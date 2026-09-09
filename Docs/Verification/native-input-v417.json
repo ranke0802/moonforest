@@ -1,0 +1,13 @@
+{
+    "passed": true,
+    "checks": [
+        "Korean final composed syllable is retained",
+        "Final composing jamo is retained",
+        "Composition inserts at cursor",
+        "Gameplay disables IME composition",
+        "Physical J press and release fires a witch energy ball"
+    ],
+    "failures": [],
+    "runtimeErrors": 0,
+    "elapsedSeconds": 40.99686813354492
+}

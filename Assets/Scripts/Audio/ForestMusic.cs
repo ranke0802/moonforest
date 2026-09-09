@@ -23,7 +23,7 @@ public sealed class ForestMusic:MonoBehaviour {
    context=p.IsDead?.16f:Time.timeScale==0?.5f:1;
   }else bossUntil=0;
   current=desired;bool audible=!Muted&&!suspended&&(Testing||Application.isFocused);float duck=Time.unscaledTime<duckUntil?.48f:1;
-  for(int i=0;i<sources.Length;i++){var s=sources[i];if(!s.clip)continue;if(i==desired&&!s.isPlaying){if(started[i])s.UnPause();else{s.Play();started[i]=true;}}float target=i==desired&&audible?Volume*context*duck:0;s.volume=Mathf.MoveTowards(s.volume,target,Time.unscaledDeltaTime*.4f);if(i!=desired&&s.volume<=.0001f&&s.isPlaying)s.Pause();}
+  for(int i=0;i<sources.Length;i++){var s=sources[i];if(!s.clip)continue;if(i==desired&&!s.isPlaying){if(started[i])s.UnPause();if(!s.isPlaying)s.Play();started[i]=true;}float target=i==desired&&audible?Volume*context*duck:0;s.volume=Mathf.MoveTowards(s.volume,target,Time.unscaledDeltaTime*.4f);if(i!=desired&&s.volume<=.0001f&&s.isPlaying)s.Pause();}
  }
  void OnApplicationPause(bool paused){suspended=paused;if(paused)SaveSettings();}void OnApplicationQuit(){SaveSettings();}void OnDestroy(){if(Instance==this){SaveSettings();Instance=null;}}
 }

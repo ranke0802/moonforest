@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 namespace WitchPlayground {
-public sealed class AdventureVerification:MonoBehaviour {
+public sealed partial class AdventureVerification:MonoBehaviour {
  static bool launched;string folder;float began;bool done;int errors;readonly List<string> checks=new List<string>(),failures=new List<string>();RpgSession session;RpgProgress stats;WitchPlayer p;AdventureProgress a;HeroRoster roster;string savedTest;bool hadTest;
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]static void Init(){var args=Environment.GetCommandLineArgs();int i=Array.IndexOf(args,"--adventure-verify");if(!launched&&i>=0&&i+1<args.Length){launched=true;var test=new GameObject("Adventure verification").AddComponent<AdventureVerification>();test.folder=args[i+1];Application.runInBackground=true;}}
  void Check(bool value,string text){(value?checks:failures).Add(text);Debug.Log((value?"ADVENTURE PASS ":"ADVENTURE FAIL ")+text);}
@@ -16,6 +16,7 @@ public sealed class AdventureVerification:MonoBehaviour {
  bool Node(string id,Vector3 at){p.Teleport(at);Camera.main.GetComponent<PlaygroundView>().Snap();Physics.SyncTransforms();ClearUI();return a.Interact(id);}
  void RoundTrip(string label){string before=a.Export();session.Save();Check(session.LoadGame(),label+" loads");Check(a.Export()==before,label+" preserves quest and relic state");ClearUI();}
  IEnumerator Start(){began=Time.realtimeSinceStartup;Directory.CreateDirectory(folder);Application.logMessageReceived+=Log;yield return Wait(.6f);p=FindAnyObjectByType<WitchPlayer>();stats=p.GetComponent<RpgProgress>();roster=p.GetComponent<HeroRoster>();session=p.GetComponent<RpgSession>();a=p.GetComponent<AdventureProgress>();p.TestControl=true;a.TestFreezeEnemies=true;hadTest=PlayerPrefs.HasKey("WitchRPG.Test.v4");savedTest=PlayerPrefs.GetString("WitchRPG.Test.v4","");session.AllowTestStorage=true;
+ if(Array.IndexOf(Environment.GetCommandLineArgs(),"--live-ai")>=0){yield return LiveAI();yield break;}
  Check(a&&a.Ready,"Adventure initializes on existing forest terrain");Check(Shader.GetGlobalVector("_AdventureClearing").w>5,"Boss arena foliage clearing is configured");Check(a.Enemies.Count==11,"Four road enemies, four site guards, three elite encounter enemies");Check(a.Enemies.Values.All(e=>e.persistentDefeat),"Quest enemies never respawn for farming");
  // Title preview uses the same pointer reducer as actual mouse polling; radius stays fixed.
  session.ShowTitleForTest();session.Creating=true;yield return Wait(.15f);var rotation=p.transform.rotation;float zoom=roster.previewCamera.orthographicSize;var rect=new Rect(200,185,326,407.5f);roster.PreviewInput(rect,true);roster.PollPreview(rect.center,true,true);roster.PollPreview(rect.center+new Vector2(110,40),false,true);yield return Wait(.15f);Check(Mathf.Abs(roster.PreviewYaw)>45&&roster.PreviewPitch>10,"Preview drag changes yaw and pitch while the menu is paused");Check(Mathf.Abs(roster.previewCamera.orthographicSize-zoom)<.001f&&p.transform.rotation==rotation,"Preview rotation preserves zoom and player orientation");yield return Shot("character-orbit");roster.PollPreview(rect.center,false,false);

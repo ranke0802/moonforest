@@ -7,7 +7,7 @@ namespace WitchPlayground {
  public bool EnvironmentShadows{get;private set;}=true;
  public float MeasuredFPS{get;private set;}
  readonly Dictionary<Renderer,ShadowCastingMode> original=new Dictionary<Renderer,ShadowCastingMode>();float elapsed;int frames;
- void Awake(){ApplyFrameLimit();Shader.SetGlobalVector("_CampClearing",campClearing);Shader.SetGlobalVector("_EntranceClearing",entranceClearing);}
+ void Awake(){if(Camera.main&&!Camera.main.GetComponent<ForestRenderBudget>())Camera.main.gameObject.AddComponent<ForestRenderBudget>();ApplyFrameLimit();Shader.SetGlobalVector("_CampClearing",campClearing);Shader.SetGlobalVector("_EntranceClearing",entranceClearing);}
  void Start(){
   foreach(var r in FindObjectsByType<Renderer>()){
    if(r.GetComponentInParent<WitchPlayer>()||r.GetComponentInParent<SlimeMonster>())continue;
