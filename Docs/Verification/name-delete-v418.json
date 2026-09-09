@@ -1,0 +1,9 @@
+{
+    "passed": true,
+    "checks": [
+        "Actual macOS IME name is saved without losing final character"
+    ],
+    "failures": [],
+    "runtimeErrors": 0,
+    "elapsedSeconds": 3.8017845153808594
+}

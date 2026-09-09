@@ -338,6 +338,9 @@ MonoBehaviour:
   respawnDelay: 999999
   isBee: 0
   isBoss: 1
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &16306462
 CharacterController:
@@ -1591,6 +1594,9 @@ MonoBehaviour:
   respawnDelay: 10
   isBee: 1
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &375505873
 CharacterController:
@@ -3482,6 +3488,9 @@ MonoBehaviour:
   respawnDelay: 8
   isBee: 0
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &875515199
 CharacterController:
@@ -3630,6 +3639,9 @@ MonoBehaviour:
   respawnDelay: 8
   isBee: 0
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &912796765
 CharacterController:
@@ -4116,6 +4128,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: -7899455115491854695, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: a1ebab496fc414c3baf54fb6d0f132b7, type: 2}
+    - target: {fileID: -7813392732933145009, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 332f8731aa6cc41adbdee3e6610242f9, type: 2}
     - target: {fileID: -7806194207886701765, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4336,6 +4356,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: -3197081127270747694, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 9d549b42cc1c74e799a2ec9db2017e03, type: 2}
+    - target: {fileID: -2986059389507384474, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 81f07d24da9224efab3f4c2da0b9df20, type: 2}
     - target: {fileID: -2823608670645820745, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4348,6 +4376,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2744114785498795817, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 12a2b30e62e6a4deea1f8fd16c63b09d, type: 2}
+    - target: {fileID: -2673374662278302635, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 3ecccfc711ae943c6a9fa26317bee661, type: 2}
     - target: {fileID: -2567381882296073958, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4368,6 +4404,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: -2162648403684174975, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 1272806f7ce7240e48aefbf9d73bfd6b, type: 2}
     - target: {fileID: -2100165226462185254, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -4460,6 +4500,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -987530326006171187, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 5869f7057f1cc47739890abd8120e9ed, type: 2}
     - target: {fileID: -745167686930395072, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -4516,6 +4560,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 308009177023316812, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 137e6ab77b4aa4af2834b2435c3a1b3f, type: 2}
     - target: {fileID: 320888612921269189, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4708,6 +4756,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 3975816509404573626, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 2d778a27ce0cf4933811d3fad19c6650, type: 2}
     - target: {fileID: 4018610557144396565, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_CastShadows
       value: 2
@@ -4800,6 +4852,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 5882541744617323220, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 61b139aee8a9a41218dffbc1425d31cd, type: 2}
+    - target: {fileID: 5895325657102198214, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 34fcb8ed658e44a24ad9a795928bf7d9, type: 2}
     - target: {fileID: 5967441449493034076, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -4852,6 +4912,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6950489051033277624, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 9afcbda8336814b3ab1ec534c8fcac27, type: 2}
     - target: {fileID: 6961627683001633070, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -4912,6 +4976,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 8076833864256554020, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 246a78fc5dc1e4cea80ee3681e6a377a, type: 2}
     - target: {fileID: 8096922105664884329, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -4932,6 +5000,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8273742527000652472, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 3ec8f9b1e1c4c4297ad05e3019584dfd, type: 2}
     - target: {fileID: 8440867199035865800, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_Layer
       value: 11
@@ -4948,6 +5020,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8870800068404394806, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
+      propertyPath: m_Mesh
+      value:
+      objectReference: {fileID: 4300000, guid: 382f59beb34b5422ca1f482aeb97ab57, type: 2}
     - target: {fileID: 8990011915362646679, guid: 82e6027a2ccb64871b46887e51d4648e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -6002,6 +6078,9 @@ MonoBehaviour:
   respawnDelay: 8
   isBee: 0
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &1066713883
 CharacterController:
@@ -6126,6 +6205,9 @@ MonoBehaviour:
   respawnDelay: 10
   isBee: 1
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &1130786716
 CharacterController:
@@ -8800,6 +8882,9 @@ MonoBehaviour:
   respawnDelay: 10
   isBee: 1
   isBoss: 0
+  isElite: 0
+  persistentDefeat: 0
+  QuestId:
   TestIdle: 0
 --- !u!143 &1871205302
 CharacterController:

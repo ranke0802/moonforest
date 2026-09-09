@@ -1,0 +1,11 @@
+{
+    "passed": true,
+    "checks": [
+        "Physical E opens NPC dialogue and a fresh E accepts quest",
+        "Physical right arrow and J choose level-up reward",
+        "J used for a menu does not leak into a combat attack"
+    ],
+    "failures": [],
+    "runtimeErrors": 0,
+    "elapsedSeconds": 4.418798446655273
+}

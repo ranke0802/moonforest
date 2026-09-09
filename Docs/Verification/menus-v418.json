@@ -1,0 +1,21 @@
+{
+    "passed": true,
+    "checks": [
+        "E/J confirmation accepts guide quest and closes dialogue",
+        "Status page closes through its keyboard-selected close button",
+        "Inventory equipment toggles through keyboard selection",
+        "Inventory equipment can be re-equipped without mouse",
+        "Arrow navigation selects the next spell and confirms it",
+        "Level-up choice is confirmed with keyboard navigation",
+        "Audio slider adjusts with left/right arrows",
+        "Relic reward can be selected by right arrow and confirmation",
+        "Follow-up request can be chosen without mouse",
+        "Pause menu language selection preserves keyboard focus",
+        "Title Start button works with keyboard confirmation",
+        "Character selection supports horizontal arrows and confirmation",
+        "Name field can be focused without a mouse"
+    ],
+    "failures": [],
+    "runtimeErrors": 0,
+    "elapsedSeconds": 6.766461372375488
+}
