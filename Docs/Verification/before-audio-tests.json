@@ -1,0 +1,36 @@
+{
+    "passed": false,
+    "checks": [
+        "All 73 effect and ambience assets load",
+        "Verification does not change player save settings",
+        "Title plays the original theme",
+        "Character selection does not restart title music",
+        "Effect and ambience levels and mute settings persist independently",
+        "New adventure starts",
+        "Forest exploration arrangement fades in",
+        "Exploration music produces real audio output",
+        "Input: holding fully drawn mouse bow has one ready cue and no premature shot",
+        "Input: mouse release fires exactly once",
+        "Input: held J chains bow cycles with a draw for every attempt",
+        "Input: releasing one of two held attack inputs does not fire twice",
+        "Input: releasing the final held input fires one mouse arrow",
+        "Input: a quick witch tap fires once without a stranded loop",
+        "Input: held warrior J produces one sound for each of three combo contacts",
+        "Input: interrupted sword wind-up emits no delayed swing",
+        "Input: crowd stress reaches the voice budget",
+        "No runtime errors"
+    ],
+    "failures": [
+        "Input: bow draw sound starts in the accepted press event",
+        "Input: early mouse release stops preparation without firing",
+        "Input: opening a menu immediately stops bow preparation",
+        "Input: closing a menu does not resume cancelled draw audio",
+        "Input: witch charge cancellation stops the loop in the same event",
+        "Input: late meteor movement cancel immediately stops channel and descent audio",
+        "Input: a new action cancels rain preparation immediately",
+        "Input: the strike that opens level-up choices still emits its attack sound",
+        "Input: an unlearned skill has failure feedback rather than silence",
+        "Input: local attack feedback survives a saturated crowd voice pool"
+    ],
+    "runtimeErrors": 0
+}

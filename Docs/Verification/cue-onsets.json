@@ -1,0 +1,50 @@
+[
+  {
+    "cue": "bow_draw",
+    "onsetMs": 5.58
+  },
+  {
+    "cue": "bow_release",
+    "onsetMs": 0.48
+  },
+  {
+    "cue": "slash",
+    "onsetMs": 4.06
+  },
+  {
+    "cue": "slash_heavy",
+    "onsetMs": 5.04
+  },
+  {
+    "cue": "energy_light",
+    "onsetMs": 1.67
+  },
+  {
+    "cue": "energy_heavy",
+    "onsetMs": 0.94
+  },
+  {
+    "cue": "roll",
+    "onsetMs": 4.08
+  },
+  {
+    "cue": "ice_wave",
+    "onsetMs": 2.21
+  },
+  {
+    "cue": "meteor_hit",
+    "onsetMs": 1.67
+  },
+  {
+    "cue": "rain_start",
+    "onsetMs": 4.08
+  },
+  {
+    "cue": "trap_set",
+    "onsetMs": 0.94
+  },
+  {
+    "cue": "shield_up",
+    "onsetMs": 1.0
+  }
+]

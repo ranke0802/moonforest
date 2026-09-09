@@ -1,0 +1,37 @@
+# Unity-generated state and local builds
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/MemoryCaptures/
+/Recordings/
+/Verification/
+/Tools/Archive/
+*.app/
+*.apk
+*.aab
+*.unitypackage
+# IDE / operating system files
+.vs/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+.DS_Store
+._*
+Thumbs.db
+# Local credentials and Python outputs
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+# Generated music exports (runtime audio is tracked under Assets)
+/Tools/Music/exports/
+/Tools/Music/WorldSoundtrack/exports/
