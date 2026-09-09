@@ -11,17 +11,17 @@ public sealed partial class RpgUI {
  public static bool MenuInputConsumed=>Instance&&Instance.menuInputFrame==Time.frameCount;
  int menuInputFrame=-1;
  bool SameRect(Rect a,Rect b)=>(a.center-b.center).sqrMagnitude<1&&Mathf.Abs(a.width-b.width)<1;
- static readonly KeyCode[] menuKeys={KeyCode.LeftArrow,KeyCode.RightArrow,KeyCode.UpArrow,KeyCode.DownArrow,KeyCode.E,KeyCode.J,KeyCode.Return,KeyCode.KeypadEnter};
+ static readonly KeyCode[] menuKeys={KeyCode.LeftArrow,KeyCode.RightArrow,KeyCode.UpArrow,KeyCode.DownArrow,KeyCode.W,KeyCode.A,KeyCode.S,KeyCode.D,KeyCode.E,KeyCode.J,KeyCode.Return,KeyCode.KeypadEnter};
  readonly HashSet<KeyCode> heldMenuKeys=new HashSet<KeyCode>();
  void MenuInput(){
   foreach(var key in menuKeys){if(Input.GetKeyUp(key))heldMenuKeys.Remove(key);if(Input.GetKeyDown(key))DispatchMenuKey(key);}
  }
  void DispatchMenuKey(KeyCode key){
   if(!MenuActive||DeveloperPanel.InputCaptured||NameEditing||!heldMenuKeys.Add(key))return;
-  if(key==KeyCode.LeftArrow)NavigateMenu(Vector2.left);
-  else if(key==KeyCode.RightArrow)NavigateMenu(Vector2.right);
-  else if(key==KeyCode.UpArrow)NavigateMenu(Vector2.up);
-  else if(key==KeyCode.DownArrow)NavigateMenu(Vector2.down);
+  if(key==KeyCode.LeftArrow||key==KeyCode.A)NavigateMenu(Vector2.left);
+  else if(key==KeyCode.RightArrow||key==KeyCode.D)NavigateMenu(Vector2.right);
+  else if(key==KeyCode.UpArrow||key==KeyCode.W)NavigateMenu(Vector2.up);
+  else if(key==KeyCode.DownArrow||key==KeyCode.S)NavigateMenu(Vector2.down);
   else ConfirmMenu();
  }
  // IMGUI can receive a native key event without a matching Update key-down sample.
@@ -52,14 +52,14 @@ public sealed partial class RpgUI {
   if(!menuCollect||!GUI.enabled)return false;menuItems.Add(new MenuItem(r,close,slider));
   if((Event.current.type==EventType.MouseMove||Event.current.type==EventType.MouseDown)&&(Event.current.mousePosition-previousMenuMouse).sqrMagnitude>1&&r.Contains(Event.current.mousePosition)){menuFocus=r;menuFocused=true;}
   bool focused=menuFocused&&SameRect(r,menuFocus);
-  if(focused&&Event.current.type==EventType.Repaint){Color old=GUI.color;GUI.color=new Color(1,.83f,.35f,.95f);GUI.DrawTexture(new Rect(r.x-4,r.y-4,r.width+8,3),Texture2D.whiteTexture);GUI.DrawTexture(new Rect(r.x-4,r.yMax+1,r.width+8,3),Texture2D.whiteTexture);GUI.DrawTexture(new Rect(r.x-4,r.y-1,3,r.height+2),Texture2D.whiteTexture);GUI.DrawTexture(new Rect(r.xMax+1,r.y-1,3,r.height+2),Texture2D.whiteTexture);GUI.color=old;}
+  if(focused&&Event.current.type==EventType.Repaint)DrawFocusFrame(r,false);
   if(focused&&menuConfirm&&pendingContext==menuContext&&SameRect(r,pendingRect)&&Event.current.type==EventType.Repaint){menuConfirm=false;suppressClick=true;return true;}return false;
  }
  bool MenuButton(Rect r,bool close=false){bool mouse=GUI.Button(r,GUIContent.none,GUIStyle.none);bool keyboard=MenuControl(r,close);return mouse||keyboard;}
  float MenuSlider(Rect r,float value){float result=GUI.HorizontalSlider(r,value,0,1);MenuControl(r,false,true);if(SameRect(r,menuFocus)&&pendingContext==menuContext&&Event.current.type==EventType.Repaint&&menuAdjust!=0){result=Mathf.Clamp01(result+menuAdjust);menuAdjust=0;}return result;}
  void EndMenu(){
-  if(MenuActive){Color old=GUI.color;GUI.color=new Color(.16f,.065f,.22f,.97f);GUI.DrawTexture(new Rect(w/2-325,h-72,650,37),Texture2D.whiteTexture);GUI.color=old;Text(new Rect(w/2-310,h-66,620,25),NameEditing?Loc.T("이름 입력 후 Enter · 방향키로 이동","Enter after typing · Arrows to navigate","名前を入力してEnter · 矢印で選択"):Loc.T("방향키 선택 · E / J 확정 · Esc 뒤로","Arrows: select · E / J: confirm · Esc: back","矢印で選択 · E / Jで決定 · Escで戻る"),new GUIStyle(center){fontSize=14},true);}
-  Text(new Rect(w-190,2,180,20),"v"+Application.version+" · KEYBOARD",new GUIStyle(small){alignment=TextAnchor.MiddleRight},true);
+  if(MenuActive){Color old=GUI.color;GUI.color=new Color(.16f,.065f,.22f,.97f);GUI.DrawTexture(new Rect(w/2-325,h-72,650,37),Texture2D.whiteTexture);GUI.color=old;Text(new Rect(w/2-310,h-66,620,25),NameEditing?Loc.T("이름 입력 후 Enter · 방향키/WASD로 이동","Enter after typing · Arrows/WASD to navigate","名前を入力してEnter · 矢印/WASDで選択"):Loc.T("방향키 / WASD 선택 · E / J 확정 · Esc 뒤로","Arrows / WASD: select · E / J: confirm · Esc: back","矢印 / WASDで選択 · E / Jで決定 · Escで戻る"),new GUIStyle(center){fontSize=14},true);}
+  Text(new Rect(w-190,2,180,20),"v"+Application.version,new GUIStyle(small){alignment=TextAnchor.MiddleRight},true);
   if(Event.current.type==EventType.Repaint){lastMenuItems.Clear();lastMenuItems.AddRange(menuItems);if(!menuFocused||!menuItems.Exists(v=>SameRect(v.rect,menuFocus))){int first=menuItems.FindIndex(v=>!v.close);if(first<0&&menuItems.Count>0)first=0;if(first>=0){menuFocus=menuItems[first].rect;menuFocused=true;}}previousMenuMouse=Event.current.mousePosition;}
  }
 }
