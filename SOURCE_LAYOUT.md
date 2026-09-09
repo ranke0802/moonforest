@@ -23,3 +23,7 @@ Assets/Scripts/Audio: BGM 전환, 효과음 채널 및 차징/시전 오디오 �
 오디오 검증: 빌드한 앱에 --audio-verify <결과 폴더> 전달. AudioVerification.Input.cs는 버튼 유지·해제·취소·회피 입력 경로를 검증합니다. --input-only를 함께 전달하면 입력 점검 부분만 실행합니다.
 
 Tools/Archive 및 루트 Verification은 로컬 작업 자료로 Git에서 제외합니다. 최신 검증 결과는 Docs/Verification에 있습니다.
+
+Assets/Scripts/Adventure: AdventureProgress(의뢰·고정 조우·저장), AdventureRelics(소유·장착·일시 효과), AdventureNode(상호작용·시각 표시)
+Assets/Scripts/UI/RpgUI.Adventure.cs: 의뢰 대화·보상·목표 HUD·유물 가방
+Assets/Scripts/Diagnostics/AdventureVerification.cs: --adventure-verify <출력 폴더>로 세 직업 진행·저장·보상 중복·지형 이동 검증. 처치 단계 검증은 실제 사망 콜백을 사용하지만 직접 피해를 주므로 일반 플레이 소요 시간·난이도 측정은 아닙니다.
