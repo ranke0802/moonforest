@@ -6,6 +6,19 @@ public sealed partial class AdventureVerification {
  IEnumerator MenuVerification(){
   session.NewGame("MenuTest",0);ClearUI();p.TestControl=true;var ui=RpgUI.Instance;yield return Wait(.25f);
   a.TalkGuide();yield return Wait(.2f);ui.ConfirmMenu();yield return Wait(.2f);Check(a.Stage==AdventureStage.Road&&ui.ActiveWindow==RpgUI.Window.None,"E/J confirmation accepts guide quest and closes dialogue");
+  // Exercise the event path independently of Input.GetKeyDown, including held-key repetition.
+  stats.GainXP(stats.NeededXP);yield return Wait(.2f);
+  ui.MenuKeyEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.RightArrow});
+  ui.MenuKeyEvent(new Event{type=EventType.KeyUp,keyCode=KeyCode.RightArrow});
+  ui.MenuKeyEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.J});yield return Wait(.2f);
+  Check(stats.PendingChoices==0,"IMGUI-only arrow and J events advance level-up without a polled key-down");
+  stats.GainXP(stats.NeededXP);yield return Wait(.2f);
+  ui.MenuKeyEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.J});yield return Wait(.2f);
+  Check(stats.PendingChoices==1,"Held confirmation cannot choose again in a newly opened menu");
+  ui.MenuKeyEvent(new Event{type=EventType.KeyUp,keyCode=KeyCode.J});
+  ui.MenuKeyEvent(new Event{type=EventType.KeyDown,keyCode=KeyCode.J});yield return Wait(.2f);
+  ui.MenuKeyEvent(new Event{type=EventType.KeyUp,keyCode=KeyCode.J});
+  Check(stats.PendingChoices==0,"Releasing and pressing confirmation advances the next choice");
   ui.Open(RpgUI.Window.Status);yield return Wait(.2f);ui.ConfirmMenu();yield return Wait(.2f);Check(ui.ActiveWindow==RpgUI.Window.None,"Status page closes through its keyboard-selected close button");
   ui.Open(RpgUI.Window.Bag);yield return Wait(.2f);bool equipped=stats.Equipped;ui.ConfirmMenu();yield return Wait(.2f);Check(stats.Equipped!=equipped,"Inventory equipment toggles through keyboard selection");ui.ConfirmMenu();yield return Wait(.2f);Check(stats.Equipped==equipped,"Inventory equipment can be re-equipped without mouse");ui.Close();
   stats.ranks=new[]{1,1,1,1};ui.Open(RpgUI.Window.Skills);yield return Wait(.2f);ui.NavigateMenu(Vector2.down);yield return Wait(.1f);ui.ConfirmMenu();yield return Wait(.2f);Check(stats.SelectedSkill==SpellId.Meteor&&ui.ActiveWindow==RpgUI.Window.None,"Arrow navigation selects the next spell and confirms it");
