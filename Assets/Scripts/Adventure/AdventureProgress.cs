@@ -6,9 +6,10 @@ namespace WitchPlayground {
 public enum AdventureStage {Offer,Road,Purify,Gate,Boss,Reward,Camp,Herbs,Elite,Complete}
 [DefaultExecutionOrder(-40)]public sealed class AdventureProgress:MonoBehaviour {
  public static AdventureProgress Instance;
- [Serializable]public class Data {public int version=1;public AdventureStage stage;public List<string> defeated=new List<string>();public int purified,herbs,sideDone;public int rewardSource=-1;public AdventureRelics.Data relics=new AdventureRelics.Data();}
+ [Serializable]public class Data {public int version=1;public AdventureStage stage;public List<string> defeated=new List<string>();public int purified,herbs,sideDone;public int rewardSource=-1;public bool completionNotice;public AdventureRelics.Data relics=new AdventureRelics.Data();}
  public Data State=new Data();public AdventureStage Stage=>State.stage;public bool Ready{get;private set;}public bool BossActive=>Stage==AdventureStage.Boss;
- public Vector3 Camp{get;private set;}public Vector3 Arena{get;private set;}public Vector3 Gate{get;private set;}public Vector3 Guide{get;private set;}
+ public Vector3 Camp{get;private set;}public Vector3 Arena{get;private set;}public Vector3 Gate{get;private set;}public Vector3 Guide{get;private set;}public Vector3 GuideHead{get;private set;}
+ public string GuideMarker=>Stage==AdventureStage.Reward||Stage==AdventureStage.Complete||State.completionNotice?"!":Stage==AdventureStage.Offer||Stage==AdventureStage.Camp?"?":"";
  public Vector3[] Sites{get;private set;}public Vector3[] Herbs{get;private set;}
  public readonly Dictionary<string,SlimeMonster> Enemies=new Dictionary<string,SlimeMonster>();
  public AdventureNode Near{get;private set;}public AdventureRelics Relics{get;private set;}
@@ -16,7 +17,7 @@ public enum AdventureStage {Offer,Road,Purify,Gate,Boss,Reward,Camp,Herbs,Elite,
  public static string T(string ko,string en,string ja)=>Loc.T(ko,en,ja);
  void Awake(){Instance=this;player=GetComponent<WitchPlayer>();session=GetComponent<RpgSession>();Relics=GetComponent<AdventureRelics>()??gameObject.AddComponent<AdventureRelics>();}
  void Start(){Configure();}
- public void Configure(){if(configured)return;configured=true;Camp=player.Spawn;Guide=FindObjectsByType<ForestInteractable>().First(n=>n.kind==ForestInteractable.Kind.NPC&&!n.healer).transform.position;
+ public void Configure(){if(configured)return;configured=true;Camp=player.Spawn;var guide=FindObjectsByType<ForestInteractable>().First(n=>n.kind==ForestInteractable.Kind.NPC&&!n.healer);Guide=guide.transform.position;var renders=guide.GetComponentsInChildren<Renderer>();GuideHead=new Vector3(Guide.x,renders.Length>0?renders.Max(r=>r.bounds.max.y)+.35f:Guide.y+1.6f,Guide.z);
   var originals=FindObjectsByType<SlimeMonster>().Where(e=>!e.isBoss).ToArray();slimeTemplate=originals.First(e=>!e.isBee);beeTemplate=originals.First(e=>e.isBee);
   foreach(var e in originals)e.gameObject.SetActive(false);
   Sites=new[]{Safe(new Vector3(11,0,3)),Safe(new Vector3(-3,0,-5))};Arena=Safe(new Vector3(-8,0,-13),1);Gate=Safe(new Vector3(-3,0,-8));
@@ -40,8 +41,8 @@ public enum AdventureStage {Offer,Road,Purify,Gate,Boss,Reward,Camp,Herbs,Elite,
  public string Export(){State.relics=Relics.State;return JsonUtility.ToJson(State);}
  public void Import(string json,bool oldBoss){Configure();State=string.IsNullOrEmpty(json)?new Data{stage=oldBoss?AdventureStage.Reward:AdventureStage.Offer,rewardSource=oldBoss?0:-1}:JsonUtility.FromJson<Data>(json);State.defeated=State.defeated??new List<string>();Relics.Import(State.relics);if(Stage==AdventureStage.Boss){State.stage=AdventureStage.Gate;player.SetCheckpoint(Gate);player.Teleport(Gate);}if(string.IsNullOrEmpty(json)){player.SetCheckpoint(oldBoss?Gate:Camp);player.Teleport(oldBoss?Gate:Camp);}lastDamage=-100;ApplyWorld();}
  void SetStage(AdventureStage stage){State.stage=stage;ApplyWorld();session.Save();}
- public void TalkGuide(){if(Stage==AdventureStage.Offer||Stage==AdventureStage.Camp||Stage==AdventureStage.Complete)RpgUI.Instance.Open(RpgUI.Window.Adventure);else RpgUI.Toast(Objective);}
- public bool AcceptMain(){if(Stage!=AdventureStage.Offer)return false;SetStage(AdventureStage.Road);RpgUI.Toast(T("J는 자동 조준 · 좌클릭은 커서 조준","J auto-aims · Left click aims at cursor","Jで自動照準 · 左クリックで手動照準"));return true;}
+ public void TalkGuide(){if(State.completionNotice){State.completionNotice=false;session.Save();}if(Stage==AdventureStage.Offer||Stage==AdventureStage.Camp||Stage==AdventureStage.Complete)RpgUI.Instance.Open(RpgUI.Window.Adventure);else RpgUI.Toast(Objective);}
+ public bool AcceptMain(){if(Stage!=AdventureStage.Offer)return false;SetStage(AdventureStage.Road);RpgUI.Toast(player.Combat.ClassId==1?T("J/좌클릭: 가까운 적을 향해 전진 공격","J / LMB: advance toward the nearest enemy","J/左クリック：近くの敵へ前進攻撃"):T("J는 자동 조준 · 좌클릭은 커서 조준","J auto-aims · Left click aims at cursor","Jで自動照準 · 左クリックで手動照準"));return true;}
  public void EnemyDefeated(SlimeMonster enemy){if(!Ready||enemy.QuestId==""||State.defeated.Contains(enemy.QuestId))return;State.defeated.Add(enemy.QuestId);if(Stage==AdventureStage.Road&&RoadKills>=4)SetStage(AdventureStage.Purify);else session.Save();}
  public void BossDefeated(){if(Stage!=AdventureStage.Boss)return;session.BossDefeated=true;State.rewardSource=0;State.stage=AdventureStage.Reward;foreach(var n in nodes)n.gameObject.SetActive(false);revealAt=Time.time+1.8f;var freed=RpgVFX.Sprite(Arena+Vector3.up,3,5,2);freed.tint=new Color(.65f,.85f,1);ForestSound.Play("upgrade",Arena,.8f);session.Save();}
  public bool Interact(string id){if(!Ready||!NodeVisible(id)||player.IsDead||RpgUI.Blocking)return false;var node=nodes.First(n=>n.Id==id);if(ClassCombat.Flat(node.transform.position-player.transform.position).magnitude>2.4f)return false;if(id=="gate"){player.SetCheckpoint(Gate);player.RestoreHealth();player.ProtectArrival();session.Save();RpgUI.Instance.Open(RpgUI.Window.Adventure);return true;}
@@ -50,8 +51,8 @@ public enum AdventureStage {Offer,Road,Purify,Gate,Boss,Reward,Camp,Herbs,Elite,
   return true;
  }
  public bool EnterBoss(){if(Stage!=AdventureStage.Gate||ClassCombat.Flat(player.transform.position-Gate).magnitude>3)return false;State.stage=AdventureStage.Boss;ApplyWorld();MoonwolfEvent.Instance.SummonAt(Arena);session.Save();return true;}
- public bool ChooseRelic(int id){if(Stage!=AdventureStage.Reward||State.rewardSource<0||!Relics.Award(id))return false;State.rewardSource=-1;ForestSound.Play("upgrade");State.stage=State.sideDone==3?AdventureStage.Complete:AdventureStage.Camp;ApplyWorld();player.CancelChannel();player.Combat.Interrupt();player.SetCheckpoint(Camp);player.Respawn();Camera.main.GetComponent<PlaygroundView>().Snap();player.ProtectArrival();session.Save();return true;}
- public bool AcceptSide(int id){if(Stage!=AdventureStage.Camp||id<0||id>1||(State.sideDone&(1<<id))!=0)return false;SetStage(id==0?AdventureStage.Herbs:AdventureStage.Elite);return true;}
+ public bool ChooseRelic(int id){if(Stage!=AdventureStage.Reward||State.rewardSource<0||!Relics.Award(id))return false;State.rewardSource=-1;State.completionNotice=true;ForestSound.Play("upgrade");State.stage=State.sideDone==3?AdventureStage.Complete:AdventureStage.Camp;ApplyWorld();player.CancelChannel();player.Combat.Interrupt();player.SetCheckpoint(Camp);player.Respawn();Camera.main.GetComponent<PlaygroundView>().Snap();player.ProtectArrival();session.Save();return true;}
+ public bool AcceptSide(int id){if(Stage!=AdventureStage.Camp||id<0||id>1||(State.sideDone&(1<<id))!=0)return false;State.completionNotice=false;SetStage(id==0?AdventureStage.Herbs:AdventureStage.Elite);return true;}
  public void PlayerDamaged(){lastDamage=Time.time;}
  public void OnRespawn(){Relics.ClearTemporary();if(BossActive){State.stage=AdventureStage.Gate;ApplyWorld();}session.Save();}
  public bool CanReturnCamp=>!player.IsDead&&!BossActive&&!player.IsChanneling&&!player.IsCharging&&Time.time-lastDamage>=5&&!FindObjectsByType<SlimeMonster>().Any(e=>!e.IsDead&&ClassCombat.Flat(e.transform.position-player.transform.position).magnitude<8);

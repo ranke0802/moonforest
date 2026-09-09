@@ -44,6 +44,11 @@
         "Warrior close-range forward combo lands all three hits",
         "Warrior does not step through the target",
         "Warrior combo still heals actual dealt damage",
+        "Warrior J turns and strikes nearest enemy rather than initial facing",
+        "Warrior advances toward the selected enemy",
+        "Next warrior mouse strike reselects a live enemy despite cursor direction",
+        "Sword target selection skips the nearer enemy behind a wall",
+        "Warrior keeps facing when no live enemy is in range",
         "Hero 0 starts directional roll (0.00, 1.00)",
         "Hero 0 body rotates forward in travel direction (0.00, 1.00)",
         "Hero 0 roll displacement matches input (0.00, 1.00)",
@@ -118,6 +123,6 @@
     ],
     "failures": [],
     "runtimeErrors": 0,
-    "stressAverageFPS": 59.585044860839844,
-    "stressP95Ms": 17.56770896911621
+    "stressAverageFPS": 59.725154876708984,
+    "stressP95Ms": 17.282045364379883
 }
