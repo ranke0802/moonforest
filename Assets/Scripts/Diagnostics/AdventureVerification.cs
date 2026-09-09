@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 namespace WitchPlayground {
+public sealed partial class RpgUI {internal bool NameEditorMatchesForTest(string value)=>entered==value&&nameEditor!=null&&nameEditor.text==value;}
 public sealed partial class AdventureVerification:MonoBehaviour {
  static bool launched;string folder;float began;bool done;int errors;readonly List<string> checks=new List<string>(),failures=new List<string>();RpgSession session;RpgProgress stats;WitchPlayer p;AdventureProgress a;HeroRoster roster;string savedTest;bool hadTest;
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]static void Init(){var args=Environment.GetCommandLineArgs();int i=Array.IndexOf(args,"--adventure-verify");if(!launched&&i>=0&&i+1<args.Length){launched=true;var test=new GameObject("Adventure verification").AddComponent<AdventureVerification>();test.folder=args[i+1];Application.runInBackground=true;}}
@@ -17,7 +18,18 @@ public sealed partial class AdventureVerification:MonoBehaviour {
  void RoundTrip(string label){string before=a.Export();session.Save();Check(session.LoadGame(),label+" loads");Check(a.Export()==before,label+" preserves quest and relic state");ClearUI();}
  IEnumerator Start(){began=Time.realtimeSinceStartup;Directory.CreateDirectory(folder);Application.logMessageReceived+=Log;yield return Wait(.6f);p=FindAnyObjectByType<WitchPlayer>();stats=p.GetComponent<RpgProgress>();roster=p.GetComponent<HeroRoster>();session=p.GetComponent<RpgSession>();a=p.GetComponent<AdventureProgress>();p.TestControl=true;a.TestFreezeEnemies=true;hadTest=PlayerPrefs.HasKey("WitchRPG.Test.v4");savedTest=PlayerPrefs.GetString("WitchRPG.Test.v4","");session.AllowTestStorage=true;
  if(Array.IndexOf(Environment.GetCommandLineArgs(),"--live-ai")>=0){yield return LiveAI();yield break;}
- if(Array.IndexOf(Environment.GetCommandLineArgs(),"--name-probe")>=0){session.ShowTitleForTest();session.Creating=true;Debug.Log("NAME_PROBE_READY");float until=Time.realtimeSinceStartup+60;while(!session.Playing&&Time.realtimeSinceStartup<until)yield return null;Debug.Log("NAME_SAVED="+session.PlayerName);int ni=Array.IndexOf(Environment.GetCommandLineArgs(),"--expected-name");if(ni>=0)Check(session.PlayerName==Environment.GetCommandLineArgs()[ni+1],"Actual macOS IME name is saved without losing final character");yield return Shot("name-confirmed");Finish(null);yield break;}
+ if(Array.IndexOf(Environment.GetCommandLineArgs(),"--name-probe")>=0){
+  var args=Environment.GetCommandLineArgs();session.ShowTitleForTest();session.Creating=Array.IndexOf(args,"--name-from-title")<0;
+  int ni=Array.IndexOf(args,"--expected-name"),ei=Array.IndexOf(args,"--expected-edit");bool inspected=false;
+  Debug.Log("NAME_PROBE_READY");float until=Time.realtimeSinceStartup+60;
+  while(!session.Playing&&Time.realtimeSinceStartup<until){
+   if(ei>=0&&Input.GetKeyDown(KeyCode.F9)){Check(RpgUI.Instance.NameEditorMatchesForTest(args[ei+1]),"Visible input and backing editor preserve the complete name before submission");inspected=true;yield return Shot("name-editing");}
+   yield return null;
+  }
+  if(ei>=0)Check(inspected,"Name editor checkpoint was inspected");
+  if(ni>=0)Check(session.Playing&&session.PlayerName==args[ni+1],"Actual macOS IME name is saved without losing final character");
+  yield return Shot("name-confirmed");Finish(null);yield break;
+ }
  if(Array.IndexOf(Environment.GetCommandLineArgs(),"--menu-verify")>=0){yield return MenuVerification();yield break;}
  if(Array.IndexOf(Environment.GetCommandLineArgs(),"--native-menu")>=0){yield return NativeMenuVerification();yield break;}
  Check(a&&a.Ready,"Adventure initializes on existing forest terrain");Check(Shader.GetGlobalVector("_AdventureClearing").w>5,"Boss arena foliage clearing is configured");Check(a.Enemies.Count==11,"Four road enemies, four site guards, three elite encounter enemies");Check(a.Enemies.Values.All(e=>e.persistentDefeat),"Quest enemies never respawn for farming");
