@@ -18,7 +18,7 @@ public sealed class ForestMusic:MonoBehaviour {
  public void Duck(float seconds){duckUntil=Mathf.Max(duckUntil,Time.unscaledTime+seconds);}
  void Update(){if(dirty&&Time.realtimeSinceStartup>=saveAt)SaveSettings();var session=RpgSession.Instance;if(!session)return;int desired=0;float context=1;
   if(session.Playing){desired=1;var p=RpgProgress.Instance.player;var moon=MoonwolfEvent.Instance;
-   if(moon&&moon.boss&&moon.boss.activeInHierarchy&&!session.BossDefeated){var health=moon.boss.GetComponent<SlimeMonster>();if(health&&!health.IsDead&&ClassCombat.Flat(moon.boss.transform.position-p.transform.position).magnitude<(current==2?32:23))bossUntil=Time.unscaledTime+5;}else bossUntil=0;
+   if(moon&&moon.boss&&moon.boss.activeInHierarchy&&(AdventureProgress.Instance?AdventureProgress.Instance.BossActive:!session.BossDefeated)){var health=moon.boss.GetComponent<SlimeMonster>();if(health&&!health.IsDead&&ClassCombat.Flat(moon.boss.transform.position-p.transform.position).magnitude<(current==2?32:23))bossUntil=Time.unscaledTime+5;}else bossUntil=0;
    if(Time.unscaledTime<bossUntil)desired=2;
    context=p.IsDead?.16f:Time.timeScale==0?.5f:1;
   }else bossUntil=0;

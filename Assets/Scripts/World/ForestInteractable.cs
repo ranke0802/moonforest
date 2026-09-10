@@ -12,6 +12,6 @@ public sealed class EquippedTome:MonoBehaviour{Vector3 rest;void Start(){rest=tr
 public sealed class ForestInteraction:MonoBehaviour {
  public WitchPlayer player;public ForestInteractable Near{get;private set;}public ForestInteractable Dialog{get;private set;}public float DialogUntil{get;private set;}ForestInteractable[] all;
  void Start(){all=FindObjectsByType<ForestInteractable>();}
- void Update(){if(RpgUI.Blocking||player.IsDead){Near=null;return;}Near=null;float distance=float.MaxValue;foreach(var item in all){if(!item||item.Collected)continue;float d=Vector3.Distance(player.transform.position,item.transform.position);if(d<item.Radius&&d<distance){Near=item;distance=d;}}if(Near&&Input.GetKeyDown(KeyCode.E)&&Near.Interact(player)){Dialog=Near;DialogUntil=Time.time+7;}}
+ void Update(){if(RpgUI.Blocking||player.IsDead){Near=null;return;}Near=null;float distance=float.MaxValue;foreach(var item in all){if(!item||item.Collected)continue;float d=Vector3.Distance(player.transform.position,item.transform.position);if(d<item.Radius&&d<distance){Near=item;distance=d;}}var a=AdventureProgress.Instance;if(a&&a.Near&&Vector3.Distance(a.Near.transform.position,player.transform.position)<=distance)Near=null;if(Near&&!RpgUI.MenuInputConsumed&&Input.GetKeyDown(KeyCode.E)&&Near.Interact(player)){Dialog=Near;DialogUntil=Time.time+7;}}
 }
 }

@@ -4,9 +4,9 @@ namespace WitchPlayground {
 public sealed partial class RpgUI {
  struct MenuItem {public Rect rect;public bool close,slider;public MenuItem(Rect r,bool c,bool s){rect=r;close=c;slider=s;}}
  readonly List<MenuItem> menuItems=new List<MenuItem>(),lastMenuItems=new List<MenuItem>();
- string menuContext="",pendingContext="";Rect menuFocus,pendingRect;bool menuFocused,menuConfirm,menuCollect;float menuAdjust;Vector2 previousMenuMouse;
- bool MenuActive=>!session.Playing||ActiveWindow!=Window.None||stats.PendingChoices>0||player.IsDead;
- string MenuContext=>session.Playing+"/"+session.Creating+"/"+ActiveWindow+"/"+stats.PendingChoices+"/"+player.IsDead+"/"+(Adventure?Adventure.Stage.ToString():"");
+ string menuContext="",pendingContext="";Rect menuFocus,pendingRect;bool menuFocused,menuConfirm,menuCollect;bool journalTabDrawing;float menuAdjust;Vector2 previousMenuMouse;
+ bool MenuActive=>!session.Playing||ActiveWindow!=Window.None||player.IsDead;
+ string MenuContext=>session.Playing+"/"+session.Creating+"/"+ActiveWindow+"/"+stats.PendingChoices+"/"+player.IsDead+"/"+(Adventure?Adventure.Stage.ToString()+"/"+journalTab+"/"+Adventure.State.relicRewards:"");
  public bool NameEditing=>session.Creating&&nameFocused;
  public static bool MenuInputConsumed=>Instance&&Instance.menuInputFrame==Time.frameCount;
  int menuInputFrame=-1;
@@ -55,7 +55,7 @@ public sealed partial class RpgUI {
   if(focused&&Event.current.type==EventType.Repaint)DrawFocusFrame(r,false);
   if(focused&&menuConfirm&&pendingContext==menuContext&&SameRect(r,pendingRect)&&Event.current.type==EventType.Repaint){menuConfirm=false;suppressClick=true;return true;}return false;
  }
- bool MenuButton(Rect r,bool close=false){bool mouse=GUI.Button(r,GUIContent.none,GUIStyle.none);bool keyboard=MenuControl(r,close);return mouse||keyboard;}
+ bool MenuButton(Rect r,bool close=false){bool mouse=GUI.Button(r,GUIContent.none,GUIStyle.none);bool keyboard=MenuControl(r,close||journalTabDrawing);return mouse||keyboard;}
  float MenuSlider(Rect r,float value){float result=GUI.HorizontalSlider(r,value,0,1);MenuControl(r,false,true);if(SameRect(r,menuFocus)&&pendingContext==menuContext&&Event.current.type==EventType.Repaint&&menuAdjust!=0){result=Mathf.Clamp01(result+menuAdjust);menuAdjust=0;}return result;}
  void EndMenu(){
   if(MenuActive){Color old=GUI.color;GUI.color=new Color(.16f,.065f,.22f,.97f);GUI.DrawTexture(new Rect(w/2-325,h-72,650,37),Texture2D.whiteTexture);GUI.color=old;Text(new Rect(w/2-310,h-66,620,25),NameEditing?Loc.T("이름 입력 후 Enter · 방향키/WASD로 이동","Enter after typing · Arrows/WASD to navigate","名前を入力してEnter · 矢印/WASDで選択"):Loc.T("방향키 / WASD 선택 · E / J 확정 · Esc 뒤로","Arrows / WASD: select · E / J: confirm · Esc: back","矢印 / WASDで選択 · E / Jで決定 · Escで戻る"),new GUIStyle(center){fontSize=14},true);}
