@@ -6,6 +6,8 @@ import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS } from './controller.js';
 import { CharacterAnimator } from './animation.js';
 import { setupFullscreen } from './fullscreen.js';
+import { createTrainingTargets } from './targets.js';
+import { createProjectiles } from './projectiles.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -13,6 +15,8 @@ const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button'].map($);
 let engine, world, actor, controller, animator, container, config, input;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
+let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
+const attackSources = new Set();
 let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
@@ -42,16 +46,37 @@ function updateButtons() {
 }
 const actions = {
   attack() { if (ready) controller.attack(); },
-  hit() { if (ready) controller.hit(); },
-  death() { if (!ready || controller.dead) return; controller.die(); input.reset(); updateButtons(); },
+  setAttackHeld(held) { setAttackHeld('keyboard', held); },
+  hit() { if (ready) { attackSources.clear(); controller.hit(); } },
+  death() { if (!ready || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   canMove() { return ready && !controller.dead; },
 };
 
+function setAttackHeld(source, held) {
+  if (held) {
+    if (!ready || controller.dead || controller.setAttackHeld(true) === false) return;
+    attackSources.add(source);
+  } else if (attackSources.delete(source)) controller?.setAttackHeld(attackSources.size > 0);
+}
+
+function faceHeading(heading, dt) {
+  const delta = Math.atan2(Math.sin(heading - actor.rotation.y), Math.cos(heading - actor.rotation.y));
+  actor.rotation.y += delta * (1 - Math.exp(-18 * dt));
+}
+
+function shootAtTarget() {
+  actor.computeWorldMatrix(true);
+  arrowNode?.computeWorldMatrix(true);
+  const origin = arrowNode ? arrowNode.getAbsolutePosition().clone() : actor.position.add(new Vector3(0, 1.35, 0));
+  const destination = shotTarget?.aimPoint.clone() || origin.add(new Vector3(Math.sin(actor.rotation.y), 0, Math.cos(actor.rotation.y)).scale(12));
+  projectiles.fire(origin, destination, shotTarget);
+}
+
 function resetCamera() {
   if (!world) return;
   world.camera.alpha = Math.PI * .38; world.camera.beta = 1.18;
-  world.camera.radius = innerWidth < 600 ? 5.5 : 4.8;
+  world.camera.radius = innerWidth < 600 ? 6.5 : 4.8;
   input.panOffset = { x: 0, y: 0, z: 0 };
 }
 
@@ -99,6 +124,10 @@ async function loadCharacter() {
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new CharacterController({ durations: animator.durations, speeds: config.speeds });
+    arrowNode = container.transformNodes.find(node => node.name === 'arrow');
+    arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
+    attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
+    projectiles.clear();
     animator.transition('idle', { loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#build-tag').textContent = config.version || 'ARCHER / 01';
@@ -116,13 +145,23 @@ async function loadCharacter() {
 }
 
 function render() {
-  const dt = document.hidden ? 0 : Math.min(engine.getDeltaTime() / 1000, 1 / 30);
+  const dt = document.hidden ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
   elapsed += dt;
   world.tick(elapsed);
+  training.update(dt);
+  projectiles.update(dt);
   if (ready) {
     const movement = input.value();
     const result = controller.update(dt, movement);
     animator.transition(result.state, result); animator.update(dt);
+    const attacking = ['attack', 'moveAttack'].includes(result.state);
+    if (attacking && result.actionId !== shotActionId) {
+      shotActionId = result.actionId;
+      shotTarget = training.selectNearest(actor.position);
+      hiddenArrowForAction = null;
+    }
+    const selectedTarget = controller.dead ? null : attacking ? shotTarget : training.selectNearest(actor.position);
+    training.setSelected(selectedTarget);
     if (result.moving) {
       const alpha = world.camera.alpha;
       const forward = new Vector3(-Math.cos(alpha), 0, -Math.sin(alpha));
@@ -131,14 +170,27 @@ function render() {
       actor.position.addInPlace(direction.scale(result.speed * dt));
       const radius = Math.hypot(actor.position.x, actor.position.z);
       if (radius > 11) { actor.position.x *= 11 / radius; actor.position.z *= 11 / radius; }
-      const heading = Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0);
-      const delta = Math.atan2(Math.sin(heading - actor.rotation.y), Math.cos(heading - actor.rotation.y));
-      actor.rotation.y += delta * (1 - Math.exp(-14 * dt));
+      // Keep the player outside the wooden target stands.
+      for (const dummy of training.targets) {
+        const dx = actor.position.x - dummy.position.x, dz = actor.position.z - dummy.position.z;
+        const distance = Math.hypot(dx, dz);
+        if (distance < .62) { actor.position.x = dummy.position.x + (distance ? dx / distance : 1) * .62; actor.position.z = dummy.position.z + (distance ? dz / distance : 0) * .62; }
+      }
+      if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
+    if (attacking && shotTarget) {
+      const direction = shotTarget.aimPoint.subtract(actor.position);
+      faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);
+    }
+    for (const event of result.events || []) if (event.type === 'release') {
+      shootAtTarget(); hiddenArrowForAction = event.actionId;
+    }
+    if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     const target = actor.position.add(new Vector3(input.panOffset.x, 1.02 + input.panOffset.y, input.panOffset.z));
     world.camera.setTarget(Vector3.Lerp(world.camera.target, target, 1 - Math.exp(-10 * dt)));
     $('#state-label').textContent = STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
+    $('#target-label').textContent = selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 사격을 재개합니다' : '사거리 안의 허수아비로 이동하세요';
     updateButtons();
   }
   statusTime += dt;
@@ -151,6 +203,8 @@ try {
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' });
   applyRenderQuality();
   world = createWorld(engine);
+  training = createTrainingTargets(world.scene, world.shadows);
+  projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   setupFullscreen($('#fullscreen-button'), toast);
   engine.runRenderLoop(render);
@@ -161,7 +215,18 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun(); updateButtons(); });
-  $('#attack-button').addEventListener('click', actions.attack);
+  const attackButton = $('#attack-button');
+  let lastPointerAttack = -Infinity;
+  attackButton.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || !ready) return;
+    event.preventDefault(); lastPointerAttack = performance.now();
+    attackButton.setPointerCapture(event.pointerId); setAttackHeld(`button:${event.pointerId}`, true);
+  });
+  for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) attackButton.addEventListener(name, event => setAttackHeld(`button:${event.pointerId}`, false));
+  attackButton.addEventListener('click', event => { if (event.detail === 0 && performance.now() - lastPointerAttack > 350) actions.attack(); });
+  const releaseAttack = () => { attackSources.clear(); controller?.setAttackHeld(false); };
+  window.addEventListener('blur', releaseAttack);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAttack(); });
   $('#hit-button').addEventListener('click', actions.hit);
   $('#death-button').addEventListener('click', () => controller?.dead ? actions.revive() : actions.death());
   $('#retry-load').addEventListener('click', loadCharacter);
@@ -172,7 +237,7 @@ try {
   $('#zoom-in').addEventListener('click', () => input.zoom(.85));
   $('#zoom-out').addEventListener('click', () => input.zoom(1.18));
   $('#reset-camera').addEventListener('click', resetCamera);
-  $('#help-toggle').addEventListener('click', () => { input.reset(); $('#help-dialog').showModal(); });
+  $('#help-toggle').addEventListener('click', () => { releaseAttack(); input.reset(); $('#help-dialog').showModal(); });
   $('#close-help').addEventListener('click', () => $('#help-dialog').close());
   $('#help-dialog').addEventListener('click', e => { if (e.target === $('#help-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.

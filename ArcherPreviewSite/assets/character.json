@@ -12,6 +12,7 @@
   },
   "speeds": { "walk": 1.1297524, "run": 3.0859220759743686, "moveAttack": 1.1297524 },
   "forwardYaw": 0,
+  "attackYaw": { "attack": 0.1256199, "moveAttack": 0.1185827 },
   "scale": 1,
   "expectedMaxBoneInfluences": 8
 }

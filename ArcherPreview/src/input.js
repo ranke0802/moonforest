@@ -22,7 +22,10 @@ export class PlaygroundInput {
     canvas.addEventListener('contextmenu', e => e.preventDefault(), opts);
     canvas.addEventListener('wheel', e => { e.preventDefault(); this.zoom(Math.exp(e.deltaY * .001)); }, { ...opts, passive: false });
     window.addEventListener('keydown', e => this.keyDown(e), opts);
-    window.addEventListener('keyup', e => this.keys.delete(e.code), opts);
+    window.addEventListener('keyup', e => {
+      this.keys.delete(e.code);
+      if (e.code === 'KeyJ') this.callbacks.setAttackHeld?.(false);
+    }, opts);
     window.addEventListener('blur', () => this.reset(), opts);
     document.addEventListener('visibilitychange', () => { if (document.hidden) this.reset(); }, opts);
   }
@@ -31,8 +34,14 @@ export class PlaygroundInput {
     const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR'];
     if (!controls.includes(e.code)) return;
     e.preventDefault();
+    const wasDown = this.keys.has(e.code);
     this.keys.add(e.code);
-    if (!e.repeat) ({ KeyJ: this.callbacks.attack, KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive }[e.code])?.();
+    if (e.code === 'KeyJ') {
+      if (!wasDown && !e.repeat) {
+        if (this.callbacks.setAttackHeld) this.callbacks.setAttackHeld(true);
+        else this.callbacks.attack?.();
+      }
+    } else if (!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive }[e.code])?.();
   }
   pointerDown(e) {
     e.preventDefault();
@@ -60,15 +69,18 @@ export class PlaygroundInput {
     const previousGesture = this.gesture;
     this.cameraPointers.set(e.pointerId, { ...previous, x: e.clientX, y: e.clientY });
     if (e.pointerType !== 'touch') this.drag(e.clientX - previous.x, e.clientY - previous.y, this.cameraMode === 'pan' || previous.button !== 0);
-    else if (this.cameraPointers.size >= 2 && previousGesture) {
+    else {
       const now = this.measureGesture();
-      this.drag(now.x - previousGesture.x, now.y - previousGesture.y, this.cameraMode === 'pan');
-      if (now.distance > 5 && previousGesture.distance > 5) this.zoom(previousGesture.distance / now.distance);
+      if (!now) this.drag(e.clientX - previous.x, e.clientY - previous.y, this.cameraMode === 'pan');
+      else if (previousGesture && now.distance > 5 && previousGesture.distance > 5) {
+        // A pinch changes distance only, even when its center moves or pan mode is selected.
+        this.zoom(previousGesture.distance / now.distance);
+      }
     }
     this.gesture = this.measureGesture();
   }
   measureGesture() {
-    const pointers = [...this.cameraPointers.values()];
+    const pointers = [...this.cameraPointers.values()].filter(pointer => pointer.type === 'touch');
     if (pointers.length < 2) return null;
     const [a, b] = pointers;
     return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, distance: Math.hypot(a.x - b.x, a.y - b.y) };
@@ -110,6 +122,7 @@ export class PlaygroundInput {
   }
   reset() {
     this.keys.clear(); this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.cameraPointers.clear(); this.gesture = null; this.joystick.hidden = true; this.hint.style.opacity = 1;
+    this.callbacks.setAttackHeld?.(false);
   }
   dispose() { this.reset(); this.abort.abort(); }
 }

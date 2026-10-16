@@ -5,7 +5,9 @@ Mobile browser review of the current Azure Elf Blender WIP.
 - Play: https://ranke0802.github.io/moonforest/
 - Left lower touch area: dynamic joystick.
 - Run toggle, Attack, Hit, Death / Revive buttons.
-- Two fingers outside the joystick: orbit and pinch zoom; camera Move mode pans.
+- One finger outside the joystick: orbit (or pan in camera Move mode). Two camera fingers: pinch zoom only; the joystick finger stays separate.
+- Three training dummies: attack automatically locks the nearest target within 14 m for that shot. A ring indicates the target, and arrow impact updates its hit count.
+- Hold Attack or J for continuous fire; release to finish the current shot without starting another. Hit and Death cancel the held attack.
 - Desktop: WASD, Shift, J attack, H hit, K death, R revive; mouse drag and wheel.
 - Quality: High (default, up to DPR3), Balanced (up to DPR2), Battery (DPR1). The choice is remembered on this browser.
 - Fullscreen button requests landscape lock when supported. On browsers without orientation lock, rotate the phone manually. Unsupported fullscreen displays an explanation.
