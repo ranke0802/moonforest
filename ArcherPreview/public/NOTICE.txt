@@ -1,0 +1,16 @@
+Moonforest Archer — animation review build
+
+Character and bow: user-provided Meshy assets, adapted in Blender.
+Current WIP: Walk wrist posture and Death hair/prop behavior remain under review.
+
+Motion sources
+- CMU Graphics Lab Motion Capture Database: subject 16, trial 36.
+  Funded by NSF EIA-0196217. https://mocap.cs.cmu.edu/
+  The database permits use in commercial products. Selling the motion data itself, including converted forms, is prohibited. This source is not CC0. Raw source motion files are not included here.
+- Universal Animation Library by Quaternius.
+  https://quaternius.com/packs/universalanimationlibrary.html
+  CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+
+Software
+- Babylon.js 9.31.0: Apache-2.0. https://github.com/BabylonJS/Babylon.js
+- Vite 8.3.4: MIT. https://github.com/vitejs/vite

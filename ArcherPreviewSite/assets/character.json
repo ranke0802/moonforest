@@ -1,0 +1,17 @@
+{
+  "model": "./azure-elf.glb",
+  "version": "Azure Elf · review",
+  "animations": {
+    "idle": "Idle",
+    "walk": "Walk",
+    "run": "Run",
+    "attack": "Attack_Bow_Standing",
+    "moveAttack": "Attack_Bow_Walking",
+    "hit": "Hit_Reaction",
+    "death": "Death"
+  },
+  "speeds": { "walk": 1.1297524, "run": 3.0859220759743686, "moveAttack": 1.1297524 },
+  "forwardYaw": 0,
+  "scale": 1,
+  "expectedMaxBoneInfluences": 8
+}

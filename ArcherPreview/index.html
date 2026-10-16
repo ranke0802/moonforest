@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0b101c" />
+    <meta name="description" content="Moonforest 궁수의 걷기, 달리기, 활 공격과 반응 동작을 직접 확인하는 3D 플레이그라운드." />
+    <title>Moonforest · Archer Playground</title>
+  </head>
+  <body>
+    <main id="app">
+      <canvas id="viewport" aria-label="궁수 3D 검수 화면. WASD로 이동하고 J로 공격합니다." tabindex="0"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <header class="topbar" data-ui>
+        <a class="brand" href="./" aria-label="Moonforest 처음으로"><span class="moon-mark" aria-hidden="true">☾</span><span>MOONFOREST<small>CHARACTER PLAYGROUND</small></span></a>
+        <div class="top-actions"><span class="build-tag" id="build-tag">ARCHER / 01</span><button id="help-toggle" class="icon-button" aria-label="조작 가이드 열기" title="조작 가이드">?</button></div>
+      </header>
+
+      <section class="character-info" aria-label="현재 캐릭터" data-ui>
+        <div class="eyebrow"><i></i> THE MOONLIT RANGER</div>
+        <h1>Azure Elf<span>푸른 숲의 궁수</span></h1>
+        <div class="status-pill"><span class="status-dot"></span><span id="state-label">준비 중</span><span class="status-divider"></span><span id="speed-label">0.00 m/s</span></div>
+        <p class="character-caption">직접 움직이고, 모든 동작을 확인하세요.</p>
+      </section>
+
+      <nav class="camera-tools" aria-label="카메라 조작" data-ui>
+        <div class="tool-switch"><button id="orbit-mode" class="selected" aria-pressed="true" title="카메라 회전">회전</button><button id="pan-mode" aria-pressed="false" title="카메라 시점 이동">이동</button></div>
+        <button id="zoom-in" class="icon-button" aria-label="확대">＋</button>
+        <button id="zoom-out" class="icon-button" aria-label="축소">−</button>
+        <button id="reset-camera" class="icon-button reset-icon" aria-label="캐릭터 중심으로 카메라 복원" title="카메라 복원">⌖</button>
+      </nav>
+
+      <section id="loading" class="loading-card" aria-live="polite" data-ui>
+        <div class="loading-orbit" aria-hidden="true"></div><h2 id="loading-title">숲으로 들어가는 중</h2><p id="loading-text">캐릭터와 동작을 불러옵니다.</p><div class="loading-track"><span id="loading-progress"></span></div><button id="retry-load" class="text-button" hidden>다시 불러오기</button>
+      </section>
+
+      <div id="joystick-hint" class="joystick-hint" aria-hidden="true"><div class="joystick-ghost"><span></span></div><span>드래그하여 이동</span></div>
+      <div id="joystick" class="joystick" hidden aria-hidden="true"><div class="joystick-rim"></div><div id="joystick-knob" class="joystick-knob"></div></div>
+
+      <aside class="keyboard-hint" data-ui><span><kbd>W</kbd><span class="key-row"><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span></span><div><strong>이동</strong><small><kbd>Shift</kbd> 달리기 · <kbd>J</kbd> 공격</small></div></aside>
+
+      <div class="camera-hint" aria-hidden="true"><span class="gesture-icon">↔</span><span class="touch-copy">두 손가락 드래그로 시점 조작 · 오므려서 확대/축소</span><span class="mouse-copy">드래그로 시점 조작 · 휠로 확대/축소</span></div>
+
+      <nav class="action-controls" aria-label="캐릭터 동작" data-ui>
+        <button id="run-button" class="action-button run-button" aria-pressed="false" disabled><span class="action-symbol">↗</span><span>달리기<small>SHIFT</small></span><i class="toggle-dot"></i></button>
+        <button id="attack-button" class="action-button attack-button" disabled><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5"/></svg><span>활 공격<small>J</small></span></button>
+        <div class="secondary-actions"><button id="hit-button" class="action-button small-action" disabled><span>피격</span><kbd>H</kbd></button><button id="death-button" class="action-button small-action" disabled><span id="death-label">사망</span><kbd id="death-key">K</kbd></button></div>
+      </nav>
+
+      <div id="toast" class="toast" role="status" hidden></div>
+      <footer class="scene-footer" data-ui><span>MOONFOREST · ANIMATION REVIEW</span><span id="render-status">WEBGL</span></footer>
+
+      <dialog id="help-dialog" class="help-dialog" data-ui>
+        <button id="close-help" class="close-help" aria-label="가이드 닫기">×</button><div class="eyebrow">PLAYGROUND CONTROLS</div><h2>숲을 자유롭게 탐험하세요.</h2>
+        <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 그 자리에 조이스틱이 생깁니다.</p><p>오른쪽 버튼으로 달리기, 활 공격, 피격, 사망을 확인합니다. 이동 중 공격하면 걷기 공격으로 전환합니다.</p><p>조이스틱 밖에서 두 손가락을 드래그하면 카메라가 회전합니다. 위의 <b>이동</b> 모드에서는 시점을 옮깁니다. 두 손가락 간격으로 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>이동</dd><dt>Shift / 달리기 버튼</dt><dd>달리기</dd><dt>J / H / K / R</dt><dd>공격 / 피격 / 사망 / 부활</dd><dt>드래그 / 오른쪽 드래그</dt><dd>회전 / 시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
+        <p class="help-note">사망한 동안에는 이동과 공격이 멈춥니다. 부활 버튼이나 R 키로 다시 시작하세요.</p>
+      </dialog>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
