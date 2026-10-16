@@ -7,6 +7,8 @@ Mobile browser review of the current Azure Elf Blender WIP.
 - Run toggle, Attack, Hit, Death / Revive buttons.
 - Two fingers outside the joystick: orbit and pinch zoom; camera Move mode pans.
 - Desktop: WASD, Shift, J attack, H hit, K death, R revive; mouse drag and wheel.
+- Quality: High (default, up to DPR3), Balanced (up to DPR2), Battery (DPR1). The choice is remembered on this browser.
+- Fullscreen button requests landscape lock when supported. On browsers without orientation lock, rotate the phone manually. Unsupported fullscreen displays an explanation.
 
 Seven embedded clips: Idle, Walk, Run, Attack_Bow_Standing, Attack_Bow_Walking, Hit_Reaction, Death. The current Walk wrist posture and Death hair/prop issues are preserved for review; this is not a final animation approval.
 

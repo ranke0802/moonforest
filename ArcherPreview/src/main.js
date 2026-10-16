@@ -5,6 +5,7 @@ import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS } from './controller.js';
 import { CharacterAnimator } from './animation.js';
+import { setupFullscreen } from './fullscreen.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -13,10 +14,23 @@ const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button'
 let engine, world, actor, controller, animator, container, config, input;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let toastTimer;
+let qualityMode = 'high';
+try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
+if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
+
+function applyRenderQuality() {
+  if (!engine) return;
+  const cap = { high: 3, balanced: 2, battery: 1 }[qualityMode];
+  const ratio = Math.min(window.devicePixelRatio || 1, cap);
+  // Babylon divides CSS dimensions by this value. HiDPI requires its reciprocal.
+  engine.setHardwareScalingLevel(1 / ratio);
+  engine.resize();
+  $('#quality-select').value = qualityMode;
+}
 
 function toast(message) {
   $('#toast').textContent = message; $('#toast').hidden = false;
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 2200);
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 4000);
 }
 function updateButtons() {
   const dead = controller?.dead || false;
@@ -135,11 +149,17 @@ function render() {
 try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' });
-  engine.setHardwareScalingLevel(Math.max(1, devicePixelRatio / 1.5));
+  applyRenderQuality();
   world = createWorld(engine);
   input = new PlaygroundInput(canvas, world.camera, actions);
+  setupFullscreen($('#fullscreen-button'), toast);
   engine.runRenderLoop(render);
-  window.addEventListener('resize', () => engine.resize());
+  window.addEventListener('resize', applyRenderQuality);
+  $('#quality-select').addEventListener('change', event => {
+    qualityMode = event.target.value;
+    try { localStorage.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }
+    applyRenderQuality();
+  });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun(); updateButtons(); });
   $('#attack-button').addEventListener('click', actions.attack);
   $('#hit-button').addEventListener('click', actions.hit);
