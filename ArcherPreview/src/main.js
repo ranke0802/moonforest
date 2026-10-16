@@ -3,7 +3,7 @@ import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@baby
 import '@babylonjs/loaders/glTF';
 import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
-import { CharacterController, STATE_LABELS } from './controller.js';
+import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
@@ -21,6 +21,16 @@ let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
+let attackSpeed = 1;
+try { attackSpeed = normalizeAttackSpeed(Number(localStorage.getItem('archer-attack-speed') ?? 1)); } catch { /* Use the default without storage. */ }
+function applyAttackSpeed(value) {
+  attackSpeed = normalizeAttackSpeed(value);
+  controller?.setAttackSpeed(attackSpeed);
+  $('#attack-speed').value = String(attackSpeed);
+  $('#attack-speed-value').textContent = `${attackSpeed.toFixed(1)}×`;
+  $('#attack-speed').setAttribute('aria-valuetext', `${attackSpeed.toFixed(1)}배`);
+}
+applyAttackSpeed(attackSpeed);
 
 function applyRenderQuality() {
   if (!engine) return;
@@ -124,6 +134,7 @@ async function loadCharacter() {
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new CharacterController({ durations: animator.durations, speeds: config.speeds });
+    controller.setAttackSpeed(attackSpeed);
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
     attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
@@ -215,6 +226,14 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun(); updateButtons(); });
+  $('#attack-speed').addEventListener('input', event => {
+    applyAttackSpeed(Number(event.target.value));
+    try { localStorage.setItem('archer-attack-speed', String(attackSpeed)); } catch { /* Keep the session choice. */ }
+  });
+  $('#reset-attack-speed').addEventListener('click', () => {
+    applyAttackSpeed(1);
+    try { localStorage.setItem('archer-attack-speed', '1'); } catch { /* Keep the session choice. */ }
+  });
   const attackButton = $('#attack-button');
   let lastPointerAttack = -Infinity;
   attackButton.addEventListener('pointerdown', event => {

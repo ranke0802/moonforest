@@ -148,3 +148,45 @@ test('joystick has a dead zone and cannot exceed normalized diagonal speed', () 
   assert.ok(Math.abs(Math.hypot(stick.x, stick.y) - 1) < 1e-12);
   assert.ok(stick.y > 0); assert.ok(Math.abs(Math.hypot(stick.knobX, stick.knobY) - 54) < 1e-9);
 });
+
+test('attack speed scales release and held-fire cadence from 0.5x to 2x', () => {
+  for (const rate of [.5, 1, 1.3, 2]) {
+    const c = new CharacterController(); c.setAttackSpeed(rate); c.setAttackHeld(true);
+    const before = c.update(releaseSeconds / rate - .001);
+    assert.equal(before.events.length, 0); close(before.timeScale, rate);
+    const shot = c.update(.002, { y: 1 });
+    assert.equal(shot.events.length, 1);
+    close(shot.events[0].clipTime, releaseSeconds);
+    close(shot.events[0].actionTime, releaseSeconds / rate);
+    const result = c.update(attackSeconds * 2 / rate);
+    assert.equal(result.events.length, 2);
+    for (const event of result.events) close(event.actionTime, releaseSeconds / rate);
+    c.setAttackHeld(false);
+    assert.equal(c.update(attackSeconds / rate).state, 'idle');
+  }
+});
+
+test('changing attack speed mid-shot preserves pose, one release, and real elapsed time', () => {
+  const c = new CharacterController(); c.attack();
+  const first = c.update(.8); c.setAttackSpeed(2);
+  close(c.update(0).clipTime, first.clipTime);
+  const shot = c.update((releaseSeconds - .8) / 2, { y: 1 });
+  assert.equal(shot.actionId, first.actionId); assert.equal(shot.events.length, 1);
+  close(shot.events[0].actionTime, .8 + (releaseSeconds - .8) / 2);
+  c.setAttackSpeed(.5);
+  assert.equal(c.update((recoverySeconds - releaseSeconds) / .5).events.length, 0);
+  close(c.update(0).timeScale, 1.5);
+  assert.equal(c.update((8 / 3 - recoverySeconds) / 1.5 + .001).state, 'idle');
+});
+
+test('attack speed is bounded and does not accelerate walking, running, hit or death', () => {
+  const c = new CharacterController();
+  assert.equal(c.setAttackSpeed(0), .5); assert.equal(c.setAttackSpeed(99), 2);
+  for (const invalid of [NaN, Infinity, undefined]) assert.equal(c.setAttackSpeed(invalid), 1);
+  c.setAttackSpeed(2);
+  const walk = c.update(.2, { y: 1 }); close(walk.speed, c.speeds.walk); close(walk.timeScale, 1);
+  const run = c.update(.2, { y: 1, run: true }); close(run.speed, c.speeds.run); close(run.timeScale, 1);
+  c.hit(); const hit = c.update(.2); close(hit.clipTime, .2); close(hit.timeScale, 1);
+  c.die(); const death = c.update(.2); close(death.clipTime, .2); close(death.timeScale, 1);
+  c.revive(); close(c.attackSpeed, 2);
+});

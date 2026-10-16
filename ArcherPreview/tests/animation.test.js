@@ -69,6 +69,21 @@ test('Babylon rendered attack time equals controller time before/after release a
   } finally { testScene.dispose(); }
 });
 
+test('rendered attack stays synchronized when speed changes while alternating standing and moving', () => {
+  const testScene = attackScene(); const { controller, target, step } = testScene;
+  try {
+    controller.attack(); let releases = 0;
+    for (let i = 0; i < 160; i++) {
+      if (i === 25) controller.setAttackSpeed(2);
+      if (i === 65) controller.setAttackSpeed(.5);
+      const result = step(1 / 60, { y: Math.floor(i / 7) % 2 });
+      releases += result.events.length;
+      if (result.actionId) assert.ok(Math.abs(target.position.y - result.clipTime) < 1e-7, 'Renderer and release events must use one speed-adjusted clock');
+    }
+    assert.equal(releases, 1);
+  } finally { testScene.dispose(); }
+});
+
 test('standing/moving swaps preserve sampled phase, blend weights and single release', () => {
   const testScene = attackScene(); const { controller, animator, target, step } = testScene;
   try {

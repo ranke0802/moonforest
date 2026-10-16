@@ -1,8 +1,10 @@
 export const STATE_LABELS = { idle: '대기', walk: '걷기', run: '달리기', attack: '활 공격', moveAttack: '이동 공격', hit: '피격', death: '사망' };
 
 // Authored 30fps frames: release 54, arrow hidden 58, final pose 81.
-// Keep the draw/release at normal speed; only accelerate the arrow-hidden recovery.
+// At 1x, keep the authored draw/release; accelerate only the arrow-hidden recovery.
 export const ATTACK_TIMING = Object.freeze({ releasePhase: 53 / 80, recoveryPhase: 57 / 80, recoveryRate: 3, blendDuration: .08 });
+export const ATTACK_SPEED = Object.freeze({ min: .5, max: 2, default: 1 });
+export const normalizeAttackSpeed = value => Number.isFinite(value) ? Math.min(ATTACK_SPEED.max, Math.max(ATTACK_SPEED.min, value)) : ATTACK_SPEED.default;
 const isAttack = state => state === 'attack' || state === 'moveAttack';
 const seconds = value => Number.isFinite(value) ? Math.max(0, value) : 0;
 
@@ -17,6 +19,7 @@ export class CharacterController {
     this.dead = false;
     this.attackQueued = false;
     this.attackHeld = false;
+    this.attackSpeed = ATTACK_SPEED.default;
     this.nextActionId = 1;
   }
   _start(kind) {
@@ -51,13 +54,15 @@ export class CharacterController {
   die() { if (this.dead) return; this._cancelAttackInput(); this.dead = true; this._start('death'); }
   revive() { this._cancelAttackInput(); this.dead = false; this.action = null; this.state = 'idle'; this.runToggled = false; }
   toggleRun() { if (!this.dead) this.runToggled = !this.runToggled; }
+  // Changing speed never rewinds progress or moves the authored release frame.
+  setAttackSpeed(value) { this.attackSpeed = normalizeAttackSpeed(value); return this.attackSpeed; }
   _advance(dt, moving, events) {
     let remaining = dt;
     while (this.action && remaining > 0) {
       const action = this.action;
       const attack = action.kind === 'attack';
       const recoveryStart = action.duration * ATTACK_TIMING.recoveryPhase;
-      const rate = attack && action.clipTime >= recoveryStart - 1e-10 ? ATTACK_TIMING.recoveryRate : 1;
+      const rate = attack ? this.attackSpeed * (action.clipTime >= recoveryStart - 1e-10 ? ATTACK_TIMING.recoveryRate : 1) : 1;
       const boundary = attack && action.clipTime < recoveryStart - 1e-10 ? recoveryStart : action.duration;
       const step = Math.min(remaining, Math.max(0, (boundary - action.clipTime) / rate));
       const before = action.clipTime;
@@ -91,7 +96,7 @@ export class CharacterController {
     const state = this.dead ? 'death' : this.action?.kind === 'hit' ? 'hit' : this.action?.kind === 'attack' ? (moving ? 'moveAttack' : 'attack') : moving ? ((this.runToggled || input.run) ? 'run' : 'walk') : 'idle';
     const phase = this.action?.progress || 0;
     const attackPhase = !isAttack(state) ? null : phase < ATTACK_TIMING.releasePhase ? 'windup' : phase < ATTACK_TIMING.recoveryPhase ? 'followThrough' : 'recovery';
-    const timeScale = this.action ? (attackPhase === 'recovery' ? ATTACK_TIMING.recoveryRate : 1) * this.durations[state] / this.action.duration : 1;
+    const timeScale = this.action ? (isAttack(state) ? this.attackSpeed * (attackPhase === 'recovery' ? ATTACK_TIMING.recoveryRate : 1) : 1) * this.durations[state] / this.action.duration : 1;
     this.state = state;
     // An authored full walking attack supplies the leg cycle. Do not overlay another full-body walk.
     const speed = moving ? (this.speeds[state] || 0) * magnitude : 0;
