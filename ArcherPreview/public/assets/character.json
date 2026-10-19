@@ -1,6 +1,6 @@
 {
-  "model": "./azure-elf.glb",
-  "version": "Azure Elf · review",
+  "model": "./azure-elf.glb?v=wrist-20261019",
+  "version": "Azure Elf · 손목 보정 10.19",
   "animations": {
     "idle": "Idle",
     "walk": "Walk",
