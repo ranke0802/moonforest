@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0b101c" />
-    <meta name="description" content="Moonforest 궁수의 걷기, 달리기, 활 공격과 반응 동작을 직접 확인하는 3D 플레이그라운드." />
-    <title>Moonforest · Archer Playground</title>
-    <script type="module" crossorigin src="./assets/index-Bq3165ui.js"></script>
+    <meta name="description" content="Moonforest 궁수와 전사의 걷기, 달리기, 공격, 방어와 반응 동작을 직접 확인하는 3D 플레이그라운드." />
+    <title>Moonforest · Character Playground</title>
+    <script type="module" crossorigin src="./assets/index-Daucwbkh.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BWXNux-o.js">
     <link rel="modulepreload" crossorigin href="./assets/observable.pure-H-M_hi7F.js">
     <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
@@ -43,10 +43,10 @@
     <link rel="modulepreload" crossorigin href="./assets/preload-helper-C7Bzh2Rg.js">
     <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-B-PZWwg9.js">
     <link rel="modulepreload" crossorigin href="./assets/texture.pure-D-ZXI31f.js">
-    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-DZuTaPiB.js">
-    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-C21STRud.js">
-    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-C5Qg5X-z.js">
-    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-C7VACo_m.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-CmsvAPkO.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-DqmVo2IX.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-Dag_n1OB.js">
+    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-D8BalgQb.js">
     <link rel="modulepreload" crossorigin href="./assets/webAudioBaseSubGraph-Dt0pq0Kf.js">
     <link rel="modulepreload" crossorigin href="./assets/spatialWebAudio-CNw0PM6n.js">
     <link rel="modulepreload" crossorigin href="./assets/abstractSoundSource-vjAm2svO.js">
@@ -74,7 +74,7 @@
     <link rel="modulepreload" crossorigin href="./assets/bakedVertexAnimation-CP3BNGXM.js">
     <link rel="modulepreload" crossorigin href="./assets/constants-_wyaM_ID.js">
     <link rel="modulepreload" crossorigin href="./assets/cubemapToSphericalPolynomial-D2Q-3Tj0.js">
-    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-XN2owqyJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-BL6NbhYa.js">
     <link rel="modulepreload" crossorigin href="./assets/helperFunctions-DHdJUWHO.js">
     <link rel="modulepreload" crossorigin href="./assets/fresnelFunction-FdYlYPwE.js">
     <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BATNZvmb.js">
@@ -205,7 +205,7 @@
     <link rel="modulepreload" crossorigin href="./assets/mrtFragmentDeclaration-BZpfWb0R.js">
     <link rel="modulepreload" crossorigin href="./assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js">
     <link rel="modulepreload" crossorigin href="./assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-DSf_KhrM.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-D1oWNf-X.css">
   </head>
   <body>
     <main id="app">
@@ -217,8 +217,9 @@
       </header>
 
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
-        <div class="eyebrow"><i></i> THE MOONLIT RANGER</div>
-        <h1>Azure Elf<span>푸른 숲의 궁수</span></h1>
+        <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · Violet Vanguard</option></select>
+        <div class="eyebrow"><i></i><span id="character-eyebrow">THE MOONLIT RANGER</span></div>
+        <h1><b id="character-name">Azure Elf</b><span id="character-subtitle">푸른 숲의 궁수</span></h1>
         <div class="status-pill"><span class="status-dot"></span><span id="state-label">준비 중</span><span class="status-divider"></span><span id="speed-label">0.00 m/s</span></div>
         <div class="target-status"><span aria-hidden="true">◎</span><span id="target-label">허수아비를 준비하는 중</span></div>
         <p class="character-caption">가까운 허수아비를 자동으로 조준합니다.</p>
@@ -248,8 +249,8 @@
           <div class="attack-speed-slider"><input id="attack-speed" type="range" min="0.5" max="2" step="0.1" value="1" aria-label="공격 속도" aria-valuetext="1.0배" /><button id="reset-attack-speed" type="button" title="공격 속도를 기본 1배로 복원" aria-label="공격 속도 1배로 복원">1×</button></div>
         </div>
         <button id="run-button" class="action-button run-button" aria-pressed="false" disabled><span class="action-symbol">↗</span><span>달리기<small>SHIFT</small></span><i class="toggle-dot"></i></button>
-        <button id="attack-button" class="action-button attack-button" title="길게 누르면 연속 공격" disabled><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5"/></svg><span>활 공격<small>길게 눌러 연사 · J</small></span></button>
-        <div class="secondary-actions"><button id="hit-button" class="action-button small-action" disabled><span>피격</span><kbd>H</kbd></button><button id="death-button" class="action-button small-action" disabled><span id="death-label">사망</span><kbd id="death-key">K</kbd></button></div>
+        <button id="attack-button" class="action-button attack-button" title="길게 누르면 연속 공격" disabled><svg viewBox="0 0 44 44" aria-hidden="true"><path id="attack-icon" d="M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5"/></svg><span><span id="attack-label">활 공격</span><small id="attack-hint">길게 눌러 연사 · J</small></span></button>
+        <div class="secondary-actions"><button id="guard-button" class="action-button small-action" aria-pressed="false" disabled hidden><span>방어</span><kbd>F</kbd></button><button id="hit-button" class="action-button small-action" disabled><span>피격</span><kbd>H</kbd></button><button id="death-button" class="action-button small-action" disabled><span id="death-label">사망</span><kbd id="death-key">K</kbd></button></div>
       </nav>
 
       <div id="toast" class="toast" role="status" hidden></div>
@@ -257,8 +258,8 @@
 
       <dialog id="help-dialog" class="help-dialog" data-ui>
         <button id="close-help" class="close-help" aria-label="가이드 닫기">×</button><div class="eyebrow">PLAYGROUND CONTROLS</div><h2>숲을 자유롭게 탐험하세요.</h2>
-        <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 그 자리에 조이스틱이 생깁니다.</p><p>공격하면 가까운 허수아비를 자동으로 조준합니다. 공격 버튼을 길게 누르면 연속 사격하고, 이동 중에도 공격할 수 있습니다. 표적의 링과 명중 횟수를 확인하세요.</p><p>조이스틱 밖에서 <b>한 손가락</b>을 드래그하면 카메라가 회전합니다. 위의 <b>이동</b> 모드에서는 시점을 옮깁니다. <b>두 손가락</b>은 간격을 조절해 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>이동</dd><dt>Shift / 달리기 버튼</dt><dd>달리기</dd><dt>J 길게 누르기</dt><dd>연속 사격</dd><dt>H / K / R</dt><dd>피격 / 사망 / 부활</dd><dt>드래그 / 오른쪽 드래그</dt><dd>회전 / 시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
-        <p class="help-note">공격 버튼 위의 슬라이더로 공격 속도를 0.5~2배로 조절합니다. 1× 버튼은 기본 속도로 복원하며, 선택한 속도는 다음 접속에도 유지됩니다.<br>사망한 동안에는 이동과 공격이 멈춥니다. 부활 버튼이나 R 키로 다시 시작하세요.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 가로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
+        <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 그 자리에 조이스틱이 생깁니다.</p><p>궁수는 가까운 허수아비를 조준하고 이동하면서 연속 사격합니다. 전사는 제자리에서 세 방향 검술을 이어가고, 방어 버튼으로 방패를 앞세웁니다. 표적의 링과 명중 횟수를 확인하세요.</p><p>조이스틱 밖에서 <b>한 손가락</b>을 드래그하면 카메라가 회전합니다. 위의 <b>이동</b> 모드에서는 시점을 옮깁니다. <b>두 손가락</b>은 간격을 조절해 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>이동</dd><dt>Shift / 달리기 버튼</dt><dd>달리기</dd><dt>J 길게 누르기</dt><dd>궁수 연속 사격 / 전사 연속 검술</dd><dt>F (전사)</dt><dd>방어 태세 전환</dd><dt>H / K / R</dt><dd>피격 / 사망 / 부활</dd><dt>드래그 / 오른쪽 드래그</dt><dd>회전 / 시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
+        <p class="help-note">왼쪽 위 캐릭터 선택으로 궁수와 전사를 바꿉니다. 전사는 공격할 때마다 사선 베기·반대 베기·찌르기가 이어집니다. 방어 버튼 또는 F로 방어 태세를 켜고, 이동하면 해제됩니다. 전사의 명중은 허수아비 가까이에서만 판정합니다.<br>공격 버튼 위의 슬라이더로 공격 속도를 0.5~2배로 조절합니다. 1× 버튼은 기본 속도로 복원하며, 선택한 속도는 다음 접속에도 유지됩니다.<br>사망한 동안에는 이동과 공격이 멈춥니다. 부활 버튼이나 R 키로 다시 시작하세요.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 가로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
       </dialog>
     </main>
   </body>

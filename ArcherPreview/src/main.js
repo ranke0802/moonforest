@@ -5,6 +5,7 @@ import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
+import { WarriorController, WARRIOR_ATTACKS, WARRIOR_LABELS } from './warrior-controller.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
@@ -12,7 +13,9 @@ import { createProjectiles } from './projectiles.js';
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
 const loading = $('#loading');
-const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button'].map($);
+const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button'].map($);
+let character = new URLSearchParams(location.search).get('character') === 'warrior' ? 'warrior' : 'archer';
+const isWarrior = () => character === 'warrior';
 let engine, world, actor, controller, animator, container, config, input;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
@@ -52,9 +55,11 @@ function updateButtons() {
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
   $('#death-button').classList.toggle('dead', dead);
+  $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || (dead && button.id !== 'death-button');
 }
 const actions = {
+  guard() { if (ready) { controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   hit() { if (ready) { attackSources.clear(); controller.hit(); } },
@@ -93,17 +98,20 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   loadingAsset = true; ready = false; updateButtons();
+  $('#character-select').disabled = true;
+  input?.reset(); attackSources.clear(); controller?.setAttackHeld(false);
+  training.setSelected(null); projectiles.clear();
   loading.hidden = false; loading.classList.remove('error'); $('#retry-load').hidden = true;
   $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
   try {
-    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/character.json`, location.href);
+    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
     config = await response.json();
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
     if (animator) animator.dispose();
-    if (container) container.dispose();
+    if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
     if (actor) actor.dispose();
     container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, progress => {
       if (progress.lengthComputable && progress.total > 0) $('#loading-progress').style.width = `${Math.min(92, progress.loaded / progress.total * 90 + 5)}%`;
@@ -133,7 +141,7 @@ async function loadCharacter() {
     }
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
-    controller = new CharacterController({ durations: animator.durations, speeds: config.speeds });
+    controller = new (isWarrior() ? WarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
     controller.setAttackSpeed(attackSpeed);
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
@@ -142,6 +150,16 @@ async function loadCharacter() {
     animator.transition('idle', { loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#build-tag').textContent = config.version || 'ARCHER / 01';
+    $('#character-select').value = character;
+    $('#character-name').textContent = isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
+    $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
+    $('.character-caption').textContent = isWarrior() ? '사선 베기 → 반대 베기 → 찌르기. F로 방어 태세.' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
+    $('#attack-hint').textContent = isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
+    $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
+    $('#guard-button').hidden = !isWarrior();
+    canvas.setAttribute('aria-label', `${isWarrior() ? '전사' : '궁수'} 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.`);
     resetCamera(); updateButtons();
     canvas.focus({ preventScroll: true });
   } catch (error) {
@@ -152,7 +170,7 @@ async function loadCharacter() {
     $('#retry-load').hidden = false; $('#loading-progress').style.width = '0%';
     if (container) container.dispose(); container = null;
     updateButtons();
-  } finally { loadingAsset = false; }
+  } finally { loadingAsset = false; $('#character-select').disabled = false; }
 }
 
 function render() {
@@ -165,7 +183,7 @@ function render() {
     const movement = input.value();
     const result = controller.update(dt, movement);
     animator.transition(result.state, result); animator.update(dt);
-    const attacking = ['attack', 'moveAttack'].includes(result.state);
+    const attacking = (isWarrior() ? WARRIOR_ATTACKS : ['attack', 'moveAttack']).includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = training.selectNearest(actor.position);
@@ -195,13 +213,15 @@ function render() {
     }
     for (const event of result.events || []) if (event.type === 'release') {
       shootAtTarget(); hiddenArrowForAction = event.actionId;
+    } else if (event.type === 'strike' && shotTarget && Vector3.Distance(actor.position, shotTarget.position) <= 1.65) {
+      training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     const target = actor.position.add(new Vector3(input.panOffset.x, 1.02 + input.panOffset.y, input.panOffset.z));
     world.camera.setTarget(Vector3.Lerp(world.camera.target, target, 1 - Math.exp(-10 * dt)));
-    $('#state-label').textContent = STATE_LABELS[result.state];
+    $('#state-label').textContent = (isWarrior() ? WARRIOR_LABELS : STATE_LABELS)[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
-    $('#target-label').textContent = selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 사격을 재개합니다' : '사거리 안의 허수아비로 이동하세요';
+    $('#target-label').textContent = selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}${isWarrior() && Vector3.Distance(actor.position, selectedTarget.position) > 1.65 ? ' · 더 가까이' : ''}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
   }
   statusTime += dt;
@@ -226,6 +246,14 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun(); updateButtons(); });
+  $('#guard-button').addEventListener('click', actions.guard);
+  $('#character-select').value = character;
+  $('#character-select').addEventListener('change', event => {
+    if (loadingAsset) return;
+    character = event.target.value === 'warrior' ? 'warrior' : 'archer';
+    const url = new URL(location.href); url.searchParams.set('character', character); history.replaceState(null, '', url);
+    loadCharacter();
+  });
   $('#attack-speed').addEventListener('input', event => {
     applyAttackSpeed(Number(event.target.value));
     try { localStorage.setItem('archer-attack-speed', String(attackSpeed)); } catch { /* Keep the session choice. */ }
@@ -260,7 +288,7 @@ try {
   $('#close-help').addEventListener('click', () => $('#help-dialog').close());
   $('#help-dialog').addEventListener('click', e => { if (e.target === $('#help-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
-  window.archerPreview = Object.freeze({ inspect: () => ({ ready, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
+  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
   loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);

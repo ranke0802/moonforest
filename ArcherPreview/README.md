@@ -1,8 +1,10 @@
-# Moonforest Archer Preview
+# Moonforest Character Preview
 
-Mobile browser review of the current Azure Elf Blender WIP.
+Mobile browser review of Azure Elf (Archer) and Violet Vanguard (Warrior). Use the character selector on the same page; only the selected model is loaded.
 
-- Play: https://ranke0802.github.io/moonforest/
+- Play: https://ranke0802.github.io/moonforest/ArcherPreviewSite/
+- Warrior direct selection: append `?character=warrior`. The default remains Archer.
+- Warrior: J / Attack cycles diagonal slash, return slash, thrust; hold for continuous attacks. F / Defense toggles the shield stance; movement exits it. Hits require a dummy within 1.65 m. H / K / R work for both characters.
 - Left lower touch area: dynamic joystick.
 - Run toggle, Attack, Hit, Death / Revive buttons.
 - One finger outside the joystick: orbit (or pan in camera Move mode). Two camera fingers: pinch zoom only; the joystick finger stays separate.
@@ -21,4 +23,6 @@ Attack playback speed affects the authored full-body moving attack, including it
 
 Requires Node >=22.12. Run `npm ci`, `npm test`, `npm run build` in this folder. Copy the built `dist/` contents into `../ArcherPreviewSite/`. GitHub Pages publishes the `archer` branch root; the root index redirects into the published build. `.nojekyll` disables Jekyll. Do not commit node_modules.
 
-The GLB is about48MB and uses up to8bone influences; first load depends on connection and mobile GPU. No account is needed to play. Source assets remain under public/assets. See public/NOTICE.txt for source credits and terms.
+The Archer GLB is about 48 MB; Warrior is about 67 MB. Both retain up to 8 bone influences. First load depends on connection and mobile GPU. No account is needed to play. Source assets remain under public/assets. See public/NOTICE.txt for source credits and terms.
+
+Warrior includes nine clips: Idle, Walk, Run, Guard, Slash_Down, Slash_Return, Thrust, Hit, Death. Its native Rigify editing file is separate from the runtime skeleton: B-Bone segment deformation is baked to explicit joints, original armor surfaces use rigid skinning, and cape motion is baked per clip. The web file uses a mesh LOD and the approved albedo maps. Blender roundtrip and Babylon hierarchy playback are checked; Unity/Godot playback and user aesthetic approval are not implied.

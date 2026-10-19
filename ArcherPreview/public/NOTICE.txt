@@ -14,3 +14,5 @@ Motion sources
 Software
 - Babylon.js 9.31.0: Apache-2.0. https://github.com/BabylonJS/Babylon.js
 - Vite 8.3.4: MIT. https://github.com/vitejs/vite
+Violet Vanguard warrior, Golden Oathblade sword, and Bunnyguard Shield: user-provided Meshy assets and user-approved texture revisions. Native Rigify rig, rigid original armor surface articulation, authored motions, and baked cape animation produced for this project. The runtime GLB retains source UV/albedo with a web mesh LOD. No additional distribution license is granted by this preview.
+
