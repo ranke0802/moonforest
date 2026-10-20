@@ -1,6 +1,6 @@
 {
-  "model": "./violet-warrior.glb?v=image-motion-20261020-v3",
-  "version": "Violet Vanguard · 이미지 기반 모션 10.20",
+  "model": "./violet-warrior.glb?v=forearm-motion-20261020-v4",
+  "version": "Violet Vanguard · 방패 파지 수정 v4 · 검수용",
   "animations": {
     "idle": "Idle",
     "walk": "Walk",
