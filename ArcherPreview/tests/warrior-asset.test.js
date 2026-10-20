@@ -103,7 +103,8 @@ test('warrior GLB: all nine motions match authored hierarchy at sampled times', 
 });
 test('warrior GLB: death holds and switching back to idle removes the fall',()=>{
   const f=fixture();try{
-    f.controller.die();f.step(3);f.compare(names.death,2.5);f.step(10);f.compare(names.death,2.5);
+    const end=f.animator.durations.death;
+    f.controller.die();f.step(end+.5);f.compare(names.death,end);f.step(10);f.compare(names.death,end);
     f.controller.revive();f.step(.2);f.compare(names.idle,.2);
   }finally{f.dispose();}
 });

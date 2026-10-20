@@ -1,8 +1,21 @@
 {
-  "model": "./violet-warrior.glb?v=rigify-20261019",
-  "version": "Violet Vanguard · 리깅 검수 10.19",
-  "animations": {"idle":"Idle","walk":"Walk","run":"Run","guard":"Guard","slashDown":"Slash_Down","slashReturn":"Slash_Return","thrust":"Thrust","hit":"Hit","death":"Death"},
-  "speeds": {"walk":0.7758620689655173,"run":2.272727272727273},
+  "model": "./violet-warrior.glb?v=image-motion-20261020-v3",
+  "version": "Violet Vanguard · 이미지 기반 모션 10.20",
+  "animations": {
+    "idle": "Idle",
+    "walk": "Walk",
+    "run": "Run",
+    "guard": "Guard",
+    "slashDown": "Slash_Down",
+    "slashReturn": "Slash_Return",
+    "thrust": "Thrust",
+    "hit": "Hit",
+    "death": "Death"
+  },
+  "speeds": {
+    "walk": 0.6805555555555556,
+    "run": 2.6535626535626538
+  },
   "forwardYaw": 0,
   "scale": 1,
   "expectedMaxBoneInfluences": 8
