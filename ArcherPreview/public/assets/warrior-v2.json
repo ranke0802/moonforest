@@ -1,6 +1,6 @@
 {
-  "model": "./content/44871530798fe0f89c64ce0c047461edd4f5f34b348c140acdaca30c8af08006.gltf",
-  "version": "전사 v2 · 대기 / 달리기 / 랜덤 검술 / 방패 밀치기",
+  "model": "./content/e873ef9798f9eef3bb739a8ff82884e546e1f7a0bda949b5931f46cd5cb280e8.gltf",
+  "version": "전사 v2 · 한손 베기 → 찌르기·베기 → 심판의 검 · 보스 전투",
   "animations": {
     "idle": "Idle_02",
     "run": "Run_03",
@@ -31,11 +31,11 @@
     "./content/139d3b117fccb364452691ce1300c71e3c034b067954bed0db7ecd23e9cb8fb5.bin",
     "./content/d3e3d5517705884d907823bd98a49e6d0ef1c0e3abc76fcd8255f1db1bacad8d.bin",
     "./content/28f8e2c488f2e38d6d8d17a85f428bedb369c861572b8b5316840a9174cbc44a.bin",
-    "./content/456bb06399b8d2c37bdf057e13dc6201c1e9edfc22478647e3732a1555016fc2.bin",
+    "./content/bece9a469aa3bca31d6519f1ab973611a1691c351d4b2fa9786709f28cd02028.bin",
     "./content/5557ad421fbef3735095cae19a1ca3b1479c72c6732ae9aab0991771fa08d9ad.bin",
     "./content/01b4ae095cfd62bb404f259d51abdd82bd336fcaaa31976102c0bac6a28a0de8.bin",
-    "./content/4274eaf25bef8c100ff30e7918efeb9018f56b5916c0e9a8834eab1e1143ad4b.bin",
-    "./content/44871530798fe0f89c64ce0c047461edd4f5f34b348c140acdaca30c8af08006.gltf"
+    "./content/1e86bfc2825a8d80e8401717a1c1b00a6b56e5c2bbc6559cc978a78141197f6e.bin",
+    "./content/e873ef9798f9eef3bb739a8ff82884e546e1f7a0bda949b5931f46cd5cb280e8.gltf"
   ],
   "resourceCacheVersion": 1
 }

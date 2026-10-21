@@ -4,7 +4,7 @@ import { splitGlb } from './resource-pack.js';
 
 const root = resolve(import.meta.dirname, '../public/assets');
 await mkdir(resolve(root, 'content'), { recursive:true });
-for (const [manifest, source] of [['character', 'azure-elf.glb'], ['warrior', 'violet-warrior.glb'], ['warrior-v2','violet-warrior-v2.glb']]) {
+for (const [manifest, source] of [['character', 'azure-elf.glb'], ['warrior', 'violet-warrior.glb'], ['warrior-v2','violet-warrior-v2.glb'], ['guardian-bear','guardian-bear.glb']]) {
   const configPath = resolve(root, `${manifest}.json`);
   const config = JSON.parse(await readFile(configPath, 'utf8'));
   const pack = splitGlb(await readFile(resolve(root, source)));

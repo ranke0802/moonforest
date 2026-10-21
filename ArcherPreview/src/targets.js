@@ -1,7 +1,8 @@
 import { Color3, MeshBuilder, StandardMaterial, TransformNode, Vector3 } from '@babylonjs/core';
+import { MeleeContactGate } from './melee-collision.js';
 
 /** Three stationary practice targets. All positions and distances use scene metres. */
-export function createTrainingTargets(scene, shadows) {
+export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
   const materials = [];
   const casters = [];
   const records = [];
@@ -93,7 +94,7 @@ export function createTrainingTargets(scene, shadows) {
     const ring = mesh('CreateTorus', 'selection', { diameter: 1.12, thickness: .024, tessellation: 48 }, [0, .025, 0], ringMaterial, root, false);
     ring.isVisible = false;
     const target = { id: definition.id, name: definition.name, position: root.position, aimPoint: new Vector3(), hits: 0 };
-    const record = { target, root, sway, ring, ringMaterial, centerMaterial, bullseye, hitAge: Infinity };
+    const record = { target, root, sway, ring, ringMaterial, centerMaterial, bullseye, hitAge: Infinity, heavy:false, stun:0, gate:new MeleeContactGate(), parts:sway.getChildMeshes() };
     bullseye.computeWorldMatrix(true);
     target.aimPoint.copyFrom(bullseye.getAbsolutePosition());
     records.push(record);
@@ -122,13 +123,24 @@ export function createTrainingTargets(scene, shadows) {
       for (const record of records) record.ring.isVisible = record.target === selected;
       return selected;
     },
-    hit(target) {
+    hit(target, {damage=18,heavy=false,stun=0}={}) {
       const record = owned.get(target);
       if (disposed || !record) return false;
       target.hits += 1;
       record.hitAge = 0;
+      record.heavy=heavy;record.stun=stun;
       record.centerMaterial.emissiveColor.set(1, .72, .28);
+      for(const mesh of record.parts){mesh.renderOverlay=true;mesh.overlayColor=Color3.White();mesh.overlayAlpha=.55;}
+      onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy);
       return true;
+    },
+    melee(sample){
+      if(!sample||disposed)return;
+      for(const record of records){
+        const p=record.bullseye.getAbsolutePosition();
+        const capsule=[[p.x,.35,p.z],[p.x,1.85,p.z]];
+        if(record.gate.check({...sample,capsule,radius:.34}))this.hit(record.target,sample.window);
+      }
     },
     update(dt) {
       if (disposed || !Number.isFinite(dt) || dt < 0) return;
@@ -139,10 +151,14 @@ export function createTrainingTargets(scene, shadows) {
         const age = record.hitAge;
         if (age < 1.25) {
           const fade = Math.exp(-age * 5);
-          record.sway.rotation.z = Math.sin(age * 30) * .09 * fade;
-          record.sway.rotation.x = Math.sin(age * 23) * .055 * fade;
+          record.sway.rotation.z = Math.sin(age * (record.heavy?17:30)) * (record.heavy?.42:.09) * fade;
+          record.sway.rotation.x = record.heavy ? -.5*Math.sin(Math.min(1,age/.85)*Math.PI)*Math.exp(-age*1.3) : Math.sin(age * 23) * .055 * fade;
         } else record.sway.rotation.setAll(0);
+        record.sway.position.z=record.heavy&&age<1.25?-.62*Math.sin(Math.PI*age/1.25)*Math.exp(-age*.8):0;
+        record.sway.position.y=.2;
+        if(record.stun>age){record.sway.rotation.z=.035*Math.sin(age*55);record.sway.rotation.x=-.06;}
         const flash = Math.max(0, 1 - age / .22);
+        for(const mesh of record.parts){mesh.renderOverlay=flash>0;mesh.overlayAlpha=flash*.55;}
         record.centerMaterial.emissiveColor.set(.12 + flash * .88, .065 + flash * .655, .015 + flash * .265);
         const pulse = .94 + Math.sin(clock * 3) * .06;
         record.ring.scaling.set(pulse, 1, pulse);

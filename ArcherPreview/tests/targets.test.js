@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { MeshBuilder, NullEngine, Scene, Vector3 } from '@babylonjs/core';
 import { createTrainingTargets } from '../src/targets.js';
 
-function fixture() {
+function fixture(onDamage) {
   const engine = new NullEngine(), scene = new Scene(engine), casters = new Set();
   scene.useRightHandedSystem = true;
   const shadows = { addShadowCaster(mesh) { casters.add(mesh); }, removeShadowCaster(mesh) { casters.delete(mesh); } };
-  const training = createTrainingTargets(scene, shadows);
+  const training = createTrainingTargets(scene, shadows,onDamage);
   return { engine, scene, training, casters, close() { training.dispose(); scene.dispose(); engine.dispose(); } };
 }
 
@@ -68,4 +68,21 @@ test('dispose releases owned meshes/materials/shadow casters and preserves unrel
   assert.equal(f.training.selectNearest(Vector3.Zero()), null);
   assert.equal(f.training.hit(f.training.targets[0]), false);
   f.scene.dispose(); f.engine.dispose();
+});
+
+test('melee dummy: one floating damage event, target-only white flash, heavy knockback fully restores',()=>{
+ const damage=[],f=fixture((...args)=>damage.push(args)),target=f.training.targets[0],p=target.aimPoint;
+ const sample={actionId:1,window:{id:'heavy',damage:64,heavy:true},blade:[[p.x-1,1,p.z],[p.x+1,1,p.z]]};
+ f.training.melee(sample);f.training.melee(sample);
+ assert.equal(damage.length,1);assert.equal(damage[0][1],64);assert.equal(damage[0][2],true);
+ const sway=f.scene.getTransformNodeByName(`training-${target.id}-sway`),root=target.position.clone();
+ const head=f.scene.getMeshByName(`training-${target.id}-head`),other=f.scene.getMeshByName('training-dummy-east-head');
+ assert.equal(head.renderOverlay,true);assert.equal(Boolean(other.renderOverlay),false);
+ for(let i=0;i<5;i++)f.training.update(.1);
+ assert.ok(Math.abs(sway.position.z)>.25);assert.ok(target.position.equals(root));
+ for(let i=0;i<15;i++)f.training.update(.1);
+ assert.deepEqual(sway.position.asArray(),[0,.2,0]);assert.ok(sway.rotation.equals(Vector3.Zero()));assert.equal(head.renderOverlay,false);
+ f.training.hit(target,{damage:10,stun:1.5});for(let i=0;i<14;i++)f.training.update(.1);
+ assert.notEqual(sway.rotation.x,0);for(let i=0;i<3;i++)f.training.update(.1);assert.ok(sway.rotation.equals(Vector3.Zero()));
+ f.close();
 });

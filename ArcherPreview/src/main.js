@@ -13,6 +13,10 @@ import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
+import { BossEncounter } from './boss-encounter.js';
+import { BOSS_MOTIONS } from './boss-spec.js';
+import { PlayerStrikeSampler } from './player-strikes.js';
+import { createDamageNumbers } from './damage-numbers.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -25,6 +29,8 @@ const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
+let boss, combatResult, swordNode, shieldNode, damageNumbers;
+const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
@@ -78,21 +84,23 @@ function updateButtons() {
   $('#death-button').classList.toggle('dead', dead);
   if(isV2())$('#guard-button').removeAttribute('aria-pressed');
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
-  for (const button of buttons) button.disabled = !ready || (dead && button.id !== 'death-button');
+  for (const button of buttons) button.disabled = !ready || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
+  $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
+  $('#boss-controls').hidden = !isV2();
 }
 const actions = {
-  guard() { if (ready) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
-  attack() { if (ready) controller.attack(); },
+  guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
+  attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
-  canMove() { return ready && !controller.dead; },
+  canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
 };
 
 function setAttackHeld(source, held) {
   if (held) {
-    if (!ready || controller.dead || controller.setAttackHeld(true) === false) return;
+    if (!ready || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
     attackSources.add(source);
   } else if (attackSources.delete(source)) controller?.setAttackHeld(attackSources.size > 0);
 }
@@ -120,6 +128,7 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   loadingAsset = true; ready = false; updateButtons();
+  boss?.hide();combatResult=null;strikeSampler.reset();
   $('#equipment-panel').hidden = !isWarrior();
   $('#sword-select').disabled = true; $('#shield-select').disabled = true;
   $('#equipment-status').textContent = '';
@@ -176,6 +185,8 @@ async function loadCharacter() {
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
     reviewFocus = isWarrior() ? container.transformNodes.find(node => node.name === 'mixamorig:Hips') : null;
+    shieldNode = container.transformNodes.find(node=>node.name==='Bunnyguard_Shield') || container.meshes.find(node=>node.name==='Bunnyguard_Shield');
+    swordNode = container.transformNodes.find(node => node.name === 'Golden_Oathblade') || container.meshes.find(node => node.name === 'Golden_Oathblade');
     attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
@@ -186,14 +197,14 @@ async function loadCharacter() {
     $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isV2() ? '검 공격 3종 랜덤 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isV2() ? '한손 베기 → 찌르기·베기 → 심판의 검 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
     $('#run-button').hidden = isWarrior();
     $('.secondary-actions').hidden = isWarrior() && !isV2();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
     $('#attack-style-control').hidden = !isV2();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
-    $('.keyboard-hint small').textContent = isV2() ? 'J 랜덤 검술 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
+    $('.keyboard-hint small').textContent = isV2() ? 'J 순차 검술 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
     $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
@@ -221,14 +232,17 @@ function render() {
   training.update(dt);
   projectiles.update(dt);
   if (ready) {
-    const movement = input.value();
+    const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
+    if(boss?.active&&!boss.playerAlive)controller.setAttackHeld(false);
     const result = controller.update(dt, movement);
+    combatResult=result;
     animator.transition(result.state, result); animator.update(dt);
     const attacking = ['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
+      if(isV2()&&boss?.active&&boss.brain.hp>0&&Vector3.Distance(actor.position,boss.actor.position)<4){const d=boss.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z);}
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
@@ -259,7 +273,9 @@ function render() {
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
-    const target = center.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
+    boss?.update(dt,actor);
+    const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
+    const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
     $('#state-label').textContent = isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
@@ -269,6 +285,7 @@ function render() {
   statusTime += dt;
   if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
+  damageNumbers?.update(dt);
 }
 
 try {
@@ -276,7 +293,25 @@ try {
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' });
   applyRenderQuality();
   world = createWorld(engine);
-  training = createTrainingTargets(world.scene, world.shadows);
+  damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
+  boss=new BossEncounter(world,encounter=>{
+    $('#summon-boss').textContent=encounter.loading?'보스 불러오는 중…':encounter.active?'보스 다시 소환':'보스 소환';
+    $('#boss-hud').hidden=!encounter.active;
+    if(!encounter.active)return;
+    $('#boss-hp').max=encounter.brain.maxHp;$('#boss-hp').value=encounter.brain.hp;
+    $('#boss-hp-text').textContent=`${encounter.brain.hp} / ${encounter.brain.maxHp}`;
+    $('#boss-state').textContent=encounter.brain.label;
+    $('#combat-feedback').textContent=encounter.lastHit||'일반 공격: 짧은 경직 · 점프 강공격: 넉백';
+    $('#player-health').textContent=`전사 체력 ${encounter.playerHp} / ${encounter.playerMaxHp} · 명중 ${encounter.hitCount} · 넉백 ${encounter.heavyCount}`;
+    $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
+  },(...args)=>damageNumbers.show(...args));
+  world.scene.onAfterAnimationsObservable.add(()=>{
+    if(!ready||!isWarrior()||!combatResult)return;
+    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode);
+    if(isV2())boss.poseAndContacts(actor,combatResult,sample,shieldNode);
+    training.melee(sample);
+  });
+  training = createTrainingTargets(world.scene, world.shadows,(...args)=>damageNumbers.show(...args));
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   setupFullscreen($('#fullscreen-button'), toast);
@@ -289,6 +324,13 @@ try {
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
   $('#guard-button').addEventListener('click', actions.guard);
+  $('#summon-boss').addEventListener('click',async()=>{
+    if(!ready||!isV2()||boss.loading)return;
+    try{input.reset();attackSources.clear();controller.setAttackHeld(false);await boss.summon(actor);world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');}
+    updateButtons();
+  });
+  for(const motion of BOSS_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;

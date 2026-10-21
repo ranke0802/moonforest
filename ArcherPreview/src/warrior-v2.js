@@ -1,19 +1,18 @@
 import { normalizeAttackSpeed } from './controller.js';
-export const V2_ATTACKS = ['attack', 'slash', 'judgment'];
+export const V2_ATTACKS = ['slash', 'attack', 'judgment'];
 export const V2_LABELS = {idle:'대기',run:'달리기',attack:'찌르기·베기',slash:'한손 베기',judgment:'심판의 검',shieldPush:'방패 밀치기'};
 
 export class WarriorV2Controller {
   constructor({durations,speeds={},random=Math.random}) {
     this.durations=durations;this.runSpeed=speeds.run||4.4371;this.random=random;
     this.attackSpeed=1;this.state='idle';this.time=0;this.action=null;this.serial=0;
-    this.held=false;this.queued=false;this.lastAttack=null;this.attackChoice='random';this.dead=false;
+    this.held=false;this.queued=false;this.lastAttack=null;this.attackChoice='sequence';this.attackIndex=0;this.dead=false;
   }
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value);}
-  setAttackChoice(value){this.attackChoice=V2_ATTACKS.includes(value)?value:'random';}
+  setAttackChoice(value){this.attackChoice=V2_ATTACKS.includes(value)?value:'sequence';}
   startAttack(kind) {
     if(!kind){
-      const candidates=V2_ATTACKS.filter(v=>v!==this.lastAttack);
-      kind=this.attackChoice==='random'?candidates[Math.min(candidates.length-1,Math.floor(this.random()*candidates.length))]:this.attackChoice;
+      kind=this.attackChoice==='sequence'?V2_ATTACKS[this.attackIndex++%V2_ATTACKS.length]:this.attackChoice;
       this.lastAttack=kind;
     }
     this.action={id:++this.serial,state:kind,time:0};this.queued=false;

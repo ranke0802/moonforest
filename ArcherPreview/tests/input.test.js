@@ -46,7 +46,7 @@ test('DOM stub: joystick stays separate while one camera touch orbits and two on
   const stick = { ...input.stick };
   pointer('pointerdown', 2, 700, 250);
   pointer('pointermove', 2, 720, 250);
-  assert.equal(camera.alpha, .9, 'single camera touch orbits while the joystick remains held');
+  assert.equal(camera.alpha, 1.1, 'single camera touch orbits while the joystick remains held');
   const angles = { alpha: camera.alpha, beta: camera.beta };
   pointer('pointerdown', 3, 850, 250);
   assert.equal(input.cameraPointers.size, 2);
@@ -60,7 +60,7 @@ test('DOM stub: joystick stays separate while one camera touch orbits and two on
   pointer('pointerup', 2, 720, 250);
   const alpha = camera.alpha;
   pointer('pointermove', 3, 920, 270);
-  assert.equal(camera.alpha, alpha - .1, 'remaining camera touch resumes orbit from its latest position');
+  assert.equal(camera.alpha, alpha + .1, 'remaining camera touch resumes orbit from its latest position');
   assert.equal(input.joystickPointer, 1);
 });
 
@@ -89,18 +89,18 @@ test('DOM stub: adding and removing a camera touch rebases without angle or zoom
   const { camera, pointer } = setup();
   pointer('pointerdown', 1, 600, 200);
   pointer('pointermove', 1, 620, 210);
-  assert.equal(camera.alpha, .9); assert.equal(camera.beta, .95); assert.equal(camera.radius, 5);
+  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, 1.05); assert.equal(camera.radius, 5);
   pointer('pointerdown', 2, 820, 210);
-  assert.deepEqual(camera, { alpha: .9, beta: .95, radius: 5 });
+  assert.deepEqual(camera, { alpha: 1.1, beta: 1.05, radius: 5 });
   pointer('pointermove', 1, 600, 210);
-  assert.equal(camera.alpha, .9); assert.equal(camera.beta, .95);
+  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, 1.05);
   assert.ok(Math.abs(camera.radius - 5 * 200 / 220) < 1e-12);
   const radius = camera.radius;
   pointer('pointerup', 2, 820, 210);
   pointer('pointermove', 1, 600, 210);
-  assert.deepEqual(camera, { alpha: .9, beta: .95, radius });
+  assert.deepEqual(camera, { alpha: 1.1, beta: 1.05, radius });
   pointer('pointermove', 1, 610, 200);
-  assert.equal(camera.alpha, .9 - .05); assert.equal(camera.beta, 1); assert.equal(camera.radius, radius);
+  assert.equal(camera.alpha, 1.1 + .05); assert.equal(camera.beta, 1); assert.equal(camera.radius, radius);
   pointer('pointerdown', 3, 900, 300);
   pointer('pointermove', 3, 900, 300);
   assert.equal(camera.radius, radius, 'new pinch starts at its current separation');
@@ -124,13 +124,13 @@ test('DOM stub: left/right orbit, middle pan, wheel zoom and keyboard controls r
   const { input, camera, canvas } = setup();
   const mouse = (name, x, y, button = 0) => canvas.emit(name, { pointerId: 8, pointerType: 'mouse', button, clientX: x, clientY: y });
   mouse('pointerdown', 600, 200); mouse('pointermove', 620, 210);
-  assert.equal(camera.alpha, .9); assert.equal(camera.beta, .95);
+  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, 1.05);
   mouse('pointerup', 620, 210);
   mouse('pointerdown', 620, 210, 2); mouse('pointermove', 640, 230, 2);
-  assert.equal(camera.alpha, .8); assert.equal(camera.beta, .85); assert.equal(input.panOffset.x, 0);
+  assert.equal(camera.alpha, 1.1 + .1); assert.equal(camera.beta, 1.05 + .1); assert.equal(input.panOffset.x, 0);
   mouse('pointerup', 640, 230, 2);
   mouse('pointerdown', 640, 230, 1); mouse('pointermove', 660, 250, 1);
-  assert.equal(camera.alpha, .8); assert.equal(camera.beta, .85); assert.notEqual(input.panOffset.x, 0);
+  assert.equal(camera.alpha, 1.1 + .1); assert.equal(camera.beta, 1.05 + .1); assert.notEqual(input.panOffset.x, 0);
   canvas.emit('wheel', { deltaY: 100 });
   assert.ok(camera.radius > 5);
   window.emit('keydown', { code: 'KeyW', target: { tagName: 'BODY' } });
@@ -147,7 +147,7 @@ test('wheel pixel and line units agree; left drag still rotates after touch pan 
   b.input.cameraMode='pan';
   b.canvas.emit('pointerdown',{pointerId:1,pointerType:'mouse',button:0,clientX:500,clientY:300});
   b.canvas.emit('pointermove',{pointerId:1,pointerType:'mouse',button:0,clientX:600,clientY:300});
-  assert.equal(b.camera.alpha,.5); assert.equal(b.input.panOffset.x,0);
+  assert.equal(b.camera.alpha,1.5); assert.equal(b.input.panOffset.x,0);
 });
 
 test('DOM stub: lost capture and focus loss clear joystick/camera/key state', () => {
