@@ -20,7 +20,11 @@ export class PlaygroundInput {
     canvas.addEventListener('pointermove', e => this.pointerMove(e), opts);
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(event, e => this.pointerUp(e), opts);
     canvas.addEventListener('contextmenu', e => e.preventDefault(), opts);
-    canvas.addEventListener('wheel', e => { e.preventDefault(); this.zoom(Math.exp(e.deltaY * .001)); }, { ...opts, passive: false });
+    canvas.addEventListener('wheel', e => {
+      e.preventDefault();
+      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? canvas.getBoundingClientRect().height : 1;
+      this.zoom(Math.exp(Math.max(-.5, Math.min(.5, e.deltaY * unit * .0025))));
+    }, { ...opts, passive: false });
     window.addEventListener('keydown', e => this.keyDown(e), opts);
     window.addEventListener('keyup', e => {
       this.keys.delete(e.code);
@@ -68,7 +72,9 @@ export class PlaygroundInput {
     if (!previous) return;
     const previousGesture = this.gesture;
     this.cameraPointers.set(e.pointerId, { ...previous, x: e.clientX, y: e.clientY });
-    if (e.pointerType !== 'touch') this.drag(e.clientX - previous.x, e.clientY - previous.y, this.cameraMode === 'pan' || previous.button !== 0);
+    // Both left and right mouse drags always orbit; middle drag pans.
+    // The mode switch applies to touch, which has no separate mouse buttons.
+    if (e.pointerType !== 'touch') this.drag(e.clientX - previous.x, e.clientY - previous.y, previous.button === 1);
     else {
       const now = this.measureGesture();
       if (!now) this.drag(e.clientX - previous.x, e.clientY - previous.y, this.cameraMode === 'pan');
@@ -111,7 +117,7 @@ export class PlaygroundInput {
       if (radius > 4) { this.panOffset.x *= 4 / radius; this.panOffset.z *= 4 / radius; }
     }
   }
-  zoom(factor) { this.camera.radius = Math.max(1.55, Math.min(10, this.camera.radius * factor)); }
+  zoom(factor) { this.camera.radius = Math.max(this.camera.lowerRadiusLimit ?? .8, Math.min(this.camera.upperRadiusLimit ?? 14, this.camera.radius * factor)); }
   value() {
     const down = (...codes) => codes.some(c => this.keys.has(c));
     let x = this.stick.x + Number(down('KeyD', 'ArrowRight')) - Number(down('KeyA', 'ArrowLeft'));

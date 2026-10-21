@@ -1,22 +1,11 @@
 {
-  "model": "./violet-warrior.glb?v=forearm-motion-20261020-v4",
-  "version": "Violet Vanguard · 방패 파지 수정 v4 · 검수용",
+  "model": "./violet-warrior.glb?v=repaired-native-20261021",
+  "version": "Violet Vanguard · 원본 모션 / 장비 보정",
   "animations": {
-    "idle": "Idle",
-    "walk": "Walk",
-    "run": "Run",
-    "guard": "Guard",
-    "slashDown": "Slash_Down",
-    "slashReturn": "Slash_Return",
-    "thrust": "Thrust",
-    "hit": "Hit",
-    "death": "Death"
+    "native": "Thrust_Slash"
   },
-  "speeds": {
-    "walk": 0.6805555555555556,
-    "run": 2.6535626535626538
-  },
+  "fps": 60,
   "forwardYaw": 0,
   "scale": 1,
-  "expectedMaxBoneInfluences": 8
+  "expectedMaxBoneInfluences": 4
 }

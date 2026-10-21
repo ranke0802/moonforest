@@ -5,7 +5,8 @@ import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
-import { WarriorController, WARRIOR_ATTACKS, WARRIOR_LABELS } from './warrior-controller.js';
+import { NativeReviewController } from './native-review.js';
+import { followTarget } from './camera-follow.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
@@ -16,7 +17,7 @@ const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button'].map($);
 let character = new URLSearchParams(location.search).get('character') === 'warrior' ? 'warrior' : 'archer';
 const isWarrior = () => character === 'warrior';
-let engine, world, actor, controller, animator, container, config, input;
+let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
 const attackSources = new Set();
@@ -62,8 +63,8 @@ const actions = {
   guard() { if (ready) { controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
-  hit() { if (ready) { attackSources.clear(); controller.hit(); } },
-  death() { if (!ready || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
+  hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
+  death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   canMove() { return ready && !controller.dead; },
 };
@@ -90,7 +91,7 @@ function shootAtTarget() {
 
 function resetCamera() {
   if (!world) return;
-  world.camera.alpha = Math.PI * .38; world.camera.beta = 1.18;
+  world.camera.alpha = Math.PI * .38; world.camera.beta = isWarrior() ? 1.35 : 1.18;
   world.camera.radius = innerWidth < 600 ? 6.5 : 4.8;
   input.panOffset = { x: 0, y: 0, z: 0 };
 }
@@ -141,25 +142,31 @@ async function loadCharacter() {
     }
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
-    controller = new (isWarrior() ? WarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
-    controller.setAttackSpeed(attackSpeed);
+    controller = new (isWarrior() ? NativeReviewController : CharacterController)({ durations: animator.durations, speeds: config.speeds, fps: config.fps });
+    controller.setAttackSpeed(isWarrior() ? Number($('#native-rate').value) : attackSpeed);
+    if (isWarrior()) { controller.loop = $('#native-loop').checked; $('#native-frame').max = controller.lastFrame; }
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
+    reviewFocus = isWarrior() ? container.transformNodes.find(node => node.name === 'mixamorig:Hips') : null;
     attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
-    animator.transition('idle', { loop: true });
+    animator.transition(isWarrior() ? 'native' : 'idle', isWarrior() ? { clipTime: 0 } : { loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#build-tag').textContent = config.version || 'ARCHER / 01';
     $('#character-select').value = character;
     $('#character-name').textContent = isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isWarrior() ? '사선 베기 → 반대 베기 → 찌르기. F로 방어 태세.' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isWarrior() ? '승인한 원본 찌르기·베기 모션을 프레임별로 확인합니다.' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.action-controls').hidden = isWarrior();
+    $('#native-review').hidden = !isWarrior();
+    $('.keyboard-hint strong').textContent = isWarrior() ? '위치 이동' : '이동';
+    $('.keyboard-hint small').textContent = isWarrior() ? '이동 모션 미포함 · J 다시 재생' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
     $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
-    $('#guard-button').hidden = !isWarrior();
-    canvas.setAttribute('aria-label', `${isWarrior() ? '전사' : '궁수'} 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.`);
+    $('#guard-button').hidden = true;
+    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 검수 화면. WASD 위치 이동, J 원본 모션 재생. 왼쪽 또는 오른쪽 마우스 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
     canvas.focus({ preventScroll: true });
   } catch (error) {
@@ -183,13 +190,13 @@ function render() {
     const movement = input.value();
     const result = controller.update(dt, movement);
     animator.transition(result.state, result); animator.update(dt);
-    const attacking = (isWarrior() ? WARRIOR_ATTACKS : ['attack', 'moveAttack']).includes(result.state);
+    const attacking = !isWarrior() && ['attack', 'moveAttack'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = training.selectNearest(actor.position);
       hiddenArrowForAction = null;
     }
-    const selectedTarget = controller.dead ? null : attacking ? shotTarget : training.selectNearest(actor.position);
+    const selectedTarget = isWarrior() || controller.dead ? null : attacking ? shotTarget : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
     if (result.moving) {
       const alpha = world.camera.alpha;
@@ -205,7 +212,7 @@ function render() {
         const distance = Math.hypot(dx, dz);
         if (distance < .62) { actor.position.x = dummy.position.x + (distance ? dx / distance : 1) * .62; actor.position.z = dummy.position.z + (distance ? dz / distance : 0) * .62; }
       }
-      if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
+      if (!isWarrior() && (!attacking || !shotTarget)) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
     if (attacking && shotTarget) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
@@ -217,11 +224,18 @@ function render() {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    const target = actor.position.add(new Vector3(input.panOffset.x, 1.02 + input.panOffset.y, input.panOffset.z));
-    world.camera.setTarget(Vector3.Lerp(world.camera.target, target, 1 - Math.exp(-10 * dt)));
-    $('#state-label').textContent = (isWarrior() ? WARRIOR_LABELS : STATE_LABELS)[result.state];
+    const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
+    const target = center.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
+    followTarget(world.camera, target, dt);
+    $('#state-label').textContent = isWarrior() ? controller.playing ? '찌르기·베기 재생' : '모션 정지' : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
-    $('#target-label').textContent = selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}${isWarrior() && Vector3.Distance(actor.position, selectedTarget.position) > 1.65 ? ' · 더 가까이' : ''}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
+    $('#target-label').textContent = isWarrior() ? '원본 모션 1개 · 60 FPS · 이동/타격 판정 미포함' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
+    if (isWarrior()) {
+      $('#native-play').textContent = controller.playing ? '일시정지' : '재생';
+      $('#native-play').setAttribute('aria-pressed', String(controller.playing));
+      $('#native-frame').value = controller.frame;
+      $('#native-frame-value').textContent = `${controller.frame} / ${controller.lastFrame}`;
+    }
     updateButtons();
   }
   statusTime += dt;
@@ -245,7 +259,15 @@ try {
     try { localStorage.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }
     applyRenderQuality();
   });
-  $('#run-button').addEventListener('click', () => { controller?.toggleRun(); updateButtons(); });
+  $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
+  const nativeAction = fn => { if (ready && isWarrior()) fn(controller); };
+  $('#native-play').addEventListener('click', () => nativeAction(c => c.togglePlay()));
+  $('#native-restart').addEventListener('click', () => nativeAction(c => c.attack()));
+  $('#native-prev').addEventListener('click', () => nativeAction(c => c.seek(c.frame - 1)));
+  $('#native-next').addEventListener('click', () => nativeAction(c => c.seek(c.frame + 1)));
+  $('#native-frame').addEventListener('input', e => nativeAction(c => c.seek(Number(e.target.value))));
+  $('#native-loop').addEventListener('change', e => nativeAction(c => { c.loop = e.target.checked; }));
+  $('#native-rate').addEventListener('change', e => nativeAction(c => c.setAttackSpeed(Number(e.target.value))));
   $('#guard-button').addEventListener('click', actions.guard);
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {

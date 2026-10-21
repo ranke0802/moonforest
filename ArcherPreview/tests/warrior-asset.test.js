@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Animation, AnimationGroup, FreeCamera, Matrix, NullEngine, Quaternion, Scene, TransformNode, Vector3 } from '@babylonjs/core';
 import { CharacterAnimator } from '../src/animation.js';
-import { WarriorController as CharacterController } from '../src/warrior-controller.js';
+import { NativeReviewController as CharacterController } from '../src/native-review.js';
 
 // Exercise the shipped segmented Rigify hierarchy and all TRS channels without a browser texture decoder.
 // The GLB remains read-only; these groups use exactly its animation data.
@@ -87,7 +87,7 @@ function fixture() {
 }
 
 
-test('warrior GLB: all nine motions match authored hierarchy at sampled times', () => {
+test('warrior GLB: supplied motion and sword match exported hierarchy at sampled times', () => {
   const f=fixture();
   try {
     for(const [state,name] of Object.entries(names)) {
@@ -101,10 +101,15 @@ test('warrior GLB: all nine motions match authored hierarchy at sampled times', 
     }
   } finally {f.dispose();}
 });
-test('warrior GLB: death holds and switching back to idle removes the fall',()=>{
+test('warrior GLB: native clip pauses, seeks and holds last frame with equipment synchronized',()=>{
   const f=fixture();try{
-    const end=f.animator.durations.death;
-    f.controller.die();f.step(end+.5);f.compare(names.death,end);f.step(10);f.compare(names.death,end);
-    f.controller.revive();f.step(.2);f.compare(names.idle,.2);
+    assert.equal(gltf.animations.length,1);
+    const animatedNames=new Set(channels.get(names.native).map(c=>gltf.nodes[c.node].name));
+    assert.ok(animatedNames.has('Golden_Oathblade'));assert.ok(animatedNames.has('mixamorig:RightHand'));
+    const end=f.animator.durations.native;
+    assert.ok(Math.abs(end-3)<1e-6);
+    f.controller.attack();f.step(end+.5);f.compare(names.native,end);f.step(10);f.compare(names.native,end);
+    f.controller.seek(67);f.step(.2);f.compare(names.native,66/60);f.step(10);f.compare(names.native,66/60);
+    f.controller.loop=true;f.controller.attack();f.step(3.25);f.compare(names.native,.25);
   }finally{f.dispose();}
 });

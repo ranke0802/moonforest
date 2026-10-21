@@ -11,7 +11,7 @@ export function createWorld(engine) {
   scene.imageProcessingConfiguration.contrast = 1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = 100;
-  camera.lowerRadiusLimit = 1.55; camera.upperRadiusLimit = 10;
+  camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = 14;
   camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
   camera.fov = .65;
   // Input is routed explicitly: joystick/action pointers never enter the camera handler.
