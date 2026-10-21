@@ -9,7 +9,7 @@ export class WarriorV2Controller {
     this.held=false;this.queued=false;this.lastAttack=null;this.attackChoice='sequence';this.attackIndex=0;this.dead=false;
   }
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value);}
-  setAttackChoice(value){this.attackChoice=V2_ATTACKS.includes(value)?value:'sequence';}
+  setAttackChoice(value){this.attackChoice=V2_ATTACKS.includes(value)?value:'sequence';this.attackIndex=0;}
   startAttack(kind) {
     if(!kind){
       kind=this.attackChoice==='sequence'?V2_ATTACKS[this.attackIndex++%V2_ATTACKS.length]:this.attackChoice;
@@ -18,8 +18,12 @@ export class WarriorV2Controller {
     this.action={id:++this.serial,state:kind,time:0};this.queued=false;
   }
   attack(){if(this.action)this.queued=true;else this.startAttack();return true;}
-  setAttackHeld(held){this.held=Boolean(held);if(held&&!this.action)this.startAttack();return true;}
-  shieldPush(){if(this.action)return false;this.startAttack('shieldPush');return true;}
+  setAttackHeld(held){
+    const pressed=Boolean(held)&&!this.held;this.held=Boolean(held);
+    if(pressed){if(this.action)this.queued=true;else this.startAttack();}
+    return true;
+  }
+  shieldPush(){if(this.action)return false;this.attackIndex=0;this.startAttack('shieldPush');return true;}
   update(dt,input={}) {
     dt=Number.isFinite(dt)?Math.max(0,dt):0;const magnitude=Math.min(1,Math.hypot(input.x||0,input.y||0));const previous=this.state;
     if(this.action){
@@ -29,7 +33,7 @@ export class WarriorV2Controller {
         const left=(this.durations[this.action.state]-this.action.time)/rate;
         if(remaining<left){this.action.time+=remaining*rate;break;}
         remaining-=Math.max(0,left);
-        if(this.held||this.queued)this.startAttack();else this.action=null;
+        if(this.held||this.queued)this.startAttack();else {this.action=null;this.attackIndex=0;}
       }
     }
     this.state=this.action?.state||(magnitude>.08?'run':'idle');if(this.state!==previous)this.time=0;

@@ -12,8 +12,12 @@ export function segmentDistanceSquared(p1,q1,p2,q2){
 }
 // Sweep the actual blade, rather than awarding a hit simply because J was pressed.
 export function bladeTouchesCapsule(previous,current,capsule,radius){
-  for(let i=0;i<=8;i++){
-    const t=i/8,blade=current.map((p,k)=>p.map((v,j)=>previous?previous[k][j]+(v-previous[k][j])*t:v));
+  const travel=previous?Math.max(...current.map((p,k)=>Math.sqrt(dot(sub(p,previous[k]),sub(p,previous[k]))))):0;
+  // Bound gaps by the collider radius instead of eight fixed samples. Fast swings
+  // on slow devices must not skip narrow arms/legs between rendered frames.
+  const steps=Math.max(1,Math.ceil(travel/Math.max(.005,radius*.5)));
+  for(let i=0;i<=steps;i++){
+    const t=i/steps,blade=current.map((p,k)=>p.map((v,j)=>previous?previous[k][j]+(v-previous[k][j])*t:v));
     if(segmentDistanceSquared(...blade,...capsule)<=radius*radius)return true;
   }
   return false;
@@ -21,10 +25,10 @@ export function bladeTouchesCapsule(previous,current,capsule,radius){
 export class MeleeContactGate{
   constructor(){this.previous=null;this.actionId=null;this.hits=new Set();}
   reset(){this.previous=null;this.actionId=null;this.hits.clear();}
-  check({actionId,window,blade,previous,capsule,radius,capsules}){
+  check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0}){
     if(this.actionId!==actionId){this.reset();this.actionId=actionId;}
     if(!window){this.previous=null;return false;}
-    const hit=!this.hits.has(window.id)&&(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius));
+    const hit=!this.hits.has(window.id)&&(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius));
     this.previous=blade;
     if(hit)this.hits.add(window.id);
     return hit;

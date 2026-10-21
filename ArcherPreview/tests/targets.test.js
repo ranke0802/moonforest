@@ -86,3 +86,11 @@ test('melee dummy: one floating damage event, target-only white flash, heavy kno
  assert.notEqual(sway.rotation.x,0);for(let i=0;i<3;i++)f.training.update(.1);assert.ok(sway.rotation.equals(Vector3.Zero()));
  f.close();
 });
+
+test('melee dummy: visible outstretched sleeves have collision, including their animated sway',()=>{
+ const f=fixture(),target=f.training.targets[0],sway=f.scene.getTransformNodeByName(`training-${target.id}-sway`);
+ sway.rotation.z=.4;sway.position.z=-.3;
+ const p=Vector3.TransformCoordinates(new Vector3(.7,1.065,0),sway.computeWorldMatrix(true));
+ f.training.melee({actionId:7,window:{id:'cut',damage:20},blade:[[p.x-.03,p.y,p.z],[p.x+.03,p.y,p.z]],bladeRadius:.045});
+ assert.equal(target.hits,1);assert.equal(f.training.targets[1].hits,0);f.close();
+});

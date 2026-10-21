@@ -17,6 +17,7 @@ import { BossEncounter } from './boss-encounter.js';
 import { BOSS_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
+import { updateBossHealthPosition } from './boss-health-bar.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -199,8 +200,9 @@ async function loadCharacter() {
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
     $('.character-caption').textContent = isV2() ? '한손 베기 → 찌르기·베기 → 심판의 검 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
+    $('.action-controls').dataset.character = character;
     $('#run-button').hidden = isWarrior();
-    $('.secondary-actions').hidden = isWarrior() && !isV2();
+    $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
     $('#attack-style-control').hidden = !isV2();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
@@ -286,6 +288,7 @@ function render() {
   if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
   damageNumbers?.update(dt);
+  updateBossHealthPosition(world.scene,boss,$('#boss-hud'));
 }
 
 try {
@@ -296,13 +299,14 @@ try {
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
   boss=new BossEncounter(world,encounter=>{
     $('#summon-boss').textContent=encounter.loading?'보스 불러오는 중…':encounter.active?'보스 다시 소환':'보스 소환';
-    $('#boss-hud').hidden=!encounter.active;
+    $('#player-combat-status').hidden=!encounter.active;
+    if(!encounter.active)$('#boss-hud').hidden=true;
     if(!encounter.active)return;
     $('#boss-hp').max=encounter.brain.maxHp;$('#boss-hp').value=encounter.brain.hp;
     $('#boss-hp-text').textContent=`${encounter.brain.hp} / ${encounter.brain.maxHp}`;
     $('#boss-state').textContent=encounter.brain.label;
-    $('#combat-feedback').textContent=encounter.lastHit||'일반 공격: 짧은 경직 · 점프 강공격: 넉백';
-    $('#player-health').textContent=`전사 체력 ${encounter.playerHp} / ${encounter.playerMaxHp} · 명중 ${encounter.hitCount} · 넉백 ${encounter.heavyCount}`;
+    $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
+    $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
   },(...args)=>damageNumbers.show(...args));
   world.scene.onAfterAnimationsObservable.add(()=>{

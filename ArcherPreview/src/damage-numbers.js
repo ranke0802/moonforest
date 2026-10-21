@@ -2,8 +2,8 @@ import { Matrix, Vector3 } from '@babylonjs/core';
 export function createDamageNumbers(scene,host){
   const records=[];
   return {
-    show(position,damage,heavy=false){
-      const element=document.createElement('span');element.className=`damage-number${heavy?' heavy':''}`;
+    show(position,damage,heavy=false,kind='enemy'){
+      const element=document.createElement('span');element.className=`damage-number ${kind}${heavy?' heavy':''}`;
       element.textContent=String(damage);host.append(element);records.push({element,position:position.clone(),age:0});
       if(records.length>24)records.shift().element.remove();
     },

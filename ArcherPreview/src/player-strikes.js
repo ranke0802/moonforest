@@ -1,8 +1,12 @@
 import { Vector3 } from '@babylonjs/core';
 export const PLAYER_STRIKES={
-  attack:[{id:'thrust-cut',from:.64,to:1.2,damage:18}],
-  slash:[{id:'cut',from:.46,to:.72,damage:20}],
-  judgment:[{id:'jump-cut',from:.93,to:1.10,damage:64,heavy:true}],
+  attack:[{id:'thrust-cut',from:.55,to:1.65,damage:18}],
+  slash:[{id:'cut',from:.38,to:.80,damage:20}],
+  // The supplied judgment clip has follow-through swings after the landing.
+  // Shared IDs keep damage to once per target/action, including separate windows.
+  judgment:[{id:'jump-cut',from:.86,to:1.20,damage:64,heavy:true},
+    {id:'jump-cut',from:2.33,to:2.86,damage:64,heavy:true},
+    {id:'jump-cut',from:3.02,to:3.53,damage:64,heavy:true}],
   shieldPush:[{id:'shield-push',from:1.10,to:1.15,damage:10,stun:1.5}],
 };
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
@@ -18,7 +22,8 @@ export class PlayerStrikeSampler{
     const window=PLAYER_STRIKES[result.state]?.find(w=>result.clipTime>=w.from&&from<=w.to);
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
-    return {actionId:result.actionId,window,blade:window?at(Math.min(result.clipTime,window.to)):blade,previous:window?at(Math.max(from,window.from)):null};
+    return {actionId:result.actionId,window,blade:window?at(Math.min(result.clipTime,window.to)):blade,previous:window?at(Math.max(from,window.from)):null,
+      bladeRadius:result.state==='shieldPush'?.06:.045};
   }
 }
 

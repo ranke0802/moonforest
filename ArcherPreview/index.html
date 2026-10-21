@@ -35,13 +35,16 @@
 
       <section id="boss-controls" class="boss-controls" data-ui hidden>
         <button id="summon-boss" disabled>보스 소환</button>
+        <div id="player-combat-status" class="player-combat-status" hidden>
+          <span id="player-health"></span>
+          <p id="combat-feedback" role="status"></p>
+        </div>
         <details class="boss-catalog"><summary>보스 모션 20종</summary><ul id="boss-motion-list"></ul></details>
       </section>
-      <section id="boss-hud" class="boss-hud" aria-label="보스 전투 상태" data-ui hidden>
-        <div><strong>GUARDIAN BEAR</strong><span id="boss-state">가드 대기</span></div>
+      <section id="boss-hud" class="boss-hud" aria-label="보스 체력" hidden>
+        <span id="boss-state" class="sr-only">가드 대기</span>
         <progress id="boss-hp" aria-label="보스 체력" max="900" value="900"></progress>
-        <div><span id="boss-hp-text">900 / 900</span><span id="player-health"></span></div>
-        <p id="combat-feedback" role="status">일반 공격: 짧은 경직 · 점프 강공격: 넉백</p>
+        <span id="boss-hp-text">900 / 900</span>
       </section>
 
       <nav class="camera-tools" aria-label="카메라 조작" data-ui>
@@ -70,7 +73,8 @@
         </div>
         <button id="run-button" class="action-button run-button" aria-pressed="false" disabled><span class="action-symbol">↗</span><span>달리기<small>SHIFT</small></span><i class="toggle-dot"></i></button>
         <button id="attack-button" class="action-button attack-button" title="길게 누르면 연속 공격" disabled><svg viewBox="0 0 44 44" aria-hidden="true"><path id="attack-icon" d="M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5"/></svg><span><span id="attack-label">활 공격</span><small id="attack-hint">길게 눌러 연사 · J</small></span></button>
-        <div class="secondary-actions"><button id="guard-button" class="action-button small-action" aria-pressed="false" disabled hidden><span>방어</span><kbd>F</kbd></button><button id="hit-button" class="action-button small-action" disabled><span>피격</span><kbd>H</kbd></button><button id="death-button" class="action-button small-action" disabled><span id="death-label">사망</span><kbd id="death-key">K</kbd></button></div>
+        <button id="guard-button" class="action-button shield-action" title="시전 중 보스 공격을 블록합니다 · F" disabled hidden><svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 3 28 8v10c0 7-6 12-12 15C10 30 4 25 4 18V8Z M16 10v16 M10 18h12"/></svg><span>방패 밀치기</span><kbd>F</kbd></button>
+        <div class="secondary-actions"><button id="hit-button" class="action-button small-action" disabled><span>피격</span><kbd>H</kbd></button><button id="death-button" class="action-button small-action" disabled><span id="death-label">사망</span><kbd id="death-key">K</kbd></button></div>
       </nav>
 
       <div id="toast" class="toast" role="status" hidden></div>
@@ -79,7 +83,7 @@
       <dialog id="help-dialog" class="help-dialog" data-ui>
         <button id="close-help" class="close-help" aria-label="가이드 닫기">×</button><div class="eyebrow">PLAYGROUND CONTROLS</div><h2>숲을 자유롭게 탐험하세요.</h2>
         <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 조이스틱이 생깁니다. 궁수는 이동하면서 가까운 허수아비에 사격합니다.</p><p>전사는 조이스틱 또는 WASD로 달립니다. 공격 버튼이나 J를 누르면 기존 찌르기·베기를 재생하고, 길게 누르면 반복합니다. 공격 중에는 이동을 멈추며 공격 후 다시 달립니다.</p><p>조이스틱 밖에서 <b>한 손가락</b> 드래그로 회전합니다. <b>이동</b> 모드는 터치 시점을 옮깁니다. <b>두 손가락</b> 간격을 조절해 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>궁수 이동 / 전사 달리기</dd><dt>Shift (궁수)</dt><dd>달리기</dd><dt>J</dt><dd>궁수 연사 / 전사 검 공격 (v2는 순차)</dd><dt>F (전사 v2)</dt><dd>방패 밀치기</dd><dt>H / K / R (궁수)</dt><dd>피격 / 사망 / 부활</dd><dt>왼쪽·오른쪽 드래그</dt><dd>카메라 회전</dd><dt>가운데 버튼 드래그</dt><dd>시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
-        <p class="help-note">왼쪽 위에서 궁수, 기존 전사, 전사 v2를 선택합니다. v2의 검 공격은 한손 베기 → 기존 찌르기·베기 → 심판의 검 순서로 반복합니다. 보스 소환 버튼으로 Guardian Bear와 전투할 수 있습니다. 실제 칼날이 닿으면 일반 공격은 짧은 경직, 점프 강공격은 넉백 후 기상을 일으킵니다. 보스 공격의 주황색 예고 범위를 벗어나면 피할 수 있습니다. 공격 종류를 지정해 검수할 수도 있습니다. 전사는 ‘장비 외형’에서 검과 방패를 각각 선택하면 즉시 바뀝니다. 선택한 조합은 이 브라우저에 저장됩니다. 한 번 받은 캐릭터 리소스는 브라우저에 저장하여 재사용하고, 업데이트로 바뀐 부분만 받습니다. 브라우저 저장공간을 비우면 다시 받습니다.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
+        <p class="help-note">왼쪽 위에서 궁수, 기존 전사, 전사 v2를 선택합니다. v2는 연속 공격 중 한손 베기 → 기존 찌르기·베기 → 심판의 검 순서로 이어집니다. 공격이 끝나고 연속 입력이 없으면 한손 베기부터 다시 시작합니다. 보스 소환 버튼으로 Guardian Bear와 전투할 수 있습니다. 실제 칼날이 닿으면 일반 공격은 짧은 경직, 점프 강공격은 넉백 후 기상을 일으킵니다. 기상 중인 보스도 공격할 수 있습니다. 보스 공격에 맞으면 전사 체력이 줄어들며, 방패 밀치기를 시전하는 동안은 블록됩니다. 보스 발밑 막대로 남은 체력을 확인하세요. 보스 공격의 주황색 예고 범위를 벗어나면 피할 수 있습니다. 공격 종류를 지정해 검수할 수도 있습니다. 전사는 ‘장비 외형’에서 검과 방패를 각각 선택하면 즉시 바뀝니다. 선택한 조합은 이 브라우저에 저장됩니다. 한 번 받은 캐릭터 리소스는 브라우저에 저장하여 재사용하고, 업데이트로 바뀐 부분만 받습니다. 브라우저 저장공간을 비우면 다시 받습니다.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
       </dialog>
     </main>
     <script type="module" src="/src/main.js"></script>

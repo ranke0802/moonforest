@@ -39,7 +39,7 @@ export class BossBrain {
     return this.bag.pop();
   }
   hit({heavy=false,damage=14,stun=0}={}){
-    if(this.hp<=0||['down','recover'].includes(this.mode))return false;
+    if(this.hp<=0||this.mode==='down')return false;
     this.hp=Math.max(0,this.hp-damage);this.flash=.22;
     if(heavy||!this.hp){this.stagger=0;this.start('Knock_Down_1','down');}
     else this.stagger=Math.max(this.stagger,stun||.18);

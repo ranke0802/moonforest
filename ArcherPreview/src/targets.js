@@ -137,9 +137,11 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
     melee(sample){
       if(!sample||disposed)return;
       for(const record of records){
-        const p=record.bullseye.getAbsolutePosition();
-        const capsule=[[p.x,.35,p.z],[p.x,1.85,p.z]];
-        if(record.gate.check({...sample,capsule,radius:.34}))this.hit(record.target,sample.window);
+        const matrix=record.sway.computeWorldMatrix(true);
+        const capsules=[[[0,.55,0],[0,1.20,0],.29],[[0,1.3,0],[0,1.76,0],.22],
+          [[-.75,1.065,0],[.75,1.065,0],.13]].map(([a,b,radius])=>({
+            points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius}));
+        if(record.gate.check({...sample,capsules}))this.hit(record.target,sample.window);
       }
     },
     update(dt) {
