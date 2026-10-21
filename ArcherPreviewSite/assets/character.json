@@ -1,5 +1,5 @@
 {
-  "model": "./azure-elf.glb?v=wrist-20261019",
+  "model": "./content/533cf50e621eb67829ca2ac3fa1c366e5b5fa0a651fc0b5a3893d3f9d517dd4e.gltf",
   "version": "Azure Elf · 손목 보정 10.19",
   "animations": {
     "idle": "Idle",
@@ -10,9 +10,37 @@
     "hit": "Hit_Reaction",
     "death": "Death"
   },
-  "speeds": { "walk": 1.1297524, "run": 3.0859220759743686, "moveAttack": 1.1297524 },
+  "speeds": {
+    "walk": 1.1297524,
+    "run": 3.0859220759743686,
+    "moveAttack": 1.1297524
+  },
   "forwardYaw": 0,
-  "attackYaw": { "attack": 0.1256199, "moveAttack": 0.1185827 },
+  "attackYaw": {
+    "attack": 0.1256199,
+    "moveAttack": 0.1185827
+  },
   "scale": 1,
-  "expectedMaxBoneInfluences": 8
+  "expectedMaxBoneInfluences": 8,
+  "legacyCacheMap": "./legacy-e0c98ab-character.json",
+  "resources": [
+    "./content/39adc15b2e316ca9d93dd923a90bee74e52cbd0c4fde06abe159ec0d9da1884c.png",
+    "./content/a1f8e2d0e9a6ec15f0291fc80e0348c5e635224d029d7930fc1f88e6d1e39bbd.png",
+    "./content/fdbc1f51a49859a8d0507fe625ffaa8994ab2dab2c7ef5a915e84c4fe7dc6342.png",
+    "./content/759d761d5c5b96f54a26a6836a5dc43f804a656ae9ac386c1dba25098bf1e785.png",
+    "./content/f6b03c8fe4e8bef4e08f2a6a34cde107c76beb437a8bc160ec15f2ea24d04d8e.bin",
+    "./content/2b7c70daeb5ac6b78f1c2f2f2397d1665d146237c67288efd3d96663b093bf38.bin",
+    "./content/eb8031fc2d3c300b3342ac47bee6326f038fd9a4afd98ef61bb62ffbb5219932.bin",
+    "./content/26c81288778dcaccbda8495430328ea93d88f1655d866aba12123ce2d46fe2b4.bin",
+    "./content/9feee6b6cf091f06000ad95747d7f2f85b37e1a7d6580abba85f0e09636fb649.bin",
+    "./content/f192ef2a40079928f12024da5cf5c25f35a2a8a24e94550b3da13f713678466f.bin",
+    "./content/491af6d4bb7a1eb619c94e624fa274a0abd7576448d4791282dd82fc9bf95349.bin",
+    "./content/de7578c117934cf4f485516927a09b6b78d2036dee39e70ffbb0bea5d9a0e51b.bin",
+    "./content/4580fad3081e2ebd0ddc5a6fbcdb8ba236a8de5f253679cef1f2222ecebbf6cf.bin",
+    "./content/41b451fc8427fdaf820d77ee74481e84eb65e200acad57fd50bbc5a587a9f092.bin",
+    "./content/94f853763375dd614a44be2bd9e8ac55c84cce7250979b9a3966e52a7c64feb3.bin",
+    "./content/c442e90efbcacf46d1bb5ecffc4ab2fbefbb8c66b445aaa45f4a9a83c9fb18ab.bin",
+    "./content/533cf50e621eb67829ca2ac3fa1c366e5b5fa0a651fc0b5a3893d3f9d517dd4e.gltf"
+  ],
+  "resourceCacheVersion": 1
 }

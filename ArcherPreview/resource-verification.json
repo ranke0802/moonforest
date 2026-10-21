@@ -1,0 +1,12 @@
+{
+  "preservedOriginalBodyChannels": 174,
+  "maxDifference": 0,
+  "sharedWarriorBytes": 52553641,
+  "newV2Bytes": 1413778,
+  "models": [
+    "azure-elf.glb",
+    "violet-warrior.glb",
+    "violet-warrior-v2.glb"
+  ],
+  "allAccessorBytesPreserved": true
+}

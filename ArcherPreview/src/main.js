@@ -6,18 +6,23 @@ import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
 import { NativeWarriorController } from './native-warrior.js';
+import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
 import { followTarget } from './camera-follow.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
+import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
 const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button'].map($);
-let character = new URLSearchParams(location.search).get('character') === 'warrior' ? 'warrior' : 'archer';
-const isWarrior = () => character === 'warrior';
+const validCharacters = ['archer','warrior','warrior-v2'];
+let character = new URLSearchParams(location.search).get('character');
+if (!validCharacters.includes(character)) character = 'archer';
+const isWarrior = () => character !== 'archer';
+const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let equipment, equipmentStorage;
@@ -71,11 +76,12 @@ function updateButtons() {
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
   $('#death-button').classList.toggle('dead', dead);
-  $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
+  if(isV2())$('#guard-button').removeAttribute('aria-pressed');
+  else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || (dead && button.id !== 'death-button');
 }
 const actions = {
-  guard() { if (ready) { controller.toggleGuard?.(); updateButtons(); } },
+  guard() { if (ready) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
@@ -123,10 +129,12 @@ async function loadCharacter() {
   loading.hidden = false; loading.classList.remove('error'); $('#retry-load').hidden = true;
   $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
   try {
-    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isWarrior() ? 'warrior' : 'character'}.json`, location.href);
+    await initializeResourceCache();
+    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
     config = await response.json();
+    await migrateCachedGlb(config, manifestUrl);
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
     if (animator) animator.dispose();
@@ -136,7 +144,7 @@ async function loadCharacter() {
     container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, progress => {
       if (progress.lengthComputable && progress.total > 0) $('#loading-progress').style.width = `${Math.min(92, progress.loaded / progress.total * 90 + 5)}%`;
       else if (progress.loaded) $('#loading-text').textContent = `${(progress.loaded / 1024 / 1024).toFixed(1)} MB 불러오는 중`;
-    }, '.glb');
+    }, modelUrl.pathname.endsWith('.gltf') ? '.gltf' : '.glb');
     container.addAllToScene();
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
@@ -162,7 +170,8 @@ async function loadCharacter() {
     }
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
-    controller = new (isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
+    controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
+    if(isV2())controller.setAttackChoice($('#attack-style-select').value);
     controller.setAttackSpeed(attackSpeed);
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
@@ -174,19 +183,22 @@ async function loadCharacter() {
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = config.version || 'ARCHER / 01';
     $('#character-select').value = character;
-    $('#character-name').textContent = isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isV2() ? '검 공격 3종 랜덤 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
     $('#run-button').hidden = isWarrior();
-    $('.secondary-actions').hidden = isWarrior();
+    $('.secondary-actions').hidden = isWarrior() && !isV2();
+    $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
+    $('#attack-style-control').hidden = !isV2();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
-    $('.keyboard-hint small').textContent = isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
+    $('.keyboard-hint small').textContent = isV2() ? 'J 랜덤 검술 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
     $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
-    $('#guard-button').hidden = true;
+    $('#guard-button').hidden = !isV2();
+    $('#guard-button span').textContent = '방패 밀치기';
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동, J 공격. 왼쪽 또는 오른쪽 마우스 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
     canvas.focus({ preventScroll: true });
@@ -212,7 +224,7 @@ function render() {
     const movement = input.value();
     const result = controller.update(dt, movement);
     animator.transition(result.state, result); animator.update(dt);
-    const attacking = ['attack', 'moveAttack'].includes(result.state);
+    const attacking = ['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
@@ -249,9 +261,9 @@ function render() {
     const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
     const target = center.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    $('#state-label').textContent = isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
+    $('#state-label').textContent = isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
-    $('#target-label').textContent = isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
+    $('#target-label').textContent = isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
   }
   statusTime += dt;
@@ -280,7 +292,7 @@ try {
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
-    character = event.target.value === 'warrior' ? 'warrior' : 'archer';
+    character = validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', character); history.replaceState(null, '', url);
     loadCharacter();
   });
@@ -288,6 +300,7 @@ try {
     applyAttackSpeed(Number(event.target.value));
     try { localStorage.setItem('archer-attack-speed', String(attackSpeed)); } catch { /* Keep the session choice. */ }
   });
+  $('#attack-style-select').addEventListener('change', event => controller?.setAttackChoice?.(event.target.value));
   $('#reset-attack-speed').addEventListener('click', () => {
     applyAttackSpeed(1);
     try { localStorage.setItem('archer-attack-speed', '1'); } catch { /* Keep the session choice. */ }

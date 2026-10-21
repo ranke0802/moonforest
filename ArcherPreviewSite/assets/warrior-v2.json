@@ -1,0 +1,41 @@
+{
+  "model": "./content/44871530798fe0f89c64ce0c047461edd4f5f34b348c140acdaca30c8af08006.gltf",
+  "version": "전사 v2 · 대기 / 달리기 / 랜덤 검술 / 방패 밀치기",
+  "animations": {
+    "idle": "Idle_02",
+    "run": "Run_03",
+    "attack": "Thrust_Slash",
+    "slash": "Right_Hand_Sword_Slash",
+    "judgment": "Sword_Judgment",
+    "shieldPush": "Shield_Push_Left"
+  },
+  "speeds": {
+    "run": 4.4371
+  },
+  "fps": 60,
+  "forwardYaw": 0,
+  "scale": 1,
+  "expectedMaxBoneInfluences": 4,
+  "legacyCacheMap": "./legacy-e0c98ab-warrior.json",
+  "resources": [
+    "./content/202afe78adfcdbcd73d98fe2dbd68b000afa03aba45bce8f0d9997ba4989851c.png",
+    "./content/0fdc6ec5e870fca6897db01912e82d557497a460d9801252ab9480979c9e364c.png",
+    "./content/d82fbf7bb747dd39ec5f71cfce4b6eef1a570a6a493724982a74003fcc042faf.png",
+    "./content/6bd731c0b08daec3778c7d9d4e7584b9f1852eae404504aded4869987fecb747.bin",
+    "./content/ce03f620263652ae7024bea9b8d5c0e4b77e33e82f41cfddfc72d73cb148d1a7.bin",
+    "./content/ff7e7fd8b48925e4425647e7fdc9fe1bd943c77b541de92ac2a1eb7ca9835ca8.bin",
+    "./content/b45836a872761f3cc6fbd19d16f63422592238defbc8676afe0158001926455b.bin",
+    "./content/06eb38b67131cebbc25177dedc2d6b979c776fba04edae75cb59ae7412659fff.bin",
+    "./content/294b727dcd60989889999cb775dba4b24f4d3bfd92e2caaa92ec3243d095ad22.bin",
+    "./content/fd3d0f7d7150631b41818d50ff653b8a0f6d38dadaca4be6b87b32de68e0088c.bin",
+    "./content/139d3b117fccb364452691ce1300c71e3c034b067954bed0db7ecd23e9cb8fb5.bin",
+    "./content/d3e3d5517705884d907823bd98a49e6d0ef1c0e3abc76fcd8255f1db1bacad8d.bin",
+    "./content/28f8e2c488f2e38d6d8d17a85f428bedb369c861572b8b5316840a9174cbc44a.bin",
+    "./content/456bb06399b8d2c37bdf057e13dc6201c1e9edfc22478647e3732a1555016fc2.bin",
+    "./content/5557ad421fbef3735095cae19a1ca3b1479c72c6732ae9aab0991771fa08d9ad.bin",
+    "./content/01b4ae095cfd62bb404f259d51abdd82bd336fcaaa31976102c0bac6a28a0de8.bin",
+    "./content/4274eaf25bef8c100ff30e7918efeb9018f56b5916c0e9a8834eab1e1143ad4b.bin",
+    "./content/44871530798fe0f89c64ce0c047461edd4f5f34b348c140acdaca30c8af08006.gltf"
+  ],
+  "resourceCacheVersion": 1
+}

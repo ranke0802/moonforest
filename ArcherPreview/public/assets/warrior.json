@@ -1,5 +1,5 @@
 {
-  "model": "./violet-warrior.glb?v=controlled-run-20261021",
+  "model": "./content/2e579ef51f7faed31839e84f6f700ce7886d21b06d82bd29869f995d3afe4755.gltf",
   "version": "Violet Vanguard · 장비 외형 선택",
   "animations": {
     "idle": "Ready",
@@ -12,5 +12,23 @@
   "fps": 60,
   "forwardYaw": 0,
   "scale": 1,
-  "expectedMaxBoneInfluences": 4
+  "expectedMaxBoneInfluences": 4,
+  "legacyCacheMap": "./legacy-e0c98ab-warrior.json",
+  "resources": [
+    "./content/202afe78adfcdbcd73d98fe2dbd68b000afa03aba45bce8f0d9997ba4989851c.png",
+    "./content/0fdc6ec5e870fca6897db01912e82d557497a460d9801252ab9480979c9e364c.png",
+    "./content/d82fbf7bb747dd39ec5f71cfce4b6eef1a570a6a493724982a74003fcc042faf.png",
+    "./content/6bd731c0b08daec3778c7d9d4e7584b9f1852eae404504aded4869987fecb747.bin",
+    "./content/ce03f620263652ae7024bea9b8d5c0e4b77e33e82f41cfddfc72d73cb148d1a7.bin",
+    "./content/ff7e7fd8b48925e4425647e7fdc9fe1bd943c77b541de92ac2a1eb7ca9835ca8.bin",
+    "./content/b45836a872761f3cc6fbd19d16f63422592238defbc8676afe0158001926455b.bin",
+    "./content/fd3d0f7d7150631b41818d50ff653b8a0f6d38dadaca4be6b87b32de68e0088c.bin",
+    "./content/631a4f3a6fbd2bd690d0507c7d0c56d857d2f182ad822376d73dc2206b69b4c1.bin",
+    "./content/139d3b117fccb364452691ce1300c71e3c034b067954bed0db7ecd23e9cb8fb5.bin",
+    "./content/ab63befad97e2523d0852834292763c3c693c45b4db233b4b768a62e2c577400.bin",
+    "./content/9ae4b020223c8f596a3c4c5fb8f65cf1de82fbab5b3fe66cfb4aa621c3d4b8f9.bin",
+    "./content/080fceea73231bfe30647c835239fa0fbd82cbb8948256d1f3015755d1d6d92a.bin",
+    "./content/2e579ef51f7faed31839e84f6f700ce7886d21b06d82bd29869f995d3afe4755.gltf"
+  ],
+  "resourceCacheVersion": 1
 }
