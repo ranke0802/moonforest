@@ -5,7 +5,7 @@ import { Animation, AnimationGroup, FreeCamera, Matrix, NullEngine, Quaternion, 
 import { CharacterAnimator } from '../src/animation.js';
 import { NativeWarriorController as CharacterController } from '../src/native-warrior.js';
 
-// Exercise the shipped segmented Rigify hierarchy and all TRS channels without a browser texture decoder.
+// Exercise the shipped native Meshy hierarchy and all TRS channels without a browser texture decoder.
 // The GLB remains read-only; these groups use exactly its animation data.
 const asset = readFileSync(new URL('../public/assets/violet-warrior.glb', import.meta.url));
 const jsonLength = asset.readUInt32LE(12);

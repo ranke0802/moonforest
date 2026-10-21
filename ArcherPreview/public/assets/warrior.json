@@ -1,6 +1,6 @@
 {
-  "model": "./violet-warrior.glb?v=run-attack-20261021",
-  "version": "Violet Vanguard · 달리기 + 공격",
+  "model": "./violet-warrior.glb?v=controlled-run-20261021",
+  "version": "Violet Vanguard · 전방 검 / 방패 안정화",
   "animations": {
     "idle": "Ready",
     "run": "Run_03",

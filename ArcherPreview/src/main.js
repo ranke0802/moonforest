@@ -229,7 +229,7 @@ function render() {
     followTarget(world.camera, target, dt);
     $('#state-label').textContent = isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
-    $('#target-label').textContent = isWarrior() ? '검·방패 장착 · 원본 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
+    $('#target-label').textContent = isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
   }
   statusTime += dt;
