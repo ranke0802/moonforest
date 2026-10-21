@@ -98,6 +98,7 @@ const actions = {
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
+  cancelAttackInput() { cancelAttackInput(); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
@@ -109,6 +110,13 @@ function setAttackHeld(source, held) {
     if (!ready || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
     attackSources.add(source);
   } else if (attackSources.delete(source)) controller?.setAttackHeld(attackSources.size > 0);
+}
+
+function cancelAttackInput(source) {
+  if(source){attackSources.delete(source);if(attackSources.size)return;}
+  else attackSources.clear();
+  if(controller?.cancelAttackInput)controller.cancelAttackInput();
+  else controller?.setAttackHeld(false);
 }
 
 function faceHeading(heading, dt) {
@@ -139,7 +147,8 @@ async function loadCharacter() {
   $('#sword-select').disabled = true; $('#shield-select').disabled = true;
   $('#equipment-status').textContent = '';
   $('#character-select').disabled = true;
-  input?.reset(); attackSources.clear(); controller?.setAttackHeld(false);
+  input?.reset(); cancelAttackInput();
+  $('#attack-button').classList.remove('is-charging');
   training.setSelected(null); projectiles.clear();
   loading.hidden = false; loading.classList.remove('error'); $('#retry-load').hidden = true;
   $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
@@ -197,21 +206,22 @@ async function loadCharacter() {
     animator.transition('idle', { clipTime: 0, loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = isV2() ? '전사 v2 · 5연속 검술 · 보스 전투' : config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = config.version || 'ARCHER / 01';
     $('#character-select').value = character;
     $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isV2() ? '한손 베기·찌르기·베기 2회 → 심판의 검 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isV2() ? '짧게: 한손 베기 ↔ 베고 찌르기 · 길게: 심판의 검' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
     $('.action-controls').dataset.character = character;
     $('#run-button').hidden = isWarrior();
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
-    $('.keyboard-hint small').textContent = isV2() ? 'J 순차 검술 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
+    $('.keyboard-hint small').textContent = isV2() ? 'J 짧게 일반 · 길게 심판 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
-    $('#attack-hint').textContent = isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
+    $('#attack-hint').textContent = isV2() ? '짧게 일반 · 길게 심판 · J' : isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
+    $('#attack-button').title = isV2() ? '짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검' : '길게 누르면 연속 공격';
     $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
     $('#guard-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
@@ -252,9 +262,14 @@ function render() {
       if(recoiled)constrainPlayerPosition();
     }
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
-    if(boss?.active&&!boss.playerAlive)controller.setAttackHeld(false);
+    if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     const result = controller.update(dt, movement);
     if(result.cancelled){attackSources.clear();strikeSampler.reset();}
+    if(isV2()){
+      $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
+      $('#attack-button').style.setProperty('--charge-progress',result.chargeProgress||0);
+      $('#attack-label').textContent=result.chargeProgress>0?'심판 준비':'검 공격';
+    }
     combatResult=result;
     animator.transition(result.state, result); animator.update(result.staggered?0:dt);
     const attacking = !result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
@@ -290,7 +305,7 @@ function render() {
     const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    $('#state-label').textContent = result.staggered?'피격 · 경직':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
+    $('#state-label').textContent = result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
     $('#target-label').textContent = isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
@@ -371,9 +386,10 @@ try {
     event.preventDefault(); lastPointerAttack = performance.now();
     attackButton.setPointerCapture(event.pointerId); setAttackHeld(`button:${event.pointerId}`, true);
   });
-  for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) attackButton.addEventListener(name, event => setAttackHeld(`button:${event.pointerId}`, false));
+  attackButton.addEventListener('pointerup', event => setAttackHeld(`button:${event.pointerId}`, false));
+  for (const name of ['pointercancel', 'lostpointercapture']) attackButton.addEventListener(name, event => cancelAttackInput(`button:${event.pointerId}`));
   attackButton.addEventListener('click', event => { if (event.detail === 0 && performance.now() - lastPointerAttack > 350) actions.attack(); });
-  const releaseAttack = () => { attackSources.clear(); controller?.setAttackHeld(false); };
+  const releaseAttack = () => cancelAttackInput();
   window.addEventListener('blur', releaseAttack);
   document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAttack(); });
   $('#hit-button').addEventListener('click', actions.hit);

@@ -216,3 +216,13 @@ test('DOM stub: typing J in a form does not start or hold an attack', () => {
   window.emit('keydown', { code: 'KeyJ', target: { tagName: 'INPUT' }, repeat: false });
   assert.deepEqual(held, []); assert.equal(attacks, 0);
 });
+
+test('focus/reset cancellation discards a pending attack instead of treating it as a tap release', () => {
+  const calls=[];
+  const {input}=setup({setAttackHeld:value=>calls.push(value?'press':'release'),cancelAttackInput:()=>calls.push('cancel')});
+  for(const cancel of [()=>window.emit('blur'),()=>{document.hidden=true;document.emit('visibilitychange');},()=>input.reset(),()=>input.dispose()]){
+    document.hidden=false;window.emit('keydown',{code:'KeyJ',target:{tagName:'BODY'},repeat:false});cancel();
+    assert.deepEqual(calls.slice(-2),['press','cancel']);
+  }
+  assert.equal(calls.includes('release'),false);
+});

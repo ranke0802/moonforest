@@ -128,7 +128,8 @@ export class PlaygroundInput {
   }
   reset() {
     this.keys.clear(); this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.cameraPointers.clear(); this.gesture = null; this.joystick.hidden = true; this.hint.style.opacity = 1;
-    this.callbacks.setAttackHeld?.(false);
+    if(this.callbacks.cancelAttackInput)this.callbacks.cancelAttackInput();
+    else this.callbacks.setAttackHeld?.(false);
   }
   dispose() { this.reset(); this.abort.abort(); }
 }
