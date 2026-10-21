@@ -10,6 +10,7 @@ import { followTarget } from './camera-follow.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
+import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -19,6 +20,20 @@ let character = new URLSearchParams(location.search).get('character') === 'warri
 const isWarrior = () => character === 'warrior';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
+let equipment, equipmentStorage;
+try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+let equipmentChoices = readEquipmentChoices(equipmentStorage);
+for (const slot of ['sword', 'shield']) {
+  const select = $(`#${slot}-select`);
+  for (const style of EQUIPMENT_STYLES) select.add(new Option(style.label, style.id));
+  select.value = equipmentChoices[slot];
+  select.addEventListener('change', () => {
+    if (!ready || !equipment) return;
+    equipmentChoices[slot] = equipment.select(slot, select.value);
+    saveEquipmentChoices(equipmentStorage, equipmentChoices);
+    $('#equipment-status').textContent = `${slot === 'sword' ? '검' : '방패'}: ${EQUIPMENT_STYLES.find(style => style.id === select.value).label} 적용`;
+  });
+}
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
 const attackSources = new Set();
 let toastTimer;
@@ -99,6 +114,9 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   loadingAsset = true; ready = false; updateButtons();
+  $('#equipment-panel').hidden = !isWarrior();
+  $('#sword-select').disabled = true; $('#shield-select').disabled = true;
+  $('#equipment-status').textContent = '';
   $('#character-select').disabled = true;
   input?.reset(); attackSources.clear(); controller?.setAttackHeld(false);
   training.setSelected(null); projectiles.clear();
@@ -112,6 +130,7 @@ async function loadCharacter() {
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
     if (animator) animator.dispose();
+    equipment?.dispose(); equipment = null;
     if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
     if (actor) actor.dispose();
     container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, progress => {
@@ -119,6 +138,7 @@ async function loadCharacter() {
       else if (progress.loaded) $('#loading-text').textContent = `${(progress.loaded / 1024 / 1024).toFixed(1)} MB 불러오는 중`;
     }, '.glb');
     container.addAllToScene();
+    if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
     actor = new TransformNode('player-world-transform', world.scene);
     // World movement is separate from exported root motion, including the authored death fall.
@@ -151,6 +171,7 @@ async function loadCharacter() {
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
+    $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = config.version || 'ARCHER / 01';
     $('#character-select').value = character;
     $('#character-name').textContent = isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
@@ -175,6 +196,7 @@ async function loadCharacter() {
     $('#loading-title').textContent = '캐릭터를 불러오지 못했습니다';
     $('#loading-text').textContent = error.message?.startsWith('필수 동작') || error.message?.startsWith('모델의 스키닝') ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.';
     $('#retry-load').hidden = false; $('#loading-progress').style.width = '0%';
+    equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
   } finally { loadingAsset = false; $('#character-select').disabled = false; }
@@ -296,7 +318,7 @@ try {
   $('#close-help').addEventListener('click', () => $('#help-dialog').close());
   $('#help-dialog').addEventListener('click', e => { if (e.target === $('#help-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
-  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
+  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
   loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);

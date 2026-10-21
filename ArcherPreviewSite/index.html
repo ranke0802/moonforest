@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0b101c" />
     <meta name="description" content="Moonforest 궁수와 전사의 이동 및 공격을 직접 조작하는 3D 플레이그라운드." />
     <title>Moonforest · Character Playground</title>
-    <script type="module" crossorigin src="./assets/index-BbrnaZrb.js"></script>
+    <script type="module" crossorigin src="./assets/index-HYBjEjA5.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BWXNux-o.js">
     <link rel="modulepreload" crossorigin href="./assets/observable.pure-H-M_hi7F.js">
     <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
@@ -43,10 +43,10 @@
     <link rel="modulepreload" crossorigin href="./assets/preload-helper-C7Bzh2Rg.js">
     <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-B-PZWwg9.js">
     <link rel="modulepreload" crossorigin href="./assets/texture.pure-D-ZXI31f.js">
-    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-CMNo5wHP.js">
-    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-vJ2oONi3.js">
-    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-DPsNIIx7.js">
-    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-C8kND-PP.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-C94eFISv.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-B-QwW_14.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-BVG0O0ES.js">
+    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-DWMqzB4B.js">
     <link rel="modulepreload" crossorigin href="./assets/webAudioBaseSubGraph-Dt0pq0Kf.js">
     <link rel="modulepreload" crossorigin href="./assets/spatialWebAudio-CNw0PM6n.js">
     <link rel="modulepreload" crossorigin href="./assets/abstractSoundSource-vjAm2svO.js">
@@ -74,7 +74,7 @@
     <link rel="modulepreload" crossorigin href="./assets/bakedVertexAnimation-CP3BNGXM.js">
     <link rel="modulepreload" crossorigin href="./assets/constants-_wyaM_ID.js">
     <link rel="modulepreload" crossorigin href="./assets/cubemapToSphericalPolynomial-D2Q-3Tj0.js">
-    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-CSBbT-Xo.js">
+    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-CAHZce6K.js">
     <link rel="modulepreload" crossorigin href="./assets/helperFunctions-DHdJUWHO.js">
     <link rel="modulepreload" crossorigin href="./assets/fresnelFunction-FdYlYPwE.js">
     <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BATNZvmb.js">
@@ -205,7 +205,7 @@
     <link rel="modulepreload" crossorigin href="./assets/mrtFragmentDeclaration-BZpfWb0R.js">
     <link rel="modulepreload" crossorigin href="./assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js">
     <link rel="modulepreload" crossorigin href="./assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-DapoQoT7.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-C9SLY3q4.css">
   </head>
   <body>
     <main id="app">
@@ -218,6 +218,14 @@
 
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
         <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · Violet Vanguard</option></select>
+        <details id="equipment-panel" class="equipment-panel" open hidden>
+          <summary>장비 외형 <span>개별 선택</span></summary>
+          <div class="equipment-options">
+            <label for="sword-select">무기 · 검<select id="sword-select" aria-label="검 외형 선택" disabled></select></label>
+            <label for="shield-select">방어구 · 방패<select id="shield-select" aria-label="방패 외형 선택" disabled></select></label>
+          </div>
+          <span id="equipment-status" class="sr-only" role="status" aria-live="polite"></span>
+        </details>
         <div class="eyebrow"><i></i><span id="character-eyebrow">THE MOONLIT RANGER</span></div>
         <h1><b id="character-name">Azure Elf</b><span id="character-subtitle">푸른 숲의 궁수</span></h1>
         <div class="status-pill"><span class="status-dot"></span><span id="state-label">준비 중</span><span class="status-divider"></span><span id="speed-label">0.00 m/s</span></div>
@@ -259,7 +267,7 @@
       <dialog id="help-dialog" class="help-dialog" data-ui>
         <button id="close-help" class="close-help" aria-label="가이드 닫기">×</button><div class="eyebrow">PLAYGROUND CONTROLS</div><h2>숲을 자유롭게 탐험하세요.</h2>
         <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 조이스틱이 생깁니다. 궁수는 이동하면서 가까운 허수아비에 사격합니다.</p><p>전사는 조이스틱 또는 WASD로 달립니다. 공격 버튼이나 J를 누르면 기존 찌르기·베기를 재생하고, 길게 누르면 반복합니다. 공격 중에는 이동을 멈추며 공격 후 다시 달립니다.</p><p>조이스틱 밖에서 <b>한 손가락</b> 드래그로 회전합니다. <b>이동</b> 모드는 터치 시점을 옮깁니다. <b>두 손가락</b> 간격을 조절해 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>궁수 이동 / 전사 달리기</dd><dt>Shift (궁수)</dt><dd>달리기</dd><dt>J</dt><dd>궁수 연사 / 전사 찌르기·베기</dd><dt>H / K / R (궁수)</dt><dd>피격 / 사망 / 부활</dd><dt>왼쪽·오른쪽 드래그</dt><dd>카메라 회전</dd><dt>가운데 버튼 드래그</dt><dd>시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
-        <p class="help-note">왼쪽 위에서 궁수와 전사를 선택합니다. 전사의 본체 모션과 검·방패는 같은 시간축으로 재생됩니다.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
+        <p class="help-note">왼쪽 위에서 궁수와 전사를 선택합니다. 전사는 ‘장비 외형’에서 검과 방패를 각각 선택하면 즉시 바뀝니다. 선택한 조합은 이 브라우저에 저장됩니다. 전사의 본체 모션과 검·방패는 같은 시간축으로 재생됩니다.<br>고화질이 기본입니다. 화면이 끊기면 상단 화질을 균형 또는 절전으로 바꾸세요.<br>⛶ 버튼으로 전체화면을 시작합니다. 자동 가로 전환을 지원하지 않는 브라우저에서는 휴대폰을 가로로 돌려 주세요.</p>
       </dialog>
     </main>
   </body>

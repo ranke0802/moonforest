@@ -4,6 +4,7 @@ Mobile browser review of Azure Elf (Archer) and Violet Vanguard (Warrior). Use t
 
 - Play: https://ranke0802.github.io/moonforest/ArcherPreviewSite/
 - Warrior direct selection: append `?character=warrior`. The default remains Archer.
+- Warrior equipment appearance: choose sword and shield independently under 장비 외형. Original, violet/silver and teal/bronze can be combined in all nine ways, including during movement or attacks. Selection is immediate and remembered per browser. The GPU palette preserves the original UV texture detail; no new GLB is loaded and no geometry, animation or attachment is changed. Archer has no equipment selector. These are material palette variants based on the approved design references, not swappable equipment geometry.
 - Warrior: Run_03 with a controlled sword/shield carry is the default movement. WASD/joystick runs; J/Attack plays the approved native Thrust_Slash. Attack finishes before movement resumes. Holding Attack/J repeats the attack. Sword and shield stay attached in both clips. Only movement and attack controls are shown; target-hit detection is not included.
 - Left lower touch area: dynamic joystick.
 - Archer: Run toggle, Attack, Hit, Death / Revive buttons.
