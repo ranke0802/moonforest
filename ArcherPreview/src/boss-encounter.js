@@ -2,6 +2,7 @@ import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vect
 import { CharacterAnimator } from './animation.js';
 import { BossBrain, BOSS_BY_NAME } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
+import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER } from './hit-feedback.js';
 
 import { shieldIntercepts } from './player-strikes.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
@@ -12,10 +13,11 @@ function rootSample(config,name,time){
 }
 
 export class BossEncounter {
-  constructor(world,onChange,onDamage=()=>{}){
+  constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{}){
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.shots=[];this.playerHp=500;this.playerMaxHp=500;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
+    this.playerReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
   }
   async summon(player){
     if(this.loading)return;this.loading=true;this.onChange(this);
@@ -44,6 +46,7 @@ export class BossEncounter {
       for(const shot of this.shots)shot.mesh.dispose();this.shots=[];
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
       this.brain=new BossBrain(this.animator.durations);this.playerHp=this.playerMaxHp;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;this.gate.reset();
+      this.playerReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=player.rotation.y+Math.PI;
       this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.knockVelocity.setAll(0);
@@ -51,7 +54,7 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.active=false;this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;for(const s of this.shots)s.mesh.dispose();this.shots=[];this.gate.reset();this.onChange(this);}
+  hide(){this.active=false;this.playerReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;for(const s of this.shots)s.mesh.dispose();this.shots=[];this.gate.reset();this.onChange(this);}
   get playerAlive(){return !this.active||this.playerHp>0;}
   update(dt,player){
     if(!this.active)return;
@@ -76,8 +79,7 @@ export class BossEncounter {
     const spec=BOSS_BY_NAME[this.brain.state];
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
     this.ring.scaling.setAll((spec.range||2.5)/1.9);
-    const alpha=this.brain.flash>0?.55*Math.sin(Math.PI*this.brain.flash/.22):0;
-    for(const mesh of this.asset.meshes){mesh.renderOverlay=alpha>0;mesh.overlayAlpha=alpha;}
+    applyHitFlash(this.asset.meshes,this.brain.flash);
     this.onChange(this);
   }
   poseAndContacts(player,result,sample,shield){
@@ -101,6 +103,7 @@ export class BossEncounter {
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
       if(this.gate.check({...sample,capsules})&&this.brain.hit(sample.window)){
         const hit=sample.window;this.hitCount++;
+        applyHitFlash(this.asset?.meshes,this.brain.flash);
         if(hit.heavy){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
         this.lastHit=hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
         this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy);this.onChange(this);
@@ -124,7 +127,7 @@ export class BossEncounter {
       const center=player.position.add(new Vector3(0,1,0));
       const line=shot.mesh.position.subtract(previous),t=Math.max(0,Math.min(1,Vector3.Dot(center.subtract(previous),line)/Math.max(1e-9,line.lengthSquared())));
       const contact=this.receiveBossHit({damage:18,bodyContact:Vector3.Distance(previous.add(line.scale(t)),center)<.55,
-        shieldContact:shieldIntercepts(previous,shot.mesh.position,shield),action:result});
+        shieldContact:shieldIntercepts(previous,shot.mesh.position,shield),action:result,source:previous});
       if(contact)shot.life=0;
       if(shot.life<=0){shot.mesh.dispose();this.shots.splice(this.shots.indexOf(shot),1);}
     }
@@ -138,20 +141,23 @@ export class BossEncounter {
     const velocity=player.position.add(new Vector3(0,1,0)).subtract(mesh.position).normalize().scale(6);
     this.shots.push({mesh,velocity,life:3});
   }
-  receiveBossHit({damage,bodyContact=false,shieldContact=false,action}){
+  receiveBossHit({damage,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(!this.playerAlive||(!bodyContact&&!shieldContact))return false;
     // Block throughout the shield-push cast, including its wind-up and recovery.
     // Contact is still required; distant attacks/projectiles cannot trigger a parry.
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 경직';
+      applyHitFlash(this.asset?.meshes,this.brain.flash);
       this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'BLOCK',false,'block');this.onChange(this);
-    }else this.hitPlayer(damage);
+    }else this.hitPlayer(damage,source);
     return true;
   }
-  hitPlayer(damage){
+  hitPlayer(damage,source){
     if(this.playerInvulnerable||!this.playerAlive)return;
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=.8;
+    this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1));
+    this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
     this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player');this.onChange(this);
   }

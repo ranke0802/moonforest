@@ -18,6 +18,7 @@ import { BOSS_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { updateBossHealthPosition } from './boss-health-bar.js';
+import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -52,8 +53,12 @@ let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
-let attackSpeed = 1;
-try { attackSpeed = normalizeAttackSpeed(Number(localStorage.getItem('archer-attack-speed') ?? 1)); } catch { /* Use the default without storage. */ }
+const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
+function readAttackSpeed(){
+  try{return normalizeAttackSpeed(Number(localStorage.getItem(attackSpeedStorageKey())??1));}
+  catch{return 1;}
+}
+let attackSpeed=readAttackSpeed();
 function applyAttackSpeed(value) {
   attackSpeed = normalizeAttackSpeed(value);
   controller?.setAttackSpeed(attackSpeed);
@@ -181,8 +186,7 @@ async function loadCharacter() {
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
-    if(isV2())controller.setAttackChoice($('#attack-style-select').value);
-    controller.setAttackSpeed(attackSpeed);
+    applyAttackSpeed(readAttackSpeed());
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
     reviewFocus = isWarrior() ? container.transformNodes.find(node => node.name === 'mixamorig:Hips') : null;
@@ -193,18 +197,17 @@ async function loadCharacter() {
     animator.transition('idle', { clipTime: 0, loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = isV2() ? '전사 v2 · 5연속 검술 · 보스 전투' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
     $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isV2() ? '한손 베기 → 찌르기·베기 → 심판의 검 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isV2() ? '한손 베기·찌르기·베기 2회 → 심판의 검 · F 방패 밀치기' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
     $('.action-controls').dataset.character = character;
     $('#run-button').hidden = isWarrior();
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
-    $('#attack-style-control').hidden = !isV2();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
     $('.keyboard-hint small').textContent = isV2() ? 'J 순차 검술 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
@@ -227,6 +230,15 @@ async function loadCharacter() {
   } finally { loadingAsset = false; $('#character-select').disabled = false; }
 }
 
+function constrainPlayerPosition(){
+  const radius=Math.hypot(actor.position.x,actor.position.z);
+  if(radius>11){actor.position.x*=11/radius;actor.position.z*=11/radius;}
+  for(const dummy of training.targets){
+    const dx=actor.position.x-dummy.position.x,dz=actor.position.z-dummy.position.z,distance=Math.hypot(dx,dz);
+    if(distance<.62){actor.position.x=dummy.position.x+(distance?dx/distance:1)*.62;actor.position.z=dummy.position.z+(distance?dz/distance:0)*.62;}
+  }
+}
+
 function render() {
   const dt = document.hidden ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
   elapsed += dt;
@@ -234,12 +246,18 @@ function render() {
   training.update(dt);
   projectiles.update(dt);
   if (ready) {
+    if(isV2()){
+      const recoiled=boss.playerReaction.update(dt,actor);
+      applyHitFlash(container.meshes,boss.playerReaction.remaining,PLAYER_STAGGER);
+      if(recoiled)constrainPlayerPosition();
+    }
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
     if(boss?.active&&!boss.playerAlive)controller.setAttackHeld(false);
     const result = controller.update(dt, movement);
+    if(result.cancelled){attackSources.clear();strikeSampler.reset();}
     combatResult=result;
-    animator.transition(result.state, result); animator.update(dt);
-    const attacking = ['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
+    animator.transition(result.state, result); animator.update(result.staggered?0:dt);
+    const attacking = !result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
@@ -254,14 +272,7 @@ function render() {
       const right = new Vector3(-forward.z, 0, forward.x);
       const direction = forward.scale(movement.y).add(right.scale(movement.x)).normalize();
       actor.position.addInPlace(direction.scale(result.speed * dt));
-      const radius = Math.hypot(actor.position.x, actor.position.z);
-      if (radius > 11) { actor.position.x *= 11 / radius; actor.position.z *= 11 / radius; }
-      // Keep the player outside the wooden target stands.
-      for (const dummy of training.targets) {
-        const dx = actor.position.x - dummy.position.x, dz = actor.position.z - dummy.position.z;
-        const distance = Math.hypot(dx, dz);
-        if (distance < .62) { actor.position.x = dummy.position.x + (distance ? dx / distance : 1) * .62; actor.position.z = dummy.position.z + (distance ? dz / distance : 0) * .62; }
-      }
+      constrainPlayerPosition();
       if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
     if (attacking && shotTarget && !isWarrior()) {
@@ -279,7 +290,7 @@ function render() {
     const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    $('#state-label').textContent = isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
+    $('#state-label').textContent = result.staggered?'피격 · 경직':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
     $('#target-label').textContent = isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
@@ -308,12 +319,15 @@ try {
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
-  },(...args)=>damageNumbers.show(...args));
+  },(...args)=>damageNumbers.show(...args),duration=>{
+    controller.hit(duration);attackSources.clear();strikeSampler.reset();
+    applyHitFlash(container.meshes,duration,PLAYER_STAGGER);
+  });
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!ready||!isWarrior()||!combatResult)return;
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode);
     if(isV2())boss.poseAndContacts(actor,combatResult,sample,shieldNode);
-    training.melee(sample);
+    if(!controller.staggerRemaining)training.melee(sample);
   });
   training = createTrainingTargets(world.scene, world.shadows,(...args)=>damageNumbers.show(...args));
   projectiles = createProjectiles(world.scene, target => training.hit(target));
@@ -330,7 +344,7 @@ try {
   $('#guard-button').addEventListener('click', actions.guard);
   $('#summon-boss').addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.setAttackHeld(false);await boss.summon(actor);world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;await boss.summon(actor);world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');}
     updateButtons();
   });
@@ -344,12 +358,11 @@ try {
   });
   $('#attack-speed').addEventListener('input', event => {
     applyAttackSpeed(Number(event.target.value));
-    try { localStorage.setItem('archer-attack-speed', String(attackSpeed)); } catch { /* Keep the session choice. */ }
+    try { localStorage.setItem(attackSpeedStorageKey(), String(attackSpeed)); } catch { /* Keep the session choice. */ }
   });
-  $('#attack-style-select').addEventListener('change', event => controller?.setAttackChoice?.(event.target.value));
   $('#reset-attack-speed').addEventListener('click', () => {
     applyAttackSpeed(1);
-    try { localStorage.setItem('archer-attack-speed', '1'); } catch { /* Keep the session choice. */ }
+    try { localStorage.setItem(attackSpeedStorageKey(), '1'); } catch { /* Keep the session choice. */ }
   });
   const attackButton = $('#attack-button');
   let lastPointerAttack = -Infinity;

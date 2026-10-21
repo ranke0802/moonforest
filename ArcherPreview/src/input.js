@@ -105,7 +105,7 @@ export class PlaygroundInput {
   drag(dx, dy, pan) {
     if (!pan) {
       this.camera.alpha += dx * .005;
-      this.camera.beta = Math.max(.25, Math.min(1.48, this.camera.beta + dy * .005));
+      this.camera.beta = Math.max(.25, Math.min(1.48, this.camera.beta - dy * .005));
     } else {
       const scale = this.camera.radius * .0013;
       const rightX = Math.sin(this.camera.alpha), rightZ = -Math.cos(this.camera.alpha);

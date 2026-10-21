@@ -89,9 +89,9 @@ test('melee: fast sweep cannot skip a narrow limb between the old eight samples'
  assert.equal(bladeTouchesCapsule(before,after,[[2,.8,.45],[2,1.2,.45]],.06),false);
 });
 
-test('actual GLB: late visible sword passes register, without repeated damage per action or idle hits',()=>{
+test('actual GLB: visible cutting passes register once; idle cannot deal damage',()=>{
  const source=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
- for(const [state,clip,time] of [['attack','Thrust_Slash',1.5],['slash','Right_Hand_Sword_Slash',.76],['judgment','Sword_Judgment',2.55],['judgment','Sword_Judgment',3.3]]){
+ for(const [state,clip,time] of [['attack','Thrust_Slash',1.5],['slash','Right_Hand_Sword_Slash',.76],['judgment','Sword_Judgment',1.02]]){
   const sampler=new PlayerStrikeSampler(),gate=new MeleeContactGate();let matrix;
   const sword={computeWorldMatrix(){},getWorldMatrix(){return matrix;}};
   for(const t of [time-.016,time]){matrix=source.pose(clip,t).Golden_Oathblade;sampler.sample({state,actionId:1,clipTime:t},sword,null);}
@@ -100,7 +100,7 @@ test('actual GLB: late visible sword passes register, without repeated damage pe
   assert.ok(sample.window,`${state} ${time}: missing strike window`);
   assert.equal(gate.check({...sample,capsule,radius:.06}),true);assert.equal(gate.check({...sample,capsule,radius:.06}),false);
   assert.equal(gate.check({...sample,blade:sample.blade.map(p=>[p[0]+5,p[1],p[2]]),previous:null,actionId:2,capsule,radius:.06}),false);
-  assert.equal(sampler.sample({state:'idle',actionId:null,clipTime:time},sword,null).window,undefined);
+  assert.equal(sampler.sample({state:'idle',actionId:null,clipTime:time},sword,null),null);
  }
 });
 

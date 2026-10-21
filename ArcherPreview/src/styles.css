@@ -41,7 +41,7 @@
 @media(max-width:800px){.equipment-panel{width:185px;margin-bottom:12px}.equipment-panel summary{padding:8px 9px;font-size:10px}.equipment-options{padding:0 8px 9px;gap:7px}.equipment-options label{grid-template-columns:62px 1fr;gap:4px;font-size:9px}.equipment-options select{font-size:10px;padding:0 4px;min-height:36px}}
 @media(max-width:520px){.equipment-panel[open]:not([hidden])~.eyebrow,.equipment-panel[open]:not([hidden])~h1,.equipment-panel[open]:not([hidden])~.target-status{display:none}}
 @media(max-height:500px) and (orientation:landscape){.equipment-panel{margin-bottom:8px;width:195px}.equipment-panel[open]~.eyebrow,.equipment-panel[open]~h1,.equipment-panel[open]~.target-status{display:none}.equipment-panel summary{padding:7px 9px}.equipment-options{gap:5px}.equipment-options select{height:32px;min-height:32px}}
-#attack-style-control{margin-bottom:8px}#attack-style-control[hidden],#guard-button[hidden],#hit-button[hidden],#death-button[hidden]{display:none}#attack-style-select{width:100%;margin-top:6px;padding:8px 5px;background:#202a3e;border:1px solid var(--line);border-radius:6px;color:#eee;font:inherit;font-size:11px;color-scheme:dark}#guard-button{white-space:nowrap}
+#guard-button[hidden],#hit-button[hidden],#death-button[hidden]{display:none}#guard-button{white-space:nowrap}
 
 .boss-controls{position:absolute;top:160px;right:36px;z-index:4;width:200px}.boss-controls[hidden],.boss-hud[hidden],.player-combat-status[hidden]{display:none}#summon-boss{width:100%;padding:11px 15px;border-radius:10px;background:#613d27;border:1px solid #af8052;color:#fff4dd;font-size:12px}.boss-catalog{font-size:10px;margin-top:8px;background:var(--panel);border:1px solid var(--line);border-radius:8px}.boss-catalog summary{padding:8px;cursor:pointer}.boss-catalog ul{max-height:220px;overflow:auto;padding:0 12px 10px 24px;line-height:1.8}
 .boss-hud{position:absolute;z-index:3;width:112px;transform:translate(-50%,8px);pointer-events:none;text-align:center;font-size:9px;line-height:1.5;font-variant-numeric:tabular-nums;color:#f7e6d1;text-shadow:0 1px 3px #000,0 0 4px #000}.boss-hud progress{appearance:none;-webkit-appearance:none;width:100%;height:5px;display:block;margin:0 0 2px;border:1px solid #211d22;border-radius:3px;overflow:hidden;background:#16131bcc;box-shadow:0 1px 3px #0008}.boss-hud progress::-webkit-progress-bar{background:#16131bcc}.boss-hud progress::-webkit-progress-value{background:#df985b}.boss-hud progress::-moz-progress-bar{background:#df985b}.boss-hud[data-state=stagger] progress{border-color:#fff}.player-combat-status{font-size:12px;color:#e6dcd1;margin:9px 0;text-align:center;font-variant-numeric:tabular-nums}.player-combat-status p{font-size:11px;color:#c0cedd;margin:5px 0 0}
@@ -61,7 +61,13 @@
 @media(max-width:800px){.action-controls[data-character="warrior-v2"] #attack-button{width:86px;height:86px}}
 @media(max-width:520px){.action-controls[data-character="warrior-v2"] #attack-button{width:81px;height:81px}}
 @media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"] #attack-button{width:77px;height:77px}}
-.action-controls[data-character="warrior-v2"] .attack-speed-control{bottom:calc(100% + 100px)}
-@media(max-width:800px){.action-controls[data-character="warrior-v2"] .attack-speed-control{bottom:calc(100% + 90px)}}
-@media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"] .attack-speed-control{right:calc(100% + 94px);bottom:calc(100% + 12px)}}
 @media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"] #guard-button{width:66px;height:66px}.shield-action svg{width:22px;height:24px}.shield-action kbd{display:none}}
+
+/* One flowing column keeps camera, speed and boss controls from overlapping. */
+.right-tools{position:absolute;top:92px;right:max(36px,env(safe-area-inset-right));width:230px;display:flex;flex-direction:column;align-items:stretch;gap:12px;transform:scale(.6666667);transform-origin:top right;z-index:4}
+.right-tools .camera-tools,.right-tools .boss-controls,.right-tools .attack-speed-control{position:static;transform:none;scale:none;width:100%;max-width:none;margin:0}
+.right-tools .camera-tools{flex-wrap:wrap;justify-content:flex-end}
+.right-tools .attack-speed-control{padding:10px 12px 5px}
+@media(max-width:800px){.right-tools{top:76px;right:18px;width:195px}.right-tools .camera-tools .tool-switch{flex-basis:100%}}
+@media(max-height:500px) and (orientation:landscape){.right-tools{top:58px;right:max(20px,env(safe-area-inset-right));width:200px;gap:9px}.right-tools .camera-tools .tool-switch{flex-basis:auto}.right-tools .camera-tools .tool-switch button{padding:5px 7px}.right-tools .camera-tools .icon-button{min-width:30px;width:30px;height:30px}.right-tools .boss-catalog ul{max-height:80px}}
+@media(max-height:500px) and (orientation:landscape){.right-tools .boss-controls{position:absolute;right:calc(100% + 18px);top:0;width:200px}}

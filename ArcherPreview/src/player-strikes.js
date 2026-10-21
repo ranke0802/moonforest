@@ -2,17 +2,15 @@ import { Vector3 } from '@babylonjs/core';
 export const PLAYER_STRIKES={
   attack:[{id:'thrust-cut',from:.55,to:1.65,damage:18}],
   slash:[{id:'cut',from:.38,to:.80,damage:20}],
-  // The supplied judgment clip has follow-through swings after the landing.
-  // Shared IDs keep damage to once per target/action, including separate windows.
-  judgment:[{id:'jump-cut',from:.86,to:1.20,damage:64,heavy:true},
-    {id:'jump-cut',from:2.33,to:2.86,damage:64,heavy:true},
-    {id:'jump-cut',from:3.02,to:3.53,damage:64,heavy:true}],
+  // Only the descending blade deals the heavy hit. Landing/recovery are inactive.
+  judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true}],
   shieldPush:[{id:'shield-push',from:1.10,to:1.15,damage:10,stun:1.5}],
 };
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
   sample(result,sword,shield){
+    if(result.actionId==null||result.staggered){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
     node.computeWorldMatrix(true);

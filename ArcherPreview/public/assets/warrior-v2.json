@@ -1,6 +1,6 @@
 {
   "model": "./content/e873ef9798f9eef3bb739a8ff82884e546e1f7a0bda949b5931f46cd5cb280e8.gltf",
-  "version": "전사 v2 · 한손 베기 → 찌르기·베기 → 심판의 검 · 보스 전투",
+  "version": "전사 v2 · 5연속 검술 · 보스 전투",
   "animations": {
     "idle": "Idle_02",
     "run": "Run_03",
