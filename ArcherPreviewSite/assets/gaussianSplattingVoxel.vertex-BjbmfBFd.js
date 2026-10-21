@@ -1,4 +1,4 @@
-import{t as e}from"./shaderStore-D-XQlhUT.js";import{t}from"./meshUboDeclaration-BATNZvmb.js";import{t as n}from"./sceneUboDeclaration-B96Tfx7b.js";import{b as r}from"./index-D8Pb0uUL.js";var i=`gaussianSplattingVoxelVertexShader`,a=`#include<sceneUboDeclaration>
+import{t as e}from"./shaderStore-D-XQlhUT.js";import{t}from"./meshUboDeclaration-BATNZvmb.js";import{t as n}from"./sceneUboDeclaration-B96Tfx7b.js";import{b as r}from"./index-3DMWb6J6.js";var i=`gaussianSplattingVoxelVertexShader`,a=`#include<sceneUboDeclaration>
 #include<meshUboDeclaration>
 attribute splatIndex0: vec4f;attribute splatIndex1: vec4f;attribute splatIndex2: vec4f;attribute splatIndex3: vec4f;attribute position: vec3f;uniform dataTextureSize: vec2f;uniform alpha: f32;uniform invWorldScale: mat4x4f;uniform viewMatrix: mat4x4f;
 #if IS_COMPOUND

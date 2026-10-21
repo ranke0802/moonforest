@@ -1,8 +1,13 @@
 {
-  "model": "./violet-warrior.glb?v=repaired-native-20261021",
-  "version": "Violet Vanguard · 원본 모션 / 장비 보정",
+  "model": "./violet-warrior.glb?v=run-attack-20261021",
+  "version": "Violet Vanguard · 달리기 + 공격",
   "animations": {
-    "native": "Thrust_Slash"
+    "idle": "Ready",
+    "run": "Run_03",
+    "attack": "Thrust_Slash"
+  },
+  "speeds": {
+    "run": 4.4371
   },
   "fps": 60,
   "forwardYaw": 0,

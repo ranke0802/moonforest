@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { Animation, AnimationGroup, FreeCamera, Matrix, NullEngine, Quaternion, Scene, TransformNode, Vector3 } from '@babylonjs/core';
 import { CharacterAnimator } from '../src/animation.js';
-import { NativeReviewController as CharacterController } from '../src/native-review.js';
+import { NativeWarriorController as CharacterController } from '../src/native-warrior.js';
 
 // Exercise the shipped segmented Rigify hierarchy and all TRS channels without a browser texture decoder.
 // The GLB remains read-only; these groups use exactly its animation data.
@@ -87,7 +87,7 @@ function fixture() {
 }
 
 
-test('warrior GLB: supplied motion and sword match exported hierarchy at sampled times', () => {
+test('warrior GLB: all supplied clips and sword match exported hierarchy at sampled times', () => {
   const f=fixture();
   try {
     for(const [state,name] of Object.entries(names)) {
@@ -101,15 +101,19 @@ test('warrior GLB: supplied motion and sword match exported hierarchy at sampled
     }
   } finally {f.dispose();}
 });
-test('warrior GLB: native clip pauses, seeks and holds last frame with equipment synchronized',()=>{
+test('warrior GLB: run, attack and ready synchronize body and equipment',()=>{
   const f=fixture();try{
-    assert.equal(gltf.animations.length,1);
-    const animatedNames=new Set(channels.get(names.native).map(c=>gltf.nodes[c.node].name));
-    assert.ok(animatedNames.has('Golden_Oathblade'));assert.ok(animatedNames.has('mixamorig:RightHand'));
-    const end=f.animator.durations.native;
-    assert.ok(Math.abs(end-3)<1e-6);
-    f.controller.attack();f.step(end+.5);f.compare(names.native,end);f.step(10);f.compare(names.native,end);
-    f.controller.seek(67);f.step(.2);f.compare(names.native,66/60);f.step(10);f.compare(names.native,66/60);
-    f.controller.loop=true;f.controller.attack();f.step(3.25);f.compare(names.native,.25);
+    assert.equal(gltf.animations.length,3);
+    for(const name of Object.values(names)) {
+      const animatedNames=new Set(channels.get(name).map(c=>gltf.nodes[c.node].name));
+      assert.ok(animatedNames.has('Golden_Oathblade'));assert.ok(animatedNames.has('mixamorig:RightHand'));
+    }
+    assert.ok(Math.abs(f.animator.durations.attack-3)<1e-6);
+    assert.ok(Math.abs(f.animator.durations.run-.8)<1e-6);
+    f.step(.2,{y:1});f.compare(names.run,.2);
+    f.controller.attack();f.step(.2,{y:1});f.compare(names.attack,.2);
+    f.step(3.1);f.compare(names.idle,0);
+    f.step(.3,{x:1});f.compare(names.run,.3);
+    f.step(.2);f.compare(names.idle,0);
   }finally{f.dispose();}
 });
