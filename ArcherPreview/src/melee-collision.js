@@ -23,8 +23,24 @@ export function bladeTouchesCapsule(previous,current,capsule,radius){
   return false;
 }
 export class MeleeContactGate{
-  constructor(){this.previous=null;this.actionId=null;this.hits=new Set();}
-  reset(){this.previous=null;this.actionId=null;this.hits.clear();}
+  constructor(){this.previous=null;this.actionId=null;this.hits=new Set();this.pending=[];}
+  reset(){this.previous=null;this.actionId=null;this.hits.clear();this.pending=[];}
+  collect(sample){
+    if(this.actionId!==sample.actionId){this.reset();this.actionId=sample.actionId;}
+    const now=sample.elapsed??0,hits=[];let hitStop=0;
+    for(const contact of sample.contacts??[sample]){
+      if(!this.check({...sample,...contact}))continue;
+      const window=contact.window;
+      if(window.burst){
+        // Commit only after real blade contact. Hold that impact pose for the short burst.
+        hitStop=Math.max(hitStop,(window.burst.length-1)*window.interval+.015);
+        window.burst.forEach((damage,i)=>this.pending.push({at:now+i*window.interval,hit:{...window,damage,heavy:i===window.burst.length-1,burstIndex:i+1}}));
+      }else hits.push(window);
+    }
+    for(const pending of this.pending)if(pending.at<=now+1e-8)hits.push(pending.hit);
+    this.pending=this.pending.filter(p=>p.at>now+1e-8);
+    return {hits,hitStop};
+  }
   check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0}){
     if(this.actionId!==actionId){this.reset();this.actionId=actionId;}
     if(!window){this.previous=null;return false;}

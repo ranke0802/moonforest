@@ -54,19 +54,19 @@ test('shield push cancels pending charge; attack input during shield push cannot
 test('cancelled input is discarded instead of firing a short press on release',()=>{
  const c=create();c.setAttackHeld(true);c.update(.3);c.cancelAttackInput();c.setAttackHeld(false);
  assert.equal(c.update(3).state,'idle');assert.equal(c.serial,0);
- c.setAttackHeld(true);c.update(.1);const result=c.update(.01,{y:1});assert.equal(result.cancelled,true);assert.equal(result.state,'run');
+ c.setAttackHeld(true);c.update(.1);c.requestMovement();const result=c.update(.01,{y:1});assert.equal(result.cancelled,true);assert.equal(result.state,'run');
  c.setAttackHeld(false);assert.equal(c.update(2).state,'idle');assert.equal(c.serial,0);
 });
 test('movement cancels every sword/shield phase immediately and resets normal combo',()=>{
  for(const kind of [...V2_ATTACKS,'shieldPush'])for(const phase of [.05,.3,.65,.95]){
   const c=create();c.startAttack(kind);c.update(durations[kind]*phase);
-  const result=c.update(1/60,{x:.7,y:.7});
+  c.requestMovement();const result=c.update(1/60,{x:.7,y:.7});
   assert.equal(result.state,'run',`${kind} ${phase}`);assert.ok(result.speed>0);assert.equal(result.actionId,null);
   assert.equal(result.cancelled,true);assert.equal(c.action,null);assert.equal(c.held,false);
   for(let i=0;i<100;i++)assert.equal(c.update(.05).state,'idle');
   tap(c);assert.equal(c.action.state,'slash');
  }
- const c=create();tap(c);c.update(durations.slash);c.update(.01,{x:1});tap(c);assert.equal(c.action.state,'slash');
+ const c=create();tap(c);c.update(durations.slash);c.requestMovement();c.update(.01,{x:1});tap(c);assert.equal(c.action.state,'slash');
 });
 test('stagger freezes current pose, cancels damage and charge, then resumes movement',()=>{
  const c=create();c.attack();c.update(.45);c.hit(.26);

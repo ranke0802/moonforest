@@ -84,6 +84,7 @@ export class BossEncounter {
   }
   poseAndContacts(player,result,sample,shield){
     if(!this.active)return;
+    let hitStop=0;
     this.player=player;
     // Keep source skeletal animation untouched. Separate planar root travel from the
     // encounter's position so clip transitions/loop boundaries never teleport the boss.
@@ -101,12 +102,13 @@ export class BossEncounter {
     if(sample&&this.playerAlive&&this.brain.hp>0&&this.brain.mode!=='down'){
       const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
-      if(this.gate.check({...sample,capsules})&&this.brain.hit(sample.window)){
-        const hit=sample.window;this.hitCount++;
+      const contacts=this.gate.collect({...sample,capsules});
+      for(const hit of contacts.hits)if(this.brain.hit(hit)){
+        hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash);
         if(hit.heavy){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
         this.lastHit=hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
-        this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy);this.onChange(this);
+        this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex);this.onChange(this);
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){
@@ -131,6 +133,7 @@ export class BossEncounter {
       if(contact)shot.life=0;
       if(shot.life<=0){shot.mesh.dispose();this.shots.splice(this.shots.indexOf(shot),1);}
     }
+    return hitStop;
   }
   fire(kind,player){
     const mesh=MeshBuilder.CreateSphere(`bear-${kind}`,{diameter:kind==='rock'?.32:.24,segments:kind==='rock'?3:10},this.world.scene);

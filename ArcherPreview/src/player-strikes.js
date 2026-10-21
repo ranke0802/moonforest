@@ -1,15 +1,15 @@
 import { Vector3 } from '@babylonjs/core';
 export const PLAYER_STRIKES={
-  attack:[{id:'thrust-cut',from:.55,to:1.65,damage:18}],
+  attack:[{id:'thrust',from:.55,to:1.02,damage:9},{id:'follow-cut',from:1.08,to:1.65,damage:9}],
   slash:[{id:'cut',from:.38,to:.80,damage:20}],
   // Only the descending blade deals the heavy hit. Landing/recovery are inactive.
-  judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true}],
+  judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true,burst:[20,20,24],interval:.055}],
   shieldPush:[{id:'shield-push',from:1.10,to:1.15,damage:10,stun:1.5}],
 };
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
-  sample(result,sword,shield){
+  sample(result,sword,shield,multiHit=true){
     if(result.actionId==null||result.staggered){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
@@ -17,10 +17,12 @@ export class PlayerStrikeSampler{
     const local=result.state==='shieldPush'?[[-.55,0,.16],[.55,0,.16]]:[[-.002,.405,0],[-.002,-.951,0]];
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
-    const window=PLAYER_STRIKES[result.state]?.find(w=>result.clipTime>=w.from&&from<=w.to);
+    const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18}]:PLAYER_STRIKES[result.state];
+    const windows=strikes?.filter(w=>result.clipTime>=w.from&&from<=w.to)||[];
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
-    return {actionId:result.actionId,window,blade:window?at(Math.min(result.clipTime,window.to)):blade,previous:window?at(Math.max(from,window.from)):null,
+    const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from))}));
+    return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
       bladeRadius:result.state==='shieldPush'?.06:.045};
   }
 }

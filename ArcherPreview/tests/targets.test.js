@@ -94,3 +94,13 @@ test('melee dummy: visible outstretched sleeves have collision, including their 
  f.training.melee({actionId:7,window:{id:'cut',damage:20},blade:[[p.x-.03,p.y,p.z],[p.x+.03,p.y,p.z]],bladeRadius:.045});
  assert.equal(target.hits,1);assert.equal(f.training.targets[1].hits,0);f.close();
 });
+
+test('dummy judgment contact emits three separate damage numbers and only the last is heavy',()=>{
+ const damage=[],f=fixture((...args)=>damage.push(args)),target=f.training.targets[0],p=target.aimPoint;
+ const window={id:'judgment',damage:64,heavy:true,burst:[20,20,24],interval:.055};
+ const sample={actionId:12,window,blade:[[p.x-1,1,p.z],[p.x+1,1,p.z]],elapsed:0};
+ assert.ok(f.training.melee(sample)>.11);
+ for(const elapsed of [.02,.055,.08,.11,.2,.5])f.training.melee({...sample,elapsed});
+ assert.equal(target.hits,3);assert.deepEqual(damage.map(d=>d[1]),[20,20,24]);assert.deepEqual(damage.map(d=>d[2]),[false,false,true]);
+ assert.deepEqual(damage.map(d=>d[4]),[1,2,3]);f.close();
+});

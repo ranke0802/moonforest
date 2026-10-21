@@ -95,6 +95,7 @@ function updateButtons() {
   $('#boss-controls').hidden = !isV2();
 }
 const actions = {
+  move() { if(ready&&isV2()) { controller.requestMovement();attackSources.clear();strikeSampler.reset(); } },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
@@ -211,7 +212,7 @@ async function loadCharacter() {
     $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
-    $('.character-caption').textContent = isV2() ? '짧게: 한손 베기 ↔ 베고 찌르기 · 길게: 심판의 검' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
+    $('.character-caption').textContent = isV2() ? '한손 베기 1타 ↔ 베고 찌르기 2타 · 길게: 심판 3타' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
     $('.action-controls').dataset.character = character;
     $('#run-button').hidden = isWarrior();
@@ -271,7 +272,7 @@ function render() {
       $('#attack-label').textContent=result.chargeProgress>0?'심판 준비':'검 공격';
     }
     combatResult=result;
-    animator.transition(result.state, result); animator.update(result.staggered?0:dt);
+    animator.transition(result.state, result); animator.update(result.staggered||result.hitStopped?0:dt);
     const attacking = !result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
@@ -340,9 +341,10 @@ try {
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!ready||!isWarrior()||!combatResult)return;
-    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode);
-    if(isV2())boss.poseAndContacts(actor,combatResult,sample,shieldNode);
-    if(!controller.staggerRemaining)training.melee(sample);
+    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2());
+    const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
+    const targetStop=!controller.staggerRemaining?training.melee(sample):0;
+    if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,(...args)=>damageNumbers.show(...args));
   projectiles = createProjectiles(world.scene, target => training.hit(target));

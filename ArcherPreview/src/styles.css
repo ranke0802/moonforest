@@ -74,3 +74,7 @@
 
 .attack-button.is-charging{position:relative;border-color:#f7d898;box-shadow:0 0 24px #e9bd6a66}
 .attack-button.is-charging::after{content:"";position:absolute;inset:-6px;border-radius:50%;pointer-events:none;background:conic-gradient(#ffe2a2 calc(var(--charge-progress,0)*1turn),#ae8e5a33 0);mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0)}
+
+/* Bring combat controls into the thumb reach area, preserving their spacing. */
+.action-controls[data-character="warrior-v2"]{right:calc(clamp(44px,8vw,96px) + env(safe-area-inset-right,0px));bottom:calc(clamp(92px,12vh,120px) + env(safe-area-inset-bottom,0px))}
+@media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}}

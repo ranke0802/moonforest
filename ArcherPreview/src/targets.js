@@ -123,7 +123,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       for (const record of records) record.ring.isVisible = record.target === selected;
       return selected;
     },
-    hit(target, {damage=18,heavy=false,stun=0}={}) {
+    hit(target, {damage=18,heavy=false,stun=0,burstIndex=0}={}) {
       const record = owned.get(target);
       if (disposed || !record) return false;
       target.hits += 1;
@@ -131,18 +131,21 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       record.heavy=heavy;record.stun=stun;
       record.centerMaterial.emissiveColor.set(1, .72, .28);
       for(const mesh of record.parts){mesh.renderOverlay=true;mesh.overlayColor=Color3.White();mesh.overlayAlpha=.55;}
-      onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy);
+      onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy,'enemy',burstIndex);
       return true;
     },
     melee(sample){
       if(!sample||disposed)return;
+      let hitStop=0;
       for(const record of records){
         const matrix=record.sway.computeWorldMatrix(true);
         const capsules=[[[0,.55,0],[0,1.20,0],.29],[[0,1.3,0],[0,1.76,0],.22],
           [[-.75,1.065,0],[.75,1.065,0],.13]].map(([a,b,radius])=>({
             points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius}));
-        if(record.gate.check({...sample,capsules}))this.hit(record.target,sample.window);
+        const contacts=record.gate.collect({...sample,capsules});
+        for(const hit of contacts.hits){this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);}
       }
+      return hitStop;
     },
     update(dt) {
       if (disposed || !Number.isFinite(dt) || dt < 0) return;

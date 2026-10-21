@@ -7,6 +7,7 @@ export class PlaygroundInput {
     this.callbacks = callbacks;
     this.keys = new Set();
     this.stick = { x: 0, y: 0 };
+    this.stickIntent = { x: 0, y: 0 };
     this.joystickPointer = null;
     this.cameraPointers = new Map();
     this.cameraMode = 'orbit';
@@ -40,6 +41,7 @@ export class PlaygroundInput {
     e.preventDefault();
     const wasDown = this.keys.has(e.code);
     this.keys.add(e.code);
+    if(!wasDown&&!e.repeat&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(e.code))this.callbacks.move?.();
     if (e.code === 'KeyJ') {
       if (!wasDown && !e.repeat) {
         if (this.callbacks.setAttackHeld) this.callbacks.setAttackHeld(true);
@@ -94,10 +96,15 @@ export class PlaygroundInput {
   moveStick(e) {
     const v = normalizedStick(e.clientX - this.origin.x, e.clientY - this.origin.y);
     this.stick = { x: v.x, y: v.y };
+    // Re-engaging or deliberately changing the stick counts as new movement, not finger jitter.
+    if(Math.hypot(v.x,v.y)<=.08)this.stickIntent={x:0,y:0};
+    else if(Math.hypot(this.stickIntent.x,this.stickIntent.y)<=.08||Math.hypot(v.x-this.stickIntent.x,v.y-this.stickIntent.y)>.25){
+      this.stickIntent={x:v.x,y:v.y};this.callbacks.move?.();
+    }
     this.knob.style.transform = `translate(${v.knobX}px,${v.knobY}px)`;
   }
   pointerUp(e) {
-    if (e.pointerId === this.joystickPointer) { this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.joystick.hidden = true; this.hint.style.opacity = 1; }
+    if (e.pointerId === this.joystickPointer) { this.stick = { x: 0, y: 0 }; this.stickIntent={x:0,y:0}; this.joystickPointer = null; this.joystick.hidden = true; this.hint.style.opacity = 1; }
     this.cameraPointers.delete(e.pointerId);
     this.gesture = this.measureGesture();
     if (this.canvas.hasPointerCapture(e.pointerId)) this.canvas.releasePointerCapture(e.pointerId);
@@ -128,6 +135,7 @@ export class PlaygroundInput {
   }
   reset() {
     this.keys.clear(); this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.cameraPointers.clear(); this.gesture = null; this.joystick.hidden = true; this.hint.style.opacity = 1;
+    this.stickIntent={x:0,y:0};
     if(this.callbacks.cancelAttackInput)this.callbacks.cancelAttackInput();
     else this.callbacks.setAttackHeld?.(false);
   }
