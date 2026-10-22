@@ -19,6 +19,7 @@ export class WarriorV2Controller {
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
   playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
   startAttack(kind) {
+    if(this.captured)return false;
     kind??=V2_COMBO[this.attackIndex++%V2_COMBO.length];
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
   }
@@ -32,13 +33,14 @@ export class WarriorV2Controller {
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
   hit(duration=.2,{force=false}={}){
+    if(this.captured)return false;
     if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=duration;
     return true;
   }
   attack(){
-    if(this.dead||this.held)return false;
+    if(this.dead||this.captured||this.held)return false;
     if(this.action||this.staggerRemaining>0){if(this.queuedAttack!=='judgment')this.queuedAttack='normal';}
     else this.startAttack();
     return true;
@@ -46,7 +48,7 @@ export class WarriorV2Controller {
   setAttackHeld(held){
     if(held){
       if(this.held)return true;
-      if(this.dead)return false;
+      if(this.dead||this.captured)return false;
       this.held=true;this.holdTime=0;this.holdTriggered=false;
       if(this.queuedAttack==='normal')this.queuedAttack=null;
     }else{
@@ -57,12 +59,18 @@ export class WarriorV2Controller {
     return true;
   }
   interruptWith(kind){
-    if(this.dead)return false;
+    if(this.dead||this.captured)return false;
     this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
   shieldPush(){return this.interruptWith('shieldPush');}
   dodge(){return this.interruptWith('dodge');}
+  capture(){
+    this.capturePose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
+    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.captured=true;
+  }
+  releaseCapture(){this.captured=false;this.capturePose=null;this.cancelAttack();this.state='idle';this.time=0;}
   update(dt,input={}) {
+    if(this.captured)return {...this.capturePose,captured:true,moving:false,speed:0,loop:false,actionId:null,chargeProgress:0,events:[]};
     dt=Number.isFinite(dt)?Math.max(0,dt):0;const magnitude=Math.min(1,Math.hypot(input.x||0,input.y||0));const previous=this.state;
     const frameDt=dt;let readyAt=0,rollFrom=null,rollTo=null;
     // A fresh press is accepted during recovery or hit-stun. Charging runs alongside

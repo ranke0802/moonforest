@@ -4,7 +4,7 @@ export function createDamageNumbers(scene,host){
   return {
     show(position,damage,heavy=false,kind='enemy',burstIndex=0,critical=false){
       const element=document.createElement('span');element.className=`damage-number ${kind}${heavy?' heavy':''}${critical?' critical':''}`;
-      element.textContent=critical?`${damage} CRIT`:String(damage);host.append(element);records.push({element,position:position.clone(),age:0,offsetX:burstIndex?(burstIndex-2)*24:0});
+      element.textContent=critical?`Critical ${damage}`:String(damage);host.append(element);records.push({element,position:position.clone(),age:0,offsetX:burstIndex?(burstIndex-2)*24:0});
       if(records.length>24)records.shift().element.remove();
     },
     update(dt){

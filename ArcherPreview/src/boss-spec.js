@@ -11,7 +11,7 @@ export const BOSS_MOTIONS = [
   {name:'Rising_Flying_Kick',label:'솟구치는 발차기',role:'attack',range:2.7,impact:.5,kind:'melee'},
   {name:'Shield_Push_Left',label:'왼팔 밀치기',role:'attack',range:2.3,impact:.55,kind:'melee'},
   {name:'Skill_01',label:'포효 충격파',role:'attack',range:2.6,impact:.52,kind:'spin'},
-  {name:'Skill_02',label:'양팔 휩쓸기',role:'attack',range:2.6,impact:.52,kind:'melee'},
+  {name:'Skill_02',label:'다리 잡아 돌려 던지기',role:'attack',range:1.8,impact:.08,kind:'grab',playRate:.85},
   {name:'Skill_03',label:'회전 몸통치기',role:'attack',range:3,impact:.52,kind:'spin'},
   {name:'Weapon_Combo',label:'연속 휩쓸기',role:'attack',range:2.6,impact:.5,kind:'spin'},
   {name:'Walking',label:'거리 좁히기',role:'move'},
@@ -78,8 +78,8 @@ export class BossBrain {
     }
     if(!playerAlive){this.startIfChanged('Block6','idle');return {events,speed:0};}
     if(['attack','guard','evade'].includes(this.mode)){
-      this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?1.12:1));
       const spec=BOSS_BY_NAME[this.state];
+      this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?(spec.playRate||1.12):1));
       const speed=this.comboStep&&this.time<duration*spec.impact?1.8:0;
       if(this.mode==='attack'&&!this.impacted&&this.time>=duration*spec.impact){this.impacted=true;events.push({type:'attack',...spec,comboStep:this.comboStep});}
       if(this.time>=duration){

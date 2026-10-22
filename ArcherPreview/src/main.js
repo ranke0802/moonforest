@@ -94,7 +94,7 @@ function updateButtons() {
   $('#death-button').classList.toggle('dead', dead);
   if(isV2())$('#guard-button').removeAttribute('aria-pressed');
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
-  for (const button of buttons) button.disabled = !ready || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
+  for (const button of buttons) button.disabled = !ready || controller?.captured || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
   $('#boss-controls').hidden = !isV2();
 }
@@ -108,7 +108,7 @@ const actions = {
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
-  canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
+  canMove() { return ready && !controller.dead && !controller.captured && (!boss?.active || boss.playerAlive); },
 };
 
 function startDefense(kind){
@@ -294,8 +294,8 @@ function render() {
       $('#attack-label').textContent=result.chargeProgress>0?'심판 준비':'검 공격';
     }
     combatResult=result;
-    animator.transition(result.state, result); animator.update(result.staggered||result.hitStopped?0:dt);
-    const attacking = !result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
+    animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
+    const attacking = !result.captured&&!result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
@@ -328,7 +328,7 @@ function render() {
     const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    $('#state-label').textContent = result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
+    $('#state-label').textContent = result.captured?boss.grab.label:result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
     $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
     $('#target-label').textContent = isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
     updateButtons();
@@ -357,7 +357,11 @@ try {
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
-  },(...args)=>damageNumbers.show(...args),(duration,options)=>{
+  },(...args)=>damageNumbers.show(...args),(duration,options={})=>{
+    if('captured' in options){
+      if(options.captured)controller.capture();else controller.releaseCapture();
+      attackSources.clear();strikeSampler.reset();input.reset();return;
+    }
     if(controller.hit(duration,options)!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
   });
@@ -365,7 +369,7 @@ try {
     if(!ready||!isWarrior()||!combatResult)return;
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2());
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
-    const targetStop=!controller.staggerRemaining?training.melee(sample):0;
+    const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,(...args)=>damageNumbers.show(...args));

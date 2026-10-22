@@ -42,7 +42,7 @@ test('boss: actual collision damages stand-up once, briefly staggers, then conti
  const engine=new NullEngine(),scene=new Scene(engine),b=new BossEncounter({scene},()=>{});
  b.active=true;b.brain=new BossBrain(durations);b.brain.hit({heavy:true,damage:64});b.brain.update(durations.Knock_Down_1+.01,2);
  b.brain.time=.3;b.dt=.016;b.groundHeight=0;
- b.actor=new TransformNode('boss',scene);b.actor.position.z=1.5;b.carrier=new TransformNode('carrier',scene);b.carrier.parent=b.actor;
+ b.actor=new TransformNode('boss',scene);b.actor.position.z=1.5;b.actor.rotation.y=Math.PI;b.carrier=new TransformNode('carrier',scene);b.carrier.parent=b.actor;
  const boneNames=['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
  b.nodes=Object.fromEntries(boneNames.map(name=>{const node=new TransformNode(name,scene);node.parent=b.carrier;node.position.y=1;return ['mixamorig:'+name,node];}));
  b.config={scale:1,catalog:[{name:'Stand_Up3',groundTrack:[0]}]};
@@ -159,7 +159,7 @@ test('strike sampling: 2x low-FPS shield contact is retained only inside its aut
 function collisionEncounter(mode){
  const engine=new NullEngine(),scene=new Scene(engine),feedback=[],b=new BossEncounter({scene},()=>{},(...args)=>feedback.push(args));
  b.active=true;b.brain=new BossBrain(durations);b.brain.start(mode==='down'?'Knock_Down_1':mode==='guard'?'Block6':'Backflip',mode);b.brain.time=.3;b.dt=.016;b.groundHeight=0;
- b.actor=new TransformNode('boss',scene);b.actor.position.z=1.5;b.carrier=new TransformNode('carrier',scene);b.carrier.parent=b.actor;
+ b.actor=new TransformNode('boss',scene);b.actor.position.z=1.5;b.actor.rotation.y=Math.PI;b.carrier=new TransformNode('carrier',scene);b.carrier.parent=b.actor;
  const boneNames=['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
  b.nodes=Object.fromEntries(boneNames.map(name=>{const node=new TransformNode(name,scene);node.parent=b.carrier;node.position.y=.3;return ['mixamorig:'+name,node];}));
  b.config={scale:1,catalog:[{name:b.brain.state,groundTrack:[0]}]};b.asset={meshes:[{}]};
@@ -181,7 +181,7 @@ test('downed boss: real low blade contact deals normal and three heavy hits with
 });
 
 test('boss defense: roll says 회피, guard says BLOCK; prevented bursts cannot damage later',()=>{
- for(const [mode,label] of [['evade','회피'],['guard','BLOCK']]){
+ for(const [mode,label] of [['evade','Dodge'],['guard','BLOCK']]){
   const {b,player,sample,feedback,close}=collisionEncounter(mode);
   const burst={...sample,window:{id:'jump-cut',damage:64,heavy:true,burst:[20,20,24],interval:.055}};
   for(const elapsed of [0,.055,.11])b.poseAndContacts(player,{}, {...burst,elapsed},null);

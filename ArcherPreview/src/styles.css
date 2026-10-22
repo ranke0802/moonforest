@@ -80,6 +80,7 @@
 @media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}}
 
 .damage-number.evade{color:#c5ecff;font-size:14px;letter-spacing:1px}
+.damage-number.critical{color:#ffe58a;font-weight:800}.damage-number.player.critical{color:#ffb39d}
 .action-controls[data-character="warrior-v2"] #dodge-button{position:absolute;right:calc(100% + 14px);bottom:4px;width:72px;height:72px;min-width:0;border-radius:50%;padding:8px;display:flex;flex-direction:column;justify-content:center;gap:3px;background:linear-gradient(145deg,#42555b,#23333c);border-color:#a3c2ba99;box-shadow:0 4px 20px #0004;touch-action:none;text-align:center}
 .dodge-action svg{width:26px;height:26px;fill:none;stroke:#d5eee7;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.dodge-action span{font-size:11px}.dodge-action kbd{font-size:8px;color:#a2bdcb}
 @media(max-width:800px),(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"] #dodge-button{width:64px;height:64px}.dodge-action kbd{display:none}}

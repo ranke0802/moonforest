@@ -6,6 +6,7 @@ import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, BLOCK_STAGGER } from 
 
 import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
+import { BossGrab } from './boss-grab.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -19,9 +20,13 @@ export class BossEncounter {
     this.playerHp=500;this.playerMaxHp=500;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
     this.playerReaction=new PlayerHitReaction();this.bossReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
+    this.grab=new BossGrab(captured=>{
+      this.playerReaction.cancelRecoil();this.gate.reset();this.onPlayerHit(0,{captured});
+    },critical=>this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true}));
   }
   async summon(player){
     if(this.loading)return;this.loading=true;this.onChange(this);
+    this.grab.reset();
     try{
       if(!this.asset){
         const url=new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`,location.href);
@@ -54,16 +59,16 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.active=false;this.playerReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
+  hide(){this.grab.reset();this.active=false;this.playerReaction.reset();this.bossReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
   get playerAlive(){return !this.active||this.playerHp>0;}
   update(dt,player){
     if(!this.active)return;
     this.dt=dt;this.player=player;this.playerInvulnerable=Math.max(0,this.playerInvulnerable-dt);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
-    const result=this.brain.update(dt,distance,this.playerAlive);this.pendingEvents=result.events;
+    const result=this.brain.update(dt,distance,this.playerAlive&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     if(this.brain.mode==='evade')this.showDefense('evade');
     if(['idle','move'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
-      if(!['down','recover'].includes(this.brain.mode)&&distance>.01)this.actor.rotation.y=Math.atan2(direction.x,direction.z);
+      if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01)this.actor.rotation.y=Math.atan2(direction.x,direction.z);
     }
     if(result.speed&&distance>1.65)this.actor.position.addInPlace(direction.normalize().scale(Math.min(result.speed*dt,distance-1.65)));
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:this.brain.mode==='move',blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
@@ -100,8 +105,8 @@ export class BossEncounter {
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
     for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
-    if(distance<1.35&&distance>.001&&this.brain.mode!=='down'){this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.actor.computeWorldMatrix(true);for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);}
-    if(sample&&this.playerAlive&&this.brain.hp>0){
+    if(!this.grab.active&&distance<1.35&&distance>.001&&this.brain.mode!=='down'){this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.actor.computeWorldMatrix(true);for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);}
+    if(sample&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
       const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
       let contacts;
@@ -125,25 +130,27 @@ export class BossEncounter {
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){
-      if(this.brain.stagger||['down','recover'].includes(this.brain.mode))continue;
+      if(this.grab.active||this.brain.stagger||['down','recover'].includes(this.brain.mode))continue;
       if(event.disabled)continue;
       if(distance<=bossAttackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(event.kind==='spin'||facing>.2){
           const aim=player.position.add(new Vector3(0,1.1,0));
           const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
-          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],grab:event.kind==='grab',bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
       }
     }
     this.pendingEvents=[];
+    this.grab.update(this.dt,{boss:this.actor,nodes:this.nodes,serial:this.brain.serial,state:this.brain.state,clipTime:this.brain.time,
+      duration:this.brain.durations[this.brain.state],interrupted:this.brain.stagger>0||this.brain.hp<=0});
     return hitStop;
   }
   showDefense(kind,actionId){
     const key=kind==='evade'?`evade:${this.brain.serial}`:`block:${this.brain.serial}:${actionId}`;
     if(this.defenseFeedbackKey===key)return false;
     this.defenseFeedbackKey=key;this.lastHit=kind==='evade'?'보스 회피':'보스 BLOCK';
-    this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),kind==='evade'?'회피':'BLOCK',false,kind);
+    this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),kind==='evade'?'Dodge':'BLOCK',false,kind);
     this.onChange(this);
     return true;
   }
@@ -153,10 +160,10 @@ export class BossEncounter {
     this.onPlayerHit(BLOCK_STAGGER,{force:true,reason:'blocked'});
     this.lastHit='전사 공격 BLOCK · 1초 경직';
   }
-  receiveBossHit({damage,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
-    if(!this.playerAlive||(!bodyContact&&!shieldContact))return false;
+  receiveBossHit({damage,grab=false,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
+    if(this.grab.active||!this.playerAlive||(!bodyContact&&!shieldContact))return false;
     if(action?.state==='dodge'&&action.actionId!=null){
-      this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'회피',false,'evade');return false;
+      this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'Dodge',false,'evade');return false;
     }
     // Block throughout the shield-push cast, including its wind-up and recovery.
     // Contact is still required; distant attacks cannot trigger a parry.
@@ -166,16 +173,19 @@ export class BossEncounter {
       if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'BLOCK',false,'block');this.onChange(this);
+    }else if(grab){
+      const {critical}=rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0));
+      if(this.grab.start(this.player,this.playerNodes,this.brain.serial,critical)){this.lastHit='다리 잡힘 · 조작 불가';this.onChange(this);}
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null});
     return true;
   }
-  hitPlayer(damage,source,{superArmor=false,critical:fixedCritical}={}){
-    if(this.playerInvulnerable||!this.playerAlive)return;
+  hitPlayer(damage,source,{superArmor=false,critical:fixedCritical,grabImpact=false}={}){
+    if((this.playerInvulnerable&&!grabImpact)||!this.playerAlive)return;
     const critical=fixedCritical??(source?rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0)).critical:false);
     damage=Math.round(damage*(critical?1.3:1));
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
     this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!superArmor});
-    this.onPlayerHit(PLAYER_STAGGER);
+    if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
     this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
   }
