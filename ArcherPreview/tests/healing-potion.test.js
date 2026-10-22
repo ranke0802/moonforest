@@ -39,3 +39,11 @@ test('encounter forbids potion use while captured/loading and clears the effect 
  b.grab.phase=null;assert.equal(b.usePotion(),true);assert.equal(b.potions.remaining,2);
  b.hide();assert.equal(b.potions.active,false);assert.equal(b.canUsePotion,false);
 });
+test('death restart restores HP and all three potions, removes the boss and pending damage',()=>{
+ let enabled=true;const b=new BossEncounter({},()=>{});b.active=true;b.playerHp=100;
+ b.actor={setEnabled:value=>enabled=value};b.ring={isVisible:true};b.usePotion();b.playerHp=0;
+ b.pendingEvents=[{type:'attack'}];b.gate.pending=[{damage:300}];b.playerInvulnerable=1;
+ b.resetBattle();assert.equal(b.active,false);assert.equal(enabled,false);assert.equal(b.ring.isVisible,false);
+ assert.equal(b.playerHp,500);assert.equal(b.playerInvulnerable,0);assert.equal(b.potions.remaining,3);assert.equal(b.potions.active,false);
+ assert.equal(b.pendingEvents.length,0);assert.equal(b.gate.pending.length,0);assert.equal(b.canUsePotion,false);
+});

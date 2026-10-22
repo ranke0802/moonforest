@@ -87,6 +87,12 @@
       </nav>
 
       <div id="toast" class="toast" role="status" hidden></div>
+      <dialog id="death-dialog" class="death-screen" aria-labelledby="death-title" aria-describedby="death-hint" data-ui>
+        <button id="death-restart" type="button" aria-label="보스 소환 전으로 돌아가기">
+          <span id="death-title">YOU DIED</span>
+          <span id="death-hint">화면을 터치하여 다시 시작</span>
+        </button>
+      </dialog>
       <footer class="scene-footer" data-ui><span>MOONFOREST · ANIMATION REVIEW</span><span id="render-status">WEBGL</span></footer>
 
       <dialog id="motion-speed-dialog" class="motion-speed-dialog" aria-labelledby="motion-speed-title" aria-describedby="motion-speed-description" data-ui>

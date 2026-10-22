@@ -63,6 +63,11 @@ export class BossEncounter {
     finally{this.loading=false;this.onChange(this);}
   }
   hide(){this.grab.reset();this.potions.cancel();this.active=false;this.playerReaction.reset();this.bossReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
+  resetBattle(){
+    this.hide();this.playerHp=this.playerMaxHp;this.playerInvulnerable=0;this.potions.reset();
+    this.pendingEvents=[];this.knockVelocity.setAll(0);this.lastHit=null;this.hitCount=0;this.heavyCount=0;
+    this.onChange(this);
+  }
   get playerAlive(){return !this.active||this.playerHp>0;}
   get canUsePotion(){return this.active&&!this.loading&&!this.grab.active&&this.potions.canUse(this.playerHp,this.playerMaxHp);}
   usePotion(){

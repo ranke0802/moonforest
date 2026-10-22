@@ -21,6 +21,7 @@ import { updateBossHealthPosition } from './boss-health-bar.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
+import { setupDeathScreen } from './death-screen.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -71,6 +72,7 @@ function applyAttackSpeed(value) {
 }
 applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
+const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.reset();},onRestart:resetBeforeBoss});
 
 function applyRenderQuality() {
   if (!engine) return;
@@ -125,6 +127,14 @@ function startDefense(kind){
     rollDirection=dodgeDirection(input.value(),world.camera.alpha,actor.rotation.y);
     actor.rotation.y=Math.atan2(rollDirection.x,rollDirection.z);
   }
+}
+
+function resetBeforeBoss(){
+  boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
+  input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
+  actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
+  animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
+  applyHitFlash(container.meshes,0);resetCamera();updateButtons();canvas.focus({preventScroll:true});
 }
 
 function setAttackHeld(source, held) {
@@ -276,7 +286,7 @@ function constrainPlayerPosition(){
 }
 
 function render() {
-  const dt = document.hidden || motionSpeedControls.isOpen() ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
+  const dt = document.hidden || motionSpeedControls.isOpen() || deathScreen.isOpen() ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -364,6 +374,7 @@ try {
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
+    if(encounter.playerHp<=0)deathScreen.show();
   },(...args)=>damageNumbers.show(...args),(duration,options={})=>{
     if('captured' in options){
       if(options.captured)controller.capture();else controller.releaseCapture();

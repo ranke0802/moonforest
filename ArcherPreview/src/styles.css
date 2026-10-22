@@ -82,6 +82,13 @@
 .damage-number.evade{color:#c5ecff;font-size:14px;letter-spacing:1px}
 .damage-number.critical{color:#ffe58a;font-weight:800}.damage-number.player.critical{color:#ffb39d}
 .damage-number.heal{color:#8df3b1}
+.death-screen{inset:0;margin:0;padding:0;width:100vw;height:100dvh;max-width:none;max-height:none;border:0;background:transparent;color:#bd292c;overflow:hidden;scale:none;transform:none}
+.death-screen[open]{animation:death-reveal 1.1s ease-out both}.death-screen::backdrop{background:#030305da;animation:death-darken 1.1s ease-out both;backdrop-filter:blur(1px)}
+#death-restart{position:absolute;inset:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;padding:24px;background:radial-gradient(ellipse at center,#39080a24,transparent 65%);color:inherit;touch-action:manipulation;cursor:pointer}
+#death-title{font-family:Georgia,'Times New Roman',serif;font-size:clamp(42px,9vw,116px);font-weight:400;letter-spacing:.18em;text-indent:.18em;line-height:1.2;white-space:nowrap;text-shadow:0 2px 3px #000,0 0 35px #9f171945}
+#death-hint{font-size:clamp(11px,1.4vw,15px);letter-spacing:.15em;color:#bbada8;line-height:1.8;text-align:center}#death-restart:focus-visible{outline:1px solid #aa716380;outline-offset:-12px}
+@keyframes death-reveal{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}@keyframes death-darken{from{background:#03030500}to{background:#030305da}}
+@media(prefers-reduced-motion:reduce){.death-screen[open],.death-screen::backdrop{animation:none}}
 .action-controls[data-character="warrior-v2"] #potion-button{position:absolute;right:8px;bottom:calc(100% + 18px);width:56px;height:56px;min-width:0;border-radius:50%;padding:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:linear-gradient(145deg,#3b6651,#203c32);border-color:#8ed4a999;touch-action:none;text-align:center}
 .potion-action svg{width:17px;height:20px;fill:none;stroke:#bdf5d0;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.potion-action span{font-size:10px}.potion-action small{margin:0;font-size:8px;letter-spacing:0;color:#b9dbc6}.potion-action b{color:#d3ffdf;font-variant-numeric:tabular-nums}
 .action-controls[data-character="warrior-v2"] #potion-button.healing{opacity:.8;box-shadow:0 0 18px #6cdb9670;border-color:#acfac6}
