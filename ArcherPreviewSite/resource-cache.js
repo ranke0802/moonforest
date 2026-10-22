@@ -11,7 +11,7 @@ self.addEventListener('fetch', event => {
   const request = event.request, url = new URL(request.url);
   const base = new URL('./assets/content/', self.registration.scope);
   if (request.method !== 'GET' || url.origin !== base.origin || !url.href.startsWith(base.href) ||
-      !/^[a-f0-9]{64}\.(bin|gltf|png|jpg|webp)$/.test(url.pathname.split('/').pop())) return;
+      !/^[a-f0-9]{64}\.(bin|gltf|png|jpg|webp|wav)$/.test(url.pathname.split('/').pop())) return;
   event.respondWith((async () => {
     let cache;
     try { cache = await caches.open(CACHE_NAME); const hit = await cache.match(request); if (hit) {stats.hits++;return hit;} } catch { /* Storage denied: normal network fallback. */ }
