@@ -1,10 +1,11 @@
 import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
-import { BossBrain, BOSS_BY_NAME, bossAttackRange } from './boss-spec.js';
+import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, BLOCK_STAGGER } from './hit-feedback.js';
 
 import { shieldIntercepts } from './player-strikes.js';
+import { rearDamage, facingYaw } from './combat-damage.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -113,12 +114,14 @@ export class BossEncounter {
         contacts={hits:[],hitStop:0};
       }else contacts=this.gate.collect({...sample,capsules});
       const grounded=['down','recover'].includes(this.brain.mode);
-      for(const hit of contacts.hits)if(this.brain.hit(hit)){
+      for(const contact of contacts.hits){
+        const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
+        if(!this.brain.hit(hit))continue;
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
         if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
         this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
-        this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex);this.onChange(this);
+        this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex,hit.critical);this.onChange(this);
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){
@@ -129,7 +132,7 @@ export class BossEncounter {
         if(event.kind==='spin'||facing>.2){
           const aim=player.position.add(new Vector3(0,1.1,0));
           const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
-          this.receiveBossHit({damage:14,bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
       }
     }
@@ -166,13 +169,15 @@ export class BossEncounter {
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null});
     return true;
   }
-  hitPlayer(damage,source,{superArmor=false}={}){
+  hitPlayer(damage,source,{superArmor=false,critical:fixedCritical}={}){
     if(this.playerInvulnerable||!this.playerAlive)return;
+    const critical=fixedCritical??(source?rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0)).critical:false);
+    damage=Math.round(damage*(critical?1.3:1));
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
     this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!superArmor});
     this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
-    this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player');this.onChange(this);
+    this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
   }
   inspect(){return {active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,visited:[...(this.brain?.visited||[])]};}
 }

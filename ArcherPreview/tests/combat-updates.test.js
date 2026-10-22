@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Matrix, Vector3 } from '@babylonjs/core';
 import { WarriorV2Controller } from '../src/warrior-v2.js';
-import { BossBrain } from '../src/boss-spec.js';
+import { BossBrain, BOSS_ADVANCING_COMBO } from '../src/boss-spec.js';
 import { BossEncounter } from '../src/boss-encounter.js';
 import { PlayerStrikeSampler } from '../src/player-strikes.js';
 
@@ -32,4 +32,11 @@ test('only one-hand slash extends the blade contact length by ten percent',()=>{
  const node={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()},sampler=new PlayerStrikeSampler();
  const length=(state,time)=>{const sample=sampler.sample({state,actionId:state,clipTime:time},node,null);return Vector3.Distance(...sample.blade.map(p=>Vector3.FromArray(p)));};
  assert.ok(Math.abs(length('slash',.5)/length('attack',.7)-1.1)<1e-9);
+});
+test('boss advances into three distinct hits; staggering any hit cancels the remaining combo',()=>{
+ const clips={Right_Jab_from_Guard:2,Left_Hook_from_Guard:1,Left_Uppercut_from_Guard:1.3333,Block6:2};
+ const b=new BossBrain(clips),events=[];let travel=0;b.startCombo();
+ for(let t=0;t<4;t+=.01){const step=b.update(.01,2);events.push(...step.events);travel+=step.speed*.01;}
+ assert.deepEqual(events.map(e=>e.name),BOSS_ADVANCING_COMBO);assert.ok(travel>2);assert.equal(b.mode,'idle');
+ b.startCombo();b.update(.1,2);b.hit();b.update(.21,2);assert.equal(b.comboStep,0);assert.equal(b.mode,'idle');
 });

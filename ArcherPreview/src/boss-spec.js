@@ -25,14 +25,18 @@ export const BOSS_BY_NAME=Object.fromEntries(BOSS_MOTIONS.map(m=>[m.name,m]));
 export const BOSS_ACTIVE_MOTIONS=BOSS_MOTIONS.filter(m=>!m.disabled);
 export const BOSS_ATTACKS=BOSS_ACTIVE_MOTIONS.filter(m=>m.role==='attack');
 export const bossAttackRange=spec=>(spec.range||2.5)*1.2;
+export const BOSS_ADVANCING_COMBO=['Right_Jab_from_Guard','Left_Hook_from_Guard','Left_Uppercut_from_Guard'];
+export const BOSS_DAMAGE={Axe_Spin_Attack:160,Flying_Fist_Kick:150,Left_Hook_from_Guard:100,Left_Uppercut_from_Guard:120,
+  Lunge_Spin_Kick:150,Right_Jab_from_Guard:80,Rising_Flying_Kick:140,Shield_Push_Left:100,Skill_01:180,Skill_02:300,Skill_03:160,Weapon_Combo:180};
 
 export class BossBrain {
   constructor(durations,random=Math.random){
     this.durations=durations;this.random=random;this.hp=this.maxHp=900;
     this.state='Block6';this.mode='idle';this.time=0;this.serial=1;this.wait=.65;
-    this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;
+    this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;this.comboStep=0;
   }
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);if(mode!=='attack')this.comboStep=0;}
+  startCombo(){this.comboStep=1;this.start(BOSS_ADVANCING_COMBO[0],'attack');}
   nextAttack(){
     if(!this.bag.length){
       this.bag=BOSS_ATTACKS.map(a=>a.name);
@@ -49,12 +53,12 @@ export class BossBrain {
     // or indefinitely delay getting up, including another judgment burst.
     if(this.mode==='down')return true;
     if(!this.hp||(heavy&&this.mode!=='recover')){this.stagger=0;this.start('Knock_Down_1','down');}
-    else {this.stagger=Math.max(this.stagger,stun||.2);this.interrupted=this.mode==='attack';if(this.interrupted)this.impacted=true;}
+    else {this.stagger=Math.max(this.stagger,stun||.2);this.interrupted=this.mode==='attack';if(this.interrupted){this.impacted=true;this.comboStep=0;}}
     return true;
   }
   parry(){
     if(this.hp<=0||['down','recover'].includes(this.mode))return false;
-    this.stagger=1;this.interrupted=true;this.impacted=true;this.flash=this.flashDuration=.45;return true;
+    this.stagger=1;this.interrupted=true;this.impacted=true;this.comboStep=0;this.flash=this.flashDuration=.45;return true;
   }
   update(dt,distance,playerAlive=true){
     const events=[];dt=Math.max(0,dt);this.flash=Math.max(0,this.flash-dt);
@@ -76,9 +80,13 @@ export class BossBrain {
     if(['attack','guard','evade'].includes(this.mode)){
       this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?1.12:1));
       const spec=BOSS_BY_NAME[this.state];
-      if(this.mode==='attack'&&!this.impacted&&this.time>=duration*spec.impact){this.impacted=true;events.push({type:'attack',...spec});}
-      if(this.time>=duration){this.start('Block6','idle');this.wait=.3;}
-      return {events,speed:0};
+      const speed=this.comboStep&&this.time<duration*spec.impact?1.8:0;
+      if(this.mode==='attack'&&!this.impacted&&this.time>=duration*spec.impact){this.impacted=true;events.push({type:'attack',...spec,comboStep:this.comboStep});}
+      if(this.time>=duration){
+        if(this.comboStep&&this.comboStep<BOSS_ADVANCING_COMBO.length)this.start(BOSS_ADVANCING_COMBO[this.comboStep++],'attack');
+        else {this.start('Block6','idle');this.wait=.3;}
+      }
+      return {events,speed};
     }
     if(distance>2.65){
       this.startIfChanged(distance>3.8?'Running':'Walking','move');
@@ -90,11 +98,12 @@ export class BossBrain {
       this.attackCount++;
       if(this.attackCount%7===0)this.start('Backflip','evade');
       else if(this.attackCount%5===0)this.start('Block6','guard');
+      else if(this.attackCount%4===0)this.startCombo();
       else this.start(this.nextAttack(),'attack');
     }
     return {events,speed:0};
   }
   startIfChanged(state,mode){if(this.state!==state||this.mode!==mode)this.start(state,mode);}
   get defense(){return this.mode==='evade'?'evade':this.mode==='guard'?'block':null;}
-  get label(){return this.hp<=0?'격파':this.stagger>.3?'강한 경직':this.stagger>0?'경직':this.mode==='idle'?'가드 대기':BOSS_BY_NAME[this.state].label;}
+  get label(){return this.hp<=0?'격파':this.stagger>.3?'강한 경직':this.stagger>0?'경직':this.comboStep?`전진 3연타 · ${this.comboStep}타`:this.mode==='idle'?'가드 대기':BOSS_BY_NAME[this.state].label;}
 }
