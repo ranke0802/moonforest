@@ -1,0 +1,71 @@
+{
+  "errors": [],
+  "initialAudio": {
+    "state": "running",
+    "loaded": 37,
+    "active": 0,
+    "peak": 0,
+    "played": 0,
+    "dropped": 1,
+    "failed": 0,
+    "music": "playing",
+    "musicLoaded": true
+  },
+  "during": {
+    "elapsed": 13.5,
+    "groggy": true,
+    "action": null,
+    "queued": null,
+    "buttons": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "state": "\uadf8\ub85c\uae30 \u00b7 \ud589\ub3d9 \ubd88\uac00"
+  },
+  "resumed": {
+    "elapsed": 1494.6000000238419,
+    "state": "run"
+  },
+  "paused": {
+    "state": "suspended",
+    "loaded": 37,
+    "active": 0,
+    "peak": 0,
+    "played": 0,
+    "dropped": 2,
+    "failed": 0,
+    "music": "paused",
+    "musicLoaded": true
+  },
+  "grab": {
+    "accepted": true,
+    "captured": true,
+    "action": null,
+    "pending": 0
+  },
+  "musicRequests": 1,
+  "final": {
+    "state": "running",
+    "loaded": 37,
+    "active": 1,
+    "peak": 6,
+    "played": 8,
+    "dropped": 3,
+    "failed": 0,
+    "music": "stopped",
+    "musicLoaded": true
+  },
+  "tests": {
+    "passed": 142,
+    "failed": 0
+  },
+  "audioAssets": {
+    "resources": 38,
+    "MiB": 3.48,
+    "musicMiB": 1.37,
+    "peak": 0.91334,
+    "auditoryReview": "No subjective listening verification available in this tool session; technical decode, levels and event timing verified."
+  }
+}

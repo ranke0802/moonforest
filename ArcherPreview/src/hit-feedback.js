@@ -1,7 +1,7 @@
 import { Color3, Vector3 } from '@babylonjs/core';
 
 export const PLAYER_STAGGER = .2;
-export const BLOCK_STAGGER = 1;
+export const PLAYER_BLOCK_GROGGY = 1.5;
 const WHITE = Color3.White();
 const flashValues=new WeakMap();
 export function applyHitFlash(meshes, remaining, duration=.22) {

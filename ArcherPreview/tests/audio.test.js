@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { GameAudio } from '../src/game-audio.js';
 import { ActionAudio } from '../src/action-audio.js';
 const fakeContext=()=>({state:'running',currentTime:0,destination:{},decoded:0,sources:[],
- createGain(){return {gain:{value:0},connect(){},disconnect(){}};},
+ createGain(){return {gain:{value:0,cancelScheduledValues(){},setValueAtTime(v){this.value=v;},linearRampToValueAtTime(v){this.value=v;}},connect(){},disconnect(){}};},
  createBufferSource(){const s={playbackRate:{value:1},connect(){},disconnect(){},start(){},stop(){this.stopped=true;}};this.sources.push(s);return s;},
  async decodeAudioData(){this.decoded++;return {duration:.2};},async resume(){this.state='running';},async suspend(){this.state='suspended';},async close(){this.state='closed';}});
 
@@ -17,6 +17,26 @@ test('sound assets load/decode once with bounded concurrency; no repeated fetch 
  await a.unlock();await a.loading;await a.unlock();assert.equal(downloads,8);assert.equal(ctx.decoded,8);assert.ok(peak<=3);
  for(let i=0;i<8;i++){ctx.currentTime+=1;assert.equal(a.play('cue0'),true);ctx.sources.at(-1).onended();}
  assert.equal(downloads,8);assert.equal(a.voices.size,0);a.dispose();
+});
+
+test('boss score loads only on encounter, reuses one decode/source, pauses with context and cancels stale loads',async()=>{
+ const ctx=fakeContext();let musicDownloads=0,finish;
+ const a=new GameAudio({contextFactory:()=>ctx,manifestUrl:new URL('https://example.test/audio.json'),fetcher:async url=>{
+  if(String(url).endsWith('.json'))return {ok:true,json:async()=>({sounds:{slash:['one.wav','two.wav']},music:{boss:{url:'boss.mp3',volume:.32}}})};
+  if(String(url).endsWith('boss.mp3')){musicDownloads++;await new Promise(r=>finish=r);}
+  return {ok:true,arrayBuffer:async()=>new ArrayBuffer(4)};
+ }});
+ await a.unlock();await a.loading;assert.equal(musicDownloads,0);assert.equal(ctx.decoded,2);
+ a.setBossMusic(true);a.setBossMusic(true);a.setBossMusic(false);finish();await a.musicLoading;await Promise.resolve();
+ assert.equal(a.music,null);assert.equal(musicDownloads,1);
+ a.setBossMusic(true);await Promise.resolve();assert.equal(a.inspect().music,'playing');const original=a.music.source;
+ for(let i=0;i<50;i++)a.setBossMusic(true);assert.equal(a.music.source,original);
+ a.setSuspended(true);assert.equal(a.inspect().music,'paused');assert.equal(original.stopped,undefined);
+ a.setSuspended(false);await Promise.resolve();assert.equal(a.music.source,original);
+ a.setBossMusic(false);a.stopAll();assert.equal(a.music,null);assert.equal(original.stopped,true);
+ a.setBossMusic(true);await Promise.resolve();assert.notEqual(a.music.source,original);assert.equal(musicDownloads,1);assert.equal(ctx.decoded,3);
+ a.play('slash');const first=ctx.sources.at(-1).buffer;ctx.currentTime=1;a.play('slash');assert.notEqual(ctx.sources.at(-1).buffer,first);
+ a.dispose();assert.equal(a.music,null);assert.equal(a.musicBuffer,null);
 });
 
 test('audio bounds voices, prioritizes contacts, drops distant/missing/duplicate sounds, suspends cleanly',async()=>{

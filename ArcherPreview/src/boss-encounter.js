@@ -2,7 +2,7 @@ import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vect
 import { CharacterAnimator } from './animation.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
-import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, BLOCK_STAGGER } from './hit-feedback.js';
+import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
 
 import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
@@ -185,8 +185,8 @@ export class BossEncounter {
   playerBlocked(){
     this.gate.pending=[];
     this.playerReaction.start(this.player.position.subtract(this.actor.position),{flashDuration:.45});
-    this.onPlayerHit(BLOCK_STAGGER,{force:true,reason:'blocked'});
-    this.lastHit='전사 공격 BLOCK · 1초 경직';
+    this.onPlayerHit(PLAYER_BLOCK_GROGGY,{force:true,reason:'blocked'});
+    this.lastHit='전사 공격 BLOCK · 1.5초 그로기';
   }
   receiveBossHit({damage,grab=false,heavy=false,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(this.grab.active||!this.playerAlive||(!bodyContact&&!shieldContact))return false;

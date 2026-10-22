@@ -2,13 +2,41 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Matrix, Vector3, NullEngine, Scene, TransformNode } from '@babylonjs/core';
 import { WarriorV2Controller } from '../src/warrior-v2.js';
-import { BossBrain, BOSS_ADVANCING_COMBO, BOSS_DAMAGE } from '../src/boss-spec.js';
+import { BossBrain, BOSS_ADVANCING_COMBO, BOSS_DAMAGE, BOSS_ATTACKS } from '../src/boss-spec.js';
 import { BossEncounter } from '../src/boss-encounter.js';
-import { PlayerStrikeSampler } from '../src/player-strikes.js';
+import { PlayerStrikeSampler, PLAYER_STRIKES } from '../src/player-strikes.js';
 import { BossGrab } from '../src/boss-grab.js';
 import { rearDamage } from '../src/combat-damage.js';
 
 const durations={idle:2,run:1,attack:3,slash:1.5,judgment:4,shieldPush:2.4,dodge:2.4666667};
+test('block groggy rejects every combat input for 1.5 seconds without buffering, then restores held movement',()=>{
+ const c=new WarriorV2Controller({durations});c.startAttack('judgment');c.setAttackHeld(true);
+ c.hit(1.5,{force:true,reason:'blocked'});
+ for(let i=0;i<14;i++){
+  assert.equal(c.attack(),false);assert.equal(c.startAttack('slash'),false);
+  assert.equal(c.dodge(),false);assert.equal(c.shieldPush(),false);assert.equal(c.setAttackHeld(true),false);
+  assert.equal(c.hit(.2),false);
+  const r=c.update(.1,{x:1});assert.equal(r.groggy,true);assert.equal(r.speed,0);assert.equal(r.actionId,null);
+ }
+ c.setAttackHeld(false);assert.equal(c.queuedAttack,null);assert.equal(c.held,false);
+ const r=c.update(.15,{x:1});assert.equal(r.state,'run');assert.ok(Math.abs(r.movementDt-.05)<1e-8);
+ assert.equal(c.action,null);assert.equal(c.groggy,false);assert.equal(c.dodge(),true);
+ const light=new WarriorV2Controller({durations});light.hit(.2);assert.equal(light.dodge(),true);
+});
+test('both ordinary sword attacks damage/flash every boss technique without canceling its impact or grab approach',()=>{
+ const clips=Object.fromEntries([...BOSS_ATTACKS.map(s=>s.name),'Running','Knock_Down_1','Block6'].map(n=>[n,2]));
+ for(const state of ['slash','attack'])for(const strike of PLAYER_STRIKES[state])for(const spec of BOSS_ATTACKS){
+  const b=new BossBrain(clips);b.start(spec.name,'attack');b.time=.02;const serial=b.serial;
+  assert.equal(b.hit(strike),true);assert.equal(b.hp,900-strike.damage);assert.ok(b.flash>0);
+  assert.equal(b.stagger,0);assert.equal(b.serial,serial);assert.equal(b.interrupted,false);
+  const events=[];for(let i=0;i<180;i++)events.push(...b.update(.01,2).events);
+  assert.ok(events.some(e=>e.name===spec.name),spec.name);
+ }
+ const b=new BossBrain(clips);b.start('Running','approach');b.hit(PLAYER_STRIKES.slash[0]);assert.equal(b.update(.1,4).speed,3.25);
+ b.hit({damage:20,stun:1.5});assert.equal(b.stagger,1.5);
+ b.start('Right_Jab_from_Guard','attack');b.hit({damage:20,heavy:true});assert.equal(b.mode,'down');
+ b.hp=1;b.start('Right_Jab_from_Guard','attack');b.hit(PLAYER_STRIKES.slash[0]);assert.equal(b.mode,'down');assert.equal(b.hp,0);
+});
 test('updated defaults accelerate thrust/slash and dodge without changing the other clips',()=>{
  const c=new WarriorV2Controller({durations});
  assert.equal(c.playbackRate('attack'),1.8*1.6);assert.equal(c.playbackRate('slash'),1.8);
@@ -20,9 +48,9 @@ test('blocking judgment overrides super armor, cancels queued damage and recoils
  b.actor={position:new Vector3(0,0,2)};b.player={position:Vector3.Zero()};
  c.startAttack('judgment');assert.equal(c.hit(),false);
  b.gate.pending=[{}];b.playerBlocked();
- assert.equal(c.action,null);assert.equal(c.staggerRemaining,1);assert.equal(b.playerHp,500);assert.equal(b.gate.pending.length,0);
+ assert.equal(c.action,null);assert.equal(c.staggerRemaining,1.5);assert.equal(c.groggy,true);assert.equal(b.playerHp,500);assert.equal(b.gate.pending.length,0);
  b.playerReaction.update(.2,b.player);assert.ok(b.player.position.z<-.27);
- assert.ok(b.playerReaction.flashRemaining>0);assert.equal(c.update(.99).staggered,true);assert.equal(c.update(.02).state,'idle');
+ assert.ok(b.playerReaction.flashRemaining>0);assert.equal(c.update(1.49).groggy,true);assert.equal(c.update(.02).state,'idle');
 });
 test('boss block reaction lasts one second and never resumes the interrupted attack',()=>{
  const b=new BossBrain({Right_Jab_from_Guard:2,Block6:2});b.start('Right_Jab_from_Guard','attack');b.time=.2;
@@ -87,4 +115,18 @@ test('throw landing deals exactly 300 or 390 rear-critical damage, bypassing the
    b.hitPlayer(300,new Vector3(0,0,2),{superArmor:true,critical,grabImpact:true});
    assert.equal(b.playerHp,critical?110:200);assert.equal(feedback.length,1);assert.equal(b.playerReaction.remaining,0);
  }
+});
+
+test('actual grab captures Judgment before contact and clears its action, buffered input and pending burst',()=>{
+ const engine=new NullEngine(),scene=new Scene(engine),player=new TransformNode('player',scene);
+ const c=new WarriorV2Controller({durations}),sampler=new PlayerStrikeSampler();
+ const b=new BossEncounter({},()=>{},()=>{},(duration,options)=>{if(options.captured)c.capture();else c.releaseCapture();sampler.reset();});
+ b.actor=new TransformNode('boss',scene);b.actor.position.z=1.8;b.player=player;b.brain=new BossBrain({Skill_02:2});b.brain.start('Skill_02','attack');
+ b.playerNodes={};for(const [name,y] of [['RightFoot',.1],['Head',1.7]]){const node=new TransformNode(name,scene);node.parent=player;node.position.y=y;b.playerNodes['mixamorig:'+name]=node;}
+ c.startAttack('judgment');const windup=c.update(.4);assert.ok(windup.clipTime<PLAYER_STRIKES.judgment[0].from);
+ c.setAttackHeld(true);b.gate.pending=[{damage:24}];
+ assert.equal(b.receiveBossHit({damage:300,grab:true,bodyContact:true,shieldContact:true,action:windup}),true);
+ assert.equal(c.captured,true);assert.equal(c.action,null);assert.equal(c.held,false);assert.equal(b.gate.pending.length,0);
+ for(let i=0;i<100;i++){const r=c.update(.1,{x:1});assert.equal(r.actionId,null);assert.equal(sampler.sample(r,null,null),null);}
+ b.grab.reset();scene.dispose();engine.dispose();
 });

@@ -40,3 +40,9 @@ test('audio cache: concurrent cues fetch once, reload reuses bytes, changed cont
  await Promise.all([sw.load(a),sw.load(a)]);await sw.load(a);assert.equal(sw.downloads,1);
  await sw.load(b);assert.equal(sw.downloads,2);assert.equal(sw.stored.size,2);
 });
+
+test('compressed boss music is persistent, coalesced and refreshed only for a changed hash',async()=>{
+ const sw=serviceWorker(),a='e'.repeat(64)+'.mp3',b='f'.repeat(64)+'.mp3';
+ await Promise.all([sw.load(a),sw.load(a)]);await sw.load(a);assert.equal(sw.downloads,1);
+ await sw.load(b);await sw.load(b);assert.equal(sw.downloads,2);
+});

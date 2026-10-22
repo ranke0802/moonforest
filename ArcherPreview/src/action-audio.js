@@ -26,6 +26,7 @@ export class ActionAudio {
     this.charged=result.chargeProgress>=1;this.playerKey=key;this.playerTime=clipTime;
   }
   boss(encounter,dt){
+    this.audio.setBossMusic?.(!!encounter?.active&&encounter.brain.hp>0&&encounter.playerHp>0);
     if(!encounter?.active)return;
     const b=encounter.brain,position=encounter.actor.position,key=b.serial,changed=key!==this.bossKey,previous=changed?-1:this.bossTime;
     const duration=b.durations[b.state],phase=b.time/duration;

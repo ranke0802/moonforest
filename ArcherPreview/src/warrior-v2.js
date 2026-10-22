@@ -12,14 +12,14 @@ export class WarriorV2Controller {
     this.durations=durations;this.runSpeed=speeds.run||4.4371;
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
     this.held=false;this.holdTime=0;this.holdTriggered=false;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
-    this.staggerRemaining=0;this.hitPose=null;this.queuedAttack=null;
+    this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.queuedAttack=null;
     this.motionSpeeds={...V2_MOTION_DEFAULTS};
   }
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value)*V2_ATTACK_BASE_RATE;}
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
   playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
   startAttack(kind) {
-    if(this.captured||this.knockedDown)return false;
+    if(this.captured||this.knockedDown||this.groggy)return false;
     kind??=V2_COMBO[this.attackIndex++%V2_COMBO.length];
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
   }
@@ -32,15 +32,18 @@ export class WarriorV2Controller {
     return false;
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
-  hit(duration=.2,{force=false}={}){
+  get groggy(){return this.staggerLocked&&this.staggerRemaining>0;}
+  hit(duration=.2,{force=false,reason}={}){
     if(this.captured||this.knockedDown)return false;
+    // Further damage can reduce HP, but cannot shorten a block's control lock.
+    if(this.groggy&&reason!=='blocked')return false;
     if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
-    this.cancelAttack();this.staggerRemaining=duration;
+    this.cancelAttack();this.staggerRemaining=Math.max(this.groggy?this.staggerRemaining:0,duration);this.staggerLocked=reason==='blocked';
     return true;
   }
   attack(){
-    if(this.dead||this.captured||this.knockedDown||this.held)return false;
+    if(this.dead||this.captured||this.knockedDown||this.groggy||this.held)return false;
     if(this.action||this.staggerRemaining>0){if(this.queuedAttack!=='judgment')this.queuedAttack='normal';}
     else this.startAttack();
     return true;
@@ -48,7 +51,7 @@ export class WarriorV2Controller {
   setAttackHeld(held){
     if(held){
       if(this.held)return true;
-      if(this.dead||this.captured||this.knockedDown)return false;
+      if(this.dead||this.captured||this.knockedDown||this.groggy)return false;
       this.held=true;this.holdTime=0;this.holdTriggered=false;
       if(this.queuedAttack==='normal')this.queuedAttack=null;
     }else{
@@ -59,20 +62,20 @@ export class WarriorV2Controller {
     return true;
   }
   interruptWith(kind){
-    if(this.dead||this.captured||this.knockedDown)return false;
+    if(this.dead||this.captured||this.knockedDown||this.groggy)return false;
     this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
   shieldPush(){return this.interruptWith('shieldPush');}
   dodge(){return this.interruptWith('dodge');}
   capture(){
     this.capturePose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
-    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.captured=true;
+    this.cancelAttack();this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.captured=true;
   }
-  releaseCapture(){this.captured=false;this.capturePose=null;this.cancelAttack();this.state='idle';this.time=0;}
+  releaseCapture(){this.captured=false;this.capturePose=null;this.cancelAttack();this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.state='idle';this.time=0;}
   get knockedDown(){return ['knockdown','getUp'].includes(this.action?.state);}
   knockdown({landed=false}={}){
     if(this.dead||this.captured||this.knockedDown)return false;
-    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;
+    this.cancelAttack();this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;
     // A thrown character has already fallen in flight; enter the grounded part.
     this.action={id:++this.serial,state:'knockdown',time:landed?this.durations.knockdown*.55:0,elapsed:0,hitStop:0};
     this.state='knockdown';return true;
@@ -102,8 +105,8 @@ export class WarriorV2Controller {
     }
     if(this.staggerRemaining>0){
       const consumed=Math.min(dt,this.staggerRemaining);this.staggerRemaining-=consumed;dt-=consumed;
-      if(this.staggerRemaining>1e-8)return {...this.hitPose,moving:false,speed:0,loop:false,actionId:null,staggered:true,chargeProgress:this.chargeProgress,events:[]};
-      this.staggerRemaining=0;this.hitPose=null;
+      if(this.staggerRemaining>1e-8)return {...this.hitPose,moving:false,speed:0,loop:false,actionId:null,staggered:true,groggy:this.groggy,chargeProgress:this.chargeProgress,events:[]};
+      this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;
     }
     let idleDt=dt;
     let hitStopped=false;
@@ -134,7 +137,7 @@ export class WarriorV2Controller {
     if(!this.action)this.time=(this.time+idleDt*playbackRate*(this.state==='run'?magnitude:1))%this.durations[this.state];
     return {state:this.state,clipTime:this.action?.time??this.time,timeScale:playbackRate,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude*playbackRate:0,
       loop:!this.action,actionId:this.action?.id??null,actionElapsed:this.action?.elapsed??0,hitStopped,chargeProgress:this.chargeProgress,
-      rollFrom,rollTo,movementDt:rollFrom!=null?idleDt:frameDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
+      rollFrom,rollTo,movementDt:idleDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
   }
   get chargeProgress(){return this.queuedAttack==='judgment'?1:this.held&&!this.holdTriggered?this.holdTime/V2_HOLD_SECONDS:0;}
 }

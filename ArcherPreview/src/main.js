@@ -100,7 +100,7 @@ function toast(message) {
 }
 function updateButtons() {
   const dead = controller?.dead || false;
-  const snapshot=[character,ready,dead,controller?.captured,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
+  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
   $('#death-label').textContent = dead ? '부활' : '사망';
@@ -108,11 +108,11 @@ function updateButtons() {
   $('#death-button').classList.toggle('dead', dead);
   if(isV2())$('#guard-button').removeAttribute('aria-pressed');
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
-  for (const button of buttons) button.disabled = !ready || controller?.captured || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
+  for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
   $('#boss-controls').hidden = !isV2();
   $('#potion-button').hidden=!isV2();
-  $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured;
+  $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured||controller?.groggy;
   $('#potion-count').textContent=String(boss?.potions.remaining??3);
   $('#potion-status').textContent=boss?.potions.active?`회복 ${4-boss.potions.pulsesLeft}/4`:'E';
   $('#potion-button').classList.toggle('healing',!!boss?.potions.active);
@@ -122,14 +122,14 @@ const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
-  potion() { if(ready&&isV2()&&!controller.captured){if(boss.usePotion())audio.play('heal_start');updateButtons();} },
+  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion())audio.play('heal_start');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   cancelAttackInput() { cancelAttackInput(); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive();audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
-  canMove() { return ready && !controller.dead && !controller.captured && (!boss?.active || boss.playerAlive); },
+  canMove() { return ready && !controller.dead && !controller.captured && !controller.groggy && (!boss?.active || boss.playerAlive); },
 };
 
 function startDefense(kind){
@@ -361,7 +361,7 @@ function render(dt) {
     const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    text('#state-label', result.captured?boss.grab.label:result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
+    text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
     updateButtons();

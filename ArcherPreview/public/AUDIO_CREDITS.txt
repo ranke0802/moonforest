@@ -1,0 +1,38 @@
+MOONFOREST AUDIO CREDITS — 2026-10-22
+
+Music and orchestral stings
+'The Summoning' by Scott Buckley — released under CC-BY 4.0.
+www.scottbuckley.com.au
+Source: https://www.scottbuckley.com.au/library/the-summoning/
+License: https://creativecommons.org/licenses/by/4.0/
+Changes: 90-second excerpt with a three-second loop crossfade, resampled and
+encoded as MP3; short excerpts faded and mixed for arrival/death/revival/victory.
+Commercial use is permitted subject to the attribution/license terms.
+
+Additional Sound FX by Will Leamon
+Fleshy Fight Sounds — OGA-BY 3.0
+Source: https://opengameart.org/content/fleshy-fight-sounds
+License: https://static.opengameart.org/OGA-BY-3.0.txt
+Used sword, hammer, armor and piercing recordings. Changes: trimmed, filtered,
+resampled, pitched, layered and gain-balanced for hit, landing and critical cues.
+
+Ben Jaszczak & Brian Nelson / Still North Media — CC0 1.0
+Medieval Sound Effects: Weapon Impacts and Weapon Textures
+https://opengameart.org/content/medieval-sound-effects-weapon-impacts
+https://opengameart.org/content/medieval-sound-effects-weapon-textures
+Used Mace Axe Blade and Haft, Axe Norse Sword Blade on Blade, Katana Sheath Fast,
+English Longbow Draw and English Longbow Shoot recordings.
+
+Swishes Sound Pack by artisticdude — CC0 1.0
+https://opengameart.org/content/swishes-sound-pack
+Used swish-7, swish-8 and swish-9 field recordings.
+
+Impact by Iwan 'qubodup' Gabovitch — CC0 1.0
+https://opengameart.org/content/impact
+Used qubodupImpactWood and qubodupImpactStone recordings.
+
+CC0 license: https://creativecommons.org/publicdomain/zero/1.0/
+CC0 recordings were trimmed, filtered, layered, pitched and gain-balanced.
+No audio from Dark Souls or other commercial game soundtracks is included.
+The authors do not endorse this project. Preserve these credits on distribution.
+Build recipe: ArcherPreview/scripts/mix-combat-audio.py
