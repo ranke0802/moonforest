@@ -1,6 +1,6 @@
 import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
-import { BossBrain, BOSS_BY_NAME } from './boss-spec.js';
+import { BossBrain, BOSS_BY_NAME, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER } from './hit-feedback.js';
 
@@ -15,7 +15,7 @@ function rootSample(config,name,time){
 export class BossEncounter {
   constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{}){
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
-    this.shots=[];this.playerHp=500;this.playerMaxHp=500;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;
+    this.playerHp=500;this.playerMaxHp=500;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
     this.playerReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
   }
@@ -43,24 +43,24 @@ export class BossEncounter {
         this.ring=MeshBuilder.CreateTorus('boss-attack-warning',{diameter:3.8,thickness:.035,tessellation:64},this.world.scene);
         this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       }
-      for(const shot of this.shots)shot.mesh.dispose();this.shots=[];
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
       this.brain=new BossBrain(this.animator.durations);this.playerHp=this.playerMaxHp;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.playerReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=player.rotation.y+Math.PI;
-      this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.knockVelocity.setAll(0);
+      this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
       this.animator.transition('Block6',{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.active=false;this.playerReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;for(const s of this.shots)s.mesh.dispose();this.shots=[];this.gate.reset();this.onChange(this);}
+  hide(){this.active=false;this.playerReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
   get playerAlive(){return !this.active||this.playerHp>0;}
   update(dt,player){
     if(!this.active)return;
     this.dt=dt;this.player=player;this.playerInvulnerable=Math.max(0,this.playerInvulnerable-dt);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const result=this.brain.update(dt,distance,this.playerAlive);this.pendingEvents=result.events;
+    if(this.brain.mode==='evade')this.showDefense('evade');
     if(['idle','move'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
       if(!['down','recover'].includes(this.brain.mode)&&distance>.01)this.actor.rotation.y=Math.atan2(direction.x,direction.z);
     }
@@ -78,7 +78,7 @@ export class BossEncounter {
     this.ring.position.set(this.actor.position.x,.025,this.actor.position.z);
     const spec=BOSS_BY_NAME[this.brain.state];
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
-    this.ring.scaling.setAll((spec.range||2.5)/1.9);
+    this.ring.scaling.setAll(bossAttackRange(spec)/1.9);
     applyHitFlash(this.asset.meshes,this.brain.flash);
     this.onChange(this);
   }
@@ -99,22 +99,29 @@ export class BossEncounter {
     for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
     if(distance<1.35&&distance>.001&&this.brain.mode!=='down'){this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.actor.computeWorldMatrix(true);for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);}
-    if(sample&&this.playerAlive&&this.brain.hp>0&&this.brain.mode!=='down'){
+    if(sample&&this.playerAlive&&this.brain.hp>0){
       const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
-      const contacts=this.gate.collect({...sample,capsules});
+      let contacts;
+      if(this.brain.defense){
+        // Consume this swing without starting a delayed damage burst through a block/roll.
+        this.gate.pending=[];
+        for(const contact of sample.contacts??[sample])if(this.gate.check({...sample,...contact,capsules}))this.showDefense(this.brain.defense,sample.actionId);
+        contacts={hits:[],hitStop:0};
+      }else contacts=this.gate.collect({...sample,capsules});
+      const grounded=['down','recover'].includes(this.brain.mode);
       for(const hit of contacts.hits)if(this.brain.hit(hit)){
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash);
-        if(hit.heavy){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
-        this.lastHit=hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
+        if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
+        this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
         this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex);this.onChange(this);
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){
       if(this.brain.stagger||['down','recover'].includes(this.brain.mode))continue;
-      if(['rock','magic'].includes(event.kind))this.fire(event.kind,player);
-      else if(distance<=event.range){
+      if(event.disabled)continue;
+      if(distance<=bossAttackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(event.kind==='spin'||facing>.2){
           const aim=player.position.add(new Vector3(0,1.1,0));
@@ -124,30 +131,19 @@ export class BossEncounter {
       }
     }
     this.pendingEvents=[];
-    for(const shot of [...this.shots]){
-      const previous=shot.mesh.position.clone();shot.mesh.position.addInPlace(shot.velocity.scale(this.dt));shot.life-=this.dt;
-      const center=player.position.add(new Vector3(0,1,0));
-      const line=shot.mesh.position.subtract(previous),t=Math.max(0,Math.min(1,Vector3.Dot(center.subtract(previous),line)/Math.max(1e-9,line.lengthSquared())));
-      const contact=this.receiveBossHit({damage:18,bodyContact:Vector3.Distance(previous.add(line.scale(t)),center)<.55,
-        shieldContact:shieldIntercepts(previous,shot.mesh.position,shield),action:result,source:previous});
-      if(contact)shot.life=0;
-      if(shot.life<=0){shot.mesh.dispose();this.shots.splice(this.shots.indexOf(shot),1);}
-    }
     return hitStop;
   }
-  fire(kind,player){
-    const mesh=MeshBuilder.CreateSphere(`bear-${kind}`,{diameter:kind==='rock'?.32:.24,segments:kind==='rock'?3:10},this.world.scene);
-    if(!this.shotMaterials)this.shotMaterials={};
-    if(!this.shotMaterials[kind]){const m=new StandardMaterial(`bear-${kind}-material`,this.world.scene);m.diffuseColor=kind==='rock'?new Color3(.36,.24,.14):new Color3(.65,.35,.05);if(kind==='magic')m.emissiveColor=new Color3(.85,.4,.03);this.shotMaterials[kind]=m;}
-    mesh.material=this.shotMaterials[kind];mesh.isPickable=false;
-    mesh.position.copyFrom(this.nodes['mixamorig:RightHand'].getAbsolutePosition());
-    const velocity=player.position.add(new Vector3(0,1,0)).subtract(mesh.position).normalize().scale(6);
-    this.shots.push({mesh,velocity,life:3});
+  showDefense(kind,actionId){
+    const key=kind==='evade'?`evade:${this.brain.serial}`:`block:${this.brain.serial}:${actionId}`;
+    if(this.defenseFeedbackKey===key)return;
+    this.defenseFeedbackKey=key;this.lastHit=kind==='evade'?'보스 회피':'보스 BLOCK';
+    this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),kind==='evade'?'회피':'BLOCK',false,kind);
+    this.onChange(this);
   }
   receiveBossHit({damage,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(!this.playerAlive||(!bodyContact&&!shieldContact))return false;
     // Block throughout the shield-push cast, including its wind-up and recovery.
-    // Contact is still required; distant attacks/projectiles cannot trigger a parry.
+    // Contact is still required; distant attacks cannot trigger a parry.
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 경직';

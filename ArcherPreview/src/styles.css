@@ -78,3 +78,5 @@
 /* Bring combat controls into the thumb reach area, preserving their spacing. */
 .action-controls[data-character="warrior-v2"]{right:calc(clamp(44px,8vw,96px) + env(safe-area-inset-right,0px));bottom:calc(clamp(92px,12vh,120px) + env(safe-area-inset-bottom,0px))}
 @media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}}
+
+.damage-number.evade{color:#c5ecff;font-size:14px;letter-spacing:1px}

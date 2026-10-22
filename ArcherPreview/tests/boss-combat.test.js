@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { BossBrain,BOSS_MOTIONS,BOSS_ATTACKS } from '../src/boss-spec.js';
+import { BossBrain,BOSS_MOTIONS,BOSS_ATTACKS,BOSS_ACTIVE_MOTIONS,bossAttackRange } from '../src/boss-spec.js';
 import { bladeTouchesCapsule,MeleeContactGate } from '../src/melee-collision.js';
 import { NullEngine,Scene,TransformNode,Vector3,FreeCamera } from '@babylonjs/core';
 import { PlayerStrikeSampler,shieldIntercepts } from '../src/player-strikes.js';
@@ -10,13 +10,14 @@ import { projectBossHealth } from '../src/boss-health-bar.js';
 import { loadPoseAsset } from './helpers/gltf-pose.js';
 const asset=JSON.parse(readFileSync(new URL('../public/assets/guardian-bear.json',import.meta.url)));
 const durations=Object.fromEntries(asset.catalog.map(c=>[c.name,c.duration]));
-test('boss: all 20 source motions are assigned and reachable in actual encounter logic',()=>{
- assert.equal(BOSS_MOTIONS.length,20);assert.equal(BOSS_ATTACKS.length,14);
+test('boss: 20 original clips are retained; 18 active motions exclude both ball projectiles',()=>{
+ assert.equal(BOSS_MOTIONS.length,20);assert.equal(BOSS_ATTACKS.length,12);
  assert.deepEqual(new Set(BOSS_MOTIONS.map(m=>m.name)),new Set(Object.keys(asset.animations)));
  const b=new BossBrain(durations,()=>.37);b.update(.1,7);b.update(.1,3);b.update(.1,2);
  for(let t=0;t<240;t+=.05)b.update(.05,2);
  b.hit({heavy:true});for(let t=0;t<11;t+=.05)b.update(.05,2);
- assert.equal(b.visited.size,20,[...b.visited].join(','));
+ assert.deepEqual(b.visited,new Set(BOSS_ACTIVE_MOTIONS.map(m=>m.name)));
+ assert.ok(BOSS_ATTACKS.every(m=>!['rock','magic'].includes(m.kind)));
 });
 test('boss: light hit pauses briefly, flashes boss, then resumes the same original motion',()=>{
  const b=new BossBrain(durations);b.start('Left_Hook_from_Guard','attack');b.time=.15;
@@ -26,7 +27,8 @@ test('boss: light hit pauses briefly, flashes boss, then resumes the same origin
 test('boss: heavy hit cancels attack, plays down then stand-up before resuming',()=>{
  const b=new BossBrain(durations);b.start('Axe_Spin_Attack','attack');b.time=.6;
  b.hit({heavy:true,damage:64});assert.equal(b.state,'Knock_Down_1');assert.equal(b.hp,836);
- assert.equal(b.hit({heavy:true}),false);
+ b.time=.3;const serial=b.serial;assert.equal(b.hit({heavy:true,damage:20}),true);
+ assert.equal(b.hp,816);assert.equal(b.time,.3);assert.equal(b.serial,serial);assert.equal(b.stagger,0);
  b.update(durations.Knock_Down_1+.01,2);assert.equal(b.state,'Stand_Up3');
  b.update(durations.Stand_Up3+.01,2);assert.equal(b.mode,'idle');
 });
@@ -48,7 +50,7 @@ test('boss: actual collision damages stand-up once, briefly staggers, then conti
  assert.equal(b.brain.hp,816);assert.equal(b.hitCount,1);assert.equal(b.brain.state,'Stand_Up3');assert.equal(b.brain.time,.3);
  b.brain.mode='down';b.poseAndContacts(player,{state:'slash',actionId:5},sample,null);
  b.brain.mode='recover';b.poseAndContacts(player,{state:'slash',actionId:5},sample,null);
- assert.equal(b.brain.hp,816,'A temporarily invulnerable target must retain per-action hit deduplication');
+ assert.equal(b.brain.hp,816,'Changing between down/recovery must retain per-action hit deduplication');
  b.brain.update(.2,2);b.brain.update(.1,2);assert.ok(b.brain.time>.3);
  b.brain.hit({damage:900});assert.equal(b.brain.hp,0);assert.equal(b.brain.mode,'down');
  scene.dispose();engine.dispose();
@@ -151,4 +153,66 @@ test('strike sampling: 2x low-FPS shield contact is retained only inside its aut
  assert.ok(Math.abs(sample.blade[0][0]-(-.55+.55))<1e-6);
  assert.equal(sampler.sample({state:'shieldPush',actionId:1,clipTime:1.4},null,shield).window,undefined);
  scene.dispose();engine.dispose();
+});
+
+function collisionEncounter(mode){
+ const engine=new NullEngine(),scene=new Scene(engine),feedback=[],b=new BossEncounter({scene},()=>{},(...args)=>feedback.push(args));
+ b.active=true;b.brain=new BossBrain(durations);b.brain.start(mode==='down'?'Knock_Down_1':mode==='guard'?'Block6':'Backflip',mode);b.brain.time=.3;b.dt=.016;b.groundHeight=0;
+ b.actor=new TransformNode('boss',scene);b.actor.position.z=1.5;b.carrier=new TransformNode('carrier',scene);b.carrier.parent=b.actor;
+ const boneNames=['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
+ b.nodes=Object.fromEntries(boneNames.map(name=>{const node=new TransformNode(name,scene);node.parent=b.carrier;node.position.y=.3;return ['mixamorig:'+name,node];}));
+ b.config={scale:1,catalog:[{name:b.brain.state,groundTrack:[0]}]};b.asset={meshes:[{}]};
+ const player={position:Vector3.Zero()},sample={actionId:1,window:{id:'cut',damage:20},blade:[[-.5,.3,1.5],[.5,.3,1.5]]};
+ return {b,feedback,player,sample,close(){scene.dispose();engine.dispose();}};
+}
+
+test('downed boss: real low blade contact deals normal and three heavy hits without restarting fall',()=>{
+ const {b,player,sample,feedback,close}=collisionEncounter('down'),serial=b.brain.serial;
+ b.poseAndContacts(player,{state:'slash',actionId:1},sample,null);
+ b.poseAndContacts(player,{state:'slash',actionId:1},sample,null);assert.equal(b.brain.hp,880);
+ const burst={...sample,actionId:2,window:{id:'jump-cut',damage:64,heavy:true,burst:[20,20,24],interval:.055}};
+ for(const elapsed of [0,.055,.11])b.poseAndContacts(player,{state:'judgment',actionId:2},{...burst,elapsed},null);
+ assert.equal(b.brain.hp,816);assert.equal(b.hitCount,4);assert.equal(b.heavyCount,0);
+ assert.equal(b.brain.serial,serial);assert.equal(b.brain.time,.3);assert.equal(b.brain.stagger,0);
+ assert.deepEqual(feedback.map(f=>f[1]),[20,20,20,24]);assert.ok(b.asset.meshes[0].renderOverlay);
+ b.poseAndContacts(player,{}, {...sample,actionId:3,blade:[[5,.3,1.5],[6,.3,1.5]]},null);assert.equal(b.brain.hp,816,'Distant swings remain misses');
+ b.brain.update(durations.Knock_Down_1,2);assert.equal(b.brain.mode,'recover');close();
+});
+
+test('boss defense: roll says 회피, guard says BLOCK; prevented bursts cannot damage later',()=>{
+ for(const [mode,label] of [['evade','회피'],['guard','BLOCK']]){
+  const {b,player,sample,feedback,close}=collisionEncounter(mode);
+  const burst={...sample,window:{id:'jump-cut',damage:64,heavy:true,burst:[20,20,24],interval:.055}};
+  for(const elapsed of [0,.055,.11])b.poseAndContacts(player,{}, {...burst,elapsed},null);
+  assert.equal(b.brain.hp,900);assert.equal(feedback.length,1);assert.equal(feedback[0][1],label);assert.equal(b.gate.pending.length,0);
+  b.brain.mode='idle';b.poseAndContacts(player,{}, {...burst,elapsed:.2},null);assert.equal(b.brain.hp,900);
+  b.poseAndContacts(player,{}, {...sample,actionId:2},null);assert.equal(b.brain.hp,880);close();
+ }
+});
+
+test('boss aggression: expanded range, quicker pursuit and shorter gaps retain an impact windup',()=>{
+ for(const spec of BOSS_ATTACKS)assert.equal(bossAttackRange(spec),spec.range*1.2);
+ const b=new BossBrain(durations,()=>.37);assert.ok(b.update(.1,5).speed>2.65);assert.ok(b.update(.1,3).speed>1.05);
+ b.update(.66,2.5);assert.equal(b.mode,'attack');assert.equal(b.time,0);
+ const spec=BOSS_ATTACKS.find(m=>m.name===b.state),impact=durations[b.state]*spec.impact/1.12;
+ assert.equal(b.update(impact-.001,2.5).events.length,0);assert.equal(b.update(.002,2.5).events.length,1);
+ b.update(10,2.5);assert.equal(b.mode,'idle');assert.equal(b.wait,.3);
+ b.update(.31,2.5);assert.equal(b.mode,'attack');
+});
+
+test('source GLBs: normal sword passes damage the actual lying boss skeleton',()=>{
+ const bear=loadPoseAsset(new URL('../public/assets/guardian-bear.glb',import.meta.url));
+ const warrior=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+ for(const phase of [1.5,3])for(const [state,clip,damage] of [['slash','Right_Hand_Sword_Slash',20],['attack','Thrust_Slash',18]]){
+  const {b,player,close}=collisionEncounter('down'),pose=bear.pose('Knock_Down_1',phase);
+  b.brain.time=phase;b.actor.scaling.setAll(asset.scale);b.actor.rotation.y=Math.PI;b.config=asset;
+  b.groundHeight=asset.catalog.find(c=>c.name==='Knock_Down_1').groundTrack[Math.floor(phase*30)];
+  for(const [name,node] of Object.entries(b.nodes))node.position.copyFrom(pose[name].getTranslation());
+  const sampler=new PlayerStrikeSampler();let matrix;const sword={computeWorldMatrix(){},getWorldMatrix(){return matrix;}};
+  for(let t=0;t<2;t+=1/60){
+   matrix=warrior.pose(clip,t).Golden_Oathblade;
+   b.poseAndContacts(player,{state,actionId:1},sampler.sample({state,actionId:1,clipTime:t},sword,null),null);
+  }
+  assert.equal(b.brain.hp,900-damage,`${state}, down phase ${phase}`);assert.equal(b.brain.time,phase);close();
+ }
 });

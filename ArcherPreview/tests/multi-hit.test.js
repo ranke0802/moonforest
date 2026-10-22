@@ -22,7 +22,7 @@ function exercise(kind,dt=.016,speed=1,{miss=false,cancelAfterHit=false}={}){
   const contact=gate.collect({...sample,capsule,radius:kind==='judgment'?.6:.75});
   for(const hit of contact.hits){hits.push({...hit,time:result.clipTime,elapsed:result.actionElapsed});boss.hit(hit);}
   c.pauseOnImpact(contact.hitStop);
-  if(cancelAfterHit&&hits.length&&!cancelled){c.requestMovement();cancelled=true;}
+  if(cancelAfterHit&&hits.length&&!cancelled){c.hit();cancelled=true;}
  }
  return {hits,boss,c};
 }
@@ -40,7 +40,7 @@ test('judgment: physical contact produces three fast pulses at the held impact p
   assert.ok(hits[2].elapsed-hits[0].elapsed<=.11+dt+1e-8);assert.equal(boss.hp,836);assert.equal(boss.mode,'down');
  }
 });
-test('judgment miss creates no burst; moving after first impact cancels the remaining pulses',()=>{
+test('judgment miss creates no burst; being hit after first impact cancels the remaining pulses',()=>{
  assert.equal(exercise('judgment',.016,1,{miss:true}).hits.length,0);
  const {hits,c}=exercise('judgment',.016,1,{cancelAfterHit:true});assert.equal(hits.length,1);assert.equal(hits[0].heavy,false);assert.equal(c.state,'run');
 });

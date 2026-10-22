@@ -236,27 +236,29 @@ function combatInput(){
   const release=code=>window.emit('keyup',{code});
   return {...controls,c,press,release,tick:(dt=.016)=>c.update(dt,controls.input.value())};
 }
-test('input priority: held W yields to attack/charge; only a fresh movement press cancels',()=>{
+test('keyboard: new movement cannot interrupt normal attack; tap buffer wins at completion',()=>{
  const {c,press,release,tick}=combatInput();press('KeyW');assert.equal(tick().state,'run');
- press('KeyJ');assert.equal(tick(.1).state,'idle');release('KeyJ');assert.equal(tick().state,'slash');
- for(let i=0;i<5;i++){press('KeyW',true);assert.equal(tick().state,'slash');}
- press('KeyD');assert.equal(tick().state,'run');assert.equal(c.action,null);
- release('KeyD');press('KeyJ');assert.equal(tick(.45).state,'judgment');release('KeyJ');
- release('KeyW');press('KeyW');assert.equal(tick().state,'run');
+ press('KeyJ');tick(.05);release('KeyJ');assert.equal(tick().state,'slash');
+ press('KeyD');assert.equal(tick().state,'slash');
+ press('KeyJ');tick(.05);release('KeyJ');assert.equal(tick().state,'slash');
+ assert.equal(tick(.9).state,'attack');assert.equal(c.serial,2);
+ assert.equal(tick(2).state,'run');assert.equal(c.serial,2);
 });
-test('input priority honors same-frame event order and resumes held movement after attack',()=>{
- const a=combatInput();a.press('KeyW');a.press('KeyJ');a.release('KeyJ');assert.equal(a.tick().state,'slash');
- assert.equal(a.tick(1).state,'run');
- const b=combatInput();b.press('KeyJ');b.press('KeyW');b.release('KeyJ');assert.equal(b.tick().state,'run');assert.equal(b.c.serial,0);
- b.press('KeyJ');b.tick(.45);b.release('KeyJ');assert.equal(b.tick().state,'judgment');
- assert.equal(b.tick(3).state,'run');
+
+test('keyboard: same-frame movement cannot erase a press; heavy buffers through recovery',()=>{
+ const {c,press,release,tick}=combatInput();press('KeyJ');press('KeyW');release('KeyJ');assert.equal(tick().state,'slash');
+ press('KeyJ');tick(.45);release('KeyJ');assert.equal(c.queuedAttack,'judgment');
+ assert.equal(tick(.5).state,'judgment');assert.equal(c.serial,2);
+ assert.equal(tick(3).state,'run');
 });
-test('touch stick: held direction/jitter permits combat; new direction or re-engagement cancels',()=>{
+
+test('touch stick: direction changes do not interrupt; releasing stick avoids delayed movement',()=>{
  const {c,pointer,press,release,tick}=combatInput();
  pointer('pointerdown',1,120,650);pointer('pointermove',1,174,650);assert.equal(tick().state,'run');
  press('KeyJ');tick(.05);release('KeyJ');assert.equal(tick().state,'slash');
- pointer('pointermove',1,174,652);assert.equal(tick().state,'slash');
- pointer('pointermove',1,120,596);assert.equal(tick().state,'run');assert.equal(c.action,null);
- pointer('pointerup',1,120,596);press('KeyJ');tick(.45);release('KeyJ');assert.equal(tick().state,'judgment');
- pointer('pointerdown',2,120,650);pointer('pointermove',2,120,596);assert.equal(tick().state,'run');
+ pointer('pointermove',1,120,596);assert.equal(tick().state,'slash');
+ pointer('pointerup',1,120,596);assert.equal(tick(1).state,'idle');assert.equal(c.action,null);
+ press('KeyJ');tick(.45);release('KeyJ');assert.equal(tick().state,'judgment');
+ pointer('pointerdown',2,120,650);pointer('pointermove',2,120,596);assert.equal(tick().state,'judgment');
+ assert.equal(tick(3).state,'run');
 });

@@ -14,7 +14,7 @@ import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import { BossEncounter } from './boss-encounter.js';
-import { BOSS_MOTIONS } from './boss-spec.js';
+import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { updateBossHealthPosition } from './boss-health-bar.js';
@@ -95,7 +95,7 @@ function updateButtons() {
   $('#boss-controls').hidden = !isV2();
 }
 const actions = {
-  move() { if(ready&&isV2()) { controller.requestMovement();attackSources.clear();strikeSampler.reset(); } },
+  move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
@@ -114,7 +114,7 @@ function setAttackHeld(source, held) {
 }
 
 function cancelAttackInput(source) {
-  if(source){attackSources.delete(source);if(attackSources.size)return;}
+  if(source){if(!attackSources.delete(source)||attackSources.size)return;}
   else attackSources.clear();
   if(controller?.cancelAttackInput)controller.cancelAttackInput();
   else controller?.setAttackHeld(false);
@@ -265,7 +265,6 @@ function render() {
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
     if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     const result = controller.update(dt, movement);
-    if(result.cancelled){attackSources.clear();strikeSampler.reset();}
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
       $('#attack-button').style.setProperty('--charge-progress',result.chargeProgress||0);
@@ -365,7 +364,7 @@ try {
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');}
     updateButtons();
   });
-  for(const motion of BOSS_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
+  for(const motion of BOSS_ACTIVE_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
