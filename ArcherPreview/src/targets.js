@@ -128,7 +128,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       if (disposed || !record) return false;
       target.hits += 1;
       record.hitAge = 0;
-      record.heavy=heavy;record.stun=stun;
+      record.heavy=heavy;record.stun=stun;record.flashDuration=stun>0?.75:.22;
       record.centerMaterial.emissiveColor.set(1, .72, .28);
       for(const mesh of record.parts){mesh.renderOverlay=true;mesh.overlayColor=Color3.White();mesh.overlayAlpha=.55;}
       onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy,'enemy',burstIndex);
@@ -162,7 +162,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
         record.sway.position.z=record.heavy&&age<1.25?-.62*Math.sin(Math.PI*age/1.25)*Math.exp(-age*.8):0;
         record.sway.position.y=.2;
         if(record.stun>age){record.sway.rotation.z=.035*Math.sin(age*55);record.sway.rotation.x=-.06;}
-        const flash = Math.max(0, 1 - age / .22);
+        const flash = Math.max(0, 1 - age / (record.flashDuration||.22));
         for(const mesh of record.parts){mesh.renderOverlay=flash>0;mesh.overlayAlpha=flash*.55;}
         record.centerMaterial.emissiveColor.set(.12 + flash * .88, .065 + flash * .655, .015 + flash * .265);
         const pulse = .94 + Math.sin(clock * 3) * .06;

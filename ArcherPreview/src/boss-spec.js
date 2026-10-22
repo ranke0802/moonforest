@@ -42,7 +42,9 @@ export class BossBrain {
   }
   hit({heavy=false,damage=14,stun=0}={}){
     if(this.hp<=0||this.defense)return false;
-    this.hp=Math.max(0,this.hp-damage);this.flash=.22;
+    this.hp=Math.max(0,this.hp-damage);
+    const flashDuration=stun>0?.75:.22;
+    if(flashDuration>=this.flash){this.flash=flashDuration;this.flashDuration=flashDuration;}
     // Grounded targets still take damage. Further hits must not restart the fall
     // or indefinitely delay getting up, including another judgment burst.
     if(this.mode==='down')return true;
@@ -50,7 +52,7 @@ export class BossBrain {
     else this.stagger=Math.max(this.stagger,stun||.18);
     return true;
   }
-  parry(){if(this.hp>0&&!['down','recover'].includes(this.mode)){this.stagger=Math.max(this.stagger,.25);this.flash=.16;return true;}return false;}
+  parry(){if(this.hp>0&&!['down','recover'].includes(this.mode)){this.stagger=Math.max(this.stagger,.25);if(this.flash<.16){this.flash=.16;this.flashDuration=.16;}return true;}return false;}
   update(dt,distance,playerAlive=true){
     const events=[];dt=Math.max(0,dt);this.flash=Math.max(0,this.flash-dt);
     if(this.stagger>0){this.stagger=Math.max(0,this.stagger-dt);return {events,speed:0};}

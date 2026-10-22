@@ -12,13 +12,15 @@ export function applyHitFlash(meshes, remaining, duration=.22) {
 /** Short, bounded recoil of the actor; no changes to the source skeleton or clips. */
 export class PlayerHitReaction {
   constructor(){this.reset();}
-  reset(){this.remaining=0;this.direction=Vector3.Zero();}
-  start(direction){
+  reset(){this.remaining=0;this.flashRemaining=0;this.direction=Vector3.Zero();}
+  cancelRecoil(){this.remaining=0;}
+  start(direction,{recoil=true}={}){
     this.direction.copyFrom(direction);this.direction.y=0;
     if(this.direction.lengthSquared()<1e-8)this.direction.set(0,0,-1);
-    this.direction.normalize();this.remaining=PLAYER_STAGGER;
+    this.direction.normalize();this.remaining=recoil?PLAYER_STAGGER:0;this.flashRemaining=PLAYER_STAGGER;
   }
   update(dt,actor){
+    this.flashRemaining=Math.max(0,this.flashRemaining-Math.max(0,dt));
     const before=this.remaining;
     this.remaining=Math.max(0,before-Math.max(0,dt));
     // Exact eased displacement integrates to 28 cm, independent of frame rate.

@@ -19,11 +19,12 @@ import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { updateBossHealthPosition } from './boss-health-bar.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
+import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
 const loading = $('#loading');
-const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button'].map($);
+const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer','warrior','warrior-v2'];
 let character = new URLSearchParams(location.search).get('character');
 if (!validCharacters.includes(character)) character = 'archer';
@@ -32,6 +33,7 @@ const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers;
+let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
@@ -96,7 +98,8 @@ function updateButtons() {
 }
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
-  guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())controller.shieldPush();else controller.toggleGuard?.(); updateButtons(); } },
+  guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
+  dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   cancelAttackInput() { cancelAttackInput(); },
@@ -105,6 +108,15 @@ const actions = {
   revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
 };
+
+function startDefense(kind){
+  if(!controller[kind]())return;
+  attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
+  if(kind==='dodge'){
+    rollDirection=dodgeDirection(input.value(),world.camera.alpha,actor.rotation.y);
+    actor.rotation.y=Math.atan2(rollDirection.x,rollDirection.z);
+  }
+}
 
 function setAttackHeld(source, held) {
   if (held) {
@@ -219,12 +231,13 @@ async function loadCharacter() {
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
-    $('.keyboard-hint small').textContent = isV2() ? 'J 짧게 일반 · 길게 심판 · F 방패 밀치기' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
+    $('.keyboard-hint small').textContent = isV2() ? 'J 공격 · 길게 심판 · F 밀치기 · Space 회피' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isV2() ? '짧게 일반 · 길게 심판 · J' : isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
     $('#attack-button').title = isV2() ? '짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검' : '길게 누르면 연속 공격';
     $('#attack-icon').setAttribute('d', isWarrior() ? 'M9 35 31 13 35 5 27 9 5 31m3-6 11 11m-10-5-5 5' : 'M12 5c21 7 21 27 0 34M12 5l11 17-11 17M5 22h34m-6-5 6 5-6 5');
     $('#guard-button').hidden = !isV2();
+    $('#dodge-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동, J 공격. 왼쪽 또는 오른쪽 마우스 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
@@ -259,12 +272,17 @@ function render() {
   if (ready) {
     if(isV2()){
       const recoiled=boss.playerReaction.update(dt,actor);
-      applyHitFlash(container.meshes,boss.playerReaction.remaining,PLAYER_STAGGER);
+      applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,PLAYER_STAGGER);
       if(recoiled)constrainPlayerPosition();
     }
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
     if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     const result = controller.update(dt, movement);
+    if(isV2()&&result.rollFrom!=null){
+      const distance=dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge);
+      actor.position.x+=rollDirection.x*distance;actor.position.z+=rollDirection.z*distance;
+      constrainPlayerPosition();
+    }
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
       $('#attack-button').style.setProperty('--charge-progress',result.chargeProgress||0);
@@ -286,7 +304,7 @@ function render() {
       const forward = new Vector3(-Math.cos(alpha), 0, -Math.sin(alpha));
       const right = new Vector3(-forward.z, 0, forward.x);
       const direction = forward.scale(movement.y).add(right.scale(movement.x)).normalize();
-      actor.position.addInPlace(direction.scale(result.speed * dt));
+      actor.position.addInPlace(direction.scale(result.speed * (result.movementDt??dt)));
       constrainPlayerPosition();
       if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
@@ -335,7 +353,7 @@ try {
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
   },(...args)=>damageNumbers.show(...args),duration=>{
-    controller.hit(duration);attackSources.clear();strikeSampler.reset();
+    if(controller.hit(duration)!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,duration,PLAYER_STAGGER);
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
@@ -357,7 +375,14 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
-  $('#guard-button').addEventListener('click', actions.guard);
+  for(const [selector,action] of [['#guard-button',actions.guard],['#dodge-button',actions.dodge]]){
+    const button=$(selector);let lastPress=-Infinity;
+    button.addEventListener('pointerdown',event=>{
+      if(event.button!==0||button.disabled)return;
+      event.preventDefault();lastPress=performance.now();action();
+    });
+    button.addEventListener('click',event=>{if(event.detail===0&&performance.now()-lastPress>350)action();});
+  }
   $('#summon-boss').addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
     try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;await boss.summon(actor);world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}

@@ -10,7 +10,7 @@ export const PLAYER_STRIKES={
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
   sample(result,sword,shield,multiHit=true){
-    if(result.actionId==null||result.staggered){this.reset();return null;}
+    if(result.actionId==null||result.staggered||result.state==='dodge'){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
     node.computeWorldMatrix(true);

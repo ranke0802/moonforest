@@ -79,7 +79,7 @@ export class BossEncounter {
     const spec=BOSS_BY_NAME[this.brain.state];
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
     this.ring.scaling.setAll(bossAttackRange(spec)/1.9);
-    applyHitFlash(this.asset.meshes,this.brain.flash);
+    applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
   }
   poseAndContacts(player,result,sample,shield){
@@ -112,7 +112,7 @@ export class BossEncounter {
       const grounded=['down','recover'].includes(this.brain.mode);
       for(const hit of contacts.hits)if(this.brain.hit(hit)){
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
-        applyHitFlash(this.asset?.meshes,this.brain.flash);
+        applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
         if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
         this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':'검 명중 · 경직';
         this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex);this.onChange(this);
@@ -142,23 +142,27 @@ export class BossEncounter {
   }
   receiveBossHit({damage,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(!this.playerAlive||(!bodyContact&&!shieldContact))return false;
+    if(action?.state==='dodge'&&action.actionId!=null){
+      this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'회피',false,'evade');return false;
+    }
     // Block throughout the shield-push cast, including its wind-up and recovery.
     // Contact is still required; distant attacks cannot trigger a parry.
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 경직';
-      applyHitFlash(this.asset?.meshes,this.brain.flash);
+      applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'BLOCK',false,'block');this.onChange(this);
-    }else this.hitPlayer(damage,source);
+    }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null});
     return true;
   }
-  hitPlayer(damage,source){
+  hitPlayer(damage,source,{superArmor=false}={}){
     if(this.playerInvulnerable||!this.playerAlive)return;
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=.8;
-    this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1));
+    this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!superArmor});
     this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
     this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player');this.onChange(this);
   }
   inspect(){return {active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,visited:[...(this.brain?.visited||[])]};}
 }
+

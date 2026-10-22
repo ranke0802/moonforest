@@ -36,7 +36,7 @@ export class PlaygroundInput {
   }
   keyDown(e) {
     if (document.querySelector('dialog[open]') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
-    const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF'];
+    const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF', 'Space'];
     if (!controls.includes(e.code)) return;
     e.preventDefault();
     const wasDown = this.keys.has(e.code);
@@ -47,7 +47,7 @@ export class PlaygroundInput {
         if (this.callbacks.setAttackHeld) this.callbacks.setAttackHeld(true);
         else this.callbacks.attack?.();
       }
-    } else if (!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyF: this.callbacks.guard }[e.code])?.();
+    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyF: this.callbacks.guard, Space: this.callbacks.dodge }[e.code])?.();
   }
   pointerDown(e) {
     e.preventDefault();

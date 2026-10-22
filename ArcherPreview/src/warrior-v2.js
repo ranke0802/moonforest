@@ -4,7 +4,7 @@ export const V2_COMBO = ['slash', 'attack'];
 export const V2_ATTACK_BASE_RATE = 1.8;
 export const V2_HOLD_SECONDS = .45;
 export const V2_COMBO_GRACE = .8;
-export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기'};
+export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기'};
 
 export class WarriorV2Controller {
   constructor({durations,speeds={}}) {
@@ -28,8 +28,10 @@ export class WarriorV2Controller {
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
   hit(duration=.26){
+    if(['judgment','dodge'].includes(this.action?.state))return false;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=duration;
+    return true;
   }
   attack(){
     if(this.dead||this.held)return false;
@@ -50,10 +52,15 @@ export class WarriorV2Controller {
     }
     return true;
   }
-  shieldPush(){if(this.action||this.staggerRemaining>0)return false;this.cancelAttackInput();this.attackIndex=0;this.startAttack('shieldPush');return true;}
+  interruptWith(kind){
+    if(this.dead)return false;
+    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
+  }
+  shieldPush(){return this.interruptWith('shieldPush');}
+  dodge(){return this.interruptWith('dodge');}
   update(dt,input={}) {
     dt=Number.isFinite(dt)?Math.max(0,dt):0;const magnitude=Math.min(1,Math.hypot(input.x||0,input.y||0));const previous=this.state;
-    const frameDt=dt;let readyAt=0;
+    const frameDt=dt;let readyAt=0,rollFrom=null,rollTo=null;
     // A fresh press is accepted during recovery or hit-stun. Charging runs alongside
     // the current clip; only one next action is buffered, regardless of tap spam.
     if(this.held&&!this.holdTriggered){
@@ -72,8 +79,11 @@ export class WarriorV2Controller {
       this.action.elapsed+=dt;
       const stopped=Math.min(dt,this.action.hitStop);this.action.hitStop-=stopped;hitStopped=stopped>0;
       if(hitStopped)dt=0; // Deliver the final pulse before advancing past the contact pose, even at low FPS.
-      const rate=this.action.state==='shieldPush'?1:this.attackSpeed;
+      const rolling=this.action.state==='dodge';
+      if(rolling)rollFrom=this.action.time;
+      const rate=['shieldPush','dodge'].includes(this.action.state)?1:this.attackSpeed;
       const left=Math.max(0,(this.durations[this.action.state]-this.action.time)/rate);
+      if(rolling)rollTo=Math.min(this.durations.dodge,this.action.time+dt);
       if(dt<left){this.action.time+=dt*rate;idleDt=0;}
       else {idleDt=dt-left;this.comboRemaining=V2_COMBO.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
     }
@@ -91,7 +101,7 @@ export class WarriorV2Controller {
     if(!this.action)this.time=(this.time+idleDt*(this.state==='run'?magnitude:1))%this.durations[this.state];
     return {state:this.state,clipTime:this.action?.time??this.time,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude:0,
       loop:!this.action,actionId:this.action?.id??null,actionElapsed:this.action?.elapsed??0,hitStopped,chargeProgress:this.chargeProgress,
-      blendDuration:this.state==='idle'?.24:.16,events:[]};
+      rollFrom,rollTo,movementDt:rollFrom!=null?idleDt:frameDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
   }
   get chargeProgress(){return this.queuedAttack==='judgment'?1:this.held&&!this.holdTriggered?this.holdTime/V2_HOLD_SECONDS:0;}
 }
