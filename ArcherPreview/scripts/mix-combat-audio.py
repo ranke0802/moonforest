@@ -54,13 +54,20 @@ leather=norm(trim(read('Katana Sheath Fast.wav'),.55))
 swings=[norm(trim(read('swish-'+str(n)+'.wav'),.3)) for n in [7,8,9]]
 bow=norm(trim(read('English Longbow Draw.wav'),.65))
 release=norm(trim(read('English Longbow Shoot.wav'),.4))
+armor_steps=[read(name) for name in ['step_metal.ogg','step_metal (2).ogg','step_metal (3).ogg']]
+metal_steps=[read('metal_steps_'+str(n).zfill(2)+'.wav') for n in [1,9,16]]
 for i in range(3):
     suffix='' if i==0 else '_'+str(i)
     swoosh=rate(swings[i],.66+.04*i)
     save('slash'+suffix,tail(mix((swoosh,1,0),(rate(leather,.9),.14,0)),.06))
     save('boss_hit'+suffix,tail(mix((rate(flesh[i%2],.88),1,0),(rate(hammer[i%2],.7),.65,.012),(band(armor,200,4200),.16,.01))))
     save('block'+suffix,tail(mix((rate(metal,.82+i*.025),.6,0),(rate(wood,.7),.9,.008),(band(clash,400,4800),.25,0)),.13))
-    save('foot_'+str(i),mix((rate(wood,.82+i*.08),1,0),(band(leather,500,6200),.16,.025)),.56)
+    # Recorded armored steps: a low boot plant followed by a short, damped clack.
+    # No sheath scrape, wood knock, swish or long ringing tail in locomotion.
+    boot=fade(norm(band(rate(armor_steps[i],.9),55,3000)),.065)
+    plate=fade(norm(band(rate(metal_steps[i],.85),400,3800)),.06)
+    plate*=np.exp(-np.arange(len(plate))/(SR*.095))
+    save('foot_'+str(i),mix((boot,1,0),(plate,.28,.015)),.56)
 save('slash_heavy',tail(mix((rate(swings[0],.5),1,0),(rate(swings[2],.62),.65,.09),(band(leather,150,2500),.3,0)),.1))
 save('shield_up',mix((leather,.7,0),(band(metal,130,2400),.22,.055)),.7)
 save('parry',tail(mix((rate(clash,.92),.7,0),(rate(wood,.67),.85,.008)),.12))

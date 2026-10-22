@@ -15,9 +15,9 @@
     "rms": 0.0659
   },
   "foot_0": {
-    "seconds": 0.575,
+    "seconds": 0.278,
     "peak": 0.56,
-    "rms": 0.0536
+    "rms": 0.1001
   },
   "slash_1": {
     "seconds": 0.712,
@@ -35,9 +35,9 @@
     "rms": 0.0728
   },
   "foot_1": {
-    "seconds": 0.575,
+    "seconds": 0.278,
     "peak": 0.56,
-    "rms": 0.0525
+    "rms": 0.093
   },
   "slash_2": {
     "seconds": 0.712,
@@ -55,9 +55,9 @@
     "rms": 0.0703
   },
   "foot_2": {
-    "seconds": 0.575,
+    "seconds": 0.278,
     "peak": 0.56,
-    "rms": 0.0509
+    "rms": 0.064
   },
   "slash_heavy": {
     "seconds": 0.651,
