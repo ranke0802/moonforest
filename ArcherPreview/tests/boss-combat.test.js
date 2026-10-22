@@ -203,7 +203,7 @@ test('boss aggression: expanded range, quicker pursuit and shorter gaps retain a
 test('source GLBs: normal sword passes damage the actual lying boss skeleton',()=>{
  const bear=loadPoseAsset(new URL('../public/assets/guardian-bear.glb',import.meta.url));
  const warrior=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
- for(const phase of [1.5,3])for(const [state,clip,damage] of [['slash','Right_Hand_Sword_Slash',20],['attack','Thrust_Slash',18]]){
+ for(const phase of [1.5,3])for(const [state,clip,damage] of [['slash','Right_Hand_Sword_Slash',20],['attack','Thrust_Slash',38]]){
   const {b,player,close}=collisionEncounter('down'),pose=bear.pose('Knock_Down_1',phase);
   b.brain.time=phase;b.actor.scaling.setAll(asset.scale);b.actor.rotation.y=Math.PI;b.config=asset;
   b.groundHeight=asset.catalog.find(c=>c.name==='Knock_Down_1').groundTrack[Math.floor(phase*30)];

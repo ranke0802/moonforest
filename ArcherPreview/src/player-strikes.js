@@ -1,6 +1,6 @@
 import { Vector3 } from '@babylonjs/core';
 export const PLAYER_STRIKES={
-  attack:[{id:'thrust',from:.55,to:1.02,damage:9},{id:'follow-cut',from:1.08,to:1.65,damage:9}],
+  attack:[{id:'thrust',from:.55,to:1.02,damage:18},{id:'follow-cut',from:1.08,to:1.65,damage:20}],
   slash:[{id:'cut',from:.38,to:.80,damage:20}],
   // Only the descending blade deals the heavy hit. Landing/recovery are inactive.
   judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true,burst:[20,20,24],interval:.055}],

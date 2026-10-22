@@ -29,7 +29,7 @@ function exercise(kind,dt=.016,speed=1,{miss=false,cancelAfterHit=false}={}){
 test('actual blade: slash is one hit; thrust/slash has two independently deduplicated passes',()=>{
  for(const dt of [1/60,1/20,.1])for(const speed of [.5,1,2]){
   assert.equal(exercise('slash',dt,speed).hits.length,1);
-  const {hits}=exercise('attack',dt,speed);assert.equal(hits.length,2,`${dt}/${speed}`);assert.deepEqual(hits.map(h=>h.id),['thrust','follow-cut']);assert.equal(hits.reduce((s,h)=>s+h.damage,0),18);
+  const {hits}=exercise('attack',dt,speed);assert.equal(hits.length,2,`${dt}/${speed}`);assert.deepEqual(hits.map(h=>h.id),['thrust','follow-cut']);assert.equal(hits.reduce((s,h)=>s+h.damage,0),38);
  }
 });
 test('judgment: physical contact produces three fast pulses at the held impact pose; only last knocks back',()=>{
