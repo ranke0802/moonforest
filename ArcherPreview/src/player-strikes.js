@@ -15,6 +15,7 @@ export class PlayerStrikeSampler{
     if(!node){this.reset();return null;}
     node.computeWorldMatrix(true);
     const local=result.state==='shieldPush'?[[-.55,0,.16],[.55,0,.16]]:[[-.002,.405,0],[-.002,-.951,0]];
+    if(result.state==='slash')local[1]=local[0].map((v,i)=>v+(local[1][i]-v)*1.1);
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
     const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18}]:PLAYER_STRIKES[result.state];

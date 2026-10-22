@@ -276,7 +276,7 @@ function render() {
   if (ready) {
     if(isV2()){
       const recoiled=boss.playerReaction.update(dt,actor);
-      applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,PLAYER_STAGGER);
+      applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
       if(recoiled)constrainPlayerPosition();
     }
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
@@ -356,9 +356,9 @@ try {
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
-  },(...args)=>damageNumbers.show(...args),duration=>{
-    if(controller.hit(duration)!==false){attackSources.clear();strikeSampler.reset();}
-    applyHitFlash(container.meshes,duration,PLAYER_STAGGER);
+  },(...args)=>damageNumbers.show(...args),(duration,options)=>{
+    if(controller.hit(duration,options)!==false){attackSources.clear();strikeSampler.reset();}
+    applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!ready||!isWarrior()||!combatResult)return;

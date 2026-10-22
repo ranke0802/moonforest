@@ -5,6 +5,7 @@ export const V2_ATTACK_BASE_RATE = 1.8;
 export const V2_HOLD_SECONDS = .45;
 export const V2_COMBO_GRACE = .8;
 export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기'};
+export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7};
 
 export class WarriorV2Controller {
   constructor({durations,speeds={}}) {
@@ -12,7 +13,7 @@ export class WarriorV2Controller {
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
     this.held=false;this.holdTime=0;this.holdTriggered=false;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
     this.staggerRemaining=0;this.hitPose=null;this.queuedAttack=null;
-    this.motionSpeeds=Object.fromEntries(Object.keys(V2_LABELS).map(state=>[state,1]));
+    this.motionSpeeds={...V2_MOTION_DEFAULTS};
   }
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value)*V2_ATTACK_BASE_RATE;}
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
@@ -30,8 +31,8 @@ export class WarriorV2Controller {
     return false;
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
-  hit(duration=.26){
-    if(['judgment','dodge'].includes(this.action?.state))return false;
+  hit(duration=.2,{force=false}={}){
+    if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=duration;
     return true;

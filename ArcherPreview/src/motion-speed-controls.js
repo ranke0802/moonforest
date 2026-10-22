@@ -1,12 +1,17 @@
 import { normalizeAttackSpeed } from './controller.js';
-import { V2_LABELS } from './warrior-v2.js';
+import { V2_LABELS, V2_MOTION_DEFAULTS } from './warrior-v2.js';
 
-const STORAGE_KEY='warrior-v2-motion-speeds';
+const STORAGE_KEY='warrior-v2-motion-speeds-v2';
 export function setupMotionSpeedControls({getController,beforeOpen}) {
   const $=selector=>document.querySelector(selector),dialog=$('#motion-speed-dialog');
   let saved={};
-  try{saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')||{};}catch{/* Use defaults when storage is unavailable. */}
-  const speeds=Object.fromEntries(Object.keys(V2_LABELS).map(state=>[state,normalizeAttackSpeed(saved[state])]));
+  try{
+    const current=localStorage.getItem(STORAGE_KEY);
+    saved=JSON.parse(current||localStorage.getItem('warrior-v2-motion-speeds')||'{}')||{};
+    if(!current){delete saved.attack;delete saved.dodge;}
+  }catch{/* Use defaults when storage is unavailable. */}
+  const speeds=Object.fromEntries(Object.keys(V2_LABELS).map(state=>[state,normalizeAttackSpeed(saved[state]??V2_MOTION_DEFAULTS[state])]));
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(speeds));}catch{/* Keep session values. */}
   const fields=new Map();
   function sync(state){
     for(const {input,output} of fields.get(state)||[]){
@@ -23,7 +28,8 @@ export function setupMotionSpeedControls({getController,beforeOpen}) {
     if(!fields.has(state))fields.set(state,[]);
     fields.get(state).push({input,output});
     input.addEventListener('input',()=>setSpeed(state,Number(input.value)));
-    reset.addEventListener('click',()=>setSpeed(state,1));sync(state);
+    reset.textContent=`${V2_MOTION_DEFAULTS[state]}×`;reset.title='기본 속도로 복원';reset.setAttribute('aria-label',`${V2_LABELS[state]} 기본 속도로 복원`);
+    reset.addEventListener('click',()=>setSpeed(state,V2_MOTION_DEFAULTS[state]));sync(state);
   }
   for(const [state,label] of Object.entries(V2_LABELS)){
     const row=document.createElement('div');row.className='motion-speed-row';
@@ -32,7 +38,7 @@ export function setupMotionSpeedControls({getController,beforeOpen}) {
     bind(state,row.querySelector('input'),row.querySelector('output'),row.querySelector('button'));
   }
   bind('dodge',$('#dodge-speed'),$('#dodge-speed-value'),$('#reset-dodge-speed'));
-  $('#reset-motion-speeds').addEventListener('click',()=>{for(const state of Object.keys(speeds))setSpeed(state,1);});
+  $('#reset-motion-speeds').addEventListener('click',()=>{for(const state of Object.keys(speeds))setSpeed(state,V2_MOTION_DEFAULTS[state]);});
   $('#motion-speed-toggle').addEventListener('click',()=>{beforeOpen();dialog.showModal();});
   $('#close-motion-speed').addEventListener('click',()=>dialog.close());
   // Require both ends outside so dragging a slider out of the dialog never closes it.

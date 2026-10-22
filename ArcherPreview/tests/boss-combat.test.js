@@ -19,10 +19,11 @@ test('boss: 20 original clips are retained; 18 active motions exclude both ball 
  assert.deepEqual(b.visited,new Set(BOSS_ACTIVE_MOTIONS.map(m=>m.name)));
  assert.ok(BOSS_ATTACKS.every(m=>!['rock','magic'].includes(m.kind)));
 });
-test('boss: light hit pauses briefly, flashes boss, then resumes the same original motion',()=>{
+test('boss: light hit cancels the attack after 0.2 seconds of visible stagger',()=>{
  const b=new BossBrain(durations);b.start('Left_Hook_from_Guard','attack');b.time=.15;
  assert.ok(b.hit());assert.equal(b.state,'Left_Hook_from_Guard');assert.equal(b.hp,886);assert.ok(b.flash>0);
- b.update(.1,2);assert.equal(b.time,.15);b.update(.1,2);b.update(.05,2);assert.ok(b.time>.15);assert.equal(b.flash,0);
+ b.update(.1,2);assert.equal(b.time,.15);assert.equal(b.update(.1,2).events.length,0);
+ b.update(.05,2);assert.equal(b.state,'Block6');assert.equal(b.mode,'idle');assert.equal(b.flash,0);
 });
 test('boss: heavy hit cancels attack, plays down then stand-up before resuming',()=>{
  const b=new BossBrain(durations);b.start('Axe_Spin_Attack','attack');b.time=.6;
@@ -125,12 +126,12 @@ test('melee: no idle hits or repeated per-frame damage; a new attack can hit aga
  assert.equal(g.check({...p,actionId:2,window:{id:'cut'}}),true);
 });
 
-test('shield: push freezes boss for 1.5 seconds; blocked attack pauses without losing health',()=>{
+test('shield: push cancels after 1.5 seconds; block cancels after one second without HP loss',()=>{
  const b=new BossBrain(durations);b.start('Left_Hook_from_Guard','attack');b.time=.1;
  b.hit({damage:10,stun:1.5});b.update(1.49,2);assert.equal(b.time,.1);assert.equal(b.hp,890);
- b.update(.02,2);b.update(.02,2);assert.ok(b.time>.1);
- const t=b.time;b.parry();b.update(.2,2);assert.equal(b.time,t);assert.equal(b.hp,890);
- b.update(.06,2);b.update(.02,2);assert.ok(b.time>t);
+ b.update(.02,2);assert.equal(b.mode,'idle');
+ b.start('Left_Hook_from_Guard','attack');b.time=.1;b.parry();b.update(.99,2);assert.equal(b.time,.1);assert.equal(b.hp,890);
+ b.update(.02,2);assert.equal(b.mode,'idle');
 });
 
 test('shield: real transformed front face blocks, a rear contact and nearby miss do not',()=>{

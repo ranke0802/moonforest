@@ -32,7 +32,7 @@ export class BossBrain {
     this.state='Block6';this.mode='idle';this.time=0;this.serial=1;this.wait=.65;
     this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;
   }
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.visited.add(state);}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);}
   nextAttack(){
     if(!this.bag.length){
       this.bag=BOSS_ATTACKS.map(a=>a.name);
@@ -49,13 +49,20 @@ export class BossBrain {
     // or indefinitely delay getting up, including another judgment burst.
     if(this.mode==='down')return true;
     if(!this.hp||(heavy&&this.mode!=='recover')){this.stagger=0;this.start('Knock_Down_1','down');}
-    else this.stagger=Math.max(this.stagger,stun||.18);
+    else {this.stagger=Math.max(this.stagger,stun||.2);this.interrupted=this.mode==='attack';if(this.interrupted)this.impacted=true;}
     return true;
   }
-  parry(){if(this.hp>0&&!['down','recover'].includes(this.mode)){this.stagger=Math.max(this.stagger,.25);if(this.flash<.16){this.flash=.16;this.flashDuration=.16;}return true;}return false;}
+  parry(){
+    if(this.hp<=0||['down','recover'].includes(this.mode))return false;
+    this.stagger=1;this.interrupted=true;this.impacted=true;this.flash=this.flashDuration=.45;return true;
+  }
   update(dt,distance,playerAlive=true){
     const events=[];dt=Math.max(0,dt);this.flash=Math.max(0,this.flash-dt);
-    if(this.stagger>0){this.stagger=Math.max(0,this.stagger-dt);return {events,speed:0};}
+    if(this.stagger>0){
+      this.stagger=Math.max(0,this.stagger-dt);
+      if(!this.stagger&&this.interrupted){this.interrupted=false;this.start('Block6','idle');this.wait=.3;}
+      return {events,speed:0};
+    }
     const duration=this.durations[this.state];
     if(this.mode==='down'||this.mode==='recover'){
       this.time=Math.min(duration,this.time+dt);
