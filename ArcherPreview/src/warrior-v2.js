@@ -12,8 +12,11 @@ export class WarriorV2Controller {
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
     this.held=false;this.holdTime=0;this.holdTriggered=false;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
     this.staggerRemaining=0;this.hitPose=null;this.queuedAttack=null;
+    this.motionSpeeds=Object.fromEntries(Object.keys(V2_LABELS).map(state=>[state,1]));
   }
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value)*V2_ATTACK_BASE_RATE;}
+  setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
+  playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
   startAttack(kind) {
     kind??=V2_COMBO[this.attackIndex++%V2_COMBO.length];
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
@@ -81,9 +84,9 @@ export class WarriorV2Controller {
       if(hitStopped)dt=0; // Deliver the final pulse before advancing past the contact pose, even at low FPS.
       const rolling=this.action.state==='dodge';
       if(rolling)rollFrom=this.action.time;
-      const rate=['shieldPush','dodge'].includes(this.action.state)?1:this.attackSpeed;
+      const rate=this.playbackRate(this.action.state);
       const left=Math.max(0,(this.durations[this.action.state]-this.action.time)/rate);
-      if(rolling)rollTo=Math.min(this.durations.dodge,this.action.time+dt);
+      if(rolling)rollTo=Math.min(this.durations.dodge,this.action.time+dt*rate);
       if(dt<left){this.action.time+=dt*rate;idleDt=0;}
       else {idleDt=dt-left;this.comboRemaining=V2_COMBO.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
     }
@@ -92,14 +95,15 @@ export class WarriorV2Controller {
       const available=Math.max(0,idleDt-Math.max(0,readyAt-(frameDt-idleDt)));
       if(kind==='judgment')this.attackIndex=0;
       this.startAttack(kind==='normal'?undefined:kind);
-      const duration=this.durations[this.action.state];
-      this.action.elapsed=available;this.action.time=Math.min(duration,available*this.attackSpeed);idleDt=0;
-      if(this.action.time>=duration){idleDt=Math.max(0,available-duration/this.attackSpeed);this.comboRemaining=kind==='normal'?V2_COMBO_GRACE:0;this.action=null;}
+      const duration=this.durations[this.action.state],rate=this.playbackRate(this.action.state);
+      this.action.elapsed=available;this.action.time=Math.min(duration,available*rate);idleDt=0;
+      if(this.action.time>=duration){idleDt=Math.max(0,available-duration/rate);this.comboRemaining=kind==='normal'?V2_COMBO_GRACE:0;this.action=null;}
     }
     if(!this.action){this.comboRemaining=Math.max(0,this.comboRemaining-idleDt);if(!this.comboRemaining)this.attackIndex=0;}
     this.state=this.action?.state||(this.held&&!this.holdTriggered?'idle':magnitude>.08?'run':'idle');if(this.state!==previous)this.time=0;
-    if(!this.action)this.time=(this.time+idleDt*(this.state==='run'?magnitude:1))%this.durations[this.state];
-    return {state:this.state,clipTime:this.action?.time??this.time,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude:0,
+    const playbackRate=this.playbackRate(this.state);
+    if(!this.action)this.time=(this.time+idleDt*playbackRate*(this.state==='run'?magnitude:1))%this.durations[this.state];
+    return {state:this.state,clipTime:this.action?.time??this.time,timeScale:playbackRate,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude*playbackRate:0,
       loop:!this.action,actionId:this.action?.id??null,actionElapsed:this.action?.elapsed??0,hitStopped,chargeProgress:this.chargeProgress,
       rollFrom,rollTo,movementDt:rollFrom!=null?idleDt:frameDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
   }

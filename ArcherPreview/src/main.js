@@ -20,6 +20,7 @@ import { createDamageNumbers } from './damage-numbers.js';
 import { updateBossHealthPosition } from './boss-health-bar.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
+import { setupMotionSpeedControls } from './motion-speed-controls.js';
 
 const $ = selector => document.querySelector(selector);
 const canvas = $('#viewport');
@@ -69,6 +70,7 @@ function applyAttackSpeed(value) {
   $('#attack-speed').setAttribute('aria-valuetext', `${attackSpeed.toFixed(1)}배`);
 }
 applyAttackSpeed(attackSpeed);
+const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
 
 function applyRenderQuality() {
   if (!engine) return;
@@ -209,6 +211,8 @@ async function loadCharacter() {
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
     applyAttackSpeed(readAttackSpeed());
+    if(isV2())motionSpeedControls.apply(controller);
+    motionSpeedControls.setVisible(isV2());
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
     reviewFocus = isWarrior() ? container.transformNodes.find(node => node.name === 'mixamorig:Hips') : null;
@@ -264,7 +268,7 @@ function constrainPlayerPosition(){
 }
 
 function render() {
-  const dt = document.hidden ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
+  const dt = document.hidden || motionSpeedControls.isOpen() ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);

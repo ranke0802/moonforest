@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0b101c" />
     <meta name="description" content="Moonforest 궁수와 전사의 이동 및 공격을 직접 조작하는 3D 플레이그라운드." />
     <title>Moonforest · Character Playground</title>
-    <script type="module" crossorigin src="./assets/index-DN2FAfIw.js"></script>
+    <script type="module" crossorigin src="./assets/index-CGhNlbbv.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BWXNux-o.js">
     <link rel="modulepreload" crossorigin href="./assets/observable.pure-H-M_hi7F.js">
     <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
@@ -43,10 +43,10 @@
     <link rel="modulepreload" crossorigin href="./assets/preload-helper-C7Bzh2Rg.js">
     <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-B-PZWwg9.js">
     <link rel="modulepreload" crossorigin href="./assets/texture.pure-D-ZXI31f.js">
-    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-D-n1urre.js">
-    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-D77W5Ot3.js">
-    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-BjyDugRB.js">
-    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-coDjZ0hA.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-C0BIKcap.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-D14dcbjN.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-C--nl9Bd.js">
+    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-mApEMziA.js">
     <link rel="modulepreload" crossorigin href="./assets/webAudioBaseSubGraph-Dt0pq0Kf.js">
     <link rel="modulepreload" crossorigin href="./assets/spatialWebAudio-CNw0PM6n.js">
     <link rel="modulepreload" crossorigin href="./assets/abstractSoundSource-vjAm2svO.js">
@@ -74,7 +74,7 @@
     <link rel="modulepreload" crossorigin href="./assets/bakedVertexAnimation-CP3BNGXM.js">
     <link rel="modulepreload" crossorigin href="./assets/constants-_wyaM_ID.js">
     <link rel="modulepreload" crossorigin href="./assets/cubemapToSphericalPolynomial-D2Q-3Tj0.js">
-    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-CFldDDAB.js">
+    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-D1g_8IYN.js">
     <link rel="modulepreload" crossorigin href="./assets/helperFunctions-DHdJUWHO.js">
     <link rel="modulepreload" crossorigin href="./assets/fresnelFunction-FdYlYPwE.js">
     <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BATNZvmb.js">
@@ -205,7 +205,7 @@
     <link rel="modulepreload" crossorigin href="./assets/mrtFragmentDeclaration-BZpfWb0R.js">
     <link rel="modulepreload" crossorigin href="./assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js">
     <link rel="modulepreload" crossorigin href="./assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-0rZtWxKG.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-Cp-cRifM.css">
   </head>
   <body>
     <main id="app">
@@ -213,7 +213,7 @@
       <div class="vignette" aria-hidden="true"></div><div id="damage-numbers" aria-hidden="true"></div>
       <header class="topbar" data-ui>
         <a class="brand" href="./" aria-label="Moonforest 처음으로"><span class="moon-mark" aria-hidden="true">☾</span><span>MOONFOREST<small>CHARACTER PLAYGROUND</small></span></a>
-        <div class="top-actions"><span class="build-tag" id="build-tag">ARCHER / 01</span><select id="quality-select" class="quality-select" aria-label="화질" title="화질 선택"><option value="high">고화질</option><option value="balanced">균형</option><option value="battery">절전</option></select><button id="fullscreen-button" class="icon-button" aria-label="가로 전체화면" title="가로 전체화면" aria-pressed="false">⛶</button><button id="help-toggle" class="icon-button" aria-label="조작 가이드 열기" title="조작 가이드">?</button></div>
+        <div class="top-actions"><span class="build-tag" id="build-tag">ARCHER / 01</span><select id="quality-select" class="quality-select" aria-label="화질" title="화질 선택"><option value="high">고화질</option><option value="balanced">균형</option><option value="battery">절전</option></select><button id="fullscreen-button" class="icon-button" aria-label="가로 전체화면" title="가로 전체화면" aria-pressed="false">⛶</button><button id="motion-speed-toggle" class="motion-speed-toggle" type="button" aria-label="모션 속도 설정 열기" title="모션 속도 설정" aria-haspopup="dialog" hidden>설정</button><button id="help-toggle" class="icon-button" aria-label="조작 가이드 열기" title="조작 가이드">?</button></div>
       </header>
 
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
@@ -243,6 +243,10 @@
         <div class="attack-speed-control">
           <label for="attack-speed">공격 속도 <output id="attack-speed-value" for="attack-speed">1.0×</output></label>
           <div class="attack-speed-slider"><input id="attack-speed" type="range" min="0.5" max="2" step="0.1" value="1" aria-label="공격 속도" aria-valuetext="1.0배" /><button id="reset-attack-speed" type="button" title="공격 속도를 기본 1배로 복원" aria-label="공격 속도 1배로 복원">1×</button></div>
+        </div>
+        <div id="dodge-speed-control" class="attack-speed-control" hidden>
+          <label for="dodge-speed">회피 속도 <output id="dodge-speed-value" for="dodge-speed">1.0×</output></label>
+          <div class="attack-speed-slider"><input id="dodge-speed" type="range" min="0.5" max="2" step="0.1" value="1" aria-label="회피 속도" aria-valuetext="1.0배" /><button id="reset-dodge-speed" type="button" title="회피 속도 1배로 복원" aria-label="회피 속도 1배로 복원">1×</button></div>
         </div>
       <section id="boss-controls" class="boss-controls" data-ui hidden>
         <button id="summon-boss" disabled>보스 소환</button>
@@ -284,6 +288,12 @@
       <div id="toast" class="toast" role="status" hidden></div>
       <footer class="scene-footer" data-ui><span>MOONFOREST · ANIMATION REVIEW</span><span id="render-status">WEBGL</span></footer>
 
+      <dialog id="motion-speed-dialog" class="motion-speed-dialog" aria-labelledby="motion-speed-title" aria-describedby="motion-speed-description" data-ui>
+        <header><h2 id="motion-speed-title">모션별 속도 · 전사 v2</h2><button id="close-motion-speed" type="button" aria-label="모션 속도 설정 닫기">×</button></header>
+        <p id="motion-speed-description">각 모션을 0.5~2배로 조절합니다. 공격 3종에는 공통 공격 속도도 함께 적용됩니다. 회피 거리는 유지되며, 달리기는 이동 속도도 함께 바뀝니다.</p>
+        <div id="motion-speed-options"></div>
+        <footer><span>자동 저장 · 설정 중 전투 일시정지</span><button id="reset-motion-speeds" type="button">개별 배율 초기화</button></footer>
+      </dialog>
       <dialog id="help-dialog" class="help-dialog" data-ui>
         <button id="close-help" class="close-help" aria-label="가이드 닫기">×</button><div class="eyebrow">PLAYGROUND CONTROLS</div><h2>숲을 자유롭게 탐험하세요.</h2>
         <div class="help-columns"><section><h3>모바일</h3><p>화면 왼쪽 아래를 터치하면 조이스틱이 생깁니다. 궁수는 이동하면서 가까운 허수아비에 사격합니다.</p><p>전사는 조이스틱 또는 WASD로 달립니다. 공격 버튼이나 J를 누르면 기존 찌르기·베기를 재생하고, 길게 누르면 반복합니다. 전사 v2는 짧게 누르면 일반 공격, 0.45초 길게 누르면 심판의 검을 한 번 사용합니다. 이동을 누른 채 공격하면 공격이 우선합니다. 공격 중에는 이동으로 동작을 취소하지 않습니다. 공격이 끝나면 누르고 있는 방향으로 이동하며, 연타 입력이 있으면 다음 일반공격을 먼저 이어갑니다.</p><p>조이스틱 밖에서 <b>한 손가락</b> 드래그로 회전합니다. <b>이동</b> 모드는 터치 시점을 옮깁니다. <b>두 손가락</b> 간격을 조절해 확대·축소합니다.</p></section><section><h3>키보드와 마우스</h3><dl><dt>W A S D / 방향키</dt><dd>궁수 이동 / 전사 달리기</dd><dt>Shift (궁수)</dt><dd>달리기</dd><dt>J</dt><dd>궁수 연사 / 전사 검 공격 (v2: 짧게 일반, 길게 심판)</dd><dt>F (전사 v2)</dt><dd>방패 밀치기</dd><dt>H / K / R (궁수)</dt><dd>피격 / 사망 / 부활</dd><dt>왼쪽·오른쪽 드래그</dt><dd>카메라 회전</dd><dt>가운데 버튼 드래그</dt><dd>시점 이동</dd><dt>마우스 휠</dt><dd>확대·축소</dd></dl></section></div>
@@ -292,3 +302,4 @@
     </main>
   </body>
 </html>
+
