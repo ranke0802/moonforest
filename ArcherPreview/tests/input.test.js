@@ -24,6 +24,14 @@ function setup(callbacks = {}) {
   return { input, camera, canvas, elements, pointer };
 }
 
+test('E uses one potion per fresh press and ignores autorepeat and form typing',()=>{
+  let uses=0;setup({potion:()=>uses++});
+  const event={code:'KeyE',target:{tagName:'BODY'},repeat:false};
+  window.emit('keydown',event);window.emit('keydown',{...event,repeat:true});window.emit('keydown',event);
+  assert.equal(uses,1);window.emit('keyup',{code:'KeyE'});window.emit('keydown',event);assert.equal(uses,2);
+  window.emit('keyup',{code:'KeyE'});window.emit('keydown',{...event,target:{tagName:'INPUT'}});assert.equal(uses,2);
+});
+
 test('DOM stub: dynamic joystick originates at touch, moves, and resets on pointercancel', () => {
   const { input, elements, pointer } = setup();
   pointer('pointerdown', 1, 120, 650);

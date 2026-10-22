@@ -97,11 +97,18 @@ function updateButtons() {
   for (const button of buttons) button.disabled = !ready || controller?.captured || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
   $('#boss-controls').hidden = !isV2();
+  $('#potion-button').hidden=!isV2();
+  $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured;
+  $('#potion-count').textContent=String(boss?.potions.remaining??3);
+  $('#potion-status').textContent=boss?.potions.active?`회복 ${4-boss.potions.pulsesLeft}/4`:'E';
+  $('#potion-button').classList.toggle('healing',!!boss?.potions.active);
+  $('#potion-button').setAttribute('aria-label',`회복 물약, 남은 횟수 ${boss?.potions.remaining??3}회${boss?.potions.active?', 회복 중':''}`);
 }
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
+  potion() { if(ready&&isV2()&&!controller.captured){boss.usePotion();updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   cancelAttackInput() { cancelAttackInput(); },
@@ -384,7 +391,7 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
-  for(const [selector,action] of [['#guard-button',actions.guard],['#dodge-button',actions.dodge]]){
+  for(const [selector,action] of [['#guard-button',actions.guard],['#dodge-button',actions.dodge],['#potion-button',actions.potion]]){
     const button=$(selector);let lastPress=-Infinity;
     button.addEventListener('pointerdown',event=>{
       if(event.button!==0||button.disabled)return;

@@ -7,6 +7,7 @@ import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, BLOCK_STAGGER } from 
 import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
+import { HealingPotion } from './healing-potion.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -18,6 +19,7 @@ export class BossEncounter {
   constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{}){
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.playerHp=500;this.playerMaxHp=500;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;
+    this.potions=new HealingPotion();
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
     this.playerReaction=new PlayerHitReaction();this.bossReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
     this.grab=new BossGrab(captured=>{
@@ -51,6 +53,7 @@ export class BossEncounter {
       }
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
       this.brain=new BossBrain(this.animator.durations);this.playerHp=this.playerMaxHp;this.playerInvulnerable=0;this.hitCount=0;this.heavyCount=0;this.gate.reset();
+      this.potions.reset();
       this.playerReaction.reset();this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=player.rotation.y+Math.PI;
@@ -59,11 +62,18 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.grab.reset();this.active=false;this.playerReaction.reset();this.bossReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
+  hide(){this.grab.reset();this.potions.cancel();this.active=false;this.playerReaction.reset();this.bossReaction.reset();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.gate.reset();this.onChange(this);}
   get playerAlive(){return !this.active||this.playerHp>0;}
+  get canUsePotion(){return this.active&&!this.loading&&!this.grab.active&&this.potions.canUse(this.playerHp,this.playerMaxHp);}
+  usePotion(){
+    if(!this.canUsePotion)return false;
+    this.potions.use(this.playerHp,this.playerMaxHp);this.lastHit='물약 사용 · 1초마다 40씩 4회 회복';this.onChange(this);return true;
+  }
   update(dt,player){
     if(!this.active)return;
     this.dt=dt;this.player=player;this.playerInvulnerable=Math.max(0,this.playerInvulnerable-dt);
+    const recovery=this.potions.update(dt,this.playerHp,this.playerMaxHp);this.playerHp=recovery.hp;
+    for(const amount of recovery.heals)this.onDamage(player.position.add(new Vector3(0,1.8,0)),`+${amount}`,false,'heal');
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const result=this.brain.update(dt,distance,this.playerAlive&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     if(this.brain.mode==='evade')this.showDefense('evade');
