@@ -44,8 +44,8 @@ export class CharacterAnimator {
     entry.controlled = Number.isFinite(clipTime);
     if (entry.controlled) entry.clipTime = clipTime;
     else if (changed) entry.clipTime = phase * this.durations[state];
-    group.loopAnimation = loop;
-    group.speedRatio = timeScale;
+    if(group.loopAnimation!==loop)group.loopAnimation = loop;
+    if(group.speedRatio!==timeScale)group.speedRatio = timeScale;
   }
   update(dt) {
     dt = Number.isFinite(dt) ? Math.max(0, dt) : 0;
@@ -60,7 +60,7 @@ export class CharacterAnimator {
     for (const [state, entry] of this.active) {
       // Interrupted fades can leave three groups active. Never mix the rest pose into that gap.
       if (totalWeight > 0) entry.weight /= totalWeight;
-      entry.group.setWeightForAllAnimatables(entry.weight);
+      if(entry.appliedWeight!==entry.weight){entry.group.setWeightForAllAnimatables(entry.weight);entry.appliedWeight=entry.weight;}
       const duration = this.durations[state];
       const sharedAttack = state !== this.current && ['attack', 'moveAttack'].includes(state) && ['attack', 'moveAttack'].includes(this.current) && entry.actionId === this.actionId && current.controlled;
       if (sharedAttack) entry.clipTime = current.clipTime / this.durations[this.current] * duration;

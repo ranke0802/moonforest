@@ -16,3 +16,10 @@ test('a released arrow hits its locked target once on arrival, then cleans up', 
   projectiles.update(1); assert.equal(hits.length, 1);
   projectiles.dispose(); scene.dispose(); engine.dispose();
 });
+
+test('repeated arrows reuse GPU geometry and clear removes all active flights',()=>{
+ const engine=new NullEngine(),scene=new Scene(engine),p=createProjectiles(scene,()=>{}),count=scene.meshes.length;
+ for(let i=0;i<100;i++){p.fire(Vector3.Zero(),new Vector3(0,0,1));p.update(1);assert.equal(p.count,0);assert.equal(scene.meshes.length,count);}
+ p.fire(Vector3.Zero(),new Vector3(0,0,1));p.clear();assert.ok(scene.meshes.every(m=>!m.isEnabled()));
+ p.dispose();assert.equal(scene.meshes.length,0);scene.dispose();engine.dispose();
+});

@@ -3,8 +3,12 @@ import { Color3, Vector3 } from '@babylonjs/core';
 export const PLAYER_STAGGER = .2;
 export const BLOCK_STAGGER = 1;
 const WHITE = Color3.White();
+const flashValues=new WeakMap();
 export function applyHitFlash(meshes, remaining, duration=.22) {
+  if(!meshes)return;
   const alpha=.72*Math.min(1,Math.max(0,remaining/duration));
+  if(flashValues.get(meshes)===alpha)return;
+  flashValues.set(meshes,alpha);
   for(const mesh of meshes||[]){
     mesh.overlayColor=WHITE;mesh.overlayAlpha=alpha;mesh.renderOverlay=alpha>0;
   }

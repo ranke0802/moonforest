@@ -101,16 +101,16 @@ test('warrior v2 GLB: all supplied clips and sword match exported hierarchy at s
     }
   } finally {f.dispose();}
 });
-test('warrior v2 GLB: shield mount stays rigid within all six clips after transitions',()=>{
+test('warrior v2 GLB: shield mount stays rigid within all seven clips after transitions',()=>{
  const f=fixture();try{
-  assert.equal(gltf.animations.length,6);
+  assert.equal(gltf.animations.length,7);
   const shield=f.nodes.find(n=>n.name==='Bunnyguard_Shield');
   const forearm=f.nodes.find(n=>n.name==='mixamorig:LeftForeArm');
   const sword=f.nodes.find(n=>n.name==='Golden_Oathblade');
   const hand=f.nodes.find(n=>n.name==='mixamorig:RightHand');
   assert.ok(sword.parent===hand,'Sword must be parented directly to the hand for stable transitions');
   let baseline;
-  for(const state of ['idle','run','attack','slash','judgment','shieldPush','idle']){
+  for(const state of ['idle','run','attack','slash','judgment','shieldPush','dodge','idle']){
    baseline=null;f.animator.transition(state,{clipTime:0,actionId:state,loop:false});f.animator.update(.25);f.nodes[0].getScene().render();
    for(let i=0;i<20;i++){
     f.animator.transition(state,{clipTime:i*.017,actionId:state,loop:false});f.animator.update(.017);f.nodes[0].getScene().render();

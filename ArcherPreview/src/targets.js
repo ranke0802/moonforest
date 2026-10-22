@@ -119,7 +119,9 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       return nearest;
     },
     setSelected(target) {
-      selected = !disposed && owned.has(target) ? target : null;
+      const next = !disposed && owned.has(target) ? target : null;
+      if(next===selected)return selected;
+      selected=next;
       for (const record of records) record.ring.isVisible = record.target === selected;
       return selected;
     },
@@ -128,6 +130,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       if (disposed || !record) return false;
       target.hits += 1;
       record.hitAge = 0;
+      record.animating=true;
       record.heavy=heavy;record.stun=stun;record.flashDuration=stun>0?.75:.22;
       record.centerMaterial.emissiveColor.set(1, .72, .28);
       for(const mesh of record.parts){mesh.renderOverlay=true;mesh.overlayColor=Color3.White();mesh.overlayAlpha=.55;}
@@ -152,6 +155,8 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
       const step = Math.min(dt, .1);
       clock += step;
       for (const record of records) {
+        if(record.ring.isVisible){const pulse=.94+Math.sin(clock*3)*.06;record.ring.scaling.set(pulse,1,pulse);}
+        if(!record.animating)continue;
         record.hitAge += step;
         const age = record.hitAge;
         if (age < 1.25) {
@@ -165,11 +170,10 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
         const flash = Math.max(0, 1 - age / (record.flashDuration||.22));
         for(const mesh of record.parts){mesh.renderOverlay=flash>0;mesh.overlayAlpha=flash*.55;}
         record.centerMaterial.emissiveColor.set(.12 + flash * .88, .065 + flash * .655, .015 + flash * .265);
-        const pulse = .94 + Math.sin(clock * 3) * .06;
-        record.ring.scaling.set(pulse, 1, pulse);
         record.bullseye.computeWorldMatrix(true);
         // Keep the same Vector3 instance so an in-flight effect can track a wobbling target.
         record.target.aimPoint.copyFrom(record.bullseye.getAbsolutePosition());
+        if(age>=1.25&&age>=record.stun)record.animating=false;
       }
     },
     dispose() {

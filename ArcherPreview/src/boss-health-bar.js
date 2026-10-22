@@ -12,5 +12,7 @@ export function updateBossHealthPosition(scene,encounter,element){
   const canvas=scene.getEngine().getRenderingCanvas();
   const p=projectBossHealth(scene,encounter.actor.position,canvas.clientWidth,canvas.clientHeight);
   element.hidden=!p.visible;
-  element.style.left=`${p.x}px`;element.style.top=`${p.y}px`;
+  element.style.left='0';element.style.top='0';
+  const transform=`translate3d(${p.x}px,${p.y+8}px,0) translateX(-50%)`;
+  if(element.style.transform!==transform)element.style.transform=transform;
 }

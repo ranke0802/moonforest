@@ -1,7 +1,9 @@
-import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, HemisphericLight, MeshBuilder, Scene, ShadowGenerator, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, HemisphericLight, Mesh, MeshBuilder, Scene, ShadowGenerator, StandardMaterial, Vector3 } from '@babylonjs/core';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
+  // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
+  scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
   scene.useRightHandedSystem = true;
   scene.clearColor = new Color4(.035, .052, .087, 1);
   scene.fogMode = Scene.FOGMODE_EXP2;
@@ -43,6 +45,7 @@ export function createWorld(engine) {
   texture.update(); texture.uScale = 4; texture.vScale = 4;
   material.diffuseTexture = texture;
   ground.material = material; ground.receiveShadows = true;
+  ground.isPickable=false;ground.freezeWorldMatrix();
 
   const ringMaterial = new StandardMaterial('stage-ring-material', scene);
   ringMaterial.diffuseColor = new Color3(.25, .28, .38);
@@ -51,6 +54,7 @@ export function createWorld(engine) {
   for (const diameter of [5.8, 6.02]) {
     const ring = MeshBuilder.CreateTorus(`stage-ring-${diameter}`, { diameter, thickness: .012, tessellation: 128 }, scene);
     ring.position.y = .007; ring.material = ringMaterial;
+    ring.isPickable=false;ring.freezeWorldMatrix();
   }
 
   const bark = new StandardMaterial('distant-bark', scene);
@@ -58,24 +62,32 @@ export function createWorld(engine) {
   const leaves = new StandardMaterial('distant-needles', scene);
   leaves.diffuseColor = new Color3(.065, .13, .15); leaves.specularColor = Color3.Black();
   // A deterministic, low-detail forest frames the inspection space without covering the character.
+  const forest=[[],[]];
   for (let i = 0; i < 46; i++) {
     const angle = i * 2.399963, radius = 13 + (i % 7) * 1.8, height = 4.5 + (i % 5) * .72;
     const x = Math.cos(angle) * radius, z = Math.sin(angle) * radius;
     const trunk = MeshBuilder.CreateCylinder(`tree-${i}`, { diameterTop: .2, diameterBottom: .45, height, tessellation: 6 }, scene);
     trunk.position.set(x, height / 2, z); trunk.material = bark; trunk.freezeWorldMatrix();
+    forest[0].push(trunk);
     for (let tier = 0; tier < 2; tier++) {
       const crown = MeshBuilder.CreateCylinder(`crown-${i}-${tier}`, { diameterTop: 0, diameterBottom: 2.8 - tier * .5, height: 3.9, tessellation: 7 }, scene);
       crown.position.set(x, height * .65 + tier * 1.4, z); crown.material = leaves; crown.freezeWorldMatrix();
+      forest[1].push(crown);
     }
   }
+  // Bake the exact original geometry/transforms; two submissions instead of 138.
+  for(const parts of forest){const mesh=Mesh.MergeMeshes(parts,true,true);mesh.isPickable=false;mesh.freezeWorldMatrix();}
   const moteMaterial = new StandardMaterial('mote-light', scene);
   moteMaterial.emissiveColor = new Color3(.25, .5, .58); moteMaterial.disableLighting = true;
   const motes = [];
+  let moteSource;
   for (let i = 0; i < 28; i++) {
-    const mote = MeshBuilder.CreateSphere(`mote-${i}`, { diameter: .018 + i % 3 * .007, segments: 3 }, scene);
+    const mote = i ? moteSource.createInstance(`mote-${i}`) : (moteSource=MeshBuilder.CreateSphere('mote-0',{diameter:.018,segments:3},scene));
+    mote.scaling.setAll((.018+i%3*.007)/.018);
     mote.position.set(Math.sin(i * 13.7) * 8, .5 + (i % 7) * .34, Math.cos(i * 7.7) * 8);
     mote.material = moteMaterial; mote.isPickable = false;
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
+  for(const material of [ringMaterial,bark,leaves,moteMaterial])material.freeze();
   return { scene, camera, shadows, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

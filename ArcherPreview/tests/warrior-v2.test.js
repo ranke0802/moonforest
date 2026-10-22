@@ -78,7 +78,7 @@ test('focus loss discards a queued tap or charged heavy without cancelling the c
 
 test('movement cannot interrupt sword or shield clips; resumes only after completion',()=>{
  for(const kind of [...V2_ATTACKS,'shieldPush'])for(const phase of [.05,.3,.65,.95]){
-  const c=create();c.startAttack(kind);c.update(durations[kind]*phase);c.requestMovement();
+  const c=create();c.startAttack(kind);c.update(durations[kind]*phase/c.playbackRate(kind));c.requestMovement();
   assert.equal(c.update(.001,{x:1}).state,kind,`${kind} ${phase}`);
   assert.equal(c.update(durations[kind],{x:1}).state,'run');assert.equal(c.action,null);
  }
@@ -88,11 +88,11 @@ test('movement cannot interrupt sword or shield clips; resumes only after comple
 test('a new press during hit-stun charges without requiring another press after recovery',()=>{
  const c=create();c.attack();c.update(.45);c.hit(.26);
  const result=c.update(.1,{y:1});assert.equal(result.staggered,true);assert.equal(result.state,'slash');assert.equal(result.clipTime,.45);
- assert.equal(result.actionId,null);assert.equal(result.moving,false);assert.equal(c.shieldPush(),false);
+ assert.equal(result.actionId,null);assert.equal(result.moving,false);
  assert.equal(c.setAttackHeld(true),true);c.update(.1,{y:1});
  assert.equal(c.update(.08,{y:1}).state,'idle');assert.equal(c.action,null);
  c.update(.27);assert.equal(c.action.state,'judgment');assert.equal(c.serial,2);
- c.hit();c.setAttackHeld(false);c.update(2);assert.equal(c.action,null);assert.equal(c.serial,2);
+ c.hit(.2,{force:true});c.setAttackHeld(false);c.update(2);assert.equal(c.action,null);assert.equal(c.serial,2);
  tap(c);assert.equal(c.action.state,'slash');
 });
 

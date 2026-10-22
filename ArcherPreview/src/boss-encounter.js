@@ -8,6 +8,7 @@ import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
 import { HealingPotion } from './healing-potion.js';
+import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -47,6 +48,7 @@ export class BossEncounter {
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
+        this.poseNodes=orderPoseNodes(this.asset.transformNodes);
         this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
         this.ring=MeshBuilder.CreateTorus('boss-attack-warning',{diameter:3.8,thickness:.035,tessellation:64},this.world.scene);
         this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
@@ -118,9 +120,11 @@ export class BossEncounter {
     const level=ground?ground[i]+(ground[Math.min(i+1,ground.length-1)]-ground[i])*(f-i):.075;
     this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
-    for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);
+    // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
-    if(!this.grab.active&&distance<1.35&&distance>.001&&this.brain.mode!=='down'){this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.actor.computeWorldMatrix(true);for(const n of Object.values(this.nodes))n.computeWorldMatrix(true);}
+    if(!this.grab.active&&distance<1.35&&distance>.001&&this.brain.mode!=='down'){this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.actor.computeWorldMatrix();}
+    this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
+    refreshPoseMatrices(this.poseNodes);
     if(sample&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
       const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));

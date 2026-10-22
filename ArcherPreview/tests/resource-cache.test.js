@@ -34,3 +34,9 @@ test('persistent resource cache: failures are not stored; denied storage still l
  sw.status=200;await sw.load(a);assert.equal(sw.downloads,2);assert.equal(sw.stored.size,1);
  const denied=serviceWorker({failWrite:true});assert.equal(await (await denied.load(a)).text(),'resource');
 });
+
+test('audio cache: concurrent cues fetch once, reload reuses bytes, changed content fetches once',async()=>{
+ const sw=serviceWorker(),a='c'.repeat(64)+'.wav',b='d'.repeat(64)+'.wav';
+ await Promise.all([sw.load(a),sw.load(a)]);await sw.load(a);assert.equal(sw.downloads,1);
+ await sw.load(b);assert.equal(sw.downloads,2);assert.equal(sw.stored.size,2);
+});

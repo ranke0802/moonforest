@@ -1,0 +1,259 @@
+{
+  "date": "2026-10-22",
+  "environment": "Windows, headless Edge 155, 1280x720 desktop; mobile emulation 412x915 DPR 3. This is not a physical-phone temperature or energy measurement.",
+  "method": "3-second idle and live boss samples, 1.5-second settings pause. CPU wall time surrounds engine frame including JS; boss AI varies. Native geometry, textures, shadow sizes, skin weights and UI layout preserved.",
+  "before": {
+    "errors": [],
+    "idle": {
+      "frames": 177,
+      "cpuMean": 1.8734463305123108,
+      "cpuP95": 2.700000047683716,
+      "draws": 152,
+      "mutationsPerFrame": 12.033898305084746,
+      "matrixCallsPerFrame": 479,
+      "forcedMatricesPerFrame": 9,
+      "meshes": 260,
+      "resolution": [
+        1280,
+        720
+      ]
+    },
+    "boss": {
+      "frames": 181,
+      "cpuMean": 2.916574581551947,
+      "cpuP95": 5.299999952316284,
+      "draws": 216.0939226519337,
+      "mutationsPerFrame": 21.34254143646409,
+      "matrixCallsPerFrame": 1265.9558011049724,
+      "forcedMatricesPerFrame": 723.1602209944751,
+      "meshes": 263,
+      "resolution": [
+        1280,
+        720
+      ]
+    },
+    "paused": {
+      "frames": 90,
+      "cpuMean": 2.3255555523766414,
+      "cpuP95": 3.100000023841858,
+      "draws": 214,
+      "mutationsPerFrame": 18,
+      "matrixCallsPerFrame": 1263,
+      "forcedMatricesPerFrame": 723,
+      "meshes": 263,
+      "resolution": [
+        1280,
+        720
+      ]
+    }
+  },
+  "afterWithAudio": {
+    "errors": [],
+    "idle": {
+      "frames": 180,
+      "cpuMean": 1.2833333300219643,
+      "cpuP95": 2,
+      "draws": 116,
+      "mutationsPerFrame": 1.0333333333333334,
+      "matrixCallsPerFrame": 267,
+      "forcedMatricesPerFrame": 0,
+      "meshes": 136,
+      "resolution": [
+        1280,
+        720
+      ]
+    },
+    "boss": {
+      "frames": 180,
+      "cpuMean": 2.0677777760558658,
+      "cpuP95": 4.199999928474426,
+      "draws": 169.02777777777777,
+      "mutationsPerFrame": 1.8277777777777777,
+      "matrixCallsPerFrame": 402.72222222222223,
+      "forcedMatricesPerFrame": 10.161111111111111,
+      "meshes": 139,
+      "resolution": [
+        1280,
+        720
+      ]
+    },
+    "paused": {
+      "frames": 0,
+      "cpuMean": null,
+      "draws": null,
+      "mutationsPerFrame": null,
+      "matrixCallsPerFrame": null,
+      "forcedMatricesPerFrame": null,
+      "meshes": 139,
+      "resolution": [
+        1280,
+        720
+      ]
+    }
+  },
+  "browser": {
+    "errors": [],
+    "pausedFrames": 0,
+    "pausedAudio": {
+      "state": "suspended",
+      "loaded": 31,
+      "active": 0,
+      "peak": 2,
+      "played": 9,
+      "dropped": 1,
+      "failed": 0
+    },
+    "pose": {
+      "nodes": 84,
+      "maxError": 0
+    },
+    "archer": {
+      "ready": true,
+      "character": "archer",
+      "audio": {
+        "state": "running",
+        "loaded": 31,
+        "active": 2,
+        "peak": 2,
+        "played": 17,
+        "dropped": 2,
+        "failed": 0
+      },
+      "renderFrames": 986,
+      "equipment": null,
+      "state": "idle",
+      "dead": false,
+      "runToggled": false,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "maxBoneInfluences": 8,
+      "animations": {
+        "idle": "Idle",
+        "walk": "Walk",
+        "run": "Run",
+        "attack": "Attack_Bow_Standing",
+        "moveAttack": "Attack_Bow_Walking",
+        "hit": "Hit_Reaction",
+        "death": "Death"
+      },
+      "joystickActive": false,
+      "cameraPointerCount": 0,
+      "camera": {
+        "alpha": 1.1938052083641213,
+        "beta": 1.18,
+        "radius": 4.8
+      },
+      "panOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "uniqueSounds": [
+      "slash",
+      "foot_0",
+      "jump",
+      "slash_heavy",
+      "land",
+      "roll",
+      "shield_up",
+      "boss_appear",
+      "boss_warning",
+      "bow_draw",
+      "bow_release",
+      "arrow_hit",
+      "player_hit",
+      "death",
+      "revive"
+    ],
+    "firstAudioRequests": 31,
+    "cache": {
+      "hits": 48,
+      "downloads": 93
+    }
+  },
+  "mobile": {
+    "browser": "155.0.4283.62",
+    "errors": [],
+    "before": {
+      "hits": 0,
+      "downloads": 50
+    },
+    "after": {
+      "hits": 52,
+      "downloads": 50
+    },
+    "newDownloadsAfterReload": 0,
+    "screen": {
+      "canvas": [
+        1236,
+        2745
+      ],
+      "dpr": 3,
+      "inspect": {
+        "ready": true,
+        "character": "warrior-v2",
+        "audio": {
+          "state": "running",
+          "loaded": 31,
+          "active": 0,
+          "peak": 1,
+          "played": 2,
+          "dropped": 0,
+          "failed": 0
+        },
+        "renderFrames": 120,
+        "equipment": {
+          "sword": "original",
+          "shield": "original"
+        },
+        "state": "dodge",
+        "dead": false,
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 2.891985463011569
+        },
+        "maxBoneInfluences": 8,
+        "animations": {
+          "idle": "Idle_02",
+          "run": "Run_03",
+          "attack": "Thrust_Slash",
+          "slash": "Right_Hand_Sword_Slash",
+          "judgment": "Sword_Judgment",
+          "shieldPush": "Shield_Push_Left",
+          "dodge": "Dodge_Roll"
+        },
+        "joystickActive": false,
+        "cameraPointerCount": 0,
+        "camera": {
+          "alpha": 1.1938052083641213,
+          "beta": 1.35,
+          "radius": 6.5
+        },
+        "panOffset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  },
+  "automatedTests": {
+    "total": 131,
+    "passed": 131
+  },
+  "audio": {
+    "files": 31,
+    "bytes": 1539764,
+    "maxConcurrentVoices": 12,
+    "maxConcurrentDownloadsAndDecodes": 3
+  },
+  "notes": [
+    "60 FPS ceiling avoids excess high-refresh rendering; no adaptive resolution or LOD reduction.",
+    "Existing tests updated to the already-active dodge clip, thrust rate, defense interrupts and heavy superarmor rules. No body animation or gameplay balance edited."
+  ]
+}

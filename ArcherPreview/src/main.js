@@ -22,9 +22,16 @@ import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
+import { FrameLoop } from './frame-loop.js';
+import { GameAudio } from './game-audio.js';
+import { ActionAudio } from './action-audio.js';
 
-const $ = selector => document.querySelector(selector);
+const elements=new Map();
+const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
+const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
 const canvas = $('#viewport');
+const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
+for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>audio.unlock(),{capture:true,passive:true});
 const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer','warrior','warrior-v2'];
@@ -34,7 +41,8 @@ const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
-let boss, combatResult, swordNode, shieldNode, damageNumbers;
+let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
+let simulateFrame=false,buttonSnapshot,healthSnapshot;
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -47,6 +55,7 @@ for (const slot of ['sword', 'shield']) {
   select.addEventListener('change', () => {
     if (!ready || !equipment) return;
     equipmentChoices[slot] = equipment.select(slot, select.value);
+    audio.play('equip');
     saveEquipmentChoices(equipmentStorage, equipmentChoices);
     $('#equipment-status').textContent = `${slot === 'sword' ? '검' : '방패'}: ${EQUIPMENT_STYLES.find(style => style.id === select.value).label} 적용`;
   });
@@ -72,7 +81,7 @@ function applyAttackSpeed(value) {
 }
 applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
-const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.reset();},onRestart:resetBeforeBoss});
+const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
 
 function applyRenderQuality() {
   if (!engine) return;
@@ -82,6 +91,7 @@ function applyRenderQuality() {
   engine.setHardwareScalingLevel(1 / ratio);
   engine.resize();
   $('#quality-select').value = qualityMode;
+  if(!document.hidden)frameLoop?.invalidate();
 }
 
 function toast(message) {
@@ -90,6 +100,8 @@ function toast(message) {
 }
 function updateButtons() {
   const dead = controller?.dead || false;
+  const snapshot=[character,ready,dead,controller?.captured,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
+  if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
@@ -110,13 +122,13 @@ const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
-  potion() { if(ready&&isV2()&&!controller.captured){boss.usePotion();updateButtons();} },
+  potion() { if(ready&&isV2()&&!controller.captured){if(boss.usePotion())audio.play('heal_start');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held) { setAttackHeld('keyboard', held); },
   cancelAttackInput() { cancelAttackInput(); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
-  revive() { if (!ready || !controller.dead) return; controller.revive(); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
+  revive() { if (!ready || !controller.dead) return; controller.revive();audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   canMove() { return ready && !controller.dead && !controller.captured && (!boss?.active || boss.playerAlive); },
 };
 
@@ -130,6 +142,7 @@ function startDefense(kind){
 }
 
 function resetBeforeBoss(){
+  audio.stopAll();actionAudio.reset();audio.play('revive');
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
@@ -161,7 +174,7 @@ function shootAtTarget() {
   arrowNode?.computeWorldMatrix(true);
   const origin = arrowNode ? arrowNode.getAbsolutePosition().clone() : actor.position.add(new Vector3(0, 1.35, 0));
   const destination = shotTarget?.aimPoint.clone() || origin.add(new Vector3(Math.sin(actor.rotation.y), 0, Math.cos(actor.rotation.y)).scale(12));
-  projectiles.fire(origin, destination, shotTarget);
+  projectiles.fire(origin, destination, shotTarget);audio.play('bow_release',{position:origin});
 }
 
 function resetCamera() {
@@ -173,7 +186,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
-  loadingAsset = true; ready = false; updateButtons();
+  loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   boss?.hide();combatResult=null;strikeSampler.reset();
   $('#equipment-panel').hidden = !isWarrior();
   $('#sword-select').disabled = true; $('#shield-select').disabled = true;
@@ -285,8 +298,9 @@ function constrainPlayerPosition(){
   }
 }
 
-function render() {
-  const dt = document.hidden || motionSpeedControls.isOpen() || deathScreen.isOpen() ? 0 : Math.min(engine.getDeltaTime() / 1000, .1);
+function render(dt) {
+  simulateFrame=dt>0;
+  if(!simulateFrame){world.scene.render();updateBossHealthPosition(world.scene,boss,$('#boss-hud'));return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -307,8 +321,9 @@ function render() {
     }
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
-      $('#attack-button').style.setProperty('--charge-progress',result.chargeProgress||0);
-      $('#attack-label').textContent=result.chargeProgress>0?'심판 준비':'검 공격';
+      const progress=String(result.chargeProgress||0);
+      if($('#attack-button').style.getPropertyValue('--charge-progress')!==progress)$('#attack-button').style.setProperty('--charge-progress',progress);
+      text('#attack-label',result.chargeProgress>0?'심판 준비':'검 공격');
     }
     combatResult=result;
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
@@ -341,13 +356,14 @@ function render() {
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
-    boss?.update(dt,actor);
+    actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
+    boss?.update(dt,actor);actionAudio.boss(boss,dt);
     const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
-    $('#state-label').textContent = result.captured?boss.grab.label:result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state];
-    $('#speed-label').textContent = `${result.speed.toFixed(2)} m/s`;
-    $('#target-label').textContent = isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요';
+    text('#state-label', result.captured?boss.grab.label:result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
+    text('#speed-label', `${result.speed.toFixed(2)} m/s`);
+    text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
     updateButtons();
   }
   statusTime += dt;
@@ -360,10 +376,15 @@ function render() {
 try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' });
+  engine.maxFPS=60;
+  engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine);
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
+  const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
   boss=new BossEncounter(world,encounter=>{
+    const snapshot=[encounter.loading,encounter.active,encounter.brain?.hp,encounter.brain?.label,encounter.brain?.mode,encounter.brain?.stagger>0,encounter.playerHp,encounter.lastHit].join('|');
+    if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
     $('#summon-boss').textContent=encounter.loading?'보스 불러오는 중…':encounter.active?'보스 다시 소환':'보스 소환';
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active)$('#boss-hud').hidden=true;
@@ -375,26 +396,34 @@ try {
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
     if(encounter.playerHp<=0)deathScreen.show();
-  },(...args)=>damageNumbers.show(...args),(duration,options={})=>{
+  },damageFeedback,(duration,options={})=>{
     if('captured' in options){
-      if(options.captured)controller.capture();else controller.releaseCapture();
+      if(options.captured){controller.capture();audio.play('equip',{volume:.7,rate:.7});}else controller.releaseCapture();
       attackSources.clear();strikeSampler.reset();input.reset();return;
     }
     if(controller.hit(duration,options)!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
-    if(!ready||!isWarrior()||!combatResult)return;
+    if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2());
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
-  training = createTrainingTargets(world.scene, world.shadows,(...args)=>damageNumbers.show(...args));
+  training = createTrainingTargets(world.scene, world.shadows,damageFeedback);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   setupFullscreen($('#fullscreen-button'), toast);
-  engine.runRenderLoop(render);
+  frameLoop=new FrameLoop(engine,render);
+  const syncPlayback=()=>{frameLoop.setPaused(document.hidden||motionSpeedControls.isOpen()||deathScreen.isOpen());audio.setSuspended(document.hidden||motionSpeedControls.isOpen());};
+  const dialogObserver=new MutationObserver(syncPlayback);
+  for(const selector of ['#motion-speed-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
+  document.addEventListener('visibilitychange',syncPlayback);
+  window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);audio.setSuspended(true);});
+  window.addEventListener('pageshow',syncPlayback);
+  window.addEventListener('focus',()=>{frameLoop.last=null;});
+  syncPlayback();
   window.addEventListener('resize', applyRenderQuality);
   $('#quality-select').addEventListener('change', event => {
     qualityMode = event.target.value;
@@ -412,8 +441,8 @@ try {
   }
   $('#summon-boss').addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;await boss.summon(actor);world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
-    catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');}
+    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;await boss.summon(actor);actionAudio.reset();audio.play('boss_appear',{position:boss.actor.position});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}
     updateButtons();
   });
   for(const motion of BOSS_ACTIVE_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
@@ -458,8 +487,13 @@ try {
   $('#help-toggle').addEventListener('click', () => { releaseAttack(); input.reset(); $('#help-dialog').showModal(); });
   $('#close-help').addEventListener('click', () => $('#help-dialog').close());
   $('#help-dialog').addEventListener('click', e => { if (e.target === $('#help-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
+  document.addEventListener('click',event=>{
+    const button=event.target.closest?.('button');
+    if(!button||button.disabled||button.closest('.action-controls')||['summon-boss','death-restart'].includes(button.id))return;
+    audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
+  });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
-  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
+  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
   loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);
