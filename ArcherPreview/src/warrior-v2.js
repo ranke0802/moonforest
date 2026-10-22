@@ -4,8 +4,8 @@ export const V2_COMBO = ['slash', 'attack'];
 export const V2_ATTACK_BASE_RATE = 1.8;
 export const V2_HOLD_SECONDS = .45;
 export const V2_COMBO_GRACE = .8;
-export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기'};
-export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7};
+export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기',knockdown:'넉다운',getUp:'기상'};
+export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7,knockdown:1,getUp:1};
 
 export class WarriorV2Controller {
   constructor({durations,speeds={}}) {
@@ -19,7 +19,7 @@ export class WarriorV2Controller {
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
   playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
   startAttack(kind) {
-    if(this.captured)return false;
+    if(this.captured||this.knockedDown)return false;
     kind??=V2_COMBO[this.attackIndex++%V2_COMBO.length];
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
   }
@@ -33,14 +33,14 @@ export class WarriorV2Controller {
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
   hit(duration=.2,{force=false}={}){
-    if(this.captured)return false;
+    if(this.captured||this.knockedDown)return false;
     if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=duration;
     return true;
   }
   attack(){
-    if(this.dead||this.captured||this.held)return false;
+    if(this.dead||this.captured||this.knockedDown||this.held)return false;
     if(this.action||this.staggerRemaining>0){if(this.queuedAttack!=='judgment')this.queuedAttack='normal';}
     else this.startAttack();
     return true;
@@ -48,7 +48,7 @@ export class WarriorV2Controller {
   setAttackHeld(held){
     if(held){
       if(this.held)return true;
-      if(this.dead||this.captured)return false;
+      if(this.dead||this.captured||this.knockedDown)return false;
       this.held=true;this.holdTime=0;this.holdTriggered=false;
       if(this.queuedAttack==='normal')this.queuedAttack=null;
     }else{
@@ -59,7 +59,7 @@ export class WarriorV2Controller {
     return true;
   }
   interruptWith(kind){
-    if(this.dead||this.captured)return false;
+    if(this.dead||this.captured||this.knockedDown)return false;
     this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
   shieldPush(){return this.interruptWith('shieldPush');}
@@ -69,9 +69,29 @@ export class WarriorV2Controller {
     this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.captured=true;
   }
   releaseCapture(){this.captured=false;this.capturePose=null;this.cancelAttack();this.state='idle';this.time=0;}
+  get knockedDown(){return ['knockdown','getUp'].includes(this.action?.state);}
+  knockdown({landed=false}={}){
+    if(this.dead||this.captured||this.knockedDown)return false;
+    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;
+    // A thrown character has already fallen in flight; enter the grounded part.
+    this.action={id:++this.serial,state:'knockdown',time:landed?this.durations.knockdown*.55:0,elapsed:0,hitStop:0};
+    this.state='knockdown';return true;
+  }
   update(dt,input={}) {
     if(this.captured)return {...this.capturePose,captured:true,moving:false,speed:0,loop:false,actionId:null,chargeProgress:0,events:[]};
     dt=Number.isFinite(dt)?Math.max(0,dt):0;const magnitude=Math.min(1,Math.hypot(input.x||0,input.y||0));const previous=this.state;
+    if(this.knockedDown){
+      let remaining=dt;
+      while(this.knockedDown){
+        const a=this.action,rate=this.playbackRate(a.state),left=(this.durations[a.state]-a.time)/rate;
+        if(remaining<left){a.time+=remaining*rate;remaining=0;break;}
+        remaining-=left;
+        if(a.state==='knockdown')this.action={id:++this.serial,state:'getUp',time:0,elapsed:0,hitStop:0};
+        else this.action=null;
+      }
+      if(this.action){this.state=this.action.state;return {state:this.state,clipTime:this.action.time,knockedDown:true,moving:false,speed:0,loop:false,actionId:null,chargeProgress:0,blendDuration:this.state==='getUp'?.18:.08,events:[]};}
+      this.state='idle';this.time=0;dt=remaining;
+    }
     const frameDt=dt;let readyAt=0,rollFrom=null,rollTo=null;
     // A fresh press is accepted during recovery or hit-stun. Charging runs alongside
     // the current clip; only one next action is buffered, regardless of tap spam.

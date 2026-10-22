@@ -14,7 +14,7 @@ test('boss: 20 original clips are retained; 18 active motions exclude both ball 
  assert.equal(BOSS_MOTIONS.length,20);assert.equal(BOSS_ATTACKS.length,12);
  assert.deepEqual(new Set(BOSS_MOTIONS.map(m=>m.name)),new Set(Object.keys(asset.animations)));
  const b=new BossBrain(durations,()=>.37);b.update(.1,7);b.update(.1,3);b.update(.1,2);
- for(let t=0;t<240;t+=.05)b.update(.05,2);
+ for(let t=0;t<240;t+=.05)b.update(.05,1.8);
  b.hit({heavy:true});for(let t=0;t<11;t+=.05)b.update(.05,2);
  assert.deepEqual(b.visited,new Set(BOSS_ACTIVE_MOTIONS.map(m=>m.name)));
  assert.ok(BOSS_ATTACKS.every(m=>!['rock','magic'].includes(m.kind)));
@@ -38,7 +38,7 @@ test('boss: defeat stays down and attacks do not fire during knockdown or stagge
  assert.equal(b.hp,0);assert.equal(b.state,'Knock_Down_1');assert.equal(b.time,durations.Knock_Down_1);
 });
 
-test('boss: actual collision damages stand-up once, briefly staggers, then continues recovery',()=>{
+test('boss: contact damages stand-up once without pausing recovery',()=>{
  const engine=new NullEngine(),scene=new Scene(engine),b=new BossEncounter({scene},()=>{});
  b.active=true;b.brain=new BossBrain(durations);b.brain.hit({heavy:true,damage:64});b.brain.update(durations.Knock_Down_1+.01,2);
  b.brain.time=.3;b.dt=.016;b.groundHeight=0;
@@ -176,7 +176,8 @@ test('downed boss: real low blade contact deals normal and three heavy hits with
  assert.equal(b.brain.hp,816);assert.equal(b.hitCount,4);assert.equal(b.heavyCount,0);
  assert.equal(b.brain.serial,serial);assert.equal(b.brain.time,.3);assert.equal(b.brain.stagger,0);
  assert.deepEqual(feedback.map(f=>f[1]),[20,20,20,24]);assert.ok(b.asset.meshes[0].renderOverlay);
- b.poseAndContacts(player,{}, {...sample,actionId:3,blade:[[5,.3,1.5],[6,.3,1.5]]},null);assert.equal(b.brain.hp,816,'Distant swings remain misses');
+ b.actor.position.z=6;
+ b.poseAndContacts(player,{}, {...sample,actionId:3,blade:[[5,.3,1.5],[6,.3,1.5]]},null);assert.equal(b.brain.hp,816,'Distant targets remain out of melee range');
  b.brain.update(durations.Knock_Down_1,2);assert.equal(b.brain.mode,'recover');close();
 });
 

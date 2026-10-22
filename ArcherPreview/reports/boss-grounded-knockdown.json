@@ -1,0 +1,88 @@
+{
+  "source_fbx_pose_error": 0,
+  "existing_seven_clips_geometry_skin_textures_byte_preserved": true,
+  "new_clips": [
+    "Knockdown",
+    "Knockdown_GetUp"
+  ],
+  "existing_resources_reused": 18,
+  "new_resources": [
+    "./content/525a2c4a375c564f49ec320c0a945105cdb37003a147533a917069ade28edae7.gltf",
+    "./content/8c6fd5534f67d21e3718c082bce50e1052e8ea50a1d3a5041881aa80f8ad3b37.bin",
+    "./content/d965642d2221de4d6970ccc4156fc60031658be8f9a55dba8d70c3ff319c160f.bin"
+  ],
+  "grounded_browser_cases": 99,
+  "grounded_misses_before": 49,
+  "grounded_misses_after": 0,
+  "browser_knockdown_throw": {
+    "errors": [],
+    "falling": {
+      "state": "knockdown",
+      "hp": 320,
+      "knockedDown": true,
+      "dodgeAccepted": false
+    },
+    "recovered": {
+      "state": "idle",
+      "states": [
+        {
+          "state": "idle",
+          "t": 1679
+        },
+        {
+          "state": "knockdown",
+          "knockedDown": true,
+          "t": 2402.100000023842
+        },
+        {
+          "state": "getUp",
+          "knockedDown": true,
+          "t": 4662.399999976158
+        },
+        {
+          "state": "idle",
+          "t": 5628.800000071526
+        }
+      ]
+    },
+    "grab": {
+      "accepted": true,
+      "captured": true
+    },
+    "landing": {
+      "hp": 200,
+      "state": "knockdown",
+      "captured": false,
+      "knockedDown": true,
+      "grabActive": false
+    },
+    "afterThrow": {
+      "hp": 200,
+      "state": "idle",
+      "captured": false,
+      "states": [
+        {
+          "state": "dodge",
+          "captured": true,
+          "t": 6178.800000071526
+        },
+        {
+          "state": "knockdown",
+          "knockedDown": true,
+          "t": 8178.899999976158
+        },
+        {
+          "state": "getUp",
+          "knockedDown": true,
+          "t": 9195.899999976158
+        },
+        {
+          "state": "idle",
+          "t": 10162.100000023842
+        }
+      ]
+    }
+  },
+  "boss_recovery_ready_frame": 117,
+  "boss_next_action_delay_seconds": 0.15
+}

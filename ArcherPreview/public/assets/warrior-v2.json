@@ -1,6 +1,6 @@
 {
-  "model": "./content/403e1ee1ef6fb49a4327348914a7d6a47f2f184140a33452d3274c7421dcea19.gltf",
-  "version": "전사 v2 · 검술 / 심판 / 방패 밀치기 / 방향 회피",
+  "model": "./content/525a2c4a375c564f49ec320c0a945105cdb37003a147533a917069ade28edae7.gltf",
+  "version": "전사 v2 · 검술 / 심판 / 방패 밀치기 / 회피 / 넉다운",
   "animations": {
     "idle": "Idle_02",
     "run": "Run_03",
@@ -8,7 +8,9 @@
     "slash": "Right_Hand_Sword_Slash",
     "judgment": "Sword_Judgment",
     "shieldPush": "Shield_Push_Left",
-    "dodge": "Dodge_Roll"
+    "dodge": "Dodge_Roll",
+    "knockdown": "Knockdown",
+    "getUp": "Knockdown_GetUp"
   },
   "speeds": {
     "run": 4.4371
@@ -37,7 +39,9 @@
     "./content/01b4ae095cfd62bb404f259d51abdd82bd336fcaaa31976102c0bac6a28a0de8.bin",
     "./content/1e86bfc2825a8d80e8401717a1c1b00a6b56e5c2bbc6559cc978a78141197f6e.bin",
     "./content/7bf3e6cf071d0abb5a70f2bd8576bf9afeb4288ffe45c4aa304ad85a2d4bfc22.bin",
-    "./content/403e1ee1ef6fb49a4327348914a7d6a47f2f184140a33452d3274c7421dcea19.gltf"
+    "./content/d965642d2221de4d6970ccc4156fc60031658be8f9a55dba8d70c3ff319c160f.bin",
+    "./content/8c6fd5534f67d21e3718c082bce50e1052e8ea50a1d3a5041881aa80f8ad3b37.bin",
+    "./content/525a2c4a375c564f49ec320c0a945105cdb37003a147533a917069ade28edae7.gltf"
   ],
   "resourceCacheVersion": 1,
   "dodge": {

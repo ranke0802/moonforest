@@ -8,6 +8,7 @@ export class ActionAudio {
     const archer=character==='archer',key=`${character}:${result.actionId??result.state}`;
     const changed=key!==this.playerKey,previous=changed?-1:this.playerTime;
     const cue=(at,name,options)=>{if(previous<at&&clipTime>=at)this.audio.play(name,{position,...options});};
+    if(result.knockedDown){if(result.state==='knockdown')cue(.8,'land');else cue(0,'equip',{volume:.5});}
     if(!result.captured&&!result.staggered){
       if(result.actionId!=null){
         if(archer){if(changed&&['attack','moveAttack'].includes(result.state))this.audio.play('bow_draw',{position});if(changed&&result.state==='hit')this.audio.play('player_hit',{position});}
@@ -38,7 +39,7 @@ export class ActionAudio {
       if(previous<at&&b.time>=at)this.audio.play('slash_heavy',{position,rate:.72,volume:.8});
       if(b.state==='Skill_02'&&encounter.grab?.holding)for(const phase of [.3,.55,.78])if(previous<duration*phase&&b.time>=duration*phase)this.audio.play('slash_heavy',{position,rate:.65,volume:.6});
     }
-    if(b.mode==='move'){this.bossFeet+=dt;if(this.bossFeet>.38){this.bossFeet%=.38;this.audio.play(`foot_${this.foot++%3}`,{position,volume:1.7,rate:.65});}}
+    if(['move','approach'].includes(b.mode)){this.bossFeet+=dt;if(this.bossFeet>.38){this.bossFeet%=.38;this.audio.play(`foot_${this.foot++%3}`,{position,volume:1.7,rate:.65});}}
     else this.bossFeet=0;
     if(b.mode==='down'&&previous<duration*.45&&phase>=.45)this.audio.play('land',{position,rate:.65});
     if(b.mode==='recover'&&previous<duration*.4&&phase>=.4)this.audio.play('equip',{position,rate:.7,volume:.6});

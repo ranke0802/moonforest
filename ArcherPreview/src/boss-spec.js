@@ -25,6 +25,12 @@ export const BOSS_BY_NAME=Object.fromEntries(BOSS_MOTIONS.map(m=>[m.name,m]));
 export const BOSS_ACTIVE_MOTIONS=BOSS_MOTIONS.filter(m=>!m.disabled);
 export const BOSS_ATTACKS=BOSS_ACTIVE_MOTIONS.filter(m=>m.role==='attack');
 export const bossAttackRange=spec=>(spec.range||2.5)*1.2;
+// Source Stand_Up3 is upright by frame 117; its remaining two seconds are an idle tail.
+export const BOSS_RECOVERY_READY_TIME=117/30;
+export const BOSS_RECOVERY_WAIT=.15;
+export const BOSS_GROUNDED_HIT_RANGE=2.4;
+export const BOSS_GRAB_APPROACH_DISTANCE=1.9;
+export const BOSS_HEAVY_ATTACKS=new Set(['Axe_Spin_Attack','Flying_Fist_Kick','Lunge_Spin_Kick','Rising_Flying_Kick','Skill_01','Skill_03','Weapon_Combo']);
 export const BOSS_ADVANCING_COMBO=['Right_Jab_from_Guard','Left_Hook_from_Guard','Left_Uppercut_from_Guard'];
 export const BOSS_DAMAGE={Axe_Spin_Attack:160,Flying_Fist_Kick:150,Left_Hook_from_Guard:100,Left_Uppercut_from_Guard:120,
   Lunge_Spin_Kick:150,Right_Jab_from_Guard:80,Rising_Flying_Kick:140,Shield_Push_Left:100,Skill_01:180,Skill_02:300,Skill_03:160,Weapon_Combo:180};
@@ -51,7 +57,7 @@ export class BossBrain {
     if(flashDuration>=this.flash){this.flash=flashDuration;this.flashDuration=flashDuration;}
     // Grounded targets still take damage. Further hits must not restart the fall
     // or indefinitely delay getting up, including another judgment burst.
-    if(this.mode==='down')return true;
+    if(this.mode==='down'||(this.mode==='recover'&&this.hp>0))return true;
     if(!this.hp||(heavy&&this.mode!=='recover')){this.stagger=0;this.start('Knock_Down_1','down');}
     else {this.stagger=Math.max(this.stagger,stun||.2);this.interrupted=this.mode==='attack';if(this.interrupted){this.impacted=true;this.comboStep=0;}}
     return true;
@@ -69,14 +75,20 @@ export class BossBrain {
     }
     const duration=this.durations[this.state];
     if(this.mode==='down'||this.mode==='recover'){
-      this.time=Math.min(duration,this.time+dt);
-      if(this.time>=duration){
+      const end=this.mode==='recover'?Math.min(duration,BOSS_RECOVERY_READY_TIME):duration;
+      this.time=Math.min(end,this.time+dt);
+      if(this.time>=end){
         if(this.mode==='down'&&this.hp>0)this.start('Stand_Up3','recover');
-        else if(this.mode==='recover'){this.start('Block6','idle');this.wait=.4;}
+        else if(this.mode==='recover'){this.start('Block6','idle');this.wait=BOSS_RECOVERY_WAIT;}
       }
       return {events,speed:0};
     }
     if(!playerAlive){this.startIfChanged('Block6','idle');return {events,speed:0};}
+    if(this.mode==='approach'){
+      if(distance<=BOSS_GRAB_APPROACH_DISTANCE)this.start('Skill_02','attack');
+      else {this.time=(this.time+dt)%duration;return {events,speed:3.25};}
+      return {events,speed:0};
+    }
     if(['attack','guard','evade'].includes(this.mode)){
       const spec=BOSS_BY_NAME[this.state];
       this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?(spec.playRate||1.12):1));
@@ -99,11 +111,11 @@ export class BossBrain {
       if(this.attackCount%7===0)this.start('Backflip','evade');
       else if(this.attackCount%5===0)this.start('Block6','guard');
       else if(this.attackCount%4===0)this.startCombo();
-      else this.start(this.nextAttack(),'attack');
+      else {const next=this.nextAttack();this.start(next==='Skill_02'?'Running':next,next==='Skill_02'?'approach':'attack');}
     }
     return {events,speed:0};
   }
   startIfChanged(state,mode){if(this.state!==state||this.mode!==mode)this.start(state,mode);}
   get defense(){return this.mode==='evade'?'evade':this.mode==='guard'?'block':null;}
-  get label(){return this.hp<=0?'격파':this.stagger>.3?'강한 경직':this.stagger>0?'경직':this.comboStep?`전진 3연타 · ${this.comboStep}타`:this.mode==='idle'?'가드 대기':BOSS_BY_NAME[this.state].label;}
+  get label(){return this.hp<=0?'격파':this.stagger>.3?'강한 경직':this.stagger>0?'경직':this.comboStep?`전진 3연타 · ${this.comboStep}타`:this.mode==='approach'?'잡기 접근':this.mode==='idle'?'가드 대기':BOSS_BY_NAME[this.state].label;}
 }

@@ -1,6 +1,6 @@
 import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
-import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, bossAttackRange } from './boss-spec.js';
+import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, BLOCK_STAGGER } from './hit-feedback.js';
 
@@ -25,7 +25,12 @@ export class BossEncounter {
     this.playerReaction=new PlayerHitReaction();this.bossReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
     this.grab=new BossGrab(captured=>{
       this.playerReaction.cancelRecoil();this.gate.reset();this.onPlayerHit(0,{captured});
-    },critical=>this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true}));
+    },critical=>{
+      // Hand off the landing to the authored knockdown clip instead of rotating
+      // the whole captured actor upright during BossGrab's generic recovery.
+      this.grab.reset();
+      this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true,knockdown:true,landed:true});
+    });
   }
   async summon(player){
     if(this.loading)return;this.loading=true;this.onChange(this);
@@ -84,11 +89,11 @@ export class BossEncounter {
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const result=this.brain.update(dt,distance,this.playerAlive&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     if(this.brain.mode==='evade')this.showDefense('evade');
-    if(['idle','move'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
+    if(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01)this.actor.rotation.y=Math.atan2(direction.x,direction.z);
     }
     if(result.speed&&distance>1.65)this.actor.position.addInPlace(direction.normalize().scale(Math.min(result.speed*dt,distance-1.65)));
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:this.brain.mode==='move',blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
+    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
     if(this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
@@ -128,6 +133,11 @@ export class BossEncounter {
     if(sample&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
       const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
       const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
+      const grounded=['down','recover'].includes(this.brain.mode);
+      // Downed/recovering bosses are always vulnerable within melee range, even
+      // when an upright sword swing passes above the lying skeleton. The gate
+      // still enforces strike windows, per-swing deduplication and burst timing.
+      const rangeContact=grounded&&distance<=BOSS_GROUNDED_HIT_RANGE;
       let contacts;
       if(this.brain.defense){
         // Consume this swing without starting a delayed damage burst through a block/roll.
@@ -136,8 +146,7 @@ export class BossEncounter {
           if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block')this.playerBlocked();
         }
         contacts={hits:[],hitStop:0};
-      }else contacts=this.gate.collect({...sample,capsules});
-      const grounded=['down','recover'].includes(this.brain.mode);
+      }else contacts=this.gate.collect({...sample,capsules,rangeContact});
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
         if(!this.brain.hit(hit))continue;
@@ -153,10 +162,10 @@ export class BossEncounter {
       if(event.disabled)continue;
       if(distance<=bossAttackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
-        if(event.kind==='spin'||facing>.2){
+        if(event.kind==='spin'||event.kind==='grab'||facing>.2){
           const aim=player.position.add(new Vector3(0,1.1,0));
           const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
-          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],grab:event.kind==='grab',bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],grab:event.kind==='grab',heavy:BOSS_HEAVY_ATTACKS.has(event.name),bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
       }
     }
@@ -179,8 +188,16 @@ export class BossEncounter {
     this.onPlayerHit(BLOCK_STAGGER,{force:true,reason:'blocked'});
     this.lastHit='전사 공격 BLOCK · 1초 경직';
   }
-  receiveBossHit({damage,grab=false,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
+  receiveBossHit({damage,grab=false,heavy=false,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(this.grab.active||!this.playerAlive||(!bodyContact&&!shieldContact))return false;
+    // A grab checks range at its cast frame. Neither a dodge nor a shield can
+    // block it; moving outside the capture radius is the way to escape.
+    if(grab){
+      if(!bodyContact)return false;
+      const {critical}=rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0));
+      if(this.grab.start(this.player,this.playerNodes,this.brain.serial,critical)){this.lastHit='다리 잡힘 · 조작 불가';this.onChange(this);return true;}
+      return false;
+    }
     if(action?.state==='dodge'&&action.actionId!=null){
       this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'Dodge',false,'evade');return false;
     }
@@ -192,19 +209,17 @@ export class BossEncounter {
       if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'BLOCK',false,'block');this.onChange(this);
-    }else if(grab){
-      const {critical}=rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0));
-      if(this.grab.start(this.player,this.playerNodes,this.brain.serial,critical)){this.lastHit='다리 잡힘 · 조작 불가';this.onChange(this);}
-    }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null});
+    }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null,knockdown:heavy});
     return true;
   }
-  hitPlayer(damage,source,{superArmor=false,critical:fixedCritical,grabImpact=false}={}){
+  hitPlayer(damage,source,{superArmor=false,critical:fixedCritical,grabImpact=false,knockdown=false,landed=false}={}){
     if((this.playerInvulnerable&&!grabImpact)||!this.playerAlive)return;
     const critical=fixedCritical??(source?rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0)).critical:false);
     damage=Math.round(damage*(critical?1.3:1));
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
-    this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!superArmor});
-    if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);
+    this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!landed&&(!superArmor||knockdown)});
+    if(knockdown)this.onPlayerHit(PLAYER_STAGGER,{knockdown:true,landed});
+    else if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
     this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
   }

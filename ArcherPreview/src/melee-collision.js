@@ -41,10 +41,10 @@ export class MeleeContactGate{
     this.pending=this.pending.filter(p=>p.at>now+1e-8);
     return {hits,hitStop};
   }
-  check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0}){
+  check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0,rangeContact=false}){
     if(this.actionId!==actionId){this.reset();this.actionId=actionId;}
     if(!window){this.previous=null;return false;}
-    const hit=!this.hits.has(window.id)&&(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius));
+    const hit=!this.hits.has(window.id)&&(rangeContact||(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius)));
     this.previous=blade;
     if(hit)this.hits.add(window.id);
     return hit;

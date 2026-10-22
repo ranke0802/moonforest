@@ -401,7 +401,8 @@ try {
       if(options.captured){controller.capture();audio.play('equip',{volume:.7,rate:.7});}else controller.releaseCapture();
       attackSources.clear();strikeSampler.reset();input.reset();return;
     }
-    if(controller.hit(duration,options)!==false){attackSources.clear();strikeSampler.reset();}
+    const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
+    if(reacted!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
