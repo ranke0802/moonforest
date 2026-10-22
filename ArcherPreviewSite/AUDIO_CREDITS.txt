@@ -31,6 +31,15 @@ Impact by Iwan 'qubodup' Gabovitch — CC0 1.0
 https://opengameart.org/content/impact
 Used qubodupImpactWood and qubodupImpactStone recordings.
 
+Footsteps Leather, Cloth, Armor by HaelDB — CC0 1.0
+https://opengameart.org/content/footsteps-leather-cloth-armor
+Used step_metal, step_metal (2) and step_metal (3) armored footstep recordings.
+Metal footsteps on concrete by Thimras — CC0 1.0
+https://opengameart.org/content/metal-footsteps-on-concrete
+Used metal_steps_01, metal_steps_09 and metal_steps_16 recordings.
+Changes: lowered pitch, filtered bright ringing, shortened decay and mixed
+three dry, weighty armored steps. No sheath-scrape layer in footsteps.
+
 CC0 license: https://creativecommons.org/publicdomain/zero/1.0/
 CC0 recordings were trimmed, filtered, layered, pitched and gain-balanced.
 No audio from Dark Souls or other commercial game soundtracks is included.
