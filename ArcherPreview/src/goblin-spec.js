@@ -22,7 +22,7 @@ export class GoblinBrain {
  start(state,mode){this.state=state;this.mode=mode;this.time=mode==='recover'?this.durations[state]:0;this.serial++;this.impacted=false;this.visited.add(state);}
  same(state,mode){if(this.state!==state||this.mode!==mode)this.start(state,mode);}
  hit({damage=18,heavy=false,stun=0}={}){
-  if(this.hp<=0||this.defense)return false;stun=Math.min(stun,.5);this.hp=Math.max(0,this.hp-damage);this.flash=this.flashDuration=stun?Math.min(stun,.75):.22;
+  if(this.hp<=0||this.defense)return false;this.hp=Math.max(0,this.hp-damage);this.flash=this.flashDuration=stun?.75:.22;
   if(!this.hp){this.stagger=0;this.start('Fall_Dead_from_Abdominal_Injury','dead');return true;}
   if(['down','recover'].includes(this.mode))return true;
   if(heavy){this.stagger=0;this.start('Knock_Down','down');}

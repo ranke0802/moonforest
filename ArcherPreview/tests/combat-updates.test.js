@@ -4,6 +4,7 @@ import { Matrix, Vector3, NullEngine, Scene, TransformNode } from '@babylonjs/co
 import { WarriorV2Controller } from '../src/warrior-v2.js';
 import { BossBrain, BOSS_ADVANCING_COMBO, BOSS_DAMAGE, BOSS_ATTACKS } from '../src/boss-spec.js';
 import { BossEncounter } from '../src/boss-encounter.js';
+import { GoblinEncounter } from '../src/goblin-encounter.js';
 import { PlayerStrikeSampler, PLAYER_STRIKES } from '../src/player-strikes.js';
 import { BossGrab } from '../src/boss-grab.js';
 import { rearDamage } from '../src/combat-damage.js';
@@ -43,14 +44,19 @@ test('updated defaults accelerate thrust/slash and dodge without changing the ot
  assert.equal(c.playbackRate('dodge'),1.7);assert.equal(c.playbackRate('idle'),1);
  c.dodge();assert.equal(c.update(.1).rollTo,.17);
 });
-test('blocking judgment overrides super armor, cancels queued damage and recoils without HP loss',()=>{
- const c=new WarriorV2Controller({durations}),b=new BossEncounter({},()=>{},()=>{},(duration,options)=>c.hit(duration,options));
+test('blocked judgment locks the warrior for 0.5s against goblins and 1.5s against bosses, without HP loss',()=>{
+ for(const [Encounter,seconds] of [[GoblinEncounter,.5],[BossEncounter,1.5]]){
+ const c=new WarriorV2Controller({durations}),b=new Encounter({},()=>{},()=>{},(duration,options)=>c.hit(duration,options));
  b.actor={position:new Vector3(0,0,2)};b.player={position:Vector3.Zero()};
  c.startAttack('judgment');assert.equal(c.hit(),false);
  b.gate.pending=[{}];b.playerBlocked();
- assert.equal(c.action,null);assert.equal(c.staggerRemaining,1.5);assert.equal(c.groggy,true);assert.equal(b.playerHp,500);assert.equal(b.gate.pending.length,0);
+ assert.equal(c.action,null);assert.equal(c.staggerRemaining,seconds);assert.equal(c.groggy,true);assert.equal(b.playerHp,500);assert.equal(b.gate.pending.length,0);
+ assert.equal(c.attack(),false);assert.equal(c.dodge(),false);assert.equal(c.shieldPush(),false);
+ assert.ok(b.lastHit.includes(`${seconds}초`));
  b.playerReaction.update(.2,b.player);assert.ok(b.player.position.z<-.27);
- assert.ok(b.playerReaction.flashRemaining>0);assert.equal(c.update(1.49).groggy,true);assert.equal(c.update(.02).state,'idle');
+ assert.ok(b.playerReaction.flashRemaining>0);assert.equal(c.update(seconds-.01,{x:1}).groggy,true);
+ assert.equal(c.update(.02,{x:1}).state,'run');assert.equal(c.groggy,false);assert.equal(c.dodge(),true);
+ }
 });
 test('boss block reaction lasts one second and never resumes the interrupted attack',()=>{
  const b=new BossBrain({Right_Jab_from_Guard:2,Block6:2});b.start('Right_Jab_from_Guard','attack');b.time=.2;

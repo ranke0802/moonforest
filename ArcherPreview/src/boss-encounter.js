@@ -217,8 +217,9 @@ export class BossEncounter {
   playerBlocked(){
     this.gate.pending=[];
     this.playerReaction.start(this.player.position.subtract(this.actor.position),{flashDuration:.45});
-    this.onPlayerHit(PLAYER_BLOCK_GROGGY,{force:true,reason:'blocked'});
-    this.lastHit='전사 공격 BLOCK · 1.5초 그로기';
+    const duration=this.kind==='goblin'?.5:PLAYER_BLOCK_GROGGY;
+    this.onPlayerHit(duration,{force:true,reason:'blocked'});
+    this.lastHit=`전사 공격 BLOCK · ${duration}초 그로기`;
   }
   receiveBossHit({damage,grab=false,heavy=false,bodyContact=false,shieldContact=false,action,source=this.actor?.position}){
     if(this.grab.active||(this.combat.grabOwner&&this.combat.grabOwner!==this)||!this.playerAlive||(!bodyContact&&!shieldContact))return false;

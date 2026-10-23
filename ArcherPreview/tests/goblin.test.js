@@ -40,9 +40,9 @@ test('goblin closes inside player sword reach before beginning its close attack'
  assert.ok(b.update(.016,1.45).speed>0);assert.equal(b.mode,'move');
  b.update(.016,1.18);assert.equal(b.mode,'attack');
 });
-test('shield stun lasts half a second and blocked attacks recover in one second',()=>{
+test('shield stun lasts 1.5 seconds and blocked monster attacks recover in one second',()=>{
  const b=new GoblinBrain(durations,()=>.5);b.start('Sword_Judgment','attack');b.hit({damage:10,stun:1.5});
- assert.equal(b.stagger,.5);assert.equal(b.flashDuration,.5);assert.equal(b.mode,'hit');
- b.update(.49,1);assert.ok(b.stagger>0);assert.equal(b.update(.011,1).events.length,0);assert.equal(b.stagger,0);assert.equal(b.mode,'idle');assert.equal(b.flash,0);
+ assert.equal(b.stagger,1.5);assert.equal(b.flashDuration,.75);assert.equal(b.mode,'hit');
+ b.update(1.49,1);assert.ok(b.stagger>0);assert.equal(b.update(.011,1).events.length,0);assert.equal(b.stagger,0);assert.equal(b.mode,'idle');assert.equal(b.flash,0);
  b.start('Right_Jab_from_Guard','attack');b.parry();assert.equal(b.stagger,1);b.update(1,1);assert.equal(b.mode,'idle');
 });
