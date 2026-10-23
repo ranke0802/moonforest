@@ -13,11 +13,11 @@ import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
-import { BossEncounter } from './boss-encounter.js';
+import { BossBattle } from './boss-battle.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
-import { updateBossHealthPosition } from './boss-health-bar.js';
+import { BossHealthBars } from './boss-health-bar.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
@@ -42,7 +42,7 @@ const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
-let simulateFrame=false,buttonSnapshot,healthSnapshot;
+let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars;
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -110,6 +110,7 @@ function updateButtons() {
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
+  $('#boss-count').disabled = $('#summon-boss').disabled;
   $('#boss-controls').hidden = !isV2();
   $('#potion-button').hidden=!isV2();
   $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured||controller?.groggy;
@@ -300,7 +301,7 @@ function constrainPlayerPosition(){
 
 function render(dt) {
   simulateFrame=dt>0;
-  if(!simulateFrame){world.scene.render();updateBossHealthPosition(world.scene,boss,$('#boss-hud'));return;}
+  if(!simulateFrame){world.scene.render();bossHealthBars.update(world.scene,boss.encounters);return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -332,7 +333,8 @@ function render(dt) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
-      if(isV2()&&boss?.active&&boss.brain.hp>0&&Vector3.Distance(actor.position,boss.actor.position)<4){const d=boss.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z);}
+      const target=isV2()?boss.nearestTarget(actor.position):null;
+      if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z);}
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
@@ -358,7 +360,8 @@ function render(dt) {
     const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
-    const focus=boss?.active?Vector3.Lerp(center,boss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
+    const cameraBoss=boss.nearestTarget(actor.position);
+    const focus=cameraBoss?Vector3.Lerp(center,cameraBoss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
@@ -370,7 +373,7 @@ function render(dt) {
   if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
   damageNumbers?.update(dt);
-  updateBossHealthPosition(world.scene,boss,$('#boss-hud'));
+  bossHealthBars.update(world.scene,boss.encounters);
 }
 
 try {
@@ -382,28 +385,25 @@ try {
   world = createWorld(engine);
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
-  boss=new BossEncounter(world,encounter=>{
-    const snapshot=[encounter.loading,encounter.active,encounter.brain?.hp,encounter.brain?.label,encounter.brain?.mode,encounter.brain?.stagger>0,encounter.playerHp,encounter.lastHit].join('|');
+  bossHealthBars=new BossHealthBars($('#boss-hud'));
+  boss=new BossBattle(world,encounter=>{
+    const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');
     if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
     $('#summon-boss').textContent=encounter.loading?'보스 불러오는 중…':encounter.active?'보스 다시 소환':'보스 소환';
     $('#player-combat-status').hidden=!encounter.active;
-    if(!encounter.active)$('#boss-hud').hidden=true;
-    if(!encounter.active)return;
-    $('#boss-hp').max=encounter.brain.maxHp;$('#boss-hp').value=encounter.brain.hp;
-    $('#boss-hp-text').textContent=`${encounter.brain.hp} / ${encounter.brain.maxHp}`;
-    $('#boss-state').textContent=encounter.brain.label;
+    if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
     $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
-    $('#boss-hud').dataset.state=encounter.brain.stagger>0?'stagger':encounter.brain.mode;
     if(encounter.playerHp<=0)deathScreen.show();
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
       if(options.captured){controller.capture();audio.play('equip',{volume:.7,rate:.7});}else controller.releaseCapture();
-      attackSources.clear();strikeSampler.reset();input.reset();return;
+      attackSources.clear();strikeSampler.reset();input.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
     if(reacted!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
+    return reacted;
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
@@ -442,7 +442,7 @@ try {
   }
   $('#summon-boss').addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;await boss.summon(actor);actionAudio.reset();audio.play('boss_appear',{position:boss.actor.position});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$('#boss-count').value);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters)audio.play('boss_appear',{position:enemy.actor.position});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}
     updateButtons();
   });
@@ -494,7 +494,7 @@ try {
     audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
   });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
-  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
+  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
   loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);

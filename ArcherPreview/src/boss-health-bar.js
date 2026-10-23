@@ -16,3 +16,38 @@ export function updateBossHealthPosition(scene,encounter,element){
   const transform=`translate3d(${p.x}px,${p.y+8}px,0) translateX(-50%)`;
   if(element.style.transform!==transform)element.style.transform=transform;
 }
+
+export class BossHealthBars {
+  constructor(template) { this.template = template; this.items = new Map(); }
+  update(scene, encounters) {
+    const visible = new Set();
+    for (const boss of encounters) {
+      if (!boss.active) continue;
+      visible.add(boss.id);
+      let item = this.items.get(boss.id);
+      if (!item) {
+        const element = boss.id === 1 ? this.template : this.template.cloneNode(true);
+        if (boss.id !== 1) {
+          element.id = `boss-hud-${boss.id}`;
+          for (const child of element.querySelectorAll('[id]')) child.id += `-${boss.id}`;
+          this.template.parentElement.append(element);
+        }
+        element.dataset.bossId = String(boss.id);
+        element.setAttribute('aria-label', `곰 보스 ${boss.id} 체력`);
+        item = { element, progress: element.querySelector('progress'), state: element.querySelector('.sr-only'), text: element.querySelector('span:last-child') };
+        this.items.set(boss.id, item);
+      }
+      const snapshot = `${boss.brain.hp}:${boss.brain.maxHp}:${boss.brain.label}:${boss.brain.mode}:${boss.brain.stagger > 0}:${encounters.length}`;
+      if (item.snapshot !== snapshot) {
+        item.snapshot = snapshot;
+        item.progress.max = boss.brain.maxHp; item.progress.value = boss.brain.hp;
+        item.text.textContent = `${encounters.length > 1 ? `곰 ${boss.id} · ` : ''}${boss.brain.hp} / ${boss.brain.maxHp}`;
+        item.state.textContent = boss.brain.label;
+        item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
+      }
+      updateBossHealthPosition(scene, boss, item.element);
+    }
+    for (const [id, item] of this.items) if (!visible.has(id)) item.element.hidden = true;
+    if (!visible.size) this.template.hidden = true;
+  }
+}
