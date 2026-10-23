@@ -26,7 +26,7 @@ export class GoblinBrain {
   if(!this.hp){this.stagger=0;this.start('Fall_Dead_from_Abdominal_Injury','dead');return true;}
   if(['down','recover'].includes(this.mode))return true;
   if(heavy){this.stagger=0;this.start('Knock_Down','down');}
-  else{this.start('Sword_Parry_Backward_2','hit');this.stagger=Math.max(this.stagger,stun||.2);}
+  else{this.start('Sword_Parry_Backward_2','hit');this.stagger=Math.max(this.stagger,stun||.3);}
   return true;
  }
  parry(){if(this.hp<=0||['down','recover'].includes(this.mode))return false;this.start('Sword_Parry_Backward_2','hit');this.stagger=1;this.flash=this.flashDuration=.45;return true;}

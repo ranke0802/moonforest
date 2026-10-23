@@ -58,10 +58,10 @@ export class BossBrain {
     // Grounded targets still take damage. Further hits must not restart the fall
     // or indefinitely delay getting up, including another judgment burst.
     if(this.mode==='down'||(this.mode==='recover'&&this.hp>0))return true;
-    // Normal sword cuts damage/flash the boss without stopping a committed
-    // technique (including its grab approach). Shield stun and heavy knockdown
+    // Normal sword cuts damage/flash the boss without staggering any state,
+    // including movement and idle. Shield stun and heavy knockdown
     // retain priority, and a lethal hit must still end the attack.
-    if(this.hp>0&&!interruptsBoss&&!heavy&&!stun&&['attack','approach'].includes(this.mode))return true;
+    if(this.hp>0&&!interruptsBoss&&!heavy&&!stun)return true;
     if(!this.hp||(heavy&&this.mode!=='recover')){this.stagger=0;this.start('Knock_Down_1','down');}
     else {this.stagger=Math.max(this.stagger,stun||.2);this.interrupted=this.mode==='attack';if(this.interrupted){this.impacted=true;this.comboStep=0;}}
     return true;

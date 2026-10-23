@@ -27,7 +27,7 @@ function strike(state,clip,capsules){
  const sword={computeWorldMatrix(){},getWorldMatrix:()=>matrix};
  for(let t=0;t<warrior.durations[clip]+.4;t+=1/60){
   matrix=warrior.pose(clip,Math.min(t,warrior.durations[clip])).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW[state]??0));
-  const sample=sampler.sample({state,clipTime:t,actionId:1,actionElapsed:t},sword,null);
+  const sample=sampler.sample({state,clipTime:t,actionId:1,actionElapsed:t},sword,null,true,PLAYER_STRIKE_AIM_YAW[state]??0);
   hits.push(...gate.collect({...sample,capsules}).hits);
  }
  return hits;
@@ -50,7 +50,7 @@ test('aimed two-hit combo connects at goblin melee distance across frame rates a
   const sword={computeWorldMatrix(){},getWorldMatrix:()=>matrix};
   for(let t=0;t<5;t+=dt){
    const result=c.update(dt);matrix=warrior.pose('Thrust_Slash',result.clipTime).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW.attack));
-   const sample=sampler.sample(result,sword,null);if(sample)hits.push(...gate.collect({...sample,capsules}).hits);
+   const sample=sampler.sample(result,sword,null,true,PLAYER_STRIKE_AIM_YAW.attack);if(sample)hits.push(...gate.collect({...sample,capsules}).hits);
   }
   assert.deepEqual(hits.map(h=>h.damage),[18,20],`${dt}/${speed}/${distance}`);
  }

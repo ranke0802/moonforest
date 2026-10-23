@@ -11,7 +11,19 @@ export function segmentDistanceSquared(p1,q1,p2,q2){
   const d=sub(add(p1,mul(d1,s)),add(p2,mul(d2,t)));return dot(d,d);
 }
 // Sweep the actual blade, rather than awarding a hit simply because J was pressed.
-export function bladeTouchesCapsule(previous,current,capsule,radius){
+export function bladeTouchesCapsule(previous,current,capsule,radius,lateral=null){
+  // A wider cutting sweep extends sideways only; thrust reach, height and
+  // recovery frames keep their original collision bounds.
+  if(lateral?.halfWidth>0){
+    if(bladeTouchesCapsule(previous,current,capsule,radius))return true;
+    const width=lateral.halfWidth,steps=Math.max(2,Math.ceil(width*2/Math.max(.025,radius)));
+    for(let i=0;i<=steps;i++){
+      const offset=-width+width*2*i/steps;
+      const shifted=capsule.map(p=>p.map((v,j)=>v-lateral.axis[j]*offset));
+      if(bladeTouchesCapsule(previous,current,shifted,radius))return true;
+    }
+    return false;
+  }
   const travel=previous?Math.max(...current.map((p,k)=>Math.sqrt(dot(sub(p,previous[k]),sub(p,previous[k]))))):0;
   // Bound gaps by the collider radius instead of eight fixed samples. Fast swings
   // on slow devices must not skip narrow arms/legs between rendered frames.
@@ -41,10 +53,10 @@ export class MeleeContactGate{
     this.pending=this.pending.filter(p=>p.at>now+1e-8);
     return {hits,hitStop};
   }
-  check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0,rangeContact=false}){
+  check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0,rangeContact=false,lateral=null}){
     if(this.actionId!==actionId){this.reset();this.actionId=actionId;}
     if(!window){this.previous=null;return false;}
-    const hit=!this.hits.has(window.id)&&(rangeContact||(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius)));
+    const hit=!this.hits.has(window.id)&&(rangeContact||(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius,lateral)));
     this.previous=blade;
     if(hit)this.hits.add(window.id);
     return hit;

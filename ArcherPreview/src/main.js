@@ -411,7 +411,7 @@ try {
   });
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
-    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2());
+    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y);
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));

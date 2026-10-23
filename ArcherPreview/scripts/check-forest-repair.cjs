@@ -7,12 +7,12 @@ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtime
   const page=await browser.newPage({viewport:{width:1280,height:820}});
   page.on('pageerror',e=>report.errors.push(e.message));
   // Private, test-only instrumentation; no mutable hooks in the shipped application.
-  await page.route('**/src/main.js',async route=>{
+  await page.route('**/src/main.js*',async route=>{
    const response=await route.fetch();
    await route.fulfill({response,body:await response.text()+`\nwindow.__qa={get boss(){return boss},get actor(){return actor},get controller(){return controller},get world(){return world},get frameLoop(){return frameLoop},get input(){return input},render,strikeSampler};`});
   });
   await page.goto('http://127.0.0.1:4191/?character=warrior-v2');
-  await page.waitForFunction(()=>window.archerPreview?.inspect().ready,null,{timeout:90000});
+  await page.waitForFunction(()=>window.__qa&&window.archerPreview?.inspect().ready,null,{timeout:90000});
   await page.evaluate(()=>__qa.frameLoop.setPaused(true));
   await page.locator('#summon-goblin').click();
   await page.waitForFunction(()=>archerPreview.inspect().boss.goblinCount===1&&!archerPreview.inspect().boss.loading,null,{timeout:90000});
@@ -31,15 +31,31 @@ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtime
    if(attack==='judgment')assert.equal(result.hits,3);
    if(attack==='attack'){assert.equal(result.hits,2);assert.equal(result.hp,142);}
   }
+  await page.locator('#goblin-count').selectOption('3');await page.locator('#summon-goblin').click();
+  await page.waitForFunction(()=>archerPreview.inspect().boss.goblinCount===3&&!archerPreview.inspect().boss.loading);
+  report.crowd=await page.evaluate(()=>{
+   const q=__qa,b=q.boss;q.frameLoop.setPaused(true);q.controller.cancelAttack();q.controller.staggerRemaining=0;b.combat.reset();q.strikeSampler.reset();q.actor.position.set(0,0,0);q.actor.rotation.y=0;
+   b.encounters.forEach((e,i)=>{e.brain.start('Walking','idle');e.actor.position.set((i-1)*.9,0,1.1);e.actor.rotation.y=Math.PI;e.brain.update=()=>({events:[],speed:0});});
+   q.render(1/60);q.controller.startAttack('slash');for(let i=0;i<100;i++)q.render(1/60);
+   return b.encounters.map(e=>({hits:e.hitCount,hp:e.brain.hp,stagger:e.brain.stagger}));
+  });
+  // The slash sweeps an arc, not a full circle: multiple enemies inside it
+  // are hit once each, while an enemy outside the blade's arc may still miss.
+  assert.ok(report.crowd.filter(e=>e.hits===1).length>=2,JSON.stringify(report.crowd));
+  assert.ok(report.crowd.every(e=>e.hits===1?e.hp===160&&e.stagger===.3:e.hits===0&&e.hp===180&&e.stagger===0),JSON.stringify(report.crowd));
+  await page.locator('#goblin-count').selectOption('1');await page.locator('#summon-goblin').click();
+  await page.waitForFunction(()=>archerPreview.inspect().boss.goblinCount===1&&!archerPreview.inspect().boss.loading);
   await page.locator('#summon-boss').click();
   await page.waitForFunction(()=>archerPreview.inspect().boss.bearCount===1&&!archerPreview.inspect().boss.loading,null,{timeout:90000});
   report.mixed=await page.evaluate(()=>{
    const q=__qa,b=q.boss;q.frameLoop.setPaused(true);q.controller.cancelAttack();q.controller.staggerRemaining=0;b.combat.reset();q.strikeSampler.reset();q.actor.position.set(0,0,0);q.actor.rotation.y=0;
    b.encounters.forEach((e,i)=>{e.brain.hp=e.brain.maxHp;e.brain.start(e.kind==='goblin'?'Walking':'Block6','idle');e.brain.stagger=0;e.gate.reset();e.hitCount=0;e.actor.position.set((i-.5)*1.3,0,1.1);e.actor.rotation.y=Math.PI;e.brain.update=()=>({events:[],speed:0});});
    q.render(1/60);q.controller.startAttack('slash');for(let i=0;i<100;i++)q.render(1/60);
-   return b.encounters.map(e=>({kind:e.kind,hits:e.hitCount,hp:e.brain.hp,position:e.actor.position.asArray()}));
+   return b.encounters.map(e=>({kind:e.kind,hits:e.hitCount,hp:e.brain.hp,stagger:e.brain.stagger,position:e.actor.position.asArray()}));
   });
   assert.ok(report.mixed.every(e=>e.hits>0),JSON.stringify(report.mixed));
+  assert.equal(report.mixed.find(e=>e.kind==='goblin').stagger,.3);
+  assert.equal(report.mixed.find(e=>e.kind!=='goblin').stagger,0);
   await page.evaluate(async()=>{await __qa.world.scene.whenReadyAsync();__qa.render(0);});
   await page.screenshot({path:path.join(root,'reports/mixed-sword-repaired.png')});
   report.grass=await page.evaluate(()=>{

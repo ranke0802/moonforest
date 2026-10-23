@@ -3,8 +3,8 @@ import { Vector3 } from '@babylonjs/core';
 // axis. Aim the whole action once; keep the source pose and real blade intact.
 export const PLAYER_STRIKE_AIM_YAW={attack:25*Math.PI/180};
 export const PLAYER_STRIKES={
-  attack:[{id:'thrust',from:.55,to:1.02,damage:18,interruptsBoss:false},{id:'follow-cut',from:1.08,to:1.65,damage:20,interruptsBoss:false}],
-  slash:[{id:'cut',from:.38,to:.80,damage:20,interruptsBoss:false}],
+  attack:[{id:'thrust',from:.55,to:1.02,damage:18,interruptsBoss:false},{id:'follow-cut',from:1.08,to:1.65,damage:20,interruptsBoss:false,halfWidth:.3}],
+  slash:[{id:'cut',from:.38,to:.80,damage:20,interruptsBoss:false,halfWidth:.3}],
   // Only the descending blade deals the heavy hit. Landing/recovery are inactive.
   judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true,burst:[20,20,24],interval:.055}],
   shieldPush:[{id:'shield-push',from:1.10,to:1.15,damage:10,stun:1.5}],
@@ -12,7 +12,7 @@ export const PLAYER_STRIKES={
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
-  sample(result,sword,shield,multiHit=true){
+  sample(result,sword,shield,multiHit=true,heading=0){
     if(result.actionId==null||result.staggered||result.state==='dodge'){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
@@ -25,7 +25,8 @@ export class PlayerStrikeSampler{
     const windows=strikes?.filter(w=>result.clipTime>=w.from&&from<=w.to)||[];
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
-    const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from))}));
+    const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from)),
+      lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth}:null}));
     return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
       bladeRadius:result.state==='shieldPush'?.06:.045};
   }
