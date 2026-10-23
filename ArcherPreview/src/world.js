@@ -1,4 +1,6 @@
-import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, HemisphericLight, Mesh, MeshBuilder, Scene, ShadowGenerator, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, HemisphericLight, MeshBuilder, Scene, ShadowGenerator, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { ArenaNavigation } from './navigation.js';
+import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
@@ -38,14 +40,16 @@ export function createWorld(engine) {
 
   const ground = MeshBuilder.CreateGround('forest-floor', { width: 70, height: 70 }, scene);
   const material = new StandardMaterial('forest-floor-material', scene);
-  material.diffuseColor = new Color3(.13, .17, .22);
+  material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
   const texture = new DynamicTexture('floor-grid', { width: 1024, height: 1024 }, scene, false);
   const ctx = texture.getContext();
-  ctx.fillStyle = '#333e4b'; ctx.fillRect(0, 0, 1024, 1024);
-  ctx.strokeStyle = '#3a4652'; ctx.lineWidth = 1;
-  for (let p = 0; p <= 1024; p += 64) { ctx.beginPath(); ctx.moveTo(p, 0); ctx.lineTo(p, 1024); ctx.moveTo(0, p); ctx.lineTo(1024, p); ctx.stroke(); }
-  texture.update(); texture.uScale = 4; texture.vScale = 4;
+  ctx.fillStyle = '#304432'; ctx.fillRect(0, 0, 1024, 1024);
+  let seed=7823;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<12000;i++){ctx.fillStyle=i%2?'rgba(93,110,64,.18)':'rgba(20,35,23,.2)';ctx.beginPath();ctx.ellipse(random()*1024,random()*1024,2+random()*9,1+random()*5,random()*Math.PI,0,Math.PI*2);ctx.fill();}
+  const clearing=ctx.createRadialGradient(512,512,45,512,512,132);clearing.addColorStop(0,'#6a624d');clearing.addColorStop(.6,'#625e48');clearing.addColorStop(1,'rgba(83,89,59,0)');ctx.fillStyle=clearing;ctx.fillRect(350,350,324,324);
+  for(let i=0;i<9000;i++){const x=random()*1024,z=random()*1024;ctx.fillStyle=i%2?'rgba(145,133,99,.18)':'rgba(15,24,20,.2)';ctx.fillRect(x,z,1+random()*2,1+random()*2);}
+  texture.update(); texture.uScale = 1; texture.vScale = 1;
   material.diffuseTexture = texture;
   ground.material = material; ground.receiveShadows = true;
   ground.isPickable=false;ground.freezeWorldMatrix();
@@ -60,26 +64,6 @@ export function createWorld(engine) {
     ring.isPickable=false;ring.freezeWorldMatrix();
   }
 
-  const bark = new StandardMaterial('distant-bark', scene);
-  bark.diffuseColor = new Color3(.065, .095, .12); bark.specularColor = Color3.Black();
-  const leaves = new StandardMaterial('distant-needles', scene);
-  leaves.diffuseColor = new Color3(.065, .13, .15); leaves.specularColor = Color3.Black();
-  // A deterministic, low-detail forest frames the inspection space without covering the character.
-  const forest=[[],[]];
-  for (let i = 0; i < 46; i++) {
-    const angle = i * 2.399963, radius = 13 + (i % 7) * 1.8, height = 4.5 + (i % 5) * .72;
-    const x = Math.cos(angle) * radius, z = Math.sin(angle) * radius;
-    const trunk = MeshBuilder.CreateCylinder(`tree-${i}`, { diameterTop: .2, diameterBottom: .45, height, tessellation: 6 }, scene);
-    trunk.position.set(x, height / 2, z); trunk.material = bark; trunk.freezeWorldMatrix();
-    forest[0].push(trunk);
-    for (let tier = 0; tier < 2; tier++) {
-      const crown = MeshBuilder.CreateCylinder(`crown-${i}-${tier}`, { diameterTop: 0, diameterBottom: 2.8 - tier * .5, height: 3.9, tessellation: 7 }, scene);
-      crown.position.set(x, height * .65 + tier * 1.4, z); crown.material = leaves; crown.freezeWorldMatrix();
-      forest[1].push(crown);
-    }
-  }
-  // Bake the exact original geometry/transforms; two submissions instead of 138.
-  for(const parts of forest){const mesh=Mesh.MergeMeshes(parts,true,true);mesh.isPickable=false;mesh.freezeWorldMatrix();}
   const moteMaterial = new StandardMaterial('mote-light', scene);
   moteMaterial.emissiveColor = new Color3(.25, .5, .58); moteMaterial.disableLighting = true;
   const motes = [];
@@ -91,6 +75,7 @@ export function createWorld(engine) {
     mote.material = moteMaterial; mote.isPickable = false;
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
-  for(const material of [ringMaterial,bark,leaves,moteMaterial])material.freeze();
-  return { scene, camera, shadows, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  for(const mat of [material,ringMaterial,moteMaterial])mat.freeze();
+  const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
+  return { scene, camera, shadows, navigation, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

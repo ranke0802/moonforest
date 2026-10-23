@@ -1,7 +1,7 @@
 import { Color3, MeshBuilder, StandardMaterial, TransformNode, Vector3 } from '@babylonjs/core';
 import { MeleeContactGate } from './melee-collision.js';
 
-/** Three stationary practice targets. All positions and distances use scene metres. */
+/** One stationary practice target. All positions and distances use scene metres. */
 export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
   const materials = [];
   const casters = [];
@@ -27,8 +27,6 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
   const hat = material('hat', [.24, .19, .32]);
 
   const definitions = [
-    { id: 'dummy-west', name: '서쪽 허수아비', position: [-3, 0, 3], cloth: [.36, .27, .48] },
-    { id: 'dummy-east', name: '동쪽 허수아비', position: [3, 0, 4], cloth: [.22, .36, .43] },
     { id: 'dummy-south', name: '남쪽 허수아비', position: [-1, 0, -4], cloth: [.34, .41, .28] },
   ];
 
@@ -104,6 +102,18 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
   const targets = records.map(record => record.target);
   return {
     targets,
+    applyModel(asset) {
+      if(disposed)return;
+      for(const record of records){
+        const instance=asset.instantiateModelsToScene(name=>`training-${record.target.id}-${name}`,false,{doNotInstantiate:true});
+        for(const mesh of record.root.getChildMeshes())if(mesh!==record.ring&&mesh!==record.bullseye){shadows?.removeShadowCaster?.(mesh,false);mesh.dispose();}
+        record.bullseye.isVisible=false;record.bullseye.isPickable=false;
+        const mount=new TransformNode(`training-${record.target.id}-model`,scene);mount.parent=record.sway;mount.position.y=-.2;
+        for(const node of instance.rootNodes)node.parent=mount;
+        record.parts=mount.getChildMeshes();
+        for(const mesh of record.parts){mesh.isPickable=false;mesh.receiveShadows=true;mesh.overlayColor=Color3.White();shadows?.addShadowCaster?.(mesh,false);casters.push(mesh);}
+      }
+    },
     /** Horizontal distance is intentional: player skeleton/root height does not change range. */
     selectNearest(playerPosition, range = 14) {
       if (disposed || !playerPosition || !Number.isFinite(playerPosition.x) || !Number.isFinite(playerPosition.z) || !Number.isFinite(range) || range < 0) return null;

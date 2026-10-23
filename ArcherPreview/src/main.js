@@ -14,6 +14,7 @@ import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import { BossBattle } from './boss-battle.js';
+import { loadTrainingGround } from './environment.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
@@ -200,6 +201,8 @@ async function loadCharacter() {
   $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
   try {
     await initializeResourceCache();
+    $('#loading-text').textContent='훈련장의 나무·풀·허수아비를 불러옵니다.';
+    await loadTrainingGround(world,training);
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
@@ -290,13 +293,8 @@ async function loadCharacter() {
   } finally { loadingAsset = false; $('#character-select').disabled = false; }
 }
 
-function constrainPlayerPosition(){
-  const radius=Math.hypot(actor.position.x,actor.position.z);
-  if(radius>11){actor.position.x*=11/radius;actor.position.z*=11/radius;}
-  for(const dummy of training.targets){
-    const dx=actor.position.x-dummy.position.x,dz=actor.position.z-dummy.position.z,distance=Math.hypot(dx,dz);
-    if(distance<.62){actor.position.x=dummy.position.x+(distance?dx/distance:1)*.62;actor.position.z=dummy.position.z+(distance?dz/distance:0)*.62;}
-  }
+function constrainPlayerPosition(previous){
+  world.navigation.constrain(actor.position,previous,.32,11);
 }
 
 function render(dt) {
@@ -308,17 +306,19 @@ function render(dt) {
   projectiles.update(dt);
   if (ready) {
     if(isV2()){
+      const beforeRecoil=actor.position.clone();
       const recoiled=boss.playerReaction.update(dt,actor);
       applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
-      if(recoiled)constrainPlayerPosition();
+      if(recoiled)constrainPlayerPosition(beforeRecoil);
     }
     const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
     if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     const result = controller.update(dt, movement);
     if(isV2()&&result.rollFrom!=null){
+      const beforeRoll=actor.position.clone();
       const distance=dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge);
       actor.position.x+=rollDirection.x*distance;actor.position.z+=rollDirection.z*distance;
-      constrainPlayerPosition();
+      constrainPlayerPosition(beforeRoll);
     }
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
@@ -339,12 +339,13 @@ function render(dt) {
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
     if (result.moving) {
+      const beforeMove=actor.position.clone();
       const alpha = world.camera.alpha;
       const forward = new Vector3(-Math.cos(alpha), 0, -Math.sin(alpha));
       const right = new Vector3(-forward.z, 0, forward.x);
       const direction = forward.scale(movement.y).add(right.scale(movement.x)).normalize();
       actor.position.addInPlace(direction.scale(result.speed * (result.movementDt??dt)));
-      constrainPlayerPosition();
+      constrainPlayerPosition(beforeMove);
       if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
     if (attacking && shotTarget && !isWarrior()) {
@@ -494,7 +495,7 @@ try {
     audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
   });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
-  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
+  window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
   loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);

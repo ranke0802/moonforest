@@ -11,15 +11,14 @@ function fixture(onDamage) {
   return { engine, scene, training, casters, close() { training.dispose(); scene.dispose(); engine.dispose(); } };
 }
 
-test('nearest targets use horizontal metres, exact range boundaries, deterministic ties and stable identities', () => {
+test('exactly one target uses horizontal metres, exact range boundaries and stable identity', () => {
   const f = fixture(), t = f.training;
-  assert.equal(t.targets.length, 3);
+  assert.equal(t.targets.length, 1);
   assert.equal(t.selectNearest(Vector3.Zero()).id, 'dummy-south');
-  assert.equal(t.selectNearest(new Vector3(0, 100, 0)), t.targets[2]);
+  assert.equal(t.selectNearest(new Vector3(0, 100, 0)), t.targets[0]);
   assert.equal(t.selectNearest(Vector3.Zero(), 4.12), null);
-  assert.equal(t.selectNearest(Vector3.Zero(), Math.sqrt(17)), t.targets[2]);
-  assert.equal(t.selectNearest(new Vector3(0, 0, 3.5)), t.targets[0], 'Exact west/east tie retains definition order');
-  assert.equal(t.selectNearest(new Vector3(3, 0, 4), 0), t.targets[1]);
+  assert.equal(t.selectNearest(Vector3.Zero(), Math.sqrt(17)), t.targets[0]);
+  assert.equal(t.selectNearest(new Vector3(-1, 0, -4), 0), t.targets[0]);
   assert.equal(t.selectNearest(new Vector3(0, 0, 100)), null);
   assert.equal(t.selectNearest(Vector3.Zero(), -1), null);
   assert.equal(t.selectNearest(new Vector3(NaN, 0, 0)), null);
@@ -32,9 +31,9 @@ test('nearest targets use horizontal metres, exact range boundaries, determinist
 
 test('selection affects only the selected ground ring and clears invalid targets', () => {
   const f = fixture(), t = f.training;
-  t.setSelected(t.targets[1]);
-  for (const target of t.targets) assert.equal(f.scene.getMeshByName(`training-${target.id}-selection`).isVisible, target === t.targets[1]);
-  assert.equal(t.setSelected({ id: t.targets[1].id }), null, 'Foreign lookalike objects are not owned targets');
+  t.setSelected(t.targets[0]);
+  for (const target of t.targets) assert.equal(f.scene.getMeshByName(`training-${target.id}-selection`).isVisible, true);
+  assert.equal(t.setSelected({ id: t.targets[0].id }), null, 'Foreign lookalike objects are not owned targets');
   for (const target of t.targets) assert.equal(f.scene.getMeshByName(`training-${target.id}-selection`).isVisible, false);
   f.close();
 });
@@ -45,7 +44,7 @@ test('a hit increments only the intended target, flashes and settles without mov
   const sway = f.scene.getTransformNodeByName(`training-${target.id}-sway`);
   const bullseye = f.scene.getMeshByName(`training-${target.id}-bullseye`);
   assert.equal(t.hit(target), true);
-  assert.equal(target.hits, 1); assert.equal(t.targets[1].hits, 0);
+  assert.equal(target.hits, 1);
   assert.ok(bullseye.material.emissiveColor.r > .9);
   t.update(.04);
   assert.ok(Math.abs(sway.rotation.z) > .01);
@@ -76,7 +75,7 @@ test('melee dummy: one floating damage event, target-only white flash, heavy kno
  f.training.melee(sample);f.training.melee(sample);
  assert.equal(damage.length,1);assert.equal(damage[0][1],64);assert.equal(damage[0][2],true);
  const sway=f.scene.getTransformNodeByName(`training-${target.id}-sway`),root=target.position.clone();
- const head=f.scene.getMeshByName(`training-${target.id}-head`),other=f.scene.getMeshByName('training-dummy-east-head');
+ const head=f.scene.getMeshByName(`training-${target.id}-head`),other=MeshBuilder.CreateBox('unrelated',{},f.scene);
  assert.equal(head.renderOverlay,true);assert.equal(Boolean(other.renderOverlay),false);
  for(let i=0;i<5;i++)f.training.update(.1);
  assert.ok(Math.abs(sway.position.z)>.25);assert.ok(target.position.equals(root));
@@ -92,7 +91,7 @@ test('melee dummy: visible outstretched sleeves have collision, including their 
  sway.rotation.z=.4;sway.position.z=-.3;
  const p=Vector3.TransformCoordinates(new Vector3(.7,1.065,0),sway.computeWorldMatrix(true));
  f.training.melee({actionId:7,window:{id:'cut',damage:20},blade:[[p.x-.03,p.y,p.z],[p.x+.03,p.y,p.z]],bladeRadius:.045});
- assert.equal(target.hits,1);assert.equal(f.training.targets[1].hits,0);f.close();
+ assert.equal(target.hits,1);f.close();
 });
 
 test('dummy judgment contact emits three separate damage numbers and only the last is heavy',()=>{
@@ -103,4 +102,17 @@ test('dummy judgment contact emits three separate damage numbers and only the la
  for(const elapsed of [.02,.055,.08,.11,.2,.5])f.training.melee({...sample,elapsed});
  assert.equal(target.hits,3);assert.deepEqual(damage.map(d=>d[1]),[20,20,24]);assert.deepEqual(damage.map(d=>d[2]),[false,false,true]);
  assert.deepEqual(damage.map(d=>d[4]),[1,2,3]);f.close();
+});
+
+test('replacement model removes old dummy pieces and retains flash, sway and planted position',()=>{
+ const f=fixture(),target=f.training.targets[0],planted=target.position.clone();
+ f.training.applyModel({instantiateModelsToScene(name){return {rootNodes:[MeshBuilder.CreateBox(name('imported-scarecrow'),{},f.scene)]};}});
+ assert.equal(f.scene.getMeshByName('training-dummy-south-head'),null);
+ const imported=f.scene.getMeshByName('training-dummy-south-imported-scarecrow');
+ assert.ok(imported);assert.equal(f.scene.getMeshByName('training-dummy-south-bullseye').isVisible,false);
+ f.training.hit(target,{damage:64,heavy:true});assert.equal(imported.renderOverlay,true);
+ for(let i=0;i<20;i++)f.training.update(.1);
+ assert.equal(imported.renderOverlay,false);assert.ok(target.position.equals(planted));
+ const sway=f.scene.getTransformNodeByName('training-dummy-south-sway');assert.deepEqual(sway.position.asArray(),[0,.2,0]);
+ f.close();
 });

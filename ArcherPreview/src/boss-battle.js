@@ -87,6 +87,8 @@ export class BossBattle {
       if (request !== this.revision) return false;
       this.combat.reset();
       const positions = bossSpawnPositions(player, count);
+      const occupied=[{x:player.position.x,z:player.position.z,radius:.8}];
+      if(this.world.navigation)for(const position of positions){this.world.navigation.constrain(position,null,.7,6.5);const safe=this.world.navigation.findFree(position,.7,6.5,occupied);position.x=safe.x;position.z=safe.z;occupied.push({...safe,radius:.7});}
       for (let index = 0; index < count; index++) {
         if (!this.pool[index]) {
           const boss = new BossEncounter(this.world, boss => this.bossChanged(boss), this.onDamage,
@@ -126,7 +128,9 @@ export class BossBattle {
     this.combat.update(dt, player, this.onDamage);
     this.updating = true;
     for (const boss of this.encounters) boss.update(dt, player);
+    const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
     separateBosses(this.encounters, this.combat.grabOwner);
+    this.encounters.forEach((boss,i)=>this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],.7,10.5));
     for (const boss of this.encounters) boss.ring.position.set(boss.actor.position.x, .025, boss.actor.position.z);
     this.updating = false; this.onChange(this);
   }
