@@ -24,6 +24,7 @@ import { PlayerHealthBar } from './player-health-bar.js';
 import { setupSettingsPanel } from './settings-panel.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
+import { constrainDodge } from './dodge-collision.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
@@ -343,7 +344,7 @@ function render(dt) {
       const beforeRoll=actor.position.clone();
       const distance=dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge);
       actor.position.x+=rollDirection.x*distance;actor.position.z+=rollDirection.z*distance;
-      constrainPlayerPosition(beforeRoll);
+      constrainDodge(actor.position,beforeRoll,world.navigation,boss.encounters);
     }
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
@@ -353,6 +354,7 @@ function render(dt) {
     }
     combatResult=result;
     const busy=result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.livingCount>0||boss.loading;
+    if(qualityMode!=='battery')renderActivity.recordFrame(dt);
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);

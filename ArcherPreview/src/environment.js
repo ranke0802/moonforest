@@ -1,5 +1,6 @@
 import { SceneLoader, TransformNode, Texture, Color3 } from '@babylonjs/core';
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
+import { attachTreeLod } from './tree-lod.js';
 
 export async function loadTrainingGround(world,training){
   if(world.environmentPromise)return world.environmentPromise;
@@ -16,6 +17,10 @@ export async function loadTrainingGround(world,training){
       const model=new URL(config.model,url),asset=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),world.scene,null,'.gltf');
       for(const material of asset.materials){material.backFaceCulling=false;material.freeze();}
       world.lighting.registerMeshes(asset.meshes);
+      for(const lod of config.lods??[]){
+        const lodUrl=new URL(lod.model,url),variant=await SceneLoader.LoadAssetContainerAsync(new URL('.',lodUrl).href,lodUrl.pathname.split('/').pop(),world.scene,null,'.gltf');
+        world.lighting.registerMeshes(attachTreeLod(world.scene,asset,variant,lod.distance));
+      }
       return [key,asset];
     }));
     const assets=Object.fromEntries(entries),plants=[];

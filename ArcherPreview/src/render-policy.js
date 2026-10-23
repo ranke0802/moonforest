@@ -9,11 +9,26 @@ export class RenderActivity {
     this.touchDevice = touchDevice;
     this.now = now;
     this.lastActive = now();
+    this.slowTime = 0;
+    this.measuredTime = 0;
+    this.measuredFrames = 0;
+    this.sustainedLimit = 60;
   }
   wake() { this.lastActive = this.now(); }
+  recordFrame(dt) {
+    if(this.touchDevice||this.sustainedLimit===30||dt<=0||dt>.1)return;
+    this.measuredTime+=dt;this.measuredFrames++;
+    if(this.measuredTime<1)return;
+    const fps=this.measuredFrames/this.measuredTime;
+    this.slowTime=fps<54?this.slowTime+this.measuredTime:0;
+    if(this.slowTime>=3)this.sustainedLimit=30;
+    this.measuredTime=0;this.measuredFrames=0;
+  }
   limit({ busy = false, quality = 'high' } = {}) {
     if (busy) this.wake();
-    if (quality === 'battery') return 30;
-    return this.touchDevice && this.now() - this.lastActive >= 3000 ? 30 : 60;
+    // Do not wake phones back to 60 during combat: sustained GPU load is the
+    // thermal problem, not just idle rendering. Animation time stays unchanged.
+    if (this.touchDevice || quality === 'battery') return 30;
+    return this.sustainedLimit;
   }
 }

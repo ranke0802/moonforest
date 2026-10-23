@@ -91,6 +91,13 @@ test('separation moves overlapping living bosses without dragging a captured pla
   separateBosses([a,b],a);assert.equal(a.actor.position.length(),0);assert.ok(Vector3.Distance(a.actor.position,b.actor.position)>=1.6);
 });
 
+test('roll contact never displaces an overlapping bear or goblin',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,1);await battle.summon(player,1,'goblin');
+ for(const b of battle.encounters){b.actor.position.set(0,0,.5);b.dt=1/30;const before=b.actor.position.clone();
+  b.poseAndContacts(player,{state:'dodge',actionId:42},null,null);assert.ok(b.actor.position.equals(before));
+ }
+});
+
 test('hiding during a pending load cannot reactivate an old summon',async()=>{
   let release;const models={load:()=>new Promise(resolve=>release=resolve)};
   const battle=new BossBattle({},()=>{},()=>{},()=>{},{models}),pending=battle.summon({position:Vector3.Zero(),rotation:{y:0}},5);

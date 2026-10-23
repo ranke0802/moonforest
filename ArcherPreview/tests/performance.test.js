@@ -15,17 +15,25 @@ test('touch rendering bounds supersampling while keeping desktop quality and low
   assert.equal(renderPixelRatio(NaN,'unknown',true),1);
 });
 
-test('mobile idle frames fall to 30, input immediately wakes 60, and combat never idles',()=>{
+test('mobile stays capped at 30 during idle, gestures and sustained combat',()=>{
   let time=0;const activity=new RenderActivity(true,()=>time);
-  assert.equal(activity.limit(),60);
-  time=2999;assert.equal(activity.limit(),60);
+  assert.equal(activity.limit(),30);
+  time=2999;assert.equal(activity.limit(),30);
   time=3000;assert.equal(activity.limit(),30);
-  activity.wake();assert.equal(activity.limit(),60);
-  time=10000;assert.equal(activity.limit({busy:true}),60);
-  time=12000;assert.equal(activity.limit(),60);
+  activity.wake();assert.equal(activity.limit(),30);
+  time=10000;assert.equal(activity.limit({busy:true}),30);
+  time=12000;assert.equal(activity.limit(),30);
   time=13000;assert.equal(activity.limit(),30);
   assert.equal(activity.limit({busy:true,quality:'battery'}),30);
   const desktop=new RenderActivity(false,()=>time);time+=10000;assert.equal(desktop.limit(),60);
+});
+
+test('desktop drops to 30 only after sustained inability to reach 60 and never oscillates',()=>{
+ const stable=new RenderActivity(false),slow=new RenderActivity(false);
+ for(let i=0;i<600;i++)stable.recordFrame(1/60);assert.equal(stable.limit(),60);
+ slow.recordFrame(.1);for(let i=0;i<120;i++)slow.recordFrame(1/60);assert.equal(slow.limit(),60);
+ for(let i=0;i<200;i++)slow.recordFrame(1/45);assert.equal(slow.limit(),30);
+ slow.wake();for(let i=0;i<600;i++)slow.recordFrame(1/60);assert.equal(slow.limit(),30);
 });
 
 test('shared HUD projection matches camera transforms across render scale and orientation changes',()=>{

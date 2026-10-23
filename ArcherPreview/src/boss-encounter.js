@@ -158,7 +158,7 @@ export class BossEncounter {
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
     const separation=this.radius+.65;
-    if(!this.grab.active&&distance<separation&&distance>.001&&!['down','dead'].includes(this.brain.mode)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
+    if(result.state!=='dodge'&&!this.grab.active&&distance<separation&&distance>.001&&!['down','dead'].includes(this.brain.mode)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
