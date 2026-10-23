@@ -41,6 +41,7 @@ export function setupMotionSpeedControls({getController,beforeOpen}) {
   $('#reset-motion-speeds').addEventListener('click',()=>{for(const state of Object.keys(speeds))setSpeed(state,V2_MOTION_DEFAULTS[state]);});
   $('#motion-speed-toggle').addEventListener('click',()=>{beforeOpen();dialog.showModal();});
   $('#close-motion-speed').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>document.querySelector('#viewport').focus({preventScroll:true}));
   // Require both ends outside so dragging a slider out of the dialog never closes it.
   const outside=event=>{const r=dialog.getBoundingClientRect();return event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom;};
   let backdropPress=false;
@@ -48,7 +49,7 @@ export function setupMotionSpeedControls({getController,beforeOpen}) {
   dialog.addEventListener('click',event=>{if(backdropPress&&event.target===dialog&&outside(event))dialog.close();backdropPress=false;});
   return {
     apply(controller){for(const [state,value] of Object.entries(speeds))controller.setMotionSpeed?.(state,value);},
-    setVisible(visible){$('#dodge-speed-control').hidden=!visible;$('#motion-speed-toggle').hidden=!visible;if(!visible&&dialog.open)dialog.close();},
+    setVisible(visible){$('#dodge-speed-control').hidden=!visible;$('#v2-motion-settings').hidden=!visible;$('#monster-motion-settings').hidden=!visible;},
     isOpen:()=>dialog.open,
   };
 }

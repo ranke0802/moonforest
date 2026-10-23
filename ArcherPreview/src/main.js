@@ -20,6 +20,8 @@ import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { BossHealthBars } from './boss-health-bar.js';
+import { PlayerHealthBar } from './player-health-bar.js';
+import { setupSettingsPanel } from './settings-panel.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
@@ -28,6 +30,7 @@ import { FrameLoop } from './frame-loop.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
 
+setupSettingsPanel();
 const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
 const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
@@ -44,7 +47,7 @@ const isV2 = () => character === 'warrior-v2';
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
-let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars;
+let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -252,6 +255,7 @@ async function loadCharacter() {
     arrowNode = container.transformNodes.find(node => node.name === 'arrow');
     arrowMesh = container.meshes.find(mesh => mesh.name === 'Azure_Arrow');
     reviewFocus = isWarrior() ? container.transformNodes.find(node => node.name === 'mixamorig:Hips') : null;
+    playerHead = container.transformNodes.find(node => node.name === 'mixamorig:Head');
     shieldNode = container.transformNodes.find(node=>node.name==='Bunnyguard_Shield') || container.meshes.find(node=>node.name==='Bunnyguard_Shield');
     swordNode = container.transformNodes.find(node => node.name === 'Golden_Oathblade') || container.meshes.find(node => node.name === 'Golden_Oathblade');
     boss.playerNodes=Object.fromEntries(container.transformNodes.map(node=>[node.name,node]));
@@ -280,9 +284,10 @@ async function loadCharacter() {
     $('#guard-button').hidden = !isV2();
     $('#dodge-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
-    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, v2에서 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, 좌클릭 또는 J 공격, 우클릭 드래그 회전, H 피격, K 쓰러짐, R 부활.');
+    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
-    canvas.focus({ preventScroll: true });
+    if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
+    frameLoop?.invalidate();
   } catch (error) {
     console.error('[Archer asset load]', error);
     loading.classList.add('error');
@@ -299,9 +304,14 @@ function constrainPlayerPosition(previous){
   world.navigation.constrain(actor.position,previous,.32,11);
 }
 
+function updateHealthBars() {
+  bossHealthBars.update(world.scene,boss.encounters);
+  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp});
+}
+
 function render(dt) {
   simulateFrame=dt>0;
-  if(!simulateFrame){world.scene.render();bossHealthBars.update(world.scene,boss.encounters);return;}
+  if(!simulateFrame){world.scene.render();updateHealthBars();return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -376,7 +386,7 @@ function render(dt) {
   if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
   damageNumbers?.update(dt);
-  bossHealthBars.update(world.scene,boss.encounters);
+  updateHealthBars();
 }
 
 try {
@@ -389,6 +399,7 @@ try {
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
   bossHealthBars=new BossHealthBars($('#boss-hud'));
+  playerHealthBar=new PlayerHealthBar($('#player-health'));
   boss=new BossBattle(world,encounter=>{
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');
     if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
@@ -397,7 +408,6 @@ try {
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
-    $('#player-health').textContent=`전사 HP ${encounter.playerHp} / ${encounter.playerMaxHp}`;
     if(encounter.playerHp<=0)deathScreen.show();
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
@@ -421,9 +431,11 @@ try {
   input = new PlaygroundInput(canvas, world.camera, actions);
   setupFullscreen($('#fullscreen-button'), toast);
   frameLoop=new FrameLoop(engine,render);
-  const syncPlayback=()=>{frameLoop.setPaused(document.hidden||motionSpeedControls.isOpen()||deathScreen.isOpen());audio.setSuspended(document.hidden||motionSpeedControls.isOpen());};
+  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open;frameLoop.setPaused(document.hidden||settingsOpen||deathScreen.isOpen());audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
-  for(const selector of ['#motion-speed-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
+  for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
+  // Preview camera, quality and equipment changes while settings pause combat.
+  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>frameLoop.invalidate());
   document.addEventListener('visibilitychange',syncPlayback);
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);audio.setSuspended(true);});
   window.addEventListener('pageshow',syncPlayback);
