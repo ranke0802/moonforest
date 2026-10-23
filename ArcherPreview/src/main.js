@@ -27,6 +27,8 @@ import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
+import { renderPixelRatio, RenderActivity } from './render-policy.js';
+import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
 
@@ -39,7 +41,7 @@ const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>audio.unlock(),{capture:true,passive:true});
 const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
-const validCharacters = ['archer','warrior','warrior-v2'];
+const validCharacters = ['archer', 'warrior', 'warrior-v2'];
 let character = new URLSearchParams(location.search).get('character');
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
@@ -48,6 +50,9 @@ let engine, world, actor, controller, animator, container, config, input, review
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
+let screenProjection;
+const touchDevice=matchMedia('(pointer: coarse)').matches;
+const renderActivity=new RenderActivity(touchDevice);
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -90,11 +95,13 @@ const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.r
 
 function applyRenderQuality() {
   if (!engine) return;
-  const cap = { high: 3, balanced: 2, battery: 1 }[qualityMode];
-  const ratio = Math.min(window.devicePixelRatio || 1, cap);
+  const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice);
   // Babylon divides CSS dimensions by this value. HiDPI requires its reciprocal.
   engine.setHardwareScalingLevel(1 / ratio);
   engine.resize();
+  screenProjection?.resize(canvas.clientWidth,canvas.clientHeight);
+  renderActivity.wake();
+  engine.maxFPS=renderActivity.limit({quality:qualityMode});
   $('#quality-select').value = qualityMode;
   if(!document.hidden)frameLoop?.invalidate();
 }
@@ -305,13 +312,13 @@ function constrainPlayerPosition(previous){
 }
 
 function updateHealthBars() {
-  bossHealthBars.update(world.scene,boss.encounters);
-  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp});
+  bossHealthBars.update(world.scene,boss.encounters,screenProjection);
+  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp},screenProjection);
 }
 
 function render(dt) {
   simulateFrame=dt>0;
-  if(!simulateFrame){world.scene.render();updateHealthBars();return;}
+  if(!simulateFrame){world.scene.render();screenProjection.beginFrame();updateHealthBars();return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -339,6 +346,9 @@ function render(dt) {
       text('#attack-label',result.chargeProgress>0?'심판 준비':'검 공격');
     }
     combatResult=result;
+    const busy=result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.livingCount>0||boss.loading;
+    const frameLimit=renderActivity.limit({busy,quality:qualityMode});
+    if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
     const attacking = !result.captured&&!result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
     if (attacking && result.actionId !== shotActionId) {
@@ -383,9 +393,10 @@ function render(dt) {
     updateButtons();
   }
   statusTime += dt;
-  if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
+  if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
-  damageNumbers?.update(dt);
+  screenProjection.beginFrame();
+  damageNumbers?.update(dt,screenProjection);
   updateHealthBars();
 }
 
@@ -396,6 +407,8 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine);
+  screenProjection=new ScreenProjection(world.scene);
+  screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
   bossHealthBars=new BossHealthBars($('#boss-hud'));
@@ -429,6 +442,9 @@ try {
   training = createTrainingTargets(world.scene, world.shadows,damageFeedback);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
+  const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
+  for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
+  document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
   setupFullscreen($('#fullscreen-button'), toast);
   frameLoop=new FrameLoop(engine,render);
   const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open;frameLoop.setPaused(document.hidden||settingsOpen||deathScreen.isOpen());audio.setSuspended(document.hidden||settingsOpen);};

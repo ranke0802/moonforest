@@ -7,19 +7,18 @@ export function projectBossHealth(scene,position,width,height){
   return {x:p.x*width/renderWidth,y:p.y*height/renderHeight,visible:p.z>=0&&p.z<=1&&p.x>=0&&p.x<=renderWidth&&p.y>=0&&p.y<=renderHeight};
 }
 
-export function updateBossHealthPosition(scene,encounter,element){
+export function updateBossHealthPosition(scene,encounter,element,projection){
   if(!encounter?.active){element.hidden=true;return;}
-  const canvas=scene.getEngine().getRenderingCanvas();
-  const p=projectBossHealth(scene,encounter.actor.position,canvas.clientWidth,canvas.clientHeight);
+  const canvas=projection?null:scene.getEngine().getRenderingCanvas();
+  const p=projection?projection.project(encounter.actor.position):projectBossHealth(scene,encounter.actor.position,canvas.clientWidth,canvas.clientHeight);
   element.hidden=!p.visible;
-  element.style.left='0';element.style.top='0';
   const transform=`translate3d(${p.x}px,${p.y+8}px,0) translateX(-50%)`;
   if(element.style.transform!==transform)element.style.transform=transform;
 }
 
 export class BossHealthBars {
   constructor(template) { this.template = template; this.items = new Map(); }
-  update(scene, encounters) {
+  update(scene, encounters, projection) {
     const visible = new Set();
     for (const boss of encounters) {
       if (!boss.active) continue;
@@ -32,6 +31,7 @@ export class BossHealthBars {
           for (const child of element.querySelectorAll('[id]')) child.id += `-${boss.id}`;
           this.template.parentElement.append(element);
         }
+        element.style.left='0';element.style.top='0';
         element.dataset.bossId = String(boss.id);
         element.dataset.kind = boss.kind;
         element.setAttribute('aria-label', `${boss.kind==='goblin'?'고블린':'곰 보스'} ${boss.number??boss.id} 체력`);
@@ -47,7 +47,7 @@ export class BossHealthBars {
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }
-      updateBossHealthPosition(scene, boss, item.element);
+      updateBossHealthPosition(scene, boss, item.element, projection);
     }
     for (const [id, item] of this.items) if (!visible.has(id)) item.element.hidden = true;
     if (!visible.size) this.template.hidden = true;

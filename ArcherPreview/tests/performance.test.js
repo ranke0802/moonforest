@@ -1,8 +1,51 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { NullEngine, Scene, TransformNode, Vector3 } from '@babylonjs/core';
+import { NullEngine, Scene, TransformNode, Vector3, FreeCamera, Matrix } from '@babylonjs/core';
 import { FrameLoop } from '../src/frame-loop.js';
 import { orderPoseNodes, refreshPoseMatrices } from '../src/pose-matrices.js';
+import { renderPixelRatio, RenderActivity } from '../src/render-policy.js';
+import { ScreenProjection } from '../src/screen-projection.js';
+
+test('touch rendering bounds supersampling while keeping desktop quality and low-DPR screens intact',()=>{
+  assert.equal(renderPixelRatio(3,'high',true),2);
+  assert.equal(renderPixelRatio(3,'balanced',true),1.5);
+  assert.equal(renderPixelRatio(3,'high',false),3);
+  assert.equal(renderPixelRatio(1,'high',true),1);
+  assert.equal(renderPixelRatio(3,'battery',true),1);
+  assert.equal(renderPixelRatio(NaN,'unknown',true),1);
+});
+
+test('mobile idle frames fall to 30, input immediately wakes 60, and combat never idles',()=>{
+  let time=0;const activity=new RenderActivity(true,()=>time);
+  assert.equal(activity.limit(),60);
+  time=2999;assert.equal(activity.limit(),60);
+  time=3000;assert.equal(activity.limit(),30);
+  activity.wake();assert.equal(activity.limit(),60);
+  time=10000;assert.equal(activity.limit({busy:true}),60);
+  time=12000;assert.equal(activity.limit(),60);
+  time=13000;assert.equal(activity.limit(),30);
+  assert.equal(activity.limit({busy:true,quality:'battery'}),30);
+  const desktop=new RenderActivity(false,()=>time);time+=10000;assert.equal(desktop.limit(),60);
+});
+
+test('shared HUD projection matches camera transforms across render scale and orientation changes',()=>{
+  const engine=new NullEngine({renderWidth:1280,renderHeight:720}),scene=new Scene(engine);
+  const camera=new FreeCamera('camera',new Vector3(0,2,-6),scene);camera.setTarget(new Vector3(0,1,0));scene.render();
+  const projection=new ScreenProjection(scene),position=new Vector3(1,1.4,0);
+  for(const [width,height] of [[640,360],[844,390],[390,844]]){
+    projection.resize(width,height);projection.beginFrame();
+    const expected=Vector3.Project(position,Matrix.Identity(),scene.getTransformMatrix(),camera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight()));
+    const result=projection.project(position);
+    assert.ok(result.visible);
+    assert.ok(Math.abs(result.x-expected.x*width/engine.getRenderWidth())<1e-6);
+    assert.ok(Math.abs(result.y-expected.y*height/engine.getRenderHeight())<1e-6);
+  }
+  const before={...projection.project(position)};
+  camera.position.set(6,2,0);camera.setTarget(new Vector3(0,1,0));scene.render();projection.beginFrame();
+  assert.ok(Math.abs(projection.project(position).x-before.x)>5);
+  assert.equal(projection.project(new Vector3(100,0,0)).visible,false);
+  scene.dispose();engine.dispose();
+});
 
 test('suspended rendering stops all frames, resumes without advancing hidden time, and repaints resize once',()=>{
   const callbacks=new Set(),steps=[];let time=0;
