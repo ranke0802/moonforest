@@ -10,6 +10,10 @@ export class PlaygroundInput {
     this.stickIntent = { x: 0, y: 0 };
     this.joystickPointer = null;
     this.cameraPointers = new Map();
+    this.mousePointer = null;
+    this.mouseAttackPointer = null;
+    this.mouseButtons = 0;
+    this.mouseChordReleased = false;
     this.cameraMode = 'orbit';
     this.panOffset = { x: 0, y: 0, z: 0 };
     this.knob = document.querySelector('#joystick-knob');
@@ -50,9 +54,11 @@ export class PlaygroundInput {
     } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyF: this.callbacks.guard, KeyE: this.callbacks.potion, Space: this.callbacks.dodge }[e.code])?.();
   }
   pointerDown(e) {
+    if (document.querySelector('dialog[open]')) return;
     e.preventDefault();
     this.canvas.focus({ preventScroll: true });
     this.canvas.setPointerCapture(e.pointerId);
+    if (e.pointerType === 'mouse') { this.mousePointer = e.pointerId; this.updateMouseButtons(e); return; }
     const box = this.canvas.getBoundingClientRect();
     const inMoveZone = e.clientX - box.left < box.width * .42 && e.clientY - box.top > box.height * .55;
     if (e.pointerType === 'touch' && inMoveZone && this.joystickPointer === null && this.callbacks.canMove()) {
@@ -69,13 +75,16 @@ export class PlaygroundInput {
     }
   }
   pointerMove(e) {
+    if (e.pointerType === 'mouse') {
+      if (this.mousePointer === e.pointerId && this.canvas.hasPointerCapture(e.pointerId)) this.updateMouseButtons(e);
+      return;
+    }
     if (e.pointerId === this.joystickPointer) { this.moveStick(e); return; }
     const previous = this.cameraPointers.get(e.pointerId);
     if (!previous) return;
     const previousGesture = this.gesture;
     this.cameraPointers.set(e.pointerId, { ...previous, x: e.clientX, y: e.clientY });
-    // Both left and right mouse drags always orbit; middle drag pans.
-    // The mode switch applies to touch, which has no separate mouse buttons.
+    // Pen drags orbit; the mode switch applies to touch.
     if (e.pointerType !== 'touch') this.drag(e.clientX - previous.x, e.clientY - previous.y, previous.button === 1);
     else {
       const now = this.measureGesture();
@@ -86,6 +95,30 @@ export class PlaygroundInput {
       }
     }
     this.gesture = this.measureGesture();
+  }
+  updateMouseButtons(e) {
+    // Pointer events report extra button presses/releases as pointermove.
+    // Read the bitmask so attacking and orbiting can happen together.
+    const buttons = e.buttons ?? (e.type === 'pointerup' ? 0 : e.button === 2 ? 2 : e.button === 1 ? 4 : 1);
+    this.mouseChordReleased = Boolean(buttons && (this.mouseButtons & ~buttons));
+    this.mouseButtons = buttons;
+    if (buttons & 1) {
+      if (this.mouseAttackPointer === null) {
+        this.mouseAttackPointer = e.pointerId;
+        if (this.callbacks.setAttackHeld) this.callbacks.setAttackHeld(true, `mouse:${e.pointerId}`);
+        else this.callbacks.attack?.();
+      }
+    } else if (this.mouseAttackPointer === e.pointerId) {
+      this.mouseAttackPointer = null;
+      this.callbacks.setAttackHeld?.(false, `mouse:${e.pointerId}`);
+    }
+    const button = buttons & 2 ? 2 : buttons & 4 ? 1 : null;
+    const previous = this.cameraPointers.get(e.pointerId);
+    if (button === null) this.cameraPointers.delete(e.pointerId);
+    else {
+      if (previous?.button === button && e.type === 'pointermove') this.drag(e.clientX - previous.x, e.clientY - previous.y, button === 1);
+      this.cameraPointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: 'mouse', button });
+    }
   }
   measureGesture() {
     const pointers = [...this.cameraPointers.values()].filter(pointer => pointer.type === 'touch');
@@ -104,6 +137,20 @@ export class PlaygroundInput {
     this.knob.style.transform = `translate(${v.knobX}px,${v.knobY}px)`;
   }
   pointerUp(e) {
+    // Some browsers also drop capture when one button of a chord is released.
+    // Continue the remaining button, but still cancel on blur or pointercancel.
+    if (e.type === 'lostpointercapture' && this.mousePointer === e.pointerId && this.mouseChordReleased && e.buttons === this.mouseButtons) {
+      this.mouseChordReleased = false;
+      this.canvas.setPointerCapture(e.pointerId);
+      return;
+    }
+    if (this.mousePointer === e.pointerId) { this.mousePointer = null; this.mouseButtons = 0; this.mouseChordReleased = false; }
+    if (this.mouseAttackPointer === e.pointerId) {
+      this.mouseAttackPointer = null;
+      if (e.type === 'pointerup') this.callbacks.setAttackHeld?.(false, `mouse:${e.pointerId}`);
+      else if (this.callbacks.cancelAttackInput) this.callbacks.cancelAttackInput(`mouse:${e.pointerId}`);
+      else this.callbacks.setAttackHeld?.(false, `mouse:${e.pointerId}`);
+    }
     if (e.pointerId === this.joystickPointer) { this.stick = { x: 0, y: 0 }; this.stickIntent={x:0,y:0}; this.joystickPointer = null; this.joystick.hidden = true; this.hint.style.opacity = 1; }
     this.cameraPointers.delete(e.pointerId);
     this.gesture = this.measureGesture();
@@ -135,6 +182,8 @@ export class PlaygroundInput {
   }
   reset() {
     this.keys.clear(); this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.cameraPointers.clear(); this.gesture = null; this.joystick.hidden = true; this.hint.style.opacity = 1;
+    this.mousePointer = null; this.mouseAttackPointer = null;
+    this.mouseButtons = 0; this.mouseChordReleased = false;
     this.stickIntent={x:0,y:0};
     if(this.callbacks.cancelAttackInput)this.callbacks.cancelAttackInput();
     else this.callbacks.setAttackHeld?.(false);

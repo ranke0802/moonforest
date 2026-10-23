@@ -6,7 +6,7 @@ import { WarriorV2Controller } from '../src/warrior-v2.js';
 class Surface {
   constructor() { this.events = new Map(); this.style = {}; this.hidden = true; this.captured = new Set(); }
   addEventListener(name, fn) { if (!this.events.has(name)) this.events.set(name, []); this.events.get(name).push(fn); }
-  emit(name, props = {}) { const event = { preventDefault() {}, target: this, ...props }; for (const fn of this.events.get(name) || []) fn(event); }
+  emit(name, props = {}) { const event = { type: name, preventDefault() {}, target: this, ...props }; for (const fn of this.events.get(name) || []) fn(event); }
   focus() {}
   getBoundingClientRect() { return { left: 0, top: 0, width: 1000, height: 800 }; }
   setPointerCapture(id) { this.captured.add(id); }
@@ -129,17 +129,20 @@ test('DOM stub: a third touch cannot orbit and replacing the pinch pair rebases 
   assert.ok(camera.radius < 5); assert.equal(camera.alpha, 1); assert.equal(camera.beta, 1);
 });
 
-test('DOM stub: left/right orbit, middle pan, wheel zoom and keyboard controls remain available', () => {
-  const { input, camera, canvas } = setup();
+test('DOM stub: left attacks without orbit, right orbits, middle pans, wheel and keys remain available', () => {
+  const held = [];
+  const { input, camera, canvas } = setup({ setAttackHeld: value => held.push(value) });
   const mouse = (name, x, y, button = 0) => canvas.emit(name, { pointerId: 8, pointerType: 'mouse', button, clientX: x, clientY: y });
   mouse('pointerdown', 600, 200); mouse('pointermove', 620, 210);
-  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, .95);
+  assert.equal(camera.alpha, 1); assert.equal(camera.beta, 1); assert.deepEqual(held, [true]);
   mouse('pointerup', 620, 210);
+  assert.deepEqual(held, [true, false]);
   mouse('pointerdown', 620, 210, 2); mouse('pointermove', 640, 230, 2);
-  assert.equal(camera.alpha, 1.1 + .1); assert.equal(camera.beta, .95 - .1); assert.equal(input.panOffset.x, 0);
+  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, .9); assert.equal(input.panOffset.x, 0);
   mouse('pointerup', 640, 230, 2);
   mouse('pointerdown', 640, 230, 1); mouse('pointermove', 660, 250, 1);
-  assert.equal(camera.alpha, 1.1 + .1); assert.equal(camera.beta, .95 - .1); assert.notEqual(input.panOffset.x, 0);
+  assert.equal(camera.alpha, 1.1); assert.equal(camera.beta, .9); assert.notEqual(input.panOffset.x, 0);
+  assert.deepEqual(held, [true, false], 'right and middle buttons cannot trigger attacks');
   canvas.emit('wheel', { deltaY: 100 });
   assert.ok(camera.radius > 5);
   window.emit('keydown', { code: 'KeyW', target: { tagName: 'BODY' } });
@@ -149,13 +152,13 @@ test('DOM stub: left/right orbit, middle pan, wheel zoom and keyboard controls r
   assert.deepEqual(input.value(), { x: 0, y: 0, run: false });
 });
 
-test('wheel pixel and line units agree; left drag still rotates after touch pan mode', () => {
+test('wheel pixel and line units agree; right drag still rotates after touch pan mode', () => {
   const a=setup(); a.canvas.emit('wheel',{deltaY:-48,deltaMode:0});
   const b=setup(); b.canvas.emit('wheel',{deltaY:-3,deltaMode:1});
   assert.equal(a.camera.radius,b.camera.radius);
   b.input.cameraMode='pan';
-  b.canvas.emit('pointerdown',{pointerId:1,pointerType:'mouse',button:0,clientX:500,clientY:300});
-  b.canvas.emit('pointermove',{pointerId:1,pointerType:'mouse',button:0,clientX:600,clientY:300});
+  b.canvas.emit('pointerdown',{pointerId:1,pointerType:'mouse',button:2,clientX:500,clientY:300});
+  b.canvas.emit('pointermove',{pointerId:1,pointerType:'mouse',button:2,clientX:600,clientY:300});
   assert.equal(b.camera.alpha,1.5); assert.equal(b.input.panOffset.x,0);
 });
 
@@ -244,6 +247,45 @@ function combatInput(){
   const release=code=>window.emit('keyup',{code});
   return {...controls,c,press,release,tick:(dt=.016)=>c.update(dt,controls.input.value())};
 }
+test('mouse: a short click attacks once; holding triggers Judgment without an extra release attack',()=>{
+ const {c,canvas,camera,tick}=combatInput();
+ const mouse=(name,buttons,x=600)=>canvas.emit(name,{pointerId:8,pointerType:'mouse',buttons,button:0,clientX:x,clientY:300});
+ mouse('pointerdown',1);assert.equal(tick(.1).state,'idle');
+ mouse('pointermove',1,650);assert.equal(camera.alpha,1);
+ mouse('pointerup',0,650);assert.equal(tick().state,'slash');assert.equal(c.serial,1);
+ tick(2);mouse('pointerdown',1);assert.equal(tick(.46).state,'judgment');assert.equal(c.serial,2);
+ mouse('pointerup',0);tick(4);assert.equal(c.action,null);assert.equal(c.serial,2);
+});
+
+test('mouse: right and left buttons can be pressed and released in either order',()=>{
+ for(const first of [1,2]){
+  const calls=[];const {canvas,camera,input}=setup({setAttackHeld:(held,source)=>calls.push([held,source])});
+  const mouse=(name,buttons,x)=>canvas.emit(name,{pointerId:8,pointerType:'mouse',buttons,button:-1,clientX:x,clientY:300});
+  mouse('pointerdown',first,600);mouse('pointermove',3,600);mouse('pointermove',3,620);
+  assert.equal(camera.alpha,1.1);assert.deepEqual(calls,[[true,'mouse:8']]);
+  mouse('pointermove',first,620);
+  canvas.captured.delete(8);
+  canvas.emit('lostpointercapture',{pointerId:8,pointerType:'mouse',buttons:first});
+  assert.equal(canvas.hasPointerCapture(8),true,'remaining chord button retains capture');
+  if(first===1){assert.equal(input.cameraPointers.size,0);assert.equal(calls.length,1);}
+  else{assert.equal(input.cameraPointers.size,1);assert.deepEqual(calls,[[true,'mouse:8'],[false,'mouse:8']]);}
+  mouse('pointerup',0,620);assert.deepEqual(calls,[[true,'mouse:8'],[false,'mouse:8']]);
+  assert.equal(input.cameraPointers.size,0);
+ }
+});
+
+test('mouse: cancellation and focus loss discard pending taps and do not restart from stale movement',()=>{
+ for(const cancel of ['pointercancel','lostpointercapture','blur']){
+  const {c,canvas,tick}=combatInput();
+  const event={pointerId:8,pointerType:'mouse',button:0,buttons:1,clientX:600,clientY:300};
+  canvas.emit('pointerdown',event);tick(.1);
+  if(cancel==='blur')window.emit('blur');else canvas.emit(cancel,event);
+  canvas.emit('pointermove',{...event,clientX:650});tick(.6);
+  canvas.emit('pointerup',{...event,buttons:0});tick();
+  assert.equal(c.held,false);assert.equal(c.serial,0);assert.equal(c.action,null);
+ }
+});
+
 test('keyboard: new movement cannot interrupt normal attack; tap buffer wins at completion',()=>{
  const {c,press,release,tick}=combatInput();press('KeyW');assert.equal(tick().state,'run');
  press('KeyJ');tick(.05);release('KeyJ');assert.equal(tick().state,'slash');

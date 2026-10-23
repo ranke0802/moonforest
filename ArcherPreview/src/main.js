@@ -124,8 +124,8 @@ const actions = {
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
   potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion())audio.play('heal_start');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
-  setAttackHeld(held) { setAttackHeld('keyboard', held); },
-  cancelAttackInput() { cancelAttackInput(); },
+  setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
+  cancelAttackInput(source) { cancelAttackInput(source); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive();audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
@@ -274,7 +274,7 @@ async function loadCharacter() {
     $('#guard-button').hidden = !isV2();
     $('#dodge-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
-    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동, J 공격. 왼쪽 또는 오른쪽 마우스 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
+    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, v2에서 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, 좌클릭 또는 J 공격, 우클릭 드래그 회전, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
     canvas.focus({ preventScroll: true });
   } catch (error) {

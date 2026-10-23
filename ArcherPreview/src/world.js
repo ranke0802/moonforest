@@ -4,6 +4,9 @@ export function createWorld(engine) {
   const scene = new Scene(engine);
   // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
   scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
+  // Babylon releases capture on any mouse button release, including during a
+  // left-attack/right-orbit chord. Our input router owns pointer capture instead.
+  scene.detachControl();
   scene.useRightHandedSystem = true;
   scene.clearColor = new Color4(.035, .052, .087, 1);
   scene.fogMode = Scene.FOGMODE_EXP2;
