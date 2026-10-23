@@ -89,6 +89,10 @@ export class BossEncounter {
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
   isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
+  hurtCapsules(){
+    const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
+    return pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
+  }
   get playerHp(){return this.combat.hp;} set playerHp(value){this.combat.hp=value;}
   get playerMaxHp(){return this.combat.maxHp;} set playerMaxHp(value){this.combat.maxHp=value;}
   get playerInvulnerable(){return this.combat.invulnerable;} set playerInvulnerable(value){this.combat.invulnerable=value;}
@@ -158,8 +162,7 @@ export class BossEncounter {
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
     if(sample&&clearSight&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
-      const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
-      const capsules=pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
+      const capsules=this.hurtCapsules();
       const grounded=['down','recover'].includes(this.brain.mode);
       // Downed/recovering bosses are always vulnerable within melee range, even
       // when an upright sword swing passes above the lying skeleton. The gate

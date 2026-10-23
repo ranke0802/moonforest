@@ -29,7 +29,7 @@ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtime
    for(let i=0;i<12;i++){await page.waitForTimeout(120);const s=await inspect();assert.ok(clear(s.position,.32),'Player clear of environment');report.movement.push(s.position);}
    for(const k of keys)await page.keyboard.up(k);
   }
-  report.checks.push('Player remains outside every tree, grass bed and target during real movement input');
+  report.checks.push('Player remains outside every tree and target during real movement input; grass is passable');
   await page.locator('#boss-count').selectOption('3');await page.locator('#summon-boss').click();
   await page.waitForFunction(()=>archerPreview.inspect().boss.count===3&&!archerPreview.inspect().boss.loading,null,{timeout:90000});
   report.bossSamples=[];

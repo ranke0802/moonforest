@@ -34,6 +34,12 @@ test('close goblin attacks, guard, knockdown, reverse recovery and death use sou
  b.hit({damage:1000});assert.equal(b.state,'Fall_Dead_from_Abdominal_Injury');assert.equal(b.hp,0);
  assert.equal(b.update(10,1).events.length,0);
 });
+
+test('goblin closes inside player sword reach before beginning its close attack',()=>{
+ const b=new GoblinBrain(durations,()=>.5);b.wait=0;b.evadeCooldown=100;b.tauntCooldown=100;
+ assert.ok(b.update(.016,1.45).speed>0);assert.equal(b.mode,'move');
+ b.update(.016,1.18);assert.equal(b.mode,'attack');
+});
 test('all living reactions can be interrupted by shield stun and blocked attacks recover in one second',()=>{
  const b=new GoblinBrain(durations,()=>.5);b.start('Sword_Judgment','attack');b.hit({damage:10,stun:1.5});
  assert.equal(b.stagger,1.5);assert.equal(b.flashDuration,.75);assert.equal(b.mode,'hit');

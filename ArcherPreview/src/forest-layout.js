@@ -20,7 +20,6 @@ export const GRASS_BEDS = [
 ];
 export const FOREST_OBSTACLES = [
   ...TREE_PLACEMENTS.map((p,i)=>({id:`tree-${i}`,x:p.x,z:p.z,radius:p.radius,height:6})),
-  ...GRASS_BEDS.map((p,i)=>({...p,id:`grass-bed-${i}`,height:.45})),
 ];
 export const TRAINING_OBSTACLES = [
   {id:'dummy-south',x:-1,z:-4,radius:.3,height:1.85},

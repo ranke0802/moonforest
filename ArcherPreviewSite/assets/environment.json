@@ -11,11 +11,12 @@
       ]
     },
     "oak-tree": {
-      "model": "./content/887295d06cbd383ff8e7936daaed003fb8c0ecf96cc5db3952dea012fb364850.gltf",
+      "model": "./content/cf50a06176289fd8ce588c40686963d1b41c997b8e768313f82226c4026a3b1f.gltf",
       "resources": [
         "./content/0cbab968d209fa5c219dbe8a606ac472d16d7474e2f400aacdfedb9e0c2ebb0b.jpg",
-        "./content/a7870ea4afb2944aeb57bce60c706ab007230eaa3bcf727912b4bfb3d8f77a7b.bin",
-        "./content/887295d06cbd383ff8e7936daaed003fb8c0ecf96cc5db3952dea012fb364850.gltf"
+        "./content/112f5475d6885d9e932c0d300ec84d802ea50e57bc33fc48b6ede0a1213cb13c.bin",
+        "./content/4d03da4780af2807f46c4eea768b5702b6fa99e5f53411cc6c85588dd8852d8c.bin",
+        "./content/cf50a06176289fd8ce588c40686963d1b41c997b8e768313f82226c4026a3b1f.gltf"
       ]
     },
     "grass-tuft": {

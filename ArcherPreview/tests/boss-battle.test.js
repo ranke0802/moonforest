@@ -118,3 +118,12 @@ test('five goblins coexist with bears, share player health and reuse one goblin 
  assert.ok(battle.goblinPool.slice(1).every(g=>!g.actor.isEnabled()));
  battle.resetBattle();assert.equal(battle.encounters.length,0);assert.equal(battle.playerHp,500);assert.ok([...battle.pool,...battle.goblinPool].every(e=>!e.actor.isEnabled()));
 });
+
+test('a shared sword swing damages both bear and goblin, with independent hit deduplication',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,1);await battle.summon(player,1,'goblin');
+ battle.encounters.forEach((b,i)=>{b.actor.position.set((i-.5)*.5,0,1.35);b.actor.rotation.y=Math.PI;b.dt=1/60;});
+ const sample={actionId:12,elapsed:.5,window:{id:'cut',damage:20},blade:[[-.6,1.4,1.35],[.6,1.4,1.35]]};
+ for(let i=0;i<2;i++)battle.poseAndContacts(player,{state:'slash',actionId:12},sample,null);
+ assert.deepEqual(battle.encounters.map(b=>b.hitCount),[1,1]);
+ assert.deepEqual(battle.encounters.map(b=>b.brain.hp),[880,160]);
+});

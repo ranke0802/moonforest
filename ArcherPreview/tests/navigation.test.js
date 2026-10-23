@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ArenaNavigation } from '../src/navigation.js';
-import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from '../src/forest-layout.js';
+import { FOREST_OBSTACLES, TRAINING_OBSTACLES, GRASS_BEDS } from '../src/forest-layout.js';
 const trunk={id:'tree',x:0,z:0,radius:1,height:6};
 test('swept character and boss collision prevents tunneling even for long dodge/throw steps',()=>{
  const nav=new ArenaNavigation([trunk]);
@@ -33,8 +33,18 @@ test('training layout has one target and open routes for bears between major are
  const occupied=[{x:0,z:0,radius:.8}];
  for(let i=0;i<5;i++){const p=nav.findFree({x:-5.3,z:1},.7,6.5,occupied);assert.ok(nav.free(p,.7,6.5));assert.ok(occupied.every(o=>Math.hypot(p.x-o.x,p.z-o.z)>=.7+o.radius+.12));occupied.push({...p,radius:.7});}
 });
-test('trees interrupt combat sight lines while low grass does not',()=>{
+test('trees interrupt combat sight lines while low obstacles do not',()=>{
  const a={x:-3,z:0},b={x:3,z:0};assert.equal(new ArenaNavigation([trunk]).segmentClear(a,b,0,true),false);
- const grass={...trunk,id:'grass',height:.4};assert.equal(new ArenaNavigation([grass]).segmentClear(a,b,0,true),true);
- assert.equal(new ArenaNavigation([grass]).segmentClear(a,b,.7),false);
+ const low={...trunk,id:'low-rock',height:.4};assert.equal(new ArenaNavigation([low]).segmentClear(a,b,0,true),true);
+ assert.equal(new ArenaNavigation([low]).segmentClear(a,b,.7),false);
+});
+
+test('warrior, goblin and bear can cross the rendered grass beds; trunks stay solid',()=>{
+ assert.ok(FOREST_OBSTACLES.every(o=>o.id.startsWith('tree-')));
+ const nav=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]),bed=GRASS_BEDS[0];
+ for(const radius of [.32,.34,.7]){
+  const from={x:bed.x-1.5,z:bed.z},to={x:bed.x+1.5,z:bed.z};
+  assert.ok(nav.segmentClear(from,to,radius));
+  const actual=nav.move(from,to,radius);assert.ok(Math.hypot(actual.x-to.x,actual.z-to.z)<1e-6);
+ }
 });

@@ -50,7 +50,7 @@ export class GoblinBrain {
    }
    return {events,speed:this.mode==='turn'?1.3:0};
   }
-  if(distance>1.5){
+  if(distance>1.2){
    if(this.decision<=0){
     this.decision=.75;this.steps++;
     if(distance>6&&this.tauntCooldown<=0&&this.random()<.28){this.tauntCooldown=10+this.random()*7;this.start('Gangnam_Groove','taunt');return {events,speed:0};}
