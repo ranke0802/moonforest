@@ -56,6 +56,15 @@ export class BossBattle {
   get playerReaction() { return this.combat.reaction; }
   get potions() { return this.combat.potions; }
   get grab() { return this.combat.grabOwner?.grab ?? this.noGrab; }
+  get canEscapeGrab() { return this.playerAlive && Boolean(this.grab.canEscape); }
+  escapeGrab() {
+    const owner=this.combat.grabOwner;
+    if(!this.canEscapeGrab||!owner?.grab.escape())return false;
+    owner.pendingEvents=[];
+    this.actionVersion++;
+    this.lastHit='잡기 탈출 · 회피';this.onChange(this);
+    return true;
+  }
   get playerNodes() { return this.combat.nodes; }
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }

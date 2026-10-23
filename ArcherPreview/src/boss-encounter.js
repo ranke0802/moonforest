@@ -59,6 +59,7 @@ export class BossEncounter {
           if(mesh.skeleton){if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;mesh.skeleton.useTextureToStoreBoneMatrices=true;}
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
+        this.world.lighting?.registerMeshes(this.asset.meshes);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
         this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);

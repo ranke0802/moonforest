@@ -97,6 +97,7 @@
 .dodge-action svg{width:26px;height:26px;fill:none;stroke:#d5eee7;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.dodge-action span{font-size:11px}.dodge-action kbd{font-size:8px;color:#a2bdcb}
 @media(max-width:800px),(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"] #dodge-button{width:64px;height:64px}.dodge-action kbd{display:none}}
 .motion-speed-toggle{height:36px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:#111a2c;color:#dce4f2;font:inherit;font-size:12px;white-space:nowrap;touch-action:manipulation}
+.live-fps{min-width:63px;font-size:17px;font-variant-numeric:tabular-nums;line-height:36px;color:#dce4f2;text-align:right;white-space:nowrap;pointer-events:none}
 #motion-speed-toggle[hidden],#dodge-speed-control[hidden]{display:none}
 .motion-speed-dialog{width:min(400px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:20px;border:1px solid #726286;border-radius:16px;background:#131b2b;color:#e8e9f4;box-shadow:0 18px 80px #0009;overflow-y:auto;font-size:12px;overscroll-behavior:contain}
 .motion-speed-dialog::backdrop{background:#050a13b3;backdrop-filter:blur(3px)}

@@ -1,6 +1,7 @@
 import { Matrix, Quaternion, Vector3 } from '@babylonjs/core';
 
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
+export const GRAB_ESCAPE_WINDOW = .3;
 const localPosition=(node,actor)=>{
   actor.computeWorldMatrix(true);node.computeWorldMatrix(true);
   return Vector3.TransformCoordinates(node.getAbsolutePosition(),actor.getWorldMatrix().clone().invert());
@@ -12,11 +13,13 @@ export class BossGrab {
   constructor(onControl=()=>{},onImpact=()=>{}){this.onControl=onControl;this.onImpact=onImpact;this.phase=null;}
   get active(){return this.phase!==null;}
   get holding(){return this.phase==='holding';}
+  get canEscape(){return this.holding&&this.time<=GRAB_ESCAPE_WINDOW+1e-9;}
   get label(){return this.holding?'붙잡힘 · 회전':this.phase==='flight'?'던져짐':this.active?'착지 · 경직':'';}
   start(player,nodes,bossSerial,critical=false){
     if(this.active||!nodes?.['mixamorig:RightFoot']||!nodes?.['mixamorig:Head'])return false;
     this.player=player;this.serial=bossSerial;this.critical=critical;this.phase='holding';this.time=0;
     this.savedRotation=player.rotation.clone();this.savedQuaternion=player.rotationQuaternion?.clone()||null;this.savedY=player.position.y;
+    this.startPosition=player.position.clone();
     this.startRotation=this.savedQuaternion?.clone()||Quaternion.FromEulerVector(this.savedRotation);
     this.foot=localPosition(nodes['mixamorig:RightFoot'],player);
     this.points=Object.entries(nodes).filter(([name])=>name.startsWith('mixamorig:')).map(([,node])=>localPosition(node,player));
@@ -69,6 +72,12 @@ export class BossGrab {
       if(t>=1)this.reset();
     }
     this.player.computeWorldMatrix(true);
+  }
+  escape(){
+    if(!this.canEscape)return false;
+    // Restore the safe grounded capture point before beginning the player's roll.
+    this.player.position.copyFrom(this.startPosition);
+    this.reset();return true;
   }
   reset(){
     if(!this.active)return;

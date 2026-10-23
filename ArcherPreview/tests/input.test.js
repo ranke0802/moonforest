@@ -247,6 +247,22 @@ function combatInput(){
   const release=code=>window.emit('keyup',{code});
   return {...controls,c,press,release,tick:(dt=.016)=>c.update(dt,controls.input.value())};
 }
+test('direction keys and a new touch stick remain live through block stun and capture without moving the actor',()=>{
+ for(const lock of ['blocked','captured'])for(const mode of ['keyboard','touch']){
+  const {c,input,pointer,press,release,tick}=combatInput();c.durations.dodge=2;
+  if(lock==='blocked')c.hit(.5,{force:true,reason:'blocked'});else c.capture();
+  if(mode==='keyboard')press('ArrowRight');
+  else {pointer('pointerdown',31,120,650);pointer('pointermove',31,174,650);}
+  assert.ok(input.value().x>.9);assert.equal(tick(.1).speed,0);
+  if(mode==='keyboard'){release('ArrowRight');press('ArrowUp');}
+  else pointer('pointermove',31,120,596);
+  assert.ok(input.value().y>.9);assert.equal(tick(.1).moving,false);
+  assert.equal(c.dodge(),false);assert.equal(c.attack(),false);
+  if(lock==='captured')c.releaseCapture();else tick(.31);
+  assert.ok(input.value().y>.9,'unlock must preserve the currently held direction');
+  assert.equal(c.dodge(),true);assert.equal(tick().state,'dodge');
+ }
+});
 test('mouse: a short click attacks once; holding triggers Judgment without an extra release attack',()=>{
  const {c,canvas,camera,tick}=combatInput();
  const mouse=(name,buttons,x=600)=>canvas.emit(name,{pointerId:8,pointerType:'mouse',buttons,button:0,clientX:x,clientY:300});

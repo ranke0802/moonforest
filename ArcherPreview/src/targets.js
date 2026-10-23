@@ -111,7 +111,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
         const mount=new TransformNode(`training-${record.target.id}-model`,scene);mount.parent=record.sway;mount.position.y=-.2;
         for(const node of instance.rootNodes)node.parent=mount;
         record.parts=mount.getChildMeshes();
-        for(const mesh of record.parts){mesh.isPickable=false;mesh.receiveShadows=true;mesh.overlayColor=Color3.White();shadows?.addShadowCaster?.(mesh,false);casters.push(mesh);}
+        for(const mesh of record.parts){mesh.isPickable=false;mesh.overlayColor=Color3.White();shadows?.addShadowCaster?.(mesh,false);casters.push(mesh);}
       }
     },
     /** Horizontal distance is intentional: player skeleton/root height does not change range. */

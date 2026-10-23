@@ -102,6 +102,7 @@ function applyRenderQuality() {
   screenProjection?.resize(canvas.clientWidth,canvas.clientHeight);
   renderActivity.wake();
   engine.maxFPS=renderActivity.limit({quality:qualityMode});
+  world?.lighting.setQuality(qualityMode);
   $('#quality-select').value = qualityMode;
   if(!document.hidden)frameLoop?.invalidate();
 }
@@ -112,7 +113,7 @@ function toast(message) {
 }
 function updateButtons() {
   const dead = controller?.dead || false;
-  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
+  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
   $('#death-label').textContent = dead ? '부활' : '사망';
@@ -121,6 +122,7 @@ function updateButtons() {
   if(isV2())$('#guard-button').removeAttribute('aria-pressed');
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
+  if(ready&&isV2()&&!dead&&boss?.canEscapeGrab)$('#dodge-button').disabled=false;
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
   $('#boss-count').disabled = $('#summon-boss').disabled;
   $('#summon-goblin').disabled=$('#goblin-count').disabled=$('#summon-boss').disabled;
@@ -143,14 +145,17 @@ const actions = {
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive();audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
-  canMove() { return ready && !controller.dead && !controller.captured && !controller.groggy && (!boss?.active || boss.playerAlive); },
+  // Accept direction intent during locks; the controller still prevents displacement.
+  canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
 };
 
 function startDefense(kind){
+  const directionInput=input.value();
+  if(kind==='dodge'&&controller.captured&&!boss.escapeGrab())return;
   if(!controller[kind]())return;
   attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
-    rollDirection=dodgeDirection(input.value(),world.camera.alpha,actor.rotation.y);
+    rollDirection=dodgeDirection(directionInput,world.camera.alpha,actor.rotation.y);
     actor.rotation.y=Math.atan2(rollDirection.x,rollDirection.z);
   }
 }
@@ -253,6 +258,7 @@ async function loadCharacter() {
       }
       world.shadows.addShadowCaster(mesh, false);
     }
+    world.lighting.registerMeshes(container.meshes);
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
@@ -356,7 +362,10 @@ function render(dt) {
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
       const target=isV2()?boss.nearestTarget(actor.position):null;
-      if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
+      if(isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08){
+        const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
+        actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
@@ -393,7 +402,7 @@ function render(dt) {
     updateButtons();
   }
   statusTime += dt;
-  if (statusTime > .5) { $('#render-status').textContent = `${Math.round(engine.getFps())} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
+  if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render();
   screenProjection.beginFrame();
   damageNumbers?.update(dt,screenProjection);
@@ -407,6 +416,7 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine);
+  world.lighting.setQuality(qualityMode);
   screenProjection=new ScreenProjection(world.scene);
   screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
@@ -425,7 +435,7 @@ try {
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
       if(options.captured){controller.capture();audio.play('equip',{volume:.7,rate:.7});}else controller.releaseCapture();
-      attackSources.clear();strikeSampler.reset();input.reset();return true;
+      attackSources.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
     if(reacted!==false){attackSources.clear();strikeSampler.reset();}
@@ -445,9 +455,9 @@ try {
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
-  setupFullscreen($('#fullscreen-button'), toast);
+  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:true});
   frameLoop=new FrameLoop(engine,render);
-  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open;frameLoop.setPaused(document.hidden||settingsOpen||deathScreen.isOpen());audio.setSuspended(document.hidden||settingsOpen);};
+  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused)text('#live-fps','0 FPS');audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
   // Preview camera, quality and equipment changes while settings pause combat.

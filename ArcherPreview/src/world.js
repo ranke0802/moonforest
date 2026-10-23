@@ -1,6 +1,7 @@
 import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, HemisphericLight, MeshBuilder, Scene, ShadowGenerator, StandardMaterial, Vector3 } from '@babylonjs/core';
 import { ArenaNavigation } from './navigation.js';
 import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
+import { SceneLighting } from './scene-lighting.js';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
@@ -32,11 +33,13 @@ export function createWorld(engine) {
   key.diffuse = new Color3(.95, .93, 1);
   const rim = new DirectionalLight('blue-rim', new Vector3(.5, -.3, .7), scene);
   rim.intensity = .6; rim.diffuse = new Color3(.4, .65, 1);
-  const shadows = new ShadowGenerator(matchMedia('(pointer:coarse)').matches ? 1024 : 2048, key);
+  const touchDevice=matchMedia('(pointer:coarse)').matches;
+  const shadows = new ShadowGenerator(touchDevice ? 1024 : 2048, key);
   shadows.usePercentageCloserFiltering = true;
   shadows.filteringQuality = ShadowGenerator.QUALITY_MEDIUM;
   shadows.bias = .0008; shadows.normalBias = .02;
   shadows.setDarkness(.35);
+  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
 
   const ground = MeshBuilder.CreateGround('forest-floor', { width: 70, height: 70 }, scene);
   const material = new StandardMaterial('forest-floor-material', scene);
@@ -53,6 +56,7 @@ export function createWorld(engine) {
   material.diffuseTexture = texture;
   ground.material = material; ground.receiveShadows = true;
   ground.isPickable=false;ground.freezeWorldMatrix();
+  lighting.registerMeshes([ground]);
 
   const ringMaterial = new StandardMaterial('stage-ring-material', scene);
   ringMaterial.diffuseColor = new Color3(.25, .28, .38);
@@ -75,7 +79,7 @@ export function createWorld(engine) {
     mote.material = moteMaterial; mote.isPickable = false;
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
-  for(const mat of [material,ringMaterial,moteMaterial])mat.freeze();
+  for(const mat of [ringMaterial,moteMaterial])mat.freeze();
   const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
-  return { scene, camera, shadows, navigation, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { scene, camera, shadows, lighting, navigation, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }
