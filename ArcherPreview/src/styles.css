@@ -107,3 +107,4 @@
 
 /* Boss count stays beside summon on desktop and narrow touch screens. */
 .boss-spawn-row{display:flex;gap:6px;align-items:stretch}.boss-spawn-row #summon-boss{flex:1;min-width:0;width:auto;padding:11px 7px}.boss-count-label{display:flex;flex:0 0 auto}#boss-count{min-width:60px;padding:7px 3px;border-radius:8px;background:#241e1a;border:1px solid #af8052;color:#fff4dd;font:inherit;font-size:12px}#boss-count:disabled{opacity:.55}
+.goblin-spawn-row{margin-top:6px}#summon-goblin{flex:1;min-width:0;padding:11px 7px;border-radius:10px;background:#304735;border:1px solid #72876a;color:#edf4df;font-size:12px}#goblin-count{min-width:60px;padding:7px 3px;border-radius:8px;background:#1e2b20;border:1px solid #72876a;color:#edf4df;font:inherit;font-size:12px}#goblin-count:disabled{opacity:.55}

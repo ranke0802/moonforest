@@ -13,11 +13,11 @@ export function instantiateBossModel(container) {
 }
 
 export class BossModelLibrary {
-  constructor(scene) { this.scene = scene; this.loads = 0; }
+  constructor(scene,manifest='guardian-bear') { this.scene = scene; this.loads = 0; this.manifest=manifest; }
   async load() {
     if (!this.pending) {
       this.pending = (async () => {
-        const url = new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`, location.href);
+        const url = new URL(`${import.meta.env.BASE_URL}assets/${this.manifest}.json`, location.href);
         const response = await fetch(url, { cache: 'no-cache' });
         if (!response.ok) throw new Error('보스 설정을 불러오지 못했습니다.');
         this.config = await response.json();

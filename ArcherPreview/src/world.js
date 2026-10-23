@@ -77,5 +77,5 @@ export function createWorld(engine) {
   }
   for(const mat of [material,ringMaterial,moteMaterial])mat.freeze();
   const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
-  return { scene, camera, shadows, navigation, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { scene, camera, shadows, navigation, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

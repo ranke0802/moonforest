@@ -15,6 +15,7 @@ import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipment
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
+import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
@@ -112,6 +113,7 @@ function updateButtons() {
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
   $('#boss-count').disabled = $('#summon-boss').disabled;
+  $('#summon-goblin').disabled=$('#goblin-count').disabled=$('#summon-boss').disabled;
   $('#boss-controls').hidden = !isV2();
   $('#potion-button').hidden=!isV2();
   $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured||controller?.groggy;
@@ -390,7 +392,8 @@ try {
   boss=new BossBattle(world,encounter=>{
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');
     if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
-    $('#summon-boss').textContent=encounter.loading?'보스 불러오는 중…':encounter.active?'보스 다시 소환':'보스 소환';
+    $('#summon-boss').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='bear')?'보스 다시 소환':'보스 소환';
+    $('#summon-goblin').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='goblin')?'고블린 다시 소환':'고블린 소환';
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
@@ -441,13 +444,14 @@ try {
     });
     button.addEventListener('click',event=>{if(event.detail===0&&performance.now()-lastPress>350)action();});
   }
-  $('#summon-boss').addEventListener('click',async()=>{
+  for(const [selector,count,kind] of [['#summon-boss','#boss-count','bear'],['#summon-goblin','#goblin-count','goblin']])$(selector).addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$('#boss-count').value);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters)audio.play('boss_appear',{position:enemy.actor.position});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$(count).value,kind);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'equip',{position:enemy.actor.position,volume:kind==='bear'?1:.45});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}
     updateButtons();
   });
   for(const motion of BOSS_ACTIVE_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
+  for(const motion of GOBLIN_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#goblin-motion-list').append(li);}
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
@@ -491,7 +495,7 @@ try {
   $('#help-dialog').addEventListener('click', e => { if (e.target === $('#help-dialog')) { const r = e.target.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close(); } });
   document.addEventListener('click',event=>{
     const button=event.target.closest?.('button');
-    if(!button||button.disabled||button.closest('.action-controls')||['summon-boss','death-restart'].includes(button.id))return;
+    if(!button||button.disabled||button.closest('.action-controls')||['summon-boss','summon-goblin','death-restart'].includes(button.id))return;
     audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
   });
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.

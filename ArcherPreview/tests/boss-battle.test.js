@@ -5,6 +5,7 @@ import { BossBattle, normalizeBossCount, bossSpawnPositions, separateBosses } fr
 import { instantiateBossModel } from '../src/boss-models.js';
 import { BOSS_MOTIONS } from '../src/boss-spec.js';
 import { ActionAudio } from '../src/action-audio.js';
+import { GOBLIN_MOTIONS } from '../src/goblin-spec.js';
 
 function fixture(t) {
   const engine = new NullEngine(), scene = new Scene(engine), container = new AssetContainer(scene);
@@ -22,8 +23,13 @@ function fixture(t) {
   container.removeAllFromScene();
   const config = {scale:1,animations:Object.fromEntries(BOSS_MOTIONS.map(({name})=>[name,name])),catalog:BOSS_MOTIONS.map(({name})=>({name,duration:2,fps:30,rootTrack:[[0,0,0]],groundTrack:[0]}))};
   const models = {loads:0,async load(){this.loads=1;},async instantiate(){await this.load();return {config,asset:instantiateBossModel(container)};}};
+  const goblinContainer=new AssetContainer(scene);
+  for(const key of ['transformNodes','meshes','skeletons','materials'])goblinContainer[key]=container[key];
+  goblinContainer.animationGroups=GOBLIN_MOTIONS.map(({name})=>{const g=new AnimationGroup(name,scene),a=new Animation(name,'position.y',30,Animation.ANIMATIONTYPE_FLOAT);a.setKeys([{frame:0,value:1.5},{frame:60,value:1.6}]);g.addTargetedAnimation(a,nodes[0]);return g;});
+  const goblinConfig={...config,animations:Object.fromEntries(GOBLIN_MOTIONS.map(({name})=>[name,name])),catalog:GOBLIN_MOTIONS.map(({name})=>({name,duration:2,fps:30,rootTrack:[[0,0,0]],groundTrack:[0]}))};
+  const goblinModels={loads:0,async load(){this.loads=1;},async instantiate(){await this.load();return {config:goblinConfig,asset:instantiateBossModel(goblinContainer)};}};
   const player = new TransformNode('player', scene), events = [];
-  const battle = new BossBattle({scene,shadows:{addShadowCaster(){}}},()=>{},(...args)=>events.push(args),()=>true,{models});
+  const battle = new BossBattle({scene,shadows:{addShadowCaster(){}}},()=>{},(...args)=>events.push(args),()=>true,{models,goblinModels});
   battle.playerNodes = Object.fromEntries(['Head','RightFoot'].map(name=>{const n=new TransformNode(name,scene);n.parent=player;n.position.y=name==='Head'?1.8:.1;return [`mixamorig:${name}`,n];}));
   t.after(()=>{battle.hide();scene.dispose();engine.dispose();});
   return {battle,player,events,scene,container};
@@ -98,4 +104,17 @@ test('multi-boss audio tracks separate attack clocks and plays victory only afte
   audio.boss(battle,.016);assert.equal(sounds.filter(s=>s==='slash_heavy').length,2);
   bosses[0].brain.hp=0;audio.boss(battle,.016);assert.equal(sounds.includes('victory'),false);assert.equal(music.at(-1),true);
   bosses[1].brain.hp=0;audio.boss(battle,.016);audio.boss(battle,.016);assert.equal(sounds.filter(s=>s==='victory').length,1);assert.equal(music.at(-1),false);
+});
+
+test('five goblins coexist with bears, share player health and reuse one goblin asset',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,2);battle.combat.hp=300;
+ await battle.summon(player,5,'goblin');assert.equal(battle.encounters.length,7);assert.equal(battle.playerHp,300);
+ assert.equal(battle.goblinModels.loads,1);assert.equal(battle.goblinPool.length,5);
+ assert.equal(new Set(battle.encounters.map(e=>e.id)).size,7);
+ const goblins=battle.encounters.filter(e=>e.kind==='goblin');assert.ok(goblins.every(g=>g.asset.animationGroups.length===12&&g.brain.hp===180));
+ assert.notEqual(goblins[0].asset.skeletons[0],goblins[1].asset.skeletons[0]);
+ assert.equal(goblins[0].asset.meshes[0].geometry,goblins[1].asset.meshes[0].geometry);
+ await battle.summon(player,1,'goblin');assert.equal(battle.encounters.length,3);assert.equal(battle.playerHp,300);
+ assert.ok(battle.goblinPool.slice(1).every(g=>!g.actor.isEnabled()));
+ battle.resetBattle();assert.equal(battle.encounters.length,0);assert.equal(battle.playerHp,500);assert.ok([...battle.pool,...battle.goblinPool].every(e=>!e.actor.isEnabled()));
 });

@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#0b101c" />
     <meta name="description" content="Moonforest 궁수와 전사의 이동 및 공격을 직접 조작하는 3D 플레이그라운드." />
     <title>Moonforest · Character Playground</title>
-    <script type="module" crossorigin src="./assets/index-CT5PjwI6.js"></script>
+    <script type="module" crossorigin src="./assets/index-Dzn9nUwE.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/math.scalar.functions-BWXNux-o.js">
     <link rel="modulepreload" crossorigin href="./assets/observable.pure-H-M_hi7F.js">
     <link rel="modulepreload" crossorigin href="./assets/performanceConfigurator-UtxC_Odd.js">
@@ -43,10 +43,10 @@
     <link rel="modulepreload" crossorigin href="./assets/preload-helper-C7Bzh2Rg.js">
     <link rel="modulepreload" crossorigin href="./assets/baseTexture.pure-B-PZWwg9.js">
     <link rel="modulepreload" crossorigin href="./assets/texture.pure-D-ZXI31f.js">
-    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure-Iyxt3YDk.js">
-    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-BWKfGgvP.js">
-    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-BFEgKk7s.js">
-    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-KFS-NJWE.js">
+    <link rel="modulepreload" crossorigin href="./assets/renderTargetTexture.pure--vmAOJRd.js">
+    <link rel="modulepreload" crossorigin href="./assets/effectRenderer.pure-g6SKwo6k.js">
+    <link rel="modulepreload" crossorigin href="./assets/postProcess.pure-eMSeMv8g.js">
+    <link rel="modulepreload" crossorigin href="./assets/brdfTextureTools-BpALznV0.js">
     <link rel="modulepreload" crossorigin href="./assets/webAudioBaseSubGraph-Dt0pq0Kf.js">
     <link rel="modulepreload" crossorigin href="./assets/spatialWebAudio-CNw0PM6n.js">
     <link rel="modulepreload" crossorigin href="./assets/abstractSoundSource-vjAm2svO.js">
@@ -74,7 +74,7 @@
     <link rel="modulepreload" crossorigin href="./assets/bakedVertexAnimation-CP3BNGXM.js">
     <link rel="modulepreload" crossorigin href="./assets/constants-_wyaM_ID.js">
     <link rel="modulepreload" crossorigin href="./assets/cubemapToSphericalPolynomial-D2Q-3Tj0.js">
-    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-C0NdNS0h.js">
+    <link rel="modulepreload" crossorigin href="./assets/dumpTools.pure-RurXaOfh.js">
     <link rel="modulepreload" crossorigin href="./assets/helperFunctions-DHdJUWHO.js">
     <link rel="modulepreload" crossorigin href="./assets/fresnelFunction-FdYlYPwE.js">
     <link rel="modulepreload" crossorigin href="./assets/meshUboDeclaration-BATNZvmb.js">
@@ -205,7 +205,7 @@
     <link rel="modulepreload" crossorigin href="./assets/mrtFragmentDeclaration-BZpfWb0R.js">
     <link rel="modulepreload" crossorigin href="./assets/boundingBoxRendererUboDeclaration-p4IHL4lf.js">
     <link rel="modulepreload" crossorigin href="./assets/iblVoxelOpacityAtomicMax-C9BLvW0W.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-TOBDTUpt.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-CelOe5TK.css">
   </head>
   <body>
     <main id="app">
@@ -253,11 +253,16 @@
           <button id="summon-boss" disabled>보스 소환</button>
           <label class="boss-count-label"><span class="sr-only">보스 소환 수</span><select id="boss-count" aria-label="보스 소환 수" disabled><option value="1">1마리</option><option value="2">2마리</option><option value="3">3마리</option><option value="4">4마리</option><option value="5">5마리</option></select></label>
         </div>
+        <div class="boss-spawn-row goblin-spawn-row">
+          <button id="summon-goblin" disabled>고블린 소환</button>
+          <label class="boss-count-label"><span class="sr-only">고블린 소환 수</span><select id="goblin-count" aria-label="고블린 소환 수" disabled><option value="1">1마리</option><option value="2">2마리</option><option value="3">3마리</option><option value="4">4마리</option><option value="5">5마리</option></select></label>
+        </div>
         <div id="player-combat-status" class="player-combat-status" hidden>
           <span id="player-health"></span>
           <p id="combat-feedback" role="status"></p>
         </div>
         <details class="boss-catalog"><summary>보스 모션 18종</summary><ul id="boss-motion-list"></ul></details>
+        <details class="boss-catalog"><summary>고블린 모션 12종</summary><ul id="goblin-motion-list"></ul></details>
       </section>
       </aside>
 

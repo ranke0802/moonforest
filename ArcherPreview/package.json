@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "prepare:resources": "node scripts/prepare-resources.mjs && node scripts/prepare-audio.mjs",
+    "prepare:resources": "node scripts/prepare-resources.mjs && node scripts/prepare-audio.mjs && node scripts/pack-environment.mjs && node scripts/pack-goblin.mjs",
     "build": "npm run prepare:resources && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.js"
@@ -15,5 +17,7 @@
     "@babylonjs/core": "9.31.0",
     "@babylonjs/loaders": "9.31.0"
   },
-  "devDependencies": { "vite": "8.3.4" }
+  "devDependencies": {
+    "vite": "8.3.4"
+  }
 }

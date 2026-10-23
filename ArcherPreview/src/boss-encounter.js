@@ -18,6 +18,7 @@ function rootSample(config,name,time){
 
 export class BossEncounter {
   constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{},{combat,loadAsset}={}){
+    this.kind='bear';this.radius=.7;this.stopDistance=1.65;this.separationRadius=.8;
     this.combat=combat??new PlayerCombat();this.ownsCombat=!combat;this.loadAsset=loadAsset;
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.hitCount=0;this.heavyCount=0;
@@ -65,14 +66,14 @@ export class BossEncounter {
         this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       }
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
-      this.brain=new BossBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
+      this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
       this.routeState={};
-      this.animator.transition('Block6',{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
+      this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
@@ -83,6 +84,11 @@ export class BossEncounter {
     this.onChange(this);
   }
   get playerAlive(){return !this.active||this.playerHp>0;}
+  createBrain(durations){return new BossBrain(durations);}
+  motionSpec(name){return BOSS_BY_NAME[name];}
+  attackRange(spec){return bossAttackRange(spec);}
+  attackDamage(event){return BOSS_DAMAGE[event.name];}
+  isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
   get playerHp(){return this.combat.hp;} set playerHp(value){this.combat.hp=value;}
   get playerMaxHp(){return this.combat.maxHp;} set playerMaxHp(value){this.combat.maxHp=value;}
   get playerInvulnerable(){return this.combat.invulnerable;} set playerInvulnerable(value){this.combat.invulnerable=value;}
@@ -101,7 +107,7 @@ export class BossEncounter {
     if(this.ownsCombat)this.combat.update(dt,player,this.onDamage);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const canTravel=this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
-    const waypoint=canTravel?navigation?.steer(this.actor.position,player.position,.7,this.routeState??={},dt):null;
+    const waypoint=canTravel?navigation?.steer(this.actor.position,player.position,this.radius,this.routeState??={},dt):null;
     const travel=waypoint?new Vector3(waypoint.x-this.actor.position.x,0,waypoint.z-this.actor.position.z):direction.clone();
     const blocked=navigation&&!navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
@@ -110,7 +116,7 @@ export class BossEncounter {
     if(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
     }
-    if(result.speed&&distance>1.65&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,distance-1.65)));
+    if(result.speed&&distance>this.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,distance-this.stopDistance)));
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
@@ -122,11 +128,11 @@ export class BossEncounter {
     if(this.brain.mode==='down')this.actor.position.addInPlace(this.knockVelocity.scale(dt));
     this.bossReaction.update(dt,this.actor);
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
-    if(navigation)navigation.constrain(this.actor.position,beforeMove,.7,10.5);else capPosition(this.actor.position);
+    if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,10.5);else capPosition(this.actor.position);
     this.ring.position.set(this.actor.position.x,.025,this.actor.position.z);
-    const spec=BOSS_BY_NAME[this.brain.state];
+    const spec=this.motionSpec(this.brain.state);
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
-    this.ring.scaling.setAll(bossAttackRange(spec)/1.9);
+    this.ring.scaling.setAll(this.attackRange(spec)/1.9);
     applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
   }
@@ -146,7 +152,8 @@ export class BossEncounter {
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
-    if(!this.grab.active&&distance<1.35&&distance>.001&&this.brain.mode!=='down'){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((1.35-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,.7,10.5);this.actor.computeWorldMatrix();}
+    const separation=this.radius+.65;
+    if(!this.grab.active&&distance<separation&&distance>.001&&!['down','dead'].includes(this.brain.mode)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
@@ -178,14 +185,14 @@ export class BossEncounter {
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){
-      if(this.grab.active||this.brain.stagger||['down','recover'].includes(this.brain.mode))continue;
+      if(this.grab.active||this.brain.stagger||this.brain.hp<=0||['down','recover'].includes(this.brain.mode))continue;
       if(event.disabled)continue;
-      if(clearSight&&distance<=bossAttackRange(event)){
+      if(clearSight&&distance<=this.attackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(event.kind==='spin'||event.kind==='grab'||facing>.2){
           const aim=player.position.add(new Vector3(0,1.1,0));
           const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
-          this.receiveBossHit({damage:BOSS_DAMAGE[event.name],grab:event.kind==='grab',heavy:BOSS_HEAVY_ATTACKS.has(event.name),bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          this.receiveBossHit({damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
       }
     }
@@ -245,6 +252,6 @@ export class BossEncounter {
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
     this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
   }
-  inspect(){return {id:this.id,active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,position:this.actor?.position.asArray(),clips:this.asset?.animationGroups.length,visited:[...(this.brain?.visited||[])]};}
+  inspect(){return {id:this.id,kind:this.kind,active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,position:this.actor?.position.asArray(),clips:this.asset?.animationGroups.length,visited:[...(this.brain?.visited||[])]};}
 }
 

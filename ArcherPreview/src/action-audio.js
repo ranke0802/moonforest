@@ -28,7 +28,7 @@ export class ActionAudio {
   boss(encounter,dt){
     const bosses=encounter?.encounters??(encounter?[encounter]:[]);
     const living=bosses.some(boss=>boss.active&&boss.brain.hp>0);
-    this.audio.setBossMusic?.(!!encounter?.active&&living&&encounter.playerHp>0);
+    this.audio.setBossMusic?.(!!encounter?.active&&bosses.some(b=>b.kind!=='goblin'&&b.active&&b.brain.hp>0)&&encounter.playerHp>0);
     if(!encounter?.active)return;
     for(const boss of bosses)if(boss.active)this.bossMotion(boss,dt);
     if(bosses.length&&!living&&!this.bossDefeated){this.audio.play('victory');this.bossDefeated=true;}
@@ -45,11 +45,11 @@ export class ActionAudio {
       if(b.mode==='attack'&&/Skill|Flying|Spin/.test(b.state))this.audio.play('boss_warning',{position});
     }
     if(b.mode==='attack'&&!b.stagger){
-      const at=Math.max(0,duration*(BOSS_BY_NAME[b.state]?.impact??.45)-.10);
-      if(previous<at&&b.time>=at)this.audio.play('slash_heavy',{position,rate:.72,volume:.8});
+      const at=Math.max(0,duration*((encounter.motionSpec?.(b.state)??BOSS_BY_NAME[b.state])?.impact??.45)-.10);
+      if(previous<at&&b.time>=at)this.audio.play(encounter.kind==='goblin'?'slash':'slash_heavy',{position,rate:encounter.kind==='goblin'?1.12:.72,volume:encounter.kind==='goblin'?.45:.8});
       if(b.state==='Skill_02'&&encounter.grab?.holding)for(const phase of [.3,.55,.78])if(previous<duration*phase&&b.time>=duration*phase)this.audio.play('slash_heavy',{position,rate:.65,volume:.6});
     }
-    if(['move','approach'].includes(b.mode)){memory.feet+=dt;if(memory.feet>.38){memory.feet%=.38;this.audio.play(`foot_${this.foot++%3}`,{position,volume:1.7,rate:.65});}}
+    if(['move','approach'].includes(b.mode)){memory.feet+=dt;if(memory.feet>.38){memory.feet%=.38;this.audio.play(`foot_${this.foot++%3}`,{position,volume:encounter.kind==='goblin'?.4:1.7,rate:encounter.kind==='goblin'?1.15:.65});}}
     else memory.feet=0;
     if(b.mode==='down'&&previous<duration*.45&&phase>=.45)this.audio.play('land',{position,rate:.65});
     if(b.mode==='recover'&&previous<duration*.4&&phase>=.4)this.audio.play('equip',{position,rate:.7,volume:.6});
