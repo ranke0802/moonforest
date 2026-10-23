@@ -183,7 +183,7 @@ export class BossEncounter {
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
         if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
-        this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?'방패 명중 · 1.5초 강한 경직':this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';
+        this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?`방패 명중 · ${this.brain.stagger}초 강한 경직`:this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';
         this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex,hit.critical);this.onChange(this);
       }
     }else this.gate.previous=null;
