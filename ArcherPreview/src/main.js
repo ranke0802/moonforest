@@ -17,7 +17,7 @@ import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
-import { PlayerStrikeSampler } from './player-strikes.js';
+import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { BossHealthBars } from './boss-health-bar.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
@@ -336,7 +336,7 @@ function render(dt) {
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
       const target=isV2()?boss.nearestTarget(actor.position):null;
-      if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z);}
+      if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);

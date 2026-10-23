@@ -4,7 +4,8 @@ import {readFileSync} from 'node:fs';
 import {Matrix,Vector3,Quaternion} from '@babylonjs/core';
 import {loadPoseAsset} from './helpers/gltf-pose.js';
 import {GoblinEncounter} from '../src/goblin-encounter.js';
-import {PlayerStrikeSampler} from '../src/player-strikes.js';
+import {PlayerStrikeSampler,PLAYER_STRIKE_AIM_YAW} from '../src/player-strikes.js';
+import {WarriorV2Controller} from '../src/warrior-v2.js';
 import {MeleeContactGate} from '../src/melee-collision.js';
 
 const warrior=loadPoseAsset(new URL('../assets/models/violet-warrior-v2.glb',import.meta.url));
@@ -25,7 +26,7 @@ function strike(state,clip,capsules){
  const sampler=new PlayerStrikeSampler(),gate=new MeleeContactGate(),hits=[];let matrix;
  const sword={computeWorldMatrix(){},getWorldMatrix:()=>matrix};
  for(let t=0;t<warrior.durations[clip]+.4;t+=1/60){
-  matrix=warrior.pose(clip,Math.min(t,warrior.durations[clip])).Golden_Oathblade;
+  matrix=warrior.pose(clip,Math.min(t,warrior.durations[clip])).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW[state]??0));
   const sample=sampler.sample({state,clipTime:t,actionId:1,actionElapsed:t},sword,null);
   hits.push(...gate.collect({...sample,capsules}).hits);
  }
@@ -37,7 +38,27 @@ test('actual sword motion hits the small goblin across walking, crouching and at
   const hits=strike(state,clip,capsulesAt(pose,time,distance));
   assert.ok(hits.length>0,`${pose}/${distance}/${state}`);
   if(state==='judgment')assert.deepEqual(hits.map(h=>h.damage),[20,20,24]);
+  else if(state==='attack')assert.deepEqual(hits.map(h=>h.damage),[18,20],`${pose}/${distance}: both normal strikes`);
   else assert.equal(new Set(hits.map(h=>h.id)).size,hits.length,'One hit per actual strike window');
+ }
+});
+
+test('aimed two-hit combo connects at goblin melee distance across frame rates and attack speeds',()=>{
+ for(const dt of [1/60,1/20,.1])for(const speed of [.5,1,2])for(const distance of [1.05,1.2,1.35]){
+  const c=new WarriorV2Controller({durations:{idle:2,run:1,attack:3}});c.setAttackSpeed(speed);c.startAttack('attack');
+  const sampler=new PlayerStrikeSampler(),gate=new MeleeContactGate(),capsules=capsulesAt('Walking',0,distance),hits=[];let matrix;
+  const sword={computeWorldMatrix(){},getWorldMatrix:()=>matrix};
+  for(let t=0;t<5;t+=dt){
+   const result=c.update(dt);matrix=warrior.pose('Thrust_Slash',result.clipTime).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW.attack));
+   const sample=sampler.sample(result,sword,null);if(sample)hits.push(...gate.collect({...sample,capsules}).hits);
+  }
+  assert.deepEqual(hits.map(h=>h.damage),[18,20],`${dt}/${speed}/${distance}`);
+ }
+});
+
+test('both aimed blade passes also reach a goblin farther along the thrust',()=>{
+ for(const [pose,time] of poses)for(const distance of [1.6,1.8]){
+  assert.deepEqual(strike('attack','Thrust_Slash',capsulesAt(pose,time,distance)).map(h=>h.damage),[18,20]);
  }
 });
 test('goblin height assistance does not award hits outside the actual horizontal sword sweep',()=>{

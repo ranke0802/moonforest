@@ -1,4 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
+// Thrust_Slash's two authored passes are centered left of the actor's forward
+// axis. Aim the whole action once; keep the source pose and real blade intact.
+export const PLAYER_STRIKE_AIM_YAW={attack:25*Math.PI/180};
 export const PLAYER_STRIKES={
   attack:[{id:'thrust',from:.55,to:1.02,damage:18,interruptsBoss:false},{id:'follow-cut',from:1.08,to:1.65,damage:20,interruptsBoss:false}],
   slash:[{id:'cut',from:.38,to:.80,damage:20,interruptsBoss:false}],

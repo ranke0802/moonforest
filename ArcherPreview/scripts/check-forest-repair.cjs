@@ -21,13 +21,15 @@ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtime
     const q=__qa,b=q.boss,e=b.encounters[0];q.frameLoop.setPaused(true);q.input.reset();q.actor.position.set(0,0,0);q.actor.rotation.y=0;
     q.controller.cancelAttack();q.controller.staggerRemaining=0;b.combat.reset();q.strikeSampler.reset();
     e.brain.hp=180;e.brain.start('Walking','idle');e.brain.stagger=0;e.gate.reset();e.hitCount=0;e.actor.position.set(0,0,1.2);e.actor.rotation.y=Math.PI;
-    e.brain.update=dt=>{e.brain.flash=Math.max(0,e.brain.flash-dt);return {events:[],speed:0};};
+    if(!e.qaUpdate)e.qaUpdate=e.brain.update.bind(e.brain);
+    e.brain.wait=100;e.brain.update=dt=>{e.qaUpdate(dt,1.2,true);return {events:[],speed:0};};
     q.render(1/60);q.controller.startAttack(state);
     for(let i=0;i<180;i++)q.render(1/60);
     return {state,hp:e.brain.hp,hits:e.hitCount,player:archerPreview.inspect().position,enemy:e.actor.position.asArray()};
    },attack);
    report.attacks.push(result);assert.ok(result.hits>0,JSON.stringify(result));
    if(attack==='judgment')assert.equal(result.hits,3);
+   if(attack==='attack'){assert.equal(result.hits,2);assert.equal(result.hp,142);}
   }
   await page.locator('#summon-boss').click();
   await page.waitForFunction(()=>archerPreview.inspect().boss.bearCount===1&&!archerPreview.inspect().boss.loading,null,{timeout:90000});
