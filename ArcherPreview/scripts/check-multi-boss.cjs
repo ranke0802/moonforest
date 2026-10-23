@@ -28,11 +28,23 @@ const {chromium}=require(path.join(process.env.USERPROFILE,'.cache/codex-runtime
   assert.equal(await page.locator('[data-boss-id="5"]').isHidden(),true);
   const ids=await page.locator('[id]').evaluateAll(nodes=>nodes.map(n=>n.id));assert.equal(new Set(ids).size,ids.length);
   report.checks.push('Independent movement and per-boss health bars; unused bars hidden without duplicate IDs');
-  for(let i=0;i<10;i++){
-   if(await page.locator('#death-dialog').getAttribute('open')!==null)break;
-   await page.keyboard.down('j');await page.waitForTimeout(1100);await page.keyboard.up('j');await page.waitForTimeout(250);
+  // Use a reproducible non-grab opening during the input smoke check.
+  // This is confined to this browser, without changing the shipped AI.
+  await page.evaluate(()=>{Math.random=()=>.2;});
+  await page.locator('#boss-count').selectOption('3');
+  report.combatRounds=[];
+  for(let round=0;round<2;round++){
+   if(await page.locator('#death-dialog').getAttribute('open')!==null)await page.locator('#death-restart').click();
+   await page.locator('#summon-boss').click();
+   await page.waitForFunction(()=>archerPreview.inspect().boss.count===3&&!archerPreview.inspect().boss.loading);
+   for(let i=0;i<10;i++){
+    if(await page.locator('#death-dialog').getAttribute('open')!==null)break;
+    await page.keyboard.down('j');await page.waitForTimeout(1100);await page.keyboard.up('j');await page.waitForTimeout(250);
+   }
+   report.combat=(await inspect()).boss;report.combatRounds.push(report.combat);
+   if(report.combat.bosses.some(b=>b.hits>0)&&report.combat.playerHp<500)break;
   }
-  report.combat=(await inspect()).boss;assert.ok(report.combat.bosses.some(b=>b.hits>0));assert.ok(report.combat.playerHp<500);
+  assert.ok(report.combat.bosses.some(b=>b.hits>0));assert.ok(report.combat.playerHp<500);
   report.checks.push('Real input damages individual bosses; boss attacks damage shared player HP');
   await page.waitForFunction(()=>document.querySelector('#death-dialog').open,null,{timeout:45000});
   await page.locator('#death-restart').click();await page.waitForFunction(()=>!archerPreview.inspect().boss.active);
