@@ -9,7 +9,7 @@ import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
 import { PlayerCombat } from './player-combat.js';
 import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
-import { isEnemySolid } from './enemy-collision.js';
+import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -74,7 +74,7 @@ export class BossEncounter {
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
-      this.routeState={};
+      this.routeState={};this.dodgeContactClearance=false;
       this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
@@ -158,8 +158,13 @@ export class BossEncounter {
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
-    const separation=this.radius+.65;
-    if(result.state!=='dodge'&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
+    // Retain the narrower clearance until this pair has separated naturally.
+    // Otherwise the first upright frame would push the enemy out of the gap
+    // the player just rolled through.
+    if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
+    else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
+    const separation=this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);

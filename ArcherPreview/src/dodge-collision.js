@@ -1,31 +1,73 @@
-import { isEnemySolid } from './enemy-collision.js';
-// Swept planar contacts: rolling moves only the player, never a blocking enemy.
-// Stop at the first obstacle rather than projecting through a crowd or a corner.
+import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
+
+const SKIN=.002, STEP=.06;
+
+// Sweep each short portion of the authored roll, then spend its remaining
+// distance along the contact tangent. Enemies are never moved by this solver.
 export function constrainDodge(position, from, navigation, encounters = [], limit = 11) {
   const dx=position.x-from.x,dz=position.z-from.z,length=Math.hypot(dx,dz);
   if(length<1e-8)return position;
-  let fraction=1;
-  const sweep=(center,radius)=>{
-    const x=from.x-center.x,z=from.z-center.z,dot=x*dx+z*dz;
-    if(dot>=0)return; // Allow rolling away from a pre-existing overlap.
-    const c=x*x+z*z-radius*radius;
-    if(c<=0){fraction=0;return;}
-    const a=length*length,disc=dot*dot-a*c;
-    if(disc<0)return;
-    const t=(-dot-Math.sqrt(disc))/a;
-    if(t>=0&&t<=fraction)fraction=Math.max(0,t-.003/length);
+  const ux=dx/length,uz=dz/length;
+  const circles=navigation.obstacles.map(o=>({x:o.x,z:o.z,radius:o.radius+.32,enemy:false}));
+  for(const enemy of encounters)if(isEnemySolid(enemy))circles.push({
+    x:enemy.actor.position.x,z:enemy.actor.position.z,radius:dodgeSeparation(enemy),enemy:true,
+  });
+  let x=from.x,z=from.z;
+  const contact=(mx,mz)=>{
+    const a=mx*mx+mz*mz;
+    if(a<1e-12)return null;
+    let hit=null,time=1;
+    for(const c of circles){
+      const rx=x-c.x,rz=z-c.z,b=rx*mx+rz*mz;
+      // Existing overlaps can escape or slide sideways, but cannot deepen.
+      if(b>=-1e-10)continue;
+      const gap=rx*rx+rz*rz-c.radius*c.radius,disc=b*b-a*gap;
+      if(disc<0)continue;
+      const t=gap<=0?0:(-b-Math.sqrt(disc))/a;
+      if(t<0||t>time)continue;
+      const hx=rx+mx*t,hz=rz+mz*t,n=Math.hypot(hx,hz);
+      time=t;hit={time,nx:hx/n,nz:hz/n,enemy:c.enemy};
+    }
+    if(Math.hypot(x+mx,z+mz)>limit){
+      const b=x*mx+z*mz,gap=x*x+z*z-limit*limit;
+      const t=Math.max(0,(-b+Math.sqrt(Math.max(0,b*b-a*gap)))/a);
+      if(t<=time){const hx=x+mx*t,hz=z+mz*t,n=Math.hypot(hx,hz);hit={time:t,nx:-hx/n,nz:-hz/n,enemy:false};}
+    }
+    return hit;
   };
-  for(const obstacle of navigation.obstacles)sweep(obstacle,obstacle.radius+.32);
-  for(const enemy of encounters){
-    if(!isEnemySolid(enemy))continue;
-    // Match the standing character separation boundary; prone/dead bodies
-    // never obstruct the roll or trigger a separation push afterwards.
-    sweep(enemy.actor.position,enemy.radius+.65+.005);
+  const steps=Math.ceil(length/STEP),step=length/steps;
+  for(let s=0;s<steps;s++){
+    let mx=ux*step,mz=uz*step;
+    for(let pass=0;pass<4;pass++){
+      const distance=Math.hypot(mx,mz),hit=contact(mx,mz);
+      if(!hit){x+=mx;z+=mz;break;}
+      const advance=Math.max(0,hit.time-SKIN/distance);
+      x+=mx*advance;z+=mz*advance;
+      const remaining=distance*(1-advance);
+      if(remaining<1e-6)break;
+      if(hit.enemy&&pass===0){
+        const tx=-hit.nz,tz=hit.nx,dot=tx*ux+tz*uz;
+        let sign=dot<0?-1:1;
+        // At a head-on contact, choose the clearer shoulder instead of
+        // yielding a zero tangent. A small offset then keeps that side stable.
+        if(Math.abs(dot)<.15){
+          const positive=contact(tx*.35,tz*.35)?.time??1;
+          const negative=contact(-tx*.35,-tz*.35)?.time??1;
+          if(Math.abs(positive-negative)>.01)sign=positive>negative?1:-1;
+        }
+        const travel=remaining*Math.max(.75,Math.abs(dot));
+        mx=tx*sign*travel;mz=tz*sign*travel;
+      }else{
+        // Walls and secondary contacts only slide; they never receive the
+        // steering assist, so sealed gaps and trees still stop the roll.
+        const scale=remaining/distance;
+        mx*=scale;mz*=scale;
+        const inward=Math.min(0,mx*hit.nx+mz*hit.nz);
+        mx-=hit.nx*inward;mz-=hit.nz*inward;
+      }
+      if(Math.hypot(mx,mz)<1e-6)break;
+    }
   }
-  if(Math.hypot(position.x,position.z)>limit){
-    const a=length*length,b=from.x*dx+from.z*dz,c=from.x*from.x+from.z*from.z-limit*limit;
-    fraction=Math.min(fraction,Math.max(0,(-b+Math.sqrt(Math.max(0,b*b-a*c)))/a));
-  }
-  position.x=from.x+dx*fraction;position.z=from.z+dz*fraction;
+  position.x=x;position.z=z;
   return position;
 }

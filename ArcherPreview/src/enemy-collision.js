@@ -5,3 +5,7 @@ export function isEnemySolid(enemy) {
   return enemy.active !== false && hp > 0 &&
     mode !== 'down' && mode !== 'recover' && mode !== 'dead';
 }
+
+// Physical rolling clearance only. Weapon hurtboxes and attack reach are
+// independent; crouching the player does not shrink a monster's hittable body.
+export function dodgeSeparation(enemy) { return enemy.radius+.25; }

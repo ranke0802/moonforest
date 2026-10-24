@@ -95,6 +95,22 @@ test('roll contact never displaces an overlapping bear or goblin',async t=>{
  const {battle,player}=fixture(t);await battle.summon(player,1);await battle.summon(player,1,'goblin');
  for(const b of battle.encounters){b.actor.position.set(0,0,.5);b.dt=1/30;const before=b.actor.position.clone();
   b.poseAndContacts(player,{state:'dodge',actionId:42},null,null);assert.ok(b.actor.position.equals(before));
+  b.poseAndContacts(player,{state:'idle',rollFrom:.9,rollTo:1},null,null);assert.ok(b.actor.position.equals(before));
+ }
+});
+
+test('ending a roll beside an enemy does not push it out of the newly usable gap',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,1);await battle.summon(player,1,'goblin');
+ for(const b of battle.encounters){
+  b.actor.position.set(0,0,b.radius+.30);b.dt=1/30;const before=b.actor.position.clone();
+  // The final roll frame can already report idle while still carrying travel.
+  b.poseAndContacts(player,{state:'idle',rollFrom:.8,rollTo:1},null,null);
+  b.poseAndContacts(player,{state:'idle'},null,null);
+  b.poseAndContacts(player,{state:'run'},null,null);
+  assert.ok(b.actor.position.equals(before),'upright contact must not undo the narrow dodge clearance');
+  player.position.z=-3;b.poseAndContacts(player,{state:'idle'},null,null);
+  player.position.z=0;b.poseAndContacts(player,{state:'run'},null,null);
+  assert.ok(b.actor.position.z>before.z,'ordinary walking separation resumes after moving clear');
  }
 });
 test('walking through prone, getting-up or dead enemies does not separate their bodies',async t=>{

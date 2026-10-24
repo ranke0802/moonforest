@@ -1,45 +1,82 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { constrainDodge } from '../src/dodge-collision.js';
+import { dodgeSeparation } from '../src/enemy-collision.js';
 const enemy=(x,z,radius=.7,mode='idle')=>({active:true,actor:{position:{x,z}},radius,brain:{hp:100,mode}});
-test('a roll cannot tunnel through a standing bear or goblin, even in one long frame',()=>{
- for(const monster of [enemy(0,2),enemy(0,2,.34)]){
-  const original={...monster.actor.position},p={x:0,z:5};
-  constrainDodge(p,{x:0,z:0},{obstacles:[]},[monster]);
-  assert.ok(p.z<2-monster.radius-.65);assert.ok(p.z>0);
-  assert.deepEqual(monster.actor.position,original);
- }
-});
-test('downed, recovering and dead enemies are passable, while standing up restores blocking',()=>{
- for(const radius of [.34,.7]){
-  const monster=enemy(0,2,radius);
-  for(const mode of ['down','recover','dead','idle']){
-   monster.brain.mode=mode;const p={x:0,z:5},before={...monster.actor.position};
-   constrainDodge(p,{x:0,z:0},{obstacles:[]},[monster]);
-   if(mode==='idle')assert.ok(p.z<2-radius-.65);else assert.equal(p.z,5);
-   assert.deepEqual(monster.actor.position,before);
+const near=(a,b,t=.006)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b}`);
+function roll({enemies=[],obstacles=[],from={x:0,z:0},delta={x:0,z:3},fps=60}={}){
+ const p={...from},path=[{...p}],before=enemies.map(e=>({...e.actor.position}));
+ for(let i=0;i<fps;i++){
+  const start={...p};p.x+=delta.x/fps;p.z+=delta.z/fps;
+  constrainDodge(p,start,{obstacles},enemies);path.push({...p});
+  assert.ok(Math.hypot(p.x-start.x,p.z-start.z)<=Math.hypot(delta.x,delta.z)/fps+1e-8,'sliding cannot add roll distance');
+  for(const e of enemies)if(e.brain.hp>0&&e.brain.mode==='idle'){
+   assert.ok(Math.hypot(p.x-e.actor.position.x,p.z-e.actor.position.z)>=Math.min(dodgeSeparation(e),Math.hypot(start.x-e.actor.position.x,start.z-e.actor.position.z))-1e-7,'enemy overlap must not deepen');
   }
-  monster.brain.mode='down';const p={x:0,z:5};
-  constrainDodge(p,{x:0,z:0},{obstacles:[{x:0,z:3,radius:.5}]},[monster]);
-  assert.ok(p.z>2&&p.z<2.18,'a wall behind a prone enemy still blocks the roll');
+  for(const o of obstacles)assert.ok(Math.hypot(p.x-o.x,p.z-o.z)>=o.radius+.32-1e-7,'tree remains solid');
+ }
+ assert.deepEqual(enemies.map(e=>e.actor.position),before,'rolling must never push enemies');
+ return {p,path};
+}
+
+test('a head-on roll skirts a stationary bear or goblin without passing through or moving it',()=>{
+ for(const radius of [.34,.7]){
+  const monster=enemy(0,1.5,radius);
+  const {p}=roll({enemies:[monster]});
+  assert.ok(p.z>2,'the player escapes past the shoulder');
+  assert.ok(p.x>=dodgeSeparation(monster),'the path passes outside the body');
  }
 });
-test('wall behind an enemy and diagonal tree contact stop only the player',()=>{
- const tree={x:1,z:2,radius:.6},monster=enemy(0,1.8),p={x:0,z:6};
- constrainDodge(p,{x:0,z:0},{obstacles:[tree]},[monster]);assert.ok(p.z<.45);
- const diagonal={x:3,z:6};constrainDodge(diagonal,{x:0,z:0},{obstacles:[tree]},[]);
- assert.ok(Math.hypot(diagonal.x-1,diagonal.z-2)>=.92);assert.ok(diagonal.z<2);
+
+test('oblique contacts preserve the requested side of escape',()=>{
+ for(const x of [-.22,.22]){
+  const {p}=roll({enemies:[enemy(x,1.5,.34)]});
+  assert.ok(p.x*x<0);assert.ok(p.z>2.5);
+ }
 });
-test('overlap permits escape, dead enemies do not block, and arena bounds remain solid',()=>{
- const monster=enemy(0,.7),out={x:0,z:-2},into={x:0,z:2};
- constrainDodge(out,{x:0,z:0},{obstacles:[]},[monster]);assert.equal(out.z,-2);
- constrainDodge(into,{x:0,z:0},{obstacles:[]},[monster]);assert.equal(into.z,0);
- monster.brain.hp=0;into.z=2;constrainDodge(into,{x:0,z:0},{obstacles:[]},[monster]);assert.equal(into.z,2);
- const edge={x:0,z:14};constrainDodge(edge,{x:0,z:10},{obstacles:[]},[]);assert.equal(edge.z,11);
+
+test('the gap between two goblins is usable instead of blocked by their old wide volumes',()=>{
+ const {p}=roll({enemies:[enemy(-.7,1.3,.34),enemy(.7,1.3,.34)]});
+ near(p.x,0);near(p.z,3);
 });
-test('30 and 60 FPS rolls stop at the same enemy boundary without moving the enemy',()=>{
- const stops=[30,60].map(fps=>{const monster=enemy(0,2),p={x:0,z:0};for(let i=0;i<fps;i++){
-  const from={...p};p.z+=3/fps;constrainDodge(p,from,{obstacles:[]},[monster]);
- }assert.deepEqual(monster.actor.position,{x:0,z:2});return p.z;});
- assert.ok(Math.abs(stops[0]-stops[1])<.004);
+
+test('head-on assistance chooses the open shoulder when a tree blocks the other',()=>{
+ const {p}=roll({enemies:[enemy(0,1.5,.34)],obstacles:[{x:.45,z:.86,radius:.1}]});
+ assert.ok(p.x<-.59);assert.ok(p.z>2);
+});
+
+test('sealed crowds and a wall behind enemies cannot be tunneled through',()=>{
+ const line=Array.from({length:11},(_,i)=>enemy((i-5)*.8,1.5,.34));
+ const {p}=roll({enemies:line});assert.ok(p.z<1.5);
+ const wall=Array.from({length:11},(_,i)=>({x:(i-5)*.65,z:2,radius:.5}));
+ const blocked=roll({enemies:[enemy(0,1,.34)],obstacles:wall}).p;
+ assert.ok(blocked.z<1.3);
+});
+
+test('downed, recovering, dead and inactive enemies are passable; walls still block',()=>{
+ for(const radius of [.34,.7])for(const mode of ['down','recover','dead']){
+  const monster=enemy(0,1.5,radius,mode);
+  near(roll({enemies:[monster]}).p.z,3);
+  const {p}=roll({enemies:[monster],obstacles:[{x:0,z:3,radius:.5}],delta:{x:0,z:5}});
+  assert.ok(p.z>2&&p.z<2.18);
+ }
+ const inactive=enemy(0,1.5);inactive.active=false;
+ const dead=enemy(0,1.5);dead.brain.hp=0;
+ for(const monster of [inactive,dead]){const p={x:0,z:3};constrainDodge(p,{x:0,z:0},{obstacles:[]},[monster]);near(p.z,3);}
+});
+
+test('existing overlaps can escape sideways or away without deepening; arena stays solid',()=>{
+ const monster=enemy(0,.7);
+ near(roll({enemies:[monster],delta:{x:0,z:-2}}).p.z,-2);
+ const {p}=roll({enemies:[monster],delta:{x:0,z:2}});
+ assert.ok(p.x>.5,'an already crowded player has a lateral escape');
+ const edge=roll({from:{x:0,z:10},delta:{x:0,z:4}}).p;
+ assert.ok(edge.z<=11);near(edge.z,11);
+});
+
+test('30/60 FPS and a single delayed frame produce the same detour',()=>{
+ for(const radius of [.34,.7]){
+  const ends=[1,30,60,120].map(fps=>roll({enemies:[enemy(0,1.5,radius)],fps}).p);
+  for(const p of ends){near(p.x,ends[0].x,.025);near(p.z,ends[0].z,.025);}
+ }
 });
