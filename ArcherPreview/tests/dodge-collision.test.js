@@ -2,12 +2,26 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { constrainDodge } from '../src/dodge-collision.js';
 const enemy=(x,z,radius=.7,mode='idle')=>({active:true,actor:{position:{x,z}},radius,brain:{hp:100,mode}});
-test('a roll cannot tunnel through a bear, goblin or downed enemy, even in one long frame',()=>{
- for(const monster of [enemy(0,2),enemy(0,2,.34),enemy(0,2,.7,'down')]){
+test('a roll cannot tunnel through a standing bear or goblin, even in one long frame',()=>{
+ for(const monster of [enemy(0,2),enemy(0,2,.34)]){
   const original={...monster.actor.position},p={x:0,z:5};
   constrainDodge(p,{x:0,z:0},{obstacles:[]},[monster]);
   assert.ok(p.z<2-monster.radius-.65);assert.ok(p.z>0);
   assert.deepEqual(monster.actor.position,original);
+ }
+});
+test('downed, recovering and dead enemies are passable, while standing up restores blocking',()=>{
+ for(const radius of [.34,.7]){
+  const monster=enemy(0,2,radius);
+  for(const mode of ['down','recover','dead','idle']){
+   monster.brain.mode=mode;const p={x:0,z:5},before={...monster.actor.position};
+   constrainDodge(p,{x:0,z:0},{obstacles:[]},[monster]);
+   if(mode==='idle')assert.ok(p.z<2-radius-.65);else assert.equal(p.z,5);
+   assert.deepEqual(monster.actor.position,before);
+  }
+  monster.brain.mode='down';const p={x:0,z:5};
+  constrainDodge(p,{x:0,z:0},{obstacles:[{x:0,z:3,radius:.5}]},[monster]);
+  assert.ok(p.z>2&&p.z<2.18,'a wall behind a prone enemy still blocks the roll');
  }
 });
 test('wall behind an enemy and diagonal tree contact stop only the player',()=>{

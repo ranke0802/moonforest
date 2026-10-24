@@ -3,6 +3,7 @@ import { BossEncounter } from './boss-encounter.js';
 import { BossModelLibrary } from './boss-models.js';
 import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
+import { isEnemySolid } from './enemy-collision.js';
 
 export const MAX_BOSSES = 5;
 export function normalizeBossCount(value) {
@@ -27,7 +28,7 @@ export function separateBosses(encounters, grabOwner) {
   const movable = boss => boss !== grabOwner && !['down', 'recover'].includes(boss.brain.mode);
   for (let pass = 0; pass < 2; pass++) for (let i = 0; i < encounters.length; i++) for (let j = i + 1; j < encounters.length; j++) {
     const a = encounters[i], b = encounters[j];
-    if (a.brain.hp <= 0 || b.brain.hp <= 0) continue;
+    if (!isEnemySolid(a) || !isEnemySolid(b)) continue;
     const aMoves = movable(a), bMoves = movable(b), weight = Number(aMoves) + Number(bMoves);
     if (!weight) continue;
     const dx = b.actor.position.x - a.actor.position.x, dz = b.actor.position.z - a.actor.position.z;

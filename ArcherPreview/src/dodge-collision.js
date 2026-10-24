@@ -1,3 +1,4 @@
+import { isEnemySolid } from './enemy-collision.js';
 // Swept planar contacts: rolling moves only the player, never a blocking enemy.
 // Stop at the first obstacle rather than projecting through a crowd or a corner.
 export function constrainDodge(position, from, navigation, encounters = [], limit = 11) {
@@ -16,9 +17,9 @@ export function constrainDodge(position, from, navigation, encounters = [], limi
   };
   for(const obstacle of navigation.obstacles)sweep(obstacle,obstacle.radius+.32);
   for(const enemy of encounters){
-    if(!enemy.active||enemy.brain.hp<=0)continue;
-    // Match the existing standing character separation boundary, including
-    // downed/recovering enemies; otherwise the next contact pass would push them.
+    if(!isEnemySolid(enemy))continue;
+    // Match the standing character separation boundary; prone/dead bodies
+    // never obstruct the roll or trigger a separation push afterwards.
     sweep(enemy.actor.position,enemy.radius+.65+.005);
   }
   if(Math.hypot(position.x,position.z)>limit){

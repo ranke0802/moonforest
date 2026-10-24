@@ -97,6 +97,19 @@ test('roll contact never displaces an overlapping bear or goblin',async t=>{
   b.poseAndContacts(player,{state:'dodge',actionId:42},null,null);assert.ok(b.actor.position.equals(before));
  }
 });
+test('walking through prone, getting-up or dead enemies does not separate their bodies',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,1);await battle.summon(player,1,'goblin');
+ for(const b of battle.encounters)for(const mode of ['down','recover','dead']){
+  b.brain.mode=mode;b.actor.position.set(0,0,.5);b.dt=1/30;const before=b.actor.position.clone();
+  b.poseAndContacts(player,{state:'run',actionId:null},null,null);assert.ok(b.actor.position.equals(before));
+ }
+ const [a,b]=battle.encounters;
+ for(const mode of ['down','recover','dead']){
+  a.brain.mode='move';b.brain.mode=mode;a.actor.position.setAll(0);b.actor.position.setAll(0);
+  separateBosses([a,b],null);assert.equal(a.actor.position.length(),0);assert.equal(b.actor.position.length(),0);
+ }
+ b.brain.mode='idle';separateBosses([a,b],null);assert.ok(a.actor.position.length()>0);
+});
 
 test('hiding during a pending load cannot reactivate an old summon',async()=>{
   let release;const models={load:()=>new Promise(resolve=>release=resolve)};
