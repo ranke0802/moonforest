@@ -1,6 +1,7 @@
 import { SceneLoader, TransformNode, Texture, Color3 } from '@babylonjs/core';
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
 import { attachTreeLod } from './tree-lod.js';
+import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
 
 export async function loadTrainingGround(world,training){
   if(world.environmentPromise)return world.environmentPromise;
@@ -17,9 +18,12 @@ export async function loadTrainingGround(world,training){
       const model=new URL(config.model,url),asset=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),world.scene,null,'.gltf');
       for(const material of asset.materials){material.backFaceCulling=false;material.freeze();}
       world.lighting.registerMeshes(asset.meshes);
+      if(key.endsWith('-tree'))prepareTreeOcclusion(asset.meshes);
       for(const lod of config.lods??[]){
         const lodUrl=new URL(lod.model,url),variant=await SceneLoader.LoadAssetContainerAsync(new URL('.',lodUrl).href,lodUrl.pathname.split('/').pop(),world.scene,null,'.gltf');
-        world.lighting.registerMeshes(attachTreeLod(world.scene,asset,variant,lod.distance));
+        const meshes=attachTreeLod(world.scene,asset,variant,lod.distance);
+        world.lighting.registerMeshes(meshes);
+        if(key.endsWith('-tree'))prepareTreeOcclusion(meshes);
       }
       return [key,asset];
     }));
@@ -34,9 +38,9 @@ export async function loadTrainingGround(world,training){
         if(node.getTotalVertices?.()>0){if(shadow)world.shadows.addShadowCaster(node,false);}
         node.computeWorldMatrix(true);node.freezeWorldMatrix?.();
       }
-      root.freezeWorldMatrix();plants.push(root);
+      root.freezeWorldMatrix();plants.push(root);return root;
     }
-    TREE_PLACEMENTS.forEach((p,i)=>plant(p.key,p,i,Math.hypot(p.x,p.z)<7));
+    world.treeOcclusion=new TreeOcclusion(TREE_PLACEMENTS.map((p,i)=>plant(p.key,p,i,Math.hypot(p.x,p.z)<7)));
     GRASS_BEDS.forEach((p,i)=>{
       plant('grass-cluster',{...p,scale:p.radius/.69,yaw:i*2.3},i,false);
       for(let j=0;j<3;j++){const a=j*2.1+i;plant('grass-tuft',{x:p.x+Math.sin(a)*p.radius*.52,z:p.z+Math.cos(a)*p.radius*.52,scale:.72+(j%2)*.18,yaw:a},i*3+j,false);}
