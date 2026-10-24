@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "prepare:resources": "node scripts/prepare-resources.mjs && node scripts/prepare-audio.mjs && node scripts/pack-environment.mjs && node scripts/pack-tree-lods.mjs && node scripts/pack-goblin.mjs",
+    "prepare:resources": "node scripts/prepare-resources.mjs && node scripts/pack-web-warrior.mjs && node scripts/prepare-audio.mjs && node scripts/pack-environment.mjs && node scripts/pack-tree-lods.mjs && node scripts/pack-goblin.mjs",
     "build": "npm run prepare:resources && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.js"

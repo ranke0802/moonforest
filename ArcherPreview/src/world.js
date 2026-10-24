@@ -81,5 +81,8 @@ export function createWorld(engine) {
   }
   for(const mat of [ringMaterial,moteMaterial])mat.freeze();
   const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
+  // Build immutable obstacle grids during initial loading, not on the first
+  // combat frame when a bear or goblin needs to route around a tree.
+  navigation.grid(.34,10.5);navigation.grid(.7,10.5);
   return { scene, camera, shadows, lighting, navigation, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }
