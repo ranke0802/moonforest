@@ -11,6 +11,8 @@
     <main id="app">
       <canvas id="viewport" aria-label="궁수 3D 검수 화면. WASD로 이동하고 J로 공격합니다." tabindex="0"></canvas>
       <div class="vignette" aria-hidden="true"></div><div id="damage-numbers" aria-hidden="true"></div>
+      <div id="loot-labels" aria-hidden="true"></div>
+      <output id="gold-balance" class="gold-balance" aria-label="보유 골드" hidden>0 G</output>
       <header class="topbar" data-ui>
         <a class="brand" href="./" aria-label="Moonforest 처음으로"><span class="moon-mark" aria-hidden="true">☾</span><span>MOONFOREST<small>CHARACTER PLAYGROUND</small></span></a>
         <div class="top-actions"><span class="build-tag" id="build-tag">ARCHER / 01</span><select id="quality-select" class="quality-select" aria-label="화질" title="화질 선택"><option value="high">고화질</option><option value="balanced">균형</option><option value="battery">절전</option></select><button id="fullscreen-button" class="icon-button" aria-label="가로 전체화면" title="가로 전체화면" aria-pressed="false">⛶</button><button id="motion-speed-toggle" class="motion-speed-toggle" type="button" aria-label="모션 속도 설정 열기" title="모션 속도 설정" aria-haspopup="dialog" hidden>설정</button><button id="help-toggle" class="icon-button" aria-label="조작 가이드 열기" title="조작 가이드">?</button></div>
@@ -19,7 +21,7 @@
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
         <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · 기존 버전</option><option value="warrior-v2">전사 v2 · 보스 전투</option></select>
         <details id="equipment-panel" class="equipment-panel" open hidden>
-          <summary>장비 외형 <span>개별 선택</span></summary>
+          <summary>장비 <span>개별 선택 · 능력치</span></summary>
           <div class="equipment-options">
             <label for="sword-select">무기 · 검<select id="sword-select" aria-label="검 외형 선택" disabled></select></label>
             <label for="shield-select">방어구 · 방패<select id="shield-select" aria-label="방패 외형 선택" disabled></select></label>

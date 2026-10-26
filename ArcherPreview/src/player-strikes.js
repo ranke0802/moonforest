@@ -1,4 +1,5 @@
 import { Vector3 } from '@babylonjs/core';
+import { boostSwordStrike } from './equipment-stats.js';
 // Thrust_Slash's two authored passes are centered left of the actor's forward
 // axis. Aim the whole action once; keep the source pose and real blade intact.
 export const PLAYER_STRIKE_AIM_YAW={attack:25*Math.PI/180};
@@ -12,7 +13,7 @@ export const PLAYER_STRIKES={
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
-  sample(result,sword,shield,multiHit=true,heading=0){
+  sample(result,sword,shield,multiHit=true,heading=0,attackBonus=0){
     if(result.actionId==null||result.staggered||result.state==='dodge'){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
@@ -22,7 +23,8 @@ export class PlayerStrikeSampler{
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
     const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18}]:PLAYER_STRIKES[result.state];
-    const windows=strikes?.filter(w=>result.clipTime>=w.from&&from<=w.to)||[];
+    const windows=(strikes?.filter(w=>result.clipTime>=w.from&&from<=w.to)||[])
+      .map(w=>result.state==='shieldPush'?w:boostSwordStrike(w,attackBonus));
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
     const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from)),

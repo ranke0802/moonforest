@@ -8,7 +8,7 @@ export function projectBossHealth(scene,position,width,height){
 }
 
 export function updateBossHealthPosition(scene,encounter,element,projection){
-  if(!encounter?.active){element.hidden=true;return;}
+  if(!encounter?.active||encounter.corpseGone){element.hidden=true;return;}
   const canvas=projection?null:scene.getEngine().getRenderingCanvas();
   const p=projection?projection.project(encounter.actor.position):projectBossHealth(scene,encounter.actor.position,canvas.clientWidth,canvas.clientHeight);
   element.hidden=!p.visible;
@@ -21,7 +21,7 @@ export class BossHealthBars {
   update(scene, encounters, projection) {
     const visible = new Set();
     for (const boss of encounters) {
-      if (!boss.active) continue;
+      if (!boss.active||boss.corpseGone) continue;
       visible.add(boss.id);
       let item = this.items.get(boss.id);
       if (!item) {

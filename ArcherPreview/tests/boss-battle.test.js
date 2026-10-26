@@ -7,7 +7,7 @@ import { BOSS_MOTIONS } from '../src/boss-spec.js';
 import { ActionAudio } from '../src/action-audio.js';
 import { GOBLIN_MOTIONS } from '../src/goblin-spec.js';
 
-function fixture(t) {
+function fixture(t,options={}) {
   const engine = new NullEngine(), scene = new Scene(engine), container = new AssetContainer(scene);
   const root = new TransformNode('root', scene);
   const names = ['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
@@ -29,7 +29,7 @@ function fixture(t) {
   const goblinConfig={...config,animations:Object.fromEntries(GOBLIN_MOTIONS.map(({name})=>[name,name])),catalog:GOBLIN_MOTIONS.map(({name})=>({name,duration:2,fps:30,rootTrack:[[0,0,0]],groundTrack:[0]}))};
   const goblinModels={loads:0,async load(){this.loads=1;},async instantiate(){await this.load();return {config:goblinConfig,asset:instantiateBossModel(goblinContainer)};}};
   const player = new TransformNode('player', scene), events = [];
-  const battle = new BossBattle({scene,shadows:{addShadowCaster(){}}},()=>{},(...args)=>events.push(args),()=>true,{models,goblinModels});
+  const battle = new BossBattle({scene,shadows:{addShadowCaster(){}}},()=>{},(...args)=>events.push(args),()=>true,{models,goblinModels,...options});
   battle.playerNodes = Object.fromEntries(['Head','RightFoot'].map(name=>{const n=new TransformNode(name,scene);n.parent=player;n.position.y=name==='Head'?1.8:.1;return [`mixamorig:${name}`,n];}));
   t.after(()=>{battle.hide();scene.dispose();engine.dispose();});
   return {battle,player,events,scene,container};
@@ -41,6 +41,31 @@ test('spawn count is bounded and five bosses have separate positions inside the 
     const positions=bossSpawnPositions({position:center,rotation:{y:1}},5);
     for(let i=0;i<5;i++){assert.ok(positions[i].length()<=6.5001);for(let j=i+1;j<5;j++)assert.ok(Vector3.Distance(positions[i],positions[j])>2);}
   }
+});
+
+test('dead bear and goblin fade independently, award once, stop rendering and reset on resummon',async t=>{
+  const rewards=[],{battle,player}=fixture(t,{onDefeat:event=>rewards.push(event)});
+  await battle.summon(player,2);await battle.summon(player,2,'goblin');
+  const bear=battle.encounters[0],liveBear=battle.encounters[1],goblin=battle.encounters[2],liveGoblin=battle.encounters[3];
+  for(const enemy of [bear,goblin]){enemy.brain.start(enemy.kind==='bear'?'Walking':'Walking','move');assert.equal(enemy.brain.hit({damage:2000}),true);}
+  battle.update(1.5,player);
+  assert.equal(bear.asset.meshes[0].visibility,.5);assert.equal(goblin.asset.meshes[0].visibility,.5);
+  assert.equal(liveBear.asset.meshes[0].visibility,1);assert.equal(liveGoblin.asset.meshes[0].visibility,1);
+  assert.deepEqual(rewards.map(r=>r.kind),['bear','goblin']);
+  battle.update(1.5,player);battle.update(.1,player);
+  for(const enemy of [bear,goblin]){assert.equal(enemy.corpseGone,true);assert.equal(enemy.actor.isEnabled(),false);assert.equal(enemy.animator.active.size,0);}
+  assert.equal(rewards.length,2);
+  await battle.summon(player,1,'goblin');assert.equal(goblin.corpseGone,false);assert.equal(goblin.asset.meshes[0].visibility,1);assert.equal(goblin.actor.isEnabled(),true);
+  goblin.brain.start('Walking','move');goblin.brain.hit({damage:2000});battle.update(.01,player);assert.equal(rewards.length,3);
+});
+
+test('equipped armor reduces incoming normal, critical and throw damage once and persists across resets',async t=>{
+  const {battle,player,events}=fixture(t);await battle.summon(player,1);
+  const bear=battle.encounters[0];bear.player=player;battle.combat.defense=4;
+  bear.hitPlayer(80,null,{critical:false});assert.equal(battle.playerHp,424);assert.equal(events.at(-1)[1],'−76');
+  battle.combat.invulnerable=0;bear.hitPlayer(80,null,{critical:true});assert.equal(battle.playerHp,324);assert.equal(events.at(-1)[1],'−100');
+  bear.hitPlayer(300,null,{critical:false,grabImpact:true,knockdown:true,landed:true});assert.equal(battle.playerHp,28);assert.equal(events.at(-1)[1],'−296');
+  battle.resetBattle();assert.equal(battle.combat.defense,4);assert.equal(battle.playerHp,500);
 });
 
 test('summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors',async t=>{

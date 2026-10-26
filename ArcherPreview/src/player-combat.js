@@ -6,6 +6,7 @@ import { HealingPotion } from './healing-potion.js';
 export class PlayerCombat {
   constructor() {
     this.maxHp = 500;
+    this.defense = 0;
     this.potions = new HealingPotion();
     this.reaction = new PlayerHitReaction();
     this.reset();

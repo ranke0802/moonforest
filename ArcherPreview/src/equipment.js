@@ -1,10 +1,6 @@
 import { MaterialPluginBase } from '@babylonjs/core';
-
-export const EQUIPMENT_STYLES = Object.freeze([
-  { id: 'original', label: '기본', value: 0 },
-  { id: 'violet-silver', label: '보라 · 은색', value: 1 },
-  { id: 'teal-bronze', label: '청록 · 청동', value: 2 },
-]);
+import { EQUIPMENT_STYLES } from './equipment-stats.js';
+export { EQUIPMENT_STYLES } from './equipment-stats.js';
 const STORAGE_KEY = 'moonforest-warrior-equipment-v1';
 const MESH_NAMES = { sword: 'Golden_Oathblade', shield: 'Bunnyguard_Shield' };
 const styleOf = id => EQUIPMENT_STYLES.find(style => style.id === id) || EQUIPMENT_STYLES[0];

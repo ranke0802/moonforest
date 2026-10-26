@@ -12,6 +12,7 @@ import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
+import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
@@ -32,6 +33,8 @@ import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
+import { GoldLoot } from './gold-loot.js';
+import { createGoldLootView } from './gold-loot-view.js';
 
 setupSettingsPanel();
 const elements=new Map();
@@ -59,16 +62,19 @@ const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
+const goldLoot=new GoldLoot({storage:equipmentStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
+let goldLootView;
 for (const slot of ['sword', 'shield']) {
   const select = $(`#${slot}-select`);
-  for (const style of EQUIPMENT_STYLES) select.add(new Option(style.label, style.id));
+  for (const style of EQUIPMENT_STYLES) select.add(new Option(equipmentLabel(slot,style), style.id));
   select.value = equipmentChoices[slot];
   select.addEventListener('change', () => {
     if (!ready || !equipment) return;
     equipmentChoices[slot] = equipment.select(slot, select.value);
+    if(boss)boss.combat.defense=equipmentStats(equipmentChoices).defense;
     audio.play('equip');
     saveEquipmentChoices(equipmentStorage, equipmentChoices);
-    $('#equipment-status').textContent = `${slot === 'sword' ? '검' : '방패'}: ${EQUIPMENT_STYLES.find(style => style.id === select.value).label} 적용`;
+    $('#equipment-status').textContent = `${equipmentLabel(slot,EQUIPMENT_STYLES.find(style => style.id === select.value))} 적용`;
   });
 }
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
@@ -162,6 +168,7 @@ function startDefense(kind){
 }
 
 function resetBeforeBoss(){
+  goldLoot.clearDrops();goldLootView.clear();
   audio.stopAll();actionAudio.reset();audio.play('revive');
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
@@ -208,6 +215,7 @@ async function loadCharacter() {
   if (loadingAsset) return;
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   boss?.hide();combatResult=null;strikeSampler.reset();
+  goldLoot.clearDrops();goldLootView?.clear();$('#gold-balance').hidden=!isV2();
   $('#equipment-panel').hidden = !isWarrior();
   $('#sword-select').disabled = true; $('#shield-select').disabled = true;
   $('#equipment-status').textContent = '';
@@ -325,7 +333,7 @@ function updateHealthBars() {
 
 function render(dt) {
   simulateFrame=dt>0;
-  if(!simulateFrame){world.scene.render();screenProjection.beginFrame();updateHealthBars();return;}
+  if(!simulateFrame){world.scene.render();screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -394,6 +402,9 @@ function render(dt) {
     const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
+    const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
+    if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('equip',{volume:.35});}
+    goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
     const focus=cameraBoss?Vector3.Lerp(center,cameraBoss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
@@ -409,6 +420,7 @@ function render(dt) {
   world.scene.render();
   screenProjection.beginFrame();
   damageNumbers?.update(dt,screenProjection);
+  goldLootView.project(screenProjection);
   updateHealthBars();
 }
 
@@ -423,6 +435,7 @@ try {
   screenProjection=new ScreenProjection(world.scene);
   screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'));
+  goldLootView=createGoldLootView(world.scene,$('#loot-labels'));
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
   bossHealthBars=new BossHealthBars($('#boss-hud'));
   playerHealthBar=new PlayerHealthBar($('#player-health'));
@@ -444,10 +457,11 @@ try {
     if(reacted!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
     return reacted;
-  });
+  },{onDefeat:({kind,position})=>goldLoot.drop(kind,position)});
+  boss.combat.defense=equipmentStats(equipmentChoices).defense;
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
-    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y);
+    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus);
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));

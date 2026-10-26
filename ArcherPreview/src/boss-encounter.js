@@ -10,6 +10,8 @@ import { BossGrab } from './boss-grab.js';
 import { PlayerCombat } from './player-combat.js';
 import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
+import { armoredDamage } from './equipment-stats.js';
+import { EnemyDeath } from './enemy-death.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -18,9 +20,10 @@ function rootSample(config,name,time){
 }
 
 export class BossEncounter {
-  constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{},{combat,loadAsset}={}){
+  constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{},{combat,loadAsset,onDefeat=()=>{}}={}){
     this.kind='bear';this.radius=.7;this.stopDistance=1.65;this.separationRadius=.8;
     this.combat=combat??new PlayerCombat();this.ownsCombat=!combat;this.loadAsset=loadAsset;
+    this.death=new EnemyDeath();this.onDefeat=onDefeat;
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
@@ -61,6 +64,7 @@ export class BossEncounter {
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
         this.world.lighting?.registerMeshes(this.asset.meshes);
+        this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
         this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
@@ -69,6 +73,8 @@ export class BossEncounter {
       }
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
+      this.death.reset();
+      for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices())this.world.shadows.addShadowCaster(mesh,false);}
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
@@ -86,6 +92,17 @@ export class BossEncounter {
     this.onChange(this);
   }
   get playerAlive(){return !this.active||this.playerHp>0;}
+  get corpseGone(){return this.death.finished;}
+  updateDeath(dt){
+    if(this.death.advance(dt)){
+      this.grab.reset();this.gate.reset();
+      this.onDefeat({kind:this.kind,position:this.actor.position.clone()});
+      for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
+    }
+    // Visibility is per mesh, so living enemies sharing this material do not fade.
+    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=visibility*this.death.opacity;
+    if(this.corpseGone){this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);}
+  }
   createBrain(durations){return new BossBrain(durations);}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec);}
@@ -107,7 +124,8 @@ export class BossEncounter {
     this.potions.use(this.playerHp,this.playerMaxHp);this.lastHit='물약 사용 · 1초마다 40씩 4회 회복';this.onChange(this);return true;
   }
   update(dt,player){
-    if(!this.active)return;
+    if(!this.active||this.corpseGone)return;
+    if(this.brain.hp<=0){this.updateDeath(dt);if(this.corpseGone)return;}
     this.dt=dt;this.player=player;
     const beforeMove=this.actor.position.clone(),navigation=this.world.navigation;
     if(this.ownsCombat)this.combat.update(dt,player,this.onDamage);
@@ -143,7 +161,7 @@ export class BossEncounter {
     this.onChange(this);
   }
   poseAndContacts(player,result,sample,shield){
-    if(!this.active)return;
+    if(!this.active||this.corpseGone)return;
     let hitStop=0;
     this.player=player;
     // Keep source skeletal animation untouched. Separate planar root travel from the
@@ -255,7 +273,7 @@ export class BossEncounter {
   hitPlayer(damage,source,{superArmor=false,critical:fixedCritical,grabImpact=false,knockdown=false,landed=false}={}){
     if((this.playerInvulnerable&&!grabImpact)||!this.playerAlive)return;
     const critical=fixedCritical??(source?rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0)).critical:false);
-    damage=Math.round(damage*(critical?1.3:1));
+    damage=armoredDamage(damage*(critical?1.3:1),this.combat.defense);
     this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
     this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!landed&&(!superArmor||knockdown)});
     if(knockdown)this.onPlayerHit(PLAYER_STAGGER,{knockdown:true,landed});

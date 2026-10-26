@@ -43,8 +43,9 @@ export function separateBosses(encounters, grabOwner) {
 }
 
 export class BossBattle {
-  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels } = {}) {
+  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, onDefeat=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
+    this.onDefeat=onDefeat;
     this.models = models ?? new BossModelLibrary(world.scene);
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];
@@ -107,7 +108,7 @@ export class BossBattle {
       for (let index = 0; index < count; index++) {
         if (!pool[index]) {
           const boss = new Encounter(this.world, boss => this.bossChanged(boss), this.onDamage,
-            (duration, options) => this.playerHit(duration, options), { combat: this.combat, loadAsset: () => models.instantiate() });
+            (duration, options) => this.playerHit(duration, options), { combat: this.combat, loadAsset: () => models.instantiate(), onDefeat:this.onDefeat });
           boss.number=index+1;boss.id=kind==='goblin'?`g${index+1}`:index+1;pool.push(boss);
         }
         const boss = pool[index], position = positions[index];

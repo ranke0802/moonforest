@@ -82,6 +82,11 @@
 .damage-number.evade{color:#c5ecff;font-size:14px;letter-spacing:1px}
 .damage-number.critical{color:#ffe58a;font-weight:800}.damage-number.player.critical{color:#ffb39d}
 .damage-number.heal{color:#8df3b1}
+.damage-number.gold{color:#f6d480}
+#loot-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
+.gold-drop-label{position:absolute;left:0;top:0;color:#f4d27c;font-size:11px;font-weight:650;text-shadow:0 1px 3px #000,0 0 5px #000;font-variant-numeric:tabular-nums}
+.gold-balance{position:absolute;left:max(16px,env(safe-area-inset-left));top:60px;pointer-events:none;color:#f4d27c;background:#171611b8;border:1px solid #a6863a55;border-radius:12px;padding:4px 10px;font-size:12px;font-variant-numeric:tabular-nums}
+@media(max-height:500px){.gold-balance{top:42px;font-size:11px}}
 .death-screen{inset:0;margin:0;padding:0;width:100vw;height:100dvh;max-width:none;max-height:none;border:0;background:radial-gradient(ellipse at center,#0000 25%,#0007 100%);color:#941f23;overflow:hidden;scale:none;transform:none}
 .death-screen[open]{animation:death-reveal 1.4s ease-out both}.death-screen::backdrop{background:#0007;backdrop-filter:grayscale(.9);animation:death-darken 1.4s ease-out both}
 #death-restart{position:absolute;inset:0;width:100%;height:100%;display:grid;place-items:center;padding:0;background:transparent;color:inherit;touch-action:manipulation;cursor:pointer}
