@@ -22,14 +22,19 @@ export async function loadTrainingGround(world,training){
       world.lighting.registerMeshes(asset.meshes);
       if(key.endsWith('-tree'))prepareTreeOcclusion(asset.meshes);
       const distantMaterials = new Map();
-      const distantMaterialFor = material => {
-        if (!distantMaterials.has(material)) distantMaterials.set(material, createFarTreeMaterial(material, world.lighting));
-        return distantMaterials.get(material);
+      const distantMaterialFor = (material,painted=null) => {
+        const cacheKey=`${material.uniqueId}:${Boolean(painted)}`;
+        if (!distantMaterials.has(cacheKey)) distantMaterials.set(cacheKey, createFarTreeMaterial(painted??material, world.lighting));
+        return distantMaterials.get(cacheKey);
       };
       for(const lod of config.lods??[]){
         const lodUrl=new URL(lod.model,url),variant=await SceneLoader.LoadAssetContainerAsync(new URL('.',lodUrl).href,lodUrl.pathname.split('/').pop(),world.scene,null,'.gltf');
-        const cheap = lod.material === 'vertex-lit';
-        const meshes=attachTreeLod(world.scene,asset,variant,lod.distance,cheap?distantMaterialFor:null);
+        const cheap = (lod.material??'').endsWith('vertex-lit'),painted=(lod.material??'').startsWith('painted-');
+        const materialFor=painted?((original,baked)=>{
+          baked.backFaceCulling=false;baked.freeze();
+          return cheap?distantMaterialFor(original,baked):baked;
+        }):cheap?(original=>distantMaterialFor(original)):null;
+        const meshes=attachTreeLod(world.scene,asset,variant,lod.distance,materialFor);
         if(!cheap)world.lighting.registerMeshes(meshes);
         if(key.endsWith('-tree'))prepareTreeOcclusion(meshes);
       }

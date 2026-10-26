@@ -1,0 +1,45 @@
+{
+  "errors": [],
+  "cases": [
+    {
+      "baseline": true,
+      "name": "center",
+      "triangles": 807972,
+      "meshes": 121,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 60
+    },
+    {
+      "baseline": true,
+      "name": "edge",
+      "triangles": 325760,
+      "meshes": 165,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 60
+    },
+    {
+      "baseline": false,
+      "name": "center",
+      "triangles": 796065,
+      "meshes": 121,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 60
+    },
+    {
+      "baseline": false,
+      "name": "edge",
+      "triangles": 326186,
+      "meshes": 165,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 60
+    }
+  ]
+}

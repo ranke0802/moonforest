@@ -41,17 +41,20 @@ export async function simplifyGeometry(source,files,policy){
   // joint-number distances, this metric protects actual changes in skinning.
   const tracked=usedJoints.slice(0,-1);
   if(tracked.length+5>32)throw new Error('Skin exceeds the safe attribute budget');
-  const stride=5+tracked.length,attributes=new Float32Array(count*stride),slot=new Map(tracked.map((j,i)=>[j,5+i]));
+  const colors=options.paintedColors?read(original.attributes.COLOR_0):null;
+  const colorSize=colors?colors.length/count:0,baseStride=colors?6:5;
+  const stride=baseStride+tracked.length,attributes=new Float32Array(count*stride),slot=new Map(tracked.map((j,i)=>[j,baseStride+i]));
   for(let i=0;i<count;i++){
-   attributes.set([normals[i*3],normals[i*3+1],normals[i*3+2],uvs[i*2],uvs[i*2+1]],i*stride);
+   attributes.set([normals[i*3],normals[i*3+1],normals[i*3+2],...(colors?Array.from(colors.subarray(i*colorSize,i*colorSize+3)):[uvs[i*2],uvs[i*2+1]])],i*stride);
    if(joints)for(let k=0;k<4;k++){const s=slot.get(joints[i*4+k]);if(s!==undefined)attributes[i*stride+s]+=weights[i*4+k];}
   }
-  const attributeWeights=[.15,.15,.15,.3,.3,...tracked.map(()=>.5)];
+  const attributeWeights=[.15,.15,.15,...(colors?[1,1,1]:[.3,.3]),...tracked.map(()=>.5)];
   const target=Math.floor(indices.length*options.ratio/3)*3;
   const [reduced,error]=S.simplifyWithAttributes(indices,positions,3,attributes,stride,attributeWeights,null,target,options.error,['Permissive',...(joints?['RegularizeLight']:[])]);
   const [remap,used]=S.compactMesh(reduced);
   primitive.indices=store(reduced,{componentType:5125,type:'SCALAR'});
   for(const [semantic,index] of Object.entries(original.attributes)){
+   if(options.paintedColors&&semantic.startsWith('TEXCOORD_')){delete primitive.attributes[semantic];continue;}
    const values=read(index),a=source.accessors[index],size=sizes[a.type],compact=new values.constructor(used*size);
    for(let i=0;i<remap.length;i++)if(remap[i]!==0xffffffff)for(let j=0;j<size;j++)compact[remap[i]*size+j]=values[i*size+j];
    primitive.attributes[semantic]=store(compact,a);

@@ -47,6 +47,6 @@ test('authored near models are preserved and background geometry is much smaller
     const count=gltf=>gltf.meshes.flatMap(mesh=>mesh.primitives).reduce((sum,p)=>sum+gltf.accessors[p.indices].count/3,0);
     assert.ok(count(far)<2500);assert.ok(count(far)<count(mid)*.1);
     assert.deepEqual(far.images,mid.images,'no replacement texture download or color change');
-    assert.equal(asset.lods[3].material,'vertex-lit');
+    assert.equal(asset.lods[3].material,'painted-vertex-lit');
   }
 });

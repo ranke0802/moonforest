@@ -1,0 +1,131 @@
+{
+  "errors": [],
+  "cases": [
+    {
+      "key": "oak-tree",
+      "level": "full",
+      "phase": "original",
+      "triangles": 173685,
+      "vertices": 329337
+    },
+    {
+      "key": "oak-tree",
+      "level": "near",
+      "phase": "before",
+      "triangles": 74115,
+      "vertices": 135412
+    },
+    {
+      "key": "oak-tree",
+      "level": "near",
+      "phase": "after",
+      "triangles": 73733,
+      "vertices": 134486
+    },
+    {
+      "key": "oak-tree",
+      "level": "mid",
+      "phase": "before",
+      "triangles": 21998,
+      "vertices": 31401
+    },
+    {
+      "key": "oak-tree",
+      "level": "mid",
+      "phase": "after",
+      "triangles": 22043,
+      "vertices": 32073
+    },
+    {
+      "key": "oak-tree",
+      "level": "distant",
+      "phase": "before",
+      "triangles": 3781,
+      "vertices": 3223
+    },
+    {
+      "key": "oak-tree",
+      "level": "distant",
+      "phase": "after",
+      "triangles": 3827,
+      "vertices": 3473
+    },
+    {
+      "key": "oak-tree",
+      "level": "background",
+      "phase": "before",
+      "triangles": 1370,
+      "vertices": 1070
+    },
+    {
+      "key": "oak-tree",
+      "level": "background",
+      "phase": "after",
+      "triangles": 1397,
+      "vertices": 1119
+    },
+    {
+      "key": "verdant-tree",
+      "level": "full",
+      "phase": "original",
+      "triangles": 151714,
+      "vertices": 309586
+    },
+    {
+      "key": "verdant-tree",
+      "level": "near",
+      "phase": "before",
+      "triangles": 73459,
+      "vertices": 142225
+    },
+    {
+      "key": "verdant-tree",
+      "level": "near",
+      "phase": "after",
+      "triangles": 71101,
+      "vertices": 135439
+    },
+    {
+      "key": "verdant-tree",
+      "level": "mid",
+      "phase": "before",
+      "triangles": 32864,
+      "vertices": 42850
+    },
+    {
+      "key": "verdant-tree",
+      "level": "mid",
+      "phase": "after",
+      "triangles": 31760,
+      "vertices": 39933
+    },
+    {
+      "key": "verdant-tree",
+      "level": "distant",
+      "phase": "before",
+      "triangles": 6120,
+      "vertices": 3095
+    },
+    {
+      "key": "verdant-tree",
+      "level": "distant",
+      "phase": "after",
+      "triangles": 6142,
+      "vertices": 3071
+    },
+    {
+      "key": "verdant-tree",
+      "level": "background",
+      "phase": "before",
+      "triangles": 2367,
+      "vertices": 967
+    },
+    {
+      "key": "verdant-tree",
+      "level": "background",
+      "phase": "after",
+      "triangles": 2475,
+      "vertices": 1089
+    }
+  ]
+}

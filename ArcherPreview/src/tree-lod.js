@@ -11,9 +11,9 @@ export function attachTreeLod(scene,source,variant,distance,materialFor=null){
   if(full.length!==low.length)throw new Error('Tree LOD mesh count mismatch');
   for(let i=0;i<full.length;i++){
     if(full[i].name!==low[i].name)throw new Error('Tree LOD mesh identity mismatch');
-    low[i].material=materialFor?materialFor(full[i].material):full[i].material;
+    low[i].material=materialFor?materialFor(full[i].material,low[i].material):full[i].material;
     low[i].isPickable=false;
-    low[i].receiveShadows=materialFor?false:full[i].receiveShadows;
+    low[i].receiveShadows=low[i].material?.metadata?.distantTree?false:full[i].receiveShadows;
     scene.addMesh(low[i]);
     full[i].addLODLevel(distance,low[i]);
   }
