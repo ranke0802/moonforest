@@ -1,16 +1,18 @@
 const clamp01=n=>Math.max(0,Math.min(1,n));
-const smooth=n=>{const t=clamp01(n);return t*t*(3-2*t);};
-// Broad, low rises leave the central sparring circle level. Outer hills frame
-// the forest, while the playable area remains suitable for the authored clips.
+// Readable shoulders around a flat sparring circle. Broad hilltops retain
+// smooth traversal while rising high enough to show in the default camera.
 const MOUNDS=[
-  [-6.4,1.0,5.5,6.5,.42], [6.8,3.2,6,6.5,.50],
-  [-5.7,-7.2,6.5,6,.42], [1,8.7,6.5,6,.46], [4.8,-8.8,6,5.8,.36],
-  [-14,5,9,9,1.05], [14,10,10,9,.95], [-9,-16,10,10,.9], [8,-17,10,10,.8], [0,18,10,10,1.05],
+  [-6.6,1.0,6,6.5,1.35], [7,3.2,6.5,6.5,1.45],
+  [-6.2,-7.2,6.5,6,1.25], [1,8.7,6.5,6,1.35], [5.6,-8.8,6,5.8,1.15],
+  [-14,5,10,10,2], [14,10,11,10,1.8], [-9,-16,11,11,1.8], [8,-17,11,11,1.6], [0,18,11,11,2.1],
 ];
 function forestHeight(x,z){
   let height=0;
-  for(const [cx,cz,rx,rz,rise] of MOUNDS){const r2=((x-cx)/rx)**2+((z-cz)/rz)**2;if(r2<1)height+=rise*(1-r2)**3;}
-  return .6*height*smooth((Math.hypot(x,z)-4.4)/3.2);
+  for(const [cx,cz,rx,rz,rise] of MOUNDS){const r2=((x-cx)/rx)**2+((z-cz)/rz)**2;if(r2<1)height+=rise*(1-r2)**2;}
+  const distance=Math.max(0,Math.hypot(x,z)-4.4);
+  const shoulder=.42*(distance-.5+.5*Math.exp(-2*distance));
+  // Smooth minimum caps the climb out of the clearing without a sharp lip.
+  return height>0&&shoulder>0?Math.pow(height**-6+shoulder**-6,-1/6):0;
 }
 
 export class TerrainHeightField {

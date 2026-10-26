@@ -10,13 +10,14 @@ import {GoldLoot} from '../src/gold-loot.js';
 import {BossGrab} from '../src/boss-grab.js';
 
 function fixture(t){const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>{scene.dispose();engine.dispose();});return scene;}
-test('central arena stays flat; playable hills remain low and walkable; cached surface is bounded',()=>{
+test('central arena stays flat; visible hills retain walkable slopes and the same mesh budget',()=>{
   const terrain=new TerrainHeightField();let maximum=0,maxSlope=0;
   for(let x=-11;x<=11;x+=.15)for(let z=-11;z<=11;z+=.15){
     const r=Math.hypot(x,z);if(r>11)continue;const y=terrain.heightAt(x,z);assert.ok(y>=0);if(r<=3.1)assert.equal(y,0);
     maximum=Math.max(maximum,y);maxSlope=Math.max(maxSlope,Math.hypot((terrain.heightAt(x+.01,z)-terrain.heightAt(x-.01,z))/.02,(terrain.heightAt(x,z+.01)-terrain.heightAt(x,z-.01))/.02));
   }
-  assert.ok(maximum>.3&&maximum<.4);assert.ok(maxSlope<.15,`slope ${maxSlope}`);assert.equal(terrain.heights.byteLength,16900);
+  assert.ok(maximum>1.5&&maximum<1.8);assert.ok(maxSlope<.43,`slope ${maxSlope}`);assert.equal(terrain.heights.byteLength,16900);
+  assert.ok(terrain.heightAt(1,8)>1,'forest shoulder must be visible above the clearing');
   assert.equal(terrain.heightAt(100,100),terrain.heightAt(35,35));
 });
 test('ground height lookup exactly matches rendered triangles, with upward smooth normals and one mesh',t=>{
@@ -27,13 +28,13 @@ test('ground height lookup exactly matches rendered triangles, with upward smoot
     const x=positions[a]*.2+positions[b]*.3+positions[c]*.5,z=positions[a+2]*.2+positions[b+2]*.3+positions[c+2]*.5,y=positions[a+1]*.2+positions[b+1]*.3+positions[c+1]*.5;
     assert.ok(Math.abs(terrain.heightAt(x,z)-y)<1e-6);
   }
-  for(let i=1;i<normals.length;i+=3)assert.ok(normals[i]>.95);
-  assert.ok(ground.getBoundingInfo().boundingBox.maximum.y>.6);
+  for(let i=1;i<normals.length;i+=3)assert.ok(normals[i]>.9);
+  assert.ok(ground.getBoundingInfo().boundingBox.maximum.y>2);
 });
 test('grounded movement and rolling retain existing obstacle sliding without shifting enemies',()=>{
   const terrain=new TerrainHeightField(),navigation=new ArenaNavigation([{x:6,z:3,radius:.5}]),position=new Vector3(4,0,3),enemy={active:true,kind:'goblin',radius:.34,brain:{hp:180,mode:'move'},actor:{position:new Vector3(7,0,3)}};
   terrain.place(position);const initial=enemy.actor.position.clone();
-  for(let i=0;i<30;i++){const previous=position.clone();position.x+=.15;constrainDodge(position,previous,navigation,[enemy]);terrain.place(position);assert.ok(Math.abs(position.y-previous.y)<.04);assert.ok(Math.hypot(position.x-6,position.z-3)>.81);}
+  for(let i=0;i<30;i++){const previous=position.clone();position.x+=.15;constrainDodge(position,previous,navigation,[enemy]);terrain.place(position);assert.ok(Math.abs(position.y-previous.y)<.075);assert.ok(Math.hypot(position.x-6,position.z-3)>.81);}
   assert.ok(enemy.actor.position.equals(initial));assert.equal(position.y,terrain.heightAt(position.x,position.z));
 });
 test('warning ring follows hills, costs 128 triangles, and does not update while hidden',t=>{
