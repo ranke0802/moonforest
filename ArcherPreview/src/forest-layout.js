@@ -1,16 +1,39 @@
-// Open central sparring circle, with multiple routes between planted borders.
+const tree=(kind,x,z,scale,yaw)=>({key:`${kind}-tree`,x,z,scale,yaw,radius:(kind==='oak'?1:.55)*scale});
+
+// A broad clearing with uneven groves and open approaches between them.
+// Authored positions stay fixed across reloads; no evenly spaced radial rows.
+// Keep the existing 24 trees / species mix and derive collision from placement.
 export const TREE_PLACEMENTS = [
-  {key:'verdant-tree',x:-5.3,z:1.0,scale:1,yaw:.4,radius:.55},
-  {key:'verdant-tree',x:5.3,z:.3,scale:.95,yaw:2.1,radius:.53},
-  {key:'verdant-tree',x:.6,z:6.1,scale:1.05,yaw:1.2,radius:.58},
-  {key:'verdant-tree',x:-4.6,z:-5.6,scale:.9,yaw:2.7,radius:.5},
-  {key:'oak-tree',x:7.7,z:6.1,scale:1,yaw:.7,radius:1},
-  {key:'oak-tree',x:-8.0,z:5.4,scale:.95,yaw:2,radius:.96},
-  {key:'oak-tree',x:7.5,z:-6.5,scale:.95,yaw:3.2,radius:.96},
-  {key:'oak-tree',x:-8.4,z:-3.0,scale:1.05,yaw:4,radius:1.05},
-  {key:'verdant-tree',x:.9,z:-9.0,scale:1.05,yaw:.2,radius:.58},
-  {key:'verdant-tree',x:-3.5,z:10.2,scale:1.1,yaw:1.6,radius:.6},
-  ...Array.from({length:14},(_,i)=>{const a=i*2.399963,r=14+(i%3)*2;return {key:i%3?'verdant-tree':'oak-tree',x:Math.sin(a)*r,z:Math.cos(a)*r,scale:.85+(i%4)*.1,yaw:a,radius:.65};}),
+  // Northwest: a broad, staggered grove.
+  tree('verdant',-11.6,8.6,1.08,.4),
+  tree('oak',-14.8,8.2,.94,2.1),
+  tree('verdant',-12.9,12.4,.86,4.7),
+  tree('verdant',-16.4,12.0,1.13,1.2),
+  tree('oak',-18.1,8.1,.92,3.8),
+  // Northeast: set farther back, leaving a wider northern opening.
+  tree('verdant',8.4,12.5,1.04,2.7),
+  tree('oak',11.8,14.3,1.04,.7),
+  tree('verdant',15.2,12.1,.9,5.4),
+  tree('oak',13.0,16.8,.9,3.2),
+  // East: a small grove that projects slightly toward the clearing.
+  tree('verdant',12.1,1.9,.94,1.8),
+  tree('oak',15.1,-.1,1,4.1),
+  tree('verdant',17.9,3.1,1.1,.2),
+  tree('verdant',14.9,5.6,.85,5.8),
+  // Southeast: a loose diagonal group, separated from the eastern grove.
+  tree('verdant',9.4,-10.5,1.02,3.4),
+  tree('oak',13.1,-11.8,.93,1.1),
+  tree('verdant',9.8,-14.9,.88,4.6),
+  tree('oak',14.1,-15.4,.9,2.6),
+  // Southwest: a denser cluster with an irregular edge.
+  tree('verdant',-7.9,-11.8,1,.9),
+  tree('oak',-11.4,-10.5,1.03,5.2),
+  tree('verdant',-12.4,-14.2,.9,2.2),
+  tree('verdant',-16,-12.8,1.08,4),
+  tree('verdant',-8.1,-16.1,.93,5.9),
+  // Two solitary trees break up the gaps without closing off the routes.
+  tree('oak',-14.2,-2.6,.9,1.6),
+  tree('verdant',1.4,-18.1,1.08,3.9),
 ];
 export const GRASS_BEDS = [
   {x:3.9,z:-3.8,radius:.72},{x:-5.3,z:-1.3,radius:.65},{x:2.2,z:-6.5,radius:.7},
