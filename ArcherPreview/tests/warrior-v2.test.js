@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {WarriorV2Controller,V2_ATTACKS,V2_ATTACK_BASE_RATE,V2_HOLD_SECONDS,V2_COMBO_GRACE} from '../src/warrior-v2.js';
-const durations={idle:56/30,run:.8,attack:3,slash:1.5,judgment:130/30,shieldPush:71/30};
+const durations={idle:56/30,run:.8,attack:3,slash:1.5,judgment:130/30,shieldPush:71/30,dodge:74/30};
 const create=()=>{const c=new WarriorV2Controller({durations,speeds:{run:4.4371}});c.setAttackSpeed(1/V2_ATTACK_BASE_RATE);return c;};
 const tap=c=>{c.setAttackHeld(true);c.update(.05);c.setAttackHeld(false);};
 
@@ -107,4 +107,33 @@ test('default 1x equals source 1.8x, new 2x equals 3.6x; shield speed is unchang
  c.cancelAttack();c.setAttackSpeed(2);c.attack();assert.ok(Math.abs(c.update(.2).clipTime-.72)<1e-9);
  c.cancelAttack();assert.equal(c.update(.2).clipTime,.2);assert.equal(c.update(.2,{y:1}).clipTime,.2);
  c.shieldPush();assert.equal(c.update(.2).clipTime,.2);
+});
+
+test('repeated dodge and shield push inputs cannot restart or queue the same defense',()=>{
+ for(const kind of ['dodge','shieldPush'])for(const speed of [.5,1,2]){
+  const c=create();c.setMotionSpeed(kind,speed);assert.equal(c[kind](),true);
+  const action=c.action,step=durations[kind]/speed/30;
+  for(let i=0;i<29;i++){
+   c.update(step);const before={...action};
+   for(let tap=0;tap<3;tap++)assert.equal(c[kind](),false);
+   assert.equal(c.action,action);assert.deepEqual(c.action,before);assert.equal(c.serial,1);
+  }
+  assert.equal(c.update(step*1.01,{y:1}).state,'run');assert.equal(c.action,null);assert.equal(c.serial,1);
+  assert.equal(c[kind](),true);assert.equal(c.serial,2);assert.equal(c.action.time,0);
+ }
+});
+
+test('ignored repeat defense preserves an already buffered sword attack and impact pause',()=>{
+ for(const kind of ['dodge','shieldPush']){
+  const c=create();c[kind]();c.update(.1);c.attack();c.pauseOnImpact(.08);
+  const before={...c.action};assert.equal(c[kind](),false);
+  assert.deepEqual(c.action,before);assert.equal(c.queuedAttack,'normal');
+ }
+});
+
+test('defense still interrupts other actions and accepts a different defense',()=>{
+ const c=create();c.attack();c.update(.1);
+ assert.equal(c.dodge(),true);assert.equal(c.action.state,'dodge');
+ assert.equal(c.shieldPush(),true);assert.equal(c.action.state,'shieldPush');
+ assert.equal(c.dodge(),true);assert.equal(c.action.state,'dodge');
 });

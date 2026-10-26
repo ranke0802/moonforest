@@ -63,6 +63,9 @@ export class WarriorV2Controller {
   }
   interruptWith(kind){
     if(this.dead||this.captured||this.knockedDown||this.groggy)return false;
+    // Repeated defense input must not reset its clip, travel, or hit window.
+    // Ignore it entirely rather than buffering another cast after completion.
+    if(this.action?.state===kind)return false;
     this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
   shieldPush(){return this.interruptWith('shieldPush');}
