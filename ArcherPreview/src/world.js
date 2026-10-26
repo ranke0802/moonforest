@@ -4,8 +4,9 @@ import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
 import { TerrainHeightField } from './terrain.js';
 import { createTerrainGround } from './terrain-mesh.js';
-import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
+import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
+import { createMountainBackdrop } from './mountain-backdrop.js';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
@@ -22,13 +23,14 @@ export function createWorld(engine) {
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
-  camera.minZ = .05; camera.maxZ = SCENERY_VIEW_DISTANCE;
+  camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = 14;
   camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
   camera.fov = .65;
   // Input is routed explicitly: joystick/action pointers never enter the camera handler.
   camera.inputs.clear();
   const sky = new MovingSky(scene);
+  const mountains = createMountainBackdrop(scene);
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);
@@ -90,5 +92,5 @@ export function createWorld(engine) {
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
-  return { scene, camera, shadows, lighting, navigation, terrain, sky, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { scene, camera, shadows, lighting, navigation, terrain, sky, mountains, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

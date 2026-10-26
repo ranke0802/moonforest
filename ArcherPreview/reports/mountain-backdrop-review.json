@@ -1,0 +1,79 @@
+{
+  "errors": [],
+  "cases": [
+    {
+      "name": "center",
+      "triangles": 985550,
+      "meshes": 71,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    },
+    {
+      "name": "west",
+      "triangles": 1025043,
+      "meshes": 70,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    },
+    {
+      "name": "south",
+      "triangles": 927919,
+      "meshes": 66,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    },
+    {
+      "name": "east-edge",
+      "triangles": 710509,
+      "meshes": 11,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    },
+    {
+      "name": "west-edge",
+      "triangles": 878930,
+      "meshes": 12,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    },
+    {
+      "name": "overhead",
+      "triangles": 728053,
+      "meshes": 101,
+      "lods": 6,
+      "fogStart": 52,
+      "fogEnd": 60,
+      "far": 220
+    }
+  ],
+  "background": {
+    "triangles": 2944,
+    "meshes": 1,
+    "textures": 0,
+    "nearest": 38.77218400601117,
+    "farthest": 149.87210318844942,
+    "unlit": true,
+    "shadowCaster": false,
+    "receiveShadows": false,
+    "pickable": false,
+    "collisions": false
+  },
+  "before": {
+    "triangles": 982606,
+    "meshes": 70,
+    "lods": 6,
+    "fogStart": 52,
+    "fogEnd": 60,
+    "far": 60
+  }
+}

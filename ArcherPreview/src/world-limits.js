@@ -4,6 +4,9 @@ export const ENEMY_ARENA_RADIUS = ARENA_RADIUS - .5;
 export const VIEW_DISTANCE = 32;
 // Only cheap static scenery extends beyond the existing gameplay render range.
 export const SCENERY_VIEW_DISTANCE = 60;
+// The skyline is a single small static mesh. Tree LOD/culling and gameplay keep
+// their own shorter ranges; this far plane does not extend those render ranges.
+export const SKYLINE_VIEW_DISTANCE = 220;
 export const FOG_START = 52;
 export const FOG_END = SCENERY_VIEW_DISTANCE;
 
