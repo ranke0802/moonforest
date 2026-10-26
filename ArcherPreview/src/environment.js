@@ -2,6 +2,8 @@ import { SceneLoader, TransformNode, Texture, Color3, Quaternion, Vector3 } from
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
 import { attachTreeLod, addDistanceCull } from './tree-lod.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
+import { createFarTreeMaterial } from './tree-material.js';
+import { SCENERY_VIEW_DISTANCE } from './world-limits.js';
 
 export async function loadTrainingGround(world,training){
   if(world.environmentPromise)return world.environmentPromise;
@@ -19,13 +21,20 @@ export async function loadTrainingGround(world,training){
       for(const material of asset.materials){material.backFaceCulling=false;material.freeze();}
       world.lighting.registerMeshes(asset.meshes);
       if(key.endsWith('-tree'))prepareTreeOcclusion(asset.meshes);
+      const distantMaterials = new Map();
+      const distantMaterialFor = material => {
+        if (!distantMaterials.has(material)) distantMaterials.set(material, createFarTreeMaterial(material, world.lighting));
+        return distantMaterials.get(material);
+      };
       for(const lod of config.lods??[]){
         const lodUrl=new URL(lod.model,url),variant=await SceneLoader.LoadAssetContainerAsync(new URL('.',lodUrl).href,lodUrl.pathname.split('/').pop(),world.scene,null,'.gltf');
-        const meshes=attachTreeLod(world.scene,asset,variant,lod.distance);
-        world.lighting.registerMeshes(meshes);
+        const cheap = lod.material === 'vertex-lit';
+        const meshes=attachTreeLod(world.scene,asset,variant,lod.distance,cheap?distantMaterialFor:null);
+        if(!cheap)world.lighting.registerMeshes(meshes);
         if(key.endsWith('-tree'))prepareTreeOcclusion(meshes);
       }
-      if(key.endsWith('-tree')||key.startsWith('grass-'))addDistanceCull(asset);
+      if(key.endsWith('-tree'))addDistanceCull(asset,SCENERY_VIEW_DISTANCE);
+      else if(key.startsWith('grass-'))addDistanceCull(asset);
       return [key,asset];
     }));
     const assets=Object.fromEntries(entries),plants=[];

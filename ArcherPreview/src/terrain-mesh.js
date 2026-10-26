@@ -2,7 +2,7 @@ import {Mesh,MeshBuilder,VertexBuffer,VertexData} from '@babylonjs/core';
 
 export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
   const mesh=MeshBuilder.CreateGround('forest-floor',{width:terrain.size,height:terrain.size,subdivisions:terrain.subdivisions},scene);
-  const positions=mesh.getVerticesData(VertexBuffer.PositionKind),normals=mesh.getVerticesData(VertexBuffer.NormalKind);
+  const positions=mesh.getVerticesData(VertexBuffer.PositionKind),normals=mesh.getVerticesData(VertexBuffer.NormalKind),uvs=mesh.getVerticesData(VertexBuffer.UVKind);
   for(let i=0;i<terrain.heights.length;i++){
     positions[i*3+1]=terrain.heights[i];
     // Stretch only the flat outermost ring beyond the fog. Keep every playable
@@ -10,10 +10,14 @@ export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
     if(borderExtension){
       if(Math.abs(positions[i*3])>=terrain.half-.001)positions[i*3]+=Math.sign(positions[i*3])*borderExtension;
       if(Math.abs(positions[i*3+2])>=terrain.half-.001)positions[i*3+2]+=Math.sign(positions[i*3+2])*borderExtension;
+      // Preserve world-space texel density on the extended skirt as well.
+      uvs[i*2]=(positions[i*3]+terrain.half)/terrain.size;
+      uvs[i*2+1]=(positions[i*3+2]+terrain.half)/terrain.size;
     }
   }
   VertexData.ComputeNormals(positions,mesh.getIndices(),normals);
   mesh.setVerticesData(VertexBuffer.PositionKind,positions,false);mesh.setVerticesData(VertexBuffer.NormalKind,normals,false);
+  mesh.setVerticesData(VertexBuffer.UVKind,uvs,false);
   mesh.refreshBoundingInfo();return mesh;
 }
 

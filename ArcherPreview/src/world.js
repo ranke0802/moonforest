@@ -4,7 +4,7 @@ import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
 import { TerrainHeightField } from './terrain.js';
 import { createTerrainGround } from './terrain-mesh.js';
-import { ENEMY_ARENA_RADIUS, VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
+import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
 
 export function createWorld(engine) {
@@ -22,7 +22,7 @@ export function createWorld(engine) {
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
-  camera.minZ = .05; camera.maxZ = VIEW_DISTANCE;
+  camera.minZ = .05; camera.maxZ = SCENERY_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = 14;
   camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
   camera.fov = .65;
@@ -47,7 +47,7 @@ export function createWorld(engine) {
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
 
   const terrain=new TerrainHeightField();
-  const ground = createTerrainGround(scene,terrain,{borderExtension:VIEW_DISTANCE});
+  const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);

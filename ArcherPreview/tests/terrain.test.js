@@ -48,6 +48,8 @@ test('flat outer skirt hides the floor edge without adding geometry or altering 
  const a=normal.getVerticesData(VertexBuffer.PositionKind),b=extended.getVerticesData(VertexBuffer.PositionKind);
  assert.equal(extended.getTotalIndices(),normal.getTotalIndices());assert.equal(extended.getTotalVertices(),4225);
  assert.equal(extended.getBoundingInfo().boundingBox.maximum.x,67);
+ const uvs=extended.getVerticesData(VertexBuffer.UVKind);
+ for(let i=0;i<b.length;i+=3){assert.ok(Math.abs(uvs[i/3*2]-(b[i]+terrain.half)/terrain.size)<1e-6);assert.ok(Math.abs(uvs[i/3*2+1]-(b[i+2]+terrain.half)/terrain.size)<1e-6);}
  for(let i=0;i<a.length;i+=3)if(Math.hypot(a[i],a[i+2])<30)assert.deepEqual(Array.from(b.slice(i,i+3)),Array.from(a.slice(i,i+3)));
 });
 test('scarecrow and gold sit on terrain instead of world zero',t=>{
