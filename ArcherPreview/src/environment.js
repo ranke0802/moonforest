@@ -1,6 +1,6 @@
 import { SceneLoader, TransformNode, Texture, Color3, Quaternion, Vector3 } from '@babylonjs/core';
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
-import { attachTreeLod } from './tree-lod.js';
+import { attachTreeLod, addDistanceCull } from './tree-lod.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
 
 export async function loadTrainingGround(world,training){
@@ -25,6 +25,7 @@ export async function loadTrainingGround(world,training){
         world.lighting.registerMeshes(meshes);
         if(key.endsWith('-tree'))prepareTreeOcclusion(meshes);
       }
+      if(key.endsWith('-tree')||key.startsWith('grass-'))addDistanceCull(asset);
       return [key,asset];
     }));
     const assets=Object.fromEntries(entries),plants=[];

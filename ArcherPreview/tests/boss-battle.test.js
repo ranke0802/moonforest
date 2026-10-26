@@ -7,6 +7,8 @@ import { BOSS_MOTIONS } from '../src/boss-spec.js';
 import { ActionAudio } from '../src/action-audio.js';
 import { GOBLIN_MOTIONS } from '../src/goblin-spec.js';
 import { TerrainHeightField } from '../src/terrain.js';
+import { ArenaNavigation } from '../src/navigation.js';
+import { FOREST_OBSTACLES } from '../src/forest-layout.js';
 
 function fixture(t,options={}) {
   const engine = new NullEngine(), scene = new Scene(engine), container = new AssetContainer(scene);
@@ -36,11 +38,27 @@ function fixture(t,options={}) {
   return {battle,player,events,scene,container};
 }
 
+test('monsters summon near an outer-arena player and continue past the former wall',async t=>{
+ const {battle,player}=fixture(t);battle.world.navigation=new ArenaNavigation(FOREST_OBSTACLES);player.position.set(18,0,0);
+ await battle.summon(player,5);
+ for(const enemy of battle.encounters){assert.ok(enemy.actor.position.x>11);assert.ok(Vector3.Distance(player.position,enemy.actor.position)<6);}
+ const enemy=battle.encounters[0];enemy.actor.position.set(15,0,0);enemy.brain.start('Walking','move');
+ battle.update(.1,player);assert.ok(enemy.actor.position.x>15,'enemy chases beyond old 10.5 m boundary');
+});
+
+test('far enemy draw suppression is reversible and leaves combat/model state intact',async t=>{
+ const {battle,player}=fixture(t);await battle.summon(player,1);const enemy=battle.encounters[0],hp=enemy.brain.hp;
+ enemy.actor.position.set(-20,0,0);enemy.updateRenderRange(new Vector3(20,1,0));
+ assert.equal(enemy.renderVisible,false);assert.ok(enemy.asset.meshes.filter(m=>m.getTotalVertices()).every(m=>!m.isVisible));
+ assert.equal(enemy.brain.hp,hp);assert.equal(enemy.active,true);assert.equal(enemy.actor.isEnabled(),true);
+ enemy.updateRenderRange(new Vector3(-15,1,0));assert.equal(enemy.renderVisible,true);assert.ok(enemy.asset.meshes.filter(m=>m.getTotalVertices()).every(m=>m.isVisible));
+});
+
 test('spawn count is bounded and five bosses have separate positions inside the arena',()=>{
   assert.deepEqual(['2',0,99,'bad',3.9].map(normalizeBossCount),[2,1,5,1,3]);
   for(const center of [Vector3.Zero(),new Vector3(9,0,9)]) {
     const positions=bossSpawnPositions({position:center,rotation:{y:1}},5);
-    for(let i=0;i<5;i++){assert.ok(positions[i].length()<=6.5001);for(let j=i+1;j<5;j++)assert.ok(Vector3.Distance(positions[i],positions[j])>2);}
+    for(let i=0;i<5;i++){assert.ok(positions[i].length()<=21.5001);for(let j=i+1;j<5;j++)assert.ok(Vector3.Distance(positions[i],positions[j])>2);}
   }
 });
 

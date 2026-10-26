@@ -70,8 +70,9 @@ test('existing overlaps can escape sideways or away without deepening; arena sta
  near(roll({enemies:[monster],delta:{x:0,z:-2}}).p.z,-2);
  const {p}=roll({enemies:[monster],delta:{x:0,z:2}});
  assert.ok(p.x>.5,'an already crowded player has a lateral escape');
- const edge=roll({from:{x:0,z:10},delta:{x:0,z:4}}).p;
- assert.ok(edge.z<=11);near(edge.z,11);
+ const beyondOldWall=roll({from:{x:0,z:10},delta:{x:0,z:4}}).p;near(beyondOldWall.z,14);
+ const edge=roll({from:{x:0,z:21},delta:{x:0,z:4}}).p;
+ assert.ok(edge.z<=22);near(edge.z,22);
 });
 
 test('30/60 FPS and a single delayed frame produce the same detour',()=>{

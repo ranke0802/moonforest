@@ -43,6 +43,13 @@ test('warning ring follows hills, costs 128 triangles, and does not update while
   for(let i=0;i<positions.length;i+=3)assert.ok(Math.abs(positions[i+1]-terrain.heightAt(center.x+positions[i],center.z+positions[i+2])-.025)<1e-6);
   const before=Array.from(positions);warning.mesh.isVisible=false;warning.update(new Vector3(-7,0,4),2);assert.deepEqual(Array.from(warning.mesh.getVerticesData(VertexBuffer.PositionKind)),before);
 });
+test('flat outer skirt hides the floor edge without adding geometry or altering playable terrain',t=>{
+ const scene=fixture(t),terrain=new TerrainHeightField(),normal=createTerrainGround(scene,terrain),extended=createTerrainGround(scene,terrain,{borderExtension:32});
+ const a=normal.getVerticesData(VertexBuffer.PositionKind),b=extended.getVerticesData(VertexBuffer.PositionKind);
+ assert.equal(extended.getTotalIndices(),normal.getTotalIndices());assert.equal(extended.getTotalVertices(),4225);
+ assert.equal(extended.getBoundingInfo().boundingBox.maximum.x,67);
+ for(let i=0;i<a.length;i+=3)if(Math.hypot(a[i],a[i+2])<30)assert.deepEqual(Array.from(b.slice(i,i+3)),Array.from(a.slice(i,i+3)));
+});
 test('scarecrow and gold sit on terrain instead of world zero',t=>{
   const scene=fixture(t),terrain=new TerrainHeightField({height:()=>.3}),training=createTrainingTargets(scene,null,()=>{},terrain),loot=new GoldLoot();
   const target=training.targets[0];assert.ok(Math.abs(target.position.y-.3)<1e-7);assert.ok(target.aimPoint.y>1.3);

@@ -7,7 +7,8 @@ import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './contr
 import { CharacterAnimator } from './animation.js';
 import { NativeWarriorController } from './native-warrior.js';
 import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
-import { followTarget } from './camera-follow.js';
+import { followTarget, combatFocus } from './camera-follow.js';
+import { ARENA_RADIUS } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
@@ -323,7 +324,7 @@ async function loadCharacter() {
 }
 
 function constrainPlayerPosition(previous){
-  world.navigation.constrain(actor.position,previous,.32,11);
+  world.navigation.constrain(actor.position,previous,.32,ARENA_RADIUS);
 }
 
 function updateHealthBars() {
@@ -409,9 +410,11 @@ function render(dt) {
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('equip',{volume:.35});}
     goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
-    const focus=cameraBoss?Vector3.Lerp(center,cameraBoss.actor.position.add(new Vector3(0,1.1,0)),.35):center;
+    const focus=combatFocus(center,cameraBoss?.actor.position);
     const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
+    world.lighting.follow(actor.position);
+    for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt);
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);

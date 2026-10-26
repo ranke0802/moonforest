@@ -18,6 +18,10 @@ function fixture(t){
  t.after(()=>{owner.grab.reset();scene.dispose();engine.dispose();});
  return {battle,owner,player,controller};
 }
+test('throwing in the outer forest does not pull the player back into the old arena',t=>{
+ const {owner,player}=fixture(t);player.position.set(18,1,0);owner.grab.velocity.set(1,0,0);owner.grab.throw();
+ assert.ok(owner.grab.flightEnd.x>21);assert.ok(Math.hypot(owner.grab.flightEnd.x,owner.grab.flightEnd.z)<=21.5);
+});
 test('escape succeeds up to and including 0.3s, restores grounded rotation and starts the selected roll',t=>{
  for(const time of [0,.15,.3]){
   const {battle,owner,player,controller}=fixture(t);

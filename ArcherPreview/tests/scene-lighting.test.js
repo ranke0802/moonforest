@@ -50,3 +50,12 @@ test('instances inherit source shadow receiving and disposed meshes leave the re
   source.dispose();assert.equal(lighting.receivers.size,0);
   scene.dispose();engine.dispose();
 });
+
+test('shadow region follows the expanded arena without resizing or allocating another shadow map',()=>{
+ const {scene,engine,lighting,key,shadows}=setup(true),map=shadows.getShadowMap();
+ lighting.follow(new Vector3(20,1.2,-16));lighting.setQuality('high');
+ assert.ok(key.position.add(key.direction.scale(25)).equals(new Vector3(20,0,-16)));
+ const previous=key.position.clone();lighting.follow(new Vector3(20.2,1.3,-15.9));assert.ok(key.position.equals(previous));
+ assert.equal(shadows.getShadowMap(),map);assert.equal(key.shadowFrustumSize,32);assert.equal(map.getSize().width,1024);
+ scene.dispose();engine.dispose();
+});

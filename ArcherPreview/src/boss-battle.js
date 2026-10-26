@@ -4,6 +4,7 @@ import { BossModelLibrary } from './boss-models.js';
 import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
 import { isEnemySolid } from './enemy-collision.js';
+import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
 export const MAX_BOSSES = 5;
 export function normalizeBossCount(value) {
@@ -13,13 +14,13 @@ export function normalizeBossCount(value) {
 export function bossSpawnPositions(player, value) {
   const count = normalizeBossCount(value), center = player.position.clone();
   center.y = 0;
-  const limit = count === 1 ? 6.5 : 2.3, distance = Math.hypot(center.x, center.z);
+  const limit = ENEMY_ARENA_RADIUS-(count===1?2.8:4), distance = Math.hypot(center.x, center.z);
   if (distance > limit) { center.x *= limit / distance; center.z *= limit / distance; }
   return Array.from({ length: count }, (_, index) => {
     const yaw = player.rotation.y + (count === 1 ? 0 : -1.1 + 2.2 * index / (count - 1));
     const position = center.add(new Vector3(Math.sin(yaw), 0, Math.cos(yaw)).scale(count === 1 ? 2.8 : 4));
     const radius = Math.hypot(position.x, position.z);
-    if (radius > 6.5) { position.x *= 6.5 / radius; position.z *= 6.5 / radius; }
+    if (radius > ENEMY_ARENA_RADIUS) { position.x *= ENEMY_ARENA_RADIUS / radius; position.z *= ENEMY_ARENA_RADIUS / radius; }
     return position;
   });
 }
@@ -104,7 +105,7 @@ export class BossBattle {
       if(!others.some(b=>b.brain.hp>0))this.combat.reset();
       const positions = bossSpawnPositions(player, count);
       const occupied=[{x:player.position.x,z:player.position.z,radius:.8},...others.filter(b=>b.brain.hp>0).map(b=>({x:b.actor.position.x,z:b.actor.position.z,radius:b.radius}))];
-      if(this.world.navigation)for(const position of positions){this.world.navigation.constrain(position,null,radius,6.5);const safe=this.world.navigation.findFree(position,radius,6.5,occupied);position.x=safe.x;position.z=safe.z;occupied.push({...safe,radius});}
+      if(this.world.navigation)for(const position of positions){this.world.navigation.constrain(position,null,radius,ENEMY_ARENA_RADIUS);const safe=this.world.navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied);position.x=safe.x;position.z=safe.z;occupied.push({...safe,radius});}
       for (let index = 0; index < count; index++) {
         if (!pool[index]) {
           const boss = new Encounter(this.world, boss => this.bossChanged(boss), this.onDamage,
@@ -146,7 +147,7 @@ export class BossBattle {
     for (const boss of this.encounters) boss.update(dt, player);
     const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
     separateBosses(this.encounters, this.combat.grabOwner);
-    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,10.5);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
+    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {

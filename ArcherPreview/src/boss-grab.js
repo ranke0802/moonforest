@@ -1,4 +1,5 @@
 import { Matrix, Quaternion, Vector3 } from '@babylonjs/core';
+import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 export const GRAB_ESCAPE_WINDOW = .3;
@@ -51,7 +52,7 @@ export class BossGrab {
     if(direction.lengthSquared()<.1)direction.copyFrom(this.radial);
     this.flightEnd=this.flightStart.add(direction.normalize().scale(3.2));
     const radius=Math.hypot(this.flightEnd.x,this.flightEnd.z);
-    if(radius>10){this.flightEnd.x*=10/radius;this.flightEnd.z*=10/radius;}
+    if(radius>ENEMY_ARENA_RADIUS){this.flightEnd.x*=ENEMY_ARENA_RADIUS/radius;this.flightEnd.z*=ENEMY_ARENA_RADIUS/radius;}
     this.constrainLanding?.(this.flightEnd,this.flightStart);
     const matrix=Matrix.Compose(this.player.scaling,this.flightRotation,Vector3.Zero());
     const lowest=Math.min(...this.points.map(p=>Vector3.TransformCoordinates(p,matrix).y));

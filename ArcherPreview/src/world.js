@@ -4,6 +4,7 @@ import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
 import { TerrainHeightField } from './terrain.js';
 import { createTerrainGround } from './terrain-mesh.js';
+import { ENEMY_ARENA_RADIUS, VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
@@ -14,13 +15,13 @@ export function createWorld(engine) {
   scene.detachControl();
   scene.useRightHandedSystem = true;
   scene.clearColor = new Color4(.035, .052, .087, 1);
-  scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = .028;
+  scene.fogMode = Scene.FOGMODE_LINEAR;
+  scene.fogStart = FOG_START; scene.fogEnd = FOG_END;
   scene.fogColor = new Color3(.035, .052, .087);
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
-  camera.minZ = .05; camera.maxZ = 100;
+  camera.minZ = .05; camera.maxZ = VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = 14;
   camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
   camera.fov = .65;
@@ -44,7 +45,7 @@ export function createWorld(engine) {
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
 
   const terrain=new TerrainHeightField();
-  const ground = createTerrainGround(scene,terrain);
+  const ground = createTerrainGround(scene,terrain,{borderExtension:VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
@@ -86,6 +87,6 @@ export function createWorld(engine) {
   const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
-  navigation.grid(.34,10.5);navigation.grid(.7,10.5);
+  navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
   return { scene, camera, shadows, lighting, navigation, terrain, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

@@ -1,8 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { ArenaNavigation } from '../src/navigation.js';
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from '../src/world-limits.js';
 import { FOREST_OBSTACLES, TRAINING_OBSTACLES, GRASS_BEDS } from '../src/forest-layout.js';
 const trunk={id:'tree',x:0,z:0,radius:1,height:6};
+test('outer forest paths reach the expanded boundary with a bounded waypoint grid',()=>{
+ const nav=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
+ const points=[{x:19,z:0},{x:-19,z:0},{x:0,z:19},{x:0,z:-19}].map(p=>nav.findFree(p,.7,ENEMY_ARENA_RADIUS));
+ for(const goal of points){const route=nav.path({x:0,z:0},goal,.7);assert.ok(route.length);let previous={x:0,z:0};for(const p of route){assert.ok(nav.segmentClear(previous,p,.7));previous=p;}assert.ok(Math.hypot(previous.x-goal.x,previous.z-goal.z)<.001);}
+ const grid=nav.grid(.7,ENEMY_ARENA_RADIUS);assert.ok(grid.length<3500);assert.equal(nav.grid(.7,ENEMY_ARENA_RADIUS),grid);
+});
 test('swept character and boss collision prevents tunneling even for long dodge/throw steps',()=>{
  const nav=new ArenaNavigation([trunk]);
  for(const r of [.32,.7])for(const length of [4,10,20]){
@@ -11,7 +18,8 @@ test('swept character and boss collision prevents tunneling even for long dodge/
  }
  const p=nav.move({x:-3,z:.5},{x:3,z:2},.32);
  assert.ok(nav.free(p,.32));assert.ok(p.z>.5,'Oblique contact slides along obstacle');
- const boundary=nav.move({x:10,z:0},{x:40,z:0},.32);assert.ok(Math.hypot(boundary.x,boundary.z)<=11);
+ const boundary=nav.move({x:10,z:0},{x:40,z:0},.32);assert.ok(Math.hypot(boundary.x,boundary.z)<=ARENA_RADIUS);
+ assert.ok(boundary.x>21.9,'old 11 m wall is removed');
 });
 test('boss route detours around a tree without crossing its expanded collision hull',()=>{
  const nav=new ArenaNavigation([trunk]),goal={x:4,z:0},cache={};let p={x:-4,z:0},largestZ=0;

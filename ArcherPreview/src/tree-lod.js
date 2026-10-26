@@ -1,5 +1,11 @@
 // Native mesh LOD also works with instanced trees: choose geometry per instance
 // without a second copy of the forest or a per-frame JavaScript traversal.
+import { VIEW_DISTANCE } from './world-limits.js';
+
+export function addDistanceCull(asset,distance=VIEW_DISTANCE){
+  for(const mesh of asset.meshes)if(mesh.getTotalVertices()>0)mesh.addLODLevel(distance,null);
+}
+
 export function attachTreeLod(scene,source,variant,distance){
   const full=source.meshes.filter(m=>m.getTotalVertices()>0),low=variant.meshes.filter(m=>m.getTotalVertices()>0);
   if(full.length!==low.length)throw new Error('Tree LOD mesh count mismatch');

@@ -13,7 +13,8 @@ import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
 import { EnemyDeath } from './enemy-death.js';
 import { createTerrainRing } from './terrain-mesh.js';
-const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
+const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
   const i=Math.floor(f),j=Math.min(i+1,c.rootTrack.length-1),t=f-i;
@@ -39,7 +40,7 @@ export class BossEncounter {
       this.grab.reset();
       this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true,knockdown:true,landed:true});
     },{heightAt:world.terrain?(x,z)=>world.terrain.heightAt(x,z):undefined,
-      constrainLanding:(to,from)=>world.navigation?.constrain(to,from,.32,10)});
+      constrainLanding:(to,from)=>world.navigation?.constrain(to,from,.32,ENEMY_ARENA_RADIUS)});
   }
   async summon(player,{position,rotationY}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
@@ -96,6 +97,15 @@ export class BossEncounter {
   }
   get playerAlive(){return !this.active||this.playerHp>0;}
   get corpseGone(){return this.death.finished;}
+  updateRenderRange(camera){
+    if(!this.active||this.corpseGone)return;
+    // Posed skinned bounds intentionally bypass normal frustum tests. Explicit
+    // range rejection skips their draws/shadows while AI and contacts continue.
+    const visible=withinRenderRange(camera,this.actor.position,3);
+    if(visible===this.renderVisible)return;
+    this.renderVisible=visible;
+    for(const mesh of this.asset.meshes)if(mesh.getTotalVertices())mesh.isVisible=visible;
+  }
   updateDeath(dt){
     if(this.death.advance(dt)){
       this.grab.reset();this.gate.reset();
@@ -155,7 +165,7 @@ export class BossEncounter {
     if(this.brain.mode==='down')this.actor.position.addInPlace(this.knockVelocity.scale(dt));
     this.bossReaction.update(dt,this.actor);
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
-    if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,10.5);else capPosition(this.actor.position);
+    if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,ENEMY_ARENA_RADIUS);else capPosition(this.actor.position);
     this.world.terrain?.place(this.actor.position);
     const spec=this.motionSpec(this.brain.state);
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
@@ -185,7 +195,7 @@ export class BossEncounter {
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
     else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
     const separation=this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;
-    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
@@ -231,7 +241,7 @@ export class BossEncounter {
     const beforeGrab=player.position.clone();
     this.grab.update(this.dt,{boss:this.actor,nodes:this.nodes,serial:this.brain.serial,state:this.brain.state,clipTime:this.brain.time,
       duration:this.brain.durations[this.brain.state],interrupted:this.brain.stagger>0||this.brain.hp<=0});
-    if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,.32,11);
+    if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,.32,ARENA_RADIUS);
     if(!this.combat.grabOwner){this.world.terrain?.place(player.position);player.computeWorldMatrix(true);}
     return hitStop;
   }

@@ -36,6 +36,7 @@ export class SceneLighting {
     this.baseDirection=key.direction.clone();
     this.highDirection=new Vector3(.65,-1,-.45);
     this.direction = key.direction.negate().normalize();
+    this.focus = Vector3.Zero();
     this.receivers = new Set();
     this.painted = new WeakSet();
     // A stable arena-sized frustum avoids per-frame bounds fitting and preserves
@@ -74,12 +75,18 @@ export class SceneLighting {
     const materials=new Set([...this.receivers].map(mesh=>mesh.material).filter(Boolean));
     for(const material of materials)material.markDirty(true);
   }
+  follow(position){
+    const x=Math.round(position.x/2)*2,z=Math.round(position.z/2)*2;
+    if(this.focus.x===x&&this.focus.z===z)return;
+    this.focus.set(x,0,z);
+    this.key.position.copyFrom(this.key.direction.scale(-25).add(this.focus));
+  }
   setQuality(quality) {
     if(this.quality===quality)return;
     this.quality=quality;
     this.high = quality === 'high';
     this.key.direction.copyFrom(this.high?this.highDirection:this.baseDirection);
-    this.key.position.copyFrom(this.key.direction.scale(-25));
+    this.key.position.copyFrom(this.key.direction.scale(-25).add(this.focus));
     this.direction.copyFrom(this.key.direction).negateInPlace().normalize();
     this.scene.shadowsEnabled = this.high;
     this.ambient.intensity = this.high ? .65 : 1.05;

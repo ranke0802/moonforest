@@ -1,10 +1,11 @@
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
+import { ARENA_RADIUS } from './world-limits.js';
 
 const SKIN=.002, STEP=.06;
 
 // Sweep each short portion of the authored roll, then spend its remaining
 // distance along the contact tangent. Enemies are never moved by this solver.
-export function constrainDodge(position, from, navigation, encounters = [], limit = 11) {
+export function constrainDodge(position, from, navigation, encounters = [], limit = ARENA_RADIUS) {
   const dx=position.x-from.x,dz=position.z-from.z,length=Math.hypot(dx,dz);
   if(length<1e-8)return position;
   const ux=dx/length,uz=dz/length;

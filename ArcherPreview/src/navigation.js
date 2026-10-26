@@ -1,3 +1,4 @@
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const EPS=.002;
 function hitTime(a,delta,c,radius){
@@ -12,8 +13,8 @@ function hitTime(a,delta,c,radius){
 /** Analytic swept circles for locomotion; a cached grid is only used to find detours. */
 export class ArenaNavigation {
   constructor(obstacles){this.obstacles=obstacles;this.grids=new Map();this.pathsBuilt=0;}
-  free(p,radius,limit=11){return Math.hypot(p.x,p.z)<=limit+1e-6&&this.obstacles.every(o=>distance(p,o)>=radius+o.radius+EPS);}
-  findFree(p,radius,limit=11,occupied=[]){
+  free(p,radius,limit=ARENA_RADIUS){return Math.hypot(p.x,p.z)<=limit+1e-6&&this.obstacles.every(o=>distance(p,o)>=radius+o.radius+EPS);}
+  findFree(p,radius,limit=ARENA_RADIUS,occupied=[]){
     const center={x:p.x,z:p.z},d=Math.hypot(p.x,p.z);
     if(d>limit){center.x*=limit/d;center.z*=limit/d;}
     const available=q=>this.free(q,radius,limit)&&occupied.every(o=>distance(q,o)>=radius+(o.radius??radius)+.12);
@@ -32,7 +33,7 @@ export class ArenaNavigation {
       return distance(a,o)>=r&&distance(b,o)>=r&&hitTime(a,delta,o,r)===null;
     });
   }
-  move(from,to,radius,limit=11){
+  move(from,to,radius,limit=ARENA_RADIUS){
     let p=this.findFree(from,radius,limit),remaining={x:to.x-from.x,z:to.z-from.z};
     for(let step=0;step<6&&Math.hypot(remaining.x,remaining.z)>1e-6;step++){
       let nearest=1,normal=null;
@@ -55,10 +56,12 @@ export class ArenaNavigation {
     }
     return this.free(p,radius,limit)?p:this.findFree(p,radius,limit);
   }
-  constrain(position,from,radius,limit=11){const p=from?this.move(from,position,radius,limit):this.findFree(position,radius,limit);position.x=p.x;position.z=p.z;return position;}
+  constrain(position,from,radius,limit=ARENA_RADIUS){const p=from?this.move(from,position,radius,limit):this.findFree(position,radius,limit);position.x=p.x;position.z=p.z;return position;}
   grid(radius,limit){
     const key=`${radius}:${limit}`;if(this.grids.has(key))return this.grids.get(key);
-    const step=.5,n=Math.floor(limit*2/step)+1,nodes=[];
+    // Coarser waypoints bound route-search cost in the larger arena. Actual
+    // collision and sliding still use the exact swept circles above.
+    const step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[];
     for(let z=0;z<n;z++)for(let x=0;x<n;x++){const p={x:x*step-limit,z:z*step-limit};nodes.push({...p,free:this.free(p,radius+.035,limit),edges:[]});}
     for(let z=0;z<n;z++)for(let x=0;x<n;x++){
       const i=z*n+x;if(!nodes[i].free)continue;
@@ -69,7 +72,7 @@ export class ArenaNavigation {
     }
     this.grids.set(key,nodes);return nodes;
   }
-  path(from,goal,radius,limit=10.5){
+  path(from,goal,radius,limit=ENEMY_ARENA_RADIUS){
     this.pathsBuilt++;const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];
     const nodes=this.grid(radius,limit);
@@ -84,7 +87,7 @@ export class ArenaNavigation {
     }
     return [];
   }
-  steer(from,goal,radius,cache,dt,limit=10.5){
+  steer(from,goal,radius,cache,dt,limit=ENEMY_ARENA_RADIUS){
     if(this.segmentClear(from,goal,radius+.03)){cache.route=null;return goal;}
     cache.age=(cache.age??0)+dt;
     if(!cache.route||cache.age>.65||distance(goal,cache.goal)>.8){cache.route=this.path(from,goal,radius,limit);cache.goal={x:goal.x,z:goal.z};cache.age=0;}

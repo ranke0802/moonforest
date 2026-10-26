@@ -1,9 +1,17 @@
 import {Mesh,MeshBuilder,VertexBuffer,VertexData} from '@babylonjs/core';
 
-export function createTerrainGround(scene,terrain){
+export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
   const mesh=MeshBuilder.CreateGround('forest-floor',{width:terrain.size,height:terrain.size,subdivisions:terrain.subdivisions},scene);
   const positions=mesh.getVerticesData(VertexBuffer.PositionKind),normals=mesh.getVerticesData(VertexBuffer.NormalKind);
-  for(let i=0;i<terrain.heights.length;i++)positions[i*3+1]=terrain.heights[i];
+  for(let i=0;i<terrain.heights.length;i++){
+    positions[i*3+1]=terrain.heights[i];
+    // Stretch only the flat outermost ring beyond the fog. Keep every playable
+    // triangle and the mesh budget unchanged; no exposed floor edge near the rim.
+    if(borderExtension){
+      if(Math.abs(positions[i*3])>=terrain.half-.001)positions[i*3]+=Math.sign(positions[i*3])*borderExtension;
+      if(Math.abs(positions[i*3+2])>=terrain.half-.001)positions[i*3+2]+=Math.sign(positions[i*3+2])*borderExtension;
+    }
+  }
   VertexData.ComputeNormals(positions,mesh.getIndices(),normals);
   mesh.setVerticesData(VertexBuffer.PositionKind,positions,false);mesh.setVerticesData(VertexBuffer.NormalKind,normals,false);
   mesh.refreshBoundingInfo();return mesh;
