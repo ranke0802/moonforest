@@ -78,11 +78,11 @@ test('dead bear and goblin fade independently, award once, stop rendering and re
   await battle.summon(player,2);await battle.summon(player,2,'goblin');
   const bear=battle.encounters[0],liveBear=battle.encounters[1],goblin=battle.encounters[2],liveGoblin=battle.encounters[3];
   for(const enemy of [bear,goblin]){enemy.brain.start(enemy.kind==='bear'?'Walking':'Walking','move');assert.equal(enemy.brain.hit({damage:2000}),true);}
-  battle.update(1.5,player);
+  battle.update(2.5,player);
   assert.equal(bear.asset.meshes[0].visibility,.5);assert.equal(goblin.asset.meshes[0].visibility,.5);
   assert.equal(liveBear.asset.meshes[0].visibility,1);assert.equal(liveGoblin.asset.meshes[0].visibility,1);
   assert.deepEqual(rewards.map(r=>r.kind),['bear','goblin']);
-  battle.update(1.5,player);battle.update(.1,player);
+  battle.update(2.5,player);battle.update(.1,player);
   for(const enemy of [bear,goblin]){assert.equal(enemy.corpseGone,true);assert.equal(enemy.actor.isEnabled(),false);assert.equal(enemy.animator.active.size,0);}
   assert.equal(rewards.length,2);
   await battle.summon(player,1,'goblin');assert.equal(goblin.corpseGone,false);assert.equal(goblin.asset.meshes[0].visibility,1);assert.equal(goblin.actor.isEnabled(),true);

@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import {GoldLoot} from '../src/gold-loot.js';
 import {EnemyDeath} from '../src/enemy-death.js';
 
-test('deaths fade for exactly three seconds and award once until reused',()=>{
+test('deaths fade for exactly five seconds and award once until reused',()=>{
   const death=new EnemyDeath();assert.equal(death.opacity,1);
-  assert.equal(death.advance(1),true);assert.equal(death.advance(.5),false);assert.equal(death.opacity,.5);
-  death.advance(1.49);assert.equal(death.finished,false);death.advance(.01);assert.equal(death.finished,true);assert.equal(death.opacity,0);
+  assert.equal(death.advance(1),true);assert.equal(death.advance(1.5),false);assert.equal(death.opacity,.5);
+  death.advance(2.49);assert.equal(death.finished,false);death.advance(.01);assert.equal(death.finished,true);assert.equal(death.opacity,0);
   assert.equal(death.advance(1),false);death.reset();assert.equal(death.opacity,1);assert.equal(death.advance(0),true);
 });
 test('10G goblin / 100G bear loot is collected nearby once, persisted, and survives battle reset',()=>{

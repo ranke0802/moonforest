@@ -1,4 +1,4 @@
-export const CORPSE_FADE_SECONDS=3;
+export const CORPSE_FADE_SECONDS=5;
 export class EnemyDeath {
   constructor(){this.reset();}
   reset(){this.started=false;this.elapsed=0;}
