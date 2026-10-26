@@ -1,6 +1,7 @@
 import { MaterialPluginBase, Vector3 } from '@babylonjs/core';
+import { TreeViewSurface } from './tree-view-surface.js';
 
-// A broad-phase segment/box test, never a raycast through foliage triangles.
+// Cheap candidate rejection only. Empty space inside this box cannot cause fading.
 export function blocksView(camera, target, min, max, padding = .18) {
   let enter = 0, leave = 1;
   for (const axis of ['x', 'y', 'z']) {
@@ -67,6 +68,13 @@ export function prepareTreeOcclusion(meshes) {
 
 export class TreeOcclusion {
   constructor(roots) {
+    const surfaces=new WeakMap();
+    const surfaceFor=mesh=>{
+      if (!mesh) return null;
+      const geometry=mesh.geometry;
+      if (!surfaces.has(geometry)) surfaces.set(geometry,new TreeViewSurface(mesh));
+      return surfaces.get(geometry);
+    };
     this.trees = roots.map(root => {
       const meshes = root.getChildMeshes(false).filter(mesh => mesh.getTotalVertices() > 0);
       const min = new Vector3(Infinity, Infinity, Infinity), max = min.negate();
@@ -74,10 +82,32 @@ export class TreeOcclusion {
         const box = mesh.getBoundingInfo().boundingBox;
         min.minimizeInPlace(box.minimumWorld); max.maximizeInPlace(box.maximumWorld);
       }
-      return { meshes, min, max, coverage: 1, target: 1 };
+      const parts=meshes.map(mesh=>{
+        const source=mesh.sourceMesh??mesh;
+        const levels=[{distance:0,surface:surfaceFor(source)},...source.getLODLevels().map(l=>({distance:l.distanceOrScreenCoverage,surface:surfaceFor(l.mesh)}))].sort((a,b)=>a.distance-b.distance);
+        return {inverse:mesh.getWorldMatrix().clone().invert(),center:mesh.getBoundingInfo().boundingSphere.centerWorld.clone(),levels};
+      });
+      return { meshes, parts, min, max, coverage: 1, target: 1 };
     });
     this.checkIn = 0;
     this.head = new Vector3(); this.chest = new Vector3();
+    this.localCamera=new Vector3();this.localTarget=new Vector3();
+  }
+  obstructs(tree,camera,target) {
+    if (!blocksView(camera,target,tree.min,tree.max,0)) return false;
+    for (const part of tree.parts) {
+      const distance=Vector3.Distance(camera,part.center);
+      let surface=part.levels[0].surface;
+      for (let i=1;i<part.levels.length;i++) {
+        if (distance<=part.levels[i].distance) break;
+        surface=part.levels[i].surface;
+      }
+      if (!surface) continue;
+      Vector3.TransformCoordinatesToRef(camera,part.inverse,this.localCamera);
+      Vector3.TransformCoordinatesToRef(target,part.inverse,this.localTarget);
+      if (surface.intersects(this.localCamera,this.localTarget)) return true;
+    }
+    return false;
   }
   update(camera, player, dt) {
     this.checkIn -= dt;
@@ -86,8 +116,8 @@ export class TreeOcclusion {
       this.head.copyFrom(player); this.head.y += 1.5;
       this.chest.copyFrom(player); this.chest.y += .85;
       for (const tree of this.trees) {
-        tree.target = blocksView(camera, this.head, tree.min, tree.max) ||
-          blocksView(camera, this.chest, tree.min, tree.max) ? .45 : 1;
+        tree.target = this.obstructs(tree,camera,this.head) ||
+          this.obstructs(tree,camera,this.chest) ? .45 : 1;
       }
     }
     const step = Math.min(dt, .1) * 4;

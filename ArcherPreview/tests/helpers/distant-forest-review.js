@@ -1,5 +1,6 @@
 // Isolated render fixture: no game entry point, input, fullscreen, or audio.
 import { Engine } from '@babylonjs/core';
+export { Vector3, Ray, MeshBuilder, StandardMaterial, Color3 } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import { createWorld } from '../../src/world.js';
 import { loadTrainingGround } from '../../src/environment.js';
