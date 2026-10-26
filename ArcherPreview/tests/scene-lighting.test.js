@@ -30,10 +30,10 @@ test('quality switching reuses one shadow map and preserves authored painted mat
   scene.dispose();engine.dispose();
 });
 
-test('mobile shadows keep a bounded static frustum and render every second frame',()=>{
+test('mobile shadows keep one bounded map synchronized with every rendered pose',()=>{
   const {scene,engine,shadows,key}=setup(true);
   assert.equal(shadows.getShadowMap().getSize().width,1024);
-  assert.equal(shadows.getShadowMap().refreshRate,2);
+  assert.equal(shadows.getShadowMap().refreshRate,1);
   assert.equal(shadows.filteringQuality,ShadowGenerator.QUALITY_LOW);
   assert.equal(key.shadowFrustumSize,32);assert.equal(key.autoUpdateExtends,false);
   assert.ok(key.shadowMaxZ>key.shadowMinZ);

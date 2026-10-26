@@ -46,7 +46,11 @@ export class SceneLighting {
     key.shadowMinZ = 1; key.shadowMaxZ = 65;
     key.autoUpdateExtends = false;
     shadows.filteringQuality = touchDevice ? ShadowGenerator.QUALITY_LOW : ShadowGenerator.QUALITY_MEDIUM;
-    shadows.getShadowMap().refreshRate = touchDevice ? 2 : 1;
+    // The scene is already capped at 30 FPS on phones. Skipping alternate
+    // shadow passes reduces animated shadows to 15 Hz; worse, a moving light
+    // samples the previous map with the new projection on the skipped frame.
+    // Keep one bounded map synchronized with the pose and light every frame.
+    shadows.getShadowMap().refreshRate = 1;
   }
   registerMeshes(meshes) {
     for (const mesh of meshes) {
@@ -80,6 +84,9 @@ export class SceneLighting {
     if(this.focus.x===x&&this.focus.z===z)return;
     this.focus.set(x,0,z);
     this.key.position.copyFrom(this.key.direction.scale(-25).add(this.focus));
+    // Also invalidate explicitly after a projection move (e.g. resume/quality
+    // change) so a previously cached map can never use the new light matrix.
+    this.shadows.getShadowMap().resetRefreshCounter();
   }
   setQuality(quality) {
     if(this.quality===quality)return;
