@@ -146,8 +146,7 @@ export class BossBattle {
     for (const boss of this.encounters) boss.update(dt, player);
     const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
     separateBosses(this.encounters, this.combat.grabOwner);
-    this.encounters.forEach((boss,i)=>this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,10.5));
-    for (const boss of this.encounters) boss.ring.position.set(boss.actor.position.x, .025, boss.actor.position.z);
+    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,10.5);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {

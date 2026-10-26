@@ -2,7 +2,7 @@ import { Color3, MeshBuilder, StandardMaterial, TransformNode, Vector3 } from '@
 import { MeleeContactGate } from './melee-collision.js';
 
 /** One stationary practice target. All positions and distances use scene metres. */
-export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
+export function createTrainingTargets(scene, shadows, onDamage = () => {}, terrain) {
   const materials = [];
   const casters = [];
   const records = [];
@@ -34,6 +34,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}) {
     const prefix = `training-${definition.id}`;
     const root = new TransformNode(`${prefix}-root`, scene);
     root.position.copyFromFloats(...definition.position);
+    terrain?.place(root.position);
     root.rotation.y = Math.atan2(-root.position.x, -root.position.z);
     const sway = new TransformNode(`${prefix}-sway`, scene);
     sway.parent = root;

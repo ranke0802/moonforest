@@ -1,4 +1,4 @@
-import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
+import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
@@ -12,6 +12,7 @@ import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
 import { EnemyDeath } from './enemy-death.js';
+import { createTerrainRing } from './terrain-mesh.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>6.5){p.x*=6.5/d;p.z*=6.5/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -37,7 +38,8 @@ export class BossEncounter {
       // the whole captured actor upright during BossGrab's generic recovery.
       this.grab.reset();
       this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true,knockdown:true,landed:true});
-    });
+    },{heightAt:world.terrain?(x,z)=>world.terrain.heightAt(x,z):undefined,
+      constrainLanding:(to,from)=>world.navigation?.constrain(to,from,.32,10)});
   }
   async summon(player,{position,rotationY}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
@@ -68,7 +70,7 @@ export class BossEncounter {
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
         this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
-        this.ring=MeshBuilder.CreateTorus('boss-attack-warning',{diameter:3.8,thickness:.035,tessellation:64},this.world.scene);
+        this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;
         this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       }
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
@@ -79,6 +81,7 @@ export class BossEncounter {
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
+      this.world.terrain?.place(this.actor.position);
       this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
       this.routeState={};this.dodgeContactClearance=false;
       this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
@@ -153,10 +156,10 @@ export class BossEncounter {
     this.bossReaction.update(dt,this.actor);
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
     if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,10.5);else capPosition(this.actor.position);
-    this.ring.position.set(this.actor.position.x,.025,this.actor.position.z);
+    this.world.terrain?.place(this.actor.position);
     const spec=this.motionSpec(this.brain.state);
     this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
-    this.ring.scaling.setAll(this.attackRange(spec)/1.9);
+    this.warningRing.update(this.actor.position,this.attackRange(spec));
     applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
   }
@@ -182,7 +185,7 @@ export class BossEncounter {
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
     else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
     const separation=this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;
-    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.actor.computeWorldMatrix();}
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,10.5);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
@@ -229,6 +232,7 @@ export class BossEncounter {
     this.grab.update(this.dt,{boss:this.actor,nodes:this.nodes,serial:this.brain.serial,state:this.brain.state,clipTime:this.brain.time,
       duration:this.brain.durations[this.brain.state],interrupted:this.brain.stagger>0||this.brain.hp<=0});
     if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,.32,11);
+    if(!this.combat.grabOwner){this.world.terrain?.place(player.position);player.computeWorldMatrix(true);}
     return hitStop;
   }
   showDefense(kind,actionId){

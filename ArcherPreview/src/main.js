@@ -389,6 +389,9 @@ function render(dt) {
       constrainPlayerPosition(beforeMove);
       if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
+    // Authored jump/roll poses remain local to the actor. Only its ground anchor
+    // follows terrain; a boss holding or throwing the actor owns its altitude.
+    if(!result.captured&&!boss.grab.active)world.terrain.place(actor.position);
     if (attacking && shotTarget && !isWarrior()) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
       faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);
@@ -466,7 +469,7 @@ try {
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
-  training = createTrainingTargets(world.scene, world.shadows,damageFeedback);
+  training = createTrainingTargets(world.scene, world.shadows,damageFeedback,world.terrain);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};

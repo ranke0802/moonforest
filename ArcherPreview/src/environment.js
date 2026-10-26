@@ -1,4 +1,4 @@
-import { SceneLoader, TransformNode, Texture, Color3 } from '@babylonjs/core';
+import { SceneLoader, TransformNode, Texture, Color3, Quaternion, Vector3 } from '@babylonjs/core';
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
 import { attachTreeLod } from './tree-lod.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
@@ -30,7 +30,13 @@ export async function loadTrainingGround(world,training){
     const assets=Object.fromEntries(entries),plants=[];
     function plant(key,p,index,shadow){
       const root=new TransformNode(`forest-${key}-${index}`,world.scene);
-      root.position.set(p.x,0,p.z);root.rotation.y=p.yaw??0;root.scaling.setAll(p.scale??1);
+      root.position.set(p.x,world.terrain?.heightAt(p.x,p.z)??0,p.z);root.rotation.y=p.yaw??0;root.scaling.setAll(p.scale??1);
+      if(key.startsWith('grass-')&&world.terrain){
+        const h=(x,z)=>world.terrain.heightAt(x,z),step=.15;
+        const normal=new Vector3(-(h(p.x+step,p.z)-h(p.x-step,p.z))/(2*step),1,-(h(p.x,p.z+step)-h(p.x,p.z-step))/(2*step)).normalize();
+        const axis=Vector3.Cross(Vector3.Up(),normal);
+        if(axis.lengthSquared()>1e-10)root.rotationQuaternion=Quaternion.RotationAxis(axis.normalize(),Math.acos(normal.y)).multiply(Quaternion.RotationAxis(Vector3.Up(),p.yaw??0));
+      }
       const instance=assets[key].instantiateModelsToScene(name=>`${root.name}-${name}`,false,{doNotInstantiate:false});
       for(const node of instance.rootNodes)node.parent=root;
       for(const node of root.getDescendants(false)){

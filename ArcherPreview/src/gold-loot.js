@@ -12,7 +12,7 @@ export class GoldLoot {
     let pile=this.drops.find(d=>Math.hypot(d.position.x-position.x,d.position.z-position.z)<.45);
     if(!pile&&this.drops.length>=64)pile=this.drops.reduce((a,b)=>Math.hypot(a.position.x-position.x,a.position.z-position.z)<Math.hypot(b.position.x-position.x,b.position.z-position.z)?a:b);
     if(pile){pile.amount+=amount;return pile;}
-    pile={id:++this.serial,amount,position:{x:position.x,y:.04,z:position.z},age:0};this.drops.push(pile);return pile;
+    pile={id:++this.serial,amount,position:{x:position.x,y:(position.y??0)+.04,z:position.z},age:0};this.drops.push(pile);return pile;
   }
   update(dt,player,canCollect=true,canReach=()=>true) {
     const collected=[];

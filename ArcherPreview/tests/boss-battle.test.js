@@ -6,6 +6,7 @@ import { instantiateBossModel } from '../src/boss-models.js';
 import { BOSS_MOTIONS } from '../src/boss-spec.js';
 import { ActionAudio } from '../src/action-audio.js';
 import { GOBLIN_MOTIONS } from '../src/goblin-spec.js';
+import { TerrainHeightField } from '../src/terrain.js';
 
 function fixture(t,options={}) {
   const engine = new NullEngine(), scene = new Scene(engine), container = new AssetContainer(scene);
@@ -40,6 +41,17 @@ test('spawn count is bounded and five bosses have separate positions inside the 
   for(const center of [Vector3.Zero(),new Vector3(9,0,9)]) {
     const positions=bossSpawnPositions({position:center,rotation:{y:1}},5);
     for(let i=0;i<5;i++){assert.ok(positions[i].length()<=6.5001);for(let j=i+1;j<5;j++)assert.ok(Vector3.Distance(positions[i],positions[j])>2);}
+  }
+});
+
+test('bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction',async t=>{
+  const {battle,player}=fixture(t),terrain=new TerrainHeightField({height:(x,z)=>.3+x*.02+z*.03});battle.world.terrain=terrain;terrain.place(player.position);
+  await battle.summon(player,1);await battle.summon(player,1,'goblin');
+  for(const enemy of battle.encounters)assert.equal(enemy.actor.position.y,terrain.heightAt(enemy.actor.position.x,enemy.actor.position.z));
+  for(const enemy of battle.encounters){enemy.actor.position.set(4,0,4);enemy.brain.start('Walking','move');}
+  for(let i=0;i<3;i++){
+    battle.update(.016,player);battle.poseAndContacts(player,{state:'idle'},null,null);
+    for(const enemy of battle.encounters)assert.equal(enemy.actor.position.y,terrain.heightAt(enemy.actor.position.x,enemy.actor.position.z));
   }
 });
 

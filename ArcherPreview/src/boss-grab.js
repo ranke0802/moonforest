@@ -10,7 +10,8 @@ const localPosition=(node,actor)=>{
 /** Moves the complete equipped actor, keeping the captured ankle at the animated palm.
  * The source skeleton, clips and equipment attachments are never rewritten. */
 export class BossGrab {
-  constructor(onControl=()=>{},onImpact=()=>{}){this.onControl=onControl;this.onImpact=onImpact;this.phase=null;}
+  constructor(onControl=()=>{},onImpact=()=>{},{heightAt,constrainLanding}={}){this.onControl=onControl;this.onImpact=onImpact;this.heightAt=heightAt;this.constrainLanding=constrainLanding;this.phase=null;}
+  groundAt(position){return this.heightAt?.(position.x,position.z)??this.savedY;}
   get active(){return this.phase!==null;}
   get holding(){return this.phase==='holding';}
   get canEscape(){return this.holding&&this.time<=GRAB_ESCAPE_WINDOW+1e-9;}
@@ -51,9 +52,11 @@ export class BossGrab {
     this.flightEnd=this.flightStart.add(direction.normalize().scale(3.2));
     const radius=Math.hypot(this.flightEnd.x,this.flightEnd.z);
     if(radius>10){this.flightEnd.x*=10/radius;this.flightEnd.z*=10/radius;}
+    this.constrainLanding?.(this.flightEnd,this.flightStart);
     const matrix=Matrix.Compose(this.player.scaling,this.flightRotation,Vector3.Zero());
     const lowest=Math.min(...this.points.map(p=>Vector3.TransformCoordinates(p,matrix).y));
-    this.flightEnd.y=Math.max(.1,-lowest+.13);
+    this.flightClearance=Math.max(.1,-lowest+.13);
+    this.flightEnd.y=this.groundAt(this.flightEnd)+this.flightClearance;
   }
   update(dt,{boss,nodes,serial,state,clipTime,duration,interrupted=false}){
     if(!this.active||dt<=0)return;
@@ -64,11 +67,12 @@ export class BossGrab {
     }else if(this.phase==='flight'){
       const t=Math.min(1,this.time/.65);
       this.player.position.copyFrom(Vector3.Lerp(this.flightStart,this.flightEnd,t));this.player.position.y+=4*.75*t*(1-t);
+      if(this.heightAt)this.player.position.y=Math.max(this.player.position.y,this.groundAt(this.player.position)+this.flightClearance);
       if(t>=1){this.phase='recover';this.time=0;this.onImpact(this.critical);}
     }else{
       const t=smooth(this.time/.6);
       this.player.rotationQuaternion=Quaternion.Slerp(this.flightRotation,this.startRotation,t);
-      this.player.position.y=this.flightEnd.y+(this.savedY-this.flightEnd.y)*t;
+      this.player.position.y=this.flightEnd.y+(this.groundAt(this.player.position)-this.flightEnd.y)*t;
       if(t>=1)this.reset();
     }
     this.player.computeWorldMatrix(true);
@@ -82,7 +86,7 @@ export class BossGrab {
   reset(){
     if(!this.active)return;
     this.player.rotation.copyFrom(this.savedRotation);this.player.rotationQuaternion=this.savedQuaternion;
-    this.player.position.y=this.savedY;this.player.computeWorldMatrix(true);
+    this.player.position.y=this.groundAt(this.player.position);this.player.computeWorldMatrix(true);
     this.phase=null;this.onControl(false);
   }
 }

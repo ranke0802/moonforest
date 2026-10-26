@@ -2,6 +2,8 @@ import { ArcRotateCamera, Color3, Color4, DirectionalLight, DynamicTexture, Hemi
 import { ArenaNavigation } from './navigation.js';
 import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
+import { TerrainHeightField } from './terrain.js';
+import { createTerrainGround } from './terrain-mesh.js';
 
 export function createWorld(engine) {
   const scene = new Scene(engine);
@@ -41,7 +43,8 @@ export function createWorld(engine) {
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
 
-  const ground = MeshBuilder.CreateGround('forest-floor', { width: 70, height: 70 }, scene);
+  const terrain=new TerrainHeightField();
+  const ground = createTerrainGround(scene,terrain);
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
@@ -84,5 +87,5 @@ export function createWorld(engine) {
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,10.5);navigation.grid(.7,10.5);
-  return { scene, camera, shadows, lighting, navigation, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { scene, camera, shadows, lighting, navigation, terrain, floorMaterial:material, tick(time) { for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }
