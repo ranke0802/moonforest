@@ -87,7 +87,7 @@ export class TreeOcclusion {
       this.chest.copyFrom(player); this.chest.y += .85;
       for (const tree of this.trees) {
         tree.target = blocksView(camera, this.head, tree.min, tree.max) ||
-          blocksView(camera, this.chest, tree.min, tree.max) ? .125 : 1;
+          blocksView(camera, this.chest, tree.min, tree.max) ? .45 : 1;
       }
     }
     const step = Math.min(dt, .1) * 4;

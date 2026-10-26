@@ -29,7 +29,7 @@ test('only an obstructing tree fades, restores, and retains the same LOD instanc
     const blocked=makeRoot(0),clear=makeRoot(6),occlusion=new TreeOcclusion([blocked,clear]);
     const camera=new Vector3(0,2,-10),player=Vector3.Zero();
     for(let i=0;i<6;i++)occlusion.update(camera,player,.05);
-    assert.equal(blocked.getChildMeshes()[0].instancedBuffers.treeCoverage,.125);
+    assert.equal(blocked.getChildMeshes()[0].instancedBuffers.treeCoverage,.45);
     assert.equal(clear.getChildMeshes()[0].instancedBuffers.treeCoverage,1);
     assert.equal(full.material,low.material);
     assert.equal(low.instancedBuffers.treeCoverage,1);

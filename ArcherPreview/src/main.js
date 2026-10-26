@@ -229,6 +229,7 @@ async function loadCharacter() {
   try {
     await initializeResourceCache();
     $('#loading-text').textContent='훈련장의 나무·풀·허수아비를 불러옵니다.';
+    void world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     await loadTrainingGround(world,training);
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
