@@ -1,6 +1,6 @@
 {
-  "model": "./content/82683287839ae139df143135b3f618eee06851a24b2e02714cefbd5788c398e3.gltf",
-  "version": "전사 v2 · V6 R4 모델 / 9개 모션",
+  "model": "./content/867a628605740bc662fc1bb7b1c35e5f7ac594c5405737d62d47cae3872c5aab.gltf",
+  "version": "전사 v2 · V6 R5 망토 / 9개 모션",
   "animations": {
     "idle": "Idle_02",
     "run": "Run_03",
@@ -38,7 +38,7 @@
     "./content/aa1644fc61d612ad58080edc8579c4caf8fdbda0519155f57f60fc50581e160f.bin",
     "./content/375278767ef4804214fa3d4308fac1ea1384c107d71982d54031f6345d26a3e5.bin",
     "./content/4af096f756f71c240800e27bc69e43904c0f8dde6b5387396bf7941fba80e4d4.bin",
-    "./content/4548e030556b13235a9b4a2482b0cb26b0b89f1261eaf7d2abfc0a3fb600a5e4.bin",
+    "./content/3f8dbdfb23280167d307ce40fc057155fdc50c6a21d62f20e0882493b287f472.bin",
     "./content/5988d1a3b562993bb87138ad42f1110b6bea44d8c379398bb18a01bfdf519b7f.bin",
     "./content/fda6e8cd22900389abc9daf3dead76317db5de9796e8878da8c590282d75162c.bin",
     "./content/84ad969b4aff8cfd2176de108bf0f75e2bdb61bfb6738fff7c06a92ae57f6a93.bin",
@@ -49,23 +49,23 @@
     "./content/415f29214388fa49f46c65f7f955d6eee3049cb1b8133068bc4863198ff08fdf.bin",
     "./content/24a5d6bd0932ecfd40cbe62d70b4643d70c85ab1a51a8b15a2e437996f0e2ef9.bin",
     "./content/a85e8319c2f52830d0cce7279c2f64e90bb93a934661dca32aeabb0aee517e3d.bin",
-    "./content/8dc3454506ae6f2f0eb8bb86c86f095769bceb463690fbd622418798b2360915.bin",
-    "./content/50cc1aaf5dc2c059de67a8124b81236de24ed6110958136a2861440917dade83.bin",
-    "./content/38b5c6f65140ba261f661322642102c620f2141fa5444d9c52afb67af5c707aa.bin",
-    "./content/abd64b36bab6041f3b11632ee4be978e694ecd8148d581acf62e970c68946c9f.bin",
-    "./content/3fd3ec354d9890fb1396ab4f6902410e8c631caf75402884fdb7f9d1aae51837.bin",
-    "./content/b27a2c3b296be869d23d1269f4da84ec470a0dd4f2f012f624255944a5fab3d9.bin",
-    "./content/6ac6edc4a09da70ab844b772af1783e0c3b52e28b11409cedf8b60c285a53853.bin",
-    "./content/452092aa29a620ef7e8dc38274f9bec904204a24907ca37812c53d2b99fd1353.bin",
-    "./content/7505d988aa4013c19c203da7feef714c392d29f24450f6bdb2d67bd282a639e5.bin",
-    "./content/4509c3ab57cc72d0547ad70d2278f350d7e64f32aa5aa8102916c7181342c1de.bin",
+    "./content/e61b7d97414771b29f2ddeeaba68822ed9132e10fe884627fa3d01ce3c6133de.bin",
+    "./content/3ac4f568f2b1eeef8b8747417db587e9139b957af09df6f8087977999eefb0c7.bin",
+    "./content/6ddd670f32d32b265093ed58653f79d554f817a8e9674fe51d397e54ba1678c1.bin",
+    "./content/109b8b8dda688f3c6e0237d0231ebdd07b599e8d0e8d10879e66161e94fc9b34.bin",
+    "./content/f8fc4dec90cc397a6f537f0dca2e7750bef71235561a4076b6e030a7737b894f.bin",
+    "./content/7e4116c346786de46e0c1e7586aa2b2c54ab1f0ac9863b5492d31fbc5a5f22ef.bin",
+    "./content/53ef01fa4be900a46fe8597c513d71c35b956edce95b7b066af4e56e7b9aee8f.bin",
+    "./content/f23bc1f4d763ef13dcc8352084188a776220e5b8f19240d39e1486e78ac7ddea.bin",
+    "./content/94af5f924d8799e4b03b0ceca5900e2c765970ec31328158ba0a157dbf558371.bin",
+    "./content/f0e17c495c418c0e57e294f56649a8f5046bceaa0880b764ff4a8c5b2bc42dd7.bin",
     "./content/873d45ce427c0ad551aa42bb7f95e1b43bc23dd9c0bae5d01b7a30c11521d7f0.jpg",
     "./content/79f107187ed61f15718804c4b58519d627a58167c96260065d83bddbdef22367.png",
     "./content/0fdc6ec5e870fca6897db01912e82d557497a460d9801252ab9480979c9e364c.png",
     "./content/d82fbf7bb747dd39ec5f71cfce4b6eef1a570a6a493724982a74003fcc042faf.png",
     "./content/77cca4b886c9f1588e9bfe68b738a1a4b5a4c11c874392e48cb7d123f1ac7768.png",
     "./content/1b598bdacb190784db72153d5a48b96210602ffb3496a5d3c0e72524a8083fc6.png",
-    "./content/82683287839ae139df143135b3f618eee06851a24b2e02714cefbd5788c398e3.gltf"
+    "./content/867a628605740bc662fc1bb7b1c35e5f7ac594c5405737d62d47cae3872c5aab.gltf"
   ],
   "resourceCacheVersion": 1,
   "dodge": {
@@ -222,5 +222,5 @@
       4.654132
     ]
   },
-  "modelRevision": "v6-r4-43dfc78c"
+  "modelRevision": "v6-r5-cape-f77e9096"
 }
