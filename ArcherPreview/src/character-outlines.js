@@ -29,7 +29,7 @@ void main(void) {
   gl_FragColor = vec4(mix(outlineColor, vec3(1.0), hitFlash), outlineOpacity);
 }`;
 const materials = new WeakMap();
-const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004 };
+const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
 function outlineMaterial(scene) {

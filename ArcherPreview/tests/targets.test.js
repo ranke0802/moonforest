@@ -109,10 +109,17 @@ test('replacement model removes old dummy pieces and retains flash, sway and pla
  f.training.applyModel({instantiateModelsToScene(name){return {rootNodes:[MeshBuilder.CreateBox(name('imported-scarecrow'),{},f.scene)]};}});
  assert.equal(f.scene.getMeshByName('training-dummy-south-head'),null);
  const imported=f.scene.getMeshByName('training-dummy-south-imported-scarecrow');
+ const outline=imported.getChildMeshes(true).find(mesh=>mesh.metadata?.moonforestOutline);
+ assert.ok(outline);assert.equal(outline.geometry,imported.geometry);
+ assert.equal(f.casters.has(outline),false);assert.equal(outline.isPickable,false);
  assert.ok(imported);assert.equal(f.scene.getMeshByName('training-dummy-south-bullseye').isVisible,false);
  f.training.hit(target,{damage:64,heavy:true});assert.equal(imported.renderOverlay,true);
+ f.training.update(.08);
+ assert.equal(outline.renderOverlay,false,'outline reads its parent flash without another overlay pass');
+ assert.deepEqual(outline.computeWorldMatrix(true).asArray(),imported.computeWorldMatrix(true).asArray());
  for(let i=0;i<20;i++)f.training.update(.1);
  assert.equal(imported.renderOverlay,false);assert.ok(target.position.equals(planted));
  const sway=f.scene.getTransformNodeByName('training-dummy-south-sway');assert.deepEqual(sway.position.asArray(),[0,.2,0]);
+ f.training.dispose();assert.equal(outline.isDisposed(),true);
  f.close();
 });

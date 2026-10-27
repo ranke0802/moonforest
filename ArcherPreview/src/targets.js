@@ -1,5 +1,6 @@
 import { Color3, MeshBuilder, StandardMaterial, TransformNode, Vector3 } from '@babylonjs/core';
 import { MeleeContactGate } from './melee-collision.js';
+import { attachCharacterOutlines } from './character-outlines.js';
 
 /** One stationary practice target. All positions and distances use scene metres. */
 export function createTrainingTargets(scene, shadows, onDamage = () => {}, terrain) {
@@ -113,6 +114,8 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
         for(const node of instance.rootNodes)node.parent=mount;
         record.parts=mount.getChildMeshes();
         for(const mesh of record.parts){mesh.isPickable=false;mesh.overlayColor=Color3.White();shadows?.addShadowCaster?.(mesh,false);casters.push(mesh);}
+        // Shells inherit the hit sway and read their parent's flash without extra overlay/shadow passes.
+        attachCharacterOutlines({meshes:[...record.parts]},'scarecrow');
       }
     },
     /** Horizontal distance is intentional: player skeleton/root height does not change range. */
