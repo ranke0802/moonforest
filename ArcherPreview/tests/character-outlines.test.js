@@ -1,8 +1,48 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { NullEngine, Scene, MeshBuilder, TransformNode, Skeleton, Quaternion, Vector3 } from '@babylonjs/core';
+import { NullEngine, Scene, MeshBuilder, TransformNode, Skeleton, Bone, Matrix, Quaternion, VertexBuffer, Vector3 } from '@babylonjs/core';
 import { attachCharacterOutlines, isRuntimeOutline } from '../src/character-outlines.js';
 import { applyHitFlash } from '../src/hit-feedback.js';
+
+for (const useTexture of [false, true]) test(`consecutive cached outline draws bind each monster's own ${useTexture ? 'bone texture' : 'bone matrices'}`, t => {
+  const engine = new NullEngine(), scene = new Scene(engine);
+  t.after(() => { scene.dispose(); engine.dispose(); });
+  engine.getCaps().textureFloat = true;
+  engine.getCaps().maxVertexTextureImageUnits = 16;
+  const actors = Array.from({length:5}, (_, i) => {
+    const body = MeshBuilder.CreateBox(`bear-${i}`, {}, scene), count = body.getTotalVertices();
+    body.position.x = i * 3;
+    body.setVerticesData(VertexBuffer.MatricesIndicesKind, new Float32Array(count * 4));
+    body.setVerticesData(VertexBuffer.MatricesWeightsKind, Array.from({length:count * 4}, (_, j) => j % 4 === 0 ? 1 : 0));
+    body.skeleton = new Skeleton(`rig-${i}`, `rig-${i}`, scene);
+    body.skeleton.useTextureToStoreBoneMatrices = useTexture;
+    const bone = new Bone('root', body.skeleton, null, Matrix.Identity());
+    bone.setPosition(new Vector3(i + .25, i * .2, 0));
+    body.skeleton.prepare(true);
+    const shell = attachCharacterOutlines({meshes:[body]}, 'bear')[0];
+    return {body,bone,shell};
+  });
+  const bound = {};
+  const effect = {
+    setMatrix() {}, setFloat() {}, setFloat2() {}, setColor3() {},
+    getUniformIndex: () => useTexture ? 0 : -1,
+    setTexture: (name, texture) => { bound[name] = texture; },
+    setMatrices: (name, matrices) => { bound[name] = Array.from(matrices); },
+  };
+  const draw = shell => shell.material.bind(shell.computeWorldMatrix(true), shell, effect, shell.subMeshes[0]);
+  // Warm every submesh, then reproduce Babylon's material-sorted render queue.
+  for (const {shell} of actors) draw(shell);
+  for (let frame=0; frame<3; frame++) {
+    scene.resetCachedMaterial();
+    for (const [i,{body,bone,shell}] of actors.entries()) {
+      bone.setPosition(new Vector3(i + frame + .5, i * .2, 0));
+      body.skeleton.prepare(true);
+      draw(shell);
+      if (useTexture) assert.ok(bound.boneSampler === body.skeleton.getTransformMatrixTexture(shell), `frame ${frame}, actor ${i}: wrong skeleton texture`);
+      else assert.deepEqual(bound.mBones, Array.from(body.skeleton.getTransformMatrices(shell)), `frame ${frame}, actor ${i}: wrong skeleton matrices`);
+    }
+  }
+});
 
 test('equipment silhouettes follow mounted transforms without copying buffers or changing the skin', t => {
   const engine = new NullEngine(), scene = new Scene(engine);

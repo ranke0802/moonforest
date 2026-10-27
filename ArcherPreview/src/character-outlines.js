@@ -1,4 +1,5 @@
 import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
+import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 
@@ -48,6 +49,9 @@ function outlineMaterial(scene) {
   material.setFloat('hitFlash', 0);
   material.onBindObservable.add(mesh => {
     const effect = material.getEffect();
+    // ShaderMaterial caches bone bindings with the shared material. Consecutive
+    // silhouettes must bind their own rig even when the material/effect is unchanged.
+    BindBonesParameters(mesh, effect);
     effect?.setFloat('outlineWidth', mesh.metadata.outlineWidth);
     effect?.setFloat('outlineOpacity', mesh.visibility);
     const source = mesh.parent;
