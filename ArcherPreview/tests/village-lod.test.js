@@ -21,7 +21,7 @@ test('geometry LOD selects original near mesh and scaled distant instances throu
   assert.equal(instance.getLOD(camera),far,'ankle stones do not retain a full 5K mesh');
 });
 
-test('mobile keeps original geometry as its near tier and streams 8K separately',()=>{
+test('mobile keeps original geometry as its near tier and streams higher resolution separately',()=>{
   const config={geometryLod:true,lods:[{level:0,triangles:5000,textureSize:2048},{level:1,triangles:2500,textureSize:1024},{level:2,triangles:1100,textureSize:512}],mobileNear:{level:0,triangles:5000,textureSize:1024}};
   const mobile=villageLodSources(config,true);assert.deepEqual(mobile.map(l=>l.triangles),[5000,2500,1100]);
   assert.equal(mobile[0],config.mobileNear);assert.equal(villageLodSources(config,false)[0],config.lods[0]);

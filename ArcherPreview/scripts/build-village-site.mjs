@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'vite';
 import { hash } from './resource-pack.js';
 import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
+import { validVillageTextureProfile } from '../src/village-texture-budget.js';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|wav|mp3)$/;
@@ -23,7 +24,7 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
   if(requireCompleteVillage){
     const village=JSON.parse(await readFile(resolve(assetsRoot,'village.json'),'utf8'));
     if(!village.complete||village.developmentFixture||village.availableAssetCount!==25||Object.keys(village.assets??{}).length!==25||VILLAGE_ASSET_IDS.some(id=>village.assets[id]?.visualReview!=='APPROVED'))throw new Error('The production village needs all 25 approved assets; fixtures cannot be published.');
-    if(village.geometryLod?.nearColorResolution!==8192||Object.values(village.assets).some(a=>!a.geometryLod||a.lods?.length!==3||a.mobileNear?.triangles!==a.lods[0].triangles||!(a.lods[2].triangles<a.lods[1].triangles&&a.lods[1].triangles<a.lods[0].triangles)||a.highTextures?.textures?.albedo?.width!==8192||a.highTextures?.textures?.albedo?.height!==8192))throw new Error('Production needs original mobile near geometry, 8K color, and two reduced geometry LODs.');
+    if(village.geometryLod?.nearColorResolution!==4096||Object.values(village.assets).some(a=>!a.geometryLod||a.lods?.length!==3||a.mobileNear?.triangles!==a.lods[0].triangles||!(a.lods[2].triangles<a.lods[1].triangles&&a.lods[1].triangles<a.lods[0].triangles)||!validVillageTextureProfile(a.highTextures)))throw new Error('Production needs original mobile near geometry, at most 4K color, and two reduced geometry LODs.');
   }
   const enqueue=(url,base)=>{
     if(url.startsWith('data:'))return;

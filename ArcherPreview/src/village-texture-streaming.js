@@ -1,5 +1,6 @@
 import {Frustum,Texture} from '@babylonjs/core';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {VILLAGE_TEXTURE_BUDGET,highTextureBytes,selectHighTextures} from './village-texture-budget.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?1500:3000);
 
@@ -9,15 +10,15 @@ export class VillageTextureStreaming {
   constructor(world,assets,records,manifestUrl,stats){
     this.world=world;this.assets=assets;this.records=records;this.url=manifestUrl;this.stats=stats;
     this.resident=new Map();this.failed=new Set();this.wanted=new Map();this.lastWanted=new Map();
-    this.nextCheck=0;this.pending=null;this.disposed=false;
-    Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null});
-    this.supported=world.scene.getEngine().getCaps().maxTextureSize>=8192;
-    if(!this.supported)stats.highTextureError='이 기기의 GPU는 8K 텍스처를 지원하지 않습니다.';
+    this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;
+    this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
+    this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
+    Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0});
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
   update(now){
-    if(this.disposed||!this.supported||now<this.nextCheck)return;
-    this.nextCheck=now+250;this.wanted.clear();
+    if(this.disposed||now<this.nextCheck)return;
+    this.nextCheck=now+250;const candidates=new Map();
     const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
     for(const record of this.records){
       if(!record.root.isEnabled())continue;
@@ -28,22 +29,35 @@ export class VillageTextureStreaming {
         const coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
         if(coverage>VILLAGE_LOD_COVERAGE.mid){
           const id=record.placement.asset;
-          this.wanted.set(id,Math.max(coverage,this.wanted.get(id)??0));this.lastWanted.set(id,now);
+          if(!this.failed.has(id)){candidates.set(id,Math.max(coverage,candidates.get(id)??0));this.lastWanted.set(id,now);}
         }
       }
     }
-    for(const id of this.resident.keys())if(shouldReleaseHighTexture(this.lastWanted.get(id)??0,now,this.world.touchDevice))this.release(id);
+    // Briefly keep off-screen maps only if they fit after visible candidates.
+    for(const id of this.resident.keys())if(!candidates.has(id)&&!shouldReleaseHighTexture(this.lastWanted.get(id)??0,now,this.world.touchDevice))candidates.set(id,0);
+    this.wanted=selectHighTextures(candidates,this.assets,this.resident,this.budget,this.maxTextureSize);
+    // Evict before replacement. An unfinished request keeps its reservation until
+    // it finishes/cancels, preventing transient double allocation during turns.
+    for(const id of this.resident.keys())if(!this.wanted.has(id))this.release(id);
     if(!this.pending){
       const candidate=[...this.wanted].filter(([id])=>!this.resident.has(id)&&!this.failed.has(id)).sort((a,b)=>b[1]-a[1])[0];
       if(candidate)this.start(candidate[0]);
     }
-    this.stats.highTextureAssets=this.resident.size;
+    this.syncStats();
+  }
+  syncStats(){
+    const entries=[...this.resident.values()];
+    this.stats.highTextureAssets=entries.length;
+    this.stats.highTextureBytes=entries.reduce((sum,e)=>sum+e.bytes,0);
+    this.stats.highTextureReserved=this.resident.has(this.pending)?0:this.pendingBytes;
+    this.stats.highTextureMax=Math.max(0,...entries.map(e=>e.resolution));
+    this.stats.highTexturePeak=Math.max(this.stats.highTexturePeak??0,this.stats.highTextureBytes+this.stats.highTextureReserved);
   }
   async loadTexture(config,old){
     const url=new URL(config.url,this.url).href;
     const texture=await new Promise((resolve,reject)=>{
       const item=new Texture(url,this.world.scene,false,old?.invertY??false,Texture.TRILINEAR_SAMPLINGMODE,
-        ()=>resolve(item),(message,error)=>{item.dispose();reject(error??new Error(message||'8K texture load failed'));});
+        ()=>resolve(item),(message,error)=>{item.dispose();reject(error??new Error(message||'High texture load failed'));});
     });
     for(const key of ['coordinatesIndex','coordinatesMode','wrapU','wrapV','uScale','vScale','uOffset','vOffset','uAng','vAng','wAng','level','gammaSpace','hasAlpha']){
       if(old&&old[key]!==undefined)texture[key]=old[key];
@@ -51,11 +65,14 @@ export class VillageTextureStreaming {
     return texture;
   }
   start(id){
-    this.pending=id;this.stats.highTexturePending=1;
-    this.load(id).catch(error=>{
+    const config=this.assets.get(id)?.config.highTextures,bytes=highTextureBytes(config);
+    this.syncStats();
+    if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
+    this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.syncStats();
+    return this.load(id).catch(error=>{
       this.failed.add(id);this.stats.highTextureError=`${id}: ${error.message??error}`;
       console.warn('Village high texture stopped; no automatic retry.',id,error);
-    }).finally(()=>{this.pending=null;this.stats.highTexturePending=0;});
+    }).finally(()=>{this.pending=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});
   }
   async load(id){
     const asset=this.assets.get(id),materials=asset.source.materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
@@ -65,19 +82,18 @@ export class VillageTextureStreaming {
       for(const [role,slot]of Object.entries(slots)){
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot]);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>t.dispose());return;}
+        const size=textures[slot].getSize(),expected=config.textures[role];
+        if(size.width!==expected.width||size.height!==expected.height)throw new Error('Texture dimensions differ from the budgeted profile');
       }
-      const size=textures.albedoTexture.getSize();
-      if(size.width!==8192||size.height!==8192)throw new Error('8K texture was unexpectedly resized');
       for(const {material}of originals){material.unfreeze();Object.assign(material,textures);material.freeze();}
-      this.resident.set(id,{textures,originals});this.stats.highTextureLoads++;this.stats.highTextureAssets=this.resident.size;this.stats.highTextureMax=8192;
+      this.resident.set(id,{textures,originals,bytes:highTextureBytes(config),resolution:config.textures.albedo.width});this.stats.highTextureLoads++;this.syncStats();
     }catch(error){Object.values(textures).forEach(t=>t.dispose());throw error;}
   }
   release(id){
     const entry=this.resident.get(id);if(!entry)return;
     for(const {material,values}of entry.originals){material.unfreeze();Object.assign(material,values);material.freeze();}
     for(const t of Object.values(entry.textures))t.dispose();
-    this.resident.delete(id);this.stats.highTextureReleases++;this.stats.highTextureAssets=this.resident.size;
-    if(!this.resident.size)this.stats.highTextureMax=0;
+    this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }
   dispose(){
     this.disposed=true;this.world.scene.onAfterRenderObservable.remove(this.observer);

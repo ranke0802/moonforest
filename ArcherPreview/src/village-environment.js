@@ -44,7 +44,7 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     let completed=0;
     for(const [id,config]of Object.entries(manifest.assets)){
       // Mobile starts with its light texture tier but original near geometry.
-      // Original 8K color is streamed separately when an asset fills the view.
+      // Up to 4K color is streamed when visible and within the texture budget.
       const levels=villageLodSources(config,touch);
       const source=await load(levels[0]),full=geometry(source);
       for(const mesh of full)mesh.metadata={...mesh.metadata,villageLodLevel:0};
@@ -100,7 +100,7 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     }
     world.treeOcclusion=new TreeOcclusion(records.filter(r=>r.blocksPlayerView&&Math.hypot(r.placement.x,r.placement.z)<54).map(r=>r.root));
     visibility=new VillageVisibility(world,records,{touch});world.villageVisibility=visibility;
-    world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 8K 스트리밍 / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
+    world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 최대 4K / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
     if(manifest.geometryLod)textureStreaming=new VillageTextureStreaming(world,assets,records,url,world.environment);
     // Read by the development review panel only, never a per-frame production scan.
     world.villageRenderRecords=records;

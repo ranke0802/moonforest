@@ -84,30 +84,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/715d3af37897a9c66404176bbd9867ebe766b45b5d01f18a49ef1c79d683bc2e.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/91090f7538ef2b2e130b67e530b723edcf721ec391b85615c373ec894840eb8b.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/1db7a09a329b7ca759ba0335d4e6ce957379d8ee2d03d1f2aba4a048609339f1.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/216cc4c01168d2bc6792473c787e4ff853019612670e3a061167eae9ccd380f8.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/75005cddfb37d42b5f6ca49f2046eea5d8b1bcdd693418ab54cf8c243de2cc61.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/ef95ea2ed4737ffcb6b99559538c30fd0f9f31f38a87118103106f773441d8e7.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/715d3af37897a9c66404176bbd9867ebe766b45b5d01f18a49ef1c79d683bc2e.webp",
-          "./content/1db7a09a329b7ca759ba0335d4e6ce957379d8ee2d03d1f2aba4a048609339f1.webp",
-          "./content/75005cddfb37d42b5f6ca49f2046eea5d8b1bcdd693418ab54cf8c243de2cc61.webp"
+          "./content/91090f7538ef2b2e130b67e530b723edcf721ec391b85615c373ec894840eb8b.webp",
+          "./content/216cc4c01168d2bc6792473c787e4ff853019612670e3a061167eae9ccd380f8.webp",
+          "./content/ef95ea2ed4737ffcb6b99559538c30fd0f9f31f38a87118103106f773441d8e7.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "house-02-tall-home": {
@@ -189,30 +187,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/d4f7bd4a51d1548e641e2a6645ed93f34d954524a6cadfa26937841276795588.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/af64b7e6b53e36f59b7f20ec673adc375e8c365709ff6d7209a80aa4c582829a.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/301998a2a55c1a81ae95b2588294d6373e8bf499d6b4491a6c4573fe234a0768.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/fe3f65567fffcabe459cf58a4b6f4aa1711f1fab406ebee79b4873227ef8398a.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/366591873213d4877d8390388a44a8e0e933159a94a58c22a7ab254da6cc29d0.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/48bcc309ad575dc2646aedad37c54bb5d0672c19be65d8c20f7fd3d687c3a71c.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/d4f7bd4a51d1548e641e2a6645ed93f34d954524a6cadfa26937841276795588.webp",
-          "./content/301998a2a55c1a81ae95b2588294d6373e8bf499d6b4491a6c4573fe234a0768.webp",
-          "./content/366591873213d4877d8390388a44a8e0e933159a94a58c22a7ab254da6cc29d0.webp"
+          "./content/af64b7e6b53e36f59b7f20ec673adc375e8c365709ff6d7209a80aa4c582829a.webp",
+          "./content/fe3f65567fffcabe459cf58a4b6f4aa1711f1fab406ebee79b4873227ef8398a.webp",
+          "./content/48bcc309ad575dc2646aedad37c54bb5d0672c19be65d8c20f7fd3d687c3a71c.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "house-03-workshop": {
@@ -294,30 +290,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/1e3d409bc0a5970baceba9b5d4f51fdd3fe9949305f2ac15043e56de3f3b0dad.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/03b843d9c888c0d21c83c99aa8d87de0cdd53d297489f37f415af2cdb390f167.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/61a734d252d0f9fc77a1dc92ddc29b60c2db3e079c1b5a36f13017bc81ed3ccb.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/d52b9c56d2b77c3dbd9461bfcf9ebf36f2f7677a3389c73c4a9b12d1cb9f5684.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/d496aba2984be8bdb6a8d2f7507ffe97363a2241e347da701d4997268221a354.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/198b373064f10a7e19121c350fb6fabf6b9eccef9e418624ee0615210d98f67f.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/1e3d409bc0a5970baceba9b5d4f51fdd3fe9949305f2ac15043e56de3f3b0dad.webp",
-          "./content/61a734d252d0f9fc77a1dc92ddc29b60c2db3e079c1b5a36f13017bc81ed3ccb.webp",
-          "./content/d496aba2984be8bdb6a8d2f7507ffe97363a2241e347da701d4997268221a354.webp"
+          "./content/03b843d9c888c0d21c83c99aa8d87de0cdd53d297489f37f415af2cdb390f167.webp",
+          "./content/d52b9c56d2b77c3dbd9461bfcf9ebf36f2f7677a3389c73c4a9b12d1cb9f5684.webp",
+          "./content/198b373064f10a7e19121c350fb6fabf6b9eccef9e418624ee0615210d98f67f.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "house-04-forest-hut": {
@@ -399,30 +393,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/ad32bd2fd9510b011f28285ca141a54df0a3cad878411b4a0f2fd048c3898b7f.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/5b21e261ec5868a27bfe58515c8916654dae85c9ca76e7f4bd8534ba5e14b963.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/3f77c2a265ecd1bd368f56f5cf79ea37407c361eb10cc13fceb5c45231a9f4d7.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f1b9850e602e38efc8e2619a3baba88a8c811c0526680369a86f22213fc16d98.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/513bc2e7ec7c6ba1c554f56d5bf6a75e2b67abceae84b3f416b212c4a05c1435.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/2c5b32547e8693068c38ae97d1ae8d362ed7e11f890fad8bdfb13c6414343a40.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/ad32bd2fd9510b011f28285ca141a54df0a3cad878411b4a0f2fd048c3898b7f.webp",
-          "./content/3f77c2a265ecd1bd368f56f5cf79ea37407c361eb10cc13fceb5c45231a9f4d7.webp",
-          "./content/513bc2e7ec7c6ba1c554f56d5bf6a75e2b67abceae84b3f416b212c4a05c1435.webp"
+          "./content/5b21e261ec5868a27bfe58515c8916654dae85c9ca76e7f4bd8534ba5e14b963.webp",
+          "./content/f1b9850e602e38efc8e2619a3baba88a8c811c0526680369a86f22213fc16d98.webp",
+          "./content/2c5b32547e8693068c38ae97d1ae8d362ed7e11f890fad8bdfb13c6414343a40.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wall-01-straight": {
@@ -504,30 +496,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/5f86252fd7ca6af234800b371c6519988bf8538df68bb866a72f47f862e11a45.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/3e0d8832dd2d552e92e99b31efbb99edaddd387c61c5a514d3db4531ea9cafcb.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/7bcaf9a0f90eb5353503d7023d2a91a0cc4d2e70c0c78e1bdec85c1f8fe11b2b.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/ea3584059c3f66be7e8927a7925ea7f83c059e631b51012bbcd33b6b56c3ac99.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/b97248560af8a54ecf75bd47ca2ca75305e5c47ec73d6fbaa0ad1f6e8eee6791.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/429c7f12230174f98fb96422cc8dba1c1a3a5a0f38b67d57c9f213a3e6a31e61.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/5f86252fd7ca6af234800b371c6519988bf8538df68bb866a72f47f862e11a45.webp",
-          "./content/7bcaf9a0f90eb5353503d7023d2a91a0cc4d2e70c0c78e1bdec85c1f8fe11b2b.webp",
-          "./content/b97248560af8a54ecf75bd47ca2ca75305e5c47ec73d6fbaa0ad1f6e8eee6791.webp"
+          "./content/3e0d8832dd2d552e92e99b31efbb99edaddd387c61c5a514d3db4531ea9cafcb.webp",
+          "./content/ea3584059c3f66be7e8927a7925ea7f83c059e631b51012bbcd33b6b56c3ac99.webp",
+          "./content/429c7f12230174f98fb96422cc8dba1c1a3a5a0f38b67d57c9f213a3e6a31e61.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wall-02-corner": {
@@ -609,30 +599,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/e5799d34fcb68102472fc0173823c0e97e80e324ca905437176955652951e59d.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/6670342083fab0e45df5d1f19cee8b9d7507a689145b0e2cb4b7b424253289c7.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/4dd2e52f365c1fad49df6c80b1c7831e515c22dc207bef92339451db35eef981.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/69a1bd158610a27ba602c81e4a71fe14bd3bf850c9bf5c235bcfdb2a412e5cd7.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/bfcb24049c5586e72ca9b38cb1fa018261ed0f9b743267f3361ed2a0065600cb.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/59a82a6109185452be5e1c61ee13c1d796fb4cfa8808d81c4b09803af2d3f177.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/e5799d34fcb68102472fc0173823c0e97e80e324ca905437176955652951e59d.webp",
-          "./content/4dd2e52f365c1fad49df6c80b1c7831e515c22dc207bef92339451db35eef981.webp",
-          "./content/bfcb24049c5586e72ca9b38cb1fa018261ed0f9b743267f3361ed2a0065600cb.webp"
+          "./content/6670342083fab0e45df5d1f19cee8b9d7507a689145b0e2cb4b7b424253289c7.webp",
+          "./content/69a1bd158610a27ba602c81e4a71fe14bd3bf850c9bf5c235bcfdb2a412e5cd7.webp",
+          "./content/59a82a6109185452be5e1c61ee13c1d796fb4cfa8808d81c4b09803af2d3f177.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wall-03-breached": {
@@ -714,30 +702,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/73b4cab3aa66079446b85933aba30e0ced3ebab43aad6e2ccbb477f9aebd36e9.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/d3fc771f500fb1617dadfb4261810276664791ac39a8b24a984acdd8de49982d.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/72b5fa966ff6939c61cf585ac2d6b591dfd45a2c7d27c261da348a4fb75057fc.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/3634ffff5e39230f833c743c4e8f536cb2c397ef54425a064bfb3605f87ff77c.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/a539f5ec79fc43dd7eb8fe2d06f33264eebade7ed3dbe370992eb961adf0bbc1.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/07f2204fbf8d32fb1476f5b99141432b57c8cc42ee23838d9ef27731d3ef7199.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/73b4cab3aa66079446b85933aba30e0ced3ebab43aad6e2ccbb477f9aebd36e9.webp",
-          "./content/72b5fa966ff6939c61cf585ac2d6b591dfd45a2c7d27c261da348a4fb75057fc.webp",
-          "./content/a539f5ec79fc43dd7eb8fe2d06f33264eebade7ed3dbe370992eb961adf0bbc1.webp"
+          "./content/d3fc771f500fb1617dadfb4261810276664791ac39a8b24a984acdd8de49982d.webp",
+          "./content/3634ffff5e39230f833c743c4e8f536cb2c397ef54425a064bfb3605f87ff77c.webp",
+          "./content/07f2204fbf8d32fb1476f5b99141432b57c8cc42ee23838d9ef27731d3ef7199.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wood-01-palisade": {
@@ -819,30 +805,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/5094ed33d83f5d0b60ceca12806476d1bdc7120e699fc2cee26265107604af46.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/c08337e8af9895a7346c66d0f9a4e0cb20bc9665fa7020ccd62c6b2d2a06f478.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/eb749b23c8967ea06a7b1b192b3428b2c35a0d21dfd3c527ed41d1cf989254ca.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/171ab1835d6c78672635d70bb156629bac20266b65ddb7deb0e366484cedc711.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/76b41d88f4c83ec29a0974d9ac80260ce3a07774ee407ed6e6a355f191194fe3.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/93c0fdd557f1122c61afea2c665396e6998f4d6ddbe607a909bdde0bddaee716.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/5094ed33d83f5d0b60ceca12806476d1bdc7120e699fc2cee26265107604af46.webp",
-          "./content/eb749b23c8967ea06a7b1b192b3428b2c35a0d21dfd3c527ed41d1cf989254ca.webp",
-          "./content/76b41d88f4c83ec29a0974d9ac80260ce3a07774ee407ed6e6a355f191194fe3.webp"
+          "./content/c08337e8af9895a7346c66d0f9a4e0cb20bc9665fa7020ccd62c6b2d2a06f478.webp",
+          "./content/171ab1835d6c78672635d70bb156629bac20266b65ddb7deb0e366484cedc711.webp",
+          "./content/93c0fdd557f1122c61afea2c665396e6998f4d6ddbe607a909bdde0bddaee716.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wood-02-cross-barricade": {
@@ -924,30 +908,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/8eb3567b910f0f695a2e1c7e8bde7765a5ede0e380dd56c1fdb5537777fbd9f1.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/0690e95eab7ec6d8627c2d128095cb79f360128f81a6ef40d0ac507e27eda8f6.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/cd0f3e88373413ee7daea58c5806260c97dead50e57ba5567ed50c3c12aaf624.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/7aea3bfa70ead60f3ff7eb84c69332e065494872f8e48498a35bacc1e6e36945.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/cfa16f00e72a15903288c9456a6ca6f810923d6142ac16a3a4df1b65d8a547f3.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/8376fe86ec79d5f7b0da86a364cb3a78b5c9bc72f21e2d96d0547fd80ec27b85.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/8eb3567b910f0f695a2e1c7e8bde7765a5ede0e380dd56c1fdb5537777fbd9f1.webp",
-          "./content/cd0f3e88373413ee7daea58c5806260c97dead50e57ba5567ed50c3c12aaf624.webp",
-          "./content/cfa16f00e72a15903288c9456a6ca6f810923d6142ac16a3a4df1b65d8a547f3.webp"
+          "./content/0690e95eab7ec6d8627c2d128095cb79f360128f81a6ef40d0ac507e27eda8f6.webp",
+          "./content/7aea3bfa70ead60f3ff7eb84c69332e065494872f8e48498a35bacc1e6e36945.webp",
+          "./content/8376fe86ec79d5f7b0da86a364cb3a78b5c9bc72f21e2d96d0547fd80ec27b85.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "wood-03-plank-gate": {
@@ -1029,30 +1011,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/e63b45ea1d51f26ca2ba383dcfb6819c769e9b6cb991c08530bb2144cf25b1d5.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/2a84e1399509c82a8303a584fcd79deec93de0d6407a28e74e2637310a918e8c.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/d3385e0634103bd8fa3354c4abbdf9203d5648d1fe9adddb7a11a99035cb1478.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/6f817ce17d4ddc5bd3993eb4b3d8b81d3ced5a58f637aad38a87cb32c6fe95b9.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/5476c39b174db25a3ea3305fa7bde79e76ebeb8878c58b26c3a8dbd6afeff93c.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/86e0fa518c81183da13454fe9eccf2134054dd1ce2415424de01cb6c2961830b.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/e63b45ea1d51f26ca2ba383dcfb6819c769e9b6cb991c08530bb2144cf25b1d5.webp",
-          "./content/d3385e0634103bd8fa3354c4abbdf9203d5648d1fe9adddb7a11a99035cb1478.webp",
-          "./content/5476c39b174db25a3ea3305fa7bde79e76ebeb8878c58b26c3a8dbd6afeff93c.webp"
+          "./content/2a84e1399509c82a8303a584fcd79deec93de0d6407a28e74e2637310a918e8c.webp",
+          "./content/6f817ce17d4ddc5bd3993eb4b3d8b81d3ced5a58f637aad38a87cb32c6fe95b9.webp",
+          "./content/86e0fa518c81183da13454fe9eccf2134054dd1ce2415424de01cb6c2961830b.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "tree-01-round-oak": {
@@ -1134,30 +1114,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/4de47f92e885fe444c701f24cb7bb54015015d5897da8506ee570ead15579698.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/dd14a4fa24c7f2be9ff6b32ec4182fb9c73b0f07649514071e716ae675fad860.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/a0b8223a8e9fe7b36693adc57eb6291493bdc176a73e17b1f24958c45f80a67d.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f7de910b78bce5bd4053dec4ad52cdf7a7fa5d9d3adc968b5ecd0ef3c792fabe.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/fb36ca34d4328438ce6f168e8e9cecfcc8883a63727bac6e8a5de23ba826f9ef.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/ba0c8bcfdd9b552e612eb861c808ff8f7258c8acf56ce9a73b4df8b8fcd07438.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/4de47f92e885fe444c701f24cb7bb54015015d5897da8506ee570ead15579698.webp",
-          "./content/a0b8223a8e9fe7b36693adc57eb6291493bdc176a73e17b1f24958c45f80a67d.webp",
-          "./content/fb36ca34d4328438ce6f168e8e9cecfcc8883a63727bac6e8a5de23ba826f9ef.webp"
+          "./content/dd14a4fa24c7f2be9ff6b32ec4182fb9c73b0f07649514071e716ae675fad860.webp",
+          "./content/f7de910b78bce5bd4053dec4ad52cdf7a7fa5d9d3adc968b5ecd0ef3c792fabe.webp",
+          "./content/ba0c8bcfdd9b552e612eb861c808ff8f7258c8acf56ce9a73b4df8b8fcd07438.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "tree-02-slender-pine": {
@@ -1239,30 +1217,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/047b09a4c8e24ab6a504eaac8435250966429d933b824aad8ea667684aff82f4.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/8f85e1793aab5d13a3706ec94bd3b6e1c9c1521165ff8c43857aa125710ed2a9.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/fcc2de560c10116412a0362da45f9fc087eadb99e1da1d13f2a2574ec2109358.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/7d06e44fe1e6c39bc9fd12655f2a3a369a4975f1f7fcf8a9fa19336357e57015.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/3ecacc3f70849ce5c76511a5f013e765a2bde5d3000a07dd3a7513db89a633ad.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/207c73d3a8adef1a67a77e2607a5b04b96391e7702c5fb004db8dc19056e4c9a.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/047b09a4c8e24ab6a504eaac8435250966429d933b824aad8ea667684aff82f4.webp",
-          "./content/fcc2de560c10116412a0362da45f9fc087eadb99e1da1d13f2a2574ec2109358.webp",
-          "./content/3ecacc3f70849ce5c76511a5f013e765a2bde5d3000a07dd3a7513db89a633ad.webp"
+          "./content/8f85e1793aab5d13a3706ec94bd3b6e1c9c1521165ff8c43857aa125710ed2a9.webp",
+          "./content/7d06e44fe1e6c39bc9fd12655f2a3a369a4975f1f7fcf8a9fa19336357e57015.webp",
+          "./content/207c73d3a8adef1a67a77e2607a5b04b96391e7702c5fb004db8dc19056e4c9a.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "rock-01-mossy-boulder": {
@@ -1344,30 +1320,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/72650b24c2de26b93225ee2242a2cb369c24dde973fb4b0ed9736d9fe40547be.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/ec87acd1af25d72eca4755dc787418125c3291ce0a4c525c042ab82ff1443416.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/529719289a896c39ed465c59fe8c19e9f457ae7390374d2ecb0304b266071eed.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/c7168953cc24ecf309dac049b907ab3fccbbd01414e66c055294180a46d56b2d.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/5b850a97da30856d3914b40a213dfd417c39a841981804d09e76881db0a57cc3.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f00d880afbfc0098136f17a8a2fd441d5b3b1a33b518828a99e45cb23256a8ac.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/72650b24c2de26b93225ee2242a2cb369c24dde973fb4b0ed9736d9fe40547be.webp",
-          "./content/529719289a896c39ed465c59fe8c19e9f457ae7390374d2ecb0304b266071eed.webp",
-          "./content/5b850a97da30856d3914b40a213dfd417c39a841981804d09e76881db0a57cc3.webp"
+          "./content/ec87acd1af25d72eca4755dc787418125c3291ce0a4c525c042ab82ff1443416.webp",
+          "./content/c7168953cc24ecf309dac049b907ab3fccbbd01414e66c055294180a46d56b2d.webp",
+          "./content/f00d880afbfc0098136f17a8a2fd441d5b3b1a33b518828a99e45cb23256a8ac.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "rock-02-jagged-outcrop": {
@@ -1449,30 +1423,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/b285ee4aeeb340002a56b9e3c42b7309f6431f94adcf783ff78fe7b5a4af0109.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/f136ff1725f22adff414c29a1d4ca7ea4039c1c67d075dc17044b18b7d564a00.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/2adb73dcbddf7f6bd576ec3877a02865187c5f9848308e7d81f63a9512c15b53.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/4a767e6b5ce2497343a3d9cf4ba2442ee7a03e8c3f707475c6c1c2e3594dde9a.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/f791b8e5f9f033361f090628c91587c36bf14160136e3cc8f28672f22cb058c7.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/b74bc030d2ec0db419ea500fc472a8a0cd1791a7e71a39df7b764a42f990bd2f.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/b285ee4aeeb340002a56b9e3c42b7309f6431f94adcf783ff78fe7b5a4af0109.webp",
-          "./content/2adb73dcbddf7f6bd576ec3877a02865187c5f9848308e7d81f63a9512c15b53.webp",
-          "./content/f791b8e5f9f033361f090628c91587c36bf14160136e3cc8f28672f22cb058c7.webp"
+          "./content/f136ff1725f22adff414c29a1d4ca7ea4039c1c67d075dc17044b18b7d564a00.webp",
+          "./content/4a767e6b5ce2497343a3d9cf4ba2442ee7a03e8c3f707475c6c1c2e3594dde9a.webp",
+          "./content/b74bc030d2ec0db419ea500fc472a8a0cd1791a7e71a39df7b764a42f990bd2f.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "chapel": {
@@ -1554,30 +1526,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/ed5bc59339135ebcc749e8b52799919849da736c279c7acb988009c33b887c4e.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/12a6193565e0c57722e3b438cd26cb8eaa49b02a3cdabc262cb615ee1db1eec5.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/ecf2faba3ad7c538282980def4b92e7fe998f1dd0c38c8acdf6b00b2f724f90d.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/ae37f7f3def3d9c53e91fa319c8f7c24706e17b83d7da6abde79bd4e6d9ff1f9.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/f252a11e06466cd3e36938ce8ff8b1f92abcdb68a1fcc5b933349e96f0ca00fb.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/b26176820493ce3857d64f8e4e11b921733e67fef39fc2a581e9aa99101b317f.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/ed5bc59339135ebcc749e8b52799919849da736c279c7acb988009c33b887c4e.webp",
-          "./content/ecf2faba3ad7c538282980def4b92e7fe998f1dd0c38c8acdf6b00b2f724f90d.webp",
-          "./content/f252a11e06466cd3e36938ce8ff8b1f92abcdb68a1fcc5b933349e96f0ca00fb.webp"
+          "./content/12a6193565e0c57722e3b438cd26cb8eaa49b02a3cdabc262cb615ee1db1eec5.webp",
+          "./content/ae37f7f3def3d9c53e91fa319c8f7c24706e17b83d7da6abde79bd4e6d9ff1f9.webp",
+          "./content/b26176820493ce3857d64f8e4e11b921733e67fef39fc2a581e9aa99101b317f.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "well": {
@@ -1659,30 +1629,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/52c737cbc0790466dba6766b6575bfeedbea6e9cc6b08d04a04dfc7703ad7fe3.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/bb9a7ad5fd2f1e3ce9f3954246ec9f393fd10e33285586713f49f6d6aa606317.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/592ef9aafcc8d75857546e9cf6bc4d41e65215d389187c4444913973d4e3564b.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/43f32fec74448de82a644eabfd9fbc2de1e1c8519d37f74d00dd3a426576868b.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/b6ab38fb3e7afc6b0ff7b2b9cb9d92ef915dbc0115151c4511c5303c8b77cf49.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/9296f3cd8138efadf0c25913cc974ab1fc6e2f2cc8ca45bee9519ea7e1ab1ae8.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/52c737cbc0790466dba6766b6575bfeedbea6e9cc6b08d04a04dfc7703ad7fe3.webp",
-          "./content/592ef9aafcc8d75857546e9cf6bc4d41e65215d389187c4444913973d4e3564b.webp",
-          "./content/b6ab38fb3e7afc6b0ff7b2b9cb9d92ef915dbc0115151c4511c5303c8b77cf49.webp"
+          "./content/bb9a7ad5fd2f1e3ce9f3954246ec9f393fd10e33285586713f49f6d6aa606317.webp",
+          "./content/43f32fec74448de82a644eabfd9fbc2de1e1c8519d37f74d00dd3a426576868b.webp",
+          "./content/9296f3cd8138efadf0c25913cc974ab1fc6e2f2cc8ca45bee9519ea7e1ab1ae8.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "watchtower": {
@@ -1764,30 +1732,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/a97bf87ce622f894aafcedc21a1507ba5c4b1ff4a87cb18398329ba4738938aa.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/d24aef1b4ae936e73a1bc46253aab3fadaaaabbfb9990404dc613c9b777a41e7.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/7c067270955c2675e1d5ec760b597ee2012f99eb61a610e1cdc3af286f922bd8.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/6c2397982fdbc691f2351bc2521595284ff1e069c8b8d84c267bb402ac9ca5fa.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/fccac0f8a915408321e1a42568a7f55201fd22fa9158494c30f641be17b4f293.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/3c4310dea285e47bcc31387ebdd4c380f8f81ae41c04ae630856ca80f89a6667.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/a97bf87ce622f894aafcedc21a1507ba5c4b1ff4a87cb18398329ba4738938aa.webp",
-          "./content/7c067270955c2675e1d5ec760b597ee2012f99eb61a610e1cdc3af286f922bd8.webp",
-          "./content/fccac0f8a915408321e1a42568a7f55201fd22fa9158494c30f641be17b4f293.webp"
+          "./content/d24aef1b4ae936e73a1bc46253aab3fadaaaabbfb9990404dc613c9b777a41e7.webp",
+          "./content/6c2397982fdbc691f2351bc2521595284ff1e069c8b8d84c267bb402ac9ca5fa.webp",
+          "./content/3c4310dea285e47bcc31387ebdd4c380f8f81ae41c04ae630856ca80f89a6667.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "rail-fence": {
@@ -1869,30 +1835,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/09f66e85a3e5e32957a5b970fda4eef410075af44a8cbb360e2a5ec4d92328fc.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/d3cd8df2a8c51a5dae0834bd9e66794cc8d7e2b0862912bb69711c3b82198c48.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/c4982d40d73904316962ebf9b443224191c3a04a60b5fc91a405d56052c5c9e1.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/154489e1ec5e43f9fb08d2d645252e86c1a1dbedfaea373136018d5aeca43be4.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/34c8af4036fa1dc12f2eb4880f8f2537867da1e29678e0e76367ede581854c9b.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/59c8970760542b90e391dbee94a2367f12baf2f15b6a100da61f99996c9d6b70.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/09f66e85a3e5e32957a5b970fda4eef410075af44a8cbb360e2a5ec4d92328fc.webp",
-          "./content/c4982d40d73904316962ebf9b443224191c3a04a60b5fc91a405d56052c5c9e1.webp",
-          "./content/34c8af4036fa1dc12f2eb4880f8f2537867da1e29678e0e76367ede581854c9b.webp"
+          "./content/d3cd8df2a8c51a5dae0834bd9e66794cc8d7e2b0862912bb69711c3b82198c48.webp",
+          "./content/154489e1ec5e43f9fb08d2d645252e86c1a1dbedfaea373136018d5aeca43be4.webp",
+          "./content/59c8970760542b90e391dbee94a2367f12baf2f15b6a100da61f99996c9d6b70.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "bush": {
@@ -1974,30 +1938,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/b7ce67de2c5467101c16c0f672d5c598ab65d305ab5e36b14fedb8746949a34c.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/81460ebb8b31ff3d94a6a3d727ee19e0b848ab86107bf1edd206d48db770939d.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/9cb3d62d2a5c9bcea864cd6b25948a9a4ce62e6e12c707bdc6fdd03d8863c40f.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/78036ec5dadb3f9ac5629592209c1c0f9dfc74943f69c59654e087ed33012ca3.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/2bcde61aab6bcafe64a67332185f8c295fc798cf354f41afbfa7238a6ae5938f.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f625b0b29398c5215dac4e2ad0c935b6d5db24143d040f57f2328b33d97dc2ca.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/b7ce67de2c5467101c16c0f672d5c598ab65d305ab5e36b14fedb8746949a34c.webp",
-          "./content/9cb3d62d2a5c9bcea864cd6b25948a9a4ce62e6e12c707bdc6fdd03d8863c40f.webp",
-          "./content/2bcde61aab6bcafe64a67332185f8c295fc798cf354f41afbfa7238a6ae5938f.webp"
+          "./content/81460ebb8b31ff3d94a6a3d727ee19e0b848ab86107bf1edd206d48db770939d.webp",
+          "./content/78036ec5dadb3f9ac5629592209c1c0f9dfc74943f69c59654e087ed33012ca3.webp",
+          "./content/f625b0b29398c5215dac4e2ad0c935b6d5db24143d040f57f2328b33d97dc2ca.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "market-stall": {
@@ -2079,30 +2041,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/ac245f743efe571b99b99ae06f627ca42ce884506bd93d09a3098893409e793d.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/db610cf2a1327f8bb8248cf89b386ff11c8305201f230302a9c8163556e1f112.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/62d0764dd2264693b8ac37c2ea7aaf28bedf1439a028a0369aa45776d077b137.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/0cfbd95c72e26655814eb84d63f1ad23516ff84edb77b7a08268a8d3fad7a2a2.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/5ab8075686d8aed96c45628a82d9659055bb4f296860160f630847e9cbbc604d.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f70eaa20953778713eca1e866857bf87e3b6f62713c0a6d1ac1c2f5c3a4dbc22.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/ac245f743efe571b99b99ae06f627ca42ce884506bd93d09a3098893409e793d.webp",
-          "./content/62d0764dd2264693b8ac37c2ea7aaf28bedf1439a028a0369aa45776d077b137.webp",
-          "./content/5ab8075686d8aed96c45628a82d9659055bb4f296860160f630847e9cbbc604d.webp"
+          "./content/db610cf2a1327f8bb8248cf89b386ff11c8305201f230302a9c8163556e1f112.webp",
+          "./content/0cfbd95c72e26655814eb84d63f1ad23516ff84edb77b7a08268a8d3fad7a2a2.webp",
+          "./content/f70eaa20953778713eca1e866857bf87e3b6f62713c0a6d1ac1c2f5c3a4dbc22.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "covered-wagon": {
@@ -2184,30 +2144,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/8bd1e778850a21b825734b42cf6b7f9969935717c6c3ad05d58d81d38499689a.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/b70ce31c206a9f9ff42301bf82c50201fdace15e4ddc1872f3ec73e0b80e05ff.webp",
+            "width": 4096,
+            "height": 4096
           },
           "normal": {
-            "url": "./content/1a75909e75044e97a103854665e2ed7f1c95376e421b0cd4c694d7a461e3b1e5.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/b34f3740780a836d3a798c88a0a3a43e7b09c74f1e1767bec36641e6b53ec5d3.webp",
+            "width": 1024,
+            "height": 1024
           },
           "orm": {
-            "url": "./content/835f60ca9e1fd0e38eb5a123b74455400bd62f09513523e35e20a892ff9bb734.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/49f696ff5659e4e5c2b29a239ac01baede34765448488b08cf7cb581ad2e4898.webp",
+            "width": 1024,
+            "height": 1024
           }
         },
         "resources": [
-          "./content/8bd1e778850a21b825734b42cf6b7f9969935717c6c3ad05d58d81d38499689a.webp",
-          "./content/1a75909e75044e97a103854665e2ed7f1c95376e421b0cd4c694d7a461e3b1e5.webp",
-          "./content/835f60ca9e1fd0e38eb5a123b74455400bd62f09513523e35e20a892ff9bb734.webp"
+          "./content/b70ce31c206a9f9ff42301bf82c50201fdace15e4ddc1872f3ec73e0b80e05ff.webp",
+          "./content/b34f3740780a836d3a798c88a0a3a43e7b09c74f1e1767bec36641e6b53ec5d3.webp",
+          "./content/49f696ff5659e4e5c2b29a239ac01baede34765448488b08cf7cb581ad2e4898.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 4096,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "handcart": {
@@ -2289,30 +2247,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/df5495842b8f62f030314f958269affea1ec7d5cad9c322adb5e29b4c84b4fa7.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/558e0c2e4ea0a49b7f807e3ca4ad20b2ffc0011bac3cac3cc82d6c3f136537fa.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/8ae2a70366eeb8fbfc6a3e13550f17ccd6105dfa0470832afa02b238777207b2.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/aa87c03967de83dcf0c346c7d9d518d04b4df4201a8b9ae9ab864214a8ee5b88.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/7ac2d5704b1d62dfc19aa240e951d623e1238f10702e1f8584b444523760f287.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/f2ac55330d4b908f6a511fc3860fa8ec4671deb37af3d8ef5777c68d0c9c3810.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/df5495842b8f62f030314f958269affea1ec7d5cad9c322adb5e29b4c84b4fa7.webp",
-          "./content/8ae2a70366eeb8fbfc6a3e13550f17ccd6105dfa0470832afa02b238777207b2.webp",
-          "./content/7ac2d5704b1d62dfc19aa240e951d623e1238f10702e1f8584b444523760f287.webp"
+          "./content/558e0c2e4ea0a49b7f807e3ca4ad20b2ffc0011bac3cac3cc82d6c3f136537fa.webp",
+          "./content/aa87c03967de83dcf0c346c7d9d518d04b4df4201a8b9ae9ab864214a8ee5b88.webp",
+          "./content/f2ac55330d4b908f6a511fc3860fa8ec4671deb37af3d8ef5777c68d0c9c3810.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "garden-bed": {
@@ -2394,30 +2350,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/b692bf0808b8e70ffdd5738c55288306a385a14413adc9cb82370a5238a3c27c.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/7fd6cf257ed48e9b5b336324afca343bf4e532b9408f41d625ef55ff5a231bc9.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/5a61993d9802638422032a86ce7d0923feb0222d2030caf350dd256e23dbff01.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/39f1a77aa57a912a40b809fd348ad24c84add10c9a8226fffc9a2e320b65b515.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/8de75d8598ec055aa0bfb77314eba72f41de93c0e1f92aca5c2702684ba97efd.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/366a47d6790a1952edda129019b5360b2e7287566aa7979d7700283633465e02.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/b692bf0808b8e70ffdd5738c55288306a385a14413adc9cb82370a5238a3c27c.webp",
-          "./content/5a61993d9802638422032a86ce7d0923feb0222d2030caf350dd256e23dbff01.webp",
-          "./content/8de75d8598ec055aa0bfb77314eba72f41de93c0e1f92aca5c2702684ba97efd.webp"
+          "./content/7fd6cf257ed48e9b5b336324afca343bf4e532b9408f41d625ef55ff5a231bc9.webp",
+          "./content/39f1a77aa57a912a40b809fd348ad24c84add10c9a8226fffc9a2e320b65b515.webp",
+          "./content/366a47d6790a1952edda129019b5360b2e7287566aa7979d7700283633465e02.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "firewood": {
@@ -2499,30 +2453,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/5e19edd7e411601baf7526b064addb6c374a3ddec5d4b00f377138c76af23710.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/5bc44f7e1ea18341b0784a726266bed2b0dd6ae11368e03bf2e6a63e145f27ea.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/e4f445ec19919b721bd50fb6e0fe451665c61439ce62cc91aafe25630ef2f337.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/2fba0a9cc71a113acc79210f5c1c85ee11f77316fd4376a2fdcbb2e42c3f0b37.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/077b407b78612d640b71b13d104b4ee9046ffefe6466dab7a47159ef7a31f75d.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/4dcb71585a8e839b6af5243f557b9a445bf5d953940b5856f70349226caec608.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/5e19edd7e411601baf7526b064addb6c374a3ddec5d4b00f377138c76af23710.webp",
-          "./content/e4f445ec19919b721bd50fb6e0fe451665c61439ce62cc91aafe25630ef2f337.webp",
-          "./content/077b407b78612d640b71b13d104b4ee9046ffefe6466dab7a47159ef7a31f75d.webp"
+          "./content/5bc44f7e1ea18341b0784a726266bed2b0dd6ae11368e03bf2e6a63e145f27ea.webp",
+          "./content/2fba0a9cc71a113acc79210f5c1c85ee11f77316fd4376a2fdcbb2e42c3f0b37.webp",
+          "./content/4dcb71585a8e839b6af5243f557b9a445bf5d953940b5856f70349226caec608.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     },
     "crate-barrel-cluster": {
@@ -2604,30 +2556,28 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/699795c43298e4106d9b37a50207349a78922fe91cffa5a40415aa406c02d832.webp",
-            "width": 8192,
-            "height": 8192
+            "url": "./content/801a3fbcfadf39c5be06410d52009387f9f68f51b39e361a335460af9b67f6c2.webp",
+            "width": 2048,
+            "height": 2048
           },
           "normal": {
-            "url": "./content/9ec85558b8dd8fabdaa0977d0e103e5d4973687f95e22194463839def575a0c2.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/ec181199a84cb629a183b57908d773df8b7c1180488cb0d4f8b7afbb3fe3a986.webp",
+            "width": 512,
+            "height": 512
           },
           "orm": {
-            "url": "./content/0e1f43aaab3b8bf31a158c65c7f0c8a1ded51359061bfa239addfb7a342cec16.webp",
-            "width": 4096,
-            "height": 4096,
-            "encoding": "lossless WebP; decoded pixels unchanged"
+            "url": "./content/63e72b6a3993e23ed6b22bab37c5f80be8c56e6a1905ac921429d46d0540340c.webp",
+            "width": 512,
+            "height": 512
           }
         },
         "resources": [
-          "./content/699795c43298e4106d9b37a50207349a78922fe91cffa5a40415aa406c02d832.webp",
-          "./content/9ec85558b8dd8fabdaa0977d0e103e5d4973687f95e22194463839def575a0c2.webp",
-          "./content/0e1f43aaab3b8bf31a158c65c7f0c8a1ded51359061bfa239addfb7a342cec16.webp"
+          "./content/801a3fbcfadf39c5be06410d52009387f9f68f51b39e361a335460af9b67f6c2.webp",
+          "./content/ec181199a84cb629a183b57908d773df8b7c1180488cb0d4f8b7afbb3fe3a986.webp",
+          "./content/63e72b6a3993e23ed6b22bab37c5f80be8c56e6a1905ac921429d46d0540340c.webp"
         ],
-        "colorResolution": 8192,
-        "colorEncoding": "WebP quality 98, no resize"
+        "colorResolution": 2048,
+        "colorEncoding": "WebP quality 92; original PNG resized with Lanczos"
       }
     }
   },
@@ -2637,7 +2587,8 @@
     "method": "attribute-aware-index-simplification",
     "nearGeometryPreserved": true,
     "mobileNearPreserved": true,
-    "nearColorResolution": 8192,
+    "nearColorResolution": 4096,
+    "textureProfile": "mobile-4k-v1",
     "visualReview": "APPROVED"
   }
 }
