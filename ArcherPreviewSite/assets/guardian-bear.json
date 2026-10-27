@@ -1,5 +1,5 @@
 {
-  "model": "./content/ddc9996c64846c7b767f14741ebae23a7ef58490feb2f28ced02c3d80153a125.gltf",
+  "model": "./content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
   "version": "Guardian Bear · 20 original motions",
   "scale": 1.45,
   "forwardYaw": 0,
@@ -7432,7 +7432,7 @@
     "./content/6b987d8af7d4a52d6b2eaafcb97768a8defe6a6acdc9a2fca99a98fd47306e7c.png",
     "./content/1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png",
     "./content/48edbc6042b567063557a199c61e611d6cbf9af751bdf0f1c63a9da924237245.png",
-    "./content/ae511d4ea553f9402f0b6d913782b3ba4fb7f2df7a2cd3fe24c865f458c896e9.bin",
+    "./content/921e7c550ec9d328979f19d62b5e594d267cf8cbe488a90df77828a8a030400f.bin",
     "./content/e823af9ef5840e07f9f9a16831132b3a73ec6bdf280c99744766b9605b6faa4a.bin",
     "./content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
     "./content/83024c43e21c1042014966f4c46ddff1fddcd1953efa942015168d1ea14ee8f4.bin",
@@ -7454,7 +7454,7 @@
     "./content/a536e909e31049e831c3e27c7b9abcb82bfcccd5bd5606a6b348f9a60ea87129.bin",
     "./content/c695c9f3804401145a03f4ee849980a0eabd59c22c88f280c17221b75930821f.bin",
     "./content/c008eb05c40bcea18fa0fa2dcd8dbab67751d22ef97729b34d56ce3540dd9f12.bin",
-    "./content/ddc9996c64846c7b767f14741ebae23a7ef58490feb2f28ced02c3d80153a125.gltf"
+    "./content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf"
   ],
   "resourceCacheVersion": 1
 }

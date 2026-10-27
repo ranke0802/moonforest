@@ -3,9 +3,20 @@ import { createHash } from 'node:crypto';
 export const hash = data => createHash('sha256').update(data).digest('hex');
 
 /** Lossless GLB packaging: stable geometry, morphs, skins, each clip and each image. */
-export function splitGlb(bytes) {
+export function splitGlb(bytes, { baseColorOnly = false } = {}) {
   const jsonLength = bytes.readUInt32LE(12);
   const gltf = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength));
+  if (baseColorOnly) for (const material of gltf.materials || []) {
+    // The runtime toon material uses painted color and geometric normals only.
+    // Unreferenced maps are not fetched/decoded by the glTF material loader.
+    delete material.normalTexture;
+    delete material.occlusionTexture;
+    if (material.pbrMetallicRoughness) {
+      delete material.pbrMetallicRoughness.metallicRoughnessTexture;
+      material.pbrMetallicRoughness.metallicFactor = 0;
+      material.pbrMetallicRoughness.roughnessFactor = 1;
+    }
+  }
   const binaryStart = 28 + jsonLength;
   const originalViews = gltf.bufferViews;
   const groups = new Map(), assigned = new Map(), files = new Map();

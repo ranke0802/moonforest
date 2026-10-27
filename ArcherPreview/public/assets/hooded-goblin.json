@@ -1,5 +1,5 @@
 {
-  "model": "./content/39e54f6c860504571ba5e06d6a49207889ccd095329d56102cf90fed269c1eec.gltf",
+  "model": "./content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
   "version": "Hooded Goblin - 12 source motions",
   "scale": 0.78,
   "forwardYaw": 0,
@@ -6355,6 +6355,7 @@
     "./content/a46cb1827b50c45b70b8f36bb256fa4b0a60bea008142c790252e33dd1110546.bin",
     "./content/8c59435c8625fe6d03c93de01c1daa31dee228878950ef0d6411c3ed355b0546.bin",
     "./content/02e3009824e84a528c9333a95d7f7d8b56d811a9bf004a4d1e89313a31242f96.bin",
-    "./content/39e54f6c860504571ba5e06d6a49207889ccd095329d56102cf90fed269c1eec.gltf"
-  ]
+    "./content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf"
+  ],
+  "resourceCacheVersion": 1
 }

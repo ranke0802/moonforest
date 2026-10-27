@@ -7,7 +7,7 @@ await mkdir(resolve(root, 'content'), { recursive:true });
 for (const [manifest, source] of [['character', 'azure-elf.glb'], ['warrior', 'violet-warrior.glb'], ['warrior-v2','violet-warrior-v2.glb'], ['guardian-bear','guardian-bear.glb']]) {
   const configPath = resolve(root, `${manifest}.json`);
   const config = JSON.parse(await readFile(configPath, 'utf8'));
-  const pack = splitGlb(await readFile(resolve(root, source)));
+  const pack = splitGlb(await readFile(resolve(root, source)), { baseColorOnly: manifest === 'guardian-bear' });
   for (const [name, file] of pack.files) await writeFile(resolve(root, 'content', name), file.data);
   config.model = `./content/${pack.model}`;
   config.resources = [...pack.files.keys()].map(name => `./content/${name}`);

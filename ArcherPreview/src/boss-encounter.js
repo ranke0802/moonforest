@@ -1,6 +1,7 @@
 import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
 import { attachCharacterOutlines, isRuntimeOutline } from './character-outlines.js';
+import { applyMonsterToon } from './monster-toon.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
@@ -58,6 +59,7 @@ export class BossEncounter {
         }
         for(const g of this.asset.animationGroups)g.stop();
         this.actor=new TransformNode('guardian-bear-world',this.world.scene);
+        this.actor.setEnabled(false);
         this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
         for(const n of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!n.parent)n.parent=this.carrier;
         this.actor.scaling.setAll(this.config.scale);
@@ -67,7 +69,11 @@ export class BossEncounter {
           if(mesh.skeleton){if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;mesh.skeleton.useTextureToStoreBoneMatrices=true;}
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
+        applyMonsterToon(this.asset, this.world.lighting);
         this.world.lighting?.registerMeshes(this.asset.meshes);
+        // Prepare the changed body shader before its silhouette can become visible.
+        await Promise.all(this.asset.meshes.filter(mesh=>mesh.getTotalVertices() && mesh.material?.metadata?.moonforestMonsterToon)
+          .map(mesh=>mesh.material.forceCompilationAsync(mesh)));
         attachCharacterOutlines(this.asset, this.kind);
         this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
