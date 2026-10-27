@@ -9,7 +9,8 @@ export function constrainDodge(position, from, navigation, encounters = [], limi
   const dx=position.x-from.x,dz=position.z-from.z,length=Math.hypot(dx,dz);
   if(length<1e-8)return position;
   const ux=dx/length,uz=dz/length;
-  const circles=navigation.obstacles.map(o=>({x:o.x,z:o.z,radius:o.radius+.32,enemy:false}));
+  const exactWorld=typeof navigation.obstacleContact==='function';
+  const circles=exactWorld?[]:navigation.obstacles.map(o=>({x:o.x,z:o.z,radius:o.radius+.32,enemy:false}));
   for(const enemy of encounters)if(isEnemySolid(enemy))circles.push({
     x:enemy.actor.position.x,z:enemy.actor.position.z,radius:dodgeSeparation(enemy),enemy:true,
   });
@@ -17,7 +18,12 @@ export function constrainDodge(position, from, navigation, encounters = [], limi
   const contact=(mx,mz)=>{
     const a=mx*mx+mz*mz;
     if(a<1e-12)return null;
-    let hit=null,time=1;
+    // V3 supplies exact static box/circle sweeps. Other scenes retain the
+    // original circle path, including the existing enemy shoulder assistance.
+    // Include the v3 navigator's clearance skin before the sweep: subtracting
+    // travel skin alone is insufficient at a grazing contact and would make
+    // the next regular move relocate an otherwise safe rolled position.
+    let hit=exactWorld?navigation.obstacleContact({x,z},{x:mx,z:mz},.322):null,time=hit?.time??1;
     for(const c of circles){
       const rx=x-c.x,rz=z-c.z,b=rx*mx+rz*mz;
       // Existing overlaps can escape or slide sideways, but cannot deepen.

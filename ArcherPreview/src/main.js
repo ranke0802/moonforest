@@ -17,6 +17,10 @@ import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
+import { loadVillage } from './village-environment.js';
+import { VILLAGE_SPAWN } from './village-layout.js';
+import { createVillageReview } from './village-review.js';
+import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
@@ -47,17 +51,23 @@ const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>audio.unlock(),{capture:true,passive:true});
 const loading = $('#loading');
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
-const validCharacters = ['archer', 'warrior', 'warrior-v2'];
+const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3'];
 let character = new URLSearchParams(location.search).get('character');
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
-const isV2 = () => character === 'warrior-v2';
+const isV2 = () => character === 'warrior-v2' || character === 'warrior-v3';
+const isVillage = () => character === 'warrior-v3';
+const villageHorizon=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageHorizon')==='1';
+const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(location.search).get('villageOverview')==='1';
+const villageReviewEnabled=import.meta.env.DEV&&isVillage()&&new URLSearchParams(location.search).get('villageReview')==='1';
+const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.search).get('villageMobile')==='1';
+let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let screenProjection;
-const touchDevice=matchMedia('(pointer: coarse)').matches;
+const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
@@ -175,6 +185,7 @@ function resetBeforeBoss(){
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
+  if(isVillage()){actor.position.set(VILLAGE_SPAWN.x,0,VILLAGE_SPAWN.z);world.terrain.place(actor.position);}
   animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
   applyHitFlash(container.meshes,0);resetCamera();updateButtons();canvas.focus({preventScroll:true});
 }
@@ -208,8 +219,10 @@ function shootAtTarget() {
 
 function resetCamera() {
   if (!world) return;
-  world.camera.alpha = Math.PI * .38; world.camera.beta = isWarrior() ? 1.35 : 1.18;
-  world.camera.radius = innerWidth < 600 ? 6.5 : 4.8;
+  world.camera.alpha = Math.PI * .38; world.camera.beta = isVillage() ? .88 : isWarrior() ? 1.35 : 1.18;
+  world.camera.radius = isVillage() ? (innerWidth < 600 ? 13 : 17) : innerWidth < 600 ? 6.5 : 4.8;
+  if(isVillage()&&villageOverview){world.camera.upperRadiusLimit=155;world.camera.radius=133;world.camera.beta=.62;world.camera.alpha=Math.PI*.38;world.camera.setTarget(new Vector3(0,0,0),false,false,true);}
+  if(isVillage()&&villageHorizon){world.camera.radius=18;world.camera.beta=1.3;}
   input.panOffset = { x: 0, y: 0, z: 0 };
 }
 
@@ -229,9 +242,14 @@ async function loadCharacter() {
   $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
   try {
     await initializeResourceCache();
-    $('#loading-text').textContent='훈련장의 나무·풀·허수아비를 불러옵니다.';
+    if(villageReview)await villageReview.startLoad();
+    $('#loading-text').textContent=isVillage()?'마을의 집과 숲을 불러옵니다.':'훈련장의 나무·풀·허수아비를 불러옵니다.';
     void world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
-    await loadTrainingGround(world,training);
+    if(isVillage()){
+      await loadVillage(world,{onProgress:(done,total)=>{$('#loading-text').textContent=`마을을 불러오는 중 ${done} / ${total}`;$('#loading-progress').style.width=`${5+done/total*65}%`;}});
+      await loadVillageTrainingTarget(world,training);
+    }
+    else await loadTrainingGround(world,training);
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
@@ -251,6 +269,7 @@ async function loadCharacter() {
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
     actor = new TransformNode('player-world-transform', world.scene);
+    if(isVillage()){actor.position.set(VILLAGE_SPAWN.x,0,VILLAGE_SPAWN.z);world.terrain.place(actor.position);}
     // World movement is separate from exported root motion, including the authored death fall.
     for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = actor;
     actor.scaling.setAll(config.scale || 1);
@@ -290,14 +309,14 @@ async function loadCharacter() {
     animator.transition('idle', { clipTime: 0, loop: true });
     ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
-    $('#character-name').textContent = isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
-    $('#character-subtitle').textContent = isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
+    $('#character-name').textContent = isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-subtitle').textContent = isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
     $('.character-caption').textContent = isV2() ? '한손 베기 1타 ↔ 베고 찌르기 2타 · 길게: 심판 3타' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
-    $('.action-controls').dataset.character = character;
+    $('.action-controls').dataset.character = isV2()?'warrior-v2':character;
     $('#run-button').hidden = isWarrior();
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
@@ -406,7 +425,7 @@ function render(dt) {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    const center = reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
+    const center = isVillage() ? actor.position.add(new Vector3(0,1.1,0)) : reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
@@ -414,11 +433,13 @@ function render(dt) {
     goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
     const focus=combatFocus(center,cameraBoss?.actor.position);
-    const target = focus.add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
+    const target = (isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
+    if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     world.lighting.follow(actor.position);
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt);
+    world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
@@ -439,7 +460,10 @@ try {
   engine.maxFPS=60;
   engine.renderEvenInBackground=false;
   applyRenderQuality();
-  world = createWorld(engine);
+  world = createWorld(engine,{village:isVillage(),touchDevice});
+  world.villageOverview=isVillage()&&villageOverview;
+  if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
+  if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
   world.lighting.setQuality(qualityMode);
   screenProjection=new ScreenProjection(world.scene);
   screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
@@ -519,8 +543,10 @@ try {
   $('#character-select').value = character;
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
-    character = validCharacters.includes(event.target.value) ? event.target.value : 'archer';
-    const url = new URL(location.href); url.searchParams.set('character', character); history.replaceState(null, '', url);
+    const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
+    const url = new URL(location.href); url.searchParams.set('character', next);
+    if((next==='warrior-v3')!==isVillage()){location.assign(url.href);return;}
+    character=next;history.replaceState(null, '', url);
     loadCharacter();
   });
   $('#attack-speed').addEventListener('input', event => {

@@ -1,0 +1,1410 @@
+{
+  "version": 1,
+  "complete": true,
+  "developmentFixture": false,
+  "sourceAssetCount": 25,
+  "availableAssetCount": 25,
+  "assets": {
+    "house-01-cottage": {
+      "name": "작은 민가",
+      "category": "building",
+      "height": 6,
+      "bounds": [
+        4.260488033294678,
+        5.000000476837158,
+        4.994880199432373
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/9ba58a8fb179e56b2267aa671b6ba6faefea6fae9d4d818a51f7fe6a97f0474e.gltf",
+          "resources": [
+            "./content/5ed23d51598a75d7ede8ceb7309833bc556fed11797af1f00c022863fe3dfc07.png",
+            "./content/7ef7f5c7353d87db144435eba13c9675efec0bb7f2f64b7f82f6345cf023d1b4.jpg",
+            "./content/c10a664f133e7242d32f211a28816c1b9551454aa481ef354eb1f2e34bf4a0e6.png",
+            "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
+            "./content/9ba58a8fb179e56b2267aa671b6ba6faefea6fae9d4d818a51f7fe6a97f0474e.gltf"
+          ],
+          "triangles": 4106,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf",
+          "resources": [
+            "./content/71c233c60d2cc207ba65ec47ac00a5d7c7cd8dcaee3b0b1a7d415712f723cf2e.png",
+            "./content/36ffe6731ce7736d73abd5b835f0e7bfeaa38164a51a385cf813dac23de4360a.jpg",
+            "./content/a9cb1180a1b55b63a705eef2a255621745b4e3d5ce0ba36f2cd139a64042648d.png",
+            "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
+            "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf"
+          ],
+          "triangles": 4106,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/f7e41ea0f87156faf625e0b2a4db1a57d850888bba83d161bf6db29672d4bb84.gltf",
+          "resources": [
+            "./content/e9f724de080c5ccec49088aeec10c1c648bafc0f3cf8a18d8eda87cbcd6500a4.jpg",
+            "./content/2a5ace92c270545b883299ec593eaf92151d21e8a56a67be7928d269e8303aaf.png",
+            "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
+            "./content/f7e41ea0f87156faf625e0b2a4db1a57d850888bba83d161bf6db29672d4bb84.gltf"
+          ],
+          "triangles": 4106,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "house-02-tall-home": {
+      "name": "높은 주택",
+      "category": "building",
+      "height": 8,
+      "bounds": [
+        4.909702301025391,
+        7,
+        3.8537728786468506
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/45a8c3999dc9e3cc5828739fa139a8323b9adf5a158ac0e6c88061a897c809b7.gltf",
+          "resources": [
+            "./content/b65f217f2eee66b543b13040428f3fb35c0f08534c0d38214924c93d0b7f5281.png",
+            "./content/a542b14d253f34294ebf6f1ef2996477be8a50d7cd0edd00cde73096d64b6a48.jpg",
+            "./content/d4a14eab67b26176cc6639b13f6c4f7209427c16bc252392fdc128571349676a.png",
+            "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
+            "./content/45a8c3999dc9e3cc5828739fa139a8323b9adf5a158ac0e6c88061a897c809b7.gltf"
+          ],
+          "triangles": 4738,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf",
+          "resources": [
+            "./content/1eef8cf0586f85d17c9b620b6bc8d0988a0d218e0f02dabce1256411427c81de.png",
+            "./content/d94061f202eee1846cc1fd979e00124a957f517ba3244283563a139092975d09.jpg",
+            "./content/5a17b43a4f10f2343d1a71bdc2193067799022a79de54a62705468746acaa20b.png",
+            "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
+            "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf"
+          ],
+          "triangles": 4738,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/f240ad57045a07d0b6665b069be41bbd7485aa33c09a4be1f53f2feaa948869c.gltf",
+          "resources": [
+            "./content/2b924d8993ba9a8d01469bbed3072bd16c512ebd5188c44ea9cf0ea1a6edac77.jpg",
+            "./content/ae910200f853c6b4ca15dc3e1ce32631d1a95e42018786feeeecfac3b2cad19d.png",
+            "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
+            "./content/f240ad57045a07d0b6665b069be41bbd7485aa33c09a4be1f53f2feaa948869c.gltf"
+          ],
+          "triangles": 4738,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "house-03-workshop": {
+      "name": "작업장",
+      "category": "building",
+      "height": 5,
+      "bounds": [
+        3.520094871520996,
+        3,
+        2.6184749603271484
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/a2f637f4a1dbcd9d9cf16b0c50523d0088bf57aa90693a017540bc2d86db65d1.gltf",
+          "resources": [
+            "./content/2f644c1b0d9414ae917a3f1eaaa37dd7c312383b73deeb48ef3067b801b883db.png",
+            "./content/e0628ae98fc827683bd97ab988678b641e348fd9d04a889376f1aeb945b9e6b4.jpg",
+            "./content/7b299f4b326a193358a2f9e30734a9ee9872c8c1d6f68ad726605ccb0bc73c30.png",
+            "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
+            "./content/a2f637f4a1dbcd9d9cf16b0c50523d0088bf57aa90693a017540bc2d86db65d1.gltf"
+          ],
+          "triangles": 4915,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf",
+          "resources": [
+            "./content/80729278401688df633d2e685b00aa4238320f864da0e2486dbbc91aec278cf2.png",
+            "./content/01778076add381e460b741a14607098dbe80461b7badc46326e55d3d1b3c6b3e.jpg",
+            "./content/e4423e9aa1984a630e5e2eb0b063e1d2548c98cd5aee1a914ec4b1fffac6760c.png",
+            "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
+            "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf"
+          ],
+          "triangles": 4915,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/a51cc7b6122f89c3a26366d8b52b6b0fdfecb3d3bb8b92e04838fe31868a124e.gltf",
+          "resources": [
+            "./content/eb7fbc5ee65a8b87927ace9cfdaf8cf8edb4b482a167022dbfc05d8ef44a9a93.jpg",
+            "./content/d9741597c64a744cf61afff56585004124c63d51f37ef0a389e5a0d9e4aa4a61.png",
+            "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
+            "./content/a51cc7b6122f89c3a26366d8b52b6b0fdfecb3d3bb8b92e04838fe31868a124e.gltf"
+          ],
+          "triangles": 4915,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "house-04-forest-hut": {
+      "name": "작은 오래된 집",
+      "category": "building",
+      "height": 5,
+      "bounds": [
+        5.162574768066406,
+        6,
+        4.895707130432129
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/c04e7bf17f8f3d5ff4d129b96aabef265f4cf8e855580977bad296130e06c6a7.gltf",
+          "resources": [
+            "./content/6f9749cd8103fa2a213a43cb83cdffa56c4d1a5374b1c95053d10691d1423d05.png",
+            "./content/d293b790a355971d95f12adb2606bbdbe1bc3d7e1086c5ab942233fe7db75d55.jpg",
+            "./content/0eacca158e870f6e5a185000572bac78bc985b4740e8d43c276fad3e758b511a.png",
+            "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
+            "./content/c04e7bf17f8f3d5ff4d129b96aabef265f4cf8e855580977bad296130e06c6a7.gltf"
+          ],
+          "triangles": 4652,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf",
+          "resources": [
+            "./content/bc4b157040fe99e5ebaccc88f1beb4142695b4ae7f903cca228c6c5c2421ebc3.png",
+            "./content/fa9258d16c3102b0ee6246370f1821448cc8864afd22665f06f4ef13adb7493e.jpg",
+            "./content/b59c694593db543b9223662122453172bea0fa862e0d0db519f5f878330f2fe9.png",
+            "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
+            "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf"
+          ],
+          "triangles": 4652,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/6d413ba7a7f19a12efccc772902994c8437b00a1705c62d7f37e9c0019be2ab2.gltf",
+          "resources": [
+            "./content/511556e0bcd4a8c06d6b56ba6050666d5e28c0492ab8d24c07d88b080a3617c5.jpg",
+            "./content/68f9e8586e9b5af61795446f853a5167a28f8f396b4110897efb0744bf3782ad.png",
+            "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
+            "./content/6d413ba7a7f19a12efccc772902994c8437b00a1705c62d7f37e9c0019be2ab2.gltf"
+          ],
+          "triangles": 4652,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "wall-01-straight": {
+      "name": "직선 돌담",
+      "category": "wall",
+      "height": 1.8,
+      "bounds": [
+        2.912600040435791,
+        1,
+        0.5407400131225586
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/3a4ff946af71499b15dfe19d4a365c1aaab1ad56a6efdbd17d4cdddda53b9c8e.gltf",
+          "resources": [
+            "./content/b6dbc57ef274b7f2aefc5c42e425d4847cf2e08c9f979396c498e6a946a6b7c9.png",
+            "./content/8f970e5cdd9fb32b03cc2a79174c783f754b7c1259d2143f527872af74acd4fc.jpg",
+            "./content/5d26b52d942630ba9990d7b3042f832cd0415e2303a84f86fefee9729b08ae12.png",
+            "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
+            "./content/3a4ff946af71499b15dfe19d4a365c1aaab1ad56a6efdbd17d4cdddda53b9c8e.gltf"
+          ],
+          "triangles": 5142,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf",
+          "resources": [
+            "./content/21511364259549ac2af4056009a19c67b987e94b4197c694ad6f10c1f9552ff4.png",
+            "./content/4519ce5fac2bcd7c1eeb6ff6314205410961d2fe536b90b97f63373791456655.jpg",
+            "./content/a3b91afa0b48bfb9ec3b64442e9d36c1acb2f4344d8513f41aaefa2e2b5af91e.png",
+            "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
+            "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf"
+          ],
+          "triangles": 5142,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/7f80daedb61bc1e9ab9031c785f6ff08b1b2471935e44c5f53055ed73de7ce6b.gltf",
+          "resources": [
+            "./content/9f6629231fc786b248fd70049383bb5f5668201fb5513c03f470899895bb315a.jpg",
+            "./content/5c52737ae0c0206c968544cb66521f7db7af21a170e066ed31084456c5c0852e.png",
+            "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
+            "./content/7f80daedb61bc1e9ab9031c785f6ff08b1b2471935e44c5f53055ed73de7ce6b.gltf"
+          ],
+          "triangles": 5142,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "wall-02-corner": {
+      "name": "모서리 돌담",
+      "category": "wall",
+      "height": 1.8,
+      "bounds": [
+        2.4760100841522217,
+        1.000000238418579,
+        2.252523899078369
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/b4ff17109405cb7e4d1379044c103ab78ef3811454f1be4e6113abd5124d1abd.gltf",
+          "resources": [
+            "./content/8524da931b6eaf4aed640cb736f2f953a1f7fd7bfb9c6e0fee8326ada8afed53.png",
+            "./content/01475979232a9222777ee8621f577bdfeb0a87eb02fb5061c654e593eb3d8b7a.jpg",
+            "./content/e3ab2d4343737735157f8fd86a0aa96fde0aed7082c919497c54985c241d3a24.png",
+            "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
+            "./content/b4ff17109405cb7e4d1379044c103ab78ef3811454f1be4e6113abd5124d1abd.gltf"
+          ],
+          "triangles": 5276,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf",
+          "resources": [
+            "./content/3c7f4393030880c8765ba4906a56af5becd890f9edd0df32e5152887d389b115.png",
+            "./content/c5d960f62b2e1b49a5df32d8ce4aa49b8105add22330337e832bc071de1b41f4.jpg",
+            "./content/391b6b19cada39035f48121d15121d98f2e4e8ef8f23010b8e2782c2bea23fff.png",
+            "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
+            "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf"
+          ],
+          "triangles": 5276,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/d6105cf67590ccc6536a6ccdb0528b227d0421f78a38d7b6beabceec20ebc60b.gltf",
+          "resources": [
+            "./content/41c5de1300e5272529fd1ca2f09af13c297477669790042c7f0611cd0b415b4b.jpg",
+            "./content/a8bb3015b351ac24e78b4442b02495d88ad3899daa2aa42597152499687ea3bf.png",
+            "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
+            "./content/d6105cf67590ccc6536a6ccdb0528b227d0421f78a38d7b6beabceec20ebc60b.gltf"
+          ],
+          "triangles": 5276,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "wall-03-breached": {
+      "name": "파손 돌담",
+      "category": "wall",
+      "height": 1.8,
+      "bounds": [
+        3.691145896911621,
+        2,
+        0.7871950268745422
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/15e8993ae73dcd74e4d3a87abefd59746bf2f6d731d2d7a4ccb365f778fd22c8.gltf",
+          "resources": [
+            "./content/fc9322438f812c93f732ba92610f4c69708419d57a8cee77d320ed4e6f6453b9.png",
+            "./content/1f9adf012f48e83bebfa39c7d8113078307c8f598e4783d523273db779e98d6f.jpg",
+            "./content/c0f5d480620637a6d9240dfa3be5ec5989a7064afd20331e8bace5a355a4f8f9.png",
+            "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
+            "./content/15e8993ae73dcd74e4d3a87abefd59746bf2f6d731d2d7a4ccb365f778fd22c8.gltf"
+          ],
+          "triangles": 5264,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf",
+          "resources": [
+            "./content/051a01b0b8c2b56271446382653c87d5237dc62c2bd0b3e666266b4e9f6e5210.png",
+            "./content/ca9fe805cafa17ea3e3890bb1cf99e8a0c4c34a7ff8610eaa6660b904605c81b.jpg",
+            "./content/81a7cb40fd1ba70ade73a9263981254389a76109062ad99b577546f9cf9e0b30.png",
+            "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
+            "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf"
+          ],
+          "triangles": 5264,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/1dbb21cba6180f34e67dbc2d37904ae32b70fac54f8ea5ee702ad14a9408206d.gltf",
+          "resources": [
+            "./content/1c65020a225dc93f97564438d611e8a58736158de170aacf0d1fc2af48d76e18.jpg",
+            "./content/a82daea5ff469c8cca9281af40d28d418b1efb359381c6b704415baf491441a0.png",
+            "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
+            "./content/1dbb21cba6180f34e67dbc2d37904ae32b70fac54f8ea5ee702ad14a9408206d.gltf"
+          ],
+          "triangles": 5264,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "wood-01-palisade": {
+      "name": "통나무 목책",
+      "category": "defense",
+      "height": 2.6,
+      "bounds": [
+        2.2280797958374023,
+        2,
+        0.4653310179710388
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/c9137b5600a8eaa56714e31b66a3a9ea7ef33a5f328c6a9e2e02b12e6c46d3a8.gltf",
+          "resources": [
+            "./content/4015f0c8b2b771dbcf7efc41141dc7422f5705291fc907258ceefdfde26957b3.png",
+            "./content/c2a9084cb8ff2b2226bd519f8bec751f212bd7b36e359c988a3146f76017ff5c.jpg",
+            "./content/5f1a67d772fb5edd824bcf6da4784f7125a7a85e824b291fa0444a92cc65173f.png",
+            "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
+            "./content/c9137b5600a8eaa56714e31b66a3a9ea7ef33a5f328c6a9e2e02b12e6c46d3a8.gltf"
+          ],
+          "triangles": 5265,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf",
+          "resources": [
+            "./content/a38d7720772f64cec7ade176e76904d467ee1a591e029375b2c7a3f2970a8fe9.png",
+            "./content/0fe666c0edb9fc0172a79d29b9fefd49b497cb038d97bb0fb95cf490bb0bfd8d.jpg",
+            "./content/4a5d0fbf10d802c79ef42aca9ea54edaf423135baaa5b28207bb09c86f502786.png",
+            "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
+            "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf"
+          ],
+          "triangles": 5265,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/ea6d484b43cbbc29fb9ddfafeab355bd9799f90fb27d5a5087912ee6080d4cc0.gltf",
+          "resources": [
+            "./content/4744415db1592e6eb28a7152bdf2dd1185646569b9d33f4f22b2b2a5a3db09d1.jpg",
+            "./content/ab1eaf175eb70098f0c470d74491b636dff9872584f39fc9b5d95672ec838ccc.png",
+            "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
+            "./content/ea6d484b43cbbc29fb9ddfafeab355bd9799f90fb27d5a5087912ee6080d4cc0.gltf"
+          ],
+          "triangles": 5265,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "wood-02-cross-barricade": {
+      "name": "교차 바리케이드",
+      "category": "defense",
+      "height": 1.4,
+      "bounds": [
+        2.1179699897766113,
+        1.2000000476837158,
+        0.24174103140830994
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/18f7c42381ffb220736e988c728f272ea3d8ddaf8c521c296077e0035ff9ed7c.gltf",
+          "resources": [
+            "./content/33bc6b6df3aa7b55a8a55cced210bfe7342dc0fc337ef9cd96aa344036af0bcc.png",
+            "./content/634793e178b3ec914cff173e96d25ab2967dbb6d394434ce1c48820bcef9bcac.jpg",
+            "./content/8b9c7c48dec5213d9a104cd302b6aa26ddf522505a46a5760cdd653f75ddd13f.png",
+            "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
+            "./content/18f7c42381ffb220736e988c728f272ea3d8ddaf8c521c296077e0035ff9ed7c.gltf"
+          ],
+          "triangles": 5173,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf",
+          "resources": [
+            "./content/e1af6b41b2b7851881e241b9e8b428d3859d47d01c02001251ad1d677ac2140a.png",
+            "./content/e543b6ddbecc7fd6f02d0bfc867d9f5ee194b5c1406d8eb3aaf6b76395d0fb86.jpg",
+            "./content/243965b39d8c067e88260edd91a3df5be32318b6e5b8cb9b4052129332d9b397.png",
+            "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
+            "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf"
+          ],
+          "triangles": 5173,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/1297abb30a55b404131b68ffc32ad91258198ac0d31e3540d3ffca88ff6cdb03.gltf",
+          "resources": [
+            "./content/444112033ecfc092772fc0af9e43fc723a5e980224c1df03aa9876b2fe5edb29.jpg",
+            "./content/040bf2f2629f1fb27169484ef7e509b0163b30a07a5afc485e857d58ec320341.png",
+            "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
+            "./content/1297abb30a55b404131b68ffc32ad91258198ac0d31e3540d3ffca88ff6cdb03.gltf"
+          ],
+          "triangles": 5173,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "wood-03-plank-gate": {
+      "name": "북쪽 닫힌 문",
+      "category": "defense",
+      "height": 3.4,
+      "bounds": [
+        2.2688560485839844,
+        1.7999999523162842,
+        0.32959407567977905
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/9ea7c33ae8b9b647ac52eeee12bd3adf7c139647f94974f2aea8524ee4b8c912.gltf",
+          "resources": [
+            "./content/0f6e4a80f258e3942febefccaaa2a3838fcd4d82eefcc1a5b680984c6e5d1ca1.png",
+            "./content/2c8350e4a8fbcf7a9f4ce57c324fd855f95ad0bd783bebea608770e753e939f7.jpg",
+            "./content/4fdfef6413c2637b7d1198b1307db0051cbede7073f301d287a4b2a8b5c52625.png",
+            "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
+            "./content/9ea7c33ae8b9b647ac52eeee12bd3adf7c139647f94974f2aea8524ee4b8c912.gltf"
+          ],
+          "triangles": 4933,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf",
+          "resources": [
+            "./content/93030a197f30748838820f98bdabf08c393dbea8990e27d8dfbc4403d8ba9cdd.png",
+            "./content/46f3b7c0dbd76d95201d0ae4cfaa199cb455bc456d567a7f19822885350c909b.jpg",
+            "./content/e74474d16294eac0fb6b032f1f0a3867c473b5876e6f7ef290ab33b79437ba16.png",
+            "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
+            "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf"
+          ],
+          "triangles": 4933,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/81866774f819aca3085be337c65972b74e51d14147c398ba49f7013bdf27b182.gltf",
+          "resources": [
+            "./content/82b4e39f8df8eec1df51e3fb3c99bdf2b8fd699ca6ad964adb29732458f8f95c.jpg",
+            "./content/2f8fadbde514db7ee6fdd3766144793eb72324ebd71e21a058f185b6ce90f341.png",
+            "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
+            "./content/81866774f819aca3085be337c65972b74e51d14147c398ba49f7013bdf27b182.gltf"
+          ],
+          "triangles": 4933,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "tree-01-round-oak": {
+      "name": "참나무",
+      "category": "tree",
+      "height": 9,
+      "bounds": [
+        15.79957103729248,
+        15,
+        11.329959869384766
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f.gltf",
+          "resources": [
+            "./content/085adace219c99dddaf61316d0ef5a7cc71247cd7d71fa81a501d26b0e7343f4.png",
+            "./content/a226d7b6fd10e211bb61fa5b4a64e24e511a7630c7ee28282526a05a41cf9f02.jpg",
+            "./content/b76b8707ed3967ec65fa005496ac0eeee28b4c50f837875ad45892dde9fe9020.png",
+            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+            "./content/eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f.gltf"
+          ],
+          "triangles": 4687,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf",
+          "resources": [
+            "./content/c3302f8e4d2955f0d6c6f6f79575741ead05ff8424aa494c7b19349c5171fb97.png",
+            "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg",
+            "./content/fc0d9a363176d809128e77dec9e25adb76ecf251c053f93a42968abc8269cad4.png",
+            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+            "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf"
+          ],
+          "triangles": 4687,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/5ffcb01d77a43086e3dc453bc9b782d1039a9396e8e7e34a8e421b48d2e739dd.gltf",
+          "resources": [
+            "./content/158f94d3c21c1feb898fc66218cca6d7c981680e30a654d70a04f7b7097917fd.jpg",
+            "./content/f405284bbc980c928c5ff2b788b5b06e9541a29408b7b198804e4b916d928461.png",
+            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+            "./content/5ffcb01d77a43086e3dc453bc9b782d1039a9396e8e7e34a8e421b48d2e739dd.gltf"
+          ],
+          "triangles": 4687,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "tree-02-slender-pine": {
+      "name": "침엽수",
+      "category": "tree",
+      "height": 12,
+      "bounds": [
+        7.039412021636963,
+        15,
+        7.891507148742676
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7.gltf",
+          "resources": [
+            "./content/ae6cc116b37df600e2108442aa27d6c7aa99d01441cb57a7a63f24ab93eb1338.png",
+            "./content/48e2abb56811d786dd011ddfe02e1648270fe151250beb0563ec833b2c2fe53f.jpg",
+            "./content/40a57192c8a28daf458ff29423069f724f7426f2a50730458f621ea6669e4567.png",
+            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+            "./content/b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7.gltf"
+          ],
+          "triangles": 5352,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf",
+          "resources": [
+            "./content/1a0babc2bffa663374a30525ec0dbb6fd2835e783c3e810294ee0e2e5d86745e.png",
+            "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg",
+            "./content/bf22df5fb9893c3c0b9b00702df339c786fa603227d98eb5a71793d586fa5468.png",
+            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+            "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf"
+          ],
+          "triangles": 5352,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/dca1e762014ccb25c937be2ebdba0165d0df1a159014660d6fd53223eafc4a93.gltf",
+          "resources": [
+            "./content/6da8b04a4ef0c6463eb610336e1ac51e7e62c71a4d91c7cabb167354d5acb6e3.jpg",
+            "./content/493243047f5f09cc466d54fe9507192bc99515abe2bde7679cf19acf323c5ce3.png",
+            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+            "./content/dca1e762014ccb25c937be2ebdba0165d0df1a159014660d6fd53223eafc4a93.gltf"
+          ],
+          "triangles": 5352,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "rock-01-mossy-boulder": {
+      "name": "이끼 둥근 바위",
+      "category": "rock",
+      "height": 2.2,
+      "bounds": [
+        1.5569519996643066,
+        1,
+        1.6407029628753662
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf.gltf",
+          "resources": [
+            "./content/25c0e007b430df329701c3a52afe96530d0cb7c7868708de0b64badeb656dbba.png",
+            "./content/553fed653165342d02c8daba8b2543b8b9857da84c4e5040e313ce9c1d5764de.jpg",
+            "./content/1aadfa46a5dba47b51225c5e455a48daf2ba1ef9d14c6795ef689b4246a0cd9b.png",
+            "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
+            "./content/6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf",
+          "resources": [
+            "./content/fe27f612671d652d546addb5802d1cc8f44c30bbc57e6aa74b892569091c6107.png",
+            "./content/26d15ccf7d6ba8f45acb72b75a93935c5129f03bec493d8380666dc34e93c21d.jpg",
+            "./content/ebdbdd8dc04db876e4fa2744e849bbed2d5c71e9b9d7e975ab7d2b8afce38d2e.png",
+            "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
+            "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/632332e9334fac10a1c162e7a9162e3e4c8c2a8550bef443c99eb01a990be72e.gltf",
+          "resources": [
+            "./content/64842060c2b3989d08eccfcc01d9bf9e0ff4ba29d69c4da8819671b9e6447cf4.jpg",
+            "./content/5135bb4eecf4439893a3533ef1ea651dc9b7b673a7e6db883c414c4eddadc732.png",
+            "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
+            "./content/632332e9334fac10a1c162e7a9162e3e4c8c2a8550bef443c99eb01a990be72e.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "rock-02-jagged-outcrop": {
+      "name": "솟은 바위",
+      "category": "rock",
+      "height": 4.5,
+      "bounds": [
+        4.221744060516357,
+        4,
+        3.0721168518066406
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541.gltf",
+          "resources": [
+            "./content/9ada4e0adc57dd045918057c0a00d31d59da8a0fa7f141d3c500130a2c14136f.png",
+            "./content/830c35f359b5dd96ea802611b53b63ee57c49e8d991330ef54b176df505f050c.jpg",
+            "./content/9a390b127e61f46ddffd9af690ca28a56c26c6d0b51c51a8960c05746b70417d.png",
+            "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
+            "./content/ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541.gltf"
+          ],
+          "triangles": 5268,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf",
+          "resources": [
+            "./content/e35e4bf51efa243f5780568912f6a310adde6e699fb3f28addd27c69be0534ab.png",
+            "./content/9d7d310eab45b3a0b78713537f191fe77313e33768d8a1a791f92c1c09b02a2f.jpg",
+            "./content/8e7f4666c870e16923999b0f2483e8ddf68522108b12c9fdbc2e7ae24c39c1c2.png",
+            "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
+            "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf"
+          ],
+          "triangles": 5268,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/fdd35ec29c3354bc0f44747995a80020cc28c2a4d3392da492d0adb38ddc90bb.gltf",
+          "resources": [
+            "./content/f7f4c262e0f5217aadc294867d3f10af2e67fcf0cac21c540b3c4261d5cb01e0.jpg",
+            "./content/2aff685519238c3ed4bec6022dc7ad1c9509dd17f71cc13017eb218f60e3f710.png",
+            "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
+            "./content/fdd35ec29c3354bc0f44747995a80020cc28c2a4d3392da492d0adb38ddc90bb.gltf"
+          ],
+          "triangles": 5268,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "chapel": {
+      "name": "작은 예배당",
+      "category": "building",
+      "height": 10,
+      "bounds": [
+        6.873079776763916,
+        10,
+        8.377677917480469
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/8bf3b270da33f6152b1c03b058bfacabcd8066611136d401312bb813770ecbc8.gltf",
+          "resources": [
+            "./content/429a5141c12ae6566947c9d8f749774df959f7e1af9bf6ccb6738f4a74ddd625.png",
+            "./content/57fd83b2888e95d15d07cf2a09f7af335dee2f13d6db7a95c3557f496408d11d.jpg",
+            "./content/b6c7c04af4bb57b0615f88b57c429492a7d3939b07169e55ef70051c2b562cc2.png",
+            "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
+            "./content/8bf3b270da33f6152b1c03b058bfacabcd8066611136d401312bb813770ecbc8.gltf"
+          ],
+          "triangles": 4547,
+          "textureSize": 2048,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf",
+          "resources": [
+            "./content/bab97103ce896b7983b5152218a4c2ed621b62e173c9390c313bbe436759de44.png",
+            "./content/204f797373c98a7f6348349b36336a594089c7b848aeb20640a3ecbb9387d922.jpg",
+            "./content/c24c1c0583bf0737374b1280730748c03f87ca6072c414115b76e096290afa19.png",
+            "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
+            "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf"
+          ],
+          "triangles": 4547,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/b77a465f7aa49f878be882b74429802b7830ef20c360102cff4f984807211d0c.gltf",
+          "resources": [
+            "./content/8774a5419924d5c6de824504da8c3ab4203be262774e08e362cc18897ddd78e7.jpg",
+            "./content/768e9517809f2b054c6933f6ff3dcb7ded5f596027bf8fe5b5ff22d086b6f1cc.png",
+            "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
+            "./content/b77a465f7aa49f878be882b74429802b7830ef20c360102cff4f984807211d0c.gltf"
+          ],
+          "triangles": 4547,
+          "textureSize": 512,
+          "normalMap": false
+        }
+      ]
+    },
+    "well": {
+      "name": "지붕 있는 우물",
+      "category": "prop",
+      "height": 3.6,
+      "bounds": [
+        2.3296639919281006,
+        2.5,
+        1.8237719535827637
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/48f632f765f4f44b692fddc42cb6491fb572147b9dd5d4d95a3007e0ae7c3e14.gltf",
+          "resources": [
+            "./content/72325ff7ca0844eeb70b8a5a8c9a9864d4d0006dc23c57d8f8f8a5b21ee487b9.png",
+            "./content/662090d7e4dd0d0ba70f211ecc3ff8132a7b25d44ac9f34e721db3ef30ff5f59.jpg",
+            "./content/d0a84ef3b92f087c66d79ae395786a86ba47e8b35d4c76b1e39a6e803f850a37.png",
+            "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
+            "./content/48f632f765f4f44b692fddc42cb6491fb572147b9dd5d4d95a3007e0ae7c3e14.gltf"
+          ],
+          "triangles": 4822,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf",
+          "resources": [
+            "./content/ba77d1751470f2ef34a1b67876a79d03111ad9e7644cf1166fd0e64a9ad1904c.png",
+            "./content/d10e3baaf9789e3e14a40ecb95ff51e398ef420a6711f6de8a3d4f70aaaf2767.jpg",
+            "./content/bb0cc7d8adcc7ac164a31610c623718aa421c5af8a52f300770ac944e73bc9d8.png",
+            "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
+            "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf"
+          ],
+          "triangles": 4822,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/4367634e6a22f760d8826132ab0fd4136407f72360a2fe4263d764f1dbf040e4.gltf",
+          "resources": [
+            "./content/fd189566c97c182631a3a2f4419e2910cd27a24bd0ff2e52c14f241499764664.jpg",
+            "./content/62763bcb48e5e852b2ab0d2e15f4a03506a06aba82eecb93861db1a448cfd7f4.png",
+            "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
+            "./content/4367634e6a22f760d8826132ab0fd4136407f72360a2fe4263d764f1dbf040e4.gltf"
+          ],
+          "triangles": 4822,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "watchtower": {
+      "name": "목조 감시탑",
+      "category": "defense",
+      "height": 8,
+      "bounds": [
+        3.0102648735046387,
+        8,
+        3.823409080505371
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/50cc31bf6da2300c169e752c08b8fc2179e1a0787c35462c9e0183389be37fa4.gltf",
+          "resources": [
+            "./content/36afbc71671107959b93d032b8613f5fbd96ad961631c94ee72a83326f68fb9f.png",
+            "./content/daaddb9d84eaecdf6268d748bc5c5326443c4ceda7b7b0c8c65dd02b25cb0eea.jpg",
+            "./content/e3d6504595927d525725fed05cc2c00093c6f777bfcc9d9ff1492e7b1dba3b2d.png",
+            "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
+            "./content/50cc31bf6da2300c169e752c08b8fc2179e1a0787c35462c9e0183389be37fa4.gltf"
+          ],
+          "triangles": 4590,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf",
+          "resources": [
+            "./content/9b0f2b2ce4d6806fc2fc6e115789cdec0ab40f37e1d624cb2f7bb3e00a3d883c.png",
+            "./content/48d7ef3fa61bd77dd778e20eca06bd85f682d113aa0b4b8ec0d34c8c751a2f39.jpg",
+            "./content/2b42c1bb034964cf2e63646b74440b90eba776a882298d3550fdc0a659db0848.png",
+            "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
+            "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf"
+          ],
+          "triangles": 4590,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/ae999055f80bbe8a84c5997fbe8ddea4daf2ecb819e7e60579ea803b546261a9.gltf",
+          "resources": [
+            "./content/daed2109d7166442c890ba41623a5937bf89e723a37dcf301348c676586c44b8.jpg",
+            "./content/d7a59d701a59d99e53d063cdb34857be878401276e50d8ce0426735f74169271.png",
+            "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
+            "./content/ae999055f80bbe8a84c5997fbe8ddea4daf2ecb819e7e60579ea803b546261a9.gltf"
+          ],
+          "triangles": 4590,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "rail-fence": {
+      "name": "낮은 가로 목책",
+      "category": "fence",
+      "height": 1.1,
+      "bounds": [
+        3.433094024658203,
+        1,
+        0.35035204887390137
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/1eaf957c54c33adc8deb946b4206258d43e5ee3a0719f063ea848747e94b20cb.gltf",
+          "resources": [
+            "./content/be57071c8630a267400df3d49ffdfa832a23a520e4ec36df92d63721337bd1c8.png",
+            "./content/d557cb358877df90358222f85bcc58a5eef5cafc6de4c65bd8f199337dc5f947.jpg",
+            "./content/24e57cb5fe95832483cf67b7ca6c97233298c726d02e821088eb4cd1b2c268a1.png",
+            "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
+            "./content/1eaf957c54c33adc8deb946b4206258d43e5ee3a0719f063ea848747e94b20cb.gltf"
+          ],
+          "triangles": 5184,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf",
+          "resources": [
+            "./content/a712bbf637f8c1759c349548c978f9ee7067632accaf5a2c1638280e50234d16.png",
+            "./content/68b70285b47083bbf762823c2815143a06c678bc200e3127d48484089941323d.jpg",
+            "./content/42ace58ee2c271600a1eef0d4b4432b888376a7a5fde9ee9cc1b67e3a20c74d3.png",
+            "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
+            "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf"
+          ],
+          "triangles": 5184,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/e876fdc836e355a64e1cdf54124d24b8829eaac47fc0ff8d056bc00bd45e1ea1.gltf",
+          "resources": [
+            "./content/fd3dd921e0c0177bb30d23aea42a02766c52b9c75a08f0c21ec7f3d0724c22b9.jpg",
+            "./content/855a0280e00952ba9fc56a132f0b56447a09600476f37dbae0eb8aa9402e620f.png",
+            "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
+            "./content/e876fdc836e355a64e1cdf54124d24b8829eaac47fc0ff8d056bc00bd45e1ea1.gltf"
+          ],
+          "triangles": 5184,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "bush": {
+      "name": "올리브색 관목",
+      "category": "plant",
+      "height": 1.3,
+      "bounds": [
+        5.589236259460449,
+        4,
+        4.572238922119141
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/06cebcabad154b8fbc2d893106b875c45de5f513fd4e56b1c83517c885c5a3cc.gltf",
+          "resources": [
+            "./content/75eec3a8c73293de55a0575ec760e57f61e2a17f377d13b2d920bea7250771bd.png",
+            "./content/e854981fd1ba73385fb43b8bdddeda0c1a1c87d3d2bad5dfebe879fb71112424.jpg",
+            "./content/0aee68039e68541095df6a0a8e31443de7e9a93901021225de7d8061eed21004.png",
+            "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
+            "./content/06cebcabad154b8fbc2d893106b875c45de5f513fd4e56b1c83517c885c5a3cc.gltf"
+          ],
+          "triangles": 4359,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf",
+          "resources": [
+            "./content/826fd485268c3e8a4a27fdc4f0d96579d4791513cec4c41259b729526a7a5d22.png",
+            "./content/630b1e0bea6b5fad1703e2f87c6c33d4dcf454364a144f07b6b20b19642003cf.jpg",
+            "./content/be5b4d724cc2b217c96ce86697535f4f57582f4aedee616bbc8bc50956120f1e.png",
+            "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
+            "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf"
+          ],
+          "triangles": 4359,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/3638ec512f5b56b9380fb96def8dbbb4aa2d915bea16a0d24e6fbb23033a1adb.gltf",
+          "resources": [
+            "./content/ba958d3d0674979f2a2006dec10b52e310c466314004f522201d5a063194bcdb.jpg",
+            "./content/f7735bb876df4ad3ae235b64f48f6578b6abe3a14c6cc9d953bba2b45bb55ddf.png",
+            "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
+            "./content/3638ec512f5b56b9380fb96def8dbbb4aa2d915bea16a0d24e6fbb23033a1adb.gltf"
+          ],
+          "triangles": 4359,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "market-stall": {
+      "name": "보라 천막 노점",
+      "category": "prop",
+      "height": 3.2,
+      "bounds": [
+        2.9224491119384766,
+        2.4000000953674316,
+        2.1061248779296875
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/7d663c626d13cc1df065e1eb9fae65ad4fdd47f96bf329485a81580aff301eb0.gltf",
+          "resources": [
+            "./content/b6665458bec5ed825497e63191d87804f48901125219f5b3edbd5ea04c3c4736.png",
+            "./content/c4ccdc3af8a783acaf75a6a356f76901da6fa1861be4b9a50ab703d84dabdc13.jpg",
+            "./content/f7b492b5791e51a4f20d0f388346d024417109ff69a1f575beee867f031c0b03.png",
+            "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
+            "./content/7d663c626d13cc1df065e1eb9fae65ad4fdd47f96bf329485a81580aff301eb0.gltf"
+          ],
+          "triangles": 4895,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf",
+          "resources": [
+            "./content/dd3430dcc79a38eaca502797ba63c227b01a768573efa5df4773bebfbcb27997.png",
+            "./content/70b71b268011910861a4128bdfcca23e3662d6fe6acac99fb8d241d82a4d2500.jpg",
+            "./content/74c0d5f30875c8561b2a4c8c1dc56416e12ff64ee68c9b352c84f4d7d4ac55d7.png",
+            "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
+            "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf"
+          ],
+          "triangles": 4895,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/6afd3c1b8fb35c63169ffce82d19eb68854e487b3ebc76f8c8908fa269a5961b.gltf",
+          "resources": [
+            "./content/c488edffafe40b67e2f13a04951c3eb5b594bbbdb0571e754f6f1dcabe1c87c4.jpg",
+            "./content/34a1d39c583776e7a13c421c4d86d25b8f4859c1b122eff0e1c6797a64ba4f47.png",
+            "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
+            "./content/6afd3c1b8fb35c63169ffce82d19eb68854e487b3ebc76f8c8908fa269a5961b.gltf"
+          ],
+          "triangles": 4895,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "covered-wagon": {
+      "name": "천 덮개 짐마차",
+      "category": "prop",
+      "height": 3.1,
+      "bounds": [
+        2.606822967529315,
+        3,
+        5.270194053649911
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 1.5707963267949,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/5832291fe5c0581a0f2448f65eacf0d249b4f735d97f1073a9d57387af359700.gltf",
+          "resources": [
+            "./content/53b56970c8dd6ffbcd25d22a19fd8989af4b0fe7fc375c1facdf12f818b3b739.png",
+            "./content/83f90bae4eed6e3913f2528046b98fdf3f6a3eb58e4e0123b36e1fa0acfe381a.jpg",
+            "./content/b9590ef60ec24e99d3b187685d92a3d53b72800b2cf8e3c399941f09faf9f564.png",
+            "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
+            "./content/5832291fe5c0581a0f2448f65eacf0d249b4f735d97f1073a9d57387af359700.gltf"
+          ],
+          "triangles": 4611,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf",
+          "resources": [
+            "./content/3165f20c0df1bf9a51df95d08c2c6853040c665dd288e92606ad13a59adb36cd.png",
+            "./content/da65f69c5f9550c9daabef9d3ad0e81d3fda8b1305ed289c071e99bae54f04c4.jpg",
+            "./content/6b09f2ad46e9a631db8383f0da9453d25c4691cf443a1f03747b838263ba34af.png",
+            "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
+            "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf"
+          ],
+          "triangles": 4611,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/f766b8265122ad2fae5e1a5fbf9c40e053896bee343363b1ccc1a0a46e9fd9b6.gltf",
+          "resources": [
+            "./content/c8363c9e3ce35e312fee3d8f104cb9c6052d75226779faaf70ecdeca0979fad8.jpg",
+            "./content/e9749bcc8304d9ff16cb50f9b0f63172626bb7cd799b0a4b9a5b131b443b0bec.png",
+            "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
+            "./content/f766b8265122ad2fae5e1a5fbf9c40e053896bee343363b1ccc1a0a46e9fd9b6.gltf"
+          ],
+          "triangles": 4611,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "handcart": {
+      "name": "두 바퀴 손수레",
+      "category": "prop",
+      "height": 1.5,
+      "bounds": [
+        1.3336839675903391,
+        1,
+        2.0656750202179
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 1.5707963267949,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204.gltf",
+          "resources": [
+            "./content/5b9b6df85a96a86fd3a3302678c7e1794378d728aba7231161b3d9eabf27efb0.png",
+            "./content/b0917e5499899311b6259912028330c4d6224ef5ce89a83ac95827630cffbd81.jpg",
+            "./content/97dbc573ec53551a4c16c50dce76c49a439c2c9d5913d02de57d7476b846fa8d.png",
+            "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
+            "./content/c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204.gltf"
+          ],
+          "triangles": 4737,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf",
+          "resources": [
+            "./content/78798d9aa9c13b0529de005f483c1534b0ffc592fcbc9a4e7cde78711acede2a.png",
+            "./content/3a96f6db09aed9190fe06abecbae3e651c2dc255623a96a778bfdf611e46bfc5.jpg",
+            "./content/200db3966a98bebd88a3768f79e869353dcb1e660349df0201f17e7d8eaaf662.png",
+            "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
+            "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf"
+          ],
+          "triangles": 4737,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/83ad9e711e2c2a2e29c63ae8a800054c831d9f8fae624afbf8dcda0b6a6981fb.gltf",
+          "resources": [
+            "./content/800c3e1f2bbbe59d3bd2e72774ebfb6a989a579da47d3ca3ead245d3316980a5.jpg",
+            "./content/9c34f161b6b2118a3083f9a0cfd01a463789b0106c01b1e2374266565fa2d8c4.png",
+            "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
+            "./content/83ad9e711e2c2a2e29c63ae8a800054c831d9f8fae624afbf8dcda0b6a6981fb.gltf"
+          ],
+          "triangles": 4737,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "garden-bed": {
+      "name": "채소와 꽃 텃밭",
+      "category": "plant",
+      "height": 0.65,
+      "bounds": [
+        1.2497620582580566,
+        0.40000003576278687,
+        0.9920270442962646
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/15dd917791e278d3034b6158d913961ffe979082f694d28219cbb1d04e735170.gltf",
+          "resources": [
+            "./content/3419aa114aa8da8fe5ec6eb2d7a6407a6c081db3508459510a42c92e04505fd7.png",
+            "./content/b3c1443b6cd04a2dd8e8563c0aad8d48b39555d360646c6af9a38bcc12707fc0.jpg",
+            "./content/3d5ee4f3d573b74995f655235cb148b80edb980d00958dac11e81b06e74dc7e1.png",
+            "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
+            "./content/15dd917791e278d3034b6158d913961ffe979082f694d28219cbb1d04e735170.gltf"
+          ],
+          "triangles": 3308,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf",
+          "resources": [
+            "./content/ae79f4e06c70b7948179f1550d86ac56c932973e03e7b2d3d5122b2893b5ff50.png",
+            "./content/74b1d905d2f491523a7e12709312e87237c5a9c0949237645a3efec3e3054879.jpg",
+            "./content/a0752f5118d503679ad70e7653ded870f369c49363d6af3e050d66625c6fc532.png",
+            "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
+            "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf"
+          ],
+          "triangles": 3308,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/c30942d44c3f094c456172a968e783f94795b92bc15db863b312985b9db9e0be.gltf",
+          "resources": [
+            "./content/64c3a8d93d0bcc8af2e5b3ddf4abce5a540f07ea2f1ab5abe28e0d4545e0e761.jpg",
+            "./content/17385c92f6979ee14e0b927fb2f46a8863b121e3b9c798359d5552fa7d995fbb.png",
+            "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
+            "./content/c30942d44c3f094c456172a968e783f94795b92bc15db863b312985b9db9e0be.gltf"
+          ],
+          "triangles": 3308,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "firewood": {
+      "name": "장작 거치대",
+      "category": "prop",
+      "height": 1.2,
+      "bounds": [
+        1.4825549125671387,
+        0.800000011920929,
+        0.7191600203514099
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9.gltf",
+          "resources": [
+            "./content/4d3d0378df58dc66746b3fcc270ac210db2efaa7750700651ff45835b0df1bbc.png",
+            "./content/1ea46b2f02b632a099d229a07aedefec985e5be9152160738293ad401eab3549.jpg",
+            "./content/f1eaf864bf8b634584cea0dd39390ffce230c0df2f242ae4500eca8792a80d43.png",
+            "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
+            "./content/d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9.gltf"
+          ],
+          "triangles": 4815,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf",
+          "resources": [
+            "./content/6e5b071d43b360d24b92654075607578c821d8da0f38044fdda5a7ade137a894.png",
+            "./content/0be813353028296a63832791489275ccfbe529a81002d51ff0ecc734e8b5b34d.jpg",
+            "./content/4dea6f2fff894e0c255556527835a62d883076b0cacbe174a449ffe0b0e68d8c.png",
+            "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
+            "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf"
+          ],
+          "triangles": 4815,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/8aece8dcb4337d32379366d3958dead64ab8ef7c9d7cba3f114129c090b631a9.gltf",
+          "resources": [
+            "./content/da8c1495217e19aaa59bf4eef9cc9d60f0cee3a707391de60863b69f986ea800.jpg",
+            "./content/f72242f504cdd36fb8f799f7bf5d912f06f4a8d174bc83127156c66756b32505.png",
+            "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
+            "./content/8aece8dcb4337d32379366d3958dead64ab8ef7c9d7cba3f114129c090b631a9.gltf"
+          ],
+          "triangles": 4815,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    },
+    "crate-barrel-cluster": {
+      "name": "상자와 통 묶음",
+      "category": "prop",
+      "height": 1.6,
+      "bounds": [
+        1.014009952545166,
+        0.8999999761581421,
+        1.0287209749221802
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74.gltf",
+          "resources": [
+            "./content/9ea62d7573c991d8e84fcc38995198cb866c6e37e86c6e942eec7071e0a0a118.png",
+            "./content/fea6fdde5fd97d647d8e5347272755026b1e1f662f4264fb2851c786b17d3673.jpg",
+            "./content/8aa4ad99ec87c5ccbf5ad0f6af571c5eb9c1ebe9bacdc0eef1303dd8f99a80e6.png",
+            "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
+            "./content/431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74.gltf"
+          ],
+          "triangles": 4683,
+          "textureSize": 1024,
+          "normalMap": true
+        },
+        {
+          "level": 1,
+          "model": "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf",
+          "resources": [
+            "./content/400d5374f4b866d6ab94d843b94fb1ea8875bdc7b6fd530431aa39f22a85933a.png",
+            "./content/0ed9a626619cf70b63d382d4bcef1af5be7a58573171e39ffb7199351a309eee.jpg",
+            "./content/a6332e40006f1700eaf006f06cd56e8d831f96073325b64ea08d234653f9a986.png",
+            "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
+            "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf"
+          ],
+          "triangles": 4683,
+          "textureSize": 512,
+          "normalMap": true
+        },
+        {
+          "level": 2,
+          "model": "./content/ef933e6297581f2d41a6b1cf229266b078c446e4d85947cf494ba10e2da79b8b.gltf",
+          "resources": [
+            "./content/6554bd53a32ed55e7eba7f8ecdf29cb6452a0bfdffa8669bf51a12beb763c612.jpg",
+            "./content/b91f1e4061e5fc4b5b38b7ec45dd6cbd4a568c6a341627655ae49e12615d1b2a.png",
+            "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
+            "./content/ef933e6297581f2d41a6b1cf229266b078c446e4d85947cf494ba10e2da79b8b.gltf"
+          ],
+          "triangles": 4683,
+          "textureSize": 256,
+          "normalMap": false
+        }
+      ]
+    }
+  },
+  "missing": []
+}

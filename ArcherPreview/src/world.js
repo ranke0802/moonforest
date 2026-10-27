@@ -7,8 +7,12 @@ import { createTerrainGround } from './terrain-mesh.js';
 import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
+import { createVillageTerrain } from './village-terrain.js';
+import { villageObstacles } from './village-layout.js';
+import { VillageNavigation } from './village-navigation.js';
+import { villageRenderRange } from './village-policy.js';
 
-export function createWorld(engine) {
+export function createWorld(engine, {village=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
   const scene = new Scene(engine);
   // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
   scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
@@ -18,19 +22,21 @@ export function createWorld(engine) {
   scene.useRightHandedSystem = true;
   scene.clearColor = new Color4(SKY_HORIZON.r, SKY_HORIZON.g, SKY_HORIZON.b, 1);
   scene.fogMode = Scene.FOGMODE_LINEAR;
-  scene.fogStart = FOG_START; scene.fogEnd = FOG_END;
+  const villagePolicy=village?villageRenderRange(touchDevice):null;
+  scene.fogStart = villagePolicy?.fogStart??FOG_START; scene.fogEnd = villagePolicy?.fogEnd??FOG_END;
   scene.fogColor = SKY_HORIZON.clone();
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
-  camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = 14;
+  camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = villagePolicy?.maxCameraRadius??14;
   camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
   camera.fov = .65;
   // Input is routed explicitly: joystick/action pointers never enter the camera handler.
   camera.inputs.clear();
   const sky = new MovingSky(scene);
   const mountains = createMountainBackdrop(scene);
+  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(1.9,1.3,1.9);mountains.freezeWorldMatrix();}
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);
@@ -40,7 +46,6 @@ export function createWorld(engine) {
   key.diffuse = new Color3(.95, .93, 1);
   const rim = new DirectionalLight('blue-rim', new Vector3(.5, -.3, .7), scene);
   rim.intensity = .6; rim.diffuse = new Color3(.4, .65, 1);
-  const touchDevice=matchMedia('(pointer:coarse)').matches;
   const shadows = new ShadowGenerator(touchDevice ? 1024 : 2048, key);
   shadows.usePercentageCloserFiltering = true;
   shadows.filteringQuality = ShadowGenerator.QUALITY_MEDIUM;
@@ -48,7 +53,7 @@ export function createWorld(engine) {
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
 
-  const terrain=new TerrainHeightField();
+  const terrain=village?createVillageTerrain():new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
@@ -70,7 +75,7 @@ export function createWorld(engine) {
   ringMaterial.diffuseColor = new Color3(.25, .28, .38);
   ringMaterial.emissiveColor = new Color3(.07, .06, .12);
   ringMaterial.specularColor = Color3.Black();
-  for (const diameter of [5.8, 6.02]) {
+  for (const diameter of village?[]:[5.8, 6.02]) {
     const ring = MeshBuilder.CreateTorus(`stage-ring-${diameter}`, { diameter, thickness: .012, tessellation: 128 }, scene);
     ring.position.y = .007; ring.material = ringMaterial;
     ring.isPickable=false;ring.freezeWorldMatrix();
@@ -88,9 +93,10 @@ export function createWorld(engine) {
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
   for(const mat of [ringMaterial,moteMaterial])mat.freeze();
-  const navigation=new ArenaNavigation([...FOREST_OBSTACLES,...TRAINING_OBSTACLES]);
+  const Navigation=village?VillageNavigation:ArenaNavigation;
+  const navigation=new Navigation([...(village?villageObstacles():FOREST_OBSTACLES),...TRAINING_OBSTACLES]);
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
-  return { scene, camera, shadows, lighting, navigation, terrain, sky, mountains, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { scene, camera, shadows, lighting, navigation, terrain, sky, mountains, village, villagePolicy, touchDevice, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }
