@@ -36,6 +36,7 @@ import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
 import { GoldLoot } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
+import { attachCharacterOutlines } from './character-outlines.js';
 
 setupSettingsPanel();
 const elements=new Map();
@@ -270,6 +271,7 @@ async function loadCharacter() {
       world.shadows.addShadowCaster(mesh, false);
     }
     world.lighting.registerMeshes(container.meshes);
+    if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });

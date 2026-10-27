@@ -10,6 +10,8 @@ export function applyHitFlash(meshes, remaining, duration=.22) {
   if(flashValues.get(meshes)===alpha)return;
   flashValues.set(meshes,alpha);
   for(const mesh of meshes||[]){
+    // The one-pass outline shader reads the parent's flash; avoid another overlay draw.
+    if(mesh.metadata?.moonforestOutline)continue;
     mesh.overlayColor=WHITE;mesh.overlayAlpha=alpha;mesh.renderOverlay=alpha>0;
   }
 }

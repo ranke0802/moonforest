@@ -1,5 +1,6 @@
 import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
+import { attachCharacterOutlines, isRuntimeOutline } from './character-outlines.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
@@ -67,6 +68,7 @@ export class BossEncounter {
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
         this.world.lighting?.registerMeshes(this.asset.meshes);
+        attachCharacterOutlines(this.asset, this.kind);
         this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
@@ -77,7 +79,7 @@ export class BossEncounter {
       this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset();
-      for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices())this.world.shadows.addShadowCaster(mesh,false);}
+      for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
