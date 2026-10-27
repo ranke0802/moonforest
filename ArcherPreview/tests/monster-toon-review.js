@@ -18,9 +18,9 @@ for(const [kind,name,xs] of [['bear','guardian-bear',[-3.9,-1.4]],['goblin','hoo
   const asset=instantiateBossModel(container),actor=new TransformNode(`${kind}-${index}`,scene);actor.position.x=x;actor.scaling.setAll(config.scale);actor.rotation.y=index?-.55:.4;
   for(const n of new Set([...asset.meshes,...asset.transformNodes]))if(!n.parent)n.parent=actor;
   for(const mesh of asset.meshes)if(mesh.getTotalVertices()){mesh.receiveShadows=true;if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;shadows.addShadowCaster(mesh,false);}
-  applyMonsterToon(asset,{direction:key.direction.negate().normalize()});attachCharacterOutlines(asset,kind);assets.push(asset);
+  applyMonsterToon(asset);attachCharacterOutlines(asset,kind);assets.push(asset);
   const group=asset.animationGroups.find(g=>g.name==='Running')||asset.animationGroups[0];group.start(true);group.goToFrame(12);group.pause();groups.push(group);
-  for(const mesh of asset.meshes)if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))stats.push({kind,triangles:mesh.getTotalIndices()/3,material:mesh.material.getClassName(),color:mesh.material.diffuseColor.asArray(),texture:mesh.material.diffuseTexture?.name,alpha:mesh.material.alpha,rig:mesh.skeleton?.name});
+  for(const mesh of asset.meshes)if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))stats.push({kind,triangles:mesh.getTotalIndices()/3,material:mesh.material.getClassName(),unlit:mesh.material.unlit,lightingDisabled:mesh.material.disableLighting,color:mesh.material.albedoColor.asArray(),texture:mesh.material.albedoTexture?.name,alpha:mesh.material.alpha,rig:mesh.skeleton?.name});
  }
 }
 document.querySelector('#outline').onclick=()=>assets.flatMap(a=>a.meshes).filter(isRuntimeOutline).forEach(m=>m.isVisible=!m.isVisible);

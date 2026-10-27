@@ -69,7 +69,7 @@ export class BossEncounter {
           if(mesh.skeleton){if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;mesh.skeleton.useTextureToStoreBoneMatrices=true;}
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
-        applyMonsterToon(this.asset, this.world.lighting);
+        applyMonsterToon(this.asset);
         this.world.lighting?.registerMeshes(this.asset.meshes);
         // Prepare the changed body shader before its silhouette can become visible.
         await Promise.all(this.asset.meshes.filter(mesh=>mesh.getTotalVertices() && mesh.material?.metadata?.moonforestMonsterToon)
