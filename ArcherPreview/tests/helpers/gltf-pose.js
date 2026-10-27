@@ -1,7 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { Matrix, Quaternion, Vector3 } from '@babylonjs/core';
 
-export function loadPoseAsset(url){
+export function loadPlayerPoseAsset(url){
+  const config=JSON.parse(readFileSync(new URL('../../public/assets/warrior-v2.json',import.meta.url)));
+  return loadPoseAsset(url,config.scale||1);
+}
+
+export function loadPoseAsset(url,scale=1){
   const data=readFileSync(url),length=data.readUInt32LE(12),gltf=JSON.parse(data.toString('utf8',20,20+length));
   function accessor(index){
     const a=gltf.accessors[index],v=gltf.bufferViews[a.bufferView],width={SCALAR:1,VEC3:3,VEC4:4}[a.type];
@@ -23,7 +28,7 @@ export function loadPoseAsset(url){
     function world(i){
       if(matrices.has(i))return matrices.get(i);
       const t=trs[i],local=Matrix.Compose(Vector3.FromArray(t.scale),Quaternion.FromArray(t.rotation),Vector3.FromArray(t.translation));
-      const m=parents.has(i)?local.multiply(world(parents.get(i))):local;matrices.set(i,m);return m;
+      const m=parents.has(i)?local.multiply(world(parents.get(i))):local.multiply(Matrix.Scaling(scale,scale,scale));matrices.set(i,m);return m;
     }
     return Object.fromEntries(gltf.nodes.map((n,i)=>[n.name,world(i)]));
   }

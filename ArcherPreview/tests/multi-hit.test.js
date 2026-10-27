@@ -5,8 +5,8 @@ import {WarriorV2Controller} from '../src/warrior-v2.js';
 import {PlayerStrikeSampler} from '../src/player-strikes.js';
 import {MeleeContactGate} from '../src/melee-collision.js';
 import {BossBrain} from '../src/boss-spec.js';
-import {loadPoseAsset} from './helpers/gltf-pose.js';
-const asset=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+import {loadPoseAsset,loadPlayerPoseAsset} from './helpers/gltf-pose.js';
+const asset=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
 const durations={idle:2,run:.8,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37};
 const clips={slash:'Right_Hand_Sword_Slash',attack:'Thrust_Slash',judgment:'Sword_Judgment'};
 function exercise(kind,dt=.016,speed=1,{miss=false,cancelAfterHit=false}={}){

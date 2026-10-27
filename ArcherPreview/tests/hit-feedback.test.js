@@ -6,7 +6,7 @@ import { BossEncounter } from '../src/boss-encounter.js';
 import { WarriorV2Controller } from '../src/warrior-v2.js';
 import { BossBrain } from '../src/boss-spec.js';
 import { PlayerStrikeSampler } from '../src/player-strikes.js';
-import { loadPoseAsset } from './helpers/gltf-pose.js';
+import { loadPoseAsset,loadPlayerPoseAsset } from './helpers/gltf-pose.js';
 
 test('heavy boss hit: white immediately on impact, fades during knockdown and clears',()=>{
  const b=new BossBrain({Knock_Down_1:2}),meshes=[{}];
@@ -41,7 +41,7 @@ test('boss contact: actual damage flashes/staggers warrior and cancels attack; b
 });
 
 test('actual GLB: judgment has no damage in wind-up, landing/recovery or after cancellation',()=>{
- const source=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));let matrix;
+ const source=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));let matrix;
  const sword={computeWorldMatrix(){},getWorldMatrix(){return matrix;}};
  for(const t of [.4,.8,1.3,2.55,3.3,4.1]){
   matrix=source.pose('Sword_Judgment',t).Golden_Oathblade;

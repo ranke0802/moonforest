@@ -30,7 +30,8 @@ export class PlayerStrikeSampler{
     const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from)),
       lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth}:null}));
     return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
-      bladeRadius:result.state==='shieldPush'?.06:.045};
+      // A 1 cm contact margin keeps near-edge hits consistent with the V6 grip.
+      bladeRadius:result.state==='shieldPush'?.06:.055};
   }
 }
 

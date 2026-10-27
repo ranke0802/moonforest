@@ -2,13 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {Matrix,Vector3,Quaternion} from '@babylonjs/core';
-import {loadPoseAsset} from './helpers/gltf-pose.js';
+import {loadPoseAsset,loadPlayerPoseAsset} from './helpers/gltf-pose.js';
 import {GoblinEncounter} from '../src/goblin-encounter.js';
 import {PlayerStrikeSampler,PLAYER_STRIKE_AIM_YAW} from '../src/player-strikes.js';
 import {WarriorV2Controller} from '../src/warrior-v2.js';
 import {MeleeContactGate} from '../src/melee-collision.js';
 
-const warrior=loadPoseAsset(new URL('../assets/models/violet-warrior-v2.glb',import.meta.url));
+const warrior=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
 const goblin=loadPoseAsset(new URL('../assets/models/hooded-goblin.glb',import.meta.url));
 const config=JSON.parse(readFileSync(new URL('../assets/goblin/config.json',import.meta.url)));
 const poses=[['Walking',0],['Running',.2],['Sneaky_Walk_inplace',.8],['Right_Jab_from_Guard',.4],['Sword_Judgment',.8]];

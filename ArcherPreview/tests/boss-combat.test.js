@@ -7,7 +7,7 @@ import { NullEngine,Scene,TransformNode,Vector3,FreeCamera } from '@babylonjs/co
 import { PlayerStrikeSampler,shieldIntercepts } from '../src/player-strikes.js';
 import { BossEncounter } from '../src/boss-encounter.js';
 import { projectBossHealth } from '../src/boss-health-bar.js';
-import { loadPoseAsset } from './helpers/gltf-pose.js';
+import { loadPoseAsset,loadPlayerPoseAsset } from './helpers/gltf-pose.js';
 const asset=JSON.parse(readFileSync(new URL('../public/assets/guardian-bear.json',import.meta.url)));
 const durations=Object.fromEntries(asset.catalog.map(c=>[c.name,c.duration]));
 test('boss: 20 original clips are retained; 18 active motions exclude both ball projectiles',()=>{
@@ -46,7 +46,7 @@ test('boss: contact damages stand-up once without pausing recovery',()=>{
  const boneNames=['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
  b.nodes=Object.fromEntries(boneNames.map(name=>{const node=new TransformNode(name,scene);node.parent=b.carrier;node.position.y=1;return ['mixamorig:'+name,node];}));
  b.config={scale:1,catalog:[{name:'Stand_Up3',groundTrack:[0]}]};
- const player={position:Vector3.Zero()},sample={actionId:5,window:{id:'cut',damage:20},blade:[[-.5,1,1.5],[.5,1,1.5]]};
+ const player={position:Vector3.Zero(),computeWorldMatrix(){}},sample={actionId:5,window:{id:'cut',damage:20},blade:[[-.5,1,1.5],[.5,1,1.5]]};
  b.poseAndContacts(player,{state:'slash',actionId:5},sample,null);b.poseAndContacts(player,{state:'slash',actionId:5},sample,null);
  assert.equal(b.brain.hp,816);assert.equal(b.hitCount,1);assert.equal(b.brain.state,'Stand_Up3');assert.equal(b.brain.time,.3);
  b.brain.mode='down';b.poseAndContacts(player,{state:'slash',actionId:5},sample,null);
@@ -59,7 +59,7 @@ test('boss: contact damages stand-up once without pausing recovery',()=>{
 
 test('boss: melee/projectile contact damages warrior, with a short repeat-hit cooldown',()=>{
  const feedback=[],b=new BossEncounter({},()=>{},(...args)=>feedback.push(args));
- b.active=true;b.brain=new BossBrain(durations);b.player={position:Vector3.Zero()};
+ b.active=true;b.brain=new BossBrain(durations);b.player={position:Vector3.Zero(),computeWorldMatrix(){}};
  assert.equal(b.receiveBossHit({damage:14,bodyContact:false}),false);assert.equal(b.playerHp,500);
  b.receiveBossHit({damage:14,bodyContact:true,action:{state:'attack',actionId:1}});assert.equal(b.playerHp,486);
  b.receiveBossHit({damage:18,bodyContact:true});assert.equal(b.playerHp,486);
@@ -69,7 +69,7 @@ test('boss: melee/projectile contact damages warrior, with a short repeat-hit co
 
 test('boss: shield push blocks throughout wind-up, impact and recovery, but never at a distance',()=>{
  const feedback=[],b=new BossEncounter({},()=>{},(...args)=>feedback.push(args));
- b.active=true;b.brain=new BossBrain(durations);b.player={position:Vector3.Zero()};
+ b.active=true;b.brain=new BossBrain(durations);b.player={position:Vector3.Zero(),computeWorldMatrix(){}};
  for(const time of [0,.5,1.12,2.34])for(const damage of [14,18]){
   const action={state:'shieldPush',actionId:1,clipTime:time};
   assert.equal(b.receiveBossHit({damage,action}),false);
@@ -93,7 +93,7 @@ test('melee: fast sweep cannot skip a narrow limb between the old eight samples'
 });
 
 test('actual GLB: visible cutting passes register once; idle cannot deal damage',()=>{
- const source=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+ const source=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
  for(const [state,clip,time] of [['attack','Thrust_Slash',1.5],['slash','Right_Hand_Sword_Slash',.76],['judgment','Sword_Judgment',1.02]]){
   const sampler=new PlayerStrikeSampler(),gate=new MeleeContactGate();let matrix;
   const sword={computeWorldMatrix(){},getWorldMatrix(){return matrix;}};
@@ -163,7 +163,7 @@ function collisionEncounter(mode){
  const boneNames=['Hips','Spine2','Neck','Head','LeftArm','LeftForeArm','LeftHand','RightArm','RightForeArm','RightHand','LeftUpLeg','LeftLeg','LeftFoot','RightUpLeg','RightLeg','RightFoot'];
  b.nodes=Object.fromEntries(boneNames.map(name=>{const node=new TransformNode(name,scene);node.parent=b.carrier;node.position.y=.3;return ['mixamorig:'+name,node];}));
  b.config={scale:1,catalog:[{name:b.brain.state,groundTrack:[0]}]};b.asset={meshes:[{}]};
- const player={position:Vector3.Zero()},sample={actionId:1,window:{id:'cut',damage:20},blade:[[-.5,.3,1.5],[.5,.3,1.5]]};
+ const player={position:Vector3.Zero(),computeWorldMatrix(){}},sample={actionId:1,window:{id:'cut',damage:20},blade:[[-.5,.3,1.5],[.5,.3,1.5]]};
  return {b,feedback,player,sample,close(){scene.dispose();engine.dispose();}};
 }
 
@@ -204,7 +204,7 @@ test('boss aggression: expanded range, quicker pursuit and shorter gaps retain a
 
 test('source GLBs: normal sword passes damage the actual lying boss skeleton',()=>{
  const bear=loadPoseAsset(new URL('../public/assets/guardian-bear.glb',import.meta.url));
- const warrior=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+ const warrior=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
  for(const phase of [1.5,3])for(const [state,clip,damage] of [['slash','Right_Hand_Sword_Slash',20],['attack','Thrust_Slash',38]]){
   const {b,player,close}=collisionEncounter('down'),pose=bear.pose('Knock_Down_1',phase);
   b.brain.time=phase;b.actor.scaling.setAll(asset.scale);b.actor.rotation.y=Math.PI;b.config=asset;

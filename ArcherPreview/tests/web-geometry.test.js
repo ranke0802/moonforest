@@ -36,6 +36,12 @@ test('web warrior preserves every clip, rig, texture and retained skin/UV vertex
   const survivors=new Set();for(let i=0;i<original.gltf.accessors[b.attributes.POSITION].count;i++)survivors.add(signature(old,i));
   for(let i=0;i<count;i++)assert.ok(survivors.has(signature(next,i)),'Position, normals, UV, bone IDs and weights must all survive together');
  }
- assert.ok(triangles<originalTriangles*.3,`${triangles}/${originalTriangles}`);
+ if(original.gltf.nodes.some(n=>n.name==='Warrior_Body_Outline')){
+  assert.ok(triangles<120000,`V6 web budget: ${triangles}`);
+  for(const node of original.gltf.nodes.filter(n=>n.name?.startsWith('Warrior_')&&n.mesh!==undefined)){
+   const before=original.gltf.meshes[node.mesh],after=optimized.meshes[node.mesh];
+   before.primitives.forEach((p,i)=>exact(after.primitives[i].indices,p.indices));
+  }
+ }else assert.ok(triangles<originalTriangles*.3,`${triangles}/${originalTriangles}`);
  assert.ok(triangles>100000,'Keep conservative near-view detail');
 });

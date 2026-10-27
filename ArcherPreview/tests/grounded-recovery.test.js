@@ -6,10 +6,10 @@ import {BossBrain,BOSS_RECOVERY_READY_TIME,BOSS_RECOVERY_WAIT,BOSS_GRAB_APPROACH
 import {BossEncounter} from '../src/boss-encounter.js';
 import {PlayerStrikeSampler} from '../src/player-strikes.js';
 import {WarriorV2Controller} from '../src/warrior-v2.js';
-import {loadPoseAsset} from './helpers/gltf-pose.js';
+import {loadPoseAsset,loadPlayerPoseAsset} from './helpers/gltf-pose.js';
 const config=JSON.parse(readFileSync(new URL('../public/assets/guardian-bear.json',import.meta.url)));
 const durations=Object.fromEntries(config.catalog.map(c=>[c.name,c.duration]));
-const source=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+const source=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
 const warriorNames=JSON.parse(readFileSync(new URL('../public/assets/warrior-v2.json',import.meta.url))).animations;
 const warriorDurations=Object.fromEntries(Object.entries(warriorNames).map(([state,clip])=>[state,source.durations[clip]]));
 
