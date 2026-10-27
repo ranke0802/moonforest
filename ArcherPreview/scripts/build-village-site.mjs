@@ -1,4 +1,4 @@
-import { readFile, readdir, mkdir, copyFile, realpath } from 'node:fs/promises';
+import { readFile, writeFile, readdir, mkdir, copyFile, realpath } from 'node:fs/promises';
 import { resolve, relative, dirname, isAbsolute, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'vite';
@@ -23,6 +23,7 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
   if(requireCompleteVillage){
     const village=JSON.parse(await readFile(resolve(assetsRoot,'village.json'),'utf8'));
     if(!village.complete||village.developmentFixture||village.availableAssetCount!==25||Object.keys(village.assets??{}).length!==25||VILLAGE_ASSET_IDS.some(id=>village.assets[id]?.visualReview!=='APPROVED'))throw new Error('The production village needs all 25 approved assets; fixtures cannot be published.');
+    if(village.geometryLod?.nearColorResolution!==8192||Object.values(village.assets).some(a=>!a.geometryLod||a.lods?.length!==3||a.mobileNear?.triangles!==a.lods[0].triangles||!(a.lods[2].triangles<a.lods[1].triangles&&a.lods[1].triangles<a.lods[0].triangles)||a.highTextures?.textures?.albedo?.width!==8192||a.highTextures?.textures?.albedo?.height!==8192))throw new Error('Production needs original mobile near geometry, 8K color, and two reduced geometry LODs.');
   }
   const enqueue=(url,base)=>{
     if(url.startsWith('data:'))return;
@@ -71,6 +72,28 @@ export async function buildVillageSite(){
     if(!directories.has(folder)){await mkdir(folder,{recursive:true});directories.add(folder);}
     await copyFile(info.absolute,target);
   }
+  // Publish exactly this verified build, excluding old bundles and source copies.
+  const deploymentFiles=[];
+  async function inventory(folder){
+    for(const entry of await readdir(folder,{withFileTypes:true})){
+      const path=resolve(folder,entry.name);
+      if(entry.isDirectory())await inventory(path);
+      else if(entry.isFile()){
+        let bytes=await readFile(path);
+        // The same inventory must validate on Windows and Linux checkouts.
+        // Never rewrite content-addressed resources; their names encode bytes.
+        if(!relative(outDir,path).split(sep).join('/').startsWith('assets/content/')&&/\.(?:js|css|html|json|txt|md)$/i.test(entry.name)){
+          const normalized=Buffer.from(bytes.toString('utf8').replaceAll('\r\n','\n'));
+          if(!normalized.equals(bytes)){await writeFile(path,normalized);bytes=normalized;}
+        }
+        deploymentFiles.push({path:relative(outDir,path).split(sep).join('/'),bytes:bytes.length,sha256:hash(bytes)});
+      }else throw new Error('Deployment cannot contain links');
+    }
+  }
+  await inventory(outDir);
+  const total=deploymentFiles.reduce((sum,f)=>sum+f.bytes,0);
+  if(total>=1_000_000_000)throw new Error('Published site exceeds the 1 GB budget.');
+  await writeFile(resolve(outDir,'deployment-files.json'),JSON.stringify({version:1,bytes:total,files:deploymentFiles},null,2)+'\n');
   const result={outDir,manifestCount,contentFiles:[...files.keys()].filter(p=>p.startsWith('assets/content/')).length,publishedResourceFiles:files.size,publishedResourceBytes:[...files.values()].reduce((n,f)=>n+f.bytes,0),sourceAssets:25};
   console.log(JSON.stringify(result));return result;
 }

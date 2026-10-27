@@ -14,3 +14,6 @@
 *.mp3 binary
 *.ttf binary
 *.sf2 binary
+# Runtime filenames and the deployment inventory are hashes of exact bytes.
+ArcherPreview/public/assets/content/** -text
+ArcherPreviewSite/** -text

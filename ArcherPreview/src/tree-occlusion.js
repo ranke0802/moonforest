@@ -84,8 +84,10 @@ export class TreeOcclusion {
       }
       const parts=meshes.map(mesh=>{
         const source=mesh.sourceMesh??mesh;
-        const levels=[{distance:0,surface:surfaceFor(source)},...source.getLODLevels().map(l=>({distance:l.distanceOrScreenCoverage,surface:surfaceFor(l.mesh)}))].sort((a,b)=>a.distance-b.distance);
-        return {inverse:mesh.getWorldMatrix().clone().invert(),center:mesh.getBoundingInfo().boundingSphere.centerWorld.clone(),levels};
+        const screenCoverage=source.useLODScreenCoverage;
+        const levels=[{distance:screenCoverage?Infinity:0,surface:surfaceFor(source)},...source.getLODLevels().map(l=>({distance:l.distanceOrScreenCoverage,surface:surfaceFor(l.mesh)}))].sort((a,b)=>screenCoverage?b.distance-a.distance:a.distance-b.distance);
+        const sphere=mesh.getBoundingInfo().boundingSphere;
+        return {inverse:mesh.getWorldMatrix().clone().invert(),center:sphere.centerWorld.clone(),radius:sphere.radiusWorld,levels,screenCoverage,camera:mesh.getScene().activeCamera};
       });
       return { meshes, parts, min, max, coverage: 1, target: 1 };
     });
@@ -97,9 +99,11 @@ export class TreeOcclusion {
     if (!blocksView(camera,target,tree.min,tree.max,0)) return false;
     for (const part of tree.parts) {
       const distance=Vector3.Distance(camera,part.center);
+      const projectionDistance=part.screenCoverage&&part.camera.mode===1?part.camera.minZ:distance;
+      const coverage=part.screenCoverage?Math.PI*(part.radius*part.camera.minZ/Math.max(projectionDistance,.001))**2/part.camera.screenArea:0;
       let surface=part.levels[0].surface;
       for (let i=1;i<part.levels.length;i++) {
-        if (distance<=part.levels[i].distance) break;
+        if (part.screenCoverage?coverage>=part.levels[i].distance:distance<=part.levels[i].distance) break;
         surface=part.levels[i].surface;
       }
       if (!surface) continue;

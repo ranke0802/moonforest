@@ -3,6 +3,8 @@ import { VILLAGE_PLACEMENTS } from './village-layout.js';
 import { VillageVisibility } from './village-visibility.js';
 import { applyVillageGround } from './village-ground.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
+import {VILLAGE_LOD_COVERAGE,villageLodSources} from './village-lod.js';
+import {VillageTextureStreaming} from './village-texture-streaming.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -22,7 +24,7 @@ export function createVillageTransform(world,placement,config){
 }
 export async function loadVillage(world,{onProgress=()=>{}}={}){
   if(world.villagePromise)return world.villagePromise;
-  const containers=[],roots=[],records=[];let visibility,fixtureMaterial;
+  const containers=[],roots=[],records=[];let visibility,fixtureMaterial,textureStreaming;
   world.villagePromise=(async()=>{
     const fixture=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageFixture')==='1';
     const url=new URL(`${import.meta.env.BASE_URL}assets/${fixture?'village-fixture':'village'}.json`,location.href);
@@ -41,9 +43,11 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     };
     let completed=0;
     for(const [id,config]of Object.entries(manifest.assets)){
-      // Phones never fetch/decode the 2K tier; all meshes still share GPU buffers.
-      const levels=config.lods.filter(l=>!touch||l.level>0);
+      // Mobile starts with its light texture tier but original near geometry.
+      // Original 8K color is streamed separately when an asset fills the view.
+      const levels=villageLodSources(config,touch);
       const source=await load(levels[0]),full=geometry(source);
+      for(const mesh of full)mesh.metadata={...mesh.metadata,villageLodLevel:0};
       const cover=['building','tree','rock'].includes(config.category)||tallProps.has(id);
       if(cover)prepareTreeOcclusion(full);
       for(const mat of source.materials){mat.backFaceCulling=!['tree','plant'].includes(config.category);}
@@ -54,12 +58,18 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
         if(low.length!==full.length)throw new Error(`${id}: LOD의 메시 구성이 다릅니다.`);
         for(let part=0;part<full.length;part++){
           const mesh=low[part];mesh.isPickable=false;world.scene.addMesh(mesh);
+          mesh.metadata={...mesh.metadata,villageLodLevel:levels[index].level};
           mesh.material.backFaceCulling=!['tree','plant'].includes(config.category);
           mesh.receiveShadows=false;mesh.material.freeze();
-          full[part].addLODLevel(touch?34:levels[index].level===1?25:49,mesh);
+          if(config.geometryLod){
+            full[part].useLODScreenCoverage=true;
+            full[part].addLODLevel(levels[index].level===1?VILLAGE_LOD_COVERAGE.mid:VILLAGE_LOD_COVERAGE.far,mesh);
+          }else full[part].addLODLevel(touch?34:levels[index].level===1?25:49,mesh);
         }
       }
-      for(const mesh of full){mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;mesh.material.freeze();}
+      // Screen-size LOD retains tiny silhouettes. Whole-cell distance culling
+      // still removes scenery behind the existing fog, with conservative bounds.
+      for(const mesh of full){if(!config.geometryLod)mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;mesh.material.freeze();}
       assets.set(id,{source,config,cover});onProgress(++completed,Object.keys(manifest.assets).length);
     }
     if(fixture){
@@ -90,11 +100,14 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     }
     world.treeOcclusion=new TreeOcclusion(records.filter(r=>r.blocksPlayerView&&Math.hypot(r.placement.x,r.placement.z)<54).map(r=>r.root));
     visibility=new VillageVisibility(world,records,{touch});world.villageVisibility=visibility;
-    world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:touch?'1K / 512':'2K / 1K / 512',visibility:visibility.stats};
-    world.scene.onDisposeObservable.addOnce(()=>{visibility.dispose();for(const c of containers)c.dispose();});
+    world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 8K 스트리밍 / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
+    if(manifest.geometryLod)textureStreaming=new VillageTextureStreaming(world,assets,records,url,world.environment);
+    // Read by the development review panel only, never a per-frame production scan.
+    world.villageRenderRecords=records;
+    world.scene.onDisposeObservable.addOnce(()=>{textureStreaming?.dispose();visibility.dispose();for(const c of containers)c.dispose();});
     return world.environment;
   })().catch(error=>{
-    visibility?.dispose();for(const r of roots)r.dispose();for(const c of containers)c.dispose();fixtureMaterial?.dispose();
+    textureStreaming?.dispose();visibility?.dispose();for(const r of roots)r.dispose();for(const c of containers)c.dispose();fixtureMaterial?.dispose();
     world.villageVisibility=null;world.treeOcclusion=null;world.environment={ready:false,mode:'village',error:error.message};
     // Only a new explicit load action retries; no automatic network retry loop.
     world.villagePromise=null;throw error;

@@ -1,4 +1,4 @@
-import { SceneInstrumentation } from '@babylonjs/core';
+import { Frustum,SceneInstrumentation } from '@babylonjs/core';
 
 function workerStats(){
   const controller=navigator.serviceWorker?.controller;
@@ -26,12 +26,20 @@ export function createVillageReview(world,{forcedMobile=false}={}){
     const env=world.environment??{},vis=env.visibility??{},lod=env.loadedLods??{},entries=performance.getEntriesByType('resource').filter(e=>e.startTime>=loadStarted&&e.name.includes('/assets/content/'));
     const transfer=entries.reduce((sum,e)=>sum+e.transferSize,0),unique=new Set(entries.map(e=>e.name)).size;
     const delta=latest&&baseline?(latest.hits<baseline.hits||latest.downloads<baseline.downloads?'worker 재시작 · 비교 불가':`hits ${latest.hits-baseline.hits} / downloads ${latest.downloads-baseline.downloads}`):'조회 중 또는 미지원';
+    const selected=[0,0,0],planes=Frustum.GetPlanes(world.camera.getTransformationMatrix());let triangles=0,originalTriangles=0;
+    for(const record of world.villageRenderRecords??[])if(record.root.isEnabled())for(const mesh of record.meshes){
+      if(!mesh.isInFrustum(planes))continue;
+      const source=mesh.sourceMesh??mesh,active=mesh.getLOD(world.camera);if(!active)continue;
+      triangles+=active.getTotalIndices()/3;originalTriangles+=source.getTotalIndices()/3;selected[active.metadata?.villageLodLevel??0]++;
+    }
     panel.textContent=[
       `DEV 마을 검수 · ${forcedMobile?'모바일 정책 강제':world.touchDevice?'모바일 정책':'데스크톱 정책'}`,
       `실제 에셋 ${env.sourceAssets??0}/25 · 배치 ${env.instances??0} · 활성 root ${vis.activeInstances??0}`,
       `활성 셀 ${vis.activeCells??0}/${vis.cells??0} · 그림자 ${vis.shadowCasters??0} · 가림 ${vis.occludedProps??0} / GPU조회 ${vis.occlusionQueries??0}`,
-      `마을 텍스처 ${env.textureTier??'로딩 중'} · 최대 ${env.largestTexture??0}px`,
+      `마을 텍스처 ${env.textureTier??'로딩 중'} · 최대 ${Math.max(env.largestTexture??0,env.highTextureMax??0)}px`,
       `로드된 LOD 0:${lod[0]??0} / 1:${lod[1]??0} / 2:${lod[2]??0}`,
+      `가시 메시 LOD 0:${selected[0]} / 1:${selected[1]} / 2:${selected[2]} · 삼각형 ${Math.round(triangles).toLocaleString()} / 원본 ${Math.round(originalTriangles).toLocaleString()}`,
+      `8K GPU ${env.highTextureAssets??0}종 · 로딩 ${env.highTexturePending??0} · 로드 ${env.highTextureLoads??0} / 해제 ${env.highTextureReleases??0}${env.highTextureError?' · '+env.highTextureError:''}`,
       `실측 ${Math.round(engine.getFps())} FPS · draw calls ${instrumentation.drawCallsCounter.current} · active meshes ${world.scene.getActiveMeshes().length}`,
       `content 응답 ${entries.length}건 / 고유 ${unique} · transferSize ${(transfer/1024).toFixed(1)} KiB`,
       `SW 이번 로드 Δ ${delta}`,

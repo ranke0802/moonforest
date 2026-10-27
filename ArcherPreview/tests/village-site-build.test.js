@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, sep } from 'node:path';
 import { hash } from '../scripts/resource-pack.js';
 import { collectVillageSiteFiles } from '../scripts/build-village-site.mjs';
+import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
 
 async function fixture(t){
   const root=await mkdtemp(join(tmpdir(),'moonforest-village-site-'));
@@ -37,4 +38,10 @@ test('production publication requires a complete, approved village and rejects t
   await assert.rejects(collectVillageSiteFiles(f.root),/25 approved assets/);
   await writeFile(join(f.root,'assets/sky.json'),JSON.stringify({texture:'content/../../outside.bin'}));
   await assert.rejects(collectVillageSiteFiles(f.root,{requireCompleteVillage:false}),/Unsupported publish dependency/);
+});
+
+test('production cannot regress to the old 1K mobile near tier without geometry LOD',async t=>{
+ const f=await fixture(t);
+ await writeFile(join(f.root,'assets/village.json'),JSON.stringify({complete:true,availableAssetCount:25,assets:Object.fromEntries(VILLAGE_ASSET_IDS.map(id=>[id,{visualReview:'APPROVED'}]))}));
+ await assert.rejects(collectVillageSiteFiles(f.root),/original mobile near geometry, 8K/);
 });

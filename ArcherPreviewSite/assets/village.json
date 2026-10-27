@@ -34,32 +34,81 @@
         },
         {
           "level": 1,
-          "model": "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf",
+          "model": "./content/e0563d5475892f95560cbdf419c05124e52d56aeec980665b620d7fbd83dab7e.gltf",
           "resources": [
+            "./content/4e9a12e4d9f9057d49bea84f3b937bdd475ef535b24b8127bfd46f9103474381.bin",
+            "./content/602cd299cf287c9ac45d75a293b0bff8ea5c3badd211b86d59d58cfb005b119c.bin",
+            "./content/99047198ad351a9aca175121bf11d2fae889683fb8a0bbb2d406ba32de4a2481.bin",
+            "./content/1275926ae62c8a8c89bae4c9f5ae5b759f51e4079eafc297787985ae6425f483.bin",
             "./content/71c233c60d2cc207ba65ec47ac00a5d7c7cd8dcaee3b0b1a7d415712f723cf2e.png",
             "./content/36ffe6731ce7736d73abd5b835f0e7bfeaa38164a51a385cf813dac23de4360a.jpg",
             "./content/a9cb1180a1b55b63a705eef2a255621745b4e3d5ce0ba36f2cd139a64042648d.png",
-            "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
-            "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf"
+            "./content/e0563d5475892f95560cbdf419c05124e52d56aeec980665b620d7fbd83dab7e.gltf"
           ],
-          "triangles": 4106,
+          "triangles": 2050,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/f7e41ea0f87156faf625e0b2a4db1a57d850888bba83d161bf6db29672d4bb84.gltf",
+          "model": "./content/3fa5d2c95438da83d0af3fb53283e92ec92d802e0252e671246ebc060fa41c09.gltf",
           "resources": [
+            "./content/032f2f467243b3f76ab40ead1e3c1ac9262c41649f01d1f6230aa9f6905f0669.bin",
+            "./content/a284036bace304dd7fb8fdd7ca504a81bb9b9a624cc729c1879e768b4ad30c8f.bin",
+            "./content/445cba95a97f38ba73f14fda64069b1062533d3396cc4f8d807e73b7dcd4a8e2.bin",
+            "./content/bdd1c938c9cb08f764a00f755af8052ed97dc7fcb1fd2fd63dbea8aedacb9d6a.bin",
             "./content/e9f724de080c5ccec49088aeec10c1c648bafc0f3cf8a18d8eda87cbcd6500a4.jpg",
             "./content/2a5ace92c270545b883299ec593eaf92151d21e8a56a67be7928d269e8303aaf.png",
-            "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
-            "./content/f7e41ea0f87156faf625e0b2a4db1a57d850888bba83d161bf6db29672d4bb84.gltf"
+            "./content/3fa5d2c95438da83d0af3fb53283e92ec92d802e0252e671246ebc060fa41c09.gltf"
           ],
-          "triangles": 4106,
+          "triangles": 1136,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf",
+        "resources": [
+          "./content/71c233c60d2cc207ba65ec47ac00a5d7c7cd8dcaee3b0b1a7d415712f723cf2e.png",
+          "./content/36ffe6731ce7736d73abd5b835f0e7bfeaa38164a51a385cf813dac23de4360a.jpg",
+          "./content/a9cb1180a1b55b63a705eef2a255621745b4e3d5ce0ba36f2cd139a64042648d.png",
+          "./content/a07910b449ad24eba3ca64aff367b3b1ef1a0a9a9f44141197cf587962b927d6.bin",
+          "./content/f8b4fdad62ced441d37aafe3b6a371ae8d3ef0638539dd560a76940f1570c601.gltf"
+        ],
+        "triangles": 4106,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/715d3af37897a9c66404176bbd9867ebe766b45b5d01f18a49ef1c79d683bc2e.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/1db7a09a329b7ca759ba0335d4e6ce957379d8ee2d03d1f2aba4a048609339f1.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/75005cddfb37d42b5f6ca49f2046eea5d8b1bcdd693418ab54cf8c243de2cc61.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/715d3af37897a9c66404176bbd9867ebe766b45b5d01f18a49ef1c79d683bc2e.webp",
+          "./content/1db7a09a329b7ca759ba0335d4e6ce957379d8ee2d03d1f2aba4a048609339f1.webp",
+          "./content/75005cddfb37d42b5f6ca49f2046eea5d8b1bcdd693418ab54cf8c243de2cc61.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "house-02-tall-home": {
       "name": "높은 주택",
@@ -90,32 +139,81 @@
         },
         {
           "level": 1,
-          "model": "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf",
+          "model": "./content/57d24e25308539541ddd003a4a8bfd3f1fc827618047f9de09490a284f4fdbce.gltf",
           "resources": [
+            "./content/5a6d6d927ee96ec1fdacf14f5fa08e66ab825302b01c4c63f5acd9baf27c6487.bin",
+            "./content/472ed9d2f94c6c651ae7d822f29e181a0f4d353bad3fb9988a7da62d312c7b4a.bin",
+            "./content/fbf0b2d6eca590825bfe8e23d69f1dee7d033923ba63c2cfe072308601ea2f89.bin",
+            "./content/60d86461fe2ffb8ec04e2afb7ba90d56a26a14485c14f17ddc07fcea8d6b06a3.bin",
             "./content/1eef8cf0586f85d17c9b620b6bc8d0988a0d218e0f02dabce1256411427c81de.png",
             "./content/d94061f202eee1846cc1fd979e00124a957f517ba3244283563a139092975d09.jpg",
             "./content/5a17b43a4f10f2343d1a71bdc2193067799022a79de54a62705468746acaa20b.png",
-            "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
-            "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf"
+            "./content/57d24e25308539541ddd003a4a8bfd3f1fc827618047f9de09490a284f4fdbce.gltf"
           ],
-          "triangles": 4738,
+          "triangles": 2818,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/f240ad57045a07d0b6665b069be41bbd7485aa33c09a4be1f53f2feaa948869c.gltf",
+          "model": "./content/9d99d20abef11be541cf5a6defb8a64ddc77436322df271ac104b31b00be53fa.gltf",
           "resources": [
+            "./content/71f69ac59159cc53d775491c59d13354ef4b769d6dd35e2c9147e07059d4e9d4.bin",
+            "./content/bb66068bf68c7acbb6350c7ccead31c1402f5a0270a14acecc589fa319ef789d.bin",
+            "./content/373ea5cb1dd18b7603f2e55273ea1455abcea5d13db9c202597ae64f87a1d2ba.bin",
+            "./content/b4b22eef846fec4f0bcc8b3f325ec10159f44bdfa5a54f76bee1a78d5fa675bc.bin",
             "./content/2b924d8993ba9a8d01469bbed3072bd16c512ebd5188c44ea9cf0ea1a6edac77.jpg",
             "./content/ae910200f853c6b4ca15dc3e1ce32631d1a95e42018786feeeecfac3b2cad19d.png",
-            "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
-            "./content/f240ad57045a07d0b6665b069be41bbd7485aa33c09a4be1f53f2feaa948869c.gltf"
+            "./content/9d99d20abef11be541cf5a6defb8a64ddc77436322df271ac104b31b00be53fa.gltf"
           ],
-          "triangles": 4738,
+          "triangles": 2336,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf",
+        "resources": [
+          "./content/1eef8cf0586f85d17c9b620b6bc8d0988a0d218e0f02dabce1256411427c81de.png",
+          "./content/d94061f202eee1846cc1fd979e00124a957f517ba3244283563a139092975d09.jpg",
+          "./content/5a17b43a4f10f2343d1a71bdc2193067799022a79de54a62705468746acaa20b.png",
+          "./content/c47d742415ea4ba78c277c171a5a8648085c3c8d4ec554ab8886f1692b2f77b6.bin",
+          "./content/a45bb457e8ec199e2fbe4cad1f045b88c758e2e4452806c5446b46c6bf24a4c8.gltf"
+        ],
+        "triangles": 4738,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/d4f7bd4a51d1548e641e2a6645ed93f34d954524a6cadfa26937841276795588.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/301998a2a55c1a81ae95b2588294d6373e8bf499d6b4491a6c4573fe234a0768.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/366591873213d4877d8390388a44a8e0e933159a94a58c22a7ab254da6cc29d0.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/d4f7bd4a51d1548e641e2a6645ed93f34d954524a6cadfa26937841276795588.webp",
+          "./content/301998a2a55c1a81ae95b2588294d6373e8bf499d6b4491a6c4573fe234a0768.webp",
+          "./content/366591873213d4877d8390388a44a8e0e933159a94a58c22a7ab254da6cc29d0.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "house-03-workshop": {
       "name": "작업장",
@@ -146,32 +244,81 @@
         },
         {
           "level": 1,
-          "model": "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf",
+          "model": "./content/3a5a9e2130698ac98ff5b3a884eae0550b0432d39d5d5b47da043280d56cc910.gltf",
           "resources": [
+            "./content/45266496bc9e60c920455b4db663c99341b9fec79fd743d27d3821d8dc3e54a7.bin",
+            "./content/0e8456d33282c702b270139f2e85892e462b3b75d562b83e5cd662300ff9dbf3.bin",
+            "./content/b53ab6d416409f93ed06a38ec19b1dcf7b35ca636186f32ff8f4a8e5ef62bd57.bin",
+            "./content/fd0face049b626338dbbbff49fdae880d6419440344f07f8a40ec38ecf76b8d2.bin",
             "./content/80729278401688df633d2e685b00aa4238320f864da0e2486dbbc91aec278cf2.png",
             "./content/01778076add381e460b741a14607098dbe80461b7badc46326e55d3d1b3c6b3e.jpg",
             "./content/e4423e9aa1984a630e5e2eb0b063e1d2548c98cd5aee1a914ec4b1fffac6760c.png",
-            "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
-            "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf"
+            "./content/3a5a9e2130698ac98ff5b3a884eae0550b0432d39d5d5b47da043280d56cc910.gltf"
           ],
-          "triangles": 4915,
+          "triangles": 2757,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/a51cc7b6122f89c3a26366d8b52b6b0fdfecb3d3bb8b92e04838fe31868a124e.gltf",
+          "model": "./content/25d8b127fe0325d773db850f18ef5bec128d81ceb8fb98adf66e9f33d5f85555.gltf",
           "resources": [
+            "./content/a0407dbcac181508f4e0e6ca6598c643394e1e62b53c7bf72723cd7b49d81beb.bin",
+            "./content/a432d81296d3151558a893a6731c90148c87a9501cbc5b4b78fcbbd6ac5e3a1a.bin",
+            "./content/43d58beb4209abf235d9c809afc114bbe9df732b2fe32878fbce85940438ec87.bin",
+            "./content/58d5fcc3cf2ea723f37826844209f589be8f1585d359b46b4cd188eeb8e5e29e.bin",
             "./content/eb7fbc5ee65a8b87927ace9cfdaf8cf8edb4b482a167022dbfc05d8ef44a9a93.jpg",
             "./content/d9741597c64a744cf61afff56585004124c63d51f37ef0a389e5a0d9e4aa4a61.png",
-            "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
-            "./content/a51cc7b6122f89c3a26366d8b52b6b0fdfecb3d3bb8b92e04838fe31868a124e.gltf"
+            "./content/25d8b127fe0325d773db850f18ef5bec128d81ceb8fb98adf66e9f33d5f85555.gltf"
           ],
-          "triangles": 4915,
+          "triangles": 2025,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf",
+        "resources": [
+          "./content/80729278401688df633d2e685b00aa4238320f864da0e2486dbbc91aec278cf2.png",
+          "./content/01778076add381e460b741a14607098dbe80461b7badc46326e55d3d1b3c6b3e.jpg",
+          "./content/e4423e9aa1984a630e5e2eb0b063e1d2548c98cd5aee1a914ec4b1fffac6760c.png",
+          "./content/bd014bf0f24d0ca446aaff860c4bdc158946d5a4d8254aaadc20d46e072d4e07.bin",
+          "./content/1981572d5f86373f95478e05752b8eec88f54e8e8389ff62ee9211f2295b1950.gltf"
+        ],
+        "triangles": 4915,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/1e3d409bc0a5970baceba9b5d4f51fdd3fe9949305f2ac15043e56de3f3b0dad.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/61a734d252d0f9fc77a1dc92ddc29b60c2db3e079c1b5a36f13017bc81ed3ccb.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/d496aba2984be8bdb6a8d2f7507ffe97363a2241e347da701d4997268221a354.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/1e3d409bc0a5970baceba9b5d4f51fdd3fe9949305f2ac15043e56de3f3b0dad.webp",
+          "./content/61a734d252d0f9fc77a1dc92ddc29b60c2db3e079c1b5a36f13017bc81ed3ccb.webp",
+          "./content/d496aba2984be8bdb6a8d2f7507ffe97363a2241e347da701d4997268221a354.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "house-04-forest-hut": {
       "name": "작은 오래된 집",
@@ -202,32 +349,81 @@
         },
         {
           "level": 1,
-          "model": "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf",
+          "model": "./content/8545e5b97ea2dd0e581f00917cf3ef599ed5fd2a50e430ae41933458fbabf09c.gltf",
           "resources": [
+            "./content/aae2b6ecf4f95cf2a04e35efcf89b5176f42d9cc6eb35e7fc14c06b999f7b061.bin",
+            "./content/c975e93cf17c469212a1e5122b1855ccde756bcf28cf033459c4260617d22bce.bin",
+            "./content/38246aa1d166c5a394eb27405907f093446579a9c7517a133b0c012681df38b3.bin",
+            "./content/f940801323ddf810b03f2261370630a2db1c682b58e76824a93dc9c58ec67451.bin",
             "./content/bc4b157040fe99e5ebaccc88f1beb4142695b4ae7f903cca228c6c5c2421ebc3.png",
             "./content/fa9258d16c3102b0ee6246370f1821448cc8864afd22665f06f4ef13adb7493e.jpg",
             "./content/b59c694593db543b9223662122453172bea0fa862e0d0db519f5f878330f2fe9.png",
-            "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
-            "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf"
+            "./content/8545e5b97ea2dd0e581f00917cf3ef599ed5fd2a50e430ae41933458fbabf09c.gltf"
           ],
-          "triangles": 4652,
+          "triangles": 3209,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/6d413ba7a7f19a12efccc772902994c8437b00a1705c62d7f37e9c0019be2ab2.gltf",
+          "model": "./content/ff0966c085093a71ecf6981be3a0b6d6040781e3e5746af6271d39b9760e8a03.gltf",
           "resources": [
+            "./content/2ad39ff89743778891160f97131512a71831986f1c8cc6646d5b1f8143b3fb8a.bin",
+            "./content/b9c7721b2aabaa8caa510f6a9fd87c0e02053af8f19fee775b57568055d08130.bin",
+            "./content/3f28a72f0cdeef6793a1b898cefe1fb523e79efec0e03600bd2213bd426c4313.bin",
+            "./content/8f78d129c05c170d261f1d428a70652f38458fd5faa4a2abd863aae108dde3d0.bin",
             "./content/511556e0bcd4a8c06d6b56ba6050666d5e28c0492ab8d24c07d88b080a3617c5.jpg",
             "./content/68f9e8586e9b5af61795446f853a5167a28f8f396b4110897efb0744bf3782ad.png",
-            "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
-            "./content/6d413ba7a7f19a12efccc772902994c8437b00a1705c62d7f37e9c0019be2ab2.gltf"
+            "./content/ff0966c085093a71ecf6981be3a0b6d6040781e3e5746af6271d39b9760e8a03.gltf"
           ],
-          "triangles": 4652,
+          "triangles": 2615,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf",
+        "resources": [
+          "./content/bc4b157040fe99e5ebaccc88f1beb4142695b4ae7f903cca228c6c5c2421ebc3.png",
+          "./content/fa9258d16c3102b0ee6246370f1821448cc8864afd22665f06f4ef13adb7493e.jpg",
+          "./content/b59c694593db543b9223662122453172bea0fa862e0d0db519f5f878330f2fe9.png",
+          "./content/871210ac5361b44be2539bf2ef431e6658607138b2c28a899650f3ea38d5390f.bin",
+          "./content/7f07cd9c02442e7a489df91da0f74618a9fac8159844b6d56181bba44e74c084.gltf"
+        ],
+        "triangles": 4652,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ad32bd2fd9510b011f28285ca141a54df0a3cad878411b4a0f2fd048c3898b7f.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/3f77c2a265ecd1bd368f56f5cf79ea37407c361eb10cc13fceb5c45231a9f4d7.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/513bc2e7ec7c6ba1c554f56d5bf6a75e2b67abceae84b3f416b212c4a05c1435.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/ad32bd2fd9510b011f28285ca141a54df0a3cad878411b4a0f2fd048c3898b7f.webp",
+          "./content/3f77c2a265ecd1bd368f56f5cf79ea37407c361eb10cc13fceb5c45231a9f4d7.webp",
+          "./content/513bc2e7ec7c6ba1c554f56d5bf6a75e2b67abceae84b3f416b212c4a05c1435.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wall-01-straight": {
       "name": "직선 돌담",
@@ -258,32 +454,81 @@
         },
         {
           "level": 1,
-          "model": "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf",
+          "model": "./content/e7a8ebe3ced969f657a77f97e50d48f44ad18776c973da93fe98ea83d6414cf7.gltf",
           "resources": [
+            "./content/ca380244b7ba13f31dd268892aa58cd1173d4d6079f9433cf901ad05a117b409.bin",
+            "./content/d0a02dfc54588206acfbc7d071e553febe2b46009af50171e3f4f50c0d8bb10b.bin",
+            "./content/40ea9a9e9d5b77701ddb0f5537baefe897b06587a823c54b29150df891665aab.bin",
+            "./content/1f2d5fb55baeab1d38dd17ab03007f2ae5f692b75d03e8d15ea04b766f96d1b5.bin",
             "./content/21511364259549ac2af4056009a19c67b987e94b4197c694ad6f10c1f9552ff4.png",
             "./content/4519ce5fac2bcd7c1eeb6ff6314205410961d2fe536b90b97f63373791456655.jpg",
             "./content/a3b91afa0b48bfb9ec3b64442e9d36c1acb2f4344d8513f41aaefa2e2b5af91e.png",
-            "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
-            "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf"
+            "./content/e7a8ebe3ced969f657a77f97e50d48f44ad18776c973da93fe98ea83d6414cf7.gltf"
           ],
-          "triangles": 5142,
+          "triangles": 2570,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/7f80daedb61bc1e9ab9031c785f6ff08b1b2471935e44c5f53055ed73de7ce6b.gltf",
+          "model": "./content/e4e13f6b9b1e7d41364cc1acc17b6405d0128ebad0597719b4435f8c5004cbbf.gltf",
           "resources": [
+            "./content/a7d8b6bf8e3444d4658c8fb0b5b6ae59ded8ba7b65a42516c876de0815ae7dfd.bin",
+            "./content/9e44a481ebd719d20f9aeae0f7f4d84d2797f4fbc9846aac17b2637c4195f1e6.bin",
+            "./content/a29a0b9524a779393e0631ddf82009a1dfc07caca66f352eee0c26956eb329a7.bin",
+            "./content/2db9c313ed97333942f6c3c9ff82e2bab0f6c8974922722fedeb861d3e536bf9.bin",
             "./content/9f6629231fc786b248fd70049383bb5f5668201fb5513c03f470899895bb315a.jpg",
             "./content/5c52737ae0c0206c968544cb66521f7db7af21a170e066ed31084456c5c0852e.png",
-            "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
-            "./content/7f80daedb61bc1e9ab9031c785f6ff08b1b2471935e44c5f53055ed73de7ce6b.gltf"
+            "./content/e4e13f6b9b1e7d41364cc1acc17b6405d0128ebad0597719b4435f8c5004cbbf.gltf"
           ],
-          "triangles": 5142,
+          "triangles": 1130,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf",
+        "resources": [
+          "./content/21511364259549ac2af4056009a19c67b987e94b4197c694ad6f10c1f9552ff4.png",
+          "./content/4519ce5fac2bcd7c1eeb6ff6314205410961d2fe536b90b97f63373791456655.jpg",
+          "./content/a3b91afa0b48bfb9ec3b64442e9d36c1acb2f4344d8513f41aaefa2e2b5af91e.png",
+          "./content/82e9574300f060cdd5c00757adac01622cfca7fbb1976259643c380af9ccdea3.bin",
+          "./content/2f468326379fbcf47986cad80563f5d200c91405ef7447dec3ce76c90f27a1bc.gltf"
+        ],
+        "triangles": 5142,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/5f86252fd7ca6af234800b371c6519988bf8538df68bb866a72f47f862e11a45.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/7bcaf9a0f90eb5353503d7023d2a91a0cc4d2e70c0c78e1bdec85c1f8fe11b2b.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/b97248560af8a54ecf75bd47ca2ca75305e5c47ec73d6fbaa0ad1f6e8eee6791.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/5f86252fd7ca6af234800b371c6519988bf8538df68bb866a72f47f862e11a45.webp",
+          "./content/7bcaf9a0f90eb5353503d7023d2a91a0cc4d2e70c0c78e1bdec85c1f8fe11b2b.webp",
+          "./content/b97248560af8a54ecf75bd47ca2ca75305e5c47ec73d6fbaa0ad1f6e8eee6791.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wall-02-corner": {
       "name": "모서리 돌담",
@@ -314,32 +559,81 @@
         },
         {
           "level": 1,
-          "model": "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf",
+          "model": "./content/349a05f730083cae2f3ac331e6743b1b0cd73804c9177da98b5a319d2edcd717.gltf",
           "resources": [
+            "./content/786e3e5f3dfbf09ad6b9e860fc9bfbe85b40c11933cb72b146c28559aa8c9861.bin",
+            "./content/f67475d9e9abf9c7ff209dc01550bd233d32a74505f65fd32a0236563cfbc311.bin",
+            "./content/4fd0c2da19661927822eec4408e9387c84785fbfae3900d4a7fe47ef8d2faecb.bin",
+            "./content/4faf55de4ade764857c16adbae681a30ebe98c6a63fee852ad0be9f65f65ff2e.bin",
             "./content/3c7f4393030880c8765ba4906a56af5becd890f9edd0df32e5152887d389b115.png",
             "./content/c5d960f62b2e1b49a5df32d8ce4aa49b8105add22330337e832bc071de1b41f4.jpg",
             "./content/391b6b19cada39035f48121d15121d98f2e4e8ef8f23010b8e2782c2bea23fff.png",
-            "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
-            "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf"
+            "./content/349a05f730083cae2f3ac331e6743b1b0cd73804c9177da98b5a319d2edcd717.gltf"
           ],
-          "triangles": 5276,
+          "triangles": 2638,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/d6105cf67590ccc6536a6ccdb0528b227d0421f78a38d7b6beabceec20ebc60b.gltf",
+          "model": "./content/acc61eae6534443b832ff404cd3feaa48de41dc47a0c6f2b5b14b376efec09ac.gltf",
           "resources": [
+            "./content/63a9bbc2ea5745f46bb7f2590b8306932de51ca0c223efff997a3e6e49add4e1.bin",
+            "./content/58d7f7996f2f1ce15d5a8eeb4eff09785c19bb66c29fb2f1ed0d641d43f3041f.bin",
+            "./content/90ab8cb1e37d0b30ae7a68672170fa1498776b5538297e2dc27e4230283c3802.bin",
+            "./content/6f5e4c68b3a56a42a0d130180be68947f6c0d8f297e34222df55412242903a24.bin",
             "./content/41c5de1300e5272529fd1ca2f09af13c297477669790042c7f0611cd0b415b4b.jpg",
             "./content/a8bb3015b351ac24e78b4442b02495d88ad3899daa2aa42597152499687ea3bf.png",
-            "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
-            "./content/d6105cf67590ccc6536a6ccdb0528b227d0421f78a38d7b6beabceec20ebc60b.gltf"
+            "./content/acc61eae6534443b832ff404cd3feaa48de41dc47a0c6f2b5b14b376efec09ac.gltf"
           ],
-          "triangles": 5276,
+          "triangles": 1159,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf",
+        "resources": [
+          "./content/3c7f4393030880c8765ba4906a56af5becd890f9edd0df32e5152887d389b115.png",
+          "./content/c5d960f62b2e1b49a5df32d8ce4aa49b8105add22330337e832bc071de1b41f4.jpg",
+          "./content/391b6b19cada39035f48121d15121d98f2e4e8ef8f23010b8e2782c2bea23fff.png",
+          "./content/105444c5e7b8d092357ca4c363bcb6464282f1668d9e60e02a272f3dac9e0aa5.bin",
+          "./content/f98adf132282cffeca3f71b583bd122c0783fb8d88a810174d55f0c2a5946190.gltf"
+        ],
+        "triangles": 5276,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/e5799d34fcb68102472fc0173823c0e97e80e324ca905437176955652951e59d.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/4dd2e52f365c1fad49df6c80b1c7831e515c22dc207bef92339451db35eef981.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/bfcb24049c5586e72ca9b38cb1fa018261ed0f9b743267f3361ed2a0065600cb.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/e5799d34fcb68102472fc0173823c0e97e80e324ca905437176955652951e59d.webp",
+          "./content/4dd2e52f365c1fad49df6c80b1c7831e515c22dc207bef92339451db35eef981.webp",
+          "./content/bfcb24049c5586e72ca9b38cb1fa018261ed0f9b743267f3361ed2a0065600cb.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wall-03-breached": {
       "name": "파손 돌담",
@@ -370,32 +664,81 @@
         },
         {
           "level": 1,
-          "model": "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf",
+          "model": "./content/72112ad17d33d2bf6696146304b412e57b73dc980cc081895f78690c852bd63b.gltf",
           "resources": [
+            "./content/78f53a804c62e1963c8efbb3e34f4fe6eb476a8e668af931b4bf5dacbb0c165c.bin",
+            "./content/2c641b5a81d3bf2577b1b766f97e49b3be745098fc82a6564052b4e2b77a1d4b.bin",
+            "./content/d198b93a39c5b837febccaf509b6afa6e68aded5ce083a4c36815ddbac4cd1c2.bin",
+            "./content/dcd21f348149bf091f509bb4aa6df141f98ec195fdf844e4f4a38a506f2ee40a.bin",
             "./content/051a01b0b8c2b56271446382653c87d5237dc62c2bd0b3e666266b4e9f6e5210.png",
             "./content/ca9fe805cafa17ea3e3890bb1cf99e8a0c4c34a7ff8610eaa6660b904605c81b.jpg",
             "./content/81a7cb40fd1ba70ade73a9263981254389a76109062ad99b577546f9cf9e0b30.png",
-            "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
-            "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf"
+            "./content/72112ad17d33d2bf6696146304b412e57b73dc980cc081895f78690c852bd63b.gltf"
           ],
-          "triangles": 5264,
+          "triangles": 2632,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/1dbb21cba6180f34e67dbc2d37904ae32b70fac54f8ea5ee702ad14a9408206d.gltf",
+          "model": "./content/6ef27219d713e98eda659cc93c9bccd4ea15e214aa6ac1b1d0c48fcd2e99a991.gltf",
           "resources": [
+            "./content/9bbb6ad016addf497dd2a59f55a76938fc8851485b8e97b9aeefed66142798b9.bin",
+            "./content/da472e879e4a37bdfbab70ba2661daedd1b7da5dd714a93c05623efd3c5c396e.bin",
+            "./content/4a799052f66658ce1dade73c7c30e3a5fb0271eff42387ebad9d72d4bab7c91f.bin",
+            "./content/0287c802e31c884ee761e4851e5c582e4bd405b2346c8bc0d3df27fb32ea903e.bin",
             "./content/1c65020a225dc93f97564438d611e8a58736158de170aacf0d1fc2af48d76e18.jpg",
             "./content/a82daea5ff469c8cca9281af40d28d418b1efb359381c6b704415baf491441a0.png",
-            "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
-            "./content/1dbb21cba6180f34e67dbc2d37904ae32b70fac54f8ea5ee702ad14a9408206d.gltf"
+            "./content/6ef27219d713e98eda659cc93c9bccd4ea15e214aa6ac1b1d0c48fcd2e99a991.gltf"
           ],
-          "triangles": 5264,
+          "triangles": 1158,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf",
+        "resources": [
+          "./content/051a01b0b8c2b56271446382653c87d5237dc62c2bd0b3e666266b4e9f6e5210.png",
+          "./content/ca9fe805cafa17ea3e3890bb1cf99e8a0c4c34a7ff8610eaa6660b904605c81b.jpg",
+          "./content/81a7cb40fd1ba70ade73a9263981254389a76109062ad99b577546f9cf9e0b30.png",
+          "./content/42297d307fae337ce64d77bafd4218623d10f926e1dbfcccc1aa02af64f8a791.bin",
+          "./content/231c5dbecbf670ec41c73ebaadb26bb923770e4fad4a15508fa111382a4eb26a.gltf"
+        ],
+        "triangles": 5264,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/73b4cab3aa66079446b85933aba30e0ced3ebab43aad6e2ccbb477f9aebd36e9.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/72b5fa966ff6939c61cf585ac2d6b591dfd45a2c7d27c261da348a4fb75057fc.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/a539f5ec79fc43dd7eb8fe2d06f33264eebade7ed3dbe370992eb961adf0bbc1.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/73b4cab3aa66079446b85933aba30e0ced3ebab43aad6e2ccbb477f9aebd36e9.webp",
+          "./content/72b5fa966ff6939c61cf585ac2d6b591dfd45a2c7d27c261da348a4fb75057fc.webp",
+          "./content/a539f5ec79fc43dd7eb8fe2d06f33264eebade7ed3dbe370992eb961adf0bbc1.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wood-01-palisade": {
       "name": "통나무 목책",
@@ -426,32 +769,81 @@
         },
         {
           "level": 1,
-          "model": "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf",
+          "model": "./content/8ec06aa8d342bd799815d39acd870b1abedb6f9e91ebd55cdcb6d62f76972af0.gltf",
           "resources": [
+            "./content/2c3cc02dd9ccf2f598f6af3803b90cd488284598a0907e4c80229be59494f2ed.bin",
+            "./content/c305150c495ba1426d53e28cf57dd2543343fd023b0f9839dab11f1e873ecd6f.bin",
+            "./content/d4a1aadae76b405e66eae8f67af37e8af2de4e90b10eb647380c8897d57e2fad.bin",
+            "./content/d95c5db58a985b8ab2d5f26c889b33830f46b2e0531889fa1260c4c51dca78b4.bin",
             "./content/a38d7720772f64cec7ade176e76904d467ee1a591e029375b2c7a3f2970a8fe9.png",
             "./content/0fe666c0edb9fc0172a79d29b9fefd49b497cb038d97bb0fb95cf490bb0bfd8d.jpg",
             "./content/4a5d0fbf10d802c79ef42aca9ea54edaf423135baaa5b28207bb09c86f502786.png",
-            "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
-            "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf"
+            "./content/8ec06aa8d342bd799815d39acd870b1abedb6f9e91ebd55cdcb6d62f76972af0.gltf"
           ],
-          "triangles": 5265,
+          "triangles": 2631,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/ea6d484b43cbbc29fb9ddfafeab355bd9799f90fb27d5a5087912ee6080d4cc0.gltf",
+          "model": "./content/c940c027d370d45d3babd958a776563477735d28d962c401d09d4faf07165d4d.gltf",
           "resources": [
+            "./content/364ccfb6b5a90ef211dc96fcf1546209e90b6100fdd99d0b7366412b3eeeef5c.bin",
+            "./content/adf29d389ccdf289f42629c09ccd683d7ac6c79f3ec626ee33347d8bcc7bce1b.bin",
+            "./content/9d4c086029c35762b39dd923adc560b16ecc8feacec0c56fefd4f8e85bb3b638.bin",
+            "./content/0b58c949ebdcbc4458efabfa5ad9f90704161cea3cc64712e17efb240a5dc8a3.bin",
             "./content/4744415db1592e6eb28a7152bdf2dd1185646569b9d33f4f22b2b2a5a3db09d1.jpg",
             "./content/ab1eaf175eb70098f0c470d74491b636dff9872584f39fc9b5d95672ec838ccc.png",
-            "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
-            "./content/ea6d484b43cbbc29fb9ddfafeab355bd9799f90fb27d5a5087912ee6080d4cc0.gltf"
+            "./content/c940c027d370d45d3babd958a776563477735d28d962c401d09d4faf07165d4d.gltf"
           ],
-          "triangles": 5265,
+          "triangles": 1647,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf",
+        "resources": [
+          "./content/a38d7720772f64cec7ade176e76904d467ee1a591e029375b2c7a3f2970a8fe9.png",
+          "./content/0fe666c0edb9fc0172a79d29b9fefd49b497cb038d97bb0fb95cf490bb0bfd8d.jpg",
+          "./content/4a5d0fbf10d802c79ef42aca9ea54edaf423135baaa5b28207bb09c86f502786.png",
+          "./content/bfa177c3a4824a62a69c5c4ebd4cfbbf758e13a977235512396225725e2de927.bin",
+          "./content/4831925d1130b322c2c17df282953c2d789ba393af756c62579032cef7dfc6ca.gltf"
+        ],
+        "triangles": 5265,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/5094ed33d83f5d0b60ceca12806476d1bdc7120e699fc2cee26265107604af46.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/eb749b23c8967ea06a7b1b192b3428b2c35a0d21dfd3c527ed41d1cf989254ca.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/76b41d88f4c83ec29a0974d9ac80260ce3a07774ee407ed6e6a355f191194fe3.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/5094ed33d83f5d0b60ceca12806476d1bdc7120e699fc2cee26265107604af46.webp",
+          "./content/eb749b23c8967ea06a7b1b192b3428b2c35a0d21dfd3c527ed41d1cf989254ca.webp",
+          "./content/76b41d88f4c83ec29a0974d9ac80260ce3a07774ee407ed6e6a355f191194fe3.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wood-02-cross-barricade": {
       "name": "교차 바리케이드",
@@ -482,32 +874,81 @@
         },
         {
           "level": 1,
-          "model": "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf",
+          "model": "./content/21562bbbb999fc4086ffa3e9d3fa08100c325efe242bde526574203064af4d01.gltf",
           "resources": [
+            "./content/fdc16e5bd85600f629b1edeb1e56a68eb720b350090cfdedcbef924da69dc0a6.bin",
+            "./content/aae4186d9c3e17d1f765514a48d016ebb987324e8a0bc9d49c07d217c35cae08.bin",
+            "./content/6bf03994756ea4d103be5debd83489069e142893c952cc62d8f58ac47577f775.bin",
+            "./content/eec533392c172f4602ec0bddf1667ba95bcaaca3ca8e298caded232694d799c5.bin",
             "./content/e1af6b41b2b7851881e241b9e8b428d3859d47d01c02001251ad1d677ac2140a.png",
             "./content/e543b6ddbecc7fd6f02d0bfc867d9f5ee194b5c1406d8eb3aaf6b76395d0fb86.jpg",
             "./content/243965b39d8c067e88260edd91a3df5be32318b6e5b8cb9b4052129332d9b397.png",
-            "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
-            "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf"
+            "./content/21562bbbb999fc4086ffa3e9d3fa08100c325efe242bde526574203064af4d01.gltf"
           ],
-          "triangles": 5173,
+          "triangles": 2586,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/1297abb30a55b404131b68ffc32ad91258198ac0d31e3540d3ffca88ff6cdb03.gltf",
+          "model": "./content/16e1dd865f8a2efe0a4c5399c53b0937c78dee50d1fb8b30514022350fcf4569.gltf",
           "resources": [
+            "./content/5cc9f8e64ab3e5c58c2346c96738322602a211d16baeb0db4b4161ddc2101d61.bin",
+            "./content/447818853a425922eb5ea98b95041c0255cf8c8baa49a0efabcb4472bea93fed.bin",
+            "./content/012a7f73fca9784c53b9f8a0169245c0cd9508dcadb22d98e0346784e8893f92.bin",
+            "./content/0044795e496bc64a762c1f5ba3a599b3a9accc492cc913fbb47486da287be578.bin",
             "./content/444112033ecfc092772fc0af9e43fc723a5e980224c1df03aa9876b2fe5edb29.jpg",
             "./content/040bf2f2629f1fb27169484ef7e509b0163b30a07a5afc485e857d58ec320341.png",
-            "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
-            "./content/1297abb30a55b404131b68ffc32ad91258198ac0d31e3540d3ffca88ff6cdb03.gltf"
+            "./content/16e1dd865f8a2efe0a4c5399c53b0937c78dee50d1fb8b30514022350fcf4569.gltf"
           ],
-          "triangles": 5173,
+          "triangles": 1137,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf",
+        "resources": [
+          "./content/e1af6b41b2b7851881e241b9e8b428d3859d47d01c02001251ad1d677ac2140a.png",
+          "./content/e543b6ddbecc7fd6f02d0bfc867d9f5ee194b5c1406d8eb3aaf6b76395d0fb86.jpg",
+          "./content/243965b39d8c067e88260edd91a3df5be32318b6e5b8cb9b4052129332d9b397.png",
+          "./content/a30a68a2d7983c81c428283cd045f0b10f704d1311c9bf47cc128a2f0683d817.bin",
+          "./content/c2289f85ca02a521dafb5a6b3c0e0333786a9f68d93545d7764310ddecd13997.gltf"
+        ],
+        "triangles": 5173,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/8eb3567b910f0f695a2e1c7e8bde7765a5ede0e380dd56c1fdb5537777fbd9f1.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/cd0f3e88373413ee7daea58c5806260c97dead50e57ba5567ed50c3c12aaf624.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/cfa16f00e72a15903288c9456a6ca6f810923d6142ac16a3a4df1b65d8a547f3.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/8eb3567b910f0f695a2e1c7e8bde7765a5ede0e380dd56c1fdb5537777fbd9f1.webp",
+          "./content/cd0f3e88373413ee7daea58c5806260c97dead50e57ba5567ed50c3c12aaf624.webp",
+          "./content/cfa16f00e72a15903288c9456a6ca6f810923d6142ac16a3a4df1b65d8a547f3.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "wood-03-plank-gate": {
       "name": "북쪽 닫힌 문",
@@ -538,32 +979,81 @@
         },
         {
           "level": 1,
-          "model": "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf",
+          "model": "./content/d4b27ca2a544321a2a5ff54dd6195c576a6cce83a4dcae6460ed66153b81feed.gltf",
           "resources": [
+            "./content/178795627d2b834fa1a96372f580b915ab48f6ec75c64dcc1727e41d95d85a33.bin",
+            "./content/1d4e87ad1b27af17668dd2c3dfa690593dfd71a71d10845564fcfcf994c92ed8.bin",
+            "./content/9d8b768a1f2ceca21c2436861837d4df89c870d418d942a3108c1e52c3a780cb.bin",
+            "./content/3c016ad005f0d02eafc9938bb0f7d19fde9f2274e08886814b5fd913c8357d16.bin",
             "./content/93030a197f30748838820f98bdabf08c393dbea8990e27d8dfbc4403d8ba9cdd.png",
             "./content/46f3b7c0dbd76d95201d0ae4cfaa199cb455bc456d567a7f19822885350c909b.jpg",
             "./content/e74474d16294eac0fb6b032f1f0a3867c473b5876e6f7ef290ab33b79437ba16.png",
-            "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
-            "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf"
+            "./content/d4b27ca2a544321a2a5ff54dd6195c576a6cce83a4dcae6460ed66153b81feed.gltf"
           ],
-          "triangles": 4933,
+          "triangles": 2465,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/81866774f819aca3085be337c65972b74e51d14147c398ba49f7013bdf27b182.gltf",
+          "model": "./content/c8bba387c378477c1c9ed5e2043a48fd590837fe827daedd19cef529bb1b68b2.gltf",
           "resources": [
+            "./content/24741f8c22cec662c79f8f7128e76f115bd04e4256bbc366cff50c346b5f89da.bin",
+            "./content/62bc0cad11d5a13b1b10ce505dba75915d69c7a55e8ff0bec51312da15690535.bin",
+            "./content/41e8c211c31f2216870fef64ab8d8f2c47f237c4d9ee3396e6fad26405354e4f.bin",
+            "./content/c73109d52cbd4f6f873e0077c6daf4d207c955f035e6f7efc9b7f4db7d822ca7.bin",
             "./content/82b4e39f8df8eec1df51e3fb3c99bdf2b8fd699ca6ad964adb29732458f8f95c.jpg",
             "./content/2f8fadbde514db7ee6fdd3766144793eb72324ebd71e21a058f185b6ce90f341.png",
-            "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
-            "./content/81866774f819aca3085be337c65972b74e51d14147c398ba49f7013bdf27b182.gltf"
+            "./content/c8bba387c378477c1c9ed5e2043a48fd590837fe827daedd19cef529bb1b68b2.gltf"
           ],
-          "triangles": 4933,
+          "triangles": 1520,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf",
+        "resources": [
+          "./content/93030a197f30748838820f98bdabf08c393dbea8990e27d8dfbc4403d8ba9cdd.png",
+          "./content/46f3b7c0dbd76d95201d0ae4cfaa199cb455bc456d567a7f19822885350c909b.jpg",
+          "./content/e74474d16294eac0fb6b032f1f0a3867c473b5876e6f7ef290ab33b79437ba16.png",
+          "./content/b9fa3a2d32dc4394158110eee4615b659dbda50f1a6b67dd0072148df510b9ce.bin",
+          "./content/8fe03e3025a565b04d360b41aed28a42ca7c7fd1d671ea2b2a62a8ee6f9802cf.gltf"
+        ],
+        "triangles": 4933,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/e63b45ea1d51f26ca2ba383dcfb6819c769e9b6cb991c08530bb2144cf25b1d5.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/d3385e0634103bd8fa3354c4abbdf9203d5648d1fe9adddb7a11a99035cb1478.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/5476c39b174db25a3ea3305fa7bde79e76ebeb8878c58b26c3a8dbd6afeff93c.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/e63b45ea1d51f26ca2ba383dcfb6819c769e9b6cb991c08530bb2144cf25b1d5.webp",
+          "./content/d3385e0634103bd8fa3354c4abbdf9203d5648d1fe9adddb7a11a99035cb1478.webp",
+          "./content/5476c39b174db25a3ea3305fa7bde79e76ebeb8878c58b26c3a8dbd6afeff93c.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "tree-01-round-oak": {
       "name": "참나무",
@@ -594,32 +1084,81 @@
         },
         {
           "level": 1,
-          "model": "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf",
+          "model": "./content/f7bebeecfa817167d9b5fb49551fe7bd6ce4c14505d5079b2153184a4453eb52.gltf",
           "resources": [
+            "./content/749b420ac309c3d71e7a09fc567b1a72576e46becbcb20e1e24e0ec44a38850f.bin",
+            "./content/161b00a864ae360260015b9ffd67a17b8d0fae4f38a8b28166353267ab2cc2be.bin",
+            "./content/9eceab811c5a81a4daeac8e4d42e6ef0a4e05a220595d86f64814e5ba226311b.bin",
+            "./content/69ac2a7aaae619a7263028970ef06cdb37d808bad08734d76e329d3b4def203a.bin",
             "./content/c3302f8e4d2955f0d6c6f6f79575741ead05ff8424aa494c7b19349c5171fb97.png",
             "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg",
             "./content/fc0d9a363176d809128e77dec9e25adb76ecf251c053f93a42968abc8269cad4.png",
-            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
-            "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf"
+            "./content/f7bebeecfa817167d9b5fb49551fe7bd6ce4c14505d5079b2153184a4453eb52.gltf"
           ],
-          "triangles": 4687,
+          "triangles": 3218,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/5ffcb01d77a43086e3dc453bc9b782d1039a9396e8e7e34a8e421b48d2e739dd.gltf",
+          "model": "./content/447bd15416cbfd3c82beaa5db5d59301b5d7879df81d9c2bdbc2bc074e6a5de0.gltf",
           "resources": [
+            "./content/73f8bf19ead6f0615d6490d02ffe457572c0ac891369693a109cac8992122171.bin",
+            "./content/95378fc67525d2ee934febe33156c3e8b2645e4bb560b52aa369870e74d1ebee.bin",
+            "./content/6b401b51454a117d1fc42aaa67f07e449cd6d8bc406c27bf84d4bcacad3ba231.bin",
+            "./content/9121ffb44b7d0da7e942e44502a086f740a1316ec4da2af58418d05892043e12.bin",
             "./content/158f94d3c21c1feb898fc66218cca6d7c981680e30a654d70a04f7b7097917fd.jpg",
             "./content/f405284bbc980c928c5ff2b788b5b06e9541a29408b7b198804e4b916d928461.png",
-            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
-            "./content/5ffcb01d77a43086e3dc453bc9b782d1039a9396e8e7e34a8e421b48d2e739dd.gltf"
+            "./content/447bd15416cbfd3c82beaa5db5d59301b5d7879df81d9c2bdbc2bc074e6a5de0.gltf"
           ],
-          "triangles": 4687,
+          "triangles": 2596,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf",
+        "resources": [
+          "./content/c3302f8e4d2955f0d6c6f6f79575741ead05ff8424aa494c7b19349c5171fb97.png",
+          "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg",
+          "./content/fc0d9a363176d809128e77dec9e25adb76ecf251c053f93a42968abc8269cad4.png",
+          "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+          "./content/965b7827c021e8b02b8b7d37c6cec74088b445793d6800e0d394d453e289e2d2.gltf"
+        ],
+        "triangles": 4687,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/4de47f92e885fe444c701f24cb7bb54015015d5897da8506ee570ead15579698.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/a0b8223a8e9fe7b36693adc57eb6291493bdc176a73e17b1f24958c45f80a67d.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/fb36ca34d4328438ce6f168e8e9cecfcc8883a63727bac6e8a5de23ba826f9ef.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/4de47f92e885fe444c701f24cb7bb54015015d5897da8506ee570ead15579698.webp",
+          "./content/a0b8223a8e9fe7b36693adc57eb6291493bdc176a73e17b1f24958c45f80a67d.webp",
+          "./content/fb36ca34d4328438ce6f168e8e9cecfcc8883a63727bac6e8a5de23ba826f9ef.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "tree-02-slender-pine": {
       "name": "침엽수",
@@ -650,32 +1189,81 @@
         },
         {
           "level": 1,
-          "model": "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf",
+          "model": "./content/eafa2fe70e3423056b77743c22d5d6a1fc2c693a4bea469b5c9e337191748c7b.gltf",
           "resources": [
+            "./content/3207a9e73ecb121fb488454fb6357ff3dda6ca00ccc9d10001ac118086c587a1.bin",
+            "./content/e17be5ebcae29653297bc79824ab2f5c87e16ccc66e8e4d4d5bbbfe5ab24a4ea.bin",
+            "./content/c2cef0346727d8d1b0aa8a09d14491c85701a5f5800f529b7d188e0492763c1b.bin",
+            "./content/5a0ea27911805f642385bf14f46e10e970eb4475ce4bb6198558ca7fde849ed7.bin",
             "./content/1a0babc2bffa663374a30525ec0dbb6fd2835e783c3e810294ee0e2e5d86745e.png",
             "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg",
             "./content/bf22df5fb9893c3c0b9b00702df339c786fa603227d98eb5a71793d586fa5468.png",
-            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
-            "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf"
+            "./content/eafa2fe70e3423056b77743c22d5d6a1fc2c693a4bea469b5c9e337191748c7b.gltf"
           ],
-          "triangles": 5352,
+          "triangles": 3848,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/dca1e762014ccb25c937be2ebdba0165d0df1a159014660d6fd53223eafc4a93.gltf",
+          "model": "./content/2b7471c5f417ea76b6af09ba0eabd4aa44a2738bc158dc360de7e1d1a57bad95.gltf",
           "resources": [
+            "./content/9abe49273e2b9acf7a2d31d0f33c14e699c435341727eeebd80d6ef7c7ee33aa.bin",
+            "./content/15eae46e0ec75ec40ac6d200f3aac9df03667b4421eace9e4dfd0b05728cd586.bin",
+            "./content/8baa6aae6ac96ba4c8c9d77f8d994a485dadf709ca774369cf980f1cc6cef315.bin",
+            "./content/a0a2219fdbc374f116384e27e672a77feff3813253ce0d7eba05b96df0d46f2a.bin",
             "./content/6da8b04a4ef0c6463eb610336e1ac51e7e62c71a4d91c7cabb167354d5acb6e3.jpg",
             "./content/493243047f5f09cc466d54fe9507192bc99515abe2bde7679cf19acf323c5ce3.png",
-            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
-            "./content/dca1e762014ccb25c937be2ebdba0165d0df1a159014660d6fd53223eafc4a93.gltf"
+            "./content/2b7471c5f417ea76b6af09ba0eabd4aa44a2738bc158dc360de7e1d1a57bad95.gltf"
           ],
-          "triangles": 5352,
+          "triangles": 3671,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf",
+        "resources": [
+          "./content/1a0babc2bffa663374a30525ec0dbb6fd2835e783c3e810294ee0e2e5d86745e.png",
+          "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg",
+          "./content/bf22df5fb9893c3c0b9b00702df339c786fa603227d98eb5a71793d586fa5468.png",
+          "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+          "./content/9573cf89a2aa78e64fdc29f968772c5474d4f4789cd58bb0cfc5052844d06fc4.gltf"
+        ],
+        "triangles": 5352,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/047b09a4c8e24ab6a504eaac8435250966429d933b824aad8ea667684aff82f4.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/fcc2de560c10116412a0362da45f9fc087eadb99e1da1d13f2a2574ec2109358.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/3ecacc3f70849ce5c76511a5f013e765a2bde5d3000a07dd3a7513db89a633ad.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/047b09a4c8e24ab6a504eaac8435250966429d933b824aad8ea667684aff82f4.webp",
+          "./content/fcc2de560c10116412a0362da45f9fc087eadb99e1da1d13f2a2574ec2109358.webp",
+          "./content/3ecacc3f70849ce5c76511a5f013e765a2bde5d3000a07dd3a7513db89a633ad.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "rock-01-mossy-boulder": {
       "name": "이끼 둥근 바위",
@@ -706,32 +1294,81 @@
         },
         {
           "level": 1,
-          "model": "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf",
+          "model": "./content/002b5a94e0af4b8719dfe8bb1e05cda8fa99f8e46b3ba46e0180ced0b978fb40.gltf",
           "resources": [
+            "./content/3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827.bin",
+            "./content/7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7.bin",
+            "./content/d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b.bin",
+            "./content/966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b.bin",
             "./content/fe27f612671d652d546addb5802d1cc8f44c30bbc57e6aa74b892569091c6107.png",
             "./content/26d15ccf7d6ba8f45acb72b75a93935c5129f03bec493d8380666dc34e93c21d.jpg",
             "./content/ebdbdd8dc04db876e4fa2744e849bbed2d5c71e9b9d7e975ab7d2b8afce38d2e.png",
-            "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
-            "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf"
+            "./content/002b5a94e0af4b8719dfe8bb1e05cda8fa99f8e46b3ba46e0180ced0b978fb40.gltf"
           ],
-          "triangles": 5255,
+          "triangles": 2626,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/632332e9334fac10a1c162e7a9162e3e4c8c2a8550bef443c99eb01a990be72e.gltf",
+          "model": "./content/50542a329f60aef0b668d5f5b81752281c2d05c09423c41e9dd6093b4c3294ef.gltf",
           "resources": [
+            "./content/60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652.bin",
+            "./content/b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91.bin",
+            "./content/a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d.bin",
+            "./content/b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7.bin",
             "./content/64842060c2b3989d08eccfcc01d9bf9e0ff4ba29d69c4da8819671b9e6447cf4.jpg",
             "./content/5135bb4eecf4439893a3533ef1ea651dc9b7b673a7e6db883c414c4eddadc732.png",
-            "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
-            "./content/632332e9334fac10a1c162e7a9162e3e4c8c2a8550bef443c99eb01a990be72e.gltf"
+            "./content/50542a329f60aef0b668d5f5b81752281c2d05c09423c41e9dd6093b4c3294ef.gltf"
           ],
-          "triangles": 5255,
+          "triangles": 1156,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf",
+        "resources": [
+          "./content/fe27f612671d652d546addb5802d1cc8f44c30bbc57e6aa74b892569091c6107.png",
+          "./content/26d15ccf7d6ba8f45acb72b75a93935c5129f03bec493d8380666dc34e93c21d.jpg",
+          "./content/ebdbdd8dc04db876e4fa2744e849bbed2d5c71e9b9d7e975ab7d2b8afce38d2e.png",
+          "./content/c92b8b3bc2064db1e835a22a55c04c50fa7961aa927086634865cf46329d191c.bin",
+          "./content/c390514387add16895700dc589d4292a58e47c5ca7bfb70d5b8cca5796950659.gltf"
+        ],
+        "triangles": 5255,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/72650b24c2de26b93225ee2242a2cb369c24dde973fb4b0ed9736d9fe40547be.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/529719289a896c39ed465c59fe8c19e9f457ae7390374d2ecb0304b266071eed.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/5b850a97da30856d3914b40a213dfd417c39a841981804d09e76881db0a57cc3.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/72650b24c2de26b93225ee2242a2cb369c24dde973fb4b0ed9736d9fe40547be.webp",
+          "./content/529719289a896c39ed465c59fe8c19e9f457ae7390374d2ecb0304b266071eed.webp",
+          "./content/5b850a97da30856d3914b40a213dfd417c39a841981804d09e76881db0a57cc3.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "rock-02-jagged-outcrop": {
       "name": "솟은 바위",
@@ -762,32 +1399,81 @@
         },
         {
           "level": 1,
-          "model": "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf",
+          "model": "./content/d8226ef9ccc0c43b5eae710800bac32f963006807a7c0df44dd9d2a716b5869d.gltf",
           "resources": [
+            "./content/5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6.bin",
+            "./content/5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a.bin",
+            "./content/fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad.bin",
+            "./content/0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc.bin",
             "./content/e35e4bf51efa243f5780568912f6a310adde6e699fb3f28addd27c69be0534ab.png",
             "./content/9d7d310eab45b3a0b78713537f191fe77313e33768d8a1a791f92c1c09b02a2f.jpg",
             "./content/8e7f4666c870e16923999b0f2483e8ddf68522108b12c9fdbc2e7ae24c39c1c2.png",
-            "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
-            "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf"
+            "./content/d8226ef9ccc0c43b5eae710800bac32f963006807a7c0df44dd9d2a716b5869d.gltf"
           ],
-          "triangles": 5268,
+          "triangles": 2634,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/fdd35ec29c3354bc0f44747995a80020cc28c2a4d3392da492d0adb38ddc90bb.gltf",
+          "model": "./content/145fb578c689c314b75502d89bbb353c792a2a4ff8c1bb2f070fcf4c726ed3ee.gltf",
           "resources": [
+            "./content/f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76.bin",
+            "./content/d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf.bin",
+            "./content/fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579.bin",
+            "./content/7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2.bin",
             "./content/f7f4c262e0f5217aadc294867d3f10af2e67fcf0cac21c540b3c4261d5cb01e0.jpg",
             "./content/2aff685519238c3ed4bec6022dc7ad1c9509dd17f71cc13017eb218f60e3f710.png",
-            "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
-            "./content/fdd35ec29c3354bc0f44747995a80020cc28c2a4d3392da492d0adb38ddc90bb.gltf"
+            "./content/145fb578c689c314b75502d89bbb353c792a2a4ff8c1bb2f070fcf4c726ed3ee.gltf"
           ],
-          "triangles": 5268,
+          "triangles": 1158,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf",
+        "resources": [
+          "./content/e35e4bf51efa243f5780568912f6a310adde6e699fb3f28addd27c69be0534ab.png",
+          "./content/9d7d310eab45b3a0b78713537f191fe77313e33768d8a1a791f92c1c09b02a2f.jpg",
+          "./content/8e7f4666c870e16923999b0f2483e8ddf68522108b12c9fdbc2e7ae24c39c1c2.png",
+          "./content/29cb2efd8ea020ec989d649f36d46c6ff5d7968e94cf9c66c3a48b605a1ee0ca.bin",
+          "./content/010ab19b54257bebcd51cc74b65965cec308ec8eb89a6ded2dc2d8875092e8ce.gltf"
+        ],
+        "triangles": 5268,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/b285ee4aeeb340002a56b9e3c42b7309f6431f94adcf783ff78fe7b5a4af0109.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/2adb73dcbddf7f6bd576ec3877a02865187c5f9848308e7d81f63a9512c15b53.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/f791b8e5f9f033361f090628c91587c36bf14160136e3cc8f28672f22cb058c7.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/b285ee4aeeb340002a56b9e3c42b7309f6431f94adcf783ff78fe7b5a4af0109.webp",
+          "./content/2adb73dcbddf7f6bd576ec3877a02865187c5f9848308e7d81f63a9512c15b53.webp",
+          "./content/f791b8e5f9f033361f090628c91587c36bf14160136e3cc8f28672f22cb058c7.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "chapel": {
       "name": "작은 예배당",
@@ -818,32 +1504,81 @@
         },
         {
           "level": 1,
-          "model": "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf",
+          "model": "./content/d7187f2afe6560057dbe813257000cda3907529b406f0c7626ea718ad1bfc1c4.gltf",
           "resources": [
+            "./content/e79760886d3ced63ecb073689cdb9907b249944bb60dc2f31b556be8519f836e.bin",
+            "./content/df9dd984d7da5a63ccf58d6c0331abe99b2b48f47949589cc977a0dacb2d8b99.bin",
+            "./content/000edd066c87e03e6d1399cb3e34f5f1114afe932b36e69bf306e0c30c354ea9.bin",
+            "./content/f2d808528a3b4b46a8fc4c42bd70df07488d27bfa42245ba0eb359f090bb8405.bin",
             "./content/bab97103ce896b7983b5152218a4c2ed621b62e173c9390c313bbe436759de44.png",
             "./content/204f797373c98a7f6348349b36336a594089c7b848aeb20640a3ecbb9387d922.jpg",
             "./content/c24c1c0583bf0737374b1280730748c03f87ca6072c414115b76e096290afa19.png",
-            "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
-            "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf"
+            "./content/d7187f2afe6560057dbe813257000cda3907529b406f0c7626ea718ad1bfc1c4.gltf"
           ],
-          "triangles": 4547,
+          "triangles": 2273,
           "textureSize": 1024,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/b77a465f7aa49f878be882b74429802b7830ef20c360102cff4f984807211d0c.gltf",
+          "model": "./content/6459c57083e82358acdc9dfa051cd4289a7b1a6dd588dd3001f027c681cc054d.gltf",
           "resources": [
+            "./content/66ad469f79a5359e6ccf980d536bfe65de7f68add97b828e5b8ad3694747d652.bin",
+            "./content/44577f5a0949f7fbf199150972c42203187c3f53f99503bde6f0b167d5fe6d1d.bin",
+            "./content/4ebdb9f8ca8f0dc5f884875d30d245c2df0e7b4c468a754af384d2bf0a505528.bin",
+            "./content/d615f93c2f29af2a893a00ac62f0bfc6fa1c9b7e487b6af5957543548ae65096.bin",
             "./content/8774a5419924d5c6de824504da8c3ab4203be262774e08e362cc18897ddd78e7.jpg",
             "./content/768e9517809f2b054c6933f6ff3dcb7ded5f596027bf8fe5b5ff22d086b6f1cc.png",
-            "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
-            "./content/b77a465f7aa49f878be882b74429802b7830ef20c360102cff4f984807211d0c.gltf"
+            "./content/6459c57083e82358acdc9dfa051cd4289a7b1a6dd588dd3001f027c681cc054d.gltf"
           ],
-          "triangles": 4547,
+          "triangles": 1180,
           "textureSize": 512,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf",
+        "resources": [
+          "./content/bab97103ce896b7983b5152218a4c2ed621b62e173c9390c313bbe436759de44.png",
+          "./content/204f797373c98a7f6348349b36336a594089c7b848aeb20640a3ecbb9387d922.jpg",
+          "./content/c24c1c0583bf0737374b1280730748c03f87ca6072c414115b76e096290afa19.png",
+          "./content/41707a77eff240a6bc2c73cc33b035e456ae90ba5eee261f68c0507d25dc4011.bin",
+          "./content/017d0bf85a3d3857a345cd85769b792c54e51610daf27098b57cc1eaecb54ddc.gltf"
+        ],
+        "triangles": 4547,
+        "textureSize": 1024,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ed5bc59339135ebcc749e8b52799919849da736c279c7acb988009c33b887c4e.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/ecf2faba3ad7c538282980def4b92e7fe998f1dd0c38c8acdf6b00b2f724f90d.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/f252a11e06466cd3e36938ce8ff8b1f92abcdb68a1fcc5b933349e96f0ca00fb.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/ed5bc59339135ebcc749e8b52799919849da736c279c7acb988009c33b887c4e.webp",
+          "./content/ecf2faba3ad7c538282980def4b92e7fe998f1dd0c38c8acdf6b00b2f724f90d.webp",
+          "./content/f252a11e06466cd3e36938ce8ff8b1f92abcdb68a1fcc5b933349e96f0ca00fb.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "well": {
       "name": "지붕 있는 우물",
@@ -874,32 +1609,81 @@
         },
         {
           "level": 1,
-          "model": "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf",
+          "model": "./content/07d936ee75b4dfa7029f73218bdf0e51f22890aa2c3da30b993d6de6b9a30603.gltf",
           "resources": [
+            "./content/73337c0ac1377a55584871096a7f63473c7bf2aceaab8358e97c1972b96d9e23.bin",
+            "./content/4b12dba8258ea96ccfff835ad2a0d8ec3f52741ae175668192852d380565dd38.bin",
+            "./content/8e4b8a004e3e7c76a60dd9950b682ebc92cf474ea0a58515d24b204f867de8c6.bin",
+            "./content/e6dbc8e0cd2b563280e89a7552070ad5567198069520cdc9edff8674d841cf46.bin",
             "./content/ba77d1751470f2ef34a1b67876a79d03111ad9e7644cf1166fd0e64a9ad1904c.png",
             "./content/d10e3baaf9789e3e14a40ecb95ff51e398ef420a6711f6de8a3d4f70aaaf2767.jpg",
             "./content/bb0cc7d8adcc7ac164a31610c623718aa421c5af8a52f300770ac944e73bc9d8.png",
-            "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
-            "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf"
+            "./content/07d936ee75b4dfa7029f73218bdf0e51f22890aa2c3da30b993d6de6b9a30603.gltf"
           ],
-          "triangles": 4822,
+          "triangles": 2466,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/4367634e6a22f760d8826132ab0fd4136407f72360a2fe4263d764f1dbf040e4.gltf",
+          "model": "./content/32231f020d8853758edee9e82fb9f4237e043b2e420431c81ef1e153aa62ea89.gltf",
           "resources": [
+            "./content/4d772d497869e945be8e3e4a0d60c5bf8d40fdcfa798309bf324a159a972d1f9.bin",
+            "./content/6b09426b963bd4a2c72b358fc1f75777dc6d639aabff8f3177eae479e17d2290.bin",
+            "./content/715136a764801a475e71b9e346753137e77bbad989176034f2117f25df76d194.bin",
+            "./content/ee700e1f6000f86c0e3ddcaba6745087df5eac20073d68b1c97c73e136dbcbdc.bin",
             "./content/fd189566c97c182631a3a2f4419e2910cd27a24bd0ff2e52c14f241499764664.jpg",
             "./content/62763bcb48e5e852b2ab0d2e15f4a03506a06aba82eecb93861db1a448cfd7f4.png",
-            "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
-            "./content/4367634e6a22f760d8826132ab0fd4136407f72360a2fe4263d764f1dbf040e4.gltf"
+            "./content/32231f020d8853758edee9e82fb9f4237e043b2e420431c81ef1e153aa62ea89.gltf"
           ],
-          "triangles": 4822,
+          "triangles": 1556,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf",
+        "resources": [
+          "./content/ba77d1751470f2ef34a1b67876a79d03111ad9e7644cf1166fd0e64a9ad1904c.png",
+          "./content/d10e3baaf9789e3e14a40ecb95ff51e398ef420a6711f6de8a3d4f70aaaf2767.jpg",
+          "./content/bb0cc7d8adcc7ac164a31610c623718aa421c5af8a52f300770ac944e73bc9d8.png",
+          "./content/e19a31378228d13a878ed8ba03d90aaf13135d0624261a66c0f618623f4000d8.bin",
+          "./content/6130397186920c854782f32d22636939e0660b9d155bcee269ec671c830a79d8.gltf"
+        ],
+        "triangles": 4822,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/52c737cbc0790466dba6766b6575bfeedbea6e9cc6b08d04a04dfc7703ad7fe3.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/592ef9aafcc8d75857546e9cf6bc4d41e65215d389187c4444913973d4e3564b.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/b6ab38fb3e7afc6b0ff7b2b9cb9d92ef915dbc0115151c4511c5303c8b77cf49.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/52c737cbc0790466dba6766b6575bfeedbea6e9cc6b08d04a04dfc7703ad7fe3.webp",
+          "./content/592ef9aafcc8d75857546e9cf6bc4d41e65215d389187c4444913973d4e3564b.webp",
+          "./content/b6ab38fb3e7afc6b0ff7b2b9cb9d92ef915dbc0115151c4511c5303c8b77cf49.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "watchtower": {
       "name": "목조 감시탑",
@@ -930,32 +1714,81 @@
         },
         {
           "level": 1,
-          "model": "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf",
+          "model": "./content/b9a01771f615aaaeab35b152c3814ecb59b4eb9fe7db88dfb7557139fcdd7b0a.gltf",
           "resources": [
+            "./content/f0f77316390a444dae33b5b2c132b72db7668038853d32b88b26b46b7f153d02.bin",
+            "./content/6cff490167c71e5eddba5ac3924633fd208ab3984e208cb73806da0d800a9a2d.bin",
+            "./content/5a915c57db6868baa90325abd046e556f05a5b5f1f55d51757b86de601fa3e24.bin",
+            "./content/c73f04ab863ffafc1e913cd9936447dc02954f42994030bc2d08844660a5266d.bin",
             "./content/9b0f2b2ce4d6806fc2fc6e115789cdec0ab40f37e1d624cb2f7bb3e00a3d883c.png",
             "./content/48d7ef3fa61bd77dd778e20eca06bd85f682d113aa0b4b8ec0d34c8c751a2f39.jpg",
             "./content/2b42c1bb034964cf2e63646b74440b90eba776a882298d3550fdc0a659db0848.png",
-            "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
-            "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf"
+            "./content/b9a01771f615aaaeab35b152c3814ecb59b4eb9fe7db88dfb7557139fcdd7b0a.gltf"
           ],
-          "triangles": 4590,
+          "triangles": 2767,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/ae999055f80bbe8a84c5997fbe8ddea4daf2ecb819e7e60579ea803b546261a9.gltf",
+          "model": "./content/ee8f38274ce317ea02152e8b0f7cbe26b8bbd7c2ce164d86d7d41462288ed841.gltf",
           "resources": [
+            "./content/0461f4983f529caac905b12bd1462345c8fda0fc60f54f273cfb011ee3de3915.bin",
+            "./content/a0c71d8a13f8d4df8cdad9206a2d2cc4699fd866aa7cbf881d8852b3a9c444b3.bin",
+            "./content/ff2e11016ab54dbdbeee9582607137bcaf259cd5cea199420c7e36960f9d872a.bin",
+            "./content/d46c674582e5499831ff3719a053c080907ce5090d489a7773b688c93fd9b96f.bin",
             "./content/daed2109d7166442c890ba41623a5937bf89e723a37dcf301348c676586c44b8.jpg",
             "./content/d7a59d701a59d99e53d063cdb34857be878401276e50d8ce0426735f74169271.png",
-            "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
-            "./content/ae999055f80bbe8a84c5997fbe8ddea4daf2ecb819e7e60579ea803b546261a9.gltf"
+            "./content/ee8f38274ce317ea02152e8b0f7cbe26b8bbd7c2ce164d86d7d41462288ed841.gltf"
           ],
-          "triangles": 4590,
+          "triangles": 2393,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf",
+        "resources": [
+          "./content/9b0f2b2ce4d6806fc2fc6e115789cdec0ab40f37e1d624cb2f7bb3e00a3d883c.png",
+          "./content/48d7ef3fa61bd77dd778e20eca06bd85f682d113aa0b4b8ec0d34c8c751a2f39.jpg",
+          "./content/2b42c1bb034964cf2e63646b74440b90eba776a882298d3550fdc0a659db0848.png",
+          "./content/54e7b0958566fc7a8f9c45bd3a73544b952b595062199062fb9360b4727b7a76.bin",
+          "./content/17896de1510db9176ae88307fc82192e808fd427d1c1f1821a83fa13f1d71aeb.gltf"
+        ],
+        "triangles": 4590,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/a97bf87ce622f894aafcedc21a1507ba5c4b1ff4a87cb18398329ba4738938aa.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/7c067270955c2675e1d5ec760b597ee2012f99eb61a610e1cdc3af286f922bd8.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/fccac0f8a915408321e1a42568a7f55201fd22fa9158494c30f641be17b4f293.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/a97bf87ce622f894aafcedc21a1507ba5c4b1ff4a87cb18398329ba4738938aa.webp",
+          "./content/7c067270955c2675e1d5ec760b597ee2012f99eb61a610e1cdc3af286f922bd8.webp",
+          "./content/fccac0f8a915408321e1a42568a7f55201fd22fa9158494c30f641be17b4f293.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "rail-fence": {
       "name": "낮은 가로 목책",
@@ -986,32 +1819,81 @@
         },
         {
           "level": 1,
-          "model": "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf",
+          "model": "./content/2cb2cef250a9fcd58086e94e3dbaaec67186cb52cd3855d385035931479e0195.gltf",
           "resources": [
+            "./content/14ed22bad6725d33ddbcddc895f67532372cdf0f9806c6de449cf7cd9e46ccf8.bin",
+            "./content/fc962376765a1d7ffb18b1c3a81e34bd621aa7d4de3ec9a88c82f1af8c3da042.bin",
+            "./content/8c74d3b44741690a67f2c5a92c7ffa3286ab003266c81b33a6ab6584bb040caa.bin",
+            "./content/7fd54aacd6b1f076c9973333522a9e89defad9e7e5c9dc237fe7a3c304f3669d.bin",
             "./content/a712bbf637f8c1759c349548c978f9ee7067632accaf5a2c1638280e50234d16.png",
             "./content/68b70285b47083bbf762823c2815143a06c678bc200e3127d48484089941323d.jpg",
             "./content/42ace58ee2c271600a1eef0d4b4432b888376a7a5fde9ee9cc1b67e3a20c74d3.png",
-            "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
-            "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf"
+            "./content/2cb2cef250a9fcd58086e94e3dbaaec67186cb52cd3855d385035931479e0195.gltf"
           ],
-          "triangles": 5184,
+          "triangles": 2592,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/e876fdc836e355a64e1cdf54124d24b8829eaac47fc0ff8d056bc00bd45e1ea1.gltf",
+          "model": "./content/e835490e561d987e66170e03a9ccf8bd0da5996a9210c79882f80f87357594c6.gltf",
           "resources": [
+            "./content/484c7bab6de2dfa5274cb7c12cc071b08c364e4f17e0b9229c691ff26a6085f4.bin",
+            "./content/e1188d645b81ba939e7f8e92863002b948e933549652cf48dfe2f5cc0d60fd6d.bin",
+            "./content/95dca29198c3a93c22e84914e193f1e12130ba00936868b2c8fcbef7504bd693.bin",
+            "./content/4072e049416e877413ad512c10475ca26a1d2d28001ad752c954ebdee4c5b97a.bin",
             "./content/fd3dd921e0c0177bb30d23aea42a02766c52b9c75a08f0c21ec7f3d0724c22b9.jpg",
             "./content/855a0280e00952ba9fc56a132f0b56447a09600476f37dbae0eb8aa9402e620f.png",
-            "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
-            "./content/e876fdc836e355a64e1cdf54124d24b8829eaac47fc0ff8d056bc00bd45e1ea1.gltf"
+            "./content/e835490e561d987e66170e03a9ccf8bd0da5996a9210c79882f80f87357594c6.gltf"
           ],
-          "triangles": 5184,
+          "triangles": 1140,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf",
+        "resources": [
+          "./content/a712bbf637f8c1759c349548c978f9ee7067632accaf5a2c1638280e50234d16.png",
+          "./content/68b70285b47083bbf762823c2815143a06c678bc200e3127d48484089941323d.jpg",
+          "./content/42ace58ee2c271600a1eef0d4b4432b888376a7a5fde9ee9cc1b67e3a20c74d3.png",
+          "./content/1d777d82802b99cc4c9223bcc1303578a023e1a2229ea1affa392dd43cc6ba53.bin",
+          "./content/efa0e6675006c4525fc88f6b1b69d4b0ba1b59a570211bf21bea3d4519db7d4b.gltf"
+        ],
+        "triangles": 5184,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/09f66e85a3e5e32957a5b970fda4eef410075af44a8cbb360e2a5ec4d92328fc.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/c4982d40d73904316962ebf9b443224191c3a04a60b5fc91a405d56052c5c9e1.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/34c8af4036fa1dc12f2eb4880f8f2537867da1e29678e0e76367ede581854c9b.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/09f66e85a3e5e32957a5b970fda4eef410075af44a8cbb360e2a5ec4d92328fc.webp",
+          "./content/c4982d40d73904316962ebf9b443224191c3a04a60b5fc91a405d56052c5c9e1.webp",
+          "./content/34c8af4036fa1dc12f2eb4880f8f2537867da1e29678e0e76367ede581854c9b.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "bush": {
       "name": "올리브색 관목",
@@ -1042,32 +1924,81 @@
         },
         {
           "level": 1,
-          "model": "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf",
+          "model": "./content/de4e612fc30c55caf9c9ef04c682f4076a5c01cf7b9eba0ebba2262e494a630f.gltf",
           "resources": [
+            "./content/dc4e9d2f69b520bad5f7179838010b6ec2ac9a537a62ff8952386a103e9bcb32.bin",
+            "./content/3a6585f507d10148a5ec81044ca978b1a6018ae202aff5b176e8fd9eaf43379e.bin",
+            "./content/5f8ceda3272c964c0a1c0775add424646d023d46e5c1b26573185cc975fa6f76.bin",
+            "./content/3de178eb1e3f03f0023a140d1c0824f4032439b8faff2e7701b9786a03b59438.bin",
             "./content/826fd485268c3e8a4a27fdc4f0d96579d4791513cec4c41259b729526a7a5d22.png",
             "./content/630b1e0bea6b5fad1703e2f87c6c33d4dcf454364a144f07b6b20b19642003cf.jpg",
             "./content/be5b4d724cc2b217c96ce86697535f4f57582f4aedee616bbc8bc50956120f1e.png",
-            "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
-            "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf"
+            "./content/de4e612fc30c55caf9c9ef04c682f4076a5c01cf7b9eba0ebba2262e494a630f.gltf"
           ],
-          "triangles": 4359,
+          "triangles": 3314,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/3638ec512f5b56b9380fb96def8dbbb4aa2d915bea16a0d24e6fbb23033a1adb.gltf",
+          "model": "./content/3efea5d18c99b8dcba1f3715f42699d45009d1341cd65352ffb050f7c9e11767.gltf",
           "resources": [
+            "./content/f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092.bin",
+            "./content/1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa.bin",
+            "./content/48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3.bin",
+            "./content/399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2.bin",
             "./content/ba958d3d0674979f2a2006dec10b52e310c466314004f522201d5a063194bcdb.jpg",
             "./content/f7735bb876df4ad3ae235b64f48f6578b6abe3a14c6cc9d953bba2b45bb55ddf.png",
-            "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
-            "./content/3638ec512f5b56b9380fb96def8dbbb4aa2d915bea16a0d24e6fbb23033a1adb.gltf"
+            "./content/3efea5d18c99b8dcba1f3715f42699d45009d1341cd65352ffb050f7c9e11767.gltf"
           ],
-          "triangles": 4359,
+          "triangles": 2238,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf",
+        "resources": [
+          "./content/826fd485268c3e8a4a27fdc4f0d96579d4791513cec4c41259b729526a7a5d22.png",
+          "./content/630b1e0bea6b5fad1703e2f87c6c33d4dcf454364a144f07b6b20b19642003cf.jpg",
+          "./content/be5b4d724cc2b217c96ce86697535f4f57582f4aedee616bbc8bc50956120f1e.png",
+          "./content/e47ab15b629ac25f540ccd698a3c0d1df7a932fea9723492943366da4cd6eb0e.bin",
+          "./content/aa6db954c96a257efb78ffa22380ef5dd3bae3545095d47b2d11764183db4b19.gltf"
+        ],
+        "triangles": 4359,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/b7ce67de2c5467101c16c0f672d5c598ab65d305ab5e36b14fedb8746949a34c.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/9cb3d62d2a5c9bcea864cd6b25948a9a4ce62e6e12c707bdc6fdd03d8863c40f.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/2bcde61aab6bcafe64a67332185f8c295fc798cf354f41afbfa7238a6ae5938f.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/b7ce67de2c5467101c16c0f672d5c598ab65d305ab5e36b14fedb8746949a34c.webp",
+          "./content/9cb3d62d2a5c9bcea864cd6b25948a9a4ce62e6e12c707bdc6fdd03d8863c40f.webp",
+          "./content/2bcde61aab6bcafe64a67332185f8c295fc798cf354f41afbfa7238a6ae5938f.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "market-stall": {
       "name": "보라 천막 노점",
@@ -1098,32 +2029,81 @@
         },
         {
           "level": 1,
-          "model": "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf",
+          "model": "./content/5995ca5def2c6ff7092c8bcdf6197f41ef119b54d8100c90eda80c835b1950e6.gltf",
           "resources": [
+            "./content/1e8194466eaf39cd6d623e59f225ca0410b77fcc6f8e3de8f3414d9907374277.bin",
+            "./content/646f5ba609e923d23bdb92bccd74ad224952e032931a02beb6ec87a4224de00f.bin",
+            "./content/edd33860d5fe8aea110bf920274ad52734f7c8f7815ca6658a5b2e527a2e5626.bin",
+            "./content/67b63155c3faab21699026b761e5ef8772b2c06f89c8b2ac45e61f5663bfca19.bin",
             "./content/dd3430dcc79a38eaca502797ba63c227b01a768573efa5df4773bebfbcb27997.png",
             "./content/70b71b268011910861a4128bdfcca23e3662d6fe6acac99fb8d241d82a4d2500.jpg",
             "./content/74c0d5f30875c8561b2a4c8c1dc56416e12ff64ee68c9b352c84f4d7d4ac55d7.png",
-            "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
-            "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf"
+            "./content/5995ca5def2c6ff7092c8bcdf6197f41ef119b54d8100c90eda80c835b1950e6.gltf"
           ],
-          "triangles": 4895,
+          "triangles": 2670,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/6afd3c1b8fb35c63169ffce82d19eb68854e487b3ebc76f8c8908fa269a5961b.gltf",
+          "model": "./content/22c2178577c862f5f277eaa2f7da0605c6f8391cfd23f7d4f519f52144cf30c1.gltf",
           "resources": [
+            "./content/a24c8638acb46391019e35835aa3c4a0eaf0b7acd528f416b4a059e70618d2e9.bin",
+            "./content/03f8b9f2fbfa8c759c710d16b146a3480af7078ef911bc3d559a0e9a1c7b4f69.bin",
+            "./content/15cc87e3ae597eabd9677551000693ffe12ac0876785a99bd5745e8799951c9b.bin",
+            "./content/3ed19422ba21125208fd5defa872ab7f9ca34eeb851fc661a658121adefb0ff6.bin",
             "./content/c488edffafe40b67e2f13a04951c3eb5b594bbbdb0571e754f6f1dcabe1c87c4.jpg",
             "./content/34a1d39c583776e7a13c421c4d86d25b8f4859c1b122eff0e1c6797a64ba4f47.png",
-            "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
-            "./content/6afd3c1b8fb35c63169ffce82d19eb68854e487b3ebc76f8c8908fa269a5961b.gltf"
+            "./content/22c2178577c862f5f277eaa2f7da0605c6f8391cfd23f7d4f519f52144cf30c1.gltf"
           ],
-          "triangles": 4895,
+          "triangles": 1893,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf",
+        "resources": [
+          "./content/dd3430dcc79a38eaca502797ba63c227b01a768573efa5df4773bebfbcb27997.png",
+          "./content/70b71b268011910861a4128bdfcca23e3662d6fe6acac99fb8d241d82a4d2500.jpg",
+          "./content/74c0d5f30875c8561b2a4c8c1dc56416e12ff64ee68c9b352c84f4d7d4ac55d7.png",
+          "./content/11eabfd08db4f61e59f8e788cafbb17d8dc97eaae0f19d6116219d6952a781f2.bin",
+          "./content/f2072f15645794706abf0f39458b39d994173e00cfda018179732799a17bdf73.gltf"
+        ],
+        "triangles": 4895,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ac245f743efe571b99b99ae06f627ca42ce884506bd93d09a3098893409e793d.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/62d0764dd2264693b8ac37c2ea7aaf28bedf1439a028a0369aa45776d077b137.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/5ab8075686d8aed96c45628a82d9659055bb4f296860160f630847e9cbbc604d.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/ac245f743efe571b99b99ae06f627ca42ce884506bd93d09a3098893409e793d.webp",
+          "./content/62d0764dd2264693b8ac37c2ea7aaf28bedf1439a028a0369aa45776d077b137.webp",
+          "./content/5ab8075686d8aed96c45628a82d9659055bb4f296860160f630847e9cbbc604d.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "covered-wagon": {
       "name": "천 덮개 짐마차",
@@ -1154,32 +2134,81 @@
         },
         {
           "level": 1,
-          "model": "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf",
+          "model": "./content/2de20944db0f7a7c6688891ea8452caabd4d6e632cd62045e0bd945dc22feaf4.gltf",
           "resources": [
+            "./content/74bced3938e92d699171663babc491e71b54c64a60fdcae2723d11427053ccd0.bin",
+            "./content/258e66000570c10f404db0411e875537ca74573e5318553b76b94ba463644e3f.bin",
+            "./content/7fe07b2bff10ef529ce9d82d8bfdcbe9e5cb7449878f46838c1bbf2737b308d7.bin",
+            "./content/375c71618a09f108691687cd47e73dacc2f12c6a208877306d3304594968f880.bin",
             "./content/3165f20c0df1bf9a51df95d08c2c6853040c665dd288e92606ad13a59adb36cd.png",
             "./content/da65f69c5f9550c9daabef9d3ad0e81d3fda8b1305ed289c071e99bae54f04c4.jpg",
             "./content/6b09f2ad46e9a631db8383f0da9453d25c4691cf443a1f03747b838263ba34af.png",
-            "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
-            "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf"
+            "./content/2de20944db0f7a7c6688891ea8452caabd4d6e632cd62045e0bd945dc22feaf4.gltf"
           ],
-          "triangles": 4611,
+          "triangles": 2305,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/f766b8265122ad2fae5e1a5fbf9c40e053896bee343363b1ccc1a0a46e9fd9b6.gltf",
+          "model": "./content/7334828d0bb52aaffcde7b324afab7ce6bd1ed8c29518868b927e69043873151.gltf",
           "resources": [
+            "./content/95d0c41a555a2a3c5bbc5d335f5ea97d7b932418e2bedb592b0b96d5dca7478e.bin",
+            "./content/fa1051059b47c7c460e07dbde495e26ba03b3d76661deedcc1b57cacd19ec59e.bin",
+            "./content/8cea9d6722a6f664ebfdee62118256bae7f5b9b247d10024a0bc7d5dc0d5ec1c.bin",
+            "./content/454ed238c84ceed06ae9d66c202572d15d74e2dc764baafe83c64e849d1bd3ca.bin",
             "./content/c8363c9e3ce35e312fee3d8f104cb9c6052d75226779faaf70ecdeca0979fad8.jpg",
             "./content/e9749bcc8304d9ff16cb50f9b0f63172626bb7cd799b0a4b9a5b131b443b0bec.png",
-            "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
-            "./content/f766b8265122ad2fae5e1a5fbf9c40e053896bee343363b1ccc1a0a46e9fd9b6.gltf"
+            "./content/7334828d0bb52aaffcde7b324afab7ce6bd1ed8c29518868b927e69043873151.gltf"
           ],
-          "triangles": 4611,
+          "triangles": 1371,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf",
+        "resources": [
+          "./content/3165f20c0df1bf9a51df95d08c2c6853040c665dd288e92606ad13a59adb36cd.png",
+          "./content/da65f69c5f9550c9daabef9d3ad0e81d3fda8b1305ed289c071e99bae54f04c4.jpg",
+          "./content/6b09f2ad46e9a631db8383f0da9453d25c4691cf443a1f03747b838263ba34af.png",
+          "./content/d147b047a95b73490e6eccdf7aa569863ba28d62bb8fab87f133b283ed54e066.bin",
+          "./content/fd7abd276676dfecfed172391d227f00b24b29675711fbf13261d475fb082316.gltf"
+        ],
+        "triangles": 4611,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/8bd1e778850a21b825734b42cf6b7f9969935717c6c3ad05d58d81d38499689a.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/1a75909e75044e97a103854665e2ed7f1c95376e421b0cd4c694d7a461e3b1e5.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/835f60ca9e1fd0e38eb5a123b74455400bd62f09513523e35e20a892ff9bb734.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/8bd1e778850a21b825734b42cf6b7f9969935717c6c3ad05d58d81d38499689a.webp",
+          "./content/1a75909e75044e97a103854665e2ed7f1c95376e421b0cd4c694d7a461e3b1e5.webp",
+          "./content/835f60ca9e1fd0e38eb5a123b74455400bd62f09513523e35e20a892ff9bb734.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "handcart": {
       "name": "두 바퀴 손수레",
@@ -1210,32 +2239,81 @@
         },
         {
           "level": 1,
-          "model": "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf",
+          "model": "./content/09049f33e0a902153ff3f823a5eb6ed05a4d6f9cb1771ad4ca34df7e7b836827.gltf",
           "resources": [
+            "./content/c274b8e5c985d6a907828f9f9552c01cffaecaecf016859b8a3be0764eb87e45.bin",
+            "./content/4209bdf4b33ea3b7d618f65e3fc159e31df805de702e09d9fd7750f00c501965.bin",
+            "./content/e5158ca108d0e8683b7d936075960467bb51b4433bb5aecfa59fb0556a3a85b7.bin",
+            "./content/ea80f0275bb5cb4a6eb7114b0b69ee6285dc84a01ccfe3b321fb2d4fd6e4ed36.bin",
             "./content/78798d9aa9c13b0529de005f483c1534b0ffc592fcbc9a4e7cde78711acede2a.png",
             "./content/3a96f6db09aed9190fe06abecbae3e651c2dc255623a96a778bfdf611e46bfc5.jpg",
             "./content/200db3966a98bebd88a3768f79e869353dcb1e660349df0201f17e7d8eaaf662.png",
-            "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
-            "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf"
+            "./content/09049f33e0a902153ff3f823a5eb6ed05a4d6f9cb1771ad4ca34df7e7b836827.gltf"
           ],
-          "triangles": 4737,
+          "triangles": 2367,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/83ad9e711e2c2a2e29c63ae8a800054c831d9f8fae624afbf8dcda0b6a6981fb.gltf",
+          "model": "./content/a3b7a55e3e03bacf53b6193160901c1ef82724c9d7faffd1edd10ce18bc3df2d.gltf",
           "resources": [
+            "./content/28313af2a269eece84d3c846305cab0fa2b0940bc00c6ed32ca0d4fd414ceafc.bin",
+            "./content/87dafd659042ec11a8c8b5b817d6ae53224b02f6cc30a7ea6c1e70a9c9a0b2e6.bin",
+            "./content/6fb9e8dc8c0c940dbed18bbd7a1faa6592dec512d9fa15438eb71de623e555ab.bin",
+            "./content/8f44f64fc3eb57223beab20f62cc37b397116ccedf5a62889bc2e9964dbcf556.bin",
             "./content/800c3e1f2bbbe59d3bd2e72774ebfb6a989a579da47d3ca3ead245d3316980a5.jpg",
             "./content/9c34f161b6b2118a3083f9a0cfd01a463789b0106c01b1e2374266565fa2d8c4.png",
-            "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
-            "./content/83ad9e711e2c2a2e29c63ae8a800054c831d9f8fae624afbf8dcda0b6a6981fb.gltf"
+            "./content/a3b7a55e3e03bacf53b6193160901c1ef82724c9d7faffd1edd10ce18bc3df2d.gltf"
           ],
-          "triangles": 4737,
+          "triangles": 1387,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf",
+        "resources": [
+          "./content/78798d9aa9c13b0529de005f483c1534b0ffc592fcbc9a4e7cde78711acede2a.png",
+          "./content/3a96f6db09aed9190fe06abecbae3e651c2dc255623a96a778bfdf611e46bfc5.jpg",
+          "./content/200db3966a98bebd88a3768f79e869353dcb1e660349df0201f17e7d8eaaf662.png",
+          "./content/4f72c0035e503d41307025edc5ed61645a8a46ced92dabeb8ffe4fc4e119254c.bin",
+          "./content/f882584817b69a88b734380a24f14b6cc9ecec1fb3dbaf51cf1b6c8c2a112896.gltf"
+        ],
+        "triangles": 4737,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/df5495842b8f62f030314f958269affea1ec7d5cad9c322adb5e29b4c84b4fa7.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/8ae2a70366eeb8fbfc6a3e13550f17ccd6105dfa0470832afa02b238777207b2.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/7ac2d5704b1d62dfc19aa240e951d623e1238f10702e1f8584b444523760f287.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/df5495842b8f62f030314f958269affea1ec7d5cad9c322adb5e29b4c84b4fa7.webp",
+          "./content/8ae2a70366eeb8fbfc6a3e13550f17ccd6105dfa0470832afa02b238777207b2.webp",
+          "./content/7ac2d5704b1d62dfc19aa240e951d623e1238f10702e1f8584b444523760f287.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "garden-bed": {
       "name": "채소와 꽃 텃밭",
@@ -1266,32 +2344,81 @@
         },
         {
           "level": 1,
-          "model": "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf",
+          "model": "./content/8cb38589c9bae2ac637da34add04c6036261f19af980f317398ed164278abeeb.gltf",
           "resources": [
+            "./content/5cb13a43318394be0fb6aeda9991b1b7d29e67f102ac921ddb3362a197ce2982.bin",
+            "./content/e8fc06cf274455e237728cd54b94dcf5446ba7b17c7874ac4e6d8390659c1380.bin",
+            "./content/12dfdc99a1cdf6509b51128ebf6d0df4a2297e7427484f644980efae5ef30915.bin",
+            "./content/76985c78f36d81f5d30b28c93b1442e0f5bd9dc67ef6e2f1500868ccf5d7c40d.bin",
             "./content/ae79f4e06c70b7948179f1550d86ac56c932973e03e7b2d3d5122b2893b5ff50.png",
             "./content/74b1d905d2f491523a7e12709312e87237c5a9c0949237645a3efec3e3054879.jpg",
             "./content/a0752f5118d503679ad70e7653ded870f369c49363d6af3e050d66625c6fc532.png",
-            "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
-            "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf"
+            "./content/8cb38589c9bae2ac637da34add04c6036261f19af980f317398ed164278abeeb.gltf"
           ],
-          "triangles": 3308,
+          "triangles": 1769,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/c30942d44c3f094c456172a968e783f94795b92bc15db863b312985b9db9e0be.gltf",
+          "model": "./content/cac19bb8d10aafcc689595f5bb874a0aa9d9b3f57c1d0915da1137fc594b578a.gltf",
           "resources": [
+            "./content/b59112a0d4ea34f080a1665bb7e59b38bb7925da61e33b6251793400724c28ed.bin",
+            "./content/368109fc454719ac35ff0235a03e69af6e0a96f5af1631a5785c4d41a51720aa.bin",
+            "./content/3ea720abee24b0f5583e40ede6639c155a4f891a9dfa5469fefe74d7e9a9b3a8.bin",
+            "./content/d2ac4cbf68c86854b2f11045821b2cbcbd0a8698f0bd72d574f6ef471e750710.bin",
             "./content/64c3a8d93d0bcc8af2e5b3ddf4abce5a540f07ea2f1ab5abe28e0d4545e0e761.jpg",
             "./content/17385c92f6979ee14e0b927fb2f46a8863b121e3b9c798359d5552fa7d995fbb.png",
-            "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
-            "./content/c30942d44c3f094c456172a968e783f94795b92bc15db863b312985b9db9e0be.gltf"
+            "./content/cac19bb8d10aafcc689595f5bb874a0aa9d9b3f57c1d0915da1137fc594b578a.gltf"
           ],
-          "triangles": 3308,
+          "triangles": 1219,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf",
+        "resources": [
+          "./content/ae79f4e06c70b7948179f1550d86ac56c932973e03e7b2d3d5122b2893b5ff50.png",
+          "./content/74b1d905d2f491523a7e12709312e87237c5a9c0949237645a3efec3e3054879.jpg",
+          "./content/a0752f5118d503679ad70e7653ded870f369c49363d6af3e050d66625c6fc532.png",
+          "./content/1cd6cdd1994671e39e44ec9efc246d7023bffbcc4ef87fe0ab07df03f49f4434.bin",
+          "./content/a8457504c112a4b0d0488492ae12071539ca6a62b89e2936daf67d8bde3f2e83.gltf"
+        ],
+        "triangles": 3308,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/b692bf0808b8e70ffdd5738c55288306a385a14413adc9cb82370a5238a3c27c.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/5a61993d9802638422032a86ce7d0923feb0222d2030caf350dd256e23dbff01.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/8de75d8598ec055aa0bfb77314eba72f41de93c0e1f92aca5c2702684ba97efd.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/b692bf0808b8e70ffdd5738c55288306a385a14413adc9cb82370a5238a3c27c.webp",
+          "./content/5a61993d9802638422032a86ce7d0923feb0222d2030caf350dd256e23dbff01.webp",
+          "./content/8de75d8598ec055aa0bfb77314eba72f41de93c0e1f92aca5c2702684ba97efd.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "firewood": {
       "name": "장작 거치대",
@@ -1322,32 +2449,81 @@
         },
         {
           "level": 1,
-          "model": "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf",
+          "model": "./content/821ef869c6291054bbd3fb24ed5f0c5d27b19af4a7712c523530df763703ef97.gltf",
           "resources": [
+            "./content/64dfc2fd2e4d00c644d52d9f9b9091bd50d493411775cfffaa165946a2b5deff.bin",
+            "./content/ba49a7755b6fd15a26a02614fcda9cb726e6ed44ea657a1a4e5acd7c9c2a84cc.bin",
+            "./content/dcb8338b0664e45bec79cd5ef8b8cbabaf4b3a5b15302595cba2ba35370dadc2.bin",
+            "./content/de0676f6b9eeadb3ae71a0e3dc33e0e656fd09c13d50e47b8496fba169000193.bin",
             "./content/6e5b071d43b360d24b92654075607578c821d8da0f38044fdda5a7ade137a894.png",
             "./content/0be813353028296a63832791489275ccfbe529a81002d51ff0ecc734e8b5b34d.jpg",
             "./content/4dea6f2fff894e0c255556527835a62d883076b0cacbe174a449ffe0b0e68d8c.png",
-            "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
-            "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf"
+            "./content/821ef869c6291054bbd3fb24ed5f0c5d27b19af4a7712c523530df763703ef97.gltf"
           ],
-          "triangles": 4815,
+          "triangles": 2407,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/8aece8dcb4337d32379366d3958dead64ab8ef7c9d7cba3f114129c090b631a9.gltf",
+          "model": "./content/2c579b5cfb1a1e374cd06b0a3ee3e257f296815a3a5fb00aa382ea4391068dca.gltf",
           "resources": [
+            "./content/1de4f0765a612d29b903c6e62995516cc77f3acf5e94ccbf5ae1e64e1ec99d7d.bin",
+            "./content/4533a838dda64c42efef0799e1b815bf1d840a45b522c4db25296da7e5adc00b.bin",
+            "./content/59f8113b395ad4281c85d3430080bfe3d47c03fbf3f953d72b114814a6e0f8be.bin",
+            "./content/2fc979abcbfc83c5e6af4cb2cd182fb2f28c226f38381b623acdf5fc7142468d.bin",
             "./content/da8c1495217e19aaa59bf4eef9cc9d60f0cee3a707391de60863b69f986ea800.jpg",
             "./content/f72242f504cdd36fb8f799f7bf5d912f06f4a8d174bc83127156c66756b32505.png",
-            "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
-            "./content/8aece8dcb4337d32379366d3958dead64ab8ef7c9d7cba3f114129c090b631a9.gltf"
+            "./content/2c579b5cfb1a1e374cd06b0a3ee3e257f296815a3a5fb00aa382ea4391068dca.gltf"
           ],
-          "triangles": 4815,
+          "triangles": 1719,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf",
+        "resources": [
+          "./content/6e5b071d43b360d24b92654075607578c821d8da0f38044fdda5a7ade137a894.png",
+          "./content/0be813353028296a63832791489275ccfbe529a81002d51ff0ecc734e8b5b34d.jpg",
+          "./content/4dea6f2fff894e0c255556527835a62d883076b0cacbe174a449ffe0b0e68d8c.png",
+          "./content/16487091d83e5628daadabc3210d772eb7107dede2206bc8e384f4b53b574fd8.bin",
+          "./content/82a988e27d97b2c4cbc70279db00c41a2ef292874efa980cab6feb311b8ced77.gltf"
+        ],
+        "triangles": 4815,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/5e19edd7e411601baf7526b064addb6c374a3ddec5d4b00f377138c76af23710.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/e4f445ec19919b721bd50fb6e0fe451665c61439ce62cc91aafe25630ef2f337.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/077b407b78612d640b71b13d104b4ee9046ffefe6466dab7a47159ef7a31f75d.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/5e19edd7e411601baf7526b064addb6c374a3ddec5d4b00f377138c76af23710.webp",
+          "./content/e4f445ec19919b721bd50fb6e0fe451665c61439ce62cc91aafe25630ef2f337.webp",
+          "./content/077b407b78612d640b71b13d104b4ee9046ffefe6466dab7a47159ef7a31f75d.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     },
     "crate-barrel-cluster": {
       "name": "상자와 통 묶음",
@@ -1378,33 +2554,90 @@
         },
         {
           "level": 1,
-          "model": "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf",
+          "model": "./content/3f9cd22a299892c67f79ee8587cdec05fbe5aabb0a79908cdd045c12f9009be2.gltf",
           "resources": [
+            "./content/488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08.bin",
+            "./content/4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d.bin",
+            "./content/2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4.bin",
+            "./content/48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371.bin",
             "./content/400d5374f4b866d6ab94d843b94fb1ea8875bdc7b6fd530431aa39f22a85933a.png",
             "./content/0ed9a626619cf70b63d382d4bcef1af5be7a58573171e39ffb7199351a309eee.jpg",
             "./content/a6332e40006f1700eaf006f06cd56e8d831f96073325b64ea08d234653f9a986.png",
-            "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
-            "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf"
+            "./content/3f9cd22a299892c67f79ee8587cdec05fbe5aabb0a79908cdd045c12f9009be2.gltf"
           ],
-          "triangles": 4683,
+          "triangles": 3091,
           "textureSize": 512,
           "normalMap": true
         },
         {
           "level": 2,
-          "model": "./content/ef933e6297581f2d41a6b1cf229266b078c446e4d85947cf494ba10e2da79b8b.gltf",
+          "model": "./content/a3700b121b1c9fe74f0f542039efad667389c67c8ed89df5847e7e3436f53080.gltf",
           "resources": [
+            "./content/f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090.bin",
+            "./content/2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7.bin",
+            "./content/390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3.bin",
+            "./content/90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5.bin",
             "./content/6554bd53a32ed55e7eba7f8ecdf29cb6452a0bfdffa8669bf51a12beb763c612.jpg",
             "./content/b91f1e4061e5fc4b5b38b7ec45dd6cbd4a568c6a341627655ae49e12615d1b2a.png",
-            "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
-            "./content/ef933e6297581f2d41a6b1cf229266b078c446e4d85947cf494ba10e2da79b8b.gltf"
+            "./content/a3700b121b1c9fe74f0f542039efad667389c67c8ed89df5847e7e3436f53080.gltf"
           ],
-          "triangles": 4683,
+          "triangles": 1969,
           "textureSize": 256,
           "normalMap": false
         }
-      ]
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf",
+        "resources": [
+          "./content/400d5374f4b866d6ab94d843b94fb1ea8875bdc7b6fd530431aa39f22a85933a.png",
+          "./content/0ed9a626619cf70b63d382d4bcef1af5be7a58573171e39ffb7199351a309eee.jpg",
+          "./content/a6332e40006f1700eaf006f06cd56e8d831f96073325b64ea08d234653f9a986.png",
+          "./content/21ea7404ac1beef49f48314583109bdf4db57b325271b613b371790a1ecb507a.bin",
+          "./content/035eb47ea625698fd413c6373d11deda99baa7ed06e547e430f12e758676d655.gltf"
+        ],
+        "triangles": 4683,
+        "textureSize": 512,
+        "normalMap": true
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/699795c43298e4106d9b37a50207349a78922fe91cffa5a40415aa406c02d832.webp",
+            "width": 8192,
+            "height": 8192
+          },
+          "normal": {
+            "url": "./content/9ec85558b8dd8fabdaa0977d0e103e5d4973687f95e22194463839def575a0c2.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          },
+          "orm": {
+            "url": "./content/0e1f43aaab3b8bf31a158c65c7f0c8a1ded51359061bfa239addfb7a342cec16.webp",
+            "width": 4096,
+            "height": 4096,
+            "encoding": "lossless WebP; decoded pixels unchanged"
+          }
+        },
+        "resources": [
+          "./content/699795c43298e4106d9b37a50207349a78922fe91cffa5a40415aa406c02d832.webp",
+          "./content/9ec85558b8dd8fabdaa0977d0e103e5d4973687f95e22194463839def575a0c2.webp",
+          "./content/0e1f43aaab3b8bf31a158c65c7f0c8a1ded51359061bfa239addfb7a342cec16.webp"
+        ],
+        "colorResolution": 8192,
+        "colorEncoding": "WebP quality 98, no resize"
+      }
     }
   },
-  "missing": []
+  "missing": [],
+  "geometryLod": {
+    "version": 1,
+    "method": "attribute-aware-index-simplification",
+    "nearGeometryPreserved": true,
+    "mobileNearPreserved": true,
+    "nearColorResolution": 8192,
+    "visualReview": "APPROVED"
+  }
 }

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { NullEngine, Scene, MeshBuilder, PBRMaterial, TransformNode, Vector3, Ray } from '@babylonjs/core';
+import { NullEngine, Scene, FreeCamera, MeshBuilder, PBRMaterial, TransformNode, Vector3, Ray } from '@babylonjs/core';
 import { blocksView, prepareTreeOcclusion, TreeOcclusion } from '../src/tree-occlusion.js';
 import { attachTreeLod } from '../src/tree-lod.js';
 import { TreeViewSurface } from '../src/tree-view-surface.js';
@@ -50,6 +50,23 @@ test('surface queries respect rotated/scaled tree instances and visible LOD/cull
   assert.equal(occlusion.obstructs(tree,new Vector3(0,1.5,-15),target),false,'LOD actually rendered has an empty line of sight');
   assert.equal(occlusion.obstructs(tree,new Vector3(0,1.5,-35),target),false,'culled geometry cannot obscure the player');
   assert.equal(occlusion.obstructs(tree,new Vector3(0,1.5,-5),new Vector3(0,1.5,-3)),false,'tree behind target is ignored');
+ }finally{scene.dispose();engine.dispose();}
+});
+
+test('screen-coverage LOD occlusion follows the rendered surface',()=>{
+ const engine=new NullEngine(),scene=new Scene(engine);
+ try{
+  const camera=new FreeCamera('camera',new Vector3(0,1.5,-5),scene);scene.activeCamera=camera;camera.minZ=.1;camera.getProjectionMatrix(true);
+  const full=MeshBuilder.CreateBox('full',{width:1,height:3,depth:1},scene),low=MeshBuilder.CreateBox('low',{size:.2},scene);
+  const positions=low.getVerticesData('position');for(let i=0;i<positions.length;i+=3)positions[i]+=4;low.setVerticesData('position',positions);
+  full.useLODScreenCoverage=true;full.addLODLevel(.22,low);prepareTreeOcclusion([full,low]);
+  const root=new TransformNode('root',scene);root.position.y=1.5;const instance=full.createInstance('instance');instance.parent=root;instance.computeWorldMatrix(true);
+  const occlusion=new TreeOcclusion([root]),target=new Vector3(0,1.5,4);
+  for(const distance of [2,20]){
+   camera.position.z=-distance;camera.getViewMatrix(true);
+   const selected=instance.getLOD(camera);
+   assert.equal(occlusion.obstructs(occlusion.trees[0],camera.position,target),selected===full);
+  }
  }finally{scene.dispose();engine.dispose();}
 });
 

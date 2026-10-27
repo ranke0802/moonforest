@@ -48,9 +48,20 @@ export async function simplifyGeometry(source,files,policy){
    attributes.set([normals[i*3],normals[i*3+1],normals[i*3+2],...(colors?Array.from(colors.subarray(i*colorSize,i*colorSize+3)):[uvs[i*2],uvs[i*2+1]])],i*stride);
    if(joints)for(let k=0;k<4;k++){const s=slot.get(joints[i*4+k]);if(s!==undefined)attributes[i*stride+s]+=weights[i*4+k];}
   }
-  const attributeWeights=[.15,.15,.15,...(colors?[1,1,1]:[.3,.3]),...tracked.map(()=>.5)];
+  const attributeWeights=options.attributeWeights??[.15,.15,.15,...(colors?[1,1,1]:[.3,.3]),...tracked.map(()=>.5)];
+  let vertexLock=options.vertexLock??null;
+  if(options.protectUvSeams){
+   const remap=S.generatePositionRemap(positions,3),uvByPosition=new Map(),seams=new Set();
+   for(let i=0;i<count;i++){
+    const key=remap[i],uv=[uvs[i*2],uvs[i*2+1]],first=uvByPosition.get(key);
+    if(first&&(Math.abs(first[0]-uv[0])>1e-5||Math.abs(first[1]-uv[1])>1e-5))seams.add(key);
+    else if(!first)uvByPosition.set(key,uv);
+   }
+   vertexLock=new Uint8Array(count);
+   for(let i=0;i<count;i++)if(seams.has(remap[i]))vertexLock[i]=2;
+  }
   const target=Math.floor(indices.length*options.ratio/3)*3;
-  const [reduced,error]=S.simplifyWithAttributes(indices,positions,3,attributes,stride,attributeWeights,null,target,options.error,['Permissive',...(joints?['RegularizeLight']:[])]);
+  const [reduced,error]=S.simplifyWithAttributes(indices,positions,3,attributes,stride,attributeWeights,vertexLock,target,options.error,options.flags??['Permissive',...(joints?['RegularizeLight']:[])]);
   const [remap,used]=S.compactMesh(reduced);
   primitive.indices=store(reduced,{componentType:5125,type:'SCALAR'});
   for(const [semantic,index] of Object.entries(original.attributes)){
