@@ -64,6 +64,24 @@ test('village spatial index preserves original analytic collision and sight rule
   }
 });
 
+test('dressed home yards keep every front door connected to the central plaza',()=>{
+  const nav=new VillageNavigation(villageObstacles());
+  for(const home of VILLAGE_HOMES){
+    const front=home.colliderFootprint[1]*home.scale*.5+.7;
+    const door={x:home.x+Math.sin(home.yaw)*front,z:home.z+Math.cos(home.yaw)*front};
+    assert.ok(nav.free(door,.32,48),`${home.id}: dressing obstructs the doorway`);
+    const path=nav.path(door,VILLAGE_SPAWN,.32,48);
+    assert.ok(path.length,`${home.id}: fencing seals the front yard`);
+    let previous=door;
+    for(const point of path){assert.ok(nav.segmentClear(previous,point,.32));previous=point;}
+    assert.deepEqual(path.at(-1),VILLAGE_SPAWN);
+  }
+  for(const chip of VILLAGE_PLACEMENTS.filter(p=>p.kind==='ground-detail')){
+    assert.ok(chip.scale*2.2<=.23,'decorative stones must remain below ankle height');
+    assert.deepEqual(villageObstacles([chip]),[],'small ground cover must not add hidden movement barriers');
+  }
+});
+
 test('body colliders fit measured footprints, preserve building corners and stop rocks and carts',()=>{
   for(const p of VILLAGE_PLACEMENTS.filter(p=>p.footprint||p.colliderFootprint)){
     const [width,depth]=(p.colliderFootprint??p.footprint).map(n=>n*p.scale),[ox,oz]=(p.colliderOffset??[0,0]).map(n=>n*p.scale);

@@ -48,7 +48,7 @@ export class VillageVisibility {
     }
     if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      const candidates=this.records.filter(r=>r.root.isEnabled()&&r.placement.kind!=='shrub'&&r.placement.kind!=='garden')
+      const candidates=this.records.filter(r=>r.root.isEnabled()&&!['shrub','garden','ground-detail'].includes(r.placement.kind))
         .map(r=>({r,d:Math.hypot(r.placement.x-player.x,r.placement.z-player.z)}))
         .filter(v=>v.d<(this.touch?13:20)).sort((a,b)=>a.d-b.d).slice(0,this.touch?12:22);
       const next=new Set(candidates.flatMap(({r})=>r.meshes));
