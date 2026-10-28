@@ -2,6 +2,7 @@ import { Frustum, Vector3 } from '@babylonjs/core';
 import { VillageOcclusion } from './village-occlusion.js';
 import { villageRenderRange } from './village-policy.js';
 import {selectVillageShadowCasters} from './village-shadow-policy.js';
+import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
 
 export function cellKey(x,z,size=16){return `${Math.floor(x/size)}:${Math.floor(z/size)}`;}
 
@@ -14,6 +15,8 @@ export class VillageVisibility {
     world.camera.getViewMatrix();world.camera.getProjectionMatrix();
     this.planes=Frustum.GetPlanes(world.camera.getTransformationMatrix());
     this.cast=new Set();this.castRecords=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
+    this.shadowFade=new ShadowFadeBudget(touch?28:44);
+    this.shadowScratch=new Set();
     for(const record of records){
       const key=cellKey(record.placement.x,record.placement.z);
       if(!this.cells.has(key))this.cells.set(key,{records:[],min:new Vector3(Infinity,Infinity,Infinity),max:new Vector3(-Infinity,-Infinity,-Infinity),active:true});
@@ -32,6 +35,12 @@ export class VillageVisibility {
     this.world.camera.getViewMatrix();this.world.camera.getProjectionMatrix();
     this.occlusion.beforeRender();
     this.timer-=dt;this.shadowTimer-=dt;
+    if(this.world.lighting?.shadowsActive===false)this.shadowFade.clear();
+    else if(this.shadowTimer<=0){
+      this.shadowTimer=.35;
+      this.shadowFade.select(selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch,this.castRecords));
+    }
+    this.updateShadows(dt);
     const moved=Vector3.DistanceSquared(this.camera,camera)>1;
     const transform=this.world.camera.getTransformationMatrix();
     const turned=!this.view||transform.m.some((n,i)=>Math.abs(n-this.view[i])>.0001);
@@ -47,24 +56,22 @@ export class VillageVisibility {
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled((active&&!r.occluded)||!!r.shadowCaster);}cell.active=active;}
       if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded)activeInstances++;}
     }
-    if(this.shadowTimer<=0){
-      this.shadowTimer=.35;
-      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch,this.castRecords):[];
-      const nextRecords=new Set(candidates);
-      // Camera culling must not switch off nearby shadow depth contributors.
-      // Keep only this bounded set enabled; native camera frustum/depth tests
-      // still reject their off-screen/covered color pixels.
-      for(const r of new Set([...this.castRecords,...nextRecords])){
-        r.shadowCaster=nextRecords.has(r);r.root.setEnabled((r.cellActive!==false&&!r.occluded)||r.shadowCaster);
-      }
-      this.castRecords=nextRecords;
-      const next=new Set(candidates.flatMap(r=>r.meshes));
-      for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
-      for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
-      this.cast=next;this.stats.shadowCasters=next.size;
-      this.stats.majorShadowCasters=candidates.filter(r=>['building','tree','tower','landmark'].includes(r.placement.kind)).length;
-    }
     Object.assign(this.stats,{activeCells,activeInstances});
   }
-  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();}
+  updateShadows(dt){
+    const active=this.shadowFade.update(dt),next=this.shadowScratch;next.clear();let major=0,fading=0;
+    for(const r of this.castRecords)if(!active.has(r)){
+      r.shadowCaster=false;r.root.setEnabled(r.cellActive!==false&&!r.occluded);this.castRecords.delete(r);
+    }
+    for(const [r,fade] of active){
+      if(!this.castRecords.has(r)){r.shadowCaster=true;r.root.setEnabled(true);this.castRecords.add(r);}
+      if(['building','tree','tower','landmark'].includes(r.placement.kind))major++;
+      if(fade<1)fading++;
+      for(const mesh of r.meshes){if(mesh.instancedBuffers)mesh.instancedBuffers[shadowFadeAttribute]=fade;next.add(mesh);}
+    }
+    for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
+    for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
+    this.shadowScratch=this.cast;this.cast=next;Object.assign(this.stats,{shadowCasters:next.size,majorShadowCasters:major,fadingShadows:fading});
+  }
+  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();this.shadowFade.clear();}
 }
