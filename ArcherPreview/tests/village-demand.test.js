@@ -11,6 +11,7 @@ import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
+import {createVillageTerrain} from '../src/village-terrain.js';
 const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('village.json',base)));
 function fixture(t,touch=false){
  const engine=new NullEngine({renderWidth:touch?900:1280,renderHeight:touch?450:720}),scene=new Scene(engine);scene.useRightHandedSystem=true;
@@ -78,4 +79,21 @@ test('real cottage, oak and gate LODs promote without changing transforms, norma
    }
   }
  }
+});
+test('streaming bounds contain every real near model across all 698 placements, including walls sunken into slopes',async t=>{
+ const {world}=fixture(t);world.terrain=createVillageTerrain();let checked=0;
+ for(const [id,config]of Object.entries(manifest.assets)){
+  const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(b.uri).data).toString('base64');
+  const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(world.scene,{json:gltf},'');
+  for(const placement of VILLAGE_PLACEMENTS.filter(p=>p.asset===id)){
+   const {root,facing}=createVillageTransform(world,placement,config),bounds=placementBounds(world,placement,config),copies=container.instantiateModelsToScene(n=>n+'-bounds',false,{doNotInstantiate:false});for(const node of copies.rootNodes)node.parent=facing;
+   for(const m of root.getChildMeshes().filter(m=>m.getTotalVertices()>0)){
+    m.computeWorldMatrix(true);const box=m.getBoundingInfo().boundingBox;
+    for(const axis of ['x','y','z'])assert.ok(box.minimumWorld[axis]>=bounds.min[axis]&&box.maximumWorld[axis]<=bounds.max[axis],placement.id+' '+axis+' bounds must remain conservative');
+   }
+   checked++;root.dispose();
+  }
+  container.dispose();loader.dispose();
+ }
+ assert.equal(checked,VILLAGE_PLACEMENTS.length);
 });
