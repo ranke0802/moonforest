@@ -57,7 +57,7 @@ export function applyVillageToon(meshes,lighting){
     material.directIntensity=1;material.maxSimultaneousLights=3;
     // Mark visible base pixels in the existing pass. Hull ink may only draw
     // outside them, so open meshes and leaf clumps cannot turn solid black.
-    Object.assign(material.stencil,{enabled:true,func:Constants.ALWAYS,funcRef:4,funcMask:4,mask:4,opStencilDepthPass:Constants.REPLACE});
+    Object.assign(material.stencil,{enabled:true,func:Constants.ALWAYS,backFunc:Constants.ALWAYS,funcRef:4,funcMask:4,mask:4,opStencilDepthPass:Constants.REPLACE,backOpStencilDepthPass:Constants.REPLACE});
     material.metadata={...material.metadata,villageToon:true};
     new VillageToonShade(material,lighting);
   }

@@ -51,7 +51,7 @@ export function createVillageReview(world,{forcedMobile=false}={}){
       `로드된 LOD 0:${lod[0]??0} / 1:${lod[1]??0} / 2:${lod[2]??0}`,
       `가시 메시 LOD 0:${selected[0]} / 1:${selected[1]} / 2:${selected[2]} · 삼각형 ${Math.round(triangles).toLocaleString()} / 원본 ${Math.round(originalTriangles).toLocaleString()}`,
       `고해상도 ${env.highTextureAssets??0}종 · 로딩 ${env.highTexturePending??0} · 로드 ${env.highTextureLoads??0} / 해제 ${env.highTextureReleases??0}${env.highTextureError?' · '+env.highTextureError:''}`,
-      `KTX GPU ${formats[env.highTextureFormat]??env.highTextureFormat??'대기'} · 본체 미완료 외곽선 보호 ${env.outlineSuppressedDraws??0}회`,
+      `KTX GPU ${formats[env.highTextureFormat]??env.highTextureFormat??'대기'} · 본체 연동 외곽선 ${env.outlineDraws??0}회`,
       `추가 텍스처 추산 ${(env.highTextureBytes/1048576||0).toFixed(1)} + 예약 ${(env.highTextureReserved/1048576||0).toFixed(1)} / 예산 ${(env.highTextureBudget/1048576||0).toFixed(0)} MiB · 최대 ${(env.highTexturePeak/1048576||0).toFixed(1)} MiB`,
       `실측 ${Math.round(engine.getFps())} FPS · draw calls ${instrumentation.drawCallsCounter.current} · active meshes ${world.scene.getActiveMeshes().length}`,
       `회전 ${frameTimes.length}프레임 · p95 ${(sortedFrames[Math.floor(sortedFrames.length*.95)]??0).toFixed(1)} ms · 최대 ${(sortedFrames.at(-1)??0).toFixed(1)} ms · 100ms초과 ${frameTimes.filter(n=>n>100).length}`,

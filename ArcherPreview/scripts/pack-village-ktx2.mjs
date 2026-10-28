@@ -16,7 +16,7 @@ export function basisModel(model,images){
   return g;
 }
 
-export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/ktx2',publicRoot=resolve(root,'public')}={}){
+export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/ktx2-download',publicRoot=resolve(root,'public')}={}){
   const assets=resolve(publicRoot,'assets'),content=resolve(assets,'content');await mkdir(content,{recursive:true});
   const read=async p=>JSON.parse(await readFile(p,'utf8'));
   const approvals=await read(resolve(output,'approval.json')),ledger=await read(resolve(output,'conversions.json'));
@@ -28,7 +28,7 @@ export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/
   const target=structuredClone(before),stored=new Map();
   async function put(bytes,ext){const name=hash(bytes)+'.'+ext;if(!stored.has(name)){await writeFile(resolve(content,name),bytes);stored.set(name,bytes.length);}return name;}
   async function texture(url,codec='etc1s'){
-    const source=basename(url).split('.')[0],profile=codec==='uastc'?(approvals.uastcProfile??codec):codec,row=ledger[source+'-'+profile];
+    const source=basename(url).split('.')[0],profile=codec==='uastc'?(approvals.uastcProfile??codec):(approvals.etcProfile??codec),row=ledger[source+'-'+profile];
     if(!row||row.width>4096)throw new Error('Missing bounded KTX2 conversion: '+source);
     const original=await readFile(row.source),bytes=await readFile(resolve(output,row.file));
     if(hash(original)!==source||hash(bytes)!==row.sha256)throw new Error('Compression content hash mismatch');
@@ -55,7 +55,7 @@ export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/
   Object.assign(ground,baselineGround);ground.color=await texture(ground.color.url,approvals.uastcAssets.includes('ground')?'uastc':'etc1s');
   ground.resources=[ground.color.url,ground.detail.url];ground.gpuBytesWithMips=Math.ceil(2048**2*4/3+256**2*4*4/3);
   ground.compression='KTX2 color; lossless linear packed detail';
-  target.compression={format:'KTX2/Basis',defaultCodec:'etc1s',uastcAssets:approvals.uastcAssets,maxResolution:4096,sequential:true,inputManifestSha256:hash(Buffer.from(JSON.stringify(before)))};
+  target.compression={format:'KTX2/Basis',defaultCodec:'etc1s',etcProfile:approvals.etcProfile??'etc1s',uastcProfile:approvals.uastcProfile??'uastc',uastcAssets:approvals.uastcAssets,maxResolution:4096,sequential:true,inputManifestSha256:hash(Buffer.from(JSON.stringify(before)))};
   await writeFile(resolve(assets,'village.json'),JSON.stringify(target,null,2)+'\n');
   await writeFile(resolve(assets,'village-ground.json'),JSON.stringify(ground,null,2)+'\n');
   console.log(JSON.stringify({assets:25,images:stored.size-models.size,models:models.size,uastcAssets:approvals.uastcAssets}));

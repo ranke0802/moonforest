@@ -18,11 +18,15 @@ def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=DEFAULT)
     p.add_argument('--ktx',default='C:/Program Files/KTX-Software/bin/ktx.exe')
-    p.add_argument('--uastc',nargs='*',default=[]);p.add_argument('--rdo',action='store_true');args=p.parse_args();out=args.output;out.mkdir(parents=True,exist_ok=True)
+    p.add_argument('--uastc',nargs='*',default=[]);p.add_argument('--rdo',action='store_true')
+    p.add_argument('--uastc-lambda',type=float,default=1);p.add_argument('--uastc-dict',type=int,default=4096)
+    p.add_argument('--etc-clevel',type=int,default=1);p.add_argument('--etc-rdo',action='store_true')
+    p.add_argument('--only',nargs='*');p.add_argument('--baseline',type=Path)
+    args=p.parse_args();out=args.output;out.mkdir(parents=True,exist_ok=True)
     assets=ROOT/'public/assets'
     for name in ['village','village-ground']:
         backup=out/f'{name}-before.json'
-        if not backup.exists(): backup.write_bytes((assets/f'{name}.json').read_bytes())
+        if not backup.exists(): backup.write_bytes(((args.baseline/f'{name}-before.json') if args.baseline else (assets/f'{name}.json')).read_bytes())
     manifest=read(out/'village-before.json');ground=read(out/'village-ground-before.json')
     jobs={}
     def add(uri,label,high=False,alpha=False):
@@ -38,8 +42,10 @@ def main():
     # Packed 256px detail is data, not albedo; keep its tiny lossless source.
     ledgerPath=out/'conversions.json';ledger=read(ledgerPath) if ledgerPath.exists() else {}
     for i,(key,j) in enumerate(jobs.items()):
+        if args.only and not any(label in args.only for label in j['labels']):continue
         codec='uastc' if j['high'] and any(x in args.uastc for x in j['labels']) else 'etc1s'
-        profile=codec+('-rdo1' if codec=='uastc' and args.rdo else '')
+        profile=codec+((f'-rdo{args.uastc_lambda:g}' if args.uastc_dict==4096 else f'-rdo{args.uastc_lambda:g}-d{args.uastc_dict}') if codec=='uastc' and args.rdo else '')
+        if codec=='etc1s' and (args.etc_clevel!=1 or args.etc_rdo):profile+=f'-c{args.etc_clevel}'+('-rdo' if args.etc_rdo else '')
         cacheKey=key+'-'+profile;dest=out/(cacheKey+'.ktx2')
         if cacheKey in ledger and dest.exists() and sha(dest)==ledger[cacheKey]['sha256']: continue
         if dest.exists(): raise RuntimeError('Unverified previous output; inspect before retrying: '+str(dest))
@@ -47,8 +53,8 @@ def main():
         if max(im.size)>4096: raise RuntimeError('4K cap exceeded')
         png=out/'encoder-input.png';im.save(png)
         command=[args.ktx,'create','--format','R8G8B8A8_SRGB' if j['alpha'] else 'R8G8B8_SRGB','--assign-tf','srgb','--assign-primaries','bt709','--assign-texcoord-origin','top-left','--generate-mipmap','--encode','basis-lz' if codec=='etc1s' else 'uastc','--threads','4']
-        command+=['--qlevel','255','--clevel','1','--no-endpoint-rdo','--no-selector-rdo'] if codec=='etc1s' else ['--uastc-quality','2','--zstd','18']
-        if codec=='uastc' and args.rdo: command+=['--uastc-rdo','--uastc-rdo-l','1','--uastc-rdo-m']
+        command+=['--qlevel','255','--clevel',str(args.etc_clevel)]+([] if args.etc_rdo else ['--no-endpoint-rdo','--no-selector-rdo']) if codec=='etc1s' else ['--uastc-quality','2','--zstd','18']
+        if codec=='uastc' and args.rdo: command+=['--uastc-rdo','--uastc-rdo-l',str(args.uastc_lambda),'--uastc-rdo-d',str(args.uastc_dict),'--uastc-rdo-m']
         start=time.time();print(f'{i+1}/{len(jobs)} {j["labels"][0]} {im.width}px {codec}',flush=True)
         subprocess.run(command+[str(png),str(dest)],check=True,capture_output=True)
         subprocess.run([args.ktx,'validate',str(dest)],check=True,capture_output=True)

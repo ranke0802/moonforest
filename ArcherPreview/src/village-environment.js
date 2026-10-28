@@ -114,8 +114,8 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 최대 4K / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
     if(manifest.geometryLod)textureStreaming=new VillageTextureStreaming(world,assets,records,url,world.environment);
     outlines=new VillageOutlines(world,records,world.environment);
-    // Compile each instanced LOD before camera movement can reveal it. A cold
-    // base shader used to leave an already-ready black hull visible by itself.
+    // Warm each base LOD before camera movement. Ink now runs inside its
+    // successful draw lifecycle and cannot render as an independent object.
     for(const container of containers)for(const mesh of geometry(container)){
       await mesh.material?.forceCompilationAsync(mesh,{useInstances:true});
     }

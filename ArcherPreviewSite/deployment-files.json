@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "bytes": 341977960,
+  "bytes": 335791018,
   "files": [
     {
       "path": "assets/abstractAudioBus-CLJgfIGz.js",
@@ -28,9 +28,9 @@
       "sha256": "f9a2f7edc4baa0c2e8388cf71174267c753f195a07c69686ebfd3ecdc3f82068"
     },
     {
-      "path": "assets/animationGroup.pure-BAYx6AQ0.js",
+      "path": "assets/animationGroup.pure-DR9MQTm_.js",
       "bytes": 53860,
-      "sha256": "4e2f6d2054bc12550e68e53e846c05c601c447fa4323b56f0df10449c575d0e7"
+      "sha256": "23a29185329962a9217261dbfa2eda484fcfc1b449bf77b374e7b3d75aef33f1"
     },
     {
       "path": "assets/audio.json",
@@ -68,9 +68,9 @@
       "sha256": "96acb243e7075ee2516449681fce0644d9ecccd9b3346a173692da2bc1b100ae"
     },
     {
-      "path": "assets/basisTextureLoader-BX4aMzBc.js",
+      "path": "assets/basisTextureLoader-Dx94gJaH.js",
       "bytes": 1219,
-      "sha256": "a19ac66532a124e664de4a388b39fe102cb7c2da6992372732645caef945a208"
+      "sha256": "e8526575f76fedfd8771a1db41e029210206fa2a430fcb96ee0a87551b0b85fd"
     },
     {
       "path": "assets/bonesDeclaration-eZsb-J1W.js",
@@ -98,9 +98,9 @@
       "sha256": "931973d15b0f570e07c219979ecdee917279397386269d6eee845b0e50a4338f"
     },
     {
-      "path": "assets/brdfTextureTools-jKK0KZAI.js",
+      "path": "assets/brdfTextureTools-JjK_arcF.js",
       "bytes": 103609,
-      "sha256": "42e82873c8d362dea45e3b078a3385d233568744473112ec8121edfb6e9d1047"
+      "sha256": "a6b6c2824da0e9595470219d59498d8a8fed7376bae2f5bc8719bb778d615646"
     },
     {
       "path": "assets/buffer.pure-CZA9e4oK.js",
@@ -328,11 +328,6 @@
       "sha256": "04f840dc5e8ab05afe32ac2617a2259c3cb43338865f20c9512f898628cd30e1"
     },
     {
-      "path": "assets/content/0502ec0b1766347178677238a891529c2608cc5a7cb4a49e1f0a93b6bee3801f.ktx2",
-      "bytes": 4431180,
-      "sha256": "0502ec0b1766347178677238a891529c2608cc5a7cb4a49e1f0a93b6bee3801f"
-    },
-    {
       "path": "assets/content/0610d30a1e748aed49e3401c5525fd87e55aff57bd265698c91df1445a756283.gltf",
       "bytes": 1774,
       "sha256": "0610d30a1e748aed49e3401c5525fd87e55aff57bd265698c91df1445a756283"
@@ -451,11 +446,6 @@
       "path": "assets/content/10fbfdcc3cb88c0e482a8936d2f97bc8cc722555f8cad23a4d5adae975d1a8c5.jpg",
       "bytes": 141715,
       "sha256": "10fbfdcc3cb88c0e482a8936d2f97bc8cc722555f8cad23a4d5adae975d1a8c5"
-    },
-    {
-      "path": "assets/content/110189bed366f00a836b9810997dbc576f374cb487e2ad75b9939d487a013473.ktx2",
-      "bytes": 14223536,
-      "sha256": "110189bed366f00a836b9810997dbc576f374cb487e2ad75b9939d487a013473"
     },
     {
       "path": "assets/content/112f5475d6885d9e932c0d300ec84d802ea50e57bc33fc48b6ede0a1213cb13c.bin",
@@ -1238,6 +1228,11 @@
       "sha256": "4b12dba8258ea96ccfff835ad2a0d8ec3f52741ae175668192852d380565dd38"
     },
     {
+      "path": "assets/content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
+      "bytes": 10750836,
+      "sha256": "4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a"
+    },
+    {
       "path": "assets/content/4b997051c0059ebfcfd1de14ebc2b7d55fa3277ef9e1b20328ccfa692a0d42b8.gltf",
       "bytes": 1534,
       "sha256": "4b997051c0059ebfcfd1de14ebc2b7d55fa3277ef9e1b20328ccfa692a0d42b8"
@@ -1511,6 +1506,11 @@
       "path": "assets/content/614446e6799b805d356912d04c5917c2ecc240b19a685714709263bdf112c5ce.ktx2",
       "bytes": 848388,
       "sha256": "614446e6799b805d356912d04c5917c2ecc240b19a685714709263bdf112c5ce"
+    },
+    {
+      "path": "assets/content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2",
+      "bytes": 11541902,
+      "sha256": "61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752"
     },
     {
       "path": "assets/content/628e7d9446694d4cccee824fe1fd926d82a67bc84c75c7eabea286d73f482ec3.bin",
@@ -2683,11 +2683,6 @@
       "sha256": "c32fa8c3381d98177969043fd9263076a111df5662b041e6b44563de49ced953"
     },
     {
-      "path": "assets/content/c3acf566c45b3ff08ea966dd95c8e4c029d06eaf95aa68c974ef8e0ff5f02e52.ktx2",
-      "bytes": 13066251,
-      "sha256": "c3acf566c45b3ff08ea966dd95c8e4c029d06eaf95aa68c974ef8e0ff5f02e52"
-    },
-    {
       "path": "assets/content/c442e90efbcacf46d1bb5ecffc4ab2fbefbb8c66b445aaa45f4a9a83c9fb18ab.bin",
       "bytes": 388152,
       "sha256": "c442e90efbcacf46d1bb5ecffc4ab2fbefbb8c66b445aaa45f4a9a83c9fb18ab"
@@ -3188,6 +3183,11 @@
       "sha256": "eb8031fc2d3c300b3342ac47bee6326f038fd9a4afd98ef61bb62ffbb5219932"
     },
     {
+      "path": "assets/content/ec26192b97277ee2a7730ebfd7ed7a87cc6763d39e5b6d70c805673809c57520.ktx2",
+      "bytes": 3240533,
+      "sha256": "ec26192b97277ee2a7730ebfd7ed7a87cc6763d39e5b6d70c805673809c57520"
+    },
+    {
       "path": "assets/content/ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211.ktx2",
       "bytes": 651457,
       "sha256": "ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211"
@@ -3503,9 +3503,9 @@
       "sha256": "d47a3524efa4f72522ea6860e1aad2c898cf32f8214493cae60596819584d2f8"
     },
     {
-      "path": "assets/ddsTextureLoader-B61wNeD1.js",
+      "path": "assets/ddsTextureLoader-CjSKgIL1.js",
       "bytes": 1270,
-      "sha256": "a647eb77b71c9c96d3607718cbc5d1404374e58766cf227b0a66615fbea46f19"
+      "sha256": "019fdde75085c7f63dd399233a780e135b5d3050cd61901a4248acd58be10701"
     },
     {
       "path": "assets/decalFragment-CvBK6CMD.js",
@@ -3543,9 +3543,9 @@
       "sha256": "772614714ad7dbd504ea642f4f6decd8bfeb86eb64aea221cfd1d54cd7ebed8a"
     },
     {
-      "path": "assets/dumpTools.pure-DQspAqpV.js",
+      "path": "assets/dumpTools.pure-CjVBLms5.js",
       "bytes": 11478,
-      "sha256": "db9f9685f0c8a9d0412d0890bdf921a1c5f487106cd235e56dc09ac13365dabd"
+      "sha256": "1e590c9dc22e2aca0780957df79a9c55f93e8f0df955f1f0a939cd664028d460"
     },
     {
       "path": "assets/easing-CfTMCaBV.js",
@@ -3553,9 +3553,9 @@
       "sha256": "5d6c8dfa8eaed2d1b3784f9dd9d15571c070a4c5abb43bb9edc63556358df7c0"
     },
     {
-      "path": "assets/effectRenderer.pure-D9LJrmuM.js",
+      "path": "assets/effectRenderer.pure-CQrjx34b.js",
       "bytes": 16798,
-      "sha256": "84aaf26a00bed3d78412bac287e6dcfdb5be211c75ba701506db71c48720c988"
+      "sha256": "b3f43032debe6470cad355c80cdd96d6b5eaa5ba2a75f6d04713ac125ab0a749"
     },
     {
       "path": "assets/engineStore-B_7KzytD.js",
@@ -3568,9 +3568,9 @@
       "sha256": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1"
     },
     {
-      "path": "assets/envTextureLoader-KyoQm0M4.js",
+      "path": "assets/envTextureLoader-9LN29zpD.js",
       "bytes": 566,
-      "sha256": "86b6fbb656d09059f87f44321c5aa0c54c43cf937b59cbd1d23cac564d64ec42"
+      "sha256": "a17668a11ec71f7e09f1ed2ade5aa9597bb592297e73d5026b7c860d17e19cfc"
     },
     {
       "path": "assets/flowGraphAssetsContext-WtUyuDAI.js",
@@ -3628,9 +3628,9 @@
       "sha256": "24789dce9bb596075415ff43964bd24a4fb9939a0f6bf325b0656719910e54d2"
     },
     {
-      "path": "assets/flowGraphGLTFDataProvider-D7XLPesU.js",
+      "path": "assets/flowGraphGLTFDataProvider-BlFViGLN.js",
       "bytes": 509,
-      "sha256": "f5d741b6dfbac8b99d2c59fb9cf7eaabd6bf9c0bbb09abd418a230e133605eba"
+      "sha256": "495c0343bd9393ab886188aa0b564a48f07942140fc92378be704ced1f18c65e"
     },
     {
       "path": "assets/flowGraphInteger.pure-CZmJgkLp.js",
@@ -3648,9 +3648,9 @@
       "sha256": "7e41920d793efbfdfccf5fe586f20b2730f7a6c626bc24c7bd78b068e60301f7"
     },
     {
-      "path": "assets/flowGraphPlayAnimationBlock.pure-DnNuYzZO.js",
+      "path": "assets/flowGraphPlayAnimationBlock.pure-BsvoRBHR.js",
       "bytes": 5969,
-      "sha256": "e360df8e1e8e6e3935c224a23b6b0406a8437d870801485b0391c7cbc19e3034"
+      "sha256": "f23c3e859ef609e6ac86d61678c1413609975cb9b1eb137c80708db71a5fa8fa"
     },
     {
       "path": "assets/flowGraphPointerDownEventBlock.pure-CCvLj5tL.js",
@@ -3728,24 +3728,24 @@
       "sha256": "80b1a1e010e777912247fa193e97e178fca00f1e46c2531a34cdfc7fa502da5a"
     },
     {
-      "path": "assets/gaussianSplatting.fragment-DMMgFwA9.js",
+      "path": "assets/gaussianSplatting.fragment-BJLrOqk9.js",
       "bytes": 3408,
-      "sha256": "b78123a43cb741e3a0f3dcefcdfdeaf86d8e05c1d2a3d6adbf338b0b19fbe469"
+      "sha256": "802078cf25c6d4f16725cf8a71e7ec206792caa3baeeb4fab26b52d835d07bf4"
     },
     {
-      "path": "assets/gaussianSplatting.fragment-fzz8DY7C.js",
+      "path": "assets/gaussianSplatting.fragment-Cgq255g6.js",
       "bytes": 3546,
-      "sha256": "3a86da6f84a19996c657d574c9d540a5d7d22835832ca524cca7c03c50f00803"
+      "sha256": "f1d07248a8d349fc56e9e21281eb9f9f91b80f53adabf3b74885f87bb2e90a9e"
     },
     {
-      "path": "assets/gaussianSplatting.vertex-Ckn6YRBS.js",
+      "path": "assets/gaussianSplatting.vertex-CxiXxq6l.js",
       "bytes": 7263,
-      "sha256": "06d27b33b7f7951ffda5b49a911b1cea515fb7b1caff68841c29c9164d7caf14"
+      "sha256": "6d472f9b59b27f64ba76bd6cdf1c0e069636b63e8248d901d117d83023297316"
     },
     {
-      "path": "assets/gaussianSplatting.vertex-SCI9Br9n.js",
+      "path": "assets/gaussianSplatting.vertex-fvdiTs06.js",
       "bytes": 8602,
-      "sha256": "43286f2797ec1a7f6ba68e73de75522047cabe3f50ff5ecb323e7a3228d02470"
+      "sha256": "f25e57e5d7c91697be5bb04fcc5c8dfcc694b1d887f6f9031b98bfe25e79c38a"
     },
     {
       "path": "assets/gaussianSplattingVoxel.fragment-B_Om6CDx.js",
@@ -3758,14 +3758,14 @@
       "sha256": "abe326f8a1ef74f6cff38dc5e2cb8a032abc2ba722e30ec1c99d212b9b332fcf"
     },
     {
-      "path": "assets/gaussianSplattingVoxel.vertex-CglwnEbc.js",
+      "path": "assets/gaussianSplattingVoxel.vertex-BiHxJ0Ko.js",
       "bytes": 2591,
-      "sha256": "1a310687489f44b35df55c80b8d6fa80432a5b1aad79e5235f79b96f786b39c1"
+      "sha256": "009a2703d34231c81a29bf0148777d5c08cb42b0cbf72ef7238b9363b8c37149"
     },
     {
-      "path": "assets/gaussianSplattingVoxel.vertex-DDoFWNmP.js",
+      "path": "assets/gaussianSplattingVoxel.vertex-BOPs0ap-.js",
       "bytes": 1875,
-      "sha256": "3ab106f4d49d85310cea533c600a1ae0816804a04660f3b8522279b3591ed94b"
+      "sha256": "a5b3312152b2c9ef4092e1b3417a1869d2244671258332157f9b86bcd7c49e2e"
     },
     {
       "path": "assets/geometryRenderingFragment-BoxdRBy7.js",
@@ -3823,9 +3823,9 @@
       "sha256": "20ff253100c31553eaa478c80ffe05d55a82e4737c13e293c3f4925ed07de5b9"
     },
     {
-      "path": "assets/hdrTextureLoader-CXl03p93.js",
+      "path": "assets/hdrTextureLoader-Bavd9VPT.js",
       "bytes": 534,
-      "sha256": "b82952b5863916c45bc5c1be5cadfde833963e0efdeb2d61051628090e4fe3c7"
+      "sha256": "38f12d6e2974e64492dbd1c249ba151aef48bb5fd662090fb7a2af30e4bbdc1a"
     },
     {
       "path": "assets/helperFunctions-D8vur8CW.js",
@@ -3878,9 +3878,9 @@
       "sha256": "1401b6b2d8dac01c75258ba4068f22a2bbf4c625618d08f31270a963aec67607"
     },
     {
-      "path": "assets/index-baZbNUyv.js",
-      "bytes": 6157374,
-      "sha256": "1e791c5f93d27f8ec7b73aa419a8e44d5cbf13bc1cc447658f6e09b95f876b72"
+      "path": "assets/index-BAH54a2c.js",
+      "bytes": 6158060,
+      "sha256": "6d1339bc5163d83e48413b46fe16525ae610c4220bf8fba9fdda0aac93501bf8"
     },
     {
       "path": "assets/index-_XbkGnFu.css",
@@ -3933,9 +3933,9 @@
       "sha256": "a65af7b08810376acf1baff937e7c3b9b52168235d3948c274155937748431fd"
     },
     {
-      "path": "assets/ktxTextureLoader-gWXEKSor.js",
+      "path": "assets/ktxTextureLoader-g8F9EOVW.js",
       "bytes": 4078,
-      "sha256": "a7a7ff869e7ae38407cb5abc5d9845f3f324c24474ac833bad38dc9770df0062"
+      "sha256": "ff4284fd819bd463c0637d19b6c36e68656f0d5c009ba95837b1f40d1d38f186"
     },
     {
       "path": "assets/legacy-e0c98ab-character.json",
@@ -4298,9 +4298,9 @@
       "sha256": "d04fbf175767670bfd2e73c8d2a7d2e8135621d782efde9d594dd5e36b8e30ba"
     },
     {
-      "path": "assets/postProcess.pure-BtDWnYf4.js",
+      "path": "assets/postProcess.pure-p2ADE2oY.js",
       "bytes": 26808,
-      "sha256": "5bd6b1c632c1edeec4dd1dc67aa088280763a2633c519c89e5f44a97c39ae896"
+      "sha256": "fbc7066a657c9af6281ffd03985dec4356a1d1c93c264e51447c660c3222218d"
     },
     {
       "path": "assets/precisionDate-Uyb-ubD0.js",
@@ -4328,9 +4328,9 @@
       "sha256": "1694bad24c61d23ef593e99ce37436c25e0a08e90860ded02e2eda3d33371879"
     },
     {
-      "path": "assets/renderTargetTexture.pure-Dx3NsyJd.js",
+      "path": "assets/renderTargetTexture.pure-Os3t4luu.js",
       "bytes": 111683,
-      "sha256": "c3be2f8294f6a6d7ec10d476ff719c212d21044428c5e4775b1add84b6af10cf"
+      "sha256": "4077876b253aaa315447bc83a1b85646967b3f0eb48d1c7bae5ae49862555525"
     },
     {
       "path": "assets/samplerFragmentDeclaration-3yaLawFX.js",
@@ -4353,14 +4353,14 @@
       "sha256": "4a35fbf78c1f9d46c5db5ff9b2ca55b3473cb56c5e464695cf5452e8a59c6735"
     },
     {
-      "path": "assets/scene.pure-DBmgpguT.js",
-      "bytes": 160577,
-      "sha256": "24161a246cb2090a9b4b48edf0dfc6309ef4fc43b61524d94ded02cebd878faf"
+      "path": "assets/scene.pure-Cg7dTRJ-.js",
+      "bytes": 160579,
+      "sha256": "38fef28e6c62b6459df19faacdff74cac0c255dec13f9bd367b44d4da32630d0"
     },
     {
-      "path": "assets/sceneComponent-thBMjXc6.js",
-      "bytes": 18075,
-      "sha256": "d9d32df364f50af2e7a3c2c1e8b61cff1b6b0116f3be9318eeb4a84fc2d5ae3f"
+      "path": "assets/sceneComponent-m53JeOmm.js",
+      "bytes": 18073,
+      "sha256": "86800684ea621c35b17e41ba0aafc53d8a4a91900d35c01ef584d93c9d1fa4ff"
     },
     {
       "path": "assets/sceneFragmentDeclaration-ql3RpL9u.js",
@@ -4503,9 +4503,9 @@
       "sha256": "cb04efe695c7b5f2f6cbf62aa035df9a85f3c4b220aa3ef7b08288e6181ee6f3"
     },
     {
-      "path": "assets/tgaTextureLoader-CZuTMwDx.js",
+      "path": "assets/tgaTextureLoader-0s0r7oOq.js",
       "bytes": 314,
-      "sha256": "ed9560580717be0dcb429d8b2b54fbecfef5155d38721b4625d631be2e3ea722"
+      "sha256": "66755bc48bab46ba81c2dd503991d4c595123f86575ff0c2d50d76b3d55e8bb5"
     },
     {
       "path": "assets/thinEngine.pure-BeYcNvbI.js",
@@ -4554,8 +4554,8 @@
     },
     {
       "path": "assets/village.json",
-      "bytes": 100624,
-      "sha256": "4b4fac7e3b14df1d367b53e05d0decb34ca7952fb046b07eb2caca3ce1a0c496"
+      "bytes": 100692,
+      "sha256": "ef57161c75f58554782aea96353bc7ccaa4f67f58a9f7ef049211dd3fe63f3eb"
     },
     {
       "path": "assets/volumetricLightingBlendVolume.fragment-Bz5yiNiY.js",
@@ -4625,7 +4625,7 @@
     {
       "path": "index.html",
       "bytes": 34889,
-      "sha256": "77d31620221edaee9cb38462653b10f7c15e4a687d4cb080e88710f20f674958"
+      "sha256": "debe4f0bf776c5ef7c6b204df2f960f08626082662dc3effcf72419416392b1e"
     },
     {
       "path": "KTX2_NOTICES.txt",

@@ -81,17 +81,17 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/110189bed366f00a836b9810997dbc576f374cb487e2ad75b9939d487a013473.ktx2",
+            "url": "./content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 14223536,
+            "bytes": 11541902,
             "codec": "uastc",
             "alpha": false,
             "gpuBlockBytes": 16
           }
         },
         "resources": [
-          "./content/110189bed366f00a836b9810997dbc576f374cb487e2ad75b9939d487a013473.ktx2"
+          "./content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2"
         ],
         "colorResolution": 4096,
         "colorEncoding": "KTX2 UASTC / sRGB / full mip chain",
@@ -645,17 +645,17 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/0502ec0b1766347178677238a891529c2608cc5a7cb4a49e1f0a93b6bee3801f.ktx2",
+            "url": "./content/ec26192b97277ee2a7730ebfd7ed7a87cc6763d39e5b6d70c805673809c57520.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 4431180,
+            "bytes": 3240533,
             "codec": "uastc",
             "alpha": false,
             "gpuBlockBytes": 16
           }
         },
         "resources": [
-          "./content/0502ec0b1766347178677238a891529c2608cc5a7cb4a49e1f0a93b6bee3801f.ktx2"
+          "./content/ec26192b97277ee2a7730ebfd7ed7a87cc6763d39e5b6d70c805673809c57520.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 UASTC / sRGB / full mip chain",
@@ -2011,17 +2011,17 @@
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/c3acf566c45b3ff08ea966dd95c8e4c029d06eaf95aa68c974ef8e0ff5f02e52.ktx2",
+            "url": "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 13066251,
+            "bytes": 10750836,
             "codec": "uastc",
             "alpha": false,
             "gpuBlockBytes": 16
           }
         },
         "resources": [
-          "./content/c3acf566c45b3ff08ea966dd95c8e4c029d06eaf95aa68c974ef8e0ff5f02e52.ktx2"
+          "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2"
         ],
         "colorResolution": 4096,
         "colorEncoding": "KTX2 UASTC / sRGB / full mip chain",
@@ -2424,6 +2424,8 @@
   "compression": {
     "format": "KTX2/Basis",
     "defaultCodec": "etc1s",
+    "etcProfile": "etc1s",
+    "uastcProfile": "uastc-rdo4-d65536",
     "uastcAssets": [
       "house-01-cottage",
       "wall-03-breached",
