@@ -3,7 +3,8 @@ export const VILLAGE_TEXTURE_BUDGET={mobile:128*1024*1024,desktop:256*1024*1024}
 export function validVillageTextureProfile(config){
   const t=config?.textures;
   return [2048,4096].includes(t?.albedo?.width)&&t.albedo.height===t.albedo.width&&
-    ['normal','orm'].every(role=>t[role]?.width===t.albedo.width/4&&t[role].height===t[role].width);
+    (config.shading==='toon-color'?Object.keys(t).length===1:
+    ['normal','orm'].every(role=>t[role]?.width===t.albedo.width/4&&t[role].height===t[role].width));
 }
 
 // Conservative RGBA8 allocation, including every mip level. This is the extra

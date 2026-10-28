@@ -35,7 +35,7 @@ export function createVillageReview(world,{forcedMobile=false}={}){
     panel.textContent=[
       `DEV 마을 검수 · ${forcedMobile?'모바일 정책 강제':world.touchDevice?'모바일 정책':'데스크톱 정책'}`,
       `실제 에셋 ${env.sourceAssets??0}/25 · 배치 ${env.instances??0} · 활성 root ${vis.activeInstances??0}`,
-      `활성 셀 ${vis.activeCells??0}/${vis.cells??0} · 그림자 ${vis.shadowCasters??0} · 가림 ${vis.occludedProps??0} / GPU조회 ${vis.occlusionQueries??0}`,
+      `활성 셀 ${vis.activeCells??0}/${vis.cells??0} · 그림자 ${vis.shadowCasters??0} (건물·나무 ${vis.majorShadowCasters??0}) · 외곽선 ${env.outlineInstances??0} · 가림 ${vis.occludedProps??0}`,
       `마을 텍스처 ${env.textureTier??'로딩 중'} · 최대 ${Math.max(env.largestTexture??0,env.highTextureMax??0)}px`,
       `로드된 LOD 0:${lod[0]??0} / 1:${lod[1]??0} / 2:${lod[2]??0}`,
       `가시 메시 LOD 0:${selected[0]} / 1:${selected[1]} / 2:${selected[2]} · 삼각형 ${Math.round(triangles).toLocaleString()} / 원본 ${Math.round(originalTriangles).toLocaleString()}`,

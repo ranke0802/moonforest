@@ -3,6 +3,10 @@ import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes,selectHighTextures} from './village-texture-budget.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?1500:3000);
+// gammaSpace's getter is false for glTF textures already decoded by the GPU.
+// Copying that value to a plain RGBA texture skips sRGB decoding and washes out
+// only the asset promoted to the near tier. Set source color space explicitly.
+export const highTextureOptions=(role,old)=>({noMipmap:false,invertY:old?.invertY??false,samplingMode:Texture.TRILINEAR_SAMPLINGMODE,useSRGBBuffer:role==='albedo',gammaSpace:role==='albedo'});
 
 // One asset at a time. The persistent content cache retains downloaded files;
 // only temporary high-resolution GPU allocations are released on distance exit.
@@ -53,13 +57,13 @@ export class VillageTextureStreaming {
     this.stats.highTextureMax=Math.max(0,...entries.map(e=>e.resolution));
     this.stats.highTexturePeak=Math.max(this.stats.highTexturePeak??0,this.stats.highTextureBytes+this.stats.highTextureReserved);
   }
-  async loadTexture(config,old){
+  async loadTexture(config,old,role){
     const url=new URL(config.url,this.url).href;
     const texture=await new Promise((resolve,reject)=>{
-      const item=new Texture(url,this.world.scene,false,old?.invertY??false,Texture.TRILINEAR_SAMPLINGMODE,
-        ()=>resolve(item),(message,error)=>{item.dispose();reject(error??new Error(message||'High texture load failed'));});
+      const item=new Texture(url,this.world.scene,{...highTextureOptions(role,old),
+        onLoad:()=>resolve(item),onError:(message,error)=>{item.dispose();reject(error??new Error(message||'High texture load failed'));}});
     });
-    for(const key of ['coordinatesIndex','coordinatesMode','wrapU','wrapV','uScale','vScale','uOffset','vOffset','uAng','vAng','wAng','level','gammaSpace','hasAlpha']){
+    for(const key of ['coordinatesIndex','coordinatesMode','wrapU','wrapV','uScale','vScale','uOffset','vOffset','uAng','vAng','wAng','level','hasAlpha']){
       if(old&&old[key]!==undefined)texture[key]=old[key];
     }
     return texture;
@@ -77,21 +81,21 @@ export class VillageTextureStreaming {
   async load(id){
     const asset=this.assets.get(id),materials=asset.source.materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
     if(!materials.length)throw new Error('Near material does not expose an albedo texture');
-    const slots={albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
+    const slots=config.shading==='toon-color'?{albedo:'albedoTexture'}:{albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
     try{
       for(const [role,slot]of Object.entries(slots)){
-        textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot]);
+        textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>t.dispose());return;}
         const size=textures[slot].getSize(),expected=config.textures[role];
         if(size.width!==expected.width||size.height!==expected.height)throw new Error('Texture dimensions differ from the budgeted profile');
       }
-      for(const {material}of originals){material.unfreeze();Object.assign(material,textures);material.freeze();}
+      for(const {material}of originals){material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
       this.resident.set(id,{textures,originals,bytes:highTextureBytes(config),resolution:config.textures.albedo.width});this.stats.highTextureLoads++;this.syncStats();
     }catch(error){Object.values(textures).forEach(t=>t.dispose());throw error;}
   }
   release(id){
     const entry=this.resident.get(id);if(!entry)return;
-    for(const {material,values}of entry.originals){material.unfreeze();Object.assign(material,values);material.freeze();}
+    for(const {material,values}of entry.originals){material.unfreeze();Object.assign(material,values);if(!material.metadata?.villageToon)material.freeze();}
     for(const t of Object.values(entry.textures))t.dispose();
     this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }

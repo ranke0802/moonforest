@@ -1,4 +1,5 @@
 import { DynamicTexture, Texture, Color3 } from '@babylonjs/core';
+import {VillageGroundShade} from './village-toon.js';
 import { VILLAGE_HOMES, VILLAGE_PLACEMENTS, VILLAGE_RING_ROAD, homeRoadEnd, villageRoadDistance } from './village-layout.js';
 
 // One baked color map, without transparent path decals or extra terrain passes.
@@ -100,5 +101,6 @@ export function applyVillageGround(world){
   texture.update();texture.wrapU=texture.wrapV=Texture.CLAMP_ADDRESSMODE;texture.anisotropicFilteringLevel=4;
   world.floorMaterial.unfreeze();world.floorMaterial.diffuseTexture?.dispose();
   world.floorMaterial.diffuseTexture=texture;world.floorMaterial.diffuseColor=Color3.White();
-  world.floorMaterial.specularColor=new Color3(.02,.02,.02);world.floorMaterial.freeze();
+  world.floorMaterial.specularColor=Color3.Black();
+  new VillageGroundShade(world.floorMaterial,world.lighting);
 }

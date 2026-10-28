@@ -1,6 +1,7 @@
 import { Frustum, Vector3 } from '@babylonjs/core';
 import { VillageOcclusion } from './village-occlusion.js';
 import { villageRenderRange } from './village-policy.js';
+import {selectVillageShadowCasters} from './village-shadow-policy.js';
 
 export function cellKey(x,z,size=16){return `${Math.floor(x/size)}:${Math.floor(z/size)}`;}
 
@@ -48,13 +49,12 @@ export class VillageVisibility {
     }
     if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      const candidates=this.records.filter(r=>r.root.isEnabled()&&!['shrub','garden','ground-detail'].includes(r.placement.kind))
-        .map(r=>({r,d:Math.hypot(r.placement.x-player.x,r.placement.z-player.z)}))
-        .filter(v=>v.d<(this.touch?13:20)).sort((a,b)=>a.d-b.d).slice(0,this.touch?12:22);
-      const next=new Set(candidates.flatMap(({r})=>r.meshes));
+      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records,player,this.touch):[];
+      const next=new Set(candidates.flatMap(r=>r.meshes));
       for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
       for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
       this.cast=next;this.stats.shadowCasters=next.size;
+      this.stats.majorShadowCasters=candidates.filter(r=>['building','tree','tower','landmark'].includes(r.placement.kind)).length;
     }
     Object.assign(this.stats,{activeCells,activeInstances});
   }

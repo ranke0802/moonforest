@@ -18,7 +18,7 @@ const resources=new Map();
 for(const id of ids){
   const asset=candidate.assets[id],original=baseline.assets[id],textures=high.assets[id];
   if(JSON.stringify(asset.lods[0])!==JSON.stringify(original.lods[0])||asset.mobileNear.model!==original.lods[1].model)throw new Error('Original near geometry changed: '+id);
-  if(current.assets[id].lods[0].model!==original.lods[0].model)throw new Error('Source asset changed; review LODs again: '+id);
+  if(current.assets[id].lods[0].model!==original.lods[0].model&&current.assets[id].toonSourceModelSha256!==basename(original.lods[0].model,'.gltf'))throw new Error('Source asset changed; review LODs again: '+id);
   if(!validVillageTextureProfile(textures))throw new Error('Invalid 4K texture profile: '+id);
   asset.highTextures={textures:textures.textures,resources:textures.resources,colorResolution:textures.colorResolution,colorEncoding:textures.colorEncoding};
   for(const lod of [...asset.lods,asset.mobileNear])for(const ref of lod.resources)resources.set(ref,source);

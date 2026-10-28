@@ -5,6 +5,8 @@ import { applyVillageGround } from './village-ground.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
 import {VILLAGE_LOD_COVERAGE,villageLodSources} from './village-lod.js';
 import {VillageTextureStreaming} from './village-texture-streaming.js';
+import {applyVillageToon} from './village-toon.js';
+import {VillageOutlines} from './village-outlines.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -24,7 +26,7 @@ export function createVillageTransform(world,placement,config){
 }
 export async function loadVillage(world,{onProgress=()=>{}}={}){
   if(world.villagePromise)return world.villagePromise;
-  const containers=[],roots=[],records=[];let visibility,fixtureMaterial,textureStreaming;
+  const containers=[],roots=[],records=[];let visibility,fixtureMaterial,textureStreaming,outlines;
   world.villagePromise=(async()=>{
     const fixture=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageFixture')==='1';
     const url=new URL(`${import.meta.env.BASE_URL}assets/${fixture?'village-fixture':'village'}.json`,location.href);
@@ -47,29 +49,36 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
       // Up to 4K color is streamed when visible and within the texture budget.
       const levels=villageLodSources(config,touch);
       const source=await load(levels[0]),full=geometry(source);
+      applyVillageToon(full,world.lighting);
       for(const mesh of full)mesh.metadata={...mesh.metadata,villageLodLevel:0};
       const cover=['building','tree','rock'].includes(config.category)||tallProps.has(id);
-      if(cover)prepareTreeOcclusion(full);
+      // Keep the same custom-instance path at every tier, including opaque
+      // props. Unregistered LOD sources can lose their base draw while an ink
+      // instance remains visible. Only the selected cover roots ever fade.
+      prepareTreeOcclusion(full);
       for(const mat of source.materials){mat.backFaceCulling=!['tree','plant'].includes(config.category);}
       world.lighting.registerMeshes(full);
       for(let index=1;index<levels.length;index++){
         const variant=await load(levels[index]),low=geometry(variant);
-        if(cover)prepareTreeOcclusion(low);
+        applyVillageToon(low,world.lighting);
+        prepareTreeOcclusion(low);
         if(low.length!==full.length)throw new Error(`${id}: LOD의 메시 구성이 다릅니다.`);
         for(let part=0;part<full.length;part++){
           const mesh=low[part];mesh.isPickable=false;world.scene.addMesh(mesh);
           mesh.metadata={...mesh.metadata,villageLodLevel:levels[index].level};
           mesh.material.backFaceCulling=!['tree','plant'].includes(config.category);
-          mesh.receiveShadows=false;mesh.material.freeze();
           if(config.geometryLod){
             full[part].useLODScreenCoverage=true;
             full[part].addLODLevel(levels[index].level===1?VILLAGE_LOD_COVERAGE.mid:VILLAGE_LOD_COVERAGE.far,mesh);
           }else full[part].addLODLevel(touch?34:levels[index].level===1?25:49,mesh);
         }
+        world.lighting.registerMeshes(low);
       }
+      // Materials stay mutable: streaming and quality changes must rebind their
+      // plugin uniforms and shadow defines across all instance/LOD variants.
       // Screen-size LOD retains tiny silhouettes. Whole-cell distance culling
       // still removes scenery behind the existing fog, with conservative bounds.
-      for(const mesh of full){if(!config.geometryLod)mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;mesh.material.freeze();}
+      for(const mesh of full){if(!config.geometryLod)mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;}
       assets.set(id,{source,config,cover});onProgress(++completed,Object.keys(manifest.assets).length);
     }
     if(fixture){
@@ -102,12 +111,13 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     visibility=new VillageVisibility(world,records,{touch});world.villageVisibility=visibility;
     world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 최대 4K / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
     if(manifest.geometryLod)textureStreaming=new VillageTextureStreaming(world,assets,records,url,world.environment);
+    outlines=new VillageOutlines(world,records,world.environment);
     // Read by the development review panel only, never a per-frame production scan.
     world.villageRenderRecords=records;
-    world.scene.onDisposeObservable.addOnce(()=>{textureStreaming?.dispose();visibility.dispose();for(const c of containers)c.dispose();});
+    world.scene.onDisposeObservable.addOnce(()=>{outlines?.dispose();textureStreaming?.dispose();visibility.dispose();for(const c of containers)c.dispose();});
     return world.environment;
   })().catch(error=>{
-    textureStreaming?.dispose();visibility?.dispose();for(const r of roots)r.dispose();for(const c of containers)c.dispose();fixtureMaterial?.dispose();
+    outlines?.dispose();textureStreaming?.dispose();visibility?.dispose();for(const r of roots)r.dispose();for(const c of containers)c.dispose();fixtureMaterial?.dispose();
     world.villageVisibility=null;world.treeOcclusion=null;world.environment={ready:false,mode:'village',error:error.message};
     // Only a new explicit load action retries; no automatic network retry loop.
     world.villagePromise=null;throw error;

@@ -51,7 +51,7 @@ export function createWorld(engine, {village=false,touchDevice=matchMedia('(poin
   shadows.filteringQuality = ShadowGenerator.QUALITY_MEDIUM;
   shadows.bias = .0008; shadows.normalBias = .02;
   shadows.setDarkness(.35);
-  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
+  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
 
   const terrain=village?createVillageTerrain():new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});

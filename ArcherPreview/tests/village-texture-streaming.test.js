@@ -63,3 +63,10 @@ test('unexpected decoded dimensions dispose textures instead of violating the pr
  m.loadTexture=async(...args)=>{const t=await load(...args);t.getSize=()=>({width:8192,height:8192});return t;};
  await assert.rejects(m.load('house'),/dimensions differ/);assert.ok(created.every(t=>t.disposed));assert.equal(material.albedoTexture,original);
 });
+
+test('toon streaming loads only color and cannot restore discarded PBR maps',async()=>{
+ const {manager:m,material,created}=fixture(),high=m.assets.get('house').config.highTextures;
+ high.shading='toon-color';high.textures={albedo:high.textures.albedo};material.bumpTexture=null;material.metallicTexture=null;
+ await m.start('house');assert.equal(created.length,1);assert.equal(material.bumpTexture,null);assert.equal(material.metallicTexture,null);
+ assert.ok(m.stats.highTextureBytes<86*1048576);m.release('house');assert.equal(material.bumpTexture,null);
+});

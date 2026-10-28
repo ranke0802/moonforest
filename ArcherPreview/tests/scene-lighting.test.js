@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import { NullEngine, Scene, DirectionalLight, HemisphericLight, ShadowGenerator, Vector3, MeshBuilder, PBRMaterial, Color3 } from '@babylonjs/core';
 import { SceneLighting } from '../src/scene-lighting.js';
 
-function setup(touchDevice) {
+function setup(touchDevice,village=false) {
   const engine=new NullEngine(),scene=new Scene(engine);
   const ambient=new HemisphericLight('sky',Vector3.Up(),scene);
   const key=new DirectionalLight('key',new Vector3(-.4,-1,-.6),scene);
   const rim=new DirectionalLight('rim',Vector3.Down(),scene);
   const shadows=new ShadowGenerator(touchDevice?1024:2048,key);
-  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice});
+  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
   return {scene,engine,ambient,key,rim,shadows,lighting};
 }
 
@@ -28,6 +28,16 @@ test('quality switching reuses one shadow map and preserves authored painted mat
     assert.ok(material.emissiveColor.equals(originalColor));assert.ok(material.albedoColor.equals(Color3.Black()));
   }
   scene.dispose();engine.dispose();
+});
+
+test('village keeps bounded shadows in balanced mode and registers every LOD receiver',()=>{
+ const {scene,engine,lighting,key,shadows}=setup(true,true),map=shadows.getShadowMap();
+ const meshes=[0,1,2].map(i=>MeshBuilder.CreateBox('lod'+i,{},scene));lighting.registerMeshes(meshes);
+ lighting.setQuality('balanced');assert.equal(scene.shadowsEnabled,true);assert.ok(meshes.every(m=>m.receiveShadows));
+ assert.equal(key.shadowFrustumSize,64);assert.equal(map.getSize().width,1024);assert.equal(map,shadows.getShadowMap());
+ lighting.follow(new Vector3(18,0,-8));assert.ok(key.position.add(key.direction.scale(45)).equals(new Vector3(18,0,-8)));
+ lighting.setQuality('battery');assert.equal(scene.shadowsEnabled,false);assert.ok(meshes.every(m=>!m.receiveShadows));
+ scene.dispose();engine.dispose();
 });
 
 test('mobile shadows keep one bounded map synchronized with every rendered pose',()=>{

@@ -30,9 +30,10 @@ class PaintedModelShade extends MaterialPluginBase {
 }
 
 export class SceneLighting {
-  constructor(scene, { ambient, key, rim, shadows, touchDevice }) {
-    Object.assign(this, { scene, ambient, key, rim, shadows, touchDevice });
+  constructor(scene, { ambient, key, rim, shadows, touchDevice, village=false }) {
+    Object.assign(this, { scene, ambient, key, rim, shadows, touchDevice, village });
     this.high = true;
+    this.shadowsActive=true;this.lightDistance=village?45:25;
     this.baseDirection=key.direction.clone();
     this.highDirection=new Vector3(.65,-1,-.45);
     this.direction = key.direction.negate().normalize();
@@ -41,9 +42,9 @@ export class SceneLighting {
     this.painted = new WeakSet();
     // A stable arena-sized frustum avoids per-frame bounds fitting and preserves
     // useful shadow texels when tall trees enter the cast list.
-    key.position = key.direction.scale(-25);
-    key.shadowFrustumSize = 32;
-    key.shadowMinZ = 1; key.shadowMaxZ = 65;
+    key.position = key.direction.scale(-this.lightDistance);
+    key.shadowFrustumSize = village?(touchDevice?64:80):32;
+    key.shadowMinZ = 1; key.shadowMaxZ = village?120:65;
     key.autoUpdateExtends = false;
     shadows.filteringQuality = touchDevice ? ShadowGenerator.QUALITY_LOW : ShadowGenerator.QUALITY_MEDIUM;
     // The scene is already capped at 30 FPS on phones. Skipping alternate
@@ -56,7 +57,7 @@ export class SceneLighting {
     for (const mesh of meshes) {
       if (!mesh.getTotalVertices?.()) continue;
       const receiver = mesh.sourceMesh || mesh;
-      receiver.receiveShadows = this.high;
+      receiver.receiveShadows = this.shadowsActive;
       if (!this.receivers.has(receiver)) {
         this.receivers.add(receiver);
         receiver.onDisposeObservable.addOnce(() => this.receivers.delete(receiver));
@@ -83,7 +84,7 @@ export class SceneLighting {
     const x=Math.round(position.x/2)*2,z=Math.round(position.z/2)*2;
     if(this.focus.x===x&&this.focus.z===z)return;
     this.focus.set(x,0,z);
-    this.key.position.copyFrom(this.key.direction.scale(-25).add(this.focus));
+    this.key.position.copyFrom(this.key.direction.scale(-this.lightDistance).add(this.focus));
     // Also invalidate explicitly after a projection move (e.g. resume/quality
     // change) so a previously cached map can never use the new light matrix.
     this.shadows.getShadowMap().resetRefreshCounter();
@@ -92,16 +93,17 @@ export class SceneLighting {
     if(this.quality===quality)return;
     this.quality=quality;
     this.high = quality === 'high';
+    this.shadowsActive=this.village?quality!=='battery':this.high;
     this.key.direction.copyFrom(this.high?this.highDirection:this.baseDirection);
-    this.key.position.copyFrom(this.key.direction.scale(-25).add(this.focus));
+    this.key.position.copyFrom(this.key.direction.scale(-this.lightDistance).add(this.focus));
     this.direction.copyFrom(this.key.direction).negateInPlace().normalize();
-    this.scene.shadowsEnabled = this.high;
+    this.scene.shadowsEnabled = this.shadowsActive;
     this.ambient.intensity = this.high ? .65 : 1.05;
     this.key.intensity = this.high ? 1.65 : 1.8;
     // One directional source plus sky fill in high quality: no extra light pass.
     this.rim.setEnabled(!this.high);
-    for (const mesh of this.receivers) mesh.receiveShadows = this.high;
+    for (const mesh of this.receivers) mesh.receiveShadows = this.shadowsActive;
     this.refreshReceivers();
-    if (this.high) this.shadows.getShadowMap().resetRefreshCounter();
+    if (this.shadowsActive) this.shadows.getShadowMap().resetRefreshCounter();
   }
 }
