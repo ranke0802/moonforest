@@ -36,6 +36,7 @@ import { constrainDodge } from './dodge-collision.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
+import {createFrameDiagnostics} from './frame-diagnostics.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
@@ -98,6 +99,12 @@ let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
+const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,
+  metadata:()=>({character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null}),
+  context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
+    position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
+    camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
+    geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0})});
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
   try{return normalizeAttackSpeed(Number(localStorage.getItem(attackSpeedStorageKey())??1));}
@@ -513,16 +520,19 @@ try {
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
   setupFullscreen($('#fullscreen-button'), toast, {autoEnter:!villageReviewEnabled});
-  frameLoop=new FrameLoop(engine,render);
-  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused)text('#live-fps','0 FPS');audio.setSuspended(document.hidden||settingsOpen);};
+  frameLoop=new FrameLoop(engine,dt=>{
+    frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
+    try{render(dt);}finally{frameDiagnostics.endFrame();}
+  });
+  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
   // Preview camera, quality and equipment changes while settings pause combat.
   for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>frameLoop.invalidate());
   document.addEventListener('visibilitychange',syncPlayback);
-  window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);audio.setSuspended(true);});
+  window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   window.addEventListener('pageshow',syncPlayback);
-  window.addEventListener('focus',()=>{frameLoop.last=null;});
+  window.addEventListener('focus',()=>{frameLoop.last=null;frameDiagnostics.suspend();});
   syncPlayback();
   window.addEventListener('resize', applyRenderQuality);
   $('#quality-select').addEventListener('change', event => {

@@ -43,6 +43,7 @@ export function setupSettingsPanel() {
   fullscreen.before(fps);
   displayOptions.append(qualityLabel);
   section('화면 · 카메라', [displayOptions, $('.camera-tools')]);
+  section('성능 진단', [$('#frame-diagnostics-options')]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
   const reset = $('#reset-motion-speeds');
   const motionSection = section('모션별 속도 · 전사 v2', [$('#motion-speed-options'), reset]);

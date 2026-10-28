@@ -85,6 +85,10 @@
         <h2 id="loading-title">불러오는 중</h2><p id="loading-text">필요한 리소스를 확인합니다.</p><p id="loading-bytes">0.0 / 0.0 MB</p><div class="loading-track" role="progressbar" aria-label="리소스 다운로드" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="loading-progress"></span></div><button id="retry-load" class="text-button" hidden>다시 불러오기</button>
       </section>
       <div id="stream-loading" hidden data-ui><span id="stream-bytes"></span><div><i id="stream-progress"></i></div></div>
+      <aside id="frame-diagnostics" class="frame-diagnostics" aria-label="프레임 진단" aria-live="off" hidden>
+        <strong id="diagnostic-fps">— FPS</strong><span id="diagnostic-frame">프레임 — ms · 최대 — ms</span>
+        <span id="diagnostic-stalls">최근 10초 지연 0회</span><small id="diagnostic-detail">측정 대기</small>
+      </aside>
 
       <div id="joystick-hint" class="joystick-hint" aria-hidden="true"><div class="joystick-ghost"><span></span></div><span>드래그하여 이동</span></div>
       <div id="joystick" class="joystick" hidden aria-hidden="true"><div class="joystick-rim"></div><div id="joystick-knob" class="joystick-knob"></div></div>
@@ -114,6 +118,13 @@
       <dialog id="motion-speed-dialog" class="motion-speed-dialog" aria-labelledby="motion-speed-title" aria-describedby="motion-speed-description" data-ui>
         <header><h2 id="motion-speed-title">모션별 속도 · 전사 v2</h2><button id="close-motion-speed" type="button" aria-label="모션 속도 설정 닫기">×</button></header>
         <p id="motion-speed-description">각 모션을 0.5~2배로 조절합니다. 공격 3종에는 공통 공격 속도도 함께 적용됩니다. 회피 거리는 유지되며, 달리기는 이동 속도도 함께 바뀝니다.</p>
+        <div id="frame-diagnostics-options" class="frame-diagnostics-options">
+          <label><input id="frame-diagnostics-toggle" type="checkbox" /> FPS · 프레임 지연 표시</label>
+          <p>휴대폰은 목표 30 FPS, 정상 프레임 간격은 약 33 ms입니다. 최대 간격과 지연 횟수는 최근 10초 기준입니다. 초기 로딩·설정·앱 전환으로 멈춘 시간은 제외합니다.</p>
+          <div><button id="copy-frame-diagnostics" type="button">기록 복사</button><button id="reset-frame-diagnostics" type="button">초기화</button></div>
+          <span id="frame-diagnostics-status" role="status"></span>
+          <textarea id="frame-diagnostics-export" readonly hidden aria-label="복사할 프레임 진단 기록"></textarea>
+        </div>
         <div id="motion-speed-options"></div>
         <footer><span>자동 저장 · 설정 중 전투 일시정지</span><button id="reset-motion-speeds" type="button">개별 배율 초기화</button></footer>
       </dialog>
