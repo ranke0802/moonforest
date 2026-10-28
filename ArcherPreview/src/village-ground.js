@@ -42,6 +42,8 @@ export async function applyVillageGround(world){
   });
   // Color alpha stores the soil mask; it never enables transparency/blending.
   const color=await load(config.color),detail=await load(config.detail);
+  const release=()=>{color.dispose();detail.dispose();world.scene.onDisposeObservable.remove(observer);if(world.releaseGround===release)world.releaseGround=null;};
+  const observer=world.scene.onDisposeObservable.addOnce(release);world.releaseGround=release;
   color.wrapU=color.wrapV=Texture.CLAMP_ADDRESSMODE;
   detail.wrapU=detail.wrapV=Texture.WRAP_ADDRESSMODE;detail.gammaSpace=false;
   const material=world.floorMaterial;material.unfreeze();material.diffuseTexture?.dispose();

@@ -1,4 +1,4 @@
-import {MeshBuilder,StandardMaterial,Color3} from '@babylonjs/core';
+import {createPortalMist} from './portal-mist.js';
 import {MAP_PORTALS,portalAvailable,travelUrl} from './map-route.js';
 import {VILLAGE_GROUND_ROUTES,sampleGroundCurve} from './village-ground-layout.js';
 const exitSamples=sampleGroundCurve(VILLAGE_GROUND_ROUTES[1].points).filter(p=>p[1]>=40);
@@ -23,27 +23,22 @@ export function consumeTravel(storage,character,now=Date.now()){
     return {hp:Math.min(500,data.hp),potions:Math.max(0,Math.min(3,Math.floor(data.potions)))};
   }catch{return null;}
 }
-export function createMapPortal(world,{button,getState,onTravel,storage}){
+export function createMapPortal(world,{button,getState,onTravel,storage,persistTravel=true}){
   const portal=MAP_PORTALS[world.mapId];if(!portal)return null;
-  const material=new StandardMaterial('waystone-violet',world.scene);material.diffuseColor=new Color3(.42,.34,.58);material.emissiveColor=new Color3(.22,.17,.3);material.specularColor=Color3.Black();
-  const ring=MeshBuilder.CreateTorus('forest-travel-ring',{diameter:3.4,thickness:.075,tessellation:40},world.scene);
-  ring.position.set(portal.x,world.terrain.heightAt(portal.x,portal.z)+.12,portal.z);ring.material=material;ring.isPickable=false;
-  for(const angle of [0,Math.PI*.5,Math.PI,Math.PI*1.5]){
-    const stone=MeshBuilder.CreateCylinder('waystone',{height:.48,diameterTop:.16,diameterBottom:.26,tessellation:5},world.scene);
-    const x=portal.x+Math.cos(angle)*1.9,z=portal.z+Math.sin(angle)*1.9;stone.position.set(x,world.terrain.heightAt(x,z)+.24,z);stone.material=material;stone.isPickable=false;stone.freezeWorldMatrix();
-  }
-  ring.freezeWorldMatrix();material.freeze();button.hidden=true;
-  let available=false;
+  const mist=createPortalMist(world,portal);button.hidden=true;
+  let available=false,disposed=false;
   const activate=()=>{
-    const state=getState();if(!portalAvailable(state.position,portal,state))return;
-    try{storage?.setItem(key,JSON.stringify({destination:portal.destination,hp:state.hp,potions:state.potions,time:Date.now()}));}catch{}
+    const state=getState();if(disposed||!portalAvailable(state.position,portal,state))return;
+    if(persistTravel)try{storage?.setItem(key,JSON.stringify({destination:portal.destination,hp:state.hp,potions:state.potions,time:Date.now()}));}catch{}
     onTravel(travelUrl(location.href,portal.destination));
   };
   button.addEventListener('click',activate);
   const keyboard=event=>{if(event.code==='KeyT'&&!event.repeat&&!event.target?.closest?.('input,select,textarea,dialog'))activate();};
   document.addEventListener('keydown',keyboard);
-  world.scene.onDisposeObservable.addOnce(()=>{button.removeEventListener('click',activate);document.removeEventListener('keydown',keyboard);});
-  return {update(){
+  const dispose=()=>{if(disposed)return;disposed=true;button.hidden=true;button.removeEventListener('click',activate);document.removeEventListener('keydown',keyboard);world.scene.onDisposeObservable.remove(observer);mist.dispose();};
+  const observer=world.scene.onDisposeObservable.addOnce(dispose);
+  return {dispose,update(dt=0){
+    if(disposed)return;mist.update(dt);
     const state=getState(),near=state.position&&Math.hypot(state.position.x-portal.x,state.position.z-portal.z)<6;
     available=portalAvailable(state.position,portal,state);button.hidden=!near;button.disabled=!available;
     const label=available?`${portal.label} · T`:state.enemies>0?'전투 종료 후 이동 가능':'이동 지점에 가까이 가세요';

@@ -5,15 +5,17 @@ import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
+import {createMapTransition,carryPortalPose} from './map-transition.js';
+import {applyPlayerDetail} from './player-detail.js';
 import {FOREST_SPAWN,MAP_PORTALS,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
-import { createWorld } from './world.js';
+import { createWorld,replaceWorldMap } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
 import { NativeWarriorController } from './native-warrior.js';
 import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
-import { followTarget, combatFocus } from './camera-follow.js';
+import { followTarget, combatFocus,playerChinTarget } from './camera-follow.js';
 import { ARENA_RADIUS } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
 import { observeViewportSize } from './viewport-resize.js';
@@ -23,7 +25,7 @@ import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipment
 import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
-import {prepareStartupResources} from './startup-resources.js';
+import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
 import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
 import { loadVillage } from './village-environment.js';
@@ -72,6 +74,7 @@ const isForest=()=>character==='warrior-v4';
 const mapSpawn=()=>new URLSearchParams(location.search).get('arrival')==='portal'?(isForest()?FOREST_SPAWN:MAP_PORTALS['monster-forest'].arrival):(isForest()?FOREST_SPAWN:VILLAGE_SPAWN);
 let mapPortal;
 let mapDeparture;
+let mapTransition;
 const movementLimit=(position=actor.position)=>world?.mapId==='village'?villageTravelLimit(position,ARENA_RADIUS):ARENA_RADIUS;
 const villageHorizon=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageHorizon')==='1';
 const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(location.search).get('villageOverview')==='1';
@@ -269,7 +272,7 @@ async function loadCharacter() {
     const manifestName=playerTextureManifest(character,engine.getCaps());
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
-    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+1.1,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
+    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+1.46,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>loadingView.download(s),s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
     loadingView.preparing();
@@ -312,6 +315,7 @@ async function loadCharacter() {
       world.shadows.addShadowCaster(mesh, false);
     }
     world.lighting.registerMeshes(container.meshes);
+    applyPlayerDetail(container,world.camera);
     if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
@@ -458,14 +462,14 @@ function render(dt) {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    const center = isVillage() ? actor.position.add(new Vector3(0,1.1,0)) : reviewFocus ? reviewFocus.getAbsolutePosition().add(new Vector3(0, .12, 0)) : actor.position.add(new Vector3(0, 1.02, 0));
+    const center=playerChinTarget(actor,playerHead);
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('equip',{volume:.35});}
     goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
-    const focus=combatFocus(center,cameraBoss?.actor.position);
+    const focus=combatFocus(center,cameraBoss?.actor.position,world.camera.radius);
     const target = (isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
@@ -476,7 +480,7 @@ function render(dt) {
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
-    updateButtons();mapPortal?.update();
+    updateButtons();mapPortal?.update(dt);
   }
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
@@ -485,6 +489,13 @@ function render(dt) {
   damageNumbers?.update(dt,screenProjection);
   goldLootView.project(screenProjection);
   updateHealthBars();
+}
+
+function bindMapPortal(){
+  mapPortal?.dispose();
+  mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,
+    getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.livingCount,hp:boss.playerHp,potions:boss.potions.remaining}),
+    onTravel:url=>mapTransition.travel(url)});
 }
 
 try {
@@ -545,25 +556,60 @@ try {
     navigate:url=>location.replace(url),
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
   });
-  mapPortal=createMapPortal(world,{button:$('#map-travel'),storage:travelStorage,
-    getState:()=>({position:actor?.position,loading:!ready||loadingAsset,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.livingCount,hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:url=>mapDeparture.leave(url)});
+  mapTransition=createMapTransition({
+    prepare:()=>{
+      ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
+      frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();actionAudio.reset();
+      boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};
+      goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
+      combatResult=null;strikeSampler.reset();mapPortal?.dispose();mapPortal=null;
+      world.cancelResourceDownloads?.();
+    },
+    release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
+    load:async href=>{
+      const url=new URL(href),destination=url.searchParams.get('character');
+      replaceWorldMap(world,destination);character=destination;history.replaceState(null,'',url);
+      actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);
+      carryPortalPose(actor,world.camera,input.panOffset);
+      controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
+      animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
+      world.camera.setTarget(playerChinTarget(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),false,false,true);
+      world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate();
+      await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>loadingView.download(s),s=>loadingView.stream(s));
+      loadingView.preparing();await loadVillage(world);
+      world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
+      $('#build-tag').textContent=isForest()?'FOREST / 04':'VILLAGE / 03';
+      $('#character-name').textContent=isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
+      $('#character-subtitle').textContent=isForest()?'마물의 숲':'숲의 경계 마을';
+      $('#character-select').value=character;bindMapPortal();
+      world.scene.render();await world.scene.whenReadyAsync();world.scene.render();
+    },
+    finish:async()=>{
+      loadingAsset=false;ready=true;updateButtons();
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
+      frameLoop.setPaused(document.hidden||motionSpeedControls.isOpen()||$('#help-dialog').open||deathScreen.isOpen());
+      if(!document.hidden)canvas.focus({preventScroll:true});
+    },
+    onError:error=>{console.error('[Map transition]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
+  });
+  bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}finally{frameDiagnostics.endFrame();}
   });
-  const syncPlayback=()=>{if(mapDeparture?.departing)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
+  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
   // Preview camera, quality and equipment changes while settings pause combat.
-  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>{if(!mapDeparture?.departing)frameLoop.invalidate();});
+  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',syncPlayback);
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   window.addEventListener('pageshow',syncPlayback);
   window.addEventListener('focus',()=>{frameLoop.last=null;frameDiagnostics.suspend();});
   syncPlayback();
   observeViewportSize(canvas, () => {
-    if(mapDeparture?.departing)return;
+    if(mapDeparture?.departing||mapTransition?.busy)return;
     // A held joystick/attack belongs to the old coordinate system after rotation.
     input.reset();
     applyRenderQuality();
@@ -595,6 +641,7 @@ try {
     if (loadingAsset) return;
     const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', next);
+    if(next!==character&&isWorldCharacter(character)&&isWorldCharacter(next)){url.searchParams.set('arrival','portal');mapTransition.travel(url.href);return;}
     if(mapForCharacter(next)!==mapForCharacter(character)){mapDeparture.leave(url.href);return;}
     character=next;history.replaceState(null, '', url);
     loadCharacter();

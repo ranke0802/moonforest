@@ -77,11 +77,15 @@ export function installVillageGeometry(asset,container,level,world){
   }
 }
 
-export function loadStreamedVillage(world){
+export function loadStreamedVillage(world,{
+  initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},
+  ground=applyVillageGround,
+  loadContainer=(model,scene)=>SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),scene,null,'.gltf'),
+}={}){
   if(world.villagePromise)return world.villagePromise;
   world.villagePromise=(async()=>{
     const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];
-    await initializeVillageKtx2();await initializeVillageMeshopt();await applyVillageGround(world);
+    await initialize();await ground(world);
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.forest?0:20,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
@@ -91,12 +95,14 @@ export function loadStreamedVillage(world){
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const work=new VillageWorkBudget(()=>world.villageStreaming?.active,()=>disposed);
       await world.prefetchResources?.(config.resources);
-      const model=new URL(config.model,url),container=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),world.scene,null,'.gltf');
+      if(disposed)return;
+      const model=new URL(config.model,url),container=await loadContainer(model,world.scene);
       if(disposed){container.dispose();return;}containers.push(container);
       const meshes=geometry(container);prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
       world.lighting.registerMeshes(meshes);
       for(const mesh of meshes)await mesh.material.forceCompilationAsync(mesh,{useInstances:true});
+      if(disposed)return;
       installVillageGeometry(asset,container,level,world);
       const instances=records.filter(r=>r.placement.asset===id);
       for(const record of instances)if(!record.meshes.length){
@@ -111,6 +117,7 @@ export function loadStreamedVillage(world){
       world.lighting.registerMeshes(activeSources);
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
+      if(disposed)return;
       const covered=instances.filter(r=>r.blocksPlayerView&&(world.forest||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await work.yield();if(disposed)return;
@@ -119,8 +126,19 @@ export function loadStreamedVillage(world){
       stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
     };
     const streaming=new VillageGeometryStreaming(world,records,load,has,stats);world.villageStreaming=streaming;
-    const dispose=()=>{if(disposed)return;disposed=true;streaming.dispose();outlines.dispose();textures?.dispose();visibility.dispose();for(const r of records)r.root.dispose();for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();for(const c of containers)c.dispose();world.villagePrepared=null;};
-    world.scene.onDisposeObservable.addOnce(dispose);
+    let cleaned=false;
+    const stop=()=>{if(disposed)return;disposed=true;streaming.dispose();textures?.dispose();};
+    const cleanup=()=>{
+      if(cleaned)return;cleaned=true;outlines.dispose();visibility.dispose();
+      for(const r of records)r.root.dispose();
+      for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
+      for(const c of containers)c.dispose();
+      world.scene.onDisposeObservable.remove(disposeObserver);
+      Object.assign(world,{villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,villageRenderRecords:null,releaseEnvironment:null});
+    };
+    const dispose=()=>{stop();cleanup();};
+    const disposeObserver=world.scene.onDisposeObservable.addOnce(dispose);
+    world.releaseEnvironment=async()=>{stop();await Promise.allSettled([streaming.pending,textures?.pendingTask].filter(Boolean));cleanup();};
     try{
       await streaming.initial(plan);
       textures=new VillageTextureStreaming(world,assets,records,url,stats);

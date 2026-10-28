@@ -1,18 +1,16 @@
-import { isVillageRoute, VILLAGE_RADIUS } from './village-layout.js';
-// The route is fixed for a scene lifetime. Switching into/out of v3 reloads it.
-import {isForestRoute,FOREST_RADIUS} from './map-route.js';
-const forest=isForestRoute(),village=isVillageRoute()||forest;
-// Keep movement, spawning and authored displacements on the same arena.
-export const ARENA_RADIUS = forest ? FOREST_RADIUS : village ? VILLAGE_RADIUS : 22;
-export const ENEMY_ARENA_RADIUS = ARENA_RADIUS - .5;
-export const VIEW_DISTANCE = village ? 65 : 32;
-// Only cheap static scenery extends beyond the existing gameplay render range.
-export const SCENERY_VIEW_DISTANCE = village ? 105 : 60;
-// The skyline is a single small static mesh. Tree LOD/culling and gameplay keep
-// their own shorter ranges; this far plane does not extend those render ranges.
-export const SKYLINE_VIEW_DISTANCE = village ? 350 : 220;
-export const FOG_START = village ? 88 : 52;
-export const FOG_END = SCENERY_VIEW_DISTANCE;
+import {VILLAGE_RADIUS} from './village-layout.js';
+import {FOREST_RADIUS,isWorldCharacter} from './map-route.js';
+// Live bindings keep every movement/combat module on the current map without
+// replacing the document (which would release fullscreen and orientation lock).
+export let ARENA_RADIUS,ENEMY_ARENA_RADIUS,VIEW_DISTANCE,SCENERY_VIEW_DISTANCE,SKYLINE_VIEW_DISTANCE,FOG_START,FOG_END;
+export function setWorldCharacter(character){
+  const village=isWorldCharacter(character);
+  ARENA_RADIUS=character==='warrior-v4'?FOREST_RADIUS:village?VILLAGE_RADIUS:22;
+  ENEMY_ARENA_RADIUS=ARENA_RADIUS-.5;VIEW_DISTANCE=village?65:32;
+  SCENERY_VIEW_DISTANCE=village?105:60;SKYLINE_VIEW_DISTANCE=village?350:220;
+  FOG_START=village?88:52;FOG_END=SCENERY_VIEW_DISTANCE;
+}
+setWorldCharacter(new URLSearchParams(globalThis.location?.search??'').get('character'));
 
 export function withinRenderRange(camera, position, padding = 0) {
   const distance = VIEW_DISTANCE + padding;

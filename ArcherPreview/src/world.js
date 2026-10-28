@@ -4,7 +4,7 @@ import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
 import { TerrainHeightField } from './terrain.js';
 import { createTerrainGround } from './terrain-mesh.js';
-import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END } from './world-limits.js';
+import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END,setWorldCharacter } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
 import { createVillageTerrain } from './village-terrain.js';
@@ -17,6 +17,7 @@ import {createMonsterForestTerrain} from './monster-forest-terrain.js';
 
 export function createWorld(engine, {village=false,forest=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
   village=village||forest;
+  setWorldCharacter(forest?'warrior-v4':village?'warrior-v3':'archer');
   const scene = new Scene(engine);
   // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
   scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
@@ -107,5 +108,23 @@ export function createWorld(engine, {village=false,forest=false,touchDevice=matc
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
-  return { forest,mapId:forest?'monster-forest':village?'village':'training',environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined,scene, camera, shadows, lighting, navigation, terrain, sky, mountains, village, villagePolicy, touchDevice, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { ground,forest,mapId:forest?'monster-forest':village?'village':'training',environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined,scene, camera, shadows, lighting, navigation, terrain, sky, mountains, village, villagePolicy, touchDevice, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+}
+
+// Called after the old streamed environment has drained and released its GPU
+// resources. Keep the same scene, canvas, camera, player and terrain identity.
+export function replaceWorldMap(world,character){
+  if(!world.village||!['warrior-v3','warrior-v4'].includes(character))throw new Error('Unsupported map transition');
+  const forest=character==='warrior-v4';setWorldCharacter(character);
+  world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
+  Object.assign(world.terrain,forest?createMonsterForestTerrain():createVillageTerrain());
+  Object.assign(world,{forest,mapId:forest?'monster-forest':'village',environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined,environment:null});
+  world.navigation=new VillageNavigation([...(forest?forestObstacles():villageObstacles()),...TRAINING_OBSTACLES]);
+  world.navigation.grid(.34,ENEMY_ARENA_RADIUS);world.navigation.grid(.7,ENEMY_ARENA_RADIUS);
+  world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
+  world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
+  world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;
+  world.ground.isPickable=false;world.ground.freezeWorldMatrix();world.lighting.registerMeshes([world.ground]);
+  world.scene.fogColor=forest?new Color3(.40,.42,.46):SKY_HORIZON.clone();
+  world.scene.imageProcessingConfiguration.exposure=forest?1.08:1.15;
 }

@@ -80,11 +80,11 @@ export class VillageTextureStreaming {
     this.syncStats();
     if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
     this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.syncStats();
-    return this.load(id).catch(error=>{
+    return this.pendingTask=this.load(id).catch(error=>{
       if(this.disposed||error.name==='AbortError')return;
       this.failed.add(id);this.stats.highTextureError=`${id}: ${error.message??error}`;
       console.warn('Village high texture stopped; no automatic retry.',id,error);
-    }).finally(()=>{this.pending=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});
+    }).finally(()=>{this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});
   }
   async load(id){
     const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
@@ -92,6 +92,7 @@ export class VillageTextureStreaming {
     const slots=config.shading==='toon-color'?{albedo:'albedoTexture'}:{albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
     try{
       if(this.world?.prefetchResources)await this.world.prefetchResources(config.resources);
+      if(this.disposed)return;
       for(const [role,slot]of Object.entries(slots)){
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>t.dispose());return;}

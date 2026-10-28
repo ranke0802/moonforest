@@ -104,6 +104,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
   const targets = records.map(record => record.target);
   return {
     targets,
+    relocate(){for(const record of records){terrain?.place(record.root.position);record.bullseye.computeWorldMatrix(true);record.target.aimPoint.copyFrom(record.bullseye.getAbsolutePosition());}},
     applyModel(asset) {
       if(disposed)return;
       for(const record of records){
