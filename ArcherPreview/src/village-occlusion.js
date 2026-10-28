@@ -38,7 +38,7 @@ export class VillageOcclusion {
   }
   reveal(group){
     group.hiddenSamples=0;
-    for(const r of group.items){r.occluded=false;r.root.setEnabled(r.cellActive!==false);}
+    for(const r of group.items){r.occluded=false;r.root.setEnabled(r.cellActive!==false||!!r.shadowCaster);}
   }
   beforeRender(){
     if(!this.groups.length||this.disabled)return;
@@ -62,7 +62,7 @@ export class VillageOcclusion {
           const visible=Boolean(engine.getQueryResult(g.query));g.pending=false;
           if(g.epoch!==this.epoch){this.reveal(g);continue;}
           g.hiddenSamples=stableOcclusion(g.hiddenSamples,visible);
-          for(const r of g.items){r.occluded=g.hiddenSamples>=2;r.root.setEnabled(r.cellActive!==false&&!r.occluded);}
+          for(const r of g.items){r.occluded=g.hiddenSamples>=2;r.root.setEnabled((r.cellActive!==false&&!r.occluded)||!!r.shadowCaster);}
         }else if(now-g.lastQuery>350){this.reveal(g);}
       }
       let submitted=0;

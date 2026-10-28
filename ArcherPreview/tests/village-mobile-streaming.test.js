@@ -56,7 +56,7 @@ for(const [orientation,width,height]of [['landscape',780,360],['portrait',360,78
   }
   const visibility=new VillageVisibility(world,records,{touch:true}),fade=new TreeOcclusion(records.filter(r=>Math.hypot(r.placement.x,r.placement.z)<54).map(r=>r.root)),stats={},ink=new VillageOutlines(world,records,stats);
   t.after(()=>{ink.dispose();visibility.dispose();});
-  const drawn=new Set(),levels=new Set(),lastLevel=new WeakMap();let transitions=0,examined=0,treeDraws=0;
+  const drawn=new Set(),shadowDrawn=new Set(),levels=new Set(),lastLevel=new WeakMap();let transitions=0,examined=0,treeDraws=0,shadowDraws=0;
   const register=()=>{
    for(const asset of assets)for(const source of new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])){
     if(sources.has(source))continue;sources.add(source);ink.sourceFor(source);
@@ -64,6 +64,7 @@ for(const [orientation,width,height]of [['landscape',780,360],['portrait',360,78
     source._processRendering=function(mesh,subMesh,effect,fill,batch,...args){
      const isBase=!ink.drawing&&!scene._isInIntermediateRendering(),instances=batch.visibleInstances[subMesh._id]??[];
      const result=original.call(this,mesh,subMesh,effect,fill,batch,...args);
+     if(scene._isInIntermediateRendering())for(const m of instances)shadowDrawn.add(m);
      if(isBase&&instances.length){
       assert.equal(engine.getDepthWrite(),true);assert.equal(subMesh.indexCount,this.getTotalIndices(),'complete topology for '+this.name);
       const data=batch.parent.instancesData;let offset=batch.renderSelf[subMesh._id]?16:0;
@@ -89,13 +90,14 @@ for(const [orientation,width,height]of [['landscape',780,360],['portrait',360,78
    camera.setTarget(target.add(new Vector3(0,1.1,0)));camera.alpha=frame*.077;camera.beta=frame%42<21?.92:1.18;camera.radius=9+(1+Math.sin(frame*.055))*10;
    camera.getViewMatrix();camera.getProjectionMatrix();lighting.follow(target);visibility.update(camera.globalPosition,target,1/30);fade.update(camera.globalPosition,target,1/30);ink.next=0;
    const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),expected=records.filter(r=>r.root.isEnabled()).flatMap(r=>r.meshes).filter(m=>m.isInFrustum(planes));
-   drawn.clear();scene.render();
+   drawn.clear();shadowDrawn.clear();scene.render();
    for(const m of expected){assert.ok(drawn.has(m),'missing visible base '+m.name+' frame '+frame);examined++;if(m.name.includes('tree-'))treeDraws++;}
+   for(const m of visibility.cast){assert.ok(shadowDrawn.has(m),'missing shadow caster '+m.name+' frame '+frame);shadowDraws++;}
    assert.ok(stats.outlineInstances<=32);assert.ok(visibility.stats.shadowCasters<=28);
   }
   let matrixBytes=0;
   for(const source of sources){const passes=Object.values(source._instanceDataStorage.renderPasses);assert.ok(passes.length<=2);for(const pass of passes)matrixBytes+=pass.instancesData?.byteLength??0;}
   assert.ok(matrixBytes<524288);assert.ok(examined>3000);assert.ok(treeDraws>1000);assert.deepEqual([...levels].sort(),[0,1,2]);assert.ok(transitions>100);
-  t.diagnostic(JSON.stringify({orientation,frames:210,visibleDraws:examined,treeDraws,lodTransitions:transitions,matrixBytes}));
+  t.diagnostic(JSON.stringify({orientation,frames:210,visibleDraws:examined,treeDraws,shadowDraws,lodTransitions:transitions,matrixBytes}));
  });
 }

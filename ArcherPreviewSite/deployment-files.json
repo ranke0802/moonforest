@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "bytes": 351988798,
+  "bytes": 351989905,
   "files": [
     {
       "path": "assets/audio.json",
@@ -4798,9 +4798,9 @@
       "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343"
     },
     {
-      "path": "assets/index-BhTbthI9.js",
-      "bytes": 230600,
-      "sha256": "35af8167cce693d1e0e76f67a38332ab5cba3e21d9bae9d6ba7b443fdaa31c32"
+      "path": "assets/index-CodvHVkb.js",
+      "bytes": 231707,
+      "sha256": "154cc3c72bdffc4395156b87074377147b37c480c24d96370a050d38492a05f8"
     },
     {
       "path": "assets/index-CYTI_Fli.css",
@@ -4875,7 +4875,7 @@
     {
       "path": "index.html",
       "bytes": 51041,
-      "sha256": "840282225995d94acca072521ebc0f004a8eb89412eab61de82f674493d3bab2"
+      "sha256": "b1f87b22ba4a5dc5d696972341105cda55f3d1e43e5e1843c435980994d667e6"
     },
     {
       "path": "KTX2_NOTICES.txt",

@@ -13,7 +13,7 @@ export class VillageVisibility {
     this.camera=new Vector3(Infinity,Infinity,Infinity);this.view=null;
     world.camera.getViewMatrix();world.camera.getProjectionMatrix();
     this.planes=Frustum.GetPlanes(world.camera.getTransformationMatrix());
-    this.cast=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
+    this.cast=new Set();this.castRecords=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
     for(const record of records){
       const key=cellKey(record.placement.x,record.placement.z);
       if(!this.cells.has(key))this.cells.set(key,{records:[],min:new Vector3(Infinity,Infinity,Infinity),max:new Vector3(-Infinity,-Infinity,-Infinity),active:true});
@@ -44,12 +44,20 @@ export class VillageVisibility {
       // Generous frustum margin prevents camera motion from revealing empty cells.
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<(this.world.villageOverview?260:villageRenderRange(this.touch).cellCull)&&inFrustum;
-      if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(active&&!r.occluded);}cell.active=active;}
+      if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled((active&&!r.occluded)||!!r.shadowCaster);}cell.active=active;}
       if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded)activeInstances++;}
     }
     if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch):[];
+      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch,this.castRecords):[];
+      const nextRecords=new Set(candidates);
+      // Camera culling must not switch off nearby shadow depth contributors.
+      // Keep only this bounded set enabled; native camera frustum/depth tests
+      // still reject their off-screen/covered color pixels.
+      for(const r of new Set([...this.castRecords,...nextRecords])){
+        r.shadowCaster=nextRecords.has(r);r.root.setEnabled((r.cellActive!==false&&!r.occluded)||r.shadowCaster);
+      }
+      this.castRecords=nextRecords;
       const next=new Set(candidates.flatMap(r=>r.meshes));
       for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
       for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
@@ -58,5 +66,5 @@ export class VillageVisibility {
     }
     Object.assign(this.stats,{activeCells,activeInstances});
   }
-  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();}
+  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();}
 }

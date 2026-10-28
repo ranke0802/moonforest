@@ -38,6 +38,7 @@ export class SceneLighting {
     this.highDirection=new Vector3(.65,-1,-.45);
     this.direction = key.direction.negate().normalize();
     this.focus = Vector3.Zero();
+    this.requestedFocus=Vector3.Zero();this.shadowForward=Vector3.Zero();this.shadowRight=Vector3.Zero();this.shadowUp=Vector3.Zero();this.worldUp=Vector3.Up();
     this.receivers = new Set();
     this.painted = new WeakSet();
     this.registeredMaterials = new WeakSet();
@@ -87,11 +88,21 @@ export class SceneLighting {
     const materials=new Set([...this.receivers].map(mesh=>mesh.material).filter(Boolean));
     for(const material of materials)material.markDirty(true);
   }
-  follow(position){
-    const x=Math.round(position.x/2)*2,z=Math.round(position.z/2)*2;
-    if(this.focus.x===x&&this.focus.z===z)return;
-    this.focus.set(x,0,z);
-    this.key.position.copyFrom(this.key.direction.scale(-this.lightDistance).add(this.focus));
+  follow(position,force=false){
+    this.requestedFocus.set(position.x,0,position.z);
+    let x=Math.round(position.x/2)*2,y=0,z=Math.round(position.z/2)*2;
+    if(this.village){
+      // Quantize in the LIGHT'S plane, in whole shadow-map texels. World-space
+      // 2m jumps change the sampling phase and make stationary edges shimmer.
+      const forward=this.shadowForward,right=this.shadowRight,up=this.shadowUp;
+      this.key.direction.normalizeToRef(forward);Vector3.CrossToRef(this.worldUp,forward,right);right.normalize();Vector3.CrossToRef(forward,right,up);
+      const texel=this.key.shadowFrustumSize/this.shadows.getShadowMap().getSize().width;
+      const u=Math.round(Vector3.Dot(this.requestedFocus,right)/texel)*texel,v=Math.round(Vector3.Dot(this.requestedFocus,up)/texel)*texel,d=Vector3.Dot(this.requestedFocus,forward);
+      x=right.x*u+up.x*v+forward.x*d;y=right.y*u+up.y*v+forward.y*d;z=right.z*u+up.z*v+forward.z*d;
+    }
+    if(!force&&this.focus.x===x&&this.focus.y===y&&this.focus.z===z)return;
+    this.focus.set(x,y,z);
+    this.key.position.set(x-this.key.direction.x*this.lightDistance,y-this.key.direction.y*this.lightDistance,z-this.key.direction.z*this.lightDistance);
     // Also invalidate explicitly after a projection move (e.g. resume/quality
     // change) so a previously cached map can never use the new light matrix.
     this.shadows.getShadowMap().resetRefreshCounter();
@@ -102,7 +113,7 @@ export class SceneLighting {
     this.high = quality === 'high';
     this.shadowsActive=this.village?quality!=='battery':this.high;
     this.key.direction.copyFrom(this.high?this.highDirection:this.baseDirection);
-    this.key.position.copyFrom(this.key.direction.scale(-this.lightDistance).add(this.focus));
+    this.follow(this.requestedFocus,true);
     this.direction.copyFrom(this.key.direction).negateInPlace().normalize();
     this.scene.shadowsEnabled = this.shadowsActive;
     this.ambient.intensity = this.high ? .65 : 1.05;
