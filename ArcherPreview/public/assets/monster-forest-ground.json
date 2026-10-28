@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "span": 160,
+  "color": {
+    "url": "./content/6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 588850,
+    "codec": "etc1s",
+    "alpha": true,
+    "gpuBlockBytes": 16
+  },
+  "detail": {
+    "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 119227
+  },
+  "soilMaskAlphaRange": [
+    64,
+    255
+  ],
+  "gpuBytesWithMips": 5941931,
+  "extraDrawCalls": 0,
+  "detailSamples": 2,
+  "method": "curved-forest-paths-clearings-and-leaf-litter",
+  "resources": [
+    "./content/6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+    "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
+  ],
+  "compression": "KTX2 color; lossless linear packed detail"
+}

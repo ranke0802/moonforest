@@ -22,6 +22,7 @@
       <canvas id="viewport" aria-label="궁수 3D 검수 화면. WASD로 이동하고 J로 공격합니다." tabindex="0"></canvas>
       <div class="vignette" aria-hidden="true"></div><div id="damage-numbers" aria-hidden="true"></div>
       <div id="loot-labels" aria-hidden="true"></div>
+      <button id="map-travel" class="map-travel" type="button" data-ui hidden>이동</button>
       <output id="gold-balance" class="gold-balance" aria-label="보유 골드" hidden>0 G</output>
       <header class="topbar" data-ui>
         <a class="brand" href="./" aria-label="Moonforest 처음으로"><span class="moon-mark" aria-hidden="true">☾</span><span>MOONFOREST<small>CHARACTER PLAYGROUND</small></span></a>
@@ -29,7 +30,7 @@
       </header>
 
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
-        <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · 기존 버전</option><option value="warrior-v2">전사 v2 · 보스 전투</option><option value="warrior-v3">전사 v3 · 숲의 경계 마을</option></select>
+        <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · 기존 버전</option><option value="warrior-v2">전사 v2 · 보스 전투</option><option value="warrior-v3">전사 v3 · 숲의 경계 마을</option><option value="warrior-v4">전사 v4 · 마물의 숲</option></select>
         <details id="equipment-panel" class="equipment-panel" open hidden>
           <summary>장비 <span>개별 선택 · 능력치</span></summary>
           <div class="equipment-options">

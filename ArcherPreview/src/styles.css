@@ -164,3 +164,5 @@
 @media(max-width:480px){.game-settings>header{top:-16px}}
 
 #stream-loading{position:absolute;left:16px;bottom:12px;z-index:5;padding:7px 10px;border-radius:6px;background:#08090dcc;color:#d2cfdb;font-size:10px;font-variant-numeric:tabular-nums;pointer-events:none}#stream-loading>div{height:2px;background:#33303d;margin-top:5px;min-width:130px}#stream-progress{display:block;height:100%;width:0;background:#b8a8db}
+
+.map-travel{position:absolute;z-index:12;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 20px;background:#302a40ee;color:#e4dbea;border:1px solid #a998ba;border-radius:12px;font:inherit;font-size:13px;touch-action:manipulation;cursor:pointer}.map-travel[hidden]{display:none}.map-travel:disabled{color:#b7b1be;border-color:#665d70}@media(max-width:600px){.map-travel{bottom:150px;max-width:70%;font-size:12px;padding:10px 14px}}

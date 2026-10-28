@@ -4,6 +4,8 @@ import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@baby
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {playerTextureManifest} from './player-texture-profile.js';
+import {FOREST_SPAWN,MAP_PORTALS,mapForCharacter,isWorldCharacter} from './map-route.js';
+import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
 import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
@@ -59,12 +61,16 @@ for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>a
 const loading = $('#loading');
 const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
-const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3'];
+const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4'];
 let character = new URLSearchParams(location.search).get('character');
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
-const isV2 = () => character === 'warrior-v2' || character === 'warrior-v3';
-const isVillage = () => character === 'warrior-v3';
+const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
+const isVillage = () => isWorldCharacter(character);
+const isForest=()=>character==='warrior-v4';
+const mapSpawn=()=>new URLSearchParams(location.search).get('arrival')==='portal'?(isForest()?FOREST_SPAWN:MAP_PORTALS['monster-forest'].arrival):(isForest()?FOREST_SPAWN:VILLAGE_SPAWN);
+let mapPortal;
+const movementLimit=(position=actor.position)=>world?.mapId==='village'?villageTravelLimit(position,ARENA_RADIUS):ARENA_RADIUS;
 const villageHorizon=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageHorizon')==='1';
 const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(location.search).get('villageOverview')==='1';
 const villageReviewEnabled=import.meta.env.DEV&&isVillage()&&new URLSearchParams(location.search).get('villageReview')==='1';
@@ -81,6 +87,8 @@ let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+let travelStorage;
+try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
 const goldLoot=new GoldLoot({storage:equipmentStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 let goldLootView;
@@ -199,7 +207,7 @@ function resetBeforeBoss(){
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
-  if(isVillage()){actor.position.set(VILLAGE_SPAWN.x,0,VILLAGE_SPAWN.z);world.terrain.place(actor.position);}
+  if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
   animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
   applyHitFlash(container.meshes,0);resetCamera();updateButtons();canvas.focus({preventScroll:true});
 }
@@ -259,7 +267,7 @@ async function loadCharacter() {
     const manifestName=playerTextureManifest(character,engine.getCaps());
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
-    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(VILLAGE_SPAWN.x,world.terrain.heightAt(VILLAGE_SPAWN.x,VILLAGE_SPAWN.z)+1.1,VILLAGE_SPAWN.z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
+    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+1.1,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>loadingView.download(s),s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
     loadingView.preparing();
@@ -281,7 +289,7 @@ async function loadCharacter() {
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
     actor = new TransformNode('player-world-transform', world.scene);
-    if(isVillage()){actor.position.set(VILLAGE_SPAWN.x,0,VILLAGE_SPAWN.z);world.terrain.place(actor.position);}
+    if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
     // World movement is separate from exported root motion, including the authored death fall.
     for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = actor;
     actor.scaling.setAll(config.scale || 1);
@@ -320,10 +328,10 @@ async function loadCharacter() {
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
-    $('#character-name').textContent = isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
-    $('#character-subtitle').textContent = isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
+    $('#character-name').textContent = isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-subtitle').textContent = isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
     $('.character-caption').textContent = isV2() ? '한손 베기 1타 ↔ 베고 찌르기 2타 · 길게: 심판 3타' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
@@ -341,6 +349,7 @@ async function loadCharacter() {
     $('#dodge-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
+    if(isVillage()){const travel=consumeTravel(travelStorage,character);if(travel){boss.combat.hp=travel.hp;boss.potions.remaining=travel.potions;}}
     resetCamera(); updateButtons();
     await skyReady;
     // Keep the black curtain through shader readiness and the first correctly
@@ -365,7 +374,8 @@ async function loadCharacter() {
 }
 
 function constrainPlayerPosition(previous){
-  world.navigation.constrain(actor.position,previous,.32,ARENA_RADIUS);
+  world.navigation.constrain(actor.position,previous,.32,movementLimit(previous));
+  if(world.mapId==='village')clampVillageExit(actor.position,previous);
 }
 
 function updateHealthBars() {
@@ -394,7 +404,8 @@ function render(dt) {
       const beforeRoll=actor.position.clone();
       const distance=dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge);
       actor.position.x+=rollDirection.x*distance;actor.position.z+=rollDirection.z*distance;
-      constrainDodge(actor.position,beforeRoll,world.navigation,boss.encounters);
+      constrainDodge(actor.position,beforeRoll,world.navigation,boss.encounters,movementLimit(beforeRoll));
+      if(world.mapId==='village')clampVillageExit(actor.position,beforeRoll);
     }
     if(isV2()){
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
@@ -462,7 +473,7 @@ function render(dt) {
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
-    updateButtons();
+    updateButtons();mapPortal?.update();
   }
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
@@ -479,7 +490,7 @@ try {
   engine.maxFPS=60;
   engine.renderEvenInBackground=false;
   applyRenderQuality();
-  world = createWorld(engine,{village:isVillage(),touchDevice});
+  world = createWorld(engine,{village:isVillage(),forest:isForest(),touchDevice});
   world.villageOverview=isVillage()&&villageOverview;
   if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
@@ -524,7 +535,10 @@ try {
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
-  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:!villageReviewEnabled});
+  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:false});
+  mapPortal=createMapPortal(world,{button:$('#map-travel'),storage:travelStorage,
+    getState:()=>({position:actor?.position,loading:!ready||loadingAsset,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.livingCount,hp:boss.playerHp,potions:boss.potions.remaining}),
+    onTravel:url=>{ready=false;input.reset();cancelAttackInput();audio.stopAll();loadingView.begin();location.assign(url);}});
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}finally{frameDiagnostics.endFrame();}
@@ -571,7 +585,7 @@ try {
     if (loadingAsset) return;
     const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', next);
-    if((next==='warrior-v3')!==isVillage()){location.assign(url.href);return;}
+    if(mapForCharacter(next)!==mapForCharacter(character)){location.assign(url.href);return;}
     character=next;history.replaceState(null, '', url);
     loadCharacter();
   });

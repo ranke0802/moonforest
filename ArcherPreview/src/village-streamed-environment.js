@@ -19,11 +19,11 @@ const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','woo
 
 export async function prepareVillageStart(world){
   if(world.villagePrepared)return world.villagePrepared;
-  const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/village.json`,location.href);
+  const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${world.environmentManifest??'village'}.json`,location.href);
   const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('마을 목록을 불러오지 못했습니다.');
   const manifest=await response.json();if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));
-  const records=VILLAGE_PLACEMENTS.map(placement=>{
+  const records=(world.placements??VILLAGE_PLACEMENTS).map(placement=>{
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
     const {root,facing}=createVillageTransform(world,placement,asset.config),bounds=placementBounds(world,placement,asset.config);
     return {root,facing,placement,bounds,min:bounds.min,max:bounds.max,meshes:[],blocksPlayerView:asset.cover};
@@ -82,7 +82,7 @@ export function loadStreamedVillage(world){
   world.villagePromise=(async()=>{
     const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];
     await initializeVillageKtx2();await initializeVillageMeshopt();await applyVillageGround(world);
-    const stats=world.environment={ready:false,mode:'village',sourceAssets:assets.size,loadedAssets:0,homes:20,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
+    const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.forest?0:20,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false;
@@ -111,7 +111,7 @@ export function loadStreamedVillage(world){
       world.lighting.registerMeshes(activeSources);
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
-      const covered=instances.filter(r=>r.blocksPlayerView&&Math.hypot(r.placement.x,r.placement.z)<54);
+      const covered=instances.filter(r=>r.blocksPlayerView&&(world.forest||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await work.yield();if(disposed)return;
         world.treeOcclusion.refreshRoots([record.root]);

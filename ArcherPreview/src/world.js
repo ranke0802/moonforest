@@ -12,7 +12,11 @@ import { villageObstacles } from './village-layout.js';
 import { VillageNavigation } from './village-navigation.js';
 import { villageRenderRange } from './village-policy.js';
 
-export function createWorld(engine, {village=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
+import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
+import {createMonsterForestTerrain} from './monster-forest-terrain.js';
+
+export function createWorld(engine, {village=false,forest=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
+  village=village||forest;
   const scene = new Scene(engine);
   // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
   scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
@@ -27,6 +31,7 @@ export function createWorld(engine, {village=false,touchDevice=matchMedia('(poin
   scene.fogColor = SKY_HORIZON.clone();
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
+  if(forest){scene.fogColor=new Color3(.40,.42,.46);scene.imageProcessingConfiguration.exposure=1.08;}
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = villagePolicy?.maxCameraRadius??14;
@@ -53,7 +58,7 @@ export function createWorld(engine, {village=false,touchDevice=matchMedia('(poin
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
 
-  const terrain=village?createVillageTerrain():new TerrainHeightField();
+  const terrain=forest?createMonsterForestTerrain():village?createVillageTerrain():new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
@@ -94,9 +99,9 @@ export function createWorld(engine, {village=false,touchDevice=matchMedia('(poin
   }
   for(const mat of [ringMaterial,moteMaterial])mat.freeze();
   const Navigation=village?VillageNavigation:ArenaNavigation;
-  const navigation=new Navigation([...(village?villageObstacles():FOREST_OBSTACLES),...TRAINING_OBSTACLES]);
+  const navigation=new Navigation([...(forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES),...TRAINING_OBSTACLES]);
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
-  return { scene, camera, shadows, lighting, navigation, terrain, sky, mountains, village, villagePolicy, touchDevice, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
+  return { forest,mapId:forest?'monster-forest':village?'village':'training',environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined,scene, camera, shadows, lighting, navigation, terrain, sky, mountains, village, villagePolicy, touchDevice, floorMaterial:material, tick(time) { sky.tick(time); for (const mote of motes) mote.mesh.position.y = mote.y + Math.sin(time * .3 + mote.phase) * .12; } };
 }

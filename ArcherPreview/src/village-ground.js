@@ -28,7 +28,7 @@ export class VillageGroundDetail extends MaterialPluginBase {
 }
 
 export async function applyVillageGround(world){
-  const url=new URL(`${import.meta.env.BASE_URL}assets/village-ground.json`,location.href);
+  const url=new URL(`${import.meta.env.BASE_URL}assets/${world.groundManifest??'village-ground'}.json`,location.href);
   const response=await fetch(url,{cache:'no-cache'});
   if(!response.ok)throw new Error('마을 바닥 재질을 불러오지 못했습니다.');
   const config=await response.json();

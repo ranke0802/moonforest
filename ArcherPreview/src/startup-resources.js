@@ -8,7 +8,7 @@ export async function prepareStartupResources(world,playerUrl,onProgress,onStrea
   };
   const player=await read(playerUrl.pathname.split('/').at(-1).replace('.json',''));
   const [village,sizes,ground,sky,environment,ktx,meshopt]=await Promise.all([
-    prepareVillageStart(world),read('resource-sizes'),read('village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
+    prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
   const resources=[...player.resources,...village.resources,...ground.resources,sky.texture,...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   const downloads=new ResourceDownloads(sizes.files,base);
   const state=await downloads.prepare(resources,onProgress);

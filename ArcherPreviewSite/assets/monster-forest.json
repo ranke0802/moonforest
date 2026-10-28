@@ -1,0 +1,1339 @@
+{
+  "version": 1,
+  "id": "monster-forest",
+  "complete": true,
+  "availableAssetCount": 10,
+  "assets": {
+    "forest-01-sickly-oak": {
+      "name": "병든 활엽수",
+      "category": "tree",
+      "bounds": [
+        5.158224105834961,
+        5.999999963468905,
+        2.838710904121399
+      ],
+      "height": 5.999999963468905,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+          "resources": [
+            "./content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+            "./content/dfb1f38721f3ba1019e02dfd56b6a49b22e3a8837325141907b77613ea2be229.bin",
+            "./content/7fa1a921d6e3275daf514e7930627eb64ed7ef59cc80148bf639584c76236bd2.ktx2"
+          ],
+          "bytes": 489959,
+          "triangles": 5000,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.572968006134033,
+              -1.4086027145385742,
+              3.6531094593783564e-8
+            ],
+            [
+              2.5852560997009277,
+              1.4301081895828247,
+              6
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d.gltf",
+          "resources": [
+            "content/1948583a0613325769a0727e9f261a91fe49082f4e5803f4aeeaaee7babc77a8.bin",
+            "content/7fa1a921d6e3275daf514e7930627eb64ed7ef59cc80148bf639584c76236bd2.ktx2",
+            "content/f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d.gltf"
+          ],
+          "bytes": 353830,
+          "triangles": 2499,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.572968006134033,
+              -1.4086027145385742,
+              3.6531094593783564e-8
+            ],
+            [
+              2.5852560997009277,
+              1.4301081895828247,
+              6
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a.gltf",
+          "resources": [
+            "content/8c6ed0341d6a3b1825e383b1574a4fa9fe51af332050af09134a5f01e7ea40d9.bin",
+            "content/15ef88c95e646f5c51be6398d1553f5615f8f7c6e9528a0c980aa76488010729.ktx2",
+            "content/3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a.gltf"
+          ],
+          "bytes": 189785,
+          "triangles": 1799,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.572968006134033,
+              -1.4086027145385742,
+              -0.018302563577890396
+            ],
+            [
+              2.5852560997009277,
+              1.4301081895828247,
+              6
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+        "resources": [
+          "./content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+          "./content/dfb1f38721f3ba1019e02dfd56b6a49b22e3a8837325141907b77613ea2be229.bin",
+          "./content/7fa1a921d6e3275daf514e7930627eb64ed7ef59cc80148bf639584c76236bd2.ktx2"
+        ],
+        "bytes": 489959,
+        "triangles": 5000,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -2.572968006134033,
+            -1.4086027145385742,
+            3.6531094593783564e-8
+          ],
+          [
+            2.5852560997009277,
+            1.4301081895828247,
+            6
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/0f2114619348f165a6d6f67d795f1bad15e6a510a61948463feaf7956a950304.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2387324,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/0f2114619348f165a6d6f67d795f1bad15e6a510a61948463feaf7956a950304.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-02-dead-tree": {
+      "name": "고사목",
+      "category": "tree",
+      "bounds": [
+        5.055612087249756,
+        6.000222004135139,
+        2.026658058166504
+      ],
+      "height": 6.000222004135139,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+          "resources": [
+            "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+            "./content/46c2d8e65e3ab7d122cd935d2d278212a8b1498f98f433ff2573fc484bea3f0f.bin",
+            "./content/430b14d7709572fb19790405ed62979d3ca96194dfd480db99f0fe973e098a70.ktx2"
+          ],
+          "bytes": 419400,
+          "triangles": 4994,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.526397943496704,
+              -1.013329029083252,
+              -0.00022200413513928652
+            ],
+            [
+              2.5292141437530518,
+              1.013329029083252,
+              6
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04.gltf",
+          "resources": [
+            "content/e72f67355218e6c7d5d7687a7768e8ea5b3ee5755bd5b59b6f3774342e3b13af.bin",
+            "content/430b14d7709572fb19790405ed62979d3ca96194dfd480db99f0fe973e098a70.ktx2",
+            "content/f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04.gltf"
+          ],
+          "bytes": 354625,
+          "triangles": 2734,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.525939702987671,
+              -1.007641315460205,
+              -0.0008477587252855301
+            ],
+            [
+              2.52750301361084,
+              1.0155702829360962,
+              5.99970006942749
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690.gltf",
+          "resources": [
+            "content/6c10fa90dbdeee52ae5b387ff53ea05c2305f633e13028207ae4249c45704aa9.bin",
+            "content/271e5bd608a87e685f27e6fcea0edb5366aed9996af37c43935c0fae9147e0a0.ktx2",
+            "content/30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690.gltf"
+          ],
+          "bytes": 153838,
+          "triangles": 1383,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.525939702987671,
+              -1.0082380771636963,
+              0.00007834184361854568
+            ],
+            [
+              2.522657871246338,
+              1.0117604732513428,
+              5.999574661254883
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+        "resources": [
+          "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+          "./content/46c2d8e65e3ab7d122cd935d2d278212a8b1498f98f433ff2573fc484bea3f0f.bin",
+          "./content/430b14d7709572fb19790405ed62979d3ca96194dfd480db99f0fe973e098a70.ktx2"
+        ],
+        "bytes": 419400,
+        "triangles": 4994,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -2.526397943496704,
+            -1.013329029083252,
+            -0.00022200413513928652
+          ],
+          [
+            2.5292141437530518,
+            1.013329029083252,
+            6
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2866044,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-03-fallen-log": {
+      "name": "속이 빈 쓰러진 통나무",
+      "category": "prop",
+      "bounds": [
+        4.5,
+        1.150843617092017,
+        1.0520667433738708
+      ],
+      "height": 1.150843617092017,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+          "resources": [
+            "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+            "./content/6beabd065d46e46d79acbf4bf68a205fad39cc85e50f43a2f35d323fdc343b67.bin",
+            "./content/9aa2a460f6fe74cda30fd31033956f8cc3a94d5b8474002f7966a394deb33d71.ktx2"
+          ],
+          "bytes": 419061,
+          "triangles": 4999,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.2522988319396973,
+              -0.5271841883659363,
+              3.208275867194743e-9
+            ],
+            [
+              2.2477011680603027,
+              0.5248825550079346,
+              1.150843620300293
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5.gltf",
+          "resources": [
+            "content/1299190fe346a7e4abb55b5421307d93ec937859c865621a031de659a5b5c155.bin",
+            "content/9aa2a460f6fe74cda30fd31033956f8cc3a94d5b8474002f7966a394deb33d71.ktx2",
+            "content/6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5.gltf"
+          ],
+          "bytes": 365091,
+          "triangles": 2749,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.2522988319396973,
+              -0.5201543569564819,
+              0.0008660468738526106
+            ],
+            [
+              2.253201723098755,
+              0.5250170230865479,
+              1.1486268043518066
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1.gltf",
+          "resources": [
+            "content/573defc19ac7e4816e4acbea85c59cfb5a28ffbf8c0e293b041018457b442dc0.bin",
+            "content/c07809328e6136a535b26604221c4d4ed5d912b8de22e1bb548e5b5deaabc21b.ktx2",
+            "content/73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1.gltf"
+          ],
+          "bytes": 156323,
+          "triangles": 1399,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -2.2445757389068604,
+              -0.5132220983505249,
+              0.0008660468738526106
+            ],
+            [
+              2.2490813732147217,
+              0.5266040563583374,
+              1.1427791118621826
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+        "resources": [
+          "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+          "./content/6beabd065d46e46d79acbf4bf68a205fad39cc85e50f43a2f35d323fdc343b67.bin",
+          "./content/9aa2a460f6fe74cda30fd31033956f8cc3a94d5b8474002f7966a394deb33d71.ktx2"
+        ],
+        "bytes": 419061,
+        "triangles": 4999,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -2.2522988319396973,
+            -0.5271841883659363,
+            3.208275867194743e-9
+          ],
+          [
+            2.2477011680603027,
+            0.5248825550079346,
+            1.150843620300293
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 3138796,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-04-poison-fungi": {
+      "name": "독버섯 군락",
+      "category": "plant",
+      "bounds": [
+        0.6909146308898926,
+        0.5500000220174517,
+        0.44343291223049164
+      ],
+      "height": 0.5500000220174517,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+          "resources": [
+            "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+            "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
+            "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+          ],
+          "bytes": 402167,
+          "triangles": 5000,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3444054424762726,
+              -0.22276830673217773,
+              -1.0096522728986201e-8
+            ],
+            [
+              0.34650918841362,
+              0.2206646054983139,
+              0.550000011920929
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf",
+          "resources": [
+            "content/c978366b3afca0c7106c285262d009bd016fa24938b04eb3262fb7cc73c37f61.bin",
+            "content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2",
+            "content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf"
+          ],
+          "bytes": 352403,
+          "triangles": 2750,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3435744643211365,
+              -0.22125114500522614,
+              -0.00011275491124251857
+            ],
+            [
+              0.3457062542438507,
+              0.22115157544612885,
+              0.5497400164604187
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf",
+          "resources": [
+            "content/98e999961066978594983198ecded798f3668b4a06162be4df2af64bf9a3949f.bin",
+            "content/13c5b26e4ee84b3b3f577bb3a8b162a1bb43c012ab6db9b8933f9f01d20d5699.ktx2",
+            "content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf"
+          ],
+          "bytes": 164530,
+          "triangles": 2000,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3435744643211365,
+              -0.22125114500522614,
+              -0.0006617243052460253
+            ],
+            [
+              0.34366631507873535,
+              0.22149628400802612,
+              0.5497400164604187
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+        "resources": [
+          "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+          "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
+          "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+        ],
+        "bytes": 402167,
+        "triangles": 5000,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -0.3444054424762726,
+            -0.22276830673217773,
+            -1.0096522728986201e-8
+          ],
+          [
+            0.34650918841362,
+            0.2206646054983139,
+            0.550000011920929
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2998974,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-05-thorn-bramble": {
+      "name": "가시덤불",
+      "category": "plant",
+      "bounds": [
+        2.4799774885177612,
+        1.299999966575708,
+        0.9424675107002258
+      ],
+      "height": 1.299999966575708,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "resources": [
+            "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+            "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
+            "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+          ],
+          "bytes": 385247,
+          "triangles": 3981,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf",
+          "resources": [
+            "content/3cdda882035ace405f2a514348a6504f4171648c4adc6b5bb66623c3cecad420.bin",
+            "content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
+            "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf"
+          ],
+          "bytes": 368264,
+          "triangles": 3405,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf",
+          "resources": [
+            "content/ca0216b15837500d56f7178fc6a211ad55f2816b4c10714a18688d2159e55175.bin",
+            "content/a1c7c71b8cda477099ef43958bfb12afc1e65f64cffc19ebb79e9056b666bfbc.ktx2",
+            "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf"
+          ],
+          "bytes": 219289,
+          "triangles": 3066,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+        "resources": [
+          "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
+          "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+        ],
+        "bytes": 385247,
+        "triangles": 3981,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -1.2387257814407349,
+            -0.47186487913131714,
+            -1.4259423863904885e-8
+          ],
+          [
+            1.2412517070770264,
+            0.4706026315689087,
+            1.2999999523162842
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2215782,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-06-witch-cave-mouth": {
+      "name": "마녀의 동굴 입구",
+      "category": "rock",
+      "bounds": [
+        7.4653730392456055,
+        5.500000135872796,
+        5.55332612991333
+      ],
+      "height": 5.500000135872796,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+          "resources": [
+            "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+            "./content/476b372f8a0e4ba1c6173b16ddc4bc9272dd106605c340d016b5ec193a1952af.bin",
+            "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2"
+          ],
+          "bytes": 390562,
+          "triangles": 4809,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.7307798862457275,
+              -2.7557108402252197,
+              -1.3587279568127997e-7
+            ],
+            [
+              3.734593152999878,
+              2.7976152896881104,
+              5.5
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf",
+          "resources": [
+            "content/bf8a88edafe894cca38317d3ff3ba8f68fb505d540dbb25f5802f2d70dbaa8b8.bin",
+            "content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2",
+            "content/523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf"
+          ],
+          "bytes": 340250,
+          "triangles": 2605,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.7277302742004395,
+              -2.7451705932617188,
+              -0.003274668473750353
+            ],
+            [
+              3.7295312881469727,
+              2.8003523349761963,
+              5.49618673324585
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/65e9dc8899c7c096f936ba43fc233cb64887ff36ec8cf7be71c011ba644e8fb6.gltf",
+          "resources": [
+            "content/20dfef11af2089173208e1f4a81b404e837d67f52e05e7ca724869890c7fc6df.bin",
+            "content/8e5aa143fcb9068001da328111ab3f545e7d07fe4a2f826de8b9701c24ce661b.ktx2",
+            "content/65e9dc8899c7c096f936ba43fc233cb64887ff36ec8cf7be71c011ba644e8fb6.gltf"
+          ],
+          "bytes": 147244,
+          "triangles": 1305,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.7277302742004395,
+              -2.745540142059326,
+              -0.0008814574684947729
+            ],
+            [
+              3.7295312881469727,
+              2.7550556659698486,
+              5.452304363250732
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+        "resources": [
+          "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+          "./content/476b372f8a0e4ba1c6173b16ddc4bc9272dd106605c340d016b5ec193a1952af.bin",
+          "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2"
+        ],
+        "bytes": 390562,
+        "triangles": 4809,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -3.7307798862457275,
+            -2.7557108402252197,
+            -1.3587279568127997e-7
+          ],
+          [
+            3.734593152999878,
+            2.7976152896881104,
+            5.5
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2965442,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "tree-02-slender-pine": {
+      "name": "침엽수",
+      "category": "tree",
+      "height": 12,
+      "bounds": [
+        7.039412021636963,
+        15,
+        7.891507148742676
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249.gltf",
+          "resources": [
+            "./content/13592054946b33997a701577cf14d0175dbedc9296c39d295677ef8aa32fa569.bin",
+            "./content/e31b69980fe617807ecd27ae96459a7d91865abdd6b85027cc9a285b42513207.ktx2",
+            "./content/cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249.gltf"
+          ],
+          "triangles": 5003,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 860337
+        },
+        {
+          "level": 1,
+          "model": "./content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "resources": [
+            "./content/a7ff7377958d2b7ea4f80bd05e7cda0ad9ff0fef87e404e01122c2e68ab099b1.bin",
+            "./content/0ae3360a6a3d75c9a923864a0c9913c14df2433513263e6fa799831af0948bdb.ktx2",
+            "./content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf"
+          ],
+          "triangles": 3649,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 412205
+        },
+        {
+          "level": 2,
+          "model": "./content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf",
+          "resources": [
+            "./content/516e240aed56b3cda64c648aa0eda7290c0299832d690df9c062084cbb618042.bin",
+            "./content/cfbc08b297aa71bfa8f9eeaa65be2d64a53b3177d93f1e3eb0119aa84e89ab68.ktx2",
+            "./content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf"
+          ],
+          "triangles": 3000,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 259418
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+        "resources": [
+          "./content/13592054946b33997a701577cf14d0175dbedc9296c39d295677ef8aa32fa569.bin",
+          "./content/0ae3360a6a3d75c9a923864a0c9913c14df2433513263e6fa799831af0948bdb.ktx2",
+          "./content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf"
+        ],
+        "triangles": 5003,
+        "textureSize": 1024,
+        "normalMap": false,
+        "bytes": 471185
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 1720066,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2"
+        ],
+        "colorResolution": 4096,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7",
+      "treeRefinement": {
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
+        "sourceModelSha256": "b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118",
+        "originalTriangles": [
+          5352,
+          3848,
+          3671
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            3.7308000326156616,
+            4.536846995353699
+          ],
+          "rootWidthAfter": [
+            2.038594961166382,
+            2.142397701740265
+          ],
+          "trunkWidthBefore": [
+            6.155935287475586,
+            7.754019260406494
+          ],
+          "trunkWidthAfter": [
+            4.794400215148926,
+            5.75468635559082
+          ]
+        }
+      }
+    },
+    "rock-01-mossy-boulder": {
+      "name": "이끼 둥근 바위",
+      "category": "rock",
+      "height": 2.2,
+      "bounds": [
+        1.5569519996643066,
+        1,
+        1.6407029628753662
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "resources": [
+            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
+            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 361154
+        },
+        {
+          "level": 1,
+          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "resources": [
+            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
+            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
+            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
+            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+          ],
+          "triangles": 2626,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 174895
+        },
+        {
+          "level": 2,
+          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "resources": [
+            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
+            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
+            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
+            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
+            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+          ],
+          "triangles": 1156,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 72848
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "resources": [
+          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+        ],
+        "triangles": 5255,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 216760
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 751327,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+    },
+    "rock-02-jagged-outcrop": {
+      "name": "솟은 바위",
+      "category": "rock",
+      "height": 4.5,
+      "bounds": [
+        4.221744060516357,
+        4,
+        3.0721168518066406
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+          "resources": [
+            "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+            "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
+            "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+          ],
+          "triangles": 5268,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 369163
+        },
+        {
+          "level": 1,
+          "model": "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "resources": [
+            "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
+            "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
+            "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
+            "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+            "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
+            "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf"
+          ],
+          "triangles": 2634,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 177112
+        },
+        {
+          "level": 2,
+          "model": "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "resources": [
+            "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
+            "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
+            "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
+            "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+            "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
+            "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf"
+          ],
+          "triangles": 1158,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 74553
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+        "resources": [
+          "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+          "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
+          "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf"
+        ],
+        "triangles": 5268,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 219765
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 795702,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541"
+    },
+    "bush": {
+      "name": "올리브색 관목",
+      "category": "plant",
+      "height": 1.3,
+      "bounds": [
+        5.589236259460449,
+        4,
+        4.572238922119141
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7.gltf",
+          "resources": [
+            "./content/1fe18627f184aa54136bbadb82655ae3afbed76f67f2bed1244db6a65320934a.bin",
+            "./content/54aaaf295fac616edf36e92f0584766a627f64f2f1716efa51a0e95998579490.ktx2",
+            "./content/6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7.gltf"
+          ],
+          "triangles": 4359,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 325978
+        },
+        {
+          "level": 1,
+          "model": "./content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "resources": [
+            "./content/3b1941d19b3a3efda6303192f595a82069e10dfab7ceb5d1e0d393407812cd8c.bin",
+            "./content/014a1d8dc9a6077eae9098ebb33c35a26528fcd8f75d003c096719a2f9990a69.bin",
+            "./content/770df73d53fe40325b2b3879cf63228f2a479b35d82074a35bf81b40d787d13b.bin",
+            "./content/309589d1d4b2bd34abdd26233024cbb18a43d4339c4b5d302917a147e845c10a.bin",
+            "./content/279352bd7c3937ffbffe90fb2b7431eea8ec657d56b971723ad8098ba5a2efad.ktx2",
+            "./content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf"
+          ],
+          "triangles": 3314,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 247912
+        },
+        {
+          "level": 2,
+          "model": "./content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "resources": [
+            "./content/942c90b0f5cd33c95cfda20c49e0db1ced22967bbc39a0f753c0209ab3468f4e.bin",
+            "./content/cab65e7173cd4aa045f9ff8534e3a3e0926440f2efc0061adf428b82f99811e2.bin",
+            "./content/7d91bfa84c53e3302edf4235fd50c8fb761776002d25653f66e6544197ed6b92.bin",
+            "./content/5969659b765132134b20c31cc506c462e724ee6ec63f4767c22094bc2478142e.bin",
+            "./content/1da44f0dc4d3b943a9fe9b8b998b0a4f98141db855defe27050b95e7c5f475b2.ktx2",
+            "./content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf"
+          ],
+          "triangles": 2238,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 167452
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf",
+        "resources": [
+          "./content/1fe18627f184aa54136bbadb82655ae3afbed76f67f2bed1244db6a65320934a.bin",
+          "./content/279352bd7c3937ffbffe90fb2b7431eea8ec657d56b971723ad8098ba5a2efad.ktx2",
+          "./content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf"
+        ],
+        "triangles": 4359,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 230829
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/f4ba6f16cf6779f1c2a4e79b581ba2ec3841f4900ea5a95ab14d4018f94df699.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 363685,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/f4ba6f16cf6779f1c2a4e79b581ba2ec3841f4900ea5a95ab14d4018f94df699.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "06cebcabad154b8fbc2d893106b875c45de5f513fd4e56b1c83517c885c5a3cc"
+    }
+  },
+  "homes": 0,
+  "placementCount": 891,
+  "newSourceModels": 6,
+  "reusedSourceModels": 4,
+  "newPaidCalls": 0,
+  "compression": {
+    "format": "KTX2/Basis",
+    "defaultCodec": "etc1s",
+    "maxResolution": 4096
+  },
+  "meshCompression": {
+    "format": "EXT_meshopt_compression",
+    "lossless": true
+  },
+  "geometryLod": {
+    "nearColorResolution": 4096
+  },
+  "groundManifest": "monster-forest-ground"
+}
