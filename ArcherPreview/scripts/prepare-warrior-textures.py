@@ -22,6 +22,8 @@ def main():
     gltf = json.loads(raw[20:20 + size])
     content = ROOT / 'public/assets/content'
     content.mkdir(parents=True, exist_ok=True)
+    profile_path = ROOT / 'assets/warrior-v3-textures.json'
+    previous = json.loads(profile_path.read_text(encoding='utf-8')) if profile_path.exists() else {}
     records = {}
     for entry in gltf['images']:
         view = gltf['bufferViews'][entry['bufferView']]
@@ -32,24 +34,25 @@ def main():
             continue
         with Image.open(io.BytesIO(source)) as opened:
             original = opened.copy()
-        original_size = original.size
         bounded = original
-        if max(original_size) > 4096:
-            ratio = 4096 / max(original_size)
-            bounded = original.resize(tuple(round(d * ratio) for d in original_size), Image.Resampling.LANCZOS)
+        assert max(original.size) <= 8192
+        # Player-only exception: preserve the source 8K image bytes exactly.
+        # Never upscale the smaller equipment maps or reuse the old 4K downsample.
+        cached = previous.get('images', {}).get(key)
+        if max(original.size) > 4096 or entry['mimeType'] == 'image/jpeg':
+            webp = source
+        elif cached and not cached['resized'] and (content / cached['uri']).exists():
+            webp = (content / cached['uri']).read_bytes()
+            assert digest(webp) == Path(cached['uri']).stem
+        else:
+            encoded = io.BytesIO()
+            bounded.save(encoded, 'WEBP', lossless=True, quality=100, method=6, exact=True)
+            webp = encoded.getvalue()
         # Lossless WebP must preserve RGB even underneath fully transparent pixels.
-        encoded = io.BytesIO()
-        bounded.save(encoded, 'WEBP', lossless=True, quality=100, method=6, exact=True)
-        webp = encoded.getvalue()
         with Image.open(io.BytesIO(webp)) as decoded:
             assert decoded.size == bounded.size
             assert decoded.convert(bounded.mode).tobytes() == bounded.tobytes(), 'WebP pixel mismatch'
-        if bounded is original:
-            fallback, mime = source, entry['mimeType']
-        else:
-            encoded = io.BytesIO()
-            bounded.save(encoded, 'PNG', optimize=True)
-            fallback, mime = encoded.getvalue(), 'image/png'
+        fallback, mime = source, entry['mimeType']
         if len(webp) < len(fallback):
             data, mime = webp, 'image/webp'
         else:
@@ -60,10 +63,10 @@ def main():
         record = dict(uri=uri, mimeType=mime, width=bounded.width, height=bounded.height,
                       sourceWidth=original.width, sourceHeight=original.height,
                       sourceBytes=len(source), bytes=len(data), resized=bounded is not original,
-                      pixelExactAfterResize=True, webpCandidateBytes=len(webp))
+                      pixelExactAfterResize=True, pixelExactSource=True, webpCandidateBytes=len(webp))
         records[key] = record
         print(json.dumps(record), flush=True)
-    profile = dict(version=1, sourceSha256=SOURCE_SHA, maxSize=4096, images=records,
+    profile = dict(version=2, sourceSha256=SOURCE_SHA, maxSize=8192, preserveSourceResolution=True, images=records,
                    beforeBytes=sum(r['sourceBytes'] for r in records.values()),
                    afterBytes=sum(r['bytes'] for r in records.values()))
     (ROOT / 'assets/warrior-v3-textures.json').write_text(json.dumps(profile, indent=2) + '\n', encoding='utf-8')

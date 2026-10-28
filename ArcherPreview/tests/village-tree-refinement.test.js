@@ -3,16 +3,18 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {packTreeGeometry,TREE_IDS} from '../scripts/pack-village-tree-refinement.mjs';
 import {hash} from '../scripts/resource-pack.js';
+import {readAccessor} from '../scripts/web-geometry.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 
 const assets=new URL('../public/assets/',import.meta.url);
 const read=url=>JSON.parse(readFileSync(url));
 const manifest=read(new URL('village.json',assets));
-const gltf=lod=>read(new URL(lod.model,assets));
-const numbers=(g,index)=>{
-  const a=g.accessors[index],v=g.bufferViews[a.bufferView],buffer=readFileSync(new URL('./content/'+g.buffers[v.buffer].uri,assets));
-  const size={SCALAR:1,VEC2:2,VEC3:3}[a.type],step=a.componentType===5126?4:2,start=(v.byteOffset??0)+(a.byteOffset??0);
-  return Array.from({length:a.count*size},(_,i)=>a.componentType===5126?buffer.readFloatLE(start+i*step):buffer.readUInt16LE(start+i*step));
-};
+const packs=new Map(),filesByModel=new Map();
+for(const id of TREE_IDS)for(const lod of [...manifest.assets[id].lods,manifest.assets[id].mobileNear]){
+  const pack=await readRuntimeGltf(new URL(lod.model,assets));packs.set(lod.model,pack.gltf);filesByModel.set(pack.gltf,pack.files);
+}
+const gltf=lod=>packs.get(lod.model);
+const numbers=(g,index)=>Array.from(readAccessor(g,filesByModel.get(g),index));
 
 test('refined tree packing rejects corrupt vertex channels and out-of-range indices',()=>{
   const raw={positions:[[0,0,0],[1,0,0],[0,1,0]],normals:[[0,0,1],[0,0,1],[0,0,1]],uvs:[[0,0],[1,0],[0,1]],indices:[0,1,2]};

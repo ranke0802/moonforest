@@ -1,6 +1,6 @@
 {
   "sourceSha256": "1ac9d3f9fd4bc5775555298c5c6b07e6712e831ab68c91f8c7914bc15f19b63a",
-  "model": "4549fc094d1b287a0951225af9f4e308d6225d2c9a037023e4ef9c4011488914.gltf",
+  "model": "c7c98d313d9247f27a405081b410c2d77b583759175bfa433d29c76258bcfdb8.gltf",
   "verification": {
     "clips": 9,
     "geometryAndSkinAccessorsPreserved": 167,
@@ -28,35 +28,38 @@
     }
   ],
   "textures": {
-    "version": 1,
+    "version": 2,
     "sourceSha256": "1ac9d3f9fd4bc5775555298c5c6b07e6712e831ab68c91f8c7914bc15f19b63a",
-    "maxSize": 4096,
+    "maxSize": 8192,
+    "preserveSourceResolution": true,
     "images": {
       "873d45ce427c0ad551aa42bb7f95e1b43bc23dd9c0bae5d01b7a30c11521d7f0": {
-        "uri": "3a794b7f8a920ad16f93ad4d8da9860850265ce72a96c2b265dc76f0a3e711b2.webp",
-        "mimeType": "image/webp",
-        "width": 4096,
-        "height": 4096,
+        "uri": "873d45ce427c0ad551aa42bb7f95e1b43bc23dd9c0bae5d01b7a30c11521d7f0.jpg",
+        "mimeType": "image/jpeg",
+        "width": 8192,
+        "height": 8192,
         "sourceWidth": 8192,
         "sourceHeight": 8192,
         "sourceBytes": 4228743,
-        "bytes": 8301350,
-        "resized": true,
+        "bytes": 4228743,
+        "resized": false,
         "pixelExactAfterResize": true,
-        "webpCandidateBytes": 8301350
+        "pixelExactSource": true,
+        "webpCandidateBytes": 4228743
       },
       "79f107187ed61f15718804c4b58519d627a58167c96260065d83bddbdef22367": {
-        "uri": "64f0d5651f6af9b7f72a666850c4fc904f53b4b07cab0fca2159cf8385987db5.webp",
-        "mimeType": "image/webp",
-        "width": 4096,
-        "height": 4096,
+        "uri": "79f107187ed61f15718804c4b58519d627a58167c96260065d83bddbdef22367.png",
+        "mimeType": "image/png",
+        "width": 8192,
+        "height": 8192,
         "sourceWidth": 8192,
         "sourceHeight": 8192,
         "sourceBytes": 24050223,
-        "bytes": 5301300,
-        "resized": true,
+        "bytes": 24050223,
+        "resized": false,
         "pixelExactAfterResize": true,
-        "webpCandidateBytes": 5301300
+        "pixelExactSource": true,
+        "webpCandidateBytes": 24050223
       },
       "0fdc6ec5e870fca6897db01912e82d557497a460d9801252ab9480979c9e364c": {
         "uri": "af0bf0a37590b47254b851098399f8d8cd610a058ca3d34b183f6d894423fb8e.webp",
@@ -69,6 +72,7 @@
         "bytes": 4545544,
         "resized": false,
         "pixelExactAfterResize": true,
+        "pixelExactSource": true,
         "webpCandidateBytes": 4545544
       },
       "d82fbf7bb747dd39ec5f71cfce4b6eef1a570a6a493724982a74003fcc042faf": {
@@ -82,6 +86,7 @@
         "bytes": 3162202,
         "resized": false,
         "pixelExactAfterResize": true,
+        "pixelExactSource": true,
         "webpCandidateBytes": 3162202
       },
       "77cca4b886c9f1588e9bfe68b738a1a4b5a4c11c874392e48cb7d123f1ac7768": {
@@ -95,6 +100,7 @@
         "bytes": 1280602,
         "resized": false,
         "pixelExactAfterResize": true,
+        "pixelExactSource": true,
         "webpCandidateBytes": 1280602
       },
       "1b598bdacb190784db72153d5a48b96210602ffb3496a5d3c0e72524a8083fc6": {
@@ -108,11 +114,12 @@
         "bytes": 1147986,
         "resized": false,
         "pixelExactAfterResize": true,
+        "pixelExactSource": true,
         "webpCandidateBytes": 1147986
       }
     },
     "beforeBytes": 44827572,
-    "afterBytes": 23738984
+    "afterBytes": 38415300
   },
-  "bytes": 37601744
+  "bytes": 52277877
 }

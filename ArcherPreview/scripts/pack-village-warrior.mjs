@@ -53,12 +53,12 @@ export async function packVillageWarrior(){
   const result=await simplifyGeometry(source.gltf,source.files,warriorWebPolicy);
   const base=resolve(root,'public/assets');await mkdir(resolve(base,'content'),{recursive:true});
   const profile=JSON.parse(await readFile(resolve(root,'assets/warrior-v3-textures.json'),'utf8'));
-  assert.equal(profile.sourceSha256,R6_SHA256);assert.equal(profile.maxSize,4096);
+  assert.equal(profile.sourceSha256,R6_SHA256);assert.equal(profile.maxSize,8192);assert.equal(profile.preserveSourceResolution,true);
   const replaced=new Map(),webpImages=new Set();
   result.files.delete(result.model);
   for(const [index,image]of result.gltf.images.entries()){
     const oldUri=image.uri,record=profile.images[hash(result.files.get(oldUri)?.data??source.files.get(oldUri).data)];
-    assert.ok(record&&record.width<=4096&&record.height<=4096&&record.pixelExactAfterResize,'missing validated 4K texture');
+    assert.ok(record&&record.width<=8192&&record.height<=8192&&record.pixelExactSource&&!record.resized&&record.width===record.sourceWidth&&record.height===record.sourceHeight,'missing source-resolution player texture');
     const bytes=await readFile(resolve(base,'content',record.uri));
     assert.equal(hash(bytes),record.uri.split('.')[0]);assert.equal(bytes.length,record.bytes);
     replaced.set(oldUri,record.uri);image.uri=record.uri;image.mimeType=record.mimeType;
@@ -78,7 +78,7 @@ export async function packVillageWarrior(){
   const config=JSON.parse(await readFile(resolve(base,'warrior-v2.json'),'utf8'));
   config.model='./content/'+result.model;config.resources=[...result.files.keys()].map(n=>'./content/'+n);
   config.version='전사 v3 · V6 망토 R6 수정본 / 9개 모션';config.modelRevision='v6-cape-r6-fix1-'+R6_SHA256.slice(0,8);
-  config.textureProfile={maxSize:4096,encoding:'lossless-webp',sourceSha256:R6_SHA256};
+  config.textureProfile={maxSize:8192,preserveSourceResolution:true,encoding:'original-8k-and-lossless-webp',sourceSha256:R6_SHA256};
   await writeFile(resolve(base,'warrior-v3.json'),JSON.stringify(config,null,2)+'\n');
   const report={sourceSha256:R6_SHA256,model:result.model,verification,stats:result.stats,textures:profile,bytes:[...result.files.values()].reduce((n,f)=>n+f.data.length,0)};
   await writeFile(resolve(root,'reports/village-warrior-r6.json'),JSON.stringify(report,null,2)+'\n');

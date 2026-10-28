@@ -6,6 +6,7 @@ import { CharacterAnimator } from '../src/animation.js';
 import { WarriorV2Controller as CharacterController } from '../src/warrior-v2.js';
 import { splitGlb } from '../scripts/resource-pack.js';
 import { readAccessor } from '../scripts/web-geometry.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 
 // Exercise the old V2 source and the actual V3 deployment buffers without a browser.
 for (const version of ['v2','v3']) {
@@ -14,8 +15,7 @@ const config=JSON.parse(readFileSync(manifestUrl));
 let gltf,files;
 if(version==='v2')({gltf,files}=splitGlb(readFileSync(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url))));
 else {
-  const url=new URL(config.model,manifestUrl);gltf=JSON.parse(readFileSync(url));
-  files=new Map(gltf.buffers.map(b=>[b.uri,{data:readFileSync(new URL(b.uri,url))}]));
+  ({gltf,files}=await readRuntimeGltf(new URL(config.model,manifestUrl)));
 }
 const names = config.animations;
 const channels = new Map();

@@ -4,12 +4,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import { Matrix, Mesh, NullEngine, Quaternion, Scene, Vector3, VertexBuffer } from '@babylonjs/core';
 import { createVillageTransform } from '../src/village-environment.js';
 import { VILLAGE_PLACEMENTS } from '../src/village-layout.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 
 const assetsUrl=new URL('../public/assets/',import.meta.url);
 const manifestUrl=['village.json','village-fixture.json'].map(n=>new URL(n,assetsUrl)).find(existsSync);
 const manifest=manifestUrl?JSON.parse(readFileSync(manifestUrl)):null;
-function positions(modelUrl){
-  const gltf=JSON.parse(readFileSync(modelUrl)),buffers=gltf.buffers.map(b=>readFileSync(new URL(b.uri,modelUrl))),parents=new Map(),matrices=new Map(),out=[];
+async function positions(modelUrl){
+  const {gltf,files}=await readRuntimeGltf(modelUrl),buffers=gltf.buffers.map(b=>files.get(b.uri)?.data),parents=new Map(),matrices=new Map(),out=[];
   gltf.nodes.forEach((node,i)=>(node.children??[]).forEach(child=>parents.set(child,i)));
   const world=i=>{
     if(matrices.has(i))return matrices.get(i);
@@ -28,12 +29,12 @@ function positions(modelUrl){
   return out;
 }
 
-test('approved wagon/cart vertices, front correction and actual runtime transforms agree',t=>{
+test('approved wagon/cart vertices, front correction and actual runtime transforms agree',async t=>{
   if(!manifest?.assets['covered-wagon']||!manifest.assets.handcart)return t.skip('wagon/cart generation not ready');
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;
   t.after(()=>{scene.dispose();engine.dispose();});
   for(const id of ['covered-wagon','handcart']){
-    const config=manifest.assets[id],vertices=positions(new URL(config.lods[0].model,manifestUrl));
+    const config=manifest.assets[id],vertices=await positions(new URL(config.lods[0].model,manifestUrl));
     assert.ok(Math.abs(config.frontYawOffset-Math.PI/2)<1e-8);
     const rotation=Matrix.RotationY(config.frontYawOffset),min=new Vector3(Infinity,Infinity,Infinity),max=min.negate();
     for(let i=0;i<vertices.length;i+=3){const p=Vector3.TransformCoordinates(Vector3.FromArray(vertices,i),rotation);min.minimizeInPlace(p);max.maximizeInPlace(p);}
