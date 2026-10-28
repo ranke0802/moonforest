@@ -19,7 +19,7 @@ test('resource packaging: changing only animation data retains all geometry and 
 
 function serviceWorker({failWrite=false}={}){
  const listeners={},stored=new Map();let downloads=0,status=200;
- const cache={async match(request){return stored.get(request.url)?.clone();},async put(request,response){if(failWrite)throw new Error('quota');stored.set(request.url,response);}};
+ const cache={async match(request){return stored.get(typeof request==='string'?request:request.url)?.clone();},async put(request,response){if(failWrite)throw new Error('quota');stored.set(typeof request==='string'?request:request.url,response);}};
  const context={URL,Map,Response,console,setTimeout,self:{registration:{scope:'https://example.test/ArcherPreviewSite/'},clients:{claim(){}},skipWaiting(){},addEventListener(type,fn){listeners[type]=fn;}},caches:{async open(){return cache;}},async fetch(){downloads++;await new Promise(r=>setTimeout(r,2));return new Response('resource',{status});}};
  vm.runInNewContext(readFileSync(new URL('../public/resource-cache.js',import.meta.url),'utf8'),context);
  return {get downloads(){return downloads;},set status(v){status=v;},stored,load(name){let result;listeners.fetch({request:new Request(`https://example.test/ArcherPreviewSite/assets/content/${name}`),respondWith(p){result=p;}});return result;}};
@@ -33,6 +33,20 @@ test('persistent resource cache: failures are not stored; denied storage still l
  const sw=serviceWorker();sw.status=404;assert.equal((await sw.load(a)).status,404);assert.equal(sw.stored.size,0);
  sw.status=200;await sw.load(a);assert.equal(sw.downloads,2);assert.equal(sw.stored.size,1);
  const denied=serviceWorker({failWrite:true});assert.equal(await (await denied.load(a)).text(),'resource');
+});
+test('content hash cache ignores revision strings across deployments',async()=>{
+ const sw=serviceWorker();await sw.load(a+'?rev=old');await sw.load(a+'?rev=new');await sw.load(a);assert.equal(sw.downloads,1);assert.equal(sw.stored.size,1);
+});
+test('worker returns the body stream before cache writing finishes, so download progress is live',async()=>{
+ const listeners={};let release,writes=0,lifetime;
+ const writing=new Promise(resolve=>{release=resolve;});
+ const context={URL,Map,Response,console,self:{registration:{scope:'https://example.test/ArcherPreviewSite/'},addEventListener(t,fn){listeners[t]=fn;}},caches:{async open(){return {async match(){},async put(){writes++;await writing;}};}},async fetch(){return new Response('stream');}};
+ vm.runInNewContext(readFileSync(new URL('../public/resource-cache.js',import.meta.url),'utf8'),context);
+ let response;listeners.fetch({request:new Request('https://example.test/ArcherPreviewSite/assets/content/'+a),respondWith(p){response=p;},waitUntil(p){lifetime=p;}});
+ const result=await Promise.race([response,new Promise((_,reject)=>setTimeout(()=>reject(new Error('Body blocked on cache write')),500))]);
+ assert.equal(await result.text(),'stream');assert.equal(writes,1);release();await lifetime;
+ let forwarded;listeners.fetch({request:new Request('https://example.test/ArcherPreviewSite/assets/content/'+b,{headers:{'X-Moonforest-Cache-Writer':'page'}}),respondWith(p){forwarded=p;}});
+ assert.equal(await (await forwarded).text(),'stream');assert.equal(writes,1,'page prefetch has only one cache writer');
 });
 
 test('audio cache: concurrent cues fetch once, reload reuses bytes, changed content fetches once',async()=>{

@@ -75,7 +75,14 @@ export class TreeOcclusion {
       if (!surfaces.has(geometry)) surfaces.set(geometry,new TreeViewSurface(mesh));
       return surfaces.get(geometry);
     };
-    this.trees = roots.map(root => {
+    this.surfaceFor=surfaceFor;this.byRoot=new Map();this.trees=[];this.refreshRoots(roots);
+    this.checkIn = 0;
+    this.head = new Vector3(); this.chest = new Vector3();
+    this.localCamera=new Vector3();this.localTarget=new Vector3();
+  }
+  refreshRoots(roots){
+    const surfaceFor=this.surfaceFor;
+    for(const root of roots){
       const meshes = root.getChildMeshes(false).filter(mesh => mesh.getTotalVertices() > 0);
       const min = new Vector3(Infinity, Infinity, Infinity), max = min.negate();
       for (const mesh of meshes) {
@@ -89,11 +96,11 @@ export class TreeOcclusion {
         const sphere=mesh.getBoundingInfo().boundingSphere;
         return {inverse:mesh.getWorldMatrix().clone().invert(),center:sphere.centerWorld.clone(),radius:sphere.radiusWorld,levels,screenCoverage,camera:mesh.getScene().activeCamera};
       });
-      return { meshes, parts, min, max, coverage: 1, target: 1 };
-    });
-    this.checkIn = 0;
-    this.head = new Vector3(); this.chest = new Vector3();
-    this.localCamera=new Vector3();this.localTarget=new Vector3();
+      const old=this.byRoot.get(root),tree={meshes,parts,min,max,coverage:old?.coverage??1,target:old?.target??1};
+      for(const mesh of meshes)mesh.instancedBuffers.treeCoverage=tree.coverage;
+      this.byRoot.set(root,tree);
+    }
+    this.trees=[...this.byRoot.values()];this.checkIn=0;
   }
   obstructs(tree,camera,target) {
     if (!blocksView(camera,target,tree.min,tree.max,0)) return false;

@@ -45,11 +45,11 @@ export class VillageVisibility {
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<(this.world.villageOverview?260:villageRenderRange(this.touch).cellCull)&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(active&&!r.occluded);}cell.active=active;}
-      if(active){activeCells++;activeInstances+=cell.records.filter(r=>!r.occluded).length;}
+      if(active){activeCells++;activeInstances+=cell.records.filter(r=>r.meshes.length&&!r.occluded).length;}
     }
     if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records,player,this.touch):[];
+      const candidates=this.world.lighting?.shadowsActive!==false?selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch):[];
       const next=new Set(candidates.flatMap(r=>r.meshes));
       for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
       for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);

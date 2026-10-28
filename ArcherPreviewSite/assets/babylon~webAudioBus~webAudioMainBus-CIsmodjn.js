@@ -1,0 +1,1 @@
+import{n as e}from"./babylon~index~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioStaticSound~webAudioS~bwx0lg66-DVNAS3Gk.js";var t=class extends e{constructor(e,t){super(e,t,3)}};export{t};

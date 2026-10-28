@@ -15,6 +15,8 @@ import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
+import {createLoadingView} from './loading-view.js';
+import {prepareStartupResources} from './startup-resources.js';
 import { BossBattle } from './boss-battle.js';
 import { loadTrainingGround } from './environment.js';
 import { loadVillage } from './village-environment.js';
@@ -50,6 +52,7 @@ const canvas = $('#viewport');
 const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>audio.unlock(),{capture:true,passive:true});
 const loading = $('#loading');
+const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3'];
 let character = new URLSearchParams(location.search).get('character');
@@ -229,6 +232,7 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
+  loadingView.begin();if(world.villageStreaming)world.villageStreaming.active=false;
   boss?.hide();combatResult=null;strikeSampler.reset();
   goldLoot.clearDrops();goldLootView?.clear();$('#gold-balance').hidden=!isV2();
   $('#equipment-panel').hidden = !isWarrior();
@@ -238,22 +242,21 @@ async function loadCharacter() {
   input?.reset(); cancelAttackInput();
   $('#attack-button').classList.remove('is-charging');
   training.setSelected(null); projectiles.clear();
-  loading.hidden = false; loading.classList.remove('error'); $('#retry-load').hidden = true;
-  $('#loading-title').textContent = '숲으로 들어가는 중'; $('#loading-text').textContent = '캐릭터와 동작을 불러옵니다.'; $('#loading-progress').style.width = '5%';
   try {
     await initializeResourceCache();
     if(villageReview)await villageReview.startLoad();
-    $('#loading-text').textContent=isVillage()?'마을의 집과 숲을 불러옵니다.':'훈련장의 나무·풀·허수아비를 불러옵니다.';
-    void world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
+    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isVillage() ? 'warrior-v3' : isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
+    resetCamera();
+    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(VILLAGE_SPAWN.x,world.terrain.heightAt(VILLAGE_SPAWN.x,VILLAGE_SPAWN.z)+1.1,VILLAGE_SPAWN.z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
+    if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>loadingView.download(s),s=>loadingView.stream(s));
+    else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
+    loadingView.preparing();
+    const skyReady=world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     if(isVillage()){
-      await loadVillage(world,{onProgress:(done,total)=>{$('#loading-text').textContent=`마을을 불러오는 중 ${done} / ${total}`;$('#loading-progress').style.width=`${5+done/total*65}%`;}});
+      await loadVillage(world);
       await loadVillageTrainingTarget(world,training);
     }
     else await loadTrainingGround(world,training);
-    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isVillage() ? 'warrior-v3' : isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
-    const response = await fetch(manifestUrl, { cache: 'no-cache' });
-    if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
-    config = await response.json();
     await migrateCachedGlb(config, manifestUrl);
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
@@ -261,10 +264,7 @@ async function loadCharacter() {
     equipment?.dispose(); equipment = null;
     if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
     if (actor) actor.dispose();
-    container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, progress => {
-      if (progress.lengthComputable && progress.total > 0) $('#loading-progress').style.width = `${Math.min(92, progress.loaded / progress.total * 90 + 5)}%`;
-      else if (progress.loaded) $('#loading-text').textContent = `${(progress.loaded / 1024 / 1024).toFixed(1)} MB 불러오는 중`;
-    }, modelUrl.pathname.endsWith('.gltf') ? '.gltf' : '.glb');
+    container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, null, modelUrl.pathname.endsWith('.gltf') ? '.gltf' : '.glb');
     container.addAllToScene();
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
@@ -307,7 +307,6 @@ async function loadCharacter() {
     attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
-    ready = true; loading.hidden = true; $('#loading-progress').style.width = '100%';
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
@@ -331,9 +330,17 @@ async function loadCharacter() {
     $('#guard-button span').textContent = '방패 밀치기';
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     resetCamera(); updateButtons();
+    await skyReady;
+    // Keep the black curtain through shader readiness and the first correctly
+    // configured character/UI frame. Do not expose the legacy default scene.
+    world.scene.render();await world.scene.whenReadyAsync();
+    world.scene.render();ready=true;updateButtons();
+    await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
+    ready=false;
     console.error('[Archer asset load]', error);
     loading.classList.add('error');
     $('#loading-title').textContent = '캐릭터를 불러오지 못했습니다';

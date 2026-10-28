@@ -54,27 +54,32 @@ export class VillageOutlines {
     Object.assign(this.material.stencil,{enabled:true,func:Constants.NOTEQUAL,backFunc:Constants.NOTEQUAL,funcRef:4,funcMask:4,mask:0,opStencilDepthPass:Constants.KEEP,backOpStencilDepthPass:Constants.KEEP});
     this.material.setColor3('inkColor',new Color3(.065,.052,.044));
     this.material.setVector2('inkFogRange',new Vector2(world.scene.fogStart,world.scene.fogEnd));
-    const sourceFor=original=>{
-      if(this.sources.has(original))return;
+    this.sourceFor=original=>{
+      if(this.sources.has(original)){for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh);return;}
       this.sources.add(original);
       original.registerInstancedBuffer('villageInk',2);original.instancedBuffers.villageInk=new Vector2(0,0);
       const observer=original.onBeforeDrawObservable.add(()=>{
         if(!this.drawing&&!world.scene._isInIntermediateRendering())this.drawn.set(original,world.scene.getRenderId());
       });
       this.baseObservers.push({original,observer});
-      for(const lod of original.getLODLevels())if(lod.mesh)sourceFor(lod.mesh);
+      for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh);
     };
-    for(const record of records)for(const mesh of record.meshes){
-      if(['ground-detail','shrub','garden'].includes(record.placement.kind))continue;
-      sourceFor(mesh.sourceMesh??mesh);
-      mesh.instancedBuffers.villageInk=new Vector2(0,0);
-      this.entries.push({record,mesh,coverage:0});
-    }
+    this.entryMeshes=new Set();this.addRecords(records);
     world.scene._afterRenderingMeshStage.registerStep(2,this,this.afterBase);
     this.observer=world.scene.onBeforeRenderObservable.add(()=>this.update(performance.now()));
   }
-  async prepare(){
-    for(const source of this.sources){
+  addRecords(records){
+    for(const record of records)for(const mesh of record.meshes){
+      if(['ground-detail','shrub','garden'].includes(record.placement.kind))continue;
+      if(this.entryMeshes.has(mesh))continue;this.entryMeshes.add(mesh);
+      this.sourceFor(mesh.sourceMesh??mesh);
+      mesh.instancedBuffers.villageInk=new Vector2(0,0);
+      this.entries.push({record,mesh,coverage:0});
+    }
+    this.next=0;
+  }
+  async prepare(sources=this.sources){
+    for(const source of sources){
       await this.material.forceCompilationAsync(source,{useInstances:true});
     }
   }

@@ -65,7 +65,11 @@ export async function buildVillageSite(){
     const actualChild=relative(await realpath(project),await realpath(outDir));
     if(!actualChild||actualChild.startsWith('..')||isAbsolute(actualChild))throw new Error('Build directory resolves outside the project.');
   }catch(error){if(error.code!=='ENOENT')throw error;}
-  const {files,manifestCount}=await collectVillageSiteFiles(resolve(project,'public'));
+  const publicRoot=resolve(project,'public');
+  const resourceInventory=await collectVillageSiteFiles(publicRoot);
+  const sizes=Object.fromEntries([...resourceInventory.files].filter(([path])=>path.startsWith('assets/content/')).map(([path,info])=>[path.split('/').at(-1),info.bytes]).sort(([a],[b])=>a.localeCompare(b)));
+  await writeFile(resolve(publicRoot,'assets/resource-sizes.json'),JSON.stringify({version:1,files:sizes})+'\n');
+  const {files,manifestCount}=await collectVillageSiteFiles(publicRoot);
   await build({root:project,publicDir:false,build:{outDir,emptyOutDir:true}});
   const directories=new Set();
   for(const [local,info]of files){

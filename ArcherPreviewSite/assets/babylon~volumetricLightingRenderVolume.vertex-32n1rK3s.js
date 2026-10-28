@@ -1,0 +1,5 @@
+import{t as e}from"./rolldown-runtime-DK3Fl9T5.js";import{t}from"./babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphPlayAnimat~ew3ox293-D-XQlhUT.js";import{t as n}from"./babylon~index~default.fragment~default.vertex~gaussianSplatting.vertex~gaussianSplattingVox~i135rexd-Dp96BatL.js";import{t as r}from"./babylon~index~background.fragment~background.vertex~default.fragment~default.vertex~gaussia~jdt4ovvn-D67E8IeP.js";var i=e({volumetricLightingRenderVolumeVertexShaderWGSL:()=>c}),a=`volumetricLightingRenderVolumeVertexShader`,o=`#include<sceneUboDeclaration>
+#include<meshUboDeclaration>
+attribute position : vec3f;varying vWorldPos: vec4f;@vertex
+fn main(input : VertexInputs)->FragmentInputs {let worldPos=mesh.world*vec4f(vertexInputs.position,1.0);vertexOutputs.vWorldPos=worldPos;vertexOutputs.position=scene.viewProjection*worldPos;}
+`;t.ShadersStoreWGSL[a]||(t.ShadersStoreWGSL[a]=o);var s=[r,n];for(let e of s)t.IncludesShadersStoreWGSL[e.name]||(t.IncludesShadersStoreWGSL[e.name]=e.shader);var c={name:a,shader:o};export{i as t};

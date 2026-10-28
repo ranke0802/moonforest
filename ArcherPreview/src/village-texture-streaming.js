@@ -25,7 +25,7 @@ export class VillageTextureStreaming {
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
   update(now){
-    if(this.disposed||now<this.nextCheck)return;
+    if(this.disposed||this.world.villageStreaming?.active===false||this.world.villageStreaming?.pending||now<this.nextCheck)return;
     this.nextCheck=now+250;const candidates=new Map();
     const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
     const view=camera.getViewMatrix().m;
@@ -33,8 +33,8 @@ export class VillageTextureStreaming {
     this.lastView=Array.from(view);
     for(const record of this.records){
       if(!record.root.isEnabled())continue;
-      const config=this.assets.get(record.placement.asset)?.config;
-      if(!config?.highTextures)continue;
+      const asset=this.assets.get(record.placement.asset),config=asset?.config;
+      if(!config?.highTextures||(asset.baseLevel!==undefined&&asset.baseLevel!==0))continue;
       for(const mesh of record.meshes){
         if(!mesh.isInFrustum(planes))continue;
         const coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
@@ -86,10 +86,11 @@ export class VillageTextureStreaming {
     }).finally(()=>{this.pending=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});
   }
   async load(id){
-    const asset=this.assets.get(id),materials=asset.source.materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
+    const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
     if(!materials.length)throw new Error('Near material does not expose an albedo texture');
     const slots=config.shading==='toon-color'?{albedo:'albedoTexture'}:{albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
     try{
+      if(this.world?.prefetchResources)await this.world.prefetchResources(config.resources);
       for(const [role,slot]of Object.entries(slots)){
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>t.dispose());return;}

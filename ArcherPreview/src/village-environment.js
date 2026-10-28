@@ -9,6 +9,8 @@ import {applyVillageToon} from './village-toon.js';
 import {VillageOutlines} from './village-outlines.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
+import {loadStreamedVillage} from './village-streamed-environment.js';
+export {prepareVillageStart} from './village-streamed-environment.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -26,7 +28,11 @@ export function createVillageTransform(world,placement,config){
   const facing=new TransformNode(`${root.name}-front`,world.scene);facing.parent=root;facing.rotation.y=config.frontYawOffset??0;
   return {root,facing};
 }
-export async function loadVillage(world,{onProgress=()=>{}}={}){
+export function loadVillage(world,options={}){
+  if(import.meta.env?.DEV&&new URLSearchParams(location.search).get('villageFixture')==='1')return loadVillageEager(world,options);
+  return loadStreamedVillage(world,options);
+}
+async function loadVillageEager(world,{onProgress=()=>{}}={}){
   if(world.villagePromise)return world.villagePromise;
   const containers=[],roots=[],records=[];let visibility,fixtureMaterial,textureStreaming,outlines;
   world.villagePromise=(async()=>{
