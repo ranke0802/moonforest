@@ -63,6 +63,9 @@ export function createWorld(engine, {village=false,forest=false,touchDevice=matc
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
+  // Both streamed maps replace this material before revealing the curtain.
+  // Only the training arena needs the procedural fallback canvas and upload.
+  if(!village){
   const texture = new DynamicTexture('floor-grid', { width: 1024, height: 1024 }, scene, false);
   const ctx = texture.getContext();
   ctx.fillStyle = '#304432'; ctx.fillRect(0, 0, 1024, 1024);
@@ -72,6 +75,7 @@ export function createWorld(engine, {village=false,forest=false,touchDevice=matc
   for(let i=0;i<9000;i++){const x=random()*1024,z=random()*1024;ctx.fillStyle=i%2?'rgba(145,133,99,.18)':'rgba(15,24,20,.2)';ctx.fillRect(x,z,1+random()*2,1+random()*2);}
   texture.update(); texture.uScale = 1; texture.vScale = 1;
   material.diffuseTexture = texture;
+  }
   ground.material = material; ground.receiveShadows = true;
   ground.isPickable=false;ground.freezeWorldMatrix();
   lighting.registerMeshes([ground]);

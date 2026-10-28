@@ -73,6 +73,29 @@ test('quota rejection cancels the stream and stops prefetch without retrying the
  assert.equal(state.storageAvailable,false);assert.equal(state.complete,false);assert.equal(cancelled,1);assert.equal(s.calls.length,1);
  await s.downloads.prepare([a,b]);assert.equal(s.calls.length,1,'actual loader handles storage fallback; prefetch does not repeat');
 });
+test('map departure cancels the active stream and queued jobs but preserves completed files for the next map',async()=>{
+ const s=setup();await s.downloads.prepare([a]);let signal,cancelled=0,started;
+ const reading=new Promise(resolve=>{started=resolve;});
+ s.downloads.fetcher=async(url,options)=>{
+  s.calls.push(url);signal=options.signal;
+  let first=true;
+  return new Response(new ReadableStream({pull(c){if(first){first=false;c.enqueue(new Uint8Array(3));}else started();},cancel(){cancelled++;}},{highWaterMark:0}));
+ };
+ const active=s.downloads.prepare([b]),queued=s.downloads.prepare([b]);
+ const results=Promise.allSettled([active,queued]);await reading;
+ s.downloads.cancel();s.downloads.cancel();
+ const settled=await results;assert.ok(settled.every(r=>r.status==='rejected'&&r.reason.name==='AbortError'));
+ assert.ok(signal.aborted);assert.equal(cancelled,1);assert.equal(s.calls.length,2);
+ assert.equal(s.stored.size,1);assert.ok(s.stored.has(resourceUrl(a,base)));assert.ok(!s.stored.has(resourceUrl(b,base)));
+ const next=new ResourceDownloads(s.downloads.sizes,base,{cacheStorage:s.downloads.storage,fetcher:()=>{throw new Error('Cached bytes should not be requested');}});
+ assert.equal((await next.prepare([a])).total,0);
+});
+
+test('departure before the queue runs causes no network calls or completed progress',async()=>{
+ const s=setup(),pending=s.downloads.prepare([a,b],e=>s.events.push(e));s.downloads.cancel();
+ await assert.rejects(pending,{name:'AbortError'});assert.equal(s.calls.length,0);assert.equal(s.events.length,0);
+});
+
 test('black curtain is in the initial document and stays up after 100% until the first scene is ready',()=>{
  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
  assert.match(html,/<html[^>]+data-loading="true"/);assert.match(html,/#app>#loading\{[^}]+background:#000/);assert.match(html,/html\[data-loading\] #app>:not\(#loading\)\{visibility:hidden!important/);

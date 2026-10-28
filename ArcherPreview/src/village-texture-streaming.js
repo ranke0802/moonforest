@@ -81,6 +81,7 @@ export class VillageTextureStreaming {
     if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
     this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.syncStats();
     return this.load(id).catch(error=>{
+      if(this.disposed||error.name==='AbortError')return;
       this.failed.add(id);this.stats.highTextureError=`${id}: ${error.message??error}`;
       console.warn('Village high texture stopped; no automatic retry.',id,error);
     }).finally(()=>{this.pending=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});

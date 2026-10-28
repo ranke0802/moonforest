@@ -11,15 +11,19 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 export class ResourceDownloads {
   constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now()}={}){
     this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
+    this.abort=new AbortController();
   }
+  cancel(){this.abort.abort(new DOMException('Map resources released','AbortError'));}
   prepare(paths,onProgress=()=>{}){
     const job=this.tail.then(()=>this.run(paths,onProgress));this.tail=job.catch(()=>{});return job;
   }
   async run(paths,onProgress){
+    const signal=this.abort.signal;signal.throwIfAborted();
     const urls=[...new Set(paths.map(p=>resourceUrl(p,this.base)))];
     let cache;try{if(!this.storageUnavailable)cache=await this.storage?.open('moonforest-resources-v1');}catch{}
     const missing=[];let cached=0;
     for(const url of urls){
+      signal.throwIfAborted();
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
       if(!Number.isSafeInteger(size)||size<0)throw new Error('리소스 용량 목록이 일치하지 않습니다. 새로고침해 주세요.');
       if(await cache?.match(url,{ignoreVary:true})){cached+=size;continue;}
@@ -33,11 +37,15 @@ export class ResourceDownloads {
     // HTTP caching; prefetching would otherwise risk a second download.
     if(!cache){onProgress({...state,ratio:0,unavailable:true});return state;}
     for(const {url,size}of missing){
+      signal.throwIfAborted();
       // This page writes the stream to CacheStorage. Tell the worker not to tee
       // and write a second copy of large player textures at the same time.
-      const response=await this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'}});
+      const response=await this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'},signal});
+      if(signal.aborted){await response.body?.cancel().catch(()=>{});signal.throwIfAborted();}
       if(!response.ok)throw new Error(`리소스 다운로드 실패 (${response.status})`);
       let received=0;const reader=response.body?.getReader();
+      const abortRead=()=>{reader?.cancel(signal.reason).catch(()=>{});};
+      signal.addEventListener('abort',abortRead,{once:true});
       const incomplete=()=>new Error('리소스가 불완전하게 다운로드되었습니다. 다시 시도해 주세요.');
       // One body consumer, with backpressure from CacheStorage. Response.clone()
       // tees the entire file and can retain a second large buffer when one reader
@@ -45,7 +53,9 @@ export class ResourceDownloads {
       const body=reader?new ReadableStream({
         async pull(controller){
           try{
+            signal.throwIfAborted();
             const {done,value}=await reader.read();
+            signal.throwIfAborted();
             if(done){if(received!==size)throw incomplete();controller.close();return;}
             received+=value.byteLength;if(received>size)throw incomplete();
             count(value.byteLength);controller.enqueue(value);
@@ -66,7 +76,7 @@ export class ResourceDownloads {
           onProgress({...state,ratio:0,unavailable:true});return state;
         }
         throw error;
-      }
+      }finally{signal.removeEventListener('abort',abortRead);}
       emit();
     }
     state.complete=true;emit();return state;

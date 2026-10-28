@@ -4,6 +4,7 @@ import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@baby
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {playerTextureManifest} from './player-texture-profile.js';
+import {createMapDeparture} from './map-departure.js';
 import {FOREST_SPAWN,MAP_PORTALS,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
 import { createWorld } from './world.js';
@@ -70,6 +71,7 @@ const isVillage = () => isWorldCharacter(character);
 const isForest=()=>character==='warrior-v4';
 const mapSpawn=()=>new URLSearchParams(location.search).get('arrival')==='portal'?(isForest()?FOREST_SPAWN:MAP_PORTALS['monster-forest'].arrival):(isForest()?FOREST_SPAWN:VILLAGE_SPAWN);
 let mapPortal;
+let mapDeparture;
 const movementLimit=(position=actor.position)=>world?.mapId==='village'?villageTravelLimit(position,ARENA_RADIUS):ARENA_RADIUS;
 const villageHorizon=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageHorizon')==='1';
 const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(location.search).get('villageOverview')==='1';
@@ -384,6 +386,7 @@ function updateHealthBars() {
 }
 
 function render(dt) {
+  if(mapDeparture?.departing)return;
   simulateFrame=dt>0;
   if(!simulateFrame){world.scene.render();screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);return;}
   elapsed += dt;
@@ -486,7 +489,7 @@ function render(dt) {
 
 try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
-  engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance' });
+  engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance',loseContextOnDispose:true });
   engine.maxFPS=60;
   engine.renderEvenInBackground=false;
   applyRenderQuality();
@@ -536,24 +539,31 @@ try {
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
   setupFullscreen($('#fullscreen-button'), toast, {autoEnter:false});
+  mapDeparture=createMapDeparture({
+    prepare:()=>{ready=false;loadingView.begin();input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    release:()=>{input.dispose();audio.dispose();engine.dispose();},
+    navigate:url=>location.replace(url),
+    onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
+  });
   mapPortal=createMapPortal(world,{button:$('#map-travel'),storage:travelStorage,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.livingCount,hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:url=>{ready=false;input.reset();cancelAttackInput();audio.stopAll();loadingView.begin();location.assign(url);}});
+    onTravel:url=>mapDeparture.leave(url)});
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}finally{frameDiagnostics.endFrame();}
   });
-  const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
+  const syncPlayback=()=>{if(mapDeparture?.departing)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog'])dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
   // Preview camera, quality and equipment changes while settings pause combat.
-  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>frameLoop.invalidate());
+  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>{if(!mapDeparture?.departing)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',syncPlayback);
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   window.addEventListener('pageshow',syncPlayback);
   window.addEventListener('focus',()=>{frameLoop.last=null;frameDiagnostics.suspend();});
   syncPlayback();
   observeViewportSize(canvas, () => {
+    if(mapDeparture?.departing)return;
     // A held joystick/attack belongs to the old coordinate system after rotation.
     input.reset();
     applyRenderQuality();
@@ -585,7 +595,7 @@ try {
     if (loadingAsset) return;
     const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', next);
-    if(mapForCharacter(next)!==mapForCharacter(character)){location.assign(url.href);return;}
+    if(mapForCharacter(next)!==mapForCharacter(character)){mapDeparture.leave(url.href);return;}
     character=next;history.replaceState(null, '', url);
     loadCharacter();
   });

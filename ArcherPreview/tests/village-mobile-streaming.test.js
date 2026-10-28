@@ -20,9 +20,9 @@ import {prepareVillageInstancing} from '../src/village-instancing.js';
 import {villageLodSources} from '../src/village-lod.js';
 import {renderPixelRatio,RenderActivity} from '../src/render-policy.js';
 
-// S23-style Chrome viewport/DPR with the actual mobile policy. NullEngine
+// S23 and iPhone 14 Pro viewports/DPR with the shared mobile policy. NullEngine
 // validates draw submission, not real GPU rasterization, upload time or thermals.
-for(const [orientation,width,height]of [['landscape',780,360],['portrait',360,780]]){
+for(const [orientation,width,height]of [['S23 landscape',780,360],['S23 portrait',360,780],['iPhone landscape',852,393],['iPhone portrait',393,852]]){
  test('mobile '+orientation+' keeps complete tree/wall/gate draws during movement, turns and delayed LOD promotion',async t=>{
   const ratio=renderPixelRatio(3,'high',true),engine=new NullEngine({renderWidth:width*ratio,renderHeight:height*ratio}),scene=new Scene(engine);
   scene.useRightHandedSystem=true;engine.getCaps().instancedArrays=true;t.after(()=>engine.dispose());

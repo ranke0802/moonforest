@@ -77,6 +77,7 @@ export class VillageGeometryStreaming {
     if(!request)return;
     this.stats.geometryPending=1;
     this.pending=this.load(request).catch(error=>{
+      if(this.disposed||error.name==='AbortError')return;
       this.failed.add(request.id+':'+request.level);this.stats.geometryError=String(error.message??error);
       console.warn('Village model stopped; no automatic retry.',request.id,request.level,error);
     }).finally(()=>{this.pending=null;this.stats.geometryPending=0;});

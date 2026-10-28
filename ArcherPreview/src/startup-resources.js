@@ -11,6 +11,8 @@ export async function prepareStartupResources(world,playerUrl,onProgress,onStrea
     prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
   const resources=[...player.resources,...village.resources,...ground.resources,sky.texture,...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   const downloads=new ResourceDownloads(sizes.files,base);
+  world.cancelResourceDownloads=()=>downloads.cancel();
+  world.scene.onDisposeObservable.addOnce(world.cancelResourceDownloads);
   const state=await downloads.prepare(resources,onProgress);
   world.prefetchResources=paths=>downloads.prepare(paths,onStream).catch(error=>{onStream({complete:true,loaded:0,total:0,ratio:0});throw error;});
   world.startupResources={files:new Set(resources).size,downloadBytes:state.total,cachedBytes:state.cached,initialLodModels:village.plan.length};
