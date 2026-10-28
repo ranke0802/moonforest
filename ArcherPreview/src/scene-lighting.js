@@ -1,4 +1,5 @@
 import { MaterialPluginBase, ShadowGenerator, Vector3 } from '@babylonjs/core';
+import {installVillageShadowFade,prepareShadowFade} from './village-shadow-fade.js';
 
 // Painted character maps are emissive to retain their authored colors. Reuse the
 // existing PBR normals and shadow result instead of adding another render pass.
@@ -54,12 +55,14 @@ export class SceneLighting {
     // samples the previous map with the new projection on the skipped frame.
     // Keep one bounded map synchronized with the pose and light every frame.
     shadows.getShadowMap().refreshRate = 1;
+    if(village)installVillageShadowFade(shadows);
   }
   registerMeshes(meshes) {
     const dirty=new Set();
     for (const mesh of meshes) {
       if (!mesh.getTotalVertices?.()) continue;
       const receiver = mesh.sourceMesh || mesh;
+      if(this.village)prepareShadowFade(receiver);
       receiver.receiveShadows = this.shadowsActive;
       if (!this.receivers.has(receiver)) {
         this.receivers.add(receiver);

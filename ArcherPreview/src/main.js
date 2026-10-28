@@ -47,6 +47,7 @@ import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createFrameDiagnostics} from './frame-diagnostics.js';
+import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
@@ -118,7 +119,9 @@ let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
-const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,
+const loadDiagnostics=new LoadDiagnostics();
+const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
+  memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
   metadata:()=>({character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
@@ -257,6 +260,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  loadDiagnostics.begin(isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   loadingView.begin();if(world.villageStreaming)world.villageStreaming.active=false;
   boss?.hide();combatResult=null;strikeSampler.reset();
@@ -275,9 +279,10 @@ async function loadCharacter() {
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
     if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+1.46,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
-    if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>loadingView.download(s),s=>loadingView.stream(s));
+    loadDiagnostics.phase('download');
+    if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
-    loadingView.preparing();
+    loadDiagnostics.phase('model');loadingView.preparing();
     const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     if(isVillage()){
       await loadVillage(world);
@@ -360,15 +365,18 @@ async function loadCharacter() {
     if(isVillage()){const travel=consumeTravel(travelStorage,character);if(travel){boss.combat.hp=travel.hp;boss.potions.remaining=travel.potions;}}
     resetCamera(); updateButtons();
     await skyReady;
+    loadDiagnostics.phase('screen');
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
     world.scene.render();await waitForSceneReady(world.scene);
     world.scene.render();ready=true;updateButtons();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
+    loadDiagnostics.finish();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
+    loadDiagnostics.finish(error.message);
     ready=false;
     console.error('[Archer asset load]', error);
     loading.classList.add('error');
@@ -561,6 +569,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
+      loadDiagnostics.begin(isForest()?'마을 이동':'마물의 숲 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();actionAudio.reset();
       boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};
@@ -579,23 +588,25 @@ try {
       world.camera.setTarget(playerChinTarget(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),false,false,true);
       world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate(world.trainingSpawn);
       if(!world.cave)await world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
-      await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>loadingView.download(s),s=>loadingView.stream(s));
-      loadingView.preparing();await loadVillage(world);
+      loadDiagnostics.phase('download');
+      await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
+      loadDiagnostics.phase('model');loadingView.preparing();await loadVillage(world);
       world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=character;bindMapPortal();
-      world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
+      loadDiagnostics.phase('screen');world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },
     finish:async()=>{
       loadingAsset=false;ready=true;updateButtons();
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
+      loadDiagnostics.finish();
       frameLoop.setPaused(document.hidden||motionSpeedControls.isOpen()||$('#help-dialog').open||deathScreen.isOpen());
       if(!document.hidden)canvas.focus({preventScroll:true});
     },
-    onError:error=>{console.error('[Map transition]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
+    onError:error=>{loadDiagnostics.finish(error.message);console.error('[Map transition]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
   });
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{

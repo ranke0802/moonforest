@@ -32,14 +32,14 @@ test('paused/hidden time and FPS cap changes are not reported as gameplay stalls
  m.reset();assert.equal(m.summary().samples,0);assert.equal(m.summary().frameMs,null);assert.equal(m.events.length,0);
 });
 
-function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'})}={}){
+function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory}={}){
  let time=0,clockCalls=0,contextCalls=0,writes=0;
- const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail'];
+ const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures'];
  const nodes=Object.fromEntries(ids.map(id=>[id,{dataset:{},hidden:false,disabled:false,checked:false,value:'',listeners:{},_text:'',
   get textContent(){return this._text;},set textContent(v){writes++;this._text=v;},
   addEventListener(type,listener){this.listeners[type]=listener;},focus(){this.focused=true;},select(){this.selected=true;}}]));
  const storage={getItem:()=>stored,setItem:(_,v)=>stored=v};
- const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,
+ const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,
   context:()=>{contextCalls++;return {position:[3,-5],activity:'회전/시점 조작'};}});
  const frame=(at,active=true)=>{time=at;diagnostic.beginFrame(active,30);time=at+4;diagnostic.endFrame();};
  const toggle=on=>{nodes['frame-diagnostics-toggle'].checked=on;nodes['frame-diagnostics-toggle'].listeners.change();};
@@ -53,6 +53,17 @@ test('disabled diagnostics perform no timing, context collection or HUD updates;
  f.toggle(true);assert.equal(f.nodes['frame-diagnostics'].hidden,false);assert.equal(f.counts().stored,'1');
  f.frame(0);f.frame(100);assert.equal(f.counts().contextCalls,1);
  f.toggle(false);const calls=f.counts().clockCalls;f.frame(1000);assert.equal(f.counts().clockCalls,calls);
+});
+test('load timings survive late HUD enable, memory samples are bounded and exported with clear labels',async()=>{
+ let calls=0,report;const loading={label:'마을',phase:'complete',totalMs:3500,downloadMs:2000,modelMs:1000,screenMs:400};
+ const f=ui({loads:{snapshot:()=>loading,history:[loading]},memory:()=>{calls++;return {jsUsedBytes:64*1048576,jsLimitBytes:2048*1048576,backgroundHighTextureEstimateBytes:32*1048576,backgroundHighTextureBudgetBytes:96*1048576};},clipboard:{writeText:async value=>report=JSON.parse(value)}});
+ f.frame(0);assert.equal(calls,0);f.toggle(true);assert.match(f.nodes['diagnostic-load-phases'].textContent,/다운로드 2.0초 · 모델 1.0초 · 화면 0.4초/);
+ assert.match(f.nodes['diagnostic-memory'].textContent,/JS 메모리 64 \/ 2048 MiB/);
+ assert.match(f.nodes['diagnostic-textures'].textContent,/추정 32 \/ 96 MiB/);
+ for(let i=0;i<30;i++)f.frame(i*33);assert.equal(calls,1);
+ f.frame(1100);assert.equal(calls,2);await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(calls,2);
+ assert.deepEqual(report.loading,loading);assert.equal(report.loadHistory.length,1);assert.equal(report.memory.jsUsedBytes,64*1048576);assert.match(report.measurement,/not total device/);
+ f.toggle(false);for(let i=0;i<40;i++)f.frame(2000+i*33);assert.equal(calls,2);
 });
 test('HUD throttles updates, explains mobile pacing, and exports measured delays without sending them',async()=>{
  let copied;const f=ui({stored:'1',clipboard:{writeText:async value=>{copied=JSON.parse(value);}}});
