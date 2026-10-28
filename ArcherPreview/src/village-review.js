@@ -37,6 +37,7 @@ export function createVillageReview(world,{forcedMobile=false}={}){
       `실제 에셋 ${env.sourceAssets??0}/25 · 배치 ${env.instances??0} · 활성 root ${vis.activeInstances??0}`,
       `활성 셀 ${vis.activeCells??0}/${vis.cells??0} · 그림자 ${vis.shadowCasters??0} (건물·나무 ${vis.majorShadowCasters??0}) · 외곽선 ${env.outlineInstances??0} · 가림 ${vis.occludedProps??0}`,
       `마을 텍스처 ${env.textureTier??'로딩 중'} · 최대 ${Math.max(env.largestTexture??0,env.highTextureMax??0)}px`,
+      `지면 ${world.groundProfile?.colorSize??0}px + 세부 ${world.groundProfile?.detailSize??0}px · GPU 추산 ${((world.groundProfile?.gpuBytes??0)/1048576).toFixed(2)} MiB · 추가 패스 ${world.groundProfile?.extraDrawCalls??0}`,
       `로드된 LOD 0:${lod[0]??0} / 1:${lod[1]??0} / 2:${lod[2]??0}`,
       `가시 메시 LOD 0:${selected[0]} / 1:${selected[1]} / 2:${selected[2]} · 삼각형 ${Math.round(triangles).toLocaleString()} / 원본 ${Math.round(originalTriangles).toLocaleString()}`,
       `고해상도 ${env.highTextureAssets??0}종 · 로딩 ${env.highTexturePending??0} · 로드 ${env.highTextureLoads??0} / 해제 ${env.highTextureReleases??0}${env.highTextureError?' · '+env.highTextureError:''}`,

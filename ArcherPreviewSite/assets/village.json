@@ -920,56 +920,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/e44aa14446041c80b1ba38b87ba23ee2c3354692fb8734668f5e772dc454b50a.gltf",
+          "model": "./content/2ea83a8264306fca9ce3d48471a16fe1b8bce48a9c7ae20e116296c069b1be08.gltf",
           "resources": [
-            "./content/e44aa14446041c80b1ba38b87ba23ee2c3354692fb8734668f5e772dc454b50a.gltf",
-            "./content/8f64e76826ad5e52581f3c54eef77f9ef186d79e309ac78855f644b82d44ec10.bin",
+            "./content/2ea83a8264306fca9ce3d48471a16fe1b8bce48a9c7ae20e116296c069b1be08.gltf",
+            "./content/e11118fd0fb0b5ad49e1276f0190c3fd8c6317d99db2ecb4acbcd3e6dc0cb5b5.bin",
             "./content/a226d7b6fd10e211bb61fa5b4a64e24e511a7630c7ee28282526a05a41cf9f02.jpg"
           ],
           "triangles": 4494,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 1127036
+          "bytes": 1127016
         },
         {
           "level": 1,
-          "model": "./content/d7b27b79af2d233cb012b2da907eae73966b6a2a3f27fff62fe1c9065d5f638b.gltf",
+          "model": "./content/d6545a0214dcee07083a03763553ebeaf430fd9a4e987da0933fe8afb9754dcd.gltf",
           "resources": [
-            "./content/d7b27b79af2d233cb012b2da907eae73966b6a2a3f27fff62fe1c9065d5f638b.gltf",
-            "./content/aac62e8d10d18b18bae945dbe1fbf91c72034b7d6a2537658a50b7bc07969140.bin",
+            "./content/d6545a0214dcee07083a03763553ebeaf430fd9a4e987da0933fe8afb9754dcd.gltf",
+            "./content/2b38ddb76fa99da9ead22b0463ea4e8ff224a52a8b78d8b637b68ada144d8be4.bin",
             "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg"
           ],
           "triangles": 3085,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 489031
+          "bytes": 489013
         },
         {
           "level": 2,
-          "model": "./content/a2ac953c376be04d32dc664f8ff04d8e682690fb588f5ce0f18f54bd72dc522c.gltf",
+          "model": "./content/8ab2333e206cbcd8857841bce78c7d122cada39d3033573ce37a6eef18ca0007.gltf",
           "resources": [
-            "./content/a2ac953c376be04d32dc664f8ff04d8e682690fb588f5ce0f18f54bd72dc522c.gltf",
-            "./content/c1d3486538f8a3e5bb0bf6c3d750aa6c7fa176fc2cf9accb1d0b2e84192d91e8.bin",
+            "./content/8ab2333e206cbcd8857841bce78c7d122cada39d3033573ce37a6eef18ca0007.gltf",
+            "./content/5716d0730748ddbd55d6fea170905d31f7e0705b70ab404b315f0ff7eab1edb2.bin",
             "./content/158f94d3c21c1feb898fc66218cca6d7c981680e30a654d70a04f7b7097917fd.jpg"
           ],
           "triangles": 2383,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 257652
+          "bytes": 257653
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/38e3e62b9ce9f29271d117c73ddd16cc4c5d593f3f005e2e249d6c87be5a0bb8.gltf",
+        "model": "./content/14a85b500c2308b28c04f78642fcabfb3ee22c91511f81948c1f3fde1be9300e.gltf",
         "resources": [
-          "./content/38e3e62b9ce9f29271d117c73ddd16cc4c5d593f3f005e2e249d6c87be5a0bb8.gltf",
-          "./content/8f64e76826ad5e52581f3c54eef77f9ef186d79e309ac78855f644b82d44ec10.bin",
+          "./content/14a85b500c2308b28c04f78642fcabfb3ee22c91511f81948c1f3fde1be9300e.gltf",
+          "./content/e11118fd0fb0b5ad49e1276f0190c3fd8c6317d99db2ecb4acbcd3e6dc0cb5b5.bin",
           "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg"
         ],
         "triangles": 4494,
         "textureSize": 1024,
         "normalMap": false,
-        "bytes": 544750
+        "bytes": 544730
       },
       "geometryLod": true,
       "highTextures": {
@@ -989,8 +989,8 @@
       },
       "toonSourceModelSha256": "eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f",
       "treeRefinement": {
-        "version": 1,
-        "method": "existing-canopy-retopology-and-opaque-leaf-sprays",
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
         "sourceModelSha256": "72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6",
         "originalTriangles": [
           4687,
@@ -998,7 +998,26 @@
           2596
         ],
         "leafPositionsSharedAcrossLods": true,
-        "newTextures": 0
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            11.743156909942627,
+            11.232125759124756
+          ],
+          "rootWidthAfter": [
+            2.951576590538025,
+            2.7273372411727905
+          ],
+          "trunkWidthBefore": [
+            8.181390881538391,
+            6.640306234359741
+          ],
+          "trunkWidthAfter": [
+            4.749637603759766,
+            3.6375392079353333
+          ]
+        }
       }
     },
     "tree-02-slender-pine": {
@@ -1016,56 +1035,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/b3bf8bf7a0abfbfe14a3ef015e73df4a802db1412cbd9fe23b4d3ac25e67647c.gltf",
+          "model": "./content/e75c7c4a7686c04cd2a3dab4a56fdc5260eb876d0287740797657557436aef24.gltf",
           "resources": [
-            "./content/b3bf8bf7a0abfbfe14a3ef015e73df4a802db1412cbd9fe23b4d3ac25e67647c.gltf",
-            "./content/eaee6ff1160fe9ab5eee7b3d777d0f07384a3528a9fa51262c3b57161ce49a2d.bin",
+            "./content/e75c7c4a7686c04cd2a3dab4a56fdc5260eb876d0287740797657557436aef24.gltf",
+            "./content/d65bb1b971cff3b44020aec952407bae8e2a576192ddbdd9bfecc00bf6e42851.bin",
             "./content/48e2abb56811d786dd011ddfe02e1648270fe151250beb0563ec833b2c2fe53f.jpg"
           ],
           "triangles": 5003,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 957678
+          "bytes": 957677
         },
         {
           "level": 1,
-          "model": "./content/d9bcce04d31e2a1622ba52442cc13a2f528da635dad46e2d338efcc8b798bfa4.gltf",
+          "model": "./content/fd537649b740a4dc1caa7c6f6d46696e2d625ec02deafd9a5da974188bef8843.gltf",
           "resources": [
-            "./content/d9bcce04d31e2a1622ba52442cc13a2f528da635dad46e2d338efcc8b798bfa4.gltf",
-            "./content/1eb58d63c5d67cbb95f03865e6c32bd58c8ec5fc5f331565d8fc01a43e7bfe02.bin",
+            "./content/fd537649b740a4dc1caa7c6f6d46696e2d625ec02deafd9a5da974188bef8843.gltf",
+            "./content/ce0dbf7c3241b3fa8e95b72eeba4f634e10cb874947f50632131027099e4b75a.bin",
             "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg"
           ],
           "triangles": 3649,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 465134
+          "bytes": 465112
         },
         {
           "level": 2,
-          "model": "./content/f8cc5df36df2f747f2ee234d1fffc64285cce7435a5325fe604f71820f1bcb8d.gltf",
+          "model": "./content/2a6f795373c6b689c413c39b20e6b19cf6513355efdc32b547ab5bc83da04590.gltf",
           "resources": [
-            "./content/f8cc5df36df2f747f2ee234d1fffc64285cce7435a5325fe604f71820f1bcb8d.gltf",
-            "./content/3998ab40844b5cd72a801f65f31531224e1afeb551ff1f974a3d50f8b622540f.bin",
+            "./content/2a6f795373c6b689c413c39b20e6b19cf6513355efdc32b547ab5bc83da04590.gltf",
+            "./content/67fe839243a6b34842dda24dc4d90242b0a590d0c3a8efb25a28426d00823a76.bin",
             "./content/6da8b04a4ef0c6463eb610336e1ac51e7e62c71a4d91c7cabb167354d5acb6e3.jpg"
           ],
           "triangles": 3000,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 284127
+          "bytes": 284126
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/e5ad97eb4f40660289f97e3cf651d89bfa7825c391269ff43f529a81770db4bb.gltf",
+        "model": "./content/1902d94f4f3526c5132475529c22baf78a8c127266f45e637f95f62a12bd5b5f.gltf",
         "resources": [
-          "./content/e5ad97eb4f40660289f97e3cf651d89bfa7825c391269ff43f529a81770db4bb.gltf",
-          "./content/eaee6ff1160fe9ab5eee7b3d777d0f07384a3528a9fa51262c3b57161ce49a2d.bin",
+          "./content/1902d94f4f3526c5132475529c22baf78a8c127266f45e637f95f62a12bd5b5f.gltf",
+          "./content/d65bb1b971cff3b44020aec952407bae8e2a576192ddbdd9bfecc00bf6e42851.bin",
           "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg"
         ],
         "triangles": 5003,
         "textureSize": 1024,
         "normalMap": false,
-        "bytes": 535240
+        "bytes": 535239
       },
       "geometryLod": true,
       "highTextures": {
@@ -1085,8 +1104,8 @@
       },
       "toonSourceModelSha256": "b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7",
       "treeRefinement": {
-        "version": 1,
-        "method": "existing-canopy-retopology-and-opaque-leaf-sprays",
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
         "sourceModelSha256": "b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118",
         "originalTriangles": [
           5352,
@@ -1094,7 +1113,26 @@
           3671
         ],
         "leafPositionsSharedAcrossLods": true,
-        "newTextures": 0
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            3.7308000326156616,
+            4.536846995353699
+          ],
+          "rootWidthAfter": [
+            2.038594961166382,
+            2.142397701740265
+          ],
+          "trunkWidthBefore": [
+            6.155935287475586,
+            7.754019260406494
+          ],
+          "trunkWidthAfter": [
+            4.794400215148926,
+            5.75468635559082
+          ]
+        }
       }
     },
     "rock-01-mossy-boulder": {

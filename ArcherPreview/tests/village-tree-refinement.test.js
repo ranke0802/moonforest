@@ -26,6 +26,9 @@ test('both trees retain single opaque draw meshes, identical mobile geometry and
   assert.deepEqual(manifest.geometryLod.nearGeometryEdits,TREE_IDS);
   for(const id of TREE_IDS){
     const a=manifest.assets[id];assert.equal(a.treeRefinement.newTextures,0);
+    const shape=a.treeRefinement.proportions;
+    assert.ok(shape.rootWidthAfter.every((n,i)=>n<shape.rootWidthBefore[i]*(id.includes('oak')?.3:.6)),'root spread must be visibly reduced');
+    assert.deepEqual(a.lods.map(l=>l.triangles),id.includes('oak')?[4494,3085,2383]:[5003,3649,3000],'proportion edits must not increase triangle counts');
     assert.equal(a.highTextures.colorResolution,4096);assert.equal(Object.keys(a.highTextures.textures).length,1);
     const near=gltf(a.lods[0]),mobile=gltf(a.mobileNear);
     assert.deepEqual(mobile.buffers,near.buffers);assert.equal(a.mobileNear.triangles,a.lods[0].triangles);

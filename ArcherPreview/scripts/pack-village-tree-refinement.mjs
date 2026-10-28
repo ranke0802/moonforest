@@ -26,7 +26,7 @@ export function packTreeGeometry(raw){
   return {bytes:Buffer.concat(chunks),bufferViews,accessors,primitive:{attributes,indices:index,material:0,mode:4}};
 }
 
-export async function packVillageTreeRefinement(root=resolve(import.meta.dirname,'../public/assets'),source=resolve(process.env.VILLAGE_TREE_REFINEMENT_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/tree-refinement')){
+export async function packVillageTreeRefinement(root=resolve(import.meta.dirname,'../public/assets'),source=resolve(process.env.VILLAGE_TREE_REFINEMENT_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/natural-ground-trees')){
   const read=p=>readFile(p,'utf8').then(JSON.parse);
   const [manifest,baseline,audit,review]=await Promise.all([read(resolve(root,'village.json')),read(resolve(source,'baseline-manifest.json')),read(resolve(source,'refinement-audit.json')),read(resolve(source,'approval.json'))]);
   if(review.status!=='APPROVED'||review.auditSha256!==hash(await readFile(resolve(source,'refinement-audit.json'))))throw new Error('Tree geometry needs reviewed evidence');
@@ -52,7 +52,7 @@ export async function packVillageTreeRefinement(root=resolve(import.meta.dirname
       lod.model=ref;lod.triangles=record.tiers[level].triangles;lod.resources=[ref,'./content/'+geometry.uri,...model.images.map(i=>'./content/'+i.uri)];
       lod.bytes=0;for(const resource of new Set(lod.resources))lod.bytes+=(await readFile(resolve(root,resource))).length;
     }
-    asset.treeRefinement={version:1,method:'existing-canopy-retopology-and-opaque-leaf-sprays',sourceModelSha256:basename(before.lods[0].model,'.gltf'),originalTriangles:before.lods.map(l=>l.triangles),leafPositionsSharedAcrossLods:true,newTextures:0};
+    asset.treeRefinement={version:2,method:audit.method,sourceModelSha256:basename(before.lods[0].model,'.gltf'),originalTriangles:before.lods.map(l=>l.triangles),leafPositionsSharedAcrossLods:true,newTextures:0,proportions:record.proportions};
   }
   manifest.geometryLod.nearGeometryPreserved=false;
   manifest.geometryLod.nearGeometryEdits=TREE_IDS;

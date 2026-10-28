@@ -35,7 +35,7 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     const manifest=await response.json();
     if(!manifest.complete&&!fixture)throw new Error('마을 에셋 제작이 아직 완료되지 않았습니다.');
     if(!fixture&&manifest.developmentFixture)throw new Error('개발 검수용 에셋 목록은 배포에 사용할 수 없습니다.');
-    applyVillageGround(world);
+    await applyVillageGround(world);
     const touch=world.touchDevice,assets=new Map(),loadedLods={0:0,1:0,2:0};let largestTexture=0;
     const load=async config=>{
       const model=new URL(config.model,url);

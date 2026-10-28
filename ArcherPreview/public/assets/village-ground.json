@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "span": 160,
+  "color": {
+    "url": "./content/372c7eff4e46797cc616919702f3badf2d6cb57b0f965e4379fba348ad187c26.webp",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 680760
+  },
+  "detail": {
+    "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 119227
+  },
+  "soilMaskAlphaRange": [
+    64,
+    255
+  ],
+  "gpuBytesWithMips": 22719147,
+  "extraDrawCalls": 0,
+  "detailSamples": 2,
+  "method": "unique-painted-world-map-and-packed-microdetail",
+  "resources": [
+    "./content/372c7eff4e46797cc616919702f3badf2d6cb57b0f965e4379fba348ad187c26.webp",
+    "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
+  ]
+}

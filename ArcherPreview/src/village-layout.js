@@ -148,7 +148,7 @@ function makePlacements(){
   // corner and planting. Candidate footprints protect the existing wide routes.
   const dressRandom=seeded(728104), dressing=[];
   const visualFootprints={'garden-bed':[2.03,1.61],bush:[1.82,1.49],'tree-01-round-oak':[3.5,3.5],'tree-02-slender-pine':[2.2,2.2]};
-  let solids=villageObstacles(out);
+  let solids=villageObstacles(out,{refinedTrees:false});
   const place=(asset,x,z,yaw,extra={})=>{
     const p={asset,x,z,yaw,scale:1,...extra,...COLLIDER_SHAPES[asset]},scale=p.scale;
     const footprint=visualFootprints[asset]??p.colliderFootprint??[1,1];
@@ -164,7 +164,7 @@ function makePlacements(){
     if(dressing.some(q=>Math.hypot(q.x-x,q.z-z)<(q.dressRadius+Math.min(w,d)*.32)))return false;
     add(asset,x,z,yaw,{...extra,dressed:true});
     const placed=out.at(-1);dressing.push({...placed,dressRadius:Math.min(w,d)*.32});
-    solids.push(...villageObstacles([placed]));return true;
+    solids.push(...villageObstacles([placed],{refinedTrees:false}));return true;
   };
   for(const [i,h]of VILLAGE_HOMES.entries()){
     const c=Math.cos(h.yaw),s=Math.sin(h.yaw),half=h.colliderFootprint[0]*h.scale*.5;
@@ -233,7 +233,7 @@ function makePlacements(){
 export const VILLAGE_PLACEMENTS=makePlacements();
 export const VILLAGE_PADS=VILLAGE_PLACEMENTS.filter(p=>p.pad).map(p=>({...p,radius:Math.hypot(...p.footprint)*.56}));
 
-export function villageObstacles(placements=VILLAGE_PLACEMENTS){
+export function villageObstacles(placements=VILLAGE_PLACEMENTS,{refinedTrees=true}={}){
   const obstacles=[];
   for(const p of placements){
     if(p.decorative)continue;
@@ -241,7 +241,8 @@ export function villageObstacles(placements=VILLAGE_PLACEMENTS){
     const center=(x,z)=>({x:p.x+(x*cos+z*sin)*scale,z:p.z+(-x*sin+z*cos)*scale});
     if(p.kind==='tree'||p.colliderRadius){
       if(p.kind==='tree'&&Math.hypot(p.x,p.z)>=50)continue;
-      obstacles.push({id:p.id,...center(...offset),radius:(p.colliderRadius??.4)*scale,height:p.kind==='tree'?8:p.kind==='rock'?3:1.5});
+      const treeScale=p.kind==='tree'&&refinedTrees?(p.asset==='tree-01-round-oak'?.55:.8):1;
+      obstacles.push({id:p.id,...center(...offset.map(n=>n*treeScale)),radius:(p.colliderRadius??.4)*scale*treeScale,height:p.kind==='tree'?8:p.kind==='rock'?3:1.5});
       continue;
     }
     const footprint=p.colliderFootprint??p.footprint;

@@ -1,0 +1,11 @@
+import {writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {groundLayout} from '../src/village-ground-layout.js';
+import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
+const out=resolve(process.env.VILLAGE_NATURAL_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/natural-ground-trees');
+await mkdir(out,{recursive:true});const layout=resolve(out,'ground-layout.json');
+await writeFile(layout,JSON.stringify({routes:groundLayout(),placements:VILLAGE_PLACEMENTS}));
+const python=process.env.VILLAGE_PYTHON??'C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe';
+const result=spawnSync(python,[resolve(import.meta.dirname,'bake-village-ground.py'),'--layout',layout,'--root',resolve(import.meta.dirname,'../public/assets'),'--out',out],{stdio:'inherit',windowsHide:true});
+if(result.error)throw result.error;if(result.status!==0)throw new Error('Ground paint bake failed');
