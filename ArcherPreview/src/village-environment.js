@@ -10,6 +10,7 @@ import {VillageOutlines} from './village-outlines.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {loadStreamedVillage} from './village-streamed-environment.js';
+import {prepareVillageInstancing} from './village-instancing.js';
 export {prepareVillageStart} from './village-streamed-environment.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
@@ -59,7 +60,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
       // Up to 4K color is streamed when visible and within the texture budget.
       const levels=villageLodSources(config,touch);
       const source=await load(levels[0]),full=geometry(source);
-      applyVillageToon(full,world.lighting);
+      prepareVillageInstancing(full);applyVillageToon(full,world.lighting);
       for(const mesh of full)mesh.metadata={...mesh.metadata,villageLodLevel:0};
       const cover=['building','tree','rock'].includes(config.category)||tallProps.has(id);
       // Keep the same custom-instance path at every tier, including opaque
@@ -70,7 +71,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
       world.lighting.registerMeshes(full);
       for(let index=1;index<levels.length;index++){
         const variant=await load(levels[index]),low=geometry(variant);
-        applyVillageToon(low,world.lighting);
+        prepareVillageInstancing(low);applyVillageToon(low,world.lighting);
         prepareTreeOcclusion(low);
         if(low.length!==full.length)throw new Error(`${id}: LOD의 메시 구성이 다릅니다.`);
         for(let part=0;part<full.length;part++){

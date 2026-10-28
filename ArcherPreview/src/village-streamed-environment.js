@@ -11,6 +11,7 @@ import {applyVillageToon} from './village-toon.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {applyVillageGround} from './village-ground.js';
+import {prepareVillageInstancing} from './village-instancing.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -41,7 +42,7 @@ export function installVillageGeometry(asset,container,level,world){
       const copy=mesh.clone(mesh.name+'-stream-lod-'+level,null,true);
       // Babylon treats a null clone parent as "inherit source parent". Detach
       // explicitly so glTF root instantiation cannot duplicate the LOD archive.
-      copy.parent=null;copy.metadata={...mesh.metadata};prepareTreeOcclusion([copy]);return copy;
+      copy.parent=null;copy.metadata={...mesh.metadata};prepareVillageInstancing([copy]);prepareTreeOcclusion([copy]);return copy;
     });
     asset.tiers.set(level,{container,meshes:archive});
   }else{
@@ -82,7 +83,7 @@ export function loadStreamedVillage(world){
       await world.prefetchResources?.(config.resources);
       const model=new URL(config.model,url),container=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),world.scene,null,'.gltf');
       if(disposed){container.dispose();return;}containers.push(container);
-      const meshes=geometry(container);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
+      const meshes=geometry(container);prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
       world.lighting.registerMeshes(meshes);
       for(const mesh of meshes)await mesh.material.forceCompilationAsync(mesh,{useInstances:true});
