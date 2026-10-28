@@ -250,7 +250,7 @@ async function loadCharacter() {
       await loadVillageTrainingTarget(world,training);
     }
     else await loadTrainingGround(world,training);
-    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
+    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isVillage() ? 'warrior-v3' : isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
     const response = await fetch(manifestUrl, { cache: 'no-cache' });
     if (!response.ok) throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');
     config = await response.json();

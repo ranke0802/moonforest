@@ -4,22 +4,27 @@ import { readFileSync } from 'node:fs';
 import { Animation, AnimationGroup, FreeCamera, Matrix, NullEngine, Quaternion, Scene, TransformNode, Vector3 } from '@babylonjs/core';
 import { CharacterAnimator } from '../src/animation.js';
 import { WarriorV2Controller as CharacterController } from '../src/warrior-v2.js';
+import { splitGlb } from '../scripts/resource-pack.js';
+import { readAccessor } from '../scripts/web-geometry.js';
 
-// Exercise the shipped native Meshy hierarchy and all TRS channels without a browser texture decoder.
-// The GLB remains read-only; these groups use exactly its animation data.
-const asset = readFileSync(new URL('../public/assets/violet-warrior-v2.glb', import.meta.url));
-const jsonLength = asset.readUInt32LE(12);
-const gltf = JSON.parse(asset.toString('utf8', 20, 20 + jsonLength));
-const binaryOffset = 20 + jsonLength + 8;
-const names = JSON.parse(readFileSync(new URL('../public/assets/warrior-v2.json', import.meta.url))).animations;
+// Exercise the old V2 source and the actual V3 deployment buffers without a browser.
+for (const version of ['v2','v3']) {
+const manifestUrl=new URL(`../public/assets/warrior-${version}.json`,import.meta.url);
+const config=JSON.parse(readFileSync(manifestUrl));
+let gltf,files;
+if(version==='v2')({gltf,files}=splitGlb(readFileSync(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url))));
+else {
+  const url=new URL(config.model,manifestUrl);gltf=JSON.parse(readFileSync(url));
+  files=new Map(gltf.buffers.map(b=>[b.uri,{data:readFileSync(new URL(b.uri,url))}]));
+}
+const names = config.animations;
 const channels = new Map();
 function accessor(index) {
-  const a = gltf.accessors[index], view = gltf.bufferViews[a.bufferView];
+  const a = gltf.accessors[index];
   assert.equal(a.componentType, 5126);
   const width = { SCALAR: 1, VEC3: 3, VEC4: 4 }[a.type];
-  const offset = binaryOffset + (view.byteOffset || 0) + (a.byteOffset || 0);
-  const stride = view.byteStride || width * 4;
-  return Array.from({ length: a.count }, (_, i) => Array.from({ length: width }, (_, k) => asset.readFloatLE(offset + i * stride + k * 4)));
+  const values=readAccessor(gltf,files,index);
+  return Array.from({ length: a.count }, (_, i) => Array.from(values.subarray(i*width,(i+1)*width)));
 }
 for (const clip of gltf.animations) channels.set(clip.name, clip.channels.map(channel => {
   const sampler = clip.samplers[channel.sampler];
@@ -87,7 +92,7 @@ function fixture() {
 }
 
 
-test('warrior v2 GLB: all supplied clips and sword match exported hierarchy at sampled times', () => {
+test(`warrior ${version}: all supplied clips and sword match exported hierarchy at sampled times`, () => {
   const f=fixture();
   try {
     for(const [state,name] of Object.entries(names)) {
@@ -101,7 +106,7 @@ test('warrior v2 GLB: all supplied clips and sword match exported hierarchy at s
     }
   } finally {f.dispose();}
 });
-test('warrior v2 GLB: shield mount stays rigid within all nine clips after transitions',()=>{
+test(`warrior ${version}: shield mount stays rigid within all nine clips after transitions`,()=>{
  const f=fixture();try{
   assert.equal(gltf.animations.length,9);
   const shield=f.nodes.find(n=>n.name==='Bunnyguard_Shield');
@@ -122,7 +127,7 @@ test('warrior v2 GLB: shield mount stays rigid within all nine clips after trans
   }
  }finally{f.dispose();}
 });
-test('warrior v2 GLB: idle loop joins without an equipment snap',()=>{
+test(`warrior ${version}: idle loop joins without an equipment snap`,()=>{
  const start=referencePose(names.idle,0),end=referencePose(names.idle,1.8666666667);
  for(const name of ['Golden_Oathblade','Bunnyguard_Shield']){
   const idx=gltf.nodes.findIndex(n=>n.name===name);
@@ -130,3 +135,4 @@ test('warrior v2 GLB: idle loop joins without an equipment snap',()=>{
   assert.ok(error<.002,`${name} loop seam ${error}`);
  }
 });
+}
