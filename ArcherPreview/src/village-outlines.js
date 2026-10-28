@@ -2,6 +2,7 @@ import {Color3,Constants,Frustum,ShaderMaterial,Vector2} from '@babylonjs/core';
 import '@babylonjs/core/Shaders/ShadersInclude/instancesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/instancesVertex.js';
 import {projectedCoverage} from './village-lod.js';
+import {VILLAGE_INK_MIN_COVERAGE,selectVillageOutlines,villageInkWidth} from './village-outline-policy.js';
 
 const vertexSource=`precision highp float;
 attribute vec3 position;attribute vec3 normal;
@@ -70,7 +71,6 @@ export class VillageOutlines {
   }
   addRecords(records){
     for(const record of records)for(const mesh of record.meshes){
-      if(['ground-detail','shrub','garden'].includes(record.placement.kind))continue;
       if(this.entryMeshes.has(mesh))continue;this.entryMeshes.add(mesh);
       this.sourceFor(mesh.sourceMesh??mesh);
       mesh.instancedBuffers.villageInk=new Vector2(0,0);
@@ -123,18 +123,17 @@ export class VillageOutlines {
         const {record,mesh}=entry;
         if(!record.root.isEnabled()||!mesh.isInFrustum(planes))continue;
         entry.coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
-        if(entry.coverage>.02)ranked.push(entry);
+        if(entry.coverage>VILLAGE_INK_MIN_COVERAGE)ranked.push(entry);
       }
-      ranked.sort((a,b)=>b.coverage*(this.selected.has(b)?1.15:1)-a.coverage*(this.selected.has(a)?1.15:1));
-      const selected=new Set(ranked.slice(0,this.world.touchDevice?32:52));
+      const {chosen:selected,triangles}=selectVillageOutlines(ranked,this.world.touchDevice,this.selected);
       for(const entry of this.selected)if(!selected.has(entry))entry.mesh.instancedBuffers.villageInk.set(0,0);
-      this.selected=selected;this.stats.outlineInstances=selected.size;
+      this.selected=selected;this.stats.outlineInstances=selected.size;this.stats.outlineTriangles=triangles;
     }
     this.selectedMeshes.clear();
     for(const entry of this.selected){
       const {record,mesh}=entry;
       const coverage=mesh.instancedBuffers?.treeCoverage??1;
-      mesh.instancedBuffers.villageInk.set(record.root.isEnabled()?coverage*Math.min(1,(entry.coverage-.02)/.025):0,record.placement.kind==='tree'?.007:.012);
+      mesh.instancedBuffers.villageInk.set(record.root.isEnabled()?coverage*Math.min(1,(entry.coverage-VILLAGE_INK_MIN_COVERAGE)/.0045):0,villageInkWidth(record.placement.kind));
       if(mesh.instancedBuffers.villageInk.x>0)this.selectedMeshes.add(mesh);
     }
   }

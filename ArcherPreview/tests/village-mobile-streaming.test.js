@@ -93,7 +93,7 @@ for(const [orientation,width,height]of [['landscape',780,360],['portrait',360,78
    drawn.clear();shadowDrawn.clear();scene.render();
    for(const m of expected){assert.ok(drawn.has(m),'missing visible base '+m.name+' frame '+frame);examined++;if(m.name.includes('tree-'))treeDraws++;}
    for(const m of visibility.cast){assert.ok(shadowDrawn.has(m),'missing shadow caster '+m.name+' frame '+frame);shadowDraws++;}
-   assert.ok(stats.outlineInstances<=32);assert.ok(visibility.stats.shadowCasters<=28);
+   assert.ok(stats.outlineInstances<=96);assert.ok(stats.outlineTriangles<=160000);assert.ok(visibility.stats.shadowCasters<=28);
   }
   let matrixBytes=0;
   for(const source of sources){const passes=Object.values(source._instanceDataStorage.renderPasses);assert.ok(passes.length<=2);for(const pass of passes)matrixBytes+=pass.instancesData?.byteLength??0;}
