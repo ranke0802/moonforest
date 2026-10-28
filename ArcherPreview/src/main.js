@@ -2,6 +2,8 @@ import './styles.css';
 import './mobile-viewport.css';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
+import './serial-player-textures.js';
+import {playerTextureManifest} from './player-texture-profile.js';
 import { createWorld } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
@@ -254,7 +256,8 @@ async function loadCharacter() {
   try {
     await initializeResourceCache();
     if(villageReview)await villageReview.startLoad();
-    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${isVillage() ? 'warrior-v3' : isV2() ? 'warrior-v2' : isWarrior() ? 'warrior' : 'character'}.json`, location.href);
+    const manifestName=playerTextureManifest(character,engine.getCaps());
+    const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
     if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(VILLAGE_SPAWN.x,world.terrain.heightAt(VILLAGE_SPAWN.x,VILLAGE_SPAWN.z)+1.1,VILLAGE_SPAWN.z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>loadingView.download(s),s=>loadingView.stream(s));

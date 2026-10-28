@@ -18,7 +18,7 @@ export class VillageTextureStreaming {
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
     this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
     const caps=world.scene.getEngine().getCaps();
-    this.compressedSupported=!!(caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
+    this.compressedSupported=!!(caps.astc||caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
     if(world.touchDevice&&this.compressedSupported&&[...assets.values()].every(a=>a.config.highTextures?.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=null;this.settleUntil=0;
     Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0});
