@@ -28,6 +28,13 @@ test('publication graph includes sky and glTF dependencies but excludes fixture 
   assert.deepEqual([...files.keys()].sort(),['NOTICE.txt','resource-cache.js','assets/character.json','assets/sky.json',...['image','buffer','model'].map(k=>`assets/content/${f[k]}`)].sort());
 });
 
+test('home-screen manifest is published at the site root beside its relative launch URL',async t=>{
+ const f=await fixture(t);
+ await writeFile(join(f.root,'app.webmanifest'),JSON.stringify({start_url:'./?character=warrior-v3',scope:'./',display:'standalone'}));
+ const {files}=await collectVillageSiteFiles(f.root,{requireCompleteVillage:false});
+ assert.ok(files.has('app.webmanifest'));assert.ok(!files.has('assets/source.glb'));
+});
+
 test('publication fails before copying if content bytes no longer match their immutable name',async t=>{
   const f=await fixture(t);await writeFile(join(f.root,'assets/content',f.buffer),'changed geometry');
   await assert.rejects(collectVillageSiteFiles(f.root,{requireCompleteVillage:false}),/Content hash mismatch/);

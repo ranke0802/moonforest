@@ -1,3 +1,5 @@
+import { isInstalledDisplay } from './app-display.js';
+
 /** Fullscreen is requested inside the click gesture. Landscape lock is optional. */
 export function setupFullscreen(button, notify = () => {}, { autoEnter = false } = {}) {
   if (!button) return () => {};
@@ -25,9 +27,11 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
   }
   function sync() {
     const active = Boolean(fullscreenElement());
+    const installed = !active && isInstalledDisplay();
     if (wasFullscreen && !active) unlock();
     wasFullscreen = active;
-    if(active)disarmAutoEntry();
+    if(active || installed)disarmAutoEntry();
+    button.hidden = installed;
     button.textContent = iconOnly ? (active ? '⤡' : '⛶') : (active ? '화면 축소' : '전체화면');
     button.setAttribute('aria-pressed', String(active));
     button.setAttribute('aria-label', active ? '화면 축소' : '전체화면');
@@ -49,6 +53,7 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
   }
   async function toggle({quiet=false,enterOnly=false}={}) {
     if (pending || disposed) return;
+    if (!fullscreenElement() && isInstalledDisplay()) { sync(); return; }
     if(enterOnly && fullscreenElement()){sync();return;}
     const report=quiet?()=>{}:notify;
     const exiting = Boolean(fullscreenElement());
@@ -56,7 +61,8 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
       ? (document.exitFullscreen || document.webkitExitFullscreen)
       : (root.requestFullscreen || root.webkitRequestFullscreen);
     if (!method) {
-      report(exiting ? '브라우저의 전체화면 종료 기능을 사용해 주세요.' : '이 브라우저는 페이지 전체화면을 지원하지 않습니다. 휴대폰을 가로로 돌려 사용해 주세요.');
+      const appleTouch = /iPhone|iPad|iPod/.test(globalThis.navigator?.userAgent || '') || (globalThis.navigator?.platform === 'MacIntel' && globalThis.navigator?.maxTouchPoints > 1);
+      report(exiting ? '브라우저의 전체화면 종료 기능을 사용해 주세요.' : appleTouch ? 'Safari의 공유 → 홈 화면에 추가로 설치한 뒤, 홈 화면 아이콘에서 열어 가로로 사용해 주세요.' : '이 브라우저는 페이지 전체화면을 지원하지 않습니다. 휴대폰을 가로로 돌려 사용해 주세요.');
       return;
     }
     pending = true;
@@ -92,8 +98,9 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
   button.addEventListener('click', onButton);
   document.addEventListener('fullscreenchange', sync);
   document.addEventListener('webkitfullscreenchange', sync);
+  globalThis.addEventListener?.('pageshow', sync);
   sync();
-  if(autoEnter && !fullscreenElement() && (root.requestFullscreen || root.webkitRequestFullscreen)){
+  if(autoEnter && !isInstalledDisplay() && !fullscreenElement() && (root.requestFullscreen || root.webkitRequestFullscreen)){
     document.addEventListener('pointerup',autoGesture,{capture:true,passive:true});
     document.addEventListener('keydown',autoGesture,{capture:true,passive:true});
     // Entry on load is only possible if this navigation retained user activation.
@@ -105,6 +112,7 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     disarmAutoEntry();
     document.removeEventListener('fullscreenchange', sync);
     document.removeEventListener('webkitfullscreenchange', sync);
+    globalThis.removeEventListener?.('pageshow', sync);
     unlock();
   };
 }

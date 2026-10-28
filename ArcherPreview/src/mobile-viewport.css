@@ -1,0 +1,80 @@
+/* The world fills the viewport. Safe-area padding belongs to HUD controls only.
+   In particular, never force a 380px-tall scene into a shorter Safari viewport. */
+html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
+#app { position: fixed; inset: 0; width: 100%; height: 100%; min-height: 0; }
+@supports (height: 100dvh) {
+  #app { height: 100dvh; }
+}
+
+@media (pointer: coarse) {
+  :root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --hud-left: max(12px, calc(var(--safe-left) + 8px));
+    --hud-right: max(12px, calc(var(--safe-right) + 8px));
+  }
+
+  /* Scaling a 150%-wide header also scaled its notch padding. Use real CSS
+     dimensions so both landscape orientations have the same safe hit targets. */
+  #app > .topbar {
+    top: calc(var(--safe-top) + 8px);
+    left: var(--hud-left);
+    right: var(--hud-right);
+    width: auto;
+    min-height: 36px;
+    padding: 0;
+    transform: none;
+    gap: 10px;
+  }
+  #app > .topbar .brand { font-size: 10px; letter-spacing: 1.6px; gap: 6px; }
+  #app > .topbar .brand small { display: none; }
+  #app > .topbar .moon-mark { font-size: 28px; }
+  #app > .topbar .top-actions { gap: 6px; }
+  #app > .topbar .motion-speed-toggle { height: 36px; min-width: 44px; padding: 0 9px; font-size: 11px; }
+  #app > .topbar .live-fps { min-width: 43px; font-size: 11px; line-height: 36px; }
+  #app > .gold-balance { top: calc(var(--safe-top) + 55px); left: var(--hud-left); }
+  #app > .right-tools.summon-tools {
+    top: calc(var(--safe-top) + 54px);
+    right: var(--hud-right);
+    width: 145px;
+    transform: none;
+  }
+  #app > .right-tools.summon-tools .boss-spawn-row button { min-height: 32px; padding: 6px 9px; font-size: 10px; }
+  #app > .right-tools.summon-tools select { min-height: 32px; font-size: 10px; }
+
+  #app > .action-controls {
+    right: max(18px, calc(var(--safe-right) + 10px));
+    bottom: max(20px, calc(var(--safe-bottom) + 10px));
+  }
+  #app > .action-controls[data-character="warrior-v2"] {
+    display: grid;
+    grid-template-columns: 64px 77px;
+    grid-template-rows: 64px 77px;
+    gap: 10px;
+    align-items: center;
+    justify-items: center;
+  }
+  #app > .action-controls[data-character="warrior-v2"] > .action-button {
+    position: static;
+    inset: auto;
+    margin: 0;
+    scale: none;
+  }
+  #app > .action-controls[data-character="warrior-v2"] #attack-button { grid-area: 2 / 2; width: 77px; height: 77px; }
+  #app > .action-controls[data-character="warrior-v2"] #guard-button { grid-area: 1 / 1; width: 64px; height: 64px; }
+  #app > .action-controls[data-character="warrior-v2"] #dodge-button { grid-area: 2 / 1; width: 64px; height: 64px; }
+  #app > .action-controls[data-character="warrior-v2"] #potion-button { grid-area: 1 / 2; width: 56px; height: 56px; }
+  #app > .action-controls[data-character="warrior-v2"] kbd { display: none; }
+  #app > .joystick-hint { left: calc(var(--hud-left) + 14px); bottom: max(28px, calc(var(--safe-bottom) + 20px)); }
+  #app > #stream-loading { left: var(--hud-left); bottom: max(8px, var(--safe-bottom)); }
+  #app > .frame-diagnostics { left: var(--hud-left); top: calc(var(--safe-top) + 92px); }
+  #app > .toast { top: calc(var(--safe-top) + 52px); max-width: calc(100% - var(--safe-left) - var(--safe-right) - 24px); }
+  #app > .game-settings, #app > .help-dialog {
+    width: min(480px, calc(100% - var(--safe-left) - var(--safe-right) - 24px));
+    max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 24px);
+    margin-top: calc(var(--safe-top) + 12px);
+    margin-bottom: calc(var(--safe-bottom) + 12px);
+  }
+}

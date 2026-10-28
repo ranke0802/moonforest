@@ -1,4 +1,5 @@
 import './styles.css';
+import './mobile-viewport.css';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import { createWorld } from './world.js';
@@ -10,6 +11,7 @@ import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
 import { followTarget, combatFocus } from './camera-follow.js';
 import { ARENA_RADIUS } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
+import { observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
@@ -534,7 +536,11 @@ try {
   window.addEventListener('pageshow',syncPlayback);
   window.addEventListener('focus',()=>{frameLoop.last=null;frameDiagnostics.suspend();});
   syncPlayback();
-  window.addEventListener('resize', applyRenderQuality);
+  observeViewportSize(canvas, () => {
+    // A held joystick/attack belongs to the old coordinate system after rotation.
+    input.reset();
+    applyRenderQuality();
+  });
   $('#quality-select').addEventListener('change', event => {
     qualityMode = event.target.value;
     try { localStorage.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }

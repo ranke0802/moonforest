@@ -49,8 +49,8 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
     }
   }
   for(const entry of await readdir(publicRoot,{withFileTypes:true})){
-    if(!entry.isFile()||!(entry.name==='resource-cache.js'||/notice|licen[cs]e|credits|copying/i.test(entry.name)))continue;
-    if(!/\.(?:js|txt|md|html|json)$/i.test(entry.name)&&entry.name.includes('.'))continue;
+    if(!entry.isFile()||!(entry.name==='resource-cache.js'||entry.name==='app.webmanifest'||/notice|licen[cs]e|credits|copying/i.test(entry.name)))continue;
+    if(!/\.(?:js|txt|md|html|json|webmanifest)$/i.test(entry.name)&&entry.name.includes('.'))continue;
     const absolute=resolve(publicRoot,entry.name);files.set(entry.name,{absolute,bytes:(await readFile(absolute)).length});
   }
   if(!files.has('resource-cache.js'))throw new Error('Persistent resource-cache worker is missing.');
@@ -70,7 +70,9 @@ export async function buildVillageSite(){
   const sizes=Object.fromEntries([...resourceInventory.files].filter(([path])=>path.startsWith('assets/content/')).map(([path,info])=>[path.split('/').at(-1),info.bytes]).sort(([a],[b])=>a.localeCompare(b)));
   await writeFile(resolve(publicRoot,'assets/resource-sizes.json'),JSON.stringify({version:1,files:sizes})+'\n');
   const {files,manifestCount}=await collectVillageSiteFiles(publicRoot);
-  await build({root:project,publicDir:false,build:{outDir,emptyOutDir:true}});
+  // Resolve public URLs in HTML (including the installed-app manifest) while
+  // copying only the verified graph below, not public's raw model sources.
+  await build({root:project,publicDir:publicRoot,build:{outDir,emptyOutDir:true,copyPublicDir:false}});
   const directories=new Set();
   for(const [local,info]of files){
     const target=resolve(outDir,local),folder=dirname(target);
@@ -87,7 +89,7 @@ export async function buildVillageSite(){
         let bytes=await readFile(path);
         // The same inventory must validate on Windows and Linux checkouts.
         // Never rewrite content-addressed resources; their names encode bytes.
-        if(!relative(outDir,path).split(sep).join('/').startsWith('assets/content/')&&/\.(?:js|css|html|json|txt|md)$/i.test(entry.name)){
+        if(!relative(outDir,path).split(sep).join('/').startsWith('assets/content/')&&/\.(?:js|css|html|json|txt|md|webmanifest)$/i.test(entry.name)){
           const normalized=Buffer.from(bytes.toString('utf8').replaceAll('\r\n','\n'));
           if(!normalized.equals(bytes)){await writeFile(path,normalized);bytes=normalized;}
         }

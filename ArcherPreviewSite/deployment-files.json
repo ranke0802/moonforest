@@ -1,7 +1,12 @@
 {
   "version": 1,
-  "bytes": 351989905,
+  "bytes": 351994896,
   "files": [
+    {
+      "path": "app.webmanifest",
+      "bytes": 281,
+      "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
+    },
     {
       "path": "assets/audio.json",
       "bytes": 7076,
@@ -4798,14 +4803,14 @@
       "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343"
     },
     {
-      "path": "assets/index-CodvHVkb.js",
-      "bytes": 231707,
-      "sha256": "154cc3c72bdffc4395156b87074377147b37c480c24d96370a050d38492a05f8"
+      "path": "assets/index-CcmNRC2r.js",
+      "bytes": 233274,
+      "sha256": "356525765363b16f548311301c8682436e6dd98c171440b08aa11923830b8c90"
     },
     {
-      "path": "assets/index-CYTI_Fli.css",
-      "bytes": 38482,
-      "sha256": "115543348d34b19e22642d50ce6ce8e95d4cddae1d6e1796cf910e37e726da80"
+      "path": "assets/index-DtkpWxnn.css",
+      "bytes": 41298,
+      "sha256": "66b76bf67080aa9618ce13ef5bc89598c53a2c6f4dd4920101228009d35fc0b4"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -4874,8 +4879,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 51041,
-      "sha256": "b1f87b22ba4a5dc5d696972341105cda55f3d1e43e5e1843c435980994d667e6"
+      "bytes": 51368,
+      "sha256": "2b8d07d4c66f45373ff330abef3273ee476e1d178e9460c61365910d5ff0f256"
     },
     {
       "path": "KTX2_NOTICES.txt",
