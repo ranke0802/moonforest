@@ -86,7 +86,7 @@ export function loadStreamedVillage(world,{
   world.villagePromise=(async()=>{
     const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];
     await initialize();await ground(world);
-    const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.forest?0:20,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
+    const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false;
@@ -118,7 +118,7 @@ export function loadStreamedVillage(world,{
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
       if(disposed)return;
-      const covered=instances.filter(r=>r.blocksPlayerView&&(world.forest||Math.hypot(r.placement.x,r.placement.z)<54));
+      const covered=instances.filter(r=>r.blocksPlayerView&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await work.yield();if(disposed)return;
         world.treeOcclusion.refreshRoots([record.root]);

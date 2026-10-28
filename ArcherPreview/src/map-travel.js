@@ -1,5 +1,5 @@
 import {createPortalMist} from './portal-mist.js';
-import {MAP_PORTALS,portalAvailable,travelUrl} from './map-route.js';
+import {mapPortals,portalAvailable,travelUrl} from './map-route.js';
 import {VILLAGE_GROUND_ROUTES,sampleGroundCurve} from './village-ground-layout.js';
 const exitSamples=sampleGroundCurve(VILLAGE_GROUND_ROUTES[1].points).filter(p=>p[1]>=40);
 export function exitRoadX(z){
@@ -24,8 +24,8 @@ export function consumeTravel(storage,character,now=Date.now()){
   }catch{return null;}
 }
 export function createMapPortal(world,{button,getState,onTravel,storage,persistTravel=true}){
-  const portal=MAP_PORTALS[world.mapId];if(!portal)return null;
-  const mist=createPortalMist(world,portal);button.hidden=true;
+  const portals=mapPortals(world.mapId);if(!portals.length)return null;
+  let portal=portals[0];const mists=portals.map(p=>createPortalMist(world,p));button.hidden=true;
   let available=false,disposed=false;
   const activate=()=>{
     const state=getState();if(disposed||!portalAvailable(state.position,portal,state))return;
@@ -35,10 +35,12 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
   button.addEventListener('click',activate);
   const keyboard=event=>{if(event.code==='KeyT'&&!event.repeat&&!event.target?.closest?.('input,select,textarea,dialog'))activate();};
   document.addEventListener('keydown',keyboard);
-  const dispose=()=>{if(disposed)return;disposed=true;button.hidden=true;button.removeEventListener('click',activate);document.removeEventListener('keydown',keyboard);world.scene.onDisposeObservable.remove(observer);mist.dispose();};
+  const dispose=()=>{if(disposed)return;disposed=true;button.hidden=true;button.removeEventListener('click',activate);document.removeEventListener('keydown',keyboard);world.scene.onDisposeObservable.remove(observer);for(const mist of mists)mist.dispose();};
   const observer=world.scene.onDisposeObservable.addOnce(dispose);
   return {dispose,update(dt=0){
-    if(disposed)return;mist.update(dt);
+    if(disposed)return;for(const mist of mists)mist.update(dt);
+    const position=getState().position;
+    if(position)portal=portals.reduce((a,b)=>Math.hypot(position.x-a.x,position.z-a.z)<Math.hypot(position.x-b.x,position.z-b.z)?a:b);
     const state=getState(),near=state.position&&Math.hypot(state.position.x-portal.x,state.position.z-portal.z)<6;
     available=portalAvailable(state.position,portal,state);button.hidden=!near;button.disabled=!available;
     const label=available?`${portal.label} · T`:state.enemies>0?'전투 종료 후 이동 가능':'이동 지점에 가까이 가세요';

@@ -23,7 +23,8 @@ export function createVillageTransform(world,placement,config){
     const dx=Math.cos(placement.yaw)*half,dz=-Math.sin(placement.yaw)*half;
     groundY=Math.min(groundY,world.terrain.heightAt(placement.x+dx,placement.z+dz),world.terrain.heightAt(placement.x-dx,placement.z-dz));
   }
-  root.position.set(placement.x,groundY-.025,placement.z);root.rotation.y=placement.yaw;
+  groundY=placement.elevation??(placement.topElevation!==undefined?placement.topElevation-config.height*placement.scale:groundY);
+  root.position.set(placement.x,groundY-.025+(placement.yOffset??0),placement.z);root.rotation.y=placement.yaw;
   root.scaling.setAll(config.height/config.bounds[1]*placement.scale);
   if(placement.length)root.scaling.x=placement.length/config.bounds[0];
   const facing=new TransformNode(`${root.name}-front`,world.scene);facing.parent=root;facing.rotation.y=config.frontYawOffset??0;
