@@ -41,15 +41,39 @@ export function villageDemand(world,records){
   return [...wanted.values()].sort((a,b)=>b.priority-a.priority||a.level-b.level);
 }
 
+// Placement bounds are immutable for this village instance. A stationary view
+// has the same demand even while downloads complete: filter the cached plan
+// against the current loaded tiers, without rescanning all 698 placements.
+export class VillageDemandCache {
+  constructor(world,records,stats={}){
+    Object.assign(this,{world,records,stats});this.previous=new Float64Array(28);this.previous.fill(NaN);this.plan=null;
+    stats.demandEvaluations=0;stats.demandCacheHits=0;
+  }
+  invalidate(){this.plan=null;}
+  get(){
+    const {world,records}=this,camera=world.camera;
+    camera.getViewMatrix();camera.getProjectionMatrix();
+    const matrix=camera.getTransformationMatrix().m,position=camera.globalPosition,target=camera.target??camera.getTarget();
+    const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length];
+    let changed=!this.plan||this.camera!==camera;
+    for(let i=0;i<16;i++)if(this.previous[i]!==matrix[i])changed=true;
+    for(let i=0;i<12;i++)if(this.previous[16+i]!==values[i])changed=true;
+    if(!changed){this.stats.demandCacheHits++;return this.plan;}
+    this.camera=camera;this.previous.set(matrix);this.previous.set(values,16);
+    this.stats.demandEvaluations++;return this.plan=villageDemand(world,records);
+  }
+}
+
 export class VillageGeometryStreaming {
   constructor(world,records,load,has,stats){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
+    this.demand=new VillageDemandCache(world,records,stats);
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
   async initial(plan){for(const request of plan)if(!this.has(request))await this.load(request);}
   update(now){
     if(this.disposed||!this.active||this.pending||this.stats.highTexturePending||now<this.next)return;this.next=now+200;
-    const request=villageDemand(this.world,this.records).find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
+    const request=this.demand.get().find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
     if(!request)return;
     this.stats.geometryPending=1;
     this.pending=this.load(request).catch(error=>{

@@ -35,6 +35,44 @@ test('denied persistent storage avoids prefetching a second copy and reports unk
  const s=setup();s.downloads.storage={async open(){throw new Error('denied');}};
  await s.downloads.prepare([a],e=>s.events.push(e));assert.equal(s.calls.length,0);assert.equal(s.events.at(-1).unavailable,true);
 });
+
+test('large downloads have one body consumer, bounded reads and throttled byte progress',async()=>{
+ const s=setup(),events=[];let produced=0,consumed=0,maximum=0,ticks=0,storedBytes=0;
+ s.downloads.sizes[a.split('/').at(-1)]=1000;s.downloads.now=()=>ticks++;
+ s.downloads.fetcher=async()=>{
+  const response=new Response(new ReadableStream({pull(c){
+   if(produced===1000){c.close();return;}produced++;maximum=Math.max(maximum,produced-consumed);c.enqueue(new Uint8Array(1));
+  }},{highWaterMark:0}),{headers:{'Content-Encoding':'gzip','Content-Length':'20','Content-Type':'application/octet-stream'}});
+  response.clone=()=>{throw new Error('Body must not be cloned');};return response;
+ };
+ s.cache.put=async(url,response)=>{
+  assert.equal(response.headers.get('Content-Encoding'),null);assert.equal(response.headers.get('Content-Length'),'1000');
+  const reader=response.body.getReader();for(;;){const {done,value}=await reader.read();if(done)break;consumed+=value.byteLength;storedBytes+=value.byteLength;}
+ };
+ const result=await s.downloads.prepare([a],x=>events.push(x));
+ assert.equal(storedBytes,1000);assert.ok(maximum<=1);assert.ok(events.length<=13,'no per-chunk DOM updates');
+ assert.equal(result.loaded,1000);assert.equal(result.complete,true);assert.equal(events.at(-1).ratio,1);
+});
+
+test('mid-stream network failure and oversized bodies never become cache hits',async()=>{
+ for(const oversized of [false,true]){
+  const s=setup();let pulls=0;
+  s.downloads.fetcher=async()=>new Response(new ReadableStream({pull(c){
+   if(oversized){c.enqueue(new Uint8Array(9));c.close();}
+   else if(pulls++===0)c.enqueue(new Uint8Array(3));else c.error(new Error('connection lost'));
+  }}));
+  await assert.rejects(s.downloads.prepare([a]),oversized?/불완전/:/connection lost/);assert.equal(s.stored.size,0);
+ }
+});
+
+test('quota rejection cancels the stream and stops prefetch without retrying the plan',async()=>{
+ const s=setup();let cancelled=0;
+ s.downloads.fetcher=async url=>{s.calls.push(url);return new Response(new ReadableStream({cancel(){cancelled++;}}));};
+ s.cache.put=async()=>{throw new DOMException('quota','QuotaExceededError');};
+ const state=await s.downloads.prepare([a,b]);
+ assert.equal(state.storageAvailable,false);assert.equal(state.complete,false);assert.equal(cancelled,1);assert.equal(s.calls.length,1);
+ await s.downloads.prepare([a,b]);assert.equal(s.calls.length,1,'actual loader handles storage fallback; prefetch does not repeat');
+});
 test('black curtain is in the initial document and stays up after 100% until the first scene is ready',()=>{
  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
  assert.match(html,/<html[^>]+data-loading="true"/);assert.match(html,/#app>#loading\{[^}]+background:#000/);assert.match(html,/html\[data-loading\] #app>:not\(#loading\)\{visibility:hidden!important/);

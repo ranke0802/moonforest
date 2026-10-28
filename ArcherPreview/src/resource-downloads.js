@@ -9,15 +9,15 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 // A fixed plan counts only missing files. Stored bytes are never reported as a
 // new download, and file count is never substituted for byte progress.
 export class ResourceDownloads {
-  constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args)}={}){
-    this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.tail=Promise.resolve();
+  constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now()}={}){
+    this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
   }
   prepare(paths,onProgress=()=>{}){
     const job=this.tail.then(()=>this.run(paths,onProgress));this.tail=job.catch(()=>{});return job;
   }
   async run(paths,onProgress){
     const urls=[...new Set(paths.map(p=>resourceUrl(p,this.base)))];
-    let cache;try{cache=await this.storage?.open('moonforest-resources-v1');}catch{}
+    let cache;try{if(!this.storageUnavailable)cache=await this.storage?.open('moonforest-resources-v1');}catch{}
     const missing=[];let cached=0;
     for(const url of urls){
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
@@ -26,7 +26,9 @@ export class ResourceDownloads {
       missing.push({url,size});
     }
     const state={loaded:0,total:missing.reduce((n,r)=>n+r.size,0),cached,complete:false,storageAvailable:!!cache};
+    let lastProgress=-Infinity;
     const emit=()=>onProgress({...state,ratio:state.total?state.loaded/state.total:1});emit();
+    const count=bytes=>{state.loaded+=bytes;const time=this.now();if(time-lastProgress>=100){lastProgress=time;emit();}};
     // Without persistent storage, let the actual loader fetch once via normal
     // HTTP caching; prefetching would otherwise risk a second download.
     if(!cache){onProgress({...state,ratio:0,unavailable:true});return state;}
@@ -35,14 +37,37 @@ export class ResourceDownloads {
       // and write a second copy of large player textures at the same time.
       const response=await this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'}});
       if(!response.ok)throw new Error(`리소스 다운로드 실패 (${response.status})`);
-      const saving=cache.put(url,response.clone()).catch(()=>{state.storageAvailable=false;});
-      let received=0;
-      if(response.body?.getReader){
-        const reader=response.body.getReader();
-        for(;;){const {done,value}=await reader.read();if(done)break;received+=value.byteLength;state.loaded+=value.byteLength;emit();}
-      }else{received=(await response.arrayBuffer()).byteLength;state.loaded+=received;emit();}
-      await saving;
-      if(received!==size){await cache.delete?.(url);throw new Error('리소스가 불완전하게 다운로드되었습니다. 다시 시도해 주세요.');}
+      let received=0;const reader=response.body?.getReader();
+      const incomplete=()=>new Error('리소스가 불완전하게 다운로드되었습니다. 다시 시도해 주세요.');
+      // One body consumer, with backpressure from CacheStorage. Response.clone()
+      // tees the entire file and can retain a second large buffer when one reader
+      // runs faster. Validate before closing so partial files cannot be committed.
+      const body=reader?new ReadableStream({
+        async pull(controller){
+          try{
+            const {done,value}=await reader.read();
+            if(done){if(received!==size)throw incomplete();controller.close();return;}
+            received+=value.byteLength;if(received>size)throw incomplete();
+            count(value.byteLength);controller.enqueue(value);
+          }catch(error){controller.error(error);await reader.cancel(error).catch(()=>{});}
+        },cancel:reason=>reader.cancel(reason),
+      },{highWaterMark:0}):null;
+      try{
+        const headers=new Headers(response.headers);
+        // fetch has already decoded any HTTP transport compression.
+        headers.delete('Content-Encoding');headers.set('Content-Length',String(size));
+        let data=body;
+        if(!reader){data=await response.arrayBuffer();received=data.byteLength;if(received!==size)throw incomplete();count(received);}
+        await cache.put(url,new Response(data,{status:response.status,statusText:response.statusText,headers}));
+      }catch(error){
+        await reader?.cancel(error).catch(()=>{});await cache.delete?.(url);
+        if(['QuotaExceededError','NotAllowedError','SecurityError'].includes(error.name)){
+          this.storageUnavailable=true;state.storageAvailable=false;
+          onProgress({...state,ratio:0,unavailable:true});return state;
+        }
+        throw error;
+      }
+      emit();
     }
     state.complete=true;emit();return state;
   }

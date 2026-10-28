@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,statSync} from 'node:fs';
 import {NullEngine,Scene,ArcRotateCamera,Vector3,MeshBuilder,AssetContainer,StandardMaterial} from '@babylonjs/core';
 import {VILLAGE_PLACEMENTS,VILLAGE_SPAWN} from '../src/village-layout.js';
-import {placementBounds,villageDemand,VillageGeometryStreaming} from '../src/village-demand.js';
+import {placementBounds,villageDemand,VillageDemandCache,VillageGeometryStreaming} from '../src/village-demand.js';
 import {installVillageGeometry} from '../src/village-streamed-environment.js';
 import {villageLodSources,projectedCoverage,villageLodTier} from '../src/village-lod.js';
 import {VillageOutlines} from '../src/village-outlines.js';
@@ -38,6 +38,31 @@ test('streaming loads one tier at a time, waits for activation and never automat
  finish();await stream.pending;stream.update(900);assert.equal(requests.length,2);assert.notDeepEqual(requests[0],requests[1]);finish();await stream.pending;
  const next=villageDemand(world,records).find(r=>!loaded.has(r.id+':'+r.level));stream.load=async()=>{throw new Error('503');};stream.update(1200);await stream.pending;
  assert.ok(stream.failed.has(next.id+':'+next.level));let nextRequest;stream.load=async r=>{nextRequest=r;loaded.add(r.id+':'+r.level);};stream.update(1500);await stream.pending;assert.notDeepEqual(nextRequest,next);
+});
+
+test('idle views reuse the exact LOD demand; every camera, projection and policy change invalidates it',t=>{
+ const {world,records}=fixture(t,true),stats={},cache=new VillageDemandCache(world,records,stats);
+ const plan=cache.get();for(let i=0;i<300;i++)assert.equal(cache.get(),plan);
+ assert.equal(stats.demandEvaluations,1);assert.equal(stats.demandCacheHits,300);
+ for(const mutate of [
+  ()=>world.camera.alpha+=.0001,()=>world.camera.beta+=.1,()=>world.camera.radius-=2,
+  ()=>world.camera.setTarget(new Vector3(15,1.1,20)),()=>world.camera.fov=.72,
+  ()=>world.camera.minZ=.08,()=>world.touchDevice=false,()=>world.villageOverview=true,
+ ]){
+  const old=cache.get();mutate();const current=cache.get();assert.notEqual(current,old);
+  assert.deepEqual(current,villageDemand(world,records));
+ }
+ const old=cache.get();cache.invalidate();assert.notEqual(cache.get(),old);
+});
+
+test('S23-size rotation and movement demand matches the uncached plan, including near trees and LOD boundaries',t=>{
+ const {world,records}=fixture(t,true),cache=new VillageDemandCache(world,records);
+ for(let i=0;i<96;i++){
+  world.camera.alpha=i*Math.PI/24;world.camera.radius=7+(i%16);
+  world.camera.setTarget(new Vector3(Math.sin(i*.2)*22,1.1,VILLAGE_SPAWN.z+Math.cos(i*.17)*12));
+  const cached=cache.get();assert.deepEqual(cached,villageDemand(world,records));assert.equal(cache.get(),cached);
+ }
+ assert.equal(cache.stats.demandEvaluations,96);assert.equal(cache.stats.demandCacheHits,96);
 });
 test('far-to-near promotion retains exact geometry, existing instance identity and native LOD selection',async t=>{
  const {world}=fixture(t),asset={tiers:new Map(),baseLevel:Infinity},containers=[];
