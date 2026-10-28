@@ -920,62 +920,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6.gltf",
+          "model": "./content/e44aa14446041c80b1ba38b87ba23ee2c3354692fb8734668f5e772dc454b50a.gltf",
           "resources": [
-            "./content/72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6.gltf",
-            "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+            "./content/e44aa14446041c80b1ba38b87ba23ee2c3354692fb8734668f5e772dc454b50a.gltf",
+            "./content/8f64e76826ad5e52581f3c54eef77f9ef186d79e309ac78855f644b82d44ec10.bin",
             "./content/a226d7b6fd10e211bb61fa5b4a64e24e511a7630c7ee28282526a05a41cf9f02.jpg"
           ],
-          "triangles": 4687,
+          "triangles": 4494,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 1102062
+          "bytes": 1127036
         },
         {
           "level": 1,
-          "model": "./content/53628de99c0771548bd420af3e821a82187bc81cf15c0853deeb64af05115d00.gltf",
+          "model": "./content/d7b27b79af2d233cb012b2da907eae73966b6a2a3f27fff62fe1c9065d5f638b.gltf",
           "resources": [
-            "./content/53628de99c0771548bd420af3e821a82187bc81cf15c0853deeb64af05115d00.gltf",
-            "./content/749b420ac309c3d71e7a09fc567b1a72576e46becbcb20e1e24e0ec44a38850f.bin",
-            "./content/161b00a864ae360260015b9ffd67a17b8d0fae4f38a8b28166353267ab2cc2be.bin",
-            "./content/9eceab811c5a81a4daeac8e4d42e6ef0a4e05a220595d86f64814e5ba226311b.bin",
-            "./content/69ac2a7aaae619a7263028970ef06cdb37d808bad08734d76e329d3b4def203a.bin",
+            "./content/d7b27b79af2d233cb012b2da907eae73966b6a2a3f27fff62fe1c9065d5f638b.gltf",
+            "./content/aac62e8d10d18b18bae945dbe1fbf91c72034b7d6a2537658a50b7bc07969140.bin",
             "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg"
           ],
-          "triangles": 3218,
+          "triangles": 3085,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 488651
+          "bytes": 489031
         },
         {
           "level": 2,
-          "model": "./content/82998ddd67ffdfd80d6c33365e07a85a7c3fedee6a61c1483d2426eb6382b8bf.gltf",
+          "model": "./content/a2ac953c376be04d32dc664f8ff04d8e682690fb588f5ce0f18f54bd72dc522c.gltf",
           "resources": [
-            "./content/82998ddd67ffdfd80d6c33365e07a85a7c3fedee6a61c1483d2426eb6382b8bf.gltf",
-            "./content/73f8bf19ead6f0615d6490d02ffe457572c0ac891369693a109cac8992122171.bin",
-            "./content/95378fc67525d2ee934febe33156c3e8b2645e4bb560b52aa369870e74d1ebee.bin",
-            "./content/6b401b51454a117d1fc42aaa67f07e449cd6d8bc406c27bf84d4bcacad3ba231.bin",
-            "./content/9121ffb44b7d0da7e942e44502a086f740a1316ec4da2af58418d05892043e12.bin",
+            "./content/a2ac953c376be04d32dc664f8ff04d8e682690fb588f5ce0f18f54bd72dc522c.gltf",
+            "./content/c1d3486538f8a3e5bb0bf6c3d750aa6c7fa176fc2cf9accb1d0b2e84192d91e8.bin",
             "./content/158f94d3c21c1feb898fc66218cca6d7c981680e30a654d70a04f7b7097917fd.jpg"
           ],
-          "triangles": 2596,
+          "triangles": 2383,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 272116
+          "bytes": 257652
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/49a42ff70a909f2ee0d760cb8e4198174ff0e87222b5904e1d0adf1483b1cf0d.gltf",
+        "model": "./content/38e3e62b9ce9f29271d117c73ddd16cc4c5d593f3f005e2e249d6c87be5a0bb8.gltf",
         "resources": [
-          "./content/49a42ff70a909f2ee0d760cb8e4198174ff0e87222b5904e1d0adf1483b1cf0d.gltf",
-          "./content/55a60a8a73548c8489b85ec6b2337a214810a1fff04f91f54ea3665e104a8dc6.bin",
+          "./content/38e3e62b9ce9f29271d117c73ddd16cc4c5d593f3f005e2e249d6c87be5a0bb8.gltf",
+          "./content/8f64e76826ad5e52581f3c54eef77f9ef186d79e309ac78855f644b82d44ec10.bin",
           "./content/c3fc97e06858752519d21867b87386b67f547bd06a06f8c18f3dbde87f6d4cba.jpg"
         ],
-        "triangles": 4687,
+        "triangles": 4494,
         "textureSize": 1024,
         "normalMap": false,
-        "bytes": 519776
+        "bytes": 544750
       },
       "geometryLod": true,
       "highTextures": {
@@ -993,7 +987,19 @@
         "colorEncoding": "WebP quality 92; original PNG resized with Lanczos",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f"
+      "toonSourceModelSha256": "eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f",
+      "treeRefinement": {
+        "version": 1,
+        "method": "existing-canopy-retopology-and-opaque-leaf-sprays",
+        "sourceModelSha256": "72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6",
+        "originalTriangles": [
+          4687,
+          3218,
+          2596
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0
+      }
     },
     "tree-02-slender-pine": {
       "name": "침엽수",
@@ -1010,62 +1016,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118.gltf",
+          "model": "./content/b3bf8bf7a0abfbfe14a3ef015e73df4a802db1412cbd9fe23b4d3ac25e67647c.gltf",
           "resources": [
-            "./content/b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118.gltf",
-            "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+            "./content/b3bf8bf7a0abfbfe14a3ef015e73df4a802db1412cbd9fe23b4d3ac25e67647c.gltf",
+            "./content/eaee6ff1160fe9ab5eee7b3d777d0f07384a3528a9fa51262c3b57161ce49a2d.bin",
             "./content/48e2abb56811d786dd011ddfe02e1648270fe151250beb0563ec833b2c2fe53f.jpg"
           ],
-          "triangles": 5352,
+          "triangles": 5003,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 936057
+          "bytes": 957678
         },
         {
           "level": 1,
-          "model": "./content/fa3fb0f4006573618264c40a3c3a64407813474bdd3aad2696c9a276c0656a22.gltf",
+          "model": "./content/d9bcce04d31e2a1622ba52442cc13a2f528da635dad46e2d338efcc8b798bfa4.gltf",
           "resources": [
-            "./content/fa3fb0f4006573618264c40a3c3a64407813474bdd3aad2696c9a276c0656a22.gltf",
-            "./content/3207a9e73ecb121fb488454fb6357ff3dda6ca00ccc9d10001ac118086c587a1.bin",
-            "./content/e17be5ebcae29653297bc79824ab2f5c87e16ccc66e8e4d4d5bbbfe5ab24a4ea.bin",
-            "./content/c2cef0346727d8d1b0aa8a09d14491c85701a5f5800f529b7d188e0492763c1b.bin",
-            "./content/5a0ea27911805f642385bf14f46e10e970eb4475ce4bb6198558ca7fde849ed7.bin",
+            "./content/d9bcce04d31e2a1622ba52442cc13a2f528da635dad46e2d338efcc8b798bfa4.gltf",
+            "./content/1eb58d63c5d67cbb95f03865e6c32bd58c8ec5fc5f331565d8fc01a43e7bfe02.bin",
             "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg"
           ],
-          "triangles": 3848,
+          "triangles": 3649,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 477884
+          "bytes": 465134
         },
         {
           "level": 2,
-          "model": "./content/92d53a2c9ec5e8275d7db31b4d4680984ef24f6eedcb6720842a3000a73d84b9.gltf",
+          "model": "./content/f8cc5df36df2f747f2ee234d1fffc64285cce7435a5325fe604f71820f1bcb8d.gltf",
           "resources": [
-            "./content/92d53a2c9ec5e8275d7db31b4d4680984ef24f6eedcb6720842a3000a73d84b9.gltf",
-            "./content/9abe49273e2b9acf7a2d31d0f33c14e699c435341727eeebd80d6ef7c7ee33aa.bin",
-            "./content/15eae46e0ec75ec40ac6d200f3aac9df03667b4421eace9e4dfd0b05728cd586.bin",
-            "./content/8baa6aae6ac96ba4c8c9d77f8d994a485dadf709ca774369cf980f1cc6cef315.bin",
-            "./content/a0a2219fdbc374f116384e27e672a77feff3813253ce0d7eba05b96df0d46f2a.bin",
+            "./content/f8cc5df36df2f747f2ee234d1fffc64285cce7435a5325fe604f71820f1bcb8d.gltf",
+            "./content/3998ab40844b5cd72a801f65f31531224e1afeb551ff1f974a3d50f8b622540f.bin",
             "./content/6da8b04a4ef0c6463eb610336e1ac51e7e62c71a4d91c7cabb167354d5acb6e3.jpg"
           ],
-          "triangles": 3671,
+          "triangles": 3000,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 328347
+          "bytes": 284127
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/f1c55f0271fcd4dec289b9f944c11854bb61098ce8e35a08255fd5fd693648be.gltf",
+        "model": "./content/e5ad97eb4f40660289f97e3cf651d89bfa7825c391269ff43f529a81770db4bb.gltf",
         "resources": [
-          "./content/f1c55f0271fcd4dec289b9f944c11854bb61098ce8e35a08255fd5fd693648be.gltf",
-          "./content/8c14c80d318333ed8054eb4ffc07151ffd11c4ec397029ec7180c4ed6fb3cceb.bin",
+          "./content/e5ad97eb4f40660289f97e3cf651d89bfa7825c391269ff43f529a81770db4bb.gltf",
+          "./content/eaee6ff1160fe9ab5eee7b3d777d0f07384a3528a9fa51262c3b57161ce49a2d.bin",
           "./content/958ba349b84c254b630641e037754bad2257beafaec6dd785be8565f8168ed15.jpg"
         ],
-        "triangles": 5352,
+        "triangles": 5003,
         "textureSize": 1024,
         "normalMap": false,
-        "bytes": 513619
+        "bytes": 535240
       },
       "geometryLod": true,
       "highTextures": {
@@ -1083,7 +1083,19 @@
         "colorEncoding": "WebP quality 92; original PNG resized with Lanczos",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7"
+      "toonSourceModelSha256": "b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7",
+      "treeRefinement": {
+        "version": 1,
+        "method": "existing-canopy-retopology-and-opaque-leaf-sprays",
+        "sourceModelSha256": "b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118",
+        "originalTriangles": [
+          5352,
+          3848,
+          3671
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0
+      }
     },
     "rock-01-mossy-boulder": {
       "name": "이끼 둥근 바위",
@@ -2260,11 +2272,15 @@
   "geometryLod": {
     "version": 1,
     "method": "attribute-aware-index-simplification",
-    "nearGeometryPreserved": true,
+    "nearGeometryPreserved": false,
     "mobileNearPreserved": true,
     "nearColorResolution": 4096,
     "textureProfile": "mobile-4k-toon-color-v1",
-    "visualReview": "APPROVED"
+    "visualReview": "APPROVED",
+    "nearGeometryEdits": [
+      "tree-01-round-oak",
+      "tree-02-slender-pine"
+    ]
   },
   "shading": "painted-toon-shadow"
 }
