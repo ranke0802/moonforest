@@ -12,6 +12,7 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
+import {VillageWorkBudget} from './village-work-budget.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -52,7 +53,15 @@ export function installVillageGeometry(asset,container,level,world){
   if(level<asset.baseLevel){
     for(let i=0;i<incoming.length;i++){
       const base=asset.baseMeshes[i],next=incoming[i];
-      if(base!==next)next.geometry.applyToMesh(base);
+      if(base!==next){
+        next.geometry.applyToMesh(base);
+        // applyToMesh retains old submeshes when their smaller ranges still fit
+        // the new buffers. A coarse-to-fine promotion then draws only fragments
+        // of the new topology. Copy the authored primitive ranges as well.
+        base.releaseSubMeshes();
+        for(const subMesh of next.subMeshes)subMesh.clone(base,base);
+        base.synchronizeInstances();
+      }
       base.material=next.material;base.metadata={...next.metadata,villageLodLevel:level};base.refreshBoundingInfo();
       for(const instance of base.instances)instance.refreshBoundingInfo();
     }
@@ -80,6 +89,7 @@ export function loadStreamedVillage(world){
     const has=r=>assets.get(r.id).tiers.has(r.level);
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
+      const work=new VillageWorkBudget(()=>world.villageStreaming?.active,()=>disposed);
       await world.prefetchResources?.(config.resources);
       const model=new URL(config.model,url),container=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),world.scene,null,'.gltf');
       if(disposed){container.dispose();return;}containers.push(container);
@@ -90,17 +100,22 @@ export function loadStreamedVillage(world){
       installVillageGeometry(asset,container,level,world);
       const instances=records.filter(r=>r.placement.asset===id);
       for(const record of instances)if(!record.meshes.length){
+        if(work.due())await work.yield();if(disposed)return;
         const instance=asset.source.instantiateModelsToScene(name=>record.root.name+'-'+name,false,{doNotInstantiate:false});
         for(const node of instance.rootNodes)node.parent=record.facing;
         record.meshes=record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0);
         for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
         record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
       }
-      const activeSources=[...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)];
+      const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])];
       world.lighting.registerMeshes(activeSources);
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
-      world.treeOcclusion.refreshRoots(instances.filter(r=>r.blocksPlayerView&&Math.hypot(r.placement.x,r.placement.z)<54).map(r=>r.root));
+      const covered=instances.filter(r=>r.blocksPlayerView&&Math.hypot(r.placement.x,r.placement.z)<54);
+      for(const record of covered){
+        if(work.due())await work.yield();if(disposed)return;
+        world.treeOcclusion.refreshRoots([record.root]);
+      }
       stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
     };
     const streaming=new VillageGeometryStreaming(world,records,load,has,stats);world.villageStreaming=streaming;

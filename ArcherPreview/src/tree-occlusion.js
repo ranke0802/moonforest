@@ -96,11 +96,12 @@ export class TreeOcclusion {
         const sphere=mesh.getBoundingInfo().boundingSphere;
         return {inverse:mesh.getWorldMatrix().clone().invert(),center:sphere.centerWorld.clone(),radius:sphere.radiusWorld,levels,screenCoverage,camera:mesh.getScene().activeCamera};
       });
-      const old=this.byRoot.get(root),tree={meshes,parts,min,max,coverage:old?.coverage??1,target:old?.target??1};
+      const old=this.byRoot.get(root),tree={meshes,parts,min,max,index:old?.index??this.trees.length,coverage:old?.coverage??1,target:old?.target??1};
       for(const mesh of meshes)mesh.instancedBuffers.treeCoverage=tree.coverage;
       this.byRoot.set(root,tree);
+      this.trees[tree.index]=tree;
     }
-    this.trees=[...this.byRoot.values()];this.checkIn=0;
+    this.checkIn=0;
   }
   obstructs(tree,camera,target) {
     if (!blocksView(camera,target,tree.min,tree.max,0)) return false;

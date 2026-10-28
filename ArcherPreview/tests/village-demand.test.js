@@ -57,9 +57,9 @@ test('far-to-near promotion retains exact geometry, existing instance identity a
  }
  const stats={},ink=new VillageOutlines(world,[],stats),record={meshes:[instance],placement:{kind:'building'},root:instance};ink.addRecords([record]);ink.addRecords([record]);assert.equal(ink.entries.length,1);assert.equal(ink.sources.size,3);ink.dispose();
 });
-test('real cottage, oak and gate LODs promote without changing transforms, normals or creating extra instances',async t=>{
+test('real cottage, trees, walls and gate LODs promote complete draw ranges without changing transforms or normals',async t=>{
  const {world}=fixture(t);
- for(const id of ['house-01-cottage','tree-01-round-oak','wood-03-plank-gate']){
+ for(const id of ['house-01-cottage','tree-01-round-oak','tree-02-slender-pine','wall-01-straight','wall-02-corner','wall-03-breached','wood-03-plank-gate']){
   const config=manifest.assets[id],asset={tiers:new Map(),baseLevel:Infinity},placement=VILLAGE_PLACEMENTS.find(p=>p.asset===id),record=createVillageTransform(world,placement,config);
   let instances,matrices;
   for(const level of [2,1,0]){
@@ -74,6 +74,9 @@ test('real cottage, oak and gate LODs promote without changing transforms, norma
    assert.equal(instances.length,meshes.length,'no duplicate archived LOD instance');
    for(let i=0;i<instances.length;i++){
     assert.ok(instances[i].sourceMesh.geometry===meshes[i].geometry,'exact geometry at level '+level);
+    const ranges=m=>m.subMeshes.map(s=>[s.materialIndex,s.verticesStart,s.verticesCount,s.indexStart,s.indexCount]);
+    assert.deepEqual(ranges(instances[i].sourceMesh),ranges(meshes[i]),id+' complete source draw ranges at level '+level);
+    assert.deepEqual(ranges(instances[i]),ranges(meshes[i]),id+' complete instance draw ranges at level '+level);
     assert.deepEqual(Array.from(instances[i].getVerticesData('normal')),Array.from(meshes[i].getVerticesData('normal')));
     assert.deepEqual(Array.from(instances[i].computeWorldMatrix(true).m),matrices[i]);
    }

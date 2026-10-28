@@ -22,8 +22,8 @@ test('throwing in the outer forest does not pull the player back into the old ar
  const {owner,player}=fixture(t);player.position.set(18,1,0);owner.grab.velocity.set(1,0,0);owner.grab.throw();
  assert.ok(owner.grab.flightEnd.x>21);assert.ok(Math.hypot(owner.grab.flightEnd.x,owner.grab.flightEnd.z)<=21.5);
 });
-test('escape succeeds up to and including 0.3s, restores grounded rotation and starts the selected roll',t=>{
- for(const time of [0,.15,.3]){
+test('escape succeeds up to and including 1s, restores grounded rotation and starts the selected roll',t=>{
+ for(const time of [0,.3,.5,.999,1]){
   const {battle,owner,player,controller}=fixture(t);
   owner.grab.time=time;player.position.set(3,1,4);player.rotation.y=2;
   assert.equal(controller.captured,true);assert.equal(battle.canEscapeGrab,true);
@@ -38,7 +38,7 @@ test('escape succeeds up to and including 0.3s, restores grounded rotation and s
  }
 });
 test('late escape and escape during throw/recovery fail without unlocking or changing pose',t=>{
- for(const [phase,time] of [['holding',.3001],['flight',0],['recover',0]]){
+ for(const [phase,time] of [['holding',1.0001],['flight',0],['recover',0]]){
   const {battle,owner,player,controller}=fixture(t);owner.grab.phase=phase;owner.grab.time=time;
   const position=player.position.clone();
   assert.equal(battle.canEscapeGrab,false);assert.equal(battle.escapeGrab(),false);

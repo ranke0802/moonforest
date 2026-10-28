@@ -13,6 +13,20 @@ function setup(touchDevice,village=false) {
   return {scene,engine,ambient,key,rim,shadows,lighting};
 }
 
+test('streaming a new LOD leaves existing warm materials alone and repeated registration is idle',()=>{
+ const {scene,engine,lighting}=setup(true,true);
+ const near=MeshBuilder.CreateBox('near',{},scene),lod=MeshBuilder.CreateBox('lod',{},scene);
+ near.material=new PBRMaterial('near',scene);lod.material=new PBRMaterial('lod',scene);
+ let nearDirty=0,lodDirty=0;
+ near.material.markDirty=()=>nearDirty++;lod.material.markDirty=()=>lodDirty++;
+ lighting.registerMeshes([near]);assert.equal(nearDirty,1);
+ lighting.registerMeshes([lod]);assert.equal(nearDirty,1);assert.equal(lodDirty,1);
+ lighting.registerMeshes([near,lod,near]);assert.equal(nearDirty,1);assert.equal(lodDirty,1);
+ near.material=lod.material;lighting.registerMeshes([near]);assert.equal(lodDirty,1,'promotion preserves the precompiled material');
+ lighting.setQuality('battery');assert.equal(lodDirty,2,'a real quality change still invalidates affected receivers');
+ scene.dispose();engine.dispose();
+});
+
 test('quality switching reuses one shadow map and preserves authored painted material colors',()=>{
   const {scene,engine,shadows,lighting,rim}=setup(true);
   const mesh=MeshBuilder.CreateBox('painted',{},scene),material=new PBRMaterial('painted',scene);

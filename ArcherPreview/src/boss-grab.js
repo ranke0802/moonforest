@@ -2,7 +2,7 @@ import { Matrix, Quaternion, Vector3 } from '@babylonjs/core';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
-export const GRAB_ESCAPE_WINDOW = .3;
+export const GRAB_ESCAPE_WINDOW = 1;
 const localPosition=(node,actor)=>{
   actor.computeWorldMatrix(true);node.computeWorldMatrix(true);
   return Vector3.TransformCoordinates(node.getAbsolutePosition(),actor.getWorldMatrix().clone().invert());

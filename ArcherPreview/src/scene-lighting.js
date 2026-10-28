@@ -40,6 +40,7 @@ export class SceneLighting {
     this.focus = Vector3.Zero();
     this.receivers = new Set();
     this.painted = new WeakSet();
+    this.registeredMaterials = new WeakSet();
     // A stable arena-sized frustum avoids per-frame bounds fitting and preserves
     // useful shadow texels when tall trees enter the cast list.
     key.position = key.direction.scale(-this.lightDistance);
@@ -54,6 +55,7 @@ export class SceneLighting {
     shadows.getShadowMap().refreshRate = 1;
   }
   registerMeshes(meshes) {
+    const dirty=new Set();
     for (const mesh of meshes) {
       if (!mesh.getTotalVertices?.()) continue;
       const receiver = mesh.sourceMesh || mesh;
@@ -63,6 +65,9 @@ export class SceneLighting {
         receiver.onDisposeObservable.addOnce(() => this.receivers.delete(receiver));
       }
       const material = receiver.material;
+      if(material&&!this.registeredMaterials.has(material)){
+        this.registeredMaterials.add(material);dirty.add(material);
+      }
       if (material?.getClassName() !== 'PBRMaterial' || this.painted.has(material)) continue;
       const albedo = material.albedoColor, emission = material.emissiveColor;
       if (!albedo || !emission || albedo.r + albedo.g + albedo.b > .01 || emission.r + emission.g + emission.b <= 0) continue;
@@ -72,7 +77,9 @@ export class SceneLighting {
       this.painted.add(material);
       if (frozen) material.freeze();
     }
-    this.refreshReceivers();
+    // Streaming another LOD must not invalidate every already-warm scene
+    // shader, nor invalidate the incoming shader again after it was compiled.
+    for(const material of dirty)material.markDirty(true);
   }
   refreshReceivers() {
     // Assets arrive after the first frame. Frozen receivers may have compiled

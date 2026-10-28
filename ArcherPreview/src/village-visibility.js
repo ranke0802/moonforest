@@ -37,7 +37,7 @@ export class VillageVisibility {
     const turned=!this.view||transform.m.some((n,i)=>Math.abs(n-this.view[i])>.0001);
     if(this.timer>0&&!moved&&!turned)return;
     this.timer=.16;this.camera.copyFrom(camera);
-    this.view=Array.from(transform.m);Frustum.GetPlanesToRef(transform,this.planes);
+    this.view??=new Float32Array(16);this.view.set(transform.m);Frustum.GetPlanesToRef(transform,this.planes);
     let activeCells=0,activeInstances=0;
     for(const cell of this.cells.values()){
       const distance=Vector3.Distance(camera,cell.center)-cell.radius;
@@ -45,7 +45,7 @@ export class VillageVisibility {
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<(this.world.villageOverview?260:villageRenderRange(this.touch).cellCull)&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(active&&!r.occluded);}cell.active=active;}
-      if(active){activeCells++;activeInstances+=cell.records.filter(r=>r.meshes.length&&!r.occluded).length;}
+      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded)activeInstances++;}
     }
     if(this.shadowTimer<=0){
       this.shadowTimer=.35;
