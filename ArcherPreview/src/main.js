@@ -505,7 +505,7 @@ try {
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
-  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:true});
+  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:!villageReviewEnabled});
   frameLoop=new FrameLoop(engine,render);
   const syncPlayback=()=>{const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();frameLoop.setPaused(paused);if(paused)text('#live-fps','0 FPS');audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);

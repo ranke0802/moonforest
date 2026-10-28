@@ -20,12 +20,12 @@ test('curved circulation road stays connected and clear of houses and fences',()
   const samples=sampleGroundCurve([[0,0],[4,2],[8,0]]);assert.deepEqual(samples[0],[0,0]);assert.deepEqual(samples.at(-1),[8,0]);
 });
 
-test('ground color and packed detail fit the prior 2K map plus one third MiB',()=>{
+test('ground keeps a sub-1MB transfer and cuts GPU memory while retaining packed detail',()=>{
   const root=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('village-ground.json',root)));
   assert.equal(manifest.color.width,2048);assert.equal(manifest.detail.width,256);assert.equal(manifest.extraDrawCalls,0);
   assert.deepEqual(manifest.soilMaskAlphaRange,[64,255],'forest RGB must survive browser image premultiplication');
-  assert.ok(manifest.gpuBytesWithMips<=2048**2*4*4/3+350000);
-  assert.ok(manifest.color.bytes+manifest.detail.bytes<800000);
+  assert.ok(manifest.gpuBytesWithMips<6*1048576);
+  assert.ok(manifest.color.bytes+manifest.detail.bytes<1000000,'KTX2 carries offline mipmaps as well as its base level');
   for(const ref of manifest.resources)assert.equal(hash(readFileSync(new URL(ref,root))),ref.split('/').at(-1).split('.')[0]);
 });
 

@@ -7,7 +7,7 @@ import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
 import { validVillageTextureProfile } from '../src/village-texture-budget.js';
 
 const project=resolve(import.meta.dirname,'..');
-const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|wav|mp3)$/;
+const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
 
 function contentReferences(value,result=[]){
   if(typeof value==='string'&&/^(?:\.\/)?content\//.test(value))result.push(value);

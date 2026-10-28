@@ -35,6 +35,9 @@ export async function applyVillageGround(world){
   if(config.span!==world.terrain.size||config.color.width!==2048||config.detail.width!==256||config.soilMaskAlphaRange?.join(',')!=='64,255')throw new Error('마을 바닥 재질 규격이 다릅니다.');
   const load=resource=>new Promise((resolve,reject)=>{
     const texture=new Texture(new URL(resource.url,url).href,world.scene,false,true,Texture.TRILINEAR_SAMPLINGMODE,()=>resolve(texture),()=>reject(new Error('마을 바닥 텍스처를 불러오지 못했습니다.')));
+    // KTX2 blocks cannot be flipped during GPU upload. The old bitmap loader
+    // inverted Y for this world map; preserve those UVs explicitly.
+    if(resource.codec){texture.vScale=-1;texture.vOffset=1;}
     texture.hasAlpha=false;texture.anisotropicFilteringLevel=4;
   });
   // Color alpha stores the soil mask; it never enables transparency/blending.

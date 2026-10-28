@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "urls": {
+    "jsDecoderModule": "./content/bcd33ad2570e025699910ae2b9d957d446075788c2fbfdc80f9b197a38348be1.js",
+    "jsMSCTranscoder": "./content/b8906bae7e55606aba070642eb3bce790a2b5aea774874e120e9fd41f7c7d60b.js",
+    "wasmMSCTranscoder": "./content/29becbf0eef2ce9f6d72109ad217704ec3799c432da0c26e3893b793ecab6bdc.wasm",
+    "wasmUASTCToASTC": "./content/6846c972b4a52d938866f43896fd2b2450052da807cdd1285e898be80614d612.wasm",
+    "wasmUASTCToBC7": "./content/be442ab8c0cbf734ded98e6ad38112aaba23c83bfeecac4213ded54631fc4eef.wasm",
+    "wasmUASTCToR8_UNORM": "./content/0467c98b150a630e5a51f7810843e8b7fd9aad22e3888baf70aad255c55d02bc.wasm",
+    "wasmUASTCToRG8_UNORM": "./content/fb45a2c103c59cec21c3708a6534d43cd4381669f66d3292dd8a6e4e1956d773.wasm",
+    "wasmUASTCToRGBA_SRGB": "./content/1f4d2e8bfef4e31679b23d473e1c410c29f7e485a739e76c5b357628f4190874.wasm",
+    "wasmUASTCToRGBA_UNORM": "./content/b7470b26a847994cdeb9226eeba1e3711688e378ee438b7dd941e83cb598b694.wasm",
+    "wasmZSTDDecoder": "./content/67d12d34f82ef700ec3a3795a77590252858c70330908a87ed1e73efc268cb4b.wasm"
+  },
+  "sources": [
+    {
+      "name": "babylon.ktx2Decoder.js",
+      "source": "https://cdn.babylonjs.com/babylon.ktx2Decoder.js",
+      "sha256": "bcd33ad2570e025699910ae2b9d957d446075788c2fbfdc80f9b197a38348be1",
+      "bytes": 24450
+    },
+    {
+      "name": "msc_basis_transcoder.js",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/msc_basis_transcoder.js",
+      "sha256": "b8906bae7e55606aba070642eb3bce790a2b5aea774874e120e9fd41f7c7d60b",
+      "bytes": 63318
+    },
+    {
+      "name": "msc_basis_transcoder.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/msc_basis_transcoder.wasm",
+      "sha256": "29becbf0eef2ce9f6d72109ad217704ec3799c432da0c26e3893b793ecab6bdc",
+      "bytes": 455582
+    },
+    {
+      "name": "uastc_astc.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_astc.wasm",
+      "sha256": "6846c972b4a52d938866f43896fd2b2450052da807cdd1285e898be80614d612",
+      "bytes": 12212
+    },
+    {
+      "name": "uastc_bc7.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_bc7.wasm",
+      "sha256": "be442ab8c0cbf734ded98e6ad38112aaba23c83bfeecac4213ded54631fc4eef",
+      "bytes": 14650
+    },
+    {
+      "name": "uastc_r8_unorm.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_r8_unorm.wasm",
+      "sha256": "0467c98b150a630e5a51f7810843e8b7fd9aad22e3888baf70aad255c55d02bc",
+      "bytes": 14139
+    },
+    {
+      "name": "uastc_rg8_unorm.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_rg8_unorm.wasm",
+      "sha256": "fb45a2c103c59cec21c3708a6534d43cd4381669f66d3292dd8a6e4e1956d773",
+      "bytes": 17611
+    },
+    {
+      "name": "uastc_rgba8_srgb_v2.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_rgba8_srgb_v2.wasm",
+      "sha256": "1f4d2e8bfef4e31679b23d473e1c410c29f7e485a739e76c5b357628f4190874",
+      "bytes": 24158
+    },
+    {
+      "name": "uastc_rgba8_unorm_v2.wasm",
+      "source": "https://cdn.babylonjs.com/ktx2Transcoders/1/uastc_rgba8_unorm_v2.wasm",
+      "sha256": "b7470b26a847994cdeb9226eeba1e3711688e378ee438b7dd941e83cb598b694",
+      "bytes": 30121
+    },
+    {
+      "name": "zstddec.wasm",
+      "source": "https://cdn.babylonjs.com/zstddec.wasm",
+      "sha256": "67d12d34f82ef700ec3a3795a77590252858c70330908a87ed1e73efc268cb4b",
+      "bytes": 29232
+    }
+  ]
+}

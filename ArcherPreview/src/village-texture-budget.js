@@ -1,4 +1,4 @@
-export const VILLAGE_TEXTURE_BUDGET={mobile:128*1024*1024,desktop:256*1024*1024};
+export const VILLAGE_TEXTURE_BUDGET={mobile:128*1024*1024,mobileCompressed:96*1024*1024,desktop:256*1024*1024};
 
 export function validVillageTextureProfile(config){
   const t=config?.textures;
@@ -9,19 +9,22 @@ export function validVillageTextureProfile(config){
 
 // Conservative RGBA8 allocation, including every mip level. This is the extra
 // streamed village texture budget, not a measurement of the whole GPU heap.
-export function highTextureBytes(config){
+export function highTextureBytes(config,compressedSupported=true){
   if(!validVillageTextureProfile(config))return Infinity;
-  return Object.values(config.textures).reduce((sum,{width,height})=>{
-    for(;;){sum+=width*height*4;if(width===1&&height===1)break;width=Math.max(1,width>>1);height=Math.max(1,height>>1);}
+  return Object.values(config.textures).reduce((sum,{width,height,codec})=>{
+    // Reserve the worst 8bpp compressed target (ASTC/BC7/ETC2 RGBA), including
+    // tail blocks. Actual opaque ETC1S often uses only 4bpp. Unsupported GPUs
+    // retain the full RGBA reservation instead of assuming compression worked.
+    for(;;){sum+=codec&&compressedSupported?Math.ceil(width/4)*Math.ceil(height/4)*16:width*height*4;if(width===1&&height===1)break;width=Math.max(1,width>>1);height=Math.max(1,height>>1);}
     return sum;
   },0);
 }
 
-export function selectHighTextures(candidates,assets,resident,budget,maxTextureSize){
+export function selectHighTextures(candidates,assets,resident,budget,maxTextureSize,compressedSupported=true){
   const ranked=[...candidates].sort((a,b)=>b[1]*(resident.has(b[0])?1.15:1)-a[1]*(resident.has(a[0])?1.15:1));
   const selected=new Map();let used=0;
   for(const [id,coverage]of ranked){
-    const config=assets.get(id)?.config.highTextures,bytes=highTextureBytes(config);
+    const config=assets.get(id)?.config.highTextures,bytes=highTextureBytes(config,compressedSupported);
     if(config?.textures?.albedo?.width>maxTextureSize||used+bytes>budget)continue;
     selected.set(id,coverage);used+=bytes;
   }

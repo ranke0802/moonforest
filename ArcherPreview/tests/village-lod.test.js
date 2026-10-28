@@ -27,9 +27,10 @@ test('mobile keeps original geometry as its near tier and streams higher resolut
   assert.equal(mobile[0],config.mobileNear);assert.equal(villageLodSources(config,false)[0],config.lods[0]);
 });
 
-test('unused high-resolution GPU textures expire after a short movement grace period',()=>{
+test('unused high-resolution textures survive short camera turns and eventually expire',()=>{
   assert.equal(shouldReleaseHighTexture(1000,2000,true),false);
-  assert.equal(shouldReleaseHighTexture(1000,2600,true),true);
+  assert.equal(shouldReleaseHighTexture(1000,2600,true),false);
   assert.equal(shouldReleaseHighTexture(1000,2600,false),false);
-  assert.equal(shouldReleaseHighTexture(1000,4100,false),true);
+  assert.equal(shouldReleaseHighTexture(1000,13001,true),true);
+  assert.equal(shouldReleaseHighTexture(1000,21001,false),true);
 });

@@ -7,6 +7,7 @@ import {VILLAGE_LOD_COVERAGE,villageLodSources} from './village-lod.js';
 import {VillageTextureStreaming} from './village-texture-streaming.js';
 import {applyVillageToon} from './village-toon.js';
 import {VillageOutlines} from './village-outlines.js';
+import {initializeVillageKtx2} from './village-ktx2.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -35,6 +36,7 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     const manifest=await response.json();
     if(!manifest.complete&&!fixture)throw new Error('마을 에셋 제작이 아직 완료되지 않았습니다.');
     if(!fixture&&manifest.developmentFixture)throw new Error('개발 검수용 에셋 목록은 배포에 사용할 수 없습니다.');
+    if(manifest.compression)await initializeVillageKtx2();
     await applyVillageGround(world);
     const touch=world.touchDevice,assets=new Map(),loadedLods={0:0,1:0,2:0};let largestTexture=0;
     const load=async config=>{
@@ -112,6 +114,12 @@ export async function loadVillage(world,{onProgress=()=>{}}={}){
     world.environment={ready:true,mode:fixture?'village-fixture':'village',sourceAssets:assets.size,homes:20,instances:records.length,missing:manifest.missing,loadedLods,largestTexture,textureTier:manifest.geometryLod?'근거리 최대 4K / 중거리 1K / 원거리 512·256':touch?'1K / 512':'2K / 1K / 512',geometryLod:!!manifest.geometryLod,visibility:visibility.stats};
     if(manifest.geometryLod)textureStreaming=new VillageTextureStreaming(world,assets,records,url,world.environment);
     outlines=new VillageOutlines(world,records,world.environment);
+    // Compile each instanced LOD before camera movement can reveal it. A cold
+    // base shader used to leave an already-ready black hull visible by itself.
+    for(const container of containers)for(const mesh of geometry(container)){
+      await mesh.material?.forceCompilationAsync(mesh,{useInstances:true});
+    }
+    await outlines.prepare();
     // Read by the development review panel only, never a per-frame production scan.
     world.villageRenderRecords=records;
     world.scene.onDisposeObservable.addOnce(()=>{outlines?.dispose();textureStreaming?.dispose();visibility.dispose();for(const c of containers)c.dispose();});

@@ -2,7 +2,7 @@ import {Frustum,Texture} from '@babylonjs/core';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes,selectHighTextures} from './village-texture-budget.js';
 
-export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?1500:3000);
+export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?12000:20000);
 // gammaSpace's getter is false for glTF textures already decoded by the GPU.
 // Copying that value to a plain RGBA texture skips sRGB decoding and washes out
 // only the asset promoted to the near tier. Set source color space explicitly.
@@ -17,6 +17,10 @@ export class VillageTextureStreaming {
     this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
     this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
+    const caps=world.scene.getEngine().getCaps();
+    this.compressedSupported=!!(caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
+    if(world.touchDevice&&this.compressedSupported&&[...assets.values()].every(a=>a.config.highTextures?.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
+    this.lastView=null;this.settleUntil=0;
     Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0});
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
@@ -24,6 +28,9 @@ export class VillageTextureStreaming {
     if(this.disposed||now<this.nextCheck)return;
     this.nextCheck=now+250;const candidates=new Map();
     const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
+    const view=camera.getViewMatrix().m;
+    if(this.lastView&&view.some((v,i)=>i<12&&Math.abs(v-this.lastView[i])>.035))this.settleUntil=now+350;
+    this.lastView=Array.from(view);
     for(const record of this.records){
       if(!record.root.isEnabled())continue;
       const config=this.assets.get(record.placement.asset)?.config;
@@ -39,11 +46,11 @@ export class VillageTextureStreaming {
     }
     // Briefly keep off-screen maps only if they fit after visible candidates.
     for(const id of this.resident.keys())if(!candidates.has(id)&&!shouldReleaseHighTexture(this.lastWanted.get(id)??0,now,this.world.touchDevice))candidates.set(id,0);
-    this.wanted=selectHighTextures(candidates,this.assets,this.resident,this.budget,this.maxTextureSize);
+    this.wanted=selectHighTextures(candidates,this.assets,this.resident,this.budget,this.maxTextureSize,this.compressedSupported);
     // Evict before replacement. An unfinished request keeps its reservation until
     // it finishes/cancels, preventing transient double allocation during turns.
     for(const id of this.resident.keys())if(!this.wanted.has(id))this.release(id);
-    if(!this.pending){
+    if(!this.pending&&now>=this.settleUntil){
       const candidate=[...this.wanted].filter(([id])=>!this.resident.has(id)&&!this.failed.has(id)).sort((a,b)=>b[1]-a[1])[0];
       if(candidate)this.start(candidate[0]);
     }
@@ -69,7 +76,7 @@ export class VillageTextureStreaming {
     return texture;
   }
   start(id){
-    const config=this.assets.get(id)?.config.highTextures,bytes=highTextureBytes(config);
+    const config=this.assets.get(id)?.config.highTextures,bytes=highTextureBytes(config,this.compressedSupported);
     this.syncStats();
     if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
     this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.syncStats();
@@ -90,7 +97,8 @@ export class VillageTextureStreaming {
         if(size.width!==expected.width||size.height!==expected.height)throw new Error('Texture dimensions differ from the budgeted profile');
       }
       for(const {material}of originals){material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
-      this.resident.set(id,{textures,originals,bytes:highTextureBytes(config),resolution:config.textures.albedo.width});this.stats.highTextureLoads++;this.syncStats();
+      this.resident.set(id,{textures,originals,bytes:highTextureBytes(config,this.compressedSupported),resolution:config.textures.albedo.width});this.stats.highTextureLoads++;this.syncStats();
+      this.stats.highTextureFormat=textures.albedoTexture.getInternalTexture?.()?.format??null;
     }catch(error){Object.values(textures).forEach(t=>t.dispose());throw error;}
   }
   release(id){
