@@ -14,6 +14,7 @@ import {applyPlayerDetail,playerDetailBias} from '../src/player-detail.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {CharacterAnimator} from '../src/animation.js';
 import {prepareMapResources} from '../src/startup-resources.js';
+import {WebGL2ShaderProcessor} from '@babylonjs/core/Engines/WebGL/webGL2ShaderProcessors.js';
 const base=new URL('../public/assets/',import.meta.url);
 
 test('in-document travel serializes release/load, keeps the curtain until ready, and accepts the return trip',async()=>{
@@ -56,15 +57,17 @@ test('real V6 idle rig focuses at its visible chin and orbit/pinch keep that tar
   }finally{engine.dispose();}
 });
 
-test('player-only texture detail changes actual compiled samples without reallocating maps or removing mips',async()=>{
+for(const webgl of [1,2])test('WebGL '+webgl+' player detail preserves complete GLSL statements, textures and mips',async()=>{
   const engine=new NullEngine(),scene=new Scene(engine),camera=new ArcRotateCamera('camera',1,1,17,Vector3.Zero(),scene),mesh=MeshBuilder.CreateBox('player',{},scene),material=new PBRMaterial('paint',scene),texture=RawTexture.CreateRGBATexture(new Uint8Array([128,100,150,255]),1,1,scene,true);
   try{
+    if(webgl===2){engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=true;}
     texture.getInternalTexture().isReady=true;engine.getCaps().maxAnisotropy=8;mesh.material=material;material.albedoTexture=texture;material.emissiveTexture=texture;
     const before=scene.textures.length;applyPlayerDetail({meshes:[mesh]},camera);applyPlayerDetail({meshes:[mesh]},camera);
     assert.equal(scene.textures.length,before);assert.equal(material.albedoTexture,texture);assert.equal(texture.noMipmap,false);assert.equal(texture.anisotropicFilteringLevel,8);
     await material.forceCompilationAsync(mesh);scene.render();
     const source=mesh.subMeshes[0].effect.fragmentSourceCode;
-    assert.match(source,/texture2D\(albedoSampler,[^\n]*playerDetailBias\)/);assert.match(source,/texture2D\(emissiveSampler,[^\n]*playerDetailBias\)/);
+    assert.match(source,/vec4 albedoTexture=texture(?:2D)?\(albedoSampler,[^\n]*playerDetailBias\);/);
+    assert.match(source,/vec3 emissiveColorTex=texture(?:2D)?\(emissiveSampler,[^\n]*playerDetailBias\)\.rgb;/);
     assert.equal(playerDetailBias(2),0);assert.equal(playerDetailBias(17),-.45);assert.equal(playerDetailBias(50),0);
   }finally{engine.dispose();}
 });

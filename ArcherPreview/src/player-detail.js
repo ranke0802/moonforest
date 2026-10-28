@@ -8,8 +8,10 @@ export class PlayerDetail extends MaterialPluginBase{
   getUniforms(){return {ubo:[{name:'playerDetailBias',size:1,type:'float'}],fragment:'uniform float playerDetailBias;'};}
   bindForSubMesh(buffer){buffer.updateFloat('playerDetailBias',playerDetailBias(this.camera.radius));}
   getCustomCode(type){if(type!=='fragment')return null;return {
-    '!TEXRD\\(albedoSampler,([^)]*)\\)':'texture2D(albedoSampler,$1,playerDetailBias)',
-    '!TEXRD\\(emissiveSampler,([^)]*)\\)':'texture2D(emissiveSampler,$1,playerDetailBias)',
+    // Babylon appends a newline to injected code. Replace the complete sample
+    // statement: splitting off a lone semicolon lets its processor discard it.
+    '!vec4 albedoTexture=TEXRD\\(albedoSampler,([^)]*)\\);':'vec4 albedoTexture=texture2D(albedoSampler,$1,playerDetailBias);',
+    '!vec3 emissiveColorTex=TEXRD\\(emissiveSampler,([^)]*)\\)\\.rgb;':'vec3 emissiveColorTex=texture2D(emissiveSampler,$1,playerDetailBias).rgb;',
   };}
 }
 export function applyPlayerDetail(container,camera){
