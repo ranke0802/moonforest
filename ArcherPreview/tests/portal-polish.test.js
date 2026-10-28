@@ -15,6 +15,7 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {CharacterAnimator} from '../src/animation.js';
 import {prepareMapResources} from '../src/startup-resources.js';
 import {WebGL2ShaderProcessor} from '@babylonjs/core/Engines/WebGL/webGL2ShaderProcessors.js';
+import {readMapContainer} from '../src/map-container.js';
 const base=new URL('../public/assets/',import.meta.url);
 
 test('in-document travel serializes release/load, keeps the curtain until ready, and accepts the return trip',async()=>{
@@ -57,10 +58,10 @@ test('real V6 idle rig focuses at its visible chin and orbit/pinch keep that tar
   }finally{engine.dispose();}
 });
 
-for(const webgl of [1,2])test('WebGL '+webgl+' player detail preserves complete GLSL statements, textures and mips',async()=>{
+for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test('WebGL '+webgl+' / UBO '+ubo+' player detail preserves complete GLSL statements, textures and mips',async()=>{
   const engine=new NullEngine(),scene=new Scene(engine),camera=new ArcRotateCamera('camera',1,1,17,Vector3.Zero(),scene),mesh=MeshBuilder.CreateBox('player',{},scene),material=new PBRMaterial('paint',scene),texture=RawTexture.CreateRGBATexture(new Uint8Array([128,100,150,255]),1,1,scene,true);
   try{
-    if(webgl===2){engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=true;}
+    if(webgl===2){engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=!ubo;}
     texture.getInternalTexture().isReady=true;engine.getCaps().maxAnisotropy=8;mesh.material=material;material.albedoTexture=texture;material.emissiveTexture=texture;
     const before=scene.textures.length;applyPlayerDetail({meshes:[mesh]},camera);applyPlayerDetail({meshes:[mesh]},camera);
     assert.equal(scene.textures.length,before);assert.equal(material.albedoTexture,texture);assert.equal(texture.noMipmap,false);assert.equal(texture.anisotropicFilteringLevel,8);
@@ -96,7 +97,7 @@ test('actual streamed village/forest round trips retain the player and drain in-
   t.after(()=>{if(oldCaches===undefined)delete globalThis.caches;else globalThis.caches=oldCaches;});
   const playerFiles=new Set(JSON.parse(readFileSync(new URL('warrior-v3-ios.json',base))).resources.map(p=>p.split('/').at(-1)));
   const player=MeshBuilder.CreateBox('retained-player',{},scene),playerTexture=RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]),1,1,scene,true),playerMaterial=new PBRMaterial('retained-player-paint',scene);player.material=playerMaterial;playerMaterial.albedoTexture=playerTexture;
-  const counts=()=>[scene.meshes.length,scene.transformNodes.length,scene.materials.length,scene.textures.length,scene.onAfterRenderObservable.observers.length,scene.onBeforeRenderObservable.observers.length];
+  const counts=()=>[scene.meshes.length,scene.transformNodes.length,scene.materials.length,scene.textures.length,scene.geometries.length,scene.onAfterRenderObservable.observers.length,scene.onBeforeRenderObservable.observers.length,scene.onDisposeObservable.observers.length,engine.onContextRestoredObservable.observers.length];
   // The glTF loader asks the scene for its one shared default material when
   // image decoding is omitted in NullEngine. Warm that fixture before counting.
   scene.defaultMaterial;playerTexture.getInternalTexture().isReady=true;
@@ -104,14 +105,14 @@ test('actual streamed village/forest round trips retain the player and drain in-
   const services={initialize:async()=>{},ground:async()=>{},loadContainer:async(model,scene)=>{
     const {gltf,files}=await readRuntimeGltf(new URL(model.pathname.split('/').at(-1),new URL('content/',base)));
     for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+files.get(b.uri).data.toString('base64');
-    const loader=new GLTFFileLoader();loader.skipMaterials=true;const c=await loader.loadAssetContainerAsync(scene,{json:gltf},'');
+    const c=await readMapContainer(scene,gltf,'',{skipMaterials:true});
     // Match OPAQUE authored materials while excluding network/GPU image decode.
     for(const mesh of c.meshes)if(mesh.getTotalVertices()){const m=new PBRMaterial('map-'+loaded+'-'+mesh.name,scene);m.transparencyMode=0;mesh.material=m;c.materials.push(m);}
     loaded++;loadedContainers.push(c);
     if(holdNext){holdNext=false;await new Promise(resolve=>{unblock=resolve;entered();});}
     return c;
   }};
-  for(const character of ['warrior-v4','warrior-v3','warrior-v4','warrior-v3']){
+  for(const character of Array.from({length:20},(_,i)=>i%2?'warrior-v3':'warrior-v4')){
     replaceWorldMap(world,character);const spawn=character==='warrior-v4'?46:71;camera.setTarget(new Vector3(0,1.46,spawn));camera.radius=13;
     assert.equal(world.scene,scene);assert.equal(world.camera,camera);assert.equal(world.terrain,terrain);assert.equal(ARENA_RADIUS,character==='warrior-v4'?62:48);assert.equal(ENEMY_ARENA_RADIUS,ARENA_RADIUS-.5);
     cachedRequests.length=0;let progress;
@@ -137,5 +138,5 @@ test('actual streamed village/forest round trips retain the player and drain in-
     assert.deepEqual(counts(),initial,'map resources must return to the retained-player baseline');
     assert.ok(loadedContainers.every(c=>!c.meshes.length&&!c.materials.length&&!c.textures.length&&!c.geometries.length));
   }
-  t.diagnostic(JSON.stringify({roundTrips:2,modelLoads:loaded,retainedResources:counts()}));
+  t.diagnostic(JSON.stringify({roundTrips:10,modelLoads:loaded,retainedResources:counts()}));
 });

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "bytes": 433782538,
+  "bytes": 433783740,
   "files": [
     {
       "path": "app.webmanifest",
@@ -13,19 +13,19 @@
       "sha256": "010163fceffacf872bb5055e5a644c9dd857e5214f6df056de35b8273e282e5b"
     },
     {
-      "path": "assets/babylon~basisTextureLoader-BXhhNle8.js",
+      "path": "assets/babylon~basisTextureLoader-NA6ahlSP.js",
       "bytes": 1378,
-      "sha256": "394ba45a72b7f50cc213294546fc34b1ce325dbba5983802cf82387f58cd0847"
+      "sha256": "e7f34bd52b5483f9c9e8de205d742b66f0ef0a68a7002467553a524204336d5e"
     },
     {
-      "path": "assets/babylon~ddsTextureLoader-B-_k_xXq.js",
+      "path": "assets/babylon~ddsTextureLoader-CEaRMPkn.js",
       "bytes": 1372,
-      "sha256": "734f7fb8a72ec09d7fe62141bb68c346a59e2e34785caa685a2ffdb975a08c15"
+      "sha256": "9850018594e5b4a0363836b5695304615383675e19e65a4692a2297ef57dcc13"
     },
     {
-      "path": "assets/babylon~envTextureLoader-1Mmsm2BA.js",
+      "path": "assets/babylon~envTextureLoader-BqevrCTx.js",
       "bytes": 640,
-      "sha256": "af33f6d31eac79529ead228457781552bf431690bf9a94d7a5dd5d51c644a589"
+      "sha256": "b4a542e267595db491aaaf01ea3270ecbdc40a51f36037e67f54d5f5a988ad0c"
     },
     {
       "path": "assets/babylon~flowGraphDebugBlock.pure-WLoiS5iS.js",
@@ -43,9 +43,9 @@
       "sha256": "084aefa756625b6ff70ef8dc5aadb28c61d0eadb65bb47b153d43281083f71c6"
     },
     {
-      "path": "assets/babylon~flowGraphGLTFDataProvider-DanHmX5U.js",
+      "path": "assets/babylon~flowGraphGLTFDataProvider-dGQWHjqC.js",
       "bytes": 736,
-      "sha256": "f5a69b84ded63083f145de80df5813a1e575ee236d31f36c4bf0309ee579fec4"
+      "sha256": "600d26f35f2206007013b6e724bd8cbf822e8418df695c4bef832a60fd019e3a"
     },
     {
       "path": "assets/babylon~flowGraphPointerDownEventBlock.pure-DXPTIpt7.js",
@@ -68,24 +68,24 @@
       "sha256": "3db23f65e9b54bdd980b84923882afd25d518fd872ef35e75675ab6c550810f9"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.fragment-CLmhrAzr.js",
+      "path": "assets/babylon~gaussianSplatting.fragment-D8YIXxug.js",
       "bytes": 4363,
-      "sha256": "83ffe7f20a15b346b2184ab4290369922a63362b162ac7e8231932e8bb271e8b"
+      "sha256": "e60ff9f47a4d4357b62a76d065243265beb67d091be965b0af1448a8051de667"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.fragment-DkQVZM9N.js",
+      "path": "assets/babylon~gaussianSplatting.fragment-DswqgErw.js",
       "bytes": 4517,
-      "sha256": "4f3be2e9244d638f93b8c57817bf77e356592447767f2467235647da61688270"
+      "sha256": "4c3316c8d5387ed51bd366627fc9edbda37037e15d63652f5ba0a7a805971752"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.vertex-BuDoWjf0.js",
+      "path": "assets/babylon~gaussianSplatting.vertex-CbANSUIV.js",
       "bytes": 8176,
-      "sha256": "ff3b0c048afbee4240c86a18e720925a57d01d216a821db142ec9cb7d1f10fe9"
+      "sha256": "cf10beed931e2fe1b4fdd027fc89b4e4005b3f062e7cf7d41729c37a8d0586d6"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.vertex-CW42E_O4.js",
+      "path": "assets/babylon~gaussianSplatting.vertex-DTSdhNXM.js",
       "bytes": 9515,
-      "sha256": "33e4b2455addc2dadf20ec7a52157ae1ccffb00893c2a317f2f56e78b4828875"
+      "sha256": "65028bb84bb7ed1e6ec3038bfa1bdc43a64e5e4d774116a91b648917a0204aae"
     },
     {
       "path": "assets/babylon~gaussianSplattingVoxel.fragment-CtfthKeJ.js",
@@ -98,14 +98,14 @@
       "sha256": "e5471a335c66740b37c29975bdf33c3338e7e603d401ddeee40ca5ab9c53c5fe"
     },
     {
-      "path": "assets/babylon~gaussianSplattingVoxel.vertex-BOyilZJu.js",
-      "bytes": 2206,
-      "sha256": "2403502d06ff3617aaf57afa10e573257a303223b659c03b2d60607aacdd3b3d"
+      "path": "assets/babylon~gaussianSplattingVoxel.vertex-1i-Npqpo.js",
+      "bytes": 2922,
+      "sha256": "923761e640dd5c2ae3f4b3037a82827d0550abb036f1abe4106551f75a624a43"
     },
     {
-      "path": "assets/babylon~gaussianSplattingVoxel.vertex-seFtRlT-.js",
-      "bytes": 2922,
-      "sha256": "394f17336be1c3d18b1e2cce24c93a84cb4fed5724c0b20b0c0eba1bb97733b4"
+      "path": "assets/babylon~gaussianSplattingVoxel.vertex-DfAbEe_n.js",
+      "bytes": 2206,
+      "sha256": "ed6edf5490b3802b28a65ec92fee3bc1ff4e9b7e4b1d00131ba7fad4ed34af28"
     },
     {
       "path": "assets/babylon~gpuRenderParticles.fragment-D2dSVo_t.js",
@@ -118,9 +118,9 @@
       "sha256": "c9c35aba77baffc1e74195b278355d8e86d6f5bb785e393d4f53cd6faecdfe65"
     },
     {
-      "path": "assets/babylon~hdrTextureLoader-DpdZaHLD.js",
+      "path": "assets/babylon~hdrTextureLoader-DET3OV1g.js",
       "bytes": 608,
-      "sha256": "20617078b9c4d8a6a0fdc2fff91a226c9bf7f784d2e1390d1ba7bae813288610"
+      "sha256": "39aba2388b424d0489e4f182df27892e9c95235abba7e7cbd5429588c01e59f4"
     },
     {
       "path": "assets/babylon~iblCopyVoxelBufferToGrid.compute-CD9VPqTW.js",
@@ -133,9 +133,9 @@
       "sha256": "e6ead06af924b7dbb5401d209039f32ccdfa2093c4f570bdc33078d13fc494a2"
     },
     {
-      "path": "assets/babylon~index-BOUXlpUN.js",
-      "bytes": 5974835,
-      "sha256": "5f8d249b3d466a51f395c6eb7b3afc860d1dd0f12928e8e52c4f027d782d7a91"
+      "path": "assets/babylon~index-CVUZMQIc.js",
+      "bytes": 5974843,
+      "sha256": "70570932d7ce86f3bf2110e12d4321796132d8d303330ebbdd467bc82bee8068"
     },
     {
       "path": "assets/babylon~index~animationGroup.pure~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlaying~klf38vi4-KGbvCOp2.js",
@@ -613,19 +613,19 @@
       "sha256": "14e16acc33f7af0ba73773d09f0732b52dc4dd35263a0afcc63fa24bee1868f2"
     },
     {
-      "path": "assets/babylon~index~envTextureLoader~dumpTools.pure-Du_RLmhk.js",
+      "path": "assets/babylon~index~envTextureLoader~dumpTools.pure-DOYYNLzn.js",
       "bytes": 25776,
-      "sha256": "adfe4227eea4d5c0f3d646108869e5369fd504f627112bf89d8744fb088b6628"
+      "sha256": "3fc3ea4effc14bf82a7fb5d64d4205bd77e7fef38dc64fef7a5d0a2f75e4ef3b"
     },
     {
-      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure-CXWa-TE6.js",
+      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure-Bi-qcWO7.js",
       "bytes": 41219,
-      "sha256": "65a190a6529c569a9869d76c18aa22e6c7b2bab3c52ea370c932854d88cf010f"
+      "sha256": "9778ff5a0a01073b84562a45a122bcd69b65c63567e8f7514c4622b288873cbe"
     },
     {
-      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure~dumpTools.pure-CPRswRAg.js",
+      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure~dumpTools.pure-BfHWzIrS.js",
       "bytes": 30691,
-      "sha256": "e51598148f83b9e6220ccd5d7df3192c6a3e08dbd26a47de22363aad3c41458c"
+      "sha256": "4cf3f22a76ca7b57c5b87d671b9d7a30e651e70f124e5cca08c8ec17cc491c0c"
     },
     {
       "path": "assets/babylon~index~flowGraphBezierCurveEasingBlock.pure~flowGraphEasingBlock.pure-DujSrSQu.js",
@@ -998,9 +998,9 @@
       "sha256": "55f43a993a54927ae7a32dbe9c4a95712fbd35dd284e2721f6dfa8c137e825ca"
     },
     {
-      "path": "assets/babylon~index~openpbrMaterialLoadingAdapter~pbrMaterial.pure~openpbrMaterial.pure-BV4z6pD1.js",
+      "path": "assets/babylon~index~openpbrMaterialLoadingAdapter~pbrMaterial.pure~openpbrMaterial.pure-DRJ2htyy.js",
       "bytes": 115264,
-      "sha256": "fcc406ee310c73679fe73f834dbba7645d6d01ce25da44b1177d325e7f20d507"
+      "sha256": "9edde5c60440f69a6d2dcfb790516311341e6165a8b2798b33414def4c007f38"
     },
     {
       "path": "assets/babylon~index~packingFunctions~depth.fragment~gaussianSplatting.fragment~kernelBlur.fragmen~gehngc96-BaOlvuOs.js",
@@ -1043,9 +1043,9 @@
       "sha256": "c17f23373bf44c68752853121f8ffc1ce8fe2b3587d980c2d5f80f8eece943eb"
     },
     {
-      "path": "assets/babylon~index~pbrMaterial.pure~openpbrMaterial.pure-D71zH7cZ.js",
+      "path": "assets/babylon~index~pbrMaterial.pure~openpbrMaterial.pure-CWHX7t2v.js",
       "bytes": 118375,
-      "sha256": "ae2ae065b283c8560e20a4164b3aadbc8fa6a94de04ff5065a72aeab385e9c42"
+      "sha256": "b79fc3affa2e289c9f21095bfc31a99a3d8b89680cc581da18504145402c3dd6"
     },
     {
       "path": "assets/babylon~index~reflectionFunction~background.fragment~default.fragment~pbr.fragment~openpbr.~buawjkjh-CkX_c0mh.js",
@@ -1128,9 +1128,9 @@
       "sha256": "32a0f012754a2d57ba6dca48a7a176df922af54719be7c730434481171ff21e5"
     },
     {
-      "path": "assets/babylon~ktxTextureLoader-CR8EztWZ.js",
+      "path": "assets/babylon~ktxTextureLoader-BrASkF--.js",
       "bytes": 4250,
-      "sha256": "f3268bb88d0414558c1174e87b1cce3eea8ed68fec62374eb46079b4dabc9b27"
+      "sha256": "119bb2a4a730c463c22e95a825aa401483031c7ec504cdf2e4a5f7d029215277"
     },
     {
       "path": "assets/babylon~lod3D.fragment-C0yxRa09.js",
@@ -1228,9 +1228,9 @@
       "sha256": "a2b5ae13b1c6fe5c4bfc51ff63e4b761a521cc62a8531927d561c552a75facbe"
     },
     {
-      "path": "assets/babylon~tgaTextureLoader-BA-42fPs.js",
+      "path": "assets/babylon~tgaTextureLoader-D4unxdtI.js",
       "bytes": 388,
-      "sha256": "869e1acc30206cbe3a3ef3d7088b9dbe695007d030f5d0e5e68ea09a1a77bd7c"
+      "sha256": "77b0a38a9d2f8b5f8a13ddac04774dd09f5ac4fa8e1bbc1396b0e861a36ca08f"
     },
     {
       "path": "assets/babylon~volumetricLightingBlendVolume.fragment-CrKAOySb.js",
@@ -5118,9 +5118,9 @@
       "sha256": "a326e58589a8cfaf7ba20dae5929f12b9c111f1c0312b6d39243f3daca63c567"
     },
     {
-      "path": "assets/index-Gggo_zA4.js",
-      "bytes": 254445,
-      "sha256": "41b0ffc2f658d7bf40c4f3a77195130b6d1fc6429c973f276474d4357de38f98"
+      "path": "assets/index-D53OXd5f.js",
+      "bytes": 255639,
+      "sha256": "04619bcc5ed3613cac3be3878cfebd5fb525ab0eaad859523ab75c6425708071"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -5205,7 +5205,7 @@
     {
       "path": "index.html",
       "bytes": 51523,
-      "sha256": "b999298a01a7efaa3710ebefacc23ec339457f72dfd2703925a4d1e326bd4297"
+      "sha256": "9fd4ad9ce7c2e4d09777cc07ffb9e10b759c6a32f235a9ef70de078a06a52c15"
     },
     {
       "path": "KTX2_NOTICES.txt",

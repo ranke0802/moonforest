@@ -1,4 +1,5 @@
-import {SceneLoader} from '@babylonjs/core';
+import {loadMapContainer} from './map-container.js';
+import {readMapManifest} from './map-manifests.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
 import {createVillageTransform} from './village-environment.js';
 import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-demand.js';
@@ -20,8 +21,7 @@ const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','woo
 export async function prepareVillageStart(world){
   if(world.villagePrepared)return world.villagePrepared;
   const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${world.environmentManifest??'village'}.json`,location.href);
-  const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('마을 목록을 불러오지 못했습니다.');
-  const manifest=await response.json();if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
+  const manifest=await readMapManifest(url);if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));
   const records=(world.placements??VILLAGE_PLACEMENTS).map(placement=>{
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
@@ -80,7 +80,7 @@ export function installVillageGeometry(asset,container,level,world){
 export function loadStreamedVillage(world,{
   initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},
   ground=applyVillageGround,
-  loadContainer=(model,scene)=>SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),scene,null,'.gltf'),
+  loadContainer=loadMapContainer,
 }={}){
   if(world.villagePromise)return world.villagePromise;
   world.villagePromise=(async()=>{

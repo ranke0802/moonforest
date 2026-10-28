@@ -1,5 +1,6 @@
 import {Texture,Color3,MaterialPluginBase} from '@babylonjs/core';
 import {VillageGroundShade} from './village-toon.js';
+import {readMapManifest} from './map-manifests.js';
 
 // One small packed texture, two differently rotated scales, zero new draw calls.
 // Macro colors and the road mask are unique across the entire terrain.
@@ -29,9 +30,7 @@ export class VillageGroundDetail extends MaterialPluginBase {
 
 export async function applyVillageGround(world){
   const url=new URL(`${import.meta.env.BASE_URL}assets/${world.groundManifest??'village-ground'}.json`,location.href);
-  const response=await fetch(url,{cache:'no-cache'});
-  if(!response.ok)throw new Error('마을 바닥 재질을 불러오지 못했습니다.');
-  const config=await response.json();
+  const config=await readMapManifest(url);
   if(config.span!==world.terrain.size||config.color.width!==2048||config.detail.width!==256||config.soilMaskAlphaRange?.join(',')!=='64,255')throw new Error('마을 바닥 재질 규격이 다릅니다.');
   const load=resource=>new Promise((resolve,reject)=>{
     const texture=new Texture(new URL(resource.url,url).href,world.scene,false,true,Texture.TRILINEAR_SAMPLINGMODE,()=>resolve(texture),()=>reject(new Error('마을 바닥 텍스처를 불러오지 못했습니다.')));

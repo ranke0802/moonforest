@@ -21,12 +21,15 @@ export class ResourceDownloads {
     const signal=this.abort.signal;signal.throwIfAborted();
     const urls=[...new Set(paths.map(p=>resourceUrl(p,this.base)))];
     let cache;try{if(!this.storageUnavailable)cache=await this.storage?.open('moonforest-resources-v1');}catch{}
+    // Enumerate keys once instead of creating a Response/body handle for every
+    // cached file. Refresh on every job so eviction/deletion remains visible.
+    const cachedUrls=cache?.keys&&urls.length>=16?new Set((await cache.keys()).map(request=>request.url)):null;
     const missing=[];let cached=0;
     for(const url of urls){
       signal.throwIfAborted();
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
       if(!Number.isSafeInteger(size)||size<0)throw new Error('리소스 용량 목록이 일치하지 않습니다. 새로고침해 주세요.');
-      if(await cache?.match(url,{ignoreVary:true})){cached+=size;continue;}
+      if(cachedUrls?cachedUrls.has(url):await cache?.match(url,{ignoreVary:true})){cached+=size;continue;}
       missing.push({url,size});
     }
     const state={loaded:0,total:missing.reduce((n,r)=>n+r.size,0),cached,complete:false,storageAvailable:!!cache};

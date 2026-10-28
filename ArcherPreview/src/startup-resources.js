@@ -1,5 +1,6 @@
 import {ResourceDownloads} from './resource-downloads.js';
 import {prepareVillageStart} from './village-environment.js';
+import {readMapManifest} from './map-manifests.js';
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream){
   world.releaseResourceDownloads?.();
@@ -13,7 +14,7 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
 }
 
 export async function prepareMapResources(world,base,onProgress,onStream){
-  const read=async name=>{const r=await fetch(new URL(name+'.json',base),{cache:'no-cache'});if(!r.ok)throw new Error('맵 리소스 목록을 불러오지 못했습니다.');return r.json();};
+  const read=name=>readMapManifest(new URL(name+'.json',base));
   const [village,sizes,ground]=await Promise.all([prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest)]);
   // The same live player, sky, decoder and training target already own their
   // resources. Only destination-map bytes belong in this download progress.
@@ -21,10 +22,7 @@ export async function prepareMapResources(world,base,onProgress,onStream){
 }
 
 export async function prepareStartupResources(world,playerUrl,onProgress,onStream){
-  const base=new URL('./',playerUrl),read=async name=>{
-    const response=await fetch(new URL(name+'.json',base),{cache:'no-cache'});
-    if(!response.ok)throw new Error('리소스 목록을 불러오지 못했습니다.');return response.json();
-  };
+  const base=new URL('./',playerUrl),read=name=>readMapManifest(new URL(name+'.json',base));
   const player=await read(playerUrl.pathname.split('/').at(-1).replace('.json',''));
   const [village,sizes,ground,sky,environment,ktx,meshopt]=await Promise.all([
     prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);

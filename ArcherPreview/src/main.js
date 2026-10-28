@@ -7,6 +7,7 @@ import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {applyPlayerDetail} from './player-detail.js';
+import {waitForSceneReady} from './scene-ready.js';
 import {FOREST_SPAWN,MAP_PORTALS,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
@@ -360,7 +361,7 @@ async function loadCharacter() {
     await skyReady;
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
-    world.scene.render();await world.scene.whenReadyAsync();
+    world.scene.render();await waitForSceneReady(world.scene);
     world.scene.render();ready=true;updateButtons();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
@@ -371,7 +372,7 @@ async function loadCharacter() {
     console.error('[Archer asset load]', error);
     loading.classList.add('error');
     $('#loading-title').textContent = '캐릭터를 불러오지 못했습니다';
-    $('#loading-text').textContent = error.message?.startsWith('필수 동작') || error.message?.startsWith('모델의 스키닝') ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.';
+    $('#loading-text').textContent = /^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.';
     $('#retry-load').hidden = false; $('#loading-progress').style.width = '0%';
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
@@ -582,7 +583,7 @@ try {
       $('#character-name').textContent=isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=character;bindMapPortal();
-      world.scene.render();await world.scene.whenReadyAsync();world.scene.render();
+      world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },
     finish:async()=>{
       loadingAsset=false;ready=true;updateButtons();
