@@ -2,19 +2,19 @@
   "version": 1,
   "span": 160,
   "color": {
-    "url": "./content/6661a9a7d4a8093974b2461f679a60217e72af224e2a4e1e929dbe44efbcc82b.ktx2",
+    "url": "./content/7324d47ec7b8cb080ddf5df43f124f28d9a6288c02603c44d384236fd81dbb76.ktx2",
     "width": 2048,
     "height": 2048,
-    "bytes": 534921,
+    "bytes": 563165,
     "codec": "etc1s",
     "alpha": true,
     "gpuBlockBytes": 16
   },
   "detail": {
-    "url": "./content/0483d19155279cf6f9aed478fad7b6ccdd6325a7cf5efdf72480be3b49fbc4e3.ktx2",
+    "url": "./content/e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56.ktx2",
     "width": 256,
     "height": 256,
-    "bytes": 27142,
+    "bytes": 27269,
     "codec": "etc1s",
     "gpuBlockBytes": 8
   },
@@ -27,8 +27,8 @@
   "detailSamples": 2,
   "method": "unique-world-space-eroded-cave-rock-and-dust",
   "resources": [
-    "./content/6661a9a7d4a8093974b2461f679a60217e72af224e2a4e1e929dbe44efbcc82b.ktx2",
-    "./content/0483d19155279cf6f9aed478fad7b6ccdd6325a7cf5efdf72480be3b49fbc4e3.ktx2"
+    "./content/7324d47ec7b8cb080ddf5df43f124f28d9a6288c02603c44d384236fd81dbb76.ktx2",
+    "./content/e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56.ktx2"
   ],
   "compression": "KTX2/Basis ETC1S color and linear packed detail"
 }

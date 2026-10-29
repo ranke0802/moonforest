@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "resourceRevision": "cd0796157cfea16bcd39e3ae7bfb12f3e4213e5731b9eb42918b0b5d46ecd757",
-  "bytes": 558229198,
+  "resourceRevision": "bdfbde969ebd8ecfa91c61020133b348e4ae2b23d86ff773dceca894fd164668",
+  "bytes": 558282452,
   "files": [
     {
       "path": "app.webmanifest",
@@ -1434,11 +1434,6 @@
       "sha256": "2af18c66e9099a4c55d9c2fb60d50522ef641c8de3dbb4a1cf94e5ca5b82d545"
     },
     {
-      "path": "assets/bundles/2b886f7bae4b912afbddcb5ffb66bdacd32effe15ac5f828ff568b5f6e1d3448.mfp.gz",
-      "bytes": 560730,
-      "sha256": "2b886f7bae4b912afbddcb5ffb66bdacd32effe15ac5f828ff568b5f6e1d3448"
-    },
-    {
       "path": "assets/bundles/2c700c14251f812748a7d1296ff88d8a93aad1f9c2692c3598a882765e4c9ac2.mfp.gz",
       "bytes": 116758,
       "sha256": "2c700c14251f812748a7d1296ff88d8a93aad1f9c2692c3598a882765e4c9ac2"
@@ -1562,6 +1557,11 @@
       "path": "assets/bundles/4625aaf19a1aeda3ceed33e589a4c903754154b02b475c1fba94e2c683b69922.mfp.gz",
       "bytes": 118715,
       "sha256": "4625aaf19a1aeda3ceed33e589a4c903754154b02b475c1fba94e2c683b69922"
+    },
+    {
+      "path": "assets/bundles/47d2f5feb742834b8abb6570db8887176ea978aa65504434871278413fa35e48.mfp.gz",
+      "bytes": 589072,
+      "sha256": "47d2f5feb742834b8abb6570db8887176ea978aa65504434871278413fa35e48"
     },
     {
       "path": "assets/bundles/49bea444b14dc70d1e4da6fdb02a5621715d62d8b39fc6892c64a7b18c5a51dd.mfp.gz",
@@ -2317,11 +2317,6 @@
       "path": "assets/content/0467c98b150a630e5a51f7810843e8b7fd9aad22e3888baf70aad255c55d02bc.wasm",
       "bytes": 14139,
       "sha256": "0467c98b150a630e5a51f7810843e8b7fd9aad22e3888baf70aad255c55d02bc"
-    },
-    {
-      "path": "assets/content/0483d19155279cf6f9aed478fad7b6ccdd6325a7cf5efdf72480be3b49fbc4e3.ktx2",
-      "bytes": 27142,
-      "sha256": "0483d19155279cf6f9aed478fad7b6ccdd6325a7cf5efdf72480be3b49fbc4e3"
     },
     {
       "path": "assets/content/04f840dc5e8ab05afe32ac2617a2259c3cb43338865f20c9512f898628cd30e1.bin",
@@ -4139,11 +4134,6 @@
       "sha256": "6660af6a2affc4c37b4d52227e7c47e6e604a94b1934934290d9c241173b8575"
     },
     {
-      "path": "assets/content/6661a9a7d4a8093974b2461f679a60217e72af224e2a4e1e929dbe44efbcc82b.ktx2",
-      "bytes": 534921,
-      "sha256": "6661a9a7d4a8093974b2461f679a60217e72af224e2a4e1e929dbe44efbcc82b"
-    },
-    {
       "path": "assets/content/6723f4a9141c6d0e739f3ba96845aff9268365291f77d12d9d51b0447fd1a50e.bin",
       "bytes": 161941,
       "sha256": "6723f4a9141c6d0e739f3ba96845aff9268365291f77d12d9d51b0447fd1a50e"
@@ -4362,6 +4352,11 @@
       "path": "assets/content/730e2b6b865a78446a2a77714f9fc6b4caa6de1594d67f6b00533fa7956f3b93.ktx2",
       "bytes": 3538449,
       "sha256": "730e2b6b865a78446a2a77714f9fc6b4caa6de1594d67f6b00533fa7956f3b93"
+    },
+    {
+      "path": "assets/content/7324d47ec7b8cb080ddf5df43f124f28d9a6288c02603c44d384236fd81dbb76.ktx2",
+      "bytes": 563165,
+      "sha256": "7324d47ec7b8cb080ddf5df43f124f28d9a6288c02603c44d384236fd81dbb76"
     },
     {
       "path": "assets/content/734668a7fe9d9a405628ea435d068b7d07e939ad53dc9793d0884e88a66464c9.ktx2",
@@ -6419,6 +6414,11 @@
       "sha256": "e37e1ecc4610cb3b5081df63a5a6a315343fa8460b0acd1bb0fa8b4480e20f9b"
     },
     {
+      "path": "assets/content/e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56.ktx2",
+      "bytes": 27269,
+      "sha256": "e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56"
+    },
+    {
       "path": "assets/content/e5083c0f4ffb97936c05e587bdadcd2c018713c0dae9bab3e448ab5bcb616a3e.gltf",
       "bytes": 2786,
       "sha256": "e5083c0f4ffb97936c05e587bdadcd2c018713c0dae9bab3e448ab5bcb616a3e"
@@ -6934,9 +6934,9 @@
       "sha256": "6cfa627a726f04b1cae188c6a60ef77b69a1fc6265b6486c937e75725745c364"
     },
     {
-      "path": "assets/index-DG53bjSo.js",
-      "bytes": 303897,
-      "sha256": "807d0c2d2f012dac86d8ad14b2fea86ef411b0c84fa39729ab8ad7dff0fe4b3e"
+      "path": "assets/index-B8pebHge.js",
+      "bytes": 300438,
+      "sha256": "826233a2b006a8e45c72004d34b948a280e161ef71c24ec19e256d073fa0904b"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -6971,12 +6971,12 @@
     {
       "path": "assets/resource-index.json",
       "bytes": 151012,
-      "sha256": "1b88e0fbb31257f1a7197a6848583bdd0f92946a820cbc8794e5be3c0e2b017d"
+      "sha256": "8e968cdd1c4b26f487c284c9ed5749e55a588604d217a4eb43c7491adb66c1c5"
     },
     {
       "path": "assets/resource-sizes.json",
       "bytes": 73335,
-      "sha256": "fd7b6c2a1c7a904031d04572bfd529100d842b0fd8acf03a4d720cd67f7cfa43"
+      "sha256": "4b619e566844e91d652876af8d7c7cc14871f0f180b480b683df95751c6df219"
     },
     {
       "path": "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -7021,12 +7021,12 @@
     {
       "path": "assets/witch-cave-ground.json",
       "bytes": 932,
-      "sha256": "2f142aee12fcb1047e11a8ee6906f30f7f51338cc1c2f27f5ed96a9909ee55c1"
+      "sha256": "847d1c595d41d74fec59357f786dcc18e9ee72ac542a70f7f00a0bb049568fd3"
     },
     {
       "path": "assets/witch-cave.json",
       "bytes": 120720,
-      "sha256": "a29626fcf6c7949849a6e315d62208a016e52181a355c5324d37ca6773a00ef8"
+      "sha256": "166a3ee26bd91a6cc3a4bb1f583888a931fe4a26f85f635f84f4d7efda95fa07"
     },
     {
       "path": "AUDIO_CREDITS.txt",
@@ -7036,7 +7036,7 @@
     {
       "path": "index.html",
       "bytes": 53610,
-      "sha256": "8b8b6438e64317ca73443687fdfd9382dd52c5222f04131e778dddff3c337fe4"
+      "sha256": "f11b078bb2c5e5f181d60d118105e46e3b2f35c3282b8122ffcc1f0d800238ab"
     },
     {
       "path": "KTX2_NOTICES.txt",

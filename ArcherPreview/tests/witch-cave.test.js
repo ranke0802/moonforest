@@ -24,21 +24,21 @@ test('v5 shares the exact existing 8K player profiles and has reversible travel'
   assert.equal(mapPortals('monster-forest').length,2);assert.equal(mapPortals('village').length,1);
   assert.deepEqual(worldSpawn('warrior-v5'),CAVE_ENTRY);
 });
-test('all broad cave route centres are walkable and terrain stays finite',()=>{
-  const terrain=createWitchCaveTerrain();
+test('varied cave route widths retain player clearance and finite ground',()=>{
+  const terrain=createWitchCaveTerrain(),nav=new CaveNavigation(caveObstacles());
   for(const points of CAVE_ROUTES)for(let i=1;i<points.length;i++)for(let n=0;n<=40;n++){
     const a=points[i-1],b=points[i],t=n/40,x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t;
-    assert.ok(caveClearance(x,z)>2.5);assert.ok(Number.isFinite(terrain.heightAt(x,z)));
+    assert.ok(nav.free({x,z},.32,CAVE_RADIUS),`route centre ${x},${z}`);assert.ok(Number.isFinite(terrain.heightAt(x,z)));
   }
 });
 
-test('baked ramp surfaces support feet and are cleared on map departure',()=>{
+test('walking uses the same continuous triangles as the ground; scanned ramps are shoulders',()=>{
   const terrain=createWitchCaveTerrain();
   for(const p of CAVE_RAMPS)for(let z=-3;z<=3;z+=.2){
     const x=p.x+Math.sin(p.yaw)*z*p.scale,zz=p.z+Math.cos(p.yaw)*z*p.scale;
-    const meshTop=caveRampHeight(x,zz,-100),height=terrain.heightAt(x,zz);
-    assert.ok(Number.isFinite(height));assert.ok(height>=meshTop-.002,'feet cannot sink into ramp');
-    assert.ok(height<meshTop+.4,'terrain support stays close to ramp');
+    const height=terrain.heightAt(x,zz);
+    assert.ok(Number.isFinite(height));assert.equal(terrain.surfaceHeight,null,'no per-frame jump onto jagged scan heights');
+    assert.equal(caveRampHeight(x,zz,height),height);
   }
 });
 test('entry reaches boss chamber; movement and dodges cannot cross flooded voids',()=>{

@@ -103,6 +103,8 @@ node scripts/stage-pages.mjs reports/pages-validation
 
 ### 점검 기준
 
+동굴 파일을 인계받을 때는 승인된 목록과 SHA-256을 비교해 선별 적용한 뒤 `build:village`로 현재 JSON·묶음·크기 목록을 재생성합니다. `node scripts/verify-cave-integration.mjs`는 실제 현재 목록과 파일 그래프를 대조하고 동굴 이동·셰이더·리소스·왕복 검사를 수행합니다. 전체 통합 테스트도 배포 전에 통과해야 합니다. 동굴 바닥처럼 일부만 바뀌면 새 해시만 추가하고, 기존 다른 맵·플레이어·LOD의 해시는 유지합니다. 구버전 파일은 전체 의존성에서 제외된 것을 확인한 뒤 게시 목록에서 제외하며 열린 구버전 탭의 캐시는 기존 보호 규칙을 따릅니다.
+
 자동테스트는 첫 묶음 다운로드, 캐시 재접속 0바이트, 한 파일 변경/부분 캐시, 맵 왕복, 손상·중단·저장공간 거부, 구버전 탭 보호 및 정리를 확인합니다. 실제 모델을 사용한 S23/iPhone 화면 크기 테스트도 유지합니다. 이는 실기기 통신 속도·발열 측정과 다릅니다.
 
 설정의 성능 진단 결과를 복사하면 `resourceDownloads`에 JSON `revision`, `bundleRequests`, `fileRequests`, `extractedFiles`, `cacheHits`, `downloadBytes`가 포함됩니다. 캐시가 있는 재접속은 `downloadBytes: 0`이어야 합니다. 서비스워커 `RESOURCE_CACHE_STATS` 메시지는 `prunedFiles`, `cleanupDeferred`, `cleanupError`를 반환합니다. 브라우저 자동조작은 수행하지 않으며 실기기 검수는 사용자가 진행합니다.

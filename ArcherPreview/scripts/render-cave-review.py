@@ -1,7 +1,8 @@
-import bpy,json,math
+import bpy,json,math,os
 from pathlib import Path
 from mathutils import Vector
-root=Path(__file__).resolve().parent.parent;out=root/'reports/witch-cave-v5'
+root=Path(__file__).resolve().parent.parent;out=Path(os.environ.get('CAVE_REVIEW_OUT',str(root/'reports/witch-cave-v5')))
+models=root/'reports/witch-cave-v5'
 data=json.loads((out/'review-scene.json').read_text(encoding='utf8'));layout=json.loads((out/'layout.json').read_text(encoding='utf8'))
 print('Blender',bpy.app.version_string,flush=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
@@ -10,7 +11,7 @@ scene.render.image_settings.file_format='PNG';scene.render.film_transparent=Fals
 scene.world.color=(.24,.23,.28);scene.view_settings.view_transform='Standard';scene.view_settings.look='Medium High Contrast';scene.view_settings.exposure=0;scene.view_settings.gamma=1
 templates={}
 for asset,config in data['assets'].items():
- before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=str(out/asset/'review.gltf'));created=set(bpy.data.objects)-before
+ before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=str(models/asset/'review.gltf'));created=set(bpy.data.objects)-before
  bpy.context.view_layer.update();meshes=[]
  for ob in created:
   if ob.type!='MESH':continue
@@ -64,12 +65,20 @@ def render(name,position,target,ortho=None):
 
 # Static review of painted water and small lamp halos; this is offline layout
 # evidence, not a claim about mobile GPU output.
-bpy.ops.mesh.primitive_plane_add(size=117,location=(0,0,-2.8));water=bpy.context.object;water.name='painted-water'
-wm=bpy.data.materials.new('water');wm.use_nodes=True;wn=wm.node_tree.nodes;wl=wm.node_tree.links;p=wn.get('Principled BSDF');p.inputs['Base Color'].default_value=(.08,.18,.21,1);p.inputs['Roughness'].default_value=1;p.inputs['Specular IOR Level'].default_value=0;p.inputs['Emission Color'].default_value=(.08,.18,.21,1);p.inputs['Emission Strength'].default_value=.5;water.data.materials.append(wm)
+wm=bpy.data.materials.new('water');wm.use_nodes=True;wn=wm.node_tree.nodes;wl=wm.node_tree.links;p=wn.get('Principled BSDF');p.inputs['Base Color'].default_value=(.08,.18,.21,1);p.inputs['Roughness'].default_value=1;p.inputs['Specular IOR Level'].default_value=0;p.inputs['Emission Color'].default_value=(.08,.18,.21,1);p.inputs['Emission Strength'].default_value=.5
+for pool in layout.get('pools',[]):
+ vv=[(pool['x'],-pool['z'],pool['height'])];ff=[]
+ for k in range(65):
+  a=k/64*math.tau;r=.96+.035*math.sin(a*7)+.025*math.cos(a*11);vv.append((pool['x']+math.cos(a)*pool['rx']*r,-pool['z']-math.sin(a)*pool['rz']*r,pool['height']))
+  if k:ff.append((0,k+1,k))
+ me=bpy.data.meshes.new('water');me.from_pydata(vv,[],ff);me.materials.append(wm);ob=bpy.data.objects.new('water',me);scene.collection.objects.link(ob)
+for fall in layout.get('waterfalls',[]):
+ x,z,w,top,bottom=fall['x'],fall['z'],fall['width'],fall['top'],fall['bottom'];dx=math.cos(fall['yaw'])*w/2;dz=math.sin(fall['yaw'])*w/2
+ me=bpy.data.meshes.new('waterfall');me.from_pydata([(x-dx,-z-dz,bottom),(x+dx,-z+dz,bottom),(x+dx,-z+dz,top),(x-dx,-z-dz,top)],[],[(0,1,2,3)]);me.materials.append(wm);ob=bpy.data.objects.new('waterfall',me);scene.collection.objects.link(ob)
 for placement in layout['placements']:
  if 'votive-lantern' not in placement['asset']:continue
  light=bpy.data.lights.new('lantern-warmth','POINT');light.energy=65;light.color=(1,.6,.23);light.shadow_soft_size=1.5
- ob=bpy.data.objects.new('lantern-warmth',light);scene.collection.objects.link(ob);ob.location=(placement['x'],-placement['z'],placement.get('elevation',0)+1)
+ ob=bpy.data.objects.new('lantern-warmth',light);scene.collection.objects.link(ob);ob.location=(placement['x'],-placement['z'],placement.get('elevation',height(placement['x'],placement['z']))+1)
 render('cave-layout-render.png',(5,-112,120),(0,0,2),150)
 render('cave-entry-render.png',(-39,-51,10),(-30,-22,4))
 render('cave-central-render.png',(8,-35,13),(-8,2,9))
