@@ -1,6 +1,6 @@
 // Select before preparing the download plan: never fetch both player profiles.
 export function playerTextureManifest(character,caps,navigator=globalThis.navigator){
-  if(character==='warrior-v4')character='warrior-v3';
+  if(character==='warrior-v4'||character==='warrior-v5')character='warrior-v3';
   if(character!=='warrior-v3')return character==='archer'?'character':character;
   const ios=/iPad|iPhone|iPod/.test(navigator?.userAgent??'')||
     (navigator?.platform==='MacIntel'&&navigator?.maxTouchPoints>1);

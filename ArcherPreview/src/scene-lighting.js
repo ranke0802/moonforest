@@ -92,7 +92,7 @@ export class SceneLighting {
     for(const material of materials)material.markDirty(true);
   }
   follow(position,force=false){
-    this.requestedFocus.set(position.x,0,position.z);
+    this.requestedFocus.set(position.x,this.followHeight?position.y:0,position.z);
     let x=Math.round(position.x/2)*2,y=0,z=Math.round(position.z/2)*2;
     if(this.village){
       // Quantize in the LIGHT'S plane, in whole shadow-map texels. World-space

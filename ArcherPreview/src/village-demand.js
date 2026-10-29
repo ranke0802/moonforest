@@ -13,7 +13,8 @@ export function placementBounds(world,p,config){
     const halfLength=(p.length??p.footprint?.[0]??2)*.5,dx=Math.cos(p.yaw)*halfLength,dz=-Math.sin(p.yaw)*halfLength;
     foundation=Math.min(foundation,world.terrain.heightAt(p.x+dx,p.z+dz),world.terrain.heightAt(p.x-dx,p.z-dz));
   }
-  const center=new Vector3(p.x,foundation-.025+height*.5,p.z);
+  foundation=p.elevation??(p.topElevation!==undefined?p.topElevation-height:foundation);
+  const center=new Vector3(p.x,foundation-.025+(p.yOffset??0)+height*.5,p.z);
   return {center,radius:half.length(),min:center.subtract(half),max:center.add(half)};
 }
 

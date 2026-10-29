@@ -24,7 +24,7 @@ Attack playback speed affects the authored full-body moving attack, including it
 
 Requires Node >=22.12. Run `npm ci`, `npm test`, `npm run build` in this folder. Copy the built `dist/` contents into `../ArcherPreviewSite/`. GitHub Pages publishes the `archer` branch root; the root index redirects into the published build. `.nojekyll` disables Jekyll. Do not commit node_modules.
 
-**The preceding generic build is for the legacy preview. Production warrior v3/v4 must use the reviewed village pipeline below; do not overwrite it with `dist/`.**
+**The preceding generic build is for the legacy preview. Production warrior v3/v4/v5 must use the reviewed village pipeline below; do not overwrite it with `dist/`.**
 
 The Archer GLB is about 48 MB; Warrior is about 53 MB. All exported skin influences are retained. First load depends on connection and mobile GPU. No account is needed to play. Source assets remain under public/assets. See public/NOTICE.txt for source credits and terms.
 
@@ -42,7 +42,7 @@ The build losslessly splits each GLB into SHA-256-addressed textures, mesh buffe
 
 A cold browser still downloads the selected character once. Storage eviction, clearing site data, private mode or denied storage can require a later download. Cache tests cover concurrent duplicate requests, warm reloads, changed-animation-only files, and failed requests.
 
-## 웹 전사 v3/v4 리소스 배포 규칙
+## 웹 전사 v3/v4/v5 리소스 배포 규칙
 
 통합 최적화 담당자가 공용 다운로드·캐시·빌드·배포를 관리합니다. 에셋/맵 담당자는 변경 파일과 검증 결과를 전달하고, 공용 런타임 및 `ArcherPreviewSite`를 동시에 수정하거나 서로 다른 빌드를 push하지 않습니다. 작업 중인 다른 변경을 `git add -A`로 함께 배포하지 않습니다.
 

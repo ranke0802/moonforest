@@ -8,7 +8,7 @@ import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {applyPlayerDetail} from './player-detail.js';
 import {waitForSceneReady} from './scene-ready.js';
-import {FOREST_SPAWN,MAP_PORTALS,mapForCharacter,isWorldCharacter} from './map-route.js';
+import {worldSpawn,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
 import { PlaygroundInput } from './input.js';
@@ -67,14 +67,15 @@ for(const type of ['pointerdown','keydown'])document.addEventListener(type,()=>a
 const loading = $('#loading');
 const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
-const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4'];
+const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4', 'warrior-v5'];
 let character = new URLSearchParams(location.search).get('character');
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
 const isVillage = () => isWorldCharacter(character);
 const isForest=()=>character==='warrior-v4';
-const mapSpawn=()=>new URLSearchParams(location.search).get('arrival')==='portal'?(isForest()?FOREST_SPAWN:MAP_PORTALS['monster-forest'].arrival):(isForest()?FOREST_SPAWN:VILLAGE_SPAWN);
+const isCave=()=>character==='warrior-v5';
+const mapSpawn=()=>worldSpawn(character,location.search,VILLAGE_SPAWN);
 let mapPortal;
 let mapDeparture;
 let mapTransition;
@@ -283,7 +284,7 @@ async function loadCharacter() {
     if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
     loadDiagnostics.phase('model');loadingView.preparing();
-    const skyReady=world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
+    const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     if(isVillage()){
       await loadVillage(world);
       await loadVillageTrainingTarget(world,training);
@@ -341,10 +342,10 @@ async function loadCharacter() {
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = isCave()?'CAVERN / 05':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
-    $('#character-name').textContent = isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
-    $('#character-subtitle').textContent = isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
+    $('#character-name').textContent = isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-subtitle').textContent = isCave()?'마녀의 동굴':isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
     $('.character-caption').textContent = isV2() ? '한손 베기 1타 ↔ 베고 찌르기 2타 · 길게: 심판 3타' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
@@ -514,7 +515,7 @@ try {
   engine.maxFPS=60;
   engine.renderEvenInBackground=false;
   applyRenderQuality();
-  world = createWorld(engine,{village:isVillage(),forest:isForest(),touchDevice});
+  world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),touchDevice});
   world.villageOverview=isVillage()&&villageOverview;
   if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
@@ -554,6 +555,7 @@ try {
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,damageFeedback,world.terrain);
+  training.relocate(world.trainingSpawn);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
@@ -568,7 +570,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
-      loadDiagnostics.begin(isForest()?'마을 이동':'마물의 숲 이동');
+      loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();actionAudio.reset();
       boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};
@@ -585,14 +587,15 @@ try {
       controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
       world.camera.setTarget(playerChinTarget(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),false,false,true);
-      world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate();
+      world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate(world.trainingSpawn);
+      if(!world.cave)await world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
       loadDiagnostics.phase('download');
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing();await loadVillage(world);
       world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
-      $('#build-tag').textContent=isForest()?'FOREST / 04':'VILLAGE / 03';
-      $('#character-name').textContent=isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
-      $('#character-subtitle').textContent=isForest()?'마물의 숲':'숲의 경계 마을';
+      $('#build-tag').textContent=isCave()?'CAVERN / 05':isForest()?'FOREST / 04':'VILLAGE / 03';
+      $('#character-name').textContent=isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
+      $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=character;bindMapPortal();
       loadDiagnostics.phase('screen');world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },

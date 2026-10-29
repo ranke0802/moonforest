@@ -6,3 +6,4 @@ dist-village/
 # Reproducible transport bundles; publish reviewed copies in ArcherPreviewSite.
 /public/assets/bundles/
 /public/assets/resource-index.json
+/reports/witch-cave-v5/

@@ -18,6 +18,7 @@ function forestHeight(x,z){
 export class TerrainHeightField {
   constructor({size=70,subdivisions=64,height=forestHeight}={}){
     this.size=size;this.subdivisions=subdivisions;this.step=size/subdivisions;this.half=size/2;
+    this.surfaceHeight=null;
     const n=subdivisions+1;this.heights=new Float32Array(n*n);
     for(let row=0;row<n;row++)for(let col=0;col<n;col++)this.heights[row*n+col]=height(col*this.step-this.half,this.half-row*this.step);
   }
@@ -28,7 +29,8 @@ export class TerrainHeightField {
     const a=this.heights[i],b=this.heights[i+1],c=this.heights[i+stride],d=this.heights[i+stride+1];
     // The same a–d diagonal as Babylon's ground mesh, not bilinear height
     // interpolation (which could place feet above/below the visible triangle).
-    return u>=v?a+u*(b-a)+v*(d-b):a+v*(c-a)+u*(d-c);
+    const ground=u>=v?a+u*(b-a)+v*(d-b):a+v*(c-a)+u*(d-c);
+    return this.surfaceHeight?.(x,z,ground)??ground;
   }
   place(position){position.y=this.heightAt(position.x,position.z);return position;}
 }
