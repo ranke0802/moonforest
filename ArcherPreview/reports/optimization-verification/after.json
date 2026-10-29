@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "createdAt": "2026-10-29T14:49:40.595Z",
+  "head": "116dbe384ba0f7caed65a54dcce08cc7f5e2709f",
+  "resourceRevision": "bdfbde969ebd8ecfa91c61020133b348e4ae2b23d86ff773dceca894fd164668",
+  "environment": {
+    "node": "v24.19.0",
+    "platform": "win32",
+    "render": "Babylon NullEngine 1560x720, mobile policy",
+    "browserAutomation": false,
+    "physicalS23": false,
+    "limits": "CPU map construction and object references only; no GPU/thermal/FPS measurement; streaming downloads/models are tested separately"
+  },
+  "firstVillageMs": 239.86369999999988,
+  "terrainHashes": {
+    "warrior-v4": "014606f03dd9c5ad69f4378b20bbe3ab1eac8113d91c9f6c7d726801b8731ed3",
+    "warrior-v5": "58f7ed6f214fff3e6742fbdfb62fa48f844cfea7bfa4aa0753953c3437481634",
+    "warrior-v3": "a5f9aa763b0bb608820b18abc042f35be4a7a158db1534aea0f32e995e617f7f"
+  },
+  "warmMapReplacement": {
+    "warrior-v4": {
+      "samples": 8,
+      "medianMs": 98.96860000000015,
+      "p95Ms": 105.10540000000037,
+      "valuesMs": [
+        99.4719,
+        99.96669999999995,
+        105.10540000000037,
+        98.5016999999998,
+        97.63509999999997,
+        98.96860000000015,
+        96.31259999999975,
+        97.76400000000012
+      ]
+    },
+    "warrior-v5": {
+      "samples": 8,
+      "medianMs": 40.68199999999979,
+      "p95Ms": 49.56510000000026,
+      "valuesMs": [
+        43.32160000000022,
+        39.01630000000023,
+        42.13749999999982,
+        38.26369999999997,
+        40.68199999999979,
+        49.56510000000026,
+        36.84680000000026,
+        36.96529999999984
+      ]
+    },
+    "warrior-v3": {
+      "samples": 8,
+      "medianMs": 142.41629999999986,
+      "p95Ms": 144.14510000000018,
+      "valuesMs": [
+        142.4405999999999,
+        142.04759999999987,
+        144.14510000000018,
+        142.41629999999986,
+        140.07730000000038,
+        141.01999999999998,
+        142.73610000000008,
+        140.52760000000035
+      ]
+    }
+  },
+  "transitions": [
+    {
+      "round": 0,
+      "character": "warrior-v4",
+      "elapsedMs": 494.22069999999985
+    },
+    {
+      "round": 0,
+      "character": "warrior-v5",
+      "elapsedMs": 253.6522
+    },
+    {
+      "round": 0,
+      "character": "warrior-v3",
+      "elapsedMs": 153.68809999999985
+    },
+    {
+      "round": 1,
+      "character": "warrior-v4",
+      "elapsedMs": 99.4719
+    },
+    {
+      "round": 1,
+      "character": "warrior-v5",
+      "elapsedMs": 43.32160000000022
+    },
+    {
+      "round": 1,
+      "character": "warrior-v3",
+      "elapsedMs": 142.4405999999999
+    },
+    {
+      "round": 2,
+      "character": "warrior-v4",
+      "elapsedMs": 99.96669999999995
+    },
+    {
+      "round": 2,
+      "character": "warrior-v5",
+      "elapsedMs": 39.01630000000023
+    },
+    {
+      "round": 2,
+      "character": "warrior-v3",
+      "elapsedMs": 142.04759999999987
+    },
+    {
+      "round": 3,
+      "character": "warrior-v4",
+      "elapsedMs": 105.10540000000037
+    },
+    {
+      "round": 3,
+      "character": "warrior-v5",
+      "elapsedMs": 42.13749999999982
+    },
+    {
+      "round": 3,
+      "character": "warrior-v3",
+      "elapsedMs": 144.14510000000018
+    },
+    {
+      "round": 4,
+      "character": "warrior-v4",
+      "elapsedMs": 98.5016999999998
+    },
+    {
+      "round": 4,
+      "character": "warrior-v5",
+      "elapsedMs": 38.26369999999997
+    },
+    {
+      "round": 4,
+      "character": "warrior-v3",
+      "elapsedMs": 142.41629999999986
+    },
+    {
+      "round": 5,
+      "character": "warrior-v4",
+      "elapsedMs": 97.63509999999997
+    },
+    {
+      "round": 5,
+      "character": "warrior-v5",
+      "elapsedMs": 40.68199999999979
+    },
+    {
+      "round": 5,
+      "character": "warrior-v3",
+      "elapsedMs": 140.07730000000038
+    },
+    {
+      "round": 6,
+      "character": "warrior-v4",
+      "elapsedMs": 98.96860000000015
+    },
+    {
+      "round": 6,
+      "character": "warrior-v5",
+      "elapsedMs": 49.56510000000026
+    },
+    {
+      "round": 6,
+      "character": "warrior-v3",
+      "elapsedMs": 141.01999999999998
+    },
+    {
+      "round": 7,
+      "character": "warrior-v4",
+      "elapsedMs": 96.31259999999975
+    },
+    {
+      "round": 7,
+      "character": "warrior-v5",
+      "elapsedMs": 36.84680000000026
+    },
+    {
+      "round": 7,
+      "character": "warrior-v3",
+      "elapsedMs": 142.73610000000008
+    },
+    {
+      "round": 8,
+      "character": "warrior-v4",
+      "elapsedMs": 97.76400000000012
+    },
+    {
+      "round": 8,
+      "character": "warrior-v5",
+      "elapsedMs": 36.96529999999984
+    },
+    {
+      "round": 8,
+      "character": "warrior-v3",
+      "elapsedMs": 140.52760000000035
+    }
+  ],
+  "sceneCounts": [
+    {
+      "round": 0,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 0,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 0,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 1,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 1,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 1,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 2,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 2,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 2,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 3,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 3,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 3,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 4,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 4,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 4,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 5,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 5,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 5,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 6,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 6,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 6,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 7,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 7,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 7,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 8,
+      "character": "warrior-v4",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 0,
+      "materialAddedObservers": 0,
+      "materialRemovedObservers": 0
+    },
+    {
+      "round": 8,
+      "character": "warrior-v5",
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    },
+    {
+      "round": 8,
+      "character": "warrior-v3",
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4,
+      "beforeRenderObservers": 1,
+      "materialAddedObservers": 1,
+      "materialRemovedObservers": 1
+    }
+  ],
+  "lifetime": {
+    "disposedMaterials": 256,
+    "frames": 30,
+    "deadMaterialVisits": 0,
+    "style": {
+      "pending": 1,
+      "active": 1,
+      "tracked": 2,
+      "disposed": false
+    }
+  },
+  "terrainCache": {
+    "bytes": 356364,
+    "limit": 524288,
+    "entries": 3,
+    "hits": 26,
+    "misses": 3,
+    "evictions": 0
+  }
+}

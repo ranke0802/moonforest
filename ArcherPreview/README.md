@@ -103,6 +103,22 @@ node scripts/stage-pages.mjs reports/pages-validation
 
 ### 점검 기준
 
+최적화 작업은 [기능 보존 검증 프롬프트](docs/optimization-verification-prompt.txt)를 먼저 적용합니다. 기능·화질을 낮추는 변경은 제외하고, 기준 커밋과 리소스 JSON revision을 기록한 뒤 재현 가능한 비용만 수정합니다. 브라우저 자동조작 없이 코드·Node/NullEngine으로 확인한 항목과 실제 S23에서 확인해야 하는 항목을 구분합니다.
+
+```sh
+node scripts/audit-runtime-optimization.mjs reports/optimization-verification/before.json
+# 검증된 원인을 수정한 뒤, 다른 부하 테스트와 동시에 실행하지 않고 비교
+node scripts/audit-runtime-optimization.mjs reports/optimization-verification/after.json
+node --test tests/*.test.js > reports/optimization-verification/full-tests.log 2>&1
+node scripts/summarize-runtime-optimization.mjs reports/optimization-verification
+```
+
+위 측정은 지형/맵 구성 CPU 시간과 재질 참조 수명만 확인합니다. 다운로드·모델 준비·GPU 업로드 전체 시간이나 S23 FPS/발열 측정이 아닙니다. 반복 왕복의 scene 자원 수, 지형 SHA-256, 폐기 재질 재검사 횟수와 캐시 크기도 기록합니다. 보고서의 시간은 같은 PC에서 첫 방문을 제외한 8회 표본이며 절대 성능 보장이 아닙니다.
+
+2026-10-29 검증에서는 지형 높이 배열을 엔진별 최대 3개·512 KiB까지 재사용하도록 했습니다(현재 3개 합계 356,364바이트). 방문마다 독립 복사본을 사용하며 지형·보행 결과는 원본과 같습니다. 동굴 색조 관리자는 실제 재질 폐기 시 참조를 해제하며, AssetContainer에 잠시 옮긴 살아 있는 재질은 유지합니다. 성능 진단을 복사한 JSON의 `mapTerrainCache`와 `caveMaterials`로 한도·대기/활성 참조 수를 확인할 수 있습니다. 플레이어 8K·배경 최대 4K·LOD·그림자·조작 정책은 그대로입니다.
+
+[이번 검증 결과](reports/optimization-verification/report.txt)와 [기계 판독용 검증 JSON](reports/optimization-verification/verification.json)에 측정 범위·수치·미검증 항목을 남겼습니다. `before.json`/`after.json`은 해당 커밋 작업의 원시 표본이므로 다음 검증은 별도 폴더에 보관합니다.
+
 동굴 파일을 인계받을 때는 승인된 목록과 SHA-256을 비교해 선별 적용한 뒤 `build:village`로 현재 JSON·묶음·크기 목록을 재생성합니다. `node scripts/verify-cave-integration.mjs`는 실제 현재 목록과 파일 그래프를 대조하고 동굴 이동·셰이더·리소스·왕복 검사를 수행합니다. 전체 통합 테스트도 배포 전에 통과해야 합니다. 동굴 바닥처럼 일부만 바뀌면 새 해시만 추가하고, 기존 다른 맵·플레이어·LOD의 해시는 유지합니다. 구버전 파일은 전체 의존성에서 제외된 것을 확인한 뒤 게시 목록에서 제외하며 열린 구버전 탭의 캐시는 기존 보호 규칙을 따릅니다.
 
 자동테스트는 첫 묶음 다운로드, 캐시 재접속 0바이트, 한 파일 변경/부분 캐시, 맵 왕복, 손상·중단·저장공간 거부, 구버전 탭 보호 및 정리를 확인합니다. 실제 모델을 사용한 S23/iPhone 화면 크기 테스트도 유지합니다. 이는 실기기 통신 속도·발열 측정과 다릅니다.

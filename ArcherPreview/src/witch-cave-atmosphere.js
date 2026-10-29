@@ -97,6 +97,6 @@ export function configureCaveAtmosphere(world){
     const m=world.camera.getWorldMatrix().m;right.set(m[0],m[1],m[2]);up.set(m[4],m[5],m[6]);
     for(const glow of glows){glow.material.setVector3('right',right);glow.material.setVector3('up',up);}
     ceiling.material.setVector3('eye',world.camera.globalPosition);ceiling.material.setVector3('focus',world.camera.target);
-  },dispose(){style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();}};
+  },inspect:()=>style.inspect(),dispose(){style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();}};
   world.caveAtmosphere.tick(0);
 }

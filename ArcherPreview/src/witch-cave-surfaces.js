@@ -49,18 +49,40 @@ export class CaveSurfaceShade extends MaterialPluginBase {
 export function caveSurfaceStyle(world){
  partitionCaveGround(world.ground,world.terrain);
  const activate=(material,ground=false)=>{const plugin=material.pluginManager?.getPlugin(ground?'CaveGroundMood':'CaveRockMood')??new CaveSurfaceShade(material,{ground});plugin.active=true;return plugin;};
- const plugins=[activate(world.floorMaterial,true)],seen=new WeakSet(),pending=new Set(world.scene.materials);
- const observer=world.scene.onNewMaterialAddedObservable.add(material=>pending.add(material));
+ const plugins=new Map([[world.floorMaterial,activate(world.floorMaterial,true)]]),seen=new WeakSet(),pending=new Set(),watched=new Map(),dead=new WeakSet();
+ let disposed=false;
+ const track=material=>{
+  if(disposed||dead.has(material)||watched.has(material)||seen.has(material))return;
+  if(material!==world.floorMaterial&&material.getClassName()!=='PBRMaterial'){seen.add(material);return;}
+  watched.set(material,material.onDisposeObservable.addOnce(()=>{
+   dead.add(material);pending.delete(material);plugins.delete(material);watched.delete(material);
+  }));
+  if(!plugins.has(material))pending.add(material);
+ };
+ for(const material of world.scene.materials)track(material);
+ const observer=world.scene.onNewMaterialAddedObservable.add(track);
+ // Material-added notifications are deferred, but removal is synchronous.
+ // Subscribe before an immediate dispose can finish. Removing to an
+ // AssetContainer is NOT disposal: its live material still needs the tint.
+ const removedObserver=world.scene.onMaterialRemovedObservable.add(track);
  let materialCount=-1;
  const bind=()=>{
   // Babylon's material-added event is deferred. Observe newly loaded sources
   // before their first draw as well, avoiding a one-frame ungraded flash.
-  if(materialCount!==world.scene.materials.length){materialCount=world.scene.materials.length;for(const material of world.scene.materials)if(!seen.has(material))pending.add(material);}
+  if(materialCount!==world.scene.materials.length){materialCount=world.scene.materials.length;for(const material of world.scene.materials)track(material);}
   for(const material of pending){
   if(material.metadata?.villageToon&&!seen.has(material)){
-   material.unfreeze();plugins.push(activate(material));seen.add(material);pending.delete(material);
-  }else if(material.getClassName()!=='PBRMaterial'||seen.has(material))pending.delete(material);
+   material.unfreeze();plugins.set(material,activate(material));seen.add(material);pending.delete(material);
+  }
  }};
  const renderObserver=world.scene.onBeforeRenderObservable.add(bind);
- return {dispose(){world.scene.onNewMaterialAddedObservable.remove(observer);world.scene.onBeforeRenderObservable.remove(renderObserver);for(const plugin of plugins)plugin.active=false;pending.clear();}};
+ const dispose=()=>{
+  if(disposed)return;disposed=true;
+  world.scene.onNewMaterialAddedObservable.remove(observer);world.scene.onMaterialRemovedObservable.remove(removedObserver);world.scene.onBeforeRenderObservable.remove(renderObserver);world.scene.onDisposeObservable.remove(sceneObserver);
+  for(const plugin of plugins.values())plugin.active=false;
+  for(const [material,subscription]of watched)material.onDisposeObservable.remove(subscription);
+  plugins.clear();watched.clear();pending.clear();
+ };
+ const sceneObserver=world.scene.onDisposeObservable.addOnce(dispose);
+ return {dispose,inspect:()=>({pending:pending.size,active:plugins.size,tracked:watched.size,disposed})};
 }

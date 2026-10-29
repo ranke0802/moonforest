@@ -19,6 +19,7 @@ import {CAVE_PLACEMENTS,caveObstacles} from './witch-cave-layout.js';
 import {createWitchCaveTerrain} from './witch-cave-terrain.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
 import {configureCaveAtmosphere} from './witch-cave-atmosphere.js';
+import {cachedMapTerrain} from './map-terrain-cache.js';
 const caveTrainingSpawn={x:-39,z:39};
 function mapNavigation({cave,forest,village}){
   const obstacles=cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
@@ -71,7 +72,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,touch
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
 
-  const terrain=cave?createWitchCaveTerrain():forest?createMonsterForestTerrain():village?createVillageTerrain():new TerrainHeightField();
+  const terrain=village?cachedMapTerrain(engine,cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
@@ -131,7 +132,7 @@ export function replaceWorldMap(world,character){
   const forest=character==='warrior-v4',cave=character==='warrior-v5';setWorldCharacter(character);
   retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
-  Object.assign(world.terrain,cave?createWitchCaveTerrain():forest?createMonsterForestTerrain():createVillageTerrain());
+  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,environment:null});
   world.navigation=mapNavigation(world);

@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-10-29T14:52:48.421Z",
+  "baseCommit": "116dbe384ba0f7caed65a54dcce08cc7f5e2709f",
+  "sourceHashes": {
+    "src/map-terrain-cache.js": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100",
+    "src/world.js": "a29a826ee78e3630da517fb469a5f3254486a7d0973ab052a9db62c624cee908",
+    "src/witch-cave-surfaces.js": "0661685eba7c02225961d0626664490eceb088a115db65738c4738330fb1e9ed",
+    "src/witch-cave-atmosphere.js": "33210be43fe7716e38c662a0648f257e77f3cc5971899067f3632273cc6a035e",
+    "src/main.js": "525545bd57c80d866ef5dd8003553bf1ef245be2ba5cf405d9c18ef5ce63d127"
+  },
+  "status": "local_checks_passed",
+  "prompt": "docs/optimization-verification-prompt.txt",
+  "resourceRevision": "bdfbde969ebd8ecfa91c61020133b348e4ae2b23d86ff773dceca894fd164668",
+  "resourceGraphUnchanged": true,
+  "tests": {
+    "total": 471,
+    "passed": 471,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "cpu": {
+    "warrior-v4": {
+      "before": {
+        "samples": 8,
+        "medianMs": 460.33710000000065,
+        "p95Ms": 471.85199999999895
+      },
+      "after": {
+        "samples": 8,
+        "medianMs": 98.73514999999998,
+        "p95Ms": 105.10540000000037
+      },
+      "reductionPercent": 78.5515549365889
+    },
+    "warrior-v5": {
+      "before": {
+        "samples": 8,
+        "medianMs": 96.6851999999999,
+        "p95Ms": 111.23470000000088
+      },
+      "after": {
+        "samples": 8,
+        "medianMs": 39.84915000000001,
+        "p95Ms": 49.56510000000026
+      },
+      "reductionPercent": 58.784643358032
+    },
+    "warrior-v3": {
+      "before": {
+        "samples": 8,
+        "medianMs": 172.56854999999632,
+        "p95Ms": 187.40499999999884
+      },
+      "after": {
+        "samples": 8,
+        "medianMs": 142.23194999999987,
+        "p95Ms": 144.14510000000018
+      },
+      "reductionPercent": 17.57944886249383
+    }
+  },
+  "firstVillageCpuMs": {
+    "before": 234.82680000000255,
+    "after": 239.86369999999988
+  },
+  "lifetime": {
+    "beforeDeadVisits": 7680,
+    "afterDeadVisits": 0,
+    "disposedMaterials": 256,
+    "frames": 30,
+    "remainingStyle": {
+      "pending": 1,
+      "active": 1,
+      "tracked": 2,
+      "disposed": false
+    }
+  },
+  "terrainCache": {
+    "bytes": 356364,
+    "limit": 524288,
+    "entries": 3,
+    "hits": 26,
+    "misses": 3,
+    "evictions": 0
+  },
+  "terrainHashesUnchanged": true,
+  "resourcePlateau": {
+    "warrior-v4": {
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4
+    },
+    "warrior-v5": {
+      "meshes": 54,
+      "materials": 10,
+      "textures": 3,
+      "geometries": 13
+    },
+    "warrior-v3": {
+      "meshes": 31,
+      "materials": 5,
+      "textures": 3,
+      "geometries": 4
+    }
+  },
+  "completedMapSwaps": 27,
+  "passed": [
+    "Full regression suite",
+    "Exact original height grids and walking interpolation",
+    "Bounded isolated CPU terrain copies",
+    "Disposed-material lifetime, deferred notifications and container removal",
+    "Cached resource graph unchanged",
+    "Existing S23 viewport draw/LOD/shadow submission tests",
+    "Combat, health/potions/equipment, camera and in-document travel logic"
+  ],
+  "notMeasured": [
+    "Physical S23 temperature/FPS/GPU memory",
+    "Real browser rasterization or fullscreen/orientation behavior",
+    "Real network download speed",
+    "End-to-end playable scene loading time"
+  ],
+  "constraints": {
+    "playerMaxTexture": 8192,
+    "backgroundMaxTexture": 4096,
+    "lodUnchanged": true,
+    "visualPolicyUnchanged": true,
+    "additionalAssetsGenerated": false,
+    "browserAutomation": false
+  },
+  "limitations": [
+    "CPU timings are one PC/Node run per version with 8 warm samples per map; no absolute timing pass threshold.",
+    "No streamed models in the map-construction benchmark. They are covered separately by the full suite.",
+    "Observer arrays can retain marked-for-removal entries until Babylon timer cleanup; dedicated tests drain those timers.",
+    "Terrain cache adds 356364 bytes of fixed CPU samples; it does not retain GPU resources."
+  ]
+}
