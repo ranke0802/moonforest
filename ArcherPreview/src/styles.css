@@ -141,6 +141,11 @@
 .game-settings .camera-hint{display:flex;white-space:normal;font-size:11px;line-height:1.7}
 .settings-display-options{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .settings-display-options label{display:flex;align-items:center;gap:12px}
+.camera-zoom-options{display:grid;gap:10px;font-size:12px;color:#dce4f2}
+.camera-zoom-options p{margin:0;line-height:1.5}.camera-zoom-options small{color:#aab8cd;line-height:1.5}
+.camera-zoom-row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.camera-zoom-row label{display:flex;align-items:center;gap:8px;min-height:36px}
+.camera-zoom-row input[type=checkbox]{width:18px;height:18px;accent-color:#b8a8db}.camera-zoom-row input[type=number]{width:96px;min-height:36px;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#101725;color:#e7e7ec;font-size:16px;user-select:text}.camera-zoom-row input:disabled{opacity:.45}.camera-zoom-row input[aria-invalid=true]{border-color:#e4a65c}
+.camera-zoom-actions{display:flex;gap:8px}.camera-zoom-actions button{min-height:36px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:#252b42;color:#dce4f2;touch-action:manipulation}#camera-zoom-status{color:#bac8dd;font-size:11px}
 .game-settings #fullscreen-button,.game-settings #help-toggle{width:auto;padding:0 12px;font-size:12px}
 .game-settings .scene-footer{display:flex;gap:12px;flex-wrap:wrap;font-size:9px}
 .game-settings .build-tag{font-size:9px;line-height:1.8}

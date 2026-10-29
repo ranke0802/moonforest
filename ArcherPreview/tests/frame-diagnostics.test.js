@@ -32,14 +32,14 @@ test('paused/hidden time and FPS cap changes are not reported as gameplay stalls
  m.reset();assert.equal(m.summary().samples,0);assert.equal(m.summary().frameMs,null);assert.equal(m.events.length,0);
 });
 
-function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory}={}){
+function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom}={}){
  let time=0,clockCalls=0,contextCalls=0,writes=0;
- const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures'];
+ const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures','diagnostic-zoom','diagnostic-zoom-range'];
  const nodes=Object.fromEntries(ids.map(id=>[id,{dataset:{},hidden:false,disabled:false,checked:false,value:'',listeners:{},_text:'',
   get textContent(){return this._text;},set textContent(v){writes++;this._text=v;},
   addEventListener(type,listener){this.listeners[type]=listener;},focus(){this.focused=true;},select(){this.selected=true;}}]));
  const storage={getItem:()=>stored,setItem:(_,v)=>stored=v};
- const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,
+ const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,zoom,
   context:()=>{contextCalls++;return {position:[3,-5],activity:'회전/시점 조작'};}});
  const frame=(at,active=true)=>{time=at;diagnostic.beginFrame(active,30);time=at+4;diagnostic.endFrame();};
  const toggle=on=>{nodes['frame-diagnostics-toggle'].checked=on;nodes['frame-diagnostics-toggle'].listeners.change();};
@@ -77,6 +77,18 @@ test('HUD throttles updates, explains mobile pacing, and exports measured delays
  assert.match(f.nodes['frame-diagnostics-status'].textContent,/복사했습니다/);
  f.nodes['reset-frame-diagnostics'].listeners.click();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.recentDelays.length,0);
 });
+test('zoom readout follows the camera, exports limits, and refreshes while settings pause the game',async()=>{
+ let calls=0,report,view={factor:1,radius:17,referenceRadius:17,minZoom:.5,maxZoom:4,minEnabled:true,maxEnabled:true};
+ const f=ui({zoom:()=>{calls++;return {...view};},clipboard:{writeText:async value=>report=JSON.parse(value)}});
+ for(let i=0;i<100;i++)f.frame(i*33);assert.equal(calls,0);
+ f.toggle(true);assert.equal(f.nodes['diagnostic-zoom'].textContent,'화면 배율 1.00×');
+ view.factor=2;view.radius=8.5;f.frame(4000);assert.equal(f.nodes['diagnostic-zoom'].textContent,'화면 배율 2.00×');
+ assert.equal(f.nodes['diagnostic-zoom-range'].textContent,'최소 0.50× · 최대 4.00×');
+ f.diagnostic.suspend();view.minEnabled=false;view.maxEnabled=false;f.diagnostic.refresh();
+ assert.equal(f.nodes['diagnostic-zoom-range'].textContent,'최소 해제 · 최대 해제');
+ await f.nodes['copy-frame-diagnostics'].listeners.click();assert.deepEqual(report.cameraZoom,view);
+});
+
 test('clipboard refusal offers a selectable local report instead of losing the diagnostic',async()=>{
  const f=ui({stored:'1',clipboard:{writeText:async()=>{throw new Error('denied');}}});f.frame(0);f.frame(120);
  await f.nodes['copy-frame-diagnostics'].listeners.click();const box=f.nodes['frame-diagnostics-export'];

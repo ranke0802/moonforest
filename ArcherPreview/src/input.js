@@ -1,4 +1,5 @@
 import { normalizedStick } from './controller.js';
+import { zoomCamera } from './camera-zoom.js';
 
 export class PlaygroundInput {
   constructor(canvas, camera, callbacks) {
@@ -171,7 +172,7 @@ export class PlaygroundInput {
       if (radius > 4) { this.panOffset.x *= 4 / radius; this.panOffset.z *= 4 / radius; }
     }
   }
-  zoom(factor) { this.camera.radius = Math.max(this.camera.lowerRadiusLimit ?? .8, Math.min(this.camera.upperRadiusLimit ?? 14, this.camera.radius * factor)); }
+  zoom(factor) { zoomCamera(this.camera, factor); }
   value() {
     const down = (...codes) => codes.some(c => this.keys.has(c));
     let x = this.stick.x + Number(down('KeyD', 'ArrowRight')) - Number(down('KeyA', 'ArrowLeft'));

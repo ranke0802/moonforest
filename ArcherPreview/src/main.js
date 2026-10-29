@@ -17,6 +17,7 @@ import { CharacterAnimator } from './animation.js';
 import { NativeWarriorController } from './native-warrior.js';
 import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
 import { followTarget, combatFocus,playerChinTarget } from './camera-follow.js';
+import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import { ARENA_RADIUS } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
 import { observeViewportSize } from './viewport-resize.js';
@@ -85,7 +86,7 @@ const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(
 const villageReviewEnabled=import.meta.env.DEV&&isVillage()&&new URLSearchParams(location.search).get('villageReview')==='1';
 const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.search).get('villageMobile')==='1';
 let villageReview;
-let engine, world, actor, controller, animator, container, config, input, reviewFocus;
+let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
@@ -122,11 +123,13 @@ try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } c
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
 const loadDiagnostics=new LoadDiagnostics();
 const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
+  zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
   metadata:()=>({character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
+    cameraZoom:cameraZoom?.snapshot()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0})});
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
@@ -256,6 +259,8 @@ function resetCamera() {
   world.camera.radius = isVillage() ? (innerWidth < 600 ? 13 : 17) : innerWidth < 600 ? 6.5 : 4.8;
   if(isVillage()&&villageOverview){world.camera.upperRadiusLimit=155;world.camera.radius=133;world.camera.beta=.62;world.camera.alpha=Math.PI*.38;world.camera.setTarget(new Vector3(0,0,0),false,false,true);}
   if(isVillage()&&villageHorizon){world.camera.radius=18;world.camera.beta=1.3;}
+  if(!villageOverview)cameraZoom?.apply();
+  frameDiagnostics.refresh();
   input.panOffset = { x: 0, y: 0, z: 0 };
 }
 
@@ -516,6 +521,8 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),touchDevice});
+  cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});
+  setupCameraZoomControls(cameraZoom,{onChange:()=>{frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();}});
   world.villageOverview=isVillage()&&villageOverview;
   if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
@@ -690,8 +697,8 @@ try {
     input.cameraMode = mode;
     for (const candidate of ['orbit', 'pan']) { $(`#${candidate}-mode`).classList.toggle('selected', mode === candidate); $(`#${candidate}-mode`).setAttribute('aria-pressed', String(mode === candidate)); }
   });
-  $('#zoom-in').addEventListener('click', () => input.zoom(.85));
-  $('#zoom-out').addEventListener('click', () => input.zoom(1.18));
+  $('#zoom-in').addEventListener('click', () => {input.zoom(.85);frameDiagnostics.refresh();frameLoop?.invalidate();});
+  $('#zoom-out').addEventListener('click', () => {input.zoom(1.18);frameDiagnostics.refresh();frameLoop?.invalidate();});
   $('#reset-camera').addEventListener('click', resetCamera);
   $('#help-toggle').addEventListener('click', () => { releaseAttack(); input.reset(); $('#help-dialog').showModal(); });
   $('#close-help').addEventListener('click', () => $('#help-dialog').close());

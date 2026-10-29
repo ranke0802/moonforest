@@ -42,7 +42,7 @@ export function setupSettingsPanel() {
   fps.id='live-fps';fps.className='live-fps';fps.textContent='— FPS';fps.setAttribute('aria-label','현재 게임 프레임');
   fullscreen.before(fps);
   displayOptions.append(qualityLabel);
-  section('화면 · 카메라', [displayOptions, $('.camera-tools')]);
+  section('화면 · 카메라', [displayOptions, $('.camera-tools'), $('#camera-zoom-options')]);
   section('성능 진단', [$('#frame-diagnostics-options')]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
   const reset = $('#reset-motion-speeds');

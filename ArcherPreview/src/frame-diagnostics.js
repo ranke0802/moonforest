@@ -41,7 +41,7 @@ export class FrameDiagnostics {
   }
 }
 
-export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({})}={}){
+export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   let nextMemory=0,memorySample={};
@@ -58,6 +58,9 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     setText('diagnostic-fps',`${s.fps===null?'—':Math.round(s.fps)} FPS · 목표 ${s.targetFps}`);
     setText('diagnostic-frame',`프레임 ${ms(s.frameMs)} ms · 최대 ${ms(s.maxMs)} ms`);
     setText('diagnostic-stalls',`최근 10초 지연 ${s.slowFrames}회 · ${Math.round(s.thresholdMs)} ms 초과`);
+    const view=zoom();
+    setText('diagnostic-zoom',view?`화면 배율 ${view.factor.toFixed(2)}×`:'화면 배율 —');
+    setText('diagnostic-zoom-range',view?`최소 ${view.minEnabled?view.minZoom.toFixed(2)+'×':'해제'} · 최대 ${view.maxEnabled?view.maxZoom.toFixed(2)+'×':'해제'}`:'최소 — · 최대 —');
     const last=monitor.events.at(-1),recent=last&&monitor.last!==null&&(monitor.last-monitor.started)/1000-last.atSeconds<3;
     panel.dataset.delayed=String(Boolean(recent&&!paused));
     const detail=last?`최근 지연 ${Math.round(last.frameMs)} ms · ${last.activity??'플레이'}`:'회전·이동하며 확인하세요';
@@ -71,12 +74,14 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   reset.addEventListener('click',()=>{monitor.reset();next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
   copy.addEventListener('click',async()=>{
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
+    report.cameraZoom=zoom();
     const value=JSON.stringify(report,null,2);
     try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);fallback.hidden=true;status.textContent='진단 기록을 복사했습니다.';}
     catch{fallback.value=value;fallback.hidden=false;fallback.focus();fallback.select();status.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
   });
   sync();
   return {
+    refresh:paint,
     beginFrame(active,targetFps){
       collecting=enabled&&active;
       if(!collecting){if(enabled){monitor.suspend();if(!paused){paused=true;paint();}}return;}

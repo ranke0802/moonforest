@@ -94,6 +94,8 @@
       <aside id="frame-diagnostics" class="frame-diagnostics" aria-label="프레임 진단" aria-live="off" hidden>
         <strong id="diagnostic-fps">— FPS</strong><span id="diagnostic-frame">프레임 — ms · 최대 — ms</span>
         <span id="diagnostic-stalls">최근 10초 지연 0회</span><small id="diagnostic-detail">측정 대기</small>
+        <span id="diagnostic-zoom">화면 배율 —</span>
+        <small id="diagnostic-zoom-range">최소 — · 최대 —</small>
         <span id="diagnostic-load">최근 로딩 기록 없음</span>
         <span id="diagnostic-load-phases">다운로드 — · 모델 — · 화면 —</span>
         <span id="diagnostic-memory">JS 메모리 —</span>
@@ -128,8 +130,16 @@
       <dialog id="motion-speed-dialog" class="motion-speed-dialog" aria-labelledby="motion-speed-title" aria-describedby="motion-speed-description" data-ui>
         <header><h2 id="motion-speed-title">모션별 속도 · 전사 v2</h2><button id="close-motion-speed" type="button" aria-label="모션 속도 설정 닫기">×</button></header>
         <p id="motion-speed-description">각 모션을 0.5~2배로 조절합니다. 공격 3종에는 공통 공격 속도도 함께 적용됩니다. 회피 거리는 유지되며, 달리기는 이동 속도도 함께 바뀝니다.</p>
+        <div id="camera-zoom-options" class="camera-zoom-options">
+          <p>확대할수록 배율이 커집니다. 마을·숲·동굴은 같은 1배 기준을 사용합니다.</p>
+          <div class="camera-zoom-row"><label><input id="camera-min-enabled" type="checkbox" checked /> 최소 배율 제한</label><label><input id="camera-min-zoom" type="number" min="0.0001" step="any" inputmode="decimal" aria-label="최소 화면 배율" /> ×</label></div>
+          <div class="camera-zoom-row"><label><input id="camera-max-enabled" type="checkbox" checked /> 최대 배율 제한</label><label><input id="camera-max-zoom" type="number" min="0.0001" step="any" inputmode="decimal" aria-label="최대 화면 배율" /> ×</label></div>
+          <small>체크를 해제하면 해당 제한이 풀립니다. 확대 제한 해제 시에도 최소 안전거리는 유지합니다.</small>
+          <div class="camera-zoom-actions"><button id="apply-camera-zoom" type="button">범위 적용</button><button id="reset-camera-zoom" type="button">기본값</button></div>
+          <span id="camera-zoom-status" role="status"></span>
+        </div>
         <div id="frame-diagnostics-options" class="frame-diagnostics-options">
-          <label><input id="frame-diagnostics-toggle" type="checkbox" /> FPS · 로딩 시간 · 메모리 표시</label>
+          <label><input id="frame-diagnostics-toggle" type="checkbox" /> FPS · 화면 배율 · 로딩 · 메모리 표시</label>
           <p>휴대폰은 목표 30 FPS, 정상 프레임 간격은 약 33 ms입니다. 최대 간격과 지연 횟수는 최근 10초 기준입니다. 초기 로딩·설정·앱 전환으로 멈춘 시간은 제외합니다.</p>
           <p>최근 로딩의 다운로드(캐시 확인 포함)·모델 준비·화면 준비 시간을 표시합니다. 총시간에는 맵 정리도 포함됩니다. JS 메모리는 사용량 / 한도이며 전체 RAM이 아닙니다. 배경 고해상도 텍스처는 추정 사용량 / 예산으로, 플레이어와 기본 LOD 등은 제외됩니다. 메모리는 1초마다 갱신됩니다.</p>
           <div><button id="copy-frame-diagnostics" type="button">기록 복사</button><button id="reset-frame-diagnostics" type="button">초기화</button></div>

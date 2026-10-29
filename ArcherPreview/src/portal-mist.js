@@ -14,12 +14,12 @@ export const portalMistFragment=`precision mediump float;varying vec2 mistUV;uni
 void main(){vec2 p=mistUV*2.0-1.0;float edge=1.0-smoothstep(.18,1.0,length(p*vec2(1.0,.95)));
 float a=texture2D(cloud,mistUV*.8+vec2(time*.009,-time*.018)).r;
 float b=texture2D(cloud,mistUV*1.3+vec2(-time*.014,time*.006)).r;
-float wisps=smoothstep(.25,.78,a*.64+b*.36);float alpha=edge*wisps*opacity;
-vec3 dusk=vec3(.42,.34,.52),lavender=vec3(.68,.59,.75);gl_FragColor=vec4(mix(dusk,lavender,clamp(a*1.2,0.0,1.0)),alpha);}`;
+float wisps=smoothstep(.25,.78,a*.64+b*.36);float alpha=edge*mix(.18,1.0,wisps)*opacity;
+vec3 dusk=vec3(.50,.28,.69),lavender=vec3(.83,.65,.94);gl_FragColor=vec4(mix(dusk,lavender,clamp(a*1.2,0.0,1.0)),alpha);}`;
 export function createPortalMist(world,portal){
   const texture=RawTexture.CreateRGBATexture(portalNoise(),128,128,world.scene,true,false,Texture.TRILINEAR_SAMPLINGMODE);texture.wrapU=texture.wrapV=Texture.WRAP_ADDRESSMODE;texture.anisotropicFilteringLevel=1;
   const material=new ShaderMaterial('portal-lavender-mist',world.scene,{vertexSource,fragmentSource:portalMistFragment},{attributes:['position','uv'],uniforms:['worldViewProjection','time','opacity'],samplers:['cloud'],needAlphaBlending:true});
-  material.backFaceCulling=false;material.disableDepthWrite=true;material.setTexture('cloud',texture);material.setFloat('time',0);material.setFloat('opacity',.44);
+  material.backFaceCulling=false;material.disableDepthWrite=true;material.setTexture('cloud',texture);material.setFloat('time',0);material.setFloat('opacity',.70);
   const y=world.terrain.heightAt(portal.x,portal.z);
   const plume=MeshBuilder.CreatePlane('portal-mist-plume',{width:3.8,height:3.2},world.scene);plume.position.set(portal.x,y+1.28,portal.z);plume.billboardMode=Mesh.BILLBOARDMODE_Y;
   const veil=MeshBuilder.CreateGround('portal-mist-ground',{width:4.2,height:4.2},world.scene);veil.position.set(portal.x,y+.07,portal.z);veil.freezeWorldMatrix();
