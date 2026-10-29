@@ -14,6 +14,7 @@ import { villageRenderRange } from './village-policy.js';
 
 import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
 import {createMonsterForestTerrain} from './monster-forest-terrain.js';
+import {retainMapEffect} from './map-shader-cache.js';
 
 export function createWorld(engine, {village=false,forest=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
   village=village||forest;
@@ -116,6 +117,7 @@ export function createWorld(engine, {village=false,forest=false,touchDevice=matc
 export function replaceWorldMap(world,character){
   if(!world.village||!['warrior-v3','warrior-v4'].includes(character))throw new Error('Unsupported map transition');
   const forest=character==='warrior-v4';setWorldCharacter(character);
+  retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
   Object.assign(world.terrain,forest?createMonsterForestTerrain():createVillageTerrain());
   Object.assign(world,{forest,mapId:forest?'monster-forest':'village',environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined,environment:null});

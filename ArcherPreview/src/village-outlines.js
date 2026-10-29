@@ -3,6 +3,7 @@ import '@babylonjs/core/Shaders/ShadersInclude/instancesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/instancesVertex.js';
 import {projectedCoverage} from './village-lod.js';
 import {VILLAGE_INK_MIN_COVERAGE,selectVillageOutlines,villageInkWidth} from './village-outline-policy.js';
+import {prepareMapMaterials} from './map-shader-cache.js';
 
 const vertexSource=`precision highp float;
 attribute vec3 position;attribute vec3 normal;
@@ -79,9 +80,7 @@ export class VillageOutlines {
     this.next=0;
   }
   async prepare(sources=this.sources){
-    for(const source of sources){
-      await this.material.forceCompilationAsync(source,{useInstances:true});
-    }
+    await prepareMapMaterials(sources,{material:this.material,cancelled:()=>this.world.scene.isDisposed});
   }
   afterBase(mesh,subMesh,batch){
     const scene=this.world.scene,engine=scene.getEngine();

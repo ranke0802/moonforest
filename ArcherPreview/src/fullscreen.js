@@ -31,7 +31,9 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     if (wasFullscreen && !active) unlock();
     wasFullscreen = active;
     if(active || installed)disarmAutoEntry();
-    button.hidden = installed;
+    // Keep a stable HUD even if Chrome reports display-mode fullscreen while
+    // its document fullscreen state is temporarily absent (resume/dialogs).
+    button.hidden = false;
     button.textContent = iconOnly ? (active ? '⤡' : '⛶') : (active ? '화면 축소' : '전체화면');
     button.setAttribute('aria-pressed', String(active));
     button.setAttribute('aria-label', active ? '화면 축소' : '전체화면');
@@ -53,7 +55,7 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
   }
   async function toggle({quiet=false,enterOnly=false}={}) {
     if (pending || disposed) return;
-    if (!fullscreenElement() && isInstalledDisplay()) { sync(); return; }
+    if (!fullscreenElement() && isInstalledDisplay()) { sync();if(!quiet)notify('현재 전체화면으로 실행 중입니다.');return; }
     if(enterOnly && fullscreenElement()){sync();return;}
     const report=quiet?()=>{}:notify;
     const exiting = Boolean(fullscreenElement());

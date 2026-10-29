@@ -42,16 +42,16 @@ test('unsupported fullscreen and disposed listeners do not attempt automatic ent
  dispose();button.dispatchEvent(new Event('click'));doc.dispatchEvent(new Event('pointerup'));await flush();assert.equal(reports.length,1);
 });
 
-test('iOS home-screen mode hides the redundant fullscreen control and never requests native entry',async t=>{
+test('home-screen mode keeps the fullscreen control visible and explains its installed state',async t=>{
  const {doc,button,stats,reports}=fixture(t,{standalone:true});
- assert.equal(button.hidden,true);
+ assert.equal(button.hidden,false);
  doc.dispatchEvent(new Event('pointerup'));button.dispatchEvent(new Event('click'));await flush();
- assert.deepEqual(stats(),{entries:0,exits:0});assert.deepEqual(reports,[]);
+ assert.deepEqual(stats(),{entries:0,exits:0});assert.match(reports[0],/전체화면으로 실행 중/);
 });
 
 test('manifest standalone mode is recognized even without navigator.standalone',async t=>{
  const {doc,button,stats}=fixture(t,{displayMode:'standalone'});
- assert.equal(button.hidden,true);doc.dispatchEvent(new Event('pointerup'));await flush();
+ assert.equal(button.hidden,false);doc.dispatchEvent(new Event('pointerup'));await flush();
  assert.equal(stats().entries,0);
 });
 

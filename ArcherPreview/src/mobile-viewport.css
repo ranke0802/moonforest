@@ -2,6 +2,11 @@
    In particular, never force a 380px-tall scene into a shorter Safari viewport. */
 html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
 #app { position: fixed; inset: 0; width: 100%; height: 100%; min-height: 0; }
+/* Diagnostic overlays never cover the persistent window controls. */
+#app > .topbar { z-index: 12; }
+#app > .topbar .top-actions { flex-shrink: 0; }
+#app > .topbar .fullscreen-toggle { flex-shrink: 0; }
+#app > .action-controls { z-index: 7; }
 @supports (height: 100dvh) {
   #app { height: 100dvh; }
 }
@@ -49,23 +54,17 @@ html, body { overscroll-behavior: none; -webkit-text-size-adjust: 100%; }
     bottom: max(20px, calc(var(--safe-bottom) + 10px));
   }
   #app > .action-controls[data-character="warrior-v2"] {
-    display: grid;
-    grid-template-columns: 64px 77px;
-    grid-template-rows: 64px 77px;
-    gap: 10px;
-    align-items: center;
-    justify-items: center;
+    /* Keep the original thumb-reach anchor and the authored radial offsets:
+       shield above-left, dodge left, potion above, attack below-right. */
+    right: calc(clamp(44px, 8vw, 96px) + var(--safe-right));
+    bottom: calc(clamp(92px, 12vh, 120px) + var(--safe-bottom));
   }
-  #app > .action-controls[data-character="warrior-v2"] > .action-button {
-    position: static;
-    inset: auto;
-    margin: 0;
-    scale: none;
+  @media (max-height: 500px) and (orientation: landscape) {
+    #app > .action-controls[data-character="warrior-v2"] {
+      right: calc(clamp(58px, 9vw, 100px) + var(--safe-right));
+      bottom: calc(64px + var(--safe-bottom));
+    }
   }
-  #app > .action-controls[data-character="warrior-v2"] #attack-button { grid-area: 2 / 2; width: 77px; height: 77px; }
-  #app > .action-controls[data-character="warrior-v2"] #guard-button { grid-area: 1 / 1; width: 64px; height: 64px; }
-  #app > .action-controls[data-character="warrior-v2"] #dodge-button { grid-area: 2 / 1; width: 64px; height: 64px; }
-  #app > .action-controls[data-character="warrior-v2"] #potion-button { grid-area: 1 / 2; width: 56px; height: 56px; }
   #app > .action-controls[data-character="warrior-v2"] kbd { display: none; }
   #app > .joystick-hint { left: calc(var(--hud-left) + 14px); bottom: max(28px, calc(var(--safe-bottom) + 20px)); }
   #app > #stream-loading { left: var(--hud-left); bottom: max(8px, var(--safe-bottom)); }
