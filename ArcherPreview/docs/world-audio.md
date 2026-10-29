@@ -33,3 +33,5 @@ node --test tests/audio.test.js tests/world-audio.test.js
 전체 테스트 → `build:village` → `sync:village` → `stage-pages` 순서와 JSON 검증은 기존 README를 따릅니다. 모델·텍스처·LOD 패킹 명령은 음향 배포 때문에 실행하지 않습니다. `public/audio-credits.html`과 `AUDIO_CREDITS.txt`는 출처 포함 배포 파일입니다. `report-world-audio.mjs`로 HTML을 재현할 수 있습니다.
 
 자동 검증 범위: 실제 파일 해시/디코딩/피크/라이선스 참조, 기존 음향 해시 유지, 36회 지역 왕복, BGM 우선순위/복귀, 동시 소스·캐시 한도, 실패/폐기/일시정지/비동기 경합. 브라우저 자동조작이나 S23 스피커 청취는 하지 않습니다. 최종 청감은 HTML의 자동 재생 없는 미리듣기와 실제 게임에서 사용자가 확인합니다.
+
+2026-10-30 통합 검증: 최종 32 kHz AudioContext 옵션을 포함한 소스로 전체 478개 테스트를 다시 통과했고 최신 빌드를 생성했습니다. 기준 배포 `d27e4b2`의 콘텐츠 945개를 모두 유지하며, 신규 음향 27개(6,227,432바이트)만 추가합니다. 8K 플레이어·마을·숲·동굴과 바닥 manifest는 동일합니다. HTML은 효과음 변형까지 포함한 65개 미리듣기 항목(중복 제거 실제 파일 64개)을 제공하고 자동 재생·자동 다운로드를 하지 않습니다. 상세 증거는 `reports/world-audio-integration/verification.json`, 전체 로그는 같은 폴더의 `full-tests.log`입니다. 전송 계획의 0바이트 재방문은 캐시 시뮬레이션이며 실제 기기 통신·청감 측정은 아닙니다.
