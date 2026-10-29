@@ -1,4 +1,5 @@
 import {KhronosTextureContainer2} from '@babylonjs/core/Misc/khronosTextureContainer2.js';
+import {installKtxDecodeCache} from './map-decode-cache.js';
 
 let initialized;
 // Pin every decoder module to our own content-addressed cache. Transcoding is
@@ -11,6 +12,7 @@ export function initializeVillageKtx2(){
     const config=await response.json();
     for(const [key,path]of Object.entries(config.urls))KhronosTextureContainer2.URLConfig[key]=new URL(path,url).href;
     KhronosTextureContainer2.DefaultNumWorkers=1;
+    installKtxDecodeCache(KhronosTextureContainer2);
     // Do not silently expand UASTC to RGBA on devices with BC1/3 support.
     KhronosTextureContainer2.DefaultDecoderOptions.useRGBAIfOnlyBC1BC3AvailableWhenUASTC=false;
     KhronosTextureContainer2.DefaultDecoderOptions.useRGBAIfASTCBC7NotAvailableWhenUASTC=false;

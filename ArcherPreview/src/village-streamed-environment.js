@@ -14,6 +14,7 @@ import {initializeVillageMeshopt} from './village-meshopt.js';
 import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
 import {VillageWorkBudget} from './village-work-budget.js';
+import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -101,7 +102,7 @@ export function loadStreamedVillage(world,{
       const meshes=geometry(container);prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
       world.lighting.registerMeshes(meshes);
-      for(const mesh of meshes)await mesh.material.forceCompilationAsync(mesh,{useInstances:true});
+      await prepareMapMaterials(meshes,{cancelled:()=>disposed});
       if(disposed)return;
       installVillageGeometry(asset,container,level,world);
       const instances=records.filter(r=>r.placement.asset===id);
@@ -129,7 +130,14 @@ export function loadStreamedVillage(world,{
     let cleaned=false;
     const stop=()=>{if(disposed)return;disposed=true;streaming.dispose();textures?.dispose();};
     const cleanup=()=>{
-      if(cleaned)return;cleaned=true;outlines.dispose();visibility.dispose();
+      if(cleaned)return;cleaned=true;
+      // Capture the variants that really drew (including active shadows), not
+      // only the prewarm variants compiled before the first caster selection.
+      if(!world.scene.isDisposed){
+        retainMapEffect(outlines.material.getEffect());
+        for(const c of containers)for(const mesh of c.meshes)for(const sub of mesh.subMeshes??[])retainMapEffect(sub.effect);
+      }
+      outlines.dispose();visibility.dispose();
       for(const r of records)r.root.dispose();
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();

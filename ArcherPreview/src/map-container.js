@@ -1,5 +1,6 @@
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
+import {cacheMapBufferViews} from './map-decode-cache.js';
 
 // Babylon 9.31's AssetContainer.dispose leaves its scene-disposal closure
 // registered. Capture that constructor hook, then release it with this map.
@@ -9,6 +10,7 @@ export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,f
   const minimum=json?.asset?.minVersion;
   if(json?.asset?.version!=='2.0'||(minimum!==undefined&&(!/^\d+\.\d+$/.test(minimum)||Number(minimum)>2)))throw new Error('지원하지 않는 맵 모델 버전입니다.');
   const loader=new GLTFFileLoader();loader.skipMaterials=skipMaterials;
+  cacheMapBufferViews(loader,scene,fileName);
   let observer;
   loader.onParsedObservable.addOnce(()=>{
     const before=new Set(scene.onDisposeObservable.observers);
