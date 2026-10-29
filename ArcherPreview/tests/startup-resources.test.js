@@ -5,6 +5,7 @@ import {NullEngine,Scene,ArcRotateCamera,Vector3} from '@babylonjs/core';
 import {prepareStartupResources} from '../src/startup-resources.js';
 import {createVillageTerrain} from '../src/village-terrain.js';
 import {VILLAGE_SPAWN} from '../src/village-layout.js';
+import {planResourceTransfers} from '../src/resource-index.js';
 const base=new URL('../public/assets/',import.meta.url);
 for(const profile of ['warrior-v3','warrior-v3-ios'])test(`${profile} startup inventory covers real player 8K, selected village LODs and ground; cached reload downloads no content`,async t=>{
  const engine=new NullEngine({renderWidth:900,renderHeight:450}),scene=new Scene(engine);scene.useRightHandedSystem=true;
@@ -25,5 +26,7 @@ for(const profile of ['warrior-v3','warrior-v3-ios'])test(`${profile} startup in
   const model=JSON.parse(readFileSync(new URL(original.model,base),'utf8'));
   assert.ok(checked.every(url=>!model.images.some(im=>url.endsWith(im.uri))),'Never prefetch the uncompressed player too');
  }
- t.diagnostic(JSON.stringify({mobileLandscapeInitialModels:world.startupResources.initialLodModels,coldAssetBytes:state.cached,cachedDownloadBytes:state.total}));
+ const index=JSON.parse(readFileSync(new URL('resource-index.json',base))),missing=checked.map(url=>({url,size:index.files[new URL(url).pathname.split('/').at(-1)]})),plan=planResourceTransfers(missing,index);
+ assert.ok(plan.packs.length+plan.files.length<checked.length*.7,'startup bundling must reduce request count without fetching extra resources');
+ t.diagnostic(JSON.stringify({mobileLandscapeInitialModels:world.startupResources.initialLodModels,coldAssetBytes:state.cached,coldBundledBytes:plan.bytes,oldRequests:checked.length,bundledRequests:plan.packs.length+plan.files.length,packs:plan.packs.length,cachedDownloadBytes:state.total}));
 });

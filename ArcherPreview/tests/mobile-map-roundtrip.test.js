@@ -26,6 +26,7 @@ for(const [device,agent,width,height]of [
  t.mock.method(globalThis,'fetch',async url=>{
   const name=new URL(url).pathname.split('/').at(-1);
   if(name.endsWith('.json'))return new Response(readFileSync(new URL(name,base)));
+  if(name.endsWith('.mfp.gz')){network.set(String(url),(network.get(String(url))??0)+1);return new Response(readFileSync(new URL('bundles/'+name,base)));}
   assert.equal(statSync(new URL('content/'+name,base)).size,sizes[name]);
   network.set(String(url),(network.get(String(url))??0)+1);
   let left=sizes[name];return new Response(new ReadableStream({pull(c){if(!left){c.close();return;}const n=Math.min(left,65536);left-=n;c.enqueue(new Uint8Array(n));}},{highWaterMark:0}));

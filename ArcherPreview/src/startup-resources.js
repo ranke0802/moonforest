@@ -1,10 +1,15 @@
 import {ResourceDownloads} from './resource-downloads.js';
 import {prepareVillageStart} from './village-environment.js';
 import {readMapManifest} from './map-manifests.js';
+import {registerResourceGraph} from './resource-cache.js';
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream){
   world.releaseResourceDownloads?.();
-  const downloads=new ResourceDownloads(sizes.files,base),cancel=()=>downloads.cancel();
+  const downloads=new ResourceDownloads(sizes.files,base,{index:sizes}),cancel=()=>downloads.cancel();
+  world.resourceDownloadStats=downloads.stats;
+  // Protect this document's complete graph (including the other map) before
+  // asking the worker to collect obsolete versions from earlier deployments.
+  registerResourceGraph(sizes);
   const observer=world.scene.onDisposeObservable.addOnce(cancel);
   world.cancelResourceDownloads=cancel;
   world.releaseResourceDownloads=()=>{cancel();world.scene.onDisposeObservable.remove(observer);world.prefetchResources=null;world.releaseResourceDownloads=null;};
@@ -15,7 +20,7 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
 
 export async function prepareMapResources(world,base,onProgress,onStream){
   const read=name=>readMapManifest(new URL(name+'.json',base));
-  const [village,sizes,ground]=await Promise.all([prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest)]);
+  const [village,sizes,ground]=await Promise.all([prepareVillageStart(world),read('resource-index'),read(world.groundManifest)]);
   // The same live player, sky, decoder and training target already own their
   // resources. Only destination-map bytes belong in this download progress.
   await prepareDownloads(world,base,sizes,[...village.resources,...ground.resources],village.plan,onProgress,onStream);
@@ -25,7 +30,7 @@ export async function prepareStartupResources(world,playerUrl,onProgress,onStrea
   const base=new URL('./',playerUrl),read=name=>readMapManifest(new URL(name+'.json',base));
   const player=await read(playerUrl.pathname.split('/').at(-1).replace('.json',''));
   const [village,sizes,ground,sky,environment,ktx,meshopt]=await Promise.all([
-    prepareVillageStart(world),read('resource-sizes'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
+    prepareVillageStart(world),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
   const resources=[...player.resources,...village.resources,...ground.resources,sky.texture,...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   await prepareDownloads(world,base,sizes,resources,village.plan,onProgress,onStream);
   return player;

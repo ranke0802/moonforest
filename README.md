@@ -4,6 +4,8 @@ Unity로 만드는 쿼터뷰 액션 RPG 프로토타입입니다. 위치·전사
 
 ## 실행
 
+웹 전사 v3·v4의 리소스 통합 다운로드, JSON 버전 관리, 캐시 정리 및 향후 배포 절차는 [웹 프리뷰 README](ArcherPreview/README.md#웹-전사-v3v4-리소스-배포-규칙)를 따릅니다. Unity 빌드와 별도 파이프라인이며, 배포 담당자는 해당 문서의 자동 검증을 통과한 결과만 게시합니다.
+
 1. 저장소를 복제합니다: `git clone https://github.com/ranke0802/moonforest.git`
 2. Unity Hub에서 복제한 폴더를 프로젝트로 추가합니다.
 3. **Unity 6000.6.0f1**로 열고 첫 에셋 임포트가 끝날 때까지 기다립니다.

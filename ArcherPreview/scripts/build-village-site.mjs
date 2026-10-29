@@ -5,6 +5,7 @@ import { build } from 'vite';
 import { hash } from './resource-pack.js';
 import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
 import { validVillageTextureProfile } from '../src/village-texture-budget.js';
+import {buildResourceBundles,verifyResourceBundles} from './resource-bundles.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
@@ -20,7 +21,7 @@ function contentReferences(value,result=[]){
 // Both './content/' and sky.json's 'content/' spelling resolve identically.
 export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVillage=true}={}){
   const publicRoot=resolve(publicDirectory),assetsRoot=resolve(publicRoot,'assets'),files=new Map(),pending=[];
-  const manifests=(await readdir(assetsRoot,{withFileTypes:true})).filter(e=>e.isFile()&&e.name.endsWith('.json')&&e.name!=='village-fixture.json');
+  const manifests=(await readdir(assetsRoot,{withFileTypes:true})).filter(e=>e.isFile()&&e.name.endsWith('.json')&&!['village-fixture.json','resource-index.json'].includes(e.name));
   if(requireCompleteVillage){
     const village=JSON.parse(await readFile(resolve(assetsRoot,'village.json'),'utf8'));
     if(!village.complete||village.developmentFixture||village.availableAssetCount!==25||Object.keys(village.assets??{}).length!==25||VILLAGE_ASSET_IDS.some(id=>village.assets[id]?.visualReview!=='APPROVED'))throw new Error('The production village needs all 25 approved assets; fixtures cannot be published.');
@@ -70,6 +71,13 @@ export async function buildVillageSite(){
   const sizes=Object.fromEntries([...resourceInventory.files].filter(([path])=>path.startsWith('assets/content/')).map(([path,info])=>[path.split('/').at(-1),info.bytes]).sort(([a],[b])=>a.localeCompare(b)));
   await writeFile(resolve(publicRoot,'assets/resource-sizes.json'),JSON.stringify({version:1,files:sizes})+'\n');
   const {files,manifestCount}=await collectVillageSiteFiles(publicRoot);
+  // Regenerate every deployment, from live manifests only. Old packs and old
+  // content copies in the workspace cannot enter the published inventory.
+  const resourceIndex=await buildResourceBundles(publicRoot,files);
+  const bundleAudit=await verifyResourceBundles(publicRoot,resourceIndex);
+  for(const path of ['resource-index.json',...resourceIndex.bundles.map(p=>p.url)]){
+    const absolute=resolve(publicRoot,'assets',path);files.set('assets/'+path,{absolute,bytes:(await readFile(absolute)).length});
+  }
   // Resolve public URLs in HTML (including the installed-app manifest) while
   // copying only the verified graph below, not public's raw model sources.
   await build({root:project,publicDir:publicRoot,build:{outDir,emptyOutDir:true,copyPublicDir:false}});
@@ -100,8 +108,8 @@ export async function buildVillageSite(){
   await inventory(outDir);
   const total=deploymentFiles.reduce((sum,f)=>sum+f.bytes,0);
   if(total>=1_000_000_000)throw new Error('Published site exceeds the 1 GB budget.');
-  await writeFile(resolve(outDir,'deployment-files.json'),JSON.stringify({version:1,bytes:total,files:deploymentFiles},null,2)+'\n');
-  const result={outDir,manifestCount,contentFiles:[...files.keys()].filter(p=>p.startsWith('assets/content/')).length,publishedResourceFiles:files.size,publishedResourceBytes:[...files.values()].reduce((n,f)=>n+f.bytes,0),sourceAssets:25};
+  await writeFile(resolve(outDir,'deployment-files.json'),JSON.stringify({version:2,resourceRevision:resourceIndex.revision,bytes:total,files:deploymentFiles},null,2)+'\n');
+  const result={outDir,manifestCount,contentFiles:[...files.keys()].filter(p=>p.startsWith('assets/content/')).length,publishedResourceFiles:files.size,publishedResourceBytes:[...files.values()].reduce((n,f)=>n+f.bytes,0),sourceAssets:25,bundleAudit};
   console.log(JSON.stringify(result));return result;
 }
 

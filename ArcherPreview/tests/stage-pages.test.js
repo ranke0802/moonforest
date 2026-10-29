@@ -13,6 +13,7 @@ test('Pages includes only the reviewed build and rejects altered resources',asyn
   const data=Buffer.from('approved');await writeFile(join(site,'index.html'),data);await writeFile(join(site,'old-source.glb'),'unreferenced');
   await writeFile(join(site,'deployment-files.json'),JSON.stringify({version:1,bytes:data.length,files:[{path:'index.html',bytes:data.length,sha256:createHash('sha256').update(data).digest('hex')}]}));
   await stagePages(root,join(root,'published'));assert.equal(await readFile(join(root,'published/ArcherPreviewSite/index.html'),'utf8'),'approved');
+  await assert.rejects(stagePages(root,join(root,'legacy'),{requireResourceIndex:true}),/current resource bundle/);
   await assert.rejects(readFile(join(root,'published/ArcherPreviewSite/old-source.glb')),e=>e.code==='ENOENT');
   await writeFile(join(site,'index.html'),'tampered');await assert.rejects(stagePages(root,join(root,'second')),/differs/);
  }finally{assert.ok(root.startsWith(join(tmpdir(),'village-pages-')));await rm(root,{recursive:true,force:true});}

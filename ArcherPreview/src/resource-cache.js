@@ -1,4 +1,16 @@
 let initialized;
+let registeredRevision,registeredController,currentGraph,listening=false;
+export function registerResourceGraph(index){
+  currentGraph=index;const worker=globalThis.navigator?.serviceWorker;
+  if(!worker)return;
+  if(!listening&&worker.addEventListener){listening=true;worker.addEventListener('controllerchange',()=>{if(currentGraph)registerResourceGraph(currentGraph);});}
+  const controller=worker.controller;
+  if(!controller||(registeredController===controller&&registeredRevision===index.revision))return;
+  try{
+    controller.postMessage({type:'RESOURCE_GRAPH_USE',revision:index.revision,files:Object.keys(index.files)});
+    registeredRevision=index.revision;registeredController=controller;
+  }catch{ /* A worker replaced during startup will receive the next declaration. */ }
+}
 export function initializeResourceCache() {
   return initialized ||= (async () => {
     if (!('serviceWorker' in navigator) || !window.isSecureContext) return false;
