@@ -63,8 +63,8 @@ packed=np.uint8(np.clip(np.stack([stone,dust,np.full_like(stone,.5)],axis=2)*255
 Image.fromarray(packed).save(out/'cave-detail.png')
 subprocess.run([str(ktx),'create','--format','R8G8B8_UNORM','--encode','basis-lz','--qlevel','255','--generate-mipmap',str(out/'cave-detail.png'),str(out/'cave-detail.ktx2')],check=True,capture_output=True)
 detailBytes=(out/'cave-detail.ktx2').read_bytes();detailUrl='./content/'+hashlib.sha256(detailBytes).hexdigest()+'.ktx2';(assets/detailUrl).write_bytes(detailBytes)
-village=json.loads((assets/'village-ground.json').read_text());detail={**village['detail'],'url':detailUrl,'bytes':len(detailBytes)}
+village=json.loads((assets/'village-ground.json').read_text());detail={**village['detail'],'url':detailUrl,'bytes':len(detailBytes),'codec':'etc1s','gpuBlockBytes':8}
 
-manifest={**village,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'detail':detail,'resources':[url,detail['url']],'method':'unique-world-space-eroded-cave-rock-and-dust'}
+manifest={**village,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'detail':detail,'resources':[url,detail['url']],'gpuBytesWithMips':round((2048*2048+256*256/2)*4/3),'compression':'KTX2/Basis ETC1S color and linear packed detail','method':'unique-world-space-eroded-cave-rock-and-dust'}
 (assets/'witch-cave-ground.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps({'bytes':len(data),'newGenerationCalls':0,'textureMax':2048}))

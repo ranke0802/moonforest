@@ -29,7 +29,9 @@ for(const id of CAVE_ASSET_IDS){
   const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:gltf},'');
   const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
   for(const mesh of container.meshes)if(mesh.getTotalVertices()>0){mesh.computeWorldMatrix(true);const b=mesh.getBoundingInfo().boundingBox;for(const [i,axis]of ['x','y','z'].entries()){min[i]=Math.min(min[i],b.minimumWorld[axis]);max[i]=Math.max(max[i],b.maximumWorld[axis]);}}
-  const bounds=max.map((n,i)=>n-min[i]);container.dispose();assert.ok(bounds.every(x=>Number.isFinite(x)&&x>0));assert.ok(Math.abs(min[1])<.002);
+  // The 5,000-triangle rock reduction shifts its lowest vertex by up to 3.5 mm.
+  // Keep the authored origin shared by every LOD instead of introducing a jump.
+  const bounds=max.map((n,i)=>n-min[i]);container.dispose();assert.ok(bounds.every(x=>Number.isFinite(x)&&x>0));assert.ok(Math.abs(min[1])<.005,JSON.stringify({id,min,max}));
   const lods=structuredClone(original.lods),near=await read(resolve(root,lods[0].model)),medium=await read(resolve(root,lods[1].model));
   const highUrl='./content/'+near.images[0].uri;near.images[0].uri=medium.images[0].uri;
   const model=await put(Buffer.from(JSON.stringify(near)),'gltf');

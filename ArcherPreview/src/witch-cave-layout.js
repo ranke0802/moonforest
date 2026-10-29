@@ -85,11 +85,13 @@ function makePlacements(){
     add(10,x+4,z-1,1,yaw,{elevation:h});add(14,x,z+.5,1,yaw,{topElevation:h+.035});
   }
   add(11,-22,-3,1.2,.15,{elevation:-2});add(12,-39,-25,1,0,{elevation:2.5});
+  add(8,-39,-25,1.4,0,{elevation:2.5});
   for(const [x,z]of [[-44,38],[-30,24],[-38,-12],[-23,-27],[-3,-30],[12,25],[32,15],[42,-8],[19,-20],[36,-38]])add(13,x,z,1,random()*6.28,{elevation:caveSurface(x,z).height});
   // A former saint's dwelling occupies a spacious apse, rather than a palace.
   add(15,29,-34,1.45,0,{elevation:6,colliderRadius:3.8});
-  for(const [dx,dz]of [[-4,-4],[4,-4],[-4,4],[4,4]])add(16,29+dx,-34+dz,1.1,Math.atan2(-dx,-dz),{elevation:6,colliderRadius:.55});
-  add(17,29,-44,1.2,0,{elevation:6});
+  for(const [dx,dz]of [[-4,-4],[4,-4],[-4,4],[4,4]])add(16,29+dx,-34+dz,1.1,Math.atan2(dz,-dx),{elevation:6,colliderRadius:.55,colliderOffsetX:-.74});
+  add(8,29,-42,2.6,0,{elevation:6});
+  add(17,29,-41.6,1,0,{topElevation:11.5});
   add(18,18,-34,1.05,.4,{elevation:6,colliderRadius:1.35});
   add(19,18,-39,1.05,.45,{elevation:6,colliderRadius:1.15});
   add(20,39,-35,1.1,-.6,{elevation:6,colliderRadius:1});
@@ -105,11 +107,15 @@ function makePlacements(){
 }
 export const CAVE_PLACEMENTS=makePlacements();
 export function caveObstacles(){
-  const obstacles=CAVE_PLACEMENTS.filter(p=>p.colliderRadius).map(p=>({id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.asset.includes('column')?18:2}));
+  const obstacles=CAVE_PLACEMENTS.filter(p=>p.colliderRadius).map(p=>({id:p.id,x:p.x+Math.cos(p.yaw)*(p.colliderOffsetX??0)*p.scale,z:p.z-Math.sin(p.yaw)*(p.colliderOffsetX??0)*p.scale,radius:p.colliderRadius,height:p.asset.includes('column')?18:2}));
   for(const p of CAVE_PLACEMENTS){
     if(p.asset===CAVE_ASSET_IDS[3])for(const side of [-1,1]){
       const offset=side*3.25*p.scale;
       obstacles.push({id:p.id+'-post'+side,x:p.x+Math.cos(p.yaw)*offset,z:p.z-Math.sin(p.yaw)*offset,radius:.9*p.scale,height:7*p.scale});
+    }
+    if(p.asset===CAVE_ASSET_IDS[7])for(const side of [-1,1]){
+      const offset=side*1.22*p.scale;
+      obstacles.push({id:p.id+'-brace'+side,x:p.x+Math.cos(p.yaw)*offset,z:p.z-Math.sin(p.yaw)*offset,radius:.18*p.scale,height:2.46*p.scale});
     }
     if(p.asset===CAVE_ASSET_IDS[9])obstacles.push({id:p.id,x:p.x,z:p.z,radius:.65*p.scale,height:1.6*p.scale});
   }
