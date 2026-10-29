@@ -4,7 +4,7 @@ export function selectVillageShadowCasters(records,player,touch,previous=new Set
   const candidates=records.filter(r=>!r.root.isDisposed?.()&&(r.root.isEnabled()||r.cellActive===false)&&r.placement.kind!=='ground-detail')
     .map(r=>{
       const dx=Math.max(r.min.x-player.x,0,player.x-r.max.x),dz=Math.max(r.min.z-player.z,0,player.z-r.max.z);
-      const distance=Math.hypot(dx,dz),important=major.has(r.placement.kind);
+      const distance=Math.hypot(dx,dz),important=major.has(r.placement.kind)||(/^cave-0[134]/.test(r.placement.asset??''));
       const retained=previous.has(r);
       return {r,distance,important,retained,rank:distance-(retained?2:0)};
     }).filter(v=>v.distance<range+(v.retained?3:0)&&(v.important||v.distance<14+(v.retained?2:0)))

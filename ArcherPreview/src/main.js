@@ -569,7 +569,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
-      loadDiagnostics.begin(isForest()?'마을 이동':'마물의 숲 이동');
+      loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();actionAudio.reset();
       boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};

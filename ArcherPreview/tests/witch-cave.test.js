@@ -1,10 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CAVE_PLACEMENTS,CAVE_ASSET_IDS,CAVE_ENTRY,CAVE_BOSS,CAVE_ROUTES,caveObstacles,caveSurface} from '../src/witch-cave-layout.js';
-import {createWitchCaveTerrain,caveClearance} from '../src/witch-cave-terrain.js';
+import {CAVE_PLACEMENTS,CAVE_ASSET_IDS,CAVE_ENTRY,CAVE_BOSS,CAVE_ROUTES,CAVE_RAMPS,caveObstacles,caveSurface} from '../src/witch-cave-layout.js';
+import {createWitchCaveTerrain,caveClearance,caveRampHeight} from '../src/witch-cave-terrain.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {worldSpawn,travelUrl,mapPortals,mapForCharacter,CAVE_RADIUS} from '../src/map-route.js';
 import {playerTextureManifest} from '../src/player-texture-profile.js';
+import {NullEngine,Vector3} from '@babylonjs/core';
+import {createWorld,replaceWorldMap} from '../src/world.js';
 test('cave uses exactly twenty approved new types with existing village props',()=>{
   const used=new Set(CAVE_PLACEMENTS.map(p=>p.asset));
   assert.deepEqual([...used].filter(id=>id.startsWith('cave-')).sort(),[...CAVE_ASSET_IDS].sort());
@@ -29,6 +31,16 @@ test('all broad cave route centres are walkable and terrain stays finite',()=>{
     assert.ok(caveClearance(x,z)>2.5);assert.ok(Number.isFinite(terrain.heightAt(x,z)));
   }
 });
+
+test('baked ramp surfaces support feet and are cleared on map departure',()=>{
+  const terrain=createWitchCaveTerrain();
+  for(const p of CAVE_RAMPS)for(let z=-3;z<=3;z+=.2){
+    const x=p.x+Math.sin(p.yaw)*z*p.scale,zz=p.z+Math.cos(p.yaw)*z*p.scale;
+    const meshTop=caveRampHeight(x,zz,-100),height=terrain.heightAt(x,zz);
+    assert.ok(Number.isFinite(height));assert.ok(height>=meshTop-.002,'feet cannot sink into ramp');
+    assert.ok(height<meshTop+.4,'terrain support stays close to ramp');
+  }
+});
 test('entry reaches boss chamber; movement and dodges cannot cross flooded voids',()=>{
   const nav=new CaveNavigation(caveObstacles());
   const goal={x:CAVE_BOSS.x,z:CAVE_BOSS.z+7};
@@ -43,4 +55,20 @@ test('entry reaches boss chamber; movement and dodges cannot cross flooded voids
     const landed=nav.move(start,{x:start.x+delta.x,z:start.z+delta.z},.34,CAVE_RADIUS);
     assert.ok(nav.free(landed,.34,CAVE_RADIUS));assert.ok(caveSurface(landed.x,landed.z).distance<0);
   }
+});
+test('cave world swaps retain camera and terrain identity and release water resources',async()=>{
+  const engine=new NullEngine(),world=createWorld(engine,{cave:true,touchDevice:true});
+  try{
+    const scene=world.scene,camera=world.camera,terrain=world.terrain;
+    assert.equal(world.mapId,'witch-cave');assert.equal(world.sky.mesh.isEnabled(),false);assert.equal(world.mountains.isEnabled(),false);
+    assert.equal(world.lighting.followHeight,true);world.lighting.follow(new Vector3(29,6,-30),true);assert.equal(world.lighting.requestedFocus.y,6);
+    const water=scene.getMeshByName('cave-still-water');assert.ok(water);await water.material.forceCompilationAsync(water);
+    const baseline=[scene.meshes.length,scene.materials.length,scene.textures.length];
+    for(let i=0;i<4;i++){
+      replaceWorldMap(world,'warrior-v4');assert.equal(world.terrain.surfaceHeight,null);assert.equal(water.isDisposed(),true);assert.equal(world.sky.mesh.isEnabled(),true);assert.equal(world.mountains.isEnabled(),true);assert.equal(world.caveAtmosphere,null);
+      replaceWorldMap(world,'warrior-v5');assert.equal(world.scene,scene);assert.equal(world.camera,camera);assert.equal(world.terrain,terrain);
+      assert.deepEqual([scene.meshes.length,scene.materials.length,scene.textures.length],baseline);
+      assert.ok(world.navigation.free(CAVE_ENTRY,.34,CAVE_RADIUS));world.tick(i);scene.render();
+    }
+  }finally{engine.dispose();}
 });

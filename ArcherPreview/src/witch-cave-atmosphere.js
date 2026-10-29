@@ -1,4 +1,5 @@
-import {Color3,Color4,MeshBuilder,ShaderMaterial} from '@babylonjs/core';
+import {Color3,Color4,Mesh,MeshBuilder,ShaderMaterial,Vector3,VertexData,Constants} from '@babylonjs/core';
+import {CAVE_PLACEMENTS,caveRoofHeight} from './witch-cave-layout.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -10,6 +11,47 @@ void main(){
  float haze=smoothstep(38.,100.,length(p-eye));
  gl_FragColor=vec4(mix(color,vec3(.24,.23,.28),haze),1.);
 }`;
+const glowVertex=`precision highp float;
+attribute vec3 position;attribute vec2 uv;varying vec2 glowUV;
+uniform mat4 viewProjection;uniform vec3 right;uniform vec3 up;
+#include<instancesDeclaration>
+void main(){
+#include<instancesVertex>
+glowUV=uv;vec3 p=finalWorld[3].xyz+right*position.x+up*position.y;
+gl_Position=viewProjection*vec4(p,1.);}`;
+const glowFragment=`precision highp float;varying vec2 glowUV;uniform vec3 tint;
+void main(){vec2 p=glowUV*2.-1.;float a=max(0.,1.-dot(p,p));gl_FragColor=vec4(tint,a*a*a*.2);}`;
+const roofFragment=`precision highp float;varying vec3 p;uniform vec3 eye;uniform vec3 focus;
+void main(){
+ // A local cutaway keeps the orbit camera clear while the distant ceiling
+ // joins the existing wall/column silhouettes. No transparent sorting pass.
+ vec2 sight=focus.xz-eye.xz;
+ float along=clamp(dot(p.xz-eye.xz,sight)/max(dot(sight,sight),.001),0.,1.);
+ if(length(p.xz-mix(eye.xz,focus.xz,along))<mix(21.,14.,along))discard;
+ float strata=sin(p.x*.73+sin(p.z*.24)*2.)*sin(p.z*.52-p.x*.13);
+ vec3 color=mix(vec3(.25,.23,.28),vec3(.37,.34,.39),.5+strata*.25);
+ float fog=smoothstep(38.,105.,length(p-eye));gl_FragColor=vec4(mix(color,vec3(.24,.23,.28),fog),1.);
+}`;
+function caveCeiling(world){
+  const positions=[],indices=[],segments=64,rings=12;
+  for(let ring=0;ring<=rings;ring++)for(let i=0;i<=segments;i++){
+    const a=i/segments*Math.PI*2,r=ring/rings*72,x=Math.cos(a)*r,z=Math.sin(a)*r;
+    positions.push(x,caveRoofHeight(x,z)+.6*Math.sin(x*.24)*Math.cos(z*.19),z);
+    if(ring&&i){const at=ring*(segments+1)+i;indices.push(at,at-1,at-segments-2);if(ring>1)indices.push(at,at-segments-2,at-segments-1);}
+  }
+  const mesh=new Mesh('cave-distant-ceiling',world.scene),data=new VertexData();data.positions=positions;data.indices=indices;data.applyToMesh(mesh);mesh.isPickable=false;mesh.freezeWorldMatrix();
+  const material=new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus']});material.backFaceCulling=false;mesh.material=material;
+  return {material,dispose(){mesh.dispose();material.dispose();}};
+}
+function caveGlow(world,asset,tint,height){
+  const material=new ShaderMaterial('cave-glow-'+asset,world.scene,{vertexSource:glowVertex,fragmentSource:glowFragment},{attributes:['position','uv'],uniforms:['world','viewProjection','right','up','tint'],needAlphaBlending:true});
+  material.setColor3('tint',Color3.FromHexString(tint));material.backFaceCulling=false;material.disableDepthWrite=true;material.alphaMode=Constants.ALPHA_ADD;
+  const source=MeshBuilder.CreatePlane('cave-glow-source-'+asset,{width:1.8,height:1.8},world.scene);source.material=material;source.isVisible=false;source.isPickable=false;
+  const instances=CAVE_PLACEMENTS.filter(p=>p.asset.includes(asset)).map((p,i)=>{
+    const mesh=source.createInstance('cave-glow-'+asset+i);mesh.position.set(p.x,(p.elevation??world.terrain.heightAt(p.x,p.z))+height*p.scale,p.z);mesh.isPickable=false;mesh.freezeWorldMatrix();return mesh;
+  });
+  return {material,dispose(){for(const m of instances)m.dispose();source.dispose();material.dispose();}};
+}
 export function configureCaveAtmosphere(world){
   world.caveAtmosphere?.dispose();world.caveAtmosphere=null;
   world.sky.mesh.setEnabled(!world.cave);world.mountains.setEnabled(!world.cave);
@@ -22,5 +64,12 @@ export function configureCaveAtmosphere(world){
   water.position.y=-2.8;water.isPickable=false;water.freezeWorldMatrix();
   const material=new ShaderMaterial('cave-painted-water',world.scene,{vertexSource,fragmentSource},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye']});
   water.material=material;material.setFloat('time',0);material.setVector3('eye',world.camera.position);
-  world.caveAtmosphere={tick(time){material.setFloat('time',time);material.setVector3('eye',world.camera.globalPosition);},dispose(){water.dispose();material.dispose();}};
+  const glows=[caveGlow(world,'votive-lantern','#e6b46b',.8),caveGlow(world,'soul-collector-arm','#ad8dd3',3.3)],ceiling=caveCeiling(world);
+  const right=Vector3.Right(),up=Vector3.Up();
+  world.caveAtmosphere={tick(time){material.setFloat('time',time);material.setVector3('eye',world.camera.globalPosition);
+    const m=world.camera.getWorldMatrix().m;right.set(m[0],m[1],m[2]);up.set(m[4],m[5],m[6]);
+    for(const glow of glows){glow.material.setVector3('right',right);glow.material.setVector3('up',up);}
+    ceiling.material.setVector3('eye',world.camera.globalPosition);ceiling.material.setVector3('focus',world.camera.target);
+  },dispose(){ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();material.dispose();}};
+  world.caveAtmosphere.tick(0);
 }

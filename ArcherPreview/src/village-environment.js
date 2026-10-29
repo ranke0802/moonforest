@@ -31,7 +31,7 @@ export function createVillageTransform(world,placement,config){
   return {root,facing};
 }
 export function loadVillage(world,options={}){
-  if(!world.forest&&import.meta.env?.DEV&&new URLSearchParams(location.search).get('villageFixture')==='1')return loadVillageEager(world,options);
+  if(!world.forest&&!world.cave&&import.meta.env?.DEV&&new URLSearchParams(location.search).get('villageFixture')==='1')return loadVillageEager(world,options);
   return loadStreamedVillage(world,options);
 }
 async function loadVillageEager(world,{onProgress=()=>{}}={}){
