@@ -7,7 +7,7 @@ import {worldSpawn,travelUrl,mapPortals,mapForCharacter,CAVE_RADIUS} from '../sr
 import {playerTextureManifest} from '../src/player-texture-profile.js';
 import {NullEngine,Vector3} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
-test('cave uses exactly twenty approved new types with existing village props',()=>{
+test('cave uses only the twenty original types and two approved supplements with existing village props',()=>{
   const used=new Set(CAVE_PLACEMENTS.map(p=>p.asset));
   assert.deepEqual([...used].filter(id=>id.startsWith('cave-')).sort(),[...CAVE_ASSET_IDS].sort());
   assert.ok(CAVE_PLACEMENTS.length<400);

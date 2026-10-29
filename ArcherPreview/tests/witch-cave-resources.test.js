@@ -9,10 +9,10 @@ import {prepareVillageStart} from '../src/village-streamed-environment.js';
 import {validVillageTextureProfile} from '../src/village-texture-budget.js';
 const base=new URL('../public/assets/',import.meta.url),read=name=>JSON.parse(readFileSync(new URL(name,base)));
 
-test('cave publishes twenty new models, six exact reuses, capped textures and three lossless-compressed LODs',()=>{
+test('cave publishes twenty original models plus two approved supplements, six exact reuses and three compressed LODs',()=>{
   const m=read('witch-cave.json'),village=read('village.json'),forest=read('monster-forest.json');
-  assert.equal(m.newSourceModels,20);assert.equal(m.reusedSourceModels,6);assert.equal(m.spentCredits,400);
-  assert.equal(m.placementCount,CAVE_PLACEMENTS.length);assert.equal(m.availableAssetCount,26);
+  assert.equal(m.newSourceModels,22);assert.equal(m.reusedSourceModels,6);assert.equal(m.spentCredits,440);
+  assert.equal(m.placementCount,CAVE_PLACEMENTS.length);assert.equal(m.availableAssetCount,28);
   assert.equal(m.sourceSettings.enablePbr,false);assert.equal(m.sourceSettings.autoSize,true);assert.equal(m.sourceSettings.textureResolution,8192);
   for(const p of CAVE_PLACEMENTS)assert.ok(m.assets[p.asset]);
   const checked=new Set();
@@ -37,8 +37,8 @@ test('cave entrance defers distant boss-room detail and shares one demand plan',
   const world={scene,camera,terrain,cave:true,placements:CAVE_PLACEMENTS,environmentManifest:'witch-cave',touchDevice:true};
   const previous=globalThis.location;globalThis.location={href:'https://example.test/game/?character=warrior-v5'};t.after(()=>{globalThis.location=previous;});
   const requests=[];t.mock.method(globalThis,'fetch',async url=>{requests.push(String(url));return {ok:true,json:async()=>read('witch-cave.json')};});
-  const start=await prepareVillageStart(world);assert.equal(start.assets.size,26);assert.equal(start.records.length,CAVE_PLACEMENTS.length);
-  assert.ok(start.plan.length>0&&start.plan.length<78);assert.ok(!start.plan.some(p=>p.id==='cave-15-resurrection-altar'&&p.level<2));
+  const start=await prepareVillageStart(world);assert.equal(start.assets.size,28);assert.equal(start.records.length,CAVE_PLACEMENTS.length);
+  assert.ok(start.plan.length>0&&start.plan.length<84);assert.ok(!start.plan.some(p=>p.id==='cave-15-resurrection-altar'&&p.level<2));
   assert.equal(await prepareVillageStart(world),start);assert.equal(requests.length,1);
-  t.diagnostic(JSON.stringify({initialLodModels:start.plan.length,possibleLodModels:78,files:start.resources.length}));
+  t.diagnostic(JSON.stringify({initialLodModels:start.plan.length,possibleLodModels:84,files:start.resources.length}));
 });

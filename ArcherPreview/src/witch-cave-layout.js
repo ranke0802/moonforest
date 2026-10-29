@@ -58,14 +58,33 @@ export function caveSurface(x,z){
   return {distance,height};
 }
 const ids=['eroded-wall','rock-ledge','great-column','natural-arch','stalagmites','stalactite-canopy','scree-ramp','timber-brace','iron-gate-leaf','hand-winch','sluice-shutter','lift-platform','votive-lantern','hidden-pressure-stone','resurrection-altar','soul-collector-arm','faded-sacred-emblem','alchemy-workbench','apothecary-shelf','modest-cot'];
-export const CAVE_ASSET_IDS=ids.map((id,i)=>`cave-${String(i+1).padStart(2,'0')}-${id}`);
+export const CAVE_SUPPLEMENT_IDS=['cave-s01-solid-cliff-base','cave-s03-dry-spillway-rock'];
+export const CAVE_ASSET_IDS=[...ids.map((id,i)=>`cave-${String(i+1).padStart(2,'0')}-${id}`),...CAVE_SUPPLEMENT_IDS];
 // The irregular scanned ramps form the rocky shoulders. The continuous terrain
 // beside them is the walking surface, so jagged scan samples never move feet.
 export const CAVE_RAMPS=[{x:-41,z:28,scale:1.05,yaw:.35,elevation:-.3},{x:47,z:-13,scale:1.1,yaw:-.2,elevation:4.05}];
-export const CAVE_WATERFALLS=[
-  {x:-12,z:-8.8,width:4.2,top:-.8,bottom:-2.8,yaw:.12},
-  {x:34,z:24,width:3.4,top:-2.8,bottom:-4.1,yaw:.8},
+// A narrow channel follows the supplied rock's actual +X-offset groove, from
+// local -Z to +Z. One continuous strip joins each upstream/downstream pool.
+export const CAVE_SPILLWAY_PROFILE=[
+  [-.55,1.78,-2.25,.3],[-.55,1.78,-1.2,.3],
+  [.35,1.78,-.6,.7],[.45,1.78,-.2,.9],[.5,1.78,.25,.9],
+  [.55,1.78,.58,.9],[.65,1.78,.94,.7],
+  [.65,.36,1.02,.7],[.65,.36,1.4,.7],[.65,.36,2.5,.7],
 ];
+export const CAVE_WATERFALLS=[
+  {x:-21.91,z:-1.316,scale:1.4,elevation:-3.267,yaw:0,top:-.8,bottom:-2.8,sourcePool:1,targetPool:0,start:[-16,-.812,-15,1.4],end:[-21,-2.812,4,1.5]},
+  {x:24.9829171431,z:40.2702005035,scale:1.2,elevation:-4.911,yaw:2.15,top:-2.8,bottom:-4.1,sourcePool:3,targetPool:2,start:[18,-2.812,44,1.1],end:[32,-4.112,33,1.5]},
+];
+export function caveSpillwayPoint(p,[x,y,z,width]){
+  const c=Math.cos(p.yaw),s=Math.sin(p.yaw);
+  return [p.x+(c*x+s*z)*p.scale,p.elevation-.025+y*p.scale,p.z+(-s*x+c*z)*p.scale,width*p.scale];
+}
+export const caveFlowRows=p=>[p.start,...CAVE_SPILLWAY_PROFILE.map((row,i)=>{
+  const point=caveSpillwayPoint(p,row);
+  if(i>=7)point[1]=p.bottom+.012; // share the receiving pool's level at any scale
+  if(i===9&&(p.bottom-p.elevation+.025)/p.scale>.5)point[3]=2.6*p.scale;
+  return point;
+}),p.end];
 function makePlacements(){
   const out=[];let seed=291005;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
   const add=(n,x,z,scale=1,yaw=0,extra={})=>out.push({id:`cavern-${out.length}`,asset:typeof n==='number'?CAVE_ASSET_IDS[n-1]:n,x,z,scale,yaw,kind:n<=7?'rock':'prop',...extra});
@@ -97,7 +116,15 @@ function makePlacements(){
         const safe=()=>[-1,0,1].every(u=>[-1,0,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*3.3*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*3.3*scale).distance>.6));
         for(let attempt=0;attempt<10&&!safe();attempt++){px-=dz/length*side*.7;pz+=dx/length*side*.7;}
         if(!safe())continue;
-        add(water?2:1,px,pz,scale,yaw,{topElevation:water?h-.3:h+2.9+random()*2.1});
+        // Replace thin water-facing ledges, rather than stacking more detail.
+        // Their caps sit below the continuous walking surface; the thick body
+        // bridges the eroded shoulder down into the basin. Collision is baked.
+        if(water){
+          const pool=CAVE_POOLS.reduce((a,b)=>Math.hypot((xx-a.x)/a.rx,(zz-a.z)/a.rz)<Math.hypot((xx-b.x)/b.rx,(zz-b.z)/b.rz)?a:b);
+          const supportScale=Math.max(1.45,(h-.24-pool.height+.5)/3.7728869915);
+          add(CAVE_SUPPLEMENT_IDS[0],xx,zz,supportScale,yaw,{kind:'rock',topElevation:h-.24,foundation:true});
+        }
+        else add(1,px,pz,scale,yaw,{topElevation:h+2.9+random()*2.1});
         if(random()<.26)add(5,xx-dz/length*side*1.6,zz+dx/length*side*1.6,.55+random()*.5,random()*6.28,{elevation:h-.5});
       }
     }
@@ -145,6 +172,9 @@ function makePlacements(){
     add(i%2?'rock-02-jagged-outcrop':'rock-01-mossy-boulder',x,z,.65+random(),random()*6.28,{elevation:-3});
     if(i%3===0)add(5,x+2,z,1+random()*.8,random()*6.28,{elevation:-2.8});
   }
+  // Broad support below the ritual chamber's exposed southern edge.
+  for(const angle of [-.9,-.45,0,.45,.9])add(CAVE_SUPPLEMENT_IDS[0],CAVE_BOSS.x+Math.sin(angle)*15.3,CAVE_BOSS.z+Math.cos(angle)*15.3,1.9,-angle,{kind:'rock',topElevation:CAVE_BOSS.height-.24,foundation:true});
+  for(const p of CAVE_WATERFALLS)add(CAVE_SUPPLEMENT_IDS[1],p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,spillway:true});
   return out;
 }
 export const CAVE_PLACEMENTS=makePlacements();

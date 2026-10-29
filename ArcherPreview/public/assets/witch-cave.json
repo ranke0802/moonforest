@@ -2,7 +2,7 @@
   "version": 1,
   "id": "witch-cave",
   "complete": true,
-  "availableAssetCount": 26,
+  "availableAssetCount": 28,
   "assets": {
     "cave-01-eroded-wall": {
       "name": "침식된 동굴 암벽",
@@ -3044,6 +3044,310 @@
       },
       "visualReview": "APPROVED"
     },
+    "cave-s01-solid-cliff-base": {
+      "name": "두꺼운 절벽 기단",
+      "category": "rock",
+      "bounds": [
+        8,
+        3.7728869915008545,
+        4.870861053466797
+      ],
+      "height": 3.7728869915008545,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+          "resources": [
+            "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+            "./content/3bc2d8f0ff56ebb54b15802ea452834a224ee79589cbaa19ac74d2d0917deca2.bin",
+            "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2"
+          ],
+          "bytes": 376717,
+          "triangles": 4999,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -4,
+              -2.438873291015625,
+              0
+            ],
+            [
+              4,
+              2.431987762451172,
+              3.7728869915008545
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf",
+          "resources": [
+            "content/acb1bd738d86f03861a3995434c697aae5544949de45ef86387f6011e5bb5f1b.bin",
+            "content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2",
+            "content/60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf"
+          ],
+          "bytes": 328993,
+          "triangles": 2749,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -4,
+              -2.4240667819976807,
+              -0.002096109092235565
+            ],
+            [
+              4,
+              2.4291398525238037,
+              3.7728869915008545
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/dfb12edec414bc68226fa1662bf517f6d22e81a3e9f22525a3c45b0a703f2468.gltf",
+          "resources": [
+            "content/808a31b3ccadd6de8f5594b5665cdc627f7bf7b9a07ade4b22fa2f341391839f.bin",
+            "content/6d94b91db564b446c64b3f6049f7326fe0d69f64b55ebdb2d32b6ce0efed4698.ktx2",
+            "content/dfb12edec414bc68226fa1662bf517f6d22e81a3e9f22525a3c45b0a703f2468.gltf"
+          ],
+          "bytes": 141019,
+          "triangles": 1399,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.9701759815216064,
+              -2.400526285171509,
+              0.00009538931772112846
+            ],
+            [
+              3.955699920654297,
+              2.4208056926727295,
+              3.7639029026031494
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+        "resources": [
+          "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+          "./content/3bc2d8f0ff56ebb54b15802ea452834a224ee79589cbaa19ac74d2d0917deca2.bin",
+          "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2"
+        ],
+        "bytes": 376717,
+        "triangles": 4999,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -4,
+            -2.438873291015625,
+            0
+          ],
+          [
+            4,
+            2.431987762451172,
+            3.7728869915008545
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/53b0a3a04b3c87736bd6870be51aba4a7fd5cb318c864b8056423488914b1617.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 3060490,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/53b0a3a04b3c87736bd6870be51aba4a7fd5cb318c864b8056423488914b1617.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "cave-s03-dry-spillway-rock": {
+      "name": "폭포 수로 바위",
+      "category": "rock",
+      "bounds": [
+        7,
+        2.84709095954895,
+        5.390926361083984
+      ],
+      "height": 2.84709095954895,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+          "resources": [
+            "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+            "./content/7a6dc4b19d67dbcde7684a8d2ef164b9b2703e550c5b6d27ddafa8bff4b2d414.bin",
+            "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2"
+          ],
+          "bytes": 384544,
+          "triangles": 4995,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.5,
+              -2.695463180541992,
+              0
+            ],
+            [
+              3.5,
+              2.695463180541992,
+              2.84709095954895
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/ec146cf16a1199c285f0d983aa08d18f34a5fbb117c9832b594e452e6b93e02b.gltf",
+          "resources": [
+            "content/409aa026b2ca0cbb6835bcedce4ed416c6c944ba93116c7342d678140a087fa8.bin",
+            "content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
+            "content/ec146cf16a1199c285f0d983aa08d18f34a5fbb117c9832b594e452e6b93e02b.gltf"
+          ],
+          "bytes": 336412,
+          "triangles": 2747,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.5,
+              -2.691897392272949,
+              -0.0028421757742762566
+            ],
+            [
+              3.5,
+              2.695463180541992,
+              2.856003522872925
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/18b172aa5a679ae5fcefd494815d9038ba1bfaef8fe6f80f92ecb5e30d5e78ad.gltf",
+          "resources": [
+            "content/fe1c3a60739dba742c81b2ead320e2d62893db49fd089b19b6f35d95569f3a3d.bin",
+            "content/61f138e11abffb4351eaf16c0cfa8f6d78ed5d6a37f0befb5bb3cdab74491292.ktx2",
+            "content/18b172aa5a679ae5fcefd494815d9038ba1bfaef8fe6f80f92ecb5e30d5e78ad.gltf"
+          ],
+          "bytes": 143886,
+          "triangles": 1398,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -3.5,
+              -2.670578718185425,
+              -0.04196452721953392
+            ],
+            [
+              3.4786386489868164,
+              2.695463180541992,
+              2.8341119289398193
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+        "resources": [
+          "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+          "./content/7a6dc4b19d67dbcde7684a8d2ef164b9b2703e550c5b6d27ddafa8bff4b2d414.bin",
+          "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2"
+        ],
+        "bytes": 384544,
+        "triangles": 4995,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -3.5,
+            -2.695463180541992,
+            0
+          ],
+          [
+            3.5,
+            2.695463180541992,
+            2.84709095954895
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/195d59f5b4c9029d2273e2fc80f56f2f814e40d376d435e71e8aa11ea51eb642.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 3121617,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/195d59f5b4c9029d2273e2fc80f56f2f814e40d376d435e71e8aa11ea51eb642.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
     "forest-06-witch-cave-mouth": {
       "name": "마녀의 동굴 입구",
       "category": "rock",
@@ -3668,10 +3972,10 @@
     }
   },
   "homes": 0,
-  "placementCount": 293,
-  "newSourceModels": 20,
+  "placementCount": 300,
+  "newSourceModels": 22,
   "reusedSourceModels": 6,
-  "spentCredits": 400,
+  "spentCredits": 440,
   "sourceSettings": {
     "aiModel": "meshy-t2.5",
     "modelType": "smart-topology",

@@ -6,7 +6,7 @@ models=root/'reports/witch-cave-v5'
 data=json.loads((out/'review-scene.json').read_text(encoding='utf8'));layout=json.loads((out/'layout.json').read_text(encoding='utf8'))
 print('Blender',bpy.app.version_string,flush=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
-scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE_NEXT';scene.render.resolution_x=1440;scene.render.resolution_y=1000;scene.render.resolution_percentage=100
+scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE_NEXT' if bpy.app.version<(5,0,0) else 'BLENDER_EEVEE';scene.render.resolution_x=1440;scene.render.resolution_y=1000;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format='PNG';scene.render.film_transparent=False
 scene.world.color=(.24,.23,.28);scene.view_settings.view_transform='Standard';scene.view_settings.look='Medium High Contrast';scene.view_settings.exposure=0;scene.view_settings.gamma=1
 templates={}
@@ -52,7 +52,9 @@ mul=nodes.new('ShaderNodeMixRGB');mul.blend_type='MULTIPLY';mul.inputs[0].defaul
 em=nodes.new('ShaderNodeEmission');links.new(mul.outputs[0],em.inputs[0]);links.new(em.outputs[0],nodes.get('Material Output').inputs[0])
 
 def height(x,z):
- col=max(0,min(n,round((x+80)/size*n)));row=max(0,min(n,round((80-z)/size*n)));return heights[row*(n+1)+col]
+ gx=max(0,min(n,(x+size/2)/size*n));gz=max(0,min(n,(size/2-z)/size*n));col=min(n-1,int(gx));row=min(n-1,int(gz));u=gx-col;v=gz-row;i=row*(n+1)+col
+ a,b,c,d=heights[i],heights[i+1],heights[i+n+1],heights[i+n+2]
+ return a+u*(b-a)+v*(d-b) if u>=v else a+v*(c-a)+u*(d-c)
 for placement in layout['placements']:
  if placement['asset'] not in data['assets']:continue
  config=data['assets'][placement['asset']];scale=config['height']/config['bounds'][1]*placement['scale']
@@ -72,9 +74,10 @@ for pool in layout.get('pools',[]):
   a=k/64*math.tau;r=.96+.035*math.sin(a*7)+.025*math.cos(a*11);vv.append((pool['x']+math.cos(a)*pool['rx']*r,-pool['z']-math.sin(a)*pool['rz']*r,pool['height']))
   if k:ff.append((0,k+1,k))
  me=bpy.data.meshes.new('water');me.from_pydata(vv,[],ff);me.materials.append(wm);ob=bpy.data.objects.new('water',me);scene.collection.objects.link(ob)
-for fall in layout.get('waterfalls',[]):
- x,z,w,top,bottom=fall['x'],fall['z'],fall['width'],fall['top'],fall['bottom'];dx=math.cos(fall['yaw'])*w/2;dz=math.sin(fall['yaw'])*w/2
- me=bpy.data.meshes.new('waterfall');me.from_pydata([(x-dx,-z-dz,bottom),(x+dx,-z+dz,bottom),(x+dx,-z+dz,top),(x-dx,-z-dz,top)],[],[(0,1,2,3)]);me.materials.append(wm);ob=bpy.data.objects.new('waterfall',me);scene.collection.objects.link(ob)
+for geometry in layout.get('waterGeometry',[]):
+ positions=geometry['positions'];indices=geometry['indices']
+ vv=[(positions[i],-positions[i+2],positions[i+1]) for i in range(0,len(positions),3)];ff=[indices[i:i+3] for i in range(0,len(indices),3)]
+ me=bpy.data.meshes.new('waterfall');me.from_pydata(vv,[],ff);me.materials.append(wm);ob=bpy.data.objects.new('waterfall',me);scene.collection.objects.link(ob)
 for placement in layout['placements']:
  if 'votive-lantern' not in placement['asset']:continue
  light=bpy.data.lights.new('lantern-warmth','POINT');light.energy=65;light.color=(1,.6,.23);light.shadow_soft_size=1.5
@@ -83,5 +86,7 @@ render('cave-layout-render.png',(5,-112,120),(0,0,2),150)
 render('cave-entry-render.png',(-39,-51,10),(-30,-22,4))
 render('cave-central-render.png',(8,-35,13),(-8,2,9))
 render('cave-boss-render.png',(29,5,15),(29,33,8))
+render('cave-spillway-upper.png',(-20,-13,8),(-21,1,-1),22)
+render('cave-spillway-lower.png',(39,-27,6),(25,-40,-3),24)
 bpy.ops.wm.save_as_mainfile(filepath=str(out/'cave-layout-review.blend'))
-print(json.dumps({'placements':len(layout['placements']),'availableTypes':len(data['assets']),'renders':4,'browserAutomation':False}),flush=True)
+print(json.dumps({'placements':len(layout['placements']),'availableTypes':len(data['assets']),'renders':6,'browserAutomation':False}),flush=True)

@@ -1,6 +1,7 @@
 import {Color3,Color4,Mesh,MeshBuilder,ShaderMaterial,Vector3,VertexData,Constants} from '@babylonjs/core';
 import {CAVE_PLACEMENTS,CAVE_POOLS,CAVE_WATERFALLS,caveRoofHeight} from './witch-cave-layout.js';
 import {caveSurfaceStyle} from './witch-cave-surfaces.js';
+import {caveFlowGeometry} from './witch-cave-water.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -57,8 +58,9 @@ function caveWater(world){
  material.backFaceCulling=false;
  const falls=new ShaderMaterial('cave-flowing-water',scene,{vertexSource,fragmentSource:fallFragment},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye']});falls.backFaceCulling=false;materials.push(falls);
  for(const [i,p]of CAVE_WATERFALLS.entries()){
-  const mesh=MeshBuilder.CreatePlane('cave-waterfall-'+i,{width:p.width,height:p.top-p.bottom},scene);
-  mesh.position.set(p.x,(p.top+p.bottom)/2,p.z);mesh.rotation.y=p.yaw;mesh.material=falls;mesh.isPickable=false;mesh.freezeWorldMatrix();meshes.push(mesh);
+  const mesh=new Mesh('cave-waterfall-'+i,scene),data=new VertexData();
+  Object.assign(data,caveFlowGeometry(p));data.applyToMesh(mesh);
+  mesh.material=falls;mesh.isPickable=false;mesh.freezeWorldMatrix();meshes.push(mesh);
  }
  return {tick(time){for(const mat of materials){mat.setFloat('time',time);mat.setVector3('eye',world.camera.globalPosition);}},dispose(){for(const mesh of meshes)mesh.dispose();for(const mat of materials)mat.dispose();}};
 }
