@@ -194,20 +194,20 @@ const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
-  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion())audio.play('heal_start');updateButtons();} },
+  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
-  revive() { if (!ready || !controller.dead) return; controller.revive();audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
+  revive() { if (!ready || !controller.dead) return; controller.revive();audio.setEnvironment(character);audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   // Accept direction intent during locks; the controller still prevents displacement.
   canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
 };
 
 function startDefense(kind){
   const directionInput=input.value();
-  if(kind==='dodge'&&controller.captured&&!boss.escapeGrab())return;
+  if(kind==='dodge'&&controller.captured){if(!boss.escapeGrab())return;audio.play('grab_escape');}
   if(!controller[kind]())return;
   attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
@@ -219,7 +219,7 @@ function startDefense(kind){
 function resetBeforeBoss(){
   goldLoot.clearDrops();goldLootView.clear();
   audio.stopAll();actionAudio.reset();audio.play('revive');
-  boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
+  boss.resetBattle();audio.setEnvironment(character);controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
   if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
@@ -376,7 +376,7 @@ async function loadCharacter() {
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
     world.scene.render();await waitForSceneReady(world.scene);
-    world.scene.render();ready=true;updateButtons();
+    world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
@@ -483,7 +483,7 @@ function render(dt) {
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
-    if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('equip',{volume:.35});}
+    if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
     const focus=combatFocus(center,cameraBoss?.actor.position,world.camera.radius);
@@ -546,7 +546,7 @@ try {
     if(encounter.playerHp<=0)deathScreen.show();
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
-      if(options.captured){controller.capture();audio.play('equip',{volume:.7,rate:.7});}else controller.releaseCapture();
+      if(options.captured){controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
       attackSources.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
@@ -580,7 +580,7 @@ try {
     prepare:()=>{
       loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
-      frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();actionAudio.reset();
+      frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;strikeSampler.reset();mapPortal?.dispose();mapPortal=null;
@@ -608,7 +608,7 @@ try {
       loadDiagnostics.phase('screen');world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },
     finish:async()=>{
-      loadingAsset=false;ready=true;updateButtons();
+      loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
       loadDiagnostics.finish();
@@ -654,7 +654,7 @@ try {
   }
   for(const [selector,count,kind] of [['#summon-boss','#boss-count','bear'],['#summon-goblin','#goblin-count','goblin']])$(selector).addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$(count).value,kind);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'equip',{position:enemy.actor.position,volume:kind==='bear'?1:.45});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$(count).value,kind);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'goblin_appear',{position:enemy.actor.position,volume:kind==='bear'?1:.45});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}
     updateButtons();
   });

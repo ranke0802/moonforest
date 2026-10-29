@@ -1,0 +1,51 @@
+{
+  "sounds": {
+    "slash": [
+      "./content/b2f0b06586dec62370400d051f7f0aceb19ca3a9053d81fcad43f0b919b5bf3f.wav",
+      "./content/be361925afdaba8af3679e7de4ec88c306ae19b89d0cc7a7298313b0414ab127.wav",
+      "./content/76ead70834769f2d53b17c3bb706492e634ff21699098c9af80d71905a09a8df.wav"
+    ],
+    "slash_heavy": "./content/ef11e7428143980be7e670e822eb629573a412a9b5a7db67ef60e31bb9110d8e.wav",
+    "shield_up": "./content/7371fa252508bc35a4853174835418de104822156658de36bee08fe057c7b600.wav",
+    "block": [
+      "./content/f6b24f1aa8ff5c2521712a10b7ca5336a21b5000b278bf1b11ea1df1a8496789.wav",
+      "./content/fc8be575d3813e8cc738d8945400c8716cf3e82cef6cffc36e89305e71404a37.wav",
+      "./content/3cc62419b8c84b2e9d322695f3994ae4fbc6f9bb59d06c837f9a04b47fe0f6bc.wav"
+    ],
+    "parry": "./content/356f60f11d9169958b92b8d0bf782a6149c45f645e2dc5dc1282914be12800de.wav",
+    "roll": "./content/b7580577962a01e5aaf89b006f7c479a302d689a8c5ba38e003dde137af1a62e.wav",
+    "land": "./content/28a88099f81376ebe4624610c6365b64f0d75692d2d4cea231060920c5d99cd0.wav",
+    "jump": "./content/8849ee361c69f06c798439535e623e7efd216fb5666f2446865928265611b3db.wav",
+    "player_hit": "./content/db0736992c537f4a375d68fd0a3456e2dc31aa51e2a2c7dd731f2ff50f98e143.wav",
+    "boss_hit": [
+      "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
+      "./content/caa55f105c1e098682cf3f3e137d15e237c8bcaacb9eecd63be41e3b3efa3d46.wav",
+      "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav"
+    ],
+    "critical": "./content/d2ae3d53c9667e194bd0b8064f4f0e5e40cc85e5bd52d505d7e24121a2506cd5.wav",
+    "heal_start": "./content/6af1a673ecdbb03a4a0cec9aa6827fdac9602fa0cf24126b575b0530ef9a8a8d.wav",
+    "heal_tick": "./content/dd1bd99664f18e528f941a2b5916bc945801a0a3e82a0c595bc157defc37da00.wav",
+    "death": "./content/b20047b8c052e5751eddc026a21b861eda3eafdf8f737cb49efffa681f6dd482.wav",
+    "revive": "./content/50c64fec9dd71b15ea2a89436a888558022eefc43fecc24a2c4325f7463bb1ae.wav",
+    "charge_ready": "./content/01451d8fd7bb1458e27248c18c6fb57eeab14d107543fa3fab26fba561351195.wav",
+    "bow_draw": "./content/5e060a8298a95a414d9ab5a7026846436f4d191db52ffe0500bebf3012dade1b.wav",
+    "bow_release": "./content/a6d821f1ffdfe7edc318ec0441f57a917f3824e59e74fc37d2f1127673603da0.wav",
+    "arrow_hit": "./content/51c4afd74ce2381c02cd8698880e59e4e36b296dc158645478e5411077091eb6.wav",
+    "foot_0": "./content/258420c409d34e6bd118262f49028140f2e6513f9f5e4ef48131efc451db6a96.wav",
+    "foot_1": "./content/3221290aa3def64fcb247999be41d19a6b8b8b1df4ab84c9cd011c2611e9f5a9.wav",
+    "foot_2": "./content/73dccd69c03c7c1ffe2547d278a729f0c65cf55fd6d8378d2a7407679930a768.wav",
+    "equip": "./content/52215c65b25000c95182747226e7eddc331c48943fec4e7791c8e2e79af02993.wav",
+    "ui_click": "./content/5bb4a130d0744b76615eac8ece14bde446fd3448c6e82cfc960446eab760fe2c.wav",
+    "ui_open": "./content/a9299de25669dabcf2255dcc2a72af4c62eec714030b1309978db04fecabd22a.wav",
+    "ui_back": "./content/a48cb46531049656054a8d9c4cd03ecef12aa99f0e07c370e487e84c849cbc73.wav",
+    "ui_error": "./content/406618e7eec878ee98ebf337fb63b0599db5311638ba344dcb9cb66327000ab6.wav",
+    "boss_appear": "./content/2259593e5cf96ae69e49b84ea36b7421d2e03b4fbe087592997a3883a63c4332.wav",
+    "boss_warning": "./content/49a6e41eae068dc7a41a174386083070e76b21ebb01ac6c86b2ece550d230155.wav",
+    "victory": "./content/b7ee2ff9f711b6664cbd3a37b82bfe302e6b2ed22b30b1cdbc18e15f19b0286b.wav",
+    "low_health": "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav"
+  },
+  "boss": {
+    "url": "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
+    "volume": 0.32
+  }
+}

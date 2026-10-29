@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "sounds": {
     "slash": [
       "./content/b2f0b06586dec62370400d051f7f0aceb19ca3a9053d81fcad43f0b919b5bf3f.wav",
@@ -43,12 +43,171 @@
     "boss_appear": "./content/2259593e5cf96ae69e49b84ea36b7421d2e03b4fbe087592997a3883a63c4332.wav",
     "boss_warning": "./content/49a6e41eae068dc7a41a174386083070e76b21ebb01ac6c86b2ece550d230155.wav",
     "victory": "./content/b7ee2ff9f711b6664cbd3a37b82bfe302e6b2ed22b30b1cdbc18e15f19b0286b.wav",
-    "low_health": "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav"
+    "low_health": "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav",
+    "portal_depart": "./content/bcfd465189ffac3ceff822fc14d0a238b44d635d4e989c6b5f80cb4d2823219b.wav",
+    "portal_arrive": "./content/505255dd9d9888459ac1083d70990a970df16f8f5c00da843fffb199d243bb70.wav",
+    "gold_pickup": "./content/dfca9dfbe0fb2c6e403bd47069ce6a631a4a2e3d212f465efcad75a14e5635ab.wav",
+    "potion_drink": "./content/569d4f3671157e7a414dadd0ed7a659ad6d80658fd1c533c62b9b36037356503.wav",
+    "grab_caught": "./content/9b2af0e6b3925ea965a806cf822d83878045004963d23688dbc7554accc14561.wav",
+    "grab_escape": "./content/b2f6fb129b1c9af322ad8e026a80785c7f942f331e3f0dc7bab95484f00d79bf.wav",
+    "evade_success": "./content/70def7b2115c793cb9615242ce8bf768cf4c9d7391bca99e1712d487258e2dc1.wav",
+    "bear_attack": "./content/22389d97bd162aec3db01eb33044d7986e6e1788c2c5838dd15f59752d84829a.wav",
+    "bear_hurt": "./content/cf37286ab5194510c0fe869996f6f4828d47d5d05c2e6b6fa465ece0ae86f24e.wav",
+    "bear_death": "./content/aaf0e176201053bea35aec6676d6fd7edf4d9061ffb8fd82f1266d56b8f731e0.wav",
+    "goblin_attack": "./content/b946601a07434fa900d63a9ac590b2d71d49caaae5afdda74c2e3b9271451065.wav",
+    "goblin_hurt": "./content/a153bba085db1410ce1f0355c90f90bef1a88ad3d5e6c9f6fd944141b0a9e578.wav",
+    "goblin_death": "./content/65530b52eb1817ab89dbf7a656450aaeaf4c6ff833cc0c48ad40e4e4c074ba90.wav",
+    "goblin_appear": "./content/5e73ebd194c71b85007a7e6949ba59f04171273c6dcbb23855d45501074aeb6b.wav",
+    "foot_cave_0": "./content/002a4a7b5c10852fc5c3185495f91190dee2d0f11f46ac8f5ec27f56c1fc3f1d.wav",
+    "foot_forest_0": "./content/45f1e0475c1aa5aac40497ae325870c95550702370bea7922772319b264840be.wav",
+    "foot_cave_1": "./content/6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42.wav",
+    "foot_forest_1": "./content/de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431.wav",
+    "foot_cave_2": "./content/46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4.wav",
+    "foot_forest_2": "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav"
   },
   "music": {
     "boss": {
       "url": "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
       "volume": 0.32
+    },
+    "village": {
+      "url": "./content/270306426ba0d78907b2834e262bc38df9e89d96b872e38f5646c5753dae058f.mp3",
+      "volume": 0.27,
+      "seconds": 72
+    },
+    "forest": {
+      "url": "./content/1b583c8a9c4091032752fc5a72c1d38ce84d294806db7a2e562e9a60494a9f85.mp3",
+      "volume": 0.25,
+      "seconds": 72
+    },
+    "cave": {
+      "url": "./content/1c9395b0a19eba656c5c474d033c702fea33385f85aa0b4e230b9ee7ef5f7163.mp3",
+      "volume": 0.24,
+      "seconds": 72
+    },
+    "combat": {
+      "url": "./content/9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5.mp3",
+      "volume": 0.29,
+      "seconds": 72
+    }
+  },
+  "ambience": {
+    "ambience_village": {
+      "url": "./content/8d63af2a58cc56f324b492e7f601b1117e97da3074e719bff7c5fa934f949b8d.mp3",
+      "volume": 0.12,
+      "seconds": 18
+    },
+    "ambience_forest": {
+      "url": "./content/8289d26753a0bade4c75bcf2f9a6d3e19e43c3fa4a11b04708c3c432f0f818cb.mp3",
+      "volume": 0.11,
+      "seconds": 18
+    },
+    "ambience_cave": {
+      "url": "./content/d7a6c3c82a038fe8da4570dd87df783a9e23f386cd7595fd1d5a697669826400.mp3",
+      "volume": 0.14,
+      "seconds": 18
+    }
+  },
+  "cueSettings": {
+    "portal_depart": {
+      "volume": 0.38,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "portal_arrive": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "gold_pickup": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "potion_drink": {
+      "volume": 0.35,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "grab_caught": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "grab_escape": {
+      "volume": 0.44,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "evade_success": {
+      "volume": 0.2,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "bear_attack": {
+      "volume": 0.28,
+      "priority": 2,
+      "cooldown": 1.2
+    },
+    "bear_hurt": {
+      "volume": 0.27,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "bear_death": {
+      "volume": 0.4,
+      "priority": 2,
+      "cooldown": 1
+    },
+    "goblin_attack": {
+      "volume": 0.28,
+      "priority": 2,
+      "cooldown": 1.2
+    },
+    "goblin_hurt": {
+      "volume": 0.27,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "goblin_death": {
+      "volume": 0.4,
+      "priority": 2,
+      "cooldown": 1
+    },
+    "goblin_appear": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "foot_cave_0": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_0": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_cave_1": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_1": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_cave_2": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_2": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
     }
   },
   "resources": [
@@ -67,7 +226,6 @@
     "./content/db0736992c537f4a375d68fd0a3456e2dc31aa51e2a2c7dd731f2ff50f98e143.wav",
     "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
     "./content/caa55f105c1e098682cf3f3e137d15e237c8bcaacb9eecd63be41e3b3efa3d46.wav",
-    "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
     "./content/d2ae3d53c9667e194bd0b8064f4f0e5e40cc85e5bd52d505d7e24121a2506cd5.wav",
     "./content/6af1a673ecdbb03a4a0cec9aa6827fdac9602fa0cf24126b575b0530ef9a8a8d.wav",
     "./content/dd1bd99664f18e528f941a2b5916bc945801a0a3e82a0c595bc157defc37da00.wav",
@@ -89,6 +247,33 @@
     "./content/49a6e41eae068dc7a41a174386083070e76b21ebb01ac6c86b2ece550d230155.wav",
     "./content/b7ee2ff9f711b6664cbd3a37b82bfe302e6b2ed22b30b1cdbc18e15f19b0286b.wav",
     "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav",
-    "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3"
+    "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
+    "./content/270306426ba0d78907b2834e262bc38df9e89d96b872e38f5646c5753dae058f.mp3",
+    "./content/1b583c8a9c4091032752fc5a72c1d38ce84d294806db7a2e562e9a60494a9f85.mp3",
+    "./content/1c9395b0a19eba656c5c474d033c702fea33385f85aa0b4e230b9ee7ef5f7163.mp3",
+    "./content/9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5.mp3",
+    "./content/8d63af2a58cc56f324b492e7f601b1117e97da3074e719bff7c5fa934f949b8d.mp3",
+    "./content/8289d26753a0bade4c75bcf2f9a6d3e19e43c3fa4a11b04708c3c432f0f818cb.mp3",
+    "./content/d7a6c3c82a038fe8da4570dd87df783a9e23f386cd7595fd1d5a697669826400.mp3",
+    "./content/bcfd465189ffac3ceff822fc14d0a238b44d635d4e989c6b5f80cb4d2823219b.wav",
+    "./content/505255dd9d9888459ac1083d70990a970df16f8f5c00da843fffb199d243bb70.wav",
+    "./content/dfca9dfbe0fb2c6e403bd47069ce6a631a4a2e3d212f465efcad75a14e5635ab.wav",
+    "./content/569d4f3671157e7a414dadd0ed7a659ad6d80658fd1c533c62b9b36037356503.wav",
+    "./content/9b2af0e6b3925ea965a806cf822d83878045004963d23688dbc7554accc14561.wav",
+    "./content/b2f6fb129b1c9af322ad8e026a80785c7f942f331e3f0dc7bab95484f00d79bf.wav",
+    "./content/70def7b2115c793cb9615242ce8bf768cf4c9d7391bca99e1712d487258e2dc1.wav",
+    "./content/22389d97bd162aec3db01eb33044d7986e6e1788c2c5838dd15f59752d84829a.wav",
+    "./content/cf37286ab5194510c0fe869996f6f4828d47d5d05c2e6b6fa465ece0ae86f24e.wav",
+    "./content/aaf0e176201053bea35aec6676d6fd7edf4d9061ffb8fd82f1266d56b8f731e0.wav",
+    "./content/b946601a07434fa900d63a9ac590b2d71d49caaae5afdda74c2e3b9271451065.wav",
+    "./content/a153bba085db1410ce1f0355c90f90bef1a88ad3d5e6c9f6fd944141b0a9e578.wav",
+    "./content/65530b52eb1817ab89dbf7a656450aaeaf4c6ff833cc0c48ad40e4e4c074ba90.wav",
+    "./content/5e73ebd194c71b85007a7e6949ba59f04171273c6dcbb23855d45501074aeb6b.wav",
+    "./content/002a4a7b5c10852fc5c3185495f91190dee2d0f11f46ac8f5ec27f56c1fc3f1d.wav",
+    "./content/45f1e0475c1aa5aac40497ae325870c95550702370bea7922772319b264840be.wav",
+    "./content/6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42.wav",
+    "./content/de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431.wav",
+    "./content/46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4.wav",
+    "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav"
   ]
 }

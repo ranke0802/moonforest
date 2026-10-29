@@ -85,6 +85,8 @@ A cold browser still downloads the selected character once. Storage eviction, cl
 
 ### 앞으로의 배포
 
+음향을 수정한 경우에는 [현재 웹 음향 제작·검증 안내](docs/world-audio.md)의 패킹/HTML 목록 생성과 음향 검증을 먼저 수행합니다. 기존 파일 해시를 유지하고 `audio.json`에서 달라진 항목만 갱신하며 출처 표기를 함께 배포합니다.
+
 이 폴더에서 실행합니다(Node >=22.12).
 
 ```sh

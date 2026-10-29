@@ -79,6 +79,8 @@ Unity의 Build Profiles에서 macOS 빌드하거나 아래 프로젝트 빌드 �
 
 사용자가 제공한 Meshy 모델·숲 배경과 프로젝트 제작 이미지·리깅·애니메이션을 사용합니다. 시작 테마 및 탐험·보스 편곡은 이 프로젝트용 MIDI로 제작했고 효과음은 Python으로 합성했습니다. 음원 생성 소스는 `Tools/Music`에 있습니다.
 
+위 설명은 이전 Unity 음향입니다. 현재 웹 `ArcherPreview`는 Scott Buckley의 CC-BY 4.0 오케스트라 음악과 허가된 녹음 Foley를 Python/FFmpeg로 편집합니다. 현재 제작·배포 절차는 [웹 음향 안내](ArcherPreview/docs/world-audio.md), 전체 출처는 [AUDIO_CREDITS.txt](ArcherPreview/public/AUDIO_CREDITS.txt), 미리듣기는 [음향 목록 HTML](ArcherPreview/public/audio-credits.html)에 있습니다. Runway는 사용하지 않습니다.
+
 악기 음색은 S. Christian Collins의 **GeneralUser GS 2.0.3**입니다. [배포 라이선스](Tools/Music/GeneralUser-LICENSE.txt)를 함께 보관합니다. 폰트 라이선스는 해당 에셋 폴더에 포함합니다. 저장소 전체에 별도의 오픈소스 라이선스를 부여하지 않았으며, 개별 외부 에셋의 이용 조건은 각 원본의 조건을 따릅니다.
 
 - [짧은 모험 실행 계획](Docs/ADVENTURE_PLAN.md)

@@ -1,0 +1,453 @@
+{
+  "village": {
+    "file": "village.mp3",
+    "group": "music",
+    "label": "마을 · 귀향의 불빛",
+    "seconds": 72.0,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.81722,
+    "rms": 0.08823,
+    "bytes": 1153196,
+    "sha256": "270306426ba0d78907b2834e262bc38df9e89d96b872e38f5646c5753dae058f",
+    "sources": [
+      "echoes"
+    ],
+    "volume": 0.27,
+    "seamDelta": 0.003951
+  },
+  "forest": {
+    "file": "forest.mp3",
+    "group": "music",
+    "label": "마물의 숲 · 잠들지 않는 숲",
+    "seconds": 72.0,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.80805,
+    "rms": 0.0906,
+    "bytes": 1153196,
+    "sha256": "1b583c8a9c4091032752fc5a72c1d38ce84d294806db7a2e562e9a60494a9f85",
+    "sources": [
+      "anabasis"
+    ],
+    "volume": 0.25,
+    "seamDelta": 0.027011
+  },
+  "cave": {
+    "file": "cave.mp3",
+    "group": "music",
+    "label": "마녀의 동굴 · 잊힌 기도",
+    "seconds": 72.0,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.84499,
+    "rms": 0.12607,
+    "bytes": 1153196,
+    "sha256": "1c9395b0a19eba656c5c474d033c702fea33385f85aa0b4e230b9ee7ef5f7163",
+    "sources": [
+      "summoning"
+    ],
+    "volume": 0.24,
+    "seamDelta": 0.018056
+  },
+  "combat": {
+    "file": "combat.mp3",
+    "group": "music",
+    "label": "일반 전투 · 경계의 검",
+    "seconds": 72.0,
+    "channels": 2,
+    "sampleRate": 32000,
+    "peak": 0.67171,
+    "rms": 0.15213,
+    "bytes": 1153196,
+    "sha256": "9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5",
+    "sources": [
+      "legionnaire"
+    ],
+    "volume": 0.29,
+    "seamDelta": 0.019997
+  },
+  "ambience_village": {
+    "file": "ambience_village.mp3",
+    "group": "ambience",
+    "label": "마을 · 바람과 새",
+    "seconds": 18.0,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.50406,
+    "rms": 0.095,
+    "bytes": 180764,
+    "sha256": "8d63af2a58cc56f324b492e7f601b1117e97da3074e719bff7c5fa934f949b8d",
+    "sources": [
+      "birds"
+    ],
+    "volume": 0.12,
+    "seamDelta": 0.001389
+  },
+  "ambience_forest": {
+    "file": "ambience_forest.mp3",
+    "group": "ambience",
+    "label": "마물의 숲 · 낮은 수관 바람",
+    "seconds": 18.0,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.57002,
+    "rms": 0.09272,
+    "bytes": 180764,
+    "sha256": "8289d26753a0bade4c75bcf2f9a6d3e19e43c3fa4a11b04708c3c432f0f818cb",
+    "sources": [
+      "birds"
+    ],
+    "volume": 0.11,
+    "seamDelta": 0.00212
+  },
+  "ambience_cave": {
+    "file": "ambience_cave.mp3",
+    "group": "ambience",
+    "label": "동굴 · 물방울과 공간 잔향",
+    "seconds": 18.0,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.57124,
+    "rms": 0.01097,
+    "bytes": 180764,
+    "sha256": "d7a6c3c82a038fe8da4570dd87df783a9e23f386cd7595fd1d5a697669826400",
+    "sources": [
+      "drips"
+    ],
+    "volume": 0.14,
+    "seamDelta": 0.002018
+  },
+  "portal_depart": {
+    "file": "portal_depart.wav",
+    "group": "sounds",
+    "label": "포탈 · 보라 연무 진입",
+    "seconds": 1.9368,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.10621,
+    "bytes": 124034,
+    "sha256": "bcfd465189ffac3ceff822fc14d0a238b44d635d4e989c6b5f80cb4d2823219b",
+    "sources": [
+      "teleport",
+      "swishes"
+    ],
+    "volume": 0.38
+  },
+  "portal_arrive": {
+    "file": "portal_arrive.wav",
+    "group": "sounds",
+    "label": "포탈 · 도착",
+    "seconds": 1.7412,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.11473,
+    "bytes": 111514,
+    "sha256": "505255dd9d9888459ac1083d70990a970df16f8f5c00da843fffb199d243bb70",
+    "sources": [
+      "teleport",
+      "swishes"
+    ],
+    "volume": 0.32
+  },
+  "gold_pickup": {
+    "file": "gold_pickup.wav",
+    "group": "sounds",
+    "label": "금화 획득",
+    "seconds": 0.635,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.05808,
+    "bytes": 40718,
+    "sha256": "dfca9dfbe0fb2c6e403bd47069ce6a631a4a2e3d212f465efcad75a14e5635ab",
+    "sources": [
+      "coins",
+      "weapon-textures"
+    ],
+    "volume": 0.32
+  },
+  "potion_drink": {
+    "file": "potion_drink.wav",
+    "group": "sounds",
+    "label": "물약 · 병 개봉과 마시기",
+    "seconds": 0.4444,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.04695,
+    "bytes": 28518,
+    "sha256": "569d4f3671157e7a414dadd0ed7a659ad6d80658fd1c533c62b9b36037356503",
+    "sources": [
+      "bottle"
+    ],
+    "volume": 0.35
+  },
+  "grab_caught": {
+    "file": "grab_caught.wav",
+    "group": "sounds",
+    "label": "곰에게 붙잡힘",
+    "seconds": 0.8333,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.05445,
+    "bytes": 53412,
+    "sha256": "9b2af0e6b3925ea965a806cf822d83878045004963d23688dbc7554accc14561",
+    "sources": [
+      "weapon-textures",
+      "impact"
+    ],
+    "volume": 0.48
+  },
+  "grab_escape": {
+    "file": "grab_escape.wav",
+    "group": "sounds",
+    "label": "곰 잡기에서 탈출",
+    "seconds": 0.6825,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.08395,
+    "bytes": 43756,
+    "sha256": "b2f6fb129b1c9af322ad8e026a80785c7f942f331e3f0dc7bab95484f00d79bf",
+    "sources": [
+      "weapon-textures",
+      "swishes"
+    ],
+    "volume": 0.44
+  },
+  "evade_success": {
+    "file": "evade_success.wav",
+    "group": "sounds",
+    "label": "공격 회피 성공",
+    "seconds": 0.1305,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.16395,
+    "bytes": 8432,
+    "sha256": "70def7b2115c793cb9615242ce8bf768cf4c9d7391bca99e1712d487258e2dc1",
+    "sources": [
+      "swishes"
+    ],
+    "volume": 0.2
+  },
+  "bear_attack": {
+    "file": "bear_attack.wav",
+    "group": "sounds",
+    "label": "곰 · 공격 발성",
+    "seconds": 1.1009,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.15243,
+    "bytes": 70534,
+    "sha256": "22389d97bd162aec3db01eb33044d7986e6e1788c2c5838dd15f59752d84829a",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.28
+  },
+  "bear_hurt": {
+    "file": "bear_hurt.wav",
+    "group": "sounds",
+    "label": "곰 · 피격 발성",
+    "seconds": 0.7153,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.27474,
+    "bytes": 45860,
+    "sha256": "cf37286ab5194510c0fe869996f6f4828d47d5d05c2e6b6fa465ece0ae86f24e",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.27
+  },
+  "bear_death": {
+    "file": "bear_death.wav",
+    "group": "sounds",
+    "label": "곰 · 쓰러짐",
+    "seconds": 1.8365,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.16608,
+    "bytes": 117614,
+    "sha256": "aaf0e176201053bea35aec6676d6fd7edf4d9061ffb8fd82f1266d56b8f731e0",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.4
+  },
+  "goblin_attack": {
+    "file": "goblin_attack.wav",
+    "group": "sounds",
+    "label": "고블린 · 공격 발성",
+    "seconds": 0.3662,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.09533,
+    "bytes": 23514,
+    "sha256": "b946601a07434fa900d63a9ac590b2d71d49caaae5afdda74c2e3b9271451065",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.28
+  },
+  "goblin_hurt": {
+    "file": "goblin_hurt.wav",
+    "group": "sounds",
+    "label": "고블린 · 피격 발성",
+    "seconds": 0.5618,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.11837,
+    "bytes": 36032,
+    "sha256": "a153bba085db1410ce1f0355c90f90bef1a88ad3d5e6c9f6fd944141b0a9e578",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.27
+  },
+  "goblin_death": {
+    "file": "goblin_death.wav",
+    "group": "sounds",
+    "label": "고블린 · 쓰러짐",
+    "seconds": 1.349,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.17207,
+    "bytes": 86414,
+    "sha256": "65530b52eb1817ab89dbf7a656450aaeaf4c6ff833cc0c48ad40e4e4c074ba90",
+    "sources": [
+      "monsters"
+    ],
+    "volume": 0.4
+  },
+  "goblin_appear": {
+    "file": "goblin_appear.wav",
+    "group": "sounds",
+    "label": "고블린 등장",
+    "seconds": 0.7184,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.09628,
+    "bytes": 46054,
+    "sha256": "5e73ebd194c71b85007a7e6949ba59f04171273c6dcbb23855d45501074aeb6b",
+    "sources": [
+      "monsters",
+      "weapon-textures"
+    ],
+    "volume": 0.32
+  },
+  "foot_cave_0": {
+    "file": "foot_cave_0.wav",
+    "group": "sounds",
+    "label": "동굴 돌바닥 발걸음 1",
+    "seconds": 0.6016,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.09083,
+    "bytes": 38578,
+    "sha256": "002a4a7b5c10852fc5c3185495f91190dee2d0f11f46ac8f5ec27f56c1fc3f1d",
+    "sources": [
+      "armor-footsteps",
+      "impact"
+    ],
+    "volume": 0.18
+  },
+  "foot_forest_0": {
+    "file": "foot_forest_0.wav",
+    "group": "sounds",
+    "label": "숲 흙바닥 발걸음 1",
+    "seconds": 0.6867,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.08373,
+    "bytes": 44026,
+    "sha256": "45f1e0475c1aa5aac40497ae325870c95550702370bea7922772319b264840be",
+    "sources": [
+      "armor-footsteps",
+      "weapon-textures"
+    ],
+    "volume": 0.18
+  },
+  "foot_cave_1": {
+    "file": "foot_cave_1.wav",
+    "group": "sounds",
+    "label": "동굴 돌바닥 발걸음 2",
+    "seconds": 0.5726,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.08467,
+    "bytes": 36722,
+    "sha256": "6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42",
+    "sources": [
+      "armor-footsteps",
+      "impact"
+    ],
+    "volume": 0.18
+  },
+  "foot_forest_1": {
+    "file": "foot_forest_1.wav",
+    "group": "sounds",
+    "label": "숲 흙바닥 발걸음 2",
+    "seconds": 0.6516,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.07924,
+    "bytes": 41780,
+    "sha256": "de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431",
+    "sources": [
+      "armor-footsteps",
+      "weapon-textures"
+    ],
+    "volume": 0.18
+  },
+  "foot_cave_2": {
+    "file": "foot_cave_2.wav",
+    "group": "sounds",
+    "label": "동굴 돌바닥 발걸음 3",
+    "seconds": 0.547,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.05226,
+    "bytes": 35086,
+    "sha256": "46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4",
+    "sources": [
+      "armor-footsteps",
+      "impact"
+    ],
+    "volume": 0.18
+  },
+  "foot_forest_2": {
+    "file": "foot_forest_2.wav",
+    "group": "sounds",
+    "label": "숲 흙바닥 발걸음 3",
+    "seconds": 0.62,
+    "channels": 1,
+    "sampleRate": 32000,
+    "peak": 0.72,
+    "rms": 0.05878,
+    "bytes": 39758,
+    "sha256": "6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138",
+    "sources": [
+      "armor-footsteps",
+      "weapon-textures"
+    ],
+    "volume": 0.18
+  }
+}

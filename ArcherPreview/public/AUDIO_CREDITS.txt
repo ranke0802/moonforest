@@ -45,3 +45,81 @@ CC0 recordings were trimmed, filtered, layered, pitched and gain-balanced.
 No audio from Dark Souls or other commercial game soundtracks is included.
 The authors do not endorse this project. Preserve these credits on distribution.
 Build recipe: ArcherPreview/scripts/mix-combat-audio.py
+
+
+WORLD AUDIO EDITS — 2026-10-30
+
+Echoes Of Home — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/echoes-of-home/
+Changes: 20–94 s excerpt; 2 s loop crossfade; gain balanced, 32 kHz stereo MP3. Game edit title: 귀향의 불빛.
+
+Anabasis I — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/anabasis-i/
+Changes: 35–109 s excerpt; 2 s loop crossfade; gain balanced, 32 kHz stereo MP3. Game edit title: 잠들지 않는 숲.
+
+Legionnaire (Original) — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/legionnaire/
+Changes: 12–86 s excerpt; 2 s loop crossfade; gain balanced, 32 kHz stereo MP3. Game edit title: 경계의 검.
+
+The Summoning — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/the-summoning/
+Changes: Existing boss score and stings retained. New cave edit 119–193 s, 2 s loop crossfade, 32 kHz stereo MP3. Game edit title: 잊힌 기도.
+
+Coin Splash — LordTomorrow
+CC0 1.0
+https://opengameart.org/content/coin-splash
+Changes: Trimmed, gain balanced, layered with recorded cloth.
+
+Monster or beast sounds — pauliuw
+CC0 1.0
+https://opengameart.org/content/monster-or-beast-sounds
+Changes: Selected beast/pixie takes, shortened, filtered, pitch shifted and given short offline reflections.
+
+Teleport Spell — Ogrebane
+CC0 1.0
+https://opengameart.org/content/teleport-spell
+Changes: Filtered, slowed/reversed and layered with a recorded swish.
+
+Liquid Bottle Drink Set — Iwan 'qubodup' Gabovitch
+CC0 1.0
+https://opengameart.org/content/liquid-bottle-drink-set
+Changes: Bottle-open and swallow takes trimmed and layered.
+
+Dripping water loop — Independent.nu; submitted by qubodup
+CC0 1.0
+https://opengameart.org/content/dripping-water-loop
+Changes: Filtered, gain balanced, 18 s mono loop with crossfade.
+
+Birds and Wind - Ambient — Spring Spring; bird recordings by isaiah658, syncopika, pauliuw
+CC0 1.0
+https://opengameart.org/content/birds-and-wind-ambient-birds-wind-and-synth
+Changes: Ambient version only; two 18 s mono edits, filtered/gain balanced; forest edit slowed.
+
+Swishes Sound Pack — artisticdude
+CC0 1.0
+https://opengameart.org/content/swishes-sound-pack
+Changes: Existing recorded swish shortened, filtered, pitched and layered.
+
+Medieval Sound Effects: Weapon Textures — Ben Jaszczak & Brian Nelson / Still North Media
+CC0 1.0
+https://opengameart.org/content/medieval-sound-effects-weapon-textures
+Changes: Existing Katana Sheath Fast recording shortened, filtered and layered.
+
+Impact — Iwan 'qubodup' Gabovitch
+CC0 1.0
+https://opengameart.org/content/impact
+Changes: Existing wood/stone recordings filtered, pitched, shortened and layered.
+
+Footsteps Leather, Cloth, Armor — HaelDB
+CC0 1.0
+https://opengameart.org/content/footsteps-leather-cloth-armor
+Changes: Existing armored boot takes filtered and layered for stone/earth surfaces.
+
+CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
+CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Scott Buckley: www.scottbuckley.com.au
+The authors do not endorse this game. Preserve attribution on distribution.

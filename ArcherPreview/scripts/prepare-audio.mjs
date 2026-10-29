@@ -16,5 +16,16 @@ for(const name of names){
   sounds[name]=urls.length===1?urls[0]:urls;
 }
 const music={boss:{url:await pack(resolve(source,'../Music/boss_battle.mp3'),'mp3'),volume:.32}};
-await writeFile(resolve(output,'audio.json'),JSON.stringify({version:2,sounds,music,resources},null,2)+'\n');
-console.log(`Audio: ${names.length} immutable cues, ${(bytes/1024/1024).toFixed(2)} MiB`);
+const edits=JSON.parse(await readFile(resolve(source,'../World/mix-report.json'),'utf8')),ambience={},cueSettings={};
+for(const [name,edit] of Object.entries(edits)){
+  const url=await pack(resolve(source,'../World',edit.file),edit.file.split('.').at(-1));
+  if(edit.group==='sounds'){
+    sounds[name]=url;cueSettings[name]={volume:edit.volume,priority:name.startsWith('foot_')?0:2,cooldown:name.endsWith('_attack')?1.2:name.endsWith('_death')?1:name.startsWith('foot_')?.12:.12};
+  }else (edit.group==='music'?music:ambience)[name]={url,volume:edit.volume,seconds:edit.seconds};
+}
+await writeFile(resolve(output,'audio.json'),JSON.stringify({version:3,sounds,music,ambience,cueSettings,resources:[...new Set(resources)]},null,2)+'\n');
+const sources=JSON.parse(await readFile(resolve(import.meta.dirname,'world-audio-sources.json'),'utf8'));
+const oldCredits=await readFile(resolve(source,'../LICENSES.txt'),'utf8');
+const creditText=oldCredits+'\n\nWORLD AUDIO EDITS — 2026-10-30\n\n'+Object.values(sources).map(s=>`${s.title} — ${s.author}\n${s.license}\n${s.url}\nChanges: ${s.changes}\n`).join('\n')+'\nCC-BY 4.0: https://creativecommons.org/licenses/by/4.0/\nCC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/\nScott Buckley: www.scottbuckley.com.au\nThe authors do not endorse this game. Preserve attribution on distribution.\n';
+await writeFile(resolve(output,'../AUDIO_CREDITS.txt'),creditText);
+console.log(`Audio: ${Object.keys(sounds).length} cues, ${Object.keys(music).length} scores, ${Object.keys(ambience).length} ambience loops; ${(bytes/1024/1024).toFixed(2)} MiB`);

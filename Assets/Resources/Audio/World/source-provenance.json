@@ -1,0 +1,56 @@
+[
+  {
+    "file": "village.mp3",
+    "url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2025/05/EchoesOfHome.mp3",
+    "bytes": 11672796,
+    "sha256": "b980963ac01d5211e2729906e2f5e74915a9d5df22fc8744e2d95045bb120e8e"
+  },
+  {
+    "file": "forest.mp3",
+    "url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2026/09/Anabasis_I.mp3",
+    "bytes": 22431868,
+    "sha256": "964e693611445d808d4cdb748006ae22c7fa8534b126acdca39bcc74de95d76c"
+  },
+  {
+    "file": "combat.mp3",
+    "url": "https://www.scottbuckley.com.au/wp-content/audio/sb_legionnaire.mp3",
+    "bytes": 3622107,
+    "sha256": "49230c850b0d3a278aee2871ca684cf4bc87bf4dd1ecc8f453f425bff2dce27c"
+  },
+  {
+    "file": "monsters.7z",
+    "url": "https://opengameart.org/sites/default/files/monsters_or_beasts.7z",
+    "bytes": 4898137,
+    "sha256": "b032a255a22e32e08b31c9e7adc560b899d24661da12af5320346e5aa4c059ec"
+  },
+  {
+    "file": "teleport.wav",
+    "url": "https://opengameart.org/sites/default/files/teleport.wav",
+    "bytes": 286694,
+    "sha256": "23fe938e7e82931227196bf6b2978ad9154f627af26623acf52958d12125f3b8"
+  },
+  {
+    "file": "coins.ogg",
+    "url": "https://opengameart.org/sites/default/files/coinsplash_0.ogg",
+    "bytes": 8442,
+    "sha256": "1918a8e2eb94697f4710d1d47568e5194f4587f26ff0305c73cf8f8e28e15cc7"
+  },
+  {
+    "file": "drips.flac",
+    "url": "https://opengameart.org/sites/default/files/atmosbasement.mp3_.flac",
+    "bytes": 1309638,
+    "sha256": "247c0ef181c8ba8d190a6194f6ea02d9defb23b70194c52c7f9187b5b7b1cc61"
+  },
+  {
+    "file": "birds.ogg",
+    "url": "https://opengameart.org/sites/default/files/Birds%20and%20Wind%20-%20Ambient_1.ogg",
+    "bytes": 1883864,
+    "sha256": "28f99f536a0772d80052f03bcb22c9ed8fd7c6e4db7f2e8356efcf26a8e24f01"
+  },
+  {
+    "file": "bottle.7z",
+    "url": "https://opengameart.org/sites/default/files/qubodup-bottle-and-drink-sounds.7z",
+    "bytes": 3470987,
+    "sha256": "6d2b9dade6ff4c20cbe2b2a7c405cd219b901bfce7045b28f5ba8b8683c7a5e7"
+  }
+]
