@@ -21,6 +21,7 @@ import {CaveNavigation} from './witch-cave-navigation.js';
 import {configureCaveAtmosphere} from './witch-cave-atmosphere.js';
 import {cachedMapTerrain} from './map-terrain-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
+import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 const caveTrainingSpawn={x:-39,z:39};
 function mapNavigation({cave,forest,village}){
   const obstacles=cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
@@ -29,7 +30,7 @@ function mapNavigation({cave,forest,village}){
   return new Navigation([...obstacles,...training]);
 }
 
-export function createWorld(engine, {village=false,forest=false,cave=false,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
+export function createWorld(engine, {village=false,forest=false,cave=false,warrior=village||forest||cave,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
   village=village||forest||cave;
   setWorldCharacter(cave?'warrior-v5':forest?'warrior-v4':village?'warrior-v3':'archer');
   const scene = new Scene(engine);
@@ -50,7 +51,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,touch
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = villagePolicy?.maxCameraRadius??14;
-  camera.lowerBetaLimit = .25; camera.upperBetaLimit = 1.48;
+  camera.lowerBetaLimit = CAMERA_LOWER_BETA; camera.upperBetaLimit = warrior?WARRIOR_UPPER_BETA:ARCHER_UPPER_BETA;
   camera.fov = .65;
   // Input is routed explicitly: joystick/action pointers never enter the camera handler.
   camera.inputs.clear();

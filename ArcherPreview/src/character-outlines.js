@@ -100,6 +100,9 @@ export function attachCharacterOutlines(asset, kind) {
   const added = [];
   for (const source of [...asset.meshes]) {
     if (!source.getTotalVertices?.() || isRuntimeOutline(source) || /outline/i.test(source.name)) continue;
+    // The r9 mouth is an interior surface collapsed to a point while closed.
+    // Inflating its normals would add a black mark to the unchanged resting face.
+    if (/Lament_Mouth_Interior/.test(source.name)) continue;
     let profile = kind;
     if (kind === 'warrior') {
       profile = { Golden_Oathblade: 'sword', Bunnyguard_Shield: 'shield' }[source.name];

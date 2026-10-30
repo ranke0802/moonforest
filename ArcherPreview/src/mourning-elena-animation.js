@@ -1,16 +1,20 @@
 import {Quaternion,Vector3} from '@babylonjs/core';
 import {orderPoseNodes,refreshPoseMatrices} from './pose-matrices.js';
-import {haloSpeedAt,shotWeight,smooth01,mourningMotionWeights} from './mourning-motion-v2.js';
+import {haloSpeedAt,windAt,shotWeight,smooth01,mourningMotionWeights,deathHaloSpeedAt,deathHaloAdvance,MOURNING_DEATH_SECONDS,MOURNING_DEATH_BLEND_SECONDS} from './mourning-motion-v2.js';
 
 const clamp=v=>Math.max(0,Math.min(1,v)),smooth=v=>v*v*(3-2*v),TAU=Math.PI*2;
 const REACH=[[0,0],[.25,.08],[.72,.48],[1.18,1],[1.82,1],[2.08,.97],[2.60,.42],[3,0]];
 export function castReach(t){for(let i=1;i<REACH.length;i++)if(t<=REACH[i][0]){const a=REACH[i-1],b=REACH[i];return a[1]+(b[1]-a[1])*smooth(clamp((t-a[0])/(b[0]-a[0])));}return 0;}
-export function mourningMorphs({castTime=0,casting=false,castWeight,walkTime=0,gaitSeconds=2.4,gaitBlend=0,breathClock=0,breathing=true}={}){
-  const weight=Number.isFinite(castWeight)?castWeight:casting?smooth(clamp(Math.min(castTime/.18,(3-castTime)/.25))):0,reach=castReach(castTime),theta=walkTime/gaitSeconds*TAU;
-  return {Cast_Palm_Cleanup:reach*weight,Cast_Elbow_Form:clamp((reach-.48)/.52)*weight,
-    Breath_Rise:breathing?.5+.5*Math.sin(breathClock*TAU/5.5):0,
-    Bust_Settle:breathing?(.5+.5*Math.sin(theta*2-.6))*gaitBlend:0,
-    Bust_ArmFollow:breathing?(.5+.5*Math.sin(theta-.65))*gaitBlend:0};
+export function mourningMorphs({castTime=0,casting=false,castWeight,walkTime=0,gaitSeconds=2.4,gaitBlend=0,breathClock=0,breathing=true,dying=false,deathTime=0}={},out={}){
+  const weight=Number.isFinite(castWeight)?castWeight:casting?smooth(clamp(Math.min(castTime/.18,(3-castTime)/.25))):0,reach=castReach(castTime),theta=walkTime/gaitSeconds*TAU,alive=dying?1-smooth01(deathTime/MOURNING_DEATH_BLEND_SECONDS):1;
+  out.Cast_Palm_Cleanup=reach*weight;out.Cast_Elbow_Form=clamp((reach-.48)/.52)*weight;out.Hair_Cast_Wind=windAt(castTime)*weight;
+  out.Breath_Rise=breathing?(.5+.5*Math.sin(breathClock*TAU/5.5))*alive:0;
+  out.Bust_Settle=breathing?(.5+.5*Math.sin(theta*2-.6))*gaitBlend*alive:0;
+  out.Bust_ArmFollow=breathing?(.5+.5*Math.sin(theta-.65))*gaitBlend*alive:0;
+  const cry=dying?smooth01((deathTime-.30)/.65)*(1-smooth01((deathTime-2.10)/1)):0,settle=dying?smooth01((deathTime-2)/1.9):0;
+  out.Death_Scream=cry;out.Death_Hair_Cry=cry*(1-settle);out.Death_Hair_Settle=settle;
+  out.Death_Ground_Contact=dying?(.055*smooth01(deathTime/.65)+.13*smooth01((deathTime-.60)/2.5))/.185:0;
+  out.Death_Ground_Early=dying?smooth01(deathTime/.65)*(1-smooth01((deathTime-1.5)/1.4)):0;return out;
 }
 
 // Varying transform channels are LINEAR. Cache constant channels and sample
@@ -47,16 +51,19 @@ function applyWeighted(channel,times,weights,hair=false){
   }
 }
 
-/** r8 playback: authored idle/cast wind/hit plus independent gait, halo and gravity. */
+/** r9 playback: independent living actions and a real-time, once-only death. */
 export class MourningElenaAnimator {
   constructor(asset,config,actor){
     this.asset=asset;this.config=config;this.actor=actor;this.current='idle';this.castTime=0;this.walkTime=0;this.hairTime=0;this.breathClock=0;this.haloTime=0;this.gaitBlend=0;this.gaitRate=2;this.accumulator=0;this.sampleInterval=0;this.samples=0;
-    this.durations={idle:6,walk:2.4,cast:3,hit:1.3,dead:6};this.gaitSeconds=config.gaitSeconds??2.4;
+    this.deathDuration=MOURNING_DEATH_SECONDS;this.durations={idle:6,walk:2.4,cast:3,hit:1.3,dead:this.deathDuration};this.gaitSeconds=config.gaitSeconds??2.4;
     for(const group of asset.animationGroups)group.stop();
     const group=n=>{const g=asset.animationGroups.find(g=>g.name===n);if(!g)throw new Error('마녀 동작 누락: '+n);return g;};
     const walk=channels(group('Chimera_Organic_Walk_2p4s'));
     const maps=Object.fromEntries([['cast','Chimera_Arcane_Cast_3s'],['idle','Chimera_Prayer_Idle_6s'],['hit','Chimera_Hit_Reaction_1p3s']].map(([name,clip])=>[name,new Map(channels(group(clip)).map(c=>[key(c),c.track]))]));
     const combined=walk.map(c=>({...c,walk:c.track,cast:maps.cast.get(key(c))??c.track,idle:maps.idle.get(key(c))??c.track,hit:maps.hit.get(key(c))??c.track}));
+    const dead=channels(group('Chimera_Death_Lament_5p2s'));
+    this.deathChannels=dead.map(c=>({...c,from:c.target[c.property].clone()}));
+    this.deathFromWeights={walk:0,cast:0,idle:1,hit:0};
     this.hair=combined.filter(c=>c.target.name.startsWith('DEF_Hair_'));
     this.body=combined.filter(c=>!c.target.name.startsWith('DEF_Hair_'));
     // Constant identical translations/scales never need writing again.
@@ -79,19 +86,34 @@ export class MourningElenaAnimator {
       const m=bone.name.match(/^DEF_HaloCloth_(\d+)_(\d+)$/);if(!m)return [];
       const q=bone.absoluteRotationQuaternion.clone(),direction=up.applyRotationQuaternion(q),tilt=Quaternion.Identity();
       Quaternion.FromUnitVectorsToRef(direction,down,tilt);
-      return [{bone,baseWorld:tilt.multiply(q),chain:Number(m[1])-1,segment:Number(m[2])-1}];
+      const baseWorld=tilt.multiply(q);return [{bone,baseWorld,worldQ:baseWorld.clone(),chain:Number(m[1])-1,segment:Number(m[2])-1}];
     }).sort((a,b)=>a.chain-b.chain||a.segment-b.segment);
     this.morphs=[];
     for(const manager of new Set(asset.meshes.map(m=>m.morphTargetManager).filter(Boolean)))for(let i=0;i<manager.numTargets;i++)this.morphs.push(manager.getTarget(i));
+    this.mouthMeshes=asset.meshes.filter(mesh=>mesh.name.includes('Lament_Mouth_Interior')&&!mesh.metadata?.moonforestOutline);
+    this.morphState={gaitSeconds:this.gaitSeconds,breathing:true};this.morphValues={};
     this.scratch={direction:new Vector3(),down:new Vector3(0,-1,0),tilt:Quaternion.Identity(),world:Quaternion.Identity(),local:Quaternion.Identity(),inverse:Quaternion.Identity()};
     for(const c of this.fixed)c.target[c.property].copyFrom(c.track.keys[0].value);
     this.reset();
   }
   reset(){
-    Object.assign(this,{current:'idle',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,clothInitialized:false,disposed:false,actionId:null});
+    Object.assign(this,{current:'idle',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,clothInitialized:false,disposed:false,actionId:null,deathTime:0,deathWeight:0,deathStarted:false});
+    for(const c of this.fixed)c.target[c.property].copyFrom(c.track.keys[0].value);
     this.sample(0);return this;
   }
   transition(state,{clipTime=0,actionId=null,staggerRemaining=0}={}){
+    this.disposed=false;
+    if(state==='dead'){
+      if(!this.deathStarted){
+        for(const c of this.deathChannels)c.from.copyFrom(c.target[c.property]);
+        for(const name of MIX_ORDER)this.deathFromWeights[name]=this.weights?.[name]??(name==='idle'?1:0);
+        this.deathTime=0;this.deathWeight=0;this.deathStarted=true;this.accumulator=0;
+        this.hitActive=false;this.hitReleaseWeight=0;this.hitPulseTime=HIT_PULSE_SECONDS;this.hitPulseWeight=0;this.staggerRemaining=0;
+      }
+      this.current='dead';this.actionId=actionId;return;
+    }
+    // Resurrection is explicit: stray living transitions cannot restart a corpse.
+    if(this.deathStarted)return;
     const remaining=Math.max(0,Number.isFinite(staggerRemaining)?staggerRemaining:0),explicit=state==='hit';
     const wasBusy=this.current==='cast'||this.hitActive;
     if((remaining>0&&this.staggerRemaining<=0)||(explicit&&!this.hitActive&&this.current!=='hit')){
@@ -106,7 +128,6 @@ export class MourningElenaAnimator {
     this.staggerRemaining=remaining;
     if(wasBusy&&state!=='cast'&&!this.hitActive)this.walkTime=0;
     this.current=state;if(state==='cast'&&!this.hitActive)this.castTime=clipTime;
-    if(state==='dead'){this.hitPulseTime=HIT_PULSE_SECONDS;this.hitPulseWeight=0;}
     this.actionId=actionId;this.disposed=false;
   }
   reactToHit(){
@@ -116,7 +137,12 @@ export class MourningElenaAnimator {
   update(dt){
     if(this.disposed)return;
     dt=Math.max(0,Number.isFinite(dt)?dt:0);const moving=this.current==='walk'&&!this.hitActive,dead=this.current==='dead';
-    if(dead)return;
+    if(dead){
+      if(this.deathFinished)return;
+      const previous=this.deathTime,elapsed=previous+dt;this.deathTime=elapsed>=this.deathDuration-1e-9?this.deathDuration:elapsed;
+      this.haloSpeed=deathHaloSpeedAt(this.deathTime);this.haloTime=(this.haloTime+deathHaloAdvance(previous,this.deathTime))%48;
+      this.sample(dt);return;
+    }
     this.gaitBlend+=(Number(moving)-this.gaitBlend)*(1-Math.exp(-7*dt));if(moving)this.walkTime=(this.walkTime+dt*this.gaitRate)%this.gaitSeconds;
     this.hairTime=(this.hairTime+dt*this.gaitRate)%this.gaitSeconds;this.idleTime=(this.idleTime+dt)%6;this.breathClock+=dt;
     if(this.hitActive)this.hitTime=Math.min(1.3,this.hitTime+dt);else this.hitReleaseTime+=dt;
@@ -130,14 +156,33 @@ export class MourningElenaAnimator {
     const step=this.accumulator;this.accumulator=0;this.sample(step);
   }
   sample(dt){
+    if(this.current==='dead'){this.sampleDeath(dt);return;}
     const casting=this.current==='cast'&&!this.hitActive;
     this.weights=mourningMotionWeights(this,casting,this.weights);
     for(const c of this.body)applyWeighted(c,this,this.weights);
     this.applyHitPulse(casting);
     for(const c of this.hair)applyWeighted(c,this,this.weights,true);
     for(const c of this.halo)c.target[c.property].copyFrom(c.track.sample(this.haloTime));
-    const values=mourningMorphs({castTime:this.castTime,casting,castWeight:this.weights.cast,walkTime:this.walkTime,gaitSeconds:this.gaitSeconds,gaitBlend:this.gaitBlend,breathClock:this.breathClock});
+    this.applyMorphs(casting,false);
+    this.refreshPose();this.applyCloth(dt);this.samples++;
+  }
+  applyMorphs(casting,dying){
+    const state=this.morphState;state.castTime=this.castTime;state.casting=casting;state.castWeight=this.weights.cast;state.walkTime=this.walkTime;state.gaitBlend=this.gaitBlend;state.breathClock=this.breathClock;state.dying=dying;state.deathTime=this.deathTime;
+    const values=mourningMorphs(state,this.morphValues);
     for(const target of this.morphs)if(values[target.name]!==undefined)target.influence=values[target.name];
+    // The authored mouth is a degenerate point at rest. Skip its draw entirely;
+    // a local enabled gate cannot be undone by range/FoW visibility restoration.
+    for(const mesh of this.mouthMeshes)mesh.setEnabled(values.Death_Scream>.0001);
+  }
+  sampleDeath(dt){
+    const weight=this.deathWeight=smooth01(this.deathTime/MOURNING_DEATH_BLEND_SECONDS);
+    for(const name of MIX_ORDER)this.weights[name]=this.deathFromWeights[name]*(1-weight);
+    for(const c of this.deathChannels){
+      const to=c.track.sample(this.deathTime),out=c.target[c.property];
+      if(c.property==='rotationQuaternion')Quaternion.SlerpToRef(c.from,to,weight,out);else Vector3.LerpToRef(c.from,to,weight,out);
+    }
+    for(const c of this.halo)c.target[c.property].copyFrom(c.track.sample(this.haloTime));
+    this.applyMorphs(false,true);
     this.refreshPose();this.applyCloth(dt);this.samples++;
   }
   applyHitPulse(casting){
@@ -165,12 +210,16 @@ export class MourningElenaAnimator {
       s.direction.set(.045*Math.sin(this.breathClock*TAU/8-c.segment*.5+c.chain),-1,-.075-.025*Math.sin(this.breathClock*TAU/12-c.segment*.6+c.chain)).normalize();
       Quaternion.FromUnitVectorsToRef(down,s.direction,s.tilt);
       yaw.multiplyToRef(s.tilt,s.world);s.world.multiplyToRef(c.baseWorld,s.world);
-      c.bone.parent.absoluteRotationQuaternion.conjugateToRef(s.inverse);s.inverse.multiplyToRef(s.world,s.local);
-      Quaternion.SlerpToRef(c.bone.rotationQuaternion,s.local,this.clothInitialized?1-Math.exp(-8*dt):1,c.bone.rotationQuaternion);
+      Quaternion.SlerpToRef(c.worldQ,s.world,this.clothInitialized?1-Math.exp(-8*dt):1,c.worldQ);
+      // Smooth only the world target. Parent rotation is compensated instantly,
+      // including halo changes in the same render ID, as in the r9 viewer.
+      c.bone.parent.absoluteRotationQuaternion.conjugateToRef(s.inverse);s.inverse.multiplyToRef(c.worldQ,c.bone.rotationQuaternion);
       c.bone.markAsDirty();c.bone.computeWorldMatrix();
     }
     this.clothInitialized=true;
   }
   dispose(){this.disposed=true;}
-  inspect(){return {state:this.current,castTime:this.castTime,walkTime:this.walkTime,idleTime:this.idleTime,hitTime:this.hitTime,hitActive:this.hitActive,hitPulseWeight:this.hitPulseWeight,hitPulseTime:this.hitPulseTime,hitPulseCount:this.hitPulseCount,haloTime:this.haloTime,haloSpeed:this.haloSpeed,weights:this.weights,samples:this.samples,dynamicChannels:this.body.length,constantChannels:this.fixed.length,interval:this.sampleInterval,morphs:Object.fromEntries(this.morphs.map(m=>[m.name,m.influence]))};}
+  get deathFinished(){return this.deathStarted&&this.deathTime>=this.deathDuration;}
+  get finished(){return this.deathFinished;}
+  inspect(){return {state:this.current,castTime:this.castTime,walkTime:this.walkTime,idleTime:this.idleTime,hitTime:this.hitTime,hitActive:this.hitActive,hitPulseWeight:this.hitPulseWeight,hitPulseTime:this.hitPulseTime,hitPulseCount:this.hitPulseCount,haloTime:this.haloTime,haloSpeed:this.haloSpeed,deathTime:this.deathTime,deathDuration:this.deathDuration,deathWeight:this.deathWeight,deathFinished:this.deathFinished,finished:this.finished,weights:this.weights,samples:this.samples,dynamicChannels:this.body.length,constantChannels:this.fixed.length,deathChannels:this.deathChannels.length,interval:this.sampleInterval,morphs:Object.fromEntries(this.morphs.map(m=>[m.name,m.influence]))};}
 }

@@ -12,11 +12,11 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {instantiateBossModel} from '../src/boss-models.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 import {castReach,mourningMorphs,makeTrack,MourningElenaAnimator} from '../src/mourning-elena-animation.js';
-import {haloSpeedAt,shotWeight,mourningMotionWeights} from '../src/mourning-motion-v2.js';
+import {haloSpeedAt,shotWeight,mourningMotionWeights,deathHaloAdvance} from '../src/mourning-motion-v2.js';
 
 const config=JSON.parse(readFileSync(new URL('../public/assets/mourning-elena.json',import.meta.url)));
-const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s','Chimera_Prayer_Idle_6s','Chimera_Hit_Reaction_1p3s'];
-const morphNames=['Cast_Palm_Cleanup','Cast_Elbow_Form','Breath_Rise','Bust_Settle','Bust_ArmFollow'];
+const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s','Chimera_Prayer_Idle_6s','Chimera_Hit_Reaction_1p3s','Chimera_Death_Lament_5p2s'];
+const morphNames=['Cast_Palm_Cleanup','Cast_Elbow_Form','Breath_Rise','Bust_Settle','Bust_ArmFollow','Hair_Cast_Wind','Death_Scream','Death_Hair_Cry','Death_Hair_Settle','Death_Ground_Contact','Death_Ground_Early'];
 const near=(actual,expected,tolerance=1e-6,label='value')=>assert.ok(Math.abs(actual-expected)<=tolerance,`${label}: ${actual} != ${expected}`);
 const smooth=t=>t*t*(3-2*t),clamp=t=>Math.max(0,Math.min(1,t));
 const weight=t=>smooth(clamp(Math.min(t/.18,(3-t)/.25)));
@@ -68,7 +68,7 @@ test('reach and separate morph clocks preserve exact cast timing and independent
   assert.equal(a.Cast_Palm_Cleanup,b.Cast_Palm_Cleanup);assert.notEqual(a.Breath_Rise,b.Breath_Rise);assert.equal(a.Bust_Settle,b.Bust_Settle);
 });
 
-test('real packed r8 animation, pose, clock and lifetime validation',async t=>{
+test('real packed r9 animation, pose, clock and lifetime validation',async t=>{
   const f=await fixture(t),{asset,animator,actor}=f;
   await t.test('required clips, separate morph targets and LINEAR/constant STEP inventory',()=>{
     assert.deepEqual(asset.animationGroups.map(g=>g.name).sort(),[...required].sort());
@@ -157,7 +157,7 @@ test('real packed r8 animation, pose, clock and lifetime validation',async t=>{
     assert.ok(animator.haloTime>haloBefore);assert.ok(animator.weights.hit>0);near(animator.weights.cast,0);
     animator.transition('walk',{staggerRemaining:0});assert.equal(animator.hitActive,false);near(animator.walkTime,0);animator.update(1/60);assert.ok(animator.walkTime>0);
     animator.update(.25);near(animator.weights.hit,0);animator.transition('walk',{staggerRemaining:.1});near(animator.hitTime,0);
-    animator.update(.04);near(animator.hitTime,.04);animator.transition('dead');const frozen=animator.inspect();animator.update(.5);near(animator.haloTime,frozen.haloTime);near(animator.hitTime,frozen.hitTime);
+    animator.update(.04);near(animator.hitTime,.04);animator.transition('dead');const frozen=animator.inspect();animator.update(.5);near(animator.haloTime,frozen.haloTime+deathHaloAdvance(0,.5));near(animator.hitTime,frozen.hitTime);near(animator.deathTime,.5);
     const before=counts(f),body=animator.body,hair=animator.hair;for(let i=0;i<20;i++){animator.reset();runV2Frame(animator,300);}
     animator.reset();assert.deepEqual(counts(f),before);assert.strictEqual(animator.body,body);assert.strictEqual(animator.hair,hair);near(animator.haloTime,0);near(animator.idleTime,0);near(animator.weights.idle,1);assert.equal(animator.hitActive,false);
     validation.v2={idleSourceMatched:true,castHairSourceMatched:true,haloContinuousAtCastSpeed:1.6,hitRequiresStaggerEdge:true,gameplayRecoveryImmediate:true,resetReusesTracks:true};

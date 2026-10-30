@@ -1,5 +1,5 @@
 {
-  "version": "Mourning Elena · r8-v2-cast-wind-idle-hit",
+  "version": "Mourning Elena · r9-attack-shape-repair",
   "id": "mourning-elena",
   "displayName": "비탄의 마녀",
   "scale": 3.5363933762773603,
@@ -14,7 +14,7 @@
   "height": 3.2,
   "gaitSeconds": 2.4,
   "distanceSourcePerCycle": 0.2285714285714286,
-  "rigRevision": "r8-v2-cast-wind-idle-hit",
+  "rigRevision": "r9-attack-shape-repair",
   "centerOffset": [
     0.00012203053973181,
     0,
@@ -30,7 +30,7 @@
     "walk": "Chimera_Organic_Walk_2p4s",
     "cast": "Chimera_Arcane_Cast_3s",
     "hit": "Chimera_Hit_Reaction_1p3s",
-    "dead": "Chimera_Prayer_Idle_6s"
+    "dead": "Chimera_Death_Lament_5p2s"
   },
   "catalog": [
     {
@@ -2389,131 +2389,11 @@
     },
     {
       "name": "dead",
-      "clip": "Chimera_Prayer_Idle_6s",
-      "duration": 6,
-      "frames": 181,
+      "clip": "Chimera_Death_Lament_5p2s",
+      "duration": 5.2,
+      "frames": 157,
       "fps": 30,
       "rootTrack": [
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
-        [
-          0,
-          0,
-          0
-        ],
         [
           0,
           0,
@@ -3457,30 +3337,6 @@
         0,
         0,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
         0
       ]
     }
@@ -3488,64 +3344,65 @@
   "sourceClips": [
     {
       "name": "Chimera_Arcane_Cast_3s",
-      "channels": 742,
       "duration": 3,
-      "samplers": 742
+      "channels": 743
+    },
+    {
+      "name": "Chimera_Death_Lament_5p2s",
+      "duration": 5.2,
+      "channels": 743
     },
     {
       "name": "Chimera_Hit_Reaction_1p3s",
-      "channels": 742,
       "duration": 1.3,
-      "samplers": 742
+      "channels": 743
     },
     {
       "name": "Chimera_Organic_Walk_2p4s",
-      "channels": 742,
       "duration": 2.4,
-      "samplers": 742
+      "channels": 743
     },
     {
       "name": "Chimera_Prayer_Idle_6s",
-      "channels": 742,
       "duration": 6,
-      "samplers": 742
+      "channels": 743
     },
     {
       "name": "Soft_Breath_and_Bust",
-      "channels": 1,
       "duration": 2.4,
-      "samplers": 1
+      "channels": 1
     },
     {
       "name": "Halo_Slow_Orbit_48s",
-      "channels": 1,
       "duration": 48,
-      "samplers": 1
+      "channels": 1
     },
     {
       "name": "Halo_Cloth_Gravity_48s",
-      "channels": 24,
       "duration": 48,
-      "samplers": 24
+      "channels": 24
     }
   ],
-  "model": "./content/e1c21f783d411793239f361df18a72d9f79e7723f66c293720fa87e6795089d4.gltf",
+  "model": "./content/fe2359ec90de38679823bf5d99cffa3399ef620bcf1effd2ec9b1f228acd7c7c.gltf",
   "resources": [
-    "./content/df89d309ad89ef618141aac31877d3ec5430e87bb93fdfa44266748c80e3d1ff.bin",
-    "./content/aab64824eac6a9390fad03210e9c9783f5987a761eb42703222ddc05c3248ba0.bin",
-    "./content/6ded586e9ee85bdfe2e5682f47889bfab256fd2c027033edaf85ce071291512c.bin",
-    "./content/309d7a9a91b47bfeb12d824b82aff201539c44eccf5d5c408fa756fe622e8fde.bin",
-    "./content/318cf6ea2ca4c7aad30767723e765f7176f4df1d95d82f241d4680f423afb8ac.bin",
-    "./content/c242d3e421790ece11fbfb358cc69c5fe8c705b6e5396c2de6285d4fc5ffba53.bin",
-    "./content/9a07c27386c7aabe4d434edc76c2d1488b36aec981168891b306e3064736ecc2.bin",
-    "./content/f0451acaf3be09c15e24d66cdd240f94fc4dcc8449ebc39959dc33aa10b93227.bin",
-    "./content/3f79be7ce78f22979b51785aab4a916b621a0964290aa4de428f2c753f24936b.bin",
-    "./content/f46bcda0d1bd73ce130878849f21fa0e4be78cb11d639133c4bd2cfed0be7368.bin",
+    "./content/189aaef43b817288dc7f98dfe8769fd40c5151aa47797559d0f21c3ed22d423e.bin",
+    "./content/af9a26582fc1481b654caaa55f94b791bb4787d73259841039f8ea5fe78ba326.bin",
+    "./content/83f0e453b58e70827892cdf2e3b1f699e2991a6f64eb4cc4b40df7cafe3ba0fb.bin",
+    "./content/a8607169166d0ca727300c18173434b9e7c9cfdf284edd83027c5d65ce8aa1f2.bin",
+    "./content/0f9620df315d943772e844b40d5187740e966ca0d164633584326c98834aeea3.bin",
+    "./content/71e589ab8f94328531244503021363cc29e9dd81f54a1afe406a22ee4629ef9b.bin",
+    "./content/8dd8e72bac661a6f4bf8b5cc1d6832cbe16118ffc6db2bf3af159fd553899979.bin",
+    "./content/0472fc0ca38bd8108b54e8959f0c97d7127218d997fdface9bde697db2cd559e.bin",
+    "./content/906e6d525d09d7dccb476c97004b57a3c262ea39e2554184104a6a20674f3602.bin",
+    "./content/fdd6ed3bfa7e34981c344fa47d1d4c420e8e9d6566fcfcda7fc283708c50cf90.bin",
+    "./content/12382af64c3346a2f7ca39b4ead1cdf681f626b3b222d0f31120881f9df6056a.bin",
+    "./content/512c316e7149f2306c652124f90e5d77ca081cd43551852f9d92504c4817f110.bin",
+    "./content/5a300defe87f01a7582b2907b0dffd0aa39d9aee3cc6a42622b14939f04d037a.bin",
     "./content/523dc800cd5cddfdf289da78c3f6c4c5098fd79bc7260784d8b76748c27e8fe7.bin",
     "./content/b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
-    "./content/e1c21f783d411793239f361df18a72d9f79e7723f66c293720fa87e6795089d4.gltf"
+    "./content/fe2359ec90de38679823bf5d99cffa3399ef620bcf1effd2ec9b1f228acd7c7c.gltf"
   ],
-  "sourceSha256": "f79c634f1711bbed96a45cfd466afb60e6d3667fe6f3938162e24f7143abecd5",
+  "sourceSha256": "9673c3aa680f521c8d861001458e41e98dabc6edb046cf726c13540acc31f061",
   "texture": {
     "width": 4096,
     "height": 4096,
@@ -3557,15 +3414,19 @@
     "alpha": false
   },
   "geometry": {
-    "triangles": 143132,
+    "triangles": 143228,
     "originalTopology": true,
     "lossless": true,
     "deformBones": 255,
     "skins": 2,
-    "morphTargets": 5
+    "morphTargets": 11,
+    "renderMeshes": 4,
+    "materials": 2,
+    "morphManagerTargets": 12,
+    "mouthTriangles": 96
   },
   "motion": {
-    "rigRevision": "r8-v2-cast-wind-idle-hit",
+    "rigRevision": "r9-attack-shape-repair",
     "gaitSeconds": 2.4,
     "idleSeconds": 6,
     "hitSeconds": 1.3,
@@ -3574,7 +3435,12 @@
     "haloPeakSpeed": 3,
     "distanceSourcePerCycle": 0.2285714285714286,
     "baseWalkSpeed": 0.33679936916927244,
-    "defaultGaitRate": 2
+    "defaultGaitRate": 2,
+    "deathSeconds": 5.2,
+    "deathBlendSeconds": 0.18,
+    "deathClamp": true,
+    "deathHaloStopSeconds": 2.8,
+    "castWindMorph": "Hair_Cast_Wind"
   },
   "style": {
     "pbr": false,

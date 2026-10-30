@@ -27,7 +27,8 @@ async function fixture(t){
   const e=new MourningElenaEncounter(world,()=>{},()=>{},()=>{},{loadAsset:()=>models.instantiate()}),player=new TransformNode('hurt-player',scene);
   player.position.set(0,6,4);await e.summon(player,{position:new Vector3(0,6,0),rotationY:0});
   t.after(()=>{e.hide();container.dispose();loader.dispose();scene.dispose();engine.dispose();});
-  const body=e.asset.meshes.find(mesh=>mesh.morphTargetManager&&!mesh.metadata?.moonforestOutline);
+  const body=e.asset.meshes.find(mesh=>mesh.name==='Elina_Chimera_Skin');
+  assert.ok(body?.skeleton&&body.morphTargetManager,'test the authored body, not the separate r9 mouth interior');
   return {e,player,body,scene,engine};
 }
 function pose(e,state,time,yaw=0){e.actor.rotation.y=yaw;e.animator.current=state;e.animator.walkTime=state==='walk'?time:0;e.animator.castTime=state==='cast'?time:0;e.animator.gaitBlend=state==='walk'?1:0;e.alignPose();e.animator.sample(0);}
@@ -81,7 +82,7 @@ test('all asymmetric limbs follow actual skinned walk/cast surfaces from front, 
   t.diagnostic(JSON.stringify({poses:poses.length*3,capsules:MOURNING_HURT_SEGMENTS.length,skinnedSurfaceSamples:total,coverage:hits/total,previousCoverage:oldHits/total,perPart:Object.fromEntries(Object.entries(groups).map(([name,g])=>[name,g.hits/g.total]))}));
 });
 
-test('r8 idle, explicit hit and interrupted-cast hit keep skin contacts through the complete clips',async t=>{
+test('r9 idle, explicit hit and interrupted-cast hit keep skin contacts through the complete clips',async t=>{
   const {e,body}=await fixture(t),gate=new MeleeContactGate(),results={},torsoMisses=[];let actionId=0,torsoContacts=0,lowestFoot=Infinity,poses=0;
   const samples={idle:[0,.25,.75,1.5,2.25,3,4.5,5.75,5.999],hit:[0,.035,.07,.16,.35,.65,.95,1.15,1.299],'cast-hit':[0,.035,.07,.16,.35,.65,.95,1.15,1.299]};
   for(const yaw of [0,Math.PI/2,Math.PI])for(const [state,times] of Object.entries(samples))for(const time of times){

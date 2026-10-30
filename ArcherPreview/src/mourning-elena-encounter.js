@@ -22,7 +22,8 @@ export class MourningElenaEncounter extends ElenaEncounter {
   // Use the same physical clearance as a roll; weapon volumes stay unchanged.
   contactSeparation(){return this.radius+.25;}
   prepareAsset(){
-    // Keep five shader slots while texture-mode shaders skip zero-weight targets.
+    // Keep stable shader slots for the authored targets while texture-mode
+    // shaders skip zero-weight targets, including the r9 death corrections.
     // The attribute fallback needs all slots bound; keep the loader's texture.
     for(const manager of new Set(this.asset.meshes.map(m=>m.morphTargetManager).filter(Boolean))){manager.areUpdatesFrozen=true;manager.optimizeInfluencers=manager.isUsingTextureForTargets;manager.numMaxInfluencers=manager.numTargets;manager.areUpdatesFrozen=false;}
   }

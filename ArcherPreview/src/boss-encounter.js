@@ -86,7 +86,7 @@ export class BossEncounter {
       }
       this.animator?.dispose();this.animator=this.createAnimator();
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
-      this.death.reset();
+      this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
       for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
@@ -107,6 +107,7 @@ export class BossEncounter {
   }
   get playerAlive(){return !this.active||this.playerHp>0;}
   get corpseGone(){return this.death.finished;}
+  get hasAuthoredLamentDeath(){return this.kind==='elena'&&this.phase===2&&this.config?.animations?.dead==='Chimera_Death_Lament_5p2s';}
   updateRenderRange(camera){
     if(!this.active||this.corpseGone)return;
     // Posed skinned bounds intentionally bypass normal frustum tests. Explicit
@@ -117,14 +118,19 @@ export class BossEncounter {
     for(const mesh of this.asset.meshes)if(mesh.getTotalVertices())mesh.isVisible=visible;
   }
   updateDeath(dt){
+    if(this.corpseGone)return;
     if(this.death.advance(dt)){
       this.grab.reset();this.gate.reset();
       this.onDefeat({kind:this.kind,position:this.actor.position.clone()});
-      for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
+      if(this.death.holdPose){this.pendingEvents=[];this.bossReaction.reset();this.knockVelocity.setAll(0);}
+      else for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
     }
     // Visibility is per mesh, so living enemies sharing this material do not fade.
-    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=visibility*this.death.opacity;
-    if(this.corpseGone){this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);}
+    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=this.death.holdPose?1:visibility*this.death.opacity;
+    if(this.corpseGone){
+      if(this.death.holdPose)for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
+      this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);
+    }
   }
   createBrain(durations){return new BossBrain(durations);}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
@@ -170,7 +176,7 @@ export class BossEncounter {
     const travelDistance=Math.hypot(target.x-this.actor.position.x,target.z-this.actor.position.z);
     if(this.brain.mode==='evade')this.showDefense('evade');
     if(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
-      if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
+      if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&!(this.brain.hp<=0&&this.death.holdPose)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
     }
     if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});

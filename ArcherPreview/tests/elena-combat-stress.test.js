@@ -129,7 +129,7 @@ test('twenty complete two-phase replays, death/restart and map trips retain resi
     for(let index=0;index<5;index++){begin(f,b,index);maxWarningBuffers=Math.max(maxWarningBuffers,rawBuffers(b).length);step(f,.05);b.spell.reset();}
     begin(f,b,cycle%5);const geometryBefore=buffers(b);for(let frame=0;frame<10;frame++)step(f,1/60);const geometryAfter=buffers(b);
     geometryBefore.forEach((part,index)=>{for(const key of Object.keys(part))assert.strictEqual(geometryAfter[index][key],part[key],'visible warning reuses '+key);});
-    b.brain.hit({damage:9999});for(let i=0;i<170;i++)step(f,1/30,{state:'idle'},false);assert.equal(f.defeats.length,cycle+1);assert.equal(b.corpseGone,true);
+    b.brain.hit({damage:9999});for(let i=0;i<Math.ceil(b.death.duration*30)+1;i++)step(f,1/30,{state:'idle'},false);assert.equal(f.defeats.length,cycle+1);assert.equal(b.corpseGone,true);
     assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);assert.equal(f.battle.allPooled.length,2);
     const current=counts(f);baseline??=current;assert.deepEqual(current,baseline,'cycle '+cycle+' must retain fixed scene resource counts');samples.push(current);
     for(const warm of warmed){assert.equal(warm.e.spell.cacheMisses,warm.misses,'warm spell topology must not allocate again');assert.equal(warm.e.spell.topologies.length,warm.topologies);const currentBuffers=cachedBuffers(warm.e);assert.equal(currentBuffers.length,warm.buffers.size);assert.ok(currentBuffers.every(buffer=>warm.buffers.has(buffer)),'warm vertex/normal/index buffers remain identical');}

@@ -1,4 +1,4 @@
-// Read-only near-LOD cave / actual r8 morph+skin surface audit. No browser/GPU.
+// Read-only near-LOD cave / actual packed morph+skin surface audit. No browser/GPU.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NullEngine,Scene,TransformNode,Vector3,VertexBuffer} from '@babylonjs/core';
@@ -20,6 +20,22 @@ import {mourningCaveClearance} from '../src/mourning-cave-clearance.js';
 import {MOURNING_CAVE_CLEARANCE_DATA as mask} from '../src/mourning-cave-clearance-data.js';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
+
+// Death must enter through transition(): it snapshots all 741 channels before
+// the .18-second blend. Directly assigning current='dead' cannot reproduce it.
+export function sampleClearancePose(animator,schedule){
+ const [state,time,haloTime,hitPulseTime,from]=schedule;
+ const living=(s,t,h,p,gait)=>{
+  animator.reset();animator.transition(s,{clipTime:s==='cast'?t:0,staggerRemaining:s==='hit'?2:0});
+  animator.idleTime=s==='idle'?t:0;animator.walkTime=s==='walk'?t:0;animator.hairTime=s==='walk'?t:0;
+  animator.gaitBlend=gait??(s==='walk'?1:0);animator.hitTime=s==='hit'?t:0;
+  animator.haloTime=h??t*2;animator.breathClock=t;if(p!==undefined)animator.hitPulseTime=p;animator.sample(0);
+ };
+ if(state!=='dead'){living(state,time,haloTime,hitPulseTime);return;}
+ const origin=from??{state:'cast',time:1.2,gaitBlend:.05};
+ living(origin.state,origin.time,haloTime,undefined,origin.gaitBlend);animator.transition('dead');
+ for(let elapsed=0;elapsed<time-1e-9;){const dt=Math.min(1/60,time-elapsed);animator.update(dt);elapsed+=dt;}
+}
 
 export async function auditElenaClearance(options={}){
 const base=new URL('../public/assets/',import.meta.url),out=new URL('../reports/elena-clearance/',import.meta.url);mkdirSync(out,{recursive:true});
@@ -95,13 +111,13 @@ if(safeOnly&&!options.schedules){
  for(const pose of [...baked].filter(p=>p.hitPulseTime!==undefined).sort((a,b)=>b.radius-a.radius).slice(0,3))schedules.push([pose.state,pose.time,pose.haloTime,pose.hitPulseTime]);
 }
 const poses=[];
-for(const [state,time,haloTime,hitPulseTime]of schedules){
- animator.reset();animator.current=state;animator.idleTime=state==='idle'?time:0;animator.walkTime=state==='walk'?time:0;animator.hairTime=state==='walk'?time:0;animator.gaitBlend=state==='walk'?1:0;animator.castTime=state==='cast'?time:0;animator.hitActive=state==='hit';animator.hitTime=state==='hit'?time:0;animator.haloTime=haloTime??time*2;animator.breathClock=time;if(hitPulseTime!==undefined)animator.hitPulseTime=hitPulseTime;animator.sample(0);
+for(const schedule of schedules){
+ const [state,time,haloTime,hitPulseTime,from]=schedule;sampleClearancePose(animator,schedule);
  for(const s of asset.skeletons)s.prepare(true);
- const meshes=body.map(m=>{const positions=worldPositions(m,true);return {name:m.name,positions,indices:Uint32Array.from(m.getIndices()),bounds:bounds(positions)};});
+ const meshes=body.filter(m=>m.isEnabled()).map(m=>{const positions=worldPositions(m,true);return {name:m.name,positions,indices:Uint32Array.from(m.getIndices()),bounds:bounds(positions)};});
  const lo=[0,1,2].map(k=>Math.min(...meshes.map(m=>m.bounds.lo[k]))),hi=[0,1,2].map(k=>Math.max(...meshes.map(m=>m.bounds.hi[k])));let radius=0;
  for(const m of meshes)for(let i=0;i<m.positions.length;i+=3)radius=Math.max(radius,Math.hypot(m.positions[i],m.positions[i+2]));
- const pose={state,time,haloTime:animator.haloTime,hitPulseTime,meshes,bounds:{lo,hi},radius};options.onPose?.(pose);poses.push(options.retainPoses===false?{...pose,meshes:undefined}:pose);
+ const pose={state,time,haloTime:animator.haloTime,hitPulseTime,from,meshes,bounds:{lo,hi},radius};options.onPose?.(pose);poses.push(options.retainPoses===false?{...pose,meshes:undefined}:pose);
 }
 const dispose=()=>{animator.dispose();for(const c of containers)c.dispose();for(const l of loaders)l.dispose();scene.dispose();engine.dispose();};
 if(options.geometryOnly)return {geometry,poses,terrain,navigation,config,placements:nearby,dispose};
@@ -124,6 +140,7 @@ function makeBVH(mesh){
  return {root:build(Array.from({length:total},(_,i)=>i)),boxes,mesh};
 }
 function query(tree,tri,box,node=tree.root){if(!overlaps(node,box))return -1;if(node.ids){for(const t of node.ids)if(overlaps(tree.boxes[t],box)&&triHit(triangle(tree.mesh,t),tri))return t;return -1;}const left=query(tree,tri,box,node.left);return left>=0?left:query(tree,tri,box,node.right);}
+function queryBox(tree,box,node=tree.root,result=[]){if(!overlaps(node,box))return result;if(node.ids){for(const t of node.ids)if(overlaps(tree.boxes[t],box))result.push(t);}else{queryBox(tree,box,node.left,result);queryBox(tree,box,node.right,result);}return result;}
 function transformedBox(box,p,yaw){const c=Math.cos(yaw),s=Math.sin(yaw),points=[];for(const x of [box.lo[0],box.hi[0]])for(const z of [box.lo[2],box.hi[2]])for(const y of [box.lo[1],box.hi[1]])points.push(p.x+c*x+s*z,p.y+y,p.z-s*x+c*z);return bounds(points);}
 const locations=[{...ELENA_HOME,label:'home'}],unique=new Set(['29.00,-27.00']);
 function addPoint(p,label){if(!p)return;const key=p.x.toFixed(2)+','+p.z.toFixed(2);if(unique.has(key))return;unique.add(key);locations.push({x:p.x,z:p.z,label});}
@@ -139,18 +156,21 @@ if(safeOnly){
 if(options.locations){locations.splice(0,locations.length,...options.locations.map(p=>({...p})));}
 for(const p of locations)p.y=terrain.heightAt(p.x,p.z);
 const contacts=[],samples=[],yaws=options.yaws??Array.from({length:quick?4:8},(_,i)=>i*Math.PI*2/(quick?4:8)),yawCount=yaws.length;let tested=0,pairs=0;
+// Environment BVHs only reject disjoint triangle AABBs. This is equivalent to
+// the former full mesh scan, but avoids millions of irrelevant terrain checks.
+const environmentTrees=boundsOnly?null:new Map(geometry.map(g=>[g,makeBVH(g)]));
 if(!boundsOnly)for(const pose of poses){
  const trees=pose.meshes.map(makeBVH);let poseContacts=0;
  for(const p of locations)for(const yaw of yaws){
   const c=Math.cos(yaw),s=Math.sin(yaw),box=transformedBox(pose.bounds,p,yaw),candidates=geometry.filter(g=>overlaps(g.bounds,box));tested++;let hits=0;
   for(const g of candidates){
-   for(const tree of trees){if(!overlaps(transformedBox(tree.mesh.bounds,p,yaw),g.bounds))continue;pairs++;let contact;
-    for(let t=0;t<g.indices.length/3;t++){
+   for(const tree of trees){const meshBox=transformedBox(tree.mesh.bounds,p,yaw);if(!overlaps(meshBox,g.bounds))continue;pairs++;let contact;
+    for(const t of queryBox(environmentTrees.get(g),meshBox)){
      const worldTri=triangle(g,t),worldBox=bounds(worldTri.flat());if(!overlaps(worldBox,box))continue;
      const local=worldTri.map(([x,y,z])=>{x-=p.x;z-=p.z;return [c*x-s*z,y-p.y,s*x+c*z];}),localBox=bounds(local.flat()),hit=query(tree,local,localBox);
      if(hit>=0){contact={placement:g.placement,asset:g.asset,environmentTriangle:t,bodyMesh:tree.mesh.name,bodyTriangle:hit,worldEnvironmentTriangle:worldTri};break;}
     }
-    if(contact){contacts.push({state:pose.state,time:pose.time,position:p,yaw,...contact});hits++;poseContacts++;}
+    if(contact){contacts.push({state:pose.state,time:pose.time,from:pose.from,haloTime:pose.haloTime,position:p,yaw,...contact});hits++;poseContacts++;}
    }
   }
   samples.push({state:pose.state,time:pose.time,x:p.x,z:p.z,yaw,contacts:hits});
@@ -163,9 +183,13 @@ const swept={lo:[Math.min(...locations.map(p=>p.x))-maxRadius,-Infinity,Math.min
 for(let t=0;t<dome.indices.length/3;t++){const tri=triangle(dome,t);if(overlaps(bounds(tri.flat()),swept))minDomeHeight=Math.min(minDomeHeight,...tri.map(v=>v[1]));}
 minCeilingGap=minDomeHeight-Math.max(...locations.map(p=>p.y))-maxY;
 const afterHashes=body.map(m=>createHash('sha256').update(Buffer.from(Float32Array.from(m.getVerticesData(VertexBuffer.PositionKind)).buffer)).digest('hex'));
-const report={generatedAt:new Date().toISOString(),scope:'Read-only actual near-LOD cave geometry against morph+skin-deformed r8 at 5.7 m body scale, CPU NullEngine',source:{model:config.model,revision:config.rigRevision,scale:config.scale*MOURNING_SIZE_SCALE,layoutSha256:sha('../src/witch-cave-layout.js'),samplerSha256:sha('../src/mourning-elena-animation.js'),manifestSha256:sha('../public/assets/witch-cave.json')},method:{quick,boundsOnly,coordinateSystem:'Babylon RH world xyz',environmentLod:0,skin:'getPositionData(true,true), skeleton.prepare(true), world transform',narrowPhase:'All triangle surfaces, BVH AABB then 3D triangle SAT with coplanar axes; first contact per environment mesh/body mesh pair',yawCount,poseSamples:poses.length,locationSamples:locations.length,poseLocationYawSamples:tested,candidateMeshPairs:pairs,limitations:'Finite animation and route samples, no continuous all-time guarantee; surfaces are tested rather than assuming scanned meshes are watertight solids. No GPU/material/camera visibility measurement.'},existingNavigation:{radius:MOURNING_SIZE.radius,collisionBakeVerticalRange:[.22,1.75],note:'Existing baked field covers player height only. Navigation-free center does not certify full creature pose clearance.'},poseBounds:poses.map(({state,time,haloTime,bounds,radius})=>({state,time,haloTime,bounds,radius})),ceiling:{exists:true,geometry:'cave-distant-ceiling',roofFormula:'7 + .4*sqrt(max(0,67^2-x^2-z^2)) plus ripple +/-0.6m',cutaway:'Fragment discard around eye-focus segment, radius21m at eye to14m at focus. Camera-dependent visibility, no physical collision.',conservativeSampledDomeMinY:minDomeHeight,maxCreatureLocalY:maxY,minimumEstimatedGap:minCeilingGap,note:'Dome analytic sampling estimate; actual overhead props separately tested from near-LOD triangles.'},locations,environment:geometry.map(({placement,asset,name,bounds,indices})=>({placement,asset,name,bounds,triangles:indices.length/3})),contacts,summary:{contacts:contacts.length,contactPlacements:[...new Set(contacts.map(c=>c.placement+' '+c.asset))],homeContacts:contacts.filter(c=>c.position.label==='home').length,maxHorizontalRadius:maxRadius,navigationRadius:MOURNING_SIZE.radius,baseGeometryUnchanged:JSON.stringify(baseHashes)===JSON.stringify(afterHashes)}};
+const report={generatedAt:new Date().toISOString(),scope:'Read-only actual near-LOD cave geometry against the current packed morph+skin model at 5.7 m body scale, CPU NullEngine',source:{model:config.model,revision:config.rigRevision,scale:config.scale*MOURNING_SIZE_SCALE,layoutSha256:sha('../src/witch-cave-layout.js'),samplerSha256:sha('../src/mourning-elena-animation.js'),manifestSha256:sha('../public/assets/witch-cave.json')},method:{quick,boundsOnly,coordinateSystem:'Babylon RH world xyz',environmentLod:0,skin:'getPositionData(true,true), skeleton.prepare(true), world transform',narrowPhase:'All triangle surfaces, BVH AABB then 3D triangle SAT with coplanar axes; first contact per environment mesh/body mesh pair',yawCount,poseSamples:poses.length,locationSamples:locations.length,poseLocationYawSamples:tested,candidateMeshPairs:pairs,limitations:'Finite animation and route samples, no continuous all-time guarantee; surfaces are tested rather than assuming scanned meshes are watertight solids. No GPU/material/camera visibility measurement.'},existingNavigation:{radius:MOURNING_SIZE.radius,collisionBakeVerticalRange:[.22,1.75],note:'Existing baked field covers player height only. Navigation-free center does not certify full creature pose clearance.'},poseBounds:poses.map(({state,time,haloTime,bounds,radius})=>({state,time,haloTime,bounds,radius})),ceiling:{exists:true,geometry:'cave-distant-ceiling',roofFormula:'7 + .4*sqrt(max(0,67^2-x^2-z^2)) plus ripple +/-0.6m',cutaway:'Fragment discard around eye-focus segment, radius21m at eye to14m at focus. Camera-dependent visibility, no physical collision.',conservativeSampledDomeMinY:minDomeHeight,maxCreatureLocalY:maxY,minimumEstimatedGap:minCeilingGap,note:'Dome analytic sampling estimate; actual overhead props separately tested from near-LOD triangles.'},locations,environment:geometry.map(({placement,asset,name,bounds,indices})=>({placement,asset,name,bounds,triangles:indices.length/3})),contacts,summary:{contacts:contacts.length,contactPlacements:[...new Set(contacts.map(c=>c.placement+' '+c.asset))],homeContacts:contacts.filter(c=>c.position.label==='home').length,maxHorizontalRadius:maxRadius,navigationRadius:MOURNING_SIZE.radius,baseGeometryUnchanged:JSON.stringify(baseHashes)===JSON.stringify(afterHashes)}};
 report.method.safeOnly=safeOnly;report.ceiling.cutaway='Fragment discard around eye-focus segment, radius7.5m at eye to5.5m at focus; physical dome unchanged.';report.ceiling.note='Lower bound of exact dome triangle vertex heights for every triangle whose XZ bounds touch the complete swept character rectangle; actual dome triangles also included in narrow phase.';
 report.method.normalHitPulseSamples=poses.filter(p=>p.hitPulseTime!==undefined).length;
+report.floor={minimumCreatureLocalY:Math.min(...poses.map(p=>p.bounds.lo[1])),note:'The nearly flat foot-contact floor is excluded from wall/prop SAT. Negative local Y is recorded separately; no correction is applied to source motion.'};
+report.method.deathTransitionSamples=poses.filter(p=>p.state==='dead').length;
+report.method.deathSampling='transition(dead) from specified living snapshot, then update(dt) at 60 Hz to the requested time; final 5.2-second pose clamped';
+report.poseBounds.forEach((p,i)=>{if(poses[i].from)p.from=poses[i].from;});
 report.poseBounds.forEach((p,i)=>{if(poses[i].hitPulseTime!==undefined)p.hitPulseTime=poses[i].hitPulseTime;});
 writeFileSync(new URL(options.outputName??(boundsOnly?'geometry-bounds.json':quick?'geometry-audit-quick.json':'geometry-audit.json'),out),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report.summary));
 animator.dispose();for(const c of containers)c.dispose();for(const l of loaders)l.dispose();scene.dispose();engine.dispose();

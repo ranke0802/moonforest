@@ -27,9 +27,10 @@ async function fixture(t,{pbr=false}={}){
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;scene.useConstantAnimationDeltaTime=true;
   // NullEngine has no GPU upload completion; prepare the shared outline sampler.
   caveFogFallback(scene).getInternalTexture().isReady=true;
-  // Exercise production bone float textures. NullEngine has no 2D-array GPU
-  // backend, so morph shader verification uses its vertex-attribute route.
-  Object.assign(engine.getCaps(),{textureFloat:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});
+  // Exercise the WebGL2 morph texture bindings used on S23/iPhone. NullEngine
+  // keeps inert texture arrays with the real data/layout, without GPU upload.
+  Object.assign(engine.getCaps(),{textureFloat:true,canUseGLVertexID:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});
+  engine.createRawTexture2DArray=(data,width,height,depth,format,mips,invertY,sampling,compression,type)=>{const texture=engine.createRawTexture(data,width,height,format,mips,invertY,sampling,compression,type);texture.depth=depth;texture.is2DArray=true;return texture;};
   engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=true;
   const camera=new FreeCamera('two-phase-review',new Vector3(29,9,-18),scene);camera.setTarget(new Vector3(29,7,-27));
   const loaded=[];
@@ -140,14 +141,14 @@ test('real phase-one defeat transforms once and preserves player state through p
 test('the actual mourning model library adopts one packed container without cloning morph managers or skeletons',async t=>{
   const f=await fixture(t),{container,config}=f.mourningModels,library=new BossModelLibrary(f.scene,'mourning-elena');
   library.container=container;library.config=config;library.load=async()=>{library.loads=1;};
-  const originalSkeletons=[...container.skeletons],originalManagers=[...new Set(container.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.equal(originalManagers.length,1);
+  const originalSkeletons=[...container.skeletons],originalManagers=[...new Set(container.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.equal(originalManagers.length,2);assert.deepEqual(originalManagers.map(manager=>manager.numTargets).sort((a,b)=>a-b),[1,11]);
   const first=await library.instantiate(),after=snapshot(f);
   for(let i=0;i<12;i++){
     const again=await library.instantiate();assert.strictEqual(again.asset,first.asset);assert.strictEqual(again.config,config);assert.deepEqual(snapshot(f),after);
   }
   assert.deepEqual(first.asset.skeletons,originalSkeletons);first.asset.skeletons.forEach((skeleton,index)=>assert.strictEqual(skeleton,originalSkeletons[index]));
-  const adoptedManagers=[...new Set(first.asset.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.deepEqual(adoptedManagers,originalManagers);assert.strictEqual(adoptedManagers[0],originalManagers[0]);
-  assert.equal(f.scene.morphTargetManagers.filter(manager=>manager===originalManagers[0]).length,1);assert.equal(f.scene.skeletons.length,originalSkeletons.length);
+  const adoptedManagers=[...new Set(first.asset.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.deepEqual(adoptedManagers,originalManagers);
+  originalManagers.forEach((manager,index)=>{assert.strictEqual(adoptedManagers[index],manager);assert.equal(f.scene.morphTargetManagers.filter(candidate=>candidate===manager).length,1);});assert.equal(f.scene.skeletons.length,originalSkeletons.length);
 });
 
 test('first offline pose and same-frame relocation refresh the mesh root before bones and cloth',async t=>{
@@ -224,10 +225,10 @@ test('five real phase-two casts stay fixed, expose valid hurt capsules, and manu
   for(const alias of ['mixamorig:Head','mixamorig:Hips','mixamorig:RightHand'])assert.ok(e.nodes[alias]);
 });
 
-test('phase-two painted body and morph-normal silhouette compile with stable five-target variants',async t=>{
+test('phase-two painted body and morph-normal silhouette compile with stable r9 target variants',async t=>{
   const f=await fixture(t,{pbr:true});f.battle.residentPhase=2;await f.battle.activateResident(f.player);const e=f.battle.mourningPool[0];e.reviewMode=true;e.reviewMovement={x:0,z:0};e.renderVisible=true;
-  const body=e.asset.meshes.find(m=>m.morphTargetManager&&!m.metadata?.moonforestOutline),outline=e.asset.meshes.find(m=>m.morphTargetManager&&m.metadata?.moonforestOutline);assert.ok(body);assert.ok(outline);
-  assert.strictEqual(outline.morphTargetManager,body.morphTargetManager);assert.equal(body.morphTargetManager.optimizeInfluencers,false);assert.equal(body.morphTargetManager.numMaxInfluencers,5);assert.equal(body.morphTargetManager.numTargets,5);
+  const body=e.asset.meshes.find(m=>m.name==='Elina_Chimera_Skin'&&!m.metadata?.moonforestOutline),outline=e.asset.meshes.find(m=>m.parent===body&&m.metadata?.moonforestOutline);assert.ok(body);assert.ok(outline);
+  assert.strictEqual(outline.morphTargetManager,body.morphTargetManager);assert.equal(body.morphTargetManager.isUsingTextureForTargets,true);assert.equal(body.morphTargetManager.optimizeInfluencers,true);assert.equal(body.morphTargetManager.numMaxInfluencers,11);assert.equal(body.morphTargetManager.numTargets,11);
   assert.equal(outline.metadata.outlinePixels,.5);assert.equal(body.material.metadata.elenaStyle.brightness,1.35);
   const effects=[];
   for(const time of [0,1.5,3]){

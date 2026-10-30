@@ -1,5 +1,5 @@
 // CPU/offline only: preserve source render geometry, bake rotation-independent
-// root safety from exact near-LOD surfaces and the actual skinned r8 envelope.
+// root safety from exact near-LOD surfaces and the actual skinned living envelope.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {auditElenaClearance} from './audit-elena-clearance.mjs';
@@ -55,6 +55,6 @@ const report={generatedAt:new Date().toISOString(),grid:{step,minX,minZ,width,he
 writeFileSync(new URL('mask-current.json',out),JSON.stringify(report,null,2)+'\n');
 if(process.argv.includes('--write')){
  const data={version:1,step,minX,minZ,width,height,ground,groundTolerance,margin,sizeScale:MOURNING_SIZE_SCALE,hashes,poseSamples:context.poses.length,bands,runs:results.current.stacked.runs};
- writeFileSync(new URL('../src/mourning-cave-clearance-data.js',import.meta.url),'// Generated from unchanged near-LOD meshes and r8 skin poses by scripts/bake-mourning-cave-clearance.mjs.\nexport const MOURNING_CAVE_CLEARANCE_DATA='+JSON.stringify(data)+';\n');
+ writeFileSync(new URL('../src/mourning-cave-clearance-data.js',import.meta.url),'// Generated from unchanged near-LOD meshes and r9 living skin poses by scripts/bake-mourning-cave-clearance.mjs.\nexport const MOURNING_CAVE_CLEARANCE_DATA='+JSON.stringify(data)+';\n');
 }
 context.dispose();
