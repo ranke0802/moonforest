@@ -16,6 +16,8 @@ import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {caveObstacles} from '../src/witch-cave-layout.js';
 import {setWorldCharacter} from '../src/world-limits.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {CaveFogRuntime} from '../src/cave-fog-runtime.js';
+import {updateBossHealthPosition} from '../src/boss-health-bar.js';
 
 const base=new URL('../public/assets/',import.meta.url),cache=new Map();
 const near=(a,b,tolerance=1e-6,label='value')=>assert.ok(Math.abs(a-b)<=tolerance,`${label}: ${a} != ${b}`);
@@ -86,6 +88,22 @@ test('an enlarged resident or transformation finds a clear spawn outside player 
   await witch.summon(player,{position:new Vector3(43,6,-27),rotationY:0});
   assert.ok(witch.movementNavigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
   assert.equal(f.mourningModels.instances,1);assert.equal(witch.actor.scaling.x,witch.config.scale*MOURNING_SIZE_SCALE);
+});
+
+test('hidden pooled Elena phases regain their HP bars when summoned outside the old fog owner',async t=>{
+  const f=await fixture(t),projection={project:()=>({visible:true,x:40,y:30})},hp={hidden:false,style:{}};
+  for(const phase of [1,2]){
+    await f.battle.summonResident(f.player,phase);const enemy=phase===1?f.battle.elenaPool[0]:f.battle.mourningPool[0],asset=enemy.asset,position=enemy.actor.position.clone(),wall=position.x-1.5;
+    const fog=new CaveFogRuntime(f.world,{isOpaque:x=>x>=wall&&x<wall+1});t.after(()=>fog.dispose());
+    const viewer={x:position.x-4,z:position.z};fog.update(viewer,0,{force:true,encounters:[enemy]});fog.beforeRender();fog.restore();
+    assert.equal(enemy.fogVisible,false);updateBossHealthPosition(f.scene,enemy,hp,projection);assert.equal(hp.hidden,true);
+    enemy.hide();fog.update(viewer,1,{force:true,encounters:[]});fog.dispose();
+    assert.equal(enemy.fogVisible,false,'inactive pooled enemies are no longer owned by the disposed fog runtime');
+    await enemy.summon(f.player,{position});
+    assert.equal(enemy.asset,asset,'summon reuses the same loaded actor');assert.equal(enemy.active,true);assert.equal(enemy.fogVisible,true);
+    updateBossHealthPosition(f.scene,enemy,hp,projection);assert.equal(hp.hidden,false,`phase ${phase} HP bar must recover after pooled summon`);
+  }
+  assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);
 });
 test('real phase-one defeat transforms once and preserves player state through phase-two trips, reset and final death',async t=>{
   const f=await fixture(t),{battle,player,world}=f;battle.combat.hp=312;battle.combat.defense=9;battle.potions.remaining=1;

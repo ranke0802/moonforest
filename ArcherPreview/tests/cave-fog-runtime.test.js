@@ -17,6 +17,7 @@ import {placementBounds} from '../src/village-demand.js';
 import {ElenaPaint} from '../src/elena-style.js';
 import {attachCharacterOutlines} from '../src/character-outlines.js';
 import {bindCaveFogMaterial,caveFogFallback} from '../src/cave-fog-binding.js';
+import {updateBossHealthPosition} from '../src/boss-health-bar.js';
 
 function fixture(t,{terrain=false,realSight=false}={}){
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;engine.getCaps().instancedArrays=true;
@@ -73,7 +74,7 @@ test('unseen enemy body, contact, spells, ink and UI point gate agree while game
  const {scene,world,fog}=fixture(t),enemy=record(scene,'enemy',5),mesh=enemy.meshes[0];
  const shells=attachCharacterOutlines({meshes:[mesh]},'elena');
  const spell=MeshBuilder.CreateGround('spell',{width:3,height:3},scene);spell.position.x=5;spell.material=new StandardMaterial('spell',scene);spell.material.alpha=.3;
- const encounter={actor:enemy.root,asset:{meshes:[mesh,...shells]},spell:{mesh:spell},contact:{mesh:MeshBuilder.CreateBox('contact',{},scene)}};
+ const encounter={active:true,actor:enemy.root,asset:{meshes:[mesh,...shells]},spell:{mesh:spell},contact:{mesh:MeshBuilder.CreateBox('contact',{},scene)}};
  fog.update({x:-5,z:0},0,{force:true,encounters:[encounter]});fog.beforeRender();
  assert.equal(encounter.fogVisible,false);assert.equal(fog.allowsPoint(enemy.root.position),false);
  for(const m of [mesh,...shells,spell,encounter.contact.mesh])assert.equal(m.isVisible,false);
@@ -81,6 +82,10 @@ test('unseen enemy body, contact, spells, ink and UI point gate agree while game
  fog.update({x:5,z:0},1,{force:true});fog.beforeRender();assert.equal(encounter.fogVisible,true);assert.equal(fog.allowsPoint(enemy.root.position),true);fog.restore();
  await shells[0].material.forceCompilationAsync(shells[0]);assert.equal(shells[0].material.isReady(shells[0],false,shells[0].subMeshes[0]),true);const code=shells[0].subMeshes[0].effect.fragmentSourceCode;
  assert.match(code,/caveFogHidesInk\(caveInkPosition\)/);assert.ok(world.scene.metadata.caveFogRuntime===fog);
+ const hp={hidden:false,style:{}},projection={project:()=>({visible:true,x:30,y:20})};
+ fog.update({x:-5,z:0},2,{force:true});fog.beforeRender();updateBossHealthPosition(scene,encounter,hp,projection);assert.equal(hp.hidden,true);
+ fog.dispose();assert.equal(encounter.fogVisible,true);updateBossHealthPosition(scene,encounter,hp,projection);assert.equal(hp.hidden,false,'leaving the fog map restores the active enemy HP bar');
+ assert.equal(mesh.isVisible,true,'disposing during a gated frame restores body visibility too');
 });
 
 test('real steep terrain uses shared original triangles and rejects nonvisible detail patches',async t=>{

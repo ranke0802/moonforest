@@ -114,6 +114,8 @@ export class CaveFogRuntime {
   inspect(){return {...this.fog.stats,...this.stats,revision:this.fog.revision,maskBytes:this.fog.rgba.byteLength,sharedTerrainGeometry:this.cover?.geometry===this.ground?.geometry,coverPatchLimit:this.patches.length};}
   dispose(){
     if(this.disposed)return;this.disposed=true;this.restore();const scene=this.world.scene;
+    for(const enemy of this.encounters)enemy.fogVisible=true;
+    this.encounters=[];
     scene.onNewMaterialAddedObservable.remove(this.materialObserver);scene.onMaterialRemovedObservable.remove(this.removedMaterial);scene.onNewMeshAddedObservable.remove(this.newMesh);scene.onMeshRemovedObservable.remove(this.removedMesh);scene.onBeforeRenderObservable.remove(this.before);scene.onAfterRenderObservable.remove(this.after);scene.onDisposeObservable.remove(this.sceneDispose);
     for(const p of this.patches){p.source.isInFrustum=p.sourceCull;p.source.render=p.sourceRender;}
     for(const plugin of this.plugins)if(plugin.runtime===this)plugin.runtime=null;this.plugins.clear();

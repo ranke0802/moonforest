@@ -93,7 +93,7 @@ export class BossEncounter {
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.world.terrain?.place(this.actor.position);
-      this.active=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
+      this.active=true;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
       this.routeState={};this.dodgeContactClearance=false;
       this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
