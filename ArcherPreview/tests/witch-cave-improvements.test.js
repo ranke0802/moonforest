@@ -104,6 +104,9 @@ test('ground patches retain every triangle and conservatively enclose their vert
 
 test('cave colour pools affect environment only and water stays opaque and bounded',async()=>{
  const engine=new NullEngine(),world=createWorld(engine,{cave:true,touchDevice:true});
+ // NullEngine has no GPU upload completion for RawTexture. Model the ready
+ // visibility upload so forceCompilation can inspect the water shader.
+ const fogTexture=world.caveFog?.texture.getInternalTexture();if(fogTexture)fogTexture.isReady=true;
  try{
   const environment=MeshBuilder.CreateBox('test-rock',{},world.scene),player=MeshBuilder.CreateBox('test-player',{},world.scene);
   environment.material=new PBRMaterial('rock',world.scene);player.material=new PBRMaterial('unchanged-player',world.scene);

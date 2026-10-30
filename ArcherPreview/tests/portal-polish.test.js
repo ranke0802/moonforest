@@ -6,6 +6,7 @@ import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {createWorld,replaceWorldMap} from '../src/world.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 import {ARENA_RADIUS,ENEMY_ARENA_RADIUS} from '../src/world-limits.js';
 import {createPortalMist} from '../src/portal-mist.js';
 import {loadStreamedVillage} from '../src/village-streamed-environment.js';
@@ -101,6 +102,9 @@ test('actual streamed village/forest round trips retain the player and drain in-
   // The glTF loader asks the scene for its one shared default material when
   // image decoding is omitted in NullEngine. Warm that fixture before counting.
   scene.defaultMaterial;playerTexture.getInternalTexture().isReady=true;
+  // The scene-wide outline fallback is retained across maps, like the player.
+  // Warm its upload and disposal observer before capturing the retained baseline.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   const initial=counts();let loaded=0,holdNext=false,unblock,entered;const loadedContainers=[];
   const services={initialize:async()=>{},ground:async()=>{},loadContainer:async(model,scene)=>{
     const {gltf,files}=await readRuntimeGltf(new URL(model.pathname.split('/').at(-1),new URL('content/',base)));

@@ -4,7 +4,7 @@ export class AudioBeds {
   constructor(owner){
     this.owner=owner;this.definitions={music:{},ambience:{}};this.desired={music:null,ambience:null};
     this.current={music:null,ambience:null};this.cache=new Map();this.voices=new Set();this.failed=new Set();
-    this.pending=null;this.disposed=false;this.ready=false;this.abort=null;
+    this.pending=null;this.disposed=false;this.ready=false;this.abort=null;this.retryAfter=0;
   }
   configure(manifest,url){this.definitions={music:manifest.music??{},ambience:manifest.ambience??{}};this.base=url;}
   request(channel,key,fade=1.2){
@@ -24,6 +24,7 @@ export class AudioBeds {
   }
   stop(){this.desired={music:null,ambience:null};for(const v of [...this.voices])this.end(v,0);}
   get canPlay(){return this.ready&&!this.disposed&&!this.owner.suspended&&this.owner.context?.state==='running';}
+  retryFailed(){if(this.failed.size&&(this.owner.now?.()??Date.now())>=this.retryAfter){this.failed.clear();this.sync();}}
   sync(){
     if(!this.canPlay||this.pending)return this.pending;
     // An already satisfied selection must not allocate promises on every frame.
@@ -56,7 +57,7 @@ export class AudioBeds {
           const data=await r.arrayBuffer();if(this.disposed)return;
           buffer=await this.owner.context.decodeAudioData(data);if(this.disposed)return;
           this.cache.set(id,buffer);
-        }catch{if(!this.disposed){this.failed.add(id);this.owner.failed++;}}
+        }catch{if(!this.disposed){this.failed.add(id);this.retryAfter=(this.owner.now?.()??Date.now())+5000;this.owner.failed++;}}
         finally{clearTimeout(timeout);this.abort=null;}
       }
       if(buffer&&this.canPlay&&this.desired[channel]===key)this.start(channel,key,buffer,definition);
@@ -70,7 +71,7 @@ export class AudioBeds {
     gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(definition.volume??.25,now+1.2);
     const voice={channel,key,id,source,gain,volume:definition.volume??.25,ending:false,cleaned:false,cleanup:()=>{
       if(voice.cleaned)return;voice.cleaned=true;source.onended=null;source.disconnect();gain.disconnect();source.buffer=null;
-      this.voices.delete(voice);if(this.current[channel]===voice)this.current[channel]=null;
+      this.voices.delete(voice);if(this.current[channel]===voice){this.current[channel]=null;if(!voice.ending&&this.canPlay)this.sync();}
     }};
     source.onended=voice.cleanup;this.voices.add(voice);this.current[channel]=voice;
     // Touch LRU without retaining redundant promises/ArrayBuffers.

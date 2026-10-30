@@ -124,7 +124,7 @@ function makePlacements(){
           const supportScale=Math.max(1.45,(h-.24-pool.height+.5)/3.7728869915);
           add(CAVE_SUPPLEMENT_IDS[0],xx,zz,supportScale,yaw,{kind:'rock',topElevation:h-.24,foundation:true});
         }
-        else add(1,px,pz,scale,yaw,{topElevation:h+2.9+random()*2.1});
+        else add(1,px,pz,scale,yaw,{topElevation:h+10.5+random()*2.1});
         if(random()<.26)add(5,xx-dz/length*side*1.6,zz+dx/length*side*1.6,.55+random()*.5,random()*6.28,{elevation:h-.5});
       }
     }

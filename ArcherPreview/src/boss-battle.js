@@ -78,6 +78,8 @@ export class BossBattle {
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
   get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
   get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool];}
+  setAttackSettings(value){this.attackSettings=value;for(const enemy of this.allPooled)this.applyAttackSettings(enemy);}
+  applyAttackSettings(enemy){const kind=enemy.kind==='elena'?(enemy.phase===2?'mourning-elena':'elena'):enemy.kind;enemy.brain?.configureAttacks?.(this.attackSettings?.[kind]??{});}
   async activateResident(player,{reset=false,phase:resetPhase=1,home=ELENA_HOME}={}){
     if(!this.world.cave)return false;
     if(reset){this.residentPhase=resetPhase===2?2:1;this.residentHome={x:home.x,z:home.z};this.residentError=null;this.mourningNeedsReset=true;}
@@ -105,6 +107,7 @@ export class BossBattle {
       if(!resident.asset||reset||(phase===2&&this.mourningNeedsReset)){
         const position=new Vector3(this.residentHome.x,0,this.residentHome.z);
         await resident.summon(player,{position,rotationY:0});
+        this.applyAttackSettings(resident);
         this.residentHome={x:resident.home.x,z:resident.home.z};
         if(phase===2)this.mourningNeedsReset=false;
       }else{
@@ -191,6 +194,7 @@ export class BossBattle {
         }
         const boss = pool[index], position = positions[index];
         await boss.summon(player, { position, rotationY: Math.atan2(player.position.x - position.x, player.position.z - position.z) });
+        this.applyAttackSettings(boss);
         if (request !== this.revision) { boss.hide(); return false; }
         boss.brain.wait += index * .17;
         boss.lastReportedHit = null;

@@ -41,9 +41,12 @@ export class BossBrain {
     this.state='Block6';this.mode='idle';this.time=0;this.serial=1;this.wait=.65;
     this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;this.comboStep=0;
   }
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);if(mode!=='attack')this.comboStep=0;}
+  configureAttacks(config={}){const old=this.attackSettings;if(old?.custom!==config.custom||old?.sequence?.join('|')!==config.sequence?.join('|'))this.customAttackIndex=0;this.attackSettings=config;}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);if(mode!=='attack')this.comboStep=0;else this.castSpeed=Number.isFinite(this.attackSettings?.speed)?Math.max(.5,Math.min(2,this.attackSettings.speed)):1;}
   startCombo(){this.comboStep=1;this.start(BOSS_ADVANCING_COMBO[0],'attack');}
   nextAttack(){
+    const sequence=this.attackSettings?.custom&&this.attackSettings.sequence;
+    if(sequence?.length){const id=sequence[(this.customAttackIndex??0)%sequence.length];this.customAttackIndex=(this.customAttackIndex??0)+1;if(BOSS_ATTACKS.some(s=>s.name===id))return id;}
     if(!this.bag.length){
       this.bag=BOSS_ATTACKS.map(a=>a.name);
       for(let i=this.bag.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[this.bag[i],this.bag[j]]=[this.bag[j],this.bag[i]];}
@@ -95,7 +98,7 @@ export class BossBrain {
     }
     if(['attack','guard','evade'].includes(this.mode)){
       const spec=BOSS_BY_NAME[this.state];
-      this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?(spec.playRate||1.12):1));
+      this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?(spec.playRate||1.12)*(this.castSpeed??1):1));
       const speed=this.comboStep&&this.time<duration*spec.impact?1.8:0;
       if(this.mode==='attack'&&!this.impacted&&this.time>=duration*spec.impact){this.impacted=true;events.push({type:'attack',...spec,comboStep:this.comboStep});}
       if(this.time>=duration){
@@ -112,7 +115,8 @@ export class BossBrain {
     this.startIfChanged('Block6','idle');this.wait-=dt;
     if(this.wait<=0){
       this.attackCount++;
-      if(this.attackCount%7===0)this.start('Backflip','evade');
+      if(this.attackSettings?.custom&&this.attackSettings.sequence?.length){const next=this.nextAttack();this.start(next==='Skill_02'?'Running':next,next==='Skill_02'?'approach':'attack');}
+      else if(this.attackCount%7===0)this.start('Backflip','evade');
       else if(this.attackCount%5===0)this.start('Block6','guard');
       else if(this.attackCount%4===0)this.startCombo();
       else {const next=this.nextAttack();this.start(next==='Skill_02'?'Running':next,next==='Skill_02'?'approach':'attack');}

@@ -41,7 +41,17 @@ export class ElenaBrain {
     this.wait=1.2;this.nextSpell=0;this.movementTurn=0;this.moveKind=null;this.visited=new Set();this.start(this.idle,'idle');
   }
   start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.castLeadInRemaining=mode==='attack'&&this.mourning?MOURNING_CAST_LEAD_IN:0;this.visited.add(state);if(mode!=='move')this.repositioning=false;if(mode==='attack'&&!this.mourning)this.spell=this.spells.find(s=>s.name===state);}
-  cast(){this.spell=this.spells[this.nextSpell++%this.spells.length];this.start(this.spell.name,'attack');return this.spell;}
+  configureAttacks(config={}){const old=this.attackSettings;if(old?.custom!==config.custom||old?.sequence?.join('|')!==config.sequence?.join('|'))this.customSpellIndex=0;this.attackSettings=config;}
+  cast(){
+    const config=this.attackSettings,sequence=config?.custom?config.sequence:null;
+    const id=sequence?.length?sequence[(this.customSpellIndex??0)%sequence.length]:null;
+    if(id)this.customSpellIndex=(this.customSpellIndex??0)+1;
+    this.spell=(id&&this.spells.find(s=>(this.mourning?s.pattern:s.name)===id))||this.spells[this.nextSpell%this.spells.length];this.nextSpell++;
+    // Snapshot on cast entry: changing the slider mid-telegraph cannot jump
+    // release time or make warning progress run backwards.
+    this.castSpeed=Number.isFinite(config?.speed)?Math.max(.5,Math.min(2,config.speed)):1;
+    this.start(this.spell.name,'attack');return this.spell;
+  }
   reposition(){
     this.start(this.walk,'move');this.repositioning=true;
     if(this.mourning){this.moveKind=MOURNING_MOVE_ORDER[this.movementTurn++%MOURNING_MOVE_ORDER.length];this.repositionRemaining=this.moveKind==='charge'?2.2:this.moveKind==='skitter'?1.45:2.3;}
@@ -55,7 +65,7 @@ export class ElenaBrain {
   cancelCast(){if(this.mode!=='attack')return false;this.start(this.idle,'idle');this.wait=1.2;return true;}
   cancelMovement(){if(!this.repositioning)return false;this.start(this.idle,'idle');this.repositionRemaining=0;this.moveKind=null;return true;}
   get defense(){return null;}
-  get attackPlaybackRate(){return this.mourning?MOURNING_CAST_RATE:1;}
+  get attackPlaybackRate(){return (this.mourning?MOURNING_CAST_RATE:1)*(this.castSpeed??1);}
   get castWarningDuration(){return (this.mourning?MOURNING_CAST_LEAD_IN:0)+spellImpact(this.spell,this.durations[this.state])/this.attackPlaybackRate;}
   get castWarningElapsed(){return (this.mourning?MOURNING_CAST_LEAD_IN-this.castLeadInRemaining:0)+this.time/this.attackPlaybackRate;}
   get label(){return this.mode==='attack'?this.spell?.label:this.repositioning?(this.mourning?this.moveKind==='charge'?(this.time<MOURNING_MOVEMENT.chargeWarning?'돌진 예고':'비탄의 돌진'):this.moveKind==='skitter'?'급속 횡이동':'끊임없는 배회':'자리 바꾸기'):({idle:'경계',move:'접근',down:'쓰러짐',recover:'일어나기',dead:this.mourning?'비탄의 끝':'광폭화'})[this.mode]??'경계';}

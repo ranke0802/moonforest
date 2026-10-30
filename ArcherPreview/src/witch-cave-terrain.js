@@ -29,16 +29,49 @@ export function witchCaveHeight(x,z){
   const lowPool=smooth((x-18)/10)*smooth((z-15)/8);
   const basin=rock*(1-water)+(-3.6-lowPool*1.3+.12*Math.sin(x*.17)*Math.cos(z*.13))*water;
   const ground=basin+(height-basin)*shelf+.025*Math.sin(x*.7)*Math.sin(z*.53)*shelf;
-  return channelBed(x,z,ground,distance);
+  // Continuous dry rock masses separate the branching rooms. The old 1.8 m
+  // shoulders exposed every room across the central basin. Water stays low;
+  // only terrain outside the walking contour rises into a real depth occluder.
+  const ridge=9*smooth((distance-.15)/3.2)*(1-water);
+  return channelBed(x,z,ground+ridge,distance);
 }
 export const createWitchCaveTerrain=()=>new TerrainHeightField({size:160,subdivisions:192,height:witchCaveHeight});
 // A cached conservative distance field keeps collision work independent of
 // the number of repeated rock meshes and of camera rotation.
 let field;
+function clearanceField(){
+  if(field)return field;
+  const n=321,step=.5,infinite=1e12,squared=new Float32Array(n*n),row=new Float64Array(n),result=new Float64Array(n),sites=new Int32Array(n),edges=new Float64Array(n+1);
+  // Exact separable squared Euclidean distance transform. The old minimum
+  // of route signed distances was not the distance to their UNION: it left
+  // invisible seams where two broad, flat walking shelves joined.
+  function transform(){
+    let k=0;sites[0]=0;edges[0]=-Infinity;edges[1]=Infinity;
+    for(let q=1;q<n;q++){
+      let s;
+      do{s=((row[q]+q*q)-(row[sites[k]]+sites[k]*sites[k]))/(2*(q-sites[k]));if(s<=edges[k])k--;else break;}while(k>=0);
+      sites[++k]=q;edges[k]=s;edges[k+1]=Infinity;
+    }
+    k=0;for(let q=0;q<n;q++){while(edges[k+1]<q)k++;result[q]=(q-sites[k])**2+row[sites[k]];}
+  }
+  for(let z=0;z<n;z++){
+    for(let x=0;x<n;x++)row[x]=caveSurface(x*step-80,z*step-80).distance>.3?0:infinite;
+    transform();for(let x=0;x<n;x++)squared[z*n+x]=result[x];
+  }
+  field=new Float32Array(n*n);
+  for(let x=0;x<n;x++){
+    for(let z=0;z<n;z++)row[z]=squared[z*n+x];
+    transform();for(let z=0;z<n;z++)field[z*n+x]=Math.sqrt(result[z])*step-step*Math.SQRT1_2-.04;
+  }
+  return field;
+}
 export function caveClearance(x,z){
   const n=321,step=.5,half=80;
-  if(!field){field=new Float32Array(n*n);for(let row=0;row<n;row++)for(let col=0;col<n;col++)field[row*n+col]=-caveSurface(col*step-half,row*step-half).distance;}
+  const data=clearanceField();
   const u=(x+half)/step,v=(z+half)/step;if(u<0||v<0||u>=n-1||v>=n-1)return -100;
   const col=Math.floor(u),row=Math.floor(v),a=u-col,b=v-row,i=row*n+col;
-  return (field[i]*(1-a)+field[i+1]*a)*(1-b)+(field[i+n]*(1-a)+field[i+n+1]*a)*b-.26;
+  // Each node distance is reduced by the occupied cell's half diagonal and
+  // a 4 cm reserve. Four distance cones preserve that conservative bound at
+  // arbitrary positions, unlike bilinear interpolation near concave corners.
+  return Math.max(data[i]-Math.hypot(a,b)*step,data[i+1]-Math.hypot(1-a,b)*step,data[i+n]-Math.hypot(a,1-b)*step,data[i+n+1]-Math.hypot(1-a,1-b)*step);
 }

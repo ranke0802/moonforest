@@ -15,6 +15,7 @@ import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {caveObstacles} from '../src/witch-cave-layout.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 const base=new URL('../public/assets/',import.meta.url),cache=new Map();
 const near=(a,b,tolerance=1e-6,label='value')=>assert.ok(Math.abs(a-b)<=tolerance,`${label}: ${a} != ${b}`);
@@ -22,6 +23,8 @@ const snapshot=f=>({meshes:f.scene.meshes.length,nodes:f.scene.transformNodes.le
 async function fixture(t,{pbr=false}={}){
   setWorldCharacter('warrior-v5');t.after(()=>setWorldCharacter('warrior'));
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;scene.useConstantAnimationDeltaTime=true;
+  // NullEngine has no GPU upload completion; prepare the shared outline sampler.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   // Exercise production bone float textures. NullEngine has no 2D-array GPU
   // backend, so morph shader verification uses its vertex-attribute route.
   Object.assign(engine.getCaps(),{textureFloat:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});

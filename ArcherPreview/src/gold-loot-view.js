@@ -1,7 +1,7 @@
 import {Color3,MeshBuilder,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
 
 // Tiny shared coin geometry; no downloaded texture, dynamic light or shadow map.
-export function createGoldLootView(scene,host) {
+export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
   const material=new StandardMaterial('loot-gold',scene);
   material.diffuseColor=new Color3(.85,.55,.12);material.emissiveColor=new Color3(.32,.18,.025);material.specularColor=new Color3(.6,.42,.16);
   const template=MeshBuilder.CreateCylinder('gold-coin-template',{diameter:.19,height:.035,tessellation:10},scene);
@@ -21,11 +21,12 @@ export function createGoldLootView(scene,host) {
           record={root,label,drop,settled:false};records.set(drop.id,record);
         }
         record.drop=drop;
+        record.root.setEnabled(visibleAt(drop.position));
         const label=`${drop.amount} G`;if(record.label.textContent!==label)record.label.textContent=label;
         if(!record.settled){const t=Math.min(1,drop.age/.6);record.root.position.set(drop.position.x,drop.position.y+Math.sin(t*Math.PI)*.38,drop.position.z);if(t===1){record.settled=true;record.root.freezeWorldMatrix();for(const mesh of record.root.getChildMeshes())mesh.freezeWorldMatrix();}}
       }
     },
-    project(projection){for(const {root,label} of records.values()){anchor.copyFrom(root.position);anchor.y+=.22;const p=projection.project(anchor);label.hidden=!p.visible;label.style.transform=`translate3d(${p.x}px,${p.y}px,0) translate(-50%,-100%)`;}},
+    project(projection){for(const {root,label} of records.values()){anchor.copyFrom(root.position);anchor.y+=.22;const p=projection.project(anchor),visible=visibleAt(root.position);root.setEnabled(visible);label.hidden=!p.visible||!visible;label.style.transform=`translate3d(${p.x}px,${p.y}px,0) translate(-50%,-100%)`;}},
     clear(){for(const record of records.values())remove(record);records.clear();},
     dispose(){this.clear();template.dispose();material.dispose();},
   };

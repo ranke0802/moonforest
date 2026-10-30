@@ -29,6 +29,7 @@ export async function prepareVillageStart(world){
     const {root,facing}=createVillageTransform(world,placement,asset.config),bounds=placementBounds(world,placement,asset.config);
     return {root,facing,placement,bounds,min:bounds.min,max:bounds.max,meshes:[],blocksPlayerView:asset.cover};
   });
+  world.caveFog?.updateRecords(records);
   const plan=villageDemand(world,records),resources=[...new Set(plan.flatMap(r=>assets.get(r.id).levels.find(l=>l.level===r.level).resources))];
   return world.villagePrepared={url,manifest,assets,records,plan,resources};
 }
@@ -100,6 +101,7 @@ export function loadStreamedVillage(world,{
       const model=new URL(config.model,url),container=await loadContainer(model,world.scene);
       if(disposed){container.dispose();return;}containers.push(container);
       const meshes=geometry(container);prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
+      for(const mesh of meshes)world.caveFog?.attach(mesh.material);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
       world.lighting.registerMeshes(meshes);
       await prepareMapMaterials(meshes,{cancelled:()=>disposed});
@@ -114,12 +116,15 @@ export function loadStreamedVillage(world,{
         for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
         record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
       }
+      world.caveFog?.updateRecords(instances);
       const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])];
       world.lighting.registerMeshes(activeSources);
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
       if(disposed)return;
-      const covered=instances.filter(r=>r.blocksPlayerView&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
+      // Cave rock walls use a narrow eye-to-player cutaway; never fade an
+      // entire room wall like a tree canopy and reveal rooms behind it.
+      const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&r.placement.kind==='rock')&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await work.yield();if(disposed)return;
         world.treeOcclusion.refreshRoots([record.root]);

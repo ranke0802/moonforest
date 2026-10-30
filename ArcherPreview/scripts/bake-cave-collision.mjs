@@ -11,7 +11,7 @@ import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {createVillageTransform} from '../src/village-environment.js';
 const base=new URL('../public/assets/',import.meta.url),out=new URL('../src/witch-cave-collision-data.js',import.meta.url);
 const manifest=JSON.parse(await readFile(new URL('witch-cave.json',base),'utf8'));
-const step=.4,size=400,min=-80,occupied=new Uint8Array(size*size),ground=new Float32Array(size*size),walk=new Uint8Array(size*size);
+const step=.4,size=400,min=-80,occupied=new Uint8Array(size*size),sight=new Uint8Array(size*size),ground=new Float32Array(size*size),walk=new Uint8Array(size*size);
 const terrain=createWitchCaveTerrain();
 for(let z=0;z<size;z++)for(let x=0;x<size;x++){
  const xx=min+(x+.5)*step,zz=min+(z+.5)*step,i=z*size+x;
@@ -48,10 +48,15 @@ try{
      const lowX=Math.max(0,Math.floor((Math.min(...points.map(v=>v[0]))-min)/step)),highX=Math.min(size-1,Math.floor((Math.max(...points.map(v=>v[0]))-min)/step));
      const lowZ=Math.max(0,Math.floor((Math.min(...points.map(v=>v[2]))-min)/step)),highZ=Math.min(size-1,Math.floor((Math.max(...points.map(v=>v[2]))-min)/step));
      for(let z=lowZ;z<=highZ;z++)for(let x=lowX;x<=highX;x++){
-      const cell=z*size+x;if(occupied[cell]||!walk[cell])continue;
+      const cell=z*size+x,bodyWanted=!occupied[cell]&&walk[cell],sightWanted=!sight[cell]&&p.kind==='rock';
+      if(!bodyWanted&&!sightWanted)continue;
       let poly=points;
       for(const [axis,bound,sign]of [[0,min+x*step,1],[0,min+(x+1)*step,-1],[2,min+z*step,1],[2,min+(z+1)*step,-1]]){poly=clip(poly,axis,bound,sign);if(!poly.length)break;}
-      if(poly.length&&Math.max(...poly.map(v=>v[1]))>=ground[cell]+.22&&Math.min(...poly.map(v=>v[1]))<=ground[cell]+1.75){occupied[cell]=1;owners[cell]=p.id+' '+id;}
+      if(poly.length){
+       const high=Math.max(...poly.map(v=>v[1])),low=Math.min(...poly.map(v=>v[1]));
+       if(bodyWanted&&high>=ground[cell]+.22&&low<=ground[cell]+1.75){occupied[cell]=1;owners[cell]=p.id+' '+id;}
+       if(sightWanted&&high>=ground[cell]+1.5&&low<=ground[cell]+2.1)sight[cell]=1;
+      }
      }
     }
    }root.dispose();
@@ -70,4 +75,10 @@ const report={triangles,occupiedCells:occupied.reduce((a,b)=>a+b,0),runs:runs.le
 await mkdir(new URL('../reports/witch-cave-v5-improved/',import.meta.url),{recursive:true});
 await writeFile(new URL('../reports/witch-cave-v5-improved/collision-bake.json',import.meta.url),JSON.stringify(report,null,2));
 await writeFile(new URL('../reports/witch-cave-v5-improved/collision-owners.json',import.meta.url),JSON.stringify({step,size,min,owners}));
-console.log(JSON.stringify(report));
+const sightRuns=[];for(let i=0;i<sight.length;i++)if(sight[i]){const start=i;while(i+1<sight.length&&sight[i+1])i++;sightRuns.push(start,i-start+1);}
+const sightData={step,size,min,fingerprint,heightRange:[1.5,2.1],kind:'rock',runs:sightRuns};
+await writeFile(new URL('../src/witch-cave-sight-data.js',import.meta.url),'// Generated from actual near-LOD rock triangles; arched openings remain open.\nexport const CAVE_SIGHT_DATA='+JSON.stringify(sightData)+';\n');
+await mkdir(new URL('../reports/cave-enclosure/',import.meta.url),{recursive:true});
+const visibility={triangles,occupiedCells:sight.reduce((a,b)=>a+b,0),runs:sightRuns.length/2,bytes:JSON.stringify(sightData).length,fingerprint,heightRange:sightData.heightRange,kind:sightData.kind,newModels:0};
+await writeFile(new URL('../reports/cave-enclosure/sight-bake.json',import.meta.url),JSON.stringify(visibility,null,2)+'\n');
+console.log(JSON.stringify({collision:report,visibility}));

@@ -1,4 +1,5 @@
 import {MaterialPluginBase,SubMesh,VertexBuffer,VertexData} from '@babylonjs/core';
+import {CAVE_VIEW_GLSL} from './witch-cave-visibility.js';
 
 // One material and vertex buffer; bounded terrain patches only change index
 // submission. The sampled walking surface and its original triangles stay exact.
@@ -36,19 +37,39 @@ float caveLow = mix(.82,1.,smoothstep(-3.,10.,vPositionW.y));
 vec3 caveTint = mix(vec3(.87,.92,1.)*caveLow,vec3(1.14,1.02,.84),caveWarm*.78);
 caveTint = mix(caveTint,vec3(1.02,.91,1.13),caveViolet*.62);
 `;
+// World-space colour keeps the existing floor painting from stretching into
+// black vertical bands on the high shoulders. No texture, mesh or draw added.
+const cliffCode=`
+#ifdef NORMAL
+float caveCliff = max(1.0-smoothstep(.42,.86,abs(normalW.y)),1.0-smoothstep(.14,.26,dot(baseColor.rgb,vec3(.299,.587,.114))));
+if(caveCliff>.001){
+ float caveStrata = .5+.5*sin(vPositionW.x*1.1+vPositionW.y*1.8+sin(vPositionW.z*.7))*sin(vPositionW.z*1.3-vPositionW.y*.9+sin(vPositionW.x*.5));
+ float caveGrain = .5+.5*sin(vPositionW.x*8.7+vPositionW.y*11.3)*sin(vPositionW.z*9.9-vPositionW.y*6.1);
+ vec3 caveRock = mix(vec3(.32,.28,.30),vec3(.49,.435,.405),.58+.16*caveStrata+.04*caveGrain);
+ float caveFacing = .82+.18*max(0.,dot(normalize(normalW),normalize(vec3(-.35,.78,-.52))));
+ float caveRockShadow = 1.;
+ if(numLights>0.)caveRockShadow=clamp(1.-numLights*(1.-aggShadow),0.,1.);
+ color.rgb=mix(color.rgb,caveRock*caveFacing*mix(.60,1.,caveRockShadow)*caveTint,caveCliff*.92);
+}
+#endif
+`;
 export class CaveSurfaceShade extends MaterialPluginBase {
- constructor(material,{ground=false}={}){super(material,ground?'CaveGroundMood':'CaveRockMood',325,{},true,true);this.ground=ground;this.active=true;}
- getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'}],fragment:'uniform float caveMoodActive;'};}
- bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);}
+ constructor(material,{ground=false,camera=null}={}){super(material,ground?'CaveGroundMood':'CaveRockMood',325,{},true,true);this.ground=ground;this.camera=camera;this.active=true;}
+ getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'},{name:'caveEye',size:3,type:'vec3'},{name:'caveFocus',size:3,type:'vec3'}],fragment:'uniform float caveMoodActive;uniform vec3 caveEye;uniform vec3 caveFocus;'};}
+ bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}}
  getCustomCode(type){
   if(type!=='fragment')return null;
-  return this.ground?{CUSTOM_FRAGMENT_BEFORE_FOG:'if(caveMoodActive>.5){'+colorCode+'color.rgb *= caveTint;}'}:
-   {CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:'if(caveMoodActive>.5){'+colorCode+'finalDiffuse *= caveTint;}'};
+  const common={CUSTOM_FRAGMENT_DEFINITIONS:CAVE_VIEW_GLSL,CUSTOM_FRAGMENT_MAIN_BEGIN:'if(caveMoodActive>.5 && caveForegroundCutaway(vPositionW,caveEye,caveFocus))discard;'};
+  // Babylon discovers hook names inside the base constructor, before ground
+  // is assigned. Register both names so the floor works even before another
+  // floor plugin is added during asynchronous texture loading.
+  return {...common,CUSTOM_FRAGMENT_BEFORE_FOG:this.ground?'if(caveMoodActive>.5){'+colorCode+'color.rgb *= caveTint;'+cliffCode+'}':'',
+   CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:this.ground?'':'if(caveMoodActive>.5){'+colorCode+'finalDiffuse *= caveTint;}'};
  }
 }
 export function caveSurfaceStyle(world){
  partitionCaveGround(world.ground,world.terrain);
- const activate=(material,ground=false)=>{const plugin=material.pluginManager?.getPlugin(ground?'CaveGroundMood':'CaveRockMood')??new CaveSurfaceShade(material,{ground});plugin.active=true;return plugin;};
+ const activate=(material,ground=false)=>{const plugin=material.pluginManager?.getPlugin(ground?'CaveGroundMood':'CaveRockMood')??new CaveSurfaceShade(material,{ground,camera:world.camera});plugin.camera=world.camera;plugin.active=true;return plugin;};
  const plugins=new Map([[world.floorMaterial,activate(world.floorMaterial,true)]]),seen=new WeakSet(),pending=new Set(),watched=new Map(),dead=new WeakSet();
  let disposed=false;
  const track=material=>{

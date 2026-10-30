@@ -4,6 +4,9 @@ import '@babylonjs/core/Shaders/ShadersInclude/instancesVertex.js';
 import {projectedCoverage} from './village-lod.js';
 import {VILLAGE_INK_MIN_COVERAGE,selectVillageOutlines,villageInkWidth} from './village-outline-policy.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
+import {CAVE_VIEW_GLSL} from './witch-cave-visibility.js';
+import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
+import {bindCaveFogMaterial} from './cave-fog-binding.js';
 
 const vertexSource=`precision highp float;
 attribute vec3 position;attribute vec3 normal;
@@ -13,7 +16,7 @@ uniform vec3 inkCamera;uniform vec2 inkFogRange;uniform vec2 inkSingle;
 #ifdef INSTANCES
 attribute vec2 villageInk;
 #endif
-varying float inkCoverage;
+varying float inkCoverage;varying vec3 inkWorldPosition;
 void main(void){
   #include<instancesVertex>
   vec2 ink=inkSingle;
@@ -21,13 +24,19 @@ void main(void){
   ink=villageInk;
   #endif
   vec4 p=finalWorld*vec4(position,1.0);
+  inkWorldPosition=p.xyz;
   p.xyz+=normalize(mat3(finalWorld)*normal)*ink.y;
   inkCoverage=ink.x*(1.0-smoothstep(inkFogRange.x,inkFogRange.y,distance(p.xyz,inkCamera)));gl_Position=viewProjection*p;
 }`;
 const fragmentSource=`precision highp float;
-uniform vec3 inkColor;varying float inkCoverage;
+uniform vec3 inkColor;varying float inkCoverage;varying vec3 inkWorldPosition;
+uniform float inkCaveActive;uniform vec3 inkCamera;uniform vec3 inkFocus;
+${CAVE_VIEW_GLSL}
+${CAVE_FOG_GLSL}
 float inkBayer2(vec2 p){return 2.0*mod(p.x+p.y,2.0)+mod(p.y,2.0);}
 void main(void){
+  if(caveFogHidesInk(inkWorldPosition))discard;
+  if(inkCaveActive>.5&&caveForegroundCutaway(inkWorldPosition,inkCamera,inkFocus))discard;
   vec2 p=mod(floor(gl_FragCoord.xy),4.0);
   float threshold=(4.0*inkBayer2(mod(p,2.0))+inkBayer2(floor(p/2.0))+0.5)/16.0;
   if(inkCoverage<threshold)discard;
@@ -49,7 +58,8 @@ export class VillageOutlines {
   constructor(world,records,stats){
     this.world=world;this.stats=stats;this.sources=new Set();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
     // A private draw wrapper must not overwrite the base PBR submesh effect.
-    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle']},false);
+    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','caveFogRect','caveFogActive'],samplers:['caveFogMap']},false);
+    this.material.setFloat('caveFogActive',0);
     this.material.setVector2('inkSingle',new Vector2(0,0));
     this.material.backFaceCulling=true;this.material.cullBackFaces=false;this.material.disableDepthWrite=true;
     this.material.metadata={villageOutline:true};
@@ -114,13 +124,16 @@ export class VillageOutlines {
     }
   }
   update(now){
+    bindCaveFogMaterial(this.world.scene,this.material);
     this.material.setVector3('inkCamera',this.world.camera.globalPosition);
+    this.material.setFloat('inkCaveActive',this.world.cave?1:0);
+    this.material.setVector3('inkFocus',this.world.camera.target);
     if(now>=this.next){
       this.next=now+150;const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
       const ranked=[];
       for(const entry of this.entries){
         const {record,mesh}=entry;
-        if(!record.root.isEnabled()||!mesh.isInFrustum(planes))continue;
+        if(record.fogVisible===false||!record.root.isEnabled()||!mesh.isInFrustum(planes))continue;
         entry.coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
         if(entry.coverage>VILLAGE_INK_MIN_COVERAGE)ranked.push(entry);
       }
@@ -132,7 +145,7 @@ export class VillageOutlines {
     for(const entry of this.selected){
       const {record,mesh}=entry;
       const coverage=mesh.instancedBuffers?.treeCoverage??1;
-      mesh.instancedBuffers.villageInk.set(record.root.isEnabled()?coverage*Math.min(1,(entry.coverage-VILLAGE_INK_MIN_COVERAGE)/.0045):0,villageInkWidth(record.placement.kind));
+      mesh.instancedBuffers.villageInk.set(record.fogVisible!==false&&record.root.isEnabled()?coverage*Math.min(1,(entry.coverage-VILLAGE_INK_MIN_COVERAGE)/.0045):0,villageInkWidth(record.placement.kind));
       if(mesh.instancedBuffers.villageInk.x>0)this.selectedMeshes.add(mesh);
     }
   }

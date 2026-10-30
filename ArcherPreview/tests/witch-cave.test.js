@@ -42,7 +42,7 @@ test('walking uses the same continuous triangles as the ground; scanned ramps ar
   }
 });
 test('entry reaches boss chamber; movement and dodges cannot cross flooded voids',()=>{
-  const nav=new CaveNavigation(caveObstacles());
+  const nav=new CaveNavigation(caveObstacles()),terrain=createWitchCaveTerrain();
   const goal={x:CAVE_BOSS.x,z:CAVE_BOSS.z+7};
   const path=nav.path(CAVE_ENTRY,goal,.34,CAVE_RADIUS-.5);
   assert.ok(path.length>5,'nontrivial route around cavern');
@@ -53,7 +53,11 @@ test('entry reaches boss chamber; movement and dodges cannot cross flooded voids
   for(let i=0;i<180;i++){
     const a=i*Math.PI/90,delta={x:Math.cos(a)*25,z:Math.sin(a)*25};
     const landed=nav.move(start,{x:start.x+delta.x,z:start.z+delta.z},.34,CAVE_RADIUS);
-    assert.ok(nav.free(landed,.34,CAVE_RADIUS));assert.ok(caveSurface(landed.x,landed.z).distance<0);
+    assert.ok(nav.free(landed,.34,CAVE_RADIUS));
+    const shelf=caveSurface(landed.x,landed.z);
+    // The union-based field opens a formerly invisible seam at a flat join.
+    // Its valid contour is +.3 m; crossing water or a raised wall is forbidden.
+    assert.ok(shelf.distance<.3);assert.ok(Math.abs(terrain.heightAt(landed.x,landed.z)-shelf.height)<.12);
   }
 });
 test('cave world swaps retain camera and terrain identity and release water resources',async()=>{

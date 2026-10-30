@@ -3,6 +3,7 @@ import { VillageOcclusion } from './village-occlusion.js';
 import { villageRenderRange } from './village-policy.js';
 import {selectVillageShadowCasters} from './village-shadow-policy.js';
 import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
+import {caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
 
 export function cellKey(x,z,size=16){return `${Math.floor(x/size)}:${Math.floor(z/size)}`;}
 
@@ -30,6 +31,11 @@ export class VillageVisibility {
     this.occlusion=new VillageOcclusion(world,records,this.stats);
   }
   update(camera,player,dt){
+    const runtime=this.world.caveFog;
+    if(this.fogRuntime!==runtime||this.fogRevision!==runtime?.fog.revision){
+      this.fogRuntime=runtime;this.fogRevision=runtime?.fog.revision;
+      for(const r of this.records){if(r.fogOwner!==runtime||r.fogRevision!==runtime?.fog.revision){r.fogVisible=caveFogAllowsRecord(runtime?.fog,r);r.fogOwner=runtime;r.fogRevision=runtime?.fog.revision;}if(!r.fogVisible){this.shadowFade.active.delete(r);this.shadowFade.desired.delete(r);}r.root.setEnabled(caveFogRootEnabled(r));}
+    }
     // getTransformationMatrix only multiplies Babylon's cached matrices. Refresh
     // them after input/follow changes, before making this frame's culling choice.
     this.world.camera.getViewMatrix();this.world.camera.getProjectionMatrix();
@@ -38,7 +44,7 @@ export class VillageVisibility {
     if(this.world.lighting?.shadowsActive===false)this.shadowFade.clear();
     else if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      this.shadowFade.select(selectVillageShadowCasters(this.records.filter(r=>r.meshes.length),player,this.touch,this.castRecords));
+      this.shadowFade.select(selectVillageShadowCasters(this.records.filter(r=>r.meshes.length&&r.fogVisible!==false),player,this.touch,this.castRecords));
     }
     this.updateShadows(dt);
     const moved=Vector3.DistanceSquared(this.camera,camera)>1;
@@ -53,18 +59,19 @@ export class VillageVisibility {
       // Generous frustum margin prevents camera motion from revealing empty cells.
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<(this.world.villageOverview?260:villageRenderRange(this.touch).cellCull)&&inFrustum;
-      if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled((active&&!r.occluded)||!!r.shadowCaster);}cell.active=active;}
-      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded)activeInstances++;}
+      if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(caveFogRootEnabled(r));}cell.active=active;}
+      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false)activeInstances++;}
     }
     Object.assign(this.stats,{activeCells,activeInstances});
   }
   updateShadows(dt){
     const active=this.shadowFade.update(dt),next=this.shadowScratch;next.clear();let major=0,fading=0;
     for(const r of this.castRecords)if(!active.has(r)){
-      r.shadowCaster=false;r.root.setEnabled(r.cellActive!==false&&!r.occluded);this.castRecords.delete(r);
+      r.shadowCaster=false;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.delete(r);
     }
     for(const [r,fade] of active){
-      if(!this.castRecords.has(r)){r.shadowCaster=true;r.root.setEnabled(true);this.castRecords.add(r);}
+      if(r.fogVisible===false)continue;
+      if(!this.castRecords.has(r)){r.shadowCaster=true;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.add(r);}
       if(['building','tree','tower','landmark'].includes(r.placement.kind))major++;
       if(fade<1)fading++;
       for(const mesh of r.meshes){if(mesh.instancedBuffers)mesh.instancedBuffers[shadowFadeAttribute]=fade;next.add(mesh);}

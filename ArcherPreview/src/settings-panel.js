@@ -45,6 +45,8 @@ export function setupSettingsPanel() {
   section('화면 · 카메라', [displayOptions, $('.camera-tools'), $('#camera-zoom-options')]);
   section('성능 진단', [$('#frame-diagnostics-options')]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
+  const bossPatterns=document.createElement('button');bossPatterns.id='open-boss-patterns';bossPatterns.type='button';bossPatterns.className='motion-speed-toggle';bossPatterns.textContent='보스 패턴 · 속도';bossPatterns.setAttribute('aria-haspopup','dialog');
+  section('보스 전투', [bossPatterns]);
   const reset = $('#reset-motion-speeds');
   const motionSection = section('모션별 속도 · 전사 v2', [$('#motion-speed-options'), reset]);
   motionSection.id = 'v2-motion-settings';
@@ -52,7 +54,7 @@ export function setupSettingsPanel() {
   catalogSection.id = 'monster-motion-settings';
   section('조작 안내 · 동작 확인', [$('#help-toggle'), $('.camera-hint'), $('.secondary-actions')]);
   $('#help-toggle').textContent = '조작 가이드 열기';
-  section('현재 상태', [$('#build-tag'), $('.scene-footer')]);
+  section('현재 상태', [$('#build-tag'), $('.scene-footer'),$('#player-combat-status')]);
   $('.right-tools').setAttribute('aria-label', '몬스터 소환');
   $('.right-tools').classList.add('summon-tools');
   const note = $('#help-dialog .help-note');

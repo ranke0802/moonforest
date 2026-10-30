@@ -26,6 +26,7 @@ export function villageDemand(world,records){
   const range=world.villageOverview?260:villageRenderRange(world.touchDevice).cellCull;
   const target=camera.target??camera.getTarget();
   for(const record of records){
+    if(world.caveFog?.fog.ready&&!world.caveFog.fog.boundsVisible(record.min??record.bounds.min,record.max??record.bounds.max,2))continue;
     const {center,radius}=record.bounds,distance=Vector3.Distance(camera.globalPosition,center)-radius;
     const close=Vector3.Distance(target,center)-radius<18;
     if(distance>range+12||(!close&&!planes.every(p=>p.dotCoordinate(center)>=-radius-10)))continue;
@@ -56,7 +57,8 @@ export class VillageDemandCache {
     camera.getViewMatrix();camera.getProjectionMatrix();
     const matrix=camera.getTransformationMatrix().m,position=camera.globalPosition,target=camera.target??camera.getTarget();
     const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length];
-    let changed=!this.plan||this.camera!==camera;
+    const fogRevision=world.caveFog?.fog.revision??0;
+    let changed=!this.plan||this.camera!==camera||this.fogRevision!==fogRevision;this.fogRevision=fogRevision;
     for(let i=0;i<16;i++)if(this.previous[i]!==matrix[i])changed=true;
     for(let i=0;i<12;i++)if(this.previous[16+i]!==values[i])changed=true;
     if(!changed){this.stats.demandCacheHits++;return this.plan;}

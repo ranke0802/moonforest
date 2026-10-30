@@ -1,6 +1,7 @@
 import { AbstractMesh, Frustum, MeshBuilder, Plane, Vector3 } from '@babylonjs/core';
 import '@babylonjs/core/Engines/Extensions/engine.query.js';
 import '@babylonjs/core/Rendering/boundingBoxRenderer.js';
+import {caveFogRootEnabled} from './cave-fog-of-war.js';
 
 export function stableOcclusion(hiddenSamples,visibleResult){return visibleResult?0:hiddenSamples+1;}
 export function safeQueryBounds(min,max,camera,nearPlane){
@@ -38,7 +39,7 @@ export class VillageOcclusion {
   }
   reveal(group){
     group.hiddenSamples=0;
-    for(const r of group.items){r.occluded=false;r.root.setEnabled(r.cellActive!==false||!!r.shadowCaster);}
+    for(const r of group.items){r.occluded=false;r.root.setEnabled(caveFogRootEnabled(r));}
   }
   beforeRender(){
     if(!this.groups.length||this.disabled)return;
@@ -62,14 +63,14 @@ export class VillageOcclusion {
           const visible=Boolean(engine.getQueryResult(g.query));g.pending=false;
           if(g.epoch!==this.epoch){this.reveal(g);continue;}
           g.hiddenSamples=stableOcclusion(g.hiddenSamples,visible);
-          for(const r of g.items){r.occluded=g.hiddenSamples>=2;r.root.setEnabled((r.cellActive!==false&&!r.occluded)||!!r.shadowCaster);}
+          for(const r of g.items){r.occluded=g.hiddenSamples>=2;r.root.setEnabled(caveFogRootEnabled(r));}
         }else if(now-g.lastQuery>350){this.reveal(g);}
       }
       let submitted=0;
       for(let checked=0;checked<this.groups.length&&submitted<2;checked++){
         const g=this.groups[this.cursor++%this.groups.length];
         if(!safe(g)){this.reveal(g);continue;}
-        if(g.pending||now-g.lastQuery<300||!g.items.some(r=>r.cellActive!==false))continue;
+        if(g.pending||now-g.lastQuery<300||!g.items.some(r=>r.cellActive!==false&&r.fogVisible!==false))continue;
         // Warm the shader outside a query. An uncompiled shader must never be
         // mistaken for a zero-sample (hidden) box.
         renderer.renderOcclusionBoundingBox(g.proxy);

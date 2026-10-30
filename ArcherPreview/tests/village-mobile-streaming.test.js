@@ -19,12 +19,15 @@ import {MovingSky} from '../src/sky.js';
 import {prepareVillageInstancing} from '../src/village-instancing.js';
 import {villageLodSources} from '../src/village-lod.js';
 import {renderPixelRatio,RenderActivity} from '../src/render-policy.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 // S23 and iPhone 14 Pro viewports/DPR with the shared mobile policy. NullEngine
 // validates draw submission, not real GPU rasterization, upload time or thermals.
 for(const [orientation,width,height]of [['S23 landscape',780,360],['S23 portrait',360,780],['iPhone landscape',852,393],['iPhone portrait',393,852]]){
  test('mobile '+orientation+' keeps complete tree/wall/gate draws during movement, turns and delayed LOD promotion',async t=>{
   const ratio=renderPixelRatio(3,'high',true),engine=new NullEngine({renderWidth:width*ratio,renderHeight:height*ratio}),scene=new Scene(engine);
+  // RawTexture uploads complete on the GPU in production, absent in NullEngine.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   scene.useRightHandedSystem=true;engine.getCaps().instancedArrays=true;t.after(()=>engine.dispose());
   const camera=new ArcRotateCamera('camera',1.2,1.14,13,new Vector3(0,1.22,6),scene);camera.fov=.65;camera.minZ=.05;camera.maxZ=300;
   const ambient=new HemisphericLight('sky',Vector3.Up(),scene),key=new DirectionalLight('sun',new Vector3(-.4,-1,-.6),scene),rim=new DirectionalLight('rim',Vector3.Down(),scene),shadows=new ShadowGenerator(1024,key);

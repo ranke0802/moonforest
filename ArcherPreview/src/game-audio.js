@@ -12,20 +12,55 @@ const SETTINGS={
 };
 
 export class GameAudio {
-  constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl}={}){
+  constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl,audioSession=globalThis.navigator?.audioSession,now=()=>Date.now()}={}){
     this.contextFactory=contextFactory;this.fetcher=fetcher;this.maxVoices=maxVoices;
     this.buffers=new Map();this.variants=new Map();this.variantIndex=new Map();this.voices=new Set();this.lastPlayed=new Map();this.listener={x:0,z:0};this.seed=27183;
     this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;
     this.manifestUrl=manifestUrl;
+    this.audioSession=audioSession;this.now=now;this.resumeAttempts=0;this.resumePending=null;this.gestureCleanup=null;
     this.suspended=false;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
   }
-  async unlock(){
+  bindUnlock(target){
+    this.gestureCleanup?.();
+    const types=['pointerdown','pointerup','touchend','click','keydown'],listener=()=>this.unlock();
+    for(const type of types)target.addEventListener(type,listener,{capture:true,passive:true});
+    this.gestureCleanup=()=>{for(const type of types)target.removeEventListener(type,listener,true);this.gestureCleanup=null;};
+    return this.gestureCleanup;
+  }
+  selectAudioSession(){
+    // Safari's default Web Audio session may be silent with the hardware mute
+    // switch. Request playback for this user-started music/effects session.
+    try{if(this.audioSession){this.previousSessionType??=this.audioSession.type;if(this.audioSession.type!=='playback')this.audioSession.type='playback';}}catch{}
+  }
+  makeContext(){
+    this.context=this.contextFactory();this.master=this.context.createGain();this.master.gain.value=.75;this.master.connect(this.context.destination);
+    const context=this.context;
+    this.contextStateChanged=()=>{if(!this.disposed&&this.context===context&&context.state==='running'&&!this.suspended)this.syncMusic();};
+    context.addEventListener?.('statechange',this.contextStateChanged);
+    // A one-frame silent source is started in the same gesture as resume,
+    // rather than waiting for the first downloaded sound to unlock the route.
+    if(context.createBuffer){const source=context.createBufferSource();source.buffer=context.createBuffer(1,1,context.sampleRate||32000);source.connect(this.master);source.onended=()=>{source.disconnect();source.buffer=null;if(this.primer===source)this.primer=null;};source.start();this.primer=source;}
+  }
+  resumeContext({gesture=false}={}){
+    const context=this.context;if(!context||context.state==='closed'||this.suspended||this.disposed)return Promise.resolve();
+    if(context.state==='running'){this.syncMusic();return Promise.resolve();}
+    // A fresh trusted tap must be able to retry a WebKit resume promise which
+    // never settled. Automatic visibility updates still share one request.
+    if(this.resumePending&&!gesture)return this.resumePending;
+    this.selectAudioSession();this.resumeAttempts++;
+    let pending;try{pending=Promise.resolve(context.resume());}catch{this.failed++;return Promise.resolve();}
+    const settled=pending.then(()=>{if(this.disposed||this.context!==context)return;if(this.suspended&&context.state==='running')context.suspend().catch(()=>{});else if(context.state==='running')this.syncMusic();},()=>{if(!this.disposed)this.failed++;}).finally(()=>{if(this.resumePending===settled)this.resumePending=null;});
+    this.resumePending=settled;return settled;
+  }
+  unlock(){
     if(this.disposed||this.suspended)return;
     try{
-      if(!this.context){this.context=this.contextFactory();this.master=this.context.createGain();this.master.gain.value=.75;this.master.connect(this.context.destination);}
-      // resume must be requested in the gesture, before any fetch/decode awaits.
-      if(this.context.state==='suspended')await this.context.resume();
+      this.selectAudioSession();
+      if(!this.context)this.makeContext();
+      const resumed=this.resumeContext({gesture:true});
+      // Fetch/decode must not be held hostage by a pending iOS resume promise.
       this.loading??=this.preload();
+      this.beds.retryFailed();this.syncMusic();return resumed;
     }catch{this.failed++;}
   }
   async preload(){
@@ -50,9 +85,9 @@ export class GameAudio {
   }
   setSuspended(value){
     this.suspended=value;
-    if(value){this.stopVoices();this.context?.suspend().catch(()=>{});}
+    if(value){this.resumePending=null;this.stopVoices();this.context?.suspend().catch(()=>{});}
     // A rejected resume is retried by the next pointer/key gesture.
-    else if(this.context?.state==='suspended')this.context.resume().then(()=>this.syncMusic()).catch(()=>{});
+    else {this.beds.retryFailed();this.resumeContext();}
   }
   stopVoices(){for(const voice of [...this.voices]){try{voice.source.stop();}catch{}voice.cleanup();}this.lastPlayed.clear();}
   stopAll(){this.stopVoices();this.environment=null;this.combatMode=null;this.musicWanted=false;this.beds.stop();}
@@ -98,6 +133,6 @@ export class GameAudio {
     if(['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
     this.peakVoices=Math.max(this.peakVoices,this.voices.size);return true;
   }
-  inspect(){return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,music:this.music&&!this.music.ending?(this.suspended?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,...this.beds.inspect()};}
-  dispose(){this.disposed=true;this.stopAll();this.buffers.clear();this.beds.dispose();this.context?.close().catch(()=>{});}
+  inspect(){return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,...this.beds.inspect()};}
+  dispose(){this.disposed=true;this.gestureCleanup?.();this.stopAll();this.buffers.clear();this.beds.dispose();this.context?.removeEventListener?.('statechange',this.contextStateChanged);if(this.primer){this.primer.onended=null;try{this.primer.stop();}catch{}this.primer.disconnect();this.primer.buffer=null;this.primer=null;}this.context?.close().catch(()=>{});try{if(this.audioSession?.type==='playback'&&this.previousSessionType!=null)this.audioSession.type=this.previousSessionType;}catch{}}
 }

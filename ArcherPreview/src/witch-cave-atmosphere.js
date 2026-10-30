@@ -2,49 +2,62 @@ import {Color3,Color4,Mesh,MeshBuilder,ShaderMaterial,Vector3,VertexData,Constan
 import {CAVE_PLACEMENTS,CAVE_POOLS,CAVE_WATERFALLS,caveRoofHeight} from './witch-cave-layout.js';
 import {caveSurfaceStyle} from './witch-cave-surfaces.js';
 import {caveFlowGeometry} from './witch-cave-water.js';
+import {CAVE_FOG_START,CAVE_FOG_END} from './witch-cave-visibility.js';
+import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
 const fragmentSource=`precision highp float;
 varying vec3 p;uniform float time;uniform vec3 eye;
+${CAVE_FOG_GLSL}
 void main(){
  float ripples=sin(p.x*1.3+p.z*.9+time*.45)*sin(p.z*1.8-p.x*.5-time*.31);
  vec3 color=mix(vec3(.15,.24,.27),vec3(.24,.36,.39),.5+.5*ripples);
- float haze=smoothstep(38.,100.,length(p-eye));
- gl_FragColor=vec4(mix(color,vec3(.24,.23,.28),haze),1.);
+ float haze=smoothstep(22.,48.,length(p-eye));
+ gl_FragColor=vec4(caveFogShade(mix(color,vec3(.24,.23,.28),haze),p),1.);
 }`;
 const glowVertex=`precision highp float;
-attribute vec3 position;attribute vec2 uv;varying vec2 glowUV;
+attribute vec3 position;attribute vec2 uv;varying vec2 glowUV;varying vec3 glowWorldPosition;
 uniform mat4 viewProjection;uniform vec3 right;uniform vec3 up;
 #include<instancesDeclaration>
 void main(){
 #include<instancesVertex>
 glowUV=uv;vec3 p=finalWorld[3].xyz+right*position.x+up*position.y;
+glowWorldPosition=p;
 gl_Position=viewProjection*vec4(p,1.);}`;
-const glowFragment=`precision highp float;varying vec2 glowUV;uniform vec3 tint;
-void main(){vec2 p=glowUV*2.-1.;float a=max(0.,1.-dot(p,p));gl_FragColor=vec4(tint,a*a*a*.2);}`;
+const glowFragment=`precision highp float;varying vec2 glowUV;varying vec3 glowWorldPosition;uniform vec3 tint;
+${CAVE_FOG_GLSL}
+void main(){if(caveFogHidesInk(glowWorldPosition))discard;vec2 p=glowUV*2.-1.;float a=max(0.,1.-dot(p,p));gl_FragColor=vec4(tint,a*a*a*.2);}`;
 const roofFragment=`precision highp float;varying vec3 p;uniform vec3 eye;uniform vec3 focus;
+${CAVE_FOG_GLSL}
 void main(){
  // A local cutaway keeps the orbit camera clear while the distant ceiling
  // joins the existing wall/column silhouettes. No transparent sorting pass.
  vec2 sight=focus.xz-eye.xz;
  float along=clamp(dot(p.xz-eye.xz,sight)/max(dot(sight,sight),.001),0.,1.);
- if(length(p.xz-mix(eye.xz,focus.xz,along))<mix(21.,14.,along))discard;
+ if(length(p.xz-mix(eye.xz,focus.xz,along))<mix(7.5,5.5,along))discard;
  float strata=sin(p.x*.73+sin(p.z*.24)*2.)*sin(p.z*.52-p.x*.13);
  vec3 color=mix(vec3(.25,.23,.28),vec3(.37,.34,.39),.5+strata*.25);
- float fog=smoothstep(38.,105.,length(p-eye));gl_FragColor=vec4(mix(color,vec3(.24,.23,.28),fog),1.);
+ float fog=smoothstep(22.,48.,length(p-eye));gl_FragColor=vec4(caveFogShade(mix(color,vec3(.24,.23,.28),fog),p),1.);
 }`;
 const fallFragment=`precision highp float;varying vec3 p;uniform float time;uniform vec3 eye;
+${CAVE_FOG_GLSL}
 void main(){
  float ribbon=sin(p.x*9.+p.z*6.+sin(p.y*1.4-time*1.8))*.5+.5;
  float foam=pow(max(0.,sin(p.y*8.+time*4.)),7.);
  vec3 color=mix(vec3(.18,.31,.35),vec3(.48,.61,.62),ribbon*.45+foam*.25);
- float haze=smoothstep(38.,100.,length(p-eye));
- gl_FragColor=vec4(mix(color,vec3(.24,.23,.28),haze),1.);
+ float haze=smoothstep(22.,48.,length(p-eye));
+ gl_FragColor=vec4(caveFogShade(mix(color,vec3(.24,.23,.28),haze),p),1.);
 }`;
+const fogUniforms=['caveFogRect','caveFogActive'];
+function bindCaveFog(world,material){
+ material.setFloat('caveFogActive',0);
+ material.onBindObservable.add(()=>{if(world.caveFog)world.caveFog.bind(material);else material.setFloat('caveFogActive',0);});
+ return material;
+}
 function caveWater(world){
  const scene=world.scene,materials=[],meshes=[];
- const material=new ShaderMaterial('cave-painted-water',scene,{vertexSource,fragmentSource},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye']});materials.push(material);
+ const material=bindCaveFog(world,new ShaderMaterial('cave-painted-water',scene,{vertexSource,fragmentSource},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye',...fogUniforms],samplers:['caveFogMap']}));materials.push(material);
  for(const [i,pool]of CAVE_POOLS.entries()){
   const positions=[pool.x,pool.height,pool.z],indices=[],segments=64;
   for(let k=0;k<=segments;k++){
@@ -56,7 +69,7 @@ function caveWater(world){
   mesh.material=material;mesh.isPickable=false;mesh.freezeWorldMatrix();meshes.push(mesh);
  }
  material.backFaceCulling=false;
- const falls=new ShaderMaterial('cave-flowing-water',scene,{vertexSource,fragmentSource:fallFragment},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye']});falls.backFaceCulling=false;materials.push(falls);
+ const falls=bindCaveFog(world,new ShaderMaterial('cave-flowing-water',scene,{vertexSource,fragmentSource:fallFragment},{attributes:['position'],uniforms:['world','worldViewProjection','time','eye',...fogUniforms],samplers:['caveFogMap']}));falls.backFaceCulling=false;materials.push(falls);
  for(const [i,p]of CAVE_WATERFALLS.entries()){
   const mesh=new Mesh('cave-waterfall-'+i,scene),data=new VertexData();
   Object.assign(data,caveFlowGeometry(p));data.applyToMesh(mesh);
@@ -72,11 +85,11 @@ function caveCeiling(world){
     if(ring&&i){const at=ring*(segments+1)+i;indices.push(at,at-1,at-segments-2);if(ring>1)indices.push(at,at-segments-2,at-segments-1);}
   }
   const mesh=new Mesh('cave-distant-ceiling',world.scene),data=new VertexData();data.positions=positions;data.indices=indices;data.applyToMesh(mesh);mesh.isPickable=false;mesh.freezeWorldMatrix();
-  const material=new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus']});material.backFaceCulling=false;mesh.material=material;
+  const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus',...fogUniforms],samplers:['caveFogMap']}));material.backFaceCulling=false;mesh.material=material;
   return {material,dispose(){mesh.dispose();material.dispose();}};
 }
 function caveGlow(world,asset,tint,height,offsetX=0){
-  const material=new ShaderMaterial('cave-glow-'+asset,world.scene,{vertexSource:glowVertex,fragmentSource:glowFragment},{attributes:['position','uv'],uniforms:['world','viewProjection','right','up','tint'],needAlphaBlending:true});
+  const material=bindCaveFog(world,new ShaderMaterial('cave-glow-'+asset,world.scene,{vertexSource:glowVertex,fragmentSource:glowFragment},{attributes:['position','uv'],uniforms:['world','viewProjection','right','up','tint',...fogUniforms],samplers:['caveFogMap'],needAlphaBlending:true}));
   material.setColor3('tint',Color3.FromHexString(tint));material.backFaceCulling=false;material.disableDepthWrite=true;material.alphaMode=Constants.ALPHA_ADD;
   const source=MeshBuilder.CreatePlane('cave-glow-source-'+asset,{width:1.8,height:1.8},world.scene);source.material=material;source.isVisible=false;source.isPickable=false;
   const instances=CAVE_PLACEMENTS.filter(p=>p.asset.includes(asset)).map((p,i)=>{
@@ -91,7 +104,7 @@ export function configureCaveAtmosphere(world){
   if(!world.cave){world.scene.clearColor=new Color4(.61,.71,.77,1);return;}
   world.scene.clearColor=new Color4(.24,.23,.28,1);
   world.scene.fogColor=new Color3(.24,.23,.28);
-  world.scene.fogStart=38;world.scene.fogEnd=105;
+  world.scene.fogStart=CAVE_FOG_START;world.scene.fogEnd=CAVE_FOG_END;
   const water=caveWater(world),style=caveSurfaceStyle(world);
   const glows=[caveGlow(world,'votive-lantern','#e6b46b',.8),caveGlow(world,'soul-collector-arm','#ad8dd3',2.784,.774)],ceiling=caveCeiling(world);
   const right=Vector3.Right(),up=Vector3.Up();

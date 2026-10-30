@@ -20,6 +20,7 @@ import {createWitchCaveTerrain} from './witch-cave-terrain.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
 import {configureCaveAtmosphere} from './witch-cave-atmosphere.js';
 import {cachedMapTerrain} from './map-terrain-cache.js';
+import {configureCaveFog} from './cave-fog-runtime.js';
 const caveTrainingSpawn={x:-39,z:39};
 function mapNavigation({cave,forest,village}){
   const obstacles=cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
@@ -122,7 +123,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,touch
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
   const mapId=cave?'witch-cave':forest?'monster-forest':village?'village':'training';
   const world={ground,forest,cave,mapId,environmentManifest:cave?'witch-cave':forest?'monster-forest':'village',groundManifest:cave?'witch-cave-ground':forest?'monster-forest-ground':'village-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,tick(time){if(!this.cave)sky.tick(time);this.caveAtmosphere?.tick(time);for(const mote of motes){mote.mesh.setEnabled(!this.cave);mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}}};
-  configureCaveAtmosphere(world);return world;
+  configureCaveAtmosphere(world);configureCaveFog(world);return world;
 }
 
 // Called after the old streamed environment has drained and released its GPU
@@ -130,6 +131,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,touch
 export function replaceWorldMap(world,character){
   if(!world.village||!['warrior-v3','warrior-v4','warrior-v5'].includes(character))throw new Error('Unsupported map transition');
   const forest=character==='warrior-v4',cave=character==='warrior-v5';setWorldCharacter(character);
+  world.caveFog?.dispose();world.caveFog=null;
   retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
@@ -145,4 +147,5 @@ export function replaceWorldMap(world,character){
   world.scene.imageProcessingConfiguration.exposure=forest?1.08:1.15;
   world.scene.fogStart=world.villagePolicy.fogStart;world.scene.fogEnd=world.villagePolicy.fogEnd;
   configureCaveAtmosphere(world);
+  configureCaveFog(world);
 }

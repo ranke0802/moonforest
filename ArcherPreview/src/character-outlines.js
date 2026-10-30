@@ -1,5 +1,7 @@
 import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
 import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
+import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
+import { bindCaveFogMaterial } from './cave-fog-binding.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -8,7 +10,8 @@ import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobal.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertex.js';
 
 // One unlit back-face pass, using the original GPU geometry and skeleton.
-// No screen-sized render target, extra textures, shadow pass or CPU skinning.
+// No screen-sized render target, extra shadow pass or CPU skinning. The cave
+// shares its small visibility mask (one complete fallback texel outside it).
 const vertexSource = `
 precision highp float;
 attribute vec3 position;
@@ -18,6 +21,7 @@ uniform mat4 viewProjection;
 uniform float outlineWidth;
 uniform float outlinePixels;
 uniform vec2 outlineViewport;
+varying vec3 caveInkPosition;
 #include<bonesDeclaration>
 #include<morphTargetsVertexGlobalDeclaration>
 #include<morphTargetsVertexDeclaration>[0..maxSimultaneousMorphTargets]
@@ -29,6 +33,7 @@ void main(void) {
   mat4 finalWorld = world;
   #include<bonesVertex>
   vec4 worldPosition = finalWorld * vec4(positionUpdated, 1.0);
+  caveInkPosition = worldPosition.xyz;
   vec3 worldNormal = normalize(mat3(finalWorld) * normalUpdated);
   if (outlinePixels > 0.0) {
     gl_Position = viewProjection * worldPosition;
@@ -45,7 +50,10 @@ precision mediump float;
 uniform vec3 outlineColor;
 uniform float outlineOpacity;
 uniform float hitFlash;
+varying vec3 caveInkPosition;
+${CAVE_FOG_GLSL}
 void main(void) {
+  if (caveFogHidesInk(caveInkPosition)) discard;
   gl_FragColor = vec4(mix(outlineColor, vec3(1.0), hitFlash), outlineOpacity);
 }`;
 const materials = new WeakMap();
@@ -58,7 +66,8 @@ function outlineMaterial(scene) {
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
       defines: ['#define NORMAL'],
-      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash'],
+      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash', 'caveFogRect', 'caveFogActive'],
+      samplers: ['caveFogMap'],
     });
   material.backFaceCulling = true;
   material.cullBackFaces = false;
@@ -67,8 +76,10 @@ function outlineMaterial(scene) {
   material.setFloat('outlineWidth', .004);
   material.setFloat('outlineOpacity', 1);
   material.setFloat('hitFlash', 0);
+  material.setFloat('caveFogActive', 0);
   material.onBindObservable.add(mesh => {
     const effect = material.getEffect();
+    bindCaveFogMaterial(scene,material);
     // ShaderMaterial caches bone bindings with the shared material. Consecutive
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);

@@ -12811,9 +12811,8 @@
       "derived": true
     }
   ],
-  "model": "./content/07a7d4c4fd99475583767d737711853db49ce220dd52561913ca4e17c677fb80.gltf",
+  "model": "./content/e68c1c27eb0d4975714fdd697ec4c017dde11419ee5e8fe5fdd7a9819bc0d03b.gltf",
   "resources": [
-    "./content/1917f7b7c1edfb907c0d091c3331a27b4f61a305d6720d8bb16d14292104fe68.bin",
     "./content/aadb32febe67010bb960d5da9fddcb6601622ed851d3f1f33c8a22c5947e7b6e.bin",
     "./content/6227a0c13bd050a47fffe2a5af6aad09a50aeae35c083441205fd62e754bbe24.bin",
     "./content/bd659bf504683895d2c054fccea1f3de8cf0d36a3edc32e210844f84b71d96fb.bin",
@@ -12830,8 +12829,9 @@
     "./content/0bf4cacad414119b1976c0fd2c58953ab9dcbaa3537091223d600336c9b6254c.bin",
     "./content/3eb3fe70fb998f1bfa13fd35e43b6c9a6aedbbdfec31966bf3b0f28415234837.bin",
     "./content/63a4e68d27be0a935fc69395d4735bee7cf0be9474a0ed9e15a66afa46fe688c.bin",
+    "./content/ab1efe95be140e4cb8eaf1814124df4c80d70ab38a46859da745667ecfe7abe6.bin",
     "./content/9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a.ktx2",
-    "./content/07a7d4c4fd99475583767d737711853db49ce220dd52561913ca4e17c677fb80.gltf"
+    "./content/e68c1c27eb0d4975714fdd697ec4c017dde11419ee5e8fe5fdd7a9819bc0d03b.gltf"
   ],
   "sourceClips": [
     {
@@ -12952,7 +12952,19 @@
   },
   "geometry": {
     "triangles": 103930,
-    "originalTopology": true
+    "originalTopology": false,
+    "originalTriangleSurfaces": true,
+    "lossless": true,
+    "exactVertexReuse": [
+      {
+        "mesh": "Elena_Meshy_Static",
+        "originalVertices": 207979,
+        "vertices": 158730,
+        "removedDuplicates": 49249,
+        "verifiedTriangleCorners": 311790,
+        "vertexBytesSaved": 2560948
+      }
+    ]
   },
   "magicEffectsEnabled": true,
   "magicEffect": "ground-telegraphs-v1",

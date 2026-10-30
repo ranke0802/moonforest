@@ -242,6 +242,7 @@ export class BossEncounter {
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
         if(!this.brain.hit(hit))continue;
+        if(this.brain.hp>0)this.animator?.reactToHit?.();
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
         if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}

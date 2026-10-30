@@ -5,6 +5,7 @@ import {VillageOutlines} from '../src/village-outlines.js';
 import {selectVillageShadowCasters} from '../src/village-shadow-policy.js';
 import {selectVillageOutlines,outlineTriangleCount} from '../src/village-outline-policy.js';
 import {applyVillageToon} from '../src/village-toon.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 test('dense trees cannot starve nearby garden, shrub, gate and fence shadows; mobile count stays bounded',()=>{
  const record=(id,kind,x)=>({root:{isEnabled:()=>true},placement:{id,kind},min:{x:x-.4,z:-.4},max:{x:x+.4,z:.4}});
@@ -20,6 +21,8 @@ test('dense trees cannot starve nearby garden, shrub, gate and fence shadows; mo
 
 test('small gardens and shrubs are outlined during actual instanced draws above the old 32-object cutoff',async t=>{
  const engine=new NullEngine(),scene=new Scene(engine);engine.getCaps().instancedArrays=true;t.after(()=>engine.dispose());
+ // Match the completed constant-sampler upload before checking actual ink draws.
+ caveFogFallback(scene).getInternalTexture().isReady=true;
  const camera=new FreeCamera('camera',new Vector3(0,2,-12),scene);camera.setTarget(new Vector3(0,1,0));
  const source=MeshBuilder.CreateBox('prop',{size:.9},scene);source.material=new PBRMaterial('paint',scene);source.isVisible=false;applyVillageToon([source],{direction:Vector3.Up(),shadowsActive:true});
  const records=Array.from({length:48},(_,i)=>{

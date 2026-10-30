@@ -4,9 +4,11 @@ import {FreeCamera,MeshBuilder,NullEngine,PBRMaterial,Scene,TransformNode,Vector
 import {VillageOutlines} from '../src/village-outlines.js';
 import {applyVillageToon} from '../src/village-toon.js';
 import {prepareTreeOcclusion} from '../src/tree-occlusion.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 test('real Babylon render couples ink to a successful base/LOD batch through turns and cold shaders',async t=>{
   const engine=new NullEngine(),scene=new Scene(engine);
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   t.after(()=>{scene.dispose();engine.dispose();});
   engine.getCaps().instancedArrays=true;
   const camera=new FreeCamera('camera',new Vector3(0,2,-6),scene);
