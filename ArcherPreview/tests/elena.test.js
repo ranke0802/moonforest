@@ -121,11 +121,13 @@ test('spell damage occurs once at release, can be dodged or blocked, and cancels
 test('an unengaged resident does not block cave exit or play bear voices, and movement remains on the dwelling floor',async t=>{
   const {battle,player,world}=await fixture(t);await battle.activateResident(player);const e=battle.elenaPool[0];
   player.position.set(-46,0,47);battle.update(.03,player);assert.equal(e.engaged,false);assert.equal(battle.combatCount,0);
+  assert.equal(battle.nearestTarget(player.position),null,'distant resident cannot pull camera or auto-aim');
   assert.equal(portalAvailable(player.position,MAP_PORTALS['witch-cave'],{enemies:battle.combatCount}),true);
   const cues=[],combat=[],audio=new ActionAudio({play:(name)=>cues.push(name),setCombat:state=>combat.push(state)});audio.boss(battle,.03);assert.equal(combat.at(-1).active,false);
   player.position.set(29,6,-23);
   for(let i=0;i<90;i++){battle.update(1/30,player);assert.ok(world.navigation.free(e.actor.position,.33));audio.boss(battle,1/30);}
   assert.equal(e.engaged,true);assert.ok(!cues.some(n=>/^(bear_|goblin_)/.test(n)));assert.equal(battle.combatCount,1);
+  assert.equal(battle.nearestTarget(player.position),e);
   player.position.set(-46,0,47);
   for(let i=0;i<300;i++)battle.update(1/30,player);
   assert.ok(Math.hypot(e.actor.position.x-29,e.actor.position.z+27)<.2);

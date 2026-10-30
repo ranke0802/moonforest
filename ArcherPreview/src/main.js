@@ -440,7 +440,7 @@ function render(dt) {
       text('#attack-label',result.chargeProgress>0?'심판 준비':'검 공격');
     }
     combatResult=result;
-    const busy=result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.livingCount>0||boss.loading;
+    const busy=result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
     if(qualityMode!=='battery')renderActivity.recordFrame(dt);
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;

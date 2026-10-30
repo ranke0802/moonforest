@@ -167,7 +167,7 @@ export class BossBattle {
   nearestTarget(position) {
     let target = null, nearest = Infinity;
     for (const boss of this.encounters) {
-      if (!boss.active || boss.brain.hp <= 0) continue;
+      if (!boss.active || boss.brain.hp <= 0 || (boss.kind==='elena'&&!boss.engaged)) continue;
       const distance = Vector3.DistanceSquared(position, boss.actor.position);
       if (distance < nearest) { nearest = distance; target = boss; }
     }
