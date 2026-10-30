@@ -105,6 +105,7 @@ export class BossBattle {
       if(!resident.asset||reset||(phase===2&&this.mourningNeedsReset)){
         const position=new Vector3(this.residentHome.x,0,this.residentHome.z);
         await resident.summon(player,{position,rotationY:0});
+        this.residentHome={x:resident.home.x,z:resident.home.z};
         if(phase===2)this.mourningNeedsReset=false;
       }else{
         resident.active=true;resident.actor.setEnabled(!resident.corpseGone);resident.routeState={};resident.engaged=false;
@@ -143,7 +144,7 @@ export class BossBattle {
       // Resetting one boss never resets player resources or other enemies.
       for(const old of [...this.elenaPool,...this.mourningPool]){old.reviewMode=false;old.hide();}
       const active=await this.activateResident(player,{reset:true,phase,home:position});
-      if(active){const resident=this.encounters.find(b=>b.kind==='elena');resident.actor.rotation.y=Math.atan2(player.position.x-position.x,player.position.z-position.z);this.lastHit=resident.displayName+' 소환';this.actionVersion++;}
+      if(active){const resident=this.encounters.find(b=>b.kind==='elena');resident.actor.rotation.y=Math.atan2(player.position.x-resident.actor.position.x,player.position.z-resident.actor.position.z);this.lastHit=resident.displayName+' 소환';this.actionVersion++;}
       return active;
     }finally{this.loading=false;this.onChange(this);}
   }
@@ -226,7 +227,7 @@ export class BossBattle {
     if(this.world.prefetchResources&&this.residentPhase===1&&this.encounters.some(b=>b.kind==='elena'&&b.engaged))this.preloadMourning();
     const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
     separateBosses(this.encounters, this.combat.grabOwner);
-    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
+    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;(boss.movementNavigation??this.world.navigation)?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {

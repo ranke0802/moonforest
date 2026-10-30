@@ -59,7 +59,7 @@ test('twenty cave round trips retain one Elena, player health/equipment and boss
   battle.combat.hp=312;battle.potions.remaining=1;battle.combat.defense=7;
   await Promise.all([battle.activateResident(player),battle.activateResident(player)]);
   const elena=battle.elenaPool[0];assert.equal(models.instances,1);assert.equal(battle.encounters.length,1);
-  assert.equal(world.navigation.free(ELENA_HOME,.34),true);assert.equal(elena.actor.position.y,world.terrain.heightAt(29,-27));
+  assert.equal(world.navigation.free(ELENA_HOME,.34),true);assert.equal(elena.actor.position.y,world.terrain.heightAt(ELENA_HOME.x,ELENA_HOME.z));
   elena.brain.hp=777;
   const count=()=>[scene.meshes.length,scene.transformNodes.length,scene.animationGroups.length,scene.skeletons.length,scene.materials.length,scene.textures.length];const before=count();
   for(let i=0;i<20;i++){
@@ -130,7 +130,7 @@ test('an unengaged resident does not block cave exit or play bear voices, and mo
   assert.equal(battle.nearestTarget(player.position),e);
   player.position.set(-46,0,47);
   for(let i=0;i<300;i++)battle.update(1/30,player);
-  assert.ok(Math.hypot(e.actor.position.x-29,e.actor.position.z+27)<.2);
+  assert.ok(Math.hypot(e.actor.position.x-ELENA_HOME.x,e.actor.position.z-ELENA_HOME.z)<.2);
 });
 
 test('a late resident download cannot appear after departing the cave',async t=>{

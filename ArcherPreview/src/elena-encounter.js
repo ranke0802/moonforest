@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {BossEncounter} from './boss-encounter.js';
-import {ElenaBrain,ELENA_HOME,ELENA_SPELLS,MOURNING_MOVEMENT,MOURNING_SIZE,MOURNING_SIZE_SCALE,spellImpact} from './elena-spec.js';
+import {ElenaBrain,ELENA_HOME,ELENA_SPELLS,MOURNING_MOVEMENT,MOURNING_SIZE,MOURNING_SIZE_SCALE} from './elena-spec.js';
 import {createElenaContact} from './elena-style.js';
 import {GroundSpellTelegraph,spellContains} from './elena-ground-magic.js';
 import {shieldIntercepts} from './player-strikes.js';
@@ -29,7 +29,7 @@ export class ElenaEncounter extends BossEncounter {
     if(!this.brain.repositioning){this.repositionTarget=null;this.chargeOrigin=null;return super.movementPlan(player);}
     if(this.repositionSerial!==this.brain.serial||!this.repositionTarget){
       this.repositionSerial=this.brain.serial;this.routeState={};
-      const options={phase:this.phase,turn:this.phase===2?this.brain.movementTurn:this.brain.nextSpell,radius:this.radius,navigation:this.world.navigation,terrain:this.world.terrain,home:this.home};
+      const options={phase:this.phase,turn:this.phase===2?this.brain.movementTurn:this.brain.nextSpell,radius:this.radius,navigation:this.movementNavigation,terrain:this.world.terrain,home:this.home};
       this.chargeOrigin=null;
       if(this.phase===2&&this.brain.moveKind==='charge'){
         this.repositionTarget=chooseElenaCharge(this.actor.position,player.position,options);
@@ -70,7 +70,7 @@ export class ElenaEncounter extends BossEncounter {
     if(this.brain.mode!=='attack'){this.spell.reset();return stop;}
     const spec=this.brain.spell,origin=this.actor.position,aim=this.reviewMode?origin.add(new Vector3(Math.sin(this.actor.rotation.y)*6,0,Math.cos(this.actor.rotation.y)*6)):player.position;
     this.spell.aim(this.brain.serial,spec.pattern,origin,aim,{range:spec.range,bossRadius:this.radius+.3,scale:this.phase===2?MOURNING_SIZE_SCALE:1});
-    this.spell.show(this.brain.time,spellImpact(spec,this.brain.durations[this.brain.state]),{flash:fire});
+    this.spell.show(this.brain.castWarningElapsed,this.brain.castWarningDuration,{flash:fire});
     if(fire&&!this.spell.fired){
       this.spell.fired=true;
       const clear=!this.world.navigation||this.world.navigation.segmentClear(this.spell.plan.origin,player.position,0,true);
@@ -99,10 +99,10 @@ export class ElenaEncounter extends BossEncounter {
     this.brain.time+=dt;this.lastRoot=null;this.lastSerial=null;
     if(walking){
       const before=p.clone(),target=this.home;
-      const waypoint=this.world.navigation?.steer(p,target,this.radius,this.routeState??={},dt)??target;
+      const waypoint=this.movementNavigation?.steer(p,target,this.radius,this.routeState??={},dt)??target;
       const x=waypoint.x-p.x,z=waypoint.z-p.z,d=Math.hypot(x,z),step=Math.min((this.phase===2?MOURNING_MOVEMENT.walkSpeed:1.1)*dt,d);
       if(d>.001){p.x+=x/d*step;p.z+=z/d*step;this.actor.rotation.y=Math.atan2(x,z);}
-      this.world.navigation?.constrain(p,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(p);
+      this.movementNavigation?.constrain(p,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(p);
     }
     if(this.phase===2)this.animator.gaitRate=MOURNING_MOVEMENT.walkSpeed/((this.config.motion?.baseWalkSpeed??.3368)*MOURNING_SIZE_SCALE);
     this.animator.transition(state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:true,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
@@ -122,7 +122,7 @@ export class ElenaEncounter extends BossEncounter {
     const movement=this.reviewMovement??{x:0,z:0},length=Math.hypot(movement.x,movement.z),moving=!casting&&this.brain.mode!=='attack'&&length>.08;
     if(!casting&&this.brain.mode!=='attack'){
       const state=moving?this.brain.walk:this.brain.idle;if(this.brain.state!==state)this.brain.start(state,moving?'move':'idle');
-      if(moving){const before=this.actor.position.clone(),speed=(this.phase===2?.673:1.1)*(movement.run?1.5:1);this.actor.position.x+=movement.x*speed*dt;this.actor.position.z+=movement.z*speed*dt;this.actor.rotation.y=Math.atan2(movement.x,movement.z);this.world.navigation?.constrain(this.actor.position,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);}
+      if(moving){const before=this.actor.position.clone(),speed=(this.phase===2?.673:1.1)*(movement.run?1.5:1);this.actor.position.x+=movement.x*speed*dt;this.actor.position.z+=movement.z*speed*dt;this.actor.rotation.y=Math.atan2(movement.x,movement.z);this.movementNavigation?.constrain(this.actor.position,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);}
     }
     this.animator.gaitRate=(movement.run?3:2)/(this.phase===2?MOURNING_SIZE_SCALE:1);
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;

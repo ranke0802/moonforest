@@ -23,7 +23,7 @@ test('reposition alternates lateral sides, backs away when close, and approaches
     const far={x:origin.x,z:origin.z+7},forward=chooseElenaReposition(origin,far,{phase,radius});assert.ok(forward.z>origin.z);assert.ok(distance(forward,far)<distance(origin,far));
     const coincident=chooseElenaReposition(origin,origin,{phase,radius});assert.ok(Object.values(coincident).every(Number.isFinite));assert.ok(distance(coincident,origin)>=radius+1.1);
   }
-  assert.deepEqual(origin,{x:29,y:6,z:-27});assert.deepEqual(player,{x:29,z:-23});
+  assert.deepEqual(origin,{x:29,y:6,z:-25.5});assert.deepEqual(player,{x:29,z:-21.5});
 });
 
 test('blocked sides, unsafe segments and height steps choose a tested alternate or shorter destination',()=>{
@@ -78,7 +78,7 @@ test('no safe route ends the movement action immediately without repeated search
 
 for(const phase of [1,2])test(`phase ${phase} performs one release and bounded movement before a fresh cast`,()=>{
   const b=brain(phase);b.cast();const duration=b.durations[b.state],impact=spellImpact(b.spell,duration);
-  assert.equal(b.update((impact+.001)/b.attackPlaybackRate,4,true).events.length,1);assert.equal(b.update((duration-impact+.01)/b.attackPlaybackRate,4,true).events.length,0);assert.equal(b.repositioning,true);assert.equal(b.mode,'move');assert.equal(b.state,b.walk);
+  assert.equal(b.update(b.castLeadInRemaining+(impact+.001)/b.attackPlaybackRate,4,true).events.length,1);assert.equal(b.update((duration-impact+.01)/b.attackPlaybackRate,4,true).events.length,0);assert.equal(b.repositioning,true);assert.equal(b.mode,'move');assert.equal(b.state,b.walk);
   const limit=b.repositionRemaining;assert.ok(limit>=2.2&&limit<=2.7);let elapsed=0;
   while(b.repositioning){const result=b.update(1/60,4,true);elapsed+=1/60;assert.equal(result.events.length,0);if(b.repositioning)near(result.speed,phase===2?MOURNING_MOVEMENT.walkSpeed:1.1);}
   assert.ok(elapsed<=limit+1/60);if(phase===1){assert.equal(b.mode,'idle');b.update(.39,4,true);assert.notEqual(b.mode,'attack');b.update(.02,4,true);}assert.equal(b.mode,'attack');assert.equal(b.time,0);

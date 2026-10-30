@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ElenaBrain,MOURNING_CAST_RATE,spellImpact} from '../src/elena-spec.js';
+import {ElenaBrain,MOURNING_CAST_RATE,MOURNING_CAST_LEAD_IN,spellImpact} from '../src/elena-spec.js';
 import {BossBrain} from '../src/boss-spec.js';
 import {readFileSync} from 'node:fs';
 const config=name=>JSON.parse(readFileSync(new URL('../public/assets/'+name+'.json',import.meta.url)));
@@ -28,11 +28,11 @@ test('shield stun, strong strikes, and lethal hits still interrupt Elena while o
   }
 });
 
-test('phase-two 1.6x cast keeps source corrective time and releases exactly once after a full one-second warning',()=>{
+test('phase-two readable lead-in preserves 1.6x source corrective time and releases exactly once',()=>{
   const b=new ElenaBrain({idle:2.4,walk:2.4,cast:3,dead:2.4},{mourning:true});b.cast();
   assert.equal(b.attackPlaybackRate,1.6);let elapsed=0,releases=0,releaseAt;
-  while(b.mode==='attack'&&elapsed<3){elapsed+=.001;const r=b.update(.001,4,true);if(r.events.length){releaseAt=elapsed;releases+=r.events.length;}if(b.mode==='attack')assert.ok(Math.abs(b.time-elapsed*MOURNING_CAST_RATE)<1e-9);}
-  assert.equal(releases,1);assert.ok(Math.abs(releaseAt-1.65/1.6)<=.0011);assert.ok(releaseAt>=1);assert.ok(Math.abs(elapsed-3/1.6)<=.0011);
+  while(b.mode==='attack'&&elapsed<3){elapsed+=.001;const r=b.update(.001,4,true);if(r.events.length){releaseAt=elapsed;releases+=r.events.length;}if(b.mode==='attack'){assert.ok(Math.abs(b.time-Math.max(0,elapsed-MOURNING_CAST_LEAD_IN)*MOURNING_CAST_RATE)<1e-9);assert.ok(Math.abs(b.castWarningElapsed-elapsed)<1e-9);}}
+  assert.equal(releases,1);assert.ok(Math.abs(releaseAt-(MOURNING_CAST_LEAD_IN+1.65/1.6))<=.0011);assert.ok(releaseAt>=1.65);assert.ok(Math.abs(elapsed-(MOURNING_CAST_LEAD_IN+3/1.6))<=.0011);
   assert.ok(Math.abs(spellImpact(b.spells[0],3)-1.65)<1e-9);assert.equal(b.durations.cast,3,'source clip and corrective keys are not retimed');
 });
 

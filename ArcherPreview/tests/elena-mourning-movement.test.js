@@ -32,7 +32,7 @@ async function fixture(t){
   t.after(()=>{battle.hide();container.dispose();loader.dispose();scene.dispose();engine.dispose();});return {engine,scene,world,battle,player,e};
 }
 function step(f,dt=1/60,action={state:'dodge',actionId:1}){f.battle.update(dt,f.player);f.scene._animate(0);f.battle.poseAndContacts(f.player,action,null,null);}
-function charge(f){f.e.actor.position.set(29,6,-27);f.world.terrain.place(f.e.actor.position);f.player.position.set(29,6,-21);f.e.brain.stagger=0;f.e.brain.movementTurn=3;f.e.brain.reposition();step(f,0);assert.equal(f.e.brain.moveKind,'charge');}
+function charge(f){f.e.actor.position.set(25.5,6,-24.125);f.world.terrain.place(f.e.actor.position);f.player.position.set(31.5,6,-24.125);f.e.brain.stagger=0;f.e.brain.movementTurn=3;f.e.brain.reposition();step(f,0);assert.equal(f.e.brain.moveKind,'charge');assert.ok(f.e.movementNavigation.segmentClear(f.e.actor.position,f.e.repositionTarget,f.e.radius));}
 
 test('phase-two brain continuously alternates movement and the five authored casts without idle gaps',()=>{
   const b=new ElenaBrain({idle:2.4,walk:2.4,cast:3,dead:2.4},{mourning:true}),kinds=new Set(),patterns=new Set();let idle=0,events=0;
@@ -56,7 +56,7 @@ test('actual rig walks, skitters and charges while every cast remains stationary
     if(b.mode==='idle')idle++;
     if(b.repositioning){kinds.add(b.moveKind);speeds[b.moveKind]=Math.max(speeds[b.moveKind],speed);}
     if(state==='attack'&&b.mode==='attack'&&serial===b.serial){near(Vector3.Distance(before,f.e.actor.position),0);castFrames++;patterns.add(b.spell.pattern);}
-    assert.ok(f.e.animator.gaitRate<=MOURNING_MOVEMENT.gaitCap);assert.ok(f.world.navigation.free(f.e.actor.position,f.e.radius));assert.ok(Math.hypot(f.e.actor.position.x-f.e.home.x,f.e.actor.position.z-f.e.home.z)<=9.5+1e-5);
+    assert.ok(f.e.animator.gaitRate<=MOURNING_MOVEMENT.gaitCap);assert.ok(f.e.movementNavigation.free(f.e.actor.position,f.e.radius));assert.ok(Math.hypot(f.e.actor.position.x-f.e.home.x,f.e.actor.position.z-f.e.home.z)<=9.5+1e-5);
   }
   assert.equal(idle,0);assert.equal(patterns.size,5);assert.ok(castFrames>1000);assert.deepEqual([...kinds].sort(),['charge','skitter','walk']);
   near(speeds.walk,MOURNING_MOVEMENT.walkSpeed);near(speeds.skitter,MOURNING_MOVEMENT.skitterSpeed);near(speeds.charge,MOURNING_MOVEMENT.chargeSpeed);
@@ -65,9 +65,9 @@ test('actual rig walks, skitters and charges while every cast remains stationary
 
 test('charge shows a full locked 0.9 second ground warning and follows the old target after a dodge',async t=>{
   const f=await fixture(t);charge(f);const origin=f.e.actor.position.clone(),target={...f.e.repositionTarget},plan=f.e.spell.plan,hp=f.battle.playerHp;
-  assert.equal(plan.pattern,'corridor');assert.equal(f.e.spell.serial,'charge:'+f.e.brain.serial);assert.equal(f.e.spell.mesh.isEnabled(),true);step(f,.3);f.player.position.x+=2;
+  assert.equal(plan.pattern,'corridor');assert.equal(f.e.spell.serial,'charge:'+f.e.brain.serial);assert.equal(f.e.spell.mesh.isEnabled(),true);step(f,.3);f.player.position.z+=2;
   step(f,.599);near(Vector3.Distance(origin,f.e.actor.position),0);assert.strictEqual(f.e.spell.plan,plan);assert.deepEqual(f.e.repositionTarget,target);
-  step(f,.002);assert.ok(f.e.actor.position.z>origin.z);near(f.e.actor.position.x,origin.x);assert.ok(f.e.spell.mesh.isEnabled());
+  step(f,.002);assert.ok(f.e.actor.position.x>origin.x);near(f.e.actor.position.z,origin.z);assert.ok(f.e.spell.mesh.isEnabled());
   for(let i=0;i<120&&f.e.brain.mode!=='attack';i++)step(f);
   assert.equal(f.e.brain.mode,'attack');assert.ok(f.e.brain.time<.02);assert.ok(Math.hypot(f.e.actor.position.x-target.x,f.e.actor.position.z-target.z)<=.16);assert.equal(f.battle.playerHp,hp);assert.equal(f.e.inspect().chargeDamage,42);assert.equal(f.e.spell.serial,f.e.brain.serial);assert.notStrictEqual(f.e.spell.plan,plan);
 });
@@ -84,10 +84,10 @@ test('charge sweep matches the warned corridor edges, rotation and slow frames w
 });
 
 test('actual charge applies one contact, supports dodge, blocks and walls, and a new charge may hit again',async t=>{
-  const f=await fixture(t);f.player.rotation.y=Math.PI;
+  const f=await fixture(t);f.player.rotation.y=-Math.PI/2;
   for(const outcome of ['hit','dodge','block','outside','wall'])await t.test(outcome,()=>{
     f.battle.combat.reset();charge(f);const serial=f.e.brain.serial,hp=f.battle.playerHp,segment=f.world.navigation.segmentClear;
-    if(outcome==='outside')f.player.position.x+=f.e.radius+.35;
+    if(outcome==='outside')f.player.position.z+=f.e.radius+.35;
     if(outcome==='wall')f.world.navigation.segmentClear=()=>false;
     let hits=0,lastHp=hp,dodged=false;
     try{
@@ -109,12 +109,12 @@ test('actual charge applies one contact, supports dodge, blocks and walls, and a
 });
 
 test('a newly blocked charge stops at the collision constraint and cannot leak its warning into the next spell',async t=>{
-  const f=await fixture(t);charge(f);const warning=f.e.spell.plan,serial=f.e.brain.serial,wallZ=f.e.actor.position.z+1,hp=f.battle.playerHp,constrain=f.world.navigation.constrain.bind(f.world.navigation);
+  const f=await fixture(t);charge(f);const warning=f.e.spell.plan,serial=f.e.brain.serial,wallX=f.e.actor.position.x+1,hp=f.battle.playerHp,navigation=f.e.movementNavigation,constrain=navigation.constrain.bind(navigation);
   // Model a blocker entering the already warned corridor through the same
   // constraint hook used by the live navigation/collision system.
-  f.world.navigation.constrain=(position,...args)=>{constrain(position,...args);position.z=Math.min(position.z,wallZ);};
+  navigation.constrain=(position,...args)=>{constrain(position,...args);position.x=Math.min(position.x,wallX);};
   for(let frame=0;frame<180&&f.e.brain.mode!=='attack';frame++){
-    step(f);assert.ok(f.e.actor.position.z<=wallZ+1e-6);
+    step(f);assert.ok(f.e.actor.position.x<=wallX+1e-6);
     if(f.e.brain.serial===serial)assert.strictEqual(f.e.spell.plan,warning);
   }
   assert.equal(f.e.brain.mode,'attack');assert.ok(f.e.brain.serial>serial);assert.equal(f.e.spell.serial,f.e.brain.serial);assert.notStrictEqual(f.e.spell.plan,warning);assert.equal(f.e.spell.fired,false);assert.equal(f.battle.playerHp,hp);
@@ -123,7 +123,7 @@ test('a newly blocked charge stops at the collision constraint and cannot leak i
 test('charge cancels on map exit or player death and manual review never starts automatic movement',async t=>{
   const f=await fixture(t);charge(f);step(f,.8);f.battle.hide();f.world.cave=false;assert.equal(f.e.spell.plan,null);assert.equal(f.e.brain.repositioning,false);
   f.world.cave=true;await f.battle.activateResident(f.player);const before=f.e.actor.position.clone();step(f,.05);assert.ok(Vector3.Distance(before,f.e.actor.position)<.06);assert.notEqual(f.e.brain.moveKind,'charge');
-  charge(f);f.battle.combat.hp=0;step(f,.95);assert.equal(f.e.brain.mode,'idle');assert.equal(f.e.spell.plan,null);near(f.e.actor.position.z,-27);
+  charge(f);f.battle.combat.hp=0;step(f,.95);assert.equal(f.e.brain.mode,'idle');assert.equal(f.e.spell.plan,null);near(f.e.actor.position.x,25.5);near(f.e.actor.position.z,-24.125);
   f.battle.combat.reset();f.e.reviewMode=true;f.e.reviewMovement={x:0,z:0};const fixed=f.e.actor.position.clone();for(let i=0;i<240;i++)step(f);near(Vector3.Distance(f.e.actor.position,fixed),0);assert.equal(f.e.brain.mode,'idle');
   assert.ok(f.e.requestReviewCast());for(let i=0;i<190;i++)step(f);assert.equal(f.e.brain.mode,'idle');near(Vector3.Distance(f.e.actor.position,fixed),0);
 });

@@ -129,6 +129,9 @@ export class BossEncounter {
   createBrain(durations){return new BossBrain(durations);}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
   prepareAsset(){}
+  // Actor movement may need a larger environment envelope than its combat body.
+  // Player sight, weapon contact and dodge collisions still use world navigation.
+  get movementNavigation(){return this.world.navigation;}
   movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
   contactSeparation(){return this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;}
   motionSpec(name){return BOSS_BY_NAME[name];}
@@ -154,10 +157,10 @@ export class BossEncounter {
     if(!this.active||this.corpseGone)return;
     if(this.brain.hp<=0){this.updateDeath(dt);if(this.corpseGone)return;}
     this.dt=dt;this.player=player;
-    const beforeMove=this.actor.position.clone(),navigation=this.world.navigation;
+    const beforeMove=this.actor.position.clone(),navigation=this.movementNavigation;
     if(this.ownsCombat)this.combat.update(dt,player,this.onDamage);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
-    const blocked=navigation&&(this.motionRootTravel!==false||this.brain.mode!=='attack')&&!navigation.segmentClear(this.actor.position,player.position,0,true);
+    const blocked=this.world.navigation&&(this.motionRootTravel!==false||this.brain.mode!=='attack')&&!this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
     const result=this.brain.update(dt,blocked?Math.max(3.8,distance):distance,this.playerAlive&&available&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     const motion=this.movementPlan(player,result,distance),target=motion.target;
@@ -215,7 +218,7 @@ export class BossEncounter {
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
     else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
     const separation=this.contactSeparation();
-    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
     const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;

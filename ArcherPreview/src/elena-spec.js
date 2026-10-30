@@ -1,5 +1,5 @@
 // Keep the authored clip names, including Meshy's original spelling.
-export const ELENA_HOME=Object.freeze({x:29,z:-27});
+export const ELENA_HOME=Object.freeze({x:29,z:-25.5});
 // The authored body is 2.7 m; the manifest's 3.2 m includes the halo.
 // Keep the packed rig untouched and apply this one ratio to world dimensions.
 export const MOURNING_SIZE_SCALE=5.7/2.7;
@@ -27,6 +27,9 @@ export const MOURNING_SPELLS=Object.freeze([
 ].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range:Math.min(14,range*MOURNING_SIZE_SCALE),damage,kind:'ground',impact:.55})));
 export function spellImpact(spec,duration){return Math.min(Math.max(1,duration*spec.impact),duration-.25);}
 export const MOURNING_CAST_RATE=1.6;
+// Give the enlarged floor patterns a readable lead-in, then play the authored
+// cast at the requested 1.6x speed. Release still matches its 1.65 s pose.
+export const MOURNING_CAST_LEAD_IN=.65;
 export const MOURNING_MOVEMENT=Object.freeze({walkSpeed:1.05,skitterSpeed:3.6,chargeSpeed:5.4,chargeWarning:.9,chargeDamage:42,gaitCap:8});
 const MOURNING_MOVE_ORDER=['walk','skitter','walk','charge'];
 
@@ -37,7 +40,7 @@ export class ElenaBrain {
     this.hp=this.maxHp=mourning?1800:1200;this.serial=0;this.stagger=0;this.flash=0;this.flashDuration=.18;
     this.wait=1.2;this.nextSpell=0;this.movementTurn=0;this.moveKind=null;this.visited=new Set();this.start(this.idle,'idle');
   }
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.visited.add(state);if(mode!=='move')this.repositioning=false;if(mode==='attack'&&!this.mourning)this.spell=this.spells.find(s=>s.name===state);}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.castLeadInRemaining=mode==='attack'&&this.mourning?MOURNING_CAST_LEAD_IN:0;this.visited.add(state);if(mode!=='move')this.repositioning=false;if(mode==='attack'&&!this.mourning)this.spell=this.spells.find(s=>s.name===state);}
   cast(){this.spell=this.spells[this.nextSpell++%this.spells.length];this.start(this.spell.name,'attack');return this.spell;}
   reposition(){
     this.start(this.walk,'move');this.repositioning=true;
@@ -49,6 +52,8 @@ export class ElenaBrain {
   cancelMovement(){if(!this.repositioning)return false;this.start(this.idle,'idle');this.repositionRemaining=0;this.moveKind=null;return true;}
   get defense(){return null;}
   get attackPlaybackRate(){return this.mourning?MOURNING_CAST_RATE:1;}
+  get castWarningDuration(){return (this.mourning?MOURNING_CAST_LEAD_IN:0)+spellImpact(this.spell,this.durations[this.state])/this.attackPlaybackRate;}
+  get castWarningElapsed(){return (this.mourning?MOURNING_CAST_LEAD_IN-this.castLeadInRemaining:0)+this.time/this.attackPlaybackRate;}
   get label(){return this.mode==='attack'?this.spell?.label:this.repositioning?(this.mourning?this.moveKind==='charge'?(this.time<MOURNING_MOVEMENT.chargeWarning?'돌진 예고':'비탄의 돌진'):this.moveKind==='skitter'?'급속 횡이동':'끊임없는 배회':'자리 바꾸기'):({idle:'경계',move:'접근',down:'쓰러짐',recover:'일어나기',dead:this.mourning?'비탄의 끝':'광폭화'})[this.mode]??'경계';}
   hit({damage=14,heavy=false,stun=0,interruptsBoss=false}={}){
     if(this.hp<=0)return false;
@@ -67,7 +72,9 @@ export class ElenaBrain {
     if(this.stagger>0){this.stagger=Math.max(0,this.stagger-dt);return {events,speed:0};}
     // time stays in authored clip seconds: pose, corrective morphs, telegraph
     // progress and release all use this same accelerated cast clock.
-    this.time+=dt*(this.mode==='attack'?this.attackPlaybackRate:1);if(this.hp<=0)return {events,speed:0};
+    const lead=this.mode==='attack'?Math.min(dt,this.castLeadInRemaining):0;
+    this.castLeadInRemaining-=lead;
+    this.time+=(dt-lead)*(this.mode==='attack'?this.attackPlaybackRate:1);if(this.hp<=0)return {events,speed:0};
     const duration=this.durations[this.state];
     if(this.mode==='down'){if(this.time>=duration)this.start('Stand_Up9','recover');return {events,speed:0};}
     if(this.mode==='recover'){if(this.time>=duration){this.start(this.idle,'idle');this.wait=.9;}return {events,speed:0};}

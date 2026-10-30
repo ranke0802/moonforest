@@ -5,10 +5,22 @@ import {MourningElenaAnimator} from './mourning-elena-animation.js';
 import {orderPoseNodes} from './pose-matrices.js';
 import {MourningHurtVolumes} from './mourning-elena-hurt.js';
 import {ENEMY_ARENA_RADIUS} from './world-limits.js';
+import {MourningCaveNavigation} from './mourning-cave-navigation.js';
+import {CaveNavigation} from './witch-cave-navigation.js';
 
 export class MourningElenaEncounter extends ElenaEncounter {
   constructor(...args){super(...args);this.phase=2;this.displayName='비탄의 마녀 엘레나';this.radius=MOURNING_SIZE.radius;this.stopDistance=MOURNING_SIZE.stopDistance;this.separationRadius=MOURNING_SIZE.separationRadius;this.sizeScale=MOURNING_SIZE_SCALE;this.renderRangePadding=MOURNING_SIZE.renderRangePadding;this.reviewFocusHeight=2.25*MOURNING_SIZE_SCALE;this.meleeAimDistance=4+1.8*(MOURNING_SIZE_SCALE-1);this.healthAnchor=new Vector3();}
   createBrain(durations){return new ElenaBrain(durations,{mourning:true});}
+  get movementNavigation(){
+    const navigation=this.world.navigation;
+    if(!this.world.cave||!(navigation instanceof CaveNavigation))return navigation;
+    if(this.clearanceSource!==navigation){this.clearanceSource=navigation;this.clearanceNavigation=new MourningCaveNavigation(navigation.obstacles);}
+    return this.clearanceNavigation;
+  }
+  // The enlarged creature's lower body is hollow and asymmetric. Do not add
+  // the bear's 65 cm comfort gap: it keeps a real descending sword out of reach.
+  // Use the same physical clearance as a roll; weapon volumes stay unchanged.
+  contactSeparation(){return this.radius+.25;}
   prepareAsset(){
     // Keep five shader slots while texture-mode shaders skip zero-weight targets.
     // The attribute fallback needs all slots bound; keep the loader's texture.
@@ -28,7 +40,7 @@ export class MourningElenaEncounter extends ElenaEncounter {
     return new MourningElenaAnimator(this.asset,this.config,this.actor);
   }
   async summon(player,options={}){
-    const position=(options.position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8))).clone(),navigation=this.world.navigation;
+    const position=(options.position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8))).clone(),navigation=this.movementNavigation;
     if(navigation&&(!navigation.free(position,this.radius)||Math.hypot(position.x-player.position.x,position.z-player.position.z)<this.radius+.8)){
       const safe=navigation.findFree(position,this.radius,ENEMY_ARENA_RADIUS,[{x:player.position.x,z:player.position.z,radius:.8}]);position.x=safe.x;position.z=safe.z;
     }

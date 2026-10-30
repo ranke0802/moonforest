@@ -48,9 +48,9 @@ function begin(f,e,index=0){
   e.reviewMode=false;e.brain.stagger=0;e.brain.start(e.brain.idle,'idle');e.brain.nextSpell=index;e.brain.cast();e.knockVelocity.setAll(0);e.bossReaction.reset();e.spell.reset();
   e.actor.position.set(ELENA_HOME.x,6,ELENA_HOME.z);f.world.terrain.place(e.actor.position);f.player.position.set(ELENA_HOME.x,6,ELENA_HOME.z+4);f.world.terrain.place(f.player.position);
   f.battle.combat.hp=500;f.battle.combat.invulnerable=0;f.battle.combat.reaction.reset();e.engaged=true;step(f,0);
-  return {spec:e.brain.spell,impact:spellImpact(e.brain.spell,e.brain.durations[e.brain.state]),plan:e.spell.plan};
+  return {spec:e.brain.spell,impact:spellImpact(e.brain.spell,e.brain.durations[e.brain.state]),warning:e.brain.castWarningDuration,plan:e.spell.plan};
 }
-function advance(f,e,time,action={state:'idle'},shield=null){const dt=(time-e.brain.time)/e.brain.attackPlaybackRate;assert.ok(dt>=-1e-7);step(f,Math.max(0,dt),action,true,shield);}
+function advance(f,e,time,action={state:'idle'},shield=null){const dt=e.brain.castLeadInRemaining+(time-e.brain.time)/e.brain.attackPlaybackRate;assert.ok(dt>=-1e-7);step(f,Math.max(0,dt),action,true,shield);}
 
 test('map exit during a nearly released cast never resumes damage without a fresh warning',async t=>{
   const f=await fixture(t);
@@ -79,11 +79,11 @@ test('all twelve authored spell motions match visible fixed footprints and relea
   for(const phase of [1,2]){
     const e=await resident(f,phase),specs=phase===1?ELENA_SPELLS:MOURNING_SPELLS;
     for(let index=0;index<specs.length;index++)for(const outcome of outcomes){
-      const label=`phase ${phase}/${specs[index].name}/${specs[index].pattern}/${outcome}`,{impact,plan}=begin(f,e,index),initialSerial=e.brain.serial;
+      const label=`phase ${phase}/${specs[index].name}/${specs[index].pattern}/${outcome}`,{impact,plan,warning}=begin(f,e,index),initialSerial=e.brain.serial;
       // The enlarged annulus intentionally leaves a larger refuge beside the
       // boss. Place positive contact probes inside its visible band.
       if(phase===2&&plan.shapes[0].kind==='ring'){f.player.position.z=ELENA_HOME.z+plan.shapes[0].innerRadius+.6;f.world.terrain.place(f.player.position);}
-      assert.ok(impact/e.brain.attackPlaybackRate>=1,label+' minimum real-time warning');assert.ok(plan,label);assert.equal(e.spell.mesh.isEnabled(),true,label);assert.equal(e.spell.rim.isEnabled(),true,label);
+      assert.ok(warning>=(phase===2?1.65:1),label+' minimum real-time warning');assert.ok(plan,label);assert.equal(e.spell.mesh.isEnabled(),true,label);assert.equal(e.spell.rim.isEnabled(),true,label);
       const positions=e.spell.mesh.getVerticesData(VertexBuffer.PositionKind);
       for(let p=0;p<positions.length;p+=Math.max(3,Math.floor(positions.length/96)*3))assert.ok(spellContains(plan,{x:positions[p],z:positions[p+2]},{radius:.0002}),label+' rendered fill agrees with footprint');
       if(outcome==='outside'||outcome==='edge-hit'){
@@ -102,7 +102,7 @@ test('all twelve authored spell motions match visible fixed footprints and relea
         const hp=f.battle.playerHp;f.battle.poseAndContacts(f.player,action,null,null);f.battle.poseAndContacts(f.player,action,null,null);assert.equal(f.battle.playerHp,hp,label+' one hit per cast');
         if(['cancel','block','shield'].includes(outcome))assert.notEqual(e.brain.mode,'attack',label+' interrupts');
         step(f,.25);assert.equal(e.spell.mesh.isEnabled(),false,label+' floor flash expires');
-        report.spellCases.push({phase,clip:specs[index].name,pattern:specs[index].pattern,outcome,warningSeconds:impact/e.brain.attackPlaybackRate,sourceImpactSeconds:impact,damage,lockedAim:true});
+        report.spellCases.push({phase,clip:specs[index].name,pattern:specs[index].pattern,outcome,warningSeconds:warning,sourceImpactSeconds:impact,damage,lockedAim:true});
       }finally{f.world.navigation.segmentClear=segmentClear;shield?.dispose();}
     }
   }

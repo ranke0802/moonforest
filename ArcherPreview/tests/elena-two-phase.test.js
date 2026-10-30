@@ -67,7 +67,8 @@ test('boss selector reuses one Elena per phase near the player without changing 
     await battle.summonResident(player,1);const saint=battle.elenaPool[0];assert.equal(saint.active,true);assert.equal(saint.brain.hp,1200);
     assert.equal(witch.active,false);assert.equal(battle.encounters.length,1);
     await battle.transformResident(player);assert.equal(witch.brain.hp,1800);assert.equal(witch.active,true);
-    assert.deepEqual(witch.home,saint.home);assert.deepEqual(snapshot(f),before);
+    assert.ok(witch.movementNavigation.free(witch.actor.position,witch.radius),'transformation must relocate if the smaller phase-one spot cannot fit all limbs');
+    assert.deepEqual(witch.home,battle.residentHome);assert.deepEqual(snapshot(f),before);
     witch.brain.hit({damage:200});await battle.summonResident(player,2);assert.equal(witch.brain.hp,1800);
     assert.equal(battle.playerHp,321);assert.equal(battle.potions.remaining,2);assert.equal(battle.combat.defense,13);
   }
@@ -78,9 +79,9 @@ test('boss selector reuses one Elena per phase near the player without changing 
 
 test('an enlarged resident or transformation finds a clear spawn outside player and cave walls',async t=>{
   const f=await fixture(t),{battle,player,world}=f;player.position.set(29,6,-27);battle.residentPhase=2;await battle.activateResident(player);const witch=battle.mourningPool[0];
-  assert.ok(world.navigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
+  assert.ok(witch.movementNavigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
   await witch.summon(player,{position:new Vector3(43,6,-27),rotationY:0});
-  assert.ok(world.navigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
+  assert.ok(witch.movementNavigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
   assert.equal(f.mourningModels.instances,1);assert.equal(witch.actor.scaling.x,witch.config.scale*MOURNING_SIZE_SCALE);
 });
 test('real phase-one defeat transforms once and preserves player state through phase-two trips, reset and final death',async t=>{
@@ -164,7 +165,8 @@ test('autonomous encounter path releases all five patterns once without source-r
   const patterns=[];
   for(let index=0;index<5;index++){
     e.brain.cast();patterns.push(e.brain.spell.pattern);const origin=e.actor.position.clone(),serial=e.brain.serial;let releases=0,plan;
-    for(let frame=0;frame<Math.floor(3/e.brain.attackPlaybackRate*60)-1;frame++){
+    const castSeconds=e.brain.castLeadInRemaining+3/e.brain.attackPlaybackRate;
+    for(let frame=0;frame<Math.floor(castSeconds*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(event=>event.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
       near(Vector3.Distance(e.actor.position,origin),0);assert.equal(e.brain.serial,serial);assert.equal(e.brain.state,'cast');assert.equal(e.engaged,true);
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);
@@ -183,7 +185,8 @@ test('five real phase-two casts stay fixed, expose valid hurt capsules, and manu
   for(let spellIndex=0;spellIndex<5;spellIndex++){
     assert.equal(e.requestReviewCast(),true);assert.equal(e.requestReviewCast(),false);const pattern=e.brain.spell.pattern;seen.push(pattern);
     const lockedPosition=e.actor.position.clone(),lockedWalk=e.animator.walkTime,hitPoints=f.battle.playerHp;let releases=0,plan;
-    for(let frame=0;frame<Math.floor(3/e.brain.attackPlaybackRate*60)-1;frame++){
+    const castSeconds=e.brain.castLeadInRemaining+3/e.brain.attackPlaybackRate;
+    for(let frame=0;frame<Math.floor(castSeconds*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(x=>x.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
       near(Vector3.Distance(e.actor.position,lockedPosition),0);near(e.animator.walkTime,lockedWalk);assert.equal(e.brain.state,'cast');
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);assert.equal(plan.pattern,pattern);

@@ -154,10 +154,12 @@ function makePlacements(){
   add(8,-39,-25,1.4,0,{elevation:2.5});
   for(const [x,z]of [[-45,38],[-36,23],[-40,-12],[-23,-30],[-3,-31],[12,30],[25.8,12.8],[46,-8],[19,-35],[36,-38]])add(13,x,z,1,random()*6.28,{colliderRadius:.45});
   // A former saint's dwelling occupies a spacious apse, rather than a palace.
-  add(15,29,-34,1.45,0,{elevation:6,colliderRadius:3.8});
-  for(const [dx,dz]of [[-4,-4],[4,-4],[-4,4],[4,4]])add(16,29+dx,-34+dz,1.1,Math.atan2(dz,-dx),{elevation:6,colliderRadius:.55,colliderOffsetX:-.74});
-  add(8,29,-42,2.6,0,{elevation:6});
-  add(17,29,-41.6,1,0,{topElevation:11.5});
+  // The 5.7 m creature's hands extend almost 6 m from its root. Keep the same
+  // dwelling props on the apse perimeter, leaving its centre open for combat.
+  add(15,29,-38.5,1.45,0,{elevation:6,colliderRadius:3.8});
+  for(const [dx,dz]of [[-4,-4],[4,-4],[-4,4],[4,4]])add(16,dz>0?(dx<0?19.5:38.5):29+dx,-34+dz,1.1,Math.atan2(dz,-dx),{elevation:6,colliderRadius:.55,colliderOffsetX:-.74});
+  add(8,29,-43.5,2.6,0,{elevation:6});
+  add(17,29,-43.1,1,0,{topElevation:11.5});
   add(18,20,-35,1.05,.1,{elevation:6,colliderRadius:1.35});
   add(19,20,-38,1.05,.1,{elevation:6,colliderRadius:1.15});
   add(20,37,-35,1.1,-.3,{elevation:6,colliderRadius:1});
