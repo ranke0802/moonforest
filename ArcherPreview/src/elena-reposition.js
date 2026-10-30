@@ -35,3 +35,31 @@ export function chooseElenaCharge(origin,player,{radius=MOURNING_SIZE.radius,nav
   }
   return target;
 }
+
+// A bounded local search for the enlarged resident. Keep the full-pose mask
+// authoritative, but favour open, less recently visited places over a repeated
+// left/right first match. This runs once per action, not once per frame.
+export function chooseMourningReposition(origin,player,{turn=0,radius=MOURNING_SIZE.radius,navigation,terrain,home=ELENA_HOME,length=2.1,recent=[],recovery=false}={}){
+  const dx=player.x-origin.x,dz=player.z-origin.z,distance=Math.hypot(dx,dz),heading=Math.atan2(dx,dz);
+  const preferred=heading+(turn%2?1:-1)*Math.PI/2,minimum=recovery?radius+.35:radius+1.1;
+  const contact=Math.max(0,Math.min(radius+.25,distance)-.03),ground=terrain?.heightAt(origin.x,origin.z);
+  let best=null,bestScore=-Infinity;
+  for(const fraction of [1,.66,.4])for(let direction=0;direction<12;direction++){
+    const travel=Math.max(.8,length*fraction),angle=heading+direction*Math.PI/6+(turn%3-1)*.12;
+    const x=Math.sin(angle)*travel,z=Math.cos(angle)*travel,target={x:origin.x+x,z:origin.z+z};
+    const fromPlayer=Math.hypot(target.x-player.x,target.z-player.z);
+    if(fromPlayer<minimum||fromPlayer>8.5||Math.hypot(target.x-home.x,target.z-home.z)>MOURNING_SIZE.homeRadius)continue;
+    // Normal sidesteps must not try to pass through the player and then spend
+    // their whole action being pushed back by the physical contact separation.
+    const t=Math.max(0,Math.min(1,(dx*x+dz*z)/(travel*travel)));
+    if(Math.hypot(origin.x+x*t-player.x,origin.z+z*t-player.z)<contact)continue;
+    if(terrain&&Math.abs(terrain.heightAt(target.x,target.z)-ground)>.8)continue;
+    if(navigation&&(!navigation.free(target,radius)||!navigation.segmentClear(origin,target,radius)))continue;
+    const clearance=navigation?.clearanceAt?.(target.x,target.z,radius),open=Number.isFinite(clearance)?Math.max(0,Math.min(2,clearance-radius-.08)):0;
+    let repeat=0;
+    for(let i=0;i<recent.length;i++)repeat+=Math.max(0,1-Math.hypot(target.x-recent[i].x,target.z-recent[i].z)/2.2)*(i+1)/recent.length;
+    const score=travel*.45+open*(recovery?1.2:.6)-Math.abs(fromPlayer-5.2)*.18+Math.cos(angle-preferred)*.28-repeat*1.8;
+    if(score>bestScore){bestScore=score;best=target;}
+  }
+  return best;
+}

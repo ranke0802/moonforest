@@ -6,14 +6,15 @@ import {GroundSpellTelegraph,spellContains} from './elena-ground-magic.js';
 import {shieldIntercepts} from './player-strikes.js';
 import {applyHitFlash} from './hit-feedback.js';
 import {ENEMY_ARENA_RADIUS} from './world-limits.js';
-import {chooseElenaReposition,chooseElenaCharge} from './elena-reposition.js';
+import {chooseElenaReposition} from './elena-reposition.js';
+import {MourningLocomotion} from './mourning-locomotion.js';
 import {chargeTouchesPlayer} from './elena-charge.js';
 
 export class ElenaEncounter extends BossEncounter {
   constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=.34;this.stopDistance=1.08;this.separationRadius=.42;this.engaged=false;this.motionRootTravel=false;}
   createBrain(durations){return new ElenaBrain(durations);}
-  async summon(...args){await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.transformRequested=false;this.contact??=createElenaContact(this.world);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();}
-  hide(){this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;}
+  async summon(...args){await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();}
+  hide(){this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;this.locomotion?.reset();}
   updateRenderRange(camera){super.updateRenderRange(camera);this.contact?.update(this.actor,this.active&&!this.corpseGone&&this.renderVisible!==false,this.death.opacity);}
   motionSpec(name){return this.brain?.mode==='attack'?this.brain.spell:ELENA_SPELLS.find(s=>s.name===name);}
   attackRange(spec){return spec?.range??1.35;}
@@ -25,24 +26,18 @@ export class ElenaEncounter extends BossEncounter {
     return this.phase===2&&this.brain.repositioning&&this.brain.moveKind==='charge'&&this.brain.time>=MOURNING_MOVEMENT.chargeWarning?this.radius+.3:super.contactSeparation();
   }
   movementPlan(player,result){
-    if(this.phase===2&&this.animator)this.animator.gaitRate=result?.speed?Math.min(MOURNING_MOVEMENT.gaitCap,result.speed/((this.config?.motion?.baseWalkSpeed??.3368)*MOURNING_SIZE_SCALE)):2/MOURNING_SIZE_SCALE;
+    if(this.phase===2){this.locomotion??=new MourningLocomotion();return this.locomotion.plan(this,player,result);}
     if(!this.brain.repositioning){this.repositionTarget=null;this.chargeOrigin=null;return super.movementPlan(player);}
     if(this.repositionSerial!==this.brain.serial||!this.repositionTarget){
       this.repositionSerial=this.brain.serial;this.routeState={};
-      const options={phase:this.phase,turn:this.phase===2?this.brain.movementTurn:this.brain.nextSpell,radius:this.radius,navigation:this.movementNavigation,terrain:this.world.terrain,home:this.home};
+      const options={phase:this.phase,turn:this.brain.nextSpell,radius:this.radius,navigation:this.movementNavigation,terrain:this.world.terrain,home:this.home};
       this.chargeOrigin=null;
-      if(this.phase===2&&this.brain.moveKind==='charge'){
-        this.repositionTarget=chooseElenaCharge(this.actor.position,player.position,options);
-        if(this.repositionTarget){this.chargeOrigin=this.actor.position.clone();this.chargePrevious=this.actor.position.clone();this.chargeResolved=false;}
-        else {this.brain.moveKind='walk';this.brain.repositionRemaining=2.3;}
-      }
-      if(!this.chargeOrigin)this.repositionTarget=chooseElenaReposition(this.actor.position,player.position,{...options,...(this.phase===2&&this.brain.moveKind==='skitter'?{length:4.4}:{})});
+      this.repositionTarget=chooseElenaReposition(this.actor.position,player.position,options);
     }
     const target=this.repositionTarget;
     if(!target||Math.hypot(target.x-this.actor.position.x,target.z-this.actor.position.z)<.16){
       this.brain.finishReposition();result.speed=0;return {target:this.actor.position,stopDistance:0,direct:true};
     }
-    if(this.phase===2&&this.brain.moveKind==='charge'&&this.brain.time<MOURNING_MOVEMENT.chargeWarning){result.speed=0;if(this.animator)this.animator.gaitRate=0;}
     return {target,stopDistance:.12,direct:true};
   }
   poseAndContacts(player,result,sample,shield){
@@ -87,12 +82,15 @@ export class ElenaEncounter extends BossEncounter {
     if(!this.active||this.corpseGone)return;
     if(this.reviewMode){this.updateReview(dt,player);return;}
     if(this.brain.hp<=0||this.brain.stagger)this.spell?.reset();
-    const p=this.actor.position,nearHome=Math.hypot(player.position.x-this.home.x,player.position.z-this.home.z)<(this.phase===2?MOURNING_SIZE.homeDetectionRange:12),detection=this.phase===2?MOURNING_SIZE.engagementRange:8;
+    // Separate enter/leave distances so motion along the detection edge cannot
+    // alternate returning home and attacking on adjacent frames.
+    const slack=this.phase===2&&this.engaged?1.5:0;
+    const p=this.actor.position,nearHome=Math.hypot(player.position.x-this.home.x,player.position.z-this.home.z)<(this.phase===2?MOURNING_SIZE.homeDetectionRange:12)+slack,detection=(this.phase===2?MOURNING_SIZE.engagementRange:8)+slack;
     this.engaged=this.brain.hp>0&&nearHome&&Vector3.DistanceSquared(p,player.position)<detection*detection;
     if(this.engaged||['dead','down','recover'].includes(this.brain.mode)){super.update(dt,player);this.ring.isVisible=false;return;}
     // A resident must not run a whole-map path search or start boss music while
     // the player explores elsewhere. Return to the dwelling without teleporting.
-    if(this.phase===2){this.brain.cancelMovement();this.repositionTarget=null;this.chargeOrigin=null;}
+    if(this.phase===2){this.brain.cancelMovement();this.locomotion?.cancel(this);this.repositionTarget=null;this.chargeOrigin=null;}
     this.dt=dt;this.player=player;this.pendingEvents=[];this.brain.flash=Math.max(0,this.brain.flash-dt);this.brain.stagger=Math.max(0,this.brain.stagger-dt);
     const dx=this.home.x-p.x,dz=this.home.z-p.z,distance=Math.hypot(dx,dz),walking=distance>.12;
     const state=walking?this.brain.walk:this.brain.idle;if(this.brain.state!==state)this.brain.start(state,walking?'move':'idle');
@@ -127,5 +125,5 @@ export class ElenaEncounter extends BossEncounter {
     this.animator.gaitRate=(movement.run?3:2)/(this.phase===2?MOURNING_SIZE_SCALE:1);
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;
   }
-  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:undefined,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
+  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,locomotion:this.locomotion?.inspect(),chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:undefined,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
 }

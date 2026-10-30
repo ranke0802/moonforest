@@ -48,6 +48,10 @@ export class ElenaBrain {
     else this.repositionRemaining=2.2+(this.nextSpell%3)*.25;
   }
   finishReposition(){this.repositionRemaining=0;if(this.mourning)this.cast();else{this.start(this.idle,'idle');this.wait=.4;}}
+  redirectMovement(kind='walk'){
+    this.start(this.walk,'move');this.repositioning=true;this.moveKind=kind;
+    this.repositionRemaining=kind==='skitter'?1.45:2.3;
+  }
   cancelCast(){if(this.mode!=='attack')return false;this.start(this.idle,'idle');this.wait=1.2;return true;}
   cancelMovement(){if(!this.repositioning)return false;this.start(this.idle,'idle');this.repositionRemaining=0;this.moveKind=null;return true;}
   get defense(){return null;}
