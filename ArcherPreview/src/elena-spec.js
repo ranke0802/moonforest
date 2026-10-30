@@ -17,18 +17,28 @@ export const MOURNING_SPELLS=Object.freeze([
   ['cross','갈라진 성역',12,36],['cluster','추모의 낙인',10,38],
 ].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range,damage,kind:'ground',impact:.55})));
 export function spellImpact(spec,duration){return Math.min(Math.max(1,duration*spec.impact),duration-.25);}
+export const MOURNING_MOVEMENT=Object.freeze({walkSpeed:1.05,skitterSpeed:3.6,chargeSpeed:5.4,chargeWarning:.9,gaitCap:8});
+const MOURNING_MOVE_ORDER=['walk','skitter','walk','charge'];
 
 export class ElenaBrain {
   constructor(durations,{mourning=false}={}){
     this.durations=durations;this.mourning=mourning;this.spells=mourning?MOURNING_SPELLS:ELENA_SPELLS;
     this.idle=mourning?'idle':'Elena_Idle';this.walk=mourning?'walk':'Walking';
     this.hp=this.maxHp=mourning?1800:1200;this.serial=0;this.stagger=0;this.flash=0;this.flashDuration=.18;
-    this.wait=1.2;this.nextSpell=0;this.visited=new Set();this.start(this.idle,'idle');
+    this.wait=1.2;this.nextSpell=0;this.movementTurn=0;this.moveKind=null;this.visited=new Set();this.start(this.idle,'idle');
   }
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.visited.add(state);if(mode==='attack'&&!this.mourning)this.spell=this.spells.find(s=>s.name===state);}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.visited.add(state);if(mode!=='move')this.repositioning=false;if(mode==='attack'&&!this.mourning)this.spell=this.spells.find(s=>s.name===state);}
   cast(){this.spell=this.spells[this.nextSpell++%this.spells.length];this.start(this.spell.name,'attack');return this.spell;}
+  reposition(){
+    this.start(this.walk,'move');this.repositioning=true;
+    if(this.mourning){this.moveKind=MOURNING_MOVE_ORDER[this.movementTurn++%MOURNING_MOVE_ORDER.length];this.repositionRemaining=this.moveKind==='charge'?2.2:this.moveKind==='skitter'?1.45:2.3;}
+    else this.repositionRemaining=2.2+(this.nextSpell%3)*.25;
+  }
+  finishReposition(){this.repositionRemaining=0;if(this.mourning)this.cast();else{this.start(this.idle,'idle');this.wait=.4;}}
+  cancelCast(){if(this.mode!=='attack')return false;this.start(this.idle,'idle');this.wait=1.2;return true;}
+  cancelMovement(){if(!this.repositioning)return false;this.start(this.idle,'idle');this.repositionRemaining=0;this.moveKind=null;return true;}
   get defense(){return null;}
-  get label(){return this.mode==='attack'?this.spell?.label:({idle:'경계',move:'접근',down:'쓰러짐',recover:'일어나기',dead:this.mourning?'비탄의 끝':'광폭화'})[this.mode]??'경계';}
+  get label(){return this.mode==='attack'?this.spell?.label:this.repositioning?(this.mourning?this.moveKind==='charge'?(this.time<MOURNING_MOVEMENT.chargeWarning?'돌진 예고':'비탄의 돌진'):this.moveKind==='skitter'?'급속 횡이동':'끊임없는 배회':'자리 바꾸기'):({idle:'경계',move:'접근',down:'쓰러짐',recover:'일어나기',dead:this.mourning?'비탄의 끝':'광폭화'})[this.mode]??'경계';}
   hit({damage=14,heavy=false,stun=0}={}){
     if(this.hp<=0)return false;
     this.hp=Math.max(0,this.hp-damage);this.flash=this.flashDuration;
@@ -53,10 +63,20 @@ export class ElenaBrain {
       const attack=this.spell;
       if(!this.impacted&&this.time>=spellImpact(attack,duration)){this.impacted=true;events.push(attack);}
       // Keep the release event even when a long frame crosses the clip's end.
-      if(this.time>=duration&&!events.length){this.start(this.idle,'idle');this.wait=this.mourning?1.5:1.8;}
+      if(this.time>=duration&&!events.length){if(manual){this.start(this.idle,'idle');this.wait=1.2;}else this.reposition();}
       return {events,speed:0};
     }
     if(manual)return {events,speed:0};
+    if(this.repositioning){
+      this.repositionRemaining-=dt;
+      if(this.repositionRemaining<=0){this.finishReposition();return {events,speed:0};}
+      if(!this.mourning)return {events,speed:1.1};
+      const speed=this.moveKind==='charge'?(this.time<MOURNING_MOVEMENT.chargeWarning?0:MOURNING_MOVEMENT.chargeSpeed):this.moveKind==='skitter'?MOURNING_MOVEMENT.skitterSpeed:MOURNING_MOVEMENT.walkSpeed;
+      return {events,speed};
+    }
+    // Phase two has no idle gap. Each movement action leads to a fresh cast,
+    // preserving frame-zero aim locking and the full ground-spell warning.
+    if(this.mourning){this.reposition();return {events,speed:0};}
     this.wait-=dt;
     if(distance<=10&&this.wait<=0){this.cast();return {events,speed:0};}
     if(distance>5){const state=this.mourning?'walk':distance>7?'Running':'Walking';if(this.state!==state)this.start(state,'move');return {events,speed:this.mourning?.673:distance>7?2.1:1.1};}

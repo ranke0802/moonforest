@@ -50,6 +50,27 @@ function step(f,dt=1/60,{contacts=true}={}){
   f.battle.update(dt,f.player);f.scene._animate(0);
   if(contacts)f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
 }
+
+test('boss selector reuses one Elena per phase near the player without changing player resources',async t=>{
+  const f=await fixture(t),{battle,player,world}=f;
+  battle.combat.hp=321;battle.potions.remaining=2;battle.combat.defense=13;
+  await battle.activateResident(player);
+  await battle.summonResident(player,2);
+  const witch=battle.mourningPool[0];assert.equal(witch.brain.hp,1800);assert.equal(witch.active,true);assert.equal(battle.encounters.length,1);
+  assert.ok(world.navigation.free(witch.actor.position,.9));assert.ok(Vector3.Distance(witch.actor.position,player.position)<5);
+  assert.deepEqual(witch.home,{x:witch.actor.position.x,z:witch.actor.position.z});
+  const before=snapshot(f);
+  for(let i=0;i<8;i++){
+    await battle.summonResident(player,1);const saint=battle.elenaPool[0];assert.equal(saint.active,true);assert.equal(saint.brain.hp,1200);
+    assert.equal(witch.active,false);assert.equal(battle.encounters.length,1);
+    await battle.transformResident(player);assert.equal(witch.brain.hp,1800);assert.equal(witch.active,true);
+    assert.deepEqual(witch.home,saint.home);assert.deepEqual(snapshot(f),before);
+    witch.brain.hit({damage:200});await battle.summonResident(player,2);assert.equal(witch.brain.hp,1800);
+    assert.equal(battle.playerHp,321);assert.equal(battle.potions.remaining,2);assert.equal(battle.combat.defense,13);
+  }
+  assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);
+  const phase=battle.residentPhase;world.cave=false;assert.equal(await battle.summonResident(player,1),false);assert.equal(battle.residentPhase,phase);
+});
 test('real phase-one defeat transforms once and preserves player state through phase-two trips, reset and final death',async t=>{
   const f=await fixture(t),{battle,player,world}=f;battle.combat.hp=312;battle.combat.defense=9;battle.potions.remaining=1;
   await Promise.all([battle.activateResident(player),battle.activateResident(player)]);const first=battle.elenaPool[0];

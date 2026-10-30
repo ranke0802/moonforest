@@ -1,8 +1,9 @@
-import {Color3,Mesh,StandardMaterial,VertexData} from '@babylonjs/core';
+import {Color3,Geometry,Mesh,StandardMaterial,VertexBuffer} from '@babylonjs/core';
 
 export const ELENA_GROUND_PATTERNS=Object.freeze(['corridor','fan','ring','cross','cluster']);
 export const ELENA_GROUND_MAX_RANGE=14;
 export const ELENA_GROUND_FLASH_TIME=.22;
+export const ELENA_GROUND_TOPOLOGY_LIMIT=7;
 const TAU=Math.PI*2,EPS=1e-8,STEP=.7,RIM_WIDTH=.085;
 const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
 const finite=(n,fallback)=>Number.isFinite(n)?n:fallback;
@@ -127,7 +128,20 @@ export function buildGroundSpellGeometry(plan,terrain){
 function material(scene,name,color){
   const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.specularColor=Color3.Black();m.disableDepthWrite=true;m.backFaceCulling=false;return m;
 }
-function applyGeometry(mesh,data){const vertices=new VertexData();vertices.positions=data.positions;vertices.normals=data.normals;vertices.indices=data.indices;vertices.applyToMesh(mesh,false);}
+function matches(geometry,data){return geometry.getTotalVertices()*3===data.positions.length&&geometry.getIndices().length===data.indices.length&&geometry.getIndices().every((index,i)=>index===data.indices[i]);}
+function makeGeometry(mesh,data){
+  const geometry=new Geometry(mesh.name+'-'+mesh.getScene().getUniqueId(),mesh.getScene());
+  geometry.setVerticesData(VertexBuffer.PositionKind,data.positions,true);
+  geometry.setVerticesData(VertexBuffer.NormalKind,data.normals,false);geometry.setIndices(data.indices);
+  return geometry;
+}
+function bindGeometry(mesh,geometry,positions){
+  if(mesh.geometry!==geometry){
+    // A smaller previous pattern must not leave a partial submesh draw range.
+    mesh.releaseSubMeshes();geometry.applyToMesh(mesh);
+  }
+  mesh.updateVerticesData(VertexBuffer.PositionKind,positions,true);
+}
 
 /** Reuses two ground meshes for every cast. The caller owns fired and applies damage once. */
 export class GroundSpellTelegraph {
@@ -137,12 +151,18 @@ export class GroundSpellTelegraph {
     this.mesh.material=this.material;this.rim.material=this.rimMaterial;
     for(const mesh of [this.mesh,this.rim]){mesh.isPickable=false;mesh.receiveShadows=false;mesh.setEnabled(false);}
     this.serial=null;this.plan=null;this.fired=false;this.disposed=false;
+    this.topologies=[];this.cacheHits=0;this.cacheMisses=0;
   }
   aim(serial,pattern,origin,target,options={}){
     if(this.disposed)return null;
     if(this.plan&&this.serial===serial)return this.plan;
     const plan=makeSpellPlan(pattern,origin,target,options),data=buildGroundSpellGeometry(plan,this.world.terrain);
-    applyGeometry(this.mesh,data.fill);applyGeometry(this.rim,data.rim);
+    let entry=this.topologies.find(e=>matches(e.fill,data.fill)&&matches(e.rim,data.rim));
+    if(entry){this.cacheHits++;this.topologies.splice(this.topologies.indexOf(entry),1);}
+    else{this.cacheMisses++;entry={fill:makeGeometry(this.mesh,data.fill),rim:makeGeometry(this.rim,data.rim)};}
+    this.topologies.push(entry);
+    bindGeometry(this.mesh,entry.fill,data.fill.positions);bindGeometry(this.rim,entry.rim,data.rim.positions);
+    while(this.topologies.length>ELENA_GROUND_TOPOLOGY_LIMIT){const old=this.topologies.shift();old.fill.dispose();old.rim.dispose();}
     this.serial=serial;this.plan=plan;this.fired=false;this.mesh.setEnabled(false);this.rim.setEnabled(false);return plan;
   }
   show(elapsed,impactTime,{flash=false}={}){
@@ -153,5 +173,5 @@ export class GroundSpellTelegraph {
     this.material.alpha=active?.48:.11+.15*progress;this.rimMaterial.alpha=active?1:.65+.3*progress;
   }
   reset(){this.serial=null;this.plan=null;this.fired=false;if(!this.disposed){this.mesh.setEnabled(false);this.rim.setEnabled(false);}}
-  dispose(){if(this.disposed)return;this.reset();this.mesh.dispose();this.rim.dispose();this.material.dispose();this.rimMaterial.dispose();this.disposed=true;}
+  dispose(){if(this.disposed)return;this.reset();this.mesh.dispose();this.rim.dispose();for(const entry of this.topologies){entry.fill.dispose();entry.rim.dispose();}this.topologies=[];this.material.dispose();this.rimMaterial.dispose();this.disposed=true;}
 }

@@ -12,6 +12,37 @@ function fixture(t,terrain){
   t.after(()=>{scene.dispose();engine.dispose();});return {scene,world:{scene,terrain}};
 }
 
+test('mixed patterns reuse exact topology buffers and always draw the full new index range',t=>{
+  const {scene,world}=fixture(t,createWitchCaveTerrain()),fx=new GroundSpellTelegraph(world),origin={x:29,y:6,z:-27};
+  const targets=ELENA_GROUND_PATTERNS.map((pattern,i)=>({pattern,point:{x:29+i*.3,z:-22},options:{range:10}}));
+  const capture=()=>new Set(fx.topologies.flatMap(e=>[e.fill,e.rim]).flatMap(g=>[g.getVertexBuffer(VertexBuffer.PositionKind),g.getVertexBuffer(VertexBuffer.NormalKind),g.getIndexBuffer()]));
+  let serial=0;
+  for(const entry of targets)fx.aim(++serial,entry.pattern,origin,entry.point,entry.options);
+  const buffers=capture(),count=scene.geometries.length,misses=fx.cacheMisses;
+  for(let round=0;round<30;round++)for(const entry of targets){
+    const plan=fx.aim(++serial,entry.pattern,origin,{x:entry.point.x+round*.017,z:entry.point.z},entry.options),expected=buildGroundSpellGeometry(plan,world.terrain);
+    for(const [mesh,data] of [[fx.mesh,expected.fill],[fx.rim,expected.rim]]){
+      assert.deepEqual(Array.from(mesh.getVerticesData(VertexBuffer.PositionKind)),data.positions);
+      assert.deepEqual(Array.from(mesh.getIndices()),data.indices);
+      assert.equal(mesh.subMeshes.length,1);assert.equal(mesh.subMeshes[0].indexCount,data.indices.length);assert.equal(mesh.subMeshes[0].indexStart,0);
+      for(const i of mesh.getIndices())assert.ok(i<mesh.getTotalVertices());
+    }
+    assert.equal(scene.geometries.length,count);assert.deepEqual(capture(),buffers);
+  }
+  assert.equal(fx.cacheMisses,misses);assert.equal(fx.cacheHits,150);fx.dispose();assert.equal(scene.geometries.length,0);
+});
+
+test('topology cache evicts unused variants at a fixed bound and releases every buffer on disposal',t=>{
+  const {scene,world}=fixture(t),fx=new GroundSpellTelegraph(world);
+  for(let i=0;i<36;i++){
+    fx.aim(i,'corridor',{x:0,y:0,z:0},{x:0,z:12},{range:3+i*.28,halfWidth:.4+i*.025});
+    assert.ok(fx.topologies.length<=7);assert.ok(scene.geometries.length<=14);
+    assert.equal(fx.mesh.subMeshes[0].indexCount,fx.mesh.getTotalIndices());
+    assert.ok(fx.mesh.getVertexBuffer(VertexBuffer.PositionKind).getBuffer());
+  }
+  assert.ok(fx.cacheMisses>7);fx.reset();assert.equal(fx.mesh.isEnabled(),false);fx.dispose();assert.equal(scene.geometries.length,0);
+});
+
 test('five immutable attack plans copy caller coordinates, clamp range, and have finite coincident aim',()=>{
   assert.deepEqual(ELENA_GROUND_PATTERNS,['corridor','fan','ring','cross','cluster']);
   const origin=new Vector3(29,6,-27),target=new Vector3(29,500,100);
@@ -124,7 +155,7 @@ test('telegraph locks aim once, changes only opacity during warning, and reuses 
   fx.show(2.2+ELENA_GROUND_FLASH_TIME+.01,2.2);assert.equal(fx.mesh.isEnabled(),false);assert.equal(fx.rim.isEnabled(),false);
   for(let i=0;i<100;i++){
     fx.aim(i+2,ELENA_GROUND_PATTERNS[i%5],origin,target);fx.show(.5,2.2);fx.fired=true;fx.reset();
-    assert.equal(scene.meshes.length,2);assert.equal(scene.materials.length,2);assert.equal(scene.geometries.length,2);assert.equal(fx.fired,false);
+    assert.equal(scene.meshes.length,2);assert.equal(scene.materials.length,2);assert.ok(scene.geometries.length<=14);assert.equal(fx.fired,false);
     assert.equal(fx.plan,null);assert.equal(fx.mesh.isEnabled(),false);assert.equal(fx.rim.isEnabled(),false);
   }
   for(const mesh of [fx.mesh,fx.rim]){assert.equal(mesh.isPickable,false);assert.equal(mesh.receiveShadows,false);assert.equal(mesh.material.disableDepthWrite,true);}

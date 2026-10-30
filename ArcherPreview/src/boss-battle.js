@@ -53,7 +53,7 @@ export class BossBattle {
     this.models = models ?? new BossModelLibrary(world.scene);
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
-    this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;
+    this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;
     this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];
     this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;
     this.noGrab = { active: false, label: '' };
@@ -78,12 +78,12 @@ export class BossBattle {
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
   get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
   get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool];}
-  async activateResident(player,{reset=false}={}){
+  async activateResident(player,{reset=false,phase:resetPhase=1,home=ELENA_HOME}={}){
     if(!this.world.cave)return false;
-    if(reset){this.residentPhase=1;this.residentError=null;this.mourningNeedsReset=true;}
+    if(reset){this.residentPhase=resetPhase===2?2:1;this.residentHome={x:home.x,z:home.z};this.residentError=null;this.mourningNeedsReset=true;}
     if(this.residentPending){
       const revision=this.residentPendingRevision,phase=this.residentPendingPhase,result=await this.residentPending;
-      return revision===this.residentRevision&&phase===this.residentPhase?result:this.activateResident(player,{reset});
+      return revision===this.residentRevision&&phase===this.residentPhase?result:this.activateResident(player,{reset,phase:resetPhase,home});
     }
     const request=this.residentRevision,phase=this.residentPhase,models=phase===2?this.mourningModels:this.elenaModels,pool=phase===2?this.mourningPool:this.elenaPool;
     this.residentPendingRevision=request;
@@ -99,7 +99,7 @@ export class BossBattle {
         if(phase===1)resident.onTransform=()=>this.transformResident(this.currentPlayer??player);
       }
       if(!resident.asset||reset||(phase===2&&this.mourningNeedsReset)){
-        const position=new Vector3(ELENA_HOME.x,0,ELENA_HOME.z);
+        const position=new Vector3(this.residentHome.x,0,this.residentHome.z);
         await resident.summon(player,{position,rotationY:0});
         if(phase===2)this.mourningNeedsReset=false;
       }else{
@@ -124,6 +124,21 @@ export class BossBattle {
   preloadMourning(){
     if(this.mourningWarmRequested)return;this.mourningWarmRequested=true;
     this.mourningModels.load().catch(error=>{this.residentError=String(error.message??error);console.warn('[Elena preload]',error);});
+  }
+  async summonResident(player,phase=1){
+    if(this.loading||this.residentPending||!this.world.cave)return false;
+    this.loading=true;this.onChange(this);
+    try{
+      const radius=phase===2?.9:.34,position=bossSpawnPositions(player,1)[0];
+      const occupied=[{x:player.position.x,z:player.position.z,radius:.8},...this.encounters.filter(b=>b.kind!=='elena'&&b.brain.hp>0).map(b=>({x:b.actor.position.x,z:b.actor.position.z,radius:b.radius}))];
+      if(this.world.navigation){const safe=this.world.navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied);position.x=safe.x;position.z=safe.z;}
+      // The same two pooled actors serve the selector and the resident fight.
+      // Resetting one boss never resets player resources or other enemies.
+      for(const old of [...this.elenaPool,...this.mourningPool]){old.reviewMode=false;old.hide();}
+      const active=await this.activateResident(player,{reset:true,phase,home:position});
+      if(active){const resident=this.encounters.find(b=>b.kind==='elena');resident.actor.rotation.y=Math.atan2(player.position.x-position.x,player.position.z-position.z);this.lastHit=resident.displayName+' 소환';this.actionVersion++;}
+      return active;
+    }finally{this.loading=false;this.onChange(this);}
   }
   get canUsePotion() { return this.active && !this.loading && !this.grab.active && this.potions.canUse(this.playerHp, this.playerMaxHp); }
   usePotion() {

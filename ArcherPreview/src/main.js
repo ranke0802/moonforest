@@ -29,6 +29,7 @@ import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
 import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
 import { BossBattle } from './boss-battle.js';
+import { BossSelection, bossSelectionHelp, summonSelectedBoss } from './boss-selection.js';
 import { loadTrainingGround } from './environment.js';
 import { loadVillage } from './village-environment.js';
 import { VILLAGE_SPAWN } from './village-layout.js';
@@ -72,8 +73,9 @@ const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button'
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4', 'warrior-v5'];
 let character = new URLSearchParams(location.search).get('character');
 // Explicit review URLs use the same map, camera, rig and input system as play.
-const elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
+let elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
 let elenaReview=null;
+const bossSelection=new BossSelection();
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
@@ -170,6 +172,30 @@ function toast(message) {
   $('#toast').textContent = message; $('#toast').hidden = false;
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 4000);
 }
+function updateSummonControls(encounter=boss) {
+  const cave=isCave(),selection=bossSelection.current(cave),disabled=!ready||!isV2()||!!encounter?.loading;
+  $('#boss-kind').value=selection.kind;
+  $('#boss-kind').disabled=disabled;
+  for(const option of $('#boss-kind').options)option.disabled=option.value!=='bear'&&!cave;
+  $('#boss-count').value=String(selection.count);
+  $('#boss-count').disabled=disabled||selection.phase!==null;
+  $('#summon-boss').disabled=disabled;
+  text('#boss-selection-help',bossSelectionHelp(selection,cave));
+  const present=encounter?.encounters.some(enemy=>enemy.kind===(selection.phase?'elena':'bear'));
+  text('#summon-boss',encounter?.loading?'불러오는 중…':present?'보스 다시 소환':'보스 소환');
+}
+
+function leaveElenaReview() {
+  elenaReviewMode=null;
+  if(!elenaReview)return;
+  elenaReview.reviewMode=false;
+  elenaReview.reviewMovement={x:0,z:0,run:false};
+  elenaReview=null;
+  text('#attack-label','검 공격');
+  text('#attack-hint','짧게 일반 · 길게 심판 · J');
+  $('#attack-button').title='짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검';
+}
+
 function updateButtons() {
   const dead = controller?.dead || false;
   const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft].join('|');
@@ -182,8 +208,7 @@ function updateButtons() {
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   if(ready&&isV2()&&!dead&&boss?.canEscapeGrab)$('#dodge-button').disabled=false;
-  $('#summon-boss').disabled = !ready || !isV2() || boss?.loading;
-  $('#boss-count').disabled = $('#summon-boss').disabled;
+  updateSummonControls();
   $('#summon-goblin').disabled=$('#goblin-count').disabled=$('#summon-boss').disabled;
   $('#boss-controls').hidden = !isV2();
   $('#potion-button').hidden=!isV2();
@@ -563,7 +588,7 @@ try {
   boss=new BossBattle(world,encounter=>{
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');
     if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
-    $('#summon-boss').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='bear')?'보스 다시 소환':'보스 소환';
+    updateSummonControls(encounter);
     $('#summon-goblin').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='goblin')?'고블린 다시 소환':'고블린 소환';
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
@@ -679,9 +704,19 @@ try {
     });
     button.addEventListener('click',event=>{if(event.detail===0&&performance.now()-lastPress>350)action();});
   }
+  $('#boss-kind').addEventListener('change',()=>{bossSelection.choose($('#boss-kind').value,isCave());updateSummonControls();});
+  $('#boss-count').addEventListener('change',()=>{bossSelection.setCount($('#boss-count').value);updateSummonControls();});
   for(const [selector,count,kind] of [['#summon-boss','#boss-count','bear'],['#summon-goblin','#goblin-count','goblin']])$(selector).addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
-    try{input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;const summoned=await boss.summon(actor,$(count).value,kind);if(!summoned)return;actionAudio.reset();for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'goblin_appear',{position:enemy.actor.position,volume:kind==='bear'?1:.45});world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});}
+    try{
+      input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;leaveElenaReview();
+      const selection=kind==='bear'?bossSelection.current(isCave()):null;
+      const summoned=await (selection?summonSelectedBoss(boss,actor,selection):boss.summon(actor,$(count).value,kind));
+      if(!summoned)return;
+      actionAudio.reset();
+      if(!selection?.phase)for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'goblin_appear',{position:enemy.actor.position,volume:kind==='bear'?1:.45});
+      world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});
+    }
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}
     updateButtons();
   });

@@ -129,6 +129,7 @@ export class BossEncounter {
   createBrain(durations){return new BossBrain(durations);}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
   prepareAsset(){}
+  movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
@@ -155,17 +156,19 @@ export class BossEncounter {
     const beforeMove=this.actor.position.clone(),navigation=this.world.navigation;
     if(this.ownsCombat)this.combat.update(dt,player,this.onDamage);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
-    const canTravel=this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
-    const waypoint=canTravel&&(this.motionRootTravel!==false||this.brain.mode!=='attack')?navigation?.steer(this.actor.position,player.position,this.radius,this.routeState??={},dt):null;
-    const travel=waypoint?new Vector3(waypoint.x-this.actor.position.x,0,waypoint.z-this.actor.position.z):direction.clone();
-    const blocked=navigation&&!navigation.segmentClear(this.actor.position,player.position,0,true);
+    const blocked=navigation&&(this.motionRootTravel!==false||this.brain.mode!=='attack')&&!navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
     const result=this.brain.update(dt,blocked?Math.max(3.8,distance):distance,this.playerAlive&&available&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
+    const motion=this.movementPlan(player,result,distance),target=motion.target;
+    const canTravel=result.speed>0&&this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
+    const waypoint=canTravel&&!motion.direct?navigation?.steer(this.actor.position,target,this.radius,this.routeState??={},dt):null;
+    const travel=new Vector3((waypoint??target).x-this.actor.position.x,0,(waypoint??target).z-this.actor.position.z);
+    const travelDistance=Math.hypot(target.x-this.actor.position.x,target.z-this.actor.position.z);
     if(this.brain.mode==='evade')this.showDefense('evade');
     if(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
     }
-    if(result.speed&&distance>this.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,distance-this.stopDistance)));
+    if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
@@ -214,7 +217,8 @@ export class BossEncounter {
     if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);
-    const clearSight=!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
+    const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;
+    const clearSight=!needsSight||!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
     if(sample&&clearSight&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
       const capsules=this.hurtCapsules();
       const grounded=['down','recover'].includes(this.brain.mode);

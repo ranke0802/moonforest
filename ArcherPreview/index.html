@@ -62,10 +62,12 @@
           <div class="attack-speed-slider"><input id="dodge-speed" type="range" min="0.5" max="2" step="0.1" value="1" aria-label="회피 속도" aria-valuetext="1.0배" /><button id="reset-dodge-speed" type="button" title="회피 속도 1배로 복원" aria-label="회피 속도 1배로 복원">1×</button></div>
         </div>
       <section id="boss-controls" class="boss-controls" data-ui hidden>
+        <label class="boss-kind-label"><span class="sr-only">소환할 보스 종류</span><select id="boss-kind" aria-label="소환할 보스 종류" aria-describedby="boss-selection-help" disabled><option value="bear">곰 보스</option><option value="elena" disabled>타락한 성녀 엘레나</option><option value="mourning-elena" disabled>비탄의 마녀 엘레나</option></select></label>
         <div class="boss-spawn-row">
           <button id="summon-boss" disabled>보스 소환</button>
-          <label class="boss-count-label"><span class="sr-only">보스 소환 수</span><select id="boss-count" aria-label="보스 소환 수" disabled><option value="1">1마리</option><option value="2">2마리</option><option value="3">3마리</option><option value="4">4마리</option><option value="5">5마리</option></select></label>
+          <label class="boss-count-label"><span class="sr-only">보스 소환 수</span><select id="boss-count" aria-label="보스 소환 수" aria-describedby="boss-selection-help" disabled><option value="1">1마리</option><option value="2">2마리</option><option value="3">3마리</option><option value="4">4마리</option><option value="5">5마리</option></select></label>
         </div>
+        <p id="boss-selection-help" class="boss-selection-help" role="status">엘레나는 마녀의 동굴에서 소환할 수 있습니다.</p>
         <div class="boss-spawn-row goblin-spawn-row">
           <button id="summon-goblin" disabled>고블린 소환</button>
           <label class="boss-count-label"><span class="sr-only">고블린 소환 수</span><select id="goblin-count" aria-label="고블린 소환 수" disabled><option value="1">1마리</option><option value="2">2마리</option><option value="3">3마리</option><option value="4">4마리</option><option value="5">5마리</option></select></label>
