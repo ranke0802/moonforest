@@ -64,6 +64,7 @@ export class BossEncounter {
         this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
         for(const n of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!n.parent)n.parent=this.carrier;
         this.actor.scaling.setAll(this.config.scale);
+        this.prepareAsset();
         for(const mesh of this.asset.meshes){
           if(!mesh.getTotalVertices())continue;
           mesh.isPickable=false;mesh.alwaysSelectAsActiveMesh=true;
@@ -80,11 +81,10 @@ export class BossEncounter {
         this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
-        this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
         this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;
         this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       }
-      this.animator.dispose();this.animator=new CharacterAnimator(this.asset.animationGroups,this.config.animations);
+      this.animator?.dispose();this.animator=this.createAnimator();
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset();
       for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
@@ -127,6 +127,8 @@ export class BossEncounter {
     if(this.corpseGone){this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);}
   }
   createBrain(durations){return new BossBrain(durations);}
+  createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
+  prepareAsset(){}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
@@ -154,7 +156,7 @@ export class BossEncounter {
     if(this.ownsCombat)this.combat.update(dt,player,this.onDamage);
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const canTravel=this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
-    const waypoint=canTravel?navigation?.steer(this.actor.position,player.position,this.radius,this.routeState??={},dt):null;
+    const waypoint=canTravel&&(this.motionRootTravel!==false||this.brain.mode!=='attack')?navigation?.steer(this.actor.position,player.position,this.radius,this.routeState??={},dt):null;
     const travel=waypoint?new Vector3(waypoint.x-this.actor.position.x,0,waypoint.z-this.actor.position.z):direction.clone();
     const blocked=navigation&&!navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
@@ -167,7 +169,7 @@ export class BossEncounter {
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
-    if(this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
+    if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
       const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale,yaw=this.actor.rotation.y;
       this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
     }
@@ -183,10 +185,7 @@ export class BossEncounter {
     applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
   }
-  poseAndContacts(player,result,sample,shield){
-    if(!this.active||this.corpseGone)return;
-    let hitStop=0;
-    this.player=player;
+  alignPose(){
     // Keep source skeletal animation untouched. Separate planar root travel from the
     // encounter's position so clip transitions/loop boundaries never teleport the boss.
     this.carrier.position.setAll(0);this.actor.computeWorldMatrix(true);this.carrier.computeWorldMatrix(true);
@@ -198,6 +197,12 @@ export class BossEncounter {
     const level=ground?ground[i]+(ground[Math.min(i+1,ground.length-1)]-ground[i])*(f-i):.075;
     this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
+  }
+  poseAndContacts(player,result,sample,shield){
+    if(!this.active||this.corpseGone)return;
+    let hitStop=0;
+    this.player=player;
+    this.alignPose();
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
     // Retain the narrower clearance until this pair has separated naturally.

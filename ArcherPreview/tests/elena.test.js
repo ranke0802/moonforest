@@ -46,7 +46,7 @@ async function fixture(t){
 test('Elena source inventory is 18 real 60 fps motions; runtime preserves topology and 4K ETC1S',()=>{
   const c=read('elena.json'),g=read(c.model);assert.equal(c.sourceClips.length,18);assert.equal(c.sourceClips.filter(a=>a.name.startsWith('mage_')).length,6);
   assert.ok(c.sourceClips.every(a=>a.fps===60));assert.equal(c.sourceClips.find(a=>a.name==='Axe_Spin_Attack').duration,2.5);
-  assert.deepEqual(Object.keys(c.animations),[...ELENA_ACTIVE_CLIPS]);assert.equal(g.animations.length,7);assert.equal(c.magicEffect,'replaceable-red-line-prototype');
+  assert.deepEqual(Object.keys(c.animations),[...ELENA_ACTIVE_CLIPS]);assert.equal(g.animations.length,12);assert.equal(c.magicEffect,'ground-telegraphs-v1');
   assert.deepEqual(c.style,ELENA_STYLE);
   const triangles=g.meshes.reduce((n,m)=>n+m.primitives.reduce((s,p)=>s+g.accessors[p.indices].count/3,0),0);assert.equal(triangles,103930);
   assert.equal(g.skins.length,1);assert.ok(g.skins[0].joints.length>=80);
@@ -69,7 +69,7 @@ test('twenty cave round trips retain one Elena, player health/equipment and boss
   assert.equal(models.loads,1);assert.equal(models.instances,1);assert.equal(battle.playerHp,312);assert.equal(battle.potions.remaining,1);assert.equal(battle.combat.defense,7);
 });
 
-test('real animation groups deform and ground the rig; only approved spin and visible line enter the loadout',async t=>{
+test('real animation groups deform and ground the rig; every authored attack is a ground spell',async t=>{
   const {battle,player,config,scene}=await fixture(t);await battle.activateResident(player);const e=battle.elenaPool[0];
   const hand=e.nodes['mixamorig:RightHand'];assert.ok(hand);
   e.renderVisible=true;const points=[];
@@ -87,8 +87,8 @@ test('real animation groups deform and ground the rig; only approved spin and vi
   assert.equal(e.asset.meshes.filter(m=>m.metadata?.moonforestOutline).length,1);
   assert.equal(e.asset.meshes.find(m=>m.metadata?.moonforestOutline).metadata.outlinePixels,.5);
   const b=new ElenaBrain(Object.fromEntries(config.catalog.map(c=>[c.name,c.duration]))),events=[];
-  for(let i=0;i<600;i++)events.push(...b.update(1/30,1,true).events);
-  assert.ok(events.length>2);assert.ok(events.every(event=>event.name==='Axe_Spin_Attack'&&event.range<=1.35));
+  for(let i=0;i<2400;i++)events.push(...b.update(1/30,1,true).events);
+  assert.equal(new Set(events.map(e=>e.name)).size,7);assert.ok(events.every(event=>event.kind==='ground'));
   b.hit({heavy:true,damage:50});assert.equal(b.mode,'down');b.update(b.durations.Knock_Down+.1,1,true);assert.equal(b.mode,'recover');b.update(b.durations.Stand_Up9+.1,1,true);assert.equal(b.mode,'idle');
 });
 
@@ -114,7 +114,7 @@ test('spell damage occurs once at release, can be dodged or blocked, and cancels
   };
   assert.ok(await cast({state:'idle'})>0);assert.equal(await cast({state:'dodge',actionId:9}),0);assert.equal(await cast({state:'shieldPush',actionId:10}),0);
   e.brain.start(ELENA_CAST.name,'attack');e.brain.hit({damage:5});assert.equal(e.brain.state,'Elena_Idle');assert.equal(e.brain.update(2,4,true).events.length,0);
-  const start=e.actor.position.add(new Vector3(0,1,0));e.spell.aim(9,start,start.add(new Vector3(0,0,2)),7);e.spell.show(start,.1,1);assert.equal(e.spell.mesh.isEnabled(),true);
+  const start=e.actor.position.clone();e.spell.aim(9,'corridor',start,start.add(new Vector3(0,0,2)),{range:7});e.spell.show(.1,1);assert.equal(e.spell.mesh.isEnabled(),true);
   battle.hide();assert.equal(e.spell.mesh.isEnabled(),false);assert.equal(e.contact.mesh.isEnabled(),false);
 });
 

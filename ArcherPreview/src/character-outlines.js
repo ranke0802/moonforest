@@ -1,7 +1,11 @@
 import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
-import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
+import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
+import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
+import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexDeclaration.js';
+import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobal.js';
+import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertex.js';
 
 // One unlit back-face pass, using the original GPU geometry and skeleton.
 // No screen-sized render target, extra textures, shadow pass or CPU skinning.
@@ -15,11 +19,17 @@ uniform float outlineWidth;
 uniform float outlinePixels;
 uniform vec2 outlineViewport;
 #include<bonesDeclaration>
+#include<morphTargetsVertexGlobalDeclaration>
+#include<morphTargetsVertexDeclaration>[0..maxSimultaneousMorphTargets]
 void main(void) {
+  vec3 positionUpdated = position;
+  vec3 normalUpdated = normal;
+  #include<morphTargetsVertexGlobal>
+  #include<morphTargetsVertex>[0..maxSimultaneousMorphTargets]
   mat4 finalWorld = world;
   #include<bonesVertex>
-  vec4 worldPosition = finalWorld * vec4(position, 1.0);
-  vec3 worldNormal = normalize(mat3(finalWorld) * normal);
+  vec4 worldPosition = finalWorld * vec4(positionUpdated, 1.0);
+  vec3 worldNormal = normalize(mat3(finalWorld) * normalUpdated);
   if (outlinePixels > 0.0) {
     gl_Position = viewProjection * worldPosition;
     vec4 displaced = viewProjection * (worldPosition + vec4(worldNormal,0.0));
@@ -47,6 +57,7 @@ function outlineMaterial(scene) {
   const material = new ShaderMaterial('moonforest-character-outline', scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
+      defines: ['#define NORMAL'],
       uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash'],
     });
   material.backFaceCulling = true;
@@ -61,6 +72,7 @@ function outlineMaterial(scene) {
     // ShaderMaterial caches bone bindings with the shared material. Consecutive
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);
+    if(mesh.morphTargetManager){BindMorphTargetParameters(mesh,effect);if(mesh.morphTargetManager.isUsingTextureForTargets)mesh.morphTargetManager._bind(effect);}
     effect?.setFloat('outlineWidth', mesh.metadata.outlineWidth);
     effect?.setFloat('outlinePixels', mesh.metadata.outlinePixels??0);
     const engine=scene.getEngine(),canvas=engine.getRenderingCanvas();
@@ -91,6 +103,7 @@ export function attachCharacterOutlines(asset, kind) {
     shell.setPivotMatrix(Matrix.Identity());
     shell.updatePoseMatrix(source.getPoseMatrix());
     shell.skeleton = source.skeleton;
+    shell.morphTargetManager = source.morphTargetManager;
     shell.numBoneInfluencers = source.numBoneInfluencers;
     shell.computeBonesUsingShaders = source.computeBonesUsingShaders;
     shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(profile==='elena'?{outlinePixels:.5}:{}) };

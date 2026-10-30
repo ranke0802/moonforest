@@ -71,6 +71,9 @@ const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4', 'warrior-v5'];
 let character = new URLSearchParams(location.search).get('character');
+// Explicit review URLs use the same map, camera, rig and input system as play.
+const elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
+let elenaReview=null;
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
@@ -195,7 +198,7 @@ const actions = {
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
   potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
-  attack() { if (ready && (!boss?.active || boss.playerAlive)) controller.attack(); },
+  attack() { if (ready && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
   hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
@@ -225,10 +228,11 @@ function resetBeforeBoss(){
   if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
   animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
   applyHitFlash(container.meshes,0);resetCamera();updateButtons();canvas.focus({preventScroll:true});
-  if(isCave())boss.activateResident(actor,{reset:true}).catch(error=>{console.error('[Elena resident]',error);toast('엘레나를 불러오지 못했습니다.');});
+  if(isCave())boss.activateResident(actor,{reset:true}).then(()=>prepareElenaReview()).catch(error=>{console.error('[Elena resident]',error);toast('엘레나를 불러오지 못했습니다.');});
 }
 
 function setAttackHeld(source, held) {
+  if(elenaReview){if(held&&ready)elenaReview.requestReviewCast();return;}
   if (held) {
     if (!ready || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
     attackSources.add(source);
@@ -374,6 +378,7 @@ async function loadCharacter() {
     resetCamera(); updateButtons();
     await skyReady;
     if(isCave())await boss.activateResident(actor);
+    await prepareElenaReview();
     loadDiagnostics.phase('screen');
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
@@ -403,6 +408,18 @@ function constrainPlayerPosition(previous){
   if(world.mapId==='village')clampVillageExit(actor.position,previous);
 }
 
+async function prepareElenaReview(){
+  elenaReview=null;
+  if(!isCave()||!['saint','witch','battle'].includes(elenaReviewMode))return;
+  if(elenaReviewMode==='witch'){boss.residentPhase=2;await boss.activateResident(actor);}
+  const resident=boss.encounters.find(e=>e.kind==='elena');if(!resident)return;
+  actor.position.set(29,0,-21.5);world.terrain.place(actor.position);actor.rotation.y=Math.PI;
+  if(elenaReviewMode!=='battle'){elenaReview=resident;resident.reviewMode=true;resident.reviewMovement={x:0,z:0};}
+  world.camera.alpha=Math.PI/2;world.camera.beta=1.25;world.camera.radius=8.5;
+  world.camera.setTarget(resident.actor.position.add(new Vector3(0,elenaReviewMode==='witch'?1.8:1.1,0)));
+  toast(elenaReview?'엘레나 검수 · WASD/스틱 이동 · 좌클릭/J/공격 버튼으로 마법 · 카메라 회전 가능':'엘레나 2단계 전투 검수 · 성녀를 쓰러뜨리면 광폭화합니다');
+}
+
 function updateHealthBars() {
   bossHealthBars.update(world.scene,boss.encounters,screenProjection);
   playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp},screenProjection);
@@ -423,7 +440,12 @@ function render(dt) {
       applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
       if(recoiled)constrainPlayerPosition(beforeRecoil);
     }
-    const movement = boss?.active&&!boss.playerAlive?{x:0,y:0}:input.value();
+    const rawMovement=input.value();
+    if(elenaReview){
+      const length=Math.hypot(rawMovement.x,rawMovement.y),direction=length>.08?dodgeDirection(rawMovement,world.camera.alpha,elenaReview.actor.rotation.y):{x:0,z:0};
+      elenaReview.reviewMovement={x:direction.x*Math.min(1,length),z:direction.z*Math.min(1,length),run:rawMovement.run||controller.runToggled};
+    }
+    const movement = elenaReview||(boss?.active&&!boss.playerAlive)?{x:0,y:0}:rawMovement;
     if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     const result = controller.update(dt, movement);
     if(isV2()&&result.rollFrom!=null){
@@ -437,10 +459,11 @@ function render(dt) {
       $('#attack-button').classList.toggle('is-charging',result.chargeProgress>0);
       const progress=String(result.chargeProgress||0);
       if($('#attack-button').style.getPropertyValue('--charge-progress')!==progress)$('#attack-button').style.setProperty('--charge-progress',progress);
-      text('#attack-label',result.chargeProgress>0?'심판 준비':'검 공격');
+      text('#attack-label',elenaReview?'마법 시전':result.chargeProgress>0?'심판 준비':'검 공격');
+      if(elenaReview)text('#attack-hint',elenaReview.phase===2?'5가지 패턴 순환 · J':'7가지 마법 모션 순환 · J');
     }
     combatResult=result;
-    const busy=result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
+    const busy=!!elenaReview||result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
     if(qualityMode!=='battery')renderActivity.recordFrame(dt);
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
@@ -481,14 +504,14 @@ function render(dt) {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    const center=playerChinTarget(actor,playerHead);
+    const center=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.phase===2?2.25:1.45,0)):playerChinTarget(actor,playerHead);
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
     boss?.update(dt,actor);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
     const cameraBoss=boss.nearestTarget(actor.position);
-    const focus=combatFocus(center,cameraBoss?.actor.position,world.camera.radius);
+    const focus=elenaReview?center:combatFocus(center,cameraBoss?.actor.position,world.camera.radius);
     const target = (isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(input.panOffset.x, input.panOffset.y, input.panOffset.z));
     followTarget(world.camera, target, dt);
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
@@ -608,6 +631,7 @@ try {
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=character;bindMapPortal();
       if(isCave())await boss.activateResident(actor);
+      await prepareElenaReview();
       loadDiagnostics.phase('screen');world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },
     finish:async()=>{

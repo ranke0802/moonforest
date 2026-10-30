@@ -4,6 +4,7 @@ import { BossModelLibrary } from './boss-models.js';
 import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
 import { ElenaEncounter } from './elena-encounter.js';
+import { MourningElenaEncounter } from './mourning-elena-encounter.js';
 import { ELENA_HOME } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
@@ -46,12 +47,13 @@ export function separateBosses(encounters, grabOwner) {
 }
 
 export class BossBattle {
-  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, onDefeat=()=>{} } = {}) {
+  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, mourningModels, onDefeat=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
     this.onDefeat=onDefeat;
     this.models = models ?? new BossModelLibrary(world.scene);
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
+    this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;
     this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];
     this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;
     this.noGrab = { active: false, label: '' };
@@ -75,33 +77,53 @@ export class BossBattle {
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
   get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
-  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool];}
+  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool];}
   async activateResident(player,{reset=false}={}){
     if(!this.world.cave)return false;
+    if(reset){this.residentPhase=1;this.residentError=null;this.mourningNeedsReset=true;}
     if(this.residentPending){
-      const revision=this.residentPendingRevision,result=await this.residentPending;
-      return revision===this.residentRevision?result:this.activateResident(player,{reset});
+      const revision=this.residentPendingRevision,phase=this.residentPendingPhase,result=await this.residentPending;
+      return revision===this.residentRevision&&phase===this.residentPhase?result:this.activateResident(player,{reset});
     }
-    const request=this.residentRevision;
+    const request=this.residentRevision,phase=this.residentPhase,models=phase===2?this.mourningModels:this.elenaModels,pool=phase===2?this.mourningPool:this.elenaPool;
     this.residentPendingRevision=request;
+    this.residentPendingPhase=phase;
     const pending=(async()=>{
-      await this.elenaModels.load();
+      await models.load();
       if(request!==this.residentRevision||!this.world.cave)return false;
-      let resident=this.elenaPool[0];
-      if(!resident){resident=new ElenaEncounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>this.elenaModels.instantiate(),onDefeat:this.onDefeat});resident.id='elena';resident.number=1;this.elenaPool.push(resident);}
-      if(!resident.asset||reset){
+      let resident=pool[0];
+      if(!resident){
+        const Encounter=phase===2?MourningElenaEncounter:ElenaEncounter;
+        resident=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat});
+        resident.id=phase===2?'mourning-elena':'elena';resident.number=1;pool.push(resident);
+        if(phase===1)resident.onTransform=()=>this.transformResident(this.currentPlayer??player);
+      }
+      if(!resident.asset||reset||(phase===2&&this.mourningNeedsReset)){
         const position=new Vector3(ELENA_HOME.x,0,ELENA_HOME.z);
         await resident.summon(player,{position,rotationY:0});
+        if(phase===2)this.mourningNeedsReset=false;
       }else{
         resident.active=true;resident.actor.setEnabled(!resident.corpseGone);resident.routeState={};resident.engaged=false;
-        resident.animator.transition(resident.brain.state,{clipTime:resident.brain.time,actionId:resident.brain.serial});resident.animator.update(.2);
+        resident.animator.transition(resident.brain.state,{clipTime:resident.brain.time,actionId:resident.brain.serial});
+        if(resident.phase===2)resident.animator.sample(0);else resident.animator.update(.2);
       }
       if(request!==this.residentRevision||!this.world.cave){resident.hide();return false;}
+      for(const old of this.encounters)if(old.kind==='elena'&&old!==resident)old.hide();
+      this.encounters=this.encounters.filter(b=>b.kind!=='elena'||b===resident);
       if(!this.encounters.includes(resident))this.encounters.push(resident);
       this.active=true;this.onChange(this);return true;
     })();
     this.residentPending=pending;
     try{return await pending;}finally{if(this.residentPending===pending)this.residentPending=null;}
+  }
+  transformResident(player){
+    if(this.residentPhase===2||!this.world.cave)return this.residentPending;
+    this.residentPhase=2;this.lastHit='타락한 성녀가 비탄의 마녀로 변합니다';this.onChange(this);
+    return this.activateResident(player).catch(error=>{this.residentError=String(error.message??error);this.lastHit='광폭화 모델을 불러오지 못했습니다. 연결을 확인해 주세요.';this.onChange(this);console.error('[Elena transformation]',error);return false;});
+  }
+  preloadMourning(){
+    if(this.mourningWarmRequested)return;this.mourningWarmRequested=true;
+    this.mourningModels.load().catch(error=>{this.residentError=String(error.message??error);console.warn('[Elena preload]',error);});
   }
   get canUsePotion() { return this.active && !this.loading && !this.grab.active && this.potions.canUse(this.playerHp, this.playerMaxHp); }
   usePotion() {
@@ -175,9 +197,11 @@ export class BossBattle {
   }
   update(dt, player) {
     if (!this.active) return;
+    this.currentPlayer=player;
     this.combat.update(dt, player, this.onDamage);
     this.updating = true;
     for (const boss of this.encounters) boss.update(dt, player);
+    if(this.world.prefetchResources&&this.residentPhase===1&&this.encounters.some(b=>b.kind==='elena'&&b.engaged))this.preloadMourning();
     const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
     separateBosses(this.encounters, this.combat.grabOwner);
     this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;this.world.navigation?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
@@ -196,7 +220,7 @@ export class BossBattle {
   inspect() {
     return { active: this.active, loading: this.loading, count: this.encounters.length, living: this.livingCount,
       playerHp: this.playerHp, potions: this.potions.remaining, capturedBy: this.combat.grabOwner?.id ?? null,
-      pooledModels: this.allPooled.length, modelLoads: this.models.loads, goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,
+      pooledModels: this.allPooled.length, modelLoads: this.models.loads, goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,mourningModelLoads:this.mourningModels.loads,residentPhase:this.residentPhase,residentError:this.residentError??null,
       bearCount:this.encounters.filter(b=>b.kind==='bear').length,goblinCount:this.encounters.filter(b=>b.kind==='goblin').length,bosses: this.encounters.map(boss => boss.inspect()) };
   }
 }
