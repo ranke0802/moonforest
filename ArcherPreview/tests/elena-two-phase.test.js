@@ -235,7 +235,8 @@ test('phase-two painted body and morph-normal silhouette compile with stable r9 
     e.brain.cast();e.brain.time=time;e.animator.transition('cast',{clipTime:time});e.animator.update(0);e.alignPose();
     await body.material.forceCompilationAsync(body);await outline.material.forceCompilationAsync(outline);f.scene.render();
     const bodyEffect=body.subMeshes[0].effect,outlineEffect=outline.subMeshes[0].effect;
-    assert.ok(bodyEffect);assert.ok(outlineEffect);assert.match(bodyEffect.fragmentSourceCode,/1\.35 \* elenaBand/);assert.match(outlineEffect.vertexSourceCode,/normalUpdated/);assert.match(outlineEffect.vertexSourceCode,/morphTargetInfluences/);
+    assert.ok(bodyEffect);assert.ok(outlineEffect);assert.match(bodyEffect.fragmentSourceCode,/elenaPaintStyle\.x \* elenaBand/);assert.match(outlineEffect.vertexSourceCode,/normalUpdated/);assert.match(outlineEffect.vertexSourceCode,/morphTargetInfluences/);
+    const values={};body.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>values[name]=[x,y]},f.scene,f.engine,body.subMeshes[0]);assert.deepEqual(values.elenaPaintStyle,[1.35,.2],'default brightness and internal ink remain exact after becoming uniforms');
     effects.push([bodyEffect,outlineEffect]);
   }
   assert.strictEqual(effects[0][0],effects[1][0]);assert.strictEqual(effects[1][0],effects[2][0]);assert.strictEqual(effects[0][1],effects[1][1]);assert.strictEqual(effects[1][1],effects[2][1]);

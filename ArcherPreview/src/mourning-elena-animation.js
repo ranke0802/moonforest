@@ -37,6 +37,12 @@ function channels(group){return group.targetedAnimations.filter(t=>['position','
 const key=c=>c.target.uniqueId+':'+c.property;
 const MIX_ORDER=['walk','cast','idle','hit'];
 const HIT_PULSE_SECONDS=.38,HIT_PULSE_SOURCE_SECONDS=.65;
+function poseRootState(root,out,at){
+  const p=root.position,r=root.rotation,q=root.rotationQuaternion,s=root.scaling;
+  out[at++]=p.x;out[at++]=p.y;out[at++]=p.z;out[at++]=r.x;out[at++]=r.y;out[at++]=r.z;
+  out[at++]=q?1:0;out[at++]=q?.x??0;out[at++]=q?.y??0;out[at++]=q?.z??0;out[at++]=q?.w??0;
+  out[at++]=s.x;out[at++]=s.y;out[at++]=s.z;out[at]=root.parent?.uniqueId??-1;
+}
 function applyWeighted(channel,times,weights,hair=false){
   const out=channel.target[channel.property];let total=0;
   // Match the reference action order: walk, cast, idle, hit. Zero-weight tracks
@@ -80,7 +86,8 @@ export class MourningElenaAnimator {
     this.hitIdentity=Quaternion.Identity();
     this.halo=channels(group('Halo_Slow_Orbit_48s'));
     this.poseNodes=orderPoseNodes([...asset.transformNodes,...asset.meshes]);
-    const poseSet=new Set(this.poseNodes);this.poseParents=[...new Set(this.poseNodes.map(n=>n.parent).filter(p=>p&&!poseSet.has(p)))];this.refreshPose();
+    const poseSet=new Set(this.poseNodes);this.poseParents=[...new Set(this.poseNodes.map(n=>n.parent).filter(p=>p&&!poseSet.has(p)))];
+    this.poseRoots=[this.actor,...this.poseParents];this.poseRootLocals=new Float64Array(this.poseRoots.length*15);this.poseRootScratch=new Float64Array(this.poseRoots.length*15);this.poseRootsReady=false;this.refreshPose();
     const up=new Vector3(0,1,0),down=new Vector3(0,-1,0);
     this.cloth=asset.transformNodes.flatMap(bone=>{
       const m=bone.name.match(/^DEF_HaloCloth_(\d+)_(\d+)$/);if(!m)return [];
@@ -164,7 +171,7 @@ export class MourningElenaAnimator {
     for(const c of this.hair)applyWeighted(c,this,this.weights,true);
     for(const c of this.halo)c.target[c.property].copyFrom(c.track.sample(this.haloTime));
     this.applyMorphs(casting,false);
-    this.refreshPose();this.applyCloth(dt);this.samples++;
+    this.refreshPose();this.applyCloth(dt);this.samples++;this.cachePoseRoots();
   }
   applyMorphs(casting,dying){
     const state=this.morphState;state.castTime=this.castTime;state.casting=casting;state.castWeight=this.weights.cast;state.walkTime=this.walkTime;state.gaitBlend=this.gaitBlend;state.breathClock=this.breathClock;state.dying=dying;state.deathTime=this.deathTime;
@@ -183,7 +190,7 @@ export class MourningElenaAnimator {
     }
     for(const c of this.halo)c.target[c.property].copyFrom(c.track.sample(this.haloTime));
     this.applyMorphs(false,true);
-    this.refreshPose();this.applyCloth(dt);this.samples++;
+    this.refreshPose();this.applyCloth(dt);this.samples++;this.cachePoseRoots();
   }
   applyHitPulse(casting){
     this.hitPulseWeight=this.hitActive?0:shotWeight(this.hitPulseTime,HIT_PULSE_SECONDS,.04,.10);
@@ -203,6 +210,23 @@ export class MourningElenaAnimator {
     this.actor.markAsDirty();this.actor.computeWorldMatrix();
     for(const parent of this.poseParents){parent.markAsDirty();parent.computeWorldMatrix();}
     refreshPoseMatrices(this.poseNodes);
+    this.poseRootsReady=false;
+  }
+  cachePoseRoots(){
+    for(let i=0;i<this.poseRoots.length;i++)poseRootState(this.poseRoots[i],this.poseRootLocals,i*15);
+    this.poseRootsReady=true;
+  }
+  ensurePoseCurrent(){
+    // This animator owns every local rig channel and samples it before contacts.
+    // Reuse that exact pose unless terrain/separation moved an external root in
+    // the same render ID. Other animators retain their ordinary forced refresh.
+    let changed=!this.poseRootsReady;
+    for(let i=0;i<this.poseRoots.length;i++){
+      const offset=i*15;poseRootState(this.poseRoots[i],this.poseRootScratch,offset);
+      for(let j=0;j<15;j++)if(this.poseRootScratch[offset+j]!==this.poseRootLocals[offset+j]){changed=true;break;}
+    }
+    if(!changed)return false;
+    this.refreshPose();this.cachePoseRoots();return true;
   }
   applyCloth(dt){
     const s=this.scratch,down=s.down,yaw=this.actor.absoluteRotationQuaternion;

@@ -2,6 +2,7 @@ import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babyl
 import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial } from './cave-fog-binding.js';
+import {characterStyleFor,registerCharacterInk} from './character-style.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -35,13 +36,13 @@ void main(void) {
   vec4 worldPosition = finalWorld * vec4(positionUpdated, 1.0);
   caveInkPosition = worldPosition.xyz;
   vec3 worldNormal = normalize(mat3(finalWorld) * normalUpdated);
-  if (outlinePixels > 0.0) {
+  worldPosition.xyz += worldNormal * outlineWidth;
+  if (outlinePixels != 0.0) {
     gl_Position = viewProjection * worldPosition;
     vec4 displaced = viewProjection * (worldPosition + vec4(worldNormal,0.0));
     vec2 delta = (displaced.xy / displaced.w - gl_Position.xy / gl_Position.w) * outlineViewport;
     if (dot(delta,delta) > .000001) gl_Position.xy += normalize(delta) * outlinePixels * 2.0 / outlineViewport * gl_Position.w;
   } else {
-    worldPosition.xyz += worldNormal * outlineWidth;
     gl_Position = viewProjection * worldPosition;
   }
 }`;
@@ -84,8 +85,10 @@ function outlineMaterial(scene) {
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);
     if(mesh.morphTargetManager){BindMorphTargetParameters(mesh,effect);if(mesh.morphTargetManager.isUsingTextureForTargets)mesh.morphTargetManager._bind(effect);}
-    effect?.setFloat('outlineWidth', mesh.metadata.outlineWidth);
-    effect?.setFloat('outlinePixels', mesh.metadata.outlinePixels??0);
+    const group=mesh.metadata.characterStyleGroup,style=characterStyleFor(mesh);
+    const pixelOutline=mesh.metadata.outlinePixels!==undefined;
+    effect?.setFloat('outlineWidth',pixelOutline?0:mesh.metadata.outlineWidth*(group==='boss'?style.outlineWidth/.5:1));
+    effect?.setFloat('outlinePixels',group==='player'||(group==='boss'&&pixelOutline)?style.outlineWidth:mesh.metadata.outlinePixels??0);
     const engine=scene.getEngine(),canvas=engine.getRenderingCanvas();
     effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);
@@ -126,6 +129,8 @@ export function attachCharacterOutlines(asset, kind) {
     shell.renderOutline = false; shell.renderOverlay = false;
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;
     shell.visibility = source.visibility; shell.isVisible = source.isVisible;
+    if(kind==='warrior')registerCharacterInk(shell,'player');
+    else if(kind==='bear'||kind==='goblin'||kind==='elena')registerCharacterInk(shell,'boss');
     added.push(shell);
   }
   asset.meshes.push(...added);

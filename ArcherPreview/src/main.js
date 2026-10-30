@@ -46,6 +46,8 @@ import { PlayerHealthBar } from './player-health-bar.js';
 import { setupSettingsPanel } from './settings-panel.js';
 import {setupSummonPanel} from './summon-panel.js';
 import {setupBossPatternPanel} from './boss-pattern-settings.js';
+import {setupCharacterStylePanel} from './character-style-settings.js';
+import {applyCharacterSurfaceStyle,setSceneCharacterStyles} from './character-style.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
@@ -112,6 +114,7 @@ const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
 const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,onChange:value=>boss?.setAttackSettings(value)});
+const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
 let travelStorage;
 try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
@@ -379,6 +382,7 @@ async function loadCharacter() {
     }
     world.lighting.registerMeshes(container.meshes);
     applyPlayerDetail(container,world.camera);
+    applyCharacterSurfaceStyle(container,'player');
     if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
@@ -598,6 +602,7 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),warrior:isWarrior(),touchDevice});
+  setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
   cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
@@ -697,7 +702,7 @@ try {
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
       loadDiagnostics.finish();
-      const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open;
+      const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
@@ -709,16 +714,17 @@ try {
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}finally{frameDiagnostics.endFrame();}
   });
-  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
+  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);
-  for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog']){
+  for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog']){
     dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
     // Closing button handlers run before this bubble handler, keeping iOS
     // audio resume directly inside the user's tap, not only a later observer.
     $(selector).addEventListener('click',syncPlayback);
   }
-  // Preview camera, quality and equipment changes while settings pause combat.
-  for(const event of ['click','change','input'])$('#motion-speed-dialog').addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
+  // Run after the pause bubble handler so reset buttons also retain their final
+  // preview frame; combat remains frozen during both settings dialogs.
+  for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',syncPlayback);
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   window.addEventListener('pageshow',syncPlayback);

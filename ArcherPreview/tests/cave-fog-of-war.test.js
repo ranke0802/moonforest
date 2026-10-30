@@ -111,7 +111,7 @@ test('low-cost opaque cover is bounded and follows the injected terrain',()=>{
  const f=new CaveFogOfWar({isOpaque:()=>false});const cover=buildCaveFogCover(f,(x,z)=>x*.01+z*.02);
  assert.equal(cover.triangles,3200);assert.equal(cover.positions.length/3,1681);assert.deepEqual(cover.textureRect,[-80,-80,160,160]);
  assert.ok(Math.abs(cover.positions[1]-(-2.4+.035))<1e-5);
- assert.match(CAVE_FOG_COVER_FRAGMENT,/vec4\(caveFogMemoryColor\(fogWorldPosition,state.y\),1\.\)/);
+ assert.match(CAVE_FOG_COVER_FRAGMENT,/vec4\(caveRockShade\(fogWorldPosition,fogWorldNormal,state.y\),1\.\)/);
  assert.match(CAVE_FOG_GLSL,/caveFogHidesInk/);
 });
 test('RGBA mask carries no stale current vision when memory remains',()=>{

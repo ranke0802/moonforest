@@ -1,17 +1,22 @@
-import {Color4,Constants,MaterialPluginBase,Mesh,RawTexture,ShaderMaterial,Texture,Vector4} from '@babylonjs/core';
+import {Color4,Constants,MaterialPluginBase,Mesh,RawTexture,ShaderMaterial,SubMesh,Texture,Vector4,VertexData} from '@babylonjs/core';
 import {CaveFogMemory,CaveFogOfWar,CAVE_FOG_VISIBLE,caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
 import {CAVE_FOG_GLSL,CAVE_FOG_COVER_FRAGMENT} from './cave-fog-cover.js';
 import {caveSurface} from './witch-cave-layout.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
 import {caveFogFallback} from './cave-fog-binding.js';
+import {CAVE_ROCK_GLSL,bindCaveRock,buildCaveRockShell,caveRockTexture} from './cave-rock-shell.js';
 
 const fogFunctions=CAVE_FOG_GLSL.replace('uniform vec4 caveFogRect;','').replace('uniform float caveFogActive;','');
 class CaveFogShade extends MaterialPluginBase {
-  constructor(material,runtime){super(material,'CaveFogOfWar',490,{},true,false);this.runtime=runtime;this.standard=material.getClassName()==='StandardMaterial';this.registerForExtraEvents=true;this._enable(true);}
-  getSamplers(samplers){samplers.push('caveFogMap');}
-  getUniforms(){return {ubo:[{name:'caveFogRect',size:4,type:'vec4'},{name:'caveFogActive',size:1,type:'float'},{name:'caveFogCutout',size:1,type:'float'}],fragment:'uniform vec4 caveFogRect;uniform float caveFogActive;uniform float caveFogCutout;'};}
-  hardBindForSubMesh(buffer){const r=this.runtime,active=r&&!r.disposed&&r.fog.ready;buffer.updateFloat('caveFogActive',active?1:0);buffer.updateFloat('caveFogCutout',this._material.alpha<1?1:0);buffer.setTexture('caveFogMap',active?r.texture:caveFogFallback(this._material.getScene()));if(active)buffer.updateFloat4('caveFogRect',r.rect.x,r.rect.y,r.rect.z,r.rect.w);}
-  getCustomCode(type){if(type!=='fragment')return null;const color=this.standard?'color':'finalColor';return {CUSTOM_FRAGMENT_DEFINITIONS:fogFunctions,CUSTOM_FRAGMENT_MAIN_BEGIN:'if(caveFogActive>.5&&caveFogCutout>.5&&caveFogHidesInk(vPositionW))discard;',CUSTOM_FRAGMENT_BEFORE_FRAGCOLOR:`${color}.rgb=caveFogShade(${color}.rgb,vPositionW);`};}
+  constructor(material,runtime){super(material,'CaveFogOfWar',490,{},true,false);this.runtime=runtime;this.standard=material.getClassName()==='StandardMaterial';this.ground=material===runtime.world.ground?.material;this.registerForExtraEvents=true;this._enable(true);}
+  getSamplers(samplers){samplers.push('caveFogMap');if(this.ground)samplers.push('caveRockMap');}
+  getUniforms(){return {ubo:[{name:'caveFogRect',size:4,type:'vec4'},{name:'caveFogActive',size:1,type:'float'},{name:'caveFogCutout',size:1,type:'float'},...(this.ground?[{name:'caveRockToGamma',size:1,type:'float'}]:[])],fragment:'uniform vec4 caveFogRect;uniform float caveFogActive;uniform float caveFogCutout;'+(this.ground?'uniform float caveRockToGamma;':'')};}
+  hardBindForSubMesh(buffer){const r=this.runtime,active=r&&!r.disposed&&r.fog.ready;buffer.updateFloat('caveFogActive',active?1:0);buffer.updateFloat('caveFogCutout',this._material.alpha<1?1:0);buffer.setTexture('caveFogMap',active?r.texture:caveFogFallback(this._material.getScene()));if(active)buffer.updateFloat4('caveFogRect',r.rect.x,r.rect.y,r.rect.z,r.rect.w);if(this.ground){const texture=r&&!r.disposed?caveRockTexture(r.world):caveFogFallback(this._material.getScene());buffer.setTexture('caveRockMap',texture);buffer.updateFloat('caveRockToGamma',texture.gammaSpace===false?1:0);}}
+  getCustomCode(type){if(type!=='fragment')return null;const color=this.standard?'color':'finalColor';return {CUSTOM_FRAGMENT_DEFINITIONS:fogFunctions+(this.ground?CAVE_ROCK_GLSL.replace('uniform float caveRockToGamma;',''):''),CUSTOM_FRAGMENT_MAIN_BEGIN:'if(caveFogActive>.5&&caveFogCutout>.5&&caveFogHidesInk(vPositionW))discard;',CUSTOM_FRAGMENT_BEFORE_FRAGCOLOR:this.ground?`if(caveFogActive>.5){vec2 caveGroundFog=caveFogState(vPositionW);if(caveGroundFog.x<.92){vec3 caveGroundNormal=vec3(0.,1.,0.);
+#ifdef NORMAL
+caveGroundNormal=normalW;
+#endif
+${color}.rgb=mix(caveRockShade(vPositionW,caveGroundNormal,caveGroundFog.y),${color}.rgb,smoothstep(.08,.92,caveGroundFog.x));}}`:`${color}.rgb=caveFogShade(${color}.rgb,vPositionW);`};}
 }
 
 // Count cells from the same prefix sum as the visibility test. A cover patch is
@@ -30,7 +35,8 @@ export class CaveFogRuntime {
     this.texture.name='cave-player-visibility';this.texture.wrapU=this.texture.wrapV=Texture.CLAMP_ADDRESSMODE;this.texture.gammaSpace=false;
     this.plugins=new Set();this.materials=new WeakSet();this.materialDisposals=new Map();this.recordMeshes=new WeakSet();this.hidden=new Map();this.hiddenOverlays=new Set();this.owned=new Set();this.shadowScratch=[];this.shadowOriginal=null;this.encounters=[];this.time=0;this.disposed=false;this.patches=[];this.dynamic=[];this.inventoryDirty=true;this.materialDirty=true;this.meshCount=-1;this.materialCount=-1;
     this.stats={uploads:0,hiddenRecords:0,hiddenMeshes:0,hiddenShadowCasters:0,detailPatches:0,coverPatches:0,coverDraws:0,coverTriangles:0};
-    world.scene.metadata={...world.scene.metadata,caveFogRuntime:this};this.previousClearColor=world.scene.clearColor;this.clearColor=new Color4(0,0,0,1);world.scene.clearColor=this.clearColor;
+    this.playerView=new Vector4(0,0,0,0);this.bossView=new Vector4(0,0,0,0);
+    world.scene.metadata={...world.scene.metadata,caveFogRuntime:this};this.previousClearColor=world.scene.clearColor;this.clearColor=new Color4(.27,.245,.265,1);world.scene.clearColor=this.clearColor;
     this.installGround(world.ground);
     this.materialObserver=world.scene.onNewMaterialAddedObservable.add(material=>this.attach(material));
     this.removedMaterial=world.scene.onMaterialRemovedObservable.add(()=>{this.materialDirty=true;});
@@ -50,7 +56,9 @@ export class CaveFogRuntime {
   bind(material){
     const active=!this.disposed&&this.fog.ready?1:0,effect=material.getEffect?.();
     material.setTexture('caveFogMap',this.texture);material.setVector4('caveFogRect',this.rect);material.setFloat('caveFogActive',active);
+    material.setVector4('cavePlayerView',this.playerView);material.setVector4('caveBossView',this.bossView);
     effect?.setTexture('caveFogMap',this.texture);effect?.setVector4('caveFogRect',this.rect);effect?.setFloat('caveFogActive',active);
+    effect?.setVector4('cavePlayerView',this.playerView);effect?.setVector4('caveBossView',this.bossView);
   }
   allowsPoint(position){return !this.fog.ready||this.fog.stateAt(position.x,position.z)===CAVE_FOG_VISIBLE;}
   allowsBounds(min,max){return this.fog.boundsVisible(min,max);}
@@ -58,6 +66,7 @@ export class CaveFogRuntime {
     if(this.disposed)return false;this.time=time;this.encounters=encounters??[];this.playerRoot=player?.position?player:null;
     const position=player?.position??player;if(!position)return false;
     const changed=this.fog.update(position,time,{force});
+    this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+1.05,position.z,1);this.updateBossView();
     if(changed){this.texture.update(this.fog.rgba);this.stats.uploads++;this.updateRecords();this.updateGround();if(this.world.villageVisibility){this.world.villageVisibility.timer=0;this.world.villageVisibility.shadowTimer=0;}this.world.villageStreaming?.demand.invalidate();}
     return changed;
   }
@@ -66,26 +75,32 @@ export class CaveFogRuntime {
     for(const record of records){record.fogVisible=caveFogAllowsRecord(this.fog,record);record.fogOwner=this;record.fogRevision=this.fog.revision;if(!record.fogVisible)hidden++;record.root.setEnabled(caveFogRootEnabled(record));for(const mesh of record.meshes)this.recordMeshes.add(mesh);}
     this.stats.hiddenRecords=hidden;
   }
+  updateBossView(){
+    this.bossView.set(0,0,0,0);let nearest=Infinity;
+    for(const enemy of this.encounters){const p=enemy.actor?.position;if(!p||!enemy.active||enemy.kind!=='elena'||!this.allowsPoint(p))continue;const distance=Math.hypot(p.x-this.playerView.x,p.z-this.playerView.z);if(distance>=nearest)continue;nearest=distance;const large=enemy.phase===2;this.bossView.set(p.x,p.y+(large?3.5:1.05),p.z,large?6.3:1.6);}
+  }
   installGround(ground){
     if(!ground?.geometry)return;
-    const material=new ShaderMaterial('cave-terrain-fog-cover',this.world.scene,{vertexSource:'precision highp float;attribute vec3 position;uniform mat4 worldViewProjection;uniform mat4 world;varying vec3 fogWorldPosition;void main(){vec3 p=position+vec3(0.,.025,0.);fogWorldPosition=(world*vec4(p,1.)).xyz;gl_Position=worldViewProjection*vec4(p,1.);}',fragmentSource:CAVE_FOG_COVER_FRAGMENT},{attributes:['position'],uniforms:['world','worldViewProjection','caveFogRect','caveFogActive'],samplers:['caveFogMap']});
-    material.backFaceCulling=false;material.disableDepthWrite=false;material.onBindObservable.add(()=>this.bind(material));
-    const cover=new Mesh('cave-terrain-fog-cover',this.world.scene);ground.geometry.applyToMesh(cover);cover.material=material;cover.isPickable=false;cover.receiveShadows=false;cover.metadata={caveFogCover:true};cover.freezeWorldMatrix();cover.releaseSubMeshes();
-    for(const source of ground.subMeshes){
-      const sub=source.clone(cover,cover),bounds=source.getBoundingInfo().boundingBox,entry={source,sub,min:bounds.minimumWorld.clone(),max:bounds.maximumWorld.clone(),detail:true,cover:true,sourceCull:source.isInFrustum,sourceRender:source.render,coverCull:sub.isInFrustum,coverRender:sub.render};
+    const material=new ShaderMaterial('cave-terrain-fog-cover',this.world.scene,{vertexSource:'precision highp float;attribute vec3 position;attribute vec3 normal;uniform mat4 worldViewProjection;uniform mat4 world;varying vec3 fogWorldPosition;varying vec3 fogWorldNormal;void main(){fogWorldPosition=(world*vec4(position,1.)).xyz;fogWorldNormal=normalize(mat3(world)*normal);gl_Position=worldViewProjection*vec4(position,1.);}',fragmentSource:CAVE_FOG_COVER_FRAGMENT},{attributes:['position','normal'],uniforms:['world','worldViewProjection','caveFogRect','caveFogActive','caveRockToGamma'],samplers:['caveFogMap','caveRockMap']});
+    material.options.uniforms.push('caveEye','caveFocus','cavePlayerView','caveBossView');material.backFaceCulling=false;material.disableDepthWrite=false;material.onBindObservable.add(()=>{this.bind(material);bindCaveRock(material,this.world);material.setVector3('caveEye',this.world.camera.globalPosition);material.setVector3('caveFocus',this.world.camera.target);});
+    const shell=buildCaveRockShell(ground,this.world.terrain),data=new VertexData();data.positions=shell.positions;data.normals=shell.normals;data.indices=shell.indices;
+    const cover=new Mesh('cave-terrain-fog-cover',this.world.scene);data.applyToMesh(cover);cover.material=material;cover.isPickable=false;cover.receiveShadows=false;cover.metadata={caveFogCover:true,caveNoShadow:true};cover.freezeWorldMatrix();cover.releaseSubMeshes();
+    for(const [index,source]of ground.subMeshes.entries()){
+      const range=shell.patches[index],sub=new SubMesh(0,0,cover.getTotalVertices(),range.indexStart,range.indexCount,cover);sub.updateBoundingInfo(cover.getWorldMatrix());
+      const bounds=source.getBoundingInfo().boundingBox,entry={source,sub,min:bounds.minimumWorld.clone(),max:bounds.maximumWorld.clone(),detail:true,cover:false,sourceCull:source.isInFrustum,sourceRender:source.render,coverCull:sub.isInFrustum,coverRender:sub.render};
       source.isInFrustum=function(...args){return entry.detail&&entry.sourceCull.apply(this,args);};source.render=function(...args){if(entry.detail)return entry.sourceRender.apply(this,args);};
       sub.isInFrustum=function(...args){return entry.cover&&entry.coverCull.apply(this,args);};const stats=this.stats;
       sub.render=function(...args){if(entry.cover){stats.coverDraws++;stats.coverTriangles+=this.indexCount/3;return entry.coverRender.apply(this,args);}};
       this.patches.push(entry);
     }
-    this.ground=ground;this.cover=cover;this.coverMaterial=material;
+    this.ground=ground;this.cover=cover;this.coverMaterial=material;this.shellTriangles=shell.triangles;this.originalGroundTriangles=shell.originalTriangles;
   }
-  updateGround(){let detail=0,cover=0;for(const p of this.patches){p.detail=this.fog.boundsVisible(p.min,p.max);p.cover=!fogBoundsFullyVisible(this.fog,p.min,p.max);detail+=Number(p.detail);cover+=Number(p.cover);}this.stats.detailPatches=detail;this.stats.coverPatches=cover;}
+  updateGround(){let detail=0,cover=0;for(const p of this.patches){p.detail=this.fog.boundsVisible(p.min,p.max);p.cover=!p.detail;detail+=Number(p.detail);cover+=Number(p.cover);}this.stats.detailPatches=detail;this.stats.coverPatches=cover;}
   hideMesh(mesh){if(mesh&&!mesh.isDisposed()&&mesh.isVisible){this.hidden.set(mesh,true);mesh.isVisible=false;}if(mesh){mesh.metadata??={};mesh.metadata.caveFogVisible=false;}}
   applyOwnedMesh(mesh,visible){if(!mesh)return;this.owned.add(mesh);if(visible&&mesh.material?.getClassName()==='ShaderMaterial'&&!mesh.material.options?.samplers?.includes('caveFogMap')){mesh.computeWorldMatrix();const b=mesh.getBoundingInfo().boundingBox;visible=fogBoundsFullyVisible(this.fog,b.minimumWorld,b.maximumWorld);}mesh.metadata??={};mesh.metadata.caveFogVisible=visible;if(!visible)this.hideMesh(mesh);}
   gateOverlay(mesh){if(!mesh.renderOverlay)return;const b=mesh.getBoundingInfo().boundingBox;if(!fogBoundsFullyVisible(this.fog,b.minimumWorld,b.maximumWorld)){mesh.renderOverlay=false;this.hiddenOverlays.add(mesh);}}
   beforeRender(){
-    if(this.disposed)return;this.restore();if(this.playerRoot&&!this.playerRoot.isDisposed?.())this.update(this.playerRoot,this.time);
+    if(this.disposed)return;this.restore();if(this.playerRoot&&!this.playerRoot.isDisposed?.())this.update(this.playerRoot,this.time);else this.updateBossView();
     const scene=this.world.scene;
     if(this.inventoryDirty||this.meshCount!==scene.meshes.length){this.meshCount=scene.meshes.length;this.inventoryDirty=false;this.updateRecords();this.dynamic=scene.meshes.filter(mesh=>mesh!==this.ground&&mesh!==this.cover&&!this.recordMeshes.has(mesh));}
     this.stats.coverDraws=0;this.stats.coverTriangles=0;
@@ -111,7 +126,7 @@ export class CaveFogRuntime {
     for(const mesh of this.hiddenOverlays)if(!mesh.isDisposed())mesh.renderOverlay=true;this.hiddenOverlays.clear();
     if(this.shadowOriginal){const map=this.world.shadows?.getShadowMap?.();if(map)map.renderList=this.shadowOriginal;this.shadowOriginal=null;}
   }
-  inspect(){return {...this.fog.stats,...this.stats,revision:this.fog.revision,maskBytes:this.fog.rgba.byteLength,sharedTerrainGeometry:this.cover?.geometry===this.ground?.geometry,coverPatchLimit:this.patches.length};}
+  inspect(){return {...this.fog.stats,...this.stats,revision:this.fog.revision,maskBytes:this.fog.rgba.byteLength,sharedTerrainGeometry:false,originalGroundTriangles:this.originalGroundTriangles,shellTriangles:this.shellTriangles,coverPatchLimit:this.patches.length,overlappingGroundPatches:this.patches.filter(p=>p.detail&&p.cover).length,reusedRockTexture:caveRockTexture(this.world).name};}
   dispose(){
     if(this.disposed)return;this.disposed=true;this.restore();const scene=this.world.scene;
     for(const enemy of this.encounters)enemy.fogVisible=true;

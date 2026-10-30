@@ -1,3 +1,6 @@
+import {CAVE_ROCK_GLSL} from './cave-rock-shell.js';
+import {CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
+
 // R = current player line-of-sight, G = explored memory. RGBA8, no mipmaps.
 // Upload only when fog.revision changes. Bind the same field to ground, rocks,
 // water, glow and ink; otherwise partially visible large meshes can leak detail.
@@ -11,9 +14,10 @@ vec2 caveFogState(vec3 p){
   return texture2D(caveFogMap,uv).rg;
 }
 vec3 caveFogMemoryColor(vec3 p,float explored){
-  // Subtle broad tonal variation, not a blur render-target or a new texture.
-  float haze=.93+.07*sin(p.x*.12+p.z*.08)*sin(p.z*.15);
-  return vec3(.073,.080,.099)*haze*smoothstep(.05,.95,explored);
+  // Unseen space reads as solid cave rock, not black painted void. Its actual
+  // rooms/props remain unsubmitted; explored memory is only slightly lighter.
+  float strata=.5+.5*sin(p.x*.51+p.y*.92+sin(p.z*.27))*sin(p.z*.43-p.y*.37);
+  return mix(vec3(.27,.235,.245),vec3(.36,.30,.28),strata*.45)*mix(.87,1.,smoothstep(.05,.95,explored));
 }
 vec3 caveFogShade(vec3 base,vec3 p){
   if(caveFogActive<.5)return base;
@@ -46,14 +50,19 @@ export function buildCaveFogCover(fog,heightAt,{spacing=4,lift=.035,maxVertices=
   return {positions,indices,triangles:indices.length/3,textureRect:[fog.minX,fog.minZ,width,depth]};
 }
 
-// The cover is opaque and writes depth, but does not shadow the player. Visible
-// cells discard; the detailed terrain remains responsible for the visible side.
+// Only fully hidden patches submit this opaque rock shell. Partial patches use
+// the original terrain once, with the same rock shading beyond current vision.
 export const CAVE_FOG_COVER_FRAGMENT=`precision highp float;
 varying vec3 fogWorldPosition;
+varying vec3 fogWorldNormal;
+uniform vec3 caveEye;uniform vec3 caveFocus;
 ${CAVE_FOG_GLSL}
+${CAVE_ROCK_GLSL}
+${CAVE_VIEW_UNIFORMS}
+${CAVE_VIEW_GLSL}
 void main(){
   if(caveFogActive<.5)discard;
+  if(caveForegroundCutaway(fogWorldPosition,caveEye,caveFocus))discard;
   vec2 state=caveFogState(fogWorldPosition);
-  if(state.x>.08)discard;
-  gl_FragColor=vec4(caveFogMemoryColor(fogWorldPosition,state.y),1.);
+  gl_FragColor=vec4(caveRockShade(fogWorldPosition,fogWorldNormal,state.y),1.);
 }`;

@@ -2,8 +2,9 @@ import {Color3,Color4,Mesh,MeshBuilder,ShaderMaterial,Vector3,VertexData,Constan
 import {CAVE_PLACEMENTS,CAVE_POOLS,CAVE_WATERFALLS,caveRoofHeight} from './witch-cave-layout.js';
 import {caveSurfaceStyle} from './witch-cave-surfaces.js';
 import {caveFlowGeometry} from './witch-cave-water.js';
-import {CAVE_FOG_START,CAVE_FOG_END} from './witch-cave-visibility.js';
+import {CAVE_FOG_START,CAVE_FOG_END,CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
 import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
+import {CAVE_ROCK_GLSL,bindCaveRock} from './cave-rock-shell.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -30,15 +31,13 @@ ${CAVE_FOG_GLSL}
 void main(){if(caveFogHidesInk(glowWorldPosition))discard;vec2 p=glowUV*2.-1.;float a=max(0.,1.-dot(p,p));gl_FragColor=vec4(tint,a*a*a*.2);}`;
 const roofFragment=`precision highp float;varying vec3 p;uniform vec3 eye;uniform vec3 focus;
 ${CAVE_FOG_GLSL}
+${CAVE_ROCK_GLSL}
+${CAVE_VIEW_UNIFORMS}
+${CAVE_VIEW_GLSL}
 void main(){
- // A local cutaway keeps the orbit camera clear while the distant ceiling
- // joins the existing wall/column silhouettes. No transparent sorting pass.
- vec2 sight=focus.xz-eye.xz;
- float along=clamp(dot(p.xz-eye.xz,sight)/max(dot(sight,sight),.001),0.,1.);
- if(length(p.xz-mix(eye.xz,focus.xz,along))<mix(7.5,5.5,along))discard;
- float strata=sin(p.x*.73+sin(p.z*.24)*2.)*sin(p.z*.52-p.x*.13);
- vec3 color=mix(vec3(.25,.23,.28),vec3(.37,.34,.39),.5+strata*.25);
- float fog=smoothstep(22.,48.,length(p-eye));gl_FragColor=vec4(caveFogShade(mix(color,vec3(.24,.23,.28),fog),p),1.);
+ if(caveForegroundCutaway(p,eye,focus))discard;
+ vec3 color=caveRockShade(p,vec3(0.,1.,0.),.5);
+ float fog=smoothstep(40.,150.,length(p-eye));gl_FragColor=vec4(mix(color,vec3(.27,.245,.265),fog*.72),1.);
 }`;
 const fallFragment=`precision highp float;varying vec3 p;uniform float time;uniform vec3 eye;
 ${CAVE_FOG_GLSL}
@@ -84,8 +83,12 @@ function caveCeiling(world){
     positions.push(x,caveRoofHeight(x,z)+.6*Math.sin(x*.24)*Math.cos(z*.19),z);
     if(ring&&i){const at=ring*(segments+1)+i;indices.push(at,at-1,at-segments-2);if(ring>1)indices.push(at,at-segments-2,at-segments-1);}
   }
+  // A distant lining closes the old open dome edge. It is decoration outside
+  // every walking/clearance region: 128 triangles, no collision/shadow/ink.
+  const edge=positions.length/3;
+  for(let i=0;i<=segments;i++){const a=i/segments*Math.PI*2;positions.push(Math.cos(a)*180,-28,Math.sin(a)*180);if(i){const prev=rings*(segments+1)+i;indices.push(prev,edge+i-1,edge+i,prev,prev-1,edge+i-1);}}
   const mesh=new Mesh('cave-distant-ceiling',world.scene),data=new VertexData();data.positions=positions;data.indices=indices;data.applyToMesh(mesh);mesh.isPickable=false;mesh.freezeWorldMatrix();
-  const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus',...fogUniforms],samplers:['caveFogMap']}));material.backFaceCulling=false;mesh.material=material;
+  const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus','cavePlayerView','caveBossView','caveRockToGamma',...fogUniforms],samplers:['caveFogMap','caveRockMap']}));material.onBindObservable.add(()=>bindCaveRock(material,world));material.backFaceCulling=false;mesh.material=material;mesh.metadata={caveNoShadow:true,caveBackdrop:true};mesh.receiveShadows=false;
   return {material,dispose(){mesh.dispose();material.dispose();}};
 }
 function caveGlow(world,asset,tint,height,offsetX=0){

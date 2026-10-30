@@ -1,4 +1,5 @@
 import { Color3, PBRMaterial } from '@babylonjs/core';
+import {applyCharacterSurfaceStyle} from './character-style.js';
 
 const materials = new WeakMap();
 // Match the warrior body's KHR_materials_unlit path. Babylon calls this class
@@ -38,4 +39,5 @@ export function applyMonsterToon(asset) {
     }
     mesh.material = toon;
   }
+  applyCharacterSurfaceStyle(asset,'boss');
 }

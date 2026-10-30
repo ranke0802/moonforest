@@ -7,6 +7,7 @@ import {worldSpawn,travelUrl,mapPortals,mapForCharacter,CAVE_RADIUS} from '../sr
 import {playerTextureManifest} from '../src/player-texture-profile.js';
 import {NullEngine,Vector3} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 test('cave uses only the twenty original types and two approved supplements with existing village props',()=>{
   const used=new Set(CAVE_PLACEMENTS.map(p=>p.asset));
   assert.deepEqual([...used].filter(id=>id.startsWith('cave-')).sort(),[...CAVE_ASSET_IDS].sort());
@@ -67,10 +68,14 @@ test('cave world swaps retain camera and terrain identity and release water reso
     assert.equal(world.mapId,'witch-cave');assert.equal(world.sky.mesh.isEnabled(),false);assert.equal(world.mountains.isEnabled(),false);
     assert.equal(world.lighting.followHeight,true);world.lighting.follow(new Vector3(29,6,-30),true);assert.equal(world.lighting.requestedFocus.y,6);
     const water=scene.getMeshByName('cave-still-water');assert.ok(water);await water.material.forceCompilationAsync(water);
+    // The shared four-byte sampler is initialized lazily by the first rock
+    // draw. Compare warmed scenes, and require the same sampler on every visit.
+    world.tick(0);scene.render();const fallback=caveFogFallback(scene);
     const baseline=[scene.meshes.length,scene.materials.length,scene.textures.length];
     for(let i=0;i<4;i++){
       replaceWorldMap(world,'warrior-v4');assert.equal(world.terrain.surfaceHeight,null);assert.equal(water.isDisposed(),true);assert.equal(world.sky.mesh.isEnabled(),true);assert.equal(world.mountains.isEnabled(),true);assert.equal(world.caveAtmosphere,null);
       replaceWorldMap(world,'warrior-v5');assert.equal(world.scene,scene);assert.equal(world.camera,camera);assert.equal(world.terrain,terrain);
+      assert.equal(caveFogFallback(scene),fallback);assert.equal(scene.textures.filter(t=>t.name==='cave-fog-inactive-sampler').length,1);
       assert.deepEqual([scene.meshes.length,scene.materials.length,scene.textures.length],baseline);
       assert.ok(world.navigation.free(CAVE_ENTRY,.34,CAVE_RADIUS));world.tick(i);scene.render();
     }

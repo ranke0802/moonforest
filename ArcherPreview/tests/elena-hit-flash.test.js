@@ -41,7 +41,7 @@ test('opaque Elena uses the exact final white alpha-combine RGB after fog/image 
   assert.equal(overlayCalls,0,'opaque flash never schedules the extra overlay pass');
   const effect=a.subMeshes[0].effect,code=effect.fragmentSourceCode;
   assert.ok(code.lastIndexOf('finalColor.rgb = mix')>code.lastIndexOf('finalColor=applyImageProcessing'));
-  assert.match(code,/1\.35 \* elenaBand/);assert.match(code,/elenaHitFlash/);
+  assert.match(code,/elenaPaintStyle\.x \* elenaBand/);assert.match(code,/elenaHitFlash/);
   applyHitFlash([a],0);applyHitFlash([b],0);scene.render();assert.strictEqual(a.subMeshes[0].effect,effect,'flash weight changes never change shader variants');
   assert.equal(a.renderOverlay,false);assert.equal(a.overlayAlpha,0);assert.equal(overlayCalls,0);
 });
@@ -56,6 +56,6 @@ test('transparent/fading Elena and non-Elena meshes retain their original overla
   material.transparencyMode=PBRMaterial.PBRMATERIAL_OPAQUE;
   const bear=MeshBuilder.CreateBox('bear',{},scene);bear.material=material;applyHitFlash([bear],.22,.22);assert.equal(bear.renderOverlay,true);assert.equal(bear.overlayAlpha,.72);
   const plugin=material.pluginManager.getPlugin('ElenaPaint'),uniforms={};
-  plugin.hardBindForSubMesh({updateFloat:(name,value)=>uniforms[name]=value},scene,scene.getEngine(),bear.subMeshes[0]);assert.equal(uniforms.elenaHitFlash,0,'a shared material does not mark unrelated meshes as Elena');
-  b.visibility=.5;applyHitFlash([b],.11,.22);plugin.hardBindForSubMesh({updateFloat:(name,value)=>uniforms[name]=value},scene,scene.getEngine(),b.subMeshes[0]);assert.equal(uniforms.elenaHitFlash,0,'fallback never applies the flash twice');
+  plugin.hardBindForSubMesh({updateFloat:(name,value)=>uniforms[name]=value,updateFloat2(){}},scene,scene.getEngine(),bear.subMeshes[0]);assert.equal(uniforms.elenaHitFlash,0,'a shared material does not mark unrelated meshes as Elena');
+  b.visibility=.5;applyHitFlash([b],.11,.22);plugin.hardBindForSubMesh({updateFloat:(name,value)=>uniforms[name]=value,updateFloat2(){}},scene,scene.getEngine(),b.subMeshes[0]);assert.equal(uniforms.elenaHitFlash,0,'fallback never applies the flash twice');
 });

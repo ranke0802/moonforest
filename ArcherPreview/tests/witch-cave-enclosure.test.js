@@ -12,11 +12,12 @@ import {applyVillageToon} from '../src/village-toon.js';
 import {VillageOutlines} from '../src/village-outlines.js';
 import {CAVE_SIGHT_DATA} from '../src/witch-cave-sight-data.js';
 import {caveRockOccludes} from '../src/witch-cave-sight.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 test('local cave cutaway protects the player while keeping floors, side walls and rear rooms opaque',()=>{
  const eye={x:0,y:6,z:10},focus={x:0,y:1.1,z:0};
  assert.equal(caveForegroundCutaway({x:0,y:3.55,z:5},eye,focus),true,'rock between eye and actor is locally cut');
- assert.equal(caveForegroundCutaway({x:1.5,y:3.55,z:5},eye,focus),false,'nearby wall outside narrow tunnel remains solid');
+ assert.equal(caveForegroundCutaway({x:3,y:3.55,z:5},eye,focus),false,'side wall beyond the play opening remains solid');
  assert.equal(caveForegroundCutaway({x:0,y:1.1,z:-2},eye,focus),false,'geometry behind actor does not reveal rear room');
  assert.equal(caveForegroundCutaway({x:0,y:0,z:0},eye,focus),false,'walking floor remains');
  assert.equal(caveForegroundCutaway(eye,eye,focus),false,'near-camera surface is not blindly discarded');
@@ -50,6 +51,8 @@ test('terrain separates rear chambers while retaining open local connecting corr
 
 test('cave floor, painted rocks and ink use the same local cutaway and focus',async()=>{
  const engine=new NullEngine(),world=createWorld(engine,{cave:true,touchDevice:true});
+ caveFogFallback(world.scene).getInternalTexture().isReady=true;
+ world.caveFog.texture.getInternalTexture().isReady=true;
  let ink;
  try{
   const rock=MeshBuilder.CreateBox('cave-occluder',{},world.scene);rock.material=new PBRMaterial('cave-rock',world.scene);applyVillageToon([rock],world.lighting);world.scene.render();
@@ -85,6 +88,7 @@ test('baked rock sight blockers follow actual tall surfaces and preserve natural
 
 test('water, falls, roof and additive glows bind the current fog runtime without retaining old maps',async()=>{
  const engine=new NullEngine(),world=createWorld(engine,{cave:true,touchDevice:true});
+ caveFogFallback(world.scene).getInternalTexture().isReady=true;
  const fogTexture=world.caveFog?.texture.getInternalTexture();if(fogTexture)fogTexture.isReady=true;
  try{
   const materials=world.scene.materials.filter(m=>['cave-painted-water','cave-flowing-water','cave-ceiling-paint'].includes(m.name)||m.name.startsWith('cave-glow-'));
@@ -95,7 +99,7 @@ test('water, falls, roof and additive glows bind the current fog runtime without
    material.onBindObservable.notifyObservers(mesh);
    const fragment=material.shaderPath.fragmentSource;
    assert.match(fragment,/uniform sampler2D caveFogMap/);
-   assert.match(fragment,material.name.startsWith('cave-glow-')?/if\(caveFogHidesInk\(glowWorldPosition\)\)discard/:/gl_FragColor=vec4\(caveFogShade\(/);
+   assert.match(fragment,material.name.startsWith('cave-glow-')?/if\(caveFogHidesInk\(glowWorldPosition\)\)discard/:material.name==='cave-ceiling-paint'?/caveRockShade\(p,/:/gl_FragColor=vec4\(caveFogShade\(/);
   }
   assert.equal(bound.length,5);
   world.caveFog=null;

@@ -55,8 +55,8 @@ if(caveCliff>.001){
 `;
 export class CaveSurfaceShade extends MaterialPluginBase {
  constructor(material,{ground=false,camera=null}={}){super(material,ground?'CaveGroundMood':'CaveRockMood',325,{},true,true);this.ground=ground;this.camera=camera;this.active=true;}
- getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'},{name:'caveEye',size:3,type:'vec3'},{name:'caveFocus',size:3,type:'vec3'}],fragment:'uniform float caveMoodActive;uniform vec3 caveEye;uniform vec3 caveFocus;'};}
- bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}}
+ getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'},{name:'caveEye',size:3,type:'vec3'},{name:'caveFocus',size:3,type:'vec3'},{name:'cavePlayerView',size:4,type:'vec4'},{name:'caveBossView',size:4,type:'vec4'}],fragment:'uniform float caveMoodActive;uniform vec3 caveEye;uniform vec3 caveFocus;uniform vec4 cavePlayerView;uniform vec4 caveBossView;'};}
+ bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}const fog=this._material.getScene().metadata?.caveFogRuntime,p=fog?.playerView,b=fog?.bossView;buffer.updateFloat4('cavePlayerView',p?.x??0,p?.y??0,p?.z??0,p?.w??0);buffer.updateFloat4('caveBossView',b?.x??0,b?.y??0,b?.z??0,b?.w??0);}
  getCustomCode(type){
   if(type!=='fragment')return null;
   const common={CUSTOM_FRAGMENT_DEFINITIONS:CAVE_VIEW_GLSL,CUSTOM_FRAGMENT_MAIN_BEGIN:'if(caveMoodActive>.5 && caveForegroundCutaway(vPositionW,caveEye,caveFocus))discard;'};

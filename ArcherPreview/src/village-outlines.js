@@ -4,7 +4,7 @@ import '@babylonjs/core/Shaders/ShadersInclude/instancesVertex.js';
 import {projectedCoverage} from './village-lod.js';
 import {VILLAGE_INK_MIN_COVERAGE,selectVillageOutlines,villageInkWidth} from './village-outline-policy.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
-import {CAVE_VIEW_GLSL} from './witch-cave-visibility.js';
+import {CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
 import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
 import {bindCaveFogMaterial} from './cave-fog-binding.js';
 
@@ -31,6 +31,7 @@ void main(void){
 const fragmentSource=`precision highp float;
 uniform vec3 inkColor;varying float inkCoverage;varying vec3 inkWorldPosition;
 uniform float inkCaveActive;uniform vec3 inkCamera;uniform vec3 inkFocus;
+${CAVE_VIEW_UNIFORMS}
 ${CAVE_VIEW_GLSL}
 ${CAVE_FOG_GLSL}
 float inkBayer2(vec2 p){return 2.0*mod(p.x+p.y,2.0)+mod(p.y,2.0);}
@@ -58,7 +59,7 @@ export class VillageOutlines {
   constructor(world,records,stats){
     this.world=world;this.stats=stats;this.sources=new Set();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
     // A private draw wrapper must not overwrite the base PBR submesh effect.
-    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','caveFogRect','caveFogActive'],samplers:['caveFogMap']},false);
+    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','cavePlayerView','caveBossView','caveFogRect','caveFogActive'],samplers:['caveFogMap']},false);
     this.material.setFloat('caveFogActive',0);
     this.material.setVector2('inkSingle',new Vector2(0,0));
     this.material.backFaceCulling=true;this.material.cullBackFaces=false;this.material.disableDepthWrite=true;

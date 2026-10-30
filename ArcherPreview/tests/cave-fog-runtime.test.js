@@ -30,6 +30,7 @@ function fixture(t,{terrain=false,realSight=false}={}){
  // NullEngine cannot complete a real RawTexture upload. Mark only this fixture
  // upload ready before forceCompilationAsync; production has no special case.
  fog.texture.getInternalTexture().isReady=true;
+ caveFogFallback(scene).getInternalTexture().isReady=true;
  t.after(()=>{fog.dispose();scene.dispose();engine.dispose();});
  return {engine,scene,camera,world,fog,shadowMap};
 }
@@ -88,14 +89,14 @@ test('unseen enemy body, contact, spells, ink and UI point gate agree while game
  assert.equal(mesh.isVisible,true,'disposing during a gated frame restores body visibility too');
 });
 
-test('real steep terrain uses shared original triangles and rejects nonvisible detail patches',async t=>{
+test('hidden terrain uses a sparse rock shell and never submits both ground versions',async t=>{
  const {scene,world,fog,camera}=fixture(t,{terrain:true,realSight:true});
  camera.position.set(-40,28,60);camera.setTarget(new Vector3(-40,0,38));fog.update({x:-44,z:38},0,{force:true});
- assert.equal(fog.cover.geometry,world.ground.geometry);assert.equal(fog.cover.getVertexBuffer('position'),world.ground.getVertexBuffer('position'));
- assert.equal(fog.cover.getTotalIndices(),world.ground.getTotalIndices());assert.equal(fog.patches.length,36);
+ assert.notEqual(fog.cover.geometry,world.ground.geometry);assert.equal(world.ground.getTotalIndices()/3,73728);assert.equal(fog.patches.length,36);
+ assert.ok(fog.cover.getTotalIndices()<world.ground.getTotalIndices()*.15);assert.ok(fog.patches.every(p=>p.detail!==p.cover));
  assert.ok(fog.stats.detailPatches>0&&fog.stats.detailPatches<36);
  await world.ground.material.forceCompilationAsync(world.ground);await fog.coverMaterial.forceCompilationAsync(fog.cover);scene.render();
- assert.ok(fog.stats.coverDraws>0&&fog.stats.coverDraws<=36);assert.ok(fog.stats.coverTriangles<=73728);
+ assert.ok(fog.stats.coverDraws>0&&fog.stats.coverDraws<=36);assert.ok(fog.stats.coverTriangles<=10080);assert.equal(fog.stats.detailPatches+fog.stats.coverPatches,36);
  const manifest=JSON.parse(readFileSync(new URL('../public/assets/witch-cave.json',import.meta.url)));
  const actualRecords=CAVE_PLACEMENTS.map(p=>{const bounds=placementBounds(world,p,manifest.assets[p.asset]);return {placement:p,bounds,min:bounds.min,max:bounds.max,root:new TransformNode(p.id,scene),meshes:[]};});
  fog.updateRecords(actualRecords);assert.ok(actualRecords.filter(r=>!r.fogVisible).length>actualRecords.length*.5);

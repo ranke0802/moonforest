@@ -147,6 +147,7 @@ for(const ubo of [false,true])test('S23 shader processing preserves 0.50 px outl
   const before=scene.materials.length;applyElenaStyle(asset);assert.equal(scene.materials.length,before);
   assert.equal(mesh.material.unlit,true);assert.equal(mesh.material.reflectionTexture,null);assert.equal(mesh.material.metallicTexture,null);assert.deepEqual(mesh.material.metadata.elenaStyle,ELENA_STYLE);
   await mesh.material.forceCompilationAsync(mesh);await asset.meshes[1].material.forceCompilationAsync(asset.meshes[1]);scene.render();
-  const fragment=mesh.subMeshes[0].effect.fragmentSourceCode;assert.match(fragment,/1\.35 \* elenaBand/);assert.match(fragment,/\.20\*max\(elenaCrease,elenaPaintEdge\)/);
+  const fragment=mesh.subMeshes[0].effect.fragmentSourceCode;assert.match(fragment,/elenaPaintStyle\.x \* elenaBand/);assert.match(fragment,/elenaPaintStyle\.y\*max\(elenaCrease,elenaPaintEdge\)/);
+  const uniforms={};mesh.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>uniforms[name]=[x,y]},scene,engine,mesh.subMeshes[0]);assert.deepEqual(uniforms.elenaPaintStyle,[1.35,.2]);
   assert.match(asset.meshes[1].subMeshes[0].effect.vertexSourceCode,/outlinePixels \* 2\.0 \/ outlineViewport/);
 });

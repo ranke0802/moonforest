@@ -1,11 +1,13 @@
 import {MaterialPluginBase,MeshBuilder,ShaderMaterial} from '@babylonjs/core';
 import {canInlineHitFlash} from './hit-feedback.js';
+import {characterStyleFor} from './character-style.js';
 export const ELENA_STYLE=Object.freeze({outlinePixels:.5,internalLineStrength:.2,brightness:1.35,contactGround:true,pbr:false});
 export class ElenaPaint extends MaterialPluginBase{
   constructor(material){super(material,'ElenaPaint',330,{},true,false);this.registerForExtraEvents=true;this._enable(true);}
-  getUniforms(){return {ubo:[{name:'elenaHitFlash',size:1,type:'float'}],fragment:'uniform float elenaHitFlash;'};}
+  getUniforms(){return {ubo:[{name:'elenaHitFlash',size:1,type:'float'},{name:'elenaPaintStyle',size:2,type:'vec2'}],fragment:'uniform float elenaHitFlash;\nuniform vec2 elenaPaintStyle;'};}
   hardBindForSubMesh(buffer,_scene,_engine,subMesh){
     const mesh=subMesh.getRenderingMesh();buffer.updateFloat('elenaHitFlash',canInlineHitFlash(mesh)?mesh.overlayAlpha??0:0);
+    const style=characterStyleFor(mesh);buffer.updateFloat2('elenaPaintStyle',style.brightness,style.internal?style.internalStrength:0);
   }
   getCustomCode(type){if(type!=='fragment')return null;return {CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:`
     // Bright three-band painted shading, with no metallic/roughness reflection.
@@ -13,7 +15,7 @@ export class ElenaPaint extends MaterialPluginBase{
     float elenaBand = .86 + .07*smoothstep(-.15,-.10,elenaLight) + .07*smoothstep(.45,.50,elenaLight);
     float elenaCrease = clamp(length(fwidth(normalW))*2.0,0.0,1.0);
     float elenaPaintEdge = clamp(length(fwidth(surfaceAlbedo))*1.5,0.0,1.0);
-    finalDiffuse *= 1.35 * elenaBand * (1.0 - .20*max(elenaCrease,elenaPaintEdge));
+    finalDiffuse *= elenaPaintStyle.x * elenaBand * (1.0 - elenaPaintStyle.y*max(elenaCrease,elenaPaintEdge));
   `,CUSTOM_FRAGMENT_BEFORE_FRAGCOLOR:`
     // The legacy white overlay blends after fog and image processing. Opaque
     // Elena meshes produce the same final RGB in their existing body pass.
@@ -25,7 +27,7 @@ export function applyElenaStyle(asset){
     if(material?.getClassName()!=='PBRMaterial'||material.metadata?.elenaStyle)continue;
     new ElenaPaint(material);material.metadata={...material.metadata,elenaStyle:ELENA_STYLE};
   }
-  for(const mesh of asset.meshes)if(mesh.getTotalVertices()&&mesh.material?.metadata?.elenaStyle)mesh.metadata={...mesh.metadata,elenaInlineFlash:true};
+  for(const mesh of asset.meshes)if(mesh.getTotalVertices()&&mesh.material?.metadata?.elenaStyle)mesh.metadata={...mesh.metadata,elenaInlineFlash:true,characterStyleGroup:'boss'};
 }
 // One soft contact patch, not a new shadow map or downloaded texture.
 export function createElenaContact(world){
