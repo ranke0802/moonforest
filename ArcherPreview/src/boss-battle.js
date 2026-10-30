@@ -54,7 +54,7 @@ export class BossBattle {
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;
-    this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];
+    this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];this.frameEncounters=[];
     this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;
     this.noGrab = { active: false, label: '' };
   }
@@ -111,7 +111,7 @@ export class BossBattle {
         this.residentHome={x:resident.home.x,z:resident.home.z};
         if(phase===2)this.mourningNeedsReset=false;
       }else{
-        resident.active=true;resident.actor.setEnabled(!resident.corpseGone);resident.routeState={};resident.engaged=false;
+        resident.active=true;resident.actor.setEnabled(!resident.corpseGone);resident.setShadowCasting?.(!resident.corpseGone);resident.routeState={};resident.engaged=false;
         resident.animator.transition(resident.brain.state,{clipTime:resident.brain.time,actionId:resident.brain.serial});
         if(resident.phase===2)resident.animator.sample(0);else resident.animator.update(.2);
       }
@@ -229,9 +229,10 @@ export class BossBattle {
     this.updating = true;
     for (const boss of this.encounters) boss.update(dt, player);
     if(this.world.prefetchResources&&this.residentPhase===1&&this.encounters.some(b=>b.kind==='elena'&&b.engaged))this.preloadMourning();
-    const beforeSeparation=this.encounters.map(boss=>boss.actor.position.clone());
-    separateBosses(this.encounters, this.combat.grabOwner);
-    this.encounters.forEach((boss,i)=>{if(boss.corpseGone)return;(boss.movementNavigation??this.world.navigation)?.constrain(boss.actor.position,beforeSeparation[i],boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));});
+    const running=this.frameEncounters;running.length=0;
+    for(const boss of this.encounters)if(boss.active&&!boss.corpseGone){(boss.separationFrom??=new Vector3()).copyFrom(boss.actor.position);running.push(boss);}
+    if(running.length>1)separateBosses(running, this.combat.grabOwner);
+    for(const boss of running){(boss.movementNavigation??this.world.navigation)?.constrain(boss.actor.position,boss.separationFrom,boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));}
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {
@@ -239,6 +240,7 @@ export class BossBattle {
     let hitStop = 0;
     const version = this.actionVersion;
     for (const boss of this.encounters) {
+      if(!boss.active||boss.corpseGone)continue;
       const canceled = version !== this.actionVersion || this.grab.active;
       hitStop = Math.max(hitStop, boss.poseAndContacts(player, canceled ? { state: 'idle', actionId: null } : result, canceled ? null : sample, shield) || 0);
     }

@@ -177,6 +177,31 @@ function makePlacements(){
   // Broad support below the ritual chamber's exposed southern edge.
   for(const angle of [-.9,-.45,0,.45,.9])add(CAVE_SUPPLEMENT_IDS[0],CAVE_BOSS.x+Math.sin(angle)*15.3,CAVE_BOSS.z+Math.cos(angle)*15.3,1.9,-angle,{kind:'rock',topElevation:CAVE_BOSS.height-.24,foundation:true});
   for(const p of CAVE_WATERFALLS)add(CAVE_SUPPLEMENT_IDS[1],p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,spillway:true});
+  // Reuse the authored eroded-wall silhouette at the foot of dry shoulders.
+  // The high row alone left a smooth terrain ramp exposed below its rocks.
+  // These lower pieces stay outside the walking union and the giant's arena;
+  // existing placements, their IDs and their random sequence remain intact.
+  const lowerWalls=[];
+  for(const {a,b}of CAVE_SEGMENTS){
+    const dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/10);
+    for(let i=0;i<count;i++)for(const side of [-1,1]){
+      if(lowerWalls.length>=40)continue;
+      const t=(i+.5)/count,x=a[0]+dx*t,z=a[1]+dz*t,h=a[2]+(b[2]-a[2])*t,r=a[3]+(b[3]-a[3])*t;
+      const scale=1.22,yaw=Math.atan2(-dz,dx)+(side<0?Math.PI:0),nx=-dz/length*side,nz=dx/length*side;
+      let px=x+nx*(r+4.45),pz=z+nz*(r+4.45);
+      const safe=()=>[-1,-.5,0,.5,1].every(u=>[-1,-.5,0,.5,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*2.95*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*2.95*scale).distance>=.8));
+      for(let k=0;k<3&&!safe();k++){px+=nx*.35;pz+=nz*.35;}
+      if(!safe()||caveWaterWeight(px,pz)>.25||Math.hypot(px-CAVE_BOSS.x,pz-CAVE_BOSS.z)<25||lowerWalls.some(p=>Math.hypot(px-p.x,pz-p.z)<7.5))continue;
+      add(1,px,pz,scale,yaw,{elevation:h+1.5,lowerShoulder:true});lowerWalls.push({x:px,z:pz});
+    }
+  }
+  for(const room of CAVE_ROOMS.filter(r=>r.r>=7&&r!==CAVE_BOSS))for(let i=0;i<12;i++){
+    if(lowerWalls.length>=40)continue;
+    const angle=i*Math.PI/6,scale=1.22,yaw=angle,px=room.x+Math.sin(angle)*(room.r+4.6),pz=room.z+Math.cos(angle)*(room.r+4.6);
+    if(caveWaterWeight(px,pz)>.25||Math.hypot(px-CAVE_BOSS.x,pz-CAVE_BOSS.z)<25||lowerWalls.some(p=>Math.hypot(px-p.x,pz-p.z)<7.5))continue;
+    if(![-1,-.5,0,.5,1].every(u=>[-1,-.5,0,.5,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*2.95*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*2.95*scale).distance>=.8)))continue;
+    add(1,px,pz,scale,yaw,{elevation:room.height+1.5,lowerShoulder:true});lowerWalls.push({x:px,z:pz});
+  }
   return out;
 }
 export const CAVE_PLACEMENTS=makePlacements();

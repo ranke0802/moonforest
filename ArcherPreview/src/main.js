@@ -8,6 +8,7 @@ import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {applyPlayerDetail} from './player-detail.js';
+import {CaveCameraGuard} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
@@ -481,12 +482,13 @@ function syncCameraFocus(dt,{snap=false}={}){
   const focus=elenaReview?center:combatFocus(center,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
   const target=(isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(pan.x,pan.y,pan.z));
   cameraPitch.follow(target,dt,{snap});
+  world.caveCamera?.follow(target,dt);
 }
 
 function render(dt) {
   if(mapDeparture?.departing)return;
   simulateFrame=dt>0;
-  if(!simulateFrame){syncCameraFocus(0);syncCaveFog();world.scene.render();screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);return;}
+  if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
   elapsed += dt;
   world.tick(elapsed);
   training.update(dt);
@@ -568,6 +570,7 @@ function render(dt) {
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
     syncCameraFocus(dt);
+    world.caveCamera?.beginFrame();
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     world.lighting.follow(actor.position);
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
@@ -581,11 +584,12 @@ function render(dt) {
   }
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
-  world.scene.render();
+  world.scene.render(!world.caveCamera?.applied);
   screenProjection.beginFrame();
   damageNumbers?.update(dt,screenProjection);
   goldLootView.project(screenProjection);
   updateHealthBars();
+  world.caveCamera?.endFrame();
 }
 
 function bindMapPortal(){
@@ -602,6 +606,7 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),warrior:isWarrior(),touchDevice});
+  world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
   cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
@@ -712,7 +717,7 @@ try {
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
-    try{render(dt);}finally{frameDiagnostics.endFrame();}
+    try{render(dt);}finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
   });
   const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
   const dialogObserver=new MutationObserver(syncPlayback);

@@ -35,7 +35,7 @@ ${CAVE_ROCK_GLSL}
 ${CAVE_VIEW_UNIFORMS}
 ${CAVE_VIEW_GLSL}
 void main(){
- if(caveForegroundCutaway(p,eye,focus))discard;
+ // Keep the ceiling continuous. The camera guard stays below this surface.
  vec3 color=caveRockShade(p,vec3(0.,1.,0.),.5);
  float fog=smoothstep(40.,150.,length(p-eye));gl_FragColor=vec4(mix(color,vec3(.27,.245,.265),fog*.72),1.);
 }`;
@@ -51,7 +51,7 @@ void main(){
 const fogUniforms=['caveFogRect','caveFogActive'];
 function bindCaveFog(world,material){
  material.setFloat('caveFogActive',0);
- material.onBindObservable.add(()=>{if(world.caveFog)world.caveFog.bind(material);else material.setFloat('caveFogActive',0);});
+ material.onBindObservable.add(()=>{if(world.caveFog)world.caveFog.bind(material);else material.setFloat('caveFogActive',0);if(material.options.uniforms.includes('eye'))material.setVector3('eye',world.camera.globalPosition);});
  return material;
 }
 function caveWater(world){
@@ -88,7 +88,7 @@ function caveCeiling(world){
   const edge=positions.length/3;
   for(let i=0;i<=segments;i++){const a=i/segments*Math.PI*2;positions.push(Math.cos(a)*180,-28,Math.sin(a)*180);if(i){const prev=rings*(segments+1)+i;indices.push(prev,edge+i-1,edge+i,prev,prev-1,edge+i-1);}}
   const mesh=new Mesh('cave-distant-ceiling',world.scene),data=new VertexData();data.positions=positions;data.indices=indices;data.applyToMesh(mesh);mesh.isPickable=false;mesh.freezeWorldMatrix();
-  const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus','cavePlayerView','caveBossView','caveRockToGamma',...fogUniforms],samplers:['caveFogMap','caveRockMap']}));material.onBindObservable.add(()=>bindCaveRock(material,world));material.backFaceCulling=false;mesh.material=material;mesh.metadata={caveNoShadow:true,caveBackdrop:true};mesh.receiveShadows=false;
+  const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource,fragmentSource:roofFragment},{attributes:['position'],uniforms:['world','worldViewProjection','eye','focus','cavePlayerView','caveBossView','caveRockToGamma',...fogUniforms],samplers:['caveFogMap','caveRockMap']}));material.onBindObservable.add(()=>{bindCaveRock(material,world);material.setVector3('eye',world.camera.globalPosition);material.setVector3('focus',world.camera.target);});material.backFaceCulling=false;mesh.material=material;mesh.metadata={caveNoShadow:true,caveBackdrop:true};mesh.receiveShadows=false;
   return {material,dispose(){mesh.dispose();material.dispose();}};
 }
 function caveGlow(world,asset,tint,height,offsetX=0){

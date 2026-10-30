@@ -12,6 +12,9 @@ import {createVillageTransform} from '../src/village-environment.js';
 const base=new URL('../public/assets/',import.meta.url),out=new URL('../src/witch-cave-collision-data.js',import.meta.url);
 const manifest=JSON.parse(await readFile(new URL('witch-cave.json',base),'utf8'));
 const step=.4,size=400,min=-80,occupied=new Uint8Array(size*size),sight=new Uint8Array(size*size),ground=new Float32Array(size*size),walk=new Uint8Array(size*size);
+// Camera occupancy retains the actual vertical range, including empty space
+// below arches. Quantised outwards, so no near-LOD wall surface is missed.
+const cameraSize=size,cameraBottom=-16,cameraUnit=.25,cameraMasks=new Uint32Array(cameraSize*cameraSize*8);
 const terrain=createWitchCaveTerrain();
 for(let z=0;z<size;z++)for(let x=0;x<size;x++){
  const xx=min+(x+.5)*step,zz=min+(z+.5)*step,i=z*size+x;
@@ -49,13 +52,15 @@ try{
      const lowZ=Math.max(0,Math.floor((Math.min(...points.map(v=>v[2]))-min)/step)),highZ=Math.min(size-1,Math.floor((Math.max(...points.map(v=>v[2]))-min)/step));
      for(let z=lowZ;z<=highZ;z++)for(let x=lowX;x<=highX;x++){
       const cell=z*size+x,bodyWanted=!occupied[cell]&&walk[cell],sightWanted=!sight[cell]&&p.kind==='rock';
-      if(!bodyWanted&&!sightWanted)continue;
+      const cameraWanted=p.kind==='rock';
+      if(!bodyWanted&&!sightWanted&&!cameraWanted)continue;
       let poly=points;
       for(const [axis,bound,sign]of [[0,min+x*step,1],[0,min+(x+1)*step,-1],[2,min+z*step,1],[2,min+(z+1)*step,-1]]){poly=clip(poly,axis,bound,sign);if(!poly.length)break;}
       if(poly.length){
        const high=Math.max(...poly.map(v=>v[1])),low=Math.min(...poly.map(v=>v[1]));
        if(bodyWanted&&high>=ground[cell]+.22&&low<=ground[cell]+1.75){occupied[cell]=1;owners[cell]=p.id+' '+id;}
        if(sightWanted&&high>=ground[cell]+1.5&&low<=ground[cell]+2.1)sight[cell]=1;
+       if(cameraWanted){const at=(z*cameraSize+x)*8,from=Math.max(0,Math.floor((low-cameraBottom)/cameraUnit)),to=Math.min(255,Math.floor((high-cameraBottom)/cameraUnit));for(let layer=from;layer<=to;layer++)cameraMasks[at+(layer>>5)]|=1<<(layer&31);}
       }
      }
     }
@@ -82,3 +87,15 @@ await mkdir(new URL('../reports/cave-enclosure/',import.meta.url),{recursive:tru
 const visibility={triangles,occupiedCells:sight.reduce((a,b)=>a+b,0),runs:sightRuns.length/2,bytes:JSON.stringify(sightData).length,fingerprint,heightRange:sightData.heightRange,kind:sightData.kind,newModels:0};
 await writeFile(new URL('../reports/cave-enclosure/sight-bake.json',import.meta.url),JSON.stringify(visibility,null,2)+'\n');
 console.log(JSON.stringify({collision:report,visibility}));
+const cameraRuns=[];
+let cameraCells=0;
+for(let i=0;i<cameraSize*cameraSize;i++)if(cameraMasks.subarray(i*8,i*8+8).some(v=>v!==0)){const start=i,masks=Array.from(cameraMasks.subarray(i*8,i*8+8));while(i+1<cameraSize*cameraSize&&masks.every((v,k)=>cameraMasks[(i+1)*8+k]===v))i++;cameraCells+=i-start+1;cameraRuns.push(start,i-start+1,...masks);}
+const cameraData={step,size:cameraSize,min,bottom:cameraBottom,unit:cameraUnit,layers:256,fingerprint,runs:cameraRuns};
+const cameraLookup=new Uint16Array(cameraSize*cameraSize),cameraProfiles=[0,0,0,0,0,0,0,0],profileIds=new Map();
+for(let i=0;i<cameraRuns.length;i+=10){const values=cameraRuns.slice(i+2,i+10),key=values.join(',');let id=profileIds.get(key);if(id===undefined){id=cameraProfiles.length/8;profileIds.set(key,id);cameraProfiles.push(...values);}cameraLookup.fill(id,cameraRuns[i],cameraRuns[i]+cameraRuns[i+1]);}
+if(cameraProfiles.length/8>65535)throw new Error('Camera field profile capacity exceeded');
+delete cameraData.runs;
+cameraData.lookup=Buffer.from(cameraLookup.buffer).toString('base64');cameraData.profiles=Buffer.from(Uint32Array.from(cameraProfiles).buffer).toString('base64');
+await writeFile(new URL('../src/witch-cave-camera-data.js',import.meta.url),'// Actual near-LOD rock voxels preserve gaps below arches; no runtime mesh rays.\nexport const CAVE_CAMERA_DATA='+JSON.stringify(cameraData)+';\n');
+await mkdir(new URL('../reports/cave-gpu-followup/',import.meta.url),{recursive:true});
+await writeFile(new URL('../reports/cave-gpu-followup/camera-bake.json',import.meta.url),JSON.stringify({triangles,placements:CAVE_PLACEMENTS.length,lowerShoulders:CAVE_PLACEMENTS.filter(p=>p.lowerShoulder),cameraCells,bytes:JSON.stringify(cameraData).length,runtimeBytes:cameraLookup.byteLength+cameraProfiles.length*4,uniqueProfiles:cameraProfiles.length/8,fingerprint,terrainUnchanged:true,sourceLod:0},null,2)+'\n');

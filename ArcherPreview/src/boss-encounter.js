@@ -99,7 +99,16 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.animator?.dispose();this.actor?.setEnabled(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  setShadowCasting(enabled){
+    // Retain pooled geometry for a warm return, but do not keep retired phases
+    // in the shadow renderer's readiness/caster traversal.
+    for(const mesh of this.asset?.meshes??[]){
+      if(!mesh.getTotalVertices?.()||isRuntimeOutline(mesh))continue;
+      if(enabled)this.world.shadows.addShadowCaster(mesh,false);
+      else this.world.shadows.removeShadowCaster?.(mesh,false);
+    }
+  }
   resetBattle(){
     this.hide();this.playerHp=this.playerMaxHp;this.playerInvulnerable=0;this.potions.reset();
     this.pendingEvents=[];this.knockVelocity.setAll(0);this.lastHit=null;this.hitCount=0;this.heavyCount=0;

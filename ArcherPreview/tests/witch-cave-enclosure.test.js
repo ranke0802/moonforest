@@ -64,10 +64,10 @@ test('cave floor, painted rocks and ink use the same local cutaway and focus',as
    await mesh.material.forceCompilationAsync(mesh,{useInstances:true});world.scene.render();
    const source=mesh.subMeshes.find(s=>s.effect)?.effect.fragmentSourceCode;
    assert.ok(source.includes(CAVE_VIEW_GLSL.trim()));
-   assert.match(source,/caveForegroundCutaway\(vPositionW,caveEye,caveFocus\)/);
+   assert.match(source,mesh===world.ground?/caveTerrainCutaway\(vPositionW,vNormalW,caveEye,caveFocus\)/:/caveForegroundCutaway\(vPositionW,caveEye,caveFocus\)/);
    const plugin=mesh.material.pluginManager.getPlugin(mesh===world.ground?'CaveGroundMood':'CaveRockMood');
    assert.equal(plugin.camera,world.camera);
-   if(mesh===world.ground){assert.match(source,/caveRockShadow=clamp\(1\.-numLights\*\(1\.-aggShadow\)/);assert.match(source,/mix\(\.60,1\.,caveRockShadow\)/);assert.match(source,/vPositionW\.y\*1\.8/);}
+   if(mesh===world.ground){assert.match(source,/caveRockShadow=clamp\(1\.-numLights\*\(1\.-aggShadow\)/);assert.match(source,/mix\(\.60,1\.,caveRockShadow\)/);assert.match(source,/caveRockShade\(vPositionW,normalW,1\.\)/);}
   }
   assert.equal(world.scene.fogStart,CAVE_FOG_START);assert.equal(world.scene.fogEnd,CAVE_FOG_END);
  }finally{ink?.dispose();engine.dispose();}

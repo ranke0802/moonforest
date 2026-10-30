@@ -62,7 +62,8 @@ ${CAVE_VIEW_UNIFORMS}
 ${CAVE_VIEW_GLSL}
 void main(){
   if(caveFogActive<.5)discard;
-  if(caveForegroundCutaway(fogWorldPosition,caveEye,caveFocus))discard;
+  // The unknown-space enclosure stays closed, even when a local visible rock
+  // is cut around the player. Never expose the backs of unsubmitted rooms.
   vec2 state=caveFogState(fogWorldPosition);
   gl_FragColor=vec4(caveRockShade(fogWorldPosition,fogWorldNormal,state.y),1.);
 }`;

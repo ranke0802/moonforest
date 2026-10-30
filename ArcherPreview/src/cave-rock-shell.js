@@ -9,15 +9,18 @@ export function caveRockTexture(world){
  return texture?.getInternalTexture?.()?texture:caveFogFallback(world.scene);
 }
 export const CAVE_ROCK_GLSL=`
+#define CAVE_ROCK_SURFACE
 uniform sampler2D caveRockMap;
 uniform float caveRockToGamma;
 vec3 caveRockShade(vec3 p,vec3 normal,float explored){
- vec2 uv=fract(p.xz*.055+vec2(p.y*.021,-p.y*.017));
+ vec3 n=abs(normalize(normal));
+ vec2 surface=n.y>max(n.x,n.z)?p.xz:(n.x>n.z?p.zy:p.xy);
+ vec2 uv=fract(surface*.11);
  vec3 paint=texture2D(caveRockMap,uv).rgb;
  paint=mix(paint,pow(max(paint,vec3(.001)),vec3(.454545)),caveRockToGamma);
- float grain=dot(paint,vec3(.299,.587,.114));
- float strata=.5+.5*sin(p.x*.51+p.y*.92+sin(p.z*.27))*sin(p.z*.43-p.y*.37);
- vec3 rock=mix(vec3(.27,.235,.245),vec3(.43,.365,.34),clamp(.25+grain*.62+strata*.16,0.,1.));
+ // Retain the authored rock map's coloured facets instead of reducing it to
+ // grey luminance and coating every wall with a synthetic concrete palette.
+ vec3 rock=paint*.96+vec3(.018,.014,.016);
  float facing=.82+.18*max(0.,dot(normalize(normal),normalize(vec3(-.35,.78,-.52))));
  return rock*facing*mix(.87,1.,smoothstep(.05,.95,explored));
 }`;

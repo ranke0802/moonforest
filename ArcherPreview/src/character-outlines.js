@@ -3,6 +3,8 @@ import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial } from './cave-fog-binding.js';
 import {characterStyleFor,registerCharacterInk} from './character-style.js';
+import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots} from './character-render-cost.js';
+import {prepareMourningCameraCulling} from './mourning-camera-culling.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -113,6 +115,8 @@ export function attachCharacterOutlines(asset, kind) {
     }
     if (!widths[profile] || !source.isVerticesDataPresent(VertexBuffer.NormalKind)) continue;
     if (source.getChildMeshes(true).some(isRuntimeOutline)) continue;
+    if(kind!=='warrior')trimEmptyBoneSlots(source);
+    orderCharacterInkAfterSurfaces(source.getScene(),source.renderingGroupId);
     const shell = source.clone(`${source.name} / silhouette`, source, true);
     // The parent supplies the source's entire animated transform. Copy only its skin bind pose.
     shell.position.setAll(0); shell.rotation.setAll(0);
@@ -134,5 +138,6 @@ export function attachCharacterOutlines(asset, kind) {
     added.push(shell);
   }
   asset.meshes.push(...added);
+  if(kind==='elena')prepareMourningCameraCulling(asset);
   return added;
 }

@@ -37,16 +37,18 @@ test('borrowed rock texture follows real Babylon sRGB getter and is never duplic
  }finally{scene.dispose();engine.dispose();}
 });
 
-test('player and visible giant boss view corridors survive 360-degree orbits, zoom and upward focus lift',()=>{
+test('emergency view opening stays narrow at every zoom and never opens a giant tunnel to a boss',()=>{
  const engine=new NullEngine(),scene=new Scene(engine),camera=new ArcRotateCamera('orbit',0,1,20,new Vector3(0,7.05,0),scene),pitch=new CameraPitch(camera,{warrior:true});pitch.update({upwardLimited:false});
  const player=new Vector3(0,7.05,0),boss=new Vector4(4,9.5,0,6.3),points=[{name:'player torso',p:player,centre:player,radius:1},{name:'player head',p:new Vector3(0,7.7,0),centre:player,radius:1},{name:'boss chest',p:new Vector3(4,10.5,0),centre:boss,radius:5.9},{name:'boss head',p:new Vector3(4,11.7,0),centre:boss,radius:5.9},{name:'boss HP',p:new Vector3(4,12,0),centre:boss,radius:5.9}];let checked=0;
  try{
   for(const radius of [8,24,56,82])for(const beta of [.25,1.18,WARRIOR_UPPER_BETA,UNRESTRICTED_UPPER_BETA])for(let a=0;a<24;a++){
    camera.radius=radius;camera.beta=beta;camera.alpha=a*Math.PI/12;pitch.follow(player,0,{snap:true});camera.getViewMatrix(true);const eye=camera.globalPosition;
-   for(const {name,p,centre,radius:bodyRadius}of points)for(const t of [.1,.25,.5,.7,.9]){const wall=Vector3.Lerp(eye,p,t);if(Vector3.Distance(wall,centre)<bodyRadius||wall.y<6.42)continue;assert.ok(caveForegroundCutaway(wall,eye,camera.target,{player,boss}),`${name}, radius${radius}, beta${beta}, yaw${a}, t${t}`);checked++;}
+   const middle=Vector3.Lerp(eye,player,.5);middle.y=Math.max(middle.y,player.y-.5);
+   const side=middle.add(new Vector3(Math.sin(camera.alpha)*1.1,0,-Math.cos(camera.alpha)*1.1));
+   assert.equal(caveForegroundCutaway(side,eye,camera.target,{player,boss}),false,'zoom and boss never widen the local opening');checked++;
    const behind=player.add(player.subtract(eye).normalize().scale(15));assert.equal(caveForegroundCutaway(behind,eye,camera.target,{player}),false,'rear rock is retained');
   }
-  assert.ok(checked>3000);
+  assert.equal(checked,384);
  }finally{scene.dispose();engine.dispose();}
 });
 
