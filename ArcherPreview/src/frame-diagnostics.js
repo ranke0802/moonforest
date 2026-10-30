@@ -1,3 +1,4 @@
+import {BossDiagnostics,bossComparisonLines} from './boss-diagnostics.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -41,13 +42,15 @@ export class FrameDiagnostics {
   }
 }
 
-export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null}={}){
+export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{}}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
-  let nextMemory=0,memorySample={};
+  const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
+  comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0};
   try{enabled=storage?.getItem(key)==='1';}catch{/* Session-only when storage is unavailable. */}
   const setText=(id,value)=>{const node=get(id);if(node&&node.textContent!==value)node.textContent=value;};
-  const sampleMemory=()=>{const at=now();if(at>=nextMemory){nextMemory=at+1000;memorySample={...memory(),sampleAtMs:at};}return memorySample;};
+  const sampleMemory=(force=false)=>{const at=now();if(force||at>=nextMemory){nextMemory=at+1000;memorySample={...memory(),sampleAtMs:at};}return memorySample;};
   const paint=()=>{
     if(!enabled)return;const s=monitor.summary(),ms=value=>value===null?'—':Math.round(value);
     const load=loads?.snapshot(),mem=sampleMemory(),seconds=value=>(value/1000).toFixed(1)+'초',mib=value=>Number.isFinite(value)?(value/1048576).toFixed(0):'—';
@@ -57,6 +60,10 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     setText('diagnostic-textures',`배경 고해상도 텍스처 추정 ${mib(mem.backgroundHighTextureEstimateBytes)} / ${mib(mem.backgroundHighTextureBudgetBytes)} MiB`);
     setText('diagnostic-fps',`${s.fps===null?'—':Math.round(s.fps)} FPS · 목표 ${s.targetFps}`);
     setText('diagnostic-frame',`프레임 ${ms(s.frameMs)} ms · 최대 ${ms(s.maxMs)} ms`);
+    setText('diagnostic-render',`드로콜 ${Number.isFinite(metrics.drawCalls)?metrics.drawCalls:'—'} · 화면 CPU ${Number.isFinite(metrics.sceneMs)?metrics.sceneMs.toFixed(1):'—'} ms`);
+    const comparisonSnapshot=bosses.snapshot(),lines=bossComparisonLines(comparisonSnapshot);
+    for(const [key,value] of Object.entries(lines))setText('diagnostic-boss-'+key,value);
+    setText('diagnostic-boss-live',`현재 보스 ${sections.bossUpdateMs.toFixed(1)} · 판정 ${sections.contactsMs.toFixed(1)} · 애니메이션 ${Number.isFinite(metrics.animationMs)?metrics.animationMs.toFixed(1):'—'} ms${bosses.backgroundLoads.some(r=>r.status==='loading')?' · 변신 준비 중':''}`);
     setText('diagnostic-stalls',`최근 10초 지연 ${s.slowFrames}회 · ${Math.round(s.thresholdMs)} ms 초과`);
     const view=zoom();
     setText('diagnostic-zoom',view?`화면 배율 ${view.factor.toFixed(2)}×`:'화면 배율 —');
@@ -66,15 +73,16 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     const detail=last?`최근 지연 ${Math.round(last.frameMs)} ms · ${last.activity??'플레이'}`:'회전·이동하며 확인하세요';
     setText('diagnostic-detail',paused?'측정 대기 · 설정/초기 로딩 중 제외':detail);
   };
-  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;paint();};
+  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;onEnabled(enabled);paint();};
   toggle.addEventListener('change',()=>{
-    enabled=toggle.checked;monitor.reset();next=0;nextMemory=0;collecting=false;fallback.hidden=true;status.textContent='';
+    enabled=toggle.checked;monitor.reset();bosses.reset();next=0;nextMemory=0;collecting=false;fallback.hidden=true;status.textContent='';if(comparison)comparison.open=false;
     try{storage?.setItem(key,enabled?'1':'0');}catch{/* Keep session choice. */}sync();
   });
-  reset.addEventListener('click',()=>{monitor.reset();next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
+  reset.addEventListener('click',()=>{monitor.reset();bosses.reset();next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
   copy.addEventListener('click',async()=>{
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
-    report.cameraZoom=zoom();
+    report.version=3;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
+    report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     const value=JSON.stringify(report,null,2);
     try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);fallback.hidden=true;status.textContent='진단 기록을 복사했습니다.';}
     catch{fallback.value=value;fallback.hidden=false;fallback.focus();fallback.select();status.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
@@ -82,12 +90,20 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   sync();
   return {
     refresh:paint,
+    get enabled(){return enabled;},
+    mark(){return collecting?now():null;},
+    measure(name,start){if(start!==null&&collecting&&name in sections)sections[name]+=Math.max(0,now()-start);},
+    bossEvent(event){if(!enabled)return;if(event.type==='begin'&&comparison)comparison.open=true;bosses.event(event,now(),sampleMemory(true),context());next=0;paint();},
+    mapChanged(){if(!enabled)return;bosses.interrupt('맵 이동');bosses.recent.clear();paint();},
     beginFrame(active,targetFps){
       collecting=enabled&&active;
-      if(!collecting){if(enabled){monitor.suspend();if(!paused){paused=true;paint();}}return;}
-      paused=false;monitor.begin(now(),targetFps);
+      if(!collecting){if(enabled){monitor.suspend();if(!paused){bosses.suspend();paused=true;paint();}}return;}
+      paused=false;sections.bossUpdateMs=0;sections.contactsMs=0;monitor.begin(now(),targetFps);
     },
-    endFrame(){if(!collecting)return;const time=now();monitor.end(time,context);if(time>=next){next=time+500;paint();}},
-    suspend(){collecting=false;paused=true;monitor.suspend();paint();},
+    endFrame(){if(!collecting)return;const time=now();metrics=renderMetrics();
+      monitor.end(time,()=>({...context(),render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
+      bosses.frame(time,{intervalStart:monitor.frameStart-monitor.interval,frameMs:monitor.interval,cpuMs:Math.max(0,time-monitor.frameStart),...metrics,...sections,targetFps:monitor.targetFps},sampleMemory(),context);
+      if(time>=next){next=time+500;paint();}},
+    suspend(){collecting=false;paused=true;monitor.suspend();bosses.suspend();paint();},
   };
 }

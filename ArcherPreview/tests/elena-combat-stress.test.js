@@ -80,6 +80,9 @@ test('all twelve authored spell motions match visible fixed footprints and relea
     const e=await resident(f,phase),specs=phase===1?ELENA_SPELLS:MOURNING_SPELLS;
     for(let index=0;index<specs.length;index++)for(const outcome of outcomes){
       const label=`phase ${phase}/${specs[index].name}/${specs[index].pattern}/${outcome}`,{impact,plan}=begin(f,e,index),initialSerial=e.brain.serial;
+      // The enlarged annulus intentionally leaves a larger refuge beside the
+      // boss. Place positive contact probes inside its visible band.
+      if(phase===2&&plan.shapes[0].kind==='ring'){f.player.position.z=ELENA_HOME.z+plan.shapes[0].innerRadius+.6;f.world.terrain.place(f.player.position);}
       assert.ok(impact/e.brain.attackPlaybackRate>=1,label+' minimum real-time warning');assert.ok(plan,label);assert.equal(e.spell.mesh.isEnabled(),true,label);assert.equal(e.spell.rim.isEnabled(),true,label);
       const positions=e.spell.mesh.getVerticesData(VertexBuffer.PositionKind);
       for(let p=0;p<positions.length;p+=Math.max(3,Math.floor(positions.length/96)*3))assert.ok(spellContains(plan,{x:positions[p],z:positions[p+2]},{radius:.0002}),label+' rendered fill agrees with footprint');

@@ -5,7 +5,7 @@ import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
 import { ElenaEncounter } from './elena-encounter.js';
 import { MourningElenaEncounter } from './mourning-elena-encounter.js';
-import { ELENA_HOME } from './elena-spec.js';
+import { ELENA_HOME, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
@@ -47,9 +47,9 @@ export function separateBosses(encounters, grabOwner) {
 }
 
 export class BossBattle {
-  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, mourningModels, onDefeat=()=>{} } = {}) {
+  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
-    this.onDefeat=onDefeat;
+    this.onDefeat=onDefeat;this.onDiagnosticEvent=onDiagnosticEvent;
     this.models = models ?? new BossModelLibrary(world.scene);
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
@@ -89,12 +89,16 @@ export class BossBattle {
     this.residentPendingRevision=request;
     this.residentPendingPhase=phase;
     const pending=(async()=>{
+      let completed=false;
+      this.onDiagnosticEvent({type:'begin',label:phase===2?'비탄의 마녀':'타락한 성녀',trigger:reset?'선택 소환':'거처/변신',mode:pool[0]?.asset?'reuse':models.container?'cached-model':'cold'});
+      try{
       await models.load();
+      this.onDiagnosticEvent({type:'stage',stage:'model'});
       if(request!==this.residentRevision||!this.world.cave)return false;
       let resident=pool[0];
       if(!resident){
         const Encounter=phase===2?MourningElenaEncounter:ElenaEncounter;
-        resident=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat});
+        resident=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat,onPreparationStage:stage=>this.onDiagnosticEvent({type:'stage',stage})});
         resident.id=phase===2?'mourning-elena':'elena';resident.number=1;pool.push(resident);
         if(phase===1)resident.onTransform=()=>this.transformResident(this.currentPlayer??player);
       }
@@ -111,7 +115,9 @@ export class BossBattle {
       for(const old of this.encounters)if(old.kind==='elena'&&old!==resident)old.hide();
       this.encounters=this.encounters.filter(b=>b.kind!=='elena'||b===resident);
       if(!this.encounters.includes(resident))this.encounters.push(resident);
-      this.active=true;this.onChange(this);return true;
+      this.active=true;this.onChange(this);completed=true;this.onDiagnosticEvent({type:'ready'});return true;
+      }catch(error){completed=true;this.onDiagnosticEvent({type:'error',error:String(error.message??error).slice(0,160)});throw error;}
+      finally{if(!completed)this.onDiagnosticEvent({type:'cancel',reason:'지역/요청 변경'});}
     })();
     this.residentPending=pending;
     try{return await pending;}finally{if(this.residentPending===pending)this.residentPending=null;}
@@ -123,13 +129,14 @@ export class BossBattle {
   }
   preloadMourning(){
     if(this.mourningWarmRequested)return;this.mourningWarmRequested=true;
-    this.mourningModels.load().catch(error=>{this.residentError=String(error.message??error);console.warn('[Elena preload]',error);});
+    this.onDiagnosticEvent({type:'prefetch-start',label:'광폭화 모델'});
+    this.mourningModels.load().then(()=>this.onDiagnosticEvent({type:'prefetch-end',label:'광폭화 모델'})).catch(error=>{this.residentError=String(error.message??error);this.onDiagnosticEvent({type:'prefetch-end',label:'광폭화 모델',error:this.residentError});console.warn('[Elena preload]',error);});
   }
   async summonResident(player,phase=1){
     if(this.loading||this.residentPending||!this.world.cave)return false;
     this.loading=true;this.onChange(this);
     try{
-      const radius=phase===2?.9:.34,position=bossSpawnPositions(player,1)[0];
+      const radius=phase===2?MOURNING_SIZE.radius:.34,position=bossSpawnPositions(player,1)[0];
       const occupied=[{x:player.position.x,z:player.position.z,radius:.8},...this.encounters.filter(b=>b.kind!=='elena'&&b.brain.hp>0).map(b=>({x:b.actor.position.x,z:b.actor.position.z,radius:b.radius}))];
       if(this.world.navigation){const safe=this.world.navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied);position.x=safe.x;position.z=safe.z;}
       // The same two pooled actors serve the selector and the resident fight.

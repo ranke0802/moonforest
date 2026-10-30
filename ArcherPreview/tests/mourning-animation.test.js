@@ -12,9 +12,10 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {instantiateBossModel} from '../src/boss-models.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 import {castReach,mourningMorphs,makeTrack,MourningElenaAnimator} from '../src/mourning-elena-animation.js';
+import {haloSpeedAt,shotWeight,mourningMotionWeights} from '../src/mourning-motion-v2.js';
 
 const config=JSON.parse(readFileSync(new URL('../public/assets/mourning-elena.json',import.meta.url)));
-const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s'];
+const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s','Chimera_Prayer_Idle_6s','Chimera_Hit_Reaction_1p3s'];
 const morphNames=['Cast_Palm_Cleanup','Cast_Elbow_Form','Breath_Rise','Bust_Settle','Bust_ArmFollow'];
 const near=(actual,expected,tolerance=1e-6,label='value')=>assert.ok(Math.abs(actual-expected)<=tolerance,`${label}: ${actual} != ${expected}`);
 const smooth=t=>t*t*(3-2*t),clamp=t=>Math.max(0,Math.min(1,t));
@@ -48,6 +49,11 @@ function runFrame(animator,index){
   const phase=index%360,casting=phase>=90&&phase<270;
   animator.transition(casting?'cast':'walk',{clipTime:casting?(phase-90)/60:0,actionId:Math.floor(index/360)});animator.update(1/60);
 }
+function runV2Frame(animator,index){
+  const p=index%720,casting=(p>=180&&p<293)||(p>=450&&p<563),start=p<450?180:450;
+  const stagger=p>=293&&p<353?(353-p)/60:p>=563&&p<578?(578-p)/60:0;
+  animator.transition(casting?'cast':p>=90&&p<180||p>=353&&p<450?'walk':'idle',{clipTime:casting?(p-start)/60*1.6:0,staggerRemaining:stagger,actionId:Math.floor(index/720)});animator.update(1/60);
+}
 
 test('reach and separate morph clocks preserve exact cast timing and independent breathing',()=>{
   for(const [t,v] of [[0,0],[.25,.08],[.72,.48],[1.18,1],[1.82,1],[2.08,.97],[2.60,.42],[3,0]])near(castReach(t),v);
@@ -62,7 +68,7 @@ test('reach and separate morph clocks preserve exact cast timing and independent
   assert.equal(a.Cast_Palm_Cleanup,b.Cast_Palm_Cleanup);assert.notEqual(a.Breath_Rise,b.Breath_Rise);assert.equal(a.Bust_Settle,b.Bust_Settle);
 });
 
-test('real packed r7 animation, pose, clock and lifetime validation',async t=>{
+test('real packed r8 animation, pose, clock and lifetime validation',async t=>{
   const f=await fixture(t),{asset,animator,actor}=f;
   await t.test('required clips, separate morph targets and LINEAR/constant STEP inventory',()=>{
     assert.deepEqual(asset.animationGroups.map(g=>g.name).sort(),[...required].sort());
@@ -86,13 +92,17 @@ test('real packed r7 animation, pose, clock and lifetime validation',async t=>{
   await t.test('body pose matches source blend; procedural morphs stay separate from transform sampling',()=>{
     const walks=new Map(asset.animationGroups.find(g=>g.name===required[0]).targetedAnimations.map(c=>[c.target.uniqueId+':'+c.animation.targetProperty,c.animation]));
     const casts=new Map(asset.animationGroups.find(g=>g.name===required[1]).targetedAnimations.map(c=>[c.target.uniqueId+':'+c.animation.targetProperty,c.animation]));
+    const idles=new Map(asset.animationGroups.find(g=>g.name===required[5]).targetedAnimations.map(c=>[c.target.uniqueId+':'+c.animation.targetProperty,c.animation]));
     animator.walkTime=.713;animator.gaitBlend=.8;animator.breathClock=1.375;
     for(const time of [0,.09,.18,.719,1.18,1.82,2.6,2.875,3]){
       animator.transition('cast',{clipTime:time,actionId:9});animator.sample(1/60);
       for(const channel of [...animator.body,...animator.fixed]){
         if(channel.target.name.startsWith('DEF_HaloCloth_'))continue;
         const k=channel.target.uniqueId+':'+channel.property,a=walks.get(k).evaluate(animator.walkTime*walks.get(k).framePerSecond),cast=casts.get(k)??walks.get(k),b=cast.evaluate(time*cast.framePerSecond);
-        const expected=channel.property==='rotationQuaternion'?Quaternion.Slerp(a,b,weight(time)):Vector3.Lerp(a,b,weight(time));
+        const idle=idles.get(k),v=idle.evaluate(animator.idleTime*idle.framePerSecond),w=animator.weights;
+        const expected=a.clone(),blend=channel.property==='rotationQuaternion'?Quaternion.SlerpToRef:Vector3.LerpToRef;
+        const first=w.walk+w.cast;if(first)blend(a,b,w.cast/first,expected);
+        blend(expected,v,w.idle,expected);
         assert.ok(error(channel.target[channel.property],expected)<2e-6,channel.target.name+'/'+channel.property);
       }
       const expected=mourningMorphs({casting:true,castTime:time,walkTime:animator.walkTime,gaitBlend:animator.gaitBlend,breathClock:animator.breathClock});
@@ -101,11 +111,11 @@ test('real packed r7 animation, pose, clock and lifetime validation',async t=>{
   });
   await t.test('walk freezes during the entire 3 second cast while hair, halo and breath keep their clocks',()=>{
     animator.transition('walk');animator.update(.37);const walk=animator.walkTime,hair=animator.hairTime,halo=animator.haloTime,breath=animator.breathClock;
-    for(let i=0;i<=180;i++){animator.transition('cast',{clipTime:i/60,actionId:11});animator.update(1/60);near(animator.walkTime,walk);}
-    assert.notEqual(animator.hairTime,hair);near(animator.haloTime-halo,181/60);near(animator.breathClock-breath,181/60);
+    let haloTravel=0;for(let i=0;i<=180;i++){animator.transition('cast',{clipTime:i/60,actionId:11});animator.update(1/60);near(animator.walkTime,walk);haloTravel+=haloSpeedAt(i/60)/60;}
+    assert.notEqual(animator.hairTime,hair);near(animator.haloTime-halo,haloTravel);near(animator.breathClock-breath,181/60);
     animator.transition('walk');assert.equal(animator.walkTime,0);animator.update(1/60);near(animator.walkTime,2/60);
     assert.equal(animator.inspect().morphs.Cast_Palm_Cleanup,0);assert.equal(animator.inspect().morphs.Cast_Elbow_Form,0);
-    validation.clocks={castSeconds:3,walkFrozen:true,walkResetsToZeroOnExit:true,hairHaloBreathIndependent:true};
+    validation.clocks={castSeconds:3,walkFrozen:true,walkResetsToZeroOnExit:true,hairHaloBreathIndependent:true,haloTimeAdvanced:haloTravel};
   });
   await t.test('hair, halo and prayer bones stay finite; streamer local +Y points down under actor yaw',()=>{
     const nodes=asset.transformNodes.filter(n=>/^(DEF_Hair_|DEF_Prayer_|CTRL_Halo_)/.test(n.name));assert.ok(nodes.length>40);
@@ -120,10 +130,42 @@ test('real packed r7 animation, pose, clock and lifetime validation',async t=>{
     }
     validation.independentRig={finiteNodes:nodes.length,actorYawRadians:[0,.8,2.7],clothBones:animator.cloth.length,maximumClothY};
   });
+  await t.test('authored prayer idle and cast hair wind sample their named source clips',()=>{
+    animator.reset();animator.update(.73);near(animator.weights.idle,1);near(animator.idleTime,.73);
+    for(const channel of [...animator.body,...animator.fixed,...animator.hair]){
+      if(channel.target.name.startsWith('DEF_HaloCloth_'))continue;
+      assert.ok(error(channel.target[channel.property],channel.idle.sample(.73))<2e-6,channel.target.name);
+    }
+    animator.transition('cast',{clipTime:1.2});animator.sample(1/60);near(animator.weights.cast,1);
+    for(const channel of animator.hair)assert.ok(error(channel.target[channel.property],channel.cast.sample(1.2))<2e-6,channel.target.name);
+  });
+  await t.test('1.6x source cast clock accelerates halo without resetting its phase',()=>{
+    animator.reset();animator.haloTime=47.9;let expected=47.9;const weights=animator.weights;
+    for(let i=0;i<=112;i++){
+      const time=i/60*1.6;animator.transition('cast',{clipTime:time});animator.update(1/60);
+      expected=(expected+haloSpeedAt(time)/60)%48;near(animator.haloTime,expected);assert.strictEqual(animator.weights,weights);
+    }
+    const before=animator.haloTime;animator.transition('idle');animator.update(1/60);near(animator.haloTime,before+1/60);near(animator.haloSpeed,1);
+    near(haloSpeedAt(0),1);near(haloSpeedAt(1.5),3);near(haloSpeedAt(3),1);
+  });
+  await t.test('hit starts only on explicit stagger edge and never extends gameplay recovery',()=>{
+    animator.reset();animator.transition('walk',{staggerRemaining:0});animator.update(.1);assert.equal(animator.hitActive,false);near(animator.hitTime,0);near(animator.weights.hit,0);
+    animator.transition('cast',{clipTime:1.2});animator.update(1/60);const haloBefore=animator.haloTime;
+    for(let i=0;i<12;i++){
+      animator.transition('idle',{staggerRemaining:.3-i/60});animator.update(1/60);near(animator.hitTime,(i+1)/60);assert.equal(animator.hitActive,true);
+    }
+    assert.ok(animator.haloTime>haloBefore);assert.ok(animator.weights.hit>0);near(animator.weights.cast,0);
+    animator.transition('walk',{staggerRemaining:0});assert.equal(animator.hitActive,false);near(animator.walkTime,0);animator.update(1/60);assert.ok(animator.walkTime>0);
+    animator.update(.25);near(animator.weights.hit,0);animator.transition('walk',{staggerRemaining:.1});near(animator.hitTime,0);
+    animator.update(.04);near(animator.hitTime,.04);animator.transition('dead');const frozen=animator.inspect();animator.update(.5);near(animator.haloTime,frozen.haloTime);near(animator.hitTime,frozen.hitTime);
+    const before=counts(f),body=animator.body,hair=animator.hair;for(let i=0;i<20;i++){animator.reset();runV2Frame(animator,300);}
+    animator.reset();assert.deepEqual(counts(f),before);assert.strictEqual(animator.body,body);assert.strictEqual(animator.hair,hair);near(animator.haloTime,0);near(animator.idleTime,0);near(animator.weights.idle,1);assert.equal(animator.hitActive,false);
+    validation.v2={idleSourceMatched:true,castHairSourceMatched:true,haloContinuousAtCastSpeed:1.6,hitRequiresStaggerEdge:true,gameplayRecoveryImmediate:true,resetReusesTracks:true};
+  });
   await t.test('repeated cycles retain model/bone/manager counts, reusable track values, and bounded retained heap',()=>{
     const before=counts(f),values=[...animator.body.map(c=>c.track.value),...animator.hair.map(c=>c.track.value)];
-    for(let i=0;i<600;i++)runFrame(animator,i);global.gc?.();const heapBefore=process.memoryUsage().heapUsed;
-    for(let i=0;i<7200;i++)runFrame(animator,i);global.gc?.();const heapAfter=process.memoryUsage().heapUsed;
+    for(let i=0;i<720;i++)runV2Frame(animator,i);global.gc?.();const heapBefore=process.memoryUsage().heapUsed;
+    for(let i=0;i<14400;i++)runV2Frame(animator,i);global.gc?.();const heapAfter=process.memoryUsage().heapUsed;
     assert.deepEqual(counts(f),before);[...animator.body.map(c=>c.track.value),...animator.hair.map(c=>c.track.value)].forEach((value,index)=>assert.strictEqual(value,values[index]));
     if(global.gc)assert.ok(heapAfter-heapBefore<8*1024*1024,`retained heap grew ${heapAfter-heapBefore}`);
     validation.lifetime={cycles:20,before,after:counts(f),explicitGC:!!global.gc,heapBefore,heapAfter,heapDelta:heapAfter-heapBefore};t.diagnostic(JSON.stringify(validation.lifetime));
@@ -131,19 +173,23 @@ test('real packed r7 animation, pose, clock and lifetime validation',async t=>{
   });
 });
 
-// Equivalent retained AnimationGroup implementation: body gait + body cast,
-// independent weighted hair, and halo. Morph/cloth work and clocks are identical.
+// Equivalent authored action order: walk, cast, idle, hit, with independent hair.
 function groupReference(f){
   const {asset,animator,scene}=f,find=name=>asset.animationGroups.find(g=>g.name===name);
   const create=(name,source,filter)=>{const g=new AnimationGroup(name,scene);for(const item of source.targetedAnimations)if(props.has(item.animation.targetProperty)&&filter(item))g.addTargetedAnimation(item.animation,item.target);return g;};
-  const groups={gait:create('reference-gait',find(required[0]),i=>!i.target.name.startsWith('DEF_Hair_')),cast:create('reference-cast',find(required[1]),i=>!i.target.name.startsWith('DEF_Hair_')),hair:create('reference-hair',find(required[0]),i=>i.target.name.startsWith('DEF_Hair_')),halo:create('reference-halo',find('Halo_Slow_Orbit_48s'),()=>true)};
-  for(const c of animator.hair)c.target[c.property].copyFrom(c.rest);
+  const groups={};for(const [name,clip] of [['walk',required[0]],['cast',required[1]],['idle',required[5]],['hit',required[6]]]){
+    groups[name]=create('reference-'+name,find(clip),i=>!i.target.name.startsWith('DEF_Hair_'));
+    groups[name+'Hair']=create('reference-'+name+'-hair',find(clip),i=>i.target.name.startsWith('DEF_Hair_'));
+  }groups.halo=create('reference-halo',find('Halo_Slow_Orbit_48s'),()=>true);
   for(const group of Object.values(groups)){group.start(true,1,group.from,group.to);group.pause();group.setWeightForAllAnimatables(0);}
-  const apply=(group,time,w)=>{if(group._testWeight!==w){group.setWeightForAllAnimatables(w);group._testWeight=w;}group.goToFrame(time*group.targetedAnimations[0].animation.framePerSecond,true);};
+  // Babylon's late quaternion mixer divides by the first two weights. Do not
+  // enqueue zero-weight groups before idle/hit, which would produce 0/0.
+  const apply=(group,time,w)=>{if(group._testWeight!==w){group.setWeightForAllAnimatables(w);group._testWeight=w;}if(w>0)group.goToFrame(time*group.targetedAnimations[0].animation.framePerSecond,true);};
   animator.sample=function(dt){
-    const casting=this.current==='cast',w=casting?weight(this.castTime):0;
-    apply(groups.gait,this.walkTime,1-w);apply(groups.cast,this.castTime,w);apply(groups.hair,this.hairTime,.3+.7*this.gaitBlend);apply(groups.halo,this.haloTime,1);scene._animate(0);
-    const values=mourningMorphs({castTime:this.castTime,casting,walkTime:this.walkTime,gaitSeconds:this.gaitSeconds,gaitBlend:this.gaitBlend,breathClock:this.breathClock});
+    const casting=this.current==='cast'&&!this.hitActive;this.weights=mourningMotionWeights(this,casting,this.weights);
+    for(const name of ['walk','cast','idle','hit']){apply(groups[name],this[name+'Time'],this.weights[name]);apply(groups[name+'Hair'],name==='walk'?this.hairTime:this[name+'Time'],this.weights[name]);}
+    apply(groups.halo,this.haloTime,1);scene._animate(0);
+    const values=mourningMorphs({castTime:this.castTime,casting,castWeight:this.weights.cast,walkTime:this.walkTime,gaitSeconds:this.gaitSeconds,gaitBlend:this.gaitBlend,breathClock:this.breathClock});
     for(const target of this.morphs)if(values[target.name]!==undefined)target.influence=values[target.name];
     this.refreshPose();this.applyCloth(dt);this.samples++;
   };
@@ -151,27 +197,27 @@ function groupReference(f){
 }
 function stats(samples){const sorted=[...samples].sort((a,b)=>a-b);return {frames:samples.length,meanMs:samples.reduce((a,b)=>a+b,0)/samples.length,p50Ms:sorted[Math.floor(sorted.length*.5)],p95Ms:sorted[Math.floor(sorted.length*.95)],maxMs:sorted.at(-1)};}
 
-test('CPU-only sampler comparison against four paused weighted AnimationGroups',async t=>{
+test('CPU-only sampler comparison against nine paused weighted AnimationGroups',async t=>{
   const optimized=await fixture(t),reference=await fixture(t),groups=groupReference(reference);let maxPoseError=0,maxMorphError=0;
   const referenceNodes=new Map(reference.asset.transformNodes.map(n=>[n.name,n]));
-  for(let i=0;i<360;i++){
-    runFrame(optimized.animator,i);optimized.scene._animate(0);runFrame(reference.animator,i);
+  for(let i=0;i<720;i++){
+    runV2Frame(optimized.animator,i);optimized.scene._animate(0);runV2Frame(reference.animator,i);
     for(const node of optimized.asset.transformNodes){const other=referenceNodes.get(node.name);for(const property of props){if(!node[property]||!other[property])continue;const e=error(node[property],other[property]);maxPoseError=Math.max(maxPoseError,e);assert.ok(e<5e-5,`${node.name}/${property}, frame ${i}, error ${e}`);}}
     for(let j=0;j<optimized.animator.morphs.length;j++)maxMorphError=Math.max(maxMorphError,Math.abs(optimized.animator.morphs[j].influence-reference.animator.morphs[j].influence));
   }
   assert.ok(maxMorphError<1e-6);
   if(process.env.ELENA_ANIMATION_BENCHMARK!=='1'){
-    t.diagnostic(JSON.stringify({poseFrames:360,maxPoseError,maxMorphError,benchmark:'skipped; set ELENA_ANIMATION_BENCHMARK=1 for isolated CPU timing and report output'}));return;
+    t.diagnostic(JSON.stringify({poseFrames:720,maxPoseError,maxMorphError,benchmark:'skipped; set ELENA_ANIMATION_BENCHMARK=1 for isolated CPU timing and report output'}));return;
   }
-  const warmupFrames=600,sampleFrames=1800;
-  for(let i=0;i<warmupFrames;i++){runFrame(optimized.animator,i);optimized.scene._animate(0);runFrame(reference.animator,i);}
+  const warmupFrames=720,sampleFrames=2160;
+  for(let i=0;i<warmupFrames;i++){runV2Frame(optimized.animator,i);optimized.scene._animate(0);runV2Frame(reference.animator,i);}
   const direct=[],legacy=[];global.gc?.();
   // Alternate order to limit systematic effects from temperature and scheduler noise.
   for(let i=0;i<sampleFrames;i++)for(const name of i%2?['reference','optimized']:['optimized','reference']){
-    const target=name==='optimized'?optimized:reference,start=performance.now();runFrame(target.animator,i);if(name==='optimized')target.scene._animate(0);(name==='optimized'?direct:legacy).push(performance.now()-start);
+    const target=name==='optimized'?optimized:reference,start=performance.now();runV2Frame(target.animator,i);if(name==='optimized')target.scene._animate(0);(name==='optimized'?direct:legacy).push(performance.now()-start);
   }
-  const report={generatedAt:new Date().toISOString(),scope:'CPU animation sampling and hierarchy refresh only; NullEngine, no draw calls, GPU or frame-rate claim',runtime:{node:process.version,babylon:'9.31.0',platform:platform(),arch:arch(),cpu:cpus()[0]?.model,samplerSha256},model:{version:config.version,sourceSha256:config.sourceSha256,scale:config.scale,centerOffset:config.centerOffset,rightHanded:true},method:{baseline:'four paused weighted AnimationGroups: body gait, body cast, independent hair, halo; source weight/morph animation channels excluded; same procedural morphs, cloth, matrices, clocks',warmupFrames,sampleFrames,stepSeconds:1/60,pattern:'90 walk frames, 180 cast frames, 90 walk frames; alternating benchmark order',explicitGC:!!global.gc},validation,poseEquality:{frames:360,maxLocalPoseError:maxPoseError,maxMorphError,tolerance:5e-5},optimized:{...stats(direct),channels:optimized.animator.inspect(),counts:counts(optimized)},animationGroups:{...stats(legacy),groups:Object.fromEntries(Object.entries(groups).map(([k,g])=>[k,g.targetedAnimations.length])),counts:counts(reference)}};
+  const report={generatedAt:new Date().toISOString(),scope:'CPU animation sampling and hierarchy refresh only; NullEngine, no draw calls, GPU or frame-rate claim',runtime:{node:process.version,babylon:'9.31.0',platform:platform(),arch:arch(),cpu:cpus()[0]?.model,samplerSha256},model:{version:config.version,sourceSha256:config.sourceSha256,scale:config.scale,centerOffset:config.centerOffset,rightHanded:true},method:{baseline:'nine paused weighted AnimationGroups: walk/cast/idle/hit body+hair and halo; source weight/morph channels excluded; same procedural morphs, cloth, matrices, clocks',warmupFrames,sampleFrames,stepSeconds:1/60,pattern:'720-frame idle/walk/two 1.6x casts/1s and .25s stagger cycles; alternating benchmark order',explicitGC:!!global.gc},validation,poseEquality:{frames:720,maxLocalPoseError:maxPoseError,maxMorphError,tolerance:5e-5},optimized:{...stats(direct),channels:optimized.animator.inspect(),counts:counts(optimized)},animationGroups:{...stats(legacy),groups:Object.fromEntries(Object.entries(groups).map(([k,g])=>[k,g.targetedAnimations.length])),counts:counts(reference)}};
   report.meanSpeedup=report.animationGroups.meanMs/report.optimized.meanMs;report.p95Speedup=report.animationGroups.p95Ms/report.optimized.p95Ms;
-  if(process.env.ELENA_ANIMATION_BENCHMARK==='1'){const directory=new URL('../reports/elena-two-phase/',import.meta.url);mkdirSync(directory,{recursive:true});writeFileSync(new URL('animation-benchmark.json',directory),JSON.stringify(report,null,2)+'\n');}
+  if(process.env.ELENA_ANIMATION_BENCHMARK==='1'){const directory=new URL('../reports/elena-motion-v2/',import.meta.url);mkdirSync(directory,{recursive:true});writeFileSync(new URL('animation-benchmark.json',directory),JSON.stringify(report,null,2)+'\n');}
   t.diagnostic(JSON.stringify({optimized:stats(direct),animationGroups:stats(legacy),meanSpeedup:report.meanSpeedup,maxPoseError,maxMorphError}));
 });

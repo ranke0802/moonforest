@@ -52,7 +52,7 @@ export const MOURNING_HURT_SEGMENTS=Object.freeze([
 
 /** Binds once per resident; sampling only writes already allocated endpoints. */
 export class MourningHurtVolumes {
-  constructor(nodes){
+  constructor(nodes,scale=1){
     this.endpoints=[];const points=new Map();
     const bind=descriptor=>{
       const name=typeof descriptor==='string'?descriptor:descriptor.node,offset=descriptor.offset;
@@ -60,7 +60,7 @@ export class MourningHurtVolumes {
       const node=nodes[name];if(!node)return null;
       const point=[0,0,0];this.endpoints.push({node,point,offset:offset?Vector3.FromArray(offset):null});points.set(key,point);return point;
     };
-    this.capsules=MOURNING_HURT_SEGMENTS.flatMap(({name,a,b,radius})=>{const first=bind(a),last=bind(b);return first&&last?[{name,points:[first,last],radius}]:[];});
+    this.capsules=MOURNING_HURT_SEGMENTS.flatMap(({name,a,b,radius})=>{const first=bind(a),last=bind(b);return first&&last?[{name,points:[first,last],radius:radius*scale}]:[];});
     this.scratch=new Vector3();
   }
   sample(){

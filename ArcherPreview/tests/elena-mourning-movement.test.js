@@ -87,7 +87,7 @@ test('actual charge applies one contact, supports dodge, blocks and walls, and a
   const f=await fixture(t);f.player.rotation.y=Math.PI;
   for(const outcome of ['hit','dodge','block','outside','wall'])await t.test(outcome,()=>{
     f.battle.combat.reset();charge(f);const serial=f.e.brain.serial,hp=f.battle.playerHp,segment=f.world.navigation.segmentClear;
-    if(outcome==='outside')f.player.position.x+=1.25;
+    if(outcome==='outside')f.player.position.x+=f.e.radius+.35;
     if(outcome==='wall')f.world.navigation.segmentClear=()=>false;
     let hits=0,lastHp=hp,dodged=false;
     try{

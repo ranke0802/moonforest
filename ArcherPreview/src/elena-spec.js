@@ -1,5 +1,14 @@
 // Keep the authored clip names, including Meshy's original spelling.
 export const ELENA_HOME=Object.freeze({x:29,z:-27});
+// The authored body is 2.7 m; the manifest's 3.2 m includes the halo.
+// Keep the packed rig untouched and apply this one ratio to world dimensions.
+export const MOURNING_SIZE_SCALE=5.7/2.7;
+export const MOURNING_SIZE=Object.freeze({
+  bodyHeight:5.7,sourceBodyHeight:2.7,radius:.9*MOURNING_SIZE_SCALE,
+  separationRadius:1.1*MOURNING_SIZE_SCALE,stopDistance:3*MOURNING_SIZE_SCALE,
+  contactScale:3*MOURNING_SIZE_SCALE,renderRangePadding:3*MOURNING_SIZE_SCALE,
+  homeRadius:9.5,engagementRange:8+.9*(MOURNING_SIZE_SCALE-1),homeDetectionRange:12+.9*(MOURNING_SIZE_SCALE-1),
+});
 export const ELENA_SPELLS=Object.freeze([
   {name:'mage_soell_cast_6',label:'붉은 마력로',pattern:'corridor',impact:.58,range:10,damage:28},
   {name:'mage_soell_cast_2',label:'타락의 부채',pattern:'fan',impact:.60,range:8,damage:26},
@@ -15,7 +24,7 @@ export const ELENA_ACTIVE_CLIPS=Object.freeze(['Elena_Idle','Walking','Running',
 export const MOURNING_SPELLS=Object.freeze([
   ['corridor','비탄의 격류',13,38],['fan','절규의 부채',11,36],['ring','상실의 고리',10,40],
   ['cross','갈라진 성역',12,36],['cluster','추모의 낙인',10,38],
-].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range,damage,kind:'ground',impact:.55})));
+].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range:Math.min(14,range*MOURNING_SIZE_SCALE),damage,kind:'ground',impact:.55})));
 export function spellImpact(spec,duration){return Math.min(Math.max(1,duration*spec.impact),duration-.25);}
 export const MOURNING_CAST_RATE=1.6;
 export const MOURNING_MOVEMENT=Object.freeze({walkSpeed:1.05,skitterSpeed:3.6,chargeSpeed:5.4,chargeWarning:.9,chargeDamage:42,gaitCap:8});

@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {BossEncounter} from './boss-encounter.js';
-import {ElenaBrain,ELENA_HOME,ELENA_SPELLS,MOURNING_MOVEMENT,spellImpact} from './elena-spec.js';
+import {ElenaBrain,ELENA_HOME,ELENA_SPELLS,MOURNING_MOVEMENT,MOURNING_SIZE,MOURNING_SIZE_SCALE,spellImpact} from './elena-spec.js';
 import {createElenaContact} from './elena-style.js';
 import {GroundSpellTelegraph,spellContains} from './elena-ground-magic.js';
 import {shieldIntercepts} from './player-strikes.js';
@@ -25,7 +25,7 @@ export class ElenaEncounter extends BossEncounter {
     return this.phase===2&&this.brain.repositioning&&this.brain.moveKind==='charge'&&this.brain.time>=MOURNING_MOVEMENT.chargeWarning?this.radius+.3:super.contactSeparation();
   }
   movementPlan(player,result){
-    if(this.phase===2&&this.animator)this.animator.gaitRate=result?.speed?Math.min(MOURNING_MOVEMENT.gaitCap,result.speed/(this.config?.motion?.baseWalkSpeed??.3368)):2;
+    if(this.phase===2&&this.animator)this.animator.gaitRate=result?.speed?Math.min(MOURNING_MOVEMENT.gaitCap,result.speed/((this.config?.motion?.baseWalkSpeed??.3368)*MOURNING_SIZE_SCALE)):2/MOURNING_SIZE_SCALE;
     if(!this.brain.repositioning){this.repositionTarget=null;this.chargeOrigin=null;return super.movementPlan(player);}
     if(this.repositionSerial!==this.brain.serial||!this.repositionTarget){
       this.repositionSerial=this.brain.serial;this.routeState={};
@@ -52,7 +52,7 @@ export class ElenaEncounter extends BossEncounter {
     if(!this.spell||!this.active||this.corpseGone||this.brain.hp<=0||(!this.playerAlive&&!this.reviewMode)||this.brain.stagger||serial!==this.brain.serial){this.spell?.reset();return stop;}
     if(!this.reviewMode&&this.phase===2&&this.brain.repositioning&&this.brain.moveKind==='charge'&&this.chargeOrigin&&this.repositionTarget){
       const length=Math.hypot(this.repositionTarget.x-this.chargeOrigin.x,this.repositionTarget.z-this.chargeOrigin.z);
-      this.spell.aim('charge:'+this.brain.serial,'corridor',this.chargeOrigin,this.repositionTarget,{range:Math.hypot(length+this.radius,this.radius),bossRadius:.1,halfWidth:this.radius});
+      this.spell.aim('charge:'+this.brain.serial,'corridor',this.chargeOrigin,this.repositionTarget,{range:Math.hypot(length+this.radius,this.radius),bossRadius:.1,halfWidth:this.radius,scale:MOURNING_SIZE_SCALE});
       this.spell.show(Math.min(this.brain.time,MOURNING_MOVEMENT.chargeWarning),MOURNING_MOVEMENT.chargeWarning,{flash:this.brain.time>=MOURNING_MOVEMENT.chargeWarning});
       if(this.brain.time>=MOURNING_MOVEMENT.chargeWarning){
         const clear=!this.world.navigation||this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
@@ -69,14 +69,16 @@ export class ElenaEncounter extends BossEncounter {
     }
     if(this.brain.mode!=='attack'){this.spell.reset();return stop;}
     const spec=this.brain.spell,origin=this.actor.position,aim=this.reviewMode?origin.add(new Vector3(Math.sin(this.actor.rotation.y)*6,0,Math.cos(this.actor.rotation.y)*6)):player.position;
-    this.spell.aim(this.brain.serial,spec.pattern,origin,aim,{range:spec.range,bossRadius:this.radius+.3});
+    this.spell.aim(this.brain.serial,spec.pattern,origin,aim,{range:spec.range,bossRadius:this.radius+.3,scale:this.phase===2?MOURNING_SIZE_SCALE:1});
     this.spell.show(this.brain.time,spellImpact(spec,this.brain.durations[this.brain.state]),{flash:fire});
     if(fire&&!this.spell.fired){
       this.spell.fired=true;
       const clear=!this.world.navigation||this.world.navigation.segmentClear(this.spell.plan.origin,player.position,0,true);
       if(!this.reviewMode&&clear&&spellContains(this.spell.plan,player.position)){
-        const hand=this.nodes['mixamorig:RightHand'].getAbsolutePosition();
-        this.receiveBossHit({damage:spec.damage,bodyContact:true,shieldContact:shieldIntercepts(hand,player.position.add(new Vector3(0,.95,0)),shield),action:result,source:hand});
+        // The enlarged witch's hand can pass above or behind a nearby player.
+        // Her floor spell approaches from the boss, at the player's guard height.
+        const source=this.phase===2?origin.add(new Vector3(0,.95,0)):this.nodes['mixamorig:RightHand'].getAbsolutePosition();
+        this.receiveBossHit({damage:spec.damage,bodyContact:true,shieldContact:shieldIntercepts(source,player.position.add(new Vector3(0,.95,0)),shield),action:result,source});
       }
     }
     return stop;
@@ -85,8 +87,8 @@ export class ElenaEncounter extends BossEncounter {
     if(!this.active||this.corpseGone)return;
     if(this.reviewMode){this.updateReview(dt,player);return;}
     if(this.brain.hp<=0||this.brain.stagger)this.spell?.reset();
-    const p=this.actor.position,nearHome=Math.hypot(player.position.x-this.home.x,player.position.z-this.home.z)<12;
-    this.engaged=this.brain.hp>0&&nearHome&&Vector3.DistanceSquared(p,player.position)<64;
+    const p=this.actor.position,nearHome=Math.hypot(player.position.x-this.home.x,player.position.z-this.home.z)<(this.phase===2?MOURNING_SIZE.homeDetectionRange:12),detection=this.phase===2?MOURNING_SIZE.engagementRange:8;
+    this.engaged=this.brain.hp>0&&nearHome&&Vector3.DistanceSquared(p,player.position)<detection*detection;
     if(this.engaged||['dead','down','recover'].includes(this.brain.mode)){super.update(dt,player);this.ring.isVisible=false;return;}
     // A resident must not run a whole-map path search or start boss music while
     // the player explores elsewhere. Return to the dwelling without teleporting.
@@ -102,8 +104,8 @@ export class ElenaEncounter extends BossEncounter {
       if(d>.001){p.x+=x/d*step;p.z+=z/d*step;this.actor.rotation.y=Math.atan2(x,z);}
       this.world.navigation?.constrain(p,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(p);
     }
-    if(this.phase===2)this.animator.gaitRate=MOURNING_MOVEMENT.walkSpeed/(this.config.motion?.baseWalkSpeed??.3368);
-    this.animator.transition(state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:true});this.animator.update(dt);this.ring.isVisible=false;applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
+    if(this.phase===2)this.animator.gaitRate=MOURNING_MOVEMENT.walkSpeed/((this.config.motion?.baseWalkSpeed??.3368)*MOURNING_SIZE_SCALE);
+    this.animator.transition(state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:true,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.spell?.reset();
   }
   updateDeath(dt){
@@ -122,8 +124,8 @@ export class ElenaEncounter extends BossEncounter {
       const state=moving?this.brain.walk:this.brain.idle;if(this.brain.state!==state)this.brain.start(state,moving?'move':'idle');
       if(moving){const before=this.actor.position.clone(),speed=(this.phase===2?.673:1.1)*(movement.run?1.5:1);this.actor.position.x+=movement.x*speed*dt;this.actor.position.z+=movement.z*speed*dt;this.actor.rotation.y=Math.atan2(movement.x,movement.z);this.world.navigation?.constrain(this.actor.position,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);}
     }
-    this.animator.gaitRate=movement.run?3:2;
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving});this.animator.update(dt);this.ring.isVisible=false;
+    this.animator.gaitRate=(movement.run?3:2)/(this.phase===2?MOURNING_SIZE_SCALE:1);
+    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;
   }
-  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
+  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:undefined,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
 }

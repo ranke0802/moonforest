@@ -10,7 +10,7 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {instantiateBossModel,BossModelLibrary} from '../src/boss-models.js';
 import {BossBattle} from '../src/boss-battle.js';
 import {MourningElenaAnimator} from '../src/mourning-elena-animation.js';
-import {MOURNING_SPELLS,spellImpact} from '../src/elena-spec.js';
+import {MOURNING_SPELLS,MOURNING_SIZE,MOURNING_SIZE_SCALE,spellImpact} from '../src/elena-spec.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {caveObstacles} from '../src/witch-cave-layout.js';
@@ -52,12 +52,15 @@ function step(f,dt=1/60,{contacts=true}={}){
 }
 
 test('boss selector reuses one Elena per phase near the player without changing player resources',async t=>{
-  const f=await fixture(t),{battle,player,world}=f;
+  const f=await fixture(t),{battle,player,world}=f,events=[];battle.onDiagnosticEvent=event=>events.push(event);
+  const stages=()=>events.map(event=>event.type==='stage'?event.stage:event.type);
   battle.combat.hp=321;battle.potions.remaining=2;battle.combat.defense=13;
   await battle.activateResident(player);
+  assert.deepEqual(stages(),['begin','model','model','screen','model','ready']);events.length=0;
   await battle.summonResident(player,2);
+  assert.deepEqual(stages(),['begin','model','model','screen','model','ready']);events.length=0;
   const witch=battle.mourningPool[0];assert.equal(witch.brain.hp,1800);assert.equal(witch.active,true);assert.equal(battle.encounters.length,1);
-  assert.ok(world.navigation.free(witch.actor.position,.9));assert.ok(Vector3.Distance(witch.actor.position,player.position)<5);
+  assert.ok(world.navigation.free(witch.actor.position,MOURNING_SIZE.radius));assert.ok(Vector3.Distance(witch.actor.position,player.position)<5);
   assert.deepEqual(witch.home,{x:witch.actor.position.x,z:witch.actor.position.z});
   const before=snapshot(f);
   for(let i=0;i<8;i++){
@@ -69,7 +72,16 @@ test('boss selector reuses one Elena per phase near the player without changing 
     assert.equal(battle.playerHp,321);assert.equal(battle.potions.remaining,2);assert.equal(battle.combat.defense,13);
   }
   assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);
+  assert.ok(events.every(event=>event.stage!=='screen'&&event.type!=='error'),'pooled summons must skip screen preparation');
   const phase=battle.residentPhase;world.cave=false;assert.equal(await battle.summonResident(player,1),false);assert.equal(battle.residentPhase,phase);
+});
+
+test('an enlarged resident or transformation finds a clear spawn outside player and cave walls',async t=>{
+  const f=await fixture(t),{battle,player,world}=f;player.position.set(29,6,-27);battle.residentPhase=2;await battle.activateResident(player);const witch=battle.mourningPool[0];
+  assert.ok(world.navigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
+  await witch.summon(player,{position:new Vector3(43,6,-27),rotationY:0});
+  assert.ok(world.navigation.free(witch.actor.position,witch.radius));assert.ok(Math.hypot(witch.actor.position.x-player.position.x,witch.actor.position.z-player.position.z)>=witch.radius+.8);
+  assert.equal(f.mourningModels.instances,1);assert.equal(witch.actor.scaling.x,witch.config.scale*MOURNING_SIZE_SCALE);
 });
 test('real phase-one defeat transforms once and preserves player state through phase-two trips, reset and final death',async t=>{
   const f=await fixture(t),{battle,player,world}=f;battle.combat.hp=312;battle.combat.defense=9;battle.potions.remaining=1;
@@ -119,7 +131,7 @@ test('the actual mourning model library adopts one packed container without clon
 test('first offline pose and same-frame relocation refresh the mesh root before bones and cloth',async t=>{
   const f=await fixture(t);f.battle.residentPhase=2;await f.battle.activateResident(f.player);const e=f.battle.mourningPool[0];
   e.alignPose();e.animator.sample(0);const head=e.nodes.DEF_Head.getAbsolutePosition().clone(),relative=head.subtract(e.actor.position);
-  assert.ok(Math.abs(relative.x)<2&&Math.abs(relative.z)<2&&relative.y>.5&&relative.y<4,'first head pose must follow the cave actor without scene.render: '+JSON.stringify({actor:e.actor.position.asArray(),head:head.asArray(),relative:relative.asArray()}));
+  assert.ok(Math.abs(relative.x)<2*MOURNING_SIZE_SCALE&&Math.abs(relative.z)<2*MOURNING_SIZE_SCALE&&relative.y>.5*MOURNING_SIZE_SCALE&&relative.y<4*MOURNING_SIZE_SCALE,'first head pose must follow the cave actor without scene.render: '+JSON.stringify({actor:e.actor.position.asArray(),head:head.asArray(),relative:relative.asArray()}));
   e.actor.position.set(31,6.25,-25);e.actor.rotation.y=2.7;e.alignPose();e.animator.sample(0);
   const expected=relative.applyRotationQuaternion(Quaternion.RotationYawPitchRoll(2.7,0,0)).add(e.actor.position);
   near(Vector3.Distance(e.nodes.DEF_Head.getAbsolutePosition(),expected),0,1e-4,'same-frame transformed head');
@@ -180,7 +192,7 @@ test('five real phase-two casts stay fixed, expose valid hurt capsules, and manu
     }
     assert.equal(releases,1);assert.equal(e.spell.fired,true);assert.ok(spellImpact(e.brain.spell,3)>=1);assert.equal(f.battle.playerHp,hitPoints,'review casts never damage the player');
     while(e.brain.mode==='attack')step(f);
-    assert.equal(e.animator.walkTime,0);const resumed=e.actor.position.clone();step(f);assert.equal(e.brain.state,'walk');near(e.animator.walkTime,2/60);assert.ok(e.actor.position.x>resumed.x);
+    assert.equal(e.animator.walkTime,0);const resumed=e.actor.position.clone();step(f);assert.equal(e.brain.state,'walk');near(e.animator.walkTime,2/(60*MOURNING_SIZE_SCALE));assert.ok(e.actor.position.x>resumed.x);
     stableCounts??=snapshot(f);assert.deepEqual(snapshot(f),stableCounts);
   }
   assert.deepEqual(seen,MOURNING_SPELLS.map(s=>s.pattern));assert.equal(f.mourningModels.instances,1);

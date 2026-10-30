@@ -1,14 +1,15 @@
 """Read-only GLB audit and texture review; source data is never modified."""
-import io, json, math, struct, hashlib
+import io, json, math, struct, hashlib, os
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = Path(r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1')
-OUT = ROOT / 'reports/elena-two-phase'
+MODEL = os.environ.get('MOURNING_ELENA_MODEL', 'tripo-1-move')
+OUT = ROOT / os.environ.get('MOURNING_ELENA_REPORT_DIR', 'reports/elena-two-phase')
 OUT.mkdir(parents=True, exist_ok=True)
-blob = (SOURCE / 'models/tripo-1-move/model.glb').read_bytes()
+blob = (SOURCE / 'models' / MODEL / 'model.glb').read_bytes()
 jl = struct.unpack_from('<I', blob, 12)[0]
 g = json.loads(blob[20:20+jl]); binary = memoryview(blob)[28+jl:]
 types = {5120:'i1',5121:'u1',5122:'<i2',5123:'<u2',5125:'<u4',5126:'<f4'}
@@ -63,7 +64,7 @@ for i,im in enumerate(g['images']):
     image=Image.open(io.BytesIO(data));alpha='A' in image.getbands() and image.getchannel('A').getextrema()!=(255,255)
     output=OUT/f'asset-source-texture-{i}.png';image.save(output)
     images.append({'image':i,'name':im['name'],'originalMimeType':im['mimeType'],'sourceEncodedBytes':len(data),'size':list(image.size),'alpha':alpha,'sourceSha256':hashlib.sha256(data).hexdigest(),'png':str(output)})
-audit_source=json.loads((SOURCE/'models/tripo-1-move/audit.json').read_text(encoding='utf-8'))
+audit_source=json.loads((SOURCE/'models'/MODEL/'audit.json').read_text(encoding='utf-8'))
 normalized=np.array([v/np.linalg.norm(v)for v in morph_vectors]);gram=normalized@normalized.T
 report={'sourceSha256':hashlib.sha256(blob).hexdigest(),'sourceBytes':len(blob),'triangles':sum(m['triangles'] for m in meshes),'skinCount':len(g['skins']),'deformJoints':sum(len(s['joints'])for s in g['skins']),'nodeCount':len(g['nodes']),'meshes':meshes,'images':images,'bounds':{'min':lo.tolist(),'max':hi.tolist(),'center':center.tolist(),'size':(hi-lo).tolist(),'method':'glTF initial morph weights + linear skinning + node world matrices'},'sourceHeight':audit_source['sourceHeight'],'scale':3.2/audit_source['sourceHeight'],'coordinateSystem':{'blender':'Z up; forward -Y','gltf':'Y up; forward +Z; right-handed'},'boneAliases':{n['name'].replace('.',''):n['name'] for n in g['nodes'] if n.get('name','').startswith('DEF_')},'animations':[{'name':a['name'],'channels':len(a['channels']),'duration':max(g['accessors'][s['input']]['max'][0]for s in a['samplers']),'samplers':len(a['samplers'])}for a in g['animations']],'morphIndependence':{'names':[m['name']for m in morphs],'uniquePositionHashes':len(set(m['positionSha256']for m in morphs)),'normalizedGramRank':int(np.linalg.matrix_rank(gram)),'normalizedGram':gram.tolist(),'prayerHandsUnchangedByMorphs':all(m['prayerAnyInfluenceVerticesAffected']==0 for m in morphs)}}
 report['morphIndependence']['prayerHandsUnchangedByMorphs']=all(m['prayerHandFingerClaspVerticesAffected']==0 for m in morphs)

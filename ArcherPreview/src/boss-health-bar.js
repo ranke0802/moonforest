@@ -10,7 +10,8 @@ export function projectBossHealth(scene,position,width,height){
 export function updateBossHealthPosition(scene,encounter,element,projection){
   if(!encounter?.active||encounter.corpseGone||encounter.renderVisible===false){element.hidden=true;return;}
   const canvas=projection?null:scene.getEngine().getRenderingCanvas();
-  const p=projection?projection.project(encounter.actor.position):projectBossHealth(scene,encounter.actor.position,canvas.clientWidth,canvas.clientHeight);
+  const position=encounter.healthBarPosition?.()??encounter.actor.position;
+  const p=projection?projection.project(position):projectBossHealth(scene,position,canvas.clientWidth,canvas.clientHeight);
   element.hidden=!p.visible;
   const transform=`translate3d(${p.x}px,${p.y+8}px,0) translateX(-50%)`;
   if(element.style.transform!==transform)element.style.transform=transform;

@@ -95,6 +95,17 @@
       <div id="stream-loading" hidden data-ui><span id="stream-bytes"></span><div><i id="stream-progress"></i></div></div>
       <aside id="frame-diagnostics" class="frame-diagnostics" aria-label="프레임 진단" aria-live="off" hidden>
         <strong id="diagnostic-fps">— FPS</strong><span id="diagnostic-frame">프레임 — ms · 최대 — ms</span>
+        <span id="diagnostic-render">드로콜 — · 화면 CPU — ms</span>
+        <details id="diagnostic-boss-comparison" class="diagnostic-boss-comparison">
+          <summary>소환 전후 비교 <small>접기/펼치기</small></summary>
+          <strong id="diagnostic-boss-title">소환 전 3초 기록 중</strong>
+          <span id="diagnostic-boss-frame">진단을 켜고 잠시 플레이한 뒤 소환하세요.</span>
+          <span id="diagnostic-boss-peak"></span><span id="diagnostic-boss-draw"></span>
+          <span id="diagnostic-boss-memory"></span><span id="diagnostic-boss-cpu"></span>
+          <small id="diagnostic-boss-live"></small><small id="diagnostic-boss-stages"></small>
+          <small id="diagnostic-boss-note"></small><small>메모리: JS 추정 · GPU 전체 아님</small>
+        </details>
+        <div class="diagnostic-general">
         <span id="diagnostic-stalls">최근 10초 지연 0회</span><small id="diagnostic-detail">측정 대기</small>
         <span id="diagnostic-zoom">화면 배율 —</span>
         <small id="diagnostic-zoom-range">최소 — · 최대 —</small>
@@ -102,6 +113,7 @@
         <span id="diagnostic-load-phases">다운로드 — · 모델 — · 화면 —</span>
         <span id="diagnostic-memory">JS 메모리 —</span>
         <small id="diagnostic-textures">배경 고해상도 텍스처 추정 —</small>
+        </div>
       </aside>
 
       <div id="joystick-hint" class="joystick-hint" aria-hidden="true"><div class="joystick-ghost"><span></span></div><span>드래그하여 이동</span></div>
@@ -141,7 +153,8 @@
           <span id="camera-zoom-status" role="status"></span>
         </div>
         <div id="frame-diagnostics-options" class="frame-diagnostics-options">
-          <label><input id="frame-diagnostics-toggle" type="checkbox" /> FPS · 화면 배율 · 로딩 · 메모리 표시</label>
+          <label><input id="frame-diagnostics-toggle" type="checkbox" /> FPS · 소환 비교 · 화면 배율 · 메모리 표시</label>
+          <small>켜고 3초 이상 플레이한 뒤 보스를 소환하면 전후를 비교합니다. 같은 시점·거리에서 확인하고, 등장 후 5초 뒤 기록을 복사해 주세요. 비교를 접으면 기존 로딩·배율 정보가 보입니다.</small>
           <p>휴대폰은 목표 30 FPS, 정상 프레임 간격은 약 33 ms입니다. 최대 간격과 지연 횟수는 최근 10초 기준입니다. 초기 로딩·설정·앱 전환으로 멈춘 시간은 제외합니다.</p>
           <p>최근 로딩의 다운로드(캐시 확인 포함)·모델 준비·화면 준비 시간을 표시합니다. 총시간에는 맵 정리도 포함됩니다. JS 메모리는 사용량 / 한도이며 전체 RAM이 아닙니다. 배경 고해상도 텍스처는 추정 사용량 / 예산으로, 플레이어와 기본 LOD 등은 제외됩니다. 메모리는 1초마다 갱신됩니다.</p>
           <div><button id="copy-frame-diagnostics" type="button">기록 복사</button><button id="reset-frame-diagnostics" type="button">초기화</button></div>

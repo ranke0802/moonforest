@@ -26,10 +26,10 @@ function rootSample(config,name,time){
 }
 
 export class BossEncounter {
-  constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{},{combat,loadAsset,onDefeat=()=>{}}={}){
+  constructor(world,onChange,onDamage=()=>{},onPlayerHit=()=>{},{combat,loadAsset,onDefeat=()=>{},onPreparationStage=()=>{}}={}){
     this.kind='bear';this.radius=.7;this.stopDistance=1.65;this.separationRadius=.8;
     this.combat=combat??new PlayerCombat();this.ownsCombat=!combat;this.loadAsset=loadAsset;
-    this.death=new EnemyDeath();this.onDefeat=onDefeat;
+    this.death=new EnemyDeath();this.onDefeat=onDefeat;this.onPreparationStage=onPreparationStage;
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
@@ -65,6 +65,7 @@ export class BossEncounter {
         this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
         for(const n of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!n.parent)n.parent=this.carrier;
         this.actor.scaling.setAll(this.config.scale);
+        this.onPreparationStage('model');
         this.prepareAsset();
         for(const mesh of this.asset.meshes){
           if(!mesh.getTotalVertices())continue;
@@ -76,7 +77,7 @@ export class BossEncounter {
         if(this.kind==='elena')applyElenaStyle(this.asset);
         this.world.lighting?.registerMeshes(this.asset.meshes);
         attachCharacterOutlines(this.asset, this.kind);
-        await prepareBossShaders(this.asset);
+        this.onPreparationStage('screen');await prepareBossShaders(this.asset);this.onPreparationStage('model');
         this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
@@ -110,7 +111,7 @@ export class BossEncounter {
     if(!this.active||this.corpseGone)return;
     // Posed skinned bounds intentionally bypass normal frustum tests. Explicit
     // range rejection skips their draws/shadows while AI and contacts continue.
-    const visible=withinRenderRange(camera,this.actor.position,3);
+    const visible=withinRenderRange(camera,this.actor.position,this.renderRangePadding??3);
     if(visible===this.renderVisible)return;
     this.renderVisible=visible;
     for(const mesh of this.asset.meshes)if(mesh.getTotalVertices())mesh.isVisible=visible;
@@ -169,7 +170,7 @@ export class BossEncounter {
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
     }
     if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
+    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
     if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){

@@ -49,6 +49,7 @@ import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createFrameDiagnostics} from './frame-diagnostics.js';
+import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
 import {inspectMapDecodeCache} from './map-decode-cache.js';
 import {inspectMapTerrainCache} from './map-terrain-cache.js';
@@ -128,7 +129,10 @@ let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
 const loadDiagnostics=new LoadDiagnostics();
+const sceneDiagnostics=new SceneDiagnostics();
 const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
+  onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
+  renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
   metadata:()=>({character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
@@ -136,7 +140,9 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
     cameraZoom:cameraZoom?.snapshot()??null,
-    geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0})});
+    geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
+    map:character,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
+    renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
   try{return normalizeAttackSpeed(Number(localStorage.getItem(attackSpeedStorageKey())??1));}
@@ -441,7 +447,7 @@ async function prepareElenaReview(){
   actor.position.set(29,0,-21.5);world.terrain.place(actor.position);actor.rotation.y=Math.PI;
   if(elenaReviewMode!=='battle'){elenaReview=resident;resident.reviewMode=true;resident.reviewMovement={x:0,z:0};}
   world.camera.alpha=Math.PI/2;world.camera.beta=1.25;world.camera.radius=8.5;
-  world.camera.setTarget(resident.actor.position.add(new Vector3(0,elenaReviewMode==='witch'?1.8:1.1,0)));
+  world.camera.setTarget(resident.actor.position.add(new Vector3(0,resident.reviewFocusHeight??1.1,0)));
   toast(elenaReview?'엘레나 검수 · WASD/스틱 이동 · 좌클릭/J/공격 버튼으로 마법 · 카메라 회전 가능':'엘레나 2단계 전투 검수 · 성녀를 쓰러뜨리면 광폭화합니다');
 }
 
@@ -502,7 +508,7 @@ function render(dt) {
       if(isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<4){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
@@ -529,9 +535,9 @@ function render(dt) {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    const center=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.phase===2?2.25:1.45,0)):playerChinTarget(actor,playerHead);
+    const center=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):playerChinTarget(actor,playerHead);
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
-    boss?.update(dt,actor);actionAudio.boss(boss,dt);
+    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
@@ -603,12 +609,15 @@ try {
     if(reacted!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
     return reacted;
-  },{onDefeat:({kind,position})=>goldLoot.drop(kind,position)});
+  },{onDefeat:({kind,position})=>goldLoot.drop(kind,position),onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus);
+    const contactsStart=frameDiagnostics.mark();
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
+    frameDiagnostics.measure('contactsMs',contactsStart);
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
@@ -628,7 +637,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
-      loadDiagnostics.begin('지역 이동');
+      frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();for(const enemy of boss.allPooled)enemy.routeState={};

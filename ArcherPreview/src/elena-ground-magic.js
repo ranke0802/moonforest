@@ -16,26 +16,27 @@ function limitPoint(origin,p,distance){const dx=p.x-origin.x,dz=p.z-origin.z,len
 export function makeSpellPlan(pattern,origin,target,options={}){
   if(!ELENA_GROUND_PATTERNS.includes(pattern))throw new RangeError('Unknown Elena ground spell: '+pattern);
   origin=point(origin);target=point(target,origin);
+  const scale=clamp(finite(options.scale,1),.25,4);
   const range=clamp(finite(options.range,14),2,ELENA_GROUND_MAX_RANGE),dx=target.x-origin.x,dz=target.z-origin.z,length=Math.hypot(dx,dz);
   const direction=length>EPS?{x:dx/length,z:dz/length}:{x:0,z:1};
-  const bossRadius=clamp(finite(options.bossRadius,.8),.1,Math.min(1.5,range*.3));
+  const bossRadius=clamp(finite(options.bossRadius,.8*scale),.1,Math.min(1.5*scale,range*.3));
   target=limitPoint(origin,target,Math.min(9,range));
   const shapes=[];
   if(pattern==='corridor'){
-    const halfWidth=clamp(finite(options.halfWidth,1.35),.35,range*.3),end=Math.sqrt(range*range-halfWidth*halfWidth);
+    const halfWidth=clamp(finite(options.halfWidth,1.35*scale),.35,range*Math.min(.6,.3*scale)),end=Math.sqrt(range*range-halfWidth*halfWidth);
     shapes.push({kind:'rect',center:offset(origin,direction,(bossRadius+end)/2),direction,halfLength:(end-bossRadius)/2,halfWidth});
   }else if(pattern==='fan'){
     shapes.push({kind:'sector',center:origin,direction,innerRadius:bossRadius,outerRadius:range,halfAngle:clamp(finite(options.halfAngle,Math.PI*.3),.25,Math.PI*.45)});
   }else if(pattern==='ring'){
-    const outerRadius=clamp(finite(options.radius,8.2),Math.max(1,bossRadius+.5),range),innerRadius=clamp(finite(options.innerRadius,2.8),bossRadius,outerRadius-.25);
+    const outerRadius=clamp(finite(options.radius,8.2*scale),Math.max(1,bossRadius+.5),range),innerRadius=clamp(finite(options.innerRadius,2.8*scale),bossRadius,outerRadius-.25);
     shapes.push({kind:'ring',center:origin,innerRadius,outerRadius});
   }else if(pattern==='cross'){
-    const halfLength=clamp(finite(options.radius,4.5),.7,range*.4),halfWidth=clamp(finite(options.halfWidth,1.15),.3,halfLength*.6);
+    const halfLength=clamp(finite(options.radius,4.5*scale),.7,range*.4),halfWidth=clamp(finite(options.halfWidth,1.15*scale),.3,halfLength*.6);
     const center=limitPoint(origin,target,Math.max(0,range-Math.hypot(halfLength,halfWidth)));
     shapes.push({kind:'cross',center,direction,halfLength,halfWidth});
   }else{
-    const radius=clamp(finite(options.radius,2.15),.4,range*.24),spread=Math.min(3.6,range*.3),center=limitPoint(origin,target,range-radius);
-    for(const side of [0,-1,1])shapes.push({kind:'circle',center:limitPoint(origin,offset(center,direction,side?-.8:0,side*spread),range-radius),radius});
+    const radius=clamp(finite(options.radius,2.15*scale),.4,range*.24),spread=Math.min(3.6*scale,range*.3),center=limitPoint(origin,target,range-radius);
+    for(const side of [0,-1,1])shapes.push({kind:'circle',center:limitPoint(origin,offset(center,direction,side?-.8*scale:0,side*spread),range-radius),radius});
   }
   return freeze({pattern,origin,target,direction,range,bossRadius,shapes});
 }

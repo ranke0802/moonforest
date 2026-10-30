@@ -32,14 +32,15 @@ test('paused/hidden time and FPS cap changes are not reported as gameplay stalls
  m.reset();assert.equal(m.summary().samples,0);assert.equal(m.summary().frameMs,null);assert.equal(m.events.length,0);
 });
 
-function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom}={}){
+function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom,renderMetrics,onEnabled}={}){
  let time=0,clockCalls=0,contextCalls=0,writes=0;
  const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures','diagnostic-zoom','diagnostic-zoom-range'];
+ ids.push('diagnostic-render','diagnostic-boss-comparison','diagnostic-boss-title','diagnostic-boss-frame','diagnostic-boss-peak','diagnostic-boss-draw','diagnostic-boss-memory','diagnostic-boss-cpu','diagnostic-boss-live','diagnostic-boss-stages','diagnostic-boss-note');
  const nodes=Object.fromEntries(ids.map(id=>[id,{dataset:{},hidden:false,disabled:false,checked:false,value:'',listeners:{},_text:'',
   get textContent(){return this._text;},set textContent(v){writes++;this._text=v;},
   addEventListener(type,listener){this.listeners[type]=listener;},focus(){this.focused=true;},select(){this.selected=true;}}]));
  const storage={getItem:()=>stored,setItem:(_,v)=>stored=v};
- const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,zoom,
+ const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,zoom,renderMetrics,onEnabled,
   context:()=>{contextCalls++;return {position:[3,-5],activity:'회전/시점 조작'};}});
  const frame=(at,active=true)=>{time=at;diagnostic.beginFrame(active,30);time=at+4;diagnostic.endFrame();};
  const toggle=on=>{nodes['frame-diagnostics-toggle'].checked=on;nodes['frame-diagnostics-toggle'].listeners.change();};
@@ -53,6 +54,23 @@ test('disabled diagnostics perform no timing, context collection or HUD updates;
  f.toggle(true);assert.equal(f.nodes['frame-diagnostics'].hidden,false);assert.equal(f.counts().stored,'1');
  f.frame(0);f.frame(100);assert.equal(f.counts().contextCalls,1);
  f.toggle(false);const calls=f.counts().clockCalls;f.frame(1000);assert.equal(f.counts().clockCalls,calls);
+});
+
+test('existing HUD opens spawn comparison, records memory and draws, and exports independent completed comparisons',async()=>{
+ let calls=0,heap=100,drawCalls=80,copied;const enabled=[];
+ const f=ui({renderMetrics:()=>{calls++;return {drawCalls,sceneMs:3,animationMs:1};},onEnabled:v=>enabled.push(v),memory:()=>({jsUsedBytes:heap*1048576}),clipboard:{writeText:async value=>copied=JSON.parse(value)}});
+ f.diagnostic.bossEvent({type:'begin'});f.frame(0);assert.equal(calls,0);assert.deepEqual(enabled,[false]);
+ f.toggle(true);for(let i=0;i<=100;i++)f.frame(i*33);
+ f.setTime(3310);f.diagnostic.bossEvent({type:'begin',label:'비탄의 마녀',mode:'cold'});assert.equal(f.nodes['diagnostic-boss-comparison'].open,true);
+ f.setTime(3400);f.diagnostic.bossEvent({type:'stage',stage:'model'});f.frame(3450);
+ heap=140;drawCalls=110;f.setTime(3500);f.diagnostic.bossEvent({type:'ready'});
+ for(let i=1;i<=110;i++)f.frame(3500+i*50);
+ await f.nodes['copy-frame-diagnostics'].listeners.click();const s=copied.bossComparison;
+ assert.equal(copied.version,3);assert.equal(s.status,'complete');assert.equal(s.before.drawCalls.mean,80);assert.equal(s.after.drawCalls.mean,110);assert.equal(s.delta.jsUsedBytes,40*1048576);
+ assert.match(f.nodes['diagnostic-boss-frame'].textContent,/33.0 → 50.0/);assert.match(f.nodes['diagnostic-render'].textContent,/드로콜 110/);
+ f.diagnostic.bossEvent({type:'begin',label:'타락한 성녀',mode:'reuse'});await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.bossComparisonHistory[0].status,'complete');
+ f.diagnostic.mapChanged();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.bossComparison.reason,'맵 이동');
+ f.toggle(false);const count=calls;f.frame(99999);assert.equal(calls,count);assert.deepEqual(enabled,[false,true,false]);
 });
 test('load timings survive late HUD enable, memory samples are bounded and exported with clear labels',async()=>{
  let calls=0,report;const loading={label:'마을',phase:'complete',totalMs:3500,downloadMs:2000,modelMs:1000,screenMs:400};
