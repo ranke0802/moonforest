@@ -74,7 +74,7 @@ test('boss advances into three distinct hits; staggering any hit cancels the rem
  const b=new BossBrain(clips),events=[];let travel=0;b.startCombo();
  for(let t=0;t<4;t+=.01){const step=b.update(.01,2);events.push(...step.events);travel+=step.speed*.01;}
  assert.deepEqual(events.map(e=>e.name),BOSS_ADVANCING_COMBO);assert.ok(travel>2);assert.equal(b.mode,'idle');
- b.startCombo();b.update(.1,2);b.hit();b.update(.21,2);assert.equal(b.comboStep,0);assert.equal(b.mode,'idle');
+ b.startCombo();b.update(.1,2);b.hit({stun:.2});b.update(.21,2);assert.equal(b.comboStep,0);assert.equal(b.mode,'idle');
 });
 test('rear critical uses the target facing, preserves front/side damage and raises damage by 30 percent',()=>{
  const target=Vector3.Zero();

@@ -50,7 +50,7 @@ export class BossBrain {
     }
     return this.bag.pop();
   }
-  hit({heavy=false,damage=14,stun=0,interruptsBoss=true}={}){
+  hit({heavy=false,damage=14,stun=0,interruptsBoss=false}={}){
     if(this.hp<=0||this.defense)return false;
     this.hp=Math.max(0,this.hp-damage);
     const flashDuration=stun>0?.75:.22;

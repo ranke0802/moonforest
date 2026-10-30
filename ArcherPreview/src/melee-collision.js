@@ -12,6 +12,14 @@ export function segmentDistanceSquared(p1,q1,p2,q2){
 }
 // Sweep the actual blade, rather than awarding a hit simply because J was pressed.
 export function bladeTouchesCapsule(previous,current,capsule,radius,lateral=null){
+  // Conservative sweep bounds reject distant limbs before the detailed sweep.
+  // Include both blade endpoints at both times and the lateral cut allowance.
+  for(let axis=0;axis<3;axis++){
+    const lo=Math.min(current[0][axis],current[1][axis],previous?.[0][axis]??current[0][axis],previous?.[1][axis]??current[1][axis]);
+    const hi=Math.max(current[0][axis],current[1][axis],previous?.[0][axis]??current[0][axis],previous?.[1][axis]??current[1][axis]);
+    const extra=(lateral?.halfWidth??0)*Math.abs(lateral?.axis?.[axis]??0);
+    if(hi+extra<Math.min(capsule[0][axis],capsule[1][axis])-radius||lo-extra>Math.max(capsule[0][axis],capsule[1][axis])+radius)return false;
+  }
   // A wider cutting sweep extends sideways only; thrust reach, height and
   // recovery frames keep their original collision bounds.
   if(lateral?.halfWidth>0){

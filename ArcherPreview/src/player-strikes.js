@@ -22,7 +22,7 @@ export class PlayerStrikeSampler{
     if(result.state==='slash')local[1]=local[0].map((v,i)=>v+(local[1][i]-v)*1.1);
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
-    const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18}]:PLAYER_STRIKES[result.state];
+    const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18,interruptsBoss:false}]:PLAYER_STRIKES[result.state];
     const windows=(strikes?.filter(w=>result.clipTime>=w.from&&from<=w.to)||[])
       .map(w=>result.state==='shieldPush'?w:boostSwordStrike(w,attackBonus));
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;

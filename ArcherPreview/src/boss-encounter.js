@@ -16,6 +16,7 @@ import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
 import { EnemyDeath } from './enemy-death.js';
 import { createTerrainRing } from './terrain-mesh.js';
+import { prepareBossShaders } from './boss-shader-warmup.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
@@ -74,10 +75,8 @@ export class BossEncounter {
         applyMonsterToon(this.asset);
         if(this.kind==='elena')applyElenaStyle(this.asset);
         this.world.lighting?.registerMeshes(this.asset.meshes);
-        // Prepare the changed body shader before its silhouette can become visible.
-        await Promise.all(this.asset.meshes.filter(mesh=>mesh.getTotalVertices() && mesh.material?.metadata?.moonforestMonsterToon)
-          .map(mesh=>mesh.material.forceCompilationAsync(mesh)));
         attachCharacterOutlines(this.asset, this.kind);
+        await prepareBossShaders(this.asset);
         this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
         this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
         this.poseNodes=orderPoseNodes(this.asset.transformNodes);
@@ -130,6 +129,7 @@ export class BossEncounter {
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
   prepareAsset(){}
   movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
+  contactSeparation(){return this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
@@ -213,7 +213,7 @@ export class BossEncounter {
     // the player just rolled through.
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
     else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
-    const separation=this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;
+    const separation=this.contactSeparation();
     if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.world.navigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     refreshPoseMatrices(this.poseNodes);

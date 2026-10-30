@@ -31,9 +31,9 @@ export class BossModelLibrary {
   }
   async instantiate() {
     await this.load();
-    if(this.config.id==='mourning-elena'){
-      // This resident can exist only once. Adopt its packed-copy container so a
-      // hidden template does not retain a second large float morph texture.
+    if(this.manifest==='elena'||this.config.id==='mourning-elena'){
+      // Each resident phase can exist only once. Adopt its packed-copy container
+      // instead of cloning its skeleton/clips or retaining a hidden morph copy.
       if(!this.residentAsset){
         this.container.addAllToScene();
         this.residentAsset={meshes:[...this.container.meshes],transformNodes:[...this.container.transformNodes],animationGroups:this.container.animationGroups,skeletons:this.container.skeletons};

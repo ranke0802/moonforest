@@ -7,6 +7,7 @@ import {shieldIntercepts} from './player-strikes.js';
 import {applyHitFlash} from './hit-feedback.js';
 import {ENEMY_ARENA_RADIUS} from './world-limits.js';
 import {chooseElenaReposition,chooseElenaCharge} from './elena-reposition.js';
+import {chargeTouchesPlayer} from './elena-charge.js';
 
 export class ElenaEncounter extends BossEncounter {
   constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=.34;this.stopDistance=1.08;this.separationRadius=.42;this.engaged=false;this.motionRootTravel=false;}
@@ -18,6 +19,11 @@ export class ElenaEncounter extends BossEncounter {
   attackRange(spec){return spec?.range??1.35;}
   attackDamage(event){return event.damage;}
   isHeavyAttack(){return false;}
+  contactSeparation(){
+    // Keep the real body contact reachable during a charge; the ordinary
+    // 65 cm comfort gap otherwise pushes the boss away before it can hit.
+    return this.phase===2&&this.brain.repositioning&&this.brain.moveKind==='charge'&&this.brain.time>=MOURNING_MOVEMENT.chargeWarning?this.radius+.3:super.contactSeparation();
+  }
   movementPlan(player,result){
     if(this.phase===2&&this.animator)this.animator.gaitRate=result?.speed?Math.min(MOURNING_MOVEMENT.gaitCap,result.speed/(this.config?.motion?.baseWalkSpeed??.3368)):2;
     if(!this.brain.repositioning){this.repositionTarget=null;this.chargeOrigin=null;return super.movementPlan(player);}
@@ -27,7 +33,7 @@ export class ElenaEncounter extends BossEncounter {
       this.chargeOrigin=null;
       if(this.phase===2&&this.brain.moveKind==='charge'){
         this.repositionTarget=chooseElenaCharge(this.actor.position,player.position,options);
-        if(this.repositionTarget)this.chargeOrigin=this.actor.position.clone();
+        if(this.repositionTarget){this.chargeOrigin=this.actor.position.clone();this.chargePrevious=this.actor.position.clone();this.chargeResolved=false;}
         else {this.brain.moveKind='walk';this.brain.repositionRemaining=2.3;}
       }
       if(!this.chargeOrigin)this.repositionTarget=chooseElenaReposition(this.actor.position,player.position,{...options,...(this.phase===2&&this.brain.moveKind==='skitter'?{length:4.4}:{})});
@@ -46,8 +52,19 @@ export class ElenaEncounter extends BossEncounter {
     if(!this.spell||!this.active||this.corpseGone||this.brain.hp<=0||(!this.playerAlive&&!this.reviewMode)||this.brain.stagger||serial!==this.brain.serial){this.spell?.reset();return stop;}
     if(!this.reviewMode&&this.phase===2&&this.brain.repositioning&&this.brain.moveKind==='charge'&&this.chargeOrigin&&this.repositionTarget){
       const length=Math.hypot(this.repositionTarget.x-this.chargeOrigin.x,this.repositionTarget.z-this.chargeOrigin.z);
-      this.spell.aim('charge:'+this.brain.serial,'corridor',this.chargeOrigin,this.repositionTarget,{range:Math.hypot(length,this.radius),bossRadius:.1,halfWidth:this.radius});
+      this.spell.aim('charge:'+this.brain.serial,'corridor',this.chargeOrigin,this.repositionTarget,{range:Math.hypot(length+this.radius,this.radius),bossRadius:.1,halfWidth:this.radius});
       this.spell.show(Math.min(this.brain.time,MOURNING_MOVEMENT.chargeWarning),MOURNING_MOVEMENT.chargeWarning,{flash:this.brain.time>=MOURNING_MOVEMENT.chargeWarning});
+      if(this.brain.time>=MOURNING_MOVEMENT.chargeWarning){
+        const clear=!this.world.navigation||this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
+        if(!this.chargeResolved&&clear&&chargeTouchesPlayer(this.spell.plan,this.chargePrevious??this.chargeOrigin,this.actor.position,player.position,{reach:this.radius})){
+          // Consume the one contact even on dodge/block/invulnerability, so an
+          // avoided charge cannot hit again when that protection ends.
+          this.chargeResolved=true;
+          const from=this.actor.position.add(new Vector3(0,1,0));
+          this.receiveBossHit({damage:MOURNING_MOVEMENT.chargeDamage,bodyContact:true,shieldContact:shieldIntercepts(from,player.position.add(new Vector3(0,.95,0)),shield),action:result,source:this.chargeOrigin});
+        }
+        this.chargePrevious?.copyFrom(this.actor.position);
+      }
       return stop;
     }
     if(this.brain.mode!=='attack'){this.spell.reset();return stop;}
@@ -108,5 +125,5 @@ export class ElenaEncounter extends BossEncounter {
     this.animator.gaitRate=movement.run?3:2;
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving});this.animator.update(dt);this.ring.isVisible=false;
   }
-  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,chargeDamage:0,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
+  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
 }

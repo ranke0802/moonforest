@@ -18,7 +18,7 @@ import {setWorldCharacter} from '../src/world-limits.js';
 
 const base=new URL('../public/assets/',import.meta.url),packed=new Map();
 const report={generatedAt:new Date().toISOString(),scope:'Actual packed models and CPU pose/contact lifecycle in Babylon NullEngine; no GPU, visual screenshot, or frame-rate claim. Heap figures include the entire Node test fixture and decoded source cache, not the browser resident footprint.',sources:Object.fromEntries(['elena-spec.js','elena-encounter.js','elena-reposition.js','boss-battle.js','elena-ground-magic.js'].map(name=>[name,createHash('sha256').update(readFileSync(new URL('../src/'+name,import.meta.url))).digest('hex')])),lifecycle:[],spellCases:[]};
-after(()=>{if(process.env.ELENA_COMBAT_REPORT==='1'){const dir=new URL('../reports/elena-combat-followup/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('combat-stress.json',dir),JSON.stringify(report,null,2)+'\n');}});
+after(()=>{if(process.env.ELENA_COMBAT_REPORT==='1'){const folder=process.env.ELENA_COMBAT_REPORT_DIR??'elena-combat-followup';if(!/^[a-z0-9-]+$/.test(folder))throw new Error('Invalid report folder');const dir=new URL('../reports/'+folder+'/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('combat-stress.json',dir),JSON.stringify(report,null,2)+'\n');}});
 const near=(a,b,message='value')=>assert.ok(Math.abs(a-b)<1e-5,`${message}: ${a} != ${b}`);
 const counts=f=>({meshes:f.scene.meshes.length,geometries:f.scene.geometries.length,nodes:f.scene.transformNodes.length,groups:f.scene.animationGroups.length,skeletons:f.scene.skeletons.length,materials:f.scene.materials.length,textures:f.scene.textures.length,managers:f.scene.morphTargetManagers.length,pool:f.battle.allPooled.length});
 async function fixture(t){
@@ -50,7 +50,7 @@ function begin(f,e,index=0){
   f.battle.combat.hp=500;f.battle.combat.invulnerable=0;f.battle.combat.reaction.reset();e.engaged=true;step(f,0);
   return {spec:e.brain.spell,impact:spellImpact(e.brain.spell,e.brain.durations[e.brain.state]),plan:e.spell.plan};
 }
-function advance(f,e,time,action={state:'idle'},shield=null){const dt=time-e.brain.time;assert.ok(dt>=-1e-7);step(f,Math.max(0,dt),action,true,shield);}
+function advance(f,e,time,action={state:'idle'},shield=null){const dt=(time-e.brain.time)/e.brain.attackPlaybackRate;assert.ok(dt>=-1e-7);step(f,Math.max(0,dt),action,true,shield);}
 
 test('map exit during a nearly released cast never resumes damage without a fresh warning',async t=>{
   const f=await fixture(t);
@@ -80,7 +80,7 @@ test('all twelve authored spell motions match visible fixed footprints and relea
     const e=await resident(f,phase),specs=phase===1?ELENA_SPELLS:MOURNING_SPELLS;
     for(let index=0;index<specs.length;index++)for(const outcome of outcomes){
       const label=`phase ${phase}/${specs[index].name}/${specs[index].pattern}/${outcome}`,{impact,plan}=begin(f,e,index),initialSerial=e.brain.serial;
-      assert.ok(impact>=1,label+' minimum warning');assert.ok(plan,label);assert.equal(e.spell.mesh.isEnabled(),true,label);assert.equal(e.spell.rim.isEnabled(),true,label);
+      assert.ok(impact/e.brain.attackPlaybackRate>=1,label+' minimum real-time warning');assert.ok(plan,label);assert.equal(e.spell.mesh.isEnabled(),true,label);assert.equal(e.spell.rim.isEnabled(),true,label);
       const positions=e.spell.mesh.getVerticesData(VertexBuffer.PositionKind);
       for(let p=0;p<positions.length;p+=Math.max(3,Math.floor(positions.length/96)*3))assert.ok(spellContains(plan,{x:positions[p],z:positions[p+2]},{radius:.0002}),label+' rendered fill agrees with footprint');
       if(outcome==='outside'||outcome==='edge-hit'){
@@ -94,12 +94,12 @@ test('all twelve authored spell motions match visible fixed footprints and relea
         advance(f,e,impact-.001);assert.equal(f.battle.playerHp,500,label+' cannot hit before release');assert.equal(e.spell.mesh.isEnabled(),true,label+' warning remains visible');
         assert.strictEqual(e.spell.plan,plan,label+' warning cannot track a moved player');
         const action=outcome==='dodge'?{state:'dodge',actionId:initialSerial}:outcome==='block'?{state:'shieldPush',actionId:initialSerial}:{state:'idle'};
-        if(outcome==='cancel'){e.brain.hit({damage:1});step(f,.002,action);}else advance(f,e,impact+.00001,action,shield);
+        if(outcome==='cancel'){e.brain.hit({damage:1,stun:.5});step(f,.002,action);}else advance(f,e,impact+.00001,action,shield);
         const damage=500-f.battle.playerHp;assert.equal(damage>0,['hit','edge-hit'].includes(outcome),label+' release outcome');
         const hp=f.battle.playerHp;f.battle.poseAndContacts(f.player,action,null,null);f.battle.poseAndContacts(f.player,action,null,null);assert.equal(f.battle.playerHp,hp,label+' one hit per cast');
         if(['cancel','block','shield'].includes(outcome))assert.notEqual(e.brain.mode,'attack',label+' interrupts');
         step(f,.25);assert.equal(e.spell.mesh.isEnabled(),false,label+' floor flash expires');
-        report.spellCases.push({phase,clip:specs[index].name,pattern:specs[index].pattern,outcome,warningSeconds:impact,damage,lockedAim:true});
+        report.spellCases.push({phase,clip:specs[index].name,pattern:specs[index].pattern,outcome,warningSeconds:impact/e.brain.attackPlaybackRate,sourceImpactSeconds:impact,damage,lockedAim:true});
       }finally{f.world.navigation.segmentClear=segmentClear;shield?.dispose();}
     }
   }

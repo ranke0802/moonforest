@@ -19,11 +19,11 @@ test('boss: 20 original clips are retained; 18 active motions exclude both ball 
  assert.deepEqual(b.visited,new Set(BOSS_ACTIVE_MOTIONS.map(m=>m.name)));
  assert.ok(BOSS_ATTACKS.every(m=>!['rock','magic'].includes(m.kind)));
 });
-test('boss: light hit cancels the attack after 0.2 seconds of visible stagger',()=>{
+test('boss: normal hits flash white without stopping or cancelling an attack',()=>{
  const b=new BossBrain(durations);b.start('Left_Hook_from_Guard','attack');b.time=.15;
  assert.ok(b.hit());assert.equal(b.state,'Left_Hook_from_Guard');assert.equal(b.hp,886);assert.ok(b.flash>0);
- b.update(.1,2);assert.equal(b.time,.15);assert.equal(b.update(.1,2).events.length,0);
- b.update(.05,2);assert.equal(b.state,'Block6');assert.equal(b.mode,'idle');assert.equal(b.flash,0);
+ const serial=b.serial;b.update(.1,2);assert.ok(b.time>.15);assert.equal(b.stagger,0);assert.equal(b.mode,'attack');assert.equal(b.serial,serial);
+ b.update(.15,2);assert.equal(b.mode,'attack');assert.equal(b.flash,0);
 });
 test('boss: heavy hit cancels attack, plays down then stand-up before resuming',()=>{
  const b=new BossBrain(durations);b.start('Axe_Spin_Attack','attack');b.time=.6;

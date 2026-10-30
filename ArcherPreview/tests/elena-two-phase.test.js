@@ -152,7 +152,7 @@ test('autonomous encounter path releases all five patterns once without source-r
   const patterns=[];
   for(let index=0;index<5;index++){
     e.brain.cast();patterns.push(e.brain.spell.pattern);const origin=e.actor.position.clone(),serial=e.brain.serial;let releases=0,plan;
-    for(let frame=0;frame<179;frame++){
+    for(let frame=0;frame<Math.floor(3/e.brain.attackPlaybackRate*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(event=>event.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
       near(Vector3.Distance(e.actor.position,origin),0);assert.equal(e.brain.serial,serial);assert.equal(e.brain.state,'cast');assert.equal(e.engaged,true);
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);
@@ -171,12 +171,12 @@ test('five real phase-two casts stay fixed, expose valid hurt capsules, and manu
   for(let spellIndex=0;spellIndex<5;spellIndex++){
     assert.equal(e.requestReviewCast(),true);assert.equal(e.requestReviewCast(),false);const pattern=e.brain.spell.pattern;seen.push(pattern);
     const lockedPosition=e.actor.position.clone(),lockedWalk=e.animator.walkTime,hitPoints=f.battle.playerHp;let releases=0,plan;
-    for(let frame=0;frame<179;frame++){
+    for(let frame=0;frame<Math.floor(3/e.brain.attackPlaybackRate*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(x=>x.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
       near(Vector3.Distance(e.actor.position,lockedPosition),0);near(e.animator.walkTime,lockedWalk);assert.equal(e.brain.state,'cast');
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);assert.equal(plan.pattern,pattern);
       for(const node of e.asset.transformNodes)assert.ok(node.getAbsolutePosition().asArray().every(Number.isFinite),node.name);
-      const capsules=e.hurtCapsules();assert.equal(capsules.length,6);assert.ok(capsules.every(c=>c.radius>0&&c.points.flat().every(Number.isFinite)));
+      const capsules=e.hurtCapsules();assert.equal(capsules.length,49);assert.ok(capsules.every(c=>c.radius>0&&c.points.flat().every(Number.isFinite)));
     }
     assert.equal(releases,1);assert.equal(e.spell.fired,true);assert.ok(spellImpact(e.brain.spell,3)>=1);assert.equal(f.battle.playerHp,hitPoints,'review casts never damage the player');
     while(e.brain.mode==='attack')step(f);

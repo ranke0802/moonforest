@@ -17,7 +17,8 @@ export const MOURNING_SPELLS=Object.freeze([
   ['cross','갈라진 성역',12,36],['cluster','추모의 낙인',10,38],
 ].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range,damage,kind:'ground',impact:.55})));
 export function spellImpact(spec,duration){return Math.min(Math.max(1,duration*spec.impact),duration-.25);}
-export const MOURNING_MOVEMENT=Object.freeze({walkSpeed:1.05,skitterSpeed:3.6,chargeSpeed:5.4,chargeWarning:.9,gaitCap:8});
+export const MOURNING_CAST_RATE=1.6;
+export const MOURNING_MOVEMENT=Object.freeze({walkSpeed:1.05,skitterSpeed:3.6,chargeSpeed:5.4,chargeWarning:.9,chargeDamage:42,gaitCap:8});
 const MOURNING_MOVE_ORDER=['walk','skitter','walk','charge'];
 
 export class ElenaBrain {
@@ -38,23 +39,26 @@ export class ElenaBrain {
   cancelCast(){if(this.mode!=='attack')return false;this.start(this.idle,'idle');this.wait=1.2;return true;}
   cancelMovement(){if(!this.repositioning)return false;this.start(this.idle,'idle');this.repositionRemaining=0;this.moveKind=null;return true;}
   get defense(){return null;}
+  get attackPlaybackRate(){return this.mourning?MOURNING_CAST_RATE:1;}
   get label(){return this.mode==='attack'?this.spell?.label:this.repositioning?(this.mourning?this.moveKind==='charge'?(this.time<MOURNING_MOVEMENT.chargeWarning?'돌진 예고':'비탄의 돌진'):this.moveKind==='skitter'?'급속 횡이동':'끊임없는 배회':'자리 바꾸기'):({idle:'경계',move:'접근',down:'쓰러짐',recover:'일어나기',dead:this.mourning?'비탄의 끝':'광폭화'})[this.mode]??'경계';}
-  hit({damage=14,heavy=false,stun=0}={}){
+  hit({damage=14,heavy=false,stun=0,interruptsBoss=false}={}){
     if(this.hp<=0)return false;
     this.hp=Math.max(0,this.hp-damage);this.flash=this.flashDuration;
     if(!this.hp){this.stagger=0;this.start(this.mourning?'dead':'Knock_Down','dead');}
     else if(heavy&&!this.mourning&&!['down','recover'].includes(this.mode)){this.stagger=0;this.start('Knock_Down','down');}
-    else if(!['down','recover'].includes(this.mode)){
+    else if((heavy||stun||interruptsBoss)&&!['down','recover'].includes(this.mode)){
       this.stagger=Math.max(this.stagger,stun||.35);
-      if(this.mode==='attack'){this.start(this.idle,'idle');this.wait=1.2;}
+      if(this.mode==='attack'||(this.mourning&&this.repositioning&&this.moveKind==='charge')){this.start(this.idle,'idle');this.wait=1.2;}
     }
     return true;
   }
-  parry(){this.stagger=1;this.impacted=true;if(this.mode==='attack'){this.start(this.idle,'idle');this.wait=1.2;}}
+  parry(){this.stagger=1;this.impacted=true;if(this.mode==='attack'||(this.mourning&&this.repositioning&&this.moveKind==='charge')){this.start(this.idle,'idle');this.wait=1.2;}}
   update(dt,distance,playerAlive,{manual=false}={}){
     this.flash=Math.max(0,this.flash-dt);const events=[];
     if(this.stagger>0){this.stagger=Math.max(0,this.stagger-dt);return {events,speed:0};}
-    this.time+=dt;if(this.hp<=0)return {events,speed:0};
+    // time stays in authored clip seconds: pose, corrective morphs, telegraph
+    // progress and release all use this same accelerated cast clock.
+    this.time+=dt*(this.mode==='attack'?this.attackPlaybackRate:1);if(this.hp<=0)return {events,speed:0};
     const duration=this.durations[this.state];
     if(this.mode==='down'){if(this.time>=duration)this.start('Stand_Up9','recover');return {events,speed:0};}
     if(this.mode==='recover'){if(this.time>=duration){this.start(this.idle,'idle');this.wait=.9;}return {events,speed:0};}

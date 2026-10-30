@@ -113,7 +113,7 @@ test('spell damage occurs once at release, can be dodged or blocked, and cancels
     step(e.brain.time,true);assert.equal(hp-battle.playerHp,damage,'same cast cannot hit twice');e.spell.reset();battle.combat.invulnerable=0;return damage;
   };
   assert.ok(await cast({state:'idle'})>0);assert.equal(await cast({state:'dodge',actionId:9}),0);assert.equal(await cast({state:'shieldPush',actionId:10}),0);
-  e.brain.start(ELENA_CAST.name,'attack');e.brain.hit({damage:5});assert.equal(e.brain.state,'Elena_Idle');assert.equal(e.brain.update(2,4,true).events.length,0);
+  e.brain.start(ELENA_CAST.name,'attack');e.brain.hit({damage:5,stun:.5});assert.equal(e.brain.state,'Elena_Idle');assert.equal(e.brain.update(2,4,true).events.length,0);
   const start=e.actor.position.clone();e.spell.aim(9,'corridor',start,start.add(new Vector3(0,0,2)),{range:7});e.spell.show(.1,1);assert.equal(e.spell.mesh.isEnabled(),true);
   battle.hide();assert.equal(e.spell.mesh.isEnabled(),false);assert.equal(e.contact.mesh.isEnabled(),false);
 });

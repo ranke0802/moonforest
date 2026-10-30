@@ -4,15 +4,24 @@ export const PLAYER_STAGGER = .2;
 export const PLAYER_BLOCK_GROGGY = 1.5;
 const WHITE = Color3.White();
 const flashValues=new WeakMap();
+export function canInlineHitFlash(mesh){
+  const material=mesh?.material;
+  return mesh?.metadata?.elenaInlineFlash===true&&mesh.visibility===1&&material?.alpha===1
+    &&!material.needAlphaBlendingForMesh(mesh)&&!material.needAlphaTestingForMesh(mesh);
+}
 export function applyHitFlash(meshes, remaining, duration=.22) {
   if(!meshes)return;
   const alpha=.72*Math.min(1,Math.max(0,remaining/duration));
-  if(flashValues.get(meshes)===alpha)return;
+  if(flashValues.get(meshes)===alpha){
+    // An opacity change can require the original overlay even at the same flash time.
+    if(alpha>0)for(const mesh of meshes)if(mesh.metadata?.elenaInlineFlash)mesh.renderOverlay=!canInlineHitFlash(mesh);
+    return;
+  }
   flashValues.set(meshes,alpha);
   for(const mesh of meshes||[]){
     // The one-pass outline shader reads the parent's flash; avoid another overlay draw.
     if(mesh.metadata?.moonforestOutline)continue;
-    mesh.overlayColor=WHITE;mesh.overlayAlpha=alpha;mesh.renderOverlay=alpha>0;
+    mesh.overlayColor=WHITE;mesh.overlayAlpha=alpha;mesh.renderOverlay=alpha>0&&!canInlineHitFlash(mesh);
   }
 }
 

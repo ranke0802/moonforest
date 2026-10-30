@@ -2,14 +2,15 @@ import {ElenaEncounter} from './elena-encounter.js';
 import {ElenaBrain} from './elena-spec.js';
 import {MourningElenaAnimator} from './mourning-elena-animation.js';
 import {orderPoseNodes} from './pose-matrices.js';
+import {MourningHurtVolumes} from './mourning-elena-hurt.js';
 
 export class MourningElenaEncounter extends ElenaEncounter {
   constructor(...args){super(...args);this.phase=2;this.displayName='비탄의 마녀 엘레나';this.radius=.9;this.stopDistance=3;this.separationRadius=1.1;}
   createBrain(durations){return new ElenaBrain(durations,{mourning:true});}
   prepareAsset(){
-    // A stable five-influence shader prevents program recompiles whenever a cast
-    // corrective reaches zero. Geometry and all five targets remain unchanged.
-    for(const manager of new Set(this.asset.meshes.map(m=>m.morphTargetManager).filter(Boolean))){manager.optimizeInfluencers=false;manager.numMaxInfluencers=manager.numTargets;manager.synchronize();}
+    // Keep five shader slots while texture-mode shaders skip zero-weight targets.
+    // The attribute fallback needs all slots bound; keep the loader's texture.
+    for(const manager of new Set(this.asset.meshes.map(m=>m.morphTargetManager).filter(Boolean))){manager.areUpdatesFrozen=true;manager.optimizeInfluencers=manager.isUsingTextureForTargets;manager.numMaxInfluencers=manager.numTargets;manager.areUpdatesFrozen=false;}
   }
   createAnimator(){
     this.poseNodes=orderPoseNodes([...this.asset.transformNodes,...this.asset.meshes]);
@@ -28,11 +29,8 @@ export class MourningElenaEncounter extends ElenaEncounter {
     this.actor.computeWorldMatrix();this.carrier.computeWorldMatrix();
   }
   hurtCapsules(){
-    const pairs=[['DEF_Abdomen','DEF_Chest',.4],['DEF_Chest','DEF_Head',.3],
-      ['DEF_FrontHand.L_UpperArm','DEF_FrontHand.L_Forearm',.22],['DEF_FrontHand.L_Forearm','DEF_FrontHand.L_Palm',.2],
-      ['DEF_FrontFoot.R_Thigh','DEF_FrontFoot.R_Shin',.22],['DEF_FrontFoot.R_Shin','DEF_FrontFoot.R_Foot',.22]];
-    // Radii are in world metres, unlike the source-unit first-phase rig.
-    return pairs.filter(([a,b])=>this.nodes[a]&&this.nodes[b]).map(([a,b,r])=>({points:[this.nodes[a].getAbsolutePosition().asArray(),this.nodes[b].getAbsolutePosition().asArray()],radius:r}));
+    this.hurtVolumes??=new MourningHurtVolumes(this.nodes);
+    return this.hurtVolumes.sample();
   }
   updateRenderRange(camera){
     super.updateRenderRange(camera);

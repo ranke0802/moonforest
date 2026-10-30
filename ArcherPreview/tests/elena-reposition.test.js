@@ -78,7 +78,7 @@ test('no safe route ends the movement action immediately without repeated search
 
 for(const phase of [1,2])test(`phase ${phase} performs one release and bounded movement before a fresh cast`,()=>{
   const b=brain(phase);b.cast();const duration=b.durations[b.state],impact=spellImpact(b.spell,duration);
-  assert.equal(b.update(impact+.001,4,true).events.length,1);assert.equal(b.update(duration-impact+.01,4,true).events.length,0);assert.equal(b.repositioning,true);assert.equal(b.mode,'move');assert.equal(b.state,b.walk);
+  assert.equal(b.update((impact+.001)/b.attackPlaybackRate,4,true).events.length,1);assert.equal(b.update((duration-impact+.01)/b.attackPlaybackRate,4,true).events.length,0);assert.equal(b.repositioning,true);assert.equal(b.mode,'move');assert.equal(b.state,b.walk);
   const limit=b.repositionRemaining;assert.ok(limit>=2.2&&limit<=2.7);let elapsed=0;
   while(b.repositioning){const result=b.update(1/60,4,true);elapsed+=1/60;assert.equal(result.events.length,0);if(b.repositioning)near(result.speed,phase===2?MOURNING_MOVEMENT.walkSpeed:1.1);}
   assert.ok(elapsed<=limit+1/60);if(phase===1){assert.equal(b.mode,'idle');b.update(.39,4,true);assert.notEqual(b.mode,'attack');b.update(.02,4,true);}assert.equal(b.mode,'attack');assert.equal(b.time,0);

@@ -79,7 +79,7 @@ function outlineMaterial(scene) {
     effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);
     const source = mesh.parent;
-    effect?.setFloat('hitFlash', source?.renderOverlay ? source.overlayAlpha : 0);
+    effect?.setFloat('hitFlash', source&&(source.renderOverlay||source.metadata?.elenaInlineFlash) ? source.overlayAlpha : 0);
   });
   materials.set(scene, material);
   return material;

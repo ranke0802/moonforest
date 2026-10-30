@@ -19,11 +19,11 @@ export function chooseElenaReposition(origin,player,{phase=1,turn=0,radius=.34,n
   return null;
 }
 
-// A charge closes the gap without contact damage. Its complete floor segment
+// Charge through the originally aimed position. Its complete floor segment
 // is checked once before the warning is shown, and the aim never follows a dodge.
 export function chooseElenaCharge(origin,player,{radius=.9,navigation,terrain,home=ELENA_HOME}={}){
-  const dx=player.x-origin.x,dz=player.z-origin.z,distance=Math.hypot(dx,dz),length=Math.min(6.3,distance-radius-.95);
-  if(length<2)return null;
+  const dx=player.x-origin.x,dz=player.z-origin.z,distance=Math.hypot(dx,dz),length=Math.min(6.3,distance+radius);
+  if(distance<2.5)return null;
   const target={x:origin.x+dx/distance*length,z:origin.z+dz/distance*length};
   if(Math.hypot(target.x-home.x,target.z-home.z)>9.5)return null;
   if(navigation&&(!navigation.free(target,radius)||!navigation.segmentClear(origin,target,radius)))return null;
