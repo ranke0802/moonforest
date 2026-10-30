@@ -86,11 +86,13 @@ test('monster shells share a material, keep independent skins and inherit fade, 
   assert.notEqual(bear.shell.skeleton, goblin.shell.skeleton);
   assert.equal(bear.shell.skeleton, bear.body.skeleton);
   const values = {}, material = bear.shell.material;
-  material.getEffect = () => ({ setFloat: (key, value) => { values[key] = value; } });
+  material.getEffect = () => ({ setFloat: (key, value) => { values[key] = value; }, setFloat2:(key,x,y)=>{values[key]=[x,y];} });
   bear.shell.visibility = .5;
   applyHitFlash(bear.asset.meshes, .22);
   material.onBindObservable.notifyObservers(bear.shell);
   assert.equal(values.outlineOpacity, .5); assert.equal(values.hitFlash, .72);
+  assert.equal(values.outlinePixels,0,'bear retains its existing world-width outline');
+  assert.deepEqual(values.outlineViewport,[engine.getRenderWidth(),engine.getRenderHeight()]);
   assert.equal(bear.shell.renderOverlay, false, 'flash must stay in the same outline pass');
   material.onBindObservable.notifyObservers(goblin.shell);
   assert.equal(values.outlineOpacity, 1); assert.equal(values.hitFlash, 0);

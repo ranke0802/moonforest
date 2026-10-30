@@ -2,6 +2,7 @@ import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBu
 import { CharacterAnimator } from './animation.js';
 import { attachCharacterOutlines, isRuntimeOutline } from './character-outlines.js';
 import { applyMonsterToon } from './monster-toon.js';
+import { applyElenaStyle } from './elena-style.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
@@ -70,6 +71,7 @@ export class BossEncounter {
           mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
         }
         applyMonsterToon(this.asset);
+        if(this.kind==='elena')applyElenaStyle(this.asset);
         this.world.lighting?.registerMeshes(this.asset.meshes);
         // Prepare the changed body shader before its silhouette can become visible.
         await Promise.all(this.asset.meshes.filter(mesh=>mesh.getTotalVertices() && mesh.material?.metadata?.moonforestMonsterToon)
@@ -191,7 +193,8 @@ export class BossEncounter {
     const hip=this.nodes['mixamorig:Hips'];hip.computeWorldMatrix(true);
     const relative=Vector3.TransformCoordinates(hip.getAbsolutePosition(),this.actor.getWorldMatrix().clone().invert());
     const clip=this.config.catalog.find(c=>c.name===this.brain.state),ground=clip.groundTrack;
-    const f=Math.min((ground?.length||1)-1,this.brain.time*30),i=Math.floor(f);
+    const sampleTime=['move','approach'].includes(this.brain.mode)&&clip.duration>0?this.brain.time%clip.duration:this.brain.time;
+    const f=Math.min((ground?.length||1)-1,sampleTime*(clip.fps??30)),i=Math.floor(f);
     const level=ground?ground[i]+(ground[Math.min(i+1,ground.length-1)]-ground[i])*(f-i):.075;
     this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);

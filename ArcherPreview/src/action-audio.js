@@ -26,7 +26,7 @@ export class ActionAudio {
     this.charged=result.chargeProgress>=1;this.playerKey=key;this.playerTime=clipTime;
   }
   boss(encounter,dt){
-    const bosses=encounter?.encounters??(encounter?[encounter]:[]);
+    const bosses=(encounter?.encounters??(encounter?[encounter]:[])).filter(b=>b.kind!=='elena'||b.engaged||(!b.corpseGone&&b.brain?.hp<=0));
     const living=bosses.some(boss=>boss.active&&boss.brain.hp>0);
     const alive=!encounter?.active||encounter.playerHp>0,bossAlive=bosses.some(b=>b.kind!=='goblin'&&b.active&&b.brain.hp>0);
     if(encounter?.active&&living){this.combatHold=2.5;this.heldBoss=bossAlive;}else this.combatHold=Math.max(0,this.combatHold-dt);
@@ -44,6 +44,13 @@ export class ActionAudio {
     let memory=this.bossStates.get(encounter);
     if(!memory){memory={key:null,time:0,feet:0,hp:encounter.brain.hp};this.bossStates.set(encounter,memory);}
     const b=encounter.brain,position=encounter.actor.position,key=b.serial,changed=key!==memory.key,previous=changed?-1:memory.time;
+    // Neutral cues only: no borrowed monster voices or magic audio before VFX approval.
+    if(encounter.kind==='elena'){
+      if(changed&&b.mode==='attack')this.audio.play('equip',{position,volume:.3});
+      if(b.mode==='move'){memory.feet+=dt;if(memory.feet>.45){memory.feet%=.45;this.audio.play(`foot_cave_${this.foot++%3}`,{position,volume:.35});}}
+      else memory.feet=0;
+      memory.key=key;memory.time=b.time;memory.hp=b.hp;return;
+    }
     const duration=b.durations[b.state],phase=b.time/duration;
     const kind=encounter.kind==='goblin'?'goblin':'bear';
     if(b.hp<memory.hp)this.audio.play(`${kind}_${b.hp<=0?'death':'hurt'}`,{position});

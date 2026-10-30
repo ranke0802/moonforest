@@ -12,14 +12,23 @@ attribute vec3 normal;
 uniform mat4 world;
 uniform mat4 viewProjection;
 uniform float outlineWidth;
+uniform float outlinePixels;
+uniform vec2 outlineViewport;
 #include<bonesDeclaration>
 void main(void) {
   mat4 finalWorld = world;
   #include<bonesVertex>
   vec4 worldPosition = finalWorld * vec4(position, 1.0);
   vec3 worldNormal = normalize(mat3(finalWorld) * normal);
-  worldPosition.xyz += worldNormal * outlineWidth;
-  gl_Position = viewProjection * worldPosition;
+  if (outlinePixels > 0.0) {
+    gl_Position = viewProjection * worldPosition;
+    vec4 displaced = viewProjection * (worldPosition + vec4(worldNormal,0.0));
+    vec2 delta = (displaced.xy / displaced.w - gl_Position.xy / gl_Position.w) * outlineViewport;
+    if (dot(delta,delta) > .000001) gl_Position.xy += normalize(delta) * outlinePixels * 2.0 / outlineViewport * gl_Position.w;
+  } else {
+    worldPosition.xyz += worldNormal * outlineWidth;
+    gl_Position = viewProjection * worldPosition;
+  }
 }`;
 const fragmentSource = `
 precision mediump float;
@@ -30,7 +39,7 @@ void main(void) {
   gl_FragColor = vec4(mix(outlineColor, vec3(1.0), hitFlash), outlineOpacity);
 }`;
 const materials = new WeakMap();
-const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004, scarecrow: .0035 };
+const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
 function outlineMaterial(scene) {
@@ -38,7 +47,7 @@ function outlineMaterial(scene) {
   const material = new ShaderMaterial('moonforest-character-outline', scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
-      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlineColor', 'outlineOpacity', 'hitFlash'],
+      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash'],
     });
   material.backFaceCulling = true;
   material.cullBackFaces = false;
@@ -53,6 +62,9 @@ function outlineMaterial(scene) {
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);
     effect?.setFloat('outlineWidth', mesh.metadata.outlineWidth);
+    effect?.setFloat('outlinePixels', mesh.metadata.outlinePixels??0);
+    const engine=scene.getEngine(),canvas=engine.getRenderingCanvas();
+    effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);
     const source = mesh.parent;
     effect?.setFloat('hitFlash', source?.renderOverlay ? source.overlayAlpha : 0);
@@ -81,7 +93,7 @@ export function attachCharacterOutlines(asset, kind) {
     shell.skeleton = source.skeleton;
     shell.numBoneInfluencers = source.numBoneInfluencers;
     shell.computeBonesUsingShaders = source.computeBonesUsingShaders;
-    shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile] };
+    shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(profile==='elena'?{outlinePixels:.5}:{}) };
     shell.material = outlineMaterial(source.getScene());
     shell.isPickable = false; shell.checkCollisions = false; shell.receiveShadows = false;
     shell.renderOutline = false; shell.renderOverlay = false;

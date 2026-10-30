@@ -3,6 +3,8 @@ import { BossEncounter } from './boss-encounter.js';
 import { BossModelLibrary } from './boss-models.js';
 import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
+import { ElenaEncounter } from './elena-encounter.js';
+import { ELENA_HOME } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
@@ -44,11 +46,12 @@ export function separateBosses(encounters, grabOwner) {
 }
 
 export class BossBattle {
-  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, onDefeat=()=>{} } = {}) {
+  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, onDefeat=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
     this.onDefeat=onDefeat;
     this.models = models ?? new BossModelLibrary(world.scene);
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
+    this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];
     this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;
     this.noGrab = { active: false, label: '' };
@@ -71,6 +74,35 @@ export class BossBattle {
   get playerNodes() { return this.combat.nodes; }
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
+  get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
+  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool];}
+  async activateResident(player,{reset=false}={}){
+    if(!this.world.cave)return false;
+    if(this.residentPending){
+      const revision=this.residentPendingRevision,result=await this.residentPending;
+      return revision===this.residentRevision?result:this.activateResident(player,{reset});
+    }
+    const request=this.residentRevision;
+    this.residentPendingRevision=request;
+    const pending=(async()=>{
+      await this.elenaModels.load();
+      if(request!==this.residentRevision||!this.world.cave)return false;
+      let resident=this.elenaPool[0];
+      if(!resident){resident=new ElenaEncounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>this.elenaModels.instantiate(),onDefeat:this.onDefeat});resident.id='elena';resident.number=1;this.elenaPool.push(resident);}
+      if(!resident.asset||reset){
+        const position=new Vector3(ELENA_HOME.x,0,ELENA_HOME.z);
+        await resident.summon(player,{position,rotationY:0});
+      }else{
+        resident.active=true;resident.actor.setEnabled(!resident.corpseGone);resident.routeState={};resident.engaged=false;
+        resident.animator.transition(resident.brain.state,{clipTime:resident.brain.time,actionId:resident.brain.serial});resident.animator.update(.2);
+      }
+      if(request!==this.residentRevision||!this.world.cave){resident.hide();return false;}
+      if(!this.encounters.includes(resident))this.encounters.push(resident);
+      this.active=true;this.onChange(this);return true;
+    })();
+    this.residentPending=pending;
+    try{return await pending;}finally{if(this.residentPending===pending)this.residentPending=null;}
+  }
   get canUsePotion() { return this.active && !this.loading && !this.grab.active && this.potions.canUse(this.playerHp, this.playerMaxHp); }
   usePotion() {
     if (!this.canUsePotion) return false;
@@ -80,7 +112,7 @@ export class BossBattle {
   bossChanged(boss) {
     if (boss.lastHit && boss.lastHit !== boss.lastReportedHit) {
       boss.lastReportedHit = boss.lastHit;
-      this.lastHit = this.encounters.length > 1 ? `${boss.kind==='goblin'?'고블린':'곰'} ${boss.number??boss.id} · ${boss.lastHit}` : boss.lastHit;
+      this.lastHit = this.encounters.length > 1 ? `${boss.displayName??(boss.kind==='goblin'?'고블린':'곰')} ${boss.number??boss.id} · ${boss.lastHit}` : boss.lastHit;
     }
     if (!this.updating && !this.loading) this.onChange(this);
   }
@@ -88,7 +120,7 @@ export class BossBattle {
     const reacted = this.onPlayerHit(duration, options);
     if (reacted !== false) {
       this.actionVersion++;
-      for (const boss of [...this.pool,...this.goblinPool]) boss.gate.reset();
+      for (const boss of this.allPooled) boss.gate.reset();
     }
     return reacted;
   }
@@ -125,8 +157,9 @@ export class BossBattle {
     finally { this.loading = false; this.onChange(this); }
   }
   hide() {
+    this.residentRevision++;
     this.revision++; this.active = false; this.updating = true;
-    for (const boss of [...this.pool,...this.goblinPool]) boss.hide();
+    for (const boss of this.allPooled) boss.hide();
     this.encounters = []; this.potions.cancel(); this.playerReaction.reset();
     this.updating = false; this.lastHit = null; this.onChange(this);
   }
@@ -163,7 +196,7 @@ export class BossBattle {
   inspect() {
     return { active: this.active, loading: this.loading, count: this.encounters.length, living: this.livingCount,
       playerHp: this.playerHp, potions: this.potions.remaining, capturedBy: this.combat.grabOwner?.id ?? null,
-      pooledModels: this.pool.length+this.goblinPool.length, modelLoads: this.models.loads, goblinModelLoads:this.goblinModels.loads,
+      pooledModels: this.allPooled.length, modelLoads: this.models.loads, goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,
       bearCount:this.encounters.filter(b=>b.kind==='bear').length,goblinCount:this.encounters.filter(b=>b.kind==='goblin').length,bosses: this.encounters.map(boss => boss.inspect()) };
   }
 }

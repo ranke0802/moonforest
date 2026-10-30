@@ -20,18 +20,18 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
 
 export async function prepareMapResources(world,base,onProgress,onStream){
   const read=name=>readMapManifest(new URL(name+'.json',base));
-  const [village,sizes,ground]=await Promise.all([prepareVillageStart(world),read('resource-index'),read(world.groundManifest)]);
+  const [village,sizes,ground,resident]=await Promise.all([prepareVillageStart(world),read('resource-index'),read(world.groundManifest),world.cave?read('elena'):null]);
   // The same live player, sky, decoder and training target already own their
   // resources. Only destination-map bytes belong in this download progress.
-  await prepareDownloads(world,base,sizes,[...village.resources,...ground.resources],village.plan,onProgress,onStream);
+  await prepareDownloads(world,base,sizes,[...village.resources,...ground.resources,...(resident?.resources??[])],village.plan,onProgress,onStream);
 }
 
 export async function prepareStartupResources(world,playerUrl,onProgress,onStream){
   const base=new URL('./',playerUrl),read=name=>readMapManifest(new URL(name+'.json',base));
   const player=await read(playerUrl.pathname.split('/').at(-1).replace('.json',''));
-  const [village,sizes,ground,sky,environment,ktx,meshopt]=await Promise.all([
-    prepareVillageStart(world),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder')]);
-  const resources=[...player.resources,...village.resources,...ground.resources,...(world.cave?[]:[sky.texture]),...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
+  const [village,sizes,ground,sky,environment,ktx,meshopt,resident]=await Promise.all([
+    prepareVillageStart(world),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder'),world.cave?read('elena'):null]);
+  const resources=[...player.resources,...village.resources,...ground.resources,...(resident?.resources??[]),...(world.cave?[]:[sky.texture]),...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   await prepareDownloads(world,base,sizes,resources,village.plan,onProgress,onStream);
   return player;
 }

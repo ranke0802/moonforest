@@ -225,6 +225,7 @@ function resetBeforeBoss(){
   if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
   animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
   applyHitFlash(container.meshes,0);resetCamera();updateButtons();canvas.focus({preventScroll:true});
+  if(isCave())boss.activateResident(actor,{reset:true}).catch(error=>{console.error('[Elena resident]',error);toast('엘레나를 불러오지 못했습니다.');});
 }
 
 function setAttackHeld(source, held) {
@@ -372,6 +373,7 @@ async function loadCharacter() {
     if(isVillage()){const travel=consumeTravel(travelStorage,character);if(travel){boss.combat.hp=travel.hp;boss.potions.remaining=travel.potions;}}
     resetCamera(); updateButtons();
     await skyReady;
+    if(isCave())await boss.activateResident(actor);
     loadDiagnostics.phase('screen');
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
@@ -511,7 +513,7 @@ function render(dt) {
 function bindMapPortal(){
   mapPortal?.dispose();
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,
-    getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.livingCount,hp:boss.playerHp,potions:boss.potions.remaining}),
+    getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount,hp:boss.playerHp,potions:boss.potions.remaining}),
     onTravel:url=>mapTransition.travel(url)});
 }
 
@@ -581,7 +583,7 @@ try {
       loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
-      boss.hide();for(const enemy of [...boss.pool,...boss.goblinPool])enemy.routeState={};
+      boss.hide();for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;strikeSampler.reset();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
@@ -605,6 +607,7 @@ try {
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=character;bindMapPortal();
+      if(isCave())await boss.activateResident(actor);
       loadDiagnostics.phase('screen');world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
     },
     finish:async()=>{

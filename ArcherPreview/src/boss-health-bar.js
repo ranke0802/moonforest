@@ -34,7 +34,7 @@ export class BossHealthBars {
         element.style.left='0';element.style.top='0';
         element.dataset.bossId = String(boss.id);
         element.dataset.kind = boss.kind;
-        element.setAttribute('aria-label', `${boss.kind==='goblin'?'고블린':'곰 보스'} ${boss.number??boss.id} 체력`);
+        element.setAttribute('aria-label', `${boss.displayName??(boss.kind==='goblin'?'고블린':'곰 보스')} ${boss.number??boss.id} 체력`);
         item = { element, progress: element.querySelector('progress'), state: element.querySelector('.sr-only'), text: element.querySelector('span:last-child') };
         item.progress.setAttribute('aria-label', boss.kind === 'goblin' ? '고블린 체력' : '보스 체력');
         this.items.set(boss.id, item);
@@ -43,7 +43,7 @@ export class BossHealthBars {
       if (item.snapshot !== snapshot) {
         item.snapshot = snapshot;
         item.progress.max = boss.brain.maxHp; item.progress.value = boss.brain.hp;
-        item.text.textContent = `${encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp} / ${boss.brain.maxHp}`;
+        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp} / ${boss.brain.maxHp}`;
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }
