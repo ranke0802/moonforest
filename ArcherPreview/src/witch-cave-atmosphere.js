@@ -5,6 +5,7 @@ import {caveFlowGeometry} from './witch-cave-water.js';
 import {CAVE_FOG_START,CAVE_FOG_END,CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
 import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
 import {CAVE_ROCK_GLSL,bindCaveRock} from './cave-rock-shell.js';
+import {readyShaderEffect} from './cave-fog-binding.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -95,6 +96,14 @@ function caveGlow(world,asset,tint,height,offsetX=0){
   const material=bindCaveFog(world,new ShaderMaterial('cave-glow-'+asset,world.scene,{vertexSource:glowVertex,fragmentSource:glowFragment},{attributes:['position','uv'],uniforms:['world','viewProjection','right','up','tint',...fogUniforms],samplers:['caveFogMap'],needAlphaBlending:true}));
   material.setColor3('tint',Color3.FromHexString(tint));material.backFaceCulling=false;material.disableDepthWrite=true;material.alphaMode=Constants.ALPHA_ADD;
   const source=MeshBuilder.CreatePlane('cave-glow-source-'+asset,{width:1.8,height:1.8},world.scene);source.material=material;source.isVisible=false;source.isPickable=false;
+  material.onBindObservable.add(mesh=>{
+    // Software instances upload their world matrix through the source mesh's
+    // UniformBuffer even without UBO support. ShaderMaterial does not attach
+    // that fallback buffer itself; use this draw's ready Effect, never a
+    // pending/cached INSTANCES variant from an earlier frame or map.
+    const effect=readyShaderEffect(material._activeEffect),buffer=mesh?.getMeshUniformBuffer();
+    if(effect&&buffer&&!buffer.useUbo)buffer.bindToEffect(effect,'Mesh');
+  });
   const instances=CAVE_PLACEMENTS.filter(p=>p.asset.includes(asset)).map((p,i)=>{
     const mesh=source.createInstance('cave-glow-'+asset+i);mesh.position.set(p.x+Math.cos(p.yaw)*offsetX*p.scale,(p.elevation??world.terrain.heightAt(p.x,p.z))+height*p.scale,p.z-Math.sin(p.yaw)*offsetX*p.scale);mesh.isPickable=false;mesh.freezeWorldMatrix();return mesh;
   });

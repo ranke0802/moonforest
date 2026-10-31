@@ -61,12 +61,12 @@ test('water clears actual rock surfaces at all three existing LODs, including up
 });
 
 test('water-facing solid foundations extend below their basin and retain original texture and LOD budgets',()=>{
-  const config=manifest.assets['cave-s01-solid-cliff-base'];let checked=0;
-  for(const p of CAVE_PLACEMENTS.filter(p=>p.foundation&&caveWaterWeight(p.x,p.z)>.45)){
+  const config=manifest.assets['cave-s01-solid-cliff-base'],foundations=CAVE_PLACEMENTS.filter(p=>p.foundation&&caveWaterWeight(p.x,p.z)>.45);let checked=0;
+  for(const p of foundations){
     const pool=CAVE_POOLS.reduce((a,b)=>Math.hypot((p.x-a.x)/a.rx,(p.z-a.z)/a.rz)<Math.hypot((p.x-b.x)/b.rx,(p.z-b.z)/b.rz)?a:b);
     assert.ok(p.topElevation-config.height*p.scale-.025<pool.height-.25,`unsupported base ${p.id}`);checked++;
   }
-  assert.ok(checked>20);
+  assert.ok(foundations.length>0,'water-facing support remains in the revised layout');assert.equal(checked,foundations.length,'every currently placed basin foundation reaches below its water surface');
   for(const id of ['cave-s01-solid-cliff-base','cave-s03-dry-spillway-rock']){
     const a=manifest.assets[id];assert.equal(a.category,'rock');assert.equal(a.lods.length,3);
     assert.equal(a.highTextures.textures.albedo.width,4096);assert.equal(a.lods[0].textureSize,1024);

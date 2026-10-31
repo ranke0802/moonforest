@@ -8,7 +8,7 @@ import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {BossModelLibrary} from '../src/boss-models.js';
 import {BossBattle} from '../src/boss-battle.js';
-import {ElenaBrain,ELENA_HOME,MOURNING_MOVEMENT,MOURNING_SPELLS} from '../src/elena-spec.js';
+import {ElenaBrain,ELENA_HOME,MOURNING_MOVEMENT,MOURNING_SPELLS,MOURNING_CAST_LEAD_IN} from '../src/elena-spec.js';
 import {chooseElenaCharge} from '../src/elena-reposition.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
@@ -113,16 +113,22 @@ test('actual charge applies one contact, supports dodge, blocks and walls, and a
   assert.ok(f.battle.playerHp<500,'a later charge gets its own contact gate');
 });
 
-test('a newly blocked charge stops at the collision constraint and cannot leak its warning into the next spell',async t=>{
-  const f=await fixture(t);charge(f);const warning=f.e.spell.plan,serial=f.e.brain.serial,wallX=f.e.actor.position.x+1,hp=f.battle.playerHp,navigation=f.e.movementNavigation,constrain=navigation.constrain.bind(navigation);
-  // Model a blocker entering the already warned corridor through the same
-  // constraint hook used by the live navigation/collision system.
-  navigation.constrain=(position,...args)=>{constrain(position,...args);position.x=Math.min(position.x,wallX);};
-  for(let frame=0;frame<180&&f.e.brain.mode!=='attack';frame++){
-    step(f);assert.ok(f.e.actor.position.x<=wallX+1e-6);
+for(const fps of [30,60])for(const phase of ['warning','travel'])test(`a newly blocked charge during ${phase} recovers at ${fps}fps without stale warning or inherited cast time`,async t=>{
+  const f=await fixture(t);charge(f);while(f.e.brain.time<(phase==='warning'?.35:.95))step(f,1/fps);
+  const warning=f.e.spell.plan,serial=f.e.brain.serial,wallX=f.e.actor.position.x+.5,hp=f.battle.playerHp,navigation=f.e.movementNavigation,halfThickness=.25,face=wallX+f.e.radius+.08+halfThickness;
+  // One physical 50 cm thick infinite wall, expressed consistently in player sight, boss
+  // free/segment checks and swept collision. Both sides remain standable; the
+  // planner cannot choose a destination through a constraint-only fake wall.
+  const restore=[];for(const nav of [navigation,f.world.navigation]){const original=nav.clearanceAt;nav.clearanceAt=function(x,z,r=0){return Math.min(original.call(this,x,z,r),Math.abs(x-face)-halfThickness);};restore.push(()=>{nav.clearanceAt=original;});}t.after(()=>restore.forEach(fn=>fn()));
+  assert.equal(navigation.free({x:face,z:f.e.actor.position.z},f.e.radius),false);assert.equal(navigation.segmentClear(f.e.actor.position,f.e.repositionTarget,f.e.radius),false);assert.equal(f.world.navigation.segmentClear(f.e.actor.position,f.player.position,0,true),false);
+  const trace=[];let lastSerial=serial,recovery=null;
+  for(let frame=0;frame<fps*3&&f.e.brain.mode!=='attack';frame++){
+    step(f,1/fps);assert.ok(f.e.actor.position.x<=wallX+1e-6);
+    if(f.e.brain.serial!==lastSerial){if(recovery===null)recovery=(frame+1)/fps;trace.push({frame,serial:f.e.brain.serial,mode:f.e.brain.mode,kind:f.e.brain.moveKind,time:f.e.brain.time,position:f.e.actor.position.asArray()});lastSerial=f.e.brain.serial;}
     if(f.e.brain.serial===serial)assert.strictEqual(f.e.spell.plan,warning);
   }
-  assert.equal(f.e.brain.mode,'attack');assert.ok(f.e.brain.serial>serial);assert.equal(f.e.spell.serial,f.e.brain.serial);assert.notStrictEqual(f.e.spell.plan,warning);assert.equal(f.e.spell.fired,false);assert.equal(f.battle.playerHp,hp);
+  t.diagnostic(JSON.stringify({phase,fps,recovery,blockedChargeTrace:trace}));
+  assert.ok(recovery!==null&&recovery<=.45,'blocked charge hands off within the unchanged recovery budget');assert.equal(f.e.brain.mode,'attack');assert.ok(f.e.brain.serial>serial);assert.equal(f.e.spell.serial,f.e.brain.serial);assert.notStrictEqual(f.e.spell.plan,warning);assert.equal(f.e.spell.fired,false);assert.equal(f.battle.playerHp,hp);assert.equal(f.e.brain.time,0);assert.equal(f.e.brain.castLeadInRemaining,MOURNING_CAST_LEAD_IN);
 });
 
 test('charge cancels on map exit or player death and manual review never starts automatic movement',async t=>{

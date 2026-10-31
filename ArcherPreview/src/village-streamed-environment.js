@@ -100,7 +100,9 @@ export function loadStreamedVillage(world,{
       if(disposed)return;
       const model=new URL(config.model,url),container=await loadContainer(model,world.scene);
       if(disposed){container.dispose();return;}containers.push(container);
-      const meshes=geometry(container);prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
+      const meshes=geometry(container);
+      if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true};
+      prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes)world.caveFog?.attach(mesh.material);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
       world.lighting.registerMeshes(meshes);

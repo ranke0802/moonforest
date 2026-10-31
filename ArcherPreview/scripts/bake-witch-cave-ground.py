@@ -10,46 +10,63 @@ def pixel(x,z):return ((x+80)*unit,(80-z)*unit)
 def field(n):return np.array(Image.fromarray(np.uint8(rng.random((n,n))*255)).resize((size,size),Image.Resampling.BICUBIC),dtype=np.float32)/255
 broad,patch,fine=[field(n) for n in (17,73,369)]
 route=Image.new('L',(size,size));draw=ImageDraw.Draw(route)
+travel=Image.new('L',(size,size));td=ImageDraw.Draw(travel)
 for points in layout['routes']:
  for a,b in zip(points,points[1:]):
   count=max(2,math.ceil(math.hypot(b[0]-a[0],b[1]-a[1])*3))
   for i in range(count+1):
    t=i/count;x=a[0]+(b[0]-a[0])*t;z=a[1]+(b[1]-a[1])*t;px,py=pixel(x,z);r=(a[3]+(b[3]-a[3])*t)*unit
    draw.ellipse((px-r,py-r,px+r,py+r),fill=255)
+   worn=r*.38;px+=math.sin(x*.19+z*.12)*unit*.32
+   td.ellipse((px-worn,py-worn,px+worn,py+worn),fill=210)
 for c in layout['rooms']:
  x,y=pixel(c['x'],c['z']);r=c['r']*unit;draw.ellipse((x-r,y-r,x+r,y+r),fill=255)
 walk=np.array(route.filter(ImageFilter.GaussianBlur(unit*.4)),dtype=np.float32)/255
-wear=np.clip(walk+(patch-.5)*.4*walk*(1-walk)*4,0,1)
-variation=(broad-.5)*21+(patch-.5)*15+(fine-.5)*6
-stone=np.array([112,111,123])+variation[:,:,None]*[.9,.82,.9]
-dust=np.array([139,131,120])+variation[:,:,None]*[1,.95,.9]
-paint=Image.fromarray(np.uint8(np.clip(stone*(1-wear[:,:,None])+dust*wear[:,:,None],0,255)))
+# The route remains rock; dust follows actual foot traffic rather than
+# painting every room as an identical pale disk. The three story areas have
+# distinct, softly joined surfaces in this one world-space map.
+traffic=np.array(travel.filter(ImageFilter.GaussianBlur(unit*.8)),dtype=np.float32)/255
+Y,X=np.mgrid[:size,:size];wx=X/unit-80;wz=80-Y/unit
+def ellipse(cx,cz,rx,rz):return np.exp(-(((wx-cx)/rx)**2+((wz-cz)/rz)**2)*1.8)
+refuge=ellipse(-32,21,6,5);lab=ellipse(-37,-19,8,6);ritual=ellipse(29,-38,8,6)
+activity=np.maximum.reduce([traffic,refuge*.70,lab*.65,ritual*.50])*walk
+wear=np.clip(activity+(patch-.5)*.18*activity*(1-activity)*4,0,1)
+variation=(broad-.5)*12+(patch-.5)*7+(fine-.5)*2.5
+stone=np.array([106,108,113])+variation[:,:,None]*[.9,.95,1]
+dust=np.array([134,125,110])+variation[:,:,None]*[1,.96,.9]
+color=stone*(1-wear[:,:,None]*.68)+dust*wear[:,:,None]*.68
+# Dampness is confined to pool shoulders, not a noisy overlay over every floor.
+damp=np.zeros((size,size),dtype=np.float32)
+for pool in layout.get('pools',[]):
+ d=np.sqrt(((wx-pool['x'])/pool['rx'])**2+((wz-pool['z'])/pool['rz'])**2)
+ damp=np.maximum(damp,np.exp(-((d-1.04)/.16)**2)*(.3+.7*(1-walk)))
+color*=1-damp[:,:,None]*.10
+color+=damp[:,:,None]*np.array([-2,1,3])
+paint=Image.fromarray(np.uint8(np.clip(color,0,255)))
 brush=ImageDraw.Draw(paint,'RGBA')
-# Uneven worn slabs, exposed around the travel lane; scattered orientation and
-# region-dependent coverage avoid a repeated paved grid. Reuses the same 2K map.
-for i in range(6500):
- x,y=rng.integers(12,size-12,2)
- if wear[y,x]<.35 or rng.random()<.38:continue
- angle=rng.uniform(0,math.tau);r=rng.uniform(2.5,8.5);points=[]
+# Reused ritual stonework is local to the protected altar and its approaches.
+# Asymmetric worn slabs do not turn the entire natural cave into a paved plaza.
+for i in range(480):
+ x,z=rng.uniform(19,39),rng.uniform(-44,-31)
+ px,py=pixel(x,z);ix,iy=int(px),int(py)
+ if ritual[iy,ix]<.18 or walk[iy,ix]<.8:continue
+ angle=rng.uniform(-.16,.16);r=rng.uniform(.26,.56)*unit;points=[]
  for k in range(6):
-  a=angle+k*math.tau/6;rr=r*rng.uniform(.72,1.1);points.append((x+math.cos(a)*rr,y+math.sin(a)*rr*.7))
- brush.polygon(points,fill=(155,147,135,55),outline=(71,72,83,65),width=1)
- brush.line(points[:3],fill=(192,180,157,65),width=1)
-for i in range(26000):
- x,y=rng.integers(3,size-3,2);r=rng.uniform(.6,2.2);shade=(180,165,146,70) if i%3 else (68,64,72,60)
- brush.polygon([(x-r,y),(x-r*.4,y-r*.5),(x+r,y-r*.25),(x+r*.6,y+r*.5)],fill=shade)
-# Long irregular, sparse mineral seams break the macro shapes without a tile.
-for i in range(160):
- x,y=rng.uniform(0,size,2);angle=rng.uniform(0,math.tau);points=[]
- for step in range(int(rng.integers(3,8))):
-  x+=math.cos(angle)*rng.uniform(4,18);y+=math.sin(angle)*rng.uniform(4,18);angle+=rng.uniform(-.5,.5);points.append((x,y))
- brush.line(points,fill=(76,70,79,38),width=1)
+  a=angle+k*math.tau/6;rr=r*rng.uniform(.78,1.08);points.append((px+math.cos(a)*rr,py+math.sin(a)*rr*.66))
+ brush.polygon(points,fill=(143,136,124,42),outline=(72,74,81,40),width=1)
+ brush.line(points[:3],fill=(179,168,147,40),width=1)
+# Sparse fracture seams align with the main geology, without gravel speckles.
+for i in range(240):
+ x,y=rng.uniform(0,size,2);angle=-.38+rng.uniform(-.28,.28);points=[]
+ for step in range(int(rng.integers(4,10))):
+  x+=math.cos(angle)*rng.uniform(7,19);y+=math.sin(angle)*rng.uniform(7,19);angle+=rng.uniform(-.20,.20);points.append((x,y))
+ brush.line(points,fill=(70,74,83,23),width=1)
 # Static contact shade does not depend on camera rotation or a shadow slot.
 contact=Image.new('RGBA',(size,size));cd=ImageDraw.Draw(contact)
 for p in layout['placements']:
  if not any(key in p['asset'] for key in ['eroded-wall','great-column','workbench','shelf','cot','resurrection-altar']):continue
  x,y=pixel(p['x'],p['z']);s=p['scale'];r=(2.4 if 'wall' in p['asset'] else 1.2)*s*unit
- cd.ellipse((x-r,y-r*.65,x+r,y+r*.65),fill=(31,34,48,85 if 'wall' in p['asset'] else 65))
+ cd.ellipse((x-r,y-r*.65,x+r,y+r*.65),fill=(31,34,44,48 if 'wall' in p['asset'] else 48))
 paint=Image.alpha_composite(paint.convert('RGBA'),contact.filter(ImageFilter.GaussianBlur(unit*.45)))
 # Warm mineral tint beneath lanterns is baked once, without point-light passes.
 glow=Image.new('RGBA',(size,size));gd=ImageDraw.Draw(glow)
@@ -63,25 +80,10 @@ subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-l
 subprocess.run([str(ktx),'validate',str(out/'cave-ground.ktx2')],check=True,capture_output=True)
 data=(out/'cave-ground.ktx2').read_bytes();url='./content/'+hashlib.sha256(data).hexdigest()+'.ktx2';(assets/url).write_bytes(data)
 
-# Packed cave microdetail: irregular fractured stone in R, fine dust in G.
-# The two runtime rotations keep its small repeated pattern unobtrusive.
-detailSize=256
-yy,xx=np.mgrid[:detailSize,:detailSize].astype(np.float32)
-cell=32;gx=np.floor(xx/cell).astype(int);gy=np.floor(yy/cell).astype(int)
-sites=rng.uniform(.18,.82,(10,10,2));distances=[]
-for oy in [-1,0,1]:
- for ox in [-1,0,1]:
-  ix=gx+ox;iy=gy+oy;site=sites[(iy+1)%10,(ix+1)%10]
-  distances.append(((ix+site[:,:,0])*cell-xx)**2+((iy+site[:,:,1])*cell-yy)**2)
-d=np.sort(np.stack(distances),axis=0);edge=np.sqrt(d[1])-np.sqrt(d[0])
-grain=rng.random((256,256));stone=.50+.14*np.clip(edge/7,0,1)-.20*np.exp(-edge*1.8)+(grain-.5)*.13
-dust=.50+(grain-.5)*.18
-packed=np.uint8(np.clip(np.stack([stone,dust,np.full_like(stone,.5)],axis=2)*255,0,255))
-Image.fromarray(packed).save(out/'cave-detail.png')
-subprocess.run([str(ktx),'create','--format','R8G8B8_UNORM','--encode','basis-lz','--qlevel','255','--generate-mipmap',str(out/'cave-detail.png'),str(out/'cave-detail.ktx2')],check=True,capture_output=True)
-detailBytes=(out/'cave-detail.ktx2').read_bytes();detailUrl='./content/'+hashlib.sha256(detailBytes).hexdigest()+'.ktx2';(assets/detailUrl).write_bytes(detailBytes)
-village=json.loads((assets/'village-ground.json').read_text(encoding='utf-8'));detail={**village['detail'],'url':detailUrl,'bytes':len(detailBytes),'codec':'etc1s','gpuBlockBytes':8}
-
-manifest={**village,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'detail':detail,'resources':[url,detail['url']],'gpuBytesWithMips':round((2048*2048+256*256/2)*4/3),'compression':'KTX2/Basis ETC1S color and linear packed detail','method':'unique-world-space-eroded-cave-rock-and-dust'}
+# Retain the already published microdetail map byte-for-byte. Only the macro
+# paint/contact changes; no unrelated detail resources are recompressed.
+previous=json.loads((assets/'witch-cave-ground.json').read_text(encoding='utf-8'))
+detail=previous['detail']
+manifest={**previous,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'resources':[url,detail['url']],'compression':'KTX2/Basis ETC1S color and linear packed detail','method':'unique-world-space-refuge-laboratory-resurrection-rock-and-dust'}
 (assets/'witch-cave-ground.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
-print(json.dumps({'bytes':len(data),'newGenerationCalls':0,'textureMax':2048}))
+print(json.dumps({'bytes':len(data),'newGenerationCalls':0,'textureMax':2048,'detailReused':True}))

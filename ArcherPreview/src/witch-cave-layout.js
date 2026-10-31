@@ -2,6 +2,13 @@
 // they are deliberately not a rectangular dungeon grid.
 export const CAVE_ENTRY={x:-42,z:43};
 export const CAVE_BOSS={x:29,z:-30,r:14,height:6};
+// Story dressing follows the existing playable shelves; the large arena and
+// the connected water/route footprint are retained for the 5.7 m encounter.
+export const CAVE_STORY_ZONES=Object.freeze({
+  refuge:Object.freeze({x:-30,z:19,r:7,height:1}),
+  laboratory:Object.freeze({x:-35,z:-18,r:9,height:3}),
+  resurrection:Object.freeze({x:29,z:-39.5,height:6,altarScale:1.25}),
+});
 export const CAVE_ROOMS=[
   {x:-42,z:43,r:8,height:0},{x:-30,z:19,r:7,height:1},
   {x:-35,z:-18,r:9,height:3},{x:7,z:27,r:8,height:1.4},
@@ -15,7 +22,7 @@ export const CAVE_ROUTES=[
   [[-35,3,1.8,2.8],[-26,-7,2.5,2.7],[-11,-11,3,3],[6,-7,3.2,2.8],[22,0,3.2,3],[35,9,3.2,5.5]],
 ];
 export const CAVE_SEGMENTS=CAVE_ROUTES.flatMap(points=>points.slice(1).map((b,i)=>({a:points[i],b})));
-export const CAVE_STATIONS=[[-35,10,.2],[-25,-24,1.3],[28,21,.8],[39,-9,0]].map(([x,z,yaw])=>{
+export const CAVE_STATIONS=[[-35,10,.2],[-25,-24,1.3]].map(([x,z,yaw])=>{
   let frame;
   for(const {a,b}of CAVE_SEGMENTS){
     const dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),t=Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[1])*dz)/length**2)),px=a[0]+dx*t,pz=a[1]+dz*t,d=Math.hypot(x-px,z-pz);
@@ -88,34 +95,38 @@ export const caveFlowRows=p=>[p.start,...CAVE_SPILLWAY_PROFILE.map((row,i)=>{
 function makePlacements(){
   const out=[];let seed=291005;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
   const add=(n,x,z,scale=1,yaw=0,extra={})=>out.push({id:`cavern-${out.length}`,asset:typeof n==='number'?CAVE_ASSET_IDS[n-1]:n,x,z,scale,yaw,kind:n<=7?'rock':'prop',...extra});
-  // Broken outer walls, with clear gaps for the entrance and the boss approach.
+  // One buried, overlapping mass follows the outer cavern. The old two rows
+  // exposed a seam of repeated small caps at unrelated heights and angles.
   for(let segment=0;segment<CAVE_RIM.length;segment++){
-    const a=CAVE_RIM[segment],b=CAVE_RIM[(segment+1)%CAVE_RIM.length],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/8),yaw=Math.atan2(-dz,dx);
+    const a=CAVE_RIM[segment],b=CAVE_RIM[(segment+1)%CAVE_RIM.length],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/12),yaw=Math.atan2(-dz,dx);
     for(let i=0;i<count;i++){
       const t=(i+.5)/count,x=a[0]+dx*t,z=a[1]+dz*t;
       if(Math.hypot(x+47,z-48)<9)continue;
-      const jitter=(random()-.5)*3;
-      add(i%3===1?2:1,x+dz/length*jitter,z-dx/length*jitter,1.65+random()*.6,yaw+(random()-.5)*.38,{elevation:-3});
-      if(i%3!==1)add(1,x+dz/length*3.5,z-dx/length*3.5,1.45+random()*.8,yaw+(random()-.5)*.6,{elevation:3.8+random()*3.8});
-      if(i%2===0){const xx=x-dz/length*3,zz=z+dx/length*3;add(6,xx,zz,1.35+random()*.4,yaw,{elevation:caveRoofHeight(xx,zz)-3});}
+      const jitter=(random()-.5)*1.3,scale=2.05+random()*.45;
+      add(1,x+dz/length*jitter,z-dx/length*jitter,scale,yaw+(random()-.5)*.24,{topElevation:14.5+1.1*Math.sin(segment*.77),length:8*scale*(.94+.06*Math.sin(segment*1.7+i)),outerMass:true});
+      // A few hanging forms frame turns. They no longer ring the entire map.
+      if(i===0&&segment%2===0){const xx=x-dz/length*3,zz=z+dx/length*3;add(6,xx,zz,1.5,yaw,{elevation:caveRoofHeight(xx,zz)-3,outerCanopy:true});}
     }
   }
-  // Natural rock shoulders under both sides of the traversable shelf.
+  // Broad authored shoulders meet the continuous rock terrain in one course.
+  // Deduplicate neighbouring branches instead of stacking another lower row.
+  const shoulders=[];
   for(const {a,b} of CAVE_SEGMENTS){
-    const dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/7);
+    const dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/10);
     for(let i=0;i<count;i++){
       const t=(i+.5)/count,x=a[0]+dx*t,z=a[1]+dz*t,r=a[3]+(b[3]-a[3])*t,h=a[2]+(b[2]-a[2])*t;
       for(const side of [-1,1]){
         const xx=x-dz/length*(r+1.4)*side,zz=z+dx/length*(r+1.4)*side;
         if(caveSurface(xx,zz).distance<-1.5)continue;
         const water=caveWaterWeight(xx,zz)>.45;
-        const outward=water?1.5:3.3,scale=.8+random()*.3,yaw=Math.atan2(-dz,dx)+(random()-.5)*.4;
+        const outward=water?1.5:4.4,scale=water?1:1.45+random()*.2,yaw=Math.atan2(-dz,dx)+(side<0?Math.PI:0)+(random()-.5)*.18;
         let px=xx-dz/length*side*outward,pz=zz+dx/length*side*outward;
         // A shoulder belonging to one branch must not protrude into another
         // branch at a bend/crossing. Check the entire conservative footprint.
         const safe=()=>[-1,0,1].every(u=>[-1,0,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*3.3*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*3.3*scale).distance>.6));
         for(let attempt=0;attempt<10&&!safe();attempt++){px-=dz/length*side*.7;pz+=dx/length*side*.7;}
-        if(!safe())continue;
+        if(!safe()||shoulders.some(p=>Math.hypot(px-p.x,pz-p.z)<(water?7.5:10)))continue;
+        shoulders.push({x:px,z:pz});
         // Replace thin water-facing ledges, rather than stacking more detail.
         // Their caps sit below the continuous walking surface; the thick body
         // bridges the eroded shoulder down into the basin. Collision is baked.
@@ -124,8 +135,8 @@ function makePlacements(){
           const supportScale=Math.max(1.45,(h-.24-pool.height+.5)/3.7728869915);
           add(CAVE_SUPPLEMENT_IDS[0],xx,zz,supportScale,yaw,{kind:'rock',topElevation:h-.24,foundation:true});
         }
-        else add(1,px,pz,scale,yaw,{topElevation:h+10.5+random()*2.1});
-        if(random()<.26)add(5,xx-dz/length*side*1.6,zz+dx/length*side*1.6,.55+random()*.5,random()*6.28,{elevation:h-.5});
+        else add(1,px,pz,scale,yaw,{topElevation:h+10.4+Math.sin(x*.13+z*.09)*.5,length:(7.3+random()*.7)*scale,rockShoulder:true});
+        if(water&&random()<.18)add(5,xx-dz/length*side*1.6,zz+dx/length*side*1.6,.6+random()*.25,yaw,{elevation:h-.5});
       }
     }
   }
@@ -152,56 +163,44 @@ function makePlacements(){
   }
   add(11,-22,-3,1.2,.15,{elevation:-2});add(12,-39,-25,1,0,{elevation:2.5});
   add(8,-39,-25,1.4,0,{elevation:2.5});
-  for(const [x,z]of [[-45,38],[-36,23],[-40,-12],[-23,-30],[-3,-31],[12,30],[25.8,12.8],[46,-8],[19,-35],[36,-38]])add(13,x,z,1,random()*6.28,{colliderRadius:.45});
-  // A former saint's dwelling occupies a spacious apse, rather than a palace.
-  // The 5.7 m creature's hands extend almost 6 m from its root. Keep the same
-  // dwelling props on the apse perimeter, leaving its centre open for combat.
-  add(15,29,-38.5,1.45,0,{elevation:6,colliderRadius:3.8});
-  for(const [dx,dz]of [[-4,-4],[4,-4],[-4,4],[4,4]])add(16,dz>0?(dx<0?19.5:38.5):29+dx,-34+dz,1.1,Math.atan2(dz,-dx),{elevation:6,colliderRadius:.55,colliderOffsetX:-.74});
+  for(const [x,z]of [[-45,38],[-34,22],[-40,-14],[-30,-23],[-3,-31],[12,30],[35,15],[46,-8],[24,-39],[35,-39]])add(13,x,z,.9,0,{colliderRadius:.36});
+  // A dry sleeping alcove retains the saint's ordinary life near the entrance.
+  // Human-scale furniture sits at the room edge, away from its through route.
+  add(20,-33.2,21.4,.58,1.45,{elevation:1,colliderRadius:.85,storyZone:'refuge'});
+  add(8,-35,18.7,.65,Math.PI/2,{elevation:1,storyZone:'refuge'});
+  add(17,-34.8,18.7,.29,Math.PI/2,{topElevation:3.12,storyZone:'refuge'});
+  add('crate-barrel-cluster',-34.1,24.1,.7,.15,{elevation:1,colliderRadius:.55,storyZone:'refuge'});
+  add('firewood',-34.7,22.8,.5,.1,{elevation:1,storyZone:'refuge'});
+  // Bench and supplies form one working wall in the laboratory, with a clear
+  // central approach and a smaller secondary table near the preserved body.
+  add(18,-38.7,-17,.95,Math.PI/2,{elevation:3,colliderRadius:1.1,storyZone:'laboratory'});
+  add(19,-39.4,-21.2,.92,Math.PI/2,{elevation:3,colliderRadius:1.25,storyZone:'laboratory'});
+  add('crate-barrel-cluster',-39.5,-23.2,.8,.2,{elevation:3,colliderRadius:.65,storyZone:'laboratory'});
+  add('handcart',-36.7,-23.6,.85,1.3,{elevation:3,colliderRadius:.8,storyZone:'laboratory'});
+  add('firewood',-40.2,-14.8,.55,.1,{elevation:3,storyZone:'laboratory'});
+  // Resurrection apparatus is concentrated at the rear. Removing the two
+  // forward collector arms frees the arena silhouette and full-pose movement.
+  const ritual=CAVE_STORY_ZONES.resurrection;
+  add(15,ritual.x,ritual.z,ritual.altarScale,0,{elevation:6,colliderRadius:3.2,storyZone:'resurrection'});
+  // The preserved body is an approved static copy of the existing Joachim.
+  // Its lowest scarf point is buried 8 cm into the support; no rig runs here.
+  add('joachim-resting',ritual.x,ritual.z,1,0,{elevation:6+1.7321051359*ritual.altarScale-.08,storyZone:'resurrection'});
+  for(const [x,z,yaw]of [[24.7,-39.3,0],[33.3,-39.3,Math.PI]])add(16,x,z,1,yaw,{elevation:6,colliderRadius:.55,colliderOffsetX:-.74,storyZone:'resurrection'});
   add(8,29,-43.5,2.6,0,{elevation:6});
   add(17,29,-43.1,1,0,{topElevation:11.5});
-  add(18,20,-35,1.05,.1,{elevation:6,colliderRadius:1.35});
-  add(19,20,-38,1.05,.1,{elevation:6,colliderRadius:1.15});
-  add(20,37,-35,1.1,-.3,{elevation:6,colliderRadius:1});
-  add('crate-barrel-cluster',18.5,-33,.65,.6,{elevation:6,colliderRadius:.65});
-  add('firewood',21.7,-37,.65,.2,{elevation:6});
-  add('crate-barrel-cluster',37.7,-38,.6,1.8,{elevation:6,colliderRadius:.6});
+  add(18,23.2,-38.1,.58,.3,{elevation:6,colliderRadius:.8,storyZone:'resurrection'});
+  add('crate-barrel-cluster',23,-39.6,.5,.6,{elevation:6,colliderRadius:.4,storyZone:'resurrection'});
   add('crate-barrel-cluster',-44,40,.8,.3,{colliderRadius:.7});
   add('firewood',-46,43,.7,0);add('handcart',-37,45,.8,1.8,{colliderRadius:1});
-  for(let i=0;i<30;i++){
+  for(let i=0;i<18;i++){
     const a=random()*Math.PI*2,r=8+random()*36,x=Math.cos(a)*r,z=Math.sin(a)*r;
     if(caveSurface(x,z).distance<3)continue;
     add(i%2?'rock-02-jagged-outcrop':'rock-01-mossy-boulder',x,z,.65+random(),random()*6.28,{elevation:-3});
-    if(i%3===0)add(5,x+2,z,1+random()*.8,random()*6.28,{elevation:-2.8});
+    if(i%4===0)add(5,x+2,z,.85+random()*.4,random()*6.28,{elevation:-2.8});
   }
   // Broad support below the ritual chamber's exposed southern edge.
   for(const angle of [-.9,-.45,0,.45,.9])add(CAVE_SUPPLEMENT_IDS[0],CAVE_BOSS.x+Math.sin(angle)*15.3,CAVE_BOSS.z+Math.cos(angle)*15.3,1.9,-angle,{kind:'rock',topElevation:CAVE_BOSS.height-.24,foundation:true});
   for(const p of CAVE_WATERFALLS)add(CAVE_SUPPLEMENT_IDS[1],p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,spillway:true});
-  // Reuse the authored eroded-wall silhouette at the foot of dry shoulders.
-  // The high row alone left a smooth terrain ramp exposed below its rocks.
-  // These lower pieces stay outside the walking union and the giant's arena;
-  // existing placements, their IDs and their random sequence remain intact.
-  const lowerWalls=[];
-  for(const {a,b}of CAVE_SEGMENTS){
-    const dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),count=Math.ceil(length/10);
-    for(let i=0;i<count;i++)for(const side of [-1,1]){
-      if(lowerWalls.length>=40)continue;
-      const t=(i+.5)/count,x=a[0]+dx*t,z=a[1]+dz*t,h=a[2]+(b[2]-a[2])*t,r=a[3]+(b[3]-a[3])*t;
-      const scale=1.22,yaw=Math.atan2(-dz,dx)+(side<0?Math.PI:0),nx=-dz/length*side,nz=dx/length*side;
-      let px=x+nx*(r+4.45),pz=z+nz*(r+4.45);
-      const safe=()=>[-1,-.5,0,.5,1].every(u=>[-1,-.5,0,.5,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*2.95*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*2.95*scale).distance>=.8));
-      for(let k=0;k<3&&!safe();k++){px+=nx*.35;pz+=nz*.35;}
-      if(!safe()||caveWaterWeight(px,pz)>.25||Math.hypot(px-CAVE_BOSS.x,pz-CAVE_BOSS.z)<25||lowerWalls.some(p=>Math.hypot(px-p.x,pz-p.z)<7.5))continue;
-      add(1,px,pz,scale,yaw,{elevation:h+1.5,lowerShoulder:true});lowerWalls.push({x:px,z:pz});
-    }
-  }
-  for(const room of CAVE_ROOMS.filter(r=>r.r>=7&&r!==CAVE_BOSS))for(let i=0;i<12;i++){
-    if(lowerWalls.length>=40)continue;
-    const angle=i*Math.PI/6,scale=1.22,yaw=angle,px=room.x+Math.sin(angle)*(room.r+4.6),pz=room.z+Math.cos(angle)*(room.r+4.6);
-    if(caveWaterWeight(px,pz)>.25||Math.hypot(px-CAVE_BOSS.x,pz-CAVE_BOSS.z)<25||lowerWalls.some(p=>Math.hypot(px-p.x,pz-p.z)<7.5))continue;
-    if(![-1,-.5,0,.5,1].every(u=>[-1,-.5,0,.5,1].every(v=>caveSurface(px+Math.cos(yaw)*u*4*scale+Math.sin(yaw)*v*2.95*scale,pz-Math.sin(yaw)*u*4*scale+Math.cos(yaw)*v*2.95*scale).distance>=.8)))continue;
-    add(1,px,pz,scale,yaw,{elevation:room.height+1.5,lowerShoulder:true});lowerWalls.push({x:px,z:pz});
-  }
   return out;
 }
 export const CAVE_PLACEMENTS=makePlacements();

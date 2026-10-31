@@ -6,6 +6,7 @@ import {ElenaBrain,ELENA_HOME,MOURNING_SIZE,MOURNING_MOVEMENT,MOURNING_CAST_LEAD
 import {MourningCaveNavigation} from '../src/mourning-cave-navigation.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {caveObstacles} from '../src/witch-cave-layout.js';
+import {mourningCaveClearance} from '../src/mourning-cave-clearance.js';
 
 function fixture(navigation={free:()=>true,segmentClear:()=>true}){
   const e={actor:{position:new Vector3(25.5,6,-24.125)},brain:new ElenaBrain({idle:6,walk:2.4,cast:3,dead:2.4},{mourning:true}),home:ELENA_HOME,radius:MOURNING_SIZE.radius,stopDistance:MOURNING_SIZE.stopDistance,movementNavigation:navigation,world:{terrain:{heightAt:()=>6}},animator:{gaitRate:0},spell:{resets:0,reset(){this.resets++;}}};
@@ -20,8 +21,12 @@ function tick(f,dt,{freeze=false}={}){
 }
 
 test('a concave full-pose corner cannot be accepted between coarse route samples',()=>{
-  const nav=new MourningCaveNavigation(caveObstacles()),a={x:34.487347793765366,z:-23.673660958185792},b={x:33.47617252962664,z:-23.999861610820517},r=MOURNING_SIZE.radius;
+  // The former corner was opened by the rear apparatus regrouping. This
+  // actual new boundary still dips below the required 8 cm root reserve
+  // between the old 40 cm sample locations, despite both endpoints being free.
+  const nav=new MourningCaveNavigation(caveObstacles()),a={x:35.299301327206194,z:-31.264836706686765},b={x:33.907096239738166,z:-30.257714561885223},r=MOURNING_SIZE.radius;
   assert.ok(nav.free(a,r,80));assert.ok(nav.free(b,r,80));
+  assert.ok(mourningCaveClearance(35.17539507442154,-31.17520283579943)<.08,'actual interior point fails the mandatory root reserve');
   assert.equal(CaveNavigation.prototype.segmentClear.call(nav,a,b,r),true,'reproduces the old coarse acceptance');
   assert.equal(nav.segmentClear(a,b,r),false,'the whole segment must be certified, not only its sampled points');
   assert.equal(nav.segmentClear({x:25.5,z:-24.125},{x:31.8,z:-24.125},r),true,'the useful charge corridor remains open');
@@ -46,6 +51,15 @@ for(const fps of [30,60])test(`a physically stalled step tries one alternate the
   assert.equal(f.e.brain.mode,'attack');assert.ok(elapsed<.7);assert.equal(Vector3.Distance(start,f.e.actor.position),0);
   assert.equal(f.motion.redirects,1);assert.equal(f.motion.blockedRecoveries,2);assert.equal(f.motion.selections,2);assert.equal(f.motion.magicFallbacks,1);
   assert.equal(f.e.brain.time,0);assert.equal(f.e.brain.castLeadInRemaining,MOURNING_CAST_LEAD_IN);
+});
+
+for(const fps of [30,60])test(`a step that initially progresses then stops gets one rolling ${MOURNING_ROUTE_POLICY.progressWindow}s recovery window at ${fps}fps`,()=>{
+  const f=fixture();f.e.brain.reposition();tick(f,1/fps);tick(f,1/fps);const stopped=f.e.actor.position.clone(),serial=f.e.brain.serial;let stalled=0;
+  // This models a real collision/separation after a little successful movement.
+  // A batch-aligned watchdog counts that early movement at the end of its first
+  // window, then waits a second full window before recognizing the stoppage.
+  while(f.e.brain.serial===serial&&stalled<.5){tick(f,1/fps,{freeze:true});stalled+=1/fps;}
+  assert.ok(f.e.brain.serial>serial,'a stopped action must actually hand off');assert.ok(stalled<=MOURNING_ROUTE_POLICY.progressWindow+2/fps+1e-8,`${stalled}s after the last net progress`);assert.ok(stalled<=.45);assert.ok(f.e.actor.position.equals(stopped));assert.equal(f.e.brain.moveKind,'walk');assert.equal(f.e.chargeOrigin,null);
 });
 
 test('a rejected fast charge switches to ordinary walk speed in the same frame',()=>{

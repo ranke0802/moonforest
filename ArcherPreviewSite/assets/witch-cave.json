@@ -2,7 +2,7 @@
   "version": 1,
   "id": "witch-cave",
   "complete": true,
-  "availableAssetCount": 28,
+  "availableAssetCount": 29,
   "assets": {
     "cave-01-eroded-wall": {
       "name": "침식된 동굴 암벽",
@@ -3969,10 +3969,98 @@
         "shading": "toon-color"
       },
       "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+    },
+    "joachim-resting": {
+      "name": "요아힘 · 보존 중인 신체",
+      "category": "prop",
+      "bounds": [
+        0.5442567467689514,
+        0.4164215624332428,
+        1.6999999284744263
+      ],
+      "height": 0.4164215624332428,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/04cd1d393deaf134e4f5f9c01d5015954fb1e2ce2759cf40ff60ff9a400fd87d.gltf",
+          "resources": [
+            "./content/2d936a5b4aa792e59c261825f1e51cfd9a8b4f21b4dbb766d679527348b3f9b1.bin",
+            "./content/623ba84e8313de48501b16b13df69e7f4336040b80b0a4045b126a812bdcce32.ktx2",
+            "./content/04cd1d393deaf134e4f5f9c01d5015954fb1e2ce2759cf40ff60ff9a400fd87d.gltf"
+          ],
+          "triangles": 48722,
+          "textureSize": 1024,
+          "bytes": 1900417
+        },
+        {
+          "level": 1,
+          "model": "./content/6c705632421517b0bd384377e058887de3be30fc6261968045c36edc082fe9bb.gltf",
+          "resources": [
+            "./content/20b146b305e81c0bef615b8ddd261ada4139537bff60e9560e4e31ce6f9da167.bin",
+            "./content/2a5b746805de5076b30af4825632c0b812609ce14678fd52e7bd0bf89b47d938.bin",
+            "./content/475332a4ad629acda72164e6a7966d67ea363ff044fca61f20c34d4dfbfa6e02.bin",
+            "./content/e8e2e07e799d3016ea115a2fd19d734498e2619fd4e05f5f99c3db7ad6b7c262.bin",
+            "./content/da666276d4a376de54502009d61032ce2900e5a1f2f02d4a238e9642d78c29ad.ktx2",
+            "./content/6c705632421517b0bd384377e058887de3be30fc6261968045c36edc082fe9bb.gltf"
+          ],
+          "triangles": 39272,
+          "textureSize": 512,
+          "bytes": 1515287
+        },
+        {
+          "level": 2,
+          "model": "./content/1e0c0bc564e783543204cb25c327894add5d5b4603cc7643103f0642c6069f59.gltf",
+          "resources": [
+            "./content/596e48679dff0c25a0d357421a36bc9526414bfeb32cbc3d206f2b5ad0be18c8.bin",
+            "./content/74e5120e6ec55abfa7639d2961a15577c7c3449e7143b0502504cc4a05ca8dee.bin",
+            "./content/5eb7f5c21341f06a0e417d70ab3caec8da031b1a26b469245a88dc9f793efbe0.bin",
+            "./content/7897c09a46a30e8898b58293e8cd14f83e452601272413223ffef88755d7b9ee.bin",
+            "./content/4901eba81fb5c6c50f3b936935b30ecf417fed2a4f59f81f72626b29defe7284.ktx2",
+            "./content/1e0c0bc564e783543204cb25c327894add5d5b4603cc7643103f0642c6069f59.gltf"
+          ],
+          "triangles": 28438,
+          "textureSize": 256,
+          "bytes": 1170798
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/04cd1d393deaf134e4f5f9c01d5015954fb1e2ce2759cf40ff60ff9a400fd87d.gltf",
+        "resources": [
+          "./content/2d936a5b4aa792e59c261825f1e51cfd9a8b4f21b4dbb766d679527348b3f9b1.bin",
+          "./content/623ba84e8313de48501b16b13df69e7f4336040b80b0a4045b126a812bdcce32.ktx2",
+          "./content/04cd1d393deaf134e4f5f9c01d5015954fb1e2ce2759cf40ff60ff9a400fd87d.gltf"
+        ],
+        "triangles": 48722,
+        "textureSize": 1024,
+        "bytes": 1900417
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2474224,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8,
+            "url": "./content/77a90e00dbdf739deb19ce8f60554ddee3ef0b80dc9f542f7b5edb95c5b8f164.ktx2"
+          }
+        },
+        "resources": [
+          "./content/77a90e00dbdf739deb19ce8f60554ddee3ef0b80dc9f542f7b5edb95c5b8f164.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED",
+      "derivedFromExistingCharacter": true,
+      "sourceSha256": "6c7267cd0841d7fc2424bd4f02bb2b84488b1d8b3451e0a0fae165e1d8c7df2b"
     }
   },
   "homes": 0,
-  "placementCount": 314,
+  "placementCount": 149,
   "newSourceModels": 22,
   "reusedSourceModels": 6,
   "spentCredits": 440,
@@ -3996,5 +4084,6 @@
   "geometryLod": {
     "nearColorResolution": 4096
   },
-  "groundManifest": "witch-cave-ground"
+  "groundManifest": "witch-cave-ground",
+  "staticCharacterReuses": 1
 }

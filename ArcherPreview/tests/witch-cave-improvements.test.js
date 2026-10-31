@@ -38,7 +38,7 @@ test('collision bake is tied to current layout and terrain, uses only original a
  for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
  assert.equal(CAVE_COLLISION_DATA.fingerprint,hash.digest('hex'),'rebake collisions after moving rocks or changing heights');
  assert.ok(JSON.stringify(CAVE_COLLISION_DATA).length<16000,'small collision metadata, no render models downloaded');
- assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.asset)).size,28);
+ assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.asset)).size,29,'22 approved cave assets, six original props and one frozen Joachim reuse');
  assert.ok(CAVE_PLACEMENTS.filter(p=>p.asset==='cave-01-eroded-wall').length<150);
 });
 

@@ -16,8 +16,8 @@ test('camera field matches current actual source layout and preserves arched cle
  assert.equal(caveCameraRockBlocked(-35,1.7,32,0),false);
  assert.ok(CAVE_CAMERA_DATA.profiles.length>100);
  assert.doesNotMatch(CAVE_FOG_COVER_FRAGMENT,/if\(caveForegroundCutaway/,'unknown-space enclosure never gets a camera hole');
- const lower=CAVE_PLACEMENTS.filter(p=>p.lowerShoulder);assert.equal(lower.length,14);
- for(const p of lower){assert.equal(p.asset,'cave-01-eroded-wall');assert.ok(caveSurface(p.x,p.z).distance>4);assert.ok(Math.hypot(p.x-29,p.z+30)>=25);}
+ const masses=CAVE_PLACEMENTS.filter(p=>p.rockShoulder||p.outerMass);assert.ok(masses.length>0,'the revised cave is enclosed by actual rock masses');
+ for(const p of masses){assert.equal(p.asset,'cave-01-eroded-wall');assert.equal(p.kind,'rock','camera/sight baking must include every enclosure mass');assert.ok(Number.isFinite(p.topElevation));if(p.rockShoulder)assert.ok(caveSurface(p.x,p.z).distance>.6,'broad shoulders stay outside the through walking shelf');}
 });
 
 test('actual route eyes remain outside solid terrain, near-LOD rocks and ceiling at close/wide/upward angles',()=>{

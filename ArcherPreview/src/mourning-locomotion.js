@@ -67,10 +67,15 @@ export class MourningLocomotion {
       this.launched=true;
     }
     if(result.speed>0){
-      this.watchTime+=Math.min(.1,e.dt??0);this.bestDistance=Math.min(this.bestDistance,distance(e.actor.position,target));
-      if(this.watchTime>=MOURNING_ROUTE_POLICY.progressWindow){
-        if(this.checkpoint-this.bestDistance<.03)return this.redirect(e,player,result);
-        this.watch(e);
+      this.bestDistance=Math.min(this.bestDistance,distance(e.actor.position,target));
+      // The position here includes the preceding frame's real navigation and
+      // player separation. Restart on actual progress, rather than only at a
+      // fixed window boundary: early motion must not buy a stopped charge a
+      // second complete window after it has run into the player or a wall.
+      if(this.checkpoint-this.bestDistance>=.03)this.watch(e);
+      else{
+        this.watchTime+=Math.min(.1,e.dt??0);
+        if(this.watchTime>=MOURNING_ROUTE_POLICY.progressWindow)return this.redirect(e,player,result);
       }
     }else this.watch(e);
     this.gait(e,result.speed);

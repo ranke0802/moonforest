@@ -28,11 +28,11 @@ export function partitionCaveGround(mesh,terrain){
 // Bounded, static colour pools preserve painted toon/shadow/ink passes. They
 // illuminate only environment materials, never the existing 8K player.
 const colorCode=`
-float caveWarm = max(max(exp(-dot(vPositionW.xz-vec2(-44.,38.),vPositionW.xz-vec2(-44.,38.))/35.),
-                        exp(-dot(vPositionW.xz-vec2(-38.,-15.),vPositionW.xz-vec2(-38.,-15.))/55.)),
-                    max(exp(-dot(vPositionW.xz-vec2(20.,-36.),vPositionW.xz-vec2(20.,-36.))/32.),
-                        exp(-dot(vPositionW.xz-vec2(35.,16.),vPositionW.xz-vec2(35.,16.))/30.)));
-float caveViolet = exp(-dot(vPositionW.xz-vec2(29.,-34.),vPositionW.xz-vec2(29.,-34.))/40.);
+float caveWarm = max(max(exp(-dot(vPositionW.xz-vec2(-44.,38.),vPositionW.xz-vec2(-44.,38.))/24.),
+                        exp(-dot(vPositionW.xz-vec2(-33.,21.),vPositionW.xz-vec2(-33.,21.))/32.)),
+                    max(exp(-dot(vPositionW.xz-vec2(-39.,-19.),vPositionW.xz-vec2(-39.,-19.))/45.),
+                        exp(-dot(vPositionW.xz-vec2(23.,-39.),vPositionW.xz-vec2(23.,-39.))/18.)));
+float caveViolet = exp(-dot(vPositionW.xz-vec2(29.,-39.5),vPositionW.xz-vec2(29.,-39.5))/30.);
 float caveLow = mix(.82,1.,smoothstep(-3.,10.,vPositionW.y));
 vec3 caveTint = mix(vec3(.87,.92,1.)*caveLow,vec3(1.14,1.02,.84),caveWarm*.78);
 caveTint = mix(caveTint,vec3(1.02,.91,1.13),caveViolet*.62);
@@ -52,8 +52,8 @@ if(caveCliff>.001){
 `;
 export class CaveSurfaceShade extends MaterialPluginBase {
  constructor(material,{ground=false,camera=null}={}){super(material,ground?'CaveGroundMood':'CaveRockMood',325,{},true,true);this.ground=ground;this.camera=camera;this.active=true;}
- getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'},{name:'caveEye',size:3,type:'vec3'},{name:'caveFocus',size:3,type:'vec3'},{name:'cavePlayerView',size:4,type:'vec4'},{name:'caveBossView',size:4,type:'vec4'}],fragment:'uniform float caveMoodActive;uniform vec3 caveEye;uniform vec3 caveFocus;uniform vec4 cavePlayerView;uniform vec4 caveBossView;'};}
- bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}const fog=this._material.getScene().metadata?.caveFogRuntime,p=fog?.playerView,b=fog?.bossView;buffer.updateFloat4('cavePlayerView',p?.x??0,p?.y??0,p?.z??0,p?.w??0);buffer.updateFloat4('caveBossView',b?.x??0,b?.y??0,b?.z??0,b?.w??0);}
+ getUniforms(){return {ubo:[{name:'caveMoodActive',size:1,type:'float'},{name:'caveRockTone',size:1,type:'float'},{name:'caveEye',size:3,type:'vec3'},{name:'caveFocus',size:3,type:'vec3'},{name:'cavePlayerView',size:4,type:'vec4'},{name:'caveBossView',size:4,type:'vec4'}],fragment:'uniform float caveMoodActive;uniform float caveRockTone;uniform vec3 caveEye;uniform vec3 caveFocus;uniform vec4 cavePlayerView;uniform vec4 caveBossView;'};}
+ bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);buffer.updateFloat('caveRockTone',this._material.metadata?.caveRockTone?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}const fog=this._material.getScene().metadata?.caveFogRuntime,p=fog?.playerView,b=fog?.bossView;buffer.updateFloat4('cavePlayerView',p?.x??0,p?.y??0,p?.z??0,p?.w??0);buffer.updateFloat4('caveBossView',b?.x??0,b?.y??0,b?.z??0,b?.w??0);}
  getCustomCode(type){
   if(type!=='fragment')return null;
   const common={CUSTOM_FRAGMENT_DEFINITIONS:CAVE_VIEW_GLSL,CUSTOM_FRAGMENT_MAIN_BEGIN:this.ground?`\n#ifdef NORMAL\nif(caveMoodActive>.5 && caveTerrainCutaway(vPositionW,vNormalW,caveEye,caveFocus))discard;\n#endif\n`:'if(caveMoodActive>.5 && caveForegroundCutaway(vPositionW,caveEye,caveFocus))discard;'};
@@ -61,7 +61,7 @@ export class CaveSurfaceShade extends MaterialPluginBase {
   // is assigned. Register both names so the floor works even before another
   // floor plugin is added during asynchronous texture loading.
   return {...common,CUSTOM_FRAGMENT_BEFORE_FOG:this.ground?'if(caveMoodActive>.5){'+colorCode+'color.rgb *= caveTint;'+cliffCode+'}':'',
-   CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:this.ground?'':'if(caveMoodActive>.5){'+colorCode+'finalDiffuse *= caveTint;}'};
+   CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:this.ground?'':'if(caveMoodActive>.5){'+colorCode+'float caveStoneValue=dot(finalDiffuse,vec3(.299,.587,.114));finalDiffuse=mix(finalDiffuse,vec3(caveStoneValue)*vec3(.94,.98,1.04),caveRockTone*.28);finalDiffuse *= caveTint;}'};
  }
 }
 export function caveSurfaceStyle(world){

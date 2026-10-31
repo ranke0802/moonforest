@@ -21,6 +21,7 @@ vec3 caveRockShade(vec3 p,vec3 normal,float explored){
  // Retain the authored rock map's coloured facets instead of reducing it to
  // grey luminance and coating every wall with a synthetic concrete palette.
  vec3 rock=paint*.96+vec3(.018,.014,.016);
+ rock=mix(rock,vec3(dot(rock,vec3(.299,.587,.114)))*vec3(.94,.98,1.04),.28);
  float facing=.82+.18*max(0.,dot(normalize(normal),normalize(vec3(-.35,.78,-.52))));
  return rock*facing*mix(.87,1.,smoothstep(.05,.95,explored));
 }`;

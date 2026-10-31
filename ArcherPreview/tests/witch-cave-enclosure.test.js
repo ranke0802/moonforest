@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NullEngine,MeshBuilder,PBRMaterial} from '@babylonjs/core';
 import {caveForegroundCutaway,CAVE_VIEW_GLSL,CAVE_FOG_START,CAVE_FOG_END} from '../src/witch-cave-visibility.js';
-import {CAVE_ROOMS,caveObstacles} from '../src/witch-cave-layout.js';
+import {CAVE_ROOMS,CAVE_ROUTES,caveSurface,caveObstacles} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain,caveClearance} from '../src/witch-cave-terrain.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {createWorld} from '../src/world.js';
@@ -13,6 +13,7 @@ import {VillageOutlines} from '../src/village-outlines.js';
 import {CAVE_SIGHT_DATA} from '../src/witch-cave-sight-data.js';
 import {caveRockOccludes} from '../src/witch-cave-sight.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {CaveFogOfWar,CAVE_FOG_VISIBLE} from '../src/cave-fog-of-war.js';
 
 test('local cave cutaway protects the player while keeping floors, side walls and rear rooms opaque',()=>{
  const eye={x:0,y:6,z:10},focus={x:0,y:1.1,z:0};
@@ -38,15 +39,26 @@ test('joined walking shelves no longer inherit an invisible collision seam',()=>
  }
 });
 
-test('terrain separates rear chambers while retaining open local connecting corridors',()=>{
+test('actual terrain and near-LOD rock sight masks hide rear rooms while keeping local through-route sight open',t=>{
  const terrain=createWitchCaveTerrain();
  function blocks(a,b){
   const steps=Math.ceil(Math.hypot(a.x-b.x,a.z-b.z)/.1),ay=terrain.heightAt(a.x,a.z)+1.6,by=terrain.heightAt(b.x,b.z)+1.6;
-  for(let i=1;i<steps;i++){const t=i/steps;if(terrain.heightAt(a.x+(b.x-a.x)*t,a.z+(b.z-a.z)*t)>ay+(by-ay)*t+.02)return true;}
+  for(let i=1;i<steps;i++){const t=i/steps,x=a.x+(b.x-a.x)*t,z=a.z+(b.z-a.z)*t;if(terrain.heightAt(x,z)>ay+(by-ay)*t+.02||caveRockOccludes(x,z,.2))return true;}
   return false;
  }
- for(const [a,b]of [[0,4],[0,5],[2,3],[2,4]])assert.equal(blocks(CAVE_ROOMS[a],CAVE_ROOMS[b]),true);
- for(const [a,b]of [[0,1],[0,3],[1,3],[3,4]])assert.equal(blocks(CAVE_ROOMS[a],CAVE_ROOMS[b]),false,'adjacent passages stay visually connected');
+ // A bent corridor need not reveal its whole next room from the preceding
+ // room centre. Test actual opacity at unlimited range for remote rooms, then
+ // test short straight sections of every traversable route as positive controls.
+ const fog=new CaveFogOfWar({radius:160,isOpaque:(x,z)=>terrain.heightAt(x,z)>caveSurface(x,z).height+1.5||caveRockOccludes(x,z,.2)});let time=0,openSections=0;
+ try{
+  for(const [a,b]of [[0,4],[0,5],[2,3],[2,4]]){assert.equal(blocks(CAVE_ROOMS[a],CAVE_ROOMS[b]),true,'physical terrain/near-mesh barrier exists');fog.update(CAVE_ROOMS[a],time++,{force:true});assert.notEqual(fog.stateAt(CAVE_ROOMS[b].x,CAVE_ROOMS[b].z),CAVE_FOG_VISIBLE,'remote room is blocked by real opacity, not by the ordinary 24 m range');}
+  fog.radius=12;
+  for(const route of CAVE_ROUTES)for(let i=1;i<route.length;i++){
+   const a=route[i-1],b=route[i],at=t=>({x:a[0]+(b[0]-a[0])*t,z:a[1]+(b[1]-a[1])*t}),from=at(.35),to=at(.65);
+   assert.equal(blocks(from,to),false,'through-route short physical sight stays open');fog.update(from,time++,{force:true});assert.equal(fog.stateAt(to.x,to.z),CAVE_FOG_VISIBLE,'actual mask preserves local route visibility');openSections++;
+  }
+  t.diagnostic(JSON.stringify({remoteRoomPairs:4,openRouteSections:openSections,opacityUsesActualNearMeshBake:true}));
+ }finally{fog.dispose();}
 });
 
 test('cave floor, painted rocks and ink use the same local cutaway and focus',async()=>{
