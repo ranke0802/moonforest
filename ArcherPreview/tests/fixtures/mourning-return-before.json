@@ -1,0 +1,574 @@
+{
+  "baselineRevision": "d1ad05b",
+  "sourceSha256": "da215cd8bda10a4f0b6e6f889e070b6c5c751e31b4daca690a5cf32741ec9228",
+  "scope": "Published d1ad05b source angular samples, retained as a regression baseline; not a runtime dependency.",
+  "sourceAngularSteps": [
+    {
+      "variant": "cast",
+      "degrees": 8.165445554597154
+    },
+    {
+      "variant": "cast_slam",
+      "degrees": 6.252174944068662
+    },
+    {
+      "variant": "cast_alternate",
+      "degrees": 34.52072312563421
+    }
+  ],
+  "alternateReturnCurve": [
+    {
+      "node": "DEF_FrontHand.L_Forearm",
+      "samples": [
+        {
+          "time": 0.8166666666666667,
+          "fromPreviousDegrees": 0.007723198841587042
+        },
+        {
+          "time": 0.8333333333333334,
+          "fromPreviousDegrees": 0
+        },
+        {
+          "time": 0.85,
+          "fromPreviousDegrees": 0
+        },
+        {
+          "time": 0.8666666666666667,
+          "fromPreviousDegrees": 0
+        },
+        {
+          "time": 0.8833333333333333,
+          "fromPreviousDegrees": 0
+        },
+        {
+          "time": 0.9,
+          "fromPreviousDegrees": 0.02659989906443543
+        },
+        {
+          "time": 0.9166666666666666,
+          "fromPreviousDegrees": 0.026599890514552475
+        },
+        {
+          "time": 0.9333333333333333,
+          "fromPreviousDegrees": 0
+        },
+        {
+          "time": 0.95,
+          "fromPreviousDegrees": 0.8963020303336539
+        },
+        {
+          "time": 0.9666666666666667,
+          "fromPreviousDegrees": 0.8959845866442521
+        },
+        {
+          "time": 0.9833333333333333,
+          "fromPreviousDegrees": 11.996032136255124
+        },
+        {
+          "time": 1,
+          "fromPreviousDegrees": 11.996086384382506
+        },
+        {
+          "time": 1.0166666666666666,
+          "fromPreviousDegrees": 17.260382567872036
+        },
+        {
+          "time": 1.0333333333333334,
+          "fromPreviousDegrees": 17.260325327798625
+        },
+        {
+          "time": 1.05,
+          "fromPreviousDegrees": 7.428444460638521
+        },
+        {
+          "time": 1.0666666666666667,
+          "fromPreviousDegrees": 7.428430947114475
+        },
+        {
+          "time": 1.0833333333333333,
+          "fromPreviousDegrees": 4.091283386810855
+        },
+        {
+          "time": 1.1,
+          "fromPreviousDegrees": 4.091402029406718
+        },
+        {
+          "time": 1.1166666666666667,
+          "fromPreviousDegrees": 4.85491615696701
+        },
+        {
+          "time": 1.1333333333333333,
+          "fromPreviousDegrees": 4.8549051683546995
+        },
+        {
+          "time": 1.15,
+          "fromPreviousDegrees": 1.9775582747491944
+        },
+        {
+          "time": 1.1666666666666667,
+          "fromPreviousDegrees": 1.9774298694484294
+        },
+        {
+          "time": 1.1833333333333333,
+          "fromPreviousDegrees": 0.1965600291176411
+        },
+        {
+          "time": 1.2,
+          "fromPreviousDegrees": 0.19771907041788536
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "largestJoint": {
+        "radians": 0.11339615940427805
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4820005285734353
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.1621378747427734
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4820005285734353
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.1621378747427734
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.11339615940427805
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4820005285734353
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.1621378747427734
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4820005285734353
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.1621378747427734
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.2261874337838516
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.820002376752511
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.32099515846597115
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.820002376752511
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.32099515846597115
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.2261874337838516
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.820002376752511
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.32099515846597115
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.820002376752511
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.32099515846597115
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4455558330928694
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7639259552150848
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4609581991843092
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7639259552150848
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4609581991843092
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4455558330928694
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7639259552150848
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4609581991843092
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7639259552150848
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4609581991843092
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.05700372002536765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.24100055043859894
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.0827087686019806
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.24100055043859894
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.0827087686019806
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.05700372002536765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.24100055043859894
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.0827087686019806
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.24100055043859894
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.0827087686019806
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.11401075620911527
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4129865447543617
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.16541909770360028
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4129865447543617
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.16541909770360028
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.11401075620911527
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4129865447543617
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.16541909770360028
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.4129865447543617
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.16541909770360028
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.22558498655495945
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.6645138607954538
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.27306984002496565
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.6645138607954538
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.27306984002496565
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.22558498655495945
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.6645138607954538
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.27306984002496565
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.6645138607954538
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.27306984002496565
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.33518805422995684
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7794644539102752
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.3187893956992765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7794644539102752
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.3187893956992765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.33518805422995684
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7794644539102752
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.3187893956992765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7794644539102752
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.3187893956992765
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.638901487332808
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.305278776872535
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5458936661193237
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.305278776872535
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5458936661193237
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.638901487332808
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.305278776872535
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5458936661193237
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.305278776872535
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5458936661193237
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7041149565386495
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.5620436110782283
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5150526520081578
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.5620436110782283
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5150526520081578
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.7041149565386495
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.5620436110782283
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5150526520081578
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 1.5620436110782283
+      }
+    },
+    {
+      "largestJoint": {
+        "radians": 0.5150526520081578
+      }
+    }
+  ]
+}

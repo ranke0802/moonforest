@@ -11,6 +11,11 @@ export function createLoadingView(doc=document){
     },
     preparing(){get('loading-text').textContent='화면을 준비합니다.';},
     reveal(){overlay.hidden=true;delete doc.documentElement.dataset.loading;},
+    fail(title,message,{retry=true}={}){
+      doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.add('error');
+      get('loading-title').textContent=title;get('loading-text').textContent=message;
+      get('retry-load').hidden=!retry;get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
+    },
     stream(state){
       get('stream-loading').hidden=state.complete||state.total===0||state.unavailable;
       get('stream-bytes').textContent='불러오는 중 '+downloadText(state);get('stream-progress').style.width=Math.min(100,state.ratio*100)+'%';

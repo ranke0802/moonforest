@@ -108,6 +108,8 @@ let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elap
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let screenProjection;
+let reconcilePlayback=()=>{};
+let frameFailure=null;
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 let rollDirection={x:0,z:1};
@@ -147,7 +149,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -320,6 +322,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  frameFailure=null;if(frameLoop)frameLoop.failed=false;
   loadDiagnostics.begin(isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   world.caveFog?.update(mapSpawn(),elapsed,{force:true});
@@ -403,6 +406,9 @@ async function loadCharacter() {
     attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
+    // Loading can finish while iOS has paused RAF. Sample the actual idle now,
+    // rather than revealing the exported bind pose until a simulation tick.
+    animator.update(0);
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = isCave()?'CAVERN / 05':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = character;
@@ -434,7 +440,7 @@ async function loadCharacter() {
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
     syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);
-    world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();
+    world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
@@ -444,14 +450,11 @@ async function loadCharacter() {
     loadDiagnostics.finish(error.message);
     ready=false;
     console.error('[Archer asset load]', error);
-    loading.classList.add('error');
-    $('#loading-title').textContent = '캐릭터를 불러오지 못했습니다';
-    $('#loading-text').textContent = /^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.';
-    $('#retry-load').hidden = false; $('#loading-progress').style.width = '0%';
+    loadingView.fail('캐릭터를 불러오지 못했습니다',/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
-  } finally { loadingAsset = false; $('#character-select').disabled = false; }
+  } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready)reconcilePlayback(); }
 }
 
 function constrainPlayerPosition(previous){
@@ -661,7 +664,7 @@ try {
   training.relocate(world.trainingSpawn);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
-  const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});};
+  const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});if(frameLoop&&!frameLoop.running)reconcilePlayback();frameLoop?.recover();};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
   setupFullscreen($('#fullscreen-button'), toast, {autoEnter:false});
@@ -720,10 +723,15 @@ try {
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
-    try{render(dt);}finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
+    try{render(dt);}catch(error){
+      frameFailure={message:String(error.message??error).slice(0,240),at:new Date().toISOString()};ready=false;
+      frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
+      console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message);
+    }finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
   });
-  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen();if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen);};
+  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true;if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true);};
   const dialogObserver=new MutationObserver(syncPlayback);
+  reconcilePlayback=syncPlayback;
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog']){
     dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
     // Closing button handlers run before this bubble handler, keeping iOS
@@ -733,10 +741,12 @@ try {
   // Run after the pause bubble handler so reset buttons also retain their final
   // preview frame; combat remains frozen during both settings dialogs.
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
-  document.addEventListener('visibilitychange',syncPlayback);
+  document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
-  window.addEventListener('pageshow',syncPlayback);
-  window.addEventListener('focus',()=>{frameLoop.last=null;frameDiagnostics.suspend();});
+  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend();};
+  window.addEventListener('pageshow',restorePlayback);
+  window.addEventListener('focus',restorePlayback);
+  engine.onContextRestoredObservable.add(restorePlayback);
   syncPlayback();
   observeViewportSize(canvas, () => {
     if(mapDeparture?.departing||mapTransition?.busy)return;
