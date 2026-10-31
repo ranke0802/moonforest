@@ -26,7 +26,8 @@ import {resolve} from 'node:path';
 export function sampleClearancePose(animator,schedule){
  const [state,time,haloTime,hitPulseTime,from]=schedule;
  const living=(s,t,h,p,gait)=>{
-  animator.reset();animator.transition(s,{clipTime:s==='cast'?t:0,staggerRemaining:s==='hit'?2:0});
+  const casting=s==='cast'||s==='cast_slam'||s==='cast_alternate';
+  animator.reset();animator.transition(casting?'cast':s,{castVariant:casting?s:'cast',clipTime:casting?t:0,staggerRemaining:s==='hit'?2:0});
   animator.idleTime=s==='idle'?t:0;animator.walkTime=s==='walk'?t:0;animator.hairTime=s==='walk'?t:0;
   animator.gaitBlend=gait??(s==='walk'?1:0);animator.hitTime=s==='hit'?t:0;
   animator.haloTime=h??t*2;animator.breathClock=t;if(p!==undefined)animator.hitPulseTime=p;animator.sample(0);
@@ -103,6 +104,7 @@ for(const n of new Set([...asset.meshes,...asset.transformNodes]))if(!n.parent)n
 const animator=new MourningElenaAnimator(asset,config,actor),body=asset.meshes.filter(m=>m.getTotalVertices());
 const baseHashes=body.map(m=>createHash('sha256').update(Buffer.from(Float32Array.from(m.getVerticesData(VertexBuffer.PositionKind)).buffer)).digest('hex'));
 const schedules=options.schedules??(quick?[['idle',0],['walk',.6],['cast',1.2],['hit',.35]]:[...Array.from({length:4},(_,i)=>['idle',i*1.5]),...Array.from({length:4},(_,i)=>['walk',i*.6]),...[0,.3,.75,1.2,1.8,2.4,2.85,3].map(t=>['cast',t]),...[.1,.35,.65,1.1].map(t=>['hit',t])]);
+if(!options.schedules&&!quick)for(const variant of ['cast_slam','cast_alternate'])for(const t of [0,.3,.75,1.2,1.65,1.8,2.4,2.85,3])schedules.push([variant,t]);
 if(safeOnly&&!options.schedules){
  for(let t=0;t<48;t+=6)schedules.push(['idle',0,t]);
  const baked=JSON.parse(readFileSync(new URL('mask-current.json',out))).profile.poses;

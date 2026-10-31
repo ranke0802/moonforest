@@ -31,7 +31,7 @@ export const ELENA_ACTIVE_CLIPS=Object.freeze(['Elena_Idle','Walking','Running',
 export const MOURNING_SPELLS=Object.freeze([
   ['corridor','비탄의 격류',13,38],['fan','절규의 부채',11,36],['ring','상실의 고리',10,40],
   ['cross','갈라진 성역',12,36],['cluster','추모의 낙인',10,38],
-].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,range:Math.min(14,range*MOURNING_SIZE_SCALE),damage,kind:'ground',impact:.55})));
+].map(([pattern,label,range,damage])=>Object.freeze({name:'cast',label,pattern,motion:pattern==='ring'||pattern==='cluster'?'cast_slam':pattern==='fan'||pattern==='cross'?'cast_alternate':'cast',range:Math.min(14,range*MOURNING_SIZE_SCALE),damage,kind:'ground',impact:.55})));
 export function spellImpact(spec,duration){return Math.min(Math.max(1,duration*spec.impact),duration-.25);}
 export const MOURNING_CAST_RATE=1.6;
 // Give the enlarged floor patterns a readable lead-in, then play the authored

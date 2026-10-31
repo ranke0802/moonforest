@@ -33,7 +33,7 @@ function living(animator,state){
  animator.reset();animator.transition('walk');animator.update(.41);
  if(state==='pulse'){animator.transition('walk');animator.reactToHit();animator.update(.08);}
  else if(state==='hit'){animator.transition('hit',{staggerRemaining:1});animator.update(.31);}
- else {animator.transition(state,{clipTime:state==='cast'?1.22:0});animator.update(.19);}
+ else {animator.transition(state,{clipTime:state.startsWith('cast')?1.22:0});animator.update(.19);}
 }
 function assertDeathPose(animator,time){
  const procedural=new Set(animator.halo.map(c=>c.target.uniqueId+':'+c.property)),weight=smooth(time/.18);
@@ -61,13 +61,13 @@ test('r9 wind and death morphs match the supplied formulas at boundaries and in-
 
 test('real r9 death captures each live pose, advances independently of cast speed, and holds its final pose',async t=>{
  const f=await fixture(t),{animator,asset}=f;
- assert.equal(asset.animationGroups.length,8);assert.equal(animator.deathDuration,5.2);assert.equal(animator.mouthMeshes.length,1);
+ assert.equal(asset.animationGroups.length,10);assert.equal(animator.deathDuration,5.2);assert.equal(animator.mouthMeshes.length,1);
  assert.equal(animator.mouthMeshes[0].getTotalIndices()/3,96);assert.equal(animator.mouthMeshes[0].isEnabled(),false);
  const dead=asset.animationGroups.find(g=>g.name==='Chimera_Death_Lament_5p2s');assert.ok(dead);close(dead.to/dead.targetedAnimations[0].animation.framePerSecond,5.2);
  const sourceTracks=new Map(dead.targetedAnimations.map(c=>[c.target.uniqueId+':'+c.animation.targetProperty,c.animation]));
  let formerlyFixedChanged=0,maxError=0;
  for(const c of animator.deathChannels)for(const time of [.09,.18,.65,1.3,2.8,5.2]){const original=sourceTracks.get(c.target.uniqueId+':'+c.property).evaluate(time*c.track.fps),difference=error(c.track.sample(time),original);maxError=Math.max(maxError,difference);assert.ok(difference<3e-6);}
- for(const fps of [30,60])for(const state of ['idle','walk','cast','hit','pulse']){
+ for(const fps of [30,60])for(const state of ['idle','walk','cast','cast_slam','cast_alternate','hit','pulse']){
   living(animator,state);const frozen={walk:animator.walkTime,hair:animator.hairTime,idle:animator.idleTime,breath:animator.breathClock,hit:animator.hitTime},halo=animator.haloTime;
   animator.transition('dead',{clipTime:999,actionId:90});assert.equal(animator.deathTime,0);assert.equal(animator.reactToHit(),false);close(animator.hitPulseWeight,0);animator.sample(0);assertDeathPose(animator,0);
   animator.update(.09);assertDeathPose(animator,.09);close(animator.deathWeight,.5);

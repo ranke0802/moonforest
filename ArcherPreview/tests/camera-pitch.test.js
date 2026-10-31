@@ -8,7 +8,7 @@ import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {CameraPitch,upwardFocusLift,setupCameraPitchControls,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA,UNRESTRICTED_UPPER_BETA} from '../src/camera-pitch.js';
 import {PlaygroundInput} from '../src/input.js';
-import {followTarget,playerChinTarget,combatFocus} from '../src/camera-follow.js';
+import {followTarget,playerChinTarget,combatFocus,CameraFollow} from '../src/camera-follow.js';
 import {CharacterAnimator} from '../src/animation.js';
 import {projectBossHealth} from '../src/boss-health-bar.js';
 import {setupSettingsPanel} from '../src/settings-panel.js';
@@ -72,9 +72,10 @@ test('the actual main paused-render and settings callbacks correct the eye befor
  const {scene,camera,pitch,input}=fixture(t),actor=new TransformNode('paused-player',scene),source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  const start=source.indexOf('function syncCameraFocus('),renderStart=source.indexOf('function render(dt)',start),renderEnd=source.indexOf('  elapsed += dt;',renderStart);
  const focusFunction=source.slice(start,renderStart),pausedRender=source.slice(renderStart,renderEnd)+'}';let fogCalls=0,hudCalls=0,lootCalls=0;
- const main=new Function('actor','cameraPitch','playerChinTarget','combatFocus','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog',
+ const follow=new CameraFollow();follow.update({followMotion:true});
+ const main=new Function('actor','cameraPitch','cameraFollow','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog',
   'let simulateFrame=false,playerHead=null;'+focusFunction+pausedRender+';return {render,syncCameraFocus};')(
-  actor,pitch,playerChinTarget,combatFocus,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++);
+  actor,pitch,follow,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++);
  pitch.update({upwardLimited:false});camera.beta=2.8;camera.radius=17;main.render(0);assert.ok(camera.position.y>=1.46-.35-1e-5);assert.equal(fogCalls,1);assert.equal(hudCalls,1);assert.equal(lootCalls,1);
  const settingStart=source.indexOf('const cameraSettingChanged=')+'const cameraSettingChanged='.length,settingEnd=source.indexOf('\n',settingStart),lambda=source.slice(settingStart,settingEnd).trim().replace(/;$/,'');let refresh=0,wake=0,invalidations=0;
  const changed=new Function('syncCameraFocus','frameDiagnostics','renderActivity','frameLoop','return '+lambda)(main.syncCameraFocus,{refresh:()=>refresh++},{wake:()=>wake++},{invalidate:()=>invalidations++});

@@ -49,18 +49,23 @@ test('charge destination crosses the aimed player position, rejects walls and in
   const shifted=chooseElenaCharge({x:0,z:0},{x:0,z:6},{home:{x:0,z:0}});near(shifted.z,target.z-origin.z);
 });
 
-test('actual rig walks, skitters and charges while every cast remains stationary and navigation-safe',async t=>{
+test('actual rig walks, skitters and charges with only the warned slam advance during casts',async t=>{
   const f=await fixture(t),kinds=new Set(),patterns=new Set(),speeds={walk:0,skitter:0,charge:0};let idle=0,castFrames=0;
+  // Cover both the resident home and a certified charge corridor. Fixed player
+  // positions legitimately reject different routes under the full-pose mask.
+  for(const start of ['home','charge']){
+  if(start==='charge')charge(f);
   for(let frame=0;frame<3600;frame++){
     const before=f.e.actor.position.clone(),state=f.e.brain.mode,serial=f.e.brain.serial;step(f);const b=f.e.brain,speed=Math.hypot(f.e.actor.position.x-before.x,f.e.actor.position.z-before.z)*60;
     if(b.mode==='idle')idle++;
     if(b.repositioning){kinds.add(b.moveKind);speeds[b.moveKind]=Math.max(speeds[b.moveKind],speed);}
-    if(state==='attack'&&b.mode==='attack'&&serial===b.serial){near(Vector3.Distance(before,f.e.actor.position),0);castFrames++;patterns.add(b.spell.pattern);}
+    if(state==='attack'&&b.mode==='attack'&&serial===b.serial){if(b.spell.motion==='cast_slam'){assert.ok(speed<2.6);assert.ok(f.e.slamAdvance.distance<=.901);}else near(Vector3.Distance(before,f.e.actor.position),0);castFrames++;patterns.add(b.spell.pattern);}
     assert.ok(f.e.animator.gaitRate<=MOURNING_MOVEMENT.gaitCap);assert.ok(f.e.movementNavigation.free(f.e.actor.position,f.e.radius));assert.ok(Math.hypot(f.e.actor.position.x-f.e.home.x,f.e.actor.position.z-f.e.home.z)<=9.5+1e-5);
+  }
   }
   assert.equal(idle,0);assert.equal(patterns.size,5);assert.ok(castFrames>1000);assert.deepEqual([...kinds].sort(),['charge','skitter','walk']);
   near(speeds.walk,MOURNING_MOVEMENT.walkSpeed);near(speeds.skitter,MOURNING_MOVEMENT.skitterSpeed);near(speeds.charge,MOURNING_MOVEMENT.chargeSpeed);
-  t.diagnostic(JSON.stringify({seconds:60,idleFrames:idle,castFrames,maxSpeeds:speeds,patterns:[...patterns]}));
+  t.diagnostic(JSON.stringify({seconds:120,starts:2,idleFrames:idle,castFrames,maxSpeeds:speeds,patterns:[...patterns]}));
 });
 
 test('charge shows a full locked 0.9 second ground warning and follows the old target after a dodge',async t=>{

@@ -5,9 +5,10 @@ import {haloSpeedAt,windAt,shotWeight,smooth01,mourningMotionWeights,deathHaloSp
 const clamp=v=>Math.max(0,Math.min(1,v)),smooth=v=>v*v*(3-2*v),TAU=Math.PI*2;
 const REACH=[[0,0],[.25,.08],[.72,.48],[1.18,1],[1.82,1],[2.08,.97],[2.60,.42],[3,0]];
 export function castReach(t){for(let i=1;i<REACH.length;i++)if(t<=REACH[i][0]){const a=REACH[i-1],b=REACH[i];return a[1]+(b[1]-a[1])*smooth(clamp((t-a[0])/(b[0]-a[0])));}return 0;}
-export function mourningMorphs({castTime=0,casting=false,castWeight,walkTime=0,gaitSeconds=2.4,gaitBlend=0,breathClock=0,breathing=true,dying=false,deathTime=0}={},out={}){
-  const weight=Number.isFinite(castWeight)?castWeight:casting?smooth(clamp(Math.min(castTime/.18,(3-castTime)/.25))):0,reach=castReach(castTime),theta=walkTime/gaitSeconds*TAU,alive=dying?1-smooth01(deathTime/MOURNING_DEATH_BLEND_SECONDS):1;
+export function mourningMorphs({castTime=0,casting=false,castWeight,castVariant='cast',castReachOverride,walkTime=0,gaitSeconds=2.4,gaitBlend=0,breathClock=0,breathing=true,dying=false,deathTime=0}={},out={}){
+  const weight=Number.isFinite(castWeight)?castWeight:casting?smooth(clamp(Math.min(castTime/.18,(3-castTime)/.25))):0,reach=Number.isFinite(castReachOverride)?clamp(castReachOverride):castReach(castTime),theta=walkTime/gaitSeconds*TAU,alive=dying?1-smooth01(deathTime/MOURNING_DEATH_BLEND_SECONDS):1;
   out.Cast_Palm_Cleanup=reach*weight;out.Cast_Elbow_Form=clamp((reach-.48)/.52)*weight;out.Hair_Cast_Wind=windAt(castTime)*weight;
+  if(castVariant==='cast_slam'){out.Cast_Palm_Cleanup=0;out.Cast_Elbow_Form=0;}
   out.Breath_Rise=breathing?(.5+.5*Math.sin(breathClock*TAU/5.5))*alive:0;
   out.Bust_Settle=breathing?(.5+.5*Math.sin(theta*2-.6))*gaitBlend*alive:0;
   out.Bust_ArmFollow=breathing?(.5+.5*Math.sin(theta-.65))*gaitBlend*alive:0;
@@ -49,7 +50,8 @@ function applyWeighted(channel,times,weights,hair=false){
   // do not sample or allocate, including the two new clips during a full cast.
   for(const name of MIX_ORDER){
     const weight=weights[name];if(weight<=0)continue;
-    const value=channel[name].sample(hair&&name==='walk'?times.hairTime:times[name+'Time']);
+    const track=name==='cast'?(channel.castVariants?.[times.castVariant]??channel.cast):channel[name];
+    const value=track.sample(hair&&name==='walk'?times.hairTime:times[name+'Time']);
     if(total===0)out.copyFrom(value);
     else if(channel.property==='rotationQuaternion')Quaternion.SlerpToRef(out,value,weight/(total+weight),out);
     else Vector3.LerpToRef(out,value,weight/(total+weight),out);
@@ -61,19 +63,26 @@ function applyWeighted(channel,times,weights,hair=false){
 export class MourningElenaAnimator {
   constructor(asset,config,actor){
     this.asset=asset;this.config=config;this.actor=actor;this.current='idle';this.castTime=0;this.walkTime=0;this.hairTime=0;this.breathClock=0;this.haloTime=0;this.gaitBlend=0;this.gaitRate=2;this.accumulator=0;this.sampleInterval=0;this.samples=0;
-    this.deathDuration=MOURNING_DEATH_SECONDS;this.durations={idle:6,walk:2.4,cast:3,hit:1.3,dead:this.deathDuration};this.gaitSeconds=config.gaitSeconds??2.4;
+    this.deathDuration=MOURNING_DEATH_SECONDS;this.durations={idle:6,walk:2.4,cast:3,cast_slam:3,cast_alternate:3,hit:1.3,dead:this.deathDuration};this.gaitSeconds=config.gaitSeconds??2.4;
     for(const group of asset.animationGroups)group.stop();
     const group=n=>{const g=asset.animationGroups.find(g=>g.name===n);if(!g)throw new Error('마녀 동작 누락: '+n);return g;};
     const walk=channels(group('Chimera_Organic_Walk_2p4s'));
     const maps=Object.fromEntries([['cast','Chimera_Arcane_Cast_3s'],['idle','Chimera_Prayer_Idle_6s'],['hit','Chimera_Hit_Reaction_1p3s']].map(([name,clip])=>[name,new Map(channels(group(clip)).map(c=>[key(c),c.track]))]));
+    const variants={cast:maps.cast};
+    for(const [name,clip]of [['cast_slam','Chimera_Advance_Slam_3s'],['cast_alternate','Chimera_Alternating_Cast_3s']]){
+      const found=asset.animationGroups.find(g=>g.name===clip);
+      if(!found&&config.animations?.[name])throw new Error('마녀 동작 누락: '+clip);
+      variants[name]=found?new Map(channels(found).map(c=>[key(c),c.track])):maps.cast;
+    }
     const combined=walk.map(c=>({...c,walk:c.track,cast:maps.cast.get(key(c))??c.track,idle:maps.idle.get(key(c))??c.track,hit:maps.hit.get(key(c))??c.track}));
+    for(const c of combined)c.castVariants=Object.fromEntries(Object.entries(variants).map(([name,tracks])=>[name,tracks.get(key(c))??c.cast]));
     const dead=channels(group('Chimera_Death_Lament_5p2s'));
     this.deathChannels=dead.map(c=>({...c,from:c.target[c.property].clone()}));
     this.deathFromWeights={walk:0,cast:0,idle:1,hit:0};
     this.hair=combined.filter(c=>c.target.name.startsWith('DEF_Hair_'));
     this.body=combined.filter(c=>!c.target.name.startsWith('DEF_Hair_'));
     // Constant identical translations/scales never need writing again.
-    this.fixed=this.body.filter(c=>MIX_ORDER.every(name=>c[name].constant&&c.walk.keys[0].value.equals(c[name].keys[0].value)));
+    this.fixed=this.body.filter(c=>[...MIX_ORDER.map(name=>c[name]),...Object.values(c.castVariants)].every(track=>track.constant&&c.walk.keys[0].value.equals(track.keys[0].value)));
     this.body=this.body.filter(c=>!this.fixed.includes(c));
     // A normal weapon hit is a visual recoil, not a gameplay stagger. Reuse
     // the authored hit's rotational delta; legs, root and arm channels stay on
@@ -104,11 +113,12 @@ export class MourningElenaAnimator {
     this.reset();
   }
   reset(){
-    Object.assign(this,{current:'idle',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,clothInitialized:false,disposed:false,actionId:null,deathTime:0,deathWeight:0,deathStarted:false});
+    Object.assign(this,{current:'idle',castVariant:'cast',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,clothInitialized:false,disposed:false,actionId:null,deathTime:0,deathWeight:0,deathStarted:false});
     for(const c of this.fixed)c.target[c.property].copyFrom(c.track.keys[0].value);
     this.sample(0);return this;
   }
-  transition(state,{clipTime=0,actionId=null,staggerRemaining=0}={}){
+  transition(state,{clipTime=0,castVariant='cast',actionId=null,staggerRemaining=0}={}){
+    if(state==='cast_slam'||state==='cast_alternate'){castVariant=state;state='cast';}
     this.disposed=false;
     if(state==='dead'){
       if(!this.deathStarted){
@@ -121,6 +131,7 @@ export class MourningElenaAnimator {
     }
     // Resurrection is explicit: stray living transitions cannot restart a corpse.
     if(this.deathStarted)return;
+    if(state==='cast')this.castVariant=['cast','cast_slam','cast_alternate'].includes(castVariant)?castVariant:'cast';
     const remaining=Math.max(0,Number.isFinite(staggerRemaining)?staggerRemaining:0),explicit=state==='hit';
     const wasBusy=this.current==='cast'||this.hitActive;
     if((remaining>0&&this.staggerRemaining<=0)||(explicit&&!this.hitActive&&this.current!=='hit')){
@@ -174,7 +185,13 @@ export class MourningElenaAnimator {
     this.refreshPose();this.applyCloth(dt);this.samples++;this.cachePoseRoots();
   }
   applyMorphs(casting,dying){
-    const state=this.morphState;state.castTime=this.castTime;state.casting=casting;state.castWeight=this.weights.cast;state.walkTime=this.walkTime;state.gaitBlend=this.gaitBlend;state.breathClock=this.breathClock;state.dying=dying;state.deathTime=this.deathTime;
+    const state=this.morphState;state.castTime=this.castTime;state.castVariant=this.castVariant;state.casting=casting;state.castWeight=this.weights.cast;state.walkTime=this.walkTime;state.gaitBlend=this.gaitBlend;state.breathClock=this.breathClock;state.dying=dying;state.deathTime=this.deathTime;
+    state.castReachOverride=undefined;
+    const curve=this.castVariant==='cast_alternate'?this.config.motion?.alternateReach:null;
+    if(curve?.length){
+      state.castReachOverride=curve.at(-1)[1];
+      for(let i=1;i<curve.length;i++)if(this.castTime<=curve[i][0]){const a=curve[i-1],b=curve[i];state.castReachOverride=a[1]+(b[1]-a[1])*smooth01((this.castTime-a[0])/Math.max(1e-6,b[0]-a[0]));break;}
+    }
     const values=mourningMorphs(state,this.morphValues);
     for(const target of this.morphs)if(values[target.name]!==undefined)target.influence=values[target.name];
     // The authored mouth is a degenerate point at rest. Skip its draw entirely;
@@ -245,5 +262,5 @@ export class MourningElenaAnimator {
   dispose(){this.disposed=true;}
   get deathFinished(){return this.deathStarted&&this.deathTime>=this.deathDuration;}
   get finished(){return this.deathFinished;}
-  inspect(){return {state:this.current,castTime:this.castTime,walkTime:this.walkTime,idleTime:this.idleTime,hitTime:this.hitTime,hitActive:this.hitActive,hitPulseWeight:this.hitPulseWeight,hitPulseTime:this.hitPulseTime,hitPulseCount:this.hitPulseCount,haloTime:this.haloTime,haloSpeed:this.haloSpeed,deathTime:this.deathTime,deathDuration:this.deathDuration,deathWeight:this.deathWeight,deathFinished:this.deathFinished,finished:this.finished,weights:this.weights,samples:this.samples,dynamicChannels:this.body.length,constantChannels:this.fixed.length,deathChannels:this.deathChannels.length,interval:this.sampleInterval,morphs:Object.fromEntries(this.morphs.map(m=>[m.name,m.influence]))};}
+  inspect(){return {state:this.current,castVariant:this.castVariant,castTime:this.castTime,walkTime:this.walkTime,idleTime:this.idleTime,hitTime:this.hitTime,hitActive:this.hitActive,hitPulseWeight:this.hitPulseWeight,hitPulseTime:this.hitPulseTime,hitPulseCount:this.hitPulseCount,haloTime:this.haloTime,haloSpeed:this.haloSpeed,deathTime:this.deathTime,deathDuration:this.deathDuration,deathWeight:this.deathWeight,deathFinished:this.deathFinished,finished:this.finished,weights:this.weights,samples:this.samples,dynamicChannels:this.body.length,constantChannels:this.fixed.length,deathChannels:this.deathChannels.length,interval:this.sampleInterval,morphs:Object.fromEntries(this.morphs.map(m=>[m.name,m.influence]))};}
 }

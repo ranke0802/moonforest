@@ -4,7 +4,7 @@ import {ELENA_SPELLS,MOURNING_SPELLS} from './elena-spec.js';
 export const BOSS_PATTERN_CATALOG=Object.freeze({
   bear:{label:'곰 보스',patterns:BOSS_ATTACKS.map(s=>({id:s.name,label:s.label}))},
   elena:{label:'타락한 성녀 엘레나',patterns:ELENA_SPELLS.map(s=>({id:s.name,label:s.label}))},
-  'mourning-elena':{label:'비탄의 마녀 엘레나',patterns:MOURNING_SPELLS.map(s=>({id:s.pattern,label:s.label}))},
+  'mourning-elena':{label:'비탄의 마녀 엘레나',patterns:MOURNING_SPELLS.map(s=>({id:s.pattern,label:s.label+' · '+({cast:'한쪽 팔 시전',cast_slam:'전진 내려찍기',cast_alternate:'교대 시전'}[s.motion])}))},
 });
 export const BOSS_PATTERN_KEY='moonforest-boss-patterns-v1';
 export function normalizeBossPatterns(value={}){

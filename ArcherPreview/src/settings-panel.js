@@ -44,8 +44,10 @@ export function setupSettingsPanel() {
   displayOptions.append(qualityLabel);
   const pitchOptions=document.createElement('div');pitchOptions.id='camera-pitch-options';pitchOptions.className='camera-zoom-options';
   pitchOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-upward-limited" type="checkbox" checked>위쪽 시야 제한</label></div><small>해제하면 거의 수직으로 올려다볼 수 있습니다.</small><small id="camera-pitch-status" role="status" aria-live="polite"></small>';
+  const followOptions=document.createElement('div');followOptions.id='camera-follow-options';followOptions.className='camera-zoom-options';
+  followOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-follow-motion" type="checkbox">캐릭터 모션 따라가기</label></div><small>체크하면 달리기·점프 등 모션에 맞춰 카메라가 움직입니다.</small><small id="camera-follow-status" role="status" aria-live="polite"></small>';
   const characterStyle=document.createElement('button');characterStyle.id='open-character-style';characterStyle.type='button';characterStyle.className='motion-speed-toggle';characterStyle.textContent='캐릭터 선 · 밝기';characterStyle.setAttribute('aria-haspopup','dialog');
-  section('화면 · 카메라', [displayOptions, characterStyle, $('.camera-tools'), $('#camera-zoom-options'), pitchOptions]);
+  section('화면 · 카메라', [displayOptions, characterStyle, $('.camera-tools'), $('#camera-zoom-options'), followOptions, pitchOptions]);
   section('성능 진단', [$('#frame-diagnostics-options')]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
   const bossPatterns=document.createElement('button');bossPatterns.id='open-boss-patterns';bossPatterns.type='button';bossPatterns.className='motion-speed-toggle';bossPatterns.textContent='보스 패턴 · 속도';bossPatterns.setAttribute('aria-haspopup','dialog');

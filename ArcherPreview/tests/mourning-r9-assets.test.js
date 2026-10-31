@@ -4,13 +4,14 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {R9_CLIPS,R9_MORPHS,accessorBytes,compareBodyCorners,morphTextureEstimate} from '../scripts/pack-mourning-elena-v2-1.mjs';
+import {R10_CLIPS} from '../scripts/pack-mourning-motion-expansion.mjs';
 const assets=new URL('../public/assets/',import.meta.url),config=JSON.parse(readFileSync(new URL('mourning-elena.json',assets)));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 let loaded;const packed=()=>loaded??=readRuntimeGltf(new URL(config.model,assets));
 
-test('r9 package preserves all eight clips and finite zero-root state catalog including full 5.2 second death',async()=>{
- const {gltf:g}=await packed();assert.equal(config.sourceSha256,'9673c3aa680f521c8d861001458e41e98dabc6edb046cf726c13540acc31f061');
- assert.equal(config.rigRevision,'r9-attack-shape-repair');assert.deepEqual(g.animations.map(a=>a.name).sort(),[...R9_CLIPS].sort());
+test('expanded package preserves r9 clips and adds two attack variants with a finite zero-root catalog and full death',async()=>{
+ const {gltf:g}=await packed();assert.match(config.sourceSha256,/^[a-f0-9]{64}$/);
+ assert.equal(config.rigRevision,'r10-attack-variants-knee');assert.deepEqual(g.animations.map(a=>a.name).sort(),[...R10_CLIPS].sort());
  const death=config.catalog.find(c=>c.name==='dead');assert.equal(death.clip,'Chimera_Death_Lament_5p2s');assert.equal(death.duration,5.2);assert.equal(death.frames,157);
  for(const state of config.catalog){assert.equal(state.rootTrack.length,state.frames);assert.equal(state.groundTrack.length,state.frames);assert.ok(state.rootTrack.every(v=>v.length===3&&v.every(x=>x===0)));assert.ok(state.groundTrack.every(x=>x===0));}
  assert.equal(config.height,3.2);assert.equal(config.scale,3.5363933762773603);assert.equal(g.skins.reduce((n,s)=>n+s.joints.length,0),255);

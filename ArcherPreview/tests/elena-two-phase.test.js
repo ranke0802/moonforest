@@ -182,7 +182,7 @@ test('leaving during phase-two instantiation hides the completed actor and reuse
   world.cave=true;await battle.activateResident(player);assert.equal(mourningModels.instances,1);assert.strictEqual(battle.encounters[0],resident);assert.equal(resident.actor.isEnabled(),true);
 });
 
-test('autonomous encounter path releases all five patterns once without source-root displacement',async t=>{
+test('autonomous casts release all five fixed footprints once with only the warned slam advance',async t=>{
   const f=await fixture(t);f.battle.residentPhase=2;await f.battle.activateResident(f.player);const e=f.battle.mourningPool[0];e.renderVisible=true;
   const patterns=[];
   for(let index=0;index<5;index++){
@@ -190,7 +190,7 @@ test('autonomous encounter path releases all five patterns once without source-r
     const castSeconds=e.brain.castLeadInRemaining+3/e.brain.attackPlaybackRate;
     for(let frame=0;frame<Math.floor(castSeconds*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(event=>event.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
-      near(Vector3.Distance(e.actor.position,origin),0);assert.equal(e.brain.serial,serial);assert.equal(e.brain.state,'cast');assert.equal(e.engaged,true);
+      if(e.brain.spell.motion==='cast_slam'){assert.ok(Vector3.Distance(e.actor.position,origin)<=.901);assert.ok(e.movementNavigation.free(e.actor.position,e.radius));}else near(Vector3.Distance(e.actor.position,origin),0);assert.equal(e.brain.serial,serial);assert.equal(e.brain.state,'cast');assert.equal(e.engaged,true);
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);
     }
     assert.equal(releases,1);assert.equal(e.spell.fired,true);const hp=f.battle.playerHp;f.battle.poseAndContacts(f.player,{state:'idle'},null,null);assert.equal(f.battle.playerHp,hp);
@@ -199,7 +199,7 @@ test('autonomous encounter path releases all five patterns once without source-r
   assert.deepEqual(patterns,MOURNING_SPELLS.map(spell=>spell.pattern));assert.equal(f.defeats.length,0);
 });
 
-test('five real phase-two casts stay fixed, expose valid hurt capsules, and manual review resumes walking',async t=>{
+test('phase-two variants keep valid hurt capsules and fixed warnings, and manual review resumes walking',async t=>{
   const f=await fixture(t);f.battle.residentPhase=2;await f.battle.activateResident(f.player);const e=f.battle.mourningPool[0];
   e.reviewMode=true;e.renderVisible=true;e.reviewMovement={x:1,z:0};const first=e.actor.position.clone();
   for(let i=0;i<30;i++)step(f);assert.ok(e.actor.position.x>first.x+.2);assert.equal(e.brain.state,'walk');assert.ok(e.animator.walkTime>0);
@@ -210,7 +210,8 @@ test('five real phase-two casts stay fixed, expose valid hurt capsules, and manu
     const castSeconds=e.brain.castLeadInRemaining+3/e.brain.attackPlaybackRate;
     for(let frame=0;frame<Math.floor(castSeconds*60)-1;frame++){
       f.battle.update(1/60,f.player);releases+=e.pendingEvents.filter(x=>x.kind==='ground').length;f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);
-      near(Vector3.Distance(e.actor.position,lockedPosition),0);near(e.animator.walkTime,lockedWalk);assert.equal(e.brain.state,'cast');
+      if(e.brain.spell.motion==='cast_slam')assert.ok(Vector3.Distance(e.actor.position,lockedPosition)<=.901);else near(Vector3.Distance(e.actor.position,lockedPosition),0);near(e.animator.walkTime,lockedWalk);assert.equal(e.brain.state,'cast');
+      assert.equal(e.animator.castVariant,e.brain.spell.motion);
       plan??=e.spell.plan;assert.strictEqual(e.spell.plan,plan);assert.equal(plan.pattern,pattern);
       for(const node of e.asset.transformNodes)assert.ok(node.getAbsolutePosition().asArray().every(Number.isFinite),node.name);
       const capsules=e.hurtCapsules();assert.equal(capsules.length,49);assert.ok(capsules.every(c=>c.radius>0&&c.points.flat().every(Number.isFinite)));

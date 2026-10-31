@@ -65,7 +65,7 @@ test('clip-space culling keeps even an off-screen base whose .50 to 3px outline 
 
 test('complete r9 living/death frame ranges and arbitrary parent yaw/scale remain inside current skin-morph bounds',{timeout:120000},async t=>{
  const f=await fixture(t);let checked=0,poses=0;
- for(const [state,duration]of [['idle',6],['walk',2.4],['cast',3],['hit',1.3],['dead',5.2]]){
+ for(const [state,duration]of [['idle',6],['walk',2.4],['cast',3],['cast_slam',3],['cast_alternate',3],['hit',1.3],['dead',5.2]]){
   f.animator.reset();f.animator.transition(state);
   for(let frame=0;frame<=Math.round(duration*30);frame++){
    if(frame)f.animator.update(1/30);f.animator.sample(0);
@@ -74,7 +74,7 @@ test('complete r9 living/death frame ranges and arbitrary parent yaw/scale remai
    checked+=checkAllVertices(f,`${state}/${frame}`);poses++;
   }
  }
- assert.equal(poses,542);assert.ok(checked>50_000_000);assert.ok(f.bounds.parts.every(part=>part.maxWeightSumError<=1e-5));
+ assert.equal(poses,724);assert.ok(checked>68_000_000);assert.ok(f.bounds.parts.every(part=>part.maxWeightSumError<=1e-5));
  t.diagnostic(JSON.stringify({poses,checkedVertices:checked,boneBoxes:f.bounds.parts.reduce((n,p)=>n+p.boxes.length,0),maxWeightSumError:Math.max(...f.bounds.parts.map(p=>p.maxWeightSumError))}));
 });
 

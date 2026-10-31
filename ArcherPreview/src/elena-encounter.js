@@ -64,7 +64,7 @@ export class ElenaEncounter extends BossEncounter {
       return stop;
     }
     if(this.brain.mode!=='attack'){this.spell.reset();return stop;}
-    const spec=this.brain.spell,origin=this.actor.position,aim=this.reviewMode?origin.add(new Vector3(Math.sin(this.actor.rotation.y)*6,0,Math.cos(this.actor.rotation.y)*6)):player.position;
+    const spec=this.brain.spell,origin=this.slamAdvance?.serial===this.brain.serial?this.slamAdvance.target:this.actor.position,aim=this.reviewMode?origin.add(new Vector3(Math.sin(this.actor.rotation.y)*6,0,Math.cos(this.actor.rotation.y)*6)):player.position;
     this.spell.aim(this.brain.serial,spec.pattern,origin,aim,{range:spec.range,bossRadius:this.radius+.3,scale:this.phase===2?MOURNING_SIZE_SCALE:1});
     this.spell.show(this.brain.castWarningElapsed,this.brain.castWarningDuration,{flash:fire});
     if(fire&&!this.spell.fired){
@@ -124,7 +124,7 @@ export class ElenaEncounter extends BossEncounter {
       if(moving){const before=this.actor.position.clone(),speed=(this.phase===2?.673:1.1)*(movement.run?1.5:1);this.actor.position.x+=movement.x*speed*dt;this.actor.position.z+=movement.z*speed*dt;this.actor.rotation.y=Math.atan2(movement.x,movement.z);this.movementNavigation?.constrain(this.actor.position,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);}
     }
     this.animator.gaitRate=(movement.run?3:2)/(this.phase===2?MOURNING_SIZE_SCALE:1);
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;
+    this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;
   }
   inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,locomotion:this.locomotion?.inspect(),chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:ELENA_SIZE.bodyHeight,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
 }

@@ -1,5 +1,5 @@
 // CPU/offline only: preserve source render geometry, bake rotation-independent
-// root safety from exact near-LOD surfaces and the actual skinned living envelope.
+// root safety from exact near-LOD surfaces and actual living/death skin envelopes.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {auditElenaClearance} from './audit-elena-clearance.mjs';
@@ -12,10 +12,11 @@ const fingerprint=()=>Object.fromEntries(paths.map(p=>[p,createHash('sha256').up
 const hashes=fingerprint();
 const step=.25,minX=8,minZ=-52,width=169,height=177,ground=6,groundTolerance=.12,bandStep=.25,margin=.18;
 const bands=Array.from({length:32},(_,i)=>({low:.025+i*bandStep,high:.025+(i+1)*bandStep,radius:0}));
-const schedules=[];for(const [state,seconds]of [['idle',6],['walk',2.4],['cast',3],['hit',1.3]])for(let i=0;i<=Math.ceil(seconds*15);i++)schedules.push([state,Math.min(seconds,i/15)]);
+const schedules=[];for(const [state,seconds]of [['idle',6],['walk',2.4],['cast',3],['cast_slam',3],['cast_alternate',3],['hit',1.3]])for(let i=0;i<=Math.ceil(seconds*15);i++)schedules.push([state,Math.min(seconds,i/15)]);
 for(let t=0;t<48;t+=6)schedules.push(['idle',0,t]);
+for(const state of ['cast','cast_slam','cast_alternate'])for(const time of [0,.06,.18,.65,1.3,2,2.8,3.6,4.4,5.2])schedules.push(['dead',time,undefined,undefined,{state,time:1.65,gaitBlend:0}]);
 const authoredPoseCount=schedules.length;
-for(const [state,times]of [['idle',[0,1.5,3,4.5]],['walk',[0,.6,1.2,1.8]],['cast',[0,.3,.75,1.2,1.8,2.4,2.85,3]]])for(const time of times)for(const pulse of [0,.04,.08,.12,.18,.24,.28,.33,.38])schedules.push([state,time,undefined,pulse]);
+for(const [state,times]of [['idle',[0,1.5,3,4.5]],['walk',[0,.6,1.2,1.8]],['cast',[0,.3,.75,1.2,1.8,2.4,2.85,3]],['cast_slam',[.3,1,1.65,2.4]],['cast_alternate',[.3,1,1.65,2.4]]])for(const time of times)for(const pulse of [0,.04,.08,.12,.18,.24,.28,.33,.38])schedules.push([state,time,undefined,pulse]);
 let authoredBands;
 const context=await auditElenaClearance({geometryOnly:true,schedules,retainPoses:false,onPose(pose){
  if(pose.hitPulseTime!==undefined&&!authoredBands)authoredBands=bands.map(b=>({...b}));
@@ -51,10 +52,10 @@ for(const [name,variant]of Object.entries(candidates)){
  const stacked=statistics(safe,variant.home),uniform=statistics(circle,variant.home);results[name]={home:variant.home,moves:variant.moves,stacked,uniform};console.log(JSON.stringify({stage:'mask complete',name,stacked:{...stacked,runs:undefined},uniform:{...uniform,runs:undefined}}));
 }
 if(JSON.stringify(hashes)!==JSON.stringify(fingerprint()))throw new Error('Clearance inputs changed while baking; rerun after source edits finish.');
-const report={generatedAt:new Date().toISOString(),grid:{step,minX,minZ,width,height},profile:{ground,groundTolerance,bandStep,margin,bands,poseSamples:context.poses.length,authoredPoseCount,hitPulsePoseCount:context.poses.length-authoredPoseCount,authoredBands,hitPulseEnvelopeExtension:bands.map((b,i)=>({low:b.low,high:b.high,extraRadius:b.radius-authoredBands[i].radius})).filter(b=>b.extraRadius>1e-6),poses:context.poses.map(({state,time,haloTime,hitPulseTime,bounds,radius})=>({state,time,haloTime,hitPulseTime,bounds,radius})),method:'15 Hz source transform samples plus 8 complete-halo phases and 144 normal-hit pulse overlays across idle/walk/cast; each intersected height band gets full triangle-vertex max radial envelope; .18 m extra margin; .25m cells conservatively rasterized; octile distance reduced .9238 and both source/root half-cell diagonals removed.'},hashes,results,limits:'Finite motion samples plus .18m margin; not an analytic quaternion-extrema proof. Ground restricted to 6 +/- .09m. This root-safe mask is combined with normal physical-radius navigation.'};
+const report={generatedAt:new Date().toISOString(),grid:{step,minX,minZ,width,height},profile:{ground,groundTolerance,bandStep,margin,bands,poseSamples:context.poses.length,authoredPoseCount,hitPulsePoseCount:context.poses.length-authoredPoseCount,authoredBands,hitPulseEnvelopeExtension:bands.map((b,i)=>({low:b.low,high:b.high,extraRadius:b.radius-authoredBands[i].radius})).filter(b=>b.extraRadius>1e-6),poses:context.poses.map(({state,time,haloTime,hitPulseTime,bounds,radius})=>({state,time,haloTime,hitPulseTime,bounds,radius})),method:'15 Hz source transform samples including all three casts, death entries from each cast, 8 complete-halo phases and normal-hit pulse overlays; each intersected height band gets full triangle-vertex max radial envelope; .18 m extra margin; .25m cells conservatively rasterized; octile distance reduced .9238 and both source/root half-cell diagonals removed.'},hashes,results,limits:'Finite motion samples plus .18m margin; not an analytic quaternion-extrema proof. Ground restricted to 6 +/- .09m. This root-safe mask is combined with normal physical-radius navigation.'};
 writeFileSync(new URL('mask-current.json',out),JSON.stringify(report,null,2)+'\n');
 if(process.argv.includes('--write')){
  const data={version:1,step,minX,minZ,width,height,ground,groundTolerance,margin,sizeScale:MOURNING_SIZE_SCALE,hashes,poseSamples:context.poses.length,bands,runs:results.current.stacked.runs};
- writeFileSync(new URL('../src/mourning-cave-clearance-data.js',import.meta.url),'// Generated from unchanged near-LOD meshes and r9 living skin poses by scripts/bake-mourning-cave-clearance.mjs.\nexport const MOURNING_CAVE_CLEARANCE_DATA='+JSON.stringify(data)+';\n');
+ writeFileSync(new URL('../src/mourning-cave-clearance-data.js',import.meta.url),'// Generated from unchanged near-LOD meshes and r10 living/death skin poses by scripts/bake-mourning-cave-clearance.mjs.\nexport const MOURNING_CAVE_CLEARANCE_DATA='+JSON.stringify(data)+';\n');
 }
 context.dispose();

@@ -94,7 +94,8 @@ test('all twelve authored spell motions match visible fixed footprints and relea
       if(outcome==='shield'){shield=new TransformNode('stress-physical-shield',f.scene);shield.position.copyFrom(f.player.position);shield.position.y+=.95;shield.position.z-=.5;shield.rotation.y=Math.PI;}
       if(outcome==='wall')f.world.navigation.segmentClear=()=>false;
       try{
-        advance(f,e,impact-.001);assert.equal(f.battle.playerHp,500,label+' cannot hit before release');assert.equal(e.spell.mesh.isEnabled(),true,label+' warning remains visible');
+        advance(f,e,impact-.001);assert.equal(f.battle.playerHp,500,label+' cannot hit before release');
+        assert.equal(e.spell.mesh.isEnabled(),true,label+' warning remains visible');
         assert.strictEqual(e.spell.plan,plan,label+' warning cannot track a moved player');
         const action=outcome==='dodge'?{state:'dodge',actionId:initialSerial}:outcome==='block'?{state:'shieldPush',actionId:initialSerial}:{state:'idle'};
         if(outcome==='cancel'){e.brain.hit({damage:1,stun:.5});step(f,.002,action);}else advance(f,e,impact+.00001,action,shield);

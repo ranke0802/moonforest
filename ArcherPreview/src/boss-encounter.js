@@ -188,7 +188,7 @@ export class BossEncounter {
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&!(this.brain.hp<=0&&this.death.holdPose)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
     }
     if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
+    this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
     if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){

@@ -18,7 +18,7 @@ import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './contr
 import { CharacterAnimator } from './animation.js';
 import { NativeWarriorController } from './native-warrior.js';
 import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
-import { combatFocus,playerChinTarget } from './camera-follow.js';
+import {CameraFollow,setupCameraFollowControls} from './camera-follow.js';
 import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import {CameraPitch,setupCameraPitchControls} from './camera-pitch.js';
 import { ARENA_RADIUS } from './world-limits.js';
@@ -103,7 +103,7 @@ const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(
 const villageReviewEnabled=import.meta.env.DEV&&isVillage()&&new URLSearchParams(location.search).get('villageReview')==='1';
 const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.search).get('villageMobile')==='1';
 let villageReview;
-let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls;
+let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
@@ -152,6 +152,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
     cameraZoom:cameraZoom?.snapshot()??null,
+    cameraFollow:cameraFollow?.snapshot()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
     map:character,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
@@ -314,6 +315,7 @@ function resetCamera() {
   cameraPitch?.setWarrior(isWarrior());cameraPitchControls?.sync();
   frameDiagnostics.refresh();
   input.panOffset = { x: 0, y: 0, z: 0 };
+  syncCameraFocus(0,{snap:true});
 }
 
 async function loadCharacter() {
@@ -478,11 +480,10 @@ function syncCaveFog(force=false){if(actor&&!actor.isDisposed())world.caveFog?.u
 
 function syncCameraFocus(dt,{snap=false}={}){
   if(!actor||actor.isDisposed()||!cameraPitch)return;
-  const center=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):playerChinTarget(actor,playerHead);
-  const focus=elenaReview?center:combatFocus(center,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
+  const focus=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):cameraFollow.focus(actor,playerHead,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
   const target=(isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(pan.x,pan.y,pan.z));
   cameraPitch.follow(target,dt,{snap});
-  world.caveCamera?.follow(target,dt);
+  world.caveCamera?.follow(target,dt,{stable:!cameraFollow.settings.followMotion});
 }
 
 function render(dt) {
@@ -610,8 +611,10 @@ try {
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
   cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
+  cameraFollow=new CameraFollow({storage:equipmentStorage});
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
   setupCameraZoomControls(cameraZoom,{onChange:cameraSettingChanged});cameraPitchControls=setupCameraPitchControls(cameraPitch,{onChange:cameraSettingChanged});
+  setupCameraFollowControls(cameraFollow,{onChange:cameraSettingChanged});
   world.villageOverview=isVillage()&&villageOverview;
   if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
@@ -687,7 +690,7 @@ try {
       carryPortalPose(actor,world.camera,input.panOffset);
       controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
-      cameraPitch.follow(playerChinTarget(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
+      cameraPitch.follow(cameraFollow.focus(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
       world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate(world.trainingSpawn);
       if(!world.cave)await world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
       loadDiagnostics.phase('download');

@@ -1,5 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {upwardFocusLift} from './camera-pitch.js';
+import {STABLE_PLAYER_FOCUS_HEIGHT} from './camera-follow.js';
 import {caveRoofHeight} from './witch-cave-layout.js';
 import {CAVE_CAMERA_DATA as DATA} from './witch-cave-camera-data.js';
 
@@ -60,7 +61,7 @@ export class CaveCameraGuard {
   this.world=world;this.base=new Vector3();this.savedTarget=new Vector3();this.renderTarget=new Vector3();this.lastKey=new Float64Array(6).fill(NaN);this.applied=false;this.ready=false;this.effectiveRadius=Infinity;this.dt=0;this.disposed=false;
   this.sceneDispose=world.scene.onDisposeObservable.addOnce(()=>this.dispose());
  }
- follow(baseFocus,dt=0){this.base.copyFrom(baseFocus);this.dt=Math.max(0,Math.min(.1,dt));this.ready=true;}
+ follow(baseFocus,dt=0,{stable=false}={}){this.base.copyFrom(baseFocus);this.dt=Math.max(0,Math.min(.1,dt));this.stable=stable;this.ready=true;}
  beginFrame(){
   this.endFrame();const {world}=this,camera=world.camera;
   if(this.disposed||!this.ready||!world.cave){this.effectiveRadius=Infinity;return false;}
@@ -72,8 +73,9 @@ export class CaveCameraGuard {
   // wall. Clamp that pivot along the path from the actual player, rather than
   // lifting it onto the high terrain shoulder and looking into the next room.
   const actor=world.caveFog?.playerRoot?.position??(world.caveFog?.playerView?.w>0?world.caveFog.playerView:null);
+  const minimumFocus=this.stable?STABLE_PLAYER_FOCUS_HEIGHT:1.55;
   if(actor){
-   const anchorY=world.terrain.heightAt(actor.x,actor.z)+1.55,eyeY=Math.max(anchorY,this.base.y),dx=this.base.x-actor.x,dz=this.base.z-actor.z,length=Math.hypot(dx,dz),count=Math.max(1,Math.ceil(length/.3));
+   const anchorY=world.terrain.heightAt(actor.x,actor.z)+minimumFocus,eyeY=Math.max(anchorY,this.base.y),dx=this.base.x-actor.x,dz=this.base.z-actor.z,length=Math.hypot(dx,dz),count=Math.max(1,Math.ceil(length/.3));
    let lastX=actor.x,lastZ=actor.z;
    for(let i=1;i<=count;i++){const x=actor.x+dx*i/count,z=actor.z+dz*i/count;if(caveCameraBlocked(world.terrain,x,eyeY-.35,z)){this.base.x=lastX;this.base.z=lastZ;break;}lastX=x;lastZ=z;}
    this.base.y=eyeY;
@@ -82,7 +84,7 @@ export class CaveCameraGuard {
   // above the walk surface, including a near-vertical upward view; otherwise
   // camera padding intersects the floor before any radius is tested.
   const floor=world.terrain.heightAt(actor?.x??this.base.x,actor?.z??this.base.z),roof=caveCameraCeilingHeight(this.base.x,this.base.z);
-  this.base.y=Math.max(floor+1.55,Math.min(roof-.65,this.base.y));
+  this.base.y=Math.max(floor+minimumFocus,Math.min(roof-.65,this.base.y));
   const key=this.lastKey;
   if(this.lastTerrain!==world.terrain||this.base.x!==key[0]||this.base.y!==key[1]||this.base.z!==key[2]||camera.alpha!==key[3]||camera.beta!==key[4]||this.savedRadius!==key[5]){
    this.allowed=caveSafeCameraRadius(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;

@@ -20,7 +20,7 @@ function tick(f,dt,{freeze=false}={}){
 }
 
 test('a concave full-pose corner cannot be accepted between coarse route samples',()=>{
-  const nav=new MourningCaveNavigation(caveObstacles()),a={x:27.18373,z:-28.84007},b={x:28.93689,z:-27.81337},r=MOURNING_SIZE.radius;
+  const nav=new MourningCaveNavigation(caveObstacles()),a={x:34.487347793765366,z:-23.673660958185792},b={x:33.47617252962664,z:-23.999861610820517},r=MOURNING_SIZE.radius;
   assert.ok(nav.free(a,r,80));assert.ok(nav.free(b,r,80));
   assert.equal(CaveNavigation.prototype.segmentClear.call(nav,a,b,r),true,'reproduces the old coarse acceptance');
   assert.equal(nav.segmentClear(a,b,r),false,'the whole segment must be certified, not only its sampled points');

@@ -22,7 +22,7 @@ test('camera field matches current actual source layout and preserves arched cle
 
 test('actual route eyes remain outside solid terrain, near-LOD rocks and ceiling at close/wide/upward angles',()=>{
  const terrain=createWitchCaveTerrain();let cases=0,clamped=0;
- for(const route of CAVE_ROUTES)for(const [x,z]of route){const base={x,z,y:terrain.heightAt(x,z)+1.55};
+ for(const focusHeight of [1.05,1.55])for(const route of CAVE_ROUTES)for(const [x,z]of route){const base={x,z,y:terrain.heightAt(x,z)+focusHeight};
   for(const beta of [.25,1.18,1.78,Math.PI-.035])for(const requested of [8,82])for(let a=0;a<8;a++){
    const alpha=a*Math.PI/4,r=caveSafeCameraRadius(terrain,base,alpha,beta,requested),lift=Math.max(0,-.35-r*Math.cos(beta));
    const eye=[x+Math.cos(alpha)*Math.sin(beta)*r,base.y+lift+Math.cos(beta)*r,z+Math.sin(alpha)*Math.sin(beta)*r];

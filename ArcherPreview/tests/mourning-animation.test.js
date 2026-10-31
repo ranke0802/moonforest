@@ -13,9 +13,10 @@ import {instantiateBossModel} from '../src/boss-models.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 import {castReach,mourningMorphs,makeTrack,MourningElenaAnimator} from '../src/mourning-elena-animation.js';
 import {haloSpeedAt,shotWeight,mourningMotionWeights,deathHaloAdvance} from '../src/mourning-motion-v2.js';
+import {R10_CLIPS} from '../scripts/pack-mourning-motion-expansion.mjs';
 
 const config=JSON.parse(readFileSync(new URL('../public/assets/mourning-elena.json',import.meta.url)));
-const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s','Chimera_Prayer_Idle_6s','Chimera_Hit_Reaction_1p3s','Chimera_Death_Lament_5p2s'];
+const required=['Chimera_Organic_Walk_2p4s','Chimera_Arcane_Cast_3s','Soft_Breath_and_Bust','Halo_Slow_Orbit_48s','Halo_Cloth_Gravity_48s','Chimera_Prayer_Idle_6s','Chimera_Hit_Reaction_1p3s','Chimera_Death_Lament_5p2s',...R10_CLIPS.filter(n=>n==='Chimera_Advance_Slam_3s'||n==='Chimera_Alternating_Cast_3s')];
 const morphNames=['Cast_Palm_Cleanup','Cast_Elbow_Form','Breath_Rise','Bust_Settle','Bust_ArmFollow','Hair_Cast_Wind','Death_Scream','Death_Hair_Cry','Death_Hair_Settle','Death_Ground_Contact','Death_Ground_Early'];
 const near=(actual,expected,tolerance=1e-6,label='value')=>assert.ok(Math.abs(actual-expected)<=tolerance,`${label}: ${actual} != ${expected}`);
 const smooth=t=>t*t*(3-2*t),clamp=t=>Math.max(0,Math.min(1,t));

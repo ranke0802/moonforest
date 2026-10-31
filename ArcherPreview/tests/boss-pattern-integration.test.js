@@ -45,7 +45,7 @@ async function fixture(t){
 const id=(phase,spec)=>phase===2?spec.pattern:spec.name;
 const kind=phase=>phase===2?'mourning-elena':'elena';
 function sourcePose(encounter){
-  const mourning=encounter.phase===2,group=mourning?encounter.asset.animationGroups.find(g=>g.name==='Chimera_Arcane_Cast_3s'):encounter.animator.clips[encounter.brain.state];
+  const mourning=encounter.phase===2,variant=encounter.brain.spell?.motion??'cast',group=mourning?encounter.asset.animationGroups.find(g=>g.name===encounter.config.motion.castVariants[variant]):encounter.animator.clips[encounter.brain.state];
   let checked=0;
   for(const {target,animation} of group.targetedAnimations){
     const property=animation.targetProperty;
@@ -54,7 +54,10 @@ function sourcePose(encounter){
   }
   assert.ok(checked>100);
   if(mourning){
-    const a=encounter.animator,expected=mourningMorphs({casting:true,castTime:encounter.brain.time,castWeight:a.weights.cast,walkTime:a.walkTime,gaitSeconds:a.gaitSeconds,gaitBlend:a.gaitBlend,breathClock:a.breathClock});
+    const a=encounter.animator,t=encounter.brain.time,reach=encounter.config.motion.alternateReach;
+    let castReachOverride;
+    if(variant==='cast_alternate'){const i=reach.findIndex((key,index)=>index>0&&t<=key[0]);if(i<0)castReachOverride=0;else{const [ta,va]=reach[i-1],[tb,vb]=reach[i],u=Math.max(0,Math.min(1,(t-ta)/(tb-ta)));castReachOverride=va+(vb-va)*u*u*(3-2*u);}}
+    const expected=mourningMorphs({casting:true,castVariant:variant,castReachOverride,castTime:t,castWeight:a.weights.cast,walkTime:a.walkTime,gaitSeconds:a.gaitSeconds,gaitBlend:a.gaitBlend,breathClock:a.breathClock});
     for(const target of a.morphs)near(target.influence,expected[target.name],target.name);
     near(a.castTime,encounter.brain.time,'cast morph source time');
   }else near(encounter.animator.active.get(encounter.brain.state).clipTime,encounter.brain.time,'controlled group time');
@@ -66,7 +69,7 @@ test('actual two-phase models keep floor warning, one damage release and source 
   for(const phase of [1,2]){
     await battle.activateResident(player,{reset:true,phase});const encounter=battle.encounters.find(e=>e.kind==='elena'),spells=phase===2?MOURNING_SPELLS:ELENA_SPELLS;
     for(const speed of [.5,1,2])for(const fps of [30,60])for(const spec of spells){
-      encounter.brain.cancelCast();encounter.spell.reset();encounter.pendingEvents=[];battle.combat.reset();
+      encounter.brain.cancelCast();encounter.spell.reset();encounter.pendingEvents=[];battle.combat.reset();encounter.actor.position.set(29,6,-25.5);
       const settings=normalizeBossPatterns({[kind(phase)]:{custom:true,sequence:[id(phase,spec)],speed}});battle.setAttackSettings(settings);
       const selected=encounter.brain.cast();assert.equal(selected,spec);
       const rate=(phase===2?1.6:1)*speed,impact=spellImpact(spec,encounter.brain.durations[spec.name]),warning=(phase===2?MOURNING_CAST_LEAD_IN:0)+impact/rate;
@@ -75,6 +78,7 @@ test('actual two-phase models keep floor warning, one damage release and source 
       player.position.copyFrom(encounter.actor.position).addInPlaceFromFloats(0,0,phase===2&&spec.pattern==='ring'?7:4);player.rotation.y=Math.PI;
       encounter.update(0,player);scene._animate(0);encounter.poseAndContacts(player,{state:'idle'},null,null);
       const plan=encounter.spell.plan,serial=encounter.brain.serial,hp=battle.playerHp;
+      if(phase===2&&spec.pattern==='ring')player.position.set(plan.origin.x+plan.direction.x*7,6,plan.origin.z+plan.direction.z*7);
       assert.ok(spellContains(plan,player.position),`${phase}/${spec.pattern}: probe must stand inside the displayed footprint`);assert.ok(encounter.spell.mesh.isEnabled());
       let elapsed=0,releases=0,damageAt=null,changed=false,previousProgress=-1;
       while(elapsed<warning+.12){

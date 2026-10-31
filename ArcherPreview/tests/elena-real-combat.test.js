@@ -105,7 +105,12 @@ function prepareHazard(f,angle,pattern){
   reset(f,angle,6,{review:false});
   if(pattern==='charge'){f.e.brain.movementTurn=3;f.e.brain.reposition();}
   else {f.e.brain.nextSpell=MOURNING_SPELLS.findIndex(s=>s.pattern===pattern);f.e.brain.cast();}
-  step(f,0,{sample:false});return f.e.spell.plan;
+  step(f,0,{sample:false});
+  const plan=f.e.spell.plan;
+  // The slam warns from its locked landing point, 0.9m ahead of the root.
+  // Positive ring probes must stand in that annulus rather than its safe center.
+  if(pattern==='ring'&&plan){const dir=direction(angle);f.player.position.set(plan.origin.x+dir.x*6,0,plan.origin.z+dir.z*6);f.world.terrain.place(f.player.position);}
+  return plan;
 }
 function prepareHorizontalCharge(f,reverse=false){
   reset(f,0,6,{review:false});f.e.actor.position.set(reverse?31.8:25.5,0,-24.125);f.world.terrain.place(f.e.actor.position);

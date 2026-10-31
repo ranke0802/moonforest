@@ -7,9 +7,12 @@ import {MourningHurtVolumes} from './mourning-elena-hurt.js';
 import {ENEMY_ARENA_RADIUS} from './world-limits.js';
 import {MourningCaveNavigation} from './mourning-cave-navigation.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
+import {MourningSlamAdvance} from './mourning-slam.js';
 
 export class MourningElenaEncounter extends ElenaEncounter {
-  constructor(...args){super(...args);this.phase=2;this.displayName='비탄의 마녀 엘레나';this.radius=MOURNING_SIZE.radius;this.stopDistance=MOURNING_SIZE.stopDistance;this.separationRadius=MOURNING_SIZE.separationRadius;this.sizeScale=MOURNING_SIZE_SCALE;this.renderRangePadding=MOURNING_SIZE.renderRangePadding;this.reviewFocusHeight=2.25*MOURNING_SIZE_SCALE;this.meleeAimDistance=4+1.8*(MOURNING_SIZE_SCALE-1);this.healthAnchor=new Vector3();}
+  constructor(...args){super(...args);this.phase=2;this.displayName='비탄의 마녀 엘레나';this.radius=MOURNING_SIZE.radius;this.stopDistance=MOURNING_SIZE.stopDistance;this.separationRadius=MOURNING_SIZE.separationRadius;this.sizeScale=MOURNING_SIZE_SCALE;this.renderRangePadding=MOURNING_SIZE.renderRangePadding;this.reviewFocusHeight=2.25*MOURNING_SIZE_SCALE;this.meleeAimDistance=4+1.8*(MOURNING_SIZE_SCALE-1);this.healthAnchor=new Vector3();this.slamAdvance=new MourningSlamAdvance();}
+  update(dt,player){super.update(dt,player);this.slamAdvance.update(this,player);}
+  hide(){this.slamAdvance?.reset();super.hide();}
   createBrain(durations){return new ElenaBrain(durations,{mourning:true});}
   get movementNavigation(){
     const navigation=this.world.navigation;
@@ -41,6 +44,7 @@ export class MourningElenaEncounter extends ElenaEncounter {
     return new MourningElenaAnimator(this.asset,this.config,this.actor);
   }
   async summon(player,options={}){
+    this.slamAdvance.reset();
     const position=(options.position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8))).clone(),navigation=this.movementNavigation;
     if(navigation&&(!navigation.free(position,this.radius)||Math.hypot(position.x-player.position.x,position.z-player.position.z)<this.radius+.8)){
       const safe=navigation.findFree(position,this.radius,ENEMY_ARENA_RADIUS,[{x:player.position.x,z:player.position.z,radius:.8}]);position.x=safe.x;position.z=safe.z;
