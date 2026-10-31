@@ -1,5 +1,12 @@
 // Keep the authored clip names, including Meshy's original spelling.
 export const ELENA_HOME=Object.freeze({x:29,z:-25.5});
+export const ELENA_SIZE_SCALE=1.7/1.6;
+export const ELENA_SIZE=Object.freeze({
+  bodyHeight:1.7,sourceBodyHeight:1.6,scale:ELENA_SIZE_SCALE,
+  radius:.34*ELENA_SIZE_SCALE,stopDistance:1.08*ELENA_SIZE_SCALE,
+  separationRadius:.42*ELENA_SIZE_SCALE,contactScale:ELENA_SIZE_SCALE,
+  reviewFocusHeight:1.45*ELENA_SIZE_SCALE,
+});
 // The authored body is 2.7 m; the manifest's 3.2 m includes the halo.
 // Keep the packed rig untouched and apply this one ratio to world dimensions.
 export const MOURNING_SIZE_SCALE=5.7/2.7;

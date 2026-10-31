@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {BossEncounter} from './boss-encounter.js';
-import {ElenaBrain,ELENA_HOME,ELENA_SPELLS,MOURNING_MOVEMENT,MOURNING_SIZE,MOURNING_SIZE_SCALE} from './elena-spec.js';
+import {ElenaBrain,ELENA_HOME,ELENA_SIZE,ELENA_SPELLS,MOURNING_MOVEMENT,MOURNING_SIZE,MOURNING_SIZE_SCALE} from './elena-spec.js';
 import {createElenaContact} from './elena-style.js';
 import {GroundSpellTelegraph,spellContains} from './elena-ground-magic.js';
 import {shieldIntercepts} from './player-strikes.js';
@@ -11,9 +11,10 @@ import {MourningLocomotion} from './mourning-locomotion.js';
 import {chargeTouchesPlayer} from './elena-charge.js';
 
 export class ElenaEncounter extends BossEncounter {
-  constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=.34;this.stopDistance=1.08;this.separationRadius=.42;this.engaged=false;this.motionRootTravel=false;}
+  constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=ELENA_SIZE.radius;this.stopDistance=ELENA_SIZE.stopDistance;this.separationRadius=ELENA_SIZE.separationRadius;this.sizeScale=ELENA_SIZE.scale;this.reviewFocusHeight=ELENA_SIZE.reviewFocusHeight;this.healthAnchor=new Vector3();this.engaged=false;this.motionRootTravel=false;}
   createBrain(durations){return new ElenaBrain(durations);}
-  async summon(...args){await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();}
+  async summon(...args){await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);if(this.phase===1)this.contact.mesh.scaling.set(ELENA_SIZE.contactScale,1,ELENA_SIZE.contactScale);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();}
+  healthBarPosition(){return this.healthAnchor.copyFrom(this.actor.position).addInPlaceFromFloats(0,ELENA_SIZE.bodyHeight+.3,0);}
   hide(){this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;this.locomotion?.reset();}
   updateRenderRange(camera){super.updateRenderRange(camera);this.contact?.update(this.actor,this.active&&!this.corpseGone&&this.renderVisible!==false,this.death.opacity);}
   motionSpec(name){return this.brain?.mode==='attack'?this.brain.spell:ELENA_SPELLS.find(s=>s.name===name);}
@@ -125,5 +126,5 @@ export class ElenaEncounter extends BossEncounter {
     this.animator.gaitRate=(movement.run?3:2)/(this.phase===2?MOURNING_SIZE_SCALE:1);
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:moving,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;
   }
-  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,locomotion:this.locomotion?.inspect(),chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:undefined,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
+  inspect(){return {...super.inspect(),phase:this.phase,name:this.displayName,pattern:this.brain?.spell?.pattern,movement:this.brain?.repositioning?this.brain.moveKind:null,locomotion:this.locomotion?.inspect(),chargeDamage:MOURNING_MOVEMENT.chargeDamage,chargeResolved:!!this.chargeResolved,castRate:this.brain?.attackPlaybackRate,sizeScale:this.sizeScale??1,bodyHeight:this.phase===2?MOURNING_SIZE.bodyHeight:ELENA_SIZE.bodyHeight,collisionRadius:this.radius,review:!!this.reviewMode,animation:this.animator.inspect?.()};}
 }

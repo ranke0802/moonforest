@@ -10,7 +10,8 @@ import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {BossBattle} from '../src/boss-battle.js';
 import {instantiateBossModel} from '../src/boss-models.js';
-import {ElenaBrain,ELENA_HOME,ELENA_ACTIVE_CLIPS,ELENA_CAST} from '../src/elena-spec.js';
+import {ElenaBrain,ELENA_HOME,ELENA_SIZE,ELENA_ACTIVE_CLIPS,ELENA_CAST} from '../src/elena-spec.js';
+import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 import {ElenaLineEffect,lineHitsPlayer,ELENA_LINE_RADIUS} from '../src/elena-magic.js';
 import {ELENA_STYLE,ElenaPaint,applyElenaStyle} from '../src/elena-style.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
@@ -67,6 +68,30 @@ test('twenty cave round trips retain one Elena, player health/equipment and boss
     world.cave=true;await battle.activateResident(player);assert.deepEqual(count(),before);assert.equal(battle.encounters.length,1);assert.equal(elena.brain.hp,777);
   }
   assert.equal(models.loads,1);assert.equal(models.instances,1);assert.equal(battle.playerHp,312);assert.equal(battle.potions.remaining,1);assert.equal(battle.combat.defense,7);
+});
+
+test('saint Elena grows from 1.6 to 1.7 metres with matching skin contacts and no repeated-summon scale accumulation',async t=>{
+  const {battle,player,config}=await fixture(t);await battle.activateResident(player);const e=battle.elenaPool[0];
+  assert.equal(config.scale,ELENA_SIZE.scale);assert.equal(config.bodyHeight,1.7);assert.equal(config.sourceBodyHeight,1.6);
+  const nodes=orderPoseNodes([...e.asset.transformNodes,...e.asset.meshes]),sources=e.asset.meshes.filter(m=>m.getTotalVertices()&&!m.metadata?.moonforestOutline);
+  const measure=()=>{
+    e.groundHeight=config.catalog.find(c=>c.name==='Elena_Idle').groundTrack[0];
+    e.alignPose();refreshPoseMatrices(nodes);for(const skeleton of e.asset.skeletons)skeleton.prepare(true);
+    let min=Infinity,max=-Infinity;const p=new Vector3();
+    for(const mesh of sources){const positions=mesh.getPositionData(true,true),matrix=mesh.computeWorldMatrix(true);for(let i=0;i<positions.length;i+=3){Vector3.TransformCoordinatesFromFloatsToRef(positions[i],positions[i+1],positions[i+2],matrix,p);min=Math.min(min,p.y);max=Math.max(max,p.y);}}
+    return {height:max-min,head:e.nodes['mixamorig:Head'].getAbsolutePosition().subtract(e.actor.position).clone(),feet:min-e.actor.position.y};
+  };
+  e.brain.start('Elena_Idle','idle');e.dt=1/30;e.animator.transition('Elena_Idle',{clipTime:0,actionId:e.brain.serial});e.animator.update(.2);
+  e.actor.scaling.setAll(config.scale/ELENA_SIZE.scale);const original=measure();
+  e.actor.scaling.setAll(config.scale);const enlarged=measure();
+  assert.ok(Math.abs(original.height-1.6)<.03,JSON.stringify(original));assert.ok(Math.abs(enlarged.height-1.7)<.03,JSON.stringify(enlarged));
+  assert.ok(Math.abs(enlarged.height/original.height-ELENA_SIZE.scale)<1e-5);
+  assert.ok(Vector3.Distance(enlarged.head,original.head.scale(ELENA_SIZE.scale))<1e-5,JSON.stringify({original,enlarged}));
+  assert.ok(Math.abs(enlarged.feet)<.035,'authored ground track still grounds the feet');
+  assert.equal(e.hurtCapsules()[0].radius,.48*config.scale);assert.equal(e.radius,ELENA_SIZE.radius);assert.equal(e.contact.mesh.scaling.x,ELENA_SIZE.contactScale);
+  assert.ok(Math.abs(e.healthBarPosition().y-e.actor.position.y-2)<1e-6);assert.equal(e.inspect().bodyHeight,1.7);
+  for(let repeat=0;repeat<4;repeat++){await e.summon(player,{position:e.actor.position.clone()});assert.equal(e.actor.scaling.x,config.scale);assert.equal(e.contact.mesh.scaling.x,ELENA_SIZE.contactScale);}
+  t.diagnostic(JSON.stringify({sourceHeight:original.height,height:enlarged.height,scale:config.scale,groundOffset:enlarged.feet,collisionRadius:e.radius}));
 });
 
 test('real animation groups deform and ground the rig; every authored attack is a ground spell',async t=>{

@@ -1,6 +1,8 @@
 {
   "version": "Elena · non-enraged · 18 source motions + held idle",
-  "scale": 1,
+  "scale": 1.0625,
+  "bodyHeight": 1.7,
+  "sourceBodyHeight": 1.6,
   "forwardYaw": 0,
   "fps": 60,
   "animations": {

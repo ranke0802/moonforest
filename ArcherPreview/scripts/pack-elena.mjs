@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {splitGlb,hash} from './resource-pack.js';
 import {compressMeshopt} from './meshopt-lossless.js';
 import {basisModel} from './pack-village-ktx2.mjs';
-import {ELENA_ACTIVE_CLIPS} from '../src/elena-spec.js';
+import {ELENA_ACTIVE_CLIPS,ELENA_SIZE} from '../src/elena-spec.js';
 import {weldExactVertices} from './weld-exact-vertices.js';
 const root=resolve(import.meta.dirname,'..'),review=resolve(root,'reports/elena-boss');
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
@@ -53,6 +53,7 @@ const content=resolve(root,'public/assets/content');await mkdir(content,{recursi
 for(const [name,file]of packed.files)await writeFile(resolve(content,name),file.data);
 const sourceClips=config.catalog.filter(c=>!c.derived).map(({name,duration,frames,fps})=>({name,duration,frames,fps}));
 config.catalog=config.catalog.filter(c=>ELENA_ACTIVE_CLIPS.includes(c.name));
+Object.assign(config,{scale:ELENA_SIZE.scale,bodyHeight:ELENA_SIZE.bodyHeight,sourceBodyHeight:ELENA_SIZE.sourceBodyHeight});
 config.animations=Object.fromEntries(ELENA_ACTIVE_CLIPS.map(n=>[n,n]));
 Object.assign(config,{model:'./content/'+packed.model,resources:[...packed.files.keys()].map(n=>'./content/'+n),sourceClips,sourceSha256:'3896b89995c7b424aa3f6a35139127609c263e4063c48d5e9165a679baece4ac',texture:{width:4096,height:4096,codec:'ETC1S',mipmaps:true},geometry:{triangles:103930,originalTopology:false,originalTriangleSurfaces:true,lossless:true,exactVertexReuse},magicEffectsEnabled:true,magicEffect:'ground-telegraphs-v1',style:{pbr:false,outlinePixels:.5,internalLineStrength:.2,brightness:1.35,contactGround:true}});
 await writeFile(resolve(root,'public/assets/elena.json'),JSON.stringify(config,null,2)+'\n');

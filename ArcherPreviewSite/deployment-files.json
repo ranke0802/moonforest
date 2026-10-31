@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea71f754839e7e6ea6c27ff14f184be66f4b7477833aec31017fb98a7d5f5765",
-  "bytes": 600988891,
+  "bytes": 600989458,
   "files": [
     {
       "path": "app.webmanifest",
@@ -7355,8 +7355,8 @@
     },
     {
       "path": "assets/elena.json",
-      "bytes": 214692,
-      "sha256": "f7d226e2938900373fe0be0bb6c51bee6c288d0fbbb1ce34fe533c5485082f9c"
+      "bytes": 214745,
+      "sha256": "71f9929b7d6d7122775ba42c75edd85afca15e693381e3c4db1b441cd4990d38"
     },
     {
       "path": "assets/environment.json",
@@ -7379,9 +7379,9 @@
       "sha256": "20a7a5ef7efa9b2e67811b84b32c0a36507d7cc7f67688e89558ad903872a476"
     },
     {
-      "path": "assets/index-Cg_vf-wd.js",
-      "bytes": 2782204,
-      "sha256": "aed7650f1198e5eab5b7f07b03a707d40b51c47ffd48046b697595aa853e7848"
+      "path": "assets/index-k8jeBe9u.js",
+      "bytes": 2782718,
+      "sha256": "3612e92f209cc641c335b6fc208ec86d4e7a4d372564faebbe57944f70c59204"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -7491,7 +7491,7 @@
     {
       "path": "index.html",
       "bytes": 55456,
-      "sha256": "6293e2abb6510ab5b97e0bb5b1d0c2afe299a2af98404e4da5f2c57d45d3aa1d"
+      "sha256": "456a8330479168d8a02fdab4a4ec9764bbf589ad36539477afbde925a715f4da"
     },
     {
       "path": "KTX2_NOTICES.txt",

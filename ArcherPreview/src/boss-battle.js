@@ -5,7 +5,7 @@ import { PlayerCombat } from './player-combat.js';
 import { GoblinEncounter } from './goblin-encounter.js';
 import { ElenaEncounter } from './elena-encounter.js';
 import { MourningElenaEncounter } from './mourning-elena-encounter.js';
-import { ELENA_HOME, MOURNING_SIZE } from './elena-spec.js';
+import { ELENA_HOME, ELENA_SIZE, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 
@@ -140,7 +140,7 @@ export class BossBattle {
     if(this.loading||this.residentPending||!this.world.cave)return false;
     this.loading=true;this.onChange(this);
     try{
-      const radius=phase===2?MOURNING_SIZE.radius:.34,position=bossSpawnPositions(player,1)[0];
+      const radius=phase===2?MOURNING_SIZE.radius:ELENA_SIZE.radius,position=bossSpawnPositions(player,1)[0];
       const occupied=[{x:player.position.x,z:player.position.z,radius:.8},...this.encounters.filter(b=>b.kind!=='elena'&&b.brain.hp>0).map(b=>({x:b.actor.position.x,z:b.actor.position.z,radius:b.radius}))];
       if(this.world.navigation){const safe=this.world.navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied);position.x=safe.x;position.z=safe.z;}
       // The same two pooled actors serve the selector and the resident fight.
