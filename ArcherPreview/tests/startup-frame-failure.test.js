@@ -57,7 +57,7 @@ function fixture(){
   applyPlayerDetail:noop,applyCharacterSurfaceStyle:noop,attachCharacterOutlines:noop,applyAttackSpeed:noop,readAttackSpeed:()=>1,equipmentChoices:{},
   motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop},actionAudio:{reset:noop},
   updateButtons:noop,cancelAttackInput:noop,input:{reset:noop,panOffset:{x:0,y:0,z:0}},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
-  resetCamera:noop,syncCaveFog:noop,prepareElenaReview:()=>gate.at('model'),waitForSceneReady:()=>gate.at('scene'),prepareMapResources:()=>gate.at('map-download'),
+  resetCamera:noop,syncCaveFog:noop,prepareElenaReview:()=>gate.at('model'),leaveElenaReview:noop,waitForSceneReady:()=>gate.at('scene'),prepareMapResources:()=>gate.at('map-download'),
   bindMapPortal:noop,carryPortalPose:noop,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop},applyRenderQuality:noop,
   frameDiagnostics:{beginFrame:noop,endFrame:noop,mapChanged:noop,suspend:noop},text:noop,
   requestAnimationFrame:callback=>{raf.push(callback);return raf.length;},consumeTravel:()=>null,travelStorage:{},

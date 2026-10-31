@@ -12,6 +12,17 @@ export const MAP_PORTALS=Object.freeze({
 });
 export const FOREST_CAVE_PORTAL=Object.freeze({x:28,z:-41,radius:2.5,destination:'warrior-v5',label:'마녀의 동굴로 들어가기',arrival:CAVE_SPAWN});
 export const mapPortals=id=>id==='monster-forest'?[MAP_PORTALS[id],FOREST_CAVE_PORTAL]:MAP_PORTALS[id]?[MAP_PORTALS[id]]:[];
+export function portalHeadingTurn(from,to){
+  const departure=mapPortals(mapForCharacter(from)).find(portal=>portal.destination===to);
+  const returning=mapPortals(mapForCharacter(to)).find(portal=>portal.destination===from);
+  if(!departure||!returning)return 0;
+  // Keep the established village entrance turn; the two forest/cave mouths
+  // have different directions and must use their actual arrival corridors.
+  if(from==='warrior-v3'||to==='warrior-v3')return Math.PI;
+  const outward=Math.atan2(departure.x-returning.arrival.x,departure.z-returning.arrival.z);
+  const inward=Math.atan2(departure.arrival.x-returning.x,departure.arrival.z-returning.z);
+  return Math.atan2(Math.sin(inward-outward),Math.cos(inward-outward));
+}
 export function worldSpawn(character,search='',villageSpawn={x:0,z:0}){
   const params=new URLSearchParams(search);
   if(character==='warrior-v5')return CAVE_SPAWN;
@@ -26,6 +37,6 @@ export function travelUrl(href,destination){
   if(!isWorldCharacter(destination))throw new Error('Unknown travel destination');
   const url=new URL(href),source=url.searchParams.get('character');url.searchParams.set('character',destination);url.searchParams.set('arrival','portal');
   if(isWorldCharacter(source))url.searchParams.set('from',source);
-  for(const name of ['villageReview','villageOverview','villageHorizon','villageFixture','villageMobile'])url.searchParams.delete(name);
+  for(const name of ['villageReview','villageOverview','villageHorizon','villageFixture','villageMobile','elenaReview'])url.searchParams.delete(name);
   return url.href;
 }

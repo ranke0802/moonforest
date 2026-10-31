@@ -67,7 +67,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
   frameDiagnostics:{mapChanged:noop,suspend:noop,refresh:noop},loadDiagnostics:{begin:noop,phase:noop,download:noop,stream:noop,finish:noop},loadingView:{begin:noop,preparing:noop,download:noop,stream:noop,reveal:noop},
   frameLoop:{setPaused(){counters.renderPauses++;},invalidate(){counters.invalidations++;}},renderActivity:{wake:noop},animator:{transition:noop,update:noop},cancelAttackInput:noop,
-  prepareMapResources:async()=>{},loadVillage:async w=>{counters.mapLoads++;w.environment={};},waitForSceneReady:async()=>{},prepareElenaReview:async()=>{},bindMapPortal:noop,applyRenderQuality:noop,
+  prepareMapResources:async()=>{},loadVillage:async w=>{counters.mapLoads++;w.environment={};},waitForSceneReady:async()=>{},prepareElenaReview:async()=>{},leaveElenaReview:noop,bindMapPortal:noop,applyRenderQuality:noop,
   motionSpeedControls:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),document:doc,location,history,innerWidth:852,console,
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`

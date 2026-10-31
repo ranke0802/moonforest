@@ -680,6 +680,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
+      leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
@@ -690,11 +691,12 @@ try {
     },
     release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
     load:async href=>{
-      const url=new URL(href),destination=url.searchParams.get('character');
+      const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character;
+      url.searchParams.delete('elenaReview');
       replaceWorldMap(world,destination);character=destination;history.replaceState(null,'',url);
       actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);
       syncCaveFog(true);
-      carryPortalPose(actor,world.camera,input.panOffset);
+      carryPortalPose(actor,world.camera,input.panOffset,{from:sourceCharacter,to:destination});
       controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
       cameraPitch.follow(cameraFollow.focus(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
