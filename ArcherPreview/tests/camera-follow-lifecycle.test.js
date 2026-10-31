@@ -61,7 +61,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
  const boundary={CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
-  initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,
+  assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
   audio,actionAudio:{reset:noop},updateButtons:noop,toast:noop,canvas:{focus:noop},config:{forwardYaw:0},container:{meshes:[]},applyHitFlash:noop,
   goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},

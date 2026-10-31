@@ -110,6 +110,9 @@ let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealt
 let screenProjection;
 let reconcilePlayback=()=>{};
 let frameFailure=null;
+function assertFrameHealthy(){
+  if(frameLoop?.failed===true||frameFailure)throw new Error('게임 실행 오류: '+(frameFailure?.message??'화면 준비 중 실행이 중단되었습니다.'));
+}
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 let rollDirection={x:0,z:1};
@@ -439,9 +442,10 @@ async function loadCharacter() {
     loadDiagnostics.phase('screen');
     // Keep the black curtain through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
-    syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);
-    world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
+    assertFrameHealthy();syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);
+    assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+    assertFrameHealthy();
     loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
@@ -450,7 +454,7 @@ async function loadCharacter() {
     loadDiagnostics.finish(error.message);
     ready=false;
     console.error('[Archer asset load]', error);
-    loadingView.fail('캐릭터를 불러오지 못했습니다',/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
+    loadingView.fail(frameFailure?'게임 실행이 중단되었습니다':'캐릭터를 불러오지 못했습니다',frameFailure?'다시 불러오기를 눌러 주세요. '+frameFailure.message:/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
@@ -706,11 +710,13 @@ try {
       $('#character-select').value=character;bindMapPortal();
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
-      loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);world.scene.render();
+      assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);assertFrameHealthy();world.scene.render();
     },
     finish:async()=>{
+      assertFrameHealthy();
       loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+      assertFrameHealthy();
       applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
       loadDiagnostics.finish();
       const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open;
@@ -718,13 +724,14 @@ try {
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
     },
-    onError:error=>{loadDiagnostics.finish(error.message);console.error('[Map transition]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
+    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);loadDiagnostics.finish(error.message);console.error('[Map transition]',error);loadingView.fail('맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:'연결을 확인한 후 다시 불러와 주세요.');},
   });
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}catch(error){
-      frameFailure={message:String(error.message??error).slice(0,240),at:new Date().toISOString()};ready=false;
+      frameFailure={message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;
+      loadDiagnostics.finish(frameFailure.message);
       frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
       console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message);
     }finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}

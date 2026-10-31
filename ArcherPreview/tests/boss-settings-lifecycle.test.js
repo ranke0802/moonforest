@@ -21,7 +21,7 @@ function fixture(){
   const frameLoop=new FrameLoop({runRenderLoop:cb=>callbacks.add(cb),stopRenderLoop:cb=>callbacks.delete(cb)},dt=>{if(dt>0)brain.update(dt,4,true,{manual:true});},()=>wall);
   const audio={suspended:false,resumes:0,setSuspended(v){if(this.suspended&&!v)this.resumes++;this.suspended=v;},setEnvironment(){},play(){}};
   const document={hidden:false},transition={busy:false};
-  const env={audio,document,frameLoop,mapDeparture:{departing:false},mapTransition:transition,motionSpeedControls:{isOpen:()=>nodes['motion-speed-dialog'].open},deathScreen:{isOpen:()=>nodes['death-dialog'].open},$:selector=>nodes[selector.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},character:'warrior-v5',updateButtons(){},requestAnimationFrame:callback=>callback(),applyRenderQuality(){},loadingView:{reveal(){}},world:{villageStreaming:{}},loadDiagnostics:{finish(){}},canvas:{focus(){}}};
+  const env={assertFrameHealthy(){},audio,document,frameLoop,mapDeparture:{departing:false},mapTransition:transition,motionSpeedControls:{isOpen:()=>nodes['motion-speed-dialog'].open},deathScreen:{isOpen:()=>nodes['death-dialog'].open},$:selector=>nodes[selector.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},character:'warrior-v5',updateButtons(){},requestAnimationFrame:callback=>callback(),applyRenderQuality(){},loadingView:{reveal(){}},world:{villageStreaming:{}},loadDiagnostics:{finish(){}},canvas:{focus(){}}};
   const sync=compile(syncSource,env),finish=compile(finishSource,env);
   return {brain,frameLoop,audio,document,nodes,transition,sync,finish,tick:ms=>{wall+=ms;for(const cb of [...callbacks])cb();}};
 }

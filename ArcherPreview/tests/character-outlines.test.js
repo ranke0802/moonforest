@@ -24,6 +24,7 @@ for (const useTexture of [false, true]) test(`consecutive cached outline draws b
   });
   const bound = {};
   const effect = {
+    isReady:()=>true,
     setMatrix() {}, setFloat() {}, setFloat2() {}, setColor3() {},
     getUniformIndex: () => useTexture ? 0 : -1,
     setTexture: (name, texture) => { bound[name] = texture; },
@@ -86,7 +87,7 @@ test('monster shells share a material, keep independent skins and inherit fade, 
   assert.notEqual(bear.shell.skeleton, goblin.shell.skeleton);
   assert.equal(bear.shell.skeleton, bear.body.skeleton);
   const values = {}, material = bear.shell.material;
-  material.getEffect = () => ({ setFloat: (key, value) => { values[key] = value; }, setFloat2:(key,x,y)=>{values[key]=[x,y];} });
+  material.getEffect = () => ({ isReady:()=>true,setTexture(){},setFloat: (key, value) => { values[key] = value; }, setFloat2:(key,x,y)=>{values[key]=[x,y];} });
   bear.shell.visibility = .5;
   applyHitFlash(bear.asset.meshes, .22);
   material.onBindObservable.notifyObservers(bear.shell);

@@ -3,7 +3,7 @@ import {CaveFogMemory,CaveFogOfWar,CAVE_FOG_VISIBLE,caveFogAllowsRecord,caveFogR
 import {CAVE_FOG_GLSL,CAVE_FOG_COVER_FRAGMENT} from './cave-fog-cover.js';
 import {caveSurface} from './witch-cave-layout.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
-import {caveFogFallback} from './cave-fog-binding.js';
+import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_ROCK_GLSL,bindCaveRock,buildCaveRockShell,caveRockTexture} from './cave-rock-shell.js';
 
 const fogFunctions=CAVE_FOG_GLSL.replace('uniform vec4 caveFogRect;','').replace('uniform float caveFogActive;','');
@@ -53,12 +53,13 @@ export class CaveFogRuntime {
     const plugin=material.pluginManager?.getPlugin('CaveFogOfWar')??new CaveFogShade(material,this);plugin.runtime=this;this.plugins.add(plugin);if(frozen)material.freeze();
     this.materialDisposals.set(material,material.onDisposeObservable.addOnce(()=>{this.plugins.delete(plugin);this.materialDisposals.delete(material);}));
   }
-  bind(material){
-    const active=!this.disposed&&this.fog.ready?1:0,effect=material.getEffect?.();
+  bind(material,effect=null){
+    const active=!this.disposed&&this.fog.ready?1:0;
     material.setTexture('caveFogMap',this.texture);material.setVector4('caveFogRect',this.rect);material.setFloat('caveFogActive',active);
     material.setVector4('cavePlayerView',this.playerView);material.setVector4('caveBossView',this.bossView);
-    effect?.setTexture('caveFogMap',this.texture);effect?.setVector4('caveFogRect',this.rect);effect?.setFloat('caveFogActive',active);
-    effect?.setVector4('cavePlayerView',this.playerView);effect?.setVector4('caveBossView',this.bossView);
+    effect=readyShaderEffect(effect);if(!effect)return;
+    effect.setTexture('caveFogMap',this.texture);effect.setVector4('caveFogRect',this.rect);effect.setFloat('caveFogActive',active);
+    effect.setVector4('cavePlayerView',this.playerView);effect.setVector4('caveBossView',this.bossView);
   }
   allowsPoint(position){return !this.fog.ready||this.fog.stateAt(position.x,position.z)===CAVE_FOG_VISIBLE;}
   allowsBounds(min,max){return this.fog.boundsVisible(min,max);}
@@ -82,7 +83,7 @@ export class CaveFogRuntime {
   installGround(ground){
     if(!ground?.geometry)return;
     const material=new ShaderMaterial('cave-terrain-fog-cover',this.world.scene,{vertexSource:'precision highp float;attribute vec3 position;attribute vec3 normal;uniform mat4 worldViewProjection;uniform mat4 world;varying vec3 fogWorldPosition;varying vec3 fogWorldNormal;void main(){fogWorldPosition=(world*vec4(position,1.)).xyz;fogWorldNormal=normalize(mat3(world)*normal);gl_Position=worldViewProjection*vec4(position,1.);}',fragmentSource:CAVE_FOG_COVER_FRAGMENT},{attributes:['position','normal'],uniforms:['world','worldViewProjection','caveFogRect','caveFogActive','caveRockToGamma'],samplers:['caveFogMap','caveRockMap']});
-    material.options.uniforms.push('caveEye','caveFocus','cavePlayerView','caveBossView');material.backFaceCulling=false;material.disableDepthWrite=false;material.onBindObservable.add(()=>{this.bind(material);bindCaveRock(material,this.world);material.setVector3('caveEye',this.world.camera.globalPosition);material.setVector3('caveFocus',this.world.camera.target);});
+    material.options.uniforms.push('caveEye','caveFocus','cavePlayerView','caveBossView');material.backFaceCulling=false;material.disableDepthWrite=false;material.onBindObservable.add(()=>{const effect=material._activeEffect;this.bind(material,effect);bindCaveRock(material,this.world,effect);material.setVector3('caveEye',this.world.camera.globalPosition);material.setVector3('caveFocus',this.world.camera.target);});
     const shell=buildCaveRockShell(ground,this.world.terrain),data=new VertexData();data.positions=shell.positions;data.normals=shell.normals;data.indices=shell.indices;
     const cover=new Mesh('cave-terrain-fog-cover',this.world.scene);data.applyToMesh(cover);cover.material=material;cover.isPickable=false;cover.receiveShadows=false;cover.metadata={caveFogCover:true,caveNoShadow:true};cover.freezeWorldMatrix();cover.releaseSubMeshes();
     for(const [index,source]of ground.subMeshes.entries()){

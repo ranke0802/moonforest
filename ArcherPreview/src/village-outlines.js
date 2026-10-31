@@ -115,7 +115,8 @@ export class VillageOutlines {
       let orientation=mesh.material._getEffectiveOrientation(mesh);
       if(mesh._getWorldMatrixDeterminant()<0)orientation=orientation===Constants.MATERIAL_ClockWiseSideOrientation?Constants.MATERIAL_CounterClockWiseSideOrientation:Constants.MATERIAL_ClockWiseSideOrientation;
       this.material._preBind(undefined,orientation);
-      this.material.bind(mesh.getWorldMatrix(),mesh);engine.setDepthWrite(false);
+      this.material.bind(mesh.getWorldMatrix(),mesh);
+      bindCaveFogMaterial(scene,this.material,this.material._activeEffect??effect);engine.setDepthWrite(false);
       mesh._processRendering(mesh,subMesh,effect,Constants.MATERIAL_TriangleFillMode,inkBatch,true);
       this.stats.outlineDraws=(this.stats.outlineDraws??0)+1;
     }finally{

@@ -1,7 +1,7 @@
 import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
 import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
-import { bindCaveFogMaterial } from './cave-fog-binding.js';
+import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
 import {characterStyleFor,registerCharacterInk} from './character-style.js';
 import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots} from './character-render-cost.js';
 import {prepareMourningCameraCulling} from './mourning-camera-culling.js';
@@ -81,8 +81,9 @@ function outlineMaterial(scene) {
   material.setFloat('hitFlash', 0);
   material.setFloat('caveFogActive', 0);
   material.onBindObservable.add(mesh => {
-    const effect = material.getEffect();
-    bindCaveFogMaterial(scene,material);
+    const effect = readyShaderEffect(material._activeEffect??material.getEffect());
+    if(!effect)return;
+    bindCaveFogMaterial(scene,material,effect);
     // ShaderMaterial caches bone bindings with the shared material. Consecutive
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);

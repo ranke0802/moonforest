@@ -96,7 +96,7 @@ test('texture morph pruning keeps stable r9 shader slots, identical skin/normals
     BindMorphTargetParameters(body,effect);manager._bind(effect);assert.equal(bound.morphTargetCount,weights.filter(Boolean).length);assert.strictEqual(bound.morphTargets,texture);
   }
   applyHitFlash(asset.meshes,.22,.22);assert.equal(body.renderOverlay,false);assert.equal(body.overlayAlpha,.72);assert.equal(shell.renderOverlay,false);
-  const uniforms={},effect={getUniformIndex:()=>0,setFloat:(name,value)=>uniforms[name]=value,setFloat2(){},setFloat3(){},setFloatArray(){},setArray(){},setTexture(){},setMatrices(){},setMatrix(){},setColor3(){}};
+  const uniforms={},effect={isReady:()=>true,getUniformIndex:()=>0,setFloat:(name,value)=>uniforms[name]=value,setFloat2(){},setFloat3(){},setFloatArray(){},setArray(){},setTexture(){},setMatrices(){},setMatrix(){},setColor3(){}};
   shell.skeleton.prepare(true);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,.72);
   applyHitFlash(asset.meshes,0);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,0);
   assert.equal(hash(body.getVerticesData(VertexBuffer.PositionKind)),original.positions);assert.equal(hash(body.getVerticesData(VertexBuffer.NormalKind)),original.normals);assert.deepEqual(targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]),original.targets);

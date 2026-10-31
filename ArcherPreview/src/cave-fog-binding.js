@@ -10,8 +10,16 @@ export function caveFogFallback(scene){
   texture.name='cave-fog-inactive-sampler';texture.gammaSpace=false;texture.wrapU=texture.wrapV=Texture.CLAMP_ADDRESSMODE;fallbacks.set(scene,texture);
   scene.onDisposeObservable.addOnce(()=>{fallbacks.delete(scene);texture.dispose();});return texture;
 }
-export function bindCaveFogMaterial(scene,material){
-  const runtime=scene.metadata?.caveFogRuntime;if(runtime&&!runtime.disposed){runtime.bind(material);return;}
-  const texture=caveFogFallback(scene),effect=material.getEffect?.();
-  material.setTexture('caveFogMap',texture);material.setFloat('caveFogActive',0);effect?.setTexture?.('caveFogMap',texture);effect?.setFloat?.('caveFogActive',0);
+export function readyShaderEffect(effect){return effect&&!effect._isDisposed&&effect.isReady?.()===true?effect:null;}
+
+// Updating a material before rendering must only queue values. ShaderMaterial
+// exposes a pending Effect while an INSTANCES/LOD variant compiles in parallel;
+// that Effect's WebGL uniform table does not exist yet. Only the actual bind
+// callback may pass its current ready Effect for a live sampler refresh.
+export function bindCaveFogMaterial(scene,material,effect=null){
+  const runtime=scene.metadata?.caveFogRuntime;if(runtime&&!runtime.disposed){runtime.bind(material,effect);return;}
+  const texture=caveFogFallback(scene);
+  material.setTexture('caveFogMap',texture);material.setFloat('caveFogActive',0);
+  effect=readyShaderEffect(effect);if(!effect)return;
+  effect.setTexture('caveFogMap',texture);effect.setFloat('caveFogActive',0);
 }

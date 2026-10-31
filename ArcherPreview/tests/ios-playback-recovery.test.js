@@ -80,7 +80,7 @@ test('the actual game frame guard exposes one failure, stops work, and requires 
  const f=playback(),{document}=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),loadingView=createLoadingView(document),noop=()=>{};
  loadingView.reveal();t.mock.method(console,'error',noop);
  const start=main.indexOf('  frameLoop=new FrameLoop(engine,dt=>{'),end=main.indexOf('\n  const syncPlayback',start),source=main.slice(start+'  frameLoop='.length,end).trim().replace(/;$/,'');
- const env={...f.state,FrameLoop,loadingView,ready:true,loadingAsset:false,frameFailure:null,world:{},input:{reset:noop},cancelAttackInput:noop,updateButtons:noop,frameDiagnostics:{beginFrame:noop,endFrame:noop,suspend:noop},render(){throw Error('test frame failure');}};
+ const env={...f.state,FrameLoop,loadingView,loadDiagnostics:{finish:noop},ready:true,loadingAsset:false,frameFailure:null,world:{},input:{reset:noop},cancelAttackInput:noop,updateButtons:noop,frameDiagnostics:{beginFrame:noop,endFrame:noop,suspend:noop},render(){throw Error('test frame failure');}};
  env.frameLoop=evaluate(source,env);env.frameLoop.setPaused(false);for(const cb of [...f.queued])cb();
  assert.equal(env.ready,false);assert.equal(env.frameLoop.failed,true);assert.equal(f.queued.size,0);assert.equal(env.frameFailure.message,'test frame failure');assert.equal(document.getElementById('loading').hidden,false);assert.match(document.getElementById('loading-text').textContent,/test frame failure/);
  evaluate(syncSource,env)();assert.equal(f.queued.size,0,'ordinary touches never auto-retry a failed frame');

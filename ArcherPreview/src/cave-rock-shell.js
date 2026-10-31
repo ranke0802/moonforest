@@ -1,4 +1,4 @@
-import {caveFogFallback} from './cave-fog-binding.js';
+import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 
 // Borrow an already resident rock map. Its streaming owner retains disposal and
 // all existing 4K/1K/512/256 tier decisions; this adds no image or GPU texture.
@@ -24,10 +24,11 @@ vec3 caveRockShade(vec3 p,vec3 normal,float explored){
  float facing=.82+.18*max(0.,dot(normalize(normal),normalize(vec3(-.35,.78,-.52))));
  return rock*facing*mix(.87,1.,smoothstep(.05,.95,explored));
 }`;
-export function bindCaveRock(material,world){
- const texture=caveRockTexture(world),effect=material.getEffect?.(),gamma=texture.gammaSpace===false?1:0;
+export function bindCaveRock(material,world,effect=null){
+ const texture=caveRockTexture(world),gamma=texture.gammaSpace===false?1:0;
  material.setTexture('caveRockMap',texture);material.setFloat('caveRockToGamma',gamma);
- effect?.setTexture('caveRockMap',texture);effect?.setFloat('caveRockToGamma',gamma);
+ effect=readyShaderEffect(effect);if(!effect)return;
+ effect.setTexture('caveRockMap',texture);effect.setFloat('caveRockToGamma',gamma);
 }
 
 // Keep every original patch-boundary vertex, so the substitute can meet the
