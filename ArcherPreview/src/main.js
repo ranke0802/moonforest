@@ -738,7 +738,13 @@ try {
       console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message);
     }finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
   });
-  const syncPlayback=()=>{if(mapDeparture?.departing||mapTransition?.busy)return;const settingsOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true;if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend();}audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true);};
+  const syncPlayback=()=>{
+    if(mapDeparture?.departing||mapTransition?.busy)return;
+    const summonOpen=$('#summon-dialog').open,otherSettings=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true;
+    if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);
+    if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
+    audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true);
+  };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog']){
@@ -752,7 +758,7 @@ try {
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
-  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend();};
+  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
   engine.onContextRestoredObservable.add(restorePlayback);

@@ -17,7 +17,8 @@ export class FrameWindow {
 
 export class BossDiagnostics {
   constructor(){this.recent=new FrameWindow();this.during=new FrameWindow();this.after=new FrameWindow();this.reset();}
-  reset(){this.recent.clear();this.during.clear();this.after.clear();this.current=null;this.history=[];this.backgroundLoads=[];this.serial=0;}
+  reset(){this.recent.clear();this.during.clear();this.after.clear();this.current=null;this.history=[];this.backgroundLoads=[];this.serial=0;this.frozenBaseline=null;}
+  clearBaseline(){this.recent.clear();this.frozenBaseline=null;}
   interrupt(reason){if(this.current&&['preparing','sampling'].includes(this.current.status)){this.current.status='interrupted';this.current.reason=reason;}}
   event(event,at,memory,context={}){
     if(event.type==='prefetch-start'){this.backgroundLoads.push({label:event.label,status:'loading',started:at,memoryBefore:{...memory}});if(this.backgroundLoads.length>8)this.backgroundLoads.shift();return;}
@@ -25,7 +26,8 @@ export class BossDiagnostics {
     if(event.type==='begin'){
       this.interrupt('다음 소환');if(this.current){this.history.push(this.snapshot());if(this.history.length>3)this.history.shift();}
       this.during.clear();this.after.clear();
-      this.current={id:++this.serial,label:event.label,trigger:event.trigger,mode:event.mode,status:'preparing',started:at,stage:'resource',stageStarted:at,stageMs:{resource:0,model:0,screen:0},before:this.recent.summary(at-3000),memoryBefore:{...memory},contextBefore:context,targets:valid(context.targetFps)?[context.targetFps]:[],stages:[],pauses:0};
+      const frozen=this.frozenBaseline;
+      this.current={id:++this.serial,label:event.label,trigger:event.trigger,mode:event.mode,status:'preparing',started:at,stage:'resource',stageStarted:at,stageMs:{resource:0,model:0,screen:0},before:frozen?.summary??this.recent.summary(at-3000),baselineSource:frozen?'before-summon-menu':'recent-play',baselineAgeMs:frozen?Math.max(0,at-frozen.capturedAt):0,memoryBefore:{...memory},contextBefore:context,targets:valid(context.targetFps)?[context.targetFps]:[],stages:[],pauses:0};
       return;
     }
     const c=this.current;if(!c||c.status!=='preparing')return;
@@ -38,20 +40,26 @@ export class BossDiagnostics {
   }
   frame(at,frame,memory,context){
     if(!valid(frame.frameMs)||frame.frameMs<=0)return;
-    this.recent.add(at,frame);const c=this.current;if(!c||!['preparing','sampling'].includes(c.status))return;
+    this.frozenBaseline=null;this.recent.add(at,frame);const c=this.current;if(!c||!['preparing','sampling'].includes(c.status))return;
     if(!c.targets.includes(frame.targetFps))c.targets.push(frame.targetFps);
     if(c.status==='preparing'||(frame.intervalStart??at-frame.frameMs)<c.readyAt){this.during.add(at,frame);return;}
     this.after.add(at,frame);c.memoryAfter={...memory};
     if(this.after.durationMs>=5000){c.status='complete';c.contextAfter=context();c.completedAt=at;}
   }
-  suspend(){this.recent.clear();if(this.current&&['preparing','sampling'].includes(this.current.status))this.current.pauses++;}
+  suspend({preserveBaseline=false,at=0}={}){
+    // Summoning happens while its modal pauses the game. Freeze only that
+    // menu's preceding play window; hidden/settings/death/map pauses discard it.
+    if(preserveBaseline){this.frozenBaseline??={summary:this.recent.summary(at-3000),capturedAt:at};this.recent.clear();}
+    else this.clearBaseline();
+    if(this.current&&['preparing','sampling'].includes(this.current.status))this.current.pauses++;
+  }
   snapshot(){
     const c=this.current;if(!c)return null;const during=this.during.summary(),after=this.after.summary();
     const delta={};for(const k of FIELDS){const a=c.before[k].mean,b=after[k].mean;delta[k]=a!=null&&b!=null?b-a:null;}
     const before=c.memoryBefore?.jsUsedBytes,last=(c.memoryAfter??c.memoryReady)?.jsUsedBytes;
     delta.jsUsedBytes=before!=null&&last!=null?last-before:null;
     const end=c.contextAfter??c.contextReady,changed=(key,tolerance)=>Array.isArray(c.contextBefore?.[key])&&Array.isArray(end?.[key])&&c.contextBefore[key].some((v,i)=>Math.abs(v-end[key][i])>tolerance);
-    return {...c,stageMs:{...c.stageMs},stages:c.stages.map(s=>({...s})),targets:[...c.targets],during,after,delta,cameraChanged:changed('camera',.02),positionChanged:changed('position',.2),baselineReady:c.before.durationMs>=2800,afterProgress:Math.min(1,this.after.durationMs/5000)};
+    return {...c,stageMs:{...c.stageMs},stages:c.stages.map(s=>({...s})),targets:[...c.targets],during,after,delta,cameraChanged:changed('camera',.02),positionChanged:changed('position',.2),baselineReady:c.before.durationMs>=2800,comparisonAvailable:c.before.durationMs>=2800&&after.samples>0,afterProgress:Math.min(1,this.after.durationMs/5000)};
   }
 }
 
@@ -60,7 +68,7 @@ const change=(n,digits=1)=>Number.isFinite(n)?`${n>=0?'+':''}${n.toFixed(digits)
 const mib=n=>Number.isFinite(n)?n/1048576:null;
 export function bossComparisonLines(s){
   if(!s)return {title:'소환 비교 · 소환 전 3초 기록 중',frame:'진단을 켜고 잠시 플레이한 뒤 소환하세요.',draw:'',memory:'',peak:'',stages:'',cpu:'',note:''};
-  const status={preparing:'준비 중',sampling:`등장 후 ${(s.afterProgress*5).toFixed(1)}/5초`,complete:'비교 완료',interrupted:'측정 중단',error:'준비 실패'}[s.status];
+  const status={preparing:'준비 중',sampling:`등장 후 ${(s.afterProgress*5).toFixed(1)}/5초`,complete:s.baselineReady?'비교 완료':'등장 후 기록 완료 · 이전 표본 부족',interrupted:'측정 중단',error:'준비 실패'}[s.status];
   const a=s.before,b=s.after,m=s.memoryAfter??s.memoryReady;
   return {title:`${s.label} · ${status}`,frame:`프레임 ${number(a.frameMs.mean)} → ${number(b.frameMs.mean)} ms (${change(s.delta.frameMs)})`,
     draw:`드로콜 ${number(a.drawCalls.mean,0)} → ${number(b.drawCalls.mean,0)} (${change(s.delta.drawCalls,0)})`,
@@ -68,5 +76,5 @@ export function bossComparisonLines(s){
     peak:`p95 ${number(a.frameMs.p95)} → ${number(b.frameMs.p95)} ms · 준비 최대 ${number(s.during.frameMs.max)} ms`,
     stages:`리소스 ${number(s.stageMs.resource/1000)} · 모델 ${number(s.stageMs.model/1000)} · 화면 ${number(s.stageMs.screen/1000)}초`,
     cpu:`CPU ${number(a.cpuMs.mean)} → ${number(b.cpuMs.mean)} ms · 보스 ${number(b.bossUpdateMs.mean)} · 판정 ${number(b.contactsMs.mean)}`,
-    note:`전 3초 → 후 5초${s.baselineReady?'':' · 이전 표본 부족'}${s.targets.length>1?' · 목표 FPS 변경':''}${s.cameraChanged||s.positionChanged?' · 시점/위치 변경':''}${s.pauses?' · 중간 일시정지':''} · ${s.mode==='reuse'?'재소환':s.mode==='cached-model'?'모델 준비됨':'첫 준비'}`};
+    note:`전 3초 → 후 5초${s.baselineSource==='before-summon-menu'?' · 소환창 전 표본':''}${s.baselineReady?'':' · 이전 표본 부족'}${s.targets.length>1?' · 목표 FPS 변경':''}${s.cameraChanged||s.positionChanged?' · 시점/위치 변경':''}${s.pauses?' · 중간 일시정지':''} · ${s.mode==='reuse'?'재소환':s.mode==='cached-model'?'모델 준비됨':'첫 준비'}`};
 }

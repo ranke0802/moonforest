@@ -60,7 +60,9 @@ test('modal real controls stay inside fullscreen root, save/reset groups and ret
 
 test('main modal pause/resume, map finish and paused preview include style dialog',()=>{
   const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
-  const sync=source.match(/const syncPlayback=\(\)=>\{.*\};/)[0],events=[],dialogs=new Map();
+  const start=source.indexOf('const syncPlayback='),end=source.indexOf('const dialogObserver',start);
+  assert.ok(start>=0&&end>start,'playback callback is present');
+  const sync=source.slice(start,end).trim(),events=[],dialogs=new Map();
   const run=new Function('mapDeparture','mapTransition','motionSpeedControls','$','document','deathScreen','input','cancelAttackInput','frameLoop','text','frameDiagnostics','audio',sync+'return syncPlayback;');
   const call=run(null,null,{isOpen:()=>false},s=>dialogs.get(s)??{open:false},{hidden:false},{isOpen:()=>false},{reset:()=>events.push('reset')},()=>events.push('cancel'),{setPaused:v=>events.push(['pause',v])},()=>{},{suspend(){}},{setSuspended:v=>events.push(['audio',v])});
   dialogs.set('#character-style-dialog',{open:true});call();assert.ok(events.includes('reset'));assert.deepEqual(events.filter(Array.isArray),[['pause',true],['audio',true]]);

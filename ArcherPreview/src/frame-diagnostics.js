@@ -82,7 +82,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   copy.addEventListener('click',async()=>{
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=3;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
-    report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
+    report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     const value=JSON.stringify(report,null,2);
     try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);fallback.hidden=true;status.textContent='진단 기록을 복사했습니다.';}
     catch{fallback.value=value;fallback.hidden=false;fallback.focus();fallback.select();status.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
@@ -94,7 +94,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     mark(){return collecting?now():null;},
     measure(name,start){if(start!==null&&collecting&&name in sections)sections[name]+=Math.max(0,now()-start);},
     bossEvent(event){if(!enabled)return;if(event.type==='begin'&&comparison)comparison.open=true;bosses.event(event,now(),sampleMemory(true),context());next=0;paint();},
-    mapChanged(){if(!enabled)return;bosses.interrupt('맵 이동');bosses.recent.clear();paint();},
+    mapChanged(){if(!enabled)return;bosses.interrupt('맵 이동');bosses.clearBaseline();paint();},
     beginFrame(active,targetFps){
       collecting=enabled&&active;
       if(!collecting){if(enabled){monitor.suspend();if(!paused){bosses.suspend();paused=true;paint();}}return;}
@@ -104,6 +104,6 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
       monitor.end(time,()=>({...context(),render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
       bosses.frame(time,{intervalStart:monitor.frameStart-monitor.interval,frameMs:monitor.interval,cpuMs:Math.max(0,time-monitor.frameStart),...metrics,...sections,targetFps:monitor.targetFps},sampleMemory(),context);
       if(time>=next){next=time+500;paint();}},
-    suspend(){collecting=false;paused=true;monitor.suspend();bosses.suspend();paint();},
+    suspend({preserveBossBaseline=false}={}){collecting=false;paused=true;monitor.suspend();bosses.suspend({preserveBaseline:enabled&&preserveBossBaseline,at:enabled&&preserveBossBaseline?now():0});paint();},
   };
 }

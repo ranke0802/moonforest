@@ -67,6 +67,10 @@ export class CaveFogRuntime {
     if(this.disposed)return false;this.time=time;this.encounters=encounters??[];this.playerRoot=player?.position?player:null;
     const position=player?.position??player;if(!position)return false;
     const changed=this.fog.update(position,time,{force});
+    // Main calls update before scene.animate/contacts; beforeRender calls it
+    // again for paused or asynchronous first draws. Prepare hidden idles before
+    // their first body/outline/shadow pass, without waiting another frame.
+    for(const enemy of this.encounters)if(enemy.renderVisible!==false&&this.allowsPoint(enemy.actor.position))enemy.prepareVisiblePose?.();
     this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+1.05,position.z,1);this.updateBossView();
     if(changed){this.texture.update(this.fog.rgba);this.stats.uploads++;this.updateRecords();this.updateGround();if(this.world.villageVisibility){this.world.villageVisibility.timer=0;this.world.villageVisibility.shadowTimer=0;}this.world.villageStreaming?.demand.invalidate();}
     return changed;

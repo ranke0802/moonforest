@@ -9,14 +9,36 @@ import {ENEMY_ARENA_RADIUS} from './world-limits.js';
 import {chooseElenaReposition} from './elena-reposition.js';
 import {MourningLocomotion} from './mourning-locomotion.js';
 import {chargeTouchesPlayer} from './elena-charge.js';
+import {refreshPoseMatrices} from './pose-matrices.js';
 
 export class ElenaEncounter extends BossEncounter {
   constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=ELENA_SIZE.radius;this.stopDistance=ELENA_SIZE.stopDistance;this.separationRadius=ELENA_SIZE.separationRadius;this.sizeScale=ELENA_SIZE.scale;this.reviewFocusHeight=ELENA_SIZE.reviewFocusHeight;this.healthAnchor=new Vector3();this.engaged=false;this.motionRootTravel=false;}
   createBrain(durations){return new ElenaBrain(durations);}
-  async summon(...args){await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);if(this.phase===1)this.contact.mesh.scaling.set(ELENA_SIZE.contactScale,1,ELENA_SIZE.contactScale);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();}
+  async summon(...args){this.residentPoseDeferred=false;this.residentPosePrepared=false;await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);if(this.phase===1)this.contact.mesh.scaling.set(ELENA_SIZE.contactScale,1,ELENA_SIZE.contactScale);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();const ground=this.config.catalog?.find(c=>c.name===this.brain.idle)?.groundTrack;this.residentIdleGround=ground?.length&&ground.every(v=>v===ground[0])?ground[0]:null;}
   healthBarPosition(){return this.healthAnchor.copyFrom(this.actor.position).addInPlaceFromFloats(0,ELENA_SIZE.bodyHeight+.3,0);}
-  hide(){this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;this.locomotion?.reset();}
-  updateRenderRange(camera){super.updateRenderRange(camera);this.contact?.update(this.actor,this.active&&!this.corpseGone&&this.renderVisible!==false,this.death.opacity);}
+  hide(){this.residentPoseDeferred=false;this.residentPosePrepared=false;this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;this.locomotion?.reset();}
+  updateRenderRange(camera){super.updateRenderRange(camera);if(this.renderVisible!==false&&this.fogVisible!==false)this.prepareVisiblePose();this.contact?.update(this.actor,this.active&&!this.corpseGone&&this.renderVisible!==false,this.death.opacity);}
+  canDeferResidentPose(){
+    // Only a settled, single-weight phase-one idle can be sampled absolutely.
+    // Keep every moving/fighting/hit/death/review path and phase-two cloth live.
+    const a=this.animator,b=this.brain,entry=a?.active?.get(b?.idle);
+    return this.phase===1&&this.world.cave&&this.active&&!this.corpseGone&&!this.reviewMode&&!this.engaged&&b?.hp>0&&b.mode==='idle'&&b.state===b.idle&&!b.flash&&!b.stagger&&!this.transformRequested
+      &&(this.renderVisible===false||this.fogVisible===false)&&Math.hypot(this.actor.position.x-this.home.x,this.actor.position.z-this.home.z)<=.12
+      &&!this.pendingEvents.length&&!this.spell?.plan&&Number.isFinite(this.residentIdleGround)&&a.current===b.idle&&a.active.size===1&&entry?.weight===1&&entry.target===1&&entry.loop===true;
+  }
+  prepareVisiblePose({align=true}={}){
+    if(!this.residentPoseDeferred||!this.active||this.corpseGone)return false;
+    this.residentPoseDeferred=false;
+    const a=this.animator,entry=a.active.get(this.residentPoseState),duration=a.durations[this.residentPoseState];
+    entry.clipTime=duration>0?this.residentPoseTime%duration:0;
+    // This path requires exactly one weight-1 idle. Direct sampling commits it
+    // now; weighted goToFrame would wait for Babylon's late-animation binding.
+    entry.group.goToFrame(entry.group.from+(duration>0?entry.clipTime/duration:0)*(entry.group.to-entry.group.from),false);
+    if(align){super.alignPose();this.residentPosePrepared=true;}
+    this.actor.markAsDirty();this.actor.computeWorldMatrix();this.carrier.markAsDirty();this.carrier.computeWorldMatrix();
+    refreshPoseMatrices(this.poseNodes);return true;
+  }
+  alignPose(){if(this.residentPosePrepared){this.residentPosePrepared=false;return;}super.alignPose();}
   motionSpec(name){return this.brain?.mode==='attack'?this.brain.spell:ELENA_SPELLS.find(s=>s.name===name);}
   attackRange(spec){return spec?.range??1.35;}
   attackDamage(event){return event.damage;}
@@ -43,6 +65,14 @@ export class ElenaEncounter extends BossEncounter {
   }
   poseAndContacts(player,result,sample,shield){
     if(this.renderVisible===false&&!this.engaged)return 0;
+    if(this.residentPoseDeferred&&this.canDeferResidentPose()&&!sample){
+      // Preserve the original idle's constant ground smoothing while omitting
+      // bone/contact work. The current rig has a constant audited idle track.
+      const level=this.residentIdleGround;
+      this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
+      return 0;
+    }
+    this.prepareVisiblePose({align:false});
     const fire=this.pendingEvents.some(e=>e.kind==='ground'),serial=this.brain.serial;this.pendingEvents=this.pendingEvents.filter(e=>e.kind!=='ground');
     const stop=super.poseAndContacts(player,result,sample,shield);
     if(!this.spell||!this.active||this.corpseGone||this.brain.hp<=0||(!this.playerAlive&&!this.reviewMode)||this.brain.stagger||serial!==this.brain.serial){this.spell?.reset();return stop;}
@@ -81,13 +111,15 @@ export class ElenaEncounter extends BossEncounter {
   }
   update(dt,player){
     if(!this.active||this.corpseGone)return;
-    if(this.reviewMode){this.updateReview(dt,player);return;}
+    this.residentPosePrepared=false;
+    if(this.reviewMode){this.prepareVisiblePose({align:false});this.updateReview(dt,player);return;}
     if(this.brain.hp<=0||this.brain.stagger)this.spell?.reset();
     // Separate enter/leave distances so motion along the detection edge cannot
     // alternate returning home and attacking on adjacent frames.
     const slack=this.phase===2&&this.engaged?1.5:0;
     const p=this.actor.position,nearHome=Math.hypot(player.position.x-this.home.x,player.position.z-this.home.z)<(this.phase===2?MOURNING_SIZE.homeDetectionRange:12)+slack,detection=(this.phase===2?MOURNING_SIZE.engagementRange:8)+slack;
     this.engaged=this.brain.hp>0&&nearHome&&Vector3.DistanceSquared(p,player.position)<detection*detection;
+    if(!this.canDeferResidentPose())this.prepareVisiblePose({align:false});
     if(this.engaged||['dead','down','recover'].includes(this.brain.mode)){super.update(dt,player);this.ring.isVisible=false;return;}
     // A resident must not run a whole-map path search or start boss music while
     // the player explores elsewhere. Return to the dwelling without teleporting.
@@ -104,7 +136,9 @@ export class ElenaEncounter extends BossEncounter {
       this.movementNavigation?.constrain(p,before,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(p);
     }
     if(this.phase===2)this.animator.gaitRate=MOURNING_MOVEMENT.walkSpeed/((this.config.motion?.baseWalkSpeed??.3368)*MOURNING_SIZE_SCALE);
-    this.animator.transition(state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:true,staggerRemaining:this.brain.stagger});this.animator.update(dt);this.ring.isVisible=false;applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
+    if(this.canDeferResidentPose()){this.residentPoseDeferred=true;this.residentPoseState=state;this.residentPoseTime=this.brain.time;}
+    else{this.animator.transition(state,{clipTime:this.brain.time,actionId:this.brain.serial,loop:true,staggerRemaining:this.brain.stagger});this.animator.update(dt);}
+    this.ring.isVisible=false;applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.spell?.reset();
   }
   updateDeath(dt){
