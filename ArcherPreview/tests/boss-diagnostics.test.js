@@ -7,6 +7,35 @@ import {BossBattle} from '../src/boss-battle.js';
 
 const frame=(frameMs=33,drawCalls=100)=>({frameMs,cpuMs:5,drawCalls,sceneMs:3,animationMs:1,bossUpdateMs:.5,contactsMs:.25,targetFps:30});
 const mem=mb=>({jsUsedBytes:mb*1048576,textures:20,meshes:100});
+const gpu=(sampleId,ms,startAtMs,endAtMs)=>({status:'valid',latest:{sampleId,ms,startAtMs,endAtMs,availableAtMs:endAtMs+50}});
+
+test('GPU stream counts each query once regardless of CPU frame count and keeps bounded sample storage',()=>{
+ const w=new FrameWindow(),sample=gpu('one',7,0,10);for(let t=100;t<1000;t+=20)w.add(t,{...frame(20),gpu:sample});
+ assert.equal(w.summary().samples,45);assert.equal(w.summary().gpuMs.samples,1);assert.equal(w.summary().gpuMs.mean,7);
+ w.add(2000,{...frame(),gpu:gpu('two',13,1500,1510)});assert.equal(w.summary().gpuMs.mean,10);assert.equal(w.summary(1000).gpuMs.samples,1);assert.equal(w.summary(1000).gpuMs.mean,13);
+ for(let i=0;i<1000;i++)w.add(3000+i*250,{...frame(),gpu:gpu('bounded-'+i,5,3000+i*250,3010+i*250)});
+ assert.equal(w.gpuCount,128);assert.equal(w.gpuSeen.size,128);assert.equal(w.gpuIds.length,128);
+});
+
+test('summon GPU phases use the whole original query interval, excluding each crossing only once',()=>{
+ const d=new BossDiagnostics();for(let t=0;t<4000;t+=40)d.frame(t,{...frame(40),gpu:gpu('before-'+Math.floor(t/250),6,Math.floor(t/250)*250-40,Math.floor(t/250)*250-10)},mem(100),()=>({}));
+ d.suspend({preserveBaseline:true,at:4000});d.event({type:'begin',label:'마녀'},5000,mem(100),{targetFps:30});d.event({type:'ready'},5500,mem(100));
+ // Result arrives after ready but belongs wholly to preparation.
+ d.frame(5600,{...frame(40),gpu:gpu('during',10,5200,5250)},mem(100),()=>({}));
+ const crossing=gpu('crossing',12,5480,5520);for(let t=5640;t<=5800;t+=40)d.frame(t,{...frame(40),gpu:crossing},mem(100),()=>({}));
+ d.frame(5840,{...frame(40),gpu:gpu('after',14,5700,5740)},mem(100),()=>({}));
+ const s=d.snapshot();assert.equal(s.before.gpuMs.mean,6);assert.equal(s.baselineSource,'before-summon-menu');assert.equal(s.during.gpuMs.samples,1);assert.equal(s.during.gpuMs.mean,10);assert.equal(s.after.gpuMs.samples,1);assert.equal(s.after.gpuMs.mean,14);assert.equal(s.delta.gpuMs,8);assert.equal(s.gpuBoundaryExcluded,1);
+ assert.match(bossComparisonLines(s).gpu,/GPU 6.0 → 14.0 ms/);assert.match(bossComparisonLines(s).gpu,/경계 제외 1/);
+ for(let t=5880;t<=11000;t+=40)d.frame(t,frame(40),mem(100),()=>({}));const complete=d.snapshot();assert.equal(complete.status,'complete');const end=complete.completedAt;
+ d.frame(end+100,{...frame(),gpu:gpu('future',999,end+10,end+20)},mem(100),()=>({}));assert.equal(d.snapshot().after.gpuMs.mean,14,'completed comparison ignores later measurements');
+ d.frame(end+110,{...frame(),gpu:gpu('delayed-before-end',16,end-100,end-50)},mem(100),()=>({}));assert.equal(d.snapshot().after.gpuMs.samples,2,'late result wholly within measured period is retained');
+});
+
+test('unsupported GPU data is explicit and never zero or a GPU/CPU sum',()=>{
+ const d=new BossDiagnostics();for(let t=0;t<=3000;t+=40)d.frame(t,{...frame(40),gpu:{status:'unsupported',meanMs:null,latest:null}}, {},()=>({}));
+ d.event({type:'begin',label:'성녀'},3100,{});d.event({type:'ready'},3200,{});d.frame(3300,{...frame(40),gpu:{status:'unsupported',meanMs:null,latest:null}}, {},()=>({}));
+ const s=d.snapshot();assert.equal(s.before.gpuStatus,'unsupported');assert.equal(s.after.gpuStatus,'unsupported');assert.equal(s.after.gpuMs.samples,0);assert.equal(s.after.gpuMs.mean,null);assert.equal(s.delta.gpuMs,null);assert.equal(s.after.cpuMs.mean,5);assert.match(bossComparisonLines(s).gpu,/GPU — → —/);
+});
 test('comparison separates pre-spawn baseline, cold preparation and five seconds of visible play',()=>{
  const d=new BossDiagnostics();for(let t=0;t<=4000;t+=40)d.frame(t,frame(40),mem(100),()=>({}));
  d.event({type:'begin',label:'비탄의 마녀',mode:'cold'},4000,mem(100),{targetFps:30,position:[0,0]});

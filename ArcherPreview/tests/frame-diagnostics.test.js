@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {FrameDiagnostics,createFrameDiagnostics} from '../src/frame-diagnostics.js';
+import {FrameDiagnostics,createFrameDiagnostics,gpuDiagnosticLine} from '../src/frame-diagnostics.js';
 import {FrameLoop} from '../src/frame-loop.js';
+import {Observable} from '@babylonjs/core/Misc/observable.js';
+import {GpuFrameSampler} from '../src/scene-diagnostics.js';
 
 const draw=(monitor,time,limit=30,work=4,context)=>{monitor.begin(time,limit);monitor.end(time+work,context);};
 test('normal mobile pacing is 30 FPS / 33ms and is never counted as a delayed frame',()=>{
@@ -32,15 +34,15 @@ test('paused/hidden time and FPS cap changes are not reported as gameplay stalls
  m.reset();assert.equal(m.summary().samples,0);assert.equal(m.summary().frameMs,null);assert.equal(m.events.length,0);
 });
 
-function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom,renderMetrics,onEnabled}={}){
+function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom,renderMetrics,onEnabled,onCollecting,onMapChanged,onReset}={}){
  let time=0,clockCalls=0,contextCalls=0,writes=0;
  const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures','diagnostic-zoom','diagnostic-zoom-range'];
- ids.push('diagnostic-render','diagnostic-boss-comparison','diagnostic-boss-title','diagnostic-boss-frame','diagnostic-boss-peak','diagnostic-boss-draw','diagnostic-boss-memory','diagnostic-boss-cpu','diagnostic-boss-live','diagnostic-boss-stages','diagnostic-boss-note');
+ ids.push('diagnostic-render','diagnostic-gpu','diagnostic-boss-gpu','diagnostic-boss-comparison','diagnostic-boss-title','diagnostic-boss-frame','diagnostic-boss-peak','diagnostic-boss-draw','diagnostic-boss-memory','diagnostic-boss-cpu','diagnostic-boss-live','diagnostic-boss-stages','diagnostic-boss-note');
  const nodes=Object.fromEntries(ids.map(id=>[id,{dataset:{},hidden:false,disabled:false,checked:false,value:'',listeners:{},_text:'',
   get textContent(){return this._text;},set textContent(v){writes++;this._text=v;},
   addEventListener(type,listener){this.listeners[type]=listener;},focus(){this.focused=true;},select(){this.selected=true;}}]));
  const storage={getItem:()=>stored,setItem:(_,v)=>stored=v};
- const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,zoom,renderMetrics,onEnabled,
+ const diagnostic=createFrameDiagnostics({doc:{getElementById:id=>nodes[id]},storage,now:()=>{clockCalls++;return time;},clipboard,metadata,loads,memory,zoom,renderMetrics,onEnabled,onCollecting,onMapChanged,onReset,
   context:()=>{contextCalls++;return {position:[3,-5],activity:'회전/시점 조작'};}});
  const frame=(at,active=true)=>{time=at;diagnostic.beginFrame(active,30);time=at+4;diagnostic.endFrame();};
  const toggle=on=>{nodes['frame-diagnostics-toggle'].checked=on;nodes['frame-diagnostics-toggle'].listeners.change();};
@@ -56,6 +58,50 @@ test('disabled diagnostics perform no timing, context collection or HUD updates;
  f.toggle(false);const calls=f.counts().clockCalls;f.frame(1000);assert.equal(f.counts().clockCalls,calls);
 });
 
+test('GPU collecting hooks transition once and reset/map/pause stop pending measurement without enabling disabled work',()=>{
+ const transitions=[],boundaries=[];let reads=0;
+ const f=ui({onCollecting:v=>transitions.push(v),onMapChanged:()=>boundaries.push('map'),onReset:()=>boundaries.push('reset'),renderMetrics:()=>{reads++;return {};}});
+ for(let i=0;i<20;i++)f.frame(i*33);assert.equal(reads,0);assert.deepEqual(transitions,[]);
+ f.toggle(true);f.frame(1000);f.frame(1033);f.frame(1066);assert.deepEqual(transitions,[true]);
+ f.frame(1100,false);f.frame(1133,false);f.diagnostic.suspend();assert.deepEqual(transitions,[true,false]);
+ f.frame(1200);f.nodes['reset-frame-diagnostics'].listeners.click();assert.deepEqual(boundaries,['reset']);
+ f.diagnostic.mapChanged();assert.deepEqual(transitions,[true,false,true,false]);assert.deepEqual(boundaries,['reset','map']);
+ f.frame(1300);f.toggle(false);const count=reads;f.frame(1400);f.diagnostic.suspend();assert.equal(reads,count);assert.deepEqual(transitions,[true,false,true,false,true,false]);
+});
+
+test('settings pause preserves completed GPU timing as historical JSON with fresh age, map/reset/context loss erase it',async()=>{
+ let time=0,resultReady=false,serial=0,deleted=0,copied;
+ const engine={onBeginFrameObservable:new Observable(),onEndFrameObservable:new Observable(),onContextLostObservable:new Observable(),onContextRestoredObservable:new Observable()};
+ const driver={lost:()=>false,disjoint:()=>false,busy:()=>false,begin:()=>({id:++serial}),end:()=>{},available:()=>resultReady,result:()=>12.5e6,remove:()=>deleted++};
+ const sampler=new GpuFrameSampler(engine,{now:()=>time,driverFactory:()=>driver});
+ const f=ui({stored:'1',onCollecting:v=>sampler.setActive(v),onMapChanged:()=>sampler.reset('paused'),onReset:()=>sampler.reset('paused'),renderMetrics:()=>({gpu:sampler.sample()}),clipboard:{writeText:async v=>copied=JSON.parse(v)}});
+ f.frame(0);time=10;engine.onBeginFrameObservable.notifyObservers();time=20;engine.onEndFrameObservable.notifyObservers();
+ resultReady=true;time=30;engine.onBeginFrameObservable.notifyObservers();f.frame(40);f.diagnostic.refresh();assert.match(f.nodes['diagnostic-gpu'].textContent,/GPU 평균 12.5 ms/);
+ time=270;resultReady=false;engine.onBeginFrameObservable.notifyObservers();time=280;f.diagnostic.suspend();assert.equal(deleted,2);assert.match(f.nodes['diagnostic-gpu'].textContent,/GPU 최근 12.5 ms · 일시정지/);
+ time=5000;f.setTime(time);await f.nodes['copy-frame-diagnostics'].listeners.click();const sample=copied.renderMetrics.gpu;
+ assert.equal(sample.status,'paused');assert.equal(sample.meanMs,null);assert.equal(sample.retained.meanMs,12.5);assert.equal(sample.retained.samples,1);assert.equal(sample.retained.ageMs,4980);assert.match(copied.measurement,/historical completed samples/);assert.equal(serial,2,'copying does not create a GPU query');
+ f.diagnostic.mapChanged();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.renderMetrics.gpu.retained,null);
+ time=6000;f.frame(6000);engine.onBeginFrameObservable.notifyObservers();time=6010;engine.onEndFrameObservable.notifyObservers();resultReady=true;time=6020;engine.onBeginFrameObservable.notifyObservers();f.frame(6030);
+ f.nodes['reset-frame-diagnostics'].listeners.click();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.renderMetrics.gpu.retained,null);assert.equal(copied.renderMetrics.gpu.latest,null);
+ engine.onContextLostObservable.notifyObservers();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.renderMetrics.gpu.status,'context-lost');assert.equal(copied.renderMetrics.gpu.meanMs,null);sampler.dispose();
+});
+
+test('GPU HUD separates unsupported/pending/disjoint/stale states and displays true zero only when valid',()=>{
+ for(const [status,label] of Object.entries({unsupported:'미지원',pending:'결과 대기',disjoint:'계측 무효',stale:'오래된 표본','context-lost':'화면 복구 대기'})){
+  const line=gpuDiagnosticLine({status,meanMs:null});assert.match(line,/GPU —/);assert.ok(line.includes(label));assert.equal(line.includes('0.0 ms'),false);
+ }
+ assert.equal(gpuDiagnosticLine({status:'valid',meanMs:0,samples:1}),'GPU 평균 0.0 ms · 비동기 1표본');
+});
+
+test('paused preview CPU counter mutations cannot overwrite last play snapshot while GPU retained age refreshes',async()=>{
+ let active=false,age=0,copied;const shared={drawCalls:80,sceneMs:3,animationMs:1};
+ const renderMetrics=()=>{shared.gpu=active?{status:'valid',meanMs:11,samples:1,latest:{sampleId:'original',ms:11,startAtMs:10,endAtMs:20}}:{status:'paused',meanMs:null,latest:null,retained:{meanMs:11,samples:1,ageMs:age,historical:true}};return shared;};
+ const f=ui({stored:'1',onCollecting:v=>active=v,renderMetrics,clipboard:{writeText:async v=>copied=JSON.parse(v)}});
+ f.frame(100);shared.drawCalls=999;shared.sceneMs=91;shared.animationMs=42;age=500;f.diagnostic.suspend();
+ assert.match(f.nodes['diagnostic-render'].textContent,/드로콜 80 · 화면 CPU 3.0 ms/);age=1500;
+ await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.renderMetrics.drawCalls,80);assert.equal(copied.renderMetrics.sceneMs,3);assert.equal(copied.renderMetrics.animationMs,1);assert.equal(copied.renderMetrics.gpu.status,'paused');assert.equal(copied.renderMetrics.gpu.retained.ageMs,1500);
+});
+
 test('existing HUD opens spawn comparison, records memory and draws, and exports independent completed comparisons',async()=>{
  let calls=0,heap=100,drawCalls=80,copied;const enabled=[];
  const f=ui({renderMetrics:()=>{calls++;return {drawCalls,sceneMs:3,animationMs:1};},onEnabled:v=>enabled.push(v),memory:()=>({jsUsedBytes:heap*1048576}),clipboard:{writeText:async value=>copied=JSON.parse(value)}});
@@ -66,7 +112,7 @@ test('existing HUD opens spawn comparison, records memory and draws, and exports
  heap=140;drawCalls=110;f.setTime(3500);f.diagnostic.bossEvent({type:'ready'});
  for(let i=1;i<=110;i++)f.frame(3500+i*50);
  await f.nodes['copy-frame-diagnostics'].listeners.click();const s=copied.bossComparison;
- assert.equal(copied.version,3);assert.equal(s.status,'complete');assert.equal(s.before.drawCalls.mean,80);assert.equal(s.after.drawCalls.mean,110);assert.equal(s.delta.jsUsedBytes,40*1048576);
+ assert.equal(copied.version,4);assert.equal(s.status,'complete');assert.equal(s.before.drawCalls.mean,80);assert.equal(s.after.drawCalls.mean,110);assert.equal(s.delta.jsUsedBytes,40*1048576);
  assert.match(f.nodes['diagnostic-boss-frame'].textContent,/33.0 → 50.0/);assert.match(f.nodes['diagnostic-render'].textContent,/드로콜 110/);
  f.diagnostic.bossEvent({type:'begin',label:'타락한 성녀',mode:'reuse'});await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.bossComparisonHistory[0].status,'complete');
  f.diagnostic.mapChanged();await f.nodes['copy-frame-diagnostics'].listeners.click();assert.equal(copied.bossComparison.reason,'맵 이동');
