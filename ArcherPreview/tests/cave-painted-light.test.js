@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {buildCavePaintLight,getCavePaintLight,sampleCavePaintLight,cavePaintEmitters,clearCavePaintLightCache,inspectCavePaintLightCache,CAVE_PAINT_LIGHT_CONFIG as CONFIG,CAVE_PAINT_LIGHT_POLICY as POLICY} from '../src/cave-painted-light.js';
+import {buildCavePaintLight,getCavePaintLight,sampleCavePaintLight,cavePaintEmitters,caveRockPaintReceiver,clearCavePaintLightCache,inspectCavePaintLightCache,CAVE_PAINT_LIGHT_CONFIG as CONFIG,CAVE_PAINT_LIGHT_POLICY as POLICY} from '../src/cave-painted-light.js';
 import {CAVE_PLACEMENTS,CAVE_BOSS} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {TerrainHeightField} from '../src/terrain.js';
@@ -42,7 +42,7 @@ test('final .8m surface margin lights the first wall while a flat receiver two m
  const wall=(x,z,r)=>Math.abs(x-.4)<=.25+r,options={placements:[lamp()],occludes:wall},before=buildCavePaintLight(flat,{...options,endSurfaceMargin:0}),after=buildCavePaintLight(flat,options),unblocked=buildCavePaintLight(flat,{...options,occludes:clear});
  const first=sampleCavePaintLight(after,.4,.1,0),oldFirst=sampleCavePaintLight(before,.4,.1,0);assert.ok(luma(first.rgb)>luma(oldFirst.rgb)+.1,'receive light on first .5m-thick wall, not just the lamp floor');
  for(const [x,z]of [[2.65,0],[2.8,2]]){const shadow=sampleCavePaintLight(after,x,.1,z),open=sampleCavePaintLight(unblocked,x,.1,z);assert.ok(luma(shadow.rgb)<.19,'intervening wall still blocks separate flat receiver/room');assert.ok(luma(open.rgb)>luma(shadow.rgb)+.04,'control receiver is within the lamp radius');}
- assert.equal(after.stats.endSurfaceMargin,.8);assert.ok(after.stats.endSurfaceSamples>0);assert.ok(after.stats.blockedRays>0);assert.equal(after.stats.version,2);assert.ok(Math.abs(after.stats.combinedSurfaceFringeLimitMeters-1.925)<1e-12);
+ assert.equal(after.stats.endSurfaceMargin,.8);assert.ok(after.stats.endSurfaceSamples>0);assert.ok(after.stats.blockedRays>0);assert.equal(after.stats.version,CONFIG.version);assert.ok(Math.abs(after.stats.combinedSurfaceFringeLimitMeters-1.925)<1e-12);
  for(let i=3;i<after.data.length;i+=4)assert.equal(after.data[i],before.data[i],'receiving height and geometry stay unchanged');
  assert.throws(()=>buildCavePaintLight(flat,{...options,endSurfaceMargin:.81}),/Invalid cave paint end surface margin/);
 });
@@ -56,6 +56,30 @@ test('existing terrain ridge blocks light even without a rock mask; separate lev
  const ridge={heightAt:(x,z)=>Math.abs(x-.4)<.4?6:0},map=buildCavePaintLight(ridge,{placements:[lamp()],occludes:clear});
  assert.ok(luma(sampleCavePaintLight(map,-3,.1,0).rgb)>.6);assert.ok(luma(sampleCavePaintLight(map,3,.1,0).rgb)<.19);assert.ok(map.stats.blockedRays>0);
  const ledge={heightAt:(x,z)=>x>0?6:0},levels=buildCavePaintLight(ledge,{placements:[lamp()],occludes:clear});assert.ok(luma(sampleCavePaintLight(levels,3,6.1,0).rgb)<.19);
+});
+
+test('lower receiving face is lit beside tall terrain while real floor alpha and separate-room occlusion stay exact',()=>{
+ const shoulder={heightAt:x=>x>.1?10:0},options={placements:[lamp()],occludes:clear};
+ const before=buildCavePaintLight(shoulder,options),after=buildCavePaintLight(shoulder,{...options,receiverAt:(_t,x,z,floor)=>x>.1&&x<1.7?0:floor});
+ const a=sampleCavePaintLight(before,.5625,.65,0),b=sampleCavePaintLight(after,.5625,.65,0);
+ assert.ok(luma(b.rgb)>luma(a.rgb)+.15,'receive near a lamp on a low face, not ten metres above it');
+ for(let i=3;i<before.data.length;i+=4)assert.equal(after.data[i],before.data[i],'water depth and physical floor alpha are unchanged');
+ assert.ok(luma(sampleCavePaintLight(after,3,10.1,0).rgb)<.19,'upper separate receiver does not inherit the lower wall light');
+ // A small free gap after an earlier obstacle is a different space, even if
+ // its destination is another low receiving surface.
+ const broken={heightAt:x=>(x>-.5&&x<0)||(x>.5)?10:0};
+ const separated=buildCavePaintLight(broken,{...options,receiverAt:(_t,x,z,floor)=>x>.5&&x<1.8?0:floor});
+ assert.ok(luma(sampleCavePaintLight(separated,1.3,.65,0).rgb)<.21,'a ray that exits a previous wall cannot be a terminal receiver');
+});
+
+test('actual lower-wall receiver changes only adjacent non-walking shoulders and keeps the 64KiB single-height contract',()=>{
+ const map=buildCavePaintLight(actualTerrain,{receiverAt:caveRockPaintReceiver});
+ assert.ok(map.stats.receiverPixels>0);assert.ok(map.stats.receiverPixels<2000);
+ const x=-41.0625,z=-9.5625,y=2.9;
+ assert.ok(luma(sampleCavePaintLight(map,x,y,z).rgb)>luma(sampleCavePaintLight(actual,x,y,z).rgb)+.12,'laboratory lamp reveals its adjacent lower wall');
+ for(let i=3;i<actual.data.length;i+=4)assert.equal(map.data[i],actual.data[i]);
+ assert.equal(caveRockPaintReceiver(actualTerrain,-35,-18,actualTerrain.heightAt(-35,-18)),actualTerrain.heightAt(-35,-18),'walkable laboratory floor uses its actual height');
+ assert.equal(map.data.byteLength,65536);assert.equal(map.stats.additionalLights,0);assert.equal(map.stats.additionalShadowPasses,0);assert.equal(map.stats.frameUpdates,0);
 });
 
 test('RGBA has fixed64KiB/1.125m texel centres and full floor range with finite bilinear edge sampling',()=>{

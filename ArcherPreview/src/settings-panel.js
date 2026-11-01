@@ -1,7 +1,9 @@
 // Move the existing controls, keeping their IDs, values and event handlers intact.
+import {setupRuntimeVersionPanel} from './runtime-version.js';
 export function setupSettingsPanel() {
   const $ = selector => document.querySelector(selector);
   const dialog = $('#motion-speed-dialog');
+  if(dialog.dataset.settingsReady==='true')return setupRuntimeVersionPanel({host:$('#current-state-settings .settings-section-body')});
   dialog.classList.add('game-settings');
   $('#motion-speed-title').textContent = '설정';
   $('#motion-speed-description').textContent = '캐릭터, 화면과 동작을 조절합니다. 설정을 닫으면 전투가 이어집니다.';
@@ -48,7 +50,14 @@ export function setupSettingsPanel() {
   followOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-follow-motion" type="checkbox">캐릭터 모션 따라가기</label></div><small>체크하면 달리기·점프 등 모션에 맞춰 카메라가 움직입니다.</small><small id="camera-follow-status" role="status" aria-live="polite"></small>';
   const characterStyle=document.createElement('button');characterStyle.id='open-character-style';characterStyle.type='button';characterStyle.className='motion-speed-toggle';characterStyle.textContent='캐릭터 선 · 밝기';characterStyle.setAttribute('aria-haspopup','dialog');
   section('화면 · 카메라', [displayOptions, characterStyle, $('.camera-tools'), $('#camera-zoom-options'), followOptions, pitchOptions]);
-  section('성능 진단', [$('#frame-diagnostics-options')]);
+  const diagnosticOptions=$('#frame-diagnostics-options'),diagnosticHelp=document.createElement('details');
+  diagnosticHelp.id='frame-diagnostics-help';diagnosticHelp.className='diagnostic-help';
+  const diagnosticSummary=document.createElement('summary');diagnosticSummary.textContent='측정 기준과 자세한 설명';diagnosticHelp.append(diagnosticSummary);
+  for(const node of [...diagnosticOptions.children])if(node.matches('small,p'))diagnosticHelp.append(node);
+  const oldInstructions=diagnosticHelp.querySelector('small');if(oldInstructions)oldInstructions.textContent='진단을 켜고 3초 이상 플레이한 뒤 보스를 소환하면 전후를 비교합니다. 자세히를 누르면 전투를 잠시 멈추고 기록을 봅니다. 등장 후 5초 뒤 복사하면 비교 결과가 포함됩니다.';
+  const diagnosticQuick=document.createElement('p');diagnosticQuick.className='diagnostic-quick';diagnosticQuick.textContent='탐색 중에는 FPS와 프레임만 표시합니다. 상세 기록은 자세히에서 확인하세요.';
+  diagnosticOptions.querySelector('label').after(diagnosticQuick);diagnosticOptions.append(diagnosticHelp);
+  section('성능 진단', [diagnosticOptions]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
   const bossPatterns=document.createElement('button');bossPatterns.id='open-boss-patterns';bossPatterns.type='button';bossPatterns.className='motion-speed-toggle';bossPatterns.textContent='보스 패턴 · 속도';bossPatterns.setAttribute('aria-haspopup','dialog');
   section('보스 전투', [bossPatterns]);
@@ -59,7 +68,8 @@ export function setupSettingsPanel() {
   catalogSection.id = 'monster-motion-settings';
   section('조작 안내 · 동작 확인', [$('#help-toggle'), $('.camera-hint'), $('.secondary-actions')]);
   $('#help-toggle').textContent = '조작 가이드 열기';
-  section('현재 상태', [$('#build-tag'), $('.scene-footer'),$('#player-combat-status')]);
+  const currentState=section('현재 상태', [$('#build-tag'), $('.scene-footer'),$('#player-combat-status')]);currentState.id='current-state-settings';
+  const runtimeVersion=setupRuntimeVersionPanel({host:currentState.querySelector('.settings-section-body')});
   $('.right-tools').setAttribute('aria-label', '몬스터 소환');
   $('.right-tools').classList.add('summon-tools');
   const note = $('#help-dialog .help-note');
@@ -67,4 +77,5 @@ export function setupSettingsPanel() {
     .replace('왼쪽 위에서 궁수, 기존 전사, 전사 v2를 선택합니다.', '설정 → 캐릭터 · 장비에서 궁수, 기존 전사, 전사 v2를 선택합니다.')
     .replace('우측 상단에서 최대 2배까지 조절합니다.', '설정 → 공통 속도에서 최대 2배까지 조절합니다.')
     .replace('상단 화질을', '설정 → 화면 · 카메라에서 화질을');
+  dialog.dataset.settingsReady='true';return runtimeVersion;
 }

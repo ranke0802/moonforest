@@ -108,7 +108,7 @@ test('material fog runs after Elena hit flash and village tint; partial legacy o
  const body=MeshBuilder.CreateBox('partial-body',{size:4},scene);body.position.x=-1;body.material=new PBRMaterial('body',scene);new ElenaPaint(body.material);body.renderOverlay=true;
  fog.beforeRender();assert.equal(body.renderOverlay,false);fog.restore();assert.equal(body.renderOverlay,true);
  await body.material.forceCompilationAsync(body);scene.render();const code=body.subMeshes[0].effect.fragmentSourceCode;
- const flash=code.indexOf('if (elenaHitFlash > 0.0)'),shade=code.indexOf('finalColor.rgb=caveFogShade(');
+ const flash=code.indexOf('if (elenaHitFlash > 0.0)'),shade=code.indexOf('finalColor.rgb=caveFogShadeSurface(');
  assert.ok(flash>=0&&shade>flash,'fog colour is applied after white hit flash');
  assert.equal((code.match(/uniform sampler2D caveFogMap;/g)??[]).length,1);
 });

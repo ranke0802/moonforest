@@ -63,7 +63,7 @@ if(caveMoodActive>.5&&caveRockTone>.5){
  float caveToneShadow=1.;
  if(numLights>0.)caveToneShadow=clamp(1.-numLights*(1.-aggShadow),0.,1.);
  vec3 caveBroad=caveRockAlbedo(vPositionW,caveToneNormal)*mix(.76,1.,caveToneShadow);
- finalDiffuse=mix(caveBroad,finalDiffuse,${CAVE_ROCK_UV_DETAIL.toFixed(2)});
+ finalDiffuse=mix(caveBroad,caveRockPaintedDetail(caveBroad,finalDiffuse),${CAVE_ROCK_UV_DETAIL.toFixed(2)});
 }`};
  }
 }

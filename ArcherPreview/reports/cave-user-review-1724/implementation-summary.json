@@ -1,0 +1,357 @@
+{
+  "status": "Source locked; 44 focused Node tests passed. Current full-frame/offscreen visual integration belongs to parent and lighting author. No device/browser visual or thermal claim.",
+  "reviewedVideo": {
+    "path": "C:/Users/ryank/Downloads/Telegram Desktop/video_2026-11-01_17-24-00.mp4",
+    "sha256": "c586c25d9d1905875ef7d7b541d77dee5f3dcaa4c4c5029af7404c297b8843f7",
+    "timePrecisionSeconds": 0.5,
+    "recordingRevisionDeviceUnknown": true,
+    "note": "Video includes old world-space player HP and repeated rock atlas, so this is symptom evidence, not proof that the video ran current source."
+  },
+  "observations": [
+    {
+      "time": "00:00",
+      "observed": "Player is partly hidden/ghosted behind the mossy entrance; world HP is still visible.",
+      "confirmedCodeCause": "Entrance is a rock asset with landmark placement kind. Old whole-object tree fade included it; old camera and eye-height sight bake excluded every one of its 4,809 actual near triangles.",
+      "fix": "Only in the cave, structural classification uses rock asset category as well as placement role; whole-object tree fade is excluded. Actual entrance triangles now enter camera/LOS bake.",
+      "verification": {
+        "oldSourceTriangleCameraMisses": 4809,
+        "newSourceTriangleCameraMisses": 0,
+        "orbitCases": 8960,
+        "oldUnsafeEyes": 107,
+        "newUnsafeEyes": 0
+      }
+    },
+    {
+      "time": "00:25 / 00:30–00:35",
+      "observed": "Sharp dark faces and a black altar/apparatus that changes appearance with viewpoint.",
+      "confirmedCodeCause": "The streamer overwrote authored double-sided materials with one-sided rendering, while inverted-hull ink remained. Actual open edge/coverage tests confirm coloured back-face omissions in selected props/entrance.",
+      "caveat": "The normal-orbit altar back-only silhouette is about 1.58%; this alone cannot explain an entirely black altar. No touch/camera log establishes the exact recorded frame cause. Surface-memory shading is a separate confirmed flat-colour mechanism.",
+      "fix": "Restore authored two-sided rendering only for 8 reviewed open source assets; retain base stencil and existing ink. Do not add shell meshes or duplicate draws."
+    },
+    {
+      "time": "00:41 / 00:55",
+      "observed": "Jagged black patches/sheets in ceiling or hanging rocks.",
+      "confirmedCodeCause": "The actual canopy is closed in all 3 LODs (0 welded boundary edges and 0 back-only silhouette). Thus its black regions are not proved to be missing base backfaces. Old FoW shader replaces all unlit parts of any partially submitted mesh with one fixed clear colour regardless of its actual surface.",
+      "fix": "Submitted environment surfaces now retain a dark, low-chroma version of their real shaded colour; unchanged opaque depth and hidden-record gates remain. Closed canopy stays one-sided. Parent handles continuous distant roof/lining separately.",
+      "verification": "The Babylon-generated actual closed-canopy shader source calls caveFogShadeSurface with environment flag 1; player flag 0 preserves the actor policy. Hidden rear-room fixture submits 0 draws. No source vertex/index/LOD or depth-write change."
+    }
+  ],
+  "materialPolicy": {
+    "selected": [
+      {
+        "id": "cave-04-natural-arch",
+        "placements": 3,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4998,
+            "openEdges": 186,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.0005268703898840885,
+            "allOrbitBackOnlyFraction": 0.440031458906803
+          },
+          {
+            "level": 1,
+            "triangles": 2747,
+            "openEdges": 157,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.0004233252195999577,
+            "allOrbitBackOnlyFraction": 0.5349801061007957
+          },
+          {
+            "level": 2,
+            "triangles": 1397,
+            "openEdges": 125,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.0005317451877060512,
+            "allOrbitBackOnlyFraction": 0.5358221476510067
+          }
+        ]
+      },
+      {
+        "id": "cave-13-votive-lantern",
+        "placements": 10,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4587,
+            "openEdges": 623,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.5808287391072381,
+            "allOrbitBackOnlyFraction": 0.5808287391072381
+          },
+          {
+            "level": 1,
+            "triangles": 3209,
+            "openEdges": 585,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.5880782918149466,
+            "allOrbitBackOnlyFraction": 0.5880782918149466
+          },
+          {
+            "level": 2,
+            "triangles": 2059,
+            "openEdges": 489,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.6044444444444445,
+            "allOrbitBackOnlyFraction": 0.6044444444444445
+          }
+        ]
+      },
+      {
+        "id": "cave-15-resurrection-altar",
+        "placements": 1,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 3986,
+            "openEdges": 858,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.015773809523809523,
+            "allOrbitBackOnlyFraction": 0.06551625375912931
+          },
+          {
+            "level": 1,
+            "triangles": 2741,
+            "openEdges": 927,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.015868293166716254,
+            "allOrbitBackOnlyFraction": 0.08258799769186383
+          },
+          {
+            "level": 2,
+            "triangles": 1702,
+            "openEdges": 954,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.015338941118258289,
+            "allOrbitBackOnlyFraction": 0.08537463976945245
+          }
+        ]
+      },
+      {
+        "id": "cave-16-soul-collector-arm",
+        "placements": 2,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4723,
+            "openEdges": 323,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.03127903375658098,
+            "allOrbitBackOnlyFraction": 0.03127903375658098
+          },
+          {
+            "level": 1,
+            "triangles": 3282,
+            "openEdges": 378,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.03498067927598129,
+            "allOrbitBackOnlyFraction": 0.03498067927598129
+          },
+          {
+            "level": 2,
+            "triangles": 2095,
+            "openEdges": 355,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.034215885947046845,
+            "allOrbitBackOnlyFraction": 0.034215885947046845
+          }
+        ]
+      },
+      {
+        "id": "cave-17-faded-sacred-emblem",
+        "placements": 2,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4717,
+            "openEdges": 461,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.10376467413304548,
+            "allOrbitBackOnlyFraction": 0.26690631318804764
+          },
+          {
+            "level": 1,
+            "triangles": 3300,
+            "openEdges": 430,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.10389960868978546,
+            "allOrbitBackOnlyFraction": 0.266681644574253
+          },
+          {
+            "level": 2,
+            "triangles": 2121,
+            "openEdges": 381,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.10194429847609038,
+            "allOrbitBackOnlyFraction": 0.2661579892280072
+          }
+        ]
+      },
+      {
+        "id": "cave-s03-dry-spillway-rock",
+        "placements": 2,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4995,
+            "openEdges": 253,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.01791542757670269,
+            "allOrbitBackOnlyFraction": 0.1543611444451462
+          },
+          {
+            "level": 1,
+            "triangles": 2747,
+            "openEdges": 211,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.01794536471955827,
+            "allOrbitBackOnlyFraction": 0.15383643826965582
+          },
+          {
+            "level": 2,
+            "triangles": 1398,
+            "openEdges": 146,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.02144193409123615,
+            "allOrbitBackOnlyFraction": 0.1583661542370728
+          }
+        ]
+      },
+      {
+        "id": "forest-06-witch-cave-mouth",
+        "placements": 1,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 4809,
+            "openEdges": 375,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.009851380042462846,
+            "allOrbitBackOnlyFraction": 0.009851380042462846
+          },
+          {
+            "level": 1,
+            "triangles": 2605,
+            "openEdges": 401,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.011214953271028037,
+            "allOrbitBackOnlyFraction": 0.011214953271028037
+          },
+          {
+            "level": 2,
+            "triangles": 1305,
+            "openEdges": 309,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.011747680258789478,
+            "allOrbitBackOnlyFraction": 0.011747680258789478
+          }
+        ]
+      },
+      {
+        "id": "joachim-resting",
+        "placements": 1,
+        "lods": [
+          {
+            "level": 0,
+            "triangles": 48722,
+            "openEdges": 5825,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.12938596491228072,
+            "allOrbitBackOnlyFraction": 0.1355260892026864
+          },
+          {
+            "level": 1,
+            "triangles": 39272,
+            "openEdges": 4735,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.1310916179337232,
+            "allOrbitBackOnlyFraction": 0.13509316770186336
+          },
+          {
+            "level": 2,
+            "triangles": 28438,
+            "openEdges": 3740,
+            "authoredDoubleSided": true,
+            "normalOrbitBackOnlyFraction": 0.13471376370280147,
+            "allOrbitBackOnlyFraction": 0.13471376370280147
+          }
+        ]
+      }
+    ],
+    "unchanged": "21 other cave asset IDs, including ordinary walls, closed canopy and solid foundations; player and living bosses unchanged. Non-cave map policy unchanged.",
+    "metadata": "villageAuthoredBackFaceCulling retains original author intent across repeated policy application and cold LOD promotion.",
+    "cpuCost": "One Set membership/material policy per newly loaded source, no per-frame topology work.",
+    "gpuCost": "Same geometry/vertices/indices/textures and draw batches. Restored back faces can increase raster/fragment work for selected 22 placements; actual device GPU cost was not measured. No claim of free two-sided rendering.",
+    "drawVerification": {
+      "realAltarFrames": 48,
+      "baseBatchesEachFrame": 1,
+      "existingInkBatchesEachFrame": 1,
+      "matchedBaseInkIndices": true,
+      "delayedPromotion": [
+        2,
+        1,
+        0
+      ]
+    }
+  },
+  "fogSurfacePolicy": {
+    "environment": "Bounded final surface RGB -> weighted RGB grey, retain 20% original chroma, multiply by 0.24. It is a display RGB brightness proxy, not a physical light measurement.",
+    "actors": "environment flag 0 still uses constant memory colour, hidden body/contact/spell/ink gates unchanged.",
+    "cost": "No extra sampler, texture lookup, render pass, vertex buffer or CPU per-frame mesh scan. The existing LOS fetch is reused; only bounded RGB arithmetic was added.",
+    "distance": "Existing final 22→48m exact clear convergence and 54/50m cover culling contract remain intact.",
+    "safety": "No black plane or transparent wall is added. Actual surface and depth are preserved. Hidden objects and rear rooms remain unsubmitted; local cutaway is unchanged."
+  },
+  "bake": {
+    "bodyCollisionByteIdentical": true,
+    "bodySHA256": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+    "bossMaskSHA256": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+    "layoutTerrainFingerprint": "dffbb324a2adbec81cc723620dcf406707f5d4095f564d07bfa1959852bf5f57",
+    "sightCellsBefore": 3272,
+    "sightCellsAfter": 3515,
+    "cameraFieldBytes": 1237152,
+    "sourceGeometryModified": false,
+    "walkingTerrainModified": false,
+    "bossSafeMaskModified": false
+  },
+  "validation": {
+    "focusedTests": 44,
+    "passed": 44,
+    "failed": 0,
+    "log": "focused-tests.log",
+    "covers": [
+      "24 real source LODs: authored/open topology/sidedness",
+      "48 actual instanced altar draws: base/ink/exact selected geometry/cold promotion",
+      "actual closed-canopy shader, actor flag and hidden rear-room submission",
+      "4,809 real entrance triangle centroids in camera bake",
+      "8,960 frozen before/after entrance-route orbit cases",
+      "near/wide/upward camera, requested zoom and pan preservation",
+      "remote room occlusion, exact local cutaway/ink agreement",
+      "actual player dodge floor preservation",
+      "S23-sized landscape/portrait repeated cave/forest resource ownership",
+      "far cover exact 48m convergence/54m omission fail-open zoom",
+      "pending/ready shader uniform lifetime"
+    ],
+    "limitations": [
+      "NullEngine validates shader-source assembly/contracts and submission; it does not execute GPU fragments or measure phone temperature/frame time.",
+      "CPU raster coverage is geometry-facing evidence only, not a textured screenshot.",
+      "Video revision and exact camera/player coordinates are unavailable; no claim that all recorded black pixels had one cause.",
+      "Current integrated offscreen colour/ceiling inspection and final deployment are owned by parent."
+    ]
+  },
+  "sourceHashes": {
+    "src/village-streamed-environment.js": "c852a0fcdc8257cabeab7cd02abd093ea71a3cfaef0af5914889e637ac6b85bd",
+    "src/cave-fog-cover.js": "75be4695e9226893016747bbb735adced6e11b992d2e4b3025745fc334edbda8",
+    "src/cave-fog-runtime.js": "5ccdc533e5b6b3a3add18817182eeeb978bb20a267957f623efe26d0897a7795",
+    "scripts/bake-cave-collision.mjs": "12dec4a99021ccad5124b669f59da0912cb3cc8dccd09e8851a5478a270b8544",
+    "src/witch-cave-camera-data.js": "dd1c55b4630db2723edfd88ab321597ecc83cac0492b64f2ced446417c188e4d",
+    "src/witch-cave-sight-data.js": "c4d3ebb57f8e6806dc2f1b836b08717880c38a4ceeeb5f0b9a9c0acc5d5f8560",
+    "src/witch-cave-collision-data.js": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+    "src/mourning-cave-clearance-data.js": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+    "src/witch-cave-layout.js": "d1ef30cb25d2a64e6ed824413daad907fc56af5447103a9e0c398aaff9c8fde6",
+    "src/witch-cave-terrain.js": "10371981594f02da1c5dc885b40fe0ff09ff0ca13c8d34392c558a43c6752e12"
+  },
+  "additionalGeneration": false,
+  "browserAutomation": false,
+  "buildOrCommitOrPushByThisAgent": false
+}

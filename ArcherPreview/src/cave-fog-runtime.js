@@ -24,7 +24,7 @@ class CaveFogShade extends MaterialPluginBase {
 #ifdef NORMAL
 caveGroundNormal=normalW;
 #endif
-${color}.rgb=mix(caveRockShade(vPositionW,caveGroundNormal,caveGroundFog.y),${color}.rgb,smoothstep(.08,.92,caveGroundFog.x));}}`:`${color}.rgb=caveFogShade(${color}.rgb,vPositionW);`)+distanceFog};}
+${color}.rgb=mix(caveFogSurfaceMemory(caveRockShade(vPositionW,caveGroundNormal,caveGroundFog.y)),${color}.rgb,smoothstep(.08,.92,caveGroundFog.x));}}`:`${color}.rgb=caveFogShadeSurface(${color}.rgb,vPositionW,caveFogEnvironment);`)+distanceFog};}
 }
 
 // Count cells from the same prefix sum as the visibility test. A cover patch is

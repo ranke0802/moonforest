@@ -1,5 +1,5 @@
 import {Constants,MaterialPluginBase,RawTexture,Texture,Vector4} from '@babylonjs/core';
-import {getCavePaintLight,CAVE_PAINT_LIGHT_CONFIG as CONFIG} from './cave-painted-light.js';
+import {getCavePaintLight,caveRockPaintReceiver,CAVE_PAINT_LIGHT_CONFIG as CONFIG} from './cave-painted-light.js';
 import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 
 export const CAVE_PAINT_UNIFORMS=['cavePaintRect','cavePaintActive'];
@@ -10,13 +10,20 @@ export const CAVE_PAINT_LIGHT_GLSL=`
 uniform sampler2D cavePaintLightMap;
 uniform vec4 cavePaintRect;
 uniform float cavePaintActive;
-vec3 cavePaintFactor(vec3 p){
- if(cavePaintActive<.5)return vec3(1.);
+vec4 cavePaintSample(vec3 p){
  vec2 uv=clamp((p.xz-cavePaintRect.xy)/cavePaintRect.zw,vec2(0.),vec2(1.));
- vec4 light=texture2D(cavePaintLightMap,uv);
- float floorHeight=${CONFIG.floorMin.toFixed(1)}+light.a*${(CONFIG.floorMax-CONFIG.floorMin).toFixed(1)};
+ return texture2D(cavePaintLightMap,uv);
+}
+float cavePaintFloorHeight(vec4 light){return ${CONFIG.floorMin.toFixed(1)}+light.a*${(CONFIG.floorMax-CONFIG.floorMin).toFixed(1)};}
+vec3 cavePaintFactorFromSample(vec3 p,vec4 light){
+ if(cavePaintActive<.5)return vec3(1.);
+ float floorHeight=cavePaintFloorHeight(light);
  float heightFactor=1.-${(1-CONFIG.heightMinimum).toFixed(4)}*smoothstep(${CONFIG.heightStart.toFixed(2)},${CONFIG.heightEnd.toFixed(1)},max(0.,p.y-floorHeight));
  return light.rgb*heightFactor;
+}
+vec3 cavePaintFactor(vec3 p){
+ if(cavePaintActive<.5)return vec3(1.);
+ return cavePaintFactorFromSample(p,cavePaintSample(p));
 }
 #endif
 `;
@@ -24,7 +31,7 @@ const functions=CAVE_PAINT_LIGHT_GLSL.replace('uniform vec4 cavePaintRect;','').
 
 export class CavePaintLightRuntime{
  constructor(world){
-  this.world=world;this.disposed=false;this.map=getCavePaintLight(world.terrain);this.rect=new Vector4(...this.map.rect);
+  this.world=world;this.disposed=false;this.map=getCavePaintLight(world.terrain,{receiverAt:caveRockPaintReceiver});this.rect=new Vector4(...this.map.rect);
   this.texture=new RawTexture(this.map.data,this.map.width,this.map.height,Constants.TEXTUREFORMAT_RGBA,world.scene,false,false,Texture.BILINEAR_SAMPLINGMODE,Constants.TEXTURETYPE_UNSIGNED_BYTE);
   this.texture.name='cave-static-painted-light';this.texture.gammaSpace=false;this.texture.wrapU=this.texture.wrapV=Texture.CLAMP_ADDRESSMODE;
   this.texture.anisotropicFilteringLevel=1;

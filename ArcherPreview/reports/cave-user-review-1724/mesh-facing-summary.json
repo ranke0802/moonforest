@@ -1,0 +1,4 @@
+{
+  "scope": "Actual packed meshes, welded topology and independent CPU front/two-sided coverage. Black candidates are pixels with actual back-face coverage but no front-face base; inverted hull ink can fill these gaps. No browser/GPU/pixel colour claim.",
+  "outCount": 87
+}

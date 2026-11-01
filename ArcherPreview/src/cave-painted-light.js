@@ -1,7 +1,7 @@
-import {CAVE_PLACEMENTS,CAVE_BOSS} from './witch-cave-layout.js';
+import {CAVE_PLACEMENTS,CAVE_BOSS,caveSurface} from './witch-cave-layout.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
 
-export const CAVE_PAINT_LIGHT_CONFIG=Object.freeze({version:2,width:128,height:128,rect:Object.freeze([-72,-72,144,144]),floorMin:-8,floorMax:24,heightStart:1.25,heightEnd:8,heightMinimum:.24,losStep:.25,losRadius:.14,bilinearGuardRadius:1.265,endSurfaceMargin:.8});
+export const CAVE_PAINT_LIGHT_CONFIG=Object.freeze({version:3,width:128,height:128,rect:Object.freeze([-72,-72,144,144]),floorMin:-8,floorMax:24,heightStart:1.25,heightEnd:8,heightMinimum:.24,losStep:.25,losRadius:.14,bilinearGuardRadius:1.265,endSurfaceMargin:.8});
 export const CAVE_PAINT_LIGHT_POLICY=Object.freeze({base:Object.freeze([.14,.16,.20]),arena:Object.freeze([.28,.30,.34]),arenaRadius:CAVE_BOSS.r,arenaFadeRadius:CAVE_BOSS.r+4,lanternRadius:7.5,lanternColor:Object.freeze([1,.76,.44]),collectorRadius:6.5,collectorColor:Object.freeze([.48,.34,.70])});
 const clamp=(value,min=0,max=1)=>Math.max(min,Math.min(max,value));
 const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t);};
@@ -18,17 +18,32 @@ export function cavePaintEmitters(terrain,{placements=CAVE_PLACEMENTS,includeSou
   return Object.freeze(emitters);
 }
 
-function clearRay(terrain,emitter,x,targetY,z,occludes,stats){
+// The height field stores the TOP of a solid shoulder. Its visible lower face
+// receives light at the adjacent authored shelf, not at that hidden top. This
+// is only used by the cave runtime; generic/stacked floors keep their true Y.
+export function caveRockPaintReceiver(terrain,x,z,floor){
+  const shelf=caveSurface(x,z);
+  return shelf.distance>.3&&shelf.distance<3.2&&floor>shelf.height+1.2?shelf.height:floor;
+}
+
+function clearRay(terrain,emitter,x,targetY,z,occludes,stats,surfaceReceiver=false){
   const dx=x-emitter.x,dz=z-emitter.z,distance=Math.hypot(dx,dz),length=Math.hypot(dx,targetY-emitter.y,dz),steps=Math.max(1,Math.ceil(distance/CAVE_PAINT_LIGHT_CONFIG.losStep));
+  let terminalSolid=false;
   for(let i=1;i<steps;i++){
     const t=i/steps;
     // A coarse texel can end inside the first wall's visible surface. Permit
     // only the final .8m of the 3D ray; an earlier intervening wall still wins.
-    if(length*(1-t)<=stats.endSurfaceMargin){stats.endSurfaceSamples+=steps-i;break;}
+    if(!terminalSolid&&length*(1-t)<=stats.endSurfaceMargin){stats.endSurfaceSamples+=steps-i;break;}
     const xx=emitter.x+dx*t,zz=emitter.z+dz*t,yy=emitter.y+(targetY-emitter.y)*t;stats.raySamples++;
     // The radius covers the gaps between .25m samples, including thin baked
     // wall cells. This reuses existing sight data; no navigation grid is built.
-    if(occludes(xx,zz,CAVE_PAINT_LIGHT_CONFIG.losRadius)||floorAt(terrain,xx,zz)>yy+.12){stats.blockedRays++;return false;}
+    const solid=occludes(xx,zz,CAVE_PAINT_LIGHT_CONFIG.losRadius)||floorAt(terrain,xx,zz)>yy+.12;
+    if(solid){
+      // At most one coarse texel plus the existing end margin can belong to
+      // the same receiving shoulder. Never shine through an earlier wall.
+      if(!surfaceReceiver||length*(1-t)>stats.combinedSurfaceFringeLimitMeters){stats.blockedRays++;return false;}
+      terminalSolid=true;
+    }else if(terminalSolid){stats.blockedRays++;return false;}
   }
   return true;
 }
@@ -36,22 +51,25 @@ function clearRay(terrain,emitter,x,targetY,z,occludes,stats){
 /** Static, deterministic CPU data only. RGB is a linear illumination factor,
  * A is a packed floor height. The returned byte array is read-only by contract.
  * No scene, texture, light, observer, upload or per-frame work is created. */
-export function buildCavePaintLight(terrain,{placements=CAVE_PLACEMENTS,includeSoulCollectors=true,occludes=caveRockOccludes,bilinearWallGuard=false,endSurfaceMargin=CAVE_PAINT_LIGHT_CONFIG.endSurfaceMargin}={}){
+export function buildCavePaintLight(terrain,{placements=CAVE_PLACEMENTS,includeSoulCollectors=true,occludes=caveRockOccludes,bilinearWallGuard=false,endSurfaceMargin=CAVE_PAINT_LIGHT_CONFIG.endSurfaceMargin,receiverAt=null}={}){
   if(typeof terrain?.heightAt!=='function'||typeof occludes!=='function')throw new TypeError('Cave paint terrain/occlusion required');
   if(!Number.isFinite(endSurfaceMargin)||endSurfaceMargin<0||endSurfaceMargin>CAVE_PAINT_LIGHT_CONFIG.endSurfaceMargin)throw new RangeError('Invalid cave paint end surface margin');
   const config=CAVE_PAINT_LIGHT_CONFIG,policy=CAVE_PAINT_LIGHT_POLICY,{width,height,rect}=config,data=new Uint8Array(width*height*4),emitters=cavePaintEmitters(terrain,{placements,includeSoulCollectors});
-  const stats={version:config.version,bytes:data.byteLength,emitters:emitters.length,lanterns:emitters.filter(e=>e.kind==='lantern').length,collectors:emitters.filter(e=>e.kind==='collector').length,raySamples:0,blockedRays:0,endSurfaceMargin,endSurfaceSamples:0,bilinearGuardPixels:0,bilinearWallGuard:Boolean(bilinearWallGuard),interpolationLimitMeters:rect[2]/width,combinedSurfaceFringeLimitMeters:rect[2]/width+endSurfaceMargin,litPixels:0,clampedHeightPixels:0,additionalLights:0,additionalShadowPasses:0,frameUpdates:0};
+  const stats={version:config.version,bytes:data.byteLength,emitters:emitters.length,lanterns:emitters.filter(e=>e.kind==='lantern').length,collectors:emitters.filter(e=>e.kind==='collector').length,raySamples:0,blockedRays:0,endSurfaceMargin,endSurfaceSamples:0,bilinearGuardPixels:0,bilinearWallGuard:Boolean(bilinearWallGuard),interpolationLimitMeters:rect[2]/width,combinedSurfaceFringeLimitMeters:rect[2]/width+endSurfaceMargin,litPixels:0,receiverPixels:0,clampedHeightPixels:0,additionalLights:0,additionalShadowPasses:0,frameUpdates:0};
   for(let row=0;row<height;row++)for(let col=0;col<width;col++){
     const x=rect[0]+(col+.5)*rect[2]/width,z=rect[1]+(row+.5)*rect[3]/height,floor=floorAt(terrain,x,z),i=(row*width+col)*4;
+    const receiver=receiverAt?receiverAt(terrain,x,z,floor):floor;
+    if(!Number.isFinite(receiver)||receiver>floor+.001)throw new RangeError('Invalid cave paint receiver');
+    const surfaceReceiver=receiver<floor-1.2;if(surfaceReceiver)stats.receiverPixels++;
     const arena=1-smooth(policy.arenaRadius,policy.arenaFadeRadius,Math.hypot(x-CAVE_BOSS.x,z-CAVE_BOSS.z));
     let r=policy.base[0]+(policy.arena[0]-policy.base[0])*arena,g=policy.base[1]+(policy.arena[1]-policy.base[1])*arena,b=policy.base[2]+(policy.arena[2]-policy.base[2])*arena,lit=false;
     let guarded;
     for(const emitter of emitters){
-      const d=Math.hypot(x-emitter.x,z-emitter.z,floor+.65-emitter.y);if(d>=emitter.radius)continue;
+      const d=Math.hypot(x-emitter.x,z-emitter.z,receiver+.65-emitter.y);if(d>=emitter.radius)continue;
       // Optional conservative experiment only. Default stays off: a one-texel
       // interpolation fringe is preferable to blackening actual lamp walls.
       guarded??=bilinearWallGuard&&occludes(x,z,config.bilinearGuardRadius);if(guarded)continue;
-      if(!clearRay(terrain,emitter,x,floor+.65,z,occludes,stats))continue;
+      if(!clearRay(terrain,emitter,x,receiver+.65,z,occludes,stats,surfaceReceiver))continue;
       const strength=1-smooth(0,emitter.radius,d);
       r=Math.max(r,r+(emitter.color[0]-r)*strength);g=Math.max(g,g+(emitter.color[1]-g)*strength);b=Math.max(b,b+(emitter.color[2]-b)*strength);lit=true;
     }
@@ -82,7 +100,7 @@ function terrainKey(terrain){
 // One detached 64KiB CPU map, shared across scene lifetimes. It never owns a
 // Babylon object, so a disposed scene cannot leave a cached texture reference.
 export function getCavePaintLight(terrain,options={}){
-  const emitters=cavePaintEmitters(terrain,options),occludes=options.occludes??caveRockOccludes,key=CAVE_PAINT_LIGHT_CONFIG.version+':'+terrainKey(terrain)+':'+identity(occludes)+':'+Boolean(options.bilinearWallGuard)+':'+(options.endSurfaceMargin??CAVE_PAINT_LIGHT_CONFIG.endSurfaceMargin)+':'+JSON.stringify(emitters);
+  const emitters=cavePaintEmitters(terrain,options),occludes=options.occludes??caveRockOccludes,key=CAVE_PAINT_LIGHT_CONFIG.version+':'+terrainKey(terrain)+':'+identity(occludes)+':'+(options.receiverAt?identity(options.receiverAt):0)+':'+Boolean(options.bilinearWallGuard)+':'+(options.endSurfaceMargin??CAVE_PAINT_LIGHT_CONFIG.endSurfaceMargin)+':'+JSON.stringify(emitters);
   if(key===cacheKey&&cached){hits++;return cached;}
   cached=buildCavePaintLight(terrain,options);cacheKey=key;return cached;
 }

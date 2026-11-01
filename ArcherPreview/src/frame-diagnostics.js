@@ -49,14 +49,31 @@ export function gpuDiagnosticLine(gpu){
   return `GPU — · ${labels[gpu?.status]??'결과 대기'}`;
 }
 
+// Older builds stored either the enabled bit or an enabled/expanded object.
+// Keep the collection preference, but never restore an inline expanded HUD.
+export function readFrameDiagnosticPreference(storage,key='moonforest-frame-diagnostics-v1'){
+  try{
+    const raw=storage?.getItem(key);if(raw==='1'||raw==='0'||raw==null)return raw==='1';
+    const saved=JSON.parse(raw),enabled=typeof saved==='boolean'?saved:saved?.enabled===true;
+    storage?.setItem?.(key,enabled?'1':'0');return enabled;
+  }catch{return false;}
+}
+
 export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
   const detailDialog=get('diagnostic-detail-dialog'),expand=get('diagnostic-expand');
-  if(panel.dataset)panel.dataset.expanded='false';
+  const compactView=()=>{
+    if(panel.dataset){if(panel.dataset.expanded!=='false')panel.dataset.expanded='false';if(panel.dataset.presentation!=='compact')panel.dataset.presentation='compact';}
+    panel.classList?.remove('expanded','is-expanded');
+    for(const property of ['width','max-width','height','max-height','overflow','overflow-y','pointer-events'])panel.style?.removeProperty?.(property);
+    const body=detailDialog?.querySelector?.('.diagnostic-detail-body');
+    if(body)for(const node of [comparison,panel.querySelector?.('.diagnostic-general'),get('diagnostic-render'),get('diagnostic-gpu'),get('diagnostic-detail-frame')])if(node&&panel.contains?.(node))body.append(node);
+  };
+  compactView();
   expand?.setAttribute?.('aria-expanded','false');
-  expand?.addEventListener('click',()=>{if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint();detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
+  expand?.addEventListener('click',()=>{compactView();if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint();detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
   for(const id of ['close-diagnostic-detail','diagnostic-detail-done'])get(id)?.addEventListener('click',()=>detailDialog?.close());
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;onCollecting(value);}};
@@ -65,7 +82,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};};
-  try{enabled=storage?.getItem(key)==='1';}catch{/* Session-only when storage is unavailable. */}
+  enabled=readFrameDiagnosticPreference(storage,key);
   const setText=(id,value)=>{const node=get(id);if(node&&node.textContent!==value)node.textContent=value;};
   const sampleMemory=(force=false)=>{const at=now();if(force||at>=nextMemory){nextMemory=at+1000;memorySample={...memory(),sampleAtMs:at};}return memorySample;};
   const paint=()=>{
@@ -117,8 +134,9 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     mark(){return collecting?now():null;},
     measure(name,start){if(start!==null&&collecting&&name in sections)sections[name]+=Math.max(0,now()-start);},
     bossEvent(event){if(!enabled)return;if(event.type==='begin'&&comparison)comparison.open=true;bosses.event(event,now(),sampleMemory(true),context());next=0;paint();},
-    mapChanged(){setCollecting(false);onMapChanged();metrics={};if(!enabled)return;bosses.interrupt('맵 이동');bosses.clearBaseline();paint();},
+    mapChanged(){compactView();setCollecting(false);onMapChanged();metrics={};if(!enabled)return;bosses.interrupt('맵 이동');bosses.clearBaseline();paint();},
     beginFrame(active,targetFps){
+      if(panel.dataset?.expanded!=='false'||panel.dataset?.presentation!=='compact')compactView();
       setCollecting(enabled&&active);
       if(!collecting){if(enabled){monitor.suspend();if(!paused){refreshGpu();bosses.suspend();paused=true;paint();}}return;}
       paused=false;sections.bossUpdateMs=0;sections.contactsMs=0;monitor.begin(now(),targetFps);

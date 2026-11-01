@@ -15,10 +15,20 @@ varying vec3 p;uniform float time;uniform vec3 eye;
 ${CAVE_FOG_GLSL}
 ${CAVE_PAINT_LIGHT_GLSL}
 void main(){
- float ripples=sin(p.x*1.3+p.z*.9+time*.45)*sin(p.z*1.8-p.x*.5-time*.31);
- vec3 color=mix(vec3(.15,.24,.27),vec3(.24,.36,.39),.5+.5*ripples);
+ // Reuse the existing static light lookup: its alpha keeps the true terrain
+ // height even where RGB receives light on a lower rock face. No shore mesh,
+ // extra sampler, transparency, reflection or shadow pass is needed.
+ vec4 painted=cavePaintSample(p);
+ float waterDepth=max(0.,p.y-cavePaintFloorHeight(painted));
+ float shallow=1.-smoothstep(.18,1.15,waterDepth);
+ float ripples=sin(p.x*.65+p.z*.43+time*.20)*sin(p.z*.87-p.x*.28-time*.15);
+ vec3 color=mix(vec3(.105,.205,.245),vec3(.27,.36,.345),shallow);
+ // A narrow submerged rim, still multiplied by the existing cave darkness.
+ // The deeper basin and static light field stay unchanged.
+ color+=vec3(.16,.21,.20)*(1.-smoothstep(.08,.32,waterDepth));
+ color+=vec3(.012,.019,.020)*ripples;
  float haze=smoothstep(22.,48.,length(p-eye));
- color=caveFogShade(color*sqrt(cavePaintFactor(p)),p);
+ color=caveFogShadeSurface(color*sqrt(cavePaintFactorFromSample(p,painted)),p,1.);
  gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),haze),1.);
 }`;
 const glowVertex=`precision highp float;
@@ -53,7 +63,7 @@ void main(){
  float foam=pow(max(0.,sin(p.y*8.+time*4.)),7.);
  vec3 color=mix(vec3(.18,.31,.35),vec3(.48,.61,.62),ribbon*.45+foam*.25);
  float haze=smoothstep(22.,48.,length(p-eye));
- color=caveFogShade(color*sqrt(cavePaintFactor(p)),p);
+ color=caveFogShadeSurface(color*sqrt(cavePaintFactor(p)),p,1.);
  gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),haze),1.);
 }`;
 const fogUniforms=['caveFogRect','caveFogActive'];

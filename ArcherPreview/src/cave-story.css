@@ -1,0 +1,11 @@
+/* Only the cave loses the heavy screen-bottom mask; other maps retain it. */
+#app.cave-map > .vignette{background:linear-gradient(180deg,rgba(6,10,20,.24),transparent 18%,transparent 87%,rgba(6,10,20,.15)),linear-gradient(90deg,rgba(6,10,20,.08),transparent 22%)}
+/* End above the movement start zone (y > 55%); never compete with the stick. */
+#cave-inspect{position:absolute;left:50%;top:min(calc(env(safe-area-inset-top) + 138px),calc(55dvh - 56px));transform:translateX(-50%);height:44px;min-height:44px;max-width:min(240px,56vw);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:10px 15px;border:1px solid #b6a18b80;border-radius:10px;background:#22212be8;color:#f0e3ca;font-size:12px;z-index:7;touch-action:manipulation}
+#cave-inspect kbd{margin-left:8px;padding:2px 5px;border:1px solid #a18c7160;border-radius:4px;font-size:10px}
+@media(pointer:coarse){#cave-inspect kbd{display:none}}
+.help-dialog[data-cave-story] > :not(#close-help):not(.cave-story-content){display:none}
+.help-dialog[data-cave-story]{width:min(480px,calc(100vw - 32px));max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 24px);padding:26px;overflow-y:auto}
+.cave-story-content h2{font-size:20px;color:#e5c99e;margin:8px 24px 18px 0}
+.cave-story-content p{font-size:14px;line-height:1.8;color:#d2d1d3}
+@media (max-width:600px){#cave-inspect{font-size:11px;padding:9px 11px}.help-dialog[data-cave-story]{padding:22px}.cave-story-content p{font-size:13px}}

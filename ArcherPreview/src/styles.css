@@ -176,7 +176,7 @@
 
 .map-travel{position:absolute;z-index:12;left:50%;bottom:max(28px,env(safe-area-inset-bottom));transform:translateX(-50%);padding:12px 20px;background:#302a40ee;color:#e4dbea;border:1px solid #a998ba;border-radius:12px;font:inherit;font-size:13px;touch-action:manipulation;cursor:pointer}.map-travel[hidden]{display:none}.map-travel:disabled{color:#b7b1be;border-color:#665d70}@media(max-width:600px){.map-travel{bottom:150px;max-width:70%;font-size:12px;padding:10px 14px}}
 /* Readability: live diagnostics never expand into the movement surface. */
-#app > #frame-diagnostics{box-sizing:border-box;width:200px;max-width:calc((100vw - 250px)/2);min-width:140px;min-height:56px;top:calc(env(safe-area-inset-top) + 82px);padding:7px 62px 7px 9px;gap:2px;pointer-events:none;max-height:none;overflow:visible;font-size:11px;line-height:16px}
+#app > #frame-diagnostics{box-sizing:border-box;width:200px;max-width:calc((100vw - 250px)/2);min-width:140px;min-height:56px;height:56px!important;max-height:56px!important;top:calc(env(safe-area-inset-top) + 82px);padding:7px 62px 7px 9px;gap:2px;pointer-events:none!important;overflow:hidden!important;font-size:11px;line-height:16px}
 #app > #frame-diagnostics > span,#app > #frame-diagnostics > strong{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-right:0;font-size:11px;line-height:16px}
 #app > #frame-diagnostics #diagnostic-expand{position:absolute;right:4px;top:6px;width:54px;min-width:44px;height:44px;min-height:44px;font-size:10px;pointer-events:auto}
 #app > .diagnostic-detail-dialog{box-sizing:border-box;width:min(540px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:14px;overflow:hidden;color:#dce4f2}
@@ -200,3 +200,10 @@
 #app > .diagnostic-detail-dialog > header{gap:8px}
 #app > .diagnostic-detail-dialog > header h2{flex:1;min-width:0;font-size:14px;line-height:1.3}
 #app > .diagnostic-detail-dialog #diagnostic-fullscreen{width:auto;min-width:68px;flex-shrink:0;padding:0 8px;font-size:11px}
+/* Performance prose is optional; toggles and copy controls remain immediate. */
+.frame-diagnostics-options .diagnostic-quick{margin:0;color:#cbd7e7;font-size:12px;line-height:1.5}
+.frame-diagnostics-options .diagnostic-help{border-top:1px solid #ffffff20;margin-top:4px}
+.frame-diagnostics-options .diagnostic-help summary{min-height:44px;display:flex;align-items:center;cursor:pointer;touch-action:manipulation;font-size:12px;color:#d3c9e8}
+.frame-diagnostics-options .diagnostic-help summary::before{content:"▸";display:inline-block;width:18px}
+.frame-diagnostics-options .diagnostic-help[open] summary::before{content:"▾"}
+.frame-diagnostics-options .diagnostic-help small,.frame-diagnostics-options .diagnostic-help p{display:block;margin:8px 0;font-size:11px;line-height:1.65}

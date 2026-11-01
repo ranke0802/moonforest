@@ -1,0 +1,44 @@
+{
+  "baseline": "9cfbda1",
+  "checkedAt": "2026-11-01T11:12:16.896Z",
+  "manifests": 24,
+  "modelTextureFiles": 1043,
+  "resourceRevision": "2d9c2c3d1ace306fa1a3c5254f1b6795ead7ba4045a866d4f93abc5f4e3eadd9",
+  "protected": {
+    "witch-cave-layout.js": {
+      "prior": "d1ef30cb25d2a64e6ed824413daad907fc56af5447103a9e0c398aaff9c8fde6",
+      "current": "d1ef30cb25d2a64e6ed824413daad907fc56af5447103a9e0c398aaff9c8fde6",
+      "unchanged": true
+    },
+    "witch-cave-terrain.js": {
+      "prior": "10371981594f02da1c5dc885b40fe0ff09ff0ca13c8d34392c558a43c6752e12",
+      "current": "10371981594f02da1c5dc885b40fe0ff09ff0ca13c8d34392c558a43c6752e12",
+      "unchanged": true
+    },
+    "witch-cave-collision-data.js": {
+      "prior": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+      "current": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+      "unchanged": true
+    },
+    "witch-cave-sight-data.js": {
+      "prior": "ac4a78dd5ab7407e5ecf4c255c3330ec2c6993f30f43765c1e2c9b230c628db4",
+      "current": "c4d3ebb57f8e6806dc2f1b836b08717880c38a4ceeeb5f0b9a9c0acc5d5f8560",
+      "unchanged": false
+    },
+    "witch-cave-camera-data.js": {
+      "prior": "3c519de1026f21973f8e18c08d6039aeda02f12566ba343beb6aec406cfef943",
+      "current": "dd1c55b4630db2723edfd88ab321597ecc83cac0492b64f2ced446417c188e4d",
+      "unchanged": false
+    },
+    "mourning-cave-clearance-data.js": {
+      "prior": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+      "current": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+      "unchanged": true
+    }
+  },
+  "browserAutomation": false,
+  "publishedFiles": 1524,
+  "playerMax": 8192,
+  "backgroundMax": 4096,
+  "status": "pass"
+}

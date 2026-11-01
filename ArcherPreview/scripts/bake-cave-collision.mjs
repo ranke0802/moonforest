@@ -51,8 +51,12 @@ try{
      const lowX=Math.max(0,Math.floor((Math.min(...points.map(v=>v[0]))-min)/step)),highX=Math.min(size-1,Math.floor((Math.max(...points.map(v=>v[0]))-min)/step));
      const lowZ=Math.max(0,Math.floor((Math.min(...points.map(v=>v[2]))-min)/step)),highZ=Math.min(size-1,Math.floor((Math.max(...points.map(v=>v[2]))-min)/step));
      for(let z=lowZ;z<=highZ;z++)for(let x=lowX;x<=highX;x++){
-      const cell=z*size+x,bodyWanted=!occupied[cell]&&walk[cell],sightWanted=!sight[cell]&&p.kind==='rock';
-      const cameraWanted=p.kind==='rock';
+      // The reused cave entrance is a structural rock although the placement
+      // labels its landmark role. Include its actual triangles in camera/LOS,
+      // while preserving the existing body-collision rules and walking floor.
+      const structural=p.kind==='rock'||config.category==='rock';
+      const cell=z*size+x,bodyWanted=!occupied[cell]&&walk[cell],sightWanted=!sight[cell]&&structural;
+      const cameraWanted=structural;
       if(!bodyWanted&&!sightWanted&&!cameraWanted)continue;
       let poly=points;
       for(const [axis,bound,sign]of [[0,min+x*step,1],[0,min+(x+1)*step,-1],[2,min+z*step,1],[2,min+(z+1)*step,-1]]){poly=clip(poly,axis,bound,sign);if(!poly.length)break;}
@@ -81,7 +85,7 @@ await mkdir(new URL('../reports/witch-cave-v5-improved/',import.meta.url),{recur
 await writeFile(new URL('../reports/witch-cave-v5-improved/collision-bake.json',import.meta.url),JSON.stringify(report,null,2));
 await writeFile(new URL('../reports/witch-cave-v5-improved/collision-owners.json',import.meta.url),JSON.stringify({step,size,min,owners}));
 const sightRuns=[];for(let i=0;i<sight.length;i++)if(sight[i]){const start=i;while(i+1<sight.length&&sight[i+1])i++;sightRuns.push(start,i-start+1);}
-const sightData={step,size,min,fingerprint,heightRange:[1.5,2.1],kind:'rock',runs:sightRuns};
+const sightData={step,size,min,fingerprint,heightRange:[1.5,2.1],kind:'rock-or-rock-asset',runs:sightRuns};
 await writeFile(new URL('../src/witch-cave-sight-data.js',import.meta.url),'// Generated from actual near-LOD rock triangles; arched openings remain open.\nexport const CAVE_SIGHT_DATA='+JSON.stringify(sightData)+';\n');
 await mkdir(new URL('../reports/cave-enclosure/',import.meta.url),{recursive:true});
 const visibility={triangles,occupiedCells:sight.reduce((a,b)=>a+b,0),runs:sightRuns.length/2,bytes:JSON.stringify(sightData).length,fingerprint,heightRange:sightData.heightRange,kind:sightData.kind,newModels:0};

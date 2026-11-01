@@ -88,7 +88,7 @@ test('cave floor, painted rocks and ink use the same local cutaway and focus',as
 test('baked rock sight blockers follow actual tall surfaces and preserve natural arch openings',()=>{
  const hash=createHash('sha256');for(const name of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+name,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
  assert.equal(CAVE_SIGHT_DATA.fingerprint,hash.digest('hex'));
- assert.deepEqual(CAVE_SIGHT_DATA.heightRange,[1.5,2.1]);assert.equal(CAVE_SIGHT_DATA.kind,'rock');
+ assert.deepEqual(CAVE_SIGHT_DATA.heightRange,[1.5,2.1]);assert.equal(CAVE_SIGHT_DATA.kind,'rock-or-rock-asset');
  for(const [x,z]of [[-35,32],[-6,-27],[40.1,-1.9]]){
   assert.equal(caveRockOccludes(x,z,.2),false,'centre of arch is open at eye height');
   let opaque=0;for(let dx=-5;dx<=5;dx+=.4)for(let dz=-5;dz<=5;dz+=.4)if(caveRockOccludes(x+dx,z+dz))opaque++;
@@ -112,7 +112,7 @@ test('water, falls, roof and additive glows bind the current fog runtime without
    const fragment=material.shaderPath.fragmentSource;
    assert.match(fragment,/uniform sampler2D caveFogMap/);
    if(material.name.startsWith('cave-glow-'))assert.match(fragment,/if\(caveFogHidesInk\(glowWorldPosition\)\)discard/);
-   else{assert.match(fragment,material.name==='cave-ceiling-paint'?/caveRockAlbedo\(p,caveRoofNormal\)/:/color=caveFogShade\(color\*sqrt\(cavePaintFactor\(p\)\),p\)/);assert.match(fragment,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);}
+   else{assert.match(fragment,material.name==='cave-ceiling-paint'?/caveRockAlbedo\(p,caveRoofNormal\)/:/color=caveFogShadeSurface\(color\*sqrt\(cavePaintFactor(FromSample)?\(p(,painted)?\)\),p,1\.\)/);assert.match(fragment,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);}
   }
   assert.equal(bound.length,5);
   world.caveFog=null;

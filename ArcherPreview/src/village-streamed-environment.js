@@ -18,6 +18,19 @@ import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
+// These authored two-sided surfaces have real open edges in every packed LOD.
+// Keep the source's coloured back faces instead of leaving only the ink hull.
+// Solid walls, foundations and the closed canopy retain the ordinary policy.
+export const CAVE_OPEN_SURFACE_ASSETS=Object.freeze(['cave-04-natural-arch','cave-13-votive-lantern','cave-15-resurrection-altar','cave-16-soul-collector-arm','cave-17-faded-sacred-emblem','cave-s03-dry-spillway-rock','forest-06-witch-cave-mouth','joachim-resting']);
+const openCaveSurfaces=new Set(CAVE_OPEN_SURFACE_ASSETS);
+export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category}={}){
+  const material=mesh.material;if(!material)return;
+  material.metadata??={};
+  if(!Object.hasOwn(material.metadata,'villageAuthoredBackFaceCulling'))material.metadata.villageAuthoredBackFaceCulling=material.backFaceCulling;
+  const authoredTwoSided=material.metadata.villageAuthoredBackFaceCulling===false;
+  material.backFaceCulling=!(['tree','plant'].includes(category)||(cave&&authoredTwoSided&&openCaveSurfaces.has(assetId)));
+}
+export function caveStructuralRecord(record,asset){return record.placement.kind==='rock'||asset?.config?.category==='rock';}
 
 export async function prepareVillageStart(world){
   if(world.villagePrepared)return world.villagePrepared;
@@ -104,7 +117,7 @@ export function loadStreamedVillage(world,{
       if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true};
       prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes)world.caveFog?.attach(mesh.material);
-      for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};mesh.material.backFaceCulling=!['tree','plant'].includes(asset.config.category);}
+      for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category});}
       world.lighting.registerMeshes(meshes);
       await prepareMapMaterials(meshes,{cancelled:()=>disposed});
       if(disposed)return;
@@ -126,7 +139,7 @@ export function loadStreamedVillage(world,{
       if(disposed)return;
       // Cave rock walls use a narrow eye-to-player cutaway; never fade an
       // entire room wall like a tree canopy and reveal rooms behind it.
-      const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&r.placement.kind==='rock')&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
+      const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await work.yield();if(disposed)return;
         world.treeOcclusion.refreshRoots([record.root]);

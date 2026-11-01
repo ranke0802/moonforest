@@ -23,8 +23,24 @@ vec3 caveFogShade(vec3 base,vec3 p){
   vec2 f=caveFogState(p);
   return mix(caveFogMemoryColor(p,f.y),base,smoothstep(.08,.92,f.x));
 }
+// An already submitted opaque surface still has a real face and depth. Retain
+// a faint, desaturated version of that face instead of painting sharp black
+// polygons across it. Hidden records/enemies keep their separate hard gate.
+vec3 caveFogSurfaceMemory(vec3 base){
+  vec3 bounded=clamp(base,vec3(0.),vec3(1.));
+  float grey=dot(bounded,vec3(.2126,.7152,.0722));
+  return mix(vec3(grey),bounded,.20)*.24;
+}
+vec3 caveFogShadeSurface(vec3 base,vec3 p,float environment){
+  if(caveFogActive<.5)return base;
+  vec2 state=caveFogState(p);
+  vec3 memory=environment>.5?caveFogSurfaceMemory(base):caveFogMemoryColor(p,state.y);
+  return mix(memory,base,smoothstep(.08,.92,state.x));
+}
 bool caveFogHidesInk(vec3 p){return caveFogActive>.5&&caveFogState(p).x<.92;}
 `;
+
+export function caveFogSurfaceMemory(base){const bounded=base.map(v=>Math.max(0,Math.min(1,v))),grey=bounded[0]*.2126+bounded[1]*.7152+bounded[2]*.0722;return bounded.map(v=>(grey*.8+v*.2)*.24);}
 
 // A lightweight opaque cover, including unseen areas whose detailed geometry
 // was not submitted. Add once; never rebuild geometry during normal movement.
@@ -65,6 +81,7 @@ void main(){
   // is cut around the player. Never expose the backs of unsubmitted rooms.
   vec2 state=caveFogState(fogWorldPosition);
   vec3 rock=caveRockShade(fogWorldPosition,fogWorldNormal,state.y);
+  rock=mix(caveFogSurfaceMemory(rock),rock,smoothstep(.08,.92,state.x));
   float haze=smoothstep(22.,48.,length(fogWorldPosition-caveEye));
   gl_FragColor=vec4(mix(rock,vec3(.024,.028,.038),haze),1.);
 }`;

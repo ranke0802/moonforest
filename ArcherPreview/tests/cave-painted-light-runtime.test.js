@@ -72,8 +72,16 @@ test('custom water and roof apply the final 48m dark-air convergence after local
  for(const name of ['cave-painted-water','cave-flowing-water','cave-ceiling-paint']){
   const m=world.scene.materials.find(m=>m.name===name),s=m.shaderPath.fragmentSource;
   assert.match(s,/smoothstep\(22\.,48\.,length\(p-eye\)\)/);assert.match(s,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);
-  assert.ok(s.includes('cavePaintFactor(p)'));assert.ok(!s.includes('vec3(.24,.23,.28)'));
+  assert.ok(s.includes('cavePaintFactor(p)')||s.includes('cavePaintFactorFromSample(p,painted)'));assert.ok(!s.includes('vec3(.24,.23,.28)'));
  }
  const profiles=['warrior-v3.json','warrior-v3-ios.json'];
  for(const file of profiles)assert.equal(JSON.parse(readFileSync(new URL('../public/assets/'+file,import.meta.url),'utf8')).textureProfile.maxSize,8192);
+});
+
+test('water reuses one packed light sample for true floor depth, with no new mesh, map or fast glitter',t=>{
+ const world=fixture(t),water=world.scene.materials.find(m=>m.name==='cave-painted-water'),s=water.shaderPath.fragmentSource;
+ assert.match(s,/vec4 painted=cavePaintSample\(p\)/);assert.match(s,/waterDepth=max\(0\.,p.y-cavePaintFloorHeight\(painted\)\)/);
+ assert.match(s,/cavePaintFactorFromSample\(p,painted\)/);assert.equal((s.match(/texture2D\(cavePaintLightMap/g)||[]).length,1);
+ assert.deepEqual(water.options.samplers,['caveFogMap','cavePaintLightMap']);assert.match(s,/time\*\.20/);assert.doesNotMatch(s,/reflect\(|refract\(|dFdx|dFdy/);
+ assert.match(s,/color\+=vec3\(\.16,\.21,\.20\)\*\(1\.-smoothstep\(\.08,\.32,waterDepth\)\)/);
 });

@@ -2,6 +2,8 @@ import './styles.css';
 import './mobile-viewport.css';
 import './mobile-ui.css';
 import './game-selection.css';
+import './cave-story.css';
+import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
@@ -340,7 +342,7 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   frameFailure=null;if(frameLoop)frameLoop.failed=false;
-  loadDiagnostics.begin(isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
+  loadDiagnostics.begin(isCave()?'마녀의 동굴':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   world.caveFog?.update(mapSpawn(),elapsed,{force:true});
   loadingView.begin();if(world.villageStreaming)world.villageStreaming.active=false;
@@ -630,6 +632,7 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),warrior:isWarrior(),touchDevice});
+  setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
   cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});

@@ -1,0 +1,316 @@
+{
+  "state": "checkpoint_validated_geological_art_in_progress",
+  "checkedAt": "2026-11-01T11:13:32.680594+00:00",
+  "tests": 884,
+  "failed": 0,
+  "resourcePreservation": {
+    "baseline": "9cfbda1",
+    "checkedAt": "2026-11-01T11:12:16.896Z",
+    "manifests": 24,
+    "modelTextureFiles": 1043,
+    "resourceRevision": "2d9c2c3d1ace306fa1a3c5254f1b6795ead7ba4045a866d4f93abc5f4e3eadd9",
+    "protected": {
+      "witch-cave-layout.js": {
+        "prior": "d1ef30cb25d2a64e6ed824413daad907fc56af5447103a9e0c398aaff9c8fde6",
+        "current": "d1ef30cb25d2a64e6ed824413daad907fc56af5447103a9e0c398aaff9c8fde6",
+        "unchanged": true
+      },
+      "witch-cave-terrain.js": {
+        "prior": "10371981594f02da1c5dc885b40fe0ff09ff0ca13c8d34392c558a43c6752e12",
+        "current": "10371981594f02da1c5dc885b40fe0ff09ff0ca13c8d34392c558a43c6752e12",
+        "unchanged": true
+      },
+      "witch-cave-collision-data.js": {
+        "prior": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+        "current": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+        "unchanged": true
+      },
+      "witch-cave-sight-data.js": {
+        "prior": "ac4a78dd5ab7407e5ecf4c255c3330ec2c6993f30f43765c1e2c9b230c628db4",
+        "current": "c4d3ebb57f8e6806dc2f1b836b08717880c38a4ceeeb5f0b9a9c0acc5d5f8560",
+        "unchanged": false
+      },
+      "witch-cave-camera-data.js": {
+        "prior": "3c519de1026f21973f8e18c08d6039aeda02f12566ba343beb6aec406cfef943",
+        "current": "dd1c55b4630db2723edfd88ab321597ecc83cac0492b64f2ced446417c188e4d",
+        "unchanged": false
+      },
+      "mourning-cave-clearance-data.js": {
+        "prior": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+        "current": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+        "unchanged": true
+      }
+    },
+    "browserAutomation": false,
+    "publishedFiles": 1524,
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "status": "pass"
+  },
+  "cameraAudit": {
+    "scope": "Actual packed near entrance triangles + frozen before/after occupancy and route orbit CPU probes. No browser/GPU/phone observation.",
+    "entrance": "cavern-89",
+    "sourceSamples": 4809,
+    "oldMissing": 4809,
+    "newMissing": 0,
+    "cameraCases": 8960,
+    "oldUnsafe": 107,
+    "newUnsafe": 0,
+    "changed": 285,
+    "examples": [
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 0.8,
+        "alpha": 2.356194490192345,
+        "requested": 8,
+        "before": 8,
+        "after": 6.111328124999997,
+        "oldEye": [
+          -46.057978851204204,
+          6.609645596239442,
+          47.05797885120421
+        ],
+        "newEye": [
+          -45.09995503550243,
+          5.29379522917165,
+          46.09995503550243
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 0.8,
+        "alpha": 2.552544031041707,
+        "requested": 8,
+        "before": 8,
+        "after": 6.202734374999998,
+        "oldEye": [
+          -46.77167832626476,
+          6.609645596239442,
+          46.18833352463263
+        ],
+        "newEye": [
+          -45.69968164759562,
+          5.357478576822913,
+          45.472048244025466
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 0.8,
+        "alpha": 2.748893571891069,
+        "requested": 8,
+        "before": 8,
+        "after": 6.7898437499999975,
+        "oldEye": [
+          -47.302004879235,
+          6.609645596239442,
+          45.19616232874746
+        ],
+        "newEye": [
+          -46.49997308646791,
+          5.766521617506035,
+          44.863949882728924
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.18,
+        "alpha": 1.7671458676442586,
+        "requested": 8,
+        "before": 8,
+        "after": 4.988671874999999,
+        "oldEye": [
+          -43.44305347758983,
+          4.0833905163971735,
+          50.2547197371369
+        ],
+        "newEye": [
+          -42.899865037221666,
+          2.9363008792704965,
+          47.523927039207784
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.18,
+        "alpha": 1.9634954084936207,
+        "requested": 8,
+        "before": 8,
+        "after": 4.564453124999999,
+        "oldEye": [
+          -44.8306512193096,
+          4.0833905163971735,
+          49.833796564005176
+        ],
+        "newEye": [
+          -43.61504685047034,
+          2.7747054264336084,
+          46.89906801027346
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.18,
+        "alpha": 2.356194490192345,
+        "requested": 8,
+        "before": 8,
+        "after": 4.741406249999999,
+        "oldEye": [
+          -47.230361450396515,
+          4.0833905163971735,
+          48.230361450396515
+        ],
+        "newEye": [
+          -45.09990855883363,
+          2.8421112644954043,
+          46.09990855883363
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.18,
+        "alpha": 2.748893571891069,
+        "requested": 8,
+        "before": 8,
+        "after": 5.267578124999998,
+        "oldEye": [
+          -48.833796564005176,
+          4.0833905163971735,
+          45.8306512193096
+        ],
+        "newEye": [
+          -46.49969466140673,
+          3.042543193566572,
+          44.86383455529248
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.78,
+        "alpha": 1.7671458676442586,
+        "requested": 8,
+        "before": 8,
+        "after": 4.481249999999998,
+        "oldEye": [
+          -43.526693528138125,
+          0.6859919214621188,
+          50.67520666638173
+        ],
+        "newEye": [
+          -42.85518692162112,
+          0.6859919214621187,
+          47.29931498421539
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.78,
+        "alpha": 1.9634954084936207,
+        "requested": 8,
+        "before": 8,
+        "after": 4.314843749999998,
+        "oldEye": [
+          -44.994717080169494,
+          0.6859919214621188,
+          50.229886590415546
+        ],
+        "newEye": [
+          -43.61521703454845,
+          0.6859919214621187,
+          46.89947887098292
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.78,
+        "alpha": 2.1598449493429825,
+        "requested": 8,
+        "before": 8,
+        "after": 4.794140624999999,
+        "oldEye": [
+          -46.34765533426663,
+          0.6859919214621188,
+          49.5067260273468
+        ],
+        "newEye": [
+          -44.6054088826882,
+          0.6859919214621188,
+          46.89926994793102
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.78,
+        "alpha": 2.552544031041707,
+        "requested": 8,
+        "before": 8,
+        "after": 5.532421874999998,
+        "oldEye": [
+          -48.5067260273468,
+          0.6859919214621188,
+          47.34765533426663
+        ],
+        "newEye": [
+          -46.499744176040664,
+          0.6859919214621188,
+          46.00663293453215
+        ]
+      },
+      {
+        "x": -42,
+        "z": 43,
+        "focus": 1.05,
+        "beta": 1.78,
+        "alpha": 2.945243112740431,
+        "requested": 8,
+        "before": 8,
+        "after": 5.5242187499999975,
+        "oldEye": [
+          -49.67520666638173,
+          0.6859919214621188,
+          44.526693528138125
+        ],
+        "newEye": [
+          -47.29994007206887,
+          0.6859919214621186,
+          44.054223626705536
+        ]
+      }
+    ],
+    "bodyCollisionByteIdentical": true,
+    "bodySHA256": "97fb4e251eafa62833683257fa68c771d68be66a627645670a081df2d99b5d6b",
+    "sightCellsBefore": 3272,
+    "sightCellsAfter": 3515,
+    "layoutTerrainFingerprint": "dffbb324a2adbec81cc723620dcf406707f5d4095f564d07bfa1959852bf5f57",
+    "bossMaskSHA256": "55482fe19b33e8fcfb1fed973787687d07debd54556f38a0d302d898fc323dd2",
+    "newCameraFieldBytes": 1237152
+  },
+  "foundationCandidateApplied": false,
+  "artDirection": "broad-rock-joints",
+  "browserAutomation": false,
+  "newGeneratedAssets": 0,
+  "fullGameVisualAcceptance": false,
+  "physicalMobileGpuThermalTested": false
+}
