@@ -44,7 +44,7 @@ test('only reviewed open cave assets retain authored coloured back faces in all 
   }
   container.dispose();lods++;
  }
- assert.equal(lods,24);
+ assert.equal(lods,21);
  // An ID alone must never turn a deliberately one-sided source two-sided.
  const material=new PBRMaterial('one-sided-control',scene);configureVillageSurfaceCulling({material},{cave:true,assetId:'cave-15-resurrection-altar',category:'prop'});assert.equal(material.backFaceCulling,true);
  for(const id of ['cave-01-eroded-wall','cave-06-stalactite-canopy','cave-s01-solid-cliff-base']){const {container,meshes}=await loadSource(scene,id,0);for(const mesh of meshes){configureVillageSurfaceCulling(mesh,{cave:true,assetId:id,category:'rock'});assert.equal(mesh.material.backFaceCulling,true,id+' stays culled');}container.dispose();}

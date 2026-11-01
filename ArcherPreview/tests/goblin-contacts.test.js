@@ -7,8 +7,10 @@ import {GoblinEncounter} from '../src/goblin-encounter.js';
 import {PlayerStrikeSampler,PLAYER_STRIKE_AIM_YAW} from '../src/player-strikes.js';
 import {WarriorV2Controller} from '../src/warrior-v2.js';
 import {MeleeContactGate} from '../src/melee-collision.js';
+import {WARRIOR_SCALE,WARRIOR_DIMENSIONS,LEGACY_PLAYER_DIMENSIONS} from '../src/player-dimensions.js';
 
 const warrior=loadPlayerPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url));
+const warrior160=loadPoseAsset(new URL('../public/assets/violet-warrior-v2.glb',import.meta.url),WARRIOR_SCALE);
 const goblin=loadPoseAsset(new URL('../assets/models/hooded-goblin.glb',import.meta.url));
 const config=JSON.parse(readFileSync(new URL('../assets/goblin/config.json',import.meta.url)));
 const poses=[['Walking',0],['Running',.2],['Sneaky_Walk_inplace',.8],['Right_Jab_from_Guard',.4],['Sword_Judgment',.8]];
@@ -22,12 +24,12 @@ function capsulesAt(pose,time,distance,x=0){
  enemy.nodes=Object.fromEntries(Object.entries(nodes).map(([name,matrix])=>[name,{getAbsolutePosition:()=>Vector3.TransformCoordinates(matrix.getTranslation().subtract(new Vector3(hip.x,-ground,hip.z)),world)}]));
  return enemy.hurtCapsules();
 }
-function strike(state,clip,capsules){
+function strike(state,clip,capsules,source=warrior,dimensions=LEGACY_PLAYER_DIMENSIONS){
  const sampler=new PlayerStrikeSampler(),gate=new MeleeContactGate(),hits=[];let matrix;
  const sword={computeWorldMatrix(){},getWorldMatrix:()=>matrix};
- for(let t=0;t<warrior.durations[clip]+.4;t+=1/60){
-  matrix=warrior.pose(clip,Math.min(t,warrior.durations[clip])).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW[state]??0));
-  const sample=sampler.sample({state,clipTime:t,actionId:1,actionElapsed:t},sword,null,true,PLAYER_STRIKE_AIM_YAW[state]??0);
+ for(let t=0;t<source.durations[clip]+.4;t+=1/60){
+  matrix=source.pose(clip,Math.min(t,source.durations[clip])).Golden_Oathblade.multiply(Matrix.RotationY(PLAYER_STRIKE_AIM_YAW[state]??0));
+  const sample=sampler.sample({state,clipTime:t,actionId:1,actionElapsed:t},sword,null,true,PLAYER_STRIKE_AIM_YAW[state]??0,0,dimensions);
   hits.push(...gate.collect({...sample,capsules}).hits);
  }
  return hits;
@@ -41,6 +43,14 @@ test('actual sword motion hits the small goblin across walking, crouching and at
   else if(state==='attack')assert.deepEqual(hits.map(h=>h.damage),[18,20],`${pose}/${distance}: both normal strikes`);
   else assert.equal(new Set(hits.map(h=>h.id)).size,hits.length,'One hit per actual strike window');
  }
+});
+
+test('160 cm warrior still reaches the actual small goblin at body contact and misses distant bodies',()=>{
+ for(const [pose,time]of poses)for(const distance of [.95,1.1])for(const [state,clip]of attacks){
+  const hits=strike(state,clip,capsulesAt(pose,time,distance),warrior160,WARRIOR_DIMENSIONS);
+  assert.ok(hits.length>0,`${pose}/${distance}/${state}: actual smaller blade must reach`);
+ }
+ for(const [state,clip]of attacks)assert.equal(strike(state,clip,capsulesAt('Walking',0,4),warrior160,WARRIOR_DIMENSIONS).length,0);
 });
 
 test('aimed two-hit combo connects at goblin melee distance across frame rates and attack speeds',()=>{

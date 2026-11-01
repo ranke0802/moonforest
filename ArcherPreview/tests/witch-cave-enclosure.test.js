@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -87,7 +88,7 @@ test('cave floor, painted rocks and ink use the same local cutaway and focus',as
 
 test('baked rock sight blockers follow actual tall surfaces and preserve natural arch openings',()=>{
  const hash=createHash('sha256');for(const name of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+name,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
- assert.equal(CAVE_SIGHT_DATA.fingerprint,hash.digest('hex'));
+ assert.equal(CAVE_SIGHT_DATA.fingerprint,caveSourceFingerprint());
  assert.deepEqual(CAVE_SIGHT_DATA.heightRange,[1.5,2.1]);assert.equal(CAVE_SIGHT_DATA.kind,'rock-or-rock-asset');
  for(const [x,z]of [[-35,32],[-6,-27],[40.1,-1.9]]){
   assert.equal(caveRockOccludes(x,z,.2),false,'centre of arch is open at eye height');

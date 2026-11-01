@@ -3,7 +3,7 @@ const attacks={slash:[[.30,'slash']],attack:[[.48,'slash'],[1.04,'slash']],judgm
 export class ActionAudio {
   constructor(audio){this.audio=audio;this.reset();}
   reset(){this.playerKey=null;this.playerTime=0;this.bossStates=new WeakMap();this.footDistance=0;this.foot=0;this.charged=false;this.bossDefeated=false;this.combatHold=0;this.heldBoss=false;this.lowHealth=false;}
-  player(result,dt,{character,position,duration=1,clipTime=result.clipTime??0}){
+  player(result,dt,{character,position,duration=1,clipTime=result.clipTime??0,strideScale=1}){
     this.audio.listener=position;
     const archer=character==='archer',key=`${character}:${result.actionId??result.state}`;
     const changed=key!==this.playerKey,previous=changed?-1:this.playerTime;
@@ -19,7 +19,7 @@ export class ActionAudio {
         if(result.state==='dodge'){cue(0,'roll');cue(duration*.75,'land',{volume:.4});}
       }
       if(archer&&changed&&result.state==='death')this.audio.play('death');
-      if(result.moving){this.footDistance+=result.speed*(result.movementDt??dt);if(this.footDistance>=.85){this.footDistance%=.85;const surface=character==='warrior-v5'?'cave_':character==='warrior-v4'?'forest_':'';this.audio.play(`foot_${surface}${this.foot++%3}`,{position});}}
+      if(result.moving){const stride=.85*strideScale;this.footDistance+=result.speed*(result.movementDt??dt);if(this.footDistance>=stride){this.footDistance%=stride;const surface=character==='warrior-v5'?'cave_':character==='warrior-v4'?'forest_':'';this.audio.play(`foot_${surface}${this.foot++%3}`,{position});}}
       else this.footDistance=0;
     }
     if(result.chargeProgress>=1&&!this.charged)this.audio.play('charge_ready');

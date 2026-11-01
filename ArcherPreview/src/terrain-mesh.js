@@ -1,4 +1,5 @@
 import {Mesh,MeshBuilder,VertexBuffer,VertexData} from '@babylonjs/core';
+import {restoreLaboratoryFloorNormals} from './cave-laboratory-terrain.js';
 
 export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
   const mesh=MeshBuilder.CreateGround('forest-floor',{width:terrain.size,height:terrain.size,subdivisions:terrain.subdivisions},scene);
@@ -16,6 +17,7 @@ export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
     }
   }
   VertexData.ComputeNormals(positions,mesh.getIndices(),normals);
+  restoreLaboratoryFloorNormals(normals,terrain);
   mesh.setVerticesData(VertexBuffer.PositionKind,positions,false);mesh.setVerticesData(VertexBuffer.NormalKind,normals,false);
   mesh.setVerticesData(VertexBuffer.UVKind,uvs,false);
   mesh.refreshBoundingInfo();return mesh;

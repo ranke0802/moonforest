@@ -1,4 +1,5 @@
 import { AudioBeds } from './audio-beds.js';
+import {bossMusicContext,availableBossMusic} from './boss-music.js';
 const DEFAULTS={volume:.55,priority:2,cooldown:.055};
 const SETTINGS={
  foot_0:{volume:.19,priority:0,cooldown:.12},foot_1:{volume:.19,priority:0,cooldown:.12},foot_2:{volume:.19,priority:0,cooldown:.12},
@@ -15,7 +16,7 @@ export class GameAudio {
   constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl,audioSession=globalThis.navigator?.audioSession,now=()=>Date.now()}={}){
     this.contextFactory=contextFactory;this.fetcher=fetcher;this.maxVoices=maxVoices;
     this.buffers=new Map();this.variants=new Map();this.variantIndex=new Map();this.voices=new Set();this.lastPlayed=new Map();this.listener={x:0,z:0};this.seed=27183;
-    this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;
+    this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;this.bossTheme=null;
     this.manifestUrl=manifestUrl;
     this.audioSession=audioSession;this.now=now;this.resumeAttempts=0;this.resumePending=null;this.gestureCleanup=null;
     this.suspended=false;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
@@ -60,14 +61,14 @@ export class GameAudio {
       const resumed=this.resumeContext({gesture:true});
       // Fetch/decode must not be held hostage by a pending iOS resume promise.
       this.loading??=this.preload();
-      this.beds.retryFailed();this.syncMusic();return resumed;
+      this.beds.retryFailed();this.selectBed();this.syncMusic();return resumed;
     }catch{this.failed++;}
   }
   async preload(){
     try{
       const manifestUrl=this.manifestUrl||new URL(`${import.meta.env?.BASE_URL??'/'}assets/audio.json`,globalThis.location.href);
       const response=await this.fetcher(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('audio manifest');
-      const manifest=await response.json(),{sounds}=manifest;this.cueSettings=manifest.cueSettings;this.beds.configure(manifest,manifestUrl);this.resolvedManifestUrl=manifestUrl;
+      const manifest=await response.json(),{sounds}=manifest;this.cueSettings=manifest.cueSettings;this.beds.configure(manifest,manifestUrl);this.resolvedManifestUrl=manifestUrl;this.selectBed();
       const queue=[],byPath=new Map();
       for(const [name,paths] of Object.entries(sounds)){
         const variants=(Array.isArray(paths)?paths:[paths]).map((path,i)=>({key:i?`${name}_${i}`:name,path}));
@@ -87,28 +88,41 @@ export class GameAudio {
     this.suspended=value;
     if(value){this.resumePending=null;this.stopVoices();this.context?.suspend().catch(()=>{});}
     // A rejected resume is retried by the next pointer/key gesture.
-    else {this.beds.retryFailed();this.resumeContext();}
+    else {this.beds.retryFailed();this.selectBed();this.resumeContext();}
   }
   stopVoices(){for(const voice of [...this.voices]){try{voice.source.stop();}catch{}voice.cleanup();}this.lastPlayed.clear();}
-  stopAll(){this.stopVoices();this.environment=null;this.combatMode=null;this.musicWanted=false;this.beds.stop();}
+  stopAll(){this.stopVoices();this.environment=null;this.combatMode=null;this.bossTheme=null;this.musicWanted=false;this.beds.stop();}
   setEnvironment(character){
     const map=character==='warrior-v5'?'cave':character==='warrior-v4'?'forest':'village';
-    this.environment=map;this.combatMode=null;this.selectBed();
+    this.environment=map;this.combatMode=null;this.bossTheme=null;this.selectBed();
     this.beds.request('ambience','ambience_'+map);
   }
   setCombat({active=false,boss=false,alive=true}={}){
     const mode=!alive?'dead':active?(boss?'boss':'combat'):null;
-    if(mode===this.combatMode)return;this.combatMode=mode;this.selectBed();
+    if(mode===this.combatMode){if(mode!=='boss')this.bossTheme=null;return;}this.combatMode=mode;if(mode!=='boss')this.bossTheme=null;this.selectBed();
+  }
+  setBossContext(encounters){
+    if(this.disposed)return;
+    const theme=bossMusicContext(encounters);
+    // Keep the last score through transformation and ActionAudio's short
+    // victory hold; map/death/reset explicitly clear this small string state.
+    if(!theme&&this.combatMode==='boss')return;
+    if(theme===this.bossTheme)return;this.bossTheme=theme;
+    if(this.combatMode==='boss')this.selectBed();
+  }
+  onBedError(channel,key){
+    if(channel==='music'&&key===this.bossTheme&&this.combatMode==='boss')this.selectBed();
   }
   selectBed(){
-    const key=this.combatMode==='dead'?null:this.combatMode||this.environment;
-    this.musicWanted=key==='boss';this.beds.request('music',key);
+    const mode=this.combatMode==='dead'?null:this.combatMode||this.environment;
+    const key=mode==='boss'?availableBossMusic(this.bossTheme,this.beds.definitions.music,this.beds.failed):mode;
+    this.musicWanted=mode==='boss';this.beds.request('music',key);
   }
   // Compatibility for existing integrations that only request the boss score.
-  setBossMusic(active,fade=.8){this.musicWanted=active;this.beds.request('music',active?'boss':this.environment,fade);if(!active&&!fade&&!this.environment)for(const v of [...this.beds.voices])if(v.channel==='music')this.beds.end(v,0);}
-  syncMusic(){return this.beds.sync();}
+  setBossMusic(active,fade=.8){this.musicWanted=active;this.combatMode=active?'boss':null;this.bossTheme=null;this.beds.request('music',active?'boss':this.environment,fade);if(!active&&!fade&&!this.environment)for(const v of [...this.beds.voices])if(v.channel==='music')this.beds.end(v,0);}
+  syncMusic(){this.selectBed();return this.beds.sync();}
   get music(){return this.beds.current.music;}
-  get musicBuffer(){return this.beds.cache.get('music:boss')??null;}
+  get musicBuffer(){return this.music?.source.buffer??this.beds.cache.get('music:boss')??null;}
   get musicLoading(){return this.beds.pending;}
   duckMusic(now){this.beds.duck(now);}
   play(name,{position,volume=1,rate=1}={}){
@@ -133,6 +147,6 @@ export class GameAudio {
     if(['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
     this.peakVoices=Math.max(this.peakVoices,this.voices.size);return true;
   }
-  inspect(){return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,...this.beds.inspect()};}
+  inspect(){return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,bossThemeRequested:this.bossTheme,bossThemeAvailable:!!this.beds.definitions.music[this.bossTheme]?.url,...this.beds.inspect()};}
   dispose(){this.disposed=true;this.gestureCleanup?.();this.stopAll();this.buffers.clear();this.beds.dispose();this.context?.removeEventListener?.('statechange',this.contextStateChanged);if(this.primer){this.primer.onended=null;try{this.primer.stop();}catch{}this.primer.disconnect();this.primer.buffer=null;this.primer=null;}this.context?.close().catch(()=>{});try{if(this.audioSession?.type==='playback'&&this.previousSessionType!=null)this.audioSession.type=this.previousSessionType;}catch{}}
 }

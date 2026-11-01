@@ -6,8 +6,8 @@ export const WARRIOR_UPPER_BETA=1.78;
 export const UNRESTRICTED_UPPER_BETA=Math.PI-.035;
 export const CAMERA_EYE_BELOW_CHIN=.35;
 
-export function upwardFocusLift(camera,warrior=true){
-  return warrior?Math.max(0,-CAMERA_EYE_BELOW_CHIN-camera.radius*Math.cos(camera.beta)):0;
+export function upwardFocusLift(camera,warrior=true,bodyScale=1){
+  return warrior?Math.max(0,-CAMERA_EYE_BELOW_CHIN*bodyScale-camera.radius*Math.cos(camera.beta)):0;
 }
 
 export class CameraPitch {
@@ -18,6 +18,7 @@ export class CameraPitch {
     this.apply();
   }
   setWarrior(value){this.warrior=!!value;this.apply();}
+  setBodyScale(value){this.bodyScale=Number.isFinite(value)&&value>0?value:1;}
   update({upwardLimited}){
     if(typeof upwardLimited!=='boolean')throw new TypeError('Invalid upward view limit');
     this.settings.upwardLimited=upwardLimited;this.apply();
@@ -28,7 +29,7 @@ export class CameraPitch {
     c.beta=Math.max(c.lowerBetaLimit,Math.min(c.upperBetaLimit,c.beta));
   }
   follow(baseFocus,dt,{snap=false}={}){
-    this.apply();const c=this.camera,lift=upwardFocusLift(c,this.warrior);
+    this.apply();const c=this.camera,lift=upwardFocusLift(c,this.warrior,this.bodyScale??1);
     this.adjusted.copyFrom(baseFocus);this.adjusted.y+=lift;
     if(snap)this.next.copyFrom(this.adjusted);else Vector3.LerpToRef(c.target,this.adjusted,1-Math.exp(-10*Math.max(0,dt)),this.next);
     // Increasing pitch/radius can lower the eye in a single input event. The
@@ -39,7 +40,7 @@ export class CameraPitch {
     c.setTarget(this.next,false,false,true);
     return this.next;
   }
-  snapshot(){return {warrior:this.warrior,upwardLimited:this.settings.upwardLimited,beta:this.camera.beta,lowerBeta:this.camera.lowerBetaLimit,upperBeta:this.camera.upperBetaLimit,lift:upwardFocusLift(this.camera,this.warrior)};}
+  snapshot(){return {warrior:this.warrior,upwardLimited:this.settings.upwardLimited,beta:this.camera.beta,lowerBeta:this.camera.lowerBetaLimit,upperBeta:this.camera.upperBetaLimit,lift:upwardFocusLift(this.camera,this.warrior,this.bodyScale??1)};}
 }
 
 export function setupCameraPitchControls(pitch,{doc=document,onChange=()=>{}}={}){

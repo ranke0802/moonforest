@@ -1,0 +1,290 @@
+{
+  "generatedAt": "2026-11-01T14:46:27.999Z",
+  "scope": "PC Node CPU sample of real cached49-capsule rig; no skin vertex calculation, renderer/GPU/device thermal measurement.",
+  "machine": {
+    "platform": "win32",
+    "arch": "x64",
+    "node": "v24.19.0",
+    "cpu": "13th Gen Intel(R) Core(TM) i9-13900HX"
+  },
+  "capsuleCount": 49,
+  "nearSupportCandidates": [
+    {
+      "name": "InnerHand.L.upper",
+      "mid": [
+        28.199254989624023,
+        8.15215277671814,
+        -26.084474563598633
+      ],
+      "radius": 0.4855555555555556
+    },
+    {
+      "name": "InnerHand.L.lower",
+      "mid": [
+        27.844633102416992,
+        7.240236520767212,
+        -25.72452163696289
+      ],
+      "radius": 0.5066666666666667
+    },
+    {
+      "name": "InnerHand.L.hand",
+      "mid": [
+        27.53867055873871,
+        6.255930356681347,
+        -25.63851014608741
+      ],
+      "radius": 0.5911111111111111
+    },
+    {
+      "name": "MidHand.R.upper",
+      "mid": [
+        30.749415605580808,
+        7.869632014474273,
+        -25.781271523404122
+      ],
+      "radius": 0.47500000000000003
+    },
+    {
+      "name": "MidHand.R.lower",
+      "mid": [
+        30.869272232055664,
+        7.337886810302734,
+        -26.419474601745605
+      ],
+      "radius": 0.5066666666666667
+    }
+  ],
+  "dimensions": {
+    "height": 1.6,
+    "ratio": 0.9003089771381485,
+    "moveRadius": 0.28809887268420753,
+    "spellRadius": 0.2700926931414445,
+    "rollRadius": 0.22507724428453713,
+    "standingClearance": 0.5852008351397966,
+    "guardHeight": 0.8552935282812411,
+    "bodyAimHeight": 0.9903398748519634,
+    "feedbackHeight": 1.6205561588486674,
+    "goldHeight": 1.4404943634210376,
+    "stableFocusHeight": 0.945324425995056,
+    "headHeight": 1.3504634657072228,
+    "chestHeight": 0.7652626305674262,
+    "chinHeight": 1.3144511066216968,
+    "eyeBelowChin": 0.31510814199835196,
+    "markerLength": 0.6302162839967039,
+    "bladeRadius": 0.049516993742598166,
+    "shieldStrikeRadius": 0.054018538628288905
+  },
+  "cases": [
+    {
+      "kind": "near-moving",
+      "callsPerRound": 300,
+      "rounds": 5,
+      "medianMillisecondsPerCall": 0.0038199999999998604,
+      "minMillisecondsPerCall": 0.0032733333333332362,
+      "maxMillisecondsPerCall": 0.020797666666666523,
+      "counts": [
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        }
+      ]
+    },
+    {
+      "kind": "near-overlap-moving",
+      "callsPerRound": 300,
+      "rounds": 5,
+      "medianMillisecondsPerCall": 0.005662333333333815,
+      "minMillisecondsPerCall": 0.005507666666666561,
+      "maxMillisecondsPerCall": 0.009262333333333572,
+      "counts": [
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 300,
+          "ensureCalls": 300,
+          "actualRootMatrixRefreshes": 0
+        }
+      ]
+    },
+    {
+      "kind": "near-stationary-cached",
+      "callsPerRound": 300,
+      "rounds": 5,
+      "medianMillisecondsPerCall": 0.00036266666666657935,
+      "minMillisecondsPerCall": 0.00035333333333331516,
+      "maxMillisecondsPerCall": 0.0003953333333333831,
+      "counts": [
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        }
+      ]
+    },
+    {
+      "kind": "far",
+      "callsPerRound": 300,
+      "rounds": 5,
+      "medianMillisecondsPerCall": 0.00013099999999970655,
+      "minMillisecondsPerCall": 0.00013033333333320723,
+      "maxMillisecondsPerCall": 0.0001633333333332606,
+      "counts": [
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        }
+      ]
+    },
+    {
+      "kind": "hidden-near",
+      "callsPerRound": 300,
+      "rounds": 5,
+      "medianMillisecondsPerCall": 0.00003933333333331272,
+      "minMillisecondsPerCall": 0.00003666666666655753,
+      "maxMillisecondsPerCall": 0.00004133333333356859,
+      "counts": [
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        },
+        {
+          "calls": 300,
+          "poseSamples": 0,
+          "ensureCalls": 0,
+          "actualRootMatrixRefreshes": 0
+        }
+      ]
+    }
+  ],
+  "upperBound": {
+    "maxOverlapQueriesPerCall": 47,
+    "maxScalarCapsuleTestsPerCall": 2303,
+    "note": "Includes all.06m outward steps plus8 bisection steps; Y rejection usually removes most limbs. Broad and comfort limits are unchanged during the measurement."
+  },
+  "limitations": [
+    "Microbenchmark timings include the instrumented actual cached-pose helper. They are PC samples and cannot predict S23 frame cost or heating.",
+    "This excludes a forced root/bone refresh: no game root moved, so ensurePoseCurrent returned false. The main frame already owns animation sampling.",
+    "Far/hidden/cached modes use no additional pose sampling. Geometry,8K/4K textures, shadow/outline/LOD remain unchanged."
+  ]
+}

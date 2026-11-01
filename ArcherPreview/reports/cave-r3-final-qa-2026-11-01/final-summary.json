@@ -1,0 +1,264 @@
+{
+  "generatedAt": "2026-11-01T15:21:21.076Z",
+  "status": "PASS_WITH_DISCLOSED_BASELINE_LIMITS",
+  "scope": "Final independent U1/r3 integration QA. Source/data locked. No browser automation, asset generation, GPU/device thermal claim, build, commit or deployment by this agent.",
+  "fingerprint": "304c660ab83690331d55caa10b19f2cab7d5a5d0b1ae9fae70e94dc526a569ef",
+  "sourceLocked": true,
+  "ownedSource": [
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/scripts/bake-laboratory-collision.mjs",
+      "sha256": "342df5ff35351ff03489cdbcac1b7df94ff1a551d9291203e3638562af222e97"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/scripts/bake-cave-collision.mjs",
+      "sha256": "670608c25becb3f08465d83d3f73da536f3b6dd90fbf35eb73a54509eee8c416"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/cave-laboratory-collision.js",
+      "sha256": "2cb185e4da0bc1c95e2bcb3502d8e5f44b4f84ae59b3a0ddeae837db13dcb6d4"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/cave-laboratory-collision-data.js",
+      "sha256": "df4238a1731373c9a4eed39979ad996ba1f096c2a9193a263e6c113981bf5d68"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/witch-cave-navigation.js",
+      "sha256": "7f22e6454689f94e854e94b6ce343e3d35416133e960b55d31907d4d9bc3e645"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/tests/cave-laboratory-collision.test.js",
+      "sha256": "d1274d895519d3102620356269a96dafa93fb55cfec6707823972884703e815d"
+    }
+  ],
+  "generatedData": [
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/witch-cave-collision-data.js",
+      "sha256": "1063cdb74474af7ff8eb07eae61ab1e3b8bd604169795573b10919a39fe9b04a"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/witch-cave-sight-data.js",
+      "sha256": "0fd5c4e4b06870edd8b4932b0eb022491cbb913a3446bf759150af9c1eece1ac"
+    },
+    {
+      "file": "C:/dev/moonforest-archer/ArcherPreview/src/witch-cave-camera-data.js",
+      "sha256": "3f9166f8ea692df7f75740938b76a351bcdfd9daadd16b80b84371e12e989f14"
+    }
+  ],
+  "earlierOwnedContactFiles": [
+    "src/mourning-elena-encounter.js",
+    "tests/elena-real-combat.test.js",
+    "tests/helpers/skin-sweep.js"
+  ],
+  "movement": {
+    "fixedCohorts": {
+      "legacy032": {
+        "radius": 0.32,
+        "count": 11035,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      "actual034": {
+        "radius": 0.34,
+        "count": 10991,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      "monster07": {
+        "radius": 0.7,
+        "count": 9400,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      "new160": {
+        "radius": 0.28809887268420753,
+        "count": 11061,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      }
+    },
+    "denseCases": 209508,
+    "dense": [
+      {
+        "radius": 0.32,
+        "oldFree": 20468,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.34,
+        "oldFree": 20389,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.7,
+        "oldFree": 17022,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.28809887268420753,
+        "oldFree": 20726,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      }
+    ],
+    "legacy11035FloorHeightChanges": 0,
+    "lockedGPUFloat32NormalChanges": 0,
+    "lockedNormalVertices": 5810,
+    "boss": {
+      "oldBaked1692": 1692,
+      "currentBaked": 1692,
+      "bakedLost": 0,
+      "oldRuntime1528": 1528,
+      "runtimeLost": 0,
+      "oldEdges5844": 5844,
+      "edgeLost": 0,
+      "examples": []
+    },
+    "openingsPreserved": 6,
+    "baselineMissingCapacities": [
+      {
+        "side": "south",
+        "interval": [
+          -28.174981481227448,
+          -24.825018518772552
+        ],
+        "radius": 0.34
+      },
+      {
+        "side": "south",
+        "interval": [
+          -28.174981481227448,
+          -24.825018518772552
+        ],
+        "radius": 0.7
+      },
+      {
+        "side": "south",
+        "interval": [
+          -28.174981481227448,
+          -24.825018518772552
+        ],
+        "radius": 0.28809887268420753
+      },
+      {
+        "side": "east",
+        "interval": [
+          -18.174981481227448,
+          -15.66
+        ],
+        "radius": 0.7
+      }
+    ]
+  },
+  "nativeField": {
+    "cells": 51920,
+    "decodedBytes": 103840,
+    "step": 0.125,
+    "quantum": 0.001,
+    "numericalSkin": 0.002,
+    "legacyMarginUnchanged": 0.08,
+    "algorithm": "whole-cell-exact-native-body-v1",
+    "runtimeQuery": "O(1), immutable typed-array lookup; no runtime mesh/skin calculation.",
+    "outsideFieldProof": "Every actual native vertex is2.25m inside field bounds; supported navigation radius<=2.0m plus.002 skin is strictly smaller.",
+    "cameraAndSightActualPayloadUnchanged": true
+  },
+  "camera": {
+    "fixedDenominator": 4896,
+    "baselineInvalidCasesKept": 0,
+    "oldRadius": {
+      "min": 0.373828125,
+      "median": 10.353515625,
+      "p95": 17,
+      "max": 17
+    },
+    "current160Radius": {
+      "min": 0.43710937499999997,
+      "median": 10.277343750000002,
+      "p95": 17,
+      "max": 17
+    },
+    "globalRetains80Percent": {
+      "count": 4829,
+      "percentage": 98.63153594771242,
+      "initialGlobalTargetPercent": 95,
+      "applicableToThisDenominator": true
+    },
+    "initialGlobal95PercentTargetPassed": true,
+    "local372Retains80Percent": 89.78494623655914,
+    "oldEyesInsideNewNative": 27,
+    "afterGuardInsideNewNative": 0,
+    "minimumActualNativeClearance": 0.32893431578520693,
+    "requestedInputChanges": 0,
+    "rawCoarseFlags": {
+      "newFrames": 163,
+      "newCases": 15,
+      "baselineFrames": 63,
+      "baselineCases": 27,
+      "nearRockFalseFlags": 43,
+      "actualRockSphereIntersections": 0,
+      "minimumFlaggedActualRockDistance": 0.5494455379162048,
+      "micronGroundBoundaryFrames": 120,
+      "minimumVerticalTerrainGap": 0.29999910305125077,
+      "groundFloatErrorMetres": 8.9694874923e-7
+    },
+    "meaningfulActualCameraPenetrationDetected": 0,
+    "explanation": "All flagged frames were retained. The rock flags were checked against actual original near triangles; the terrain flags are a sub-micron Float32 comparison at the pre-existing.3m vertical guard boundary. No camera code was changed to hide them."
+  },
+  "resources": {
+    "passed": true,
+    "baseline": "ab7e058",
+    "unchangedExistingCaveAssets": 28,
+    "changedExistingCaveAssets": [],
+    "removed": [
+      "joachim-resting"
+    ],
+    "added": [
+      "cave-derived-laboratory-rock"
+    ],
+    "existingFilesVerified": 177,
+    "existingReferencedBytes": 82948174,
+    "modelAndTextureManifestsSemanticallyUnchanged": true,
+    "newNativeTriangles": [
+      4512,
+      3158,
+      2374
+    ],
+    "newNativeTextures": 0,
+    "player8KAndBackground4KAndOriginalLodsPreserved": true
+  },
+  "tests": {
+    "newTest": "tests/cave-laboratory-collision.test.js",
+    "newCases": 4,
+    "focusedCasesIncludingExistingDodgeAndBoxCollision": 21,
+    "passed": 21,
+    "failed": 0,
+    "log": "native-collision-tests.log",
+    "earlierReal160RigCasesPassed": 26,
+    "earlierLog": "../player-160-dimensions-audit/final-focused-tests.log"
+  },
+  "reports": [
+    "cohort-and-floor.json",
+    "routes-and-boss.json",
+    "native-distance-bake.json",
+    "fine-separation-integrity.json",
+    "blocked-native-distance.json",
+    "camera-372.json",
+    "camera-default-global.json",
+    "transient-camera-real-mesh.json",
+    "resource-preservation.json"
+  ],
+  "remaining": [
+    "Parent-owned final full suite/build/sync/deployment gate.",
+    "User visual/mobile review remains separate from Node geometry and gameplay verification."
+  ]
+}

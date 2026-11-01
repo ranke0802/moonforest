@@ -1,4 +1,5 @@
 import {TerrainHeightField} from './terrain.js';
+import {applyLaboratoryTerrain} from './cave-laboratory-terrain.js';
 import {caveSurface,caveWaterWeight,CAVE_WATERFALLS,caveFlowRows} from './witch-cave-layout.js';
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 const channels=CAVE_WATERFALLS.flatMap(p=>{const rows=caveFlowRows(p);return rows.slice(1).map((b,i)=>({a:rows[i],b}));});
@@ -35,7 +36,7 @@ export function witchCaveHeight(x,z){
   const ridge=9*smooth((distance-.15)/3.2)*(1-water);
   return channelBed(x,z,ground+ridge,distance);
 }
-export const createWitchCaveTerrain=()=>new TerrainHeightField({size:160,subdivisions:192,height:witchCaveHeight});
+export const createWitchCaveTerrain=()=>applyLaboratoryTerrain(new TerrainHeightField({size:160,subdivisions:192,height:witchCaveHeight}));
 // A cached conservative distance field keeps collision work independent of
 // the number of repeated rock meshes and of camera rotation.
 let field;

@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -42,9 +43,9 @@ for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test(`static cave illumin
 test('collision bake is tied to current layout and terrain, uses only original asset types',()=>{
  const hash=createHash('sha256');
  for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
- assert.equal(CAVE_COLLISION_DATA.fingerprint,hash.digest('hex'),'rebake collisions after moving rocks or changing heights');
+ assert.equal(CAVE_COLLISION_DATA.fingerprint,caveSourceFingerprint(),'rebake collisions after moving rocks or changing near geometry');
  assert.ok(JSON.stringify(CAVE_COLLISION_DATA).length<16000,'small collision metadata, no render models downloaded');
- assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.asset)).size,29,'22 approved cave assets, six original props and one frozen Joachim reuse');
+ assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.asset)).size,29,'22 approved cave assets, six original props and one derived laboratory; Joachim body removed');
  assert.ok(CAVE_PLACEMENTS.filter(p=>p.asset==='cave-01-eroded-wall').length<150);
 });
 

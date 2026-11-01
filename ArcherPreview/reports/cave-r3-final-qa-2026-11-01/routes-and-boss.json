@@ -1,0 +1,258 @@
+{
+  "generatedAt": "2026-11-01T15:19:12.903Z",
+  "scope": "Fixed old movement cohorts plus dense continuous-region samples, all six lab boundary passages and every original full-pose boss cell/edge. No sampled point is forced free.",
+  "epoch": {
+    "src/witch-cave-layout.js": "3a65c4e58c24e45d47da94e9ccfd6c0e41918fa23101439e8879b27c2393efba",
+    "src/witch-cave-terrain.js": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d",
+    "src/cave-laboratory-geometry.js": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126",
+    "src/cave-laboratory-terrain-data.js": "df66cf701b19ff42c494ca329d91a10afa947a9ec3e0ce8ab8be40de05671516",
+    "public/assets/witch-cave.json": "5b9a618c62f76b577647fa218d1174a9ae354a45b5246b0aab2cb48601ee673d",
+    "src/witch-cave-collision-data.js": "1063cdb74474af7ff8eb07eae61ab1e3b8bd604169795573b10919a39fe9b04a",
+    "src/witch-cave-sight-data.js": "0fd5c4e4b06870edd8b4932b0eb022491cbb913a3446bf759150af9c1eece1ac",
+    "src/witch-cave-camera-data.js": "3f9166f8ea692df7f75740938b76a351bcdfd9daadd16b80b84371e12e989f14"
+  },
+  "dense": {
+    "step": 0.125,
+    "sampleCenters": 209508,
+    "byRadius": [
+      {
+        "radius": 0.32,
+        "oldFree": 20468,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.34,
+        "oldFree": 20389,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.7,
+        "oldFree": 17022,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.28809887268420753,
+        "oldFree": 20726,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      }
+    ]
+  },
+  "portals": [
+    {
+      "side": "north",
+      "interval": [
+        -38.84,
+        -30.66
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 52,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 49,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 55,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "side": "north",
+      "interval": [
+        -29.674981481227448,
+        -23
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 43,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 38,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 43,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "side": "south",
+      "interval": [
+        -28.174981481227448,
+        -24.825018518772552
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 0,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 0,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 0,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "side": "east",
+      "interval": [
+        -28.174981481227448,
+        -18.825018518772552
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 52,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 40,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 53,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "side": "east",
+      "interval": [
+        -18.174981481227448,
+        -15.66
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 4,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 0,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 6,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    },
+    {
+      "side": "east",
+      "interval": [
+        -11.34,
+        -7
+      ],
+      "radii": [
+        {
+          "radius": 0.34,
+          "baselineCrossings": 29,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.7,
+          "baselineCrossings": 26,
+          "lostCrossings": 0,
+          "examples": []
+        },
+        {
+          "radius": 0.28809887268420753,
+          "baselineCrossings": 30,
+          "lostCrossings": 0,
+          "examples": []
+        }
+      ]
+    }
+  ],
+  "boss": {
+    "oldBaked1692": 1692,
+    "currentBaked": 1692,
+    "bakedLost": 0,
+    "oldRuntime1528": 1528,
+    "runtimeLost": 0,
+    "oldEdges5844": 5844,
+    "edgeLost": 0,
+    "examples": []
+  },
+  "passed": true,
+  "passCriteria": "Preserve every existing baseline crossing and body/edge cohort; do not invent all-radius capacity at openings that did not have it before.",
+  "baselineMissingCapacities": [
+    {
+      "side": "south",
+      "interval": [
+        -28.174981481227448,
+        -24.825018518772552
+      ],
+      "radius": 0.34
+    },
+    {
+      "side": "south",
+      "interval": [
+        -28.174981481227448,
+        -24.825018518772552
+      ],
+      "radius": 0.7
+    },
+    {
+      "side": "south",
+      "interval": [
+        -28.174981481227448,
+        -24.825018518772552
+      ],
+      "radius": 0.28809887268420753
+    },
+    {
+      "side": "east",
+      "interval": [
+        -18.174981481227448,
+        -15.66
+      ],
+      "radius": 0.7
+    }
+  ]
+}

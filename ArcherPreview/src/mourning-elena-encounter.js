@@ -8,6 +8,15 @@ import {ENEMY_ARENA_RADIUS} from './world-limits.js';
 import {MourningCaveNavigation} from './mourning-cave-navigation.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
 import {MourningSlamAdvance} from './mourning-slam.js';
+import {playerDimensions} from './player-dimensions.js';
+
+// Distance to the player's upright vertical segment without per-limb scratch
+// arrays or scanning skinned vertices. The fitted hurt endpoints are reused.
+function uprightDistanceSquared(x,z,low,high,a,b){
+  const dx=b[0]-a[0],dy=b[1]-a[1],dz=b[2]-a[2],rx=a[0]-x,rz=a[2]-z,horizontal=dx*dx+dz*dz,length=horizontal+dy*dy;
+  const at=t=>{t=Math.max(0,Math.min(1,t));const y=a[1]+dy*t,gap=Math.max(low-y,0,y-high);return (rx+dx*t)**2+(rz+dz*t)**2+gap*gap;};
+  return Math.min(at(0),at(1),at(horizontal?-(rx*dx+rz*dz)/horizontal:0),at(length?-(rx*dx+(a[1]-low)*dy+rz*dz)/length:0),at(length?-(rx*dx+(a[1]-high)*dy+rz*dz)/length:0));
+}
 
 export class MourningElenaEncounter extends ElenaEncounter {
   constructor(...args){super(...args);this.phase=2;this.displayName='비탄의 마녀 엘레나';this.radius=MOURNING_SIZE.radius;this.stopDistance=MOURNING_SIZE.stopDistance;this.separationRadius=MOURNING_SIZE.separationRadius;this.sizeScale=MOURNING_SIZE_SCALE;this.renderRangePadding=MOURNING_SIZE.renderRangePadding;this.reviewFocusHeight=2.25*MOURNING_SIZE_SCALE;this.meleeAimDistance=4+1.8*(MOURNING_SIZE_SCALE-1);this.healthAnchor=new Vector3();this.slamAdvance=new MourningSlamAdvance();}
@@ -20,10 +29,37 @@ export class MourningElenaEncounter extends ElenaEncounter {
     if(this.clearanceSource!==navigation){this.clearanceSource=navigation;this.clearanceNavigation=new MourningCaveNavigation(navigation.obstacles);}
     return this.clearanceNavigation;
   }
-  // The enlarged creature's lower body is hollow and asymmetric. Do not add
-  // the bear's 65 cm comfort gap: it keeps a real descending sword out of reach.
-  // Use the same physical clearance as a roll; weapon volumes stay unchanged.
-  contactSeparation(){return this.radius+.25;}
+  // The environment still needs the full1.9m root envelope. Inside that broad
+  // contact range, however, the planted limbs leave genuine gaps below the
+  // abdomen. A solid root cylinder would keep the160cm sword out of reach.
+  contactSeparation(){
+    const player=this.player,dimensions=playerDimensions(player),broad=this.radius+dimensions.rollRadius;
+    if(!player||this.renderVisible===false||this.fogVisible===false||!this.nodes)return broad;
+    const p=player.position,root=this.actor.position,dx=p.x-root.x,dz=p.z-root.z,distance=Math.hypot(dx,dz);
+    if(distance>=broad||distance<.001)return broad;
+    const cached=this.bodyContactCache;
+    // Casting arms are attack volumes. When both actors stand still their
+    // independent animation must not pump the boss root back and forth.
+    if(cached&&cached.brain===this.brain&&cached.player===player&&Math.abs(cached.px-p.x)<.003&&Math.abs(cached.py-p.y)<.003&&Math.abs(cached.pz-p.z)<.003&&Math.abs(cached.x-root.x)<.003&&Math.abs(cached.y-root.y)<.003&&Math.abs(cached.z-root.z)<.003&&Math.abs(cached.yaw-this.actor.rotation.y)<.003)return cached.separation;
+    this.animator?.ensurePoseCurrent?.();
+    const capsules=this.hurtCapsules(),radius=dimensions.moveRadius,low=p.y+radius,high=p.y+dimensions.height-radius,ux=dx/distance,uz=dz/distance;
+    const overlaps=trial=>{const x=root.x+ux*trial,z=root.z+uz*trial;for(const capsule of capsules){const [a,b]=capsule.points,r=capsule.radius+radius+.015;if(Math.min(a[1],b[1])-r>high||Math.max(a[1],b[1])+r<low)continue;if(uprightDistanceSquared(x,z,low,high,a,b)<r*r)return true;}return false;};
+    // The real160cm sword's three authored attacks share a measured .9–1.2m
+    // close range. Keep its middle1.1m as comfort clearance so held movement
+    // cannot carry the player through the hollow core and behind the blade.
+    const comfort=Math.min(broad,dimensions.height*(1.1/1.6));
+    let separation=comfort;
+    if(overlaps(distance)){
+      let lo=distance,hi=distance;
+      // Find the first free outward interval. Keep the previous broad contact
+      // bound, rather than extending the body's reach or changing nav safety.
+      while(hi<broad&&overlaps(hi))hi=Math.min(broad,hi+.06);
+      if(overlaps(hi))separation=broad;
+      else {lo=Math.max(distance,hi-.06);for(let i=0;i<8;i++){const mid=(lo+hi)/2;if(overlaps(mid))lo=mid;else hi=mid;}separation=Math.max(comfort,hi);}
+    }
+    const state=this.bodyContactCache??={};Object.assign(state,{brain:this.brain,player,px:p.x,py:p.y,pz:p.z,x:root.x,y:root.y,z:root.z,yaw:this.actor.rotation.y,separation});
+    return separation;
+  }
   prepareAsset(){
     // Keep stable shader slots for the authored targets while texture-mode
     // shaders skip zero-weight targets, including the r9 death corrections.

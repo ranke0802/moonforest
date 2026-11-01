@@ -1,0 +1,90 @@
+{
+  "revision": "lab-large-joints-r3-v1",
+  "status": "CHILD_IMPLEMENTATION_LOCKED_PARENT_RELEASE_GATES_PENDING",
+  "shaderCorrection": {
+    "initialFocused32Scope": "Historical NullEngine binding, state and lifecycle tests before the reserved GLSL argument fix. These were not a real shader compiler result.",
+    "rootFixed": "GLSL reserved parameter active renamed to clipEnabled; model/terrain/placement values unchanged.",
+    "postCorrectionGeometryModuleSha256": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126",
+    "standaloneCompiler": "Root-exported ES300 color/ink/shadow, UBO false/true: 12 stages, all exit0; report independently read and emitted clipEnabled verified.",
+    "standaloneReport": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-natural-160cm/2026-11-01/shader-native/standalone-compile.json",
+    "postCorrectionRegression": "43/43 focused audio/player-dimensions/native geometry/native lifecycle/native bind tests passed. Separate subsequent audio-only safety addition passed30/30. Final narrow load-cancellation ownership fix plus its3 new regressions and native lifecycle/geometry/boss-music passed21/21.",
+    "limits": "Standalone GLSL syntax/semantic success is not target-phone driver execution, frame-time, visual or thermal validation. Parent must refresh source fingerprints after the module text change."
+  },
+  "sourceSha256": "eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b",
+  "terrainSha256": "7d0fb908cd01d1c76d255f8ff13ceca5c710e7798f916bcc42d93bf043b7c471",
+  "generationCalls": 0,
+  "newTextures": 0,
+  "ledger": {"newSourceModels": 22, "reusedSourceModels": 6, "spentCredits": 440, "derivedEnvironmentAssets": 1},
+  "manifest": {"assets": 29, "placements": 149},
+  "geometry": {
+    "triangles": [4512, 3158, 2374],
+    "closedComponentsPerLevel": [1, 1, 1],
+    "boundaryEdgesPerLevel": [0, 0, 0],
+    "nonmanifoldEdgesPerLevel": [0, 0, 0],
+    "maxAbsoluteSimplificationErrorMetres": [0, 0.0015226181130856276, 0.029381142929196358],
+    "vertexPositionAndNormalAttributesUnmodified": true,
+    "sharedPivot": [-35.5, 1.8, -18.5],
+    "placementElevation": 1.825,
+    "collisionCameraSightAuthority": "near; parent generated and independently validates actual bakes",
+    "meshopt": "Accessor bytes round-trip losslessly. LOD index simplification is separately measured and visually reviewed."
+  },
+  "runtime": {
+    "requiredInitialTier": 2,
+    "oldCeilingAndCoverRetainedWhilePending": true,
+    "replaceOnlyAfterFarAndInstancesAndInkReady": true,
+    "sameRevisionReactivationAllocations": 0,
+    "groundRetiredTriangles": [],
+    "retainedGroundTriangles": 73728,
+    "groundPositionNormalUVBitsPreservedAcrossActivation": true,
+    "protectedNormalsRestoredAfterInitialCompute": 69,
+    "repartitionUnchangedNormals": "No second summation in reordered index order",
+    "legacyClipAssets": ["cave-01-eroded-wall", "cave-03-great-column"],
+    "clipBoundsWorldXZ": [-48, -30, -23, -7],
+    "legacyColorInkShadowBoundariesEqual": true,
+    "legacyGpuVertexTopologyUnchanged": true,
+    "legacyClipLimitation": "Fragment rejection only; this does not remove old vertex processing or imply fewer old draw calls.",
+    "essentialStructuralLimitation": "Ready far enclosure remains enabled even outside FoW or a disabled streaming cell, retaining depth closure. Normal frustum and pixel FoW still apply. This is not zero submission of all hidden geometry.",
+    "mobileCompressedHighTextureBudgetMiB": 96,
+    "nativeTextureMiB": 0
+  },
+  "tests": {
+    "focusedPassed": 32,
+    "focusedFailed": 0,
+    "files": [
+      "tests/cave-laboratory-geometry.test.js",
+      "tests/cave-laboratory-packing.test.js",
+      "tests/cave-laboratory-legacy-clip.test.js",
+      "tests/cave-laboratory-lifecycle.test.js",
+      "tests/cave-open-surfaces.test.js",
+      "tests/witch-cave-resources.test.js",
+      "tests/village-shadow-fade.test.js",
+      "tests/village-outline-render.test.js",
+      "tests/cave-painted-light-runtime.test.js",
+      "tests/camera-zoom.test.js"
+    ],
+    "legacyActualWorldSpaceVertices": {"inside": 1610, "outside": 7540},
+    "actualDepthDrawsPerUBOMode": 2,
+    "uboModes": [false, true],
+    "roundTrips": 12,
+    "actualGeometryContainerLoads": 180,
+    "loadedCaveEveryVisit": {"meshes": 298, "materials": 27, "textures": 6, "geometries": 25, "observers": [3, 3, 21, 2, 2, 1, 1]},
+    "forestAfterEveryRelease": {"meshes": 31, "materials": 5, "textures": 4, "geometries": 4, "observers": [0, 0, 2, 0, 0, 0, 0]},
+    "retainedLinkedPrograms": 6,
+    "linkedProgramCap": 12,
+    "cameraIdentityPreserved": true,
+    "scope": "Actual Babylon NullEngine lifecycle, compressed geometry decoded offline, authored opacity and culling retained; images omitted at loader boundary. No browser automation."
+  },
+  "artifacts": {
+    "base": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-large-rock-blockout/2026-11-01/r3-direct-joints",
+    "approvedInput": "native/approved-runtime.json",
+    "packingAudit": "native/laboratory-packing-audit.json",
+    "lodAudit": "native/lod-review-ready.json",
+    "visualComparison": "lod-review/comparison.jpg",
+    "artistHandoff": "handoff.json"
+  },
+  "limitations": [
+    "Parent full suite, deployment inventory/pack validation and final collision-camera-sight release gates remain separate.",
+    "NullEngine submission and lifecycle tests do not measure real GPU rasterization, mobile frame time or thermals.",
+    "Offline art and LOD approval do not establish final in-game mobile appearance."
+  ]
+}

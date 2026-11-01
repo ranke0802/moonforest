@@ -1,0 +1,183 @@
+{
+  "generatedAt": "2026-11-01T15:19:12.606Z",
+  "scope": "ab7e058 public manifest/immutable-content comparison; original model/LOD/texture bytes and URLs are preserved. No asset downloads or generation.",
+  "baseline": "ab7e058",
+  "oldCaveAssetCount": 29,
+  "currentCaveAssetCount": 29,
+  "unchangedExistingCaveAssets": [
+    "cave-01-eroded-wall",
+    "cave-02-rock-ledge",
+    "cave-03-great-column",
+    "cave-04-natural-arch",
+    "cave-05-stalagmites",
+    "cave-06-stalactite-canopy",
+    "cave-07-scree-ramp",
+    "cave-08-timber-brace",
+    "cave-09-iron-gate-leaf",
+    "cave-10-hand-winch",
+    "cave-11-sluice-shutter",
+    "cave-12-lift-platform",
+    "cave-13-votive-lantern",
+    "cave-14-hidden-pressure-stone",
+    "cave-15-resurrection-altar",
+    "cave-16-soul-collector-arm",
+    "cave-17-faded-sacred-emblem",
+    "cave-18-alchemy-workbench",
+    "cave-19-apothecary-shelf",
+    "cave-20-modest-cot",
+    "cave-s01-solid-cliff-base",
+    "cave-s03-dry-spillway-rock",
+    "forest-06-witch-cave-mouth",
+    "crate-barrel-cluster",
+    "firewood",
+    "handcart",
+    "rock-02-jagged-outcrop",
+    "rock-01-mossy-boulder"
+  ],
+  "changedExistingCaveAssets": [],
+  "removed": [
+    "joachim-resting"
+  ],
+  "added": [
+    "cave-derived-laboratory-rock"
+  ],
+  "unchangedManifests": [
+    {
+      "file": "village.json",
+      "unchanged": true,
+      "baselineSHA256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "currentSHA256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "bytesUnchanged": true
+    },
+    {
+      "file": "monster-forest.json",
+      "unchanged": true,
+      "baselineSHA256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "currentSHA256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "bytesUnchanged": true
+    },
+    {
+      "file": "warrior-v3.json",
+      "unchanged": true,
+      "baselineSHA256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "currentSHA256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "bytesUnchanged": true
+    },
+    {
+      "file": "warrior-v3-ios.json",
+      "unchanged": true,
+      "baselineSHA256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "currentSHA256": "8fd4bceb04d02117fe6cfbac0d9e5ab128b419a56cb05cde3a17d0fa76de6253",
+      "bytesUnchanged": false
+    },
+    {
+      "file": "elena.json",
+      "unchanged": true,
+      "baselineSHA256": "71f9929b7d6d7122775ba42c75edd85afca15e693381e3c4db1b441cd4990d38",
+      "currentSHA256": "71f9929b7d6d7122775ba42c75edd85afca15e693381e3c4db1b441cd4990d38",
+      "bytesUnchanged": true
+    },
+    {
+      "file": "mourning-elena.json",
+      "unchanged": true,
+      "baselineSHA256": "a5814434c83515de3a3837f9ad551f01d92099a2859160266acca261540b57af",
+      "currentSHA256": "a5814434c83515de3a3837f9ad551f01d92099a2859160266acca261540b57af",
+      "bytesUnchanged": true
+    }
+  ],
+  "existingReferencedFiles": {
+    "count": 177,
+    "bytes": 82948174,
+    "invalid": []
+  },
+  "derived": {
+    "name": "실험실 큰 암반·절리",
+    "category": "rock",
+    "bounds": [
+      25,
+      27.20000081062317,
+      23
+    ],
+    "height": 27.20000081062317,
+    "frontYawOffset": 0,
+    "geometryLod": true,
+    "lods": [
+      {
+        "level": 0,
+        "model": "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+        "resources": [
+          "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
+          "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
+          "./content/dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445.bin",
+          "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf"
+        ],
+        "triangles": 4512,
+        "textureSize": 0,
+        "bytes": 109951
+      },
+      {
+        "level": 1,
+        "model": "./content/14e68dcac35fa5e99ca6d83444a0112cacbc389ecab0dfe833182fa0077ec021.gltf",
+        "resources": [
+          "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
+          "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
+          "./content/06bb097847d2a2190714cccd5fb254c06e634c9fe1346e15cf804ef08f0a0561.bin",
+          "./content/14e68dcac35fa5e99ca6d83444a0112cacbc389ecab0dfe833182fa0077ec021.gltf"
+        ],
+        "triangles": 3158,
+        "textureSize": 0,
+        "bytes": 105593
+      },
+      {
+        "level": 2,
+        "model": "./content/7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1.gltf",
+        "resources": [
+          "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
+          "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
+          "./content/f8389f306b4802fcb886ce71d653def0d7b65e1b8d67242eea33ed9d027cd6c1.bin",
+          "./content/7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1.gltf"
+        ],
+        "triangles": 2374,
+        "textureSize": 0,
+        "bytes": 102624
+      }
+    ],
+    "mobileNear": {
+      "level": 0,
+      "model": "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+      "resources": [
+        "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
+        "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
+        "./content/dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445.bin",
+        "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf"
+      ],
+      "triangles": 4512,
+      "textureSize": 0,
+      "bytes": 109951
+    },
+    "surfaceStyle": "cave-palette",
+    "essentialStructural": true,
+    "visualReview": "APPROVED",
+    "derivedFromExistingAssets": [
+      "cave-01-eroded-wall"
+    ],
+    "sourceSha256": "eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b",
+    "terrainSha256": "7d0fb908cd01d1c76d255f8ff13ceca5c710e7798f916bcc42d93bf043b7c471",
+    "replacesLegacyAssets": [
+      "cave-01-eroded-wall",
+      "cave-03-great-column"
+    ],
+    "approvedRevision": "lab-large-joints-r3-v1",
+    "provenance": {
+      "sourceGeometryJsonSha256": "fbcb0eb86be1452ac71ad9adb7eb8371f2e32a4826d57c0a260704c672442c1c",
+      "sourceOriginalBlendSha256": "4ebbeff26ad4142700130547ffc6ddcd8c8937a4ecc573ea65225066a76c48b9",
+      "lodLockMaskSha256": "cea30ea2fc982205f201f52d3e71322a1b018582d5151b68be0bd6e643bad964",
+      "indexOnlyLOD": true,
+      "vertexPositionNormalAttributesUnchanged": true,
+      "sourceImages": 0
+    },
+    "newGenerationCalls": 0
+  },
+  "allowedRemoval": "joachim-resting was explicitly removed by the user; no original used environment asset was replaced.",
+  "passed": true
+}

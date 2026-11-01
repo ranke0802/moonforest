@@ -1,0 +1,61 @@
+{
+  "date": "2026-11-01",
+  "status": "TRANSITION_IMPLEMENTED_NEW_AUDIO_NOT_GENERATED_OR_APPLIED",
+  "sourceFiles": [
+    "src/game-audio.js",
+    "src/audio-beds.js",
+    "src/boss-music.js",
+    "tests/boss-music.test.js"
+  ],
+  "sourceSha256": {
+    "src/game-audio.js": "53151438302144458226c83dfc229cd60e0cb75d3cdeecbedf927527c8998e09",
+    "src/audio-beds.js": "436a5213bceabdef2ebb860e23c55eab0fae024cc84ae1f27b1575f3e503ba74",
+    "src/boss-music.js": "b2887b6c12048b9ade81308543123ef1f1e7a7bac5df46ff686a92e9d599f71f",
+    "tests/boss-music.test.js": "4c2b9060cc6f6108227141a67131f8a1cea8acc260e8a9f723478105cf00041b"
+  },
+  "tests": {
+    "files": [
+      "tests/boss-music.test.js",
+      "tests/audio.test.js",
+      "tests/world-audio.test.js",
+      "tests/ios-audio.test.js"
+    ],
+    "pass": 30,
+    "fail": 0,
+    "browserAutomation": false,
+    "realPhonePlayback": false
+  },
+  "mainWiring": "boss.update(dt,actor) 직후, actionAudio.boss(boss,dt) 직전에 audio.setBossContext(boss?.encounters) 호출. main.js는 부모 담당이며 이 작업에서 수정하지 않음.",
+  "manifestContract": {
+    "keys": [
+      "elena_saint",
+      "elena_mourning"
+    ],
+    "example": {
+      "url": "./content/<sha256>.mp3",
+      "volume": 0.25,
+      "decodedBytes": "편집본 duration × 실제/보수적 decode sampleRate × channels × 4"
+    },
+    "existingBossFallback": "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
+    "themeEntriesPresent": {
+      "elena_saint": false,
+      "elena_mourning": false
+    },
+    "manifestModified": false,
+    "mediaGenerated": false
+  },
+  "policy": {
+    "selection": "active/HP>0/engaged Elena만. phase2 > phase1 > generic boss. 미교전/검수/죽은/숨긴 pooled actor 제외. 렌더 가림만으로 전투 음악을 중단하지 않음.",
+    "fadeSeconds": 1.2,
+    "phaseGapAndVictoryHold": "ActionAudio의 기존 전투 hold 동안 마지막 테마 유지, death/stopAll/setEnvironment에서 초기화.",
+    "fallback": "테마 항목 없음/실패 시 기존 boss로 복귀. 음원 없는 상태를 신곡으로 위장하지 않음. 자동 프레임별 재시도 없음; 기존 사용자 입력+5초 cooldown 재시도만 유지.",
+    "decode": "음악/환경음 serialized decode 1건. 음악 최대2 + 환경음 최대2. map stop generation 이후 늦게 끝난 decode는 cache/playback에 반영하지 않음.",
+    "residentDecodedLimitMiB": 48,
+    "budgetLimit": "48MiB는 AudioBeds가 보관하는 완료 buffer 상한이며 SFX/브라우저 decoder 내부 임시메모리를 포함하지 않는다. 정확한 decodedBytes metadata면 다운로드/decode 전에 예산을 검사한다. metadata가 없거나 잘못되면 decode 후 실제 AudioBuffer.length/channels로 거부하므로 일시적 decode 메모리 peak까지 보장하지 않는다."
+  },
+  "limits": [
+    "실제 새 음원/manifest pack은 인증 복구 및 생성 완료 후 별도 단계.",
+    "실기기 Safari/Chrome 청취·루프 seam·음량·발열은 측정하지 않음.",
+    "동일 motif/BPM 연계는 음악 제작 지시이며 runtime beat sync는 구현하지 않음."
+  ]
+}

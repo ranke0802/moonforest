@@ -1,0 +1,90 @@
+{
+  "status": "REVIEW_COMPLETE_CANCELLATION_DEFECT_FIXED_PARENT_RELEASE_GATES_PENDING",
+  "reviewScope": "Read-only integration review plus two narrowly authorized followups: game-audio sync re-selection and initial-load cancellation ownership. No geometry/terrain/layout/bake change.",
+  "deployment": "Working-tree integration inspected. Child did not build, commit, push, browse or verify live deployment.",
+  "shader": {
+    "resolvedCriticalIssue": "Root caught reserved GLSL identifier active which NullEngine readiness had not detected. Parent renamed only the argument to clipEnabled.",
+    "geometryModuleSha256": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126",
+    "standaloneES300Stages": 12,
+    "standaloneFailures": 0,
+    "evidence": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-natural-160cm/2026-11-01/shader-native/standalone-compile.json",
+    "independentRead": "Read all12 exit0 results and checked the generated color/ink/shadow fragment sources contain clipEnabled and identical inclusive XZ tests.",
+    "nullEngineBoundary": "It validates material readiness plumbing, uniforms, instance transforms, submission callbacks and disposal; it is not an actual GLSL compiler or GPU rasterizer.",
+    "phoneBoundary": "Neither the changed source hash nor standalone compile success establishes S23/iPhone performance or appearance."
+  },
+  "player160": {
+    "evidence": [
+      "src/player-dimensions.js:4 defines height1.6 / measured upright source height. configurePlayerSize assigns absolute scale, not cumulative scaling.",
+      "src/main.js:392-394 applies the metadata profile once after model roots attach and sets camera body scale.",
+      "src/main.js:414-417 scales controller world speeds; 542-544 scales dodge distance/contact profile; 596 scales step stride; 682 passes contact dimensions.",
+      "src/main.js:509-514 passes stable or motion-follow focus through camera pitch and cave guard; camera-follow.js reads metadata dimensions.",
+      "src/cave-fog-runtime.js:84 uses the same player stableFocusHeight; witch-cave-camera.js:111 uses that actor profile for physical eye clearance.",
+      "src/main.js:725 updates cave fog at arrival and uses the same retained actor/camera on map transfer. The initial pre-profile fog update is corrected by forced sync before screen reveal."
+    ],
+    "verified": "player-dimensions tests5/5 included in post-GLSL regression43/43. Existing camera-bounds/rear-view roundtrip tests were part of historical focused32/32.",
+    "noNewBlockerObserved": true,
+    "exclusion": "The source-model skin measurement and full gameplay contact QA are parent/validator evidence, not newly measured by this read-only review."
+  },
+  "native": {
+    "evidence": [
+      "src/village-streamed-environment.js:51-55 prepends the essential far tier to initial plan even outside FoW; source templates/instances and ink are ready before structuralReady true at150-154.",
+      "src/witch-cave-atmosphere.js:145-149 rejects replacement before the essential far source and record are ready; old roof remains until then.",
+      "src/witch-cave-surfaces.js:119-123 checks terrain version, repartitions the same floor, replaces same-mesh fog patches with force:true and activates shared metadata.",
+      "src/cave-laboratory-terrain.js validates sourceSHA/terrainSHA/version/size/grid. terrain-mesh.js and partitionCaveGround restore69 protected floor normals after the initial normal calculation.",
+      "retiredGroundTriangles is empty; lowered228 nonwalkable heights are retained as a closed73728-triangle floor, not cut out indiscriminately.",
+      "All three color/ink/shadow legacy clips use identical world-XZ boundaries, restricted to two approved legacy assets. The new native palette excludes unrelated UV detail."
+    ],
+    "lifecycle": "Actual149-placement startup plans, real glTF AssetContainers with offline-decoded geometry and image boundary stub,12 same-scene cave/forest swaps,180 loads: stable resource counts, no visible-source attribute change, one-time replacement and camera identity retained.",
+    "honestCost": "Textureless native adds one required far asset and an essential closure record; hidden enclosure submission is intentionally allowed. Legacy fragment discard preserves exterior surfaces but does not remove old vertex processing or automatically reduce old draw calls.",
+    "loadFailurePolicy": "Required far is a fail-closed initial dependency. Rejecting its load should retain the loading veil/error rather than reveal an unclosed laboratory. Loading is sequential; no burst generation or new texture decode is introduced.",
+    "physicalFieldExcluded": "Parent/validator exact-distance native body field is in progress; no final pass/fail judgment or deployment clearance is given for it here."
+  },
+  "finding": {
+    "id": "A01",
+    "priority": "P2_LIFECYCLE_CORRECTNESS",
+    "status": "FIXED_WITH_PARENT_AUTHORIZATION_AND_THREE_REGRESSIONS",
+    "trigger": "releaseEnvironment called while streaming.initial is awaiting its first container, then that old request resolves.",
+    "location": "src/village-streamed-environment.js:184-190",
+    "observed": "cleanup sets records/streaming/prepared null and afterRender observer count2, but the late initial continuation constructs VillageTextureStreaming, sets disposed recordCount1 and readytrue, and observer count rises3.",
+    "probe": "reports/cave-lab-joints-plan-2026-11-01/probe-initial-release.mjs",
+    "normalUIQualification": "Normal main prevents portal travel during initial loading and serializes world transfer, so this is a direct cancellation/scene-disposal boundary defect, not a reproduced ordinary portal symptom.",
+    "implemented": "After initial(plan), reject with AbortError if disposed before creating texture streaming. Explicit per-load owner scopes cleanup and outer catch; the old load can dispose only its closure-owned containers/records/observers and cannot clear a new world's fields.",
+    "regression": "tests/village-initial-cancel.test.js: released initial completion, new forest loaded before old rejection, scene disposed before late completion. Real packed geometry decoded offline and actual AssetContainer cleanup; all3 pass.",
+    "latestFocused": "21/21: cancellation3 + actual12-trip native lifecycle1 + geometry6 + boss-music11. Prior post-GLSL43/43 and separate audio30/30 remain scoped historical runs."
+  },
+  "audio": {
+    "newSongsGenerated": 0,
+    "newSongsApplied": 0,
+    "reason": "Runway authentication expired (UNAUTHORIZED); current audio manifest has no elena_saint or elena_mourning entries.",
+    "fallback": "Existing boss music continues. Optional phase-specific definitions select only active living engaged Elena; phase2 wins; map/death/reset clear theme state.",
+    "mainHook": "src/main.js:597 after boss.update and before ActionAudio.boss.",
+    "authorizedSafetyChange": "syncMusic re-evaluates selectBed against current definitions/failed set; same-key beds.request remains no-op.",
+    "existingSafePaths": "preload already selected immediately after configure; unlock/setSuspended(false) already reselected after retryFailed. Added sync safety covers direct sync/configuration boundary as well.",
+    "regression": "30/30 audio tests, including delayed manifest, failure-list recovery plus modal-close gesture, stale noncancellable decode,12 death/map loops, byte/voice bounds.",
+    "memory": "AudioBeds retained decoded buffers<=48MiB, at most2 music+2 ambience. SFX, decoder internal temporary buffers and actual mobile peak RSS are outside this claim."
+  },
+  "paintedLightFixtureFollowup": {
+    "productionChanged": false,
+    "staleAssumption": "Old laboratory shoulder sample(-41.0625,-9.5625) is now floor2.813914 with receiver equal to floor. Its native-surface distance is.917464m, so it no longer proves lower-wall illumination.",
+    "actualBlock": "Lantern107 to old sample is blocked by actual terrain height3.802509 at(-40.726974,-10.963816),1.442976m before target. Removing the2D sight mask leaves the same.159447 luma; not a new native-mask regression.",
+    "preservedReceiverTest": "Retained non-walking shoulder(15.1875,32.0625): floor8.659164,receiver1.495028. Test asserts the geometric precondition before comparing base.159447 against receiver.467503.",
+    "nativePositiveControl": "Decode actual public near geometry and raycast285degrees horizontally from real lantern107. First surface is3.380740m away at(-43.265544,3.707492,-13.125). Source-JSON face4460; runtime root1.825-.025 equals exported pivot1.8, so source world coordinates need no extra offset.",
+    "nativeLight": "Existing.8m terminal margin: luma.514737 versus.238356 with margin0. No light radius/margin/terrain/production change.",
+    "tests": "painted-light pure and runtime19/19 pass, including existing thin-wall/separate-room negative controls and20 map roundtrips.",
+    "evidence": "reports/cave-lab-joints-plan-2026-11-01/painted-native-receiver-probe.json",
+    "limitation": "Height-agnostic2D sight remains a conservative illumination approximation at other facets. This CPU positive control does not claim every wall is visually ideal or validate mobile GPU performance."
+  },
+  "ownedCommitPaths": {
+    "newRuntime": ["src/boss-music.js", "src/cave-laboratory-geometry.js"],
+    "newScripts": ["scripts/pack-cave-laboratory.mjs"],
+    "newTests": ["tests/boss-music.test.js", "tests/cave-laboratory-geometry.test.js", "tests/cave-laboratory-packing.test.js", "tests/cave-laboratory-legacy-clip.test.js", "tests/cave-laboratory-lifecycle.test.js", "tests/village-initial-cancel.test.js"],
+    "modifiedRuntime": ["src/game-audio.js", "src/audio-beds.js", "src/witch-cave-surfaces.js", "src/cave-rock-shell.js", "src/witch-cave-atmosphere.js", "src/village-texture-streaming.js", "src/village-streamed-environment.js", "src/village-outlines.js", "src/village-shadow-fade.js"],
+    "modifiedTests": ["tests/cave-open-surfaces.test.js", "tests/witch-cave-resources.test.js", "tests/cave-painted-light.test.js"],
+    "manifest": ["public/assets/witch-cave.json", "only its referenced new immutable native content files; root deployment pack/inventory procedure owns final selection"],
+    "reports": ["reports/elena-boss-music-2026-11-01/integration-validation.json", "reports/cave-lab-joints-plan-2026-11-01/native-runtime-validation.json", "reports/cave-lab-joints-plan-2026-11-01/final-readonly-audit.json", "reports/cave-lab-joints-plan-2026-11-01/build-native-lods.mjs"],
+    "excludeDebugByDefault": ["tests/cave-shadow-stage-debug.mjs", "tests/cave-native-shader-export.mjs", "reports/cave-lab-joints-plan-2026-11-01/probe-initial-release.mjs", "reports/cave-lab-joints-plan-2026-11-01/probe-painted-native-receiver.mjs"],
+    "sharedFollowups": "Root changed the geometry GLSL argument after child lock and owns latest fingerprints/bakes. Root owns main/terrain/layout/height/camera and validator owns physical clearance; include their explicit lists separately."
+  },
+  "remainingReleaseGates": ["Parent full suite after latest source corrections", "New native exact-distance body/camera/sight validation", "Content JSON/size/partial bundle/HTTP inventory verification", "Parent build and explicit deployment", "User final real-device visual and performance check"],
+  "noClaims": ["No new music delivery", "No measured GPU speedup", "No measured thermal reduction", "No browser or phone visual acceptance", "No final physical-field acceptance while it is changing"]
+}

@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-11-01T15:08:21.091Z",
+  "scope": "Deterministic actual public near-model offline body-distance bake. No model/texture regeneration or runtime mesh sampling.",
+  "version": 1,
+  "revision": "lab-large-joints-r3-v1",
+  "sourceSha256": "eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b",
+  "terrainSha256": "7d0fb908cd01d1c76d255f8ff13ceca5c710e7798f916bcc42d93bf043b7c471",
+  "model": "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+  "modelResources": {
+    "132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin": "132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94",
+    "a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin": "a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb",
+    "dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445.bin": "dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445",
+    "c0df4e8b3ee72ca953d88d9a87f11668df11bb6324d28348e034f31516626df5.bin": "c0df4e8b3ee72ca953d88d9a87f11668df11bb6324d28348e034f31516626df5",
+    "769e85df55d12877203e0bcbfe7bccf983fa182fb02a23ef88a1ccaf42fc7252.bin": "769e85df55d12877203e0bcbfe7bccf983fa182fb02a23ef88a1ccaf42fc7252",
+    "b4caf584601e53cfed413f4ba8e918ea33a3ff10e8ad9cc078074086b3662922.bin": "b4caf584601e53cfed413f4ba8e918ea33a3ff10e8ad9cc078074086b3662922"
+  },
+  "fingerprint": "304c660ab83690331d55caa10b19f2cab7d5a5d0b1ae9fae70e94dc526a569ef",
+  "algorithm": "whole-cell-exact-native-body-v1",
+  "step": 0.125,
+  "minX": -50.25,
+  "minZ": -32.25,
+  "width": 236,
+  "height": 220,
+  "quantum": 0.001,
+  "nativeSkin": 0.002,
+  "legacyMargin": 0.08,
+  "maxDistance": 2.25,
+  "maxSupportedRadius": 2,
+  "padding": 2.25,
+  "bodyBand": [
+    0.22,
+    1.75
+  ],
+  "cells": 51920,
+  "bytes": 103840,
+  "solidInteriorCells": 5719,
+  "surfaceOverlappingCells": 2718,
+  "triangleCellTests": 577177,
+  "windingFallbacks": 1,
+  "elapsedMilliseconds": 1069.7919,
+  "proof": [
+    "For every field cell, floor extrema are obtained by clipping the actual a-d source ground triangles to its rectangle. The body band [minFloor+.22,maxFloor+1.75] contains the existing low-body policy for every center inside that cell.",
+    "Distance is the minimum horizontal distance between the ENTIRE cell rectangle and every actual native triangle clipped to that vertical band. Rectangle/polygon intersection gives zero. Solid interiors are also zero; no positive clearance inside a closed volume.",
+    "A triangle farther than the current saturated distance in an XZ axis cannot improve that distance; the spatial index only omits triangles farther than maxDistance.",
+    "Quantisation rounds down1mm after subtracting1micron, so the stored distance never exceeds the certificate. Native collision requires physicalRadius+.002; legacy coarse collision keeps its original.08 reserve and voxel policy.",
+    "The field boundary is2.25m beyond every actual native vertex in XZ. Outside the field, distance to this structure exceeds every supported2.0m radius plus.002 skin; returningInfinity there is safe."
+  ]
+}

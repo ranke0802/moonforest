@@ -7,6 +7,7 @@ import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
 import {CAVE_ROCK_GLSL} from './cave-rock-shell.js';
 import {readyShaderEffect} from './cave-fog-binding.js';
 import {CavePaintLightRuntime,bindCavePaintLight,CAVE_PAINT_LIGHT_GLSL,CAVE_PAINT_UNIFORMS,CAVE_PAINT_SAMPLERS} from './cave-painted-light-runtime.js';
+import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled,clipLaboratoryCeiling} from './cave-laboratory-geometry.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -107,7 +108,8 @@ function caveCeiling(world){
   for(let i=0;i<=segments;i++){const a=i/segments*Math.PI*2;positions.push(Math.cos(a)*180,-28,Math.sin(a)*180);if(i){const prev=rings*(segments+1)+i;indices.push(prev,edge+i-1,edge+i,prev,prev-1,edge+i-1);}}
   const mesh=new Mesh('cave-distant-ceiling',world.scene),data=new VertexData();data.positions=positions;data.indices=indices;data.normals=[];VertexData.ComputeNormals(positions,indices,data.normals,{useRightHandedSystem:world.scene.useRightHandedSystem});data.applyToMesh(mesh);mesh.isPickable=false;mesh.freezeWorldMatrix();
   const material=bindCaveFog(world,new ShaderMaterial('cave-ceiling-paint',world.scene,{vertexSource:roofVertex,fragmentSource:roofFragment},{attributes:['position','normal'],uniforms:['world','worldViewProjection','eye','focus','cavePlayerView','caveBossView',...fogUniforms,...CAVE_PAINT_UNIFORMS],samplers:['caveFogMap',...CAVE_PAINT_SAMPLERS]}));material.onBindObservable.add(()=>{material.setVector3('eye',world.camera.globalPosition);material.setVector3('focus',world.camera.target);});material.backFaceCulling=false;mesh.material=material;mesh.metadata={caveNoShadow:true,caveBackdrop:true};mesh.receiveShadows=false;
-  return {material,dispose(){mesh.dispose();material.dispose();}};
+  let laboratoryRevision=null;
+  return {material,prepareLaboratory:contract=>clipLaboratoryCeiling(data,contract),replaceLaboratory(geometry,contract){if(laboratoryRevision===contract.revision)return;const replacement=new VertexData();replacement.positions=geometry.positions;replacement.normals=geometry.normals;replacement.indices=geometry.indices;replacement.applyToMesh(mesh);mesh.refreshBoundingInfo();laboratoryRevision=contract.revision;mesh.metadata={...mesh.metadata,caveLaboratoryRevision:laboratoryRevision};},dispose(){mesh.dispose();material.dispose();}};
 }
 function caveGlow(world,asset,tint,height,offsetX=0){
   const material=bindCaveFog(world,new ShaderMaterial('cave-glow-'+asset,world.scene,{vertexSource:glowVertex,fragmentSource:glowFragment},{attributes:['position','uv'],uniforms:['world','viewProjection','right','up','tint',...fogUniforms],samplers:['caveFogMap'],needAlphaBlending:true}));
@@ -139,10 +141,16 @@ export function configureCaveAtmosphere(world){
   const paint=new CavePaintLightRuntime(world),water=caveWater(world),style=caveSurfaceStyle(world);
   const glows=[caveGlow(world,'votive-lantern','#e6b46b',.8),caveGlow(world,'soul-collector-arm','#ad8dd3',2.784,.774)],ceiling=caveCeiling(world);
   const right=Vector3.Right(),up=Vector3.Up();
-  world.caveAtmosphere={tick(time){water.tick(time);
+  let laboratoryRevision=null;
+  world.caveAtmosphere={activateLaboratoryGeometry(contract=CAVE_LABORATORY_GEOMETRY){
+    if(!laboratoryEnabled(contract))return false;if(laboratoryRevision===contract.revision)return true;
+    const prepared=world.villagePrepared,asset=prepared?.assets.get(contract.assetId);
+    if(!asset?.tiers.has(2)||!prepared.records.some(r=>r.placement.asset===contract.assetId&&r.essentialStructural&&r.structuralReady))throw Error('Laboratory enclosure must be ready before retiring source surfaces');
+    const geometry=ceiling.prepareLaboratory(contract);style.activateLaboratory(contract);ceiling.replaceLaboratory(geometry,contract);laboratoryRevision=contract.revision;return true;
+  },tick(time){water.tick(time);
     const m=world.camera.getWorldMatrix().m;right.set(m[0],m[1],m[2]);up.set(m[4],m[5],m[6]);
     for(const glow of glows){glow.material.setVector3('right',right);glow.material.setVector3('up',up);}
     ceiling.material.setVector3('eye',world.camera.globalPosition);ceiling.material.setVector3('focus',world.camera.target);
-  },inspect:()=>({...style.inspect(),paintedLight:paint.inspect(),projectedRockAtlas:false}),dispose(){style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();paint.dispose();}};
+  },inspect:()=>({...style.inspect(),paintedLight:paint.inspect(),projectedRockAtlas:false,laboratoryRevision}),dispose(){style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();paint.dispose();}};
   world.caveAtmosphere.tick(0);
 }

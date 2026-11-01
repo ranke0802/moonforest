@@ -1,5 +1,6 @@
 import { Vector3 } from '@babylonjs/core';
 import { boostSwordStrike } from './equipment-stats.js';
+import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
 // Thrust_Slash's two authored passes are centered left of the actor's forward
 // axis. Aim the whole action once; keep the source pose and real blade intact.
 export const PLAYER_STRIKE_AIM_YAW={attack:25*Math.PI/180};
@@ -13,7 +14,7 @@ export const PLAYER_STRIKES={
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
-  sample(result,sword,shield,multiHit=true,heading=0,attackBonus=0){
+  sample(result,sword,shield,multiHit=true,heading=0,attackBonus=0,dimensions=LEGACY_PLAYER_DIMENSIONS){
     if(result.actionId==null||result.staggered||result.state==='dodge'){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
@@ -28,10 +29,10 @@ export class PlayerStrikeSampler{
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
     const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from)),
-      lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth}:null}));
+      lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth*dimensions.ratio}:null}));
     return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
       // A 1 cm contact margin keeps near-edge hits consistent with the V6 grip.
-      bladeRadius:result.state==='shieldPush'?.06:.055};
+      bladeRadius:result.state==='shieldPush'?dimensions.shieldStrikeRadius:dimensions.bladeRadius};
   }
 }
 

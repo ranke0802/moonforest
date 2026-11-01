@@ -1,0 +1,71 @@
+{
+  "generatedAt": "2026-11-01T15:08:26.651Z",
+  "scope": "Actual integrated active contract/public near-baked body epoch. Baseline navigation loaded from ab7e058 source; no stale generated-data substitution.",
+  "baseline": "ab7e058",
+  "epoch": {
+    "src/witch-cave-layout.js": "3a65c4e58c24e45d47da94e9ccfd6c0e41918fa23101439e8879b27c2393efba",
+    "src/witch-cave-terrain.js": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d",
+    "src/cave-laboratory-geometry.js": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126",
+    "src/cave-laboratory-terrain-data.js": "df66cf701b19ff42c494ca329d91a10afa947a9ec3e0ce8ab8be40de05671516",
+    "public/assets/witch-cave.json": "5b9a618c62f76b577647fa218d1174a9ae354a45b5246b0aab2cb48601ee673d",
+    "src/witch-cave-collision-data.js": "1063cdb74474af7ff8eb07eae61ab1e3b8bd604169795573b10919a39fe9b04a",
+    "src/witch-cave-sight-data.js": "0fd5c4e4b06870edd8b4932b0eb022491cbb913a3446bf759150af9c1eece1ac",
+    "src/witch-cave-camera-data.js": "3f9166f8ea692df7f75740938b76a351bcdfd9daadd16b80b84371e12e989f14"
+  },
+  "fingerprint": "304c660ab83690331d55caa10b19f2cab7d5a5d0b1ae9fae70e94dc526a569ef",
+  "placementCount": 149,
+  "contract": {
+    "version": 1,
+    "revision": "lab-large-joints-r3-v1",
+    "sourceSha256": "eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b"
+  },
+  "cohorts": {
+    "legacy032": {
+      "radius": 0.32,
+      "count": 11035,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    "actual034": {
+      "radius": 0.34,
+      "count": 10991,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    "monster07": {
+      "radius": 0.7,
+      "count": 9400,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    "new160": {
+      "radius": 0.28809887268420753,
+      "count": 11061,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    }
+  },
+  "height": {
+    "frozen11035": 0,
+    "maxDelta": 0,
+    "examples": []
+  },
+  "normal": {
+    "lockedVertices": 5810,
+    "changedGPUFloat32Normals": 0,
+    "maxComponentDelta": 0,
+    "restored69ChangedGPUFloat32Normals": 0,
+    "examples": []
+  },
+  "ground": {
+    "baselineTriangles": 73728,
+    "currentTriangles": 73728,
+    "retired": 0,
+    "restoredNormals": 69
+  },
+  "passed": true
+}

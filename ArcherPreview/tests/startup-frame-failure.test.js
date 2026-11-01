@@ -8,6 +8,7 @@ import {FrameLoop} from '../src/frame-loop.js';
 import {createLoadingView} from '../src/loading-view.js';
 import {LoadDiagnostics} from '../src/load-diagnostics.js';
 import {createMapTransition} from '../src/map-transition.js';
+import {configurePlayerSize,WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const noop=()=>{},results=[];
@@ -50,7 +51,7 @@ function fixture(){
  const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:async()=>{}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
- const dependencies={FrameLoop,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
+ const dependencies={FrameLoop,configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:async()=>{},loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>({meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose:noop})},
@@ -58,7 +59,7 @@ function fixture(){
   motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop},actionAudio:{reset:noop},
   updateButtons:noop,cancelAttackInput:noop,input:{reset:noop,panOffset:{x:0,y:0,z:0}},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
   resetCamera:noop,syncCaveFog:noop,prepareElenaReview:()=>gate.at('model'),leaveElenaReview:noop,waitForSceneReady:()=>gate.at('scene'),prepareMapResources:()=>gate.at('map-download'),
-  bindMapPortal:noop,carryPortalPose:noop,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop},applyRenderQuality:noop,
+  bindMapPortal:noop,carryPortalPose:noop,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop,setBodyScale:noop},applyRenderQuality:noop,
   frameDiagnostics:{beginFrame:noop,endFrame:noop,mapChanged:noop,suspend:noop},text:noop,
   requestAnimationFrame:callback=>{raf.push(callback);return raf.length;},consumeTravel:()=>null,travelStorage:{},
   replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':'village';w.cave=w.mapId==='cave';w.environment={};},

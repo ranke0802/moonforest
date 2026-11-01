@@ -1,9 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {Ray,Vector3} from '@babylonjs/core';
 import {buildCavePaintLight,getCavePaintLight,sampleCavePaintLight,cavePaintEmitters,caveRockPaintReceiver,clearCavePaintLightCache,inspectCavePaintLightCache,CAVE_PAINT_LIGHT_CONFIG as CONFIG,CAVE_PAINT_LIGHT_POLICY as POLICY} from '../src/cave-painted-light.js';
 import {CAVE_PLACEMENTS,CAVE_BOSS} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {TerrainHeightField} from '../src/terrain.js';
+import {CAVE_LABORATORY_GEOMETRY} from '../src/cave-laboratory-geometry.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+import {readAccessor} from '../scripts/web-geometry.js';
 
 const clear=()=>false,lamp=(x=-3,z=0)=>({id:'test-lamp',asset:'cave-13-votive-lantern',x,z,scale:1,yaw:0}),flat={heightAt:()=>0};
 const luma=rgb=>rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;
@@ -75,11 +80,26 @@ test('lower receiving face is lit beside tall terrain while real floor alpha and
 test('actual lower-wall receiver changes only adjacent non-walking shoulders and keeps the 64KiB single-height contract',()=>{
  const map=buildCavePaintLight(actualTerrain,{receiverAt:caveRockPaintReceiver});
  assert.ok(map.stats.receiverPixels>0);assert.ok(map.stats.receiverPixels<2000);
- const x=-41.0625,z=-9.5625,y=2.9;
- assert.ok(luma(sampleCavePaintLight(map,x,y,z).rgb)>luma(sampleCavePaintLight(actual,x,y,z).rgb)+.12,'laboratory lamp reveals its adjacent lower wall');
+ // The r3 laboratory lowered the old (-41.0625,-9.5625) shoulder. Use a
+ // retained tall shoulder beside the real (12,30) lantern, not the new floor.
+ const x=15.1875,z=32.0625,floor=actualTerrain.heightAt(x,z),receiver=caveRockPaintReceiver(actualTerrain,x,z,floor),y=receiver+.65;
+ assert.ok(floor>receiver+1.2,'fixture must remain a high non-walking shoulder');assert.ok(Math.abs(receiver-1.495027699127818)<1e-6);assert.ok(floor>8);
+ assert.ok(luma(sampleCavePaintLight(map,x,y,z).rgb)>luma(sampleCavePaintLight(actual,x,y,z).rgb)+.12,'actual lantern reveals its retained adjacent lower receiving face');
  for(let i=3;i<actual.data.length;i+=4)assert.equal(map.data[i],actual.data[i]);
  assert.equal(caveRockPaintReceiver(actualTerrain,-35,-18,actualTerrain.heightAt(-35,-18)),actualTerrain.heightAt(-35,-18),'walkable laboratory floor uses its actual height');
  assert.equal(map.data.byteLength,65536);assert.equal(map.stats.additionalLights,0);assert.equal(map.stats.additionalShadowPasses,0);assert.equal(map.stats.frameUpdates,0);
+});
+
+test('the actual r3 native first wall receives warm lamp light with the existing .8m end margin',async()=>{
+ const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),config=manifest.assets[CAVE_LABORATORY_GEOMETRY.assetId],placement=CAVE_PLACEMENTS.find(p=>p.asset===CAVE_LABORATORY_GEOMETRY.assetId),{gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));
+ assert.equal(config.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);assert.equal(placement.yaw,0);assert.equal(config.height/config.bounds[1]*placement.scale,1);
+ const emitter=actual.emitters.find(e=>e.id==='cavern-107');assert.deepEqual([emitter.x,emitter.z],[-40,-14]);
+ const angle=285*Math.PI/180,origin=new Vector3(emitter.x,emitter.y,emitter.z),direction=new Vector3(Math.sin(angle),0,Math.cos(angle)),ray=new Ray(origin,direction,emitter.radius),offset=new Vector3(placement.x,placement.elevation-.025,placement.z);let first=Infinity;
+ for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){const p=readAccessor(gltf,files,primitive.attributes.POSITION),indices=readAccessor(gltf,files,primitive.indices);for(let i=0;i<indices.length;i+=3){const tri=[0,1,2].map(k=>Vector3.FromArray(p,indices[i+k]*3).add(offset)),hit=ray.intersectsTriangle(...tri);if(hit&&hit.distance>0&&hit.distance<first)first=hit.distance;}}
+ assert.ok(first<emitter.radius,'positive actual packed-native first-surface intersection');const point=origin.add(direction.scale(first));assert.ok(Math.abs(point.z+13.125)<1e-6);assert.ok(first>3.3&&first<3.5);
+ const before=buildCavePaintLight(actualTerrain,{receiverAt:caveRockPaintReceiver,endSurfaceMargin:0}),after=buildCavePaintLight(actualTerrain,{receiverAt:caveRockPaintReceiver}),sample=sampleCavePaintLight(after,point.x,point.y,point.z);
+ assert.ok(luma(sample.rgb)>.45);assert.ok(luma(sample.rgb)>luma(sampleCavePaintLight(before,point.x,point.y,point.z).rgb)+.2,'first native receiving wall benefits from terminal margin without widening it');assert.ok(sample.rgb[0]>sample.rgb[2]);assert.equal(after.stats.endSurfaceMargin,.8);assert.equal(after.data.byteLength,65536);
+ const oldX=-41.0625,oldZ=-9.5625,oldFloor=actualTerrain.heightAt(oldX,oldZ);assert.equal(caveRockPaintReceiver(actualTerrain,oldX,oldZ,oldFloor),oldFloor,'retired shoulder fixture is now the actual lowered floor');
 });
 
 test('RGBA has fixed64KiB/1.125m texel centres and full floor range with finite bilinear edge sampling',()=>{

@@ -1,5 +1,6 @@
 import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_ROCK_PALETTE_GLSL} from './cave-rock-palette.js';
+import {groundTriangleKey} from './cave-laboratory-geometry.js';
 
 // Borrow an already resident rock map. Its streaming owner retains disposal and
 // all existing 4K/1K/512/256 tier decisions; this adds no image or GPU texture.
@@ -26,12 +27,27 @@ export function buildCaveRockShell(ground,terrain,{stride=4}={}){
  if(!Number.isInteger(stride)||stride<1||!Number.isInteger(n))throw new TypeError('Invalid rock shell grid');
  const positions=[],normals=[],indices=[],patches=[],lookup=new Map();
  const vertex=(x,z)=>{const id=z*rowWidth+x;if(!lookup.has(id)){lookup.set(id,positions.length/3);positions.push(source[id*3],source[id*3+1],source[id*3+2]);normals.push(sourceNormals[id*3],sourceNormals[id*3+1],sourceNormals[id*3+2]);}return lookup.get(id);};
+ // Only an approved replacement can leave holes in the source grid. Exact
+ // cell triangles near those holes keep the sparse cover from recreating a
+ // retired ridge. Temporary CPU tables are released after this one-time build.
+ let present,triangles;
+ if(ground.metadata?.caveLaboratoryRetiredTriangles){
+  present=new Uint8Array(n*n);triangles=new Uint32Array(n*n*6);
+  for(let i=0;i<original.length;i+=3){const key=groundTriangleKey(original[i],original[i+1],original[i+2],n);if(key<0)throw Error('Laboratory cover requires the original terrain grid');present[key>>1]|=1<<(key&1);triangles.set(original.slice(i,i+3),key*3);}
+ }
  for(const sub of ground.subMeshes){
   let x0=Infinity,x1=-Infinity,z0=Infinity,z1=-Infinity;
   for(let i=sub.indexStart;i<sub.indexStart+sub.indexCount;i++){const id=original[i],x=id%rowWidth,z=Math.floor(id/rowWidth);x0=Math.min(x0,x);x1=Math.max(x1,x);z0=Math.min(z0,z);z1=Math.max(z1,z);}
   const start=indices.length;
   for(let z=z0;z<z1;z+=stride)for(let x=x0;x<x1;x+=stride){
    const xx=Math.min(x+stride,x1),zz=Math.min(z+stride,z1),north=z===z0,east=xx===x1,south=zz===z1,west=x===x0;
+   let mixed=false;if(present)for(let v=z;v<zz&&!mixed;v++)for(let u=x;u<xx;u++)if(present[v*n+u]!==3){mixed=true;break;}
+   if(mixed){
+    for(let v=z;v<zz;v++)for(let u=x;u<xx;u++)for(let half=0;half<2;half++)if(present[v*n+u]&(1<<half)){
+     const at=((v*n+u)*2+half)*3;for(let k=0;k<3;k++){const id=triangles[at+k];indices.push(vertex(id%rowWidth,Math.floor(id/rowWidth)));}
+    }
+    continue;
+   }
    if(!north&&!east&&!south&&!west){const a=vertex(x,z),b=vertex(xx,z),c=vertex(xx,zz),d=vertex(x,zz);indices.push(a,b,c,a,c,d);continue;}
    const ring=[];
    for(let u=x;u<xx;u+=north?1:xx-x)ring.push(vertex(u,z));

@@ -1,6 +1,7 @@
 import {ShaderStore} from '@babylonjs/core';
 import {shadowMapVertexShader} from '@babylonjs/core/Shaders/shadowMap.vertex.js';
 import {shadowMapPixelShader} from '@babylonjs/core/Shaders/shadowMap.fragment.js';
+import {CAVE_LABORATORY_CLIP_GLSL,activeLaboratoryClip} from './cave-laboratory-geometry.js';
 
 export const shadowFadeAttribute='villageShadowFade';
 export function prepareShadowFade(mesh){
@@ -17,6 +18,7 @@ export function installVillageShadowFade(shadows){
   const name='moonforestShadowFade';
   ShaderStore.ShadersStore[name+'VertexShader']=shadowMapVertexShader.shader
     .replace('#define CUSTOM_VERTEX_DEFINITIONS',`varying float vVillageShadowFade;
+varying vec3 vVillageLaboratoryPosition;
 uniform float villageShadowUniform;
 #ifdef INSTANCES
 attribute float villageShadowFade;
@@ -26,20 +28,28 @@ vVillageShadowFade=villageShadowUniform;
 #ifdef INSTANCES
 vVillageShadowFade=villageShadowFade;
 #endif
-vec3 positionUpdated=position;`);
+vec3 positionUpdated=position;`)
+    .replace('vec4 worldPos=finalWorld*vec4(positionUpdated,1.0);','vec4 worldPos=finalWorld*vec4(positionUpdated,1.0);vVillageLaboratoryPosition=worldPos.xyz;');
   ShaderStore.ShadersStore[name+'PixelShader']=shadowMapPixelShader.shader
     .replace('#define CUSTOM_FRAGMENT_DEFINITIONS',`varying float vVillageShadowFade;
+varying vec3 vVillageLaboratoryPosition;uniform float villageLegacyLabClip;uniform vec4 villageLaboratoryRect;
+${CAVE_LABORATORY_CLIP_GLSL}
 float villageBayer2(vec2 p) { return 2.0*mod(p.x+p.y,2.0)+mod(p.y,2.0); }`)
     .replace('#include<clipPlaneFragment>',`#include<clipPlaneFragment>
+if(caveLaboratoryClip(vVillageLaboratoryPosition,villageLegacyLabClip,villageLaboratoryRect))discard;
 if (vVillageShadowFade < 0.999) {
   vec2 p=mod(floor(gl_FragCoord.xy),4.0);
   float threshold=(4.0*villageBayer2(mod(p,2.0))+villageBayer2(floor(p/2.0))+0.5)/16.0;
   if (vVillageShadowFade < threshold) discard;
 }`);
-  shadows.customShaderOptions={shaderName:name,attributes:[shadowFadeAttribute],uniforms:['villageShadowUniform']};
+  shadows.customShaderOptions={shaderName:name,attributes:[shadowFadeAttribute],uniforms:['villageShadowUniform','villageLegacyLabClip','villageLaboratoryRect']};
   let mesh;
   shadows.onBeforeShadowMapRenderMeshObservable.add(value=>{mesh=value;});
-  shadows.onBeforeShadowMapRenderObservable.add(effect=>effect.setFloat('villageShadowUniform',mesh?.instancedBuffers?.[shadowFadeAttribute]??1));
+  shadows.onBeforeShadowMapRenderObservable.add(effect=>{
+    effect.setFloat('villageShadowUniform',mesh?.instancedBuffers?.[shadowFadeAttribute]??1);
+    const laboratory=activeLaboratoryClip(mesh?.getScene(),mesh?.material),rect=laboratory?.bounds;
+    effect.setFloat('villageLegacyLabClip',laboratory?1:0);effect.setFloat4('villageLaboratoryRect',rect?.minX??0,rect?.minZ??0,rect?.maxX??0,rect?.maxZ??0);
+  });
 }
 
 // Fade outgoing records to zero before reusing their slots. Even at a full

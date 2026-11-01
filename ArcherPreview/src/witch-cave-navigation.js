@@ -2,7 +2,10 @@ import {VillageNavigation} from './village-navigation.js';
 import {caveClearance} from './witch-cave-terrain.js';
 import {caveMeshClearance} from './witch-cave-collision.js';
 import {ARENA_RADIUS} from './world-limits.js';
-const clearance=(x,z)=>Math.min(caveClearance(x,z),caveMeshClearance(x,z));
+import {caveLaboratoryClearance} from './cave-laboratory-collision.js';
+// The old coarse geometry/terrain policies remain unchanged. Only the new
+// native structure uses its exact, conservatively quantised local certificate.
+const clearance=(x,z)=>Math.min(caveClearance(x,z),caveMeshClearance(x,z),caveLaboratoryClearance(x,z));
 export class CaveNavigation extends VillageNavigation {
   clearanceAt(x,z,radius=0){return clearance(x,z);}
   free(p,radius,limit=ARENA_RADIUS){return this.clearanceAt(p.x,p.z,radius)>=radius+.08&&super.free(p,radius,limit);}

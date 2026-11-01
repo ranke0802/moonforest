@@ -1,0 +1,360 @@
+{
+  "generatedAt": "2026-11-01T15:16:11.991Z",
+  "scope": "One actualPUBLIC near-LOD triangle sphere audit of unique transient camera/voxel flags. Reused original walls/entrance included with the same world transforms and exact clipping as the delivered bake.",
+  "uniqueTransientPoints": 14,
+  "testedTriangles": 808,
+  "minimumActualSurfaceDistance": 0.5494455379162048,
+  "actualPoint3SphereIntersections": 0,
+  "rows": [
+    {
+      "frame": 28,
+      "eye": [
+        -44.026954650878906,
+        4.96119499206543,
+        46.51078796386719
+      ],
+      "mathematical": [
+        -44.026955866215964,
+        4.961194562567889,
+        46.51079054498584
+      ],
+      "maximumFloatDifference": 0.0000025811186503688077,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 1,
+      "nearestActualRockSurface": 0.8506384168747537,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-89",
+        "asset": "forest-06-witch-cave-mouth",
+        "triangle": 1547
+      }
+    },
+    {
+      "frame": 29,
+      "eye": [
+        -44.05315399169922,
+        5.021819591522217,
+        46.5561637878418
+      ],
+      "mathematical": [
+        -44.05315410665677,
+        5.021820331867032,
+        46.55616722849822
+      ],
+      "maximumFloatDifference": 0.000003440656421105359,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 1,
+      "nearestActualRockSurface": 0.8416363470521522,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-89",
+        "asset": "forest-06-witch-cave-mouth",
+        "triangle": 1547
+      }
+    },
+    {
+      "frame": 10,
+      "eye": [
+        43.45402145385742,
+        7.584820747375488,
+        -3.4815585613250732
+      ],
+      "mathematical": [
+        43.45402269620547,
+        7.584820657512132,
+        -3.4815588148138357
+      ],
+      "maximumFloatDifference": 0.0000012423480484358151,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.8917206258980843,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 4725
+      }
+    },
+    {
+      "frame": 11,
+      "eye": [
+        43.469120025634766,
+        7.668457984924316,
+        -3.455406427383423
+      ],
+      "mathematical": [
+        43.46912186459759,
+        7.668458089162378,
+        -3.4554062880066536
+      ],
+      "maximumFloatDifference": 0.0000018389628237969191,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.8531345467168833,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 4725
+      }
+    },
+    {
+      "frame": 12,
+      "eye": [
+        43.483516693115234,
+        7.745670795440674,
+        -3.4304749965667725
+      ],
+      "mathematical": [
+        43.48351560315807,
+        7.745670867185186,
+        -3.4304756015090376
+      ],
+      "maximumFloatDifference": 0.0000010899571663003371,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.8172759570072033,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 4725
+      }
+    },
+    {
+      "frame": 13,
+      "eye": [
+        43.497230529785156,
+        7.8168511390686035,
+        -3.40671968460083
+      ],
+      "mathematical": [
+        43.49723103649552,
+        7.816851955097731,
+        -3.406719774120741
+      ],
+      "maximumFloatDifference": 8.160291278258569e-7,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.7840241540787346,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 4725
+      }
+    },
+    {
+      "frame": 25,
+      "eye": [
+        43.44868850708008,
+        7.999342918395996,
+        -3.4907960891723633
+      ],
+      "mathematical": [
+        43.44868961484096,
+        7.999342432129751,
+        -3.490795982698073
+      ],
+      "maximumFloatDifference": 0.00000110776088035891,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.8164284253843462,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 26,
+      "eye": [
+        43.474853515625,
+        8.060016632080078,
+        -3.445476531982422
+      ],
+      "mathematical": [
+        43.474854478927476,
+        8.06001719392592,
+        -3.4454771087270886
+      ],
+      "maximumFloatDifference": 9.633024760091757e-7,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.7799992561962815,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 27,
+      "eye": [
+        43.497989654541016,
+        8.113875389099121,
+        -3.405405282974243
+      ],
+      "mathematical": [
+        43.49799009706741,
+        8.11387562664687,
+        -3.405405042644208
+      ],
+      "maximumFloatDifference": 4.4252639241904035e-7,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.7532546270714389,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 11,
+      "eye": [
+        43.4504280090332,
+        8.086478233337402,
+        -3.487781524658203
+      ],
+      "mathematical": [
+        43.45042968175497,
+        8.086477191807075,
+        -3.4877820983944345
+      ],
+      "maximumFloatDifference": 0.0000016727217655443383,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.811926313291869,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 12,
+      "eye": [
+        43.46730041503906,
+        8.16737174987793,
+        -3.4585633277893066
+      ],
+      "mathematical": [
+        43.46729928905171,
+        8.167372935458516,
+        -3.458563081452739
+      ],
+      "maximumFloatDifference": 0.0000011855805865934599,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.7964645881957984,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 13,
+      "eye": [
+        43.483150482177734,
+        8.241856575012207,
+        -3.4311094284057617
+      ],
+      "mathematical": [
+        43.483149345263065,
+        8.241856198327106,
+        -3.4311099787918544
+      ],
+      "maximumFloatDifference": 0.000001136914669075395,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 2,
+      "nearestActualRockSurface": 0.7901784587873881,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 1249
+      }
+    },
+    {
+      "frame": 28,
+      "eye": [
+        38.53828048706055,
+        9.762065887451172,
+        -5.0724358558654785
+      ],
+      "mathematical": [
+        38.53828229334319,
+        9.762065715097059,
+        -5.072435536076789
+      ],
+      "maximumFloatDifference": 0.0000018062826399045662,
+      "mathematicalBlocked": true,
+      "oneMicronSmallerPaddingBlocked": true,
+      "tenMicronSmallerPaddingBlocked": true,
+      "candidatePlacements": 1,
+      "nearestActualRockSurface": 0.5494455379162048,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-91",
+        "asset": "cave-04-natural-arch",
+        "triangle": 2412
+      }
+    },
+    {
+      "frame": 59,
+      "eye": [
+        -5,
+        7.388808250427246,
+        36.14836502075195
+      ],
+      "mathematical": [
+        -4.999999999999999,
+        7.3888090207355965,
+        36.14836475976499
+      ],
+      "maximumFloatDifference": 7.703083504395636e-7,
+      "mathematicalBlocked": false,
+      "oneMicronSmallerPaddingBlocked": false,
+      "tenMicronSmallerPaddingBlocked": false,
+      "candidatePlacements": 1,
+      "nearestActualRockSurface": 2.3687290009681665,
+      "physicalSphereClear": true,
+      "closest": {
+        "placement": "cavern-69",
+        "asset": "cave-01-eroded-wall",
+        "triangle": 2403
+      }
+    }
+  ]
+}

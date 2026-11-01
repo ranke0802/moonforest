@@ -1,0 +1,14 @@
+{
+  "status": "SOURCE_AND_BUILD_VERIFIED_READY_TO_PUBLISH",
+  "baseline": "ab7e05865a4c476772b7a28dec17252294d4888c",
+  "fullTests": {"passed": 923, "failed": 0, "skipped": 0, "durationMilliseconds": 81650.2793},
+  "standaloneShaderStages": {"passed": 20, "failed": 0, "note": "Independent compiler after real Babylon preprocessing; not a phone GPU driver test."},
+  "player": {"uprightBodyHeightMetres": 1.6, "idleHeightMetres": 1.5520336908306702, "absoluteScale": 1.633702125188912, "originalTextureMaximum": 8192, "originalGeometryAndWeightsPreserved": true},
+  "laboratory": {"revision": "lab-large-joints-r3-v1", "nearSourceSha256": "eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b", "terrainSha256": "7d0fb908cd01d1c76d255f8ff13ceca5c710e7798f916bcc42d93bf043b7c471", "collisionFingerprint": "304c660ab83690331d55caa10b19f2cab7d5a5d0b1ae9fae70e94dc526a569ef", "lodTriangles": [4512,3158,2374], "addedImageTextures": 0, "newPaidGenerationCalls": 0, "existingLODAndTextureMaximum4096Preserved": true},
+  "joachim": {"bodyPlacements": 0, "altarPreserved": true, "sourceFilesPreserved": true},
+  "lifecycle": {"sameSceneMapRoundTrips": 12, "initialCancellationBoundaries": 3, "lateInitialCompletionCannotRestoreDisposedResources": true},
+  "bossGeometry": {"poseLocationYawSamples": 67760, "triangleContacts": 0, "sourceGeometryUnchanged": true},
+  "build": {"resourceRevision": "7f638aa2b5b40a67a69f34cce0649fa14e0e5c36260acd1d9bb314bcca2b6c66", "verifiedFiles": 1517, "bytes": 600736462, "mainBundle": "assets/index-DX7bLT8c.js", "publishedChangedFiles": 18},
+  "music": {"acceptedGenerations": 0, "actualNewTracksApplied": 0, "phaseRoutingPrepared": true, "blocker": "Runway UNAUTHORIZED; awaiting user reauthentication", "fallback": "Existing boss music"},
+  "limits": ["No browser automation", "No physical S23/iPhone appearance or thermal measurement", "Only the laboratory area is rebuilt", "Some conservative camera voxel flags and sub-micron Float32 floor boundary readings remain disclosed in final cave QA", "Existing old wall fragments are clipped in color/ink/shadow; their vertex processing is not eliminated"]
+}

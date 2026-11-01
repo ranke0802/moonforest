@@ -1,5 +1,6 @@
 import { MaterialPluginBase, Vector3 } from '@babylonjs/core';
 import { TreeViewSurface } from './tree-view-surface.js';
+import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
 
 // Cheap candidate rejection only. Empty space inside this box cannot cause fading.
 export function blocksView(camera, target, min, max, padding = .18) {
@@ -121,12 +122,12 @@ export class TreeOcclusion {
     }
     return false;
   }
-  update(camera, player, dt) {
+  update(camera, player, dt,dimensions=LEGACY_PLAYER_DIMENSIONS) {
     this.checkIn -= dt;
     if (this.checkIn <= 0) {
       this.checkIn = .1;
-      this.head.copyFrom(player); this.head.y += 1.5;
-      this.chest.copyFrom(player); this.chest.y += .85;
+      this.head.copyFrom(player); this.head.y += dimensions.headHeight;
+      this.chest.copyFrom(player); this.chest.y += dimensions.chestHeight;
       for (const tree of this.trees) {
         tree.target = this.obstructs(tree,camera,this.head) ||
           this.obstructs(tree,camera,this.chest) ? .45 : 1;

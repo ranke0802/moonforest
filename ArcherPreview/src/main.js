@@ -45,6 +45,7 @@ import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
+import {configurePlayerSize,playerDimensions,WARRIOR_DIMENSIONS} from './player-dimensions.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { BossHealthBars } from './boss-health-bar.js';
 import { PlayerHealthBar } from './player-health-bar.js';
@@ -159,7 +160,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({playerSize:actor?playerDimensions(actor):null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -361,7 +362,7 @@ async function loadCharacter() {
     const manifestName=playerTextureManifest(character,engine.getCaps());
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
-    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+1.46,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
+    if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+WARRIOR_DIMENSIONS.stableFocusHeight,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     loadDiagnostics.phase('download');
     if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
@@ -388,7 +389,8 @@ async function loadCharacter() {
     syncCaveFog(true);
     // World movement is separate from exported root motion, including the authored death fall.
     for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = actor;
-    actor.scaling.setAll(config.scale || 1);
+    const dimensions=configurePlayerSize(actor,config,{warrior:isV2()});
+    cameraPitch.setBodyScale(dimensions.ratio);
     actor.rotation.y = config.forwardYaw || 0;
     maxInfluences = 0;
     for (const mesh of container.meshes) {
@@ -411,7 +413,8 @@ async function loadCharacter() {
     if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
-    controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds: config.speeds });
+    const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
+    controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds });
     applyAttackSpeed(readAttackSpeed());
     if(isV2())motionSpeedControls.apply(controller);
     motionSpeedControls.setVisible(isV2());
@@ -478,7 +481,7 @@ async function loadCharacter() {
 }
 
 function constrainPlayerPosition(previous){
-  world.navigation.constrain(actor.position,previous,.32,movementLimit(previous));
+  world.navigation.constrain(actor.position,previous,playerDimensions(actor).moveRadius,movementLimit(previous));
   if(world.mapId==='village')clampVillageExit(actor.position,previous);
 }
 
@@ -536,9 +539,9 @@ function render(dt) {
     const result = controller.update(dt, movement);
     if(isV2()&&result.rollFrom!=null){
       const beforeRoll=actor.position.clone();
-      const distance=dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge);
+      const distance=(dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge))*playerDimensions(actor).ratio;
       actor.position.x+=rollDirection.x*distance;actor.position.z+=rollDirection.z*distance;
-      constrainDodge(actor.position,beforeRoll,world.navigation,boss.encounters,movementLimit(beforeRoll));
+      constrainDodge(actor.position,beforeRoll,world.navigation,boss.encounters,movementLimit(beforeRoll),playerDimensions(actor));
       if(world.mapId==='village')clampVillageExit(actor.position,beforeRoll);
     }
     if(isV2()){
@@ -590,10 +593,10 @@ function render(dt) {
       training.hit(shotTarget);
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
-    actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime});
-    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);actionAudio.boss(boss,dt);
+    actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime,strideScale:playerDimensions(actor).ratio});
+    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);audio.setBossContext(boss?.encounters);actionAudio.boss(boss,dt);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
-    if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,1.6,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
+    if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,playerDimensions(actor).goldHeight,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
     syncCameraFocus(dt);
     world.caveCamera?.beginFrame();
@@ -601,7 +604,7 @@ function render(dt) {
     world.lighting.follow(actor.position);
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     syncCaveFog();
-    world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt);
+    world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt,playerDimensions(actor));
     world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
@@ -676,7 +679,7 @@ try {
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
-    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus);
+    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
     const contactsStart=frameDiagnostics.mark();
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     frameDiagnostics.measure('contactsMs',contactsStart);

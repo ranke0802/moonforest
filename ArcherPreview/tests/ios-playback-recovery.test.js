@@ -12,6 +12,7 @@ import {WarriorV2Controller,V2_LABELS} from '../src/warrior-v2.js';
 import {FrameLoop} from '../src/frame-loop.js';
 import {RenderActivity} from '../src/render-policy.js';
 import {createLoadingView} from '../src/loading-view.js';
+import {configurePlayerSize,playerDimensions} from '../src/player-dimensions.js';
 
 const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const block=(start,end)=>main.slice(main.indexOf(start)+start.length,main.indexOf(end,main.indexOf(start))).trim().replace(/;$/,'');
@@ -56,7 +57,7 @@ test('actual 8K iOS player is posed before reveal and moves through the real ren
  for(const name of ['extensionsUsed','extensionsRequired'])gltf[name]=(gltf[name]??[]).filter(n=>n!=='EXT_meshopt_compression');
  for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+packed.files.get(b.uri).data.toString('base64');
  const loader=new GLTFFileLoader();loader.skipMaterials=true;const asset=await loader.loadAssetContainerAsync(scene,{json:gltf},'');asset.addAllToScene();t.after(()=>loader.dispose());
- const actor=new TransformNode('actual-ios-player',scene);actor.scaling.setAll(config.scale);for(const n of new Set([...asset.meshes,...asset.transformNodes]))if(!n.parent)n.parent=actor;
+ const actor=new TransformNode('actual-ios-player',scene);configurePlayerSize(actor,config,{warrior:true});for(const n of new Set([...asset.meshes,...asset.transformNodes]))if(!n.parent)n.parent=actor;
  const animator=new CharacterAnimator(asset.animationGroups,config.animations),controller=new WarriorV2Controller({durations:animator.durations,speeds:config.speeds});t.after(()=>animator.dispose());
  const rest=asset.transformNodes.map(n=>n.rotationQuaternion?.clone());
  const prime=block("    animator.transition('idle', { clipTime: 0, loop: true });", "    $('#sword-select')");
@@ -66,7 +67,7 @@ test('actual 8K iOS player is posed before reveal and moves through the real ren
  let movement={x:0,y:0},hudFrames=0;const f=playback(),noop=()=>{},world={scene,camera,tick:noop,terrain:{place:p=>{p.y=0;}},lighting:{follow:noop}};
  // CPU simulation uses the real app callback and model; no WebGL/phone GPU claim.
  scene.render=()=>{scene._animate(0);camera.getViewMatrix(true);scene.updateTransformMatrix(true);};
- const env={...f.state,Vector3,character:'warrior-v3',ready:true,simulateFrame:false,elapsed:0,statusTime:0,world,actor,container:asset,config,animator,controller,elenaReview:null,qualityMode:'high',input:{value:()=>movement,cameraPointers:new Map()},isV2:()=>true,isWarrior:()=>true,isVillage:()=>true,
+ const env={...f.state,Vector3,playerDimensions,audio:{...f.state.audio,setBossContext:noop},character:'warrior-v3',ready:true,simulateFrame:false,elapsed:0,statusTime:0,world,actor,container:asset,config,animator,controller,elenaReview:null,qualityMode:'high',input:{value:()=>movement,cameraPointers:new Map()},isV2:()=>true,isWarrior:()=>true,isVillage:()=>true,
  boss:{playerReaction:{update:()=>0},active:false,playerAlive:true,combatCount:0,loading:false,grab:{active:false},encounters:[],update:noop},applyHitFlash:noop,constrainPlayerPosition:noop,attackSources:new Set(),shotActionId:null,shotTarget:null,hiddenArrowForAction:null,arrowMesh:null,
  training:{update:noop,setSelected:noop},projectiles:{update:noop},actionAudio:{player:noop,boss:noop},goldLoot:{drops:[],update:()=>[]},goldLootView:{sync:noop,project:noop},damageNumbers:{update:noop},syncCameraFocus:noop,syncCaveFog:noop,faceHeading:noop,updateButtons:noop,mapPortal:null,screenProjection:{beginFrame:noop},updateHealthBars:()=>hudFrames++,V2_LABELS,combatResult:null,frameDiagnostics:{mark:()=>0,measure:noop},
  $:s=>document.querySelector(s),text:noop};

@@ -1,0 +1,86 @@
+{
+  "scope": "Actual decoded and CPU-skinned reviewed runtime body, boots to hair top; excludes weapon, cape and outline shell. Reference is exported upright bind pose; animation may bend or jump.",
+  "modelSha256": "f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083",
+  "bodyMeshes": [
+    "Warrior_Body_primitive0",
+    "Warrior_Body_primitive1",
+    "Warrior_Body_primitive2",
+    "Warrior_Ear.L",
+    "Warrior_Ear.R",
+    "Warrior_Face",
+    "Warrior_Hair",
+    "Warrior_Neck"
+  ],
+  "oldScale": 1.8146016164162133,
+  "sourceBind": {
+    "min": [
+      -0.48651137948036194,
+      -1.0968608421535464e-7,
+      -0.06481931358575821
+    ],
+    "max": [
+      0.48651137948036194,
+      0.9793705940246582,
+      0.17646797001361847
+    ],
+    "height": 0.9793707037107424
+  },
+  "oldBind": {
+    "min": [
+      -0.8828243567043828,
+      -1.9903655047137886e-7,
+      -0.11762123401817881
+    ],
+    "max": [
+      0.8828243567043828,
+      1.7771675054517573,
+      0.32021907128379823
+    ],
+    "height": 1.7771677044883079
+  },
+  "targetScale": 1.633702125188912,
+  "targetBind": {
+    "min": [
+      -0.7948146910000666,
+      -1.7919439258697425e-7,
+      -0.10589545254527888
+    ],
+    "max": [
+      0.7948146910000666,
+      1.599999853848601,
+      0.2882961035928755
+    ],
+    "height": 1.6000000330429938
+  },
+  "idle": {
+    "min": [
+      -0.4202155136731527,
+      0.004900938012850992,
+      -0.2582041929032499
+    ],
+    "max": [
+      0.38291345255802156,
+      1.5569346288435213,
+      0.3869645474516439
+    ],
+    "height": 1.5520336908306702
+  },
+  "nodes": {
+    "mixamorig:LeftFoot": [
+      0.23460827767848969,
+      0.15358345210552216,
+      0.15264971554279327
+    ],
+    "mixamorig:RightFoot": [
+      -0.2080201506614685,
+      0.13282011449337006,
+      -0.08295898139476776
+    ],
+    "mixamorig:Head": [
+      0.005687084514647722,
+      1.2998303174972534,
+      -0.08922708034515381
+    ]
+  },
+  "relativeScale": 0.9003089771381485
+}

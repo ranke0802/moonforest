@@ -20,6 +20,8 @@ import {mourningCaveClearance} from '../src/mourning-cave-clearance.js';
 import {MOURNING_CAVE_CLEARANCE_DATA as mask} from '../src/mourning-cave-clearance-data.js';
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
+import {caveCollisionGeometry} from './cave-collision-geometry.mjs';
+import {clipLaboratoryCeiling} from '../src/cave-laboratory-geometry.js';
 
 // Death must enter through transition(): it snapshots all 741 channels before
 // the .18-second blend. Directly assigning current='dead' cannot reproduce it.
@@ -83,7 +85,7 @@ for(const id of new Set(nearby.map(p=>p.asset))){
  const nodes=[...container.transformNodes,...container.meshes],roots=nodes.filter(n=>!n.parent),ordered=orderPoseNodes(nodes);
  for(const p of nearby.filter(p=>p.asset===id)){
   const {root,facing}=createVillageTransform(world,p,c);for(const n of roots)n.parent=facing;root.computeWorldMatrix(true);facing.computeWorldMatrix(true);refreshPoseMatrices(ordered);
-  for(const mesh of container.meshes.filter(m=>m.getTotalVertices())){const positions=worldPositions(mesh),indices=Uint32Array.from(mesh.getIndices());geometry.push({placement:p.id,asset:id,name:mesh.name,positions,indices,bounds:bounds(positions)});}
+  for(const mesh of container.meshes.filter(m=>m.getTotalVertices())){const clipped=caveCollisionGeometry(id,{positions:worldPositions(mesh),indices:Uint32Array.from(mesh.getIndices())});geometry.push({placement:p.id,asset:id,name:mesh.name,...clipped,bounds:bounds(clipped.positions)});}
   for(const n of roots)n.parent=null;root.dispose();
  }
 }
@@ -96,7 +98,7 @@ for(const id of new Set(nearby.map(p=>p.asset))){
   positions.push(x,caveRoofHeight(x,z)+.6*Math.sin(x*.24)*Math.cos(z*.19),z);
   if(ring&&i){const at=ring*(segments+1)+i;indices.push(at,at-1,at-segments-2);if(ring>1)indices.push(at,at-segments-2,at-segments-1);}
  }
- const p=Float32Array.from(positions);geometry.push({placement:'cave-distant-ceiling',asset:'procedural-dome',name:'cave-distant-ceiling',positions:p,indices:Uint32Array.from(indices),bounds:bounds(p)});
+ const clipped=clipLaboratoryCeiling({positions:Float32Array.from(positions),indices:Uint32Array.from(indices)});geometry.push({placement:'cave-distant-ceiling',asset:'procedural-dome',name:'cave-distant-ceiling',...clipped,bounds:bounds(clipped.positions)});
 }
 const container=await load(new URL(config.model,base)),asset=instantiateBossModel(container),actor=new TransformNode('clearance-actor',scene),carrier=new TransformNode('clearance-center',scene);
 carrier.parent=actor;carrier.position.copyFromFloats(...config.centerOffset);actor.scaling.setAll(config.scale*MOURNING_SIZE_SCALE);

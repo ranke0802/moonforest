@@ -8,9 +8,10 @@ import {playerTextureManifest} from '../src/player-texture-profile.js';
 import {NullEngine,Vector3} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
-test('cave uses only the twenty original types and two approved supplements with existing village props',()=>{
+import {CAVE_LABORATORY_GEOMETRY} from '../src/cave-laboratory-geometry.js';
+test('cave uses original and approved supplement types plus the reviewed derived laboratory with existing village props',()=>{
   const used=new Set(CAVE_PLACEMENTS.map(p=>p.asset));
-  assert.deepEqual([...used].filter(id=>id.startsWith('cave-')).sort(),[...CAVE_ASSET_IDS].sort());
+  assert.deepEqual([...used].filter(id=>id.startsWith('cave-')).sort(),[...CAVE_ASSET_IDS,CAVE_LABORATORY_GEOMETRY.assetId].sort());
   assert.ok(CAVE_PLACEMENTS.length<400);
   assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.id)).size,CAVE_PLACEMENTS.length);
   for(const p of CAVE_PLACEMENTS)for(const k of ['x','z','yaw','scale'])assert.ok(Number.isFinite(p[k]),p.id+' '+k);

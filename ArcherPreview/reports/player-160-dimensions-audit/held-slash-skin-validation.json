@@ -1,0 +1,347 @@
+{
+  "scope": "One exact60fps45degree held-approach snapshot; no comfort retuning or runtime asset changes.",
+  "attacks": [
+    {
+      "kind": "attack",
+      "startedAt": 0.8,
+      "hits": 2,
+      "completed": true
+    },
+    {
+      "kind": "slash",
+      "startedAt": 1.85,
+      "hits": 0,
+      "completed": true
+    },
+    {
+      "kind": "judgment",
+      "startedAt": 2.683333333333333,
+      "hits": 3,
+      "completed": true
+    },
+    {
+      "kind": "attack",
+      "startedAt": 5.233333333333333
+    }
+  ],
+  "frames": [
+    {
+      "frame": 123,
+      "time": 2.05,
+      "clip": 0.3900000000000001,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.569204148814953,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": null,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": null,
+        "testedTriangles": 0,
+        "temporalSamples": 0,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 124,
+      "time": 2.066666666666667,
+      "clip": 0.42000000000000015,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.6254511849127141,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.19892003178808534,
+        "minimumProvedDistance": 0.19393963023730423,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 89695,
+          "alpha": 1,
+          "pointTimeError": 0.004980401550781105
+        },
+        "testedTriangles": 110,
+        "temporalSamples": 3960,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 125,
+      "time": 2.0833333333333335,
+      "clip": 0.4500000000000002,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.8185439150511745,
+      "capsule": "FrontFoot.R.shin",
+      "skin": {
+        "minimumDistance": 0.1990432245612239,
+        "minimumProvedDistance": 0.19408285077923473,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 89695,
+          "alpha": 0,
+          "pointTimeError": 0.004960373781989169
+        },
+        "testedTriangles": 93,
+        "temporalSamples": 5115,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 126,
+      "time": 2.1,
+      "clip": 0.4800000000000002,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.6886452848509552,
+      "capsule": "MidHand.R.lower",
+      "skin": {
+        "minimumDistance": null,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": null,
+        "testedTriangles": 0,
+        "temporalSamples": 0,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 127,
+      "time": 2.1166666666666667,
+      "clip": 0.5100000000000002,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.41665306771316307,
+      "capsule": "MidHand.R.lower",
+      "skin": {
+        "minimumDistance": null,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": null,
+        "testedTriangles": 0,
+        "temporalSamples": 0,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 128,
+      "time": 2.1333333333333333,
+      "clip": 0.5400000000000003,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.09313626541515668,
+      "capsule": "MidHand.R.lower",
+      "skin": {
+        "minimumDistance": 0.414637874818318,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 106699,
+          "alpha": 0.7065217391304348,
+          "pointTimeError": 0.004988626406241855
+        },
+        "testedTriangles": 13,
+        "temporalSamples": 1209,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 129,
+      "time": 2.15,
+      "clip": 0.5700000000000003,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.1000334591670497,
+      "capsule": "MidHand.R.lower",
+      "skin": {
+        "minimumDistance": null,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": null,
+        "testedTriangles": 0,
+        "temporalSamples": 0,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 130,
+      "time": 2.1666666666666665,
+      "clip": 0.6000000000000003,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.32381934510185845,
+      "capsule": "InnerHand.L.lower",
+      "skin": {
+        "minimumDistance": 0.4258941234138781,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 58752,
+          "alpha": 0.4576271186440678,
+          "pointTimeError": 0.004981659257496286
+        },
+        "testedTriangles": 17,
+        "temporalSamples": 1020,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 131,
+      "time": 2.183333333333333,
+      "clip": 0.6300000000000003,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.14439526776005512,
+      "capsule": "InnerHand.L.lower",
+      "skin": {
+        "minimumDistance": 0.10009458294629091,
+        "minimumProvedDistance": 0.09513335389933093,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 40137,
+          "alpha": 0.8833333333333333,
+          "pointTimeError": 0.004961229046959972
+        },
+        "testedTriangles": 147,
+        "temporalSamples": 8967,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 132,
+      "time": 2.2,
+      "clip": 0.6600000000000004,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.14670848747286963,
+      "capsule": "InnerHand.L.lower",
+      "skin": {
+        "minimumDistance": 0.10128603704694297,
+        "minimumProvedDistance": 0.09632796648171607,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 40168,
+          "alpha": 0,
+          "pointTimeError": 0.004958070565226897
+        },
+        "testedTriangles": 248,
+        "temporalSamples": 17856,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 133,
+      "time": 2.216666666666667,
+      "clip": 0.6900000000000004,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.42029515564066616,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.5357208829924704,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 75880,
+          "alpha": 1,
+          "pointTimeError": 0.004992492743955743
+        },
+        "testedTriangles": 21,
+        "temporalSamples": 1260,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 134,
+      "time": 2.2333333333333334,
+      "clip": 0.7200000000000004,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.3643281312430246,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.355889804146939,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 75853,
+          "alpha": 1,
+          "pointTimeError": 0.004880315821033696
+        },
+        "testedTriangles": 17,
+        "temporalSamples": 714,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 135,
+      "time": 2.25,
+      "clip": 0.7500000000000004,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.348867657896537,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.31850804919457415,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 75865,
+          "alpha": 1,
+          "pointTimeError": 0.004807317680628156
+        },
+        "testedTriangles": 35,
+        "temporalSamples": 665,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 136,
+      "time": 2.2666666666666666,
+      "clip": 0.7800000000000005,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.25199846483367144,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.2121428904751897,
+        "minimumProvedDistance": 0.2,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 75865,
+          "alpha": 1,
+          "pointTimeError": 0.004843785647719873
+        },
+        "testedTriangles": 68,
+        "temporalSamples": 816,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    },
+    {
+      "frame": 137,
+      "time": 2.283333333333333,
+      "clip": 0.8100000000000005,
+      "distance": 1.1000000000000003,
+      "capsuleGap": 0.1563603944969209,
+      "capsule": "abdomen",
+      "skin": {
+        "minimumDistance": 0.0999390066925383,
+        "minimumProvedDistance": 0.0949862832986576,
+        "bladeRadius": 0.049516993742598166,
+        "actualSurfaceClear": true,
+        "closest": {
+          "triangle": 75866,
+          "alpha": 1,
+          "pointTimeError": 0.004952723393880697
+        },
+        "testedTriangles": 110,
+        "temporalSamples": 1540,
+        "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+      }
+    }
+  ],
+  "skinSurfaceClear": true,
+  "minimumTriangleDistance": 0.0999390066925383,
+  "minimumProvedDistance": 0.0949862832986576,
+  "minimumCapsuleGap": 0.09313626541515668
+}

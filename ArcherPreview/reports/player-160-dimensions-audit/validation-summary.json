@@ -1,0 +1,109 @@
+{
+  "scope": "Actual160cm player dimension/contact validation. No browser automation, new assets or device/GPU claims.",
+  "sourceLocked": true,
+  "ownedSource": [
+    "src/mourning-elena-encounter.js",
+    "tests/elena-real-combat.test.js",
+    "tests/helpers/skin-sweep.js"
+  ],
+  "actualHeightDefinition": "Upright bind-pose boots-to-hair1.6m. Idle bends the rig and measures1.55203m; equipment is excluded from stature.",
+  "targetScale": 1.633702125188912,
+  "legacyScale": 1.8146016164162133,
+  "profileRatio": 0.9003089771381485,
+  "contact": {
+    "environmentRadiusUnchanged": 1.9,
+    "minimumMeleeComfort160cm": 1.1,
+    "rangeAuditCases": 528,
+    "rangeAuditCommonDistances": [
+      0.9,
+      1,
+      1.1,
+      1.2
+    ],
+    "shape": "Inside the original broad range, reuse fitted world-space body capsules against the shorter upright player capsule. Supporting limbs remain solid. No full-skin CPU work in the game loop.",
+    "stationaryCast": "Reuse contact clearance while both actors are stationary; independently moving cast arms retain attack-volume behavior without pumping the root.",
+    "farOrHiddenAdditionalPoseSamples": 0,
+    "weaponOrHurtboxExpansion": false
+  },
+  "focusedTests": {
+    "command": "node --test tests/elena-real-combat.test.js tests/elena-mourning-movement.test.js tests/dodge-collision.test.js",
+    "passed": 26,
+    "failed": 0,
+    "durationSeconds": 42.6397,
+    "log": "final-focused-tests.log"
+  },
+  "actualCombat": {
+    "nearSwordCases": 96,
+    "nearSwordHits": 96,
+    "shieldPushHits": 8,
+    "shieldPushCases": 32,
+    "farSwordCases": 48,
+    "farFalseHits": 0,
+    "spellEscapeReplays": 80,
+    "chargeEscapeReplays": 64,
+    "chargeEscapeDamage": 0,
+    "standingChargePositiveControls": 4,
+    "standingChargeDamageEach": 55,
+    "standingChargeHitsEach": 1,
+    "earlyWarningDamage": 0,
+    "heldMovementSixSecondCases": 16,
+    "heldMovementCompletedAttacks": 48,
+    "heldMovementMinimumDistance": 1.1,
+    "heldMovementHits": 47,
+    "heldMovementVerifiedMisses": 1
+  },
+  "verifiedMiss": {
+    "fps": 60,
+    "approachDegrees": 45,
+    "attack": "slash",
+    "startedAtSeconds": 1.85,
+    "actualSkinTriangleMinimumDistance": 0.0999390066925383,
+    "actualSkinSweepProvedMinimumDistance": 0.0949862832986576,
+    "bladeRadius": 0.049516993742598166,
+    "decision": "Legitimate geometric miss. Do not enlarge hurtboxes or tune the distance to force every moving attack to hit.",
+    "evidence": "held-slash-skin-validation.json"
+  },
+  "preserved": [
+    "Player8K",
+    "Background maximum4K",
+    "Original LOD",
+    "Boss5.7m",
+    "Witch wall/full-pose safety radius1.9",
+    "Real sword/shield transforms",
+    "Damage and telegraph clocks",
+    "One-hit charge consumption",
+    "Dodge invulnerability",
+    "No browser automation"
+  ],
+  "remaining": [
+    "Native r3 laboratory model/3LOD packing and same-version camera/sight/body bake are separate work; source clay geometry passes are not deployment approval."
+  ],
+  "cpuSample": {
+    "scope": "PC Node CPU sample of real cached49-capsule rig; no skin vertex calculation, renderer/GPU/device thermal measurement.",
+    "machine": {
+      "platform": "win32",
+      "arch": "x64",
+      "node": "v24.19.0",
+      "cpu": "13th Gen Intel(R) Core(TM) i9-13900HX"
+    },
+    "callsPerCase": 1500,
+    "mediansMillisecondsPerCall": {
+      "near-moving": 0.0038199999999998604,
+      "near-overlap-moving": 0.005662333333333815,
+      "near-stationary-cached": 0.00036266666666657935,
+      "far": 0.00013099999999970655,
+      "hidden-near": 0.00003933333333331272
+    },
+    "upperBound": {
+      "maxOverlapQueriesPerCall": 47,
+      "maxScalarCapsuleTestsPerCall": 2303,
+      "note": "Includes all.06m outward steps plus8 bisection steps; Y rejection usually removes most limbs. Broad and comfort limits are unchanged during the measurement."
+    },
+    "evidence": "contact-cpu-sample.json",
+    "limitations": [
+      "Microbenchmark timings include the instrumented actual cached-pose helper. They are PC samples and cannot predict S23 frame cost or heating.",
+      "This excludes a forced root/bone refresh: no game root moved, so ensurePoseCurrent returned false. The main frame already owns animation sampling.",
+      "Far/hidden/cached modes use no additional pose sampling. Geometry,8K/4K textures, shadow/outline/LOD remain unchanged."
+    ]
+  }
+}

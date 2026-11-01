@@ -147,5 +147,5 @@ export class CaveFogOfWar {
 }
 
 // This gate must win over frustum, hardware occlusion and shadow fade decisions.
-export const caveFogAllowsRecord=(fog,record)=>!fog||fog.boundsVisible(record.min??record.bounds?.min,record.max??record.bounds?.max);
-export const caveFogRootEnabled=record=>record.fogVisible!==false&&((record.cellActive!==false&&!record.occluded)||!!record.shadowCaster);
+export const caveFogAllowsRecord=(fog,record)=>record.essentialStructural===true?record.structuralReady===true:!fog||fog.boundsVisible(record.min??record.bounds?.min,record.max??record.bounds?.max);
+export const caveFogRootEnabled=record=>record.essentialStructural===true?record.structuralReady===true:record.fogVisible!==false&&((record.cellActive!==false&&!record.occluded)||!!record.shadowCaster);

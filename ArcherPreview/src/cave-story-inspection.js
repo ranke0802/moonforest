@@ -7,8 +7,8 @@ export const CAVE_STORY_INSPECTIONS=Object.freeze([
   paragraphs:['작은 침상과 빛바랜 성표. 다친 이들을 돌보던 엘레나의 생활 흔적이 남아 있다.','기도가 닿지 않게 된 뒤에도 그녀는 성표를 버리지 않았다. 안쪽 실험실에는 요아힘을 되살리려는 기록이 이어진다.']},
  {id:'laboratory',placement:at('cave-18-alchemy-workbench'),range:3.8,label:'실험대 살펴보기',title:'돌아오지 않는 영혼',
   paragraphs:['약병과 실험 도구가 한 작업대에 모여 있다. 엘레나는 숲의 동물과 마물에 약물을 시험하며 생명과 영혼을 붙잡는 방법을 찾고 있다.','이 실험의 목적은 하나다. 요아힘의 영혼을 그의 몸으로 돌려보내는 것. 더 깊은 곳의 제단이 마지막 실험을 기다린다.']},
- {id:'resurrection',placement:at('joachim-resting'),range:4.2,label:'요아힘 살펴보기',title:'요아힘이 누운 제단',
-  paragraphs:['제단 위에 요아힘의 몸이 놓여 있다. 주변 장치는 그를 보존하고 영혼을 붙잡기 위해 모여 있다.','이곳의 실험과 방어 장치는 모두 그에게 이어진다. 엘레나는 아직 그를 떠나보내지 못했다.']},
+ {id:'resurrection',placement:at('cave-15-resurrection-altar'),range:4.2,label:'제단 살펴보기',title:'미완성 부활 의식',
+  paragraphs:['비어 있는 제단 주변에 영혼을 모으는 장치와 실험 도구가 놓여 있다.','이곳의 실험과 방어 장치는 모두 요아힘을 되살리려는 엘레나의 집착으로 이어진다.']},
 ].map(point=>Object.freeze({...point,paragraphs:Object.freeze(point.paragraphs)})));
 
 export function nearestCaveInspection(world,state){

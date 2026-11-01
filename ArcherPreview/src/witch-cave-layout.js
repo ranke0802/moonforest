@@ -1,3 +1,4 @@
+import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from './cave-laboratory-geometry.js';
 // Metres. Branches follow eroded ledges around a flooded central cavern;
 // they are deliberately not a rectangular dungeon grid.
 export const CAVE_ENTRY={x:-42,z:43};
@@ -93,8 +94,8 @@ export const caveFlowRows=p=>[p.start,...CAVE_SPILLWAY_PROFILE.map((row,i)=>{
   return point;
 }),p.end];
 function makePlacements(){
-  const out=[];let seed=291005;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-  const add=(n,x,z,scale=1,yaw=0,extra={})=>out.push({id:`cavern-${out.length}`,asset:typeof n==='number'?CAVE_ASSET_IDS[n-1]:n,x,z,scale,yaw,kind:n<=7?'rock':'prop',...extra});
+  const out=[];let nextId=0,seed=291005;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  const add=(n,x,z,scale=1,yaw=0,extra={})=>out.push({id:`cavern-${nextId++}`,asset:typeof n==='number'?CAVE_ASSET_IDS[n-1]:n,x,z,scale,yaw,kind:n<=7?'rock':'prop',...extra});
   // One buried, overlapping mass follows the outer cavern. The old two rows
   // exposed a seam of repeated small caps at unrelated heights and angles.
   for(let segment=0;segment<CAVE_RIM.length;segment++){
@@ -182,9 +183,9 @@ function makePlacements(){
   // forward collector arms frees the arena silhouette and full-pose movement.
   const ritual=CAVE_STORY_ZONES.resurrection;
   add(15,ritual.x,ritual.z,ritual.altarScale,0,{elevation:6,colliderRadius:3.2,storyZone:'resurrection'});
-  // The preserved body is an approved static copy of the existing Joachim.
-  // Its lowest scarf point is buried 8 cm into the support; no rig runs here.
-  add('joachim-resting',ritual.x,ritual.z,1,0,{elevation:6+1.7321051359*ritual.altarScale-.08,storyZone:'resurrection'});
+  // The user removed Joachim's body. Reserve its old ID so downstream
+  // visibility/collision/cache references do not shift; retain the altar.
+  nextId++;
   for(const [x,z,yaw]of [[24.7,-39.3,0],[33.3,-39.3,Math.PI]])add(16,x,z,1,yaw,{elevation:6,colliderRadius:.55,colliderOffsetX:-.74,storyZone:'resurrection'});
   add(8,29,-43.5,2.6,0,{elevation:6});
   add(17,29,-43.1,1,0,{topElevation:11.5});
@@ -201,6 +202,10 @@ function makePlacements(){
   // Broad support below the ritual chamber's exposed southern edge.
   for(const angle of [-.9,-.45,0,.45,.9])add(CAVE_SUPPLEMENT_IDS[0],CAVE_BOSS.x+Math.sin(angle)*15.3,CAVE_BOSS.z+Math.cos(angle)*15.3,1.9,-angle,{kind:'rock',topElevation:CAVE_BOSS.height-.24,foundation:true});
   for(const p of CAVE_WATERFALLS)add(CAVE_SUPPLEMENT_IDS[1],p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,spillway:true});
+  if(laboratoryEnabled()){
+    const p=CAVE_LABORATORY_GEOMETRY.placement;
+    add(CAVE_LABORATORY_GEOMETRY.assetId,p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,laboratoryStructure:true});
+  }
   return out;
 }
 export const CAVE_PLACEMENTS=makePlacements();

@@ -1,6 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
 import { PlayerHitReaction } from './hit-feedback.js';
 import { HealingPotion } from './healing-potion.js';
+import {playerDimensions} from './player-dimensions.js';
 
 // One player clock and health pool, regardless of how many enemies are active.
 export class PlayerCombat {
@@ -22,6 +23,6 @@ export class PlayerCombat {
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     const recovery = this.potions.update(dt, this.hp, this.maxHp);
     this.hp = recovery.hp;
-    for (const amount of recovery.heals) onDamage(player.position.add(new Vector3(0, 1.8, 0)), `+${amount}`, false, 'heal');
+    for (const amount of recovery.heals) onDamage(player.position.add(new Vector3(0, playerDimensions(player).feedbackHeight, 0)), `+${amount}`, false, 'heal');
   }
 }

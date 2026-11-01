@@ -1,3 +1,4 @@
+import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
 // Body blocking is independent of damage detection: prone enemies remain
 // attackable, but become solid again only after their get-up animation finishes.
 export function isEnemySolid(enemy) {
@@ -8,4 +9,4 @@ export function isEnemySolid(enemy) {
 
 // Physical rolling clearance only. Weapon hurtboxes and attack reach are
 // independent; crouching the player does not shrink a monster's hittable body.
-export function dodgeSeparation(enemy) { return enemy.radius+.25; }
+export function dodgeSeparation(enemy,dimensions=LEGACY_PLAYER_DIMENSIONS) { return enemy.radius+dimensions.rollRadius; }

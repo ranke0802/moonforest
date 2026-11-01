@@ -11,6 +11,7 @@ import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
 import { PlayerCombat } from './player-combat.js';
+import {playerDimensions} from './player-dimensions.js';
 import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
@@ -44,7 +45,7 @@ export class BossEncounter {
       this.grab.reset();
       this.hitPlayer(BOSS_DAMAGE.Skill_02,this.actor.position,{superArmor:true,critical,grabImpact:true,knockdown:true,landed:true});
     },{heightAt:world.terrain?(x,z)=>world.terrain.heightAt(x,z):undefined,
-      constrainLanding:(to,from)=>world.navigation?.constrain(to,from,.32,ENEMY_ARENA_RADIUS)});
+      constrainLanding:(to,from)=>world.navigation?.constrain(to,from,playerDimensions(this.player).moveRadius,ENEMY_ARENA_RADIUS)});
   }
   async summon(player,{position,rotationY}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
@@ -148,7 +149,7 @@ export class BossEncounter {
   // Player sight, weapon contact and dodge collisions still use world navigation.
   get movementNavigation(){return this.world.navigation;}
   movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
-  contactSeparation(){return this.dodgeContactClearance?dodgeSeparation(this):this.radius+.65;}
+  contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+dimensions.standingClearance;}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
@@ -231,7 +232,7 @@ export class BossEncounter {
     // Otherwise the first upright frame would push the enemy out of the gap
     // the player just rolled through.
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
-    else if(distance>=this.radius+.65)this.dodgeContactClearance=false;
+    else if(distance>=this.radius+playerDimensions(player).standingClearance)this.dodgeContactClearance=false;
     const separation=this.contactSeparation();
     if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
@@ -271,7 +272,7 @@ export class BossEncounter {
       if(clearSight&&distance<=this.attackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(event.kind==='spin'||event.kind==='grab'||facing>.2){
-          const aim=player.position.add(new Vector3(0,1.1,0));
+          const aim=player.position.add(new Vector3(0,playerDimensions(player).bodyAimHeight,0));
           const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
           this.receiveBossHit({damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
@@ -281,7 +282,7 @@ export class BossEncounter {
     const beforeGrab=player.position.clone();
     this.grab.update(this.dt,{boss:this.actor,nodes:this.nodes,serial:this.brain.serial,state:this.brain.state,clipTime:this.brain.time,
       duration:this.brain.durations[this.brain.state],interrupted:this.brain.stagger>0||this.brain.hp<=0});
-    if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,.32,ARENA_RADIUS);
+    if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,playerDimensions(player).moveRadius,ARENA_RADIUS);
     if(!this.combat.grabOwner){this.world.terrain?.place(player.position);player.computeWorldMatrix(true);}
     return hitStop;
   }
@@ -311,7 +312,7 @@ export class BossEncounter {
       return false;
     }
     if(action?.state==='dodge'&&action.actionId!=null){
-      this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'Dodge',false,'evade');return false;
+      this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'Dodge',false,'evade');return false;
     }
     // Block throughout the shield-push cast, including its wind-up and recovery.
     // Contact is still required; distant attacks cannot trigger a parry.
@@ -320,7 +321,7 @@ export class BossEncounter {
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
       if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
-      this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),'BLOCK',false,'block');this.onChange(this);
+      this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block');this.onChange(this);
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null,knockdown:heavy});
     return true;
   }
@@ -333,7 +334,7 @@ export class BossEncounter {
     if(knockdown)this.onPlayerHit(PLAYER_STAGGER,{knockdown:true,landed});
     else if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
-    this.onDamage(this.player.position.add(new Vector3(0,1.8,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
+    this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
   }
   inspect(){return {id:this.id,kind:this.kind,active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,position:this.actor?.position.asArray(),clips:this.asset?.animationGroups.length,visited:[...(this.brain?.visited||[])]};}
 }

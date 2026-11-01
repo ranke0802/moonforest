@@ -20,7 +20,8 @@ export class VillageTextureStreaming {
     this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
     const caps=world.scene.getEngine().getCaps();
     this.compressedSupported=!!(caps.astc||caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
-    if(world.touchDevice&&this.compressedSupported&&[...assets.values()].every(a=>a.config.highTextures?.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
+    const profiles=[...assets.values()].map(a=>a.config.highTextures).filter(Boolean);
+    if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>p.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=new Float32Array(16);this.hasView=false;this.lastFov=null;this.motionUntil=0;this.lastFinished=-Infinity;
     this.seenSince=new Map();this.replacementSince=new Map();this.clock=()=>performance.now();
     Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});

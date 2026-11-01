@@ -1,11 +1,12 @@
 import { Vector3 } from '@babylonjs/core';
+import {playerDimensions} from './player-dimensions.js';
 const chinOffset=new Vector3(0,-.03,-.025);
 export const STABLE_PLAYER_FOCUS_HEIGHT=1.05;
 export function playerChinTarget(actor,head){
   // The reviewed V6 rig's Head joint is above the visible chin. Offset in the
   // bone's local space so terrain height, scale and turning are all respected.
   if(head){head.computeWorldMatrix(true);return Vector3.TransformCoordinates(chinOffset,head.getWorldMatrix());}
-  return actor.position.add(new Vector3(0,1.46,0));
+  return actor.position.add(new Vector3(0,playerDimensions(actor).chinHeight,0));
 }
 
 // The player actor is the ground/world anchor. Jump, roll and running bob are
@@ -21,10 +22,11 @@ export class CameraFollow {
     try{this.storage?.setItem(this.key,JSON.stringify(this.settings));}catch{/* Session preference still applies. */}
   }
   focus(actor,head,enemyPosition=null,radius=Infinity){
+    this.stableFocusHeight=playerDimensions(actor).stableFocusHeight;
     if(this.settings.followMotion)return combatFocus(playerChinTarget(actor,head),enemyPosition,radius);
-    this.center.copyFrom(actor.position);this.center.y+=STABLE_PLAYER_FOCUS_HEIGHT;return this.center;
+    this.center.copyFrom(actor.position);this.center.y+=this.stableFocusHeight;return this.center;
   }
-  snapshot(){return {...this.settings,stableFocusHeight:STABLE_PLAYER_FOCUS_HEIGHT};}
+  snapshot(){return {...this.settings,stableFocusHeight:this.stableFocusHeight??STABLE_PLAYER_FOCUS_HEIGHT};}
 }
 
 export function setupCameraFollowControls(follow,{doc=document,onChange=()=>{}}={}){

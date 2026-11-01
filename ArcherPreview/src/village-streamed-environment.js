@@ -15,13 +15,14 @@ import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
 import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
+import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
 // These authored two-sided surfaces have real open edges in every packed LOD.
 // Keep the source's coloured back faces instead of leaving only the ink hull.
 // Solid walls, foundations and the closed canopy retain the ordinary policy.
-export const CAVE_OPEN_SURFACE_ASSETS=Object.freeze(['cave-04-natural-arch','cave-13-votive-lantern','cave-15-resurrection-altar','cave-16-soul-collector-arm','cave-17-faded-sacred-emblem','cave-s03-dry-spillway-rock','forest-06-witch-cave-mouth','joachim-resting']);
+export const CAVE_OPEN_SURFACE_ASSETS=Object.freeze(['cave-04-natural-arch','cave-13-votive-lantern','cave-15-resurrection-altar','cave-16-soul-collector-arm','cave-17-faded-sacred-emblem','cave-s03-dry-spillway-rock','forest-06-witch-cave-mouth']);
 const openCaveSurfaces=new Set(CAVE_OPEN_SURFACE_ASSETS);
 export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category}={}){
   const material=mesh.material;if(!material)return;
@@ -40,10 +41,19 @@ export async function prepareVillageStart(world){
   const records=(world.placements??VILLAGE_PLACEMENTS).map(placement=>{
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
     const {root,facing}=createVillageTransform(world,placement,asset.config),bounds=placementBounds(world,placement,asset.config);
-    return {root,facing,placement,bounds,min:bounds.min,max:bounds.max,meshes:[],blocksPlayerView:asset.cover};
+    const essentialStructural=world.cave&&asset.config.essentialStructural===true;
+    return {root,facing,placement,bounds,min:bounds.min,max:bounds.max,meshes:[],blocksPlayerView:asset.cover,essentialStructural,structuralReady:!essentialStructural};
   });
   world.caveFog?.updateRecords(records);
-  const plan=villageDemand(world,records),resources=[...new Set(plan.flatMap(r=>assets.get(r.id).levels.find(l=>l.level===r.level).resources))];
+  const plan=villageDemand(world,records);
+  // Structural far geometry replaces a previously always-closed room surface.
+  // It must finish before the loading veil lifts, even outside current FoW.
+  for(const id of new Set(records.filter(r=>r.essentialStructural).map(r=>r.placement.asset))){
+    if(!assets.get(id).levels.some(l=>l.level===2))throw Error('Essential cave structure requires a far LOD');
+    const previous=plan.findIndex(r=>r.id===id&&r.level===2);if(previous>=0)plan.splice(previous,1);
+    plan.unshift({id,level:2,priority:Infinity});
+  }
+  const resources=[...new Set(plan.flatMap(r=>assets.get(r.id).levels.find(l=>l.level===r.level).resources))];
   return world.villagePrepared={url,manifest,assets,records,plan,resources};
 }
 
@@ -98,8 +108,9 @@ export function loadStreamedVillage(world,{
   loadContainer=loadMapContainer,
 }={}){
   if(world.villagePromise)return world.villagePromise;
+  const owner={};world.villageLoadOwner=owner;let ownedPrepared=null;
   world.villagePromise=(async()=>{
-    const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];
+    const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];ownedPrepared=prepared;
     await initialize();await ground(world);
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
@@ -114,7 +125,7 @@ export function loadStreamedVillage(world,{
       const model=new URL(config.model,url),container=await loadContainer(model,world.scene);
       if(disposed){container.dispose();return;}containers.push(container);
       const meshes=geometry(container);
-      if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true};
+      if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
       prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes)world.caveFog?.attach(mesh.material);
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category});}
@@ -137,6 +148,11 @@ export function loadStreamedVillage(world,{
       for(const mesh of activeSources)outlines.sourceFor(mesh);
       outlines.addRecords(instances);await outlines.prepare(activeSources);
       if(disposed)return;
+      if(level===2&&instances.some(r=>r.essentialStructural)){
+        for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
+        world.caveFog?.updateRecords(instances);
+        world.caveAtmosphere?.activateLaboratoryGeometry?.();
+      }
       // Cave rock walls use a narrow eye-to-player cutaway; never fade an
       // entire room wall like a tree canopy and reveal rooms behind it.
       const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
@@ -162,16 +178,17 @@ export function loadStreamedVillage(world,{
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();
       world.scene.onDisposeObservable.remove(disposeObserver);
-      Object.assign(world,{villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,villageRenderRecords:null,releaseEnvironment:null});
+      if(world.villageLoadOwner===owner)Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,villageRenderRecords:null,releaseEnvironment:null});
     };
     const dispose=()=>{stop();cleanup();};
     const disposeObserver=world.scene.onDisposeObservable.addOnce(dispose);
     world.releaseEnvironment=async()=>{stop();await Promise.allSettled([streaming.pending,textures?.pendingTask].filter(Boolean));cleanup();};
     try{
       await streaming.initial(plan);
+      if(disposed)throw Object.assign(new Error('Map load was released'),{name:'AbortError'});
       textures=new VillageTextureStreaming(world,assets,records,url,stats);
       world.villageRenderRecords=records;stats.ready=true;return stats;
     }catch(error){dispose();throw error;}
-  })().catch(error=>{for(const r of world.villagePrepared?.records??[])r.root.dispose();world.villagePrepared=null;world.villagePromise=null;world.villageVisibility=null;world.treeOcclusion=null;world.villageStreaming=null;throw error;});
+  })().catch(error=>{if(world.villageLoadOwner===owner){for(const r of ownedPrepared?.records??[])r.root.dispose();Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null});}throw error;});
   return world.villagePromise;
 }

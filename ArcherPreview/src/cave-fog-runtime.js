@@ -2,6 +2,7 @@ import {Color4,Constants,MaterialPluginBase,Mesh,RawTexture,ShaderMaterial,SubMe
 import {CaveFogMemory,CaveFogOfWar,CAVE_FOG_VISIBLE,caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
 import {CAVE_FOG_GLSL,CAVE_FOG_COVER_FRAGMENT} from './cave-fog-cover.js';
 import {caveSurface} from './witch-cave-layout.js';
+import {playerDimensions} from './player-dimensions.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
 import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_ROCK_GLSL,bindCaveRock,buildCaveRockShell,caveRockTexture} from './cave-rock-shell.js';
@@ -80,7 +81,7 @@ export class CaveFogRuntime {
     // again for paused or asynchronous first draws. Prepare hidden idles before
     // their first body/outline/shadow pass, without waiting another frame.
     for(const enemy of this.encounters)if(enemy.renderVisible!==false&&this.allowsPoint(enemy.actor.position))enemy.prepareVisiblePose?.();
-    this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+1.05,position.z,1);this.updateBossView();
+    this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+playerDimensions(this.playerRoot).stableFocusHeight,position.z,1);this.updateBossView();
     if(changed){this.texture.update(this.fog.rgba);this.stats.uploads++;this.updateRecords();this.updateGround();if(this.world.villageVisibility){this.world.villageVisibility.timer=0;this.world.villageVisibility.shadowTimer=0;}this.world.villageStreaming?.demand.invalidate();}
     return changed;
   }
@@ -108,6 +109,14 @@ export class CaveFogRuntime {
       this.patches.push(entry);
     }
     this.ground=ground;this.cover=cover;this.coverMaterial=material;this.shellTriangles=shell.triangles;this.originalGroundTriangles=shell.originalTriangles;
+  }
+  replaceGround(ground,{force=false}={}){
+    if(this.disposed||(!force&&ground===this.ground))return;
+    this.restore();
+    for(const p of this.patches){p.source.isInFrustum=p.sourceCull;p.source.render=p.sourceRender;}
+    this.patches.length=0;this.cover?.dispose();this.coverMaterial?.dispose();
+    this.ground=this.cover=this.coverMaterial=null;
+    this.installGround(ground);this.updateGround();this.coverDistanceEye.fill(NaN);this.inventoryDirty=true;
   }
   updateGround(){let detail=0,cover=0;for(const p of this.patches){p.detail=this.fog.boundsVisible(p.min,p.max);p.cover=!p.detail;detail+=Number(p.detail);cover+=Number(p.cover);}this.stats.detailPatches=detail;this.stats.coverPatches=cover;}
   updateCoverDistance(){

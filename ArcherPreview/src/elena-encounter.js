@@ -10,6 +10,7 @@ import {chooseElenaReposition} from './elena-reposition.js';
 import {MourningLocomotion} from './mourning-locomotion.js';
 import {chargeTouchesPlayer} from './elena-charge.js';
 import {refreshPoseMatrices} from './pose-matrices.js';
+import {playerDimensions} from './player-dimensions.js';
 
 export class ElenaEncounter extends BossEncounter {
   constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=ELENA_SIZE.radius;this.stopDistance=ELENA_SIZE.stopDistance;this.separationRadius=ELENA_SIZE.separationRadius;this.sizeScale=ELENA_SIZE.scale;this.reviewFocusHeight=ELENA_SIZE.reviewFocusHeight;this.healthAnchor=new Vector3();this.engaged=false;this.motionRootTravel=false;}
@@ -82,12 +83,12 @@ export class ElenaEncounter extends BossEncounter {
       this.spell.show(Math.min(this.brain.time,MOURNING_MOVEMENT.chargeWarning),MOURNING_MOVEMENT.chargeWarning,{flash:this.brain.time>=MOURNING_MOVEMENT.chargeWarning});
       if(this.brain.time>=MOURNING_MOVEMENT.chargeWarning){
         const clear=!this.world.navigation||this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
-        if(!this.chargeResolved&&clear&&chargeTouchesPlayer(this.spell.plan,this.chargePrevious??this.chargeOrigin,this.actor.position,player.position,{reach:this.radius})){
+        if(!this.chargeResolved&&clear&&chargeTouchesPlayer(this.spell.plan,this.chargePrevious??this.chargeOrigin,this.actor.position,player.position,{reach:this.radius,playerRadius:playerDimensions(player).spellRadius})){
           // Consume the one contact even on dodge/block/invulnerability, so an
           // avoided charge cannot hit again when that protection ends.
           this.chargeResolved=true;
           const from=this.actor.position.add(new Vector3(0,1,0));
-          this.receiveBossHit({damage:MOURNING_MOVEMENT.chargeDamage,bodyContact:true,shieldContact:shieldIntercepts(from,player.position.add(new Vector3(0,.95,0)),shield),action:result,source:this.chargeOrigin});
+          this.receiveBossHit({damage:MOURNING_MOVEMENT.chargeDamage,bodyContact:true,shieldContact:shieldIntercepts(from,player.position.add(new Vector3(0,playerDimensions(player).guardHeight,0)),shield),action:result,source:this.chargeOrigin});
         }
         this.chargePrevious?.copyFrom(this.actor.position);
       }
@@ -100,11 +101,11 @@ export class ElenaEncounter extends BossEncounter {
     if(fire&&!this.spell.fired){
       this.spell.fired=true;
       const clear=!this.world.navigation||this.world.navigation.segmentClear(this.spell.plan.origin,player.position,0,true);
-      if(!this.reviewMode&&clear&&spellContains(this.spell.plan,player.position)){
+      if(!this.reviewMode&&clear&&spellContains(this.spell.plan,player.position,{radius:playerDimensions(player).spellRadius})){
         // The enlarged witch's hand can pass above or behind a nearby player.
         // Her floor spell approaches from the boss, at the player's guard height.
-        const source=this.phase===2?origin.add(new Vector3(0,.95,0)):this.nodes['mixamorig:RightHand'].getAbsolutePosition();
-        this.receiveBossHit({damage:spec.damage,bodyContact:true,shieldContact:shieldIntercepts(source,player.position.add(new Vector3(0,.95,0)),shield),action:result,source});
+        const source=this.phase===2?origin.add(new Vector3(0,playerDimensions(player).guardHeight,0)):this.nodes['mixamorig:RightHand'].getAbsolutePosition();
+        this.receiveBossHit({damage:spec.damage,bodyContact:true,shieldContact:shieldIntercepts(source,player.position.add(new Vector3(0,playerDimensions(player).guardHeight,0)),shield),action:result,source});
       }
     }
     return stop;

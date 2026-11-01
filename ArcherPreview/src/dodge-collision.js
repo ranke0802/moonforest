@@ -1,18 +1,19 @@
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { ARENA_RADIUS } from './world-limits.js';
+import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
 
 const SKIN=.002, STEP=.06;
 
 // Sweep each short portion of the authored roll, then spend its remaining
 // distance along the contact tangent. Enemies are never moved by this solver.
-export function constrainDodge(position, from, navigation, encounters = [], limit = ARENA_RADIUS) {
+export function constrainDodge(position, from, navigation, encounters = [], limit = ARENA_RADIUS,dimensions=LEGACY_PLAYER_DIMENSIONS) {
   const dx=position.x-from.x,dz=position.z-from.z,length=Math.hypot(dx,dz);
   if(length<1e-8)return position;
   const ux=dx/length,uz=dz/length;
   const exactWorld=typeof navigation.obstacleContact==='function';
-  const circles=exactWorld?[]:navigation.obstacles.map(o=>({x:o.x,z:o.z,radius:o.radius+.32,enemy:false}));
+  const circles=exactWorld?[]:navigation.obstacles.map(o=>({x:o.x,z:o.z,radius:o.radius+dimensions.moveRadius,enemy:false}));
   for(const enemy of encounters)if(isEnemySolid(enemy))circles.push({
-    x:enemy.actor.position.x,z:enemy.actor.position.z,radius:dodgeSeparation(enemy),enemy:true,
+    x:enemy.actor.position.x,z:enemy.actor.position.z,radius:dodgeSeparation(enemy,dimensions),enemy:true,
   });
   let x=from.x,z=from.z;
   const contact=(mx,mz)=>{
@@ -23,7 +24,7 @@ export function constrainDodge(position, from, navigation, encounters = [], limi
     // Include the v3 navigator's clearance skin before the sweep: subtracting
     // travel skin alone is insufficient at a grazing contact and would make
     // the next regular move relocate an otherwise safe rolled position.
-    let hit=exactWorld?navigation.obstacleContact({x,z},{x:mx,z:mz},.322):null,time=hit?.time??1;
+    let hit=exactWorld?navigation.obstacleContact({x,z},{x:mx,z:mz},dimensions.moveRadius+SKIN):null,time=hit?.time??1;
     for(const c of circles){
       const rx=x-c.x,rz=z-c.z,b=rx*mx+rz*mz;
       // Existing overlaps can escape or slide sideways, but cannot deepen.

@@ -13,10 +13,11 @@ import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
+import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
 
 test('camera field matches current actual source layout and preserves arched clearance by height',()=>{
  const hash=createHash('sha256');for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
- assert.equal(CAVE_CAMERA_DATA.fingerprint,hash.digest('hex'));
+ assert.equal(CAVE_CAMERA_DATA.fingerprint,caveSourceFingerprint());
  assert.equal(caveCameraRockBlocked(-35,1.7,32,0),false);
  assert.ok(CAVE_CAMERA_DATA.profiles.length>100);
  assert.doesNotMatch(CAVE_FOG_COVER_FRAGMENT,/if\(caveForegroundCutaway/,'unknown-space enclosure never gets a camera hole');

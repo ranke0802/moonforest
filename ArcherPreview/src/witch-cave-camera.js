@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {upwardFocusLift} from './camera-pitch.js';
-import {STABLE_PLAYER_FOCUS_HEIGHT} from './camera-follow.js';
+import {playerDimensions} from './player-dimensions.js';
 import {caveRoofHeight} from './witch-cave-layout.js';
 import {CAVE_CAMERA_DATA as DATA} from './witch-cave-camera-data.js';
 
@@ -41,9 +41,9 @@ export function caveCameraBlocked(terrain,x,y,z,padding=.3){
 }
 // Trace the family of valid orbit eyes, including CameraPitch's upward lift.
 // No picking, render-mesh access or allocation is performed per sample.
-export function caveSafeCameraRadius(terrain,base,alpha,beta,requested,{padding=.3,step=.3,minimum=.15}={}){
+export function caveSafeCameraRadius(terrain,base,alpha,beta,requested,{padding=.3,step=.3,minimum=.15,bodyScale=1}={}){
  const cos=Math.cos(beta),sin=Math.sin(beta),dx=Math.cos(alpha)*sin,dz=Math.sin(alpha)*sin;
- const blocked=r=>{const lift=Math.max(0,-.35-r*cos);return caveCameraBlocked(terrain,base.x+dx*r,base.y+lift+cos*r,base.z+dz*r,padding);};
+ const blocked=r=>{const lift=Math.max(0,-.35*bodyScale-r*cos);return caveCameraBlocked(terrain,base.x+dx*r,base.y+lift+cos*r,base.z+dz*r,padding);};
  let safe=Math.min(minimum,requested);
  if(blocked(safe))return safe;
  for(let r=Math.min(safe+step,requested);r<=requested;){
@@ -57,15 +57,15 @@ export function caveSafeCameraRadius(terrain,base,alpha,beta,requested,{padding=
 // otherwise force it into the character. Search only a small upward movement
 // of the eye, never an automatic yaw or a path through the wall. Close manual
 // inspection and unrestricted look-up are deliberately left alone.
-export function caveReadableCamera(terrain,base,alpha,beta,requested){
- const radius=caveSafeCameraRadius(terrain,base,alpha,beta,requested);
+export function caveReadableCamera(terrain,base,alpha,beta,requested,options={}){
+ const radius=caveSafeCameraRadius(terrain,base,alpha,beta,requested,options);
  let bestRadius=radius,bestBeta=beta;
  const threshold=Math.min(5.5,requested*.65);
  const smooth=v=>{v=Math.max(0,Math.min(1,v));return v*v*(3-2*v);};
  const maxCorrection=.48*smooth((1.5-beta)/.18)*smooth((beta-.65)/.18)*smooth((requested-6)/2);
  if(requested>=6&&beta>=.65&&beta<=1.5&&radius<Math.min(4.5,requested*.55)){
   for(let i=1;i<=6;i++){
-   const candidate=Math.max(.25,beta-maxCorrection*i/6),safe=caveSafeCameraRadius(terrain,base,alpha,candidate,requested);
+   const candidate=Math.max(.25,beta-maxCorrection*i/6),safe=caveSafeCameraRadius(terrain,base,alpha,candidate,requested,options);
    if(safe>bestRadius+.15){bestRadius=safe;bestBeta=candidate;}
    if(bestRadius>=threshold)break;
   }
@@ -108,11 +108,11 @@ export class CaveCameraGuard {
   // wall. Clamp that pivot along the path from the actual player, rather than
   // lifting it onto the high terrain shoulder and looking into the next room.
   const actor=world.caveFog?.playerRoot?.position??(world.caveFog?.playerView?.w>0?world.caveFog.playerView:null);
-  const minimumFocus=this.stable?STABLE_PLAYER_FOCUS_HEIGHT:1.55;
+  const dimensions=playerDimensions(world.caveFog?.playerRoot),minimumFocus=this.stable?dimensions.stableFocusHeight:1.55*dimensions.ratio;
   if(actor){
    const anchorY=world.terrain.heightAt(actor.x,actor.z)+minimumFocus,eyeY=Math.max(anchorY,this.base.y),dx=this.base.x-actor.x,dz=this.base.z-actor.z,length=Math.hypot(dx,dz),count=Math.max(1,Math.ceil(length/.3));
    let lastX=actor.x,lastZ=actor.z;
-   for(let i=1;i<=count;i++){const x=actor.x+dx*i/count,z=actor.z+dz*i/count;if(caveCameraBlocked(world.terrain,x,eyeY-.35,z)){this.base.x=lastX;this.base.z=lastZ;break;}lastX=x;lastZ=z;}
+   for(let i=1;i<=count;i++){const x=actor.x+dx*i/count,z=actor.z+dz*i/count;if(caveCameraBlocked(world.terrain,x,eyeY-dimensions.eyeBelowChin,z)){this.base.x=lastX;this.base.z=lastZ;break;}lastX=x;lastZ=z;}
    this.base.y=eyeY;
   }
   // A roll lowers the head almost to the ground. Keep the physical eye anchor
@@ -122,7 +122,7 @@ export class CaveCameraGuard {
   this.base.y=Math.max(floor+minimumFocus,Math.min(roof-.65,this.base.y));
   const key=this.lastKey;
   if(this.lastTerrain!==world.terrain||this.base.x!==key[0]||this.base.y!==key[1]||this.base.z!==key[2]||camera.alpha!==key[3]||camera.beta!==key[4]||this.savedRadius!==key[5]){
-   this.framing=caveReadableCamera(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;
+   this.framing=caveReadableCamera(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius,{bodyScale:dimensions.ratio});key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;
   }
   const targetCorrection=this.framing.beta-this.savedBeta;
   // Requested input remains authoritative. The transient correction eases in
@@ -131,11 +131,11 @@ export class CaveCameraGuard {
   this.pitchCorrection+=(targetCorrection-this.pitchCorrection)*(1-Math.exp(-this.dt*8));
   if(Math.abs(this.pitchCorrection-targetCorrection)<.001)this.pitchCorrection=targetCorrection;
   camera.beta=Math.max(.25,this.savedBeta+this.pitchCorrection);
-  const allowed=camera.beta===this.framing.beta?this.framing.radius:caveSafeCameraRadius(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);
+  const allowed=camera.beta===this.framing.beta?this.framing.radius:caveSafeCameraRadius(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius,{bodyScale:dimensions.ratio});
   this.allowed=allowed;
   const recovered=Number.isFinite(this.effectiveRadius)?this.effectiveRadius+(allowed-this.effectiveRadius)*(1-Math.exp(-this.dt*8)):allowed;
   this.effectiveRadius=Math.min(allowed,recovered);
-  camera.radius=this.effectiveRadius;this.renderTarget.copyFrom(this.base);this.renderTarget.y+=upwardFocusLift(camera,true);camera.setTarget(this.renderTarget,false,false,true);
+  camera.radius=this.effectiveRadius;this.renderTarget.copyFrom(this.base);this.renderTarget.y+=upwardFocusLift(camera,true,dimensions.ratio);camera.setTarget(this.renderTarget,false,false,true);
   camera.getViewMatrix(true);world.scene.updateTransformMatrix(true);this.applied=true;
   return true;
  }

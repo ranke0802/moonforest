@@ -1,6 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
 import { projectBossHealth } from './boss-health-bar.js';
 import {markerScreenAngle} from './combat-readability.js';
+import {playerDimensions} from './player-dimensions.js';
 
 export class PlayerHealthBar {
   constructor(label) {
@@ -40,7 +41,8 @@ export class PlayerHealthBar {
     const canvas=projection?null:scene.getEngine().getRenderingCanvas(),project=point=>projection?projection.project(point):projectBossHealth(scene,point,canvas.clientWidth,canvas.clientHeight);
     const point=project(this.foot);if(!point.visible)return;const foot={x:point.x,y:point.y};
     actor.getDirectionToRef(this.forward,this.direction);this.direction.normalize();
-    this.tip.copyFrom(this.foot).addInPlaceFromFloats(this.direction.x*.7,this.direction.y*.7,this.direction.z*.7);
+    const length=playerDimensions(actor).markerLength;
+    this.tip.copyFrom(this.foot).addInPlaceFromFloats(this.direction.x*length,this.direction.y*length,this.direction.z*length);
     const tip=project(this.tip);if(!tip.visible)return;const angle=markerScreenAngle(foot,tip);if(angle===null)return;
     const transform=`translate3d(${foot.x}px,${foot.y}px,0) translate(-50%,-50%)`;
     if(this.marker.style.transform!==transform)this.marker.style.transform=transform;
