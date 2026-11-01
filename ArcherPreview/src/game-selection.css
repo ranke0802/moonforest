@@ -1,0 +1,26 @@
+/* Keep the scene/HUD inert to accidental drag selection. Inherit explicitly
+   so editable islands can restore selection even on WebKit descendants. */
+#app {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+#app :where(*) {
+  -webkit-user-select: inherit;
+  user-select: inherit;
+  -webkit-touch-callout: inherit;
+}
+#app :is(input:not([type]), input[type="text" i], input[type="number" i],
+  input[type="search" i], input[type="email" i], input[type="password" i],
+  input[type="tel" i], input[type="url" i], textarea,
+  [contenteditable=""], [contenteditable="true" i], [contenteditable="plaintext-only" i]) {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+#app [contenteditable="false" i] {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+#app img { -webkit-user-drag: none; }

@@ -1,6 +1,8 @@
 import './styles.css';
 import './mobile-viewport.css';
 import './mobile-ui.css';
+import './game-selection.css';
+import {setupGameSelection} from './game-selection.js';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
@@ -68,6 +70,8 @@ import { GoldLoot } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
 import { attachCharacterOutlines } from './character-outlines.js';
 
+const gameSelection=setupGameSelection(document.getElementById('app'));
+if(import.meta.hot)import.meta.hot.dispose(()=>gameSelection.dispose());
 setupSettingsPanel();
 setupSummonPanel();
 const diagnosticExpand=document.querySelector('#diagnostic-expand');
