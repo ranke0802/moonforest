@@ -53,19 +53,54 @@ export function caveSafeCameraRadius(terrain,base,alpha,beta,requested,{padding=
  return safe;
 }
 
+// Keep a distant, player-chosen view useful when a low rock shoulder would
+// otherwise force it into the character. Search only a small upward movement
+// of the eye, never an automatic yaw or a path through the wall. Close manual
+// inspection and unrestricted look-up are deliberately left alone.
+export function caveReadableCamera(terrain,base,alpha,beta,requested){
+ const radius=caveSafeCameraRadius(terrain,base,alpha,beta,requested);
+ let bestRadius=radius,bestBeta=beta;
+ const threshold=Math.min(5.5,requested*.65);
+ const smooth=v=>{v=Math.max(0,Math.min(1,v));return v*v*(3-2*v);};
+ const maxCorrection=.48*smooth((1.5-beta)/.18)*smooth((beta-.65)/.18)*smooth((requested-6)/2);
+ if(requested>=6&&beta>=.65&&beta<=1.5&&radius<Math.min(4.5,requested*.55)){
+  for(let i=1;i<=6;i++){
+   const candidate=Math.max(.25,beta-maxCorrection*i/6),safe=caveSafeCameraRadius(terrain,base,alpha,candidate,requested);
+   if(safe>bestRadius+.15){bestRadius=safe;bestBeta=candidate;}
+   if(bestRadius>=threshold)break;
+  }
+ }
+ // A tiny gain is not worth moving the player's horizon.
+ if(bestRadius<radius+.75)return {radius,beta,baselineRadius:radius,reason:radius<requested-.01?'obstruction':'requested'};
+ return {radius:bestRadius,beta:bestBeta,baselineRadius:radius,reason:'readable-obstruction'};
+}
+
+// A player marker may explain occlusion by a boss, never reveal the player
+// through a structural wall. The same terrain/rock/ceiling test as the rendered
+// eye keeps this independent of render-mesh visibility and LOD changes.
+export function cavePlayerMarkerClear(terrain,eye,player){
+ const dx=player.x-eye.x,dy=terrain.heightAt(player.x,player.z)+.25-eye.y,dz=player.z-eye.z;
+ const steps=Math.max(1,Math.ceil(Math.hypot(dx,dy,dz)/.35));
+ for(let i=1;i<=steps;i++){
+  const t=i/steps;
+  if(caveCameraBlocked(terrain,eye.x+dx*t,eye.y+dy*t,eye.z+dz*t,.05))return false;
+ }
+ return true;
+}
+
 // beginFrame is called before visibility/streaming/HP projection and render.
 // End after all screen projection: only the requested radius/target are then
 // restored, keeping wheel/pinch/zoom settings independent of wall correction.
 export class CaveCameraGuard {
  constructor(world){
-  this.world=world;this.base=new Vector3();this.savedTarget=new Vector3();this.renderTarget=new Vector3();this.lastKey=new Float64Array(6).fill(NaN);this.applied=false;this.ready=false;this.effectiveRadius=Infinity;this.dt=0;this.disposed=false;
+  this.world=world;this.base=new Vector3();this.savedTarget=new Vector3();this.renderTarget=new Vector3();this.lastKey=new Float64Array(6).fill(NaN);this.applied=false;this.ready=false;this.effectiveRadius=Infinity;this.pitchCorrection=0;this.dt=0;this.disposed=false;
   this.sceneDispose=world.scene.onDisposeObservable.addOnce(()=>this.dispose());
  }
  follow(baseFocus,dt=0,{stable=false}={}){this.base.copyFrom(baseFocus);this.dt=Math.max(0,Math.min(.1,dt));this.stable=stable;this.ready=true;}
  beginFrame(){
   this.endFrame();const {world}=this,camera=world.camera;
-  if(this.disposed||!this.ready||!world.cave){this.effectiveRadius=Infinity;return false;}
-  camera.update();this.savedRadius=camera.radius;this.savedTarget.copyFrom(camera.target);
+  if(this.disposed||!this.ready||!world.cave){this.effectiveRadius=Infinity;this.pitchCorrection=0;this.framing=null;this.lastKey.fill(NaN);return false;}
+  camera.update();this.savedRadius=camera.radius;this.savedBeta=camera.beta;this.savedTarget.copyFrom(camera.target);
   // Preserve follow smoothing in XZ; the raw vertical anchor keeps the eye at
   // the same safe height when the unrestricted pitch lifts the look target.
   this.base.x=camera.target.x;this.base.z=camera.target.z;
@@ -87,9 +122,17 @@ export class CaveCameraGuard {
   this.base.y=Math.max(floor+minimumFocus,Math.min(roof-.65,this.base.y));
   const key=this.lastKey;
   if(this.lastTerrain!==world.terrain||this.base.x!==key[0]||this.base.y!==key[1]||this.base.z!==key[2]||camera.alpha!==key[3]||camera.beta!==key[4]||this.savedRadius!==key[5]){
-   this.allowed=caveSafeCameraRadius(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;
+   this.framing=caveReadableCamera(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;
   }
-  const allowed=this.allowed;
+  const targetCorrection=this.framing.beta-this.savedBeta;
+  // Requested input remains authoritative. The transient correction eases in
+  // and out, and every intermediate eye is checked rather than interpolating
+  // a camera through rock. A paused redraw retains the last safe correction.
+  this.pitchCorrection+=(targetCorrection-this.pitchCorrection)*(1-Math.exp(-this.dt*8));
+  if(Math.abs(this.pitchCorrection-targetCorrection)<.001)this.pitchCorrection=targetCorrection;
+  camera.beta=Math.max(.25,this.savedBeta+this.pitchCorrection);
+  const allowed=camera.beta===this.framing.beta?this.framing.radius:caveSafeCameraRadius(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius);
+  this.allowed=allowed;
   const recovered=Number.isFinite(this.effectiveRadius)?this.effectiveRadius+(allowed-this.effectiveRadius)*(1-Math.exp(-this.dt*8)):allowed;
   this.effectiveRadius=Math.min(allowed,recovered);
   camera.radius=this.effectiveRadius;this.renderTarget.copyFrom(this.base);this.renderTarget.y+=upwardFocusLift(camera,true);camera.setTarget(this.renderTarget,false,false,true);
@@ -98,10 +141,10 @@ export class CaveCameraGuard {
  }
  endFrame(){
   if(!this.applied)return;const camera=this.world.camera;
-  camera.radius=this.savedRadius;camera.setTarget(this.savedTarget,false,false,true);this.applied=false;
+  camera.radius=this.savedRadius;camera.beta=this.savedBeta;camera.setTarget(this.savedTarget,false,false,true);this.applied=false;
   // Keep the rendered matrices/global position until the next beginFrame so
   // deferred HUD work sees the image that was drawn, never the requested eye.
  }
- inspect(){return {requestedRadius:this.savedRadius??this.world.camera.radius,effectiveRadius:this.effectiveRadius,applied:this.applied,fieldBytes:lookup.byteLength+profiles.byteLength};}
+ inspect(){return {requestedRadius:this.savedRadius??this.world.camera.radius,effectiveRadius:this.effectiveRadius,requestedBeta:this.savedBeta??this.world.camera.beta,effectiveBeta:(this.savedBeta??this.world.camera.beta)+this.pitchCorrection,pitchCorrection:this.pitchCorrection,reason:this.framing?.reason??'inactive',baselineRadius:this.framing?.baselineRadius??null,applied:this.applied,fieldBytes:lookup.byteLength+profiles.byteLength};}
  dispose(){if(this.disposed)return;this.endFrame();this.disposed=true;this.world.scene.onDisposeObservable.remove(this.sceneDispose);}
 }

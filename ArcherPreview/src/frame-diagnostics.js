@@ -53,6 +53,12 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
+  const detailDialog=get('diagnostic-detail-dialog'),expand=get('diagnostic-expand');
+  if(panel.dataset)panel.dataset.expanded='false';
+  expand?.setAttribute?.('aria-expanded','false');
+  expand?.addEventListener('click',()=>{if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint();detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
+  for(const id of ['close-diagnostic-detail','diagnostic-detail-done'])get(id)?.addEventListener('click',()=>detailDialog?.close());
+  detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
   let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0};
@@ -69,8 +75,9 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     setText('diagnostic-load-phases',load?`다운로드 ${seconds(load.downloadMs)} · 모델 ${seconds(load.modelMs)} · 화면 ${seconds(load.screenMs)}`:'다운로드 — · 모델 — · 화면 —');
     setText('diagnostic-memory',`JS 메모리 ${mib(mem.jsUsedBytes)} / ${mib(mem.jsLimitBytes)} MiB${mem.jsUsedBytes==null?' (미지원)':''}`);
     setText('diagnostic-textures',`배경 고해상도 텍스처 추정 ${mib(mem.backgroundHighTextureEstimateBytes)} / ${mib(mem.backgroundHighTextureBudgetBytes)} MiB`);
-    setText('diagnostic-fps',`${s.fps===null?'—':Math.round(s.fps)} FPS · 목표 ${s.targetFps}`);
-    setText('diagnostic-frame',`프레임 ${ms(s.frameMs)} ms · 최대 ${ms(s.maxMs)} ms`);
+    setText('diagnostic-fps',paused?'일시정지 · 직전 기록':`${s.fps===null?'집계 중':Math.round(s.fps)+' FPS'} · 목표 ${s.targetFps}`);
+    setText('diagnostic-frame',`${ms(s.frameMs)} ms · p95 ${ms(s.p95Ms)} ms`);
+    setText('diagnostic-detail-frame',`최근 10초 · 최대 ${ms(s.maxMs)} ms · p95 ${ms(s.p95Ms)} ms${paused?' · 정지 전 기록':''}`);
     setText('diagnostic-render',`드로콜 ${Number.isFinite(metrics.drawCalls)?metrics.drawCalls:'—'} · 화면 CPU ${Number.isFinite(metrics.sceneMs)?metrics.sceneMs.toFixed(1):'—'} ms`);
     setText('diagnostic-gpu',gpuDiagnosticLine(metrics.gpu));
     const comparisonSnapshot=bosses.snapshot(),lines=bossComparisonLines(comparisonSnapshot);
@@ -87,20 +94,22 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   };
   const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;onEnabled(enabled);paint();};
   toggle.addEventListener('change',()=>{
-    enabled=toggle.checked;setCollecting(false);monitor.reset();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(comparison)comparison.open=false;
+    enabled=toggle.checked;setCollecting(false);monitor.reset();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(!enabled&&detailDialog?.open)detailDialog.close();if(comparison)comparison.open=false;
     try{storage?.setItem(key,enabled?'1':'0');}catch{/* Keep session choice. */}sync();
   });
   reset.addEventListener('click',()=>{monitor.reset();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
-  copy.addEventListener('click',async()=>{
+  const copyReport=async()=>{
     if(enabled)refreshGpu();
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
     report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
     const value=JSON.stringify(report,null,2);
-    try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);fallback.hidden=true;status.textContent='진단 기록을 복사했습니다.';}
-    catch{fallback.value=value;fallback.hidden=false;fallback.focus();fallback.select();status.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
-  });
+    const exportBox=detailDialog?.open?(get('diagnostic-detail-export')??fallback):fallback,exportStatus=detailDialog?.open?(get('diagnostic-detail-status')??status):status;
+    try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);exportBox.hidden=true;exportStatus.textContent='진단 기록을 복사했습니다.';}
+    catch{exportBox.value=value;exportBox.hidden=false;exportBox.focus();exportBox.select();exportStatus.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
+  };
+  copy.addEventListener('click',copyReport);get('diagnostic-detail-copy')?.addEventListener('click',copyReport);
   sync();
   return {
     refresh:paint,

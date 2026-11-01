@@ -2,7 +2,7 @@
  * iOS can finish rotating/resuming after window.resize; observe the canvas too.
  * Coalesce event bursts and only reallocate the GPU buffer when its size changes.
  */
-export function observeViewportSize(canvas, onResize, host = window) {
+export function observeViewportSize(canvas, onResize, host = window, {onLayout=()=>{}} = {}) {
   const doc = host.document;
   let frame = null, disposed = false, previous = '';
   const timers = new Set(), listeners = [];
@@ -13,7 +13,10 @@ export function observeViewportSize(canvas, onResize, host = window) {
     const pixelRatio = host.devicePixelRatio || 1;
     if (width <= 0 || height <= 0) return;
     const key = `${width}:${height}:${pixelRatio}`;
-    if (key === previous) return;
+    // A 180-degree phone turn can swap CSS safe-area insets without changing
+    // canvas dimensions. Refresh lightweight HUD layout without reallocating
+    // the renderer or resetting held input for an unchanged backing size.
+    if (key === previous) { onLayout({width,height,pixelRatio}); return; }
     previous = key;
     onResize({ width, height, pixelRatio });
   }

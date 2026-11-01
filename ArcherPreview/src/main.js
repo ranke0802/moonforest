@@ -10,7 +10,7 @@ import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {applyPlayerDetail} from './player-detail.js';
-import {CaveCameraGuard} from './witch-cave-camera.js';
+import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
@@ -74,8 +74,6 @@ const gameSelection=setupGameSelection(document.getElementById('app'));
 if(import.meta.hot)import.meta.hot.dispose(()=>gameSelection.dispose());
 setupSettingsPanel();
 setupSummonPanel();
-const diagnosticExpand=document.querySelector('#diagnostic-expand');
-diagnosticExpand.addEventListener('click',()=>{const expanded=diagnosticExpand.getAttribute('aria-expanded')!=='true';diagnosticExpand.setAttribute('aria-expanded',String(expanded));document.querySelector('#frame-diagnostics').dataset.expanded=String(expanded);diagnosticExpand.textContent=expanded?'간단히':'자세히';});
 const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
 const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
@@ -159,12 +157,12 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
     cameraZoom:cameraZoom?.snapshot()??null,
-    cameraFollow:cameraFollow?.snapshot()??null,
+    cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
     map:character,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
@@ -185,13 +183,22 @@ applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
 const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
 
+function resizeScreenProjection(){
+  if(!screenProjection)return;
+  screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
+  // CSS env() resolves the phone's notch insets here, once per viewport change.
+  // Damage/HUD layout consumes these numbers without frame-by-frame DOM reads.
+  const style=getComputedStyle($('#app'));
+  screenProjection.safeInsets=Object.fromEntries(['top','right','bottom','left'].map(side=>[side,Math.max(0,parseFloat(style.getPropertyValue(`--safe-inset-${side}`))||0)]));
+}
+
 function applyRenderQuality() {
   if (!engine) return;
   const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice);
   // Babylon divides CSS dimensions by this value. HiDPI requires its reciprocal.
   engine.setHardwareScalingLevel(1 / ratio);
   engine.resize();
-  screenProjection?.resize(canvas.clientWidth,canvas.clientHeight);
+  resizeScreenProjection();
   renderActivity.wake();
   engine.maxFPS=renderActivity.limit({quality:qualityMode});
   world?.lighting.setQuality(qualityMode);
@@ -486,8 +493,10 @@ async function prepareElenaReview(){
 }
 
 function updateHealthBars() {
-  bossHealthBars.update(world.scene,boss.encounters,screenProjection);
-  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp},screenProjection);
+  bossHealthBars.update(world.scene,boss.encounters,screenProjection,{playerPosition:actor?.position});
+  const nearGiant=ready&&isV2()&&world.cave&&boss.playerHp>0&&boss.encounters.some(enemy=>enemy.active&&enemy.phase===2&&enemy.brain.hp>0&&enemy.renderVisible!==false&&enemy.fogVisible!==false&&Vector3.DistanceSquared(actor.position,enemy.actor.position)<=6.5*6.5);
+  const markerClear=nearGiant&&cavePlayerMarkerClear(world.terrain,world.camera.globalPosition,actor.position);
+  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp,marker:{enabled:nearGiant,clearToPlayer:markerClear,groundY:actor?world.terrain.heightAt(actor.position.x,actor.position.z):0}},screenProjection);
 }
 
 function syncCaveFog(force=false){if(actor&&!actor.isDisposed())world.caveFog?.update(actor,elapsed,{force,encounters:boss?.encounters??[]});}
@@ -634,7 +643,7 @@ try {
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
   world.lighting.setQuality(qualityMode);
   screenProjection=new ScreenProjection(world.scene);
-  screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
+  resizeScreenProjection();
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
@@ -679,6 +688,11 @@ try {
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
   setupFullscreen($('#fullscreen-button'), toast, {autoEnter:false});
+  const diagnosticFullscreen=$('#diagnostic-fullscreen'),primaryFullscreen=$('#fullscreen-button');
+  diagnosticFullscreen.addEventListener('click',()=>primaryFullscreen.click());
+  const syncDiagnosticFullscreen=()=>{diagnosticFullscreen.textContent=primaryFullscreen.textContent;diagnosticFullscreen.setAttribute('aria-label',primaryFullscreen.getAttribute('aria-label'));diagnosticFullscreen.setAttribute('aria-pressed',primaryFullscreen.getAttribute('aria-pressed'));};
+  for(const name of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(name,syncDiagnosticFullscreen);
+  syncDiagnosticFullscreen();
   mapDeparture=createMapDeparture({
     prepare:()=>{ready=false;loadingView.begin();input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{input.dispose();audio.dispose();engine.dispose();},
@@ -728,7 +742,7 @@ try {
       assertFrameHealthy();
       applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
       loadDiagnostics.finish();
-      const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open;
+      const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
@@ -747,14 +761,14 @@ try {
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
-    const summonOpen=$('#summon-dialog').open,otherSettings=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true;
+    const summonOpen=$('#summon-dialog').open,otherSettings=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true;
     if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);
-    if(paused){text('#live-fps','0 FPS');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
+    if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true);
   };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
-  for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog']){
+  for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog','#diagnostic-detail-dialog']){
     dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
     // Closing button handlers run before this bubble handler, keeping iOS
     // audio resume directly inside the user's tap, not only a later observer.
@@ -765,7 +779,7 @@ try {
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
-  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
+  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
   engine.onContextRestoredObservable.add(restorePlayback);
@@ -775,7 +789,7 @@ try {
     // A held joystick/attack belongs to the old coordinate system after rotation.
     input.reset();
     applyRenderQuality();
-  });
+  },window,{onLayout:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)resizeScreenProjection();}});
   $('#quality-select').addEventListener('change', event => {
     qualityMode = event.target.value;
     try { localStorage.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }

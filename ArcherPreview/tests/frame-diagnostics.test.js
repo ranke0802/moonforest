@@ -37,7 +37,7 @@ test('paused/hidden time and FPS cap changes are not reported as gameplay stalls
 function ui({stored='0',clipboard={writeText:async()=>{}},metadata=()=>({character:'warrior-v3'}),loads,memory,zoom,renderMetrics,onEnabled,onCollecting,onMapChanged,onReset}={}){
  let time=0,clockCalls=0,contextCalls=0,writes=0;
  const ids=['frame-diagnostics','frame-diagnostics-toggle','copy-frame-diagnostics','reset-frame-diagnostics','frame-diagnostics-status','frame-diagnostics-export','diagnostic-fps','diagnostic-frame','diagnostic-stalls','diagnostic-detail','diagnostic-load','diagnostic-load-phases','diagnostic-memory','diagnostic-textures','diagnostic-zoom','diagnostic-zoom-range'];
- ids.push('diagnostic-render','diagnostic-gpu','diagnostic-boss-gpu','diagnostic-boss-comparison','diagnostic-boss-title','diagnostic-boss-frame','diagnostic-boss-peak','diagnostic-boss-draw','diagnostic-boss-memory','diagnostic-boss-cpu','diagnostic-boss-live','diagnostic-boss-stages','diagnostic-boss-note');
+ ids.push('diagnostic-render','diagnostic-detail-frame','diagnostic-gpu','diagnostic-boss-gpu','diagnostic-boss-comparison','diagnostic-boss-title','diagnostic-boss-frame','diagnostic-boss-peak','diagnostic-boss-draw','diagnostic-boss-memory','diagnostic-boss-cpu','diagnostic-boss-live','diagnostic-boss-stages','diagnostic-boss-note');
  const nodes=Object.fromEntries(ids.map(id=>[id,{dataset:{},hidden:false,disabled:false,checked:false,value:'',listeners:{},_text:'',
   get textContent(){return this._text;},set textContent(v){writes++;this._text=v;},
   addEventListener(type,listener){this.listeners[type]=listener;},focus(){this.focused=true;},select(){this.selected=true;}}]));
@@ -134,7 +134,7 @@ test('HUD throttles updates, explains mobile pacing, and exports measured delays
  const before=f.counts().writes;for(let i=0;i<=30;i++)f.frame(i*1000/30);
  assert.ok(f.counts().writes-before<20,'no per-frame DOM updates');assert.match(f.nodes['diagnostic-fps'].textContent,/30 FPS/);
  f.frame(1420);f.frame(1530);assert.equal(f.nodes['frame-diagnostics'].dataset.delayed,'true');
- assert.match(f.nodes['diagnostic-frame'].textContent,/최대 420 ms/);
+ assert.match(f.nodes['diagnostic-frame'].textContent,/p95 110 ms/);assert.match(f.nodes['diagnostic-detail-frame'].textContent,/최대 420 ms/);
  f.diagnostic.suspend();assert.match(f.nodes['diagnostic-detail'].textContent,/측정 대기/);
  await f.nodes['copy-frame-diagnostics'].listeners.click();
  assert.equal(copied.character,'warrior-v3');assert.equal(copied.summary.maxMs,420);assert.deepEqual(copied.recentDelays[0].position,[3,-5]);

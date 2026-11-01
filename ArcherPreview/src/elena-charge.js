@@ -1,7 +1,10 @@
+import {spellContains} from './elena-ground-magic.js';
+
 // Intersect only the portion of the warned rectangle actually crossed this
 // frame. This sweeps over slow frames without hitting the whole route early.
 export function chargeTouchesPlayer(plan,previous,current,player,{playerRadius=.3,reach=.9}={}){
   const shape=plan?.shapes?.[0];if(shape?.kind!=='rect')return false;
+  if(!spellContains(plan,player,{radius:playerRadius}))return false;
   const {origin,direction}=plan,project=p=>(p.x-origin.x)*direction.x+(p.z-origin.z)*direction.z;
   const center=project(shape.center),start=center-shape.halfLength,end=center+shape.halfLength;
   const a=project(previous),b=project(current);

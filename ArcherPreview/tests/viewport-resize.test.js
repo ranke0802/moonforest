@@ -5,7 +5,7 @@ import { isInstalledDisplay } from '../src/app-display.js';
 
 function fixture(t, { width = 393, height = 852, observer = true } = {}) {
   const host = new EventTarget(), doc = new EventTarget(), canvas = { clientWidth: width, clientHeight: height };
-  const frames = new Map(), timers = new Map(), calls = [];
+  const frames = new Map(), timers = new Map(), calls = [],layouts=[];
   let next = 0, resizeObserver;
   host.document = doc;
   host.devicePixelRatio = 3;
@@ -20,12 +20,20 @@ function fixture(t, { width = 393, height = 852, observer = true } = {}) {
     observe(target) { assert.equal(target, canvas); }
     disconnect() { this.disconnected = true; }
   };
-  const dispose = observeViewportSize(canvas, size => calls.push(size), host);
+  const dispose = observeViewportSize(canvas, size => calls.push(size), host,{onLayout:size=>layouts.push(size)});
   t.after(dispose);
   const flush = () => { const pending = [...frames.values()]; frames.clear(); for (const fn of pending) fn(); };
   const settle = () => { const pending = [...timers.values()]; timers.clear(); for (const fn of pending) fn(); flush(); };
-  return { host, doc, canvas, calls, frames, timers, flush, settle, dispose, observer: () => resizeObserver };
+  return { host, doc, canvas, calls,layouts, frames, timers, flush, settle, dispose, observer: () => resizeObserver };
 }
+
+test('same-size landscape reversal refreshes safe-area layout while keeping the GPU backing buffer',t=>{
+ const f=fixture(t,{width:852,height:393});f.flush();
+ f.host.dispatchEvent(new Event('orientationchange'));f.flush();f.settle();
+ assert.equal(f.calls.length,1);assert.ok(f.layouts.length>=2);
+ assert.deepEqual(f.layouts.at(-1),{width:852,height:393,pixelRatio:3});
+ f.dispose();const count=f.layouts.length;f.host.dispatchEvent(new Event('orientationchange'));f.flush();f.settle();assert.equal(f.layouts.length,count);
+});
 
 test('iPhone 14 Pro portrait → landscape sizes the renderer from the full canvas, not the status-bar-reduced visual viewport', t => {
   const f = fixture(t); f.flush();

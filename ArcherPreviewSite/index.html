@@ -12,7 +12,7 @@
     <meta name="description" content="Moonforest 궁수와 전사의 이동 및 공격을 직접 조작하는 3D 플레이그라운드." />
     <title>Moonforest · Character Playground</title>
     <style>html,body{background:#000;margin:0}html[data-loading] #app>:not(#loading){visibility:hidden!important;pointer-events:none!important}#app>#loading{z-index:10000;box-sizing:border-box;width:100%;height:100%;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;color:#e7e7ec;text-align:center;background:#000;border:0;border-radius:0;flex-direction:column;justify-content:center;align-items:center;margin:0;padding:24px;display:flex;position:fixed;inset:0;transform:scale(1)}#app>#loading[hidden]{display:none!important}#loading .loading-track{background:#292930;width:min(280px,75vw);height:3px;margin-top:12px;overflow:hidden}#loading-progress{background:#b8a8db;width:0;height:100%;transition:width .12s linear;display:block}#loading-bytes{font-variant-numeric:tabular-nums;color:#aaa7b3;margin:4px 0;font-size:13px}#loading h2{margin:14px 0 6px;font-size:17px;font-weight:500}#loading-text{color:#96939f;margin:4px 0;font-size:12px}#loading .loading-orbit{display:none}</style>
-    <script type="module" crossorigin src="./assets/index-BrnwWpUB.js"></script>
+    <script type="module" crossorigin src="./assets/index-D4F5qJ9Y.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-DK3Fl9T5.js">
     <link rel="modulepreload" crossorigin href="./assets/babylon~index~animationGroup.pure~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioS~ljbbullm-H-M_hi7F.js">
     <link rel="modulepreload" crossorigin href="./assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~nsgtqo7t-UtxC_Odd.js">
@@ -213,7 +213,7 @@
     <link rel="modulepreload" crossorigin href="./assets/babylon~index~boundingBoxRenderer.fragment~boundingBoxRenderer.vertex-CJNubAdW.js">
     <link rel="modulepreload" crossorigin href="./assets/babylon~index~gaussianSplattingVoxel.fragment~iblVoxelGrid.fragment-DrQZ58oK.js">
     <link rel="modulepreload" crossorigin href="./assets/babylon~index-Cqs0uHiE.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-Cl2O1uO4.css">
+    <link rel="stylesheet" crossorigin href="./assets/index-CHagBkC8.css">
   </head>
   <body>
     <main id="app">
@@ -292,8 +292,14 @@
       </section>
       <div id="stream-loading" hidden data-ui><span id="stream-bytes"></span><div><i id="stream-progress"></i></div></div>
       <aside id="frame-diagnostics" class="frame-diagnostics" aria-label="프레임 진단" aria-live="off" hidden>
-        <button id="diagnostic-expand" type="button" aria-expanded="false">자세히</button>
+        <button id="diagnostic-expand" type="button" aria-expanded="false" aria-haspopup="dialog" aria-controls="diagnostic-detail-dialog">자세히</button>
         <strong id="diagnostic-fps">— FPS</strong><span id="diagnostic-frame">프레임 — ms · 최대 — ms</span>
+      </aside>
+      <dialog id="diagnostic-detail-dialog" class="motion-speed-dialog diagnostic-detail-dialog" aria-labelledby="diagnostic-detail-title" data-ui>
+        <header><h2 id="diagnostic-detail-title">성능 진단 · 일시정지</h2><button id="diagnostic-fullscreen" type="button" aria-label="전체화면 전환">전체화면</button><button id="close-diagnostic-detail" type="button" aria-label="진단 닫기">×</button></header>
+        <div class="diagnostic-detail-body">
+        <p>전투를 잠시 멈추고 직전 기록을 봅니다. 소환 비교는 완료된 측정 구간이며 현재 프레임과 다릅니다.</p>
+        <span id="diagnostic-detail-frame">최근 10초 기록 대기</span>
         <span id="diagnostic-render">드로콜 — · 화면 CPU — ms</span>
         <span id="diagnostic-gpu">GPU 측정 대기</span>
         <details id="diagnostic-boss-comparison" class="diagnostic-boss-comparison">
@@ -315,7 +321,11 @@
         <span id="diagnostic-memory">JS 메모리 —</span>
         <small id="diagnostic-textures">배경 고해상도 텍스처 추정 —</small>
         </div>
-      </aside>
+        </div>
+        <footer><button id="diagnostic-detail-copy" type="button">기록 복사</button><button id="diagnostic-detail-done" type="button">닫고 계속하기</button></footer>
+        <span id="diagnostic-detail-status" role="status"></span>
+        <textarea id="diagnostic-detail-export" readonly hidden aria-label="복사할 상세 진단 기록"></textarea>
+      </dialog>
 
       <div id="joystick-hint" class="joystick-hint" aria-hidden="true"><div class="joystick-ghost"><span></span></div><span>드래그하여 이동</span></div>
       <div id="joystick" class="joystick" hidden aria-hidden="true"><div class="joystick-rim"></div><div id="joystick-knob" class="joystick-knob"></div></div>

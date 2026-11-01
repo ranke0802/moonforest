@@ -1,4 +1,5 @@
 import { Matrix, Vector3 } from '@babylonjs/core';
+import {primaryHealthBoss} from './combat-readability.js';
 
 // CSS coordinates, independent of render resolution / device pixel ratio.
 export function projectBossHealth(scene,position,width,height){
@@ -7,8 +8,11 @@ export function projectBossHealth(scene,position,width,height){
   return {x:p.x*width/renderWidth,y:p.y*height/renderHeight,visible:p.z>=0&&p.z<=1&&p.x>=0&&p.x<=renderWidth&&p.y>=0&&p.y<=renderHeight};
 }
 
-export function updateBossHealthPosition(scene,encounter,element,projection){
+export function updateBossHealthPosition(scene,encounter,element,projection,{fixed=false}={}){
   if(!encounter?.active||encounter.corpseGone||encounter.renderVisible===false||encounter.fogVisible===false){element.hidden=true;return;}
+  if(element.dataset)element.dataset.hud=fixed?'fixed':'world';
+  if(fixed){element.hidden=false;element.style.left='';element.style.top='';element.style.transform='translateX(-50%)';return;}
+  element.style.left='0';element.style.top='0';
   const canvas=projection?null:scene.getEngine().getRenderingCanvas();
   const position=encounter.healthBarPosition?.()??encounter.actor.position;
   const p=projection?projection.project(position):projectBossHealth(scene,position,canvas.clientWidth,canvas.clientHeight);
@@ -19,7 +23,8 @@ export function updateBossHealthPosition(scene,encounter,element,projection){
 
 export class BossHealthBars {
   constructor(template) { this.template = template; this.items = new Map(); }
-  update(scene, encounters, projection) {
+  update(scene, encounters, projection, {playerPosition}={}) {
+    const primary=primaryHealthBoss(encounters,playerPosition??scene.activeCamera?.target,this.primaryId);this.primaryId=primary?.id;
     const visible = new Set();
     for (const boss of encounters) {
       if (!boss.active||boss.corpseGone) continue;
@@ -44,13 +49,16 @@ export class BossHealthBars {
       if (item.snapshot !== snapshot) {
         item.snapshot = snapshot;
         item.progress.max = boss.brain.maxHp; item.progress.value = boss.brain.hp;
-        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp} / ${boss.brain.maxHp}`;
+        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp<=0?(boss.kind==='elena'&&boss.phase===1?'광폭화 · ':'격파 · '):''}${boss.brain.hp} / ${boss.brain.maxHp}`;
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }
-      updateBossHealthPosition(scene, boss, item.element, projection);
+      updateBossHealthPosition(scene, boss, item.element, projection,{fixed:boss===primary});
     }
-    for (const [id, item] of this.items) if (!visible.has(id)) item.element.hidden = true;
+    for (const [id, item] of this.items) if (!visible.has(id)) {
+      item.element.hidden = true;
+      if(!encounters.some(boss=>boss.id===id)){if(item.element!==this.template)item.element.remove();this.items.delete(id);}
+    }
     if (!visible.size) this.template.hidden = true;
   }
 }

@@ -1,4 +1,5 @@
 import {Color3,Geometry,Mesh,StandardMaterial,VertexBuffer} from '@babylonjs/core';
+import {clipGroundSpellSurface,groundSurfaceContains} from './elena-ground-surface.js';
 
 export const ELENA_GROUND_PATTERNS=Object.freeze(['corridor','fan','ring','cross','cluster']);
 export const ELENA_GROUND_MAX_RANGE=14;
@@ -8,7 +9,7 @@ const TAU=Math.PI*2,EPS=1e-8,STEP=.7,RIM_WIDTH=.085;
 const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
 const finite=(n,fallback)=>Number.isFinite(n)?n:fallback;
 const point=(p,fallback={x:0,y:0,z:0})=>({x:finite(p?.x,fallback.x),y:finite(p?.y,fallback.y),z:finite(p?.z,fallback.z)});
-const freeze=value=>{for(const child of Object.values(value))if(child&&typeof child==='object')freeze(child);return Object.freeze(value);};
+const freeze=value=>{if(Object.isFrozen(value))return value;if(!Array.isArray(value)||typeof value[0]==='object')for(const child of Object.values(value))if(child&&typeof child==='object')freeze(child);return Object.freeze(value);};
 function offset(center,direction,along,across=0){return {x:center.x+direction.x*along+direction.z*across,y:center.y,z:center.z+direction.z*along-direction.x*across};}
 function limitPoint(origin,p,distance){const dx=p.x-origin.x,dz=p.z-origin.z,length=Math.hypot(dx,dz),s=Math.min(1,distance/Math.max(EPS,length));return {x:origin.x+dx*s,y:origin.y,z:origin.z+dz*s};}
 
@@ -42,8 +43,7 @@ export function makeSpellPlan(pattern,origin,target,options={}){
 }
 
 function rectangleDistanceSquared(x,z,halfWidth,halfLength){return Math.max(0,Math.abs(x)-halfWidth)**2+Math.max(0,Math.abs(z)-halfLength)**2;}
-/** Disc/footprint overlap in XZ, including the player's body radius at visible edges. */
-export function spellContains(plan,position,{radius=.3}={}){
+function analyticalContains(plan,position,radius){
   if(!plan||!Number.isFinite(position?.x)||!Number.isFinite(position?.z))return false;
   radius=Math.max(0,finite(radius,.3));
   for(const shape of plan.shapes){
@@ -63,6 +63,12 @@ export function spellContains(plan,position,{radius=.3}={}){
     }
   }
   return false;
+}
+
+/** Original footprint AND its locked supported floor, including body edges. */
+export function spellContains(plan,position,{radius=.3}={}){
+  radius=Math.max(0,finite(radius,.3));
+  return analyticalContains(plan,position,radius)&&groundSurfaceContains(plan.surface,position,radius);
 }
 
 function geometry(){return {positions:[],normals:[],indices:[]};}
@@ -100,6 +106,7 @@ function polygon(shape,coordinates){return coordinates.map(([x,z])=>offset(shape
 
 /** Build only at aim time; both meshes derive from the same shapes used by spellContains. */
 export function buildGroundSpellGeometry(plan,terrain){
+  if(plan.ground)return plan.ground;
   const fill=geometry(),rim=geometry();
   for(const shape of plan.shapes){
     if(shape.kind==='rect'||shape.kind==='cross'){
@@ -129,7 +136,7 @@ export function buildGroundSpellGeometry(plan,terrain){
 function material(scene,name,color){
   const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.specularColor=Color3.Black();m.disableDepthWrite=true;m.backFaceCulling=false;return m;
 }
-function matches(geometry,data){return geometry.getTotalVertices()*3===data.positions.length&&geometry.getIndices().length===data.indices.length&&geometry.getIndices().every((index,i)=>index===data.indices[i]);}
+function matches(geometry,data){const indices=geometry.getIndices()??[];return geometry.getTotalVertices()*3===data.positions.length&&indices.length===data.indices.length&&indices.every((index,i)=>index===data.indices[i]);}
 function makeGeometry(mesh,data){
   const geometry=new Geometry(mesh.name+'-'+mesh.getScene().getUniqueId(),mesh.getScene());
   geometry.setVerticesData(VertexBuffer.PositionKind,data.positions,true);
@@ -157,7 +164,8 @@ export class GroundSpellTelegraph {
   aim(serial,pattern,origin,target,options={}){
     if(this.disposed)return null;
     if(this.plan&&this.serial===serial)return this.plan;
-    const plan=makeSpellPlan(pattern,origin,target,options),data=buildGroundSpellGeometry(plan,this.world.terrain);
+    const footprint=makeSpellPlan(pattern,origin,target,options),clipped=clipGroundSpellSurface(footprint,buildGroundSpellGeometry(footprint,this.world.terrain),this.world.terrain,this.world.navigation);
+    const {data}=clipped,plan=freeze({...footprint,surface:clipped.surface,ground:data,floorStats:clipped.stats});
     let entry=this.topologies.find(e=>matches(e.fill,data.fill)&&matches(e.rim,data.rim));
     if(entry){this.cacheHits++;this.topologies.splice(this.topologies.indexOf(entry),1);}
     else{this.cacheMisses++;entry={fill:makeGeometry(this.mesh,data.fill),rim:makeGeometry(this.rim,data.rim)};}
@@ -168,7 +176,7 @@ export class GroundSpellTelegraph {
   }
   show(elapsed,impactTime,{flash=false}={}){
     if(this.disposed)return;
-    const visible=!!this.plan&&Number.isFinite(elapsed)&&Number.isFinite(impactTime)&&elapsed>=0&&(flash||elapsed<=impactTime+ELENA_GROUND_FLASH_TIME);
+    const visible=!!this.plan&&this.plan.ground.fill.indices.length>0&&Number.isFinite(elapsed)&&Number.isFinite(impactTime)&&elapsed>=0&&(flash||elapsed<=impactTime+ELENA_GROUND_FLASH_TIME);
     this.mesh.setEnabled(visible);this.rim.setEnabled(visible);if(!visible)return;
     const active=flash||elapsed>=impactTime,progress=clamp(elapsed/Math.max(.001,impactTime),0,1);
     this.material.alpha=active?.48:.11+.15*progress;this.rimMaterial.alpha=active?1:.65+.3*progress;
