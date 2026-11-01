@@ -1,0 +1,389 @@
+{
+  "date": "2026-11-01",
+  "baselineHead": "ff86a79ca96aae193a9f094eb983517dc34a6df7",
+  "status": "implemented, focused-tested and source-locked; parent owns build/deploy",
+  "scope": "Actual CPU terrain/cover/roof submission and static149 placement bounds. Imported environment meshes/characters are not present in the submission fixture. This is not a complete shipped-frame draw count, GPU timer, phone FPS, screenshot or thermal measurement.",
+  "ownedChanges": [
+    "src/cave-fog-runtime.js",
+    "tests/cave-cover-distance.test.js"
+  ],
+  "rootOwnedDependencies": [
+    "src/cave-fog-cover.js: constant dark memory and22→48m final exact-clear cover blend",
+    "src/witch-cave-atmosphere.js: roof/water/falls finish at the same exact-clear RGB after all shading",
+    "root cave palette/static lamp illumination work is separate"
+  ],
+  "sourceHashes": [
+    {
+      "path": "src/cave-fog-runtime.js",
+      "sha256": "cf0412c63ca41c623f65cca5db476522638a922ba9c25eb9f197a9f9fbf53304"
+    },
+    {
+      "path": "tests/cave-cover-distance.test.js",
+      "sha256": "cac35d775fb7abd3fac68e358383dc8c5e862fdbc1fc0c5b59ef764e2d99cb6b"
+    },
+    {
+      "path": "src/cave-fog-cover.js",
+      "sha256": "1097bf766e4529c516ebc2c878c627be680057cc7a6db510042ac6cdfaef3fc1"
+    },
+    {
+      "path": "src/witch-cave-atmosphere.js",
+      "sha256": "b42a8b6921b04058ea38dd490f4eff36f6fff0e7e4de0301538ce0c4a073584f"
+    }
+  ],
+  "initialAudit": {
+    "terrain": {
+      "patches": 36,
+      "originalTriangles": 73728,
+      "shellTriangles": 10080,
+      "roofTriangles": 1600
+    },
+    "observations": [
+      "Existing FoW disables fully hidden records before base/LOD/ink/shadow submission; actual placement bounds hide120~127 of149 records at these five anchors.",
+      "Detail and cover decisions are mutually exclusive per one of36 terrain patches. Actual20-view submission audit had0 overlapping detail/cover patches.",
+      "A26.7m patch can retain2048 detailed triangles with very few visible1m fog cells, including a deliberate1m conservative padding. Reducing that guard or subdividing patches is not part of this change.",
+      "The closed1600-triangle global roof intersects visibility/frustum bounds and stays submitted. Its visible opaque surface must not be removed by a player-FoW-only rule."
+    ],
+    "rejectedOcclusionCone": {
+      "result": [
+        {
+          "budget": 8,
+          "cases": 20,
+          "totalBeforeDraws": 195,
+          "totalAfterDraws": 195,
+          "totalSkippedTriangles": 0,
+          "casesWithSavings": 0,
+          "maxNodeCpuMs": 0.6539999999999964,
+          "meanNodeCpuMs": 0.22470499999999446
+        },
+        {
+          "budget": "all",
+          "cases": 20,
+          "totalBeforeDraws": 195,
+          "totalAfterDraws": 195,
+          "totalSkippedTriangles": 0,
+          "casesWithSavings": 0,
+          "maxNodeCpuMs": 28.94380000000001,
+          "meanNodeCpuMs": 7.170595000000003
+        }
+      ],
+      "decision": "Rejected. Even checking all actual opaque cover triangle shadow cones saved0 of195 cover draws across20 views, while adding up to28.94ms Node work. No such candidate search was added to runtime."
+    }
+  },
+  "adoptedMethod": {
+    "name": "Fully distance-fogged cover omission only",
+    "geometry": "Keep existing36 chunks, original visible terrain buffers, sparse shell indices and all roof geometry. No dynamic index reconstruction, patch subdivision, external asset or black moving hemisphere.",
+    "thresholds": {
+      "fogStartsMetres": 22,
+      "exactClearFromMetres": 48,
+      "hideNearestAabbMetres": 54,
+      "showAgainNearestAabbMetres": 50,
+      "clearRGB": [
+        0.024,
+        0.028,
+        0.038
+      ]
+    },
+    "eye": "Current rendered camera.getViewMatrix/globalPosition; source patch AABB encloses every sparse cover vertex and is conservative.",
+    "eligibility": "Fog must be ready, eye finite, playerView valid, camera/playerView3D distance<=24m. A requested orbit radius>24m, including82m, also fails open even when the physical guard temporarily pulls the eye closer.",
+    "safetyProof": [
+      "AABB nearest distance>=54 implies every fragment in that whole cover patch is already beyond the48m exact-clear boundary. Centre distance is never used.",
+      "The render and frustum gates both omit only cover. Detail patches and roof are untouched;0~48m AABBs always render from either hysteresis state.",
+      "Environment/ground final output is blended after other fog/paint/image processing to raw RGB(.024,.028,.038). Fully hidden fragment memory has the same constant RGB, and roof/water/falls finish at the same value.",
+      "Camera distance<=24 plus the player24m visible field keeps visible content in the nearby domain. The54m reserve covers fog-grid interpolation. Outside that view envelope the gate fails open to keep original depth/character occlusion.",
+      "Player/boss materials receive caveFogEnvironment0, so their visible brightness and toon paint do not receive this new environment distance blend. Existing FoW behavior remains."
+    ],
+    "cost": "Per moving eye at most36 squared point/AABB checks; exact-eye cache avoids repeating them while stationary. No raycasts, GPU occlusion queries, timers, readback, extra render pass, texture or buffer upload."
+  },
+  "publicAndDiagnosticApi": {
+    "constructor": "CaveFogRuntime(world,{coverDistanceCulling:true}) default; false is used for controlled A/B verification.",
+    "helpers": [
+      "CAVE_COVER_HIDE_DISTANCE=54",
+      "CAVE_COVER_SHOW_DISTANCE=50",
+      "distantCoverHidden(previous,min,max,eye)"
+    ],
+    "materialUniform": "caveFogEnvironment, updated through existing hardBindForSubMesh. No direct pending Effect write was introduced.",
+    "inspectFields": [
+      "distanceHiddenCoverPatches",
+      "coverDistanceCulling",
+      "coverDistanceEligible",
+      "coverHideDistance",
+      "coverShowDistance"
+    ],
+    "note": "distanceHiddenCoverPatches counts eligible selected patches, not necessarily draws saved: frustum rejection is separate. Saved draws below come from actual process-rendering hooks."
+  },
+  "measuredSubmissionComparison": {
+    "anchors": [
+      [
+        "entry",
+        -42,
+        43
+      ],
+      [
+        "refuge",
+        -30,
+        19
+      ],
+      [
+        "laboratory",
+        -35,
+        -18
+      ],
+      [
+        "boss",
+        29,
+        -30
+      ],
+      [
+        "resurrection",
+        29,
+        -39.5
+      ]
+    ],
+    "directions": 4,
+    "requestedRadius": 13,
+    "before": {
+      "cases": 20,
+      "coverDraws": 195,
+      "coverTriangles": 54600,
+      "detailDraws": 86,
+      "detailTriangles": 176128,
+      "roofDraws": 20,
+      "roofTriangles": 32000,
+      "totalMeasuredDraws": 301,
+      "totalMeasuredTriangles": 262728
+    },
+    "after": {
+      "cases": 20,
+      "coverDraws": 86,
+      "coverTriangles": 24080,
+      "detailDraws": 86,
+      "detailTriangles": 176128,
+      "roofDraws": 20,
+      "roofTriangles": 32000,
+      "totalMeasuredDraws": 192,
+      "totalMeasuredTriangles": 232208
+    },
+    "savedCoverDraws": 109,
+    "savedCoverTriangles": 30520,
+    "coverDrawReductionPercent": 55.8974358974359,
+    "measuredTerrainCoverRoofDrawReductionPercent": 36.21262458471761,
+    "measuredTerrainCoverRoofTriangleReductionPercent": 11.616576839925708,
+    "pairs": [
+      {
+        "zone": "entry",
+        "alpha": 0,
+        "coverDrawsBefore": 3,
+        "coverDrawsAfter": 3,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "entry",
+        "alpha": 1.5707963267948966,
+        "coverDrawsBefore": 15,
+        "coverDrawsAfter": 4,
+        "savedDraws": 11,
+        "savedTriangles": 3080
+      },
+      {
+        "zone": "entry",
+        "alpha": 3.141592653589793,
+        "coverDrawsBefore": 16,
+        "coverDrawsAfter": 6,
+        "savedDraws": 10,
+        "savedTriangles": 2800
+      },
+      {
+        "zone": "entry",
+        "alpha": 4.71238898038469,
+        "coverDrawsBefore": 3,
+        "coverDrawsAfter": 3,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "refuge",
+        "alpha": 0,
+        "coverDrawsBefore": 4,
+        "coverDrawsAfter": 4,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "refuge",
+        "alpha": 1.5707963267948966,
+        "coverDrawsBefore": 12,
+        "coverDrawsAfter": 2,
+        "savedDraws": 10,
+        "savedTriangles": 2800
+      },
+      {
+        "zone": "refuge",
+        "alpha": 3.141592653589793,
+        "coverDrawsBefore": 15,
+        "coverDrawsAfter": 4,
+        "savedDraws": 11,
+        "savedTriangles": 3080
+      },
+      {
+        "zone": "refuge",
+        "alpha": 4.71238898038469,
+        "coverDrawsBefore": 6,
+        "coverDrawsAfter": 5,
+        "savedDraws": 1,
+        "savedTriangles": 280
+      },
+      {
+        "zone": "laboratory",
+        "alpha": 0,
+        "coverDrawsBefore": 4,
+        "coverDrawsAfter": 4,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "laboratory",
+        "alpha": 1.5707963267948966,
+        "coverDrawsBefore": 5,
+        "coverDrawsAfter": 4,
+        "savedDraws": 1,
+        "savedTriangles": 280
+      },
+      {
+        "zone": "laboratory",
+        "alpha": 3.141592653589793,
+        "coverDrawsBefore": 16,
+        "coverDrawsAfter": 3,
+        "savedDraws": 13,
+        "savedTriangles": 3640
+      },
+      {
+        "zone": "laboratory",
+        "alpha": 4.71238898038469,
+        "coverDrawsBefore": 12,
+        "coverDrawsAfter": 3,
+        "savedDraws": 9,
+        "savedTriangles": 2520
+      },
+      {
+        "zone": "boss",
+        "alpha": 0,
+        "coverDrawsBefore": 16,
+        "coverDrawsAfter": 6,
+        "savedDraws": 10,
+        "savedTriangles": 2800
+      },
+      {
+        "zone": "boss",
+        "alpha": 1.5707963267948966,
+        "coverDrawsBefore": 4,
+        "coverDrawsAfter": 4,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "boss",
+        "alpha": 3.141592653589793,
+        "coverDrawsBefore": 6,
+        "coverDrawsAfter": 6,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "boss",
+        "alpha": 4.71238898038469,
+        "coverDrawsBefore": 17,
+        "coverDrawsAfter": 6,
+        "savedDraws": 11,
+        "savedTriangles": 3080
+      },
+      {
+        "zone": "resurrection",
+        "alpha": 0,
+        "coverDrawsBefore": 15,
+        "coverDrawsAfter": 4,
+        "savedDraws": 11,
+        "savedTriangles": 3080
+      },
+      {
+        "zone": "resurrection",
+        "alpha": 1.5707963267948966,
+        "coverDrawsBefore": 4,
+        "coverDrawsAfter": 4,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "resurrection",
+        "alpha": 3.141592653589793,
+        "coverDrawsBefore": 5,
+        "coverDrawsAfter": 5,
+        "savedDraws": 0,
+        "savedTriangles": 0
+      },
+      {
+        "zone": "resurrection",
+        "alpha": 4.71238898038469,
+        "coverDrawsBefore": 17,
+        "coverDrawsAfter": 6,
+        "savedDraws": 11,
+        "savedTriangles": 3080
+      }
+    ],
+    "limits": "The20 poses have actual geometry and frustum submission hooks but no imported prop/character geometry. Do not extrapolate these percentages to total game draw calls, GPU cost, FPS, download size or memory.",
+    "fixtureNote": "NullEngine cannot complete real RawTexture uploads. Only fog/fallback/static-paint fixture textures are marked ready before comparison; no production readiness bypass exists."
+  },
+  "cpuMeasurement": {
+    "scope": "Isolated Node updateCoverDistance, includes cached/current camera.getViewMatrix; not a complete frame or handset benchmark.",
+    "cachedEye": {
+      "samples": 2000,
+      "meanMs": 0.0006148500000008425,
+      "p95Ms": 0.0008000000000265572,
+      "maxMs": 0.0181999999999789
+    },
+    "movingEye": {
+      "samples": 2000,
+      "meanMs": 0.001992550000000847,
+      "p95Ms": 0.005400000000008731,
+      "maxMs": 0.10259999999993852
+    }
+  },
+  "tests": {
+    "command": "& 'C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe' --test tests/cave-cover-distance.test.js tests/cave-fog-runtime.test.js tests/cave-fog-of-war.test.js tests/pending-shader-uniforms.test.js",
+    "tests": 41,
+    "passed": 41,
+    "failed": 0,
+    "log": "tests.log",
+    "coverage": [
+      "0~48m always retained from both states; exact54/50 boundary and50~54 hysteresis",
+      "Closest full3D AABB and near-corner counterexamples to centre-distance culling",
+      "Render/frustum gates preserve detail and retain identical geometry/index/vertex references through400 camera changes",
+      "Unready/non-finite view fails open; eye/player distance>24 and requested82 retain depth while user beta/radius survive",
+      "Player/boss environment flag0; ground/painted environment1; final exact-clear shader contracts",
+      "FoW memory/teleport/late LOD/ink/shadow and pooled map lifecycle",
+      "Original iOS pending uniform-table error reproducer, safe queued bindings and eight map round trips"
+    ]
+  },
+  "preserved": [
+    "Player8K and background<=4K",
+    "Existing model LODs and material quality",
+    "Existing combat/telegraph/release clocks",
+    "Original terrain heights/indices, navigation, portals and boss clearance",
+    "No rejected laboratory-shell connection"
+  ],
+  "caveats": [
+    "No GPU or handset frame/heat reduction is guaranteed. Human device review must check dark silhouettes, lamp areas and far transition under both portrait/landscape/fullscreen.",
+    "GPU buffers/textures are retained; this saves far submissions, not download bytes or a claimed large memory amount.",
+    "The source-contract proof depends on all global opaque far paths retaining exact final-clear output. Future shader changes must keep this contract or disable coverDistanceCulling."
+  ],
+  "browserAutomationUsed": false,
+  "newAssetsGenerated": false,
+  "buildPerformed": false,
+  "deployPerformed": false,
+  "evidence": [
+    "submissions.json",
+    "occlusion-feasibility.json",
+    "submissions-distance.json",
+    "tests.log"
+  ]
+}

@@ -14,10 +14,9 @@ vec2 caveFogState(vec3 p){
   return texture2D(caveFogMap,uv).rg;
 }
 vec3 caveFogMemoryColor(vec3 p,float explored){
-  // Unseen space reads as solid cave rock, not black painted void. Its actual
-  // rooms/props remain unsubmitted; explored memory is only slightly lighter.
-  float strata=.5+.5*sin(p.x*.51+p.y*.92+sin(p.z*.27))*sin(p.z*.43-p.y*.37);
-  return mix(vec3(.27,.235,.245),vec3(.36,.30,.28),strata*.45)*mix(.87,1.,smoothstep(.05,.95,explored));
+  // Low-detail darkness belongs to the real occluding surface, not a moving
+  // black hemisphere. No repeated rock atlas or pattern is drawn in memory.
+  return vec3(.024,.028,.038);
 }
 vec3 caveFogShade(vec3 base,vec3 p){
   if(caveFogActive<.5)return base;
@@ -65,5 +64,7 @@ void main(){
   // The unknown-space enclosure stays closed, even when a local visible rock
   // is cut around the player. Never expose the backs of unsubmitted rooms.
   vec2 state=caveFogState(fogWorldPosition);
-  gl_FragColor=vec4(caveRockShade(fogWorldPosition,fogWorldNormal,state.y),1.);
+  vec3 rock=caveRockShade(fogWorldPosition,fogWorldNormal,state.y);
+  float haze=smoothstep(22.,48.,length(fogWorldPosition-caveEye));
+  gl_FragColor=vec4(mix(rock,vec3(.024,.028,.038),haze),1.);
 }`;

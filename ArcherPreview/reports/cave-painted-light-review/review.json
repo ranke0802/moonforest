@@ -1,0 +1,96 @@
+{
+  "review": "정적 동굴 명암 런타임 통합 독립 검토",
+  "date": "2026-11-01",
+  "sourceModified": false,
+  "browserAutomation": false,
+  "physicalGpuMeasured": false,
+  "blockingRuntimeBugsFound": [],
+  "result": "후속 안개 분리 변경을1회 재검토·probe 재실행했다. 환경/바닥은 기본엔진FOG를 끄고 퇴장 시 원래값을 복구하며 캐릭터는 기존fogColor(.24,.23,.28)와기본FOG를유지한다. R01은해소됐다. 새크래시·폐기uniform접근·맵왕복자원누수의차단급재현은없었다.",
+  "followUpRecheck": {"runs":1,"runtimeSourceModified":false,"uboModes":[false,true],"totalRoundTrips":20,"environmentFogDisabledOnlyInCave":true,"environmentOriginalFogRestoredOnExit":true,"characterOriginalFogColorPreserved":[0.24,0.23,0.28],"newIssues":[]},
+  "inspected": [
+    "src/cave-painted-light-runtime.js",
+    "src/witch-cave-surfaces.js",
+    "src/witch-cave-atmosphere.js",
+    "src/cave-rock-palette.js",
+    "src/cave-rock-shell.js",
+    "src/cave-fog-runtime.js",
+    "src/cave-fog-cover.js",
+    "src/cave-fog-binding.js",
+    "src/village-toon.js",
+    "src/monster-toon.js",
+    "src/elena-style.js",
+    "src/world.js"
+  ],
+  "probe": {
+    "script": "probe.mjs",
+    "results": "probe-results.json",
+    "method": "기존 createWorld/replaceWorldMap과 실제 Babylon9.31 WebGL2 shader processor를 NullEngine에서 사용. 환경/PBR캐릭터 테스트 geometry로 shader·수명 경계를 검사. 실제 브라우저나 GPU 드라이버는 실행하지 않음.",
+    "uboModes": [false, true],
+    "roundTripsPerMode": 10,
+    "ticksWithoutStaticMapUpdate": 600,
+    "pendingAndDisposedEffectDirectWrites": 0,
+    "countsStablePerMode": {"textures":7,"materials":14,"meshes":55,"geometries":16,"lights":3,"beforeRenderObservers":2,"sceneDisposeObservers":5},
+    "afterEngineDispose": "scene.metadata.cavePaintLighting=null, scene.textures.length=0",
+    "payloadBytes": 65536,
+    "cache": "CPU map1개,65536byte payload,scene/GPU객체참조0"
+  },
+  "confirmedSafe": [
+    {
+      "area": "자원 생성/수명",
+      "finding": "CavePaintLightRuntime은 configureCaveAtmosphere에서 진입마다1개 생성되고 기존 분위기 dispose가 먼저 실행된다. 생성 뒤 tick/render 중 texture.update가 호출되지 않으며, 맵 이탈·scene폐기에서 texture와metadata가 정리된다. roof/water/glow의 material도 함께 폐기된다.",
+      "evidence": "UBO양쪽10회왕복 후 materials까지 포함한 resource/observer 수 일정;600tick 추가업로드0."
+    },
+    {
+      "area": "UBO/비UBO 및 pending Effect",
+      "finding": "PBR/Standard plugin은 hardBindForSubMesh에서현재runtime을조회하고 sampler와active를갱신한다. ShaderMaterial 경로는 material에 값을 queue하되 readyShaderEffect가통과한 실제Effect에만직접쓴다. pending/_isDisposed Effect는직접setter접근0이었다.",
+      "evidence": "실제 shader processor에서 UBO사용false/true 각각컴파일;pending/disposed setter가throw하는probe가통과."
+    },
+    {
+      "area": "폐기/활성화 경계",
+      "finding": "runtime폐기 후 retained환경material은active0과scene공용1pxfallback을바인드한다. 다음동굴진입에서는newruntime의새map으로재바인드한다. synchronousmap전환중Promise가중간bind에끼어들지않고,바인더가매번metadata에서현재owner를읽는다.",
+      "evidence": "runtime.dispose→bindCavePaintLight(pendingEffect)와맵왕복/retainedPBR재렌더가오류없이통과."
+    },
+    {
+      "area": "색공간/높이",
+      "finding": "RawTexture는RGBA8/noMips/invertYfalse/bilinear/clamp/gammaSpacefalse/hasAlphafalse이다. shader의floor=-8+alpha*32,1-.76*smoothstep(1.25,8,max(0,y-floor))는CPU sample계약과같다. PBR/바닥은imageprocessing전linear색에factor를곱한다.",
+      "qualification": "roof는customshader에서gamma변환하고물은sqrt(factor)로표현을완화한다. 따라서CPU.rgb가모든재질의최종화면RGB와같다는의미는아니다."
+    },
+    {
+      "area": "환경 한정 적용",
+      "finding": "caveSurfaceStyle은floor와villageToon표식이있는환경material에만paintplugin을붙인다. 실제monster-toon/elena-style 경로로준비한캐릭터material에는CavePaintLight가없고기존metadata밝기값도바뀌지않았다.",
+      "qualification": "후속probe에서캐릭터의기본FOG와기존fogColor(.24,.23,.28)가보존되고환경만별도dark-air수렴을사용함을확인했다."
+    },
+    {
+      "area": "그림자/LOD/원본 자료",
+      "finding": "기존VillageToon의aggShadow/villageShadow와ground shadow term은유지되고명암factor가뒤에서곱해진다. 새로운light/shadowmap/pass는없다. 환경albedoTexture와geometry객체가유지되며4K/8K자료나LOD메시를재작성하는경로가없다.",
+      "qualification": "75% broad palette 혼합은의도된최종색/디테일억제이며원래texture파일이바뀌지않는다는말과구분해야한다. 명암map추가1샘플의실제GPU비용은미측정이다."
+    },
+    {
+      "area": "맵 이동/카메라/상태",
+      "finding": "명암module은scene/camera/actor/HP/장비/포탈방향을소유하지않는다. replaceWorldMap의기존동일scene·camera·terrain정체성을사용하며map별runtime만교체한다. 이번검토에서maproute상태변경경로는없었다."
+    }
+  ],
+  "policyDiscrepancies": [],
+  "resolvedFindings": [
+    {
+      "id": "R01",
+      "status": "resolved",
+      "severity": "해소된 원거리 캐릭터 안개색 차이",
+      "observation": "테스트 캐릭터material은fogEnabled=true,#defineFOG와CalcFogFactor가실제컴파일결과에포함된다. scene.fogColor는새로운(.024,.028,.038)이다. 그래서22~48m의기본엔진안개구간에서는플레이어/보스도더어두운안개색쪽으로수렴한다.",
+      "source": "src/witch-cave-atmosphere.js:124-128; Babylon pbr.fragment.js fogFragment; src/monster-toon.js",
+      "interpretation": "위observation은수정전근거다. 부모가scene.fogColor를기존값으로복원하고환경material의원래fogEnabled를저장/복원하도록수정했다. 최신probe는environment/ground의#defineFOG없음,캐릭터#defineFOG있음과기존색유지,10회왕복각UBO모드에서환경fogfalse→원래true→false복귀를확인했다.",
+      "sourceFixApplied": false
+    }
+  ],
+  "knownApproximation": [
+    "lightfield는2.5D정적연출이며실시간광원/그림자가아니다.",
+    "수신표면끝0.8m허용과1.125m보간을합친근접번짐상한1.925m이며,첫벽뒤2m이상/다른방원거리LOS차단은별도pure테스트가통과했다.",
+    "높은지형어깨의단일floor높이근사때문에그XZ의낮은벽표면은끝LOS보완후에도어두울수있다. 추가반경/명도변주는하지않았다.",
+    "64KiB는texelpayload다.드라이버전체GPU할당·온도·프레임개선율을측정한것이아니다."
+  ],
+  "verificationLimits": [
+    "NullEngine의UBO사용과shaderprocessor검증은실제iPhone/S23의GPU컴파일·래스터출력검증이아니다.",
+    "전체원본8K/KTX2자료decode/upload를이probe에서실행하지않았다. 원본객체참조와source경로불변을확인한것이다.",
+    "실제원화톤·첫벽명암·카메라/장판가독성의최종승인은별도오프라인렌더와사용자실기기검수가필요하다."
+  ]
+}

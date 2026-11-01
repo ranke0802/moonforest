@@ -13,10 +13,15 @@ import {applyVillageToon} from '../src/village-toon.js';
 import {VillageGroundShade} from '../src/village-toon.js';
 import {WebGL2ShaderProcessor} from '@babylonjs/core/Engines/WebGL/webGL2ShaderProcessors.js';
 
-for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test(`cave tint composes after toon/shadows with WebGL ${webgl}, UBO ${ubo}`,async()=>{
+// NullEngine never finishes GPU uploads. Explicitly complete only the static
+// fixture textures so forceCompilation can inspect the generated source.
+function readyCaveTextures(world){for(const t of [world.caveFog?.texture,world.scene.metadata?.cavePaintLighting?.texture])if(t?.getInternalTexture())t.getInternalTexture().isReady=true;}
+
+for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test(`static cave illumination composes after toon/shadows with WebGL ${webgl}, UBO ${ubo}`,async()=>{
  const engine=new NullEngine();
  if(webgl===2){engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=!ubo;}
  const world=createWorld(engine,{cave:true,touchDevice:true});
+ readyCaveTextures(world);
  try{
   const rock=MeshBuilder.CreateBox('shader-rock',{},world.scene);rock.material=new PBRMaterial('rock',world.scene);
   applyVillageToon([rock],world.lighting);new VillageGroundShade(world.floorMaterial,world.lighting);world.scene.render();
@@ -25,10 +30,11 @@ for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test(`cave tint composes 
    const effect=mesh.subMeshes.find(sub=>sub.effect)?.effect;assert.ok(effect,'visible cave surface has a prepared shader');
    const source=effect.fragmentSourceCode;
    assert.equal((source.match(/(?:uniform\s+)?float caveMoodActive;/g)??[]).length,1,'exactly one declaration in either UBO mode');
-   assert.match(source,/if\(caveMoodActive>\.5\)/);
+   assert.match(source,/if\(caveMoodActive>\.5(?:&&caveRockTone>\.5)?\)/);
    const shadow=source.indexOf(mesh===rock?'finalDiffuse = surfaceAlbedo':'color.rgb *= mix(0.60');
-   const tint=source.indexOf(mesh===rock?'finalDiffuse *= caveTint':'color.rgb *= caveTint');
-   assert.ok(shadow>=0&&tint>shadow,'colour pools must retain the toon/shadow output');
+   const tint=source.indexOf(mesh===rock?'finalDiffuse*=cavePaintFactor(vPositionW)':'color.rgb*=cavePaintFactor(vPositionW)');
+   assert.ok(shadow>=0&&tint>shadow,'static illumination must retain the toon/shadow output');
+   assert.equal((source.match(/vec3 cavePaintFactor\(/g)??[]).length,1,'one shared illumination function');
   }
  }finally{engine.dispose();}
 });
@@ -106,7 +112,7 @@ test('cave colour pools affect environment only and water stays opaque and bound
  const engine=new NullEngine(),world=createWorld(engine,{cave:true,touchDevice:true});
  // NullEngine has no GPU upload completion for RawTexture. Model the ready
  // visibility upload so forceCompilation can inspect the water shader.
- const fogTexture=world.caveFog?.texture.getInternalTexture();if(fogTexture)fogTexture.isReady=true;
+ readyCaveTextures(world);
  try{
   const environment=MeshBuilder.CreateBox('test-rock',{},world.scene),player=MeshBuilder.CreateBox('test-player',{},world.scene);
   environment.material=new PBRMaterial('rock',world.scene);player.material=new PBRMaterial('unchanged-player',world.scene);
@@ -124,7 +130,7 @@ test('cave colour pools affect environment only and water stays opaque and bound
    assert.ok(water.every(m=>m.isDisposed()));
    assert.equal(world.ground.subMeshes.length,1,'village/forest ground unchanged');
    assert.equal(mood.active,false);
-   replaceWorldMap(world,'warrior-v5');world.scene.render();
+   replaceWorldMap(world,'warrior-v5');readyCaveTextures(world);world.scene.render();
    assert.equal(environment.material.pluginManager.getPlugin('CaveRockMood'),mood,'reactivate rather than accumulate tint plugins');
    assert.equal(mood.active,true);assert.equal(world.ground.subMeshes.length,36);assert.equal(world.ground.receiveShadows,true);
    assert.ok(player.material.albedoColor.equals(playerColor));assert.equal(player.material.pluginManager?.getPlugin('CaveRockMood')??null,null);

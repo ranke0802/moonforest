@@ -1,4 +1,5 @@
 import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
+import {CAVE_ROCK_PALETTE_GLSL} from './cave-rock-palette.js';
 
 // Borrow an already resident rock map. Its streaming owner retains disposal and
 // all existing 4K/1K/512/256 tier decisions; this adds no image or GPU texture.
@@ -8,23 +9,7 @@ export function caveRockTexture(world){
  const texture=material?.albedoTexture;
  return texture?.getInternalTexture?.()?texture:caveFogFallback(world.scene);
 }
-export const CAVE_ROCK_GLSL=`
-#define CAVE_ROCK_SURFACE
-uniform sampler2D caveRockMap;
-uniform float caveRockToGamma;
-vec3 caveRockShade(vec3 p,vec3 normal,float explored){
- vec3 n=abs(normalize(normal));
- vec2 surface=n.y>max(n.x,n.z)?p.xz:(n.x>n.z?p.zy:p.xy);
- vec2 uv=fract(surface*.11);
- vec3 paint=texture2D(caveRockMap,uv).rgb;
- paint=mix(paint,pow(max(paint,vec3(.001)),vec3(.454545)),caveRockToGamma);
- // Retain the authored rock map's coloured facets instead of reducing it to
- // grey luminance and coating every wall with a synthetic concrete palette.
- vec3 rock=paint*.96+vec3(.018,.014,.016);
- rock=mix(rock,vec3(dot(rock,vec3(.299,.587,.114)))*vec3(.94,.98,1.04),.28);
- float facing=.82+.18*max(0.,dot(normalize(normal),normalize(vec3(-.35,.78,-.52))));
- return rock*facing*mix(.87,1.,smoothstep(.05,.95,explored));
-}`;
+export const CAVE_ROCK_GLSL=CAVE_ROCK_PALETTE_GLSL;
 export function bindCaveRock(material,world,effect=null){
  const texture=caveRockTexture(world),gamma=texture.gammaSpace===false?1:0;
  material.setTexture('caveRockMap',texture);material.setFloat('caveRockToGamma',gamma);

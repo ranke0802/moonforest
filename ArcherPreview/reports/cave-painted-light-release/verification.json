@@ -1,0 +1,46 @@
+{
+  "verifiedAt": "2026-11-01T07:26:29.868282+00:00",
+  "tests": {
+    "total": 858,
+    "passed": 858,
+    "failed": 0
+  },
+  "focusedTests": 62,
+  "staticMapBytes": 65536,
+  "detachedCpuCacheBytes": 65536,
+  "newLights": 0,
+  "newShadowPasses": 0,
+  "frameLightTextureUploads": 0,
+  "nullEngineRoundTrips": 20,
+  "newGeneratedAssets": 0,
+  "browserAutomation": false,
+  "physicalMobileGpuOrThermalTested": false,
+  "structuralCaveReconstructionComplete": false,
+  "unapprovedLabShellActive": false,
+  "resources": {
+    "baseline": "1ad32fc0b3e8e27be18563cd24482516c9c986cd",
+    "checkedAt": "2026-11-01T07:26:10.814Z",
+    "manifests": 24,
+    "protectedFiles": 6,
+    "resourceRevision": "2d9c2c3d1ace306fa1a3c5254f1b6795ead7ba4045a866d4f93abc5f4e3eadd9",
+    "contentFiles": 1043,
+    "changedContent": [],
+    "unapprovedShellImported": false,
+    "status": "pass"
+  },
+  "publishedBuild": {
+    "resourceRevision": "2d9c2c3d1ace306fa1a3c5254f1b6795ead7ba4045a866d4f93abc5f4e3eadd9",
+    "verifiedFiles": 1524,
+    "bytes": 610073189,
+    "changedPaths": [
+      "ArcherPreviewSite/assets/index-BSMveAJr.js",
+      "ArcherPreviewSite/index.html",
+      "ArcherPreviewSite/deployment-files.json"
+    ]
+  },
+  "knownArtLimitations": [
+    "Large wall relief and ceiling detail still insufficient in offline review",
+    "Single floor-height illumination can leave low walls on high terrain dark",
+    "This is an incremental material and visibility change, not approved replacement cave geometry"
+  ]
+}

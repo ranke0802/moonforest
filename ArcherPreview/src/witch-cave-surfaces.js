@@ -1,5 +1,8 @@
 import {MaterialPluginBase,SubMesh,VertexBuffer,VertexData} from '@babylonjs/core';
 import {CAVE_VIEW_GLSL} from './witch-cave-visibility.js';
+import {CAVE_ROCK_GLSL} from './cave-rock-shell.js';
+import {CAVE_ROCK_UV_DETAIL} from './cave-rock-palette.js';
+import {CavePaintLightShade} from './cave-painted-light-runtime.js';
 
 // One material and vertex buffer; bounded terrain patches only change index
 // submission. The sampled walking surface and its original triangles stay exact.
@@ -27,26 +30,16 @@ export function partitionCaveGround(mesh,terrain){
 
 // Bounded, static colour pools preserve painted toon/shadow/ink passes. They
 // illuminate only environment materials, never the existing 8K player.
-const colorCode=`
-float caveWarm = max(max(exp(-dot(vPositionW.xz-vec2(-44.,38.),vPositionW.xz-vec2(-44.,38.))/24.),
-                        exp(-dot(vPositionW.xz-vec2(-33.,21.),vPositionW.xz-vec2(-33.,21.))/32.)),
-                    max(exp(-dot(vPositionW.xz-vec2(-39.,-19.),vPositionW.xz-vec2(-39.,-19.))/45.),
-                        exp(-dot(vPositionW.xz-vec2(23.,-39.),vPositionW.xz-vec2(23.,-39.))/18.)));
-float caveViolet = exp(-dot(vPositionW.xz-vec2(29.,-39.5),vPositionW.xz-vec2(29.,-39.5))/30.);
-float caveLow = mix(.82,1.,smoothstep(-3.,10.,vPositionW.y));
-vec3 caveTint = mix(vec3(.87,.92,1.)*caveLow,vec3(1.14,1.02,.84),caveWarm*.78);
-caveTint = mix(caveTint,vec3(1.02,.91,1.13),caveViolet*.62);
-`;
 // World-space colour keeps the existing floor painting from stretching into
 // black vertical bands on the high shoulders. No texture, mesh or draw added.
 const cliffCode=`
 #if defined(NORMAL) && defined(CAVE_ROCK_SURFACE)
 float caveCliff = 1.0-smoothstep(.42,.86,abs(normalW.y));
 if(caveCliff>.001){
- vec3 caveRock = caveRockShade(vPositionW,normalW,1.);
+ vec3 caveRock = caveRockAlbedo(vPositionW,normalW);
  float caveRockShadow = 1.;
  if(numLights>0.)caveRockShadow=clamp(1.-numLights*(1.-aggShadow),0.,1.);
- color.rgb=mix(color.rgb,caveRock*mix(.60,1.,caveRockShadow)*caveTint,caveCliff*.92);
+ color.rgb=mix(color.rgb,caveRock*mix(.60,1.,caveRockShadow),caveCliff*.92);
 }
 #endif
 `;
@@ -56,17 +49,27 @@ export class CaveSurfaceShade extends MaterialPluginBase {
  bindForSubMesh(buffer){buffer.updateFloat('caveMoodActive',this.active?1:0);buffer.updateFloat('caveRockTone',this._material.metadata?.caveRockTone?1:0);if(this.camera){buffer.updateVector3('caveEye',this.camera.globalPosition);buffer.updateVector3('caveFocus',this.camera.target);}const fog=this._material.getScene().metadata?.caveFogRuntime,p=fog?.playerView,b=fog?.bossView;buffer.updateFloat4('cavePlayerView',p?.x??0,p?.y??0,p?.z??0,p?.w??0);buffer.updateFloat4('caveBossView',b?.x??0,b?.y??0,b?.z??0,b?.w??0);}
  getCustomCode(type){
   if(type!=='fragment')return null;
-  const common={CUSTOM_FRAGMENT_DEFINITIONS:CAVE_VIEW_GLSL,CUSTOM_FRAGMENT_MAIN_BEGIN:this.ground?`\n#ifdef NORMAL\nif(caveMoodActive>.5 && caveTerrainCutaway(vPositionW,vNormalW,caveEye,caveFocus))discard;\n#endif\n`:'if(caveMoodActive>.5 && caveForegroundCutaway(vPositionW,caveEye,caveFocus))discard;'};
+  const common={CUSTOM_FRAGMENT_DEFINITIONS:CAVE_VIEW_GLSL+CAVE_ROCK_GLSL,CUSTOM_FRAGMENT_MAIN_BEGIN:this.ground?`\n#ifdef NORMAL\nif(caveMoodActive>.5 && caveTerrainCutaway(vPositionW,vNormalW,caveEye,caveFocus))discard;\n#endif\n`:'if(caveMoodActive>.5 && caveForegroundCutaway(vPositionW,caveEye,caveFocus))discard;'};
   // Babylon discovers hook names inside the base constructor, before ground
   // is assigned. Register both names so the floor works even before another
   // floor plugin is added during asynchronous texture loading.
-  return {...common,CUSTOM_FRAGMENT_BEFORE_FOG:this.ground?'if(caveMoodActive>.5){'+colorCode+'color.rgb *= caveTint;'+cliffCode+'}':'',
-   CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:this.ground?'':'if(caveMoodActive>.5){'+colorCode+'float caveStoneValue=dot(finalDiffuse,vec3(.299,.587,.114));finalDiffuse=mix(finalDiffuse,vec3(caveStoneValue)*vec3(.94,.98,1.04),caveRockTone*.28);finalDiffuse *= caveTint;}'};
+  return {...common,CUSTOM_FRAGMENT_BEFORE_FOG:this.ground?'if(caveMoodActive>.5){'+cliffCode+'}':'',
+   CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:this.ground?'':`
+if(caveMoodActive>.5&&caveRockTone>.5){
+ vec3 caveToneNormal=vec3(0.,1.,0.);
+#ifdef NORMAL
+ caveToneNormal=normalW;
+#endif
+ float caveToneShadow=1.;
+ if(numLights>0.)caveToneShadow=clamp(1.-numLights*(1.-aggShadow),0.,1.);
+ vec3 caveBroad=caveRockAlbedo(vPositionW,caveToneNormal)*mix(.76,1.,caveToneShadow);
+ finalDiffuse=mix(caveBroad,finalDiffuse,${CAVE_ROCK_UV_DETAIL.toFixed(2)});
+}`};
  }
 }
 export function caveSurfaceStyle(world){
  partitionCaveGround(world.ground,world.terrain);
- const activate=(material,ground=false)=>{const plugin=material.pluginManager?.getPlugin(ground?'CaveGroundMood':'CaveRockMood')??new CaveSurfaceShade(material,{ground,camera:world.camera});plugin.camera=world.camera;plugin.active=true;return plugin;};
+ const activate=(material,ground=false)=>{const plugin=material.pluginManager?.getPlugin(ground?'CaveGroundMood':'CaveRockMood')??new CaveSurfaceShade(material,{ground,camera:world.camera});plugin.camera=world.camera;plugin.active=true;plugin.previousFogEnabled=material.fogEnabled;material.fogEnabled=false;const paint=material.pluginManager?.getPlugin('CavePaintLight')??new CavePaintLightShade(material,{ground});paint.active=true;return plugin;};
  const plugins=new Map([[world.floorMaterial,activate(world.floorMaterial,true)]]),seen=new WeakSet(),pending=new Set(),watched=new Map(),dead=new WeakSet();
  let disposed=false;
  const track=material=>{
@@ -97,7 +100,7 @@ export function caveSurfaceStyle(world){
  const dispose=()=>{
   if(disposed)return;disposed=true;
   world.scene.onNewMaterialAddedObservable.remove(observer);world.scene.onMaterialRemovedObservable.remove(removedObserver);world.scene.onBeforeRenderObservable.remove(renderObserver);world.scene.onDisposeObservable.remove(sceneObserver);
-  for(const plugin of plugins.values())plugin.active=false;
+  for(const [material,plugin]of plugins){plugin.active=false;material.fogEnabled=plugin.previousFogEnabled;const paint=material.pluginManager?.getPlugin('CavePaintLight');if(paint)paint.active=false;}
   for(const [material,subscription]of watched)material.onDisposeObservable.remove(subscription);
   plugins.clear();watched.clear();pending.clear();
  };

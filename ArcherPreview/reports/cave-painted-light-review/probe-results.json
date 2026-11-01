@@ -1,0 +1,119 @@
+{
+  "readOnlySource": true,
+  "browserAutomation": false,
+  "physicalGpuMeasured": false,
+  "probes": [
+    {
+      "uboRequested": false,
+      "uboUsed": false,
+      "counts": {
+        "textures": 7,
+        "materials": 14,
+        "meshes": 55,
+        "geometries": 16,
+        "lights": 3,
+        "beforeRender": 2,
+        "onDispose": 5
+      },
+      "roundTrips": 10,
+      "frameUploads": 0,
+      "texture": {
+        "bytes": 65536,
+        "gammaSpace": false,
+        "noMipmap": true,
+        "invertY": false,
+        "hasAlpha": false
+      },
+      "pendingAndDisposedEffectWrites": 0,
+      "environmentAlbedoObjectPreserved": true,
+      "geometryPreserved": true,
+      "environmentEngineFog": false,
+      "environmentFogRestoredOnExit": true,
+      "characterPaintPlugin": false,
+      "characterFogEnabled": true,
+      "actorDefinesFog": true,
+      "characterShaderAppliesEngineFog": true,
+      "sceneFogColor": [
+        0.24,
+        0.23,
+        0.28
+      ],
+      "cpuSample": {
+        "rgb": [
+          0.9749455337690633,
+          0.7441176470588237,
+          0.4331154684095861
+        ],
+        "rawRGB": [
+          0.9749455337690633,
+          0.7441176470588237,
+          0.4331154684095861
+        ],
+        "floorHeight": 0.03137254901960773,
+        "heightFactor": 1
+      },
+      "cpuCache": {
+        "maps": 1,
+        "bytes": 65536,
+        "hits": 11,
+        "sceneObjects": 0
+      }
+    },
+    {
+      "uboRequested": true,
+      "uboUsed": true,
+      "counts": {
+        "textures": 7,
+        "materials": 14,
+        "meshes": 55,
+        "geometries": 16,
+        "lights": 3,
+        "beforeRender": 2,
+        "onDispose": 5
+      },
+      "roundTrips": 10,
+      "frameUploads": 0,
+      "texture": {
+        "bytes": 65536,
+        "gammaSpace": false,
+        "noMipmap": true,
+        "invertY": false,
+        "hasAlpha": false
+      },
+      "pendingAndDisposedEffectWrites": 0,
+      "environmentAlbedoObjectPreserved": true,
+      "geometryPreserved": true,
+      "environmentEngineFog": false,
+      "environmentFogRestoredOnExit": true,
+      "characterPaintPlugin": false,
+      "characterFogEnabled": true,
+      "actorDefinesFog": true,
+      "characterShaderAppliesEngineFog": true,
+      "sceneFogColor": [
+        0.24,
+        0.23,
+        0.28
+      ],
+      "cpuSample": {
+        "rgb": [
+          0.9749455337690633,
+          0.7441176470588237,
+          0.4331154684095861
+        ],
+        "rawRGB": [
+          0.9749455337690633,
+          0.7441176470588237,
+          0.4331154684095861
+        ],
+        "floorHeight": 0.03137254901960773,
+        "heightFactor": 1
+      },
+      "cpuCache": {
+        "maps": 1,
+        "bytes": 65536,
+        "hits": 23,
+        "sceneObjects": 0
+      }
+    }
+  ]
+}

@@ -79,7 +79,7 @@ test('cave floor, painted rocks and ink use the same local cutaway and focus',as
    assert.match(source,mesh===world.ground?/caveTerrainCutaway\(vPositionW,vNormalW,caveEye,caveFocus\)/:/caveForegroundCutaway\(vPositionW,caveEye,caveFocus\)/);
    const plugin=mesh.material.pluginManager.getPlugin(mesh===world.ground?'CaveGroundMood':'CaveRockMood');
    assert.equal(plugin.camera,world.camera);
-   if(mesh===world.ground){assert.match(source,/caveRockShadow=clamp\(1\.-numLights\*\(1\.-aggShadow\)/);assert.match(source,/mix\(\.60,1\.,caveRockShadow\)/);assert.match(source,/caveRockShade\(vPositionW,normalW,1\.\)/);}
+   if(mesh===world.ground){assert.match(source,/caveRockShadow=clamp\(1\.-numLights\*\(1\.-aggShadow\)/);assert.match(source,/mix\(\.60,1\.,caveRockShadow\)/);assert.match(source,/caveRockAlbedo\(vPositionW,normalW\)/);assert.doesNotMatch(source,/texture2D\(caveRockMap/);}
   }
   assert.equal(world.scene.fogStart,CAVE_FOG_START);assert.equal(world.scene.fogEnd,CAVE_FOG_END);
  }finally{ink?.dispose();engine.dispose();}
@@ -111,7 +111,8 @@ test('water, falls, roof and additive glows bind the current fog runtime without
    material.onBindObservable.notifyObservers(mesh);
    const fragment=material.shaderPath.fragmentSource;
    assert.match(fragment,/uniform sampler2D caveFogMap/);
-   assert.match(fragment,material.name.startsWith('cave-glow-')?/if\(caveFogHidesInk\(glowWorldPosition\)\)discard/:material.name==='cave-ceiling-paint'?/caveRockShade\(p,/:/gl_FragColor=vec4\(caveFogShade\(/);
+   if(material.name.startsWith('cave-glow-'))assert.match(fragment,/if\(caveFogHidesInk\(glowWorldPosition\)\)discard/);
+   else{assert.match(fragment,material.name==='cave-ceiling-paint'?/caveRockAlbedo\(p,caveRoofNormal\)/:/color=caveFogShade\(color\*sqrt\(cavePaintFactor\(p\)\),p\)/);assert.match(fragment,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);}
   }
   assert.equal(bound.length,5);
   world.caveFog=null;
