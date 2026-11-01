@@ -119,6 +119,16 @@ CC0 1.0
 https://opengameart.org/content/footsteps-leather-cloth-armor
 Changes: Existing armored boot takes filtered and layered for stone/earth surfaces.
 
+A Dragon's Lullaby (2023 Remaster) — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/a-dragons-lullaby-2023/
+Changes: 42–104 s excerpt; 2 s loop crossfade; gain balanced, original pitch, 32 kHz stereo MP3 128 kbps. Game edit title: 타락한 성녀 엘레나 · 꺼진 축복.
+
+Balefire — Scott Buckley
+CC-BY 4.0
+https://www.scottbuckley.com.au/library/balefire/
+Changes: 218–280 s excerpt; 2 s loop crossfade; gain balanced, original pitch, 32 kHz stereo MP3 128 kbps. Game edit title: 비탄의 마녀 엘레나 · 비탄의 잔향.
+
 CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
 CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
 Scott Buckley: www.scottbuckley.com.au

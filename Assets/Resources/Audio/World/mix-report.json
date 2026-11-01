@@ -449,5 +449,57 @@
       "weapon-textures"
     ],
     "volume": 0.18
+  },
+  "elena_saint": {
+    "file": "elena_saint.mp3",
+    "group": "music",
+    "label": "타락한 성녀 엘레나 · 꺼진 축복",
+    "seconds": 60,
+    "channels": 2,
+    "sampleRate": 32000,
+    "decodedBytes": 15360000,
+    "peak": 0.761652,
+    "truePeak4x": 0.763178,
+    "rms": 0.127114,
+    "bytes": 961388,
+    "sha256": "caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1",
+    "sources": [
+      "elena-lullaby"
+    ],
+    "volume": 0.3,
+    "seamDelta": 0.023903,
+    "seamContextP99": 0.022551,
+    "sourceStart": 42,
+    "sourceEnd": 104,
+    "crossfadeSeconds": 2,
+    "sourceSha256": "fe07f1c8e0b10743c7ed72348bf7fe4692e8471358f0f7f48d0a4e8ca8ae4200",
+    "gain": 0.906626,
+    "method": "Licensed original recording excerpt, offline loop crossfade and gain only; not AI composition"
+  },
+  "elena_mourning": {
+    "file": "elena_mourning.mp3",
+    "group": "music",
+    "label": "비탄의 마녀 엘레나 · 비탄의 잔향",
+    "seconds": 60,
+    "channels": 2,
+    "sampleRate": 32000,
+    "decodedBytes": 15360000,
+    "peak": 0.670253,
+    "truePeak4x": 0.670253,
+    "rms": 0.147358,
+    "bytes": 961388,
+    "sha256": "69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0",
+    "sources": [
+      "elena-balefire"
+    ],
+    "volume": 0.3,
+    "seamDelta": 0.00685,
+    "seamContextP99": 0.043522,
+    "sourceStart": 218,
+    "sourceEnd": 280,
+    "crossfadeSeconds": 2,
+    "sourceSha256": "1546693f6381dc44c2cc90e8934aad32fd325bbc7ee26419ca3f2fb78f0809ad",
+    "gain": 0.760185,
+    "method": "Licensed original recording excerpt, offline loop crossfade and gain only; not AI composition"
   }
 }

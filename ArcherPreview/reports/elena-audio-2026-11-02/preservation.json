@@ -1,0 +1,18 @@
+{
+  "baseline": "f415be0",
+  "addedMusic": [
+    "elena_saint",
+    "elena_mourning"
+  ],
+  "unchangedOldMusic": [
+    "boss",
+    "village",
+    "forest",
+    "cave",
+    "combat"
+  ],
+  "existingSoundCues": 51,
+  "unchangedResourceFiles": 64,
+  "additionalAudioBytes": 1922776,
+  "modelAndTextureChanges": 0
+}

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {GameAudio} from '../src/game-audio.js';
 import {ActionAudio} from '../src/action-audio.js';
 import {bossMusicContext,ELENA_MUSIC_KEYS} from '../src/boss-music.js';
@@ -27,6 +28,28 @@ function fixture({themes=true,fail,defer,decodeDefer,manifestDefer,definitions={
 async function settle(audio){await audio.loading;for(let i=0;i<30;i++){if(audio.beds.pending)await audio.beds.pending;else{await Promise.resolve();if(!audio.beds.pending)return;}}throw Error('audio did not settle');}
 async function start(f){f.audio.setEnvironment('warrior-v5');await f.audio.unlock();await settle(f.audio);f.context.advance();}
 function combat(audio,enemies){audio.setBossContext(enemies);audio.setCombat({active:true,boss:true,alive:true});}
+
+test('shipped 60-second theme sizes fit the existing cache through cave, two phases, death and repeated returns',async()=>{
+ const manifest=JSON.parse(readFileSync(new URL('../public/assets/audio.json',import.meta.url))),definitions={cave:{actualDecodedBytes:72*32000*2*4},boss:{actualDecodedBytes:90*32000*2*4}};
+ for(const key of Object.values(ELENA_MUSIC_KEYS)){
+  const track=manifest.music[key];assert.equal(track.seconds,60);assert.equal(track.decodedBytes,60*32000*2*4);
+  definitions[key]={decodedBytes:track.decodedBytes,actualDecodedBytes:track.decodedBytes};
+ }
+ const f=fixture({definitions});await start(f);let peakBytes=0;
+ for(let i=0;i<12;i++){
+  for(const [enemy,key]of [[saint(),ELENA_MUSIC_KEYS.saint],[witch(),ELENA_MUSIC_KEYS.mourning]]){
+   combat(f.audio,[enemy]);await settle(f.audio);assert.equal(f.audio.inspect().context,key);
+   const playing=f.audio.music.source,requests=f.requests.length;
+   for(let frame=0;frame<90;frame++)combat(f.audio,[enemy]);await settle(f.audio);
+   assert.equal(f.audio.music.source,playing);assert.equal(f.requests.length,requests);
+   peakBytes=Math.max(peakBytes,f.audio.beds.cacheBytes());assert.ok(peakBytes<=AUDIO_BED_LIMITS.decodedBytes);f.context.advance();
+  }
+  f.audio.setCombat({alive:false});f.context.advance();assert.equal(f.audio.inspect().music,'stopped');
+  f.audio.stopAll();f.audio.setEnvironment('warrior-v4');await settle(f.audio);f.context.advance();
+  f.audio.stopAll();f.audio.setEnvironment('warrior-v5');await settle(f.audio);f.context.advance();
+ }
+ assert.equal(f.peakDecodes(),1);f.audio.dispose();assert.equal(f.audio.beds.cache.size,0);assert.equal(f.audio.beds.voices.size,0);
+});
 
 test('actual engaged living Elena wins deterministically over bears; phase2 wins over phase1 and no actor is retained or changed',()=>{
  const one=saint(),two=witch(),ordinary=bear(),input=[ordinary,one,two];assert.equal(bossMusicContext(input),ELENA_MUSIC_KEYS.mourning);assert.equal(bossMusicContext([...input].reverse()),ELENA_MUSIC_KEYS.mourning);

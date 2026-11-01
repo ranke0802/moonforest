@@ -89,6 +89,22 @@
       "url": "./content/9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5.mp3",
       "volume": 0.29,
       "seconds": 72
+    },
+    "elena_saint": {
+      "url": "./content/caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1.mp3",
+      "volume": 0.3,
+      "seconds": 60,
+      "decodedBytes": 15360000,
+      "sampleRate": 32000,
+      "channels": 2
+    },
+    "elena_mourning": {
+      "url": "./content/69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0.mp3",
+      "volume": 0.3,
+      "seconds": 60,
+      "decodedBytes": 15360000,
+      "sampleRate": 32000,
+      "channels": 2
     }
   },
   "ambience": {
@@ -274,6 +290,8 @@
     "./content/6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42.wav",
     "./content/de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431.wav",
     "./content/46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4.wav",
-    "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav"
+    "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav",
+    "./content/caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1.mp3",
+    "./content/69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0.mp3"
   ]
 }

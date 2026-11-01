@@ -1,0 +1,16 @@
+{
+  "status": "SOURCE_BUILD_AND_RESOURCE_GRAPH_VERIFIED",
+  "baseline": "f415be0cab0ee339acc72bdb90e88391933f58e2",
+  "method": "Established licensed original recording excerpt and offline loop/gain edit; no AI music service",
+  "originalCompositionCreated": false,
+  "aiGenerationCalls": 0,
+  "tracks": {
+    "elena_saint": {"gameTitle": "꺼진 축복", "source": "A Dragon's Lullaby (2023 Remaster)", "author": "Scott Buckley", "license": "CC-BY 4.0", "sourceURL": "https://www.scottbuckley.com.au/library/a-dragons-lullaby-2023/", "sourceExcerptSeconds": [42,104], "sha256": "caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1"},
+    "elena_mourning": {"gameTitle": "비탄의 잔향", "source": "Balefire", "author": "Scott Buckley", "license": "CC-BY 4.0", "sourceURL": "https://www.scottbuckley.com.au/library/balefire/", "sourceExcerptSeconds": [218,280], "sha256": "69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0"}
+  },
+  "format": {"secondsEach": 60, "sampleRate": 32000, "channels": 2, "codec": "MP3 128kbps", "downloadBytesEach": 961388, "decodedBytesEach": 15360000, "loopCrossfadeSeconds": 2, "phaseCrossfadeSeconds": 1.2},
+  "verification": {"fullTestsPassed": 924, "fullTestsFailed": 0, "focusedAudioPassed": 24, "repeatPhaseDeathMapCyclesWithActualThemeByteSizes": 12, "serialDecode": true, "decodedBedBudgetBytes": 50331648, "peak4xBelowClipping": true, "seamRelativeToLocalWaveformChecked": true, "stageFiles": 1520, "stageBytes": 604579641},
+  "preservation": {"oldMusic": 5, "oldSoundCues": 51, "oldAudioResourceFiles": 64, "oldAudioReferencesChanged": 0, "additionalMusicBytes": 1922776, "modelTextureLODChanges": 0, "playerTextureMaximum": 8192, "backgroundTextureMaximum": 4096},
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "limits": ["No browser automation", "No actual speaker listening or physical phone thermal measurement", "Music cache byte bound covers completed music/ambience buffers; SFX and decoder temporary memory are separate"]
+}

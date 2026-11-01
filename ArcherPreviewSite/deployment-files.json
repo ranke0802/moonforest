@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "resourceRevision": "7f638aa2b5b40a67a69f34cce0649fa14e0e5c36260acd1d9bb314bcca2b6c66",
-  "bytes": 600736462,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "bytes": 604579641,
   "files": [
     {
       "path": "app.webmanifest",
@@ -10,8 +10,8 @@
     },
     {
       "path": "assets/audio.json",
-      "bytes": 14419,
-      "sha256": "b70f0339ae8707979d5aba0f6ab492ded90405392dcf44207ce77ab3d974fa3d"
+      "bytes": 15082,
+      "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
       "path": "assets/babylon~basisTextureLoader-DBdKvUhg.js",
@@ -1314,11 +1314,6 @@
       "sha256": "0915a63348641118c1f7698169ac2e91cc9db131e9df7eef0d0d2e7f797bd031"
     },
     {
-      "path": "assets/bundles/099ca3e642bc3bf471fd14471e506c6baedfde4f75e64d40066024046ac1b399.mfp.gz",
-      "bytes": 2696020,
-      "sha256": "099ca3e642bc3bf471fd14471e506c6baedfde4f75e64d40066024046ac1b399"
-    },
-    {
       "path": "assets/bundles/0a5da62bb06e2d42558a4fb9a33c033a324d8bcf20dc9ddb41de4d895ff9df50.mfp.gz",
       "bytes": 173072,
       "sha256": "0a5da62bb06e2d42558a4fb9a33c033a324d8bcf20dc9ddb41de4d895ff9df50"
@@ -1784,6 +1779,11 @@
       "sha256": "81f3f851fb8f6b662f6e51c403cde161fa96a94f26f7c9a165d990fbacb254ab"
     },
     {
+      "path": "assets/bundles/82b7028208e911a7007db83c74537d97bb105cc452caf627aea6461e5e78c220.mfp.gz",
+      "bytes": 1381046,
+      "sha256": "82b7028208e911a7007db83c74537d97bb105cc452caf627aea6461e5e78c220"
+    },
+    {
       "path": "assets/bundles/82efd1946253f91ab30f72ebc4bb7573ae78dde8dc9d269f3439090ff65af7a8.mfp.gz",
       "bytes": 588368,
       "sha256": "82efd1946253f91ab30f72ebc4bb7573ae78dde8dc9d269f3439090ff65af7a8"
@@ -2012,6 +2012,11 @@
       "path": "assets/bundles/c2a2ca1922c97729738a4b9e5a8a9913f080e0d06c49c603ce4701d9f7a5bfe7.mfp.gz",
       "bytes": 119172,
       "sha256": "c2a2ca1922c97729738a4b9e5a8a9913f080e0d06c49c603ce4701d9f7a5bfe7"
+    },
+    {
+      "path": "assets/bundles/c5056f1df1604f2abf233abd5cbb545b9df8c0af93b4c89f23489de906c3b641.mfp.gz",
+      "bytes": 3231066,
+      "sha256": "c5056f1df1604f2abf233abd5cbb545b9df8c0af93b4c89f23489de906c3b641"
     },
     {
       "path": "assets/bundles/c7c84ca6e4d64b4df398572c1d3271e29209fbc3bd1812b36d74de1a799f879c.mfp.gz",
@@ -4444,6 +4449,11 @@
       "sha256": "69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4"
     },
     {
+      "path": "assets/content/69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0.mp3",
+      "bytes": 961388,
+      "sha256": "69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0"
+    },
+    {
       "path": "assets/content/6a4864fbe9bbbd382e6cddc05332d8cc0e35a1a48e2034e3be2435a885aa0a09.gltf",
       "bytes": 2774,
       "sha256": "6a4864fbe9bbbd382e6cddc05332d8cc0e35a1a48e2034e3be2435a885aa0a09"
@@ -6459,6 +6469,11 @@
       "sha256": "caa55f105c1e098682cf3f3e137d15e237c8bcaacb9eecd63be41e3b3efa3d46"
     },
     {
+      "path": "assets/content/caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1.mp3",
+      "bytes": 961388,
+      "sha256": "caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1"
+    },
+    {
       "path": "assets/content/cab65e7173cd4aa045f9ff8534e3a3e0926440f2efc0061adf428b82f99811e2.bin",
       "bytes": 50762,
       "sha256": "cab65e7173cd4aa045f9ff8534e3a3e0926440f2efc0061adf428b82f99811e2"
@@ -7490,13 +7505,13 @@
     },
     {
       "path": "assets/resource-index.json",
-      "bytes": 165029,
-      "sha256": "8d822fcf00249158f03ffe6608840cbb1581931651e370ae6bc201d75c9211d5"
+      "bytes": 165467,
+      "sha256": "550c431f7aad1e3934eb1d883544f911db0a9251c3858160e9442f57f9a44b45"
     },
     {
       "path": "assets/resource-sizes.json",
-      "bytes": 80299,
-      "sha256": "e01932203fbab525f5a9de4766107d3be4300f9f3db6c13b43027c35e3b40b84"
+      "bytes": 80455,
+      "sha256": "d5068a910cd52fd8f26f14353089618ea697978e472c2b014ec9e39f2ffe6e93"
     },
     {
       "path": "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -7550,13 +7565,13 @@
     },
     {
       "path": "audio-credits.html",
-      "bytes": 45276,
-      "sha256": "2f1f1ab4e39829917d4c7707a9a94cad4789a3d2568c05240a716233f93498d5"
+      "bytes": 47770,
+      "sha256": "65e8365056bf073a2a25d4c50ccfcbf6f5da522b7570e74c186572d3473b358e"
     },
     {
       "path": "AUDIO_CREDITS.txt",
-      "bytes": 5517,
-      "sha256": "bc154da2ecf1a718535fc753dc7728b018ddbaa8d72c72e8fb549016574bcccf"
+      "bytes": 6077,
+      "sha256": "588e8abac1b838cc76d9a68a56e3b1c6279179e4ddd902c8559bcbb71da19cf9"
     },
     {
       "path": "index.html",

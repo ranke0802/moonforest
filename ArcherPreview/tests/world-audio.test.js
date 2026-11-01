@@ -86,7 +86,12 @@ test('packed audio references are hashed, licensed and finite; original sound re
  const original=JSON.parse(await readFile(new URL('fixtures/audio-original-v2.json',import.meta.url)));
  for(const [key,value]of Object.entries(original.sounds))assert.deepEqual(manifest.sounds[key],value);
  assert.deepEqual(manifest.music.boss,original.boss);
- assert.equal(Object.keys(manifest.sounds).length,51);assert.equal(Object.keys(manifest.music).length,5);assert.equal(Object.keys(manifest.ambience).length,3);
+ assert.equal(Object.keys(manifest.sounds).length,51);assert.equal(Object.keys(manifest.music).length,7);assert.equal(Object.keys(manifest.ambience).length,3);
+ for(const key of ['elena_saint','elena_mourning']){
+  const track=manifest.music[key],edit=edits[key];assert.equal(track.seconds,60);assert.equal(track.sampleRate,32000);assert.equal(track.channels,2);assert.equal(track.decodedBytes,60*32000*2*4);
+  assert.notEqual(track.url,manifest.music.boss.url);assert.ok(edit.truePeak4x<.99);assert.ok(edit.seamDelta<=Math.max(.035,edit.seamContextP99*1.5));
+ }
+ assert.notEqual(manifest.music.elena_saint.url,manifest.music.elena_mourning.url);
  assert.equal(new Set(manifest.resources).size,manifest.resources.length);
  for(const url of manifest.resources){const data=await readFile(new URL(url,base));assert.equal(createHash('sha256').update(data).digest('hex'),url.split('/').at(-1).split('.')[0]);}
  for(const [key,edit]of Object.entries(edits)){

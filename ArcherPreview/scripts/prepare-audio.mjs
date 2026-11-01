@@ -21,7 +21,7 @@ for(const [name,edit] of Object.entries(edits)){
   const url=await pack(resolve(source,'../World',edit.file),edit.file.split('.').at(-1));
   if(edit.group==='sounds'){
     sounds[name]=url;cueSettings[name]={volume:edit.volume,priority:name.startsWith('foot_')?0:2,cooldown:name.endsWith('_attack')?1.2:name.endsWith('_death')?1:name.startsWith('foot_')?.12:.12};
-  }else (edit.group==='music'?music:ambience)[name]={url,volume:edit.volume,seconds:edit.seconds};
+  }else (edit.group==='music'?music:ambience)[name]={url,volume:edit.volume,seconds:edit.seconds,...(Number.isSafeInteger(edit.decodedBytes)?{decodedBytes:edit.decodedBytes,sampleRate:edit.sampleRate,channels:edit.channels}:{})};
 }
 await writeFile(resolve(output,'audio.json'),JSON.stringify({version:3,sounds,music,ambience,cueSettings,resources:[...new Set(resources)]},null,2)+'\n');
 const sources=JSON.parse(await readFile(resolve(import.meta.dirname,'world-audio-sources.json'),'utf8'));

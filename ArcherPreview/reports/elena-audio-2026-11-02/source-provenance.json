@@ -1,0 +1,32 @@
+[
+  {
+    "key": "elena_saint",
+    "file": "ADragonsLullaby2023.mp3",
+    "url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2023/02/ADragonsLullaby2023.mp3",
+    "page": "https://www.scottbuckley.com.au/library/a-dragons-lullaby-2023/",
+    "title": "A Dragon's Lullaby (2023 Remaster)",
+    "source": "elena-lullaby",
+    "label": "타락한 성녀 엘레나 · 꺼진 축복",
+    "start": 42,
+    "volume": 0.3,
+    "bytes": 6729383,
+    "sha256": "fe07f1c8e0b10743c7ed72348bf7fe4692e8471358f0f7f48d0a4e8ca8ae4200",
+    "author": "Scott Buckley",
+    "license": "CC-BY 4.0"
+  },
+  {
+    "key": "elena_mourning",
+    "file": "Balefire.mp3",
+    "url": "https://www.scottbuckley.com.au/library/wp-content/uploads/2023/06/Balefire.mp3",
+    "page": "https://www.scottbuckley.com.au/library/balefire/",
+    "title": "Balefire",
+    "source": "elena-balefire",
+    "label": "비탄의 마녀 엘레나 · 비탄의 잔향",
+    "start": 218,
+    "volume": 0.3,
+    "bytes": 13601666,
+    "sha256": "1546693f6381dc44c2cc90e8934aad32fd325bbc7ee26419ca3f2fb78f0809ad",
+    "author": "Scott Buckley",
+    "license": "CC-BY 4.0"
+  }
+]
