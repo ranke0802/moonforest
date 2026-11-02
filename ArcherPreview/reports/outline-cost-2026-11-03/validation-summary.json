@@ -1,0 +1,89 @@
+{
+  "baseline": "d03de5b",
+  "tests": {
+    "tests": 1216,
+    "pass": 1216,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "resourceGraphUnchanged": true,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "changes": [
+    "Ordinary scenery has no tint instance attribute; only graded sources use a tinted variant.",
+    "LOD ordering and selected mesh triangle counts are reused only within a single selection.",
+    "Screen readiness checks only the applicable source/LOD outline variant."
+  ],
+  "preserved": [
+    "Five chest grade colors and width 0.028",
+    "Instanced chest ink draw batching",
+    "Original selection order, hysteresis and triangle/count budgets",
+    "Player 8K, background max 4K, geometry LOD thresholds",
+    "Plains 100–200% range preference"
+  ],
+  "fourMapValidation": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "actual-four-map-chest-and-monochrome-render",
+        "visits": 8,
+        "shippedChestTriangles": 4479,
+        "pointsByMap": {
+          "village": 10,
+          "great-plains": 12,
+          "monster-forest": 29,
+          "witch-cave": 15
+        },
+        "tier5Draws": 8,
+        "coldBaseline": {
+          "meshes": 0,
+          "geometries": 0,
+          "materials": 1,
+          "textures": 1,
+          "before": 0,
+          "after": 0,
+          "dispose": 1,
+          "newMaterial": 0,
+          "removedMaterial": 0,
+          "newMesh": 0,
+          "removedMesh": 0,
+          "stages": 0,
+          "pending": 0
+        },
+        "warmedBaseline": {
+          "meshes": 0,
+          "geometries": 0,
+          "materials": 1,
+          "textures": 2,
+          "before": 0,
+          "after": 0,
+          "dispose": 3,
+          "newMaterial": 0,
+          "removedMaterial": 0,
+          "newMesh": 0,
+          "removedMesh": 0,
+          "stages": 0,
+          "pending": 0
+        },
+        "warmedSceneTextureNames": [
+          "cave-fog-inactive-sampler",
+          "data:EnvironmentBRDFTexture0"
+        ],
+        "plateau": true
+      },
+      {
+        "case": "actual-sdk-fog-and-cold-lod-outline-coupling",
+        "frames": 16,
+        "lodSources": 2,
+        "hiddenTier5Submissions": 0
+      }
+    ],
+    "limitations": [
+      "Node/Babylon NullEngine submission and lifecycle QA; no GPU rasterization, visual-quality, device-FPS or thermal measurement.",
+      "Four-map test uses every actual CHAPTER_POINTS row and shipped 4479-triangle chest Meshopt geometry; image and KTX upload are omitted. Non-chest scenery and alternate LOD geometry are controlled SDK fixtures.",
+      "Fog line-of-sight uses the real runtime with a controlled opaque wall or open field; it does not visually validate every authored dungeon wall."
+    ],
+    "browserAutomation": false
+  }
+}

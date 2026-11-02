@@ -1,0 +1,64 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "actual-four-map-chest-and-monochrome-render",
+      "visits": 8,
+      "shippedChestTriangles": 4479,
+      "pointsByMap": {
+        "village": 10,
+        "great-plains": 12,
+        "monster-forest": 29,
+        "witch-cave": 15
+      },
+      "tier5Draws": 8,
+      "coldBaseline": {
+        "meshes": 0,
+        "geometries": 0,
+        "materials": 1,
+        "textures": 1,
+        "before": 0,
+        "after": 0,
+        "dispose": 1,
+        "newMaterial": 0,
+        "removedMaterial": 0,
+        "newMesh": 0,
+        "removedMesh": 0,
+        "stages": 0,
+        "pending": 0
+      },
+      "warmedBaseline": {
+        "meshes": 0,
+        "geometries": 0,
+        "materials": 1,
+        "textures": 2,
+        "before": 0,
+        "after": 0,
+        "dispose": 3,
+        "newMaterial": 0,
+        "removedMaterial": 0,
+        "newMesh": 0,
+        "removedMesh": 0,
+        "stages": 0,
+        "pending": 0
+      },
+      "warmedSceneTextureNames": [
+        "cave-fog-inactive-sampler",
+        "data:EnvironmentBRDFTexture0"
+      ],
+      "plateau": true
+    },
+    {
+      "case": "actual-sdk-fog-and-cold-lod-outline-coupling",
+      "frames": 16,
+      "lodSources": 2,
+      "hiddenTier5Submissions": 0
+    }
+  ],
+  "limitations": [
+    "Node/Babylon NullEngine submission and lifecycle QA; no GPU rasterization, visual-quality, device-FPS or thermal measurement.",
+    "Four-map test uses every actual CHAPTER_POINTS row and shipped 4479-triangle chest Meshopt geometry; image and KTX upload are omitted. Non-chest scenery and alternate LOD geometry are controlled SDK fixtures.",
+    "Fog line-of-sight uses the real runtime with a controlled opaque wall or open field; it does not visually validate every authored dungeon wall."
+  ],
+  "browserAutomation": false
+}

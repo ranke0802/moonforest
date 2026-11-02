@@ -56,9 +56,10 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
     for(const node of root.getChildTransformNodes())node.freezeWorldMatrix();root.freezeWorldMatrix();
     localRecords.push({point,root,meshes,placement:{...point,kind:'ground-detail',scale:point.scale??1},config,center:new Vector3(point.x,root.position.y+height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
    }
-   for(const source of sources)prepareVillageInkSource(source);
+   const tinted=mapPoints.some(point=>point.model===id&&(point.lootTier??point.tier));
+   for(const source of sources)prepareVillageInkSource(source,{tinted});
    if(!outlines)outlines=new VillageOutlines(world,[],stats);
-   await lifetime.run(()=>outlines.prepare(sources,{cancelled}));lifetime.check();if(!current(revision))return;
+   await lifetime.run(()=>outlines.prepare(sources,{cancelled,tinted}));lifetime.check();if(!current(revision))return;
    outlines.addRecords(localRecords);
    containers.push(container);container=null;owned.push(...localRoots);records.push(...localRecords);localRoots=[];
    for(const record of localRecords)record.point.visual=record.root;

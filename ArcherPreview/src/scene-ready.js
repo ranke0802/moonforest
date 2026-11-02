@@ -35,7 +35,7 @@ export function currentFrameReadiness(scene){
       if(!source.isReady(false)){block('view',mesh,null,'geometry');continue;}
       const hardware=hardwareFor(mesh,source,engine);
       for(const sub of source.subMeshes??[]){if(!hardware&&source.subMeshes.length>1&&sub.isInFrustum&&!sub.isInFrustum(planes))continue;useMaterial(source,sub,hardware,'view');
-        if(hardware&&mesh.instancedBuffers?.villageInk?.x>0&&!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh)for(const material of scene.materials)if(material.metadata?.villageOutline){outlines.push(label(mesh));useMaterial(source,sub,true,'outline',material);}
+        if(hardware&&mesh.instancedBuffers?.villageInk?.x>0&&!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh)for(const material of scene.materials)if(material.metadata?.villageOutline&&(!material.metadata.villageOutlineUsesSource||material.metadata.villageOutlineUsesSource(source))){outlines.push(label(mesh));useMaterial(source,sub,true,'outline',material);}
       }
     }
     // Off-camera casters can still shade a visible surface. Check their exact

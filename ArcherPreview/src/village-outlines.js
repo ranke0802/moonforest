@@ -10,7 +10,7 @@ import {bindCaveFogMaterial} from './cave-fog-binding.js';
 import {CAVE_LABORATORY_CLIP_GLSL,activeLaboratoryClip} from './cave-laboratory-geometry.js';
 import {lootRarity} from './loot-rarity.js';
 
-const vertexSource=`precision highp float;
+const vertexSource=tinted=>`precision highp float;
 attribute vec3 position;attribute vec3 normal;
 uniform mat4 viewProjection;
 uniform vec3 inkCamera;uniform vec2 inkFogRange;uniform vec2 inkSingle;
@@ -18,25 +18,25 @@ uniform vec3 inkColor;
 #include<instancesDeclaration>
 #ifdef INSTANCES
 attribute vec2 villageInk;
-attribute vec3 villageInkTint;
+${tinted?'attribute vec3 villageInkTint;':''}
 #endif
 varying float inkCoverage;varying vec3 inkWorldPosition;
-varying vec3 inkTint;
+${tinted?'varying vec3 inkTint;':''}
 void main(void){
   #include<instancesVertex>
   vec2 ink=inkSingle;
-  inkTint=inkColor;
+  ${tinted?'inkTint=inkColor;':''}
   #ifdef INSTANCES
   ink=villageInk;
-  inkTint=villageInkTint;
+  ${tinted?'inkTint=villageInkTint;':''}
   #endif
   vec4 p=finalWorld*vec4(position,1.0);
   inkWorldPosition=p.xyz;
   p.xyz+=normalize(mat3(finalWorld)*normal)*ink.y;
   inkCoverage=ink.x*(1.0-smoothstep(inkFogRange.x,inkFogRange.y,distance(p.xyz,inkCamera)));gl_Position=viewProjection*p;
 }`;
-const fragmentSource=`precision highp float;
-varying vec3 inkTint;varying float inkCoverage;varying vec3 inkWorldPosition;
+const fragmentSource=tinted=>`precision highp float;
+${tinted?'varying vec3 inkTint;':'uniform vec3 inkColor;'}varying float inkCoverage;varying vec3 inkWorldPosition;
 uniform float inkCaveActive;uniform vec3 inkCamera;uniform vec3 inkFocus;
 uniform float inkLegacyLabClip;uniform vec4 inkLaboratoryRect;
 ${CAVE_VIEW_UNIFORMS}
@@ -51,7 +51,7 @@ void main(void){
   vec2 p=mod(floor(gl_FragCoord.xy),4.0);
   float threshold=(4.0*inkBayer2(mod(p,2.0))+inkBayer2(floor(p/2.0))+0.5)/16.0;
   if(inkCoverage<threshold)discard;
-  gl_FragColor=vec4(inkTint,1.0);
+  gl_FragColor=vec4(${tinted?'inkTint':'inkColor'},1.0);
 }`;
 
 // Only a subset of the batch that REALLY drew may receive ink. Never re-run
@@ -65,9 +65,14 @@ export function outlineBatch(batch,id,selected){
 // Prepare attribute layouts before warming an owned, still-hidden container.
 // Registering callbacks/records only after warmup succeeds makes cancellation
 // atomic: a failed candidate leaves no dangling ink entries in the live map.
-export function prepareVillageInkSource(mesh){
+export function prepareVillageInkSource(mesh,{tinted=false}={}){
   if(!mesh.instancedBuffers?.villageInk){mesh.registerInstancedBuffer('villageInk',2);mesh.instancedBuffers.villageInk=new Vector2(0,0);}
-  if(!mesh.instancedBuffers?.villageInkTint){mesh.registerInstancedBuffer('villageInkTint',3);mesh.instancedBuffers.villageInkTint=new Color3(.065,.052,.044);}
+  if(tinted&&!mesh.instancedBuffers?.villageInkTint){
+    mesh.registerInstancedBuffer('villageInkTint',3);mesh.instancedBuffers.villageInkTint=new Color3(.065,.052,.044);
+    // A shared source may already have ungraded instances when its first
+    // graded record arrives. Keep those instances dark in the tinted batch.
+    for(const instance of mesh.instances??[])instance.instancedBuffers.villageInkTint=new Color3(.065,.052,.044);
+  }
 }
 
 // Attach ink to the successful base draw, using its exact geometry, LOD and
@@ -75,27 +80,30 @@ export function prepareVillageInkSource(mesh){
 // No shell objects, textures, render targets or geometry copies are allocated.
 export class VillageOutlines {
   constructor(world,records,stats){
-    this.world=world;this.stats=stats;this.sources=new Set();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
+    this.world=world;this.stats=stats;this.sources=new Set();this.tintedSources=new WeakSet();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
     // A private draw wrapper must not overwrite the base PBR submesh effect.
-    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk','villageInkTint'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap']},false);
-    this.laboratoryRect=new Vector4();this.material.setFloat('inkLegacyLabClip',0);this.material.setVector4('inkLaboratoryRect',this.laboratoryRect);
-    this.material.setFloat('caveFogActive',0);
-    this.material.setVector2('inkSingle',new Vector2(0,0));
-    this.material.backFaceCulling=true;this.material.cullBackFaces=false;this.material.disableDepthWrite=true;
-    this.material.metadata={villageOutline:true};
-    Object.assign(this.material.stencil,{enabled:true,func:Constants.NOTEQUAL,backFunc:Constants.NOTEQUAL,funcRef:4,funcMask:4,mask:0,opStencilDepthPass:Constants.KEEP,backOpStencilDepthPass:Constants.KEEP});
-    this.material.setColor3('inkColor',new Color3(.065,.052,.044));
+    this.laboratoryRect=new Vector4();
     this.fogRange=new Vector2(world.scene.fogStart,world.scene.fogEnd);
-    this.material.setVector2('inkFogRange',this.fogRange);
-    this.sourceFor=original=>{
-      if(this.sources.has(original)){for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh);return;}
+    this.makeMaterial=tinted=>{
+      const material=new ShaderMaterial(tinted?'village-ink-tinted':'village-ink',world.scene,{vertexSource:vertexSource(tinted),fragmentSource:fragmentSource(tinted)},{attributes:['position','normal','villageInk',...(tinted?['villageInkTint']:[])],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap']},false);
+      material.setFloat('inkLegacyLabClip',0);material.setVector4('inkLaboratoryRect',this.laboratoryRect);material.setFloat('caveFogActive',0);material.setVector2('inkSingle',new Vector2(0,0));
+      material.backFaceCulling=true;material.cullBackFaces=false;material.disableDepthWrite=true;
+      material.metadata={villageOutline:true,villageOutlineUsesSource:source=>this.sources.has(source)&&this.tintedSources.has(source)===tinted};
+      Object.assign(material.stencil,{enabled:true,func:Constants.NOTEQUAL,backFunc:Constants.NOTEQUAL,funcRef:4,funcMask:4,mask:0,opStencilDepthPass:Constants.KEEP,backOpStencilDepthPass:Constants.KEEP});
+      material.setColor3('inkColor',new Color3(.065,.052,.044));material.setVector2('inkFogRange',this.fogRange);return material;
+    };
+    this.material=this.makeMaterial(false);this.tintedMaterial=null;
+    this.sourceFor=(original,tinted=false)=>{
+      tinted||=this.tintedSources.has(original);
+      if(tinted){this.tintedSources.add(original);this.tintedMaterial??=this.makeMaterial(true);}
+      prepareVillageInkSource(original,{tinted});
+      if(this.sources.has(original)){for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh,tinted);return;}
       this.sources.add(original);
-      prepareVillageInkSource(original);
       const observer=original.onBeforeDrawObservable.add(()=>{
         if(!this.drawing&&!world.scene._isInIntermediateRendering())this.drawn.set(original,world.scene.getRenderId());
       });
       this.baseObservers.push({original,observer});
-      for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh);
+      for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh,tinted);
     };
     this.entryMeshes=new Set();this.addRecords(records);
     world.scene._afterRenderingMeshStage.registerStep(2,this,this.afterBase);
@@ -104,16 +112,20 @@ export class VillageOutlines {
   addRecords(records){
     for(const record of records)for(const mesh of record.meshes){
       if(this.entryMeshes.has(mesh))continue;this.entryMeshes.add(mesh);
-      this.sourceFor(mesh.sourceMesh??mesh);
-      mesh.instancedBuffers.villageInk=new Vector2(0,0);
       const tier=record.placement.lootTier??record.placement.tier;
-      mesh.instancedBuffers.villageInkTint=tier?Color3.FromHexString(lootRarity(tier).color):new Color3(.065,.052,.044);
+      const source=mesh.sourceMesh??mesh;this.sourceFor(source,!!tier);
+      mesh.instancedBuffers.villageInk=new Vector2(0,0);
+      if(this.tintedSources.has(source))mesh.instancedBuffers.villageInkTint=tier?Color3.FromHexString(lootRarity(tier).color):new Color3(.065,.052,.044);
       this.entries.push({record,mesh,coverage:0,inkWidth:tier?.028:villageInkWidth(record.placement.kind)});
     }
     this.next=0;
   }
-  async prepare(sources=this.sources,{cancelled=()=>false}={}){
-    await prepareMapMaterials(sources,{material:this.material,cancelled:()=>this.world.scene.isDisposed||cancelled()});
+  async prepare(sources=this.sources,{cancelled=()=>false,tinted=false}={}){
+    const ordinary=[],colored=[];
+    for(const source of sources)(tinted||this.tintedSources.has(source)?colored:ordinary).push(source);
+    const stopped=()=>this.world.scene.isDisposed||cancelled();
+    if(ordinary.length)await prepareMapMaterials(ordinary,{material:this.material,cancelled:stopped});
+    if(colored.length&&!stopped()){this.tintedMaterial??=this.makeMaterial(true);await prepareMapMaterials(colored,{material:this.tintedMaterial,cancelled:stopped});}
   }
   afterBase(mesh,subMesh,batch){
     const scene=this.world.scene,engine=scene.getEngine();
@@ -125,10 +137,11 @@ export class VillageOutlines {
     // All village placements use hardware instances. A mirrored standalone
     // fallback is deliberately skipped instead of outlining an unrelated batch.
     if(subMesh.getMesh()._internalAbstractMeshDataInfo._actAsRegularMesh)return;
-    if(!this.material.isReady(mesh,true))return;
+    const material=this.tintedSources.has(mesh)?this.tintedMaterial:this.material;
+    if(!material?.isReady(mesh,true))return;
     const laboratory=activeLaboratoryClip(scene,mesh.material),rect=laboratory?.bounds;
-    this.material.setFloat('inkLegacyLabClip',laboratory?1:0);this.laboratoryRect.set(rect?.minX??0,rect?.minZ??0,rect?.maxX??0,rect?.maxZ??0);this.material.setVector4('inkLaboratoryRect',this.laboratoryRect);
-    const effect=this.material.getEffect(),depthWrite=engine.getDepthWrite(),depth=engine._depthCullingState;
+    material.setFloat('inkLegacyLabClip',laboratory?1:0);this.laboratoryRect.set(rect?.minX??0,rect?.minZ??0,rect?.maxX??0,rect?.maxZ??0);material.setVector4('inkLaboratoryRect',this.laboratoryRect);
+    const effect=material.getEffect(),depthWrite=engine.getDepthWrite(),depth=engine._depthCullingState;
     const state={cull:depth.cull,cullFace:depth.cullFace,frontFace:depth.frontFace,zOffset:depth.zOffset,zOffsetUnits:depth.zOffsetUnits};
     const stencil=engine.stencilStateComposer.stencilMaterial;
     this.drawing=true;
@@ -138,24 +151,29 @@ export class VillageOutlines {
       // Derive it explicitly so mirrored glTF roots also cull front faces.
       let orientation=mesh.material._getEffectiveOrientation(mesh);
       if(mesh._getWorldMatrixDeterminant()<0)orientation=orientation===Constants.MATERIAL_ClockWiseSideOrientation?Constants.MATERIAL_CounterClockWiseSideOrientation:Constants.MATERIAL_ClockWiseSideOrientation;
-      this.material._preBind(undefined,orientation);
-      this.material.bind(mesh.getWorldMatrix(),mesh);
-      bindCaveFogMaterial(scene,this.material,this.material._activeEffect??effect);engine.setDepthWrite(false);
+      material._preBind(undefined,orientation);
+      material.bind(mesh.getWorldMatrix(),mesh);
+      bindCaveFogMaterial(scene,material,material._activeEffect??effect);engine.setDepthWrite(false);
       mesh._processRendering(mesh,subMesh,effect,Constants.MATERIAL_TriangleFillMode,inkBatch,true);
       this.stats.outlineDraws=(this.stats.outlineDraws??0)+1;
     }finally{
-      this.material.unbind();engine.setDepthWrite(depthWrite);
+      material.unbind();engine.setDepthWrite(depthWrite);
       Object.assign(depth,state);engine.stencilStateComposer.stencilMaterial=stencil;
       scene.resetCachedMaterial();this.drawing=false;
     }
   }
+  updateMaterial(material,fogChanged){
+    if(fogChanged)material.setVector2('inkFogRange',this.fogRange);
+    bindCaveFogMaterial(this.world.scene,material);
+    material.setVector3('inkCamera',this.world.camera.globalPosition);
+    material.setFloat('inkCaveActive',this.world.cave?1:0);material.setVector3('inkFocus',this.world.camera.target);
+  }
   update(now){
     const {fogStart,fogEnd}=this.world.scene;
-    if(this.fogRange.x!==fogStart||this.fogRange.y!==fogEnd){this.fogRange.set(fogStart,fogEnd);this.material.setVector2('inkFogRange',this.fogRange);}
-    bindCaveFogMaterial(this.world.scene,this.material);
-    this.material.setVector3('inkCamera',this.world.camera.globalPosition);
-    this.material.setFloat('inkCaveActive',this.world.cave?1:0);
-    this.material.setVector3('inkFocus',this.world.camera.target);
+    const fogChanged=this.fogRange.x!==fogStart||this.fogRange.y!==fogEnd;
+    if(fogChanged)this.fogRange.set(fogStart,fogEnd);
+    this.updateMaterial(this.material,fogChanged);
+    if(this.tintedMaterial)this.updateMaterial(this.tintedMaterial,fogChanged);
     if(now>=this.next){
       this.next=now+150;const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
       const ranked=[];
@@ -182,6 +200,6 @@ export class VillageOutlines {
     const stage=this.world.scene._afterRenderingMeshStage,index=stage.findIndex(step=>step.component===this);if(index>=0)stage.splice(index,1);
     for(const {original,observer}of this.baseObservers)original.onBeforeDrawObservable.remove(observer);
     for(const {mesh}of this.entries)mesh.instancedBuffers.villageInk.set(0,0);
-    this.material.dispose();
+    this.material.dispose();this.tintedMaterial?.dispose();
   }
 }

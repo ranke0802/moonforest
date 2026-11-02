@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {FreeCamera,MeshBuilder,NullEngine,PBRMaterial,Scene,TransformNode,Vector3} from '@babylonjs/core';
+import {Color3,FreeCamera,MeshBuilder,NullEngine,PBRMaterial,Scene,TransformNode,Vector3} from '@babylonjs/core';
 import {VillageOutlines} from '../src/village-outlines.js';
 import {applyVillageToon} from '../src/village-toon.js';
 import {prepareTreeOcclusion} from '../src/tree-occlusion.js';
@@ -21,6 +21,10 @@ test('real Babylon render couples ink to a successful base/LOD batch through tur
   instances.forEach((m,i)=>{m.parent=root;m.position.x=i*3;m.instancedBuffers.treeCoverage=1;m.computeWorldMatrix(true);});
   const count=scene.meshes.length,stats={},ink=new VillageOutlines({scene,camera,touchDevice:true},instances.map(mesh=>({root,meshes:[mesh],placement:{kind:'tree'}})),stats);
   t.after(()=>ink.dispose());
+  for(const source of [near,far])assert.equal(Object.hasOwn(source.instancedBuffers,'villageInkTint'),false,'ordinary scenery and LOD do not register tint');
+  assert.equal(ink.tintedMaterial,null);
+  assert.doesNotMatch(ink.material.shaderPath.vertexSource,/villageInkTint|varying vec3 inkTint/);
+  assert.match(ink.material.shaderPath.fragmentSource,/uniform vec3 inkColor/);
   assert.equal(scene.meshes.length,count,'no independently culled hull objects');
   for(const source of [near,far])await source.material.forceCompilationAsync(source,{useInstances:true});
   await ink.prepare();
@@ -69,6 +73,7 @@ test('all treasure grades share geometry and a single ink material with stable i
  const geometries=scene.geometries.length,count=scene.meshes.length;
  const ink=new VillageOutlines({scene,camera,touchDevice:true},records,{});t.after(()=>{ink.dispose();scene.dispose();engine.dispose();});
  await ink.prepare();await source.material.forceCompilationAsync(source,{useInstances:true});
+ assert.ok(ink.tintedMaterial);assert.match(ink.tintedMaterial.shaderPath.vertexSource,/attribute vec3 villageInkTint/);
  let draws=0;const process=source._processRendering;source._processRendering=function(...args){if(ink.drawing)draws++;return process.apply(this,args);};
  scene.render();assert.equal(draws,1,'five colours must not add five ink passes');
  assert.equal(scene.meshes.length,count);assert.equal(scene.geometries.length,geometries);
@@ -76,4 +81,34 @@ test('all treasure grades share geometry and a single ink material with stable i
   const mesh=records[i].meshes[0];assert.equal(mesh.instancedBuffers.villageInkTint.toHexString().toLowerCase(),LOOT_RARITIES[i].color);
   assert.equal(ink.entries[i].inkWidth,.028);assert.equal(mesh.geometry,source.geometry);
  }
+});
+
+test('late tier promotion preserves dark ungraded instances, LOD sources and one shared ink batch',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);engine.getCaps().instancedArrays=true;
+ const camera=new FreeCamera('camera',new Vector3(0,2,-5),scene);camera.setTarget(Vector3.Zero());caveFogFallback(scene).getInternalTexture().isReady=true;
+ const source=MeshBuilder.CreateBox('source',{},scene),lod=MeshBuilder.CreateBox('lod',{},scene),root=new TransformNode('root',scene);
+ for(const mesh of [source,lod]){mesh.material=new PBRMaterial(mesh.name+'-paint',scene);mesh.isVisible=false;}source.addLODLevel(12,lod);
+ const ordinary=source.createInstance('ungraded');ordinary.parent=root;ordinary.position.x=-.5;ordinary.computeWorldMatrix(true);
+ const ink=new VillageOutlines({scene,camera,touchDevice:true},[{root,meshes:[ordinary],placement:{kind:'ground-detail'}}],{});t.after(()=>{ink.dispose();scene.dispose();engine.dispose();});
+ await ink.prepare();assert.equal(source.instancedBuffers.villageInkTint,undefined);assert.equal(lod.instancedBuffers.villageInkTint,undefined);
+ const colored=source.createInstance('graded');colored.parent=root;colored.position.x=.5;colored.computeWorldMatrix(true);
+ ink.addRecords([{root,meshes:[colored],placement:{kind:'ground-detail',tier:5}}]);
+ assert.ok(source.instancedBuffers.villageInkTint);assert.ok(lod.instancedBuffers.villageInkTint);
+ assert.equal(ordinary.instancedBuffers.villageInkTint.toHexString().toLowerCase(),new Color3(.065,.052,.044).toHexString().toLowerCase());
+ assert.equal(colored.instancedBuffers.villageInkTint.toHexString().toLowerCase(),LOOT_RARITIES[4].color);
+ await ink.prepare();await source.material.forceCompilationAsync(source,{useInstances:true});
+ let draws=0,effect;const process=source._processRendering;source._processRendering=function(mesh,sub,shader,...args){if(ink.drawing){draws++;effect=shader;}return process.call(this,mesh,sub,shader,...args);};
+ scene.render();assert.equal(draws,1);assert.equal(effect,ink.tintedMaterial.getEffect());
+});
+
+test('real SDK buffer processing omits the tint upload for ordinary scenery',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine),camera=new FreeCamera('camera',new Vector3(0,2,-5),scene),root=new TransformNode('root',scene);
+ const source=MeshBuilder.CreateBox('scenery',{},scene),instances=Array.from({length:100},(_,i)=>source.createInstance('tree-'+i));
+ const ink=new VillageOutlines({scene,camera,touchDevice:true},instances.map(mesh=>({root,meshes:[mesh],placement:{kind:'tree'}})),{});
+ t.after(()=>{ink.dispose();scene.dispose();engine.dispose();});
+ source._processInstancedBuffers(instances,false);
+ const updates=[],original=engine.updateDynamicVertexBuffer.bind(engine);engine.updateDynamicVertexBuffer=(buffer,data,...args)=>{updates.push(data.byteLength);return original(buffer,data,...args);};
+ source._processInstancedBuffers(instances,false);
+ assert.deepEqual(Object.keys(source.instancedBuffers),['villageInk']);
+ assert.deepEqual(updates,[1024],'only the existing two-float ink buffer is uploaded');
 });

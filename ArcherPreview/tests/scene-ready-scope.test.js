@@ -58,3 +58,18 @@ test('camera postprocess readiness stays required and names the camera',async t=
  const f=await fixture(t);f.camera.isReady=()=>false;let time=0;
  await assert.rejects(waitForSceneReady(f.scene,{now:()=>time,wait:async()=>{time+=45000;}}),error=>error.blocker.kind==='camera'&&error.blocker.mesh===f.camera.name);
 });
+
+test('outline readiness uses only the matching source and selected LOD variant',async t=>{
+ const f=await fixture(t,{arc:true}),root=new TransformNode('roots',f.scene),plain=f.box.createInstance('plain');plain.parent=root;
+ const chest=MeshBuilder.CreateBox('chest-source',{},f.scene),far=MeshBuilder.CreateBox('chest-far',{},f.scene);chest.material=far.material=f.material;chest.addLODLevel(1,far);
+ const graded=chest.createInstance('graded');graded.parent=root;graded.position.x=1;graded.computeWorldMatrix(true);
+ const ink=new VillageOutlines({scene:f.scene,camera:f.camera,cave:false,touchDevice:false},[
+  {root,meshes:[plain],placement:{kind:'tree'}},
+  {root,meshes:[graded],placement:{kind:'ground-detail',tier:5}},
+ ],{});t.after(()=>ink.dispose());f.box.setEnabled(false);chest.setEnabled(false);far.setEnabled(false);
+ plain.instancedBuffers.villageInk=new Vector2(1,.004);graded.instancedBuffers.villageInk=new Vector2(1,.028);
+ const mono=[],tinted=[];ink.material.isReady=(mesh)=>{mono.push(mesh.name);return true;};ink.tintedMaterial.isReady=(mesh)=>{tinted.push(mesh.name);return true;};
+ const state=currentFrameReadiness(f.scene);
+ assert.ok(state.outlines.includes(plain.name));assert.ok(state.outlines.includes(graded.name));
+ assert.deepEqual(mono,['visible-player']);assert.deepEqual(tinted,['chest-far']);
+});
