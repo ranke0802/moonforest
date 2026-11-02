@@ -17,11 +17,11 @@ export class VillageVisibility {
     this.planes=Frustum.GetPlanes(world.camera.getTransformationMatrix());
     this.cast=new Set();this.castRecords=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
     this.shadowFade=new ShadowFadeBudget(touch?28:44);
-    this.shadowScratch=new Set();
-    for(const record of records){
+    this.shadowScratch=new Set();this.shadowCandidateFlags=new Uint8Array(records.length);
+    for(const [index,record] of records.entries()){
       const key=cellKey(record.placement.x,record.placement.z);
-      if(!this.cells.has(key))this.cells.set(key,{records:[],min:new Vector3(Infinity,Infinity,Infinity),max:new Vector3(-Infinity,-Infinity,-Infinity),active:true});
-      const cell=this.cells.get(key);cell.records.push(record);
+      if(!this.cells.has(key))this.cells.set(key,{records:[],indices:[],min:new Vector3(Infinity,Infinity,Infinity),max:new Vector3(-Infinity,-Infinity,-Infinity),active:true});
+      const cell=this.cells.get(key);cell.records.push(record);cell.indices.push(index);
       cell.min.minimizeInPlace(record.min);cell.max.maximizeInPlace(record.max);
     }
     for(const cell of this.cells.values()){
@@ -29,6 +29,17 @@ export class VillageVisibility {
     }
     this.stats.cells=this.cells.size;
     this.occlusion=new VillageOcclusion(world,records,this.stats);
+  }
+  shadowCandidates(player){
+    const flags=this.shadowCandidateFlags,range=(this.touch?28:36)+3;flags.fill(0);let checked=0;
+    for(const cell of this.cells.values()){
+      const dx=Math.max(cell.min.x-player.x,0,player.x-cell.max.x),dz=Math.max(cell.min.z-player.z,0,player.z-cell.max.z);
+      // Do not test the camera frustum: off-screen cells can cast visible shadows.
+      const distance=Math.hypot(dx,dz);
+      if(!Number.isFinite(distance)||distance<=range+1e-6){for(const i of cell.indices)flags[i]=1;checked+=cell.indices.length;}
+    }
+    this.stats.shadowRecordsTotal=this.records.length;this.stats.shadowRecordsChecked=checked;
+    return this.records.filter((r,i)=>flags[i]&&r.meshes.length&&r.fogVisible!==false);
   }
   update(camera,player,dt){
     const runtime=this.world.caveFog;
@@ -44,7 +55,7 @@ export class VillageVisibility {
     if(this.world.lighting?.shadowsActive===false)this.shadowFade.clear();
     else if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      this.shadowFade.select(selectVillageShadowCasters(this.records.filter(r=>r.meshes.length&&r.fogVisible!==false),player,this.touch,this.castRecords));
+      this.shadowFade.select(selectVillageShadowCasters(this.shadowCandidates(player),player,this.touch,this.castRecords));
     }
     this.updateShadows(dt);
     const moved=Vector3.DistanceSquared(this.camera,camera)>1;

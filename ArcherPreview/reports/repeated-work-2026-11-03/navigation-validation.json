@@ -1,0 +1,199 @@
+{
+  "baseline": "9ca3561",
+  "passed": true,
+  "summary": {
+    "segmentQueries": 22169,
+    "orderChecks": 22169,
+    "movementChecks": 313,
+    "helperChecks": 1320
+  },
+  "cases": [
+    {
+      "case": "conservative-cell-oracle",
+      "queries": 1320,
+      "rectangleCells": 666643,
+      "segmentCells": 140636
+    },
+    {
+      "case": "actual-map-LOS-oracle",
+      "map": "village",
+      "obstacles": 281,
+      "queries": 2216,
+      "clear": 60,
+      "blocked": 2156,
+      "retainedCandidates": 85059,
+      "removedCandidates": 67330,
+      "exactResultsAndOrder": true,
+      "caveTerrainSamplingUnchanged": false
+    },
+    {
+      "case": "actual-map-LOS-oracle",
+      "map": "great-plains",
+      "obstacles": 789,
+      "queries": 2400,
+      "clear": 398,
+      "blocked": 2002,
+      "retainedCandidates": 72289,
+      "removedCandidates": 152915,
+      "exactResultsAndOrder": true,
+      "caveTerrainSamplingUnchanged": false
+    },
+    {
+      "case": "actual-map-LOS-oracle",
+      "map": "monster-forest",
+      "obstacles": 838,
+      "queries": 2400,
+      "clear": 105,
+      "blocked": 2295,
+      "retainedCandidates": 151436,
+      "removedCandidates": 193499,
+      "exactResultsAndOrder": true,
+      "caveTerrainSamplingUnchanged": false
+    },
+    {
+      "case": "actual-map-LOS-oracle",
+      "map": "witch-cave",
+      "obstacles": 36,
+      "queries": 2064,
+      "clear": 6,
+      "blocked": 2058,
+      "retainedCandidates": 7646,
+      "removedCandidates": 10599,
+      "exactResultsAndOrder": true,
+      "caveTerrainSamplingUnchanged": true
+    },
+    {
+      "case": "actual-cave-free-endpoint-short-segments",
+      "queries": 13089,
+      "clear": 12852,
+      "blocked": 237,
+      "zones": {
+        "entry": {
+          "queries": 142,
+          "clear": 138,
+          "blocked": 4
+        },
+        "portal": {
+          "queries": 44,
+          "clear": 44,
+          "blocked": 0
+        },
+        "boss": {
+          "queries": 1340,
+          "clear": 1327,
+          "blocked": 13
+        },
+        "corridor": {
+          "queries": 11563,
+          "clear": 11343,
+          "blocked": 220
+        }
+      },
+      "clearShortQueries0To10Metres": 12264,
+      "lengthsMetres": [
+        0,
+        0.399999999,
+        0.4,
+        0.40000000100000005,
+        0.7999999990000001,
+        0.8,
+        0.800000001,
+        1.1999999989999999,
+        1.2,
+        1.200000001,
+        3.6,
+        4,
+        7.2,
+        10,
+        14.4,
+        20
+      ],
+      "optimizedCollectorQueries": 156,
+      "optimizedCollectorClear": 112,
+      "terrainSampleCallsCompared": 100080,
+      "exactResultsOrderAndSamplePoints": true
+    },
+    {
+      "case": "legacy-undersized-OBB-fallback",
+      "comparisons": 220,
+      "wholeNavigatorRectangleFallback": true,
+      "includesNarrowPhaseEps": true,
+      "actualMapsStillOptimized": true
+    },
+    {
+      "case": "unchanged-contact-and-movement",
+      "movementComparisons": 313,
+      "tieOrderingPreserved": true,
+      "nearbyAndContactImplementationsUnchanged": true
+    },
+    {
+      "case": "cell-requests-and-informational-CPU",
+      "map": "village",
+      "scenario": "80 map-spanning long diagonals with radii 0/.34/.7/2; not a representative frame or short-route workload",
+      "queries": 80,
+      "baselineCellRequests": 50323,
+      "optimizedCellRequests": 5550,
+      "reduction": 0.8897124575243924,
+      "timedQueries": 240,
+      "timedScope": "full segmentClear: candidate collection, original-order sorting, analytic narrow phase, and cave terrain sampling when reached",
+      "baselineCpuMs": 52.47199999999975,
+      "optimizedCpuMs": 28.812200000000303,
+      "physicalFpsMeasured": false
+    },
+    {
+      "case": "cell-requests-and-informational-CPU",
+      "map": "great-plains",
+      "scenario": "80 map-spanning long diagonals with radii 0/.34/.7/2; not a representative frame or short-route workload",
+      "queries": 80,
+      "baselineCellRequests": 232200,
+      "optimizedCellRequests": 12108,
+      "reduction": 0.9478552971576227,
+      "timedQueries": 240,
+      "timedScope": "full segmentClear: candidate collection, original-order sorting, analytic narrow phase, and cave terrain sampling when reached",
+      "baselineCpuMs": 251.28409999999985,
+      "optimizedCpuMs": 12.265400000000227,
+      "physicalFpsMeasured": false
+    },
+    {
+      "case": "cell-requests-and-informational-CPU",
+      "map": "monster-forest",
+      "scenario": "80 map-spanning long diagonals with radii 0/.34/.7/2; not a representative frame or short-route workload",
+      "queries": 80,
+      "baselineCellRequests": 81280,
+      "optimizedCellRequests": 7102,
+      "reduction": 0.912623031496063,
+      "timedQueries": 240,
+      "timedScope": "full segmentClear: candidate collection, original-order sorting, analytic narrow phase, and cave terrain sampling when reached",
+      "baselineCpuMs": 157.20020000000022,
+      "optimizedCpuMs": 16.71270000000004,
+      "physicalFpsMeasured": false
+    },
+    {
+      "case": "cell-requests-and-informational-CPU",
+      "map": "witch-cave",
+      "scenario": "80 map-spanning long diagonals with radii 0/.34/.7/2; not a representative frame or short-route workload",
+      "queries": 80,
+      "baselineCellRequests": 114760,
+      "optimizedCellRequests": 8470,
+      "reduction": 0.9261937957476473,
+      "timedQueries": 240,
+      "timedScope": "full segmentClear: candidate collection, original-order sorting, analytic narrow phase, and cave terrain sampling when reached",
+      "baselineCpuMs": 121.89139999999952,
+      "optimizedCpuMs": 4.713999999999942,
+      "physicalFpsMeasured": false
+    }
+  ],
+  "unchanged": [
+    "Analytic obstacleClearance/sweepObstacle predicates and EPS .002",
+    "Original nearby and obstacleContact traversal/order; movement dash/slide contacts",
+    "CaveNavigation .4m LOS samples and .2m sweep samples",
+    "Player/background textures, geometry, LOD and view-distance settings"
+  ],
+  "limitations": [
+    "Node CPU correctness and work-count evidence only; timings are machine/load dependent and not mobile FPS, GPU or thermal measurements.",
+    "The timed workload is 80 map-spanning long diagonals repeated three times. It does not establish typical per-frame cost or an FPS improvement.",
+    "The grid index already assumes immutable obstacle placement. No cross-query result cache or new invalidation requirement was added.",
+    "Navigators with any OBB extending beyond its padded index radius retain the original rectangle collector. All four actual map layouts satisfy the conservative safety certificate."
+  ],
+  "browserAutomation": false
+}

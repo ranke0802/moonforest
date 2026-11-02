@@ -1,0 +1,21 @@
+{
+  "baseline": "9ca3561",
+  "scope": "Read-only source review by an agent separate from the collision/combat authors; no browser automation",
+  "resolved": [
+    {
+      "issue": "An OBB wider than its legacy index radius could be removed from segment candidates, changing a blocked result to clear.",
+      "resolution": "If any OBB's circumradius plus the existing 0.002 collision epsilon exceeds its padded index radius, the navigator retains the original rectangle collector.",
+      "coverage": "220 underbound OBB cases and an epsilon boundary test; all four current map layouts retain the optimized path."
+    }
+  ],
+  "findings": [
+    "Occlusion beforeRender keeps the original previous-frame comparison and reveal/flag ordering; Float64Array buffer reuse does not change GPU query code.",
+    "Combat reuse requires a same-generation proof, matching actor/map/navigation/terrain/radius and exact position before and after separation. Subclass movement invalidates the proof.",
+    "No additional high-risk difference or new unbounded retention was found in the current authored-map synchronous combat paths.",
+    "Player pose reuse was removed after paired CPU comparisons failed to show a consistent benefit."
+  ],
+  "limitations": [
+    "Same-object in-place obstacle or terrain edits are not detected by reference checks. Current gameplay has no such edit during combat update; future dynamic terrain or layout code must invalidate the index/proof or use the original path.",
+    "This review does not measure hardware rendering, device FPS, GPU time or temperature."
+  ]
+}

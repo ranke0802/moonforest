@@ -1,6 +1,7 @@
 import { ArenaNavigation } from './navigation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
+import {visitSegmentCells} from './navigation-segment-cells.js';
 
 const CELL=4,EPS=.002;
 const key=(x,z)=>`${Math.floor(x/CELL)}:${Math.floor(z/CELL)}`;
@@ -36,9 +37,14 @@ class RouteHeap {
 // spatial index for the larger village. AI/path rules and movement stay intact.
 export class VillageNavigation extends ArenaNavigation {
   constructor(obstacles){
-    super(obstacles);this.cells=new Map();this.gridMetadata=new WeakMap();
+    super(obstacles);this.cells=new Map();this.gridMetadata=new WeakMap();this.obstacleCells=new WeakMap();this.segmentCellPruningSafe=true;
+    let order=0;
     for(const o of obstacles){
       const extent=o.radius+1.5;
+      // Legacy callers may supply an OBB whose index radius understates its
+      // solid. Keep the original rectangle search for that entire navigator.
+      if(o.shape==='box'&&!(Math.hypot(o.halfWidth,o.halfDepth)+EPS<=extent))this.segmentCellPruningSafe=false;
+      if(!this.obstacleCells.has(o))this.obstacleCells.set(o,{x:Math.floor((o.x-extent)/CELL),z:Math.floor((o.z-extent)/CELL),order});order++;
       for(let x=Math.floor((o.x-extent)/CELL);x<=Math.floor((o.x+extent)/CELL);x++)for(let z=Math.floor((o.z-extent)/CELL);z<=Math.floor((o.z+extent)/CELL);z++){
         const k=`${x}:${z}`;if(!this.cells.has(k))this.cells.set(k,[]);this.cells.get(k).push(o);
       }
@@ -131,9 +137,24 @@ export class VillageNavigation extends ArenaNavigation {
     for(let x=Math.floor((Math.min(a.x,b.x)-radius)/CELL);x<=Math.floor((Math.max(a.x,b.x)+radius)/CELL);x++)for(let z=Math.floor((Math.min(a.z,b.z)-radius)/CELL);z<=Math.floor((Math.max(a.z,b.z)+radius)/CELL);z++)for(const o of this.cells.get(`${x}:${z}`)??[])near.add(o);
     return near;
   }
+  segmentObstacles(a,b,radius=0){
+    const minX=Math.floor((Math.min(a.x,b.x)-radius)/CELL),maxX=Math.floor((Math.max(a.x,b.x)+radius)/CELL);
+    const minZ=Math.floor((Math.min(a.z,b.z)-radius)/CELL),maxZ=Math.floor((Math.max(a.z,b.z)+radius)/CELL);
+    // Adjacent path-grid edges and axis-aligned queries already have a narrow
+    // rectangle. Preserve that cheap path, as well as legacy invalid radii.
+    if(!this.segmentCellPruningSafe||radius<0||!Number.isFinite(radius)||!Number.isFinite(minX+maxX+minZ+maxZ)||(maxX-minX+1)*(maxZ-minZ+1)<=16||a.x===b.x||a.z===b.z)return this.nearby(a,b,radius);
+    const near=new Set();
+    visitSegmentCells(a,b,radius,CELL,(x,z)=>{for(const o of this.cells.get(`${x}:${z}`)??[])near.add(o);});
+    // Keep the old rectangle's first-appearance order for retained obstacles.
+    // An obstacle covers a rectangle of index cells; its first old cell is the
+    // lower-left intersection, with original insertion order breaking ties.
+    const ordered=[...near].map(o=>{const at=this.obstacleCells.get(o);return {o,x:Math.max(minX,at.x),z:Math.max(minZ,at.z),order:at.order};});
+    ordered.sort((a,b)=>a.x-b.x||a.z-b.z||a.order-b.order);
+    return ordered.map(entry=>entry.o);
+  }
   segmentClear(a,b,radius=0,combat=false){
     const delta={x:b.x-a.x,z:b.z-a.z},r=radius+EPS;
-    for(const o of this.nearby(a,b,radius)){
+    for(const o of this.segmentObstacles(a,b,radius)){
       if(combat&&(o.height<1||o.id.startsWith('dummy-')))continue;
       if(obstacleClearance(a,o)<r||obstacleClearance(b,o)<r||sweepObstacle(a,delta,o,r))return false;
     }

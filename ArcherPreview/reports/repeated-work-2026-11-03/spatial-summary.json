@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9ca3561",
+  "implementation": {
+    "demand": "Conservative bounding-sphere cells only for >=1000 records in normal views; direct baseline loop for smaller maps, overview and malformed bounds. Candidate flags preserve original placement order and the close 360-degree prefetch path.",
+    "shadows": "Existing visibility cells provide conservative full-AABB candidates within maximum retained caster range; no camera-frustum restriction; original shadow policy, hysteresis and record order retained.",
+    "unchanged": [
+      "camera distance and fog",
+      "geometry LOD and assets",
+      "8K player and background texture profiles",
+      "texture pacing, budgets, loads and releases",
+      "shadow policy, fade and budgets",
+      "overview rendering",
+      "map ownership and cache release"
+    ]
+  },
+  "scope": "Current authored maps: demand index applies to great-plains only; shadow candidates apply to all four maps. Index is built once per environment lazily and rebuilt when record count changes. No index is built for overview-only views.",
+  "validation": {
+    "focusedTests": 44,
+    "passed": 44,
+    "failed": 0,
+    "tests": [
+      "village-spatial-reuse.test.js",
+      "village-demand.test.js",
+      "plains-view-distance.test.js",
+      "village-style-coverage.test.js",
+      "village-texture-pacing.test.js",
+      "village-texture-streaming.test.js",
+      "village-texture-cancel.test.js"
+    ],
+    "equivalence": "Frozen baseline demand and original shadow policy exact ordered outputs on four maps, desktop/touch, moving/turning cameras, 100/200%, synthetic cave fog and four authored terrain height fields. Added NaN fail-open, giant bounds, threshold and behind-camera close prefetch cases.",
+    "measurements": [
+      "four-map-candidates.json",
+      "four-map-cpu.json",
+      "measure-spatial.mjs"
+    ]
+  },
+  "limits": [
+    "All candidate statistics are expensive narrow checks; cheap full-record flag filtering and cell overhead remain.",
+    "CPU timings are Node NullEngine local samples including candidate work, without browser, GPU or device FPS. Host load and JIT noise apply.",
+    "No visual quality or FPS claim without target-device measurement.",
+    "The direct and indexed demand loops duplicate policy code and must remain aligned; tests use a frozen baseline oracle."
+  ]
+}

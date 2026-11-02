@@ -1,0 +1,481 @@
+{
+  "method": "Three 320-sample paired, alternating-order rounds after warmup. Milliseconds are totals per round. Node NullEngine, flat terrain surrogate and synthetic visibility; includes cell, candidate, sorting and policy work. No browser, GPU or FPS measurement; host load/JIT noise applies.",
+  "results": [
+    {
+      "map": "village",
+      "touch": true,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 21.83,
+          "demandAfter": 21.69,
+          "shadowBefore": 15.65,
+          "shadowAfter": 9.41
+        },
+        {
+          "demandBefore": 21.19,
+          "demandAfter": 20.83,
+          "shadowBefore": 17.09,
+          "shadowAfter": 8.85
+        },
+        {
+          "demandBefore": 20.6,
+          "demandAfter": 21.18,
+          "shadowBefore": 18.14,
+          "shadowAfter": 8.8
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 21.19,
+        "demandAfter": 21.18,
+        "shadowBefore": 17.09,
+        "shadowAfter": 8.85
+      }
+    },
+    {
+      "map": "village",
+      "touch": false,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 20.13,
+          "demandAfter": 19.59,
+          "shadowBefore": 17.82,
+          "shadowAfter": 12.36
+        },
+        {
+          "demandBefore": 19.4,
+          "demandAfter": 19.33,
+          "shadowBefore": 17.09,
+          "shadowAfter": 10.89
+        },
+        {
+          "demandBefore": 19.21,
+          "demandAfter": 20.52,
+          "shadowBefore": 14.87,
+          "shadowAfter": 11.47
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 19.4,
+        "demandAfter": 19.59,
+        "shadowBefore": 17.09,
+        "shadowAfter": 11.47
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "indexed",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 19.26,
+          "demandAfter": 19.56,
+          "shadowBefore": 13.61,
+          "shadowAfter": 4.35
+        },
+        {
+          "demandBefore": 18.27,
+          "demandAfter": 16.9,
+          "shadowBefore": 13.38,
+          "shadowAfter": 4.15
+        },
+        {
+          "demandBefore": 19.1,
+          "demandAfter": 17.59,
+          "shadowBefore": 12.91,
+          "shadowAfter": 4.17
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 19.1,
+        "demandAfter": 17.59,
+        "shadowBefore": 13.38,
+        "shadowAfter": 4.17
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 1,
+      "overview": true,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 22.88,
+          "demandAfter": 25.13,
+          "shadowBefore": 14.34,
+          "shadowAfter": 4.3
+        },
+        {
+          "demandBefore": 23.29,
+          "demandAfter": 24.67,
+          "shadowBefore": 15.51,
+          "shadowAfter": 4.96
+        },
+        {
+          "demandBefore": 24.51,
+          "demandAfter": 22.95,
+          "shadowBefore": 14.14,
+          "shadowAfter": 4.54
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 23.29,
+        "demandAfter": 24.67,
+        "shadowBefore": 14.34,
+        "shadowAfter": 4.54
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 2,
+      "overview": false,
+      "demandPolicy": "indexed",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 23.34,
+          "demandAfter": 23.05,
+          "shadowBefore": 17.99,
+          "shadowAfter": 6.23
+        },
+        {
+          "demandBefore": 25.22,
+          "demandAfter": 22.37,
+          "shadowBefore": 17.07,
+          "shadowAfter": 5.11
+        },
+        {
+          "demandBefore": 24.81,
+          "demandAfter": 23.34,
+          "shadowBefore": 16.44,
+          "shadowAfter": 4.94
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 24.81,
+        "demandAfter": 23.05,
+        "shadowBefore": 17.07,
+        "shadowAfter": 5.11
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 2,
+      "overview": true,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 28.85,
+          "demandAfter": 23.5,
+          "shadowBefore": 18.52,
+          "shadowAfter": 6.14
+        },
+        {
+          "demandBefore": 26.95,
+          "demandAfter": 24.95,
+          "shadowBefore": 16.67,
+          "shadowAfter": 5.4
+        },
+        {
+          "demandBefore": 23.39,
+          "demandAfter": 25.1,
+          "shadowBefore": 14.93,
+          "shadowAfter": 4.34
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 26.95,
+        "demandAfter": 24.95,
+        "shadowBefore": 16.67,
+        "shadowAfter": 5.4
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "indexed",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 30.42,
+          "demandAfter": 22.35,
+          "shadowBefore": 16.51,
+          "shadowAfter": 5.59
+        },
+        {
+          "demandBefore": 23.77,
+          "demandAfter": 20.85,
+          "shadowBefore": 14.48,
+          "shadowAfter": 5.26
+        },
+        {
+          "demandBefore": 24.64,
+          "demandAfter": 22.61,
+          "shadowBefore": 16.6,
+          "shadowAfter": 5.44
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 24.64,
+        "demandAfter": 22.35,
+        "shadowBefore": 16.51,
+        "shadowAfter": 5.44
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 1,
+      "overview": true,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 23.84,
+          "demandAfter": 26.07,
+          "shadowBefore": 19.08,
+          "shadowAfter": 5.98
+        },
+        {
+          "demandBefore": 24.54,
+          "demandAfter": 27.51,
+          "shadowBefore": 19.17,
+          "shadowAfter": 6.15
+        },
+        {
+          "demandBefore": 24.97,
+          "demandAfter": 27.77,
+          "shadowBefore": 19.54,
+          "shadowAfter": 6.1
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 24.54,
+        "demandAfter": 27.51,
+        "shadowBefore": 19.17,
+        "shadowAfter": 6.1
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 2,
+      "overview": false,
+      "demandPolicy": "indexed",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 26.26,
+          "demandAfter": 22.88,
+          "shadowBefore": 17.59,
+          "shadowAfter": 5.59
+        },
+        {
+          "demandBefore": 24.06,
+          "demandAfter": 22.22,
+          "shadowBefore": 17.84,
+          "shadowAfter": 5.44
+        },
+        {
+          "demandBefore": 24.39,
+          "demandAfter": 22.86,
+          "shadowBefore": 17.63,
+          "shadowAfter": 5.58
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 24.39,
+        "demandAfter": 22.86,
+        "shadowBefore": 17.63,
+        "shadowAfter": 5.58
+      }
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 2,
+      "overview": true,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 23.74,
+          "demandAfter": 23.13,
+          "shadowBefore": 18.59,
+          "shadowAfter": 5.42
+        },
+        {
+          "demandBefore": 24.36,
+          "demandAfter": 25.74,
+          "shadowBefore": 17.12,
+          "shadowAfter": 5.63
+        },
+        {
+          "demandBefore": 24.47,
+          "demandAfter": 24.87,
+          "shadowBefore": 17.38,
+          "shadowAfter": 6.12
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 24.36,
+        "demandAfter": 24.87,
+        "shadowBefore": 17.38,
+        "shadowAfter": 5.63
+      }
+    },
+    {
+      "map": "monster-forest",
+      "touch": true,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 33.27,
+          "demandAfter": 32.93,
+          "shadowBefore": 22.02,
+          "shadowAfter": 9.72
+        },
+        {
+          "demandBefore": 30.96,
+          "demandAfter": 32.33,
+          "shadowBefore": 23.07,
+          "shadowAfter": 10.51
+        },
+        {
+          "demandBefore": 31.81,
+          "demandAfter": 33.56,
+          "shadowBefore": 23.32,
+          "shadowAfter": 9.74
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 31.81,
+        "demandAfter": 32.93,
+        "shadowBefore": 23.07,
+        "shadowAfter": 9.74
+      }
+    },
+    {
+      "map": "monster-forest",
+      "touch": false,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 31.89,
+          "demandAfter": 31.97,
+          "shadowBefore": 23.01,
+          "shadowAfter": 12.82
+        },
+        {
+          "demandBefore": 30.29,
+          "demandAfter": 31.22,
+          "shadowBefore": 23.52,
+          "shadowAfter": 12.52
+        },
+        {
+          "demandBefore": 30.86,
+          "demandAfter": 31.61,
+          "shadowBefore": 22.65,
+          "shadowAfter": 13.2
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 30.86,
+        "demandAfter": 31.61,
+        "shadowBefore": 23.01,
+        "shadowAfter": 12.82
+      }
+    },
+    {
+      "map": "witch-cave",
+      "touch": true,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 8.67,
+          "demandAfter": 7.98,
+          "shadowBefore": 4.02,
+          "shadowAfter": 2.56
+        },
+        {
+          "demandBefore": 7.88,
+          "demandAfter": 8.58,
+          "shadowBefore": 4.09,
+          "shadowAfter": 2.59
+        },
+        {
+          "demandBefore": 7.73,
+          "demandAfter": 8.4,
+          "shadowBefore": 4.06,
+          "shadowAfter": 2.59
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 7.88,
+        "demandAfter": 8.4,
+        "shadowBefore": 4.06,
+        "shadowAfter": 2.59
+      }
+    },
+    {
+      "map": "witch-cave",
+      "touch": false,
+      "scale": 1,
+      "overview": false,
+      "demandPolicy": "direct",
+      "samplesPerRound": 320,
+      "rounds": [
+        {
+          "demandBefore": 7.87,
+          "demandAfter": 7.12,
+          "shadowBefore": 3.93,
+          "shadowAfter": 2.84
+        },
+        {
+          "demandBefore": 7.36,
+          "demandAfter": 8.32,
+          "shadowBefore": 4.33,
+          "shadowAfter": 3.12
+        },
+        {
+          "demandBefore": 7.45,
+          "demandAfter": 7.77,
+          "shadowBefore": 3.98,
+          "shadowAfter": 3.09
+        }
+      ],
+      "medianMs": {
+        "demandBefore": 7.45,
+        "demandAfter": 7.77,
+        "shadowBefore": 3.98,
+        "shadowAfter": 3.09
+      }
+    }
+  ]
+}

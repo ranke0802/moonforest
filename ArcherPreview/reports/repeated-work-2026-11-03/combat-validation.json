@@ -1,0 +1,784 @@
+{
+  "scope": "Real Babylon NullEngine, synthetic animated bear rigs, actual four map terrain and navigation; prior battle orchestration oracle. No browser, visual GPU, phone FPS or thermal test.",
+  "playerPoseSharing": "Deferred: same-frame player terrain and forced matrix calls retain the original behavior.",
+  "cases": [
+    {
+      "map": "village",
+      "scenario": "single",
+      "frames": 12,
+      "baseline": {
+        "constrain": 24,
+        "place": 36,
+        "playerMatrix": 12
+      },
+      "optimized": {
+        "constrain": 12,
+        "place": 24,
+        "playerMatrix": 12
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "separated",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "overlap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "knockback",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "wall",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "postmove",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "grab",
+      "frames": 12,
+      "baseline": {
+        "constrain": 84,
+        "place": 72,
+        "playerMatrix": 24
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 36,
+        "playerMatrix": 24
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "player-dirty",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "player-observer",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "map-change",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "terrain-swap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 37,
+        "place": 73,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "nav-swap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 37,
+        "place": 73,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "village",
+      "scenario": "custom-terrain",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "single",
+      "frames": 12,
+      "baseline": {
+        "constrain": 24,
+        "place": 36,
+        "playerMatrix": 12
+      },
+      "optimized": {
+        "constrain": 12,
+        "place": 24,
+        "playerMatrix": 12
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "separated",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "overlap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "knockback",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "wall",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "postmove",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "grab",
+      "frames": 12,
+      "baseline": {
+        "constrain": 84,
+        "place": 72,
+        "playerMatrix": 24
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 36,
+        "playerMatrix": 24
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "player-dirty",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "player-observer",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "great-plains",
+      "scenario": "map-change",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "single",
+      "frames": 12,
+      "baseline": {
+        "constrain": 24,
+        "place": 36,
+        "playerMatrix": 12
+      },
+      "optimized": {
+        "constrain": 12,
+        "place": 24,
+        "playerMatrix": 12
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "separated",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "overlap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "knockback",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "wall",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "postmove",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "grab",
+      "frames": 12,
+      "baseline": {
+        "constrain": 84,
+        "place": 72,
+        "playerMatrix": 24
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 36,
+        "playerMatrix": 24
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "player-dirty",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "player-observer",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "monster-forest",
+      "scenario": "map-change",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "single",
+      "frames": 12,
+      "baseline": {
+        "constrain": 24,
+        "place": 36,
+        "playerMatrix": 12
+      },
+      "optimized": {
+        "constrain": 12,
+        "place": 24,
+        "playerMatrix": 12
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "separated",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "overlap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "knockback",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "wall",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "postmove",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "grab",
+      "frames": 12,
+      "baseline": {
+        "constrain": 84,
+        "place": 72,
+        "playerMatrix": 24
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 36,
+        "playerMatrix": 24
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "player-dirty",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "player-observer",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 36,
+        "place": 72,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "map-change",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 48,
+        "place": 84,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "terrain-swap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 37,
+        "place": 73,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "nav-swap",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 37,
+        "place": 73,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "map": "witch-cave",
+      "scenario": "custom-terrain",
+      "frames": 12,
+      "baseline": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "optimized": {
+        "constrain": 72,
+        "place": 108,
+        "playerMatrix": 36
+      },
+      "equal": true
+    },
+    {
+      "scenario": "local-paired-update-timing",
+      "scope": "8 alternating 100-call batches, two warm NullEngine scenes with three synthetic bosses and dt=0; not device or GPU timing",
+      "timings": [
+        {
+          "baseline": 1.30279999999766,
+          "optimized": 1.6491000000023632
+        },
+        {
+          "optimized": 1.3616000000038184,
+          "baseline": 1.232799999997951
+        },
+        {
+          "baseline": 1.2907000000050175,
+          "optimized": 1.3438999999998487
+        },
+        {
+          "optimized": 1.364000000001397,
+          "baseline": 1.2463000000061584
+        },
+        {
+          "baseline": 1.260099999999511,
+          "optimized": 1.0834000000031665
+        },
+        {
+          "optimized": 1.347300000001269,
+          "baseline": 1.2206000000005588
+        },
+        {
+          "baseline": 1.2149000000063097,
+          "optimized": 2.0522000000055414
+        },
+        {
+          "optimized": 1.0965999999971245,
+          "baseline": 1.1240000000034343
+        }
+      ],
+      "medianMsPer100": {
+        "baseline": 1.2463000000061584,
+        "optimized": 1.3616000000038184
+      }
+    }
+  ]
+}

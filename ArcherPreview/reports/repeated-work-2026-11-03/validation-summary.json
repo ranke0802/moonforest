@@ -1,0 +1,36 @@
+{
+  "baseline": "9ca3561",
+  "tests": {
+    "tests": 1248,
+    "pass": 1248,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "navigation": {
+    "segmentQueries": 22169,
+    "orderChecks": 22169,
+    "movementChecks": 313,
+    "helperChecks": 1320
+  },
+  "combatCases": 47,
+  "resourceGraphUnchanged": true,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "inputAndNarrowPhaseFilesUnchanged": [
+    "src/input.js",
+    "src/warrior-v2.js",
+    "src/player-strikes.js",
+    "src/village-lod.js",
+    "src/village-shadow-policy.js",
+    "src/witch-cave-navigation.js"
+  ],
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "deployment": {
+    "status": "pending"
+  },
+  "notes": [
+    "Candidate counts exclude the cheap flag pass and cell selection overhead; they are not total loop counts.",
+    "Local paired CPU timing is not phone FPS/GPU/thermal measurement.",
+    "Combat oracle uses actual maps and SDK with synthetic animated rigs; shipped-asset regressions are in the full suite."
+  ]
+}

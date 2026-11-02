@@ -270,6 +270,13 @@ export class BossEncounter {
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
     if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,ENEMY_ARENA_RADIUS);else capPosition(this.actor.position);
     this.world.terrain?.place(this.actor.position);
+    // Only the battle-owned update may certify this exact post-collision pose.
+    // Subclasses can still move after super.update; the battle checks the
+    // complete snapshot again after every encounter and separation have run.
+    if(this._battleUpdateToken){
+      const p=this.actor.position,proof=this._reconciledMotion??={};
+      proof.token=this._battleUpdateToken;proof.generation=this._battleUpdateToken.generation;proof.actor=this.actor;proof.scene=this.world.scene;proof.mapId=this.world.mapId;proof.navigation=navigation;proof.obstacles=navigation?.obstacles;proof.cells=navigation?.cells;proof.terrain=this.world.terrain;proof.heights=this.world.terrain?.heights;proof.size=this.world.terrain?.size;proof.subdivisions=this.world.terrain?.subdivisions;proof.radius=this.radius;proof.x=p.x;proof.y=p.y;proof.z=p.z;
+    }
     const spec=this.motionSpec(this.brain.state);
     this.ring.isVisible=this.kind!=='elena'&&this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
     this.warningRing.update(this.actor.position,this.attackRange(spec));

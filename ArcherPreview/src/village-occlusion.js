@@ -47,8 +47,12 @@ export class VillageOcclusion {
     const changed=!this.view||view.some((n,i)=>Math.abs(n-this.view[i])>.00001);
     if(changed){this.epoch++;this.stableFrames=0;for(const g of this.groups)this.reveal(g);}
     else this.stableFrames++;
-    this.view=Array.from(view);
-    this.stats.occludedProps=this.groups.reduce((n,g)=>n+g.items.filter(r=>r.occluded).length,0);
+    // Keep the previous-frame comparison (including tiny changes), without
+    // allocating a matrix array and one filtered item array per group/frame.
+    this.view??=new Float64Array(view.length);this.view.set(view);
+    let occludedProps=0;
+    for(const group of this.groups)for(const record of group.items)if(record.occluded)occludedProps++;
+    this.stats.occludedProps=occludedProps;
   }
   afterRender(){
     if(this.disabled||this.stableFrames<3||!this.groups.length)return;

@@ -1,0 +1,117 @@
+{
+  "comparison": "exact demand plan and shadow caster order against unindexed functions",
+  "scene": "NullEngine; authored placements and manifest bounds, flat terrain surrogate, synthetic cave fog; not real GPU/FPS",
+  "countMeaning": "Counts are candidate records passed into expensive narrow checks. A cheap ordered flag pass still visits all records; cell tests and array work are additional. Runtime demand uses direct scan below 1000 records and in overview.",
+  "cases": [
+    {
+      "map": "village",
+      "touch": false,
+      "scale": 1,
+      "steps": 36,
+      "records": 698,
+      "baselineNarrowChecks": 25128,
+      "demandNarrowCandidates": 25128,
+      "shadowNarrowCandidates": 13522,
+      "demandPolicy": "direct"
+    },
+    {
+      "map": "village",
+      "touch": true,
+      "scale": 1,
+      "steps": 36,
+      "records": 698,
+      "baselineNarrowChecks": 25128,
+      "demandNarrowCandidates": 25128,
+      "shadowNarrowCandidates": 9899,
+      "demandPolicy": "direct"
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 1,
+      "steps": 48,
+      "records": 1209,
+      "baselineNarrowChecks": 58032,
+      "demandNarrowCandidates": 17434,
+      "shadowNarrowCandidates": 8830,
+      "demandPolicy": "indexed"
+    },
+    {
+      "map": "great-plains",
+      "touch": false,
+      "scale": 2,
+      "steps": 48,
+      "records": 1209,
+      "baselineNarrowChecks": 58032,
+      "demandNarrowCandidates": 17446,
+      "shadowNarrowCandidates": 8830,
+      "demandPolicy": "indexed"
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 1,
+      "steps": 48,
+      "records": 1209,
+      "baselineNarrowChecks": 58032,
+      "demandNarrowCandidates": 16401,
+      "shadowNarrowCandidates": 6729,
+      "demandPolicy": "indexed"
+    },
+    {
+      "map": "great-plains",
+      "touch": true,
+      "scale": 2,
+      "steps": 48,
+      "records": 1209,
+      "baselineNarrowChecks": 58032,
+      "demandNarrowCandidates": 18362,
+      "shadowNarrowCandidates": 6729,
+      "demandPolicy": "indexed"
+    },
+    {
+      "map": "monster-forest",
+      "touch": false,
+      "scale": 1,
+      "steps": 48,
+      "records": 891,
+      "baselineNarrowChecks": 42768,
+      "demandNarrowCandidates": 42768,
+      "shadowNarrowCandidates": 17466,
+      "demandPolicy": "direct"
+    },
+    {
+      "map": "monster-forest",
+      "touch": true,
+      "scale": 1,
+      "steps": 48,
+      "records": 891,
+      "baselineNarrowChecks": 42768,
+      "demandNarrowCandidates": 42768,
+      "shadowNarrowCandidates": 12764,
+      "demandPolicy": "direct"
+    },
+    {
+      "map": "witch-cave",
+      "touch": false,
+      "scale": 1,
+      "steps": 48,
+      "records": 159,
+      "baselineNarrowChecks": 7632,
+      "demandNarrowCandidates": 7632,
+      "shadowNarrowCandidates": 3478,
+      "demandPolicy": "direct"
+    },
+    {
+      "map": "witch-cave",
+      "touch": true,
+      "scale": 1,
+      "steps": 48,
+      "records": 159,
+      "baselineNarrowChecks": 7632,
+      "demandNarrowCandidates": 7632,
+      "shadowNarrowCandidates": 2884,
+      "demandPolicy": "direct"
+    }
+  ]
+}

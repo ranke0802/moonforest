@@ -9,6 +9,20 @@ import { ELENA_HOME, ELENA_SIZE, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 import { createBossPreparation } from './boss-preparation.js';
+import { ArenaNavigation } from './navigation.js';
+import { VillageNavigation } from './village-navigation.js';
+import { CaveNavigation } from './witch-cave-navigation.js';
+import { MourningCaveNavigation } from './mourning-cave-navigation.js';
+import { TerrainHeightField } from './terrain.js';
+
+function stableMapCollision(navigation,terrain){
+  const type=navigation?.constructor;
+  if((type!==ArenaNavigation&&type!==VillageNavigation&&type!==CaveNavigation&&type!==MourningCaveNavigation)||terrain?.constructor!==TerrainHeightField)return false;
+  const move=type===ArenaNavigation?ArenaNavigation.prototype.move:VillageNavigation.prototype.move;
+  const free=type===ArenaNavigation?ArenaNavigation.prototype.free:type===VillageNavigation?VillageNavigation.prototype.free:CaveNavigation.prototype.free;
+  const findFree=type===MourningCaveNavigation?MourningCaveNavigation.prototype.findFree:ArenaNavigation.prototype.findFree;
+  return navigation.constrain===ArenaNavigation.prototype.constrain&&navigation.move===move&&navigation.free===free&&navigation.findFree===findFree&&terrain.place===TerrainHeightField.prototype.place&&terrain.heightAt===TerrainHeightField.prototype.heightAt&&!terrain.surfaceHeight;
+}
 
 export const MAX_BOSSES = 5;
 export function normalizeBossCount(value) {
@@ -56,7 +70,7 @@ export class BossBattle {
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;
     this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];this.frameEncounters=[];
-    this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;
+    this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;this.motionToken={generation:0};
     this.noGrab = { active: false, label: '' };
   }
   get playerHp() { return this.combat.hp; }
@@ -257,12 +271,22 @@ export class BossBattle {
     this.currentPlayer=player;
     this.combat.update(dt, player, this.onDamage);
     this.updating = true;
-    for (const boss of this.encounters) boss.update(dt, player);
+    const updateToken=this.motionToken,generation=++updateToken.generation;
+    for (const boss of this.encounters){boss._battleUpdateToken=updateToken;try{boss.update(dt, player);}finally{boss._battleUpdateToken=null;}}
     if(this.world.prefetchResources&&this.residentPhase===1&&this.encounters.some(b=>b.kind==='elena'&&b.engaged))this.preloadMourning();
     const running=this.frameEncounters;running.length=0;
     for(const boss of this.encounters)if(boss.active&&!boss.corpseGone){(boss.separationFrom??=new Vector3()).copyFrom(boss.actor.position);running.push(boss);}
     if(running.length>1)separateBosses(running, this.combat.grabOwner);
-    for(const boss of running){(boss.movementNavigation??this.world.navigation)?.constrain(boss.actor.position,boss.separationFrom,boss.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(boss.actor.position);boss.warningRing.update(boss.actor.position,boss.attackRange(boss.motionSpec(boss.brain.state)));}
+    for(const boss of running){
+      const position=boss.actor.position,navigation=boss.movementNavigation??this.world.navigation,terrain=this.world.terrain,proof=boss._reconciledMotion;
+      // The normal map navigator and height field are deterministic for an
+      // unchanged pose. Unknown implementations, stale tokens, subclass
+      // movement and separation all keep the original second reconciliation.
+      const unchanged=proof?.token===updateToken&&proof.generation===generation&&proof.actor===boss.actor&&proof.scene===this.world.scene&&proof.mapId===this.world.mapId&&proof.navigation===navigation&&proof.obstacles===navigation?.obstacles&&proof.cells===navigation?.cells&&proof.terrain===terrain&&proof.heights===terrain?.heights&&proof.size===terrain?.size&&proof.subdivisions===terrain?.subdivisions&&proof.radius===boss.radius&&position.x===proof.x&&position.y===proof.y&&position.z===proof.z&&position.x===boss.separationFrom.x&&position.y===boss.separationFrom.y&&position.z===boss.separationFrom.z&&stableMapCollision(navigation,terrain);
+      if(!unchanged){navigation?.constrain(position,boss.separationFrom,boss.radius,ENEMY_ARENA_RADIUS);terrain?.place(position);}
+      boss.warningRing.update(position,boss.attackRange(boss.motionSpec(boss.brain.state)));
+      if(proof){proof.token=proof.actor=proof.scene=proof.navigation=proof.obstacles=proof.cells=proof.terrain=proof.heights=null;}
+    }
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {
