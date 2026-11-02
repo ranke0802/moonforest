@@ -58,7 +58,7 @@ test('unready/invalid eye fails open and wide requested zoom uses the guarded re
  f.fog.playerView.set(0,0,0,1);f.world.camera.globalPosition={x:82,y:0,z:0};f.fog.updateCoverDistance();assert.ok(f.fog.patches.every(p=>!p.farHidden));assert.equal(f.fog.coverDistanceEligible,false);
  const base=new Vector3(29,f.terrain.heightAt(29,-30)+1.05,-30),camera=new ArcRotateCamera('wide-cave',0,1.18,82,base.clone(),f.scene);f.world.camera=camera;const guard=new CaveCameraGuard(f.world);f.world.caveCamera=guard;f.fog.playerView.set(base.x,base.y,base.z,1);
  guard.follow(base,1/30,{stable:true});guard.beginFrame();f.fog.updateCoverDistance();assert.ok(f.fog.patches.every(p=>!p.farHidden));assert.equal(f.fog.coverDistanceEligible,false);guard.endFrame();assert.equal(camera.radius,82);assert.equal(camera.beta,1.18);
- camera.radius=13;guard.follow(base,1/30,{stable:true});guard.beginFrame();const renderEye=camera.globalPosition.clone();f.fog.updateCoverDistance();assert.equal(f.fog.coverDistanceEye[0],renderEye.x);assert.equal(f.fog.coverDistanceEye[1],renderEye.y);assert.equal(f.fog.coverDistanceEye[2],renderEye.z);assert.equal(f.fog.coverDistanceEligible,true);guard.endFrame();guard.dispose();
+ camera.radius=13;guard.follow(base,1/30,{stable:true});guard.beginFrame();const renderEye=camera.globalPosition.clone();f.fog.updateCoverDistance();assert.equal(f.fog.coverDistanceEye[0],base.x);assert.equal(f.fog.coverDistanceEye[1],base.y);assert.equal(f.fog.coverDistanceEye[2],base.z);assert.equal(f.fog.coverDistanceEligible,true);guard.endFrame();guard.dispose();
  assert.deepEqual(f.scene.clearColor.asArray(),[.024,.028,.038,1]);
 });
 
@@ -68,13 +68,13 @@ test('final distance blend is environment-only; player and boss paint receive a 
   f.fog.attach(material);const plugin=material.pluginManager.getPlugin('CaveFogOfWar'),values={},buffer={updateFloat:(name,value)=>{values[name]=value;},updateFloat4(){},setTexture(){}};
   plugin.hardBindForSubMesh(buffer);assert.equal(values.caveFogEnvironment,expected,material.name);
   const fragment=plugin.getCustomCode('fragment').CUSTOM_FRAGMENT_BEFORE_FRAGCOLOR;
-  assert.match(fragment,/caveFogActive>\.5&&caveFogEnvironment>\.5/);assert.match(fragment,/smoothstep\(22\.,48\.,length\(vPositionW-vEyePosition.xyz\)\)/);assert.match(fragment,/vec3\(\.024,\.028,\.038\)/);
+  assert.match(fragment,/caveFogActive>\.5&&caveFogEnvironment>\.5/);assert.match(fragment,/caveDistanceHaze\(vPositionW,vEyePosition.xyz\)/);assert.match(fragment,/vec3\(\.024,\.028,\.038\)/);
  }
 });
 
 test('far omission contract has exact same final clear output for cover, memory, roof, water and falls',()=>{
  assert.match(CAVE_FOG_GLSL,/vec3 caveFogMemoryColor[^}]*return vec3\(\.024,\.028,\.038\);/s);
- assert.match(CAVE_FOG_COVER_FRAGMENT,/smoothstep\(22\.,48\.,length\(fogWorldPosition-caveEye\)\)/);
+ assert.match(CAVE_FOG_COVER_FRAGMENT,/caveDistanceHaze\(fogWorldPosition,caveEye\)/);
  assert.match(CAVE_FOG_COVER_FRAGMENT,/gl_FragColor=vec4\(mix\(rock,vec3\(\.024,\.028,\.038\),haze\),1\.\)/);
  const atmosphere=readFileSync(new URL('../src/witch-cave-atmosphere.js',import.meta.url),'utf8');
  assert.equal((atmosphere.match(/gl_FragColor=vec4\(mix\(color,vec3\(\.024,\.028,\.038\),(?:haze|fog)\),1\.\)/g)??[]).length,3,'each global opaque atmosphere shader converges after its other colour/shading');

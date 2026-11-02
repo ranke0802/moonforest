@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {MOURNING_SIZE} from '../src/elena-spec.js';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {NullEngine,Scene,ArcRotateCamera,Vector3,Vector4,RawTexture,Constants,ShaderMaterial,PBRMaterial} from '@babylonjs/core';
@@ -57,7 +58,7 @@ test('a boss hidden by player sight never opens a remote wall; moved visible bos
  const actor={position:new Vector3(5,0,0)},enemy={actor,kind:'elena',phase:2,active:true};
  try{
   fog.update({x:-5,y:0,z:0},0,{encounters:[enemy],force:true});assert.equal(fog.bossView.w,0);
-  actor.position.x=-4;fog.update({x:-5,y:0,z:0},.01,{encounters:[enemy]});assert.equal(fog.bossView.w,6.3);assert.equal(fog.bossView.x,-4);const uploads=fog.stats.uploads;
+  actor.position.x=-4;fog.update({x:-5,y:0,z:0},.01,{encounters:[enemy]});assert.equal(fog.bossView.w,MOURNING_SIZE.sightRadius);assert.equal(fog.bossView.x,-4);const uploads=fog.stats.uploads;
   actor.position.x=-3;fog.update({x:-5,y:0,z:0},.02,{encounters:[enemy]});assert.equal(fog.bossView.x,-3);assert.equal(fog.stats.uploads,uploads);assert.equal(fog.playerView.y,1.05);
  }finally{fog.dispose();scene.dispose();engine.dispose();}
 });

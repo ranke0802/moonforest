@@ -1,3 +1,4 @@
+import {instantiateStaticMap} from './static-map-instances.js';
 import {loadMapContainer} from './map-container.js';
 import {readMapManifest} from './map-manifests.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
@@ -156,7 +157,7 @@ export function loadStreamedVillage(world,{
       const instances=records.filter(r=>r.placement.asset===id);
       for(const record of instances)if(!record.meshes.length){
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
-        const instance=asset.source.instantiateModelsToScene(name=>record.root.name+'-'+name,false,{doNotInstantiate:false});
+        const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
         for(const node of instance.rootNodes)node.parent=record.facing;
         record.meshes=record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0);
         for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}

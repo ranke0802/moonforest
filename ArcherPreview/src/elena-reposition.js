@@ -24,7 +24,7 @@ export function chooseElenaReposition(origin,player,{phase=1,turn=0,radius,navig
 // Charge through the originally aimed position. Its complete floor segment
 // is checked once before the warning is shown, and the aim never follows a dodge.
 export function chooseElenaCharge(origin,player,{radius=MOURNING_SIZE.radius,navigation,terrain,home=ELENA_HOME}={}){
-  const dx=player.x-origin.x,dz=player.z-origin.z,distance=Math.hypot(dx,dz),length=Math.min(6.3,distance+radius);
+  const dx=player.x-origin.x,dz=player.z-origin.z,distance=Math.hypot(dx,dz),length=Math.min(MOURNING_SIZE.chargeDistance,distance+radius);
   if(distance<Math.max(2.5,radius+1.1))return null;
   const target={x:origin.x+dx/distance*length,z:origin.z+dz/distance*length};
   if(Math.hypot(target.x-home.x,target.z-home.z)>MOURNING_SIZE.homeRadius)return null;

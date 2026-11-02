@@ -1,0 +1,43 @@
+{
+  "before": {
+    "village": {
+      "environment": 387.5,
+      "replace": 23.2,
+      "release": 10.9,
+      "renderReady": 9.3
+    },
+    "monster-forest": {
+      "environment": 387.9,
+      "replace": 33.1,
+      "release": 20.3,
+      "renderReady": 15.1
+    },
+    "witch-cave": {
+      "environment": 167.7,
+      "replace": 145.1,
+      "release": 3.0,
+      "renderReady": 11.2
+    }
+  },
+  "after": {
+    "village": {
+      "environment": 170.5,
+      "replace": 23.9,
+      "release": 7.9,
+      "renderReady": 8.1
+    },
+    "monster-forest": {
+      "environment": 119.6,
+      "replace": 27.1,
+      "release": 19.7,
+      "renderReady": 14.0
+    },
+    "witch-cave": {
+      "environment": 91.5,
+      "replace": 122.9,
+      "release": 1.7,
+      "renderReady": 6.9
+    }
+  },
+  "scope": "Node NullEngine warm environment setup; baseline CPU profiler enabled and after profiler disabled. Indicative attribution only, not controlled device speed or heat measurement."
+}

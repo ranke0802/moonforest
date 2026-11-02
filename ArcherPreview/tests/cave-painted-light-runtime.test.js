@@ -17,7 +17,7 @@ test('static cave light owns one 64KiB map, no light/shadow/pass, and never uplo
  const world=fixture(t),runtime=world.scene.metadata.cavePaintLighting,lights=world.scene.lights.length,meshes=world.scene.meshes.length;
  assert.equal(lights,3);assert.equal(runtime.texture.getSize().width,128);assert.equal(runtime.texture.getSize().height,128);
  assert.equal(runtime.texture.gammaSpace,false);assert.equal(runtime.texture.noMipmap,true);assert.equal(runtime.texture.wrapU,Texture.CLAMP_ADDRESSMODE);
- assert.equal(runtime.inspect().bytes,65536);assert.equal(runtime.inspect().emitters,12);
+ assert.equal(runtime.inspect().bytes,65536);assert.equal(runtime.inspect().emitters,22);
  t.mock.method(runtime.texture,'update',()=>assert.fail('Static map must not upload per frame'));
  for(let i=0;i<600;i++)world.tick(i/30);
  assert.equal(world.scene.lights.length,lights);assert.equal(world.scene.meshes.length,meshes);assert.equal(runtime.inspect().frameUploads,0);
@@ -71,7 +71,7 @@ test('custom water and roof apply the final 48m dark-air convergence after local
  const world=fixture(t);
  for(const name of ['cave-painted-water','cave-flowing-water','cave-ceiling-paint']){
   const m=world.scene.materials.find(m=>m.name===name),s=m.shaderPath.fragmentSource;
-  assert.match(s,/smoothstep\(22\.,48\.,length\(p-eye\)\)/);assert.match(s,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);
+  assert.match(s,/caveDistanceHaze\(p,eye\)/);assert.match(s,/mix\(color,vec3\(\.024,\.028,\.038\),(haze|fog)\)/);
   assert.ok(s.includes('cavePaintFactor(p)')||s.includes('cavePaintFactorFromSample(p,painted)'));assert.ok(!s.includes('vec3(.24,.23,.28)'));
  }
  const profiles=['warrior-v3.json','warrior-v3-ios.json'];

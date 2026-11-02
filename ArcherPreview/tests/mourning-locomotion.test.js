@@ -21,12 +21,11 @@ function tick(f,dt,{freeze=false}={}){
 }
 
 test('a concave full-pose corner cannot be accepted between coarse route samples',()=>{
-  // The former corner was opened by the rear apparatus regrouping. This
-  // actual new boundary still dips below the required 8 cm root reserve
+  // The 4.5m full-pose boundary still dips below the required 8cm root reserve
   // between the old 40 cm sample locations, despite both endpoints being free.
-  const nav=new MourningCaveNavigation(caveObstacles()),a={x:35.299301327206194,z:-31.264836706686765},b={x:33.907096239738166,z:-30.257714561885223},r=MOURNING_SIZE.radius;
+  const nav=new MourningCaveNavigation(caveObstacles()),a={x:22.552756394492462,z:-24.14930189587176},b={x:22.93053890859298,z:-23.14680788459517},r=MOURNING_SIZE.radius;
   assert.ok(nav.free(a,r,80));assert.ok(nav.free(b,r,80));
-  assert.ok(mourningCaveClearance(35.17539507442154,-31.17520283579943)<.08,'actual interior point fails the mandatory root reserve');
+  assert.ok(mourningCaveClearance(22.8719826189074,-23.30219445634304)<.08,'actual interior point fails the mandatory root reserve');
   assert.equal(CaveNavigation.prototype.segmentClear.call(nav,a,b,r),true,'reproduces the old coarse acceptance');
   assert.equal(nav.segmentClear(a,b,r),false,'the whole segment must be certified, not only its sampled points');
   assert.equal(nav.segmentClear({x:25.5,z:-24.125},{x:31.8,z:-24.125},r),true,'the useful charge corridor remains open');

@@ -29,6 +29,10 @@
         <a class="brand" href="./" aria-label="Moonforest 처음으로"><span class="moon-mark" aria-hidden="true">☾</span><span>MOONFOREST<small>CHARACTER PLAYGROUND</small></span></a>
         <div class="top-actions"><span class="build-tag" id="build-tag">ARCHER / 01</span><select id="quality-select" class="quality-select" aria-label="화질" title="화질 선택"><option value="high">고화질</option><option value="balanced">균형</option><option value="battery">절전</option></select><button id="fullscreen-button" class="icon-button" aria-label="가로 전체화면" title="가로 전체화면" aria-pressed="false">⛶</button><button id="motion-speed-toggle" class="motion-speed-toggle" type="button" aria-label="모션 속도 설정 열기" title="모션 속도 설정" aria-haspopup="dialog" hidden>설정</button><button id="help-toggle" class="icon-button" aria-label="조작 가이드 열기" title="조작 가이드">?</button></div>
       </header>
+      <aside id="dot-minimap" class="dot-minimap" aria-label="현재 맵과 이동 경로" hidden>
+        <strong>마을</strong><canvas width="96" height="96" role="img" aria-label="길, 포탈, 현재 위치와 방향"></canvas>
+        <small><span class="map-player">● 나</span> · <span class="map-portal">◆ 포탈</span></small>
+      </aside>
 
       <section class="character-info" aria-label="현재 캐릭터" data-ui>
         <select id="character-select" class="character-select" aria-label="캐릭터 선택"><option value="archer">궁수 · Azure Elf</option><option value="warrior">전사 · 기존 버전</option><option value="warrior-v2">전사 v2 · 보스 전투</option><option value="warrior-v3">전사 v3 · 숲의 경계 마을</option><option value="warrior-v4">전사 v4 · 마물의 숲</option><option value="warrior-v5">전사 v5 · 마녀의 동굴</option></select>

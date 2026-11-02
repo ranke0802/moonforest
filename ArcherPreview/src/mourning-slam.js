@@ -14,7 +14,7 @@ export class MourningSlamAdvance {
     if(this.serial!==brain.serial){
       this.serial=brain.serial;this.progress=0;this.origin.copyFrom(actor.position);this.target.copyFrom(actor.position);
       const dx=Math.sin(actor.rotation.y),dz=Math.cos(actor.rotation.y),gap=Math.hypot(player.position.x-actor.position.x,player.position.z-actor.position.z);
-      const wanted=Math.max(0,Math.min(.9,gap-enemy.radius-.8));
+      const wanted=Math.max(0,Math.min(MOURNING_SIZE.slamAdvance,gap-enemy.radius-.8));
       for(const fraction of [1,.66,.33]){
         const x=this.origin.x+dx*wanted*fraction,z=this.origin.z+dz*wanted*fraction;
         this.step.set(x,terrain?.heightAt(x,z)??this.origin.y,z);

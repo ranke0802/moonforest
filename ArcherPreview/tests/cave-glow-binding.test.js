@@ -49,7 +49,7 @@ for(const name of ['votive-lantern','soul-collector-arm'])test(`actual ${name} s
   assert.ok(transfers.some(matches),'instance reaches Mesh.transferToEffect at its authored light position');
   assert.ok(uploads.some(matches),'the ready Effect receives that instance world matrix');
  }
- assert.equal(material.alphaMode,Constants.ALPHA_ADD);assert.equal(source.instances.length,name==='votive-lantern'?10:2);
+ assert.equal(material.alphaMode,Constants.ALPHA_ADD);assert.equal(source.instances.length,name==='votive-lantern'?20:2);
 });
 
 test('glow fallback refreshes its bound Effect after a real ShaderMaterial variant recompile',t=>{

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
-  "bytes": 604632495,
+  "bytes": 604643920,
   "files": [
     {
       "path": "app.webmanifest",
@@ -7459,14 +7459,14 @@
       "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343"
     },
     {
-      "path": "assets/index-CokvyQ4P.css",
-      "bytes": 53682,
-      "sha256": "3a330fa432058ebf7d396a94f0a0177c303d239d553b4944a8f54016117e695e"
+      "path": "assets/index-ANJ2M5aP.js",
+      "bytes": 2422772,
+      "sha256": "4574fefa0834101c1abd4663564711d8cbb9b264ef9a77a3b476c9d1661d7d72"
     },
     {
-      "path": "assets/index-q9lq5JTm.js",
-      "bytes": 2412731,
-      "sha256": "895b1e1514f55aa0caab4e024cdc7acf4146d48b38d121bce78d0a1ea2c67ea4"
+      "path": "assets/index-BNCtEVy6.css",
+      "bytes": 54710,
+      "sha256": "2f736425fdc78ee42f8b231995b7d1e36e93f1ceae3a86dfc2ee291717d2f329"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -7561,7 +7561,7 @@
     {
       "path": "assets/witch-cave.json",
       "bytes": 134036,
-      "sha256": "5b9a618c62f76b577647fa218d1174a9ae354a45b5246b0aab2cb48601ee673d"
+      "sha256": "ede3eb299e7d6aca5383986a8688c522cb956b147217268a6333f885eeb45f9c"
     },
     {
       "path": "audio-credits.html",
@@ -7575,8 +7575,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 58522,
-      "sha256": "9e210f143863c1de32276933e0690a57360fcbaa70a9241f21d3adc6b109c62c"
+      "bytes": 58878,
+      "sha256": "1aca07a80d6a859189aae159600185918b5966f08523f7ec3e1564afff2f01d3"
     },
     {
       "path": "KTX2_NOTICES.txt",

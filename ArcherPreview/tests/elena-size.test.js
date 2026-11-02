@@ -15,7 +15,7 @@ test('larger spells enlarge their actual floor shapes within the existing room l
   const origin={x:29,y:6,z:-27},target={x:29,z:-23};let vertices=0;
   for(const spell of MOURNING_SPELLS){
     const plan=makeSpellPlan(spell.pattern,origin,target,{range:spell.range,bossRadius:MOURNING_SIZE.radius+.3,scale:MOURNING_SIZE_SCALE});
-    near(plan.range,ELENA_GROUND_MAX_RANGE);near(plan.bossRadius,2.2);
+    near(plan.range,ELENA_GROUND_MAX_RANGE);near(plan.bossRadius,1.8);
     const {fill}=buildGroundSpellGeometry(plan,{heightAt:()=>6});vertices+=fill.positions.length/3;
     for(let i=0;i<fill.positions.length;i+=3){const p={x:fill.positions[i],z:fill.positions[i+2]};assert.ok(spellContains(plan,p,{radius:1e-6}),spell.pattern);assert.ok(Math.hypot(p.x-origin.x,p.z-origin.z)<=14+1e-6);}
     assert.ok(spellImpact(spell,3)/MOURNING_CAST_RATE>=1);
@@ -31,7 +31,7 @@ test('enlarged charge width, visible endpoints and swept damage agree with an un
   for(const yaw of [0,.8,2.7])for(const length of [3.1,6.3]){
     const origin={x:29,y:6,z:-27},at=(along,side=0)=>({x:origin.x+Math.sin(yaw)*along+Math.cos(yaw)*side,z:origin.z+Math.cos(yaw)*along-Math.sin(yaw)*side}),radius=MOURNING_SIZE.radius;
     const plan=makeSpellPlan('corridor',origin,at(length),{range:Math.hypot(length+radius,radius),halfWidth:radius,bossRadius:.1,scale:MOURNING_SIZE_SCALE}),shape=plan.shapes[0];
-    near(shape.halfWidth,1.9);near((shape.center.x-origin.x)*Math.sin(yaw)+(shape.center.z-origin.z)*Math.cos(yaw)+shape.halfLength,length+radius);
+    near(shape.halfWidth,1.5);near((shape.center.x-origin.x)*Math.sin(yaw)+(shape.center.z-origin.z)*Math.cos(yaw)+shape.halfLength,length+radius);
     for(const [side,inside] of [[radius+.299,true],[radius+.301,false]]){assert.equal(spellContains(plan,at(2,side)),inside);assert.equal(chargeTouchesPlayer(plan,origin,at(length),at(2,side),{reach:radius}),inside);}
     assert.equal(chargeTouchesPlayer(plan,origin,at(.1),at(3),{reach:radius}),false);
     assert.equal(chargeTouchesPlayer(plan,at(length),at(length+3),at(length+radius+.301),{reach:radius}),false);

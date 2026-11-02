@@ -1,0 +1,7 @@
+{
+  "models": 162,
+  "meshes": 162,
+  "regularMs": 303.8769999999822,
+  "optimizedMs": 33.33980000000702,
+  "scope": "Node NullEngine CPU instantiation only, same geometry and material identity; no GPU/device timing"
+}

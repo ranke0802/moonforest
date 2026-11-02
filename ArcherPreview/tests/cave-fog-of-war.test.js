@@ -112,7 +112,7 @@ test('low-cost opaque cover is bounded and follows the injected terrain',()=>{
  assert.equal(cover.triangles,3200);assert.equal(cover.positions.length/3,1681);assert.deepEqual(cover.textureRect,[-80,-80,160,160]);
  assert.ok(Math.abs(cover.positions[1]-(-2.4+.035))<1e-5);
  assert.match(CAVE_FOG_COVER_FRAGMENT,/rock=caveRockShade\(fogWorldPosition,fogWorldNormal,state.y\)/);
- assert.match(CAVE_FOG_COVER_FRAGMENT,/smoothstep\(22\.,48\.,length\(fogWorldPosition-caveEye\)\)/);
+ assert.match(CAVE_FOG_COVER_FRAGMENT,/caveDistanceHaze\(fogWorldPosition,caveEye\)/);
  assert.match(CAVE_FOG_COVER_FRAGMENT,/vec4\(mix\(rock,vec3\(\.024,\.028,\.038\),haze\),1\.\)/);
  assert.match(CAVE_FOG_GLSL,/caveFogHidesInk/);
 });

@@ -36,13 +36,13 @@ test('repeated high-speed movement and pushes slide along the full-body boundary
   }
 });
 
-test('reposition and charge paths validate the entire actor envelope while combat width stays 1.9m',t=>{
+test('reposition and charge paths validate the entire actor envelope while combat width is 1.5m',t=>{
   setWorldCharacter('warrior-v5');t.after(()=>setWorldCharacter('warrior'));
   const navigation=new MourningCaveNavigation(caveObstacles()),terrain=createWitchCaveTerrain(),radius=MOURNING_SIZE.radius;
   const origin={x:25.5,z:-24.125},player={x:31.8,z:-24.125};
   const charge=chooseElenaCharge(origin,player,{radius,navigation,terrain,home:ELENA_HOME});
-  assert.ok(charge);assert.ok(Math.abs(Math.hypot(charge.x-origin.x,charge.z-origin.z)-6.3)<1e-8);
-  assert.ok(navigation.segmentClear(origin,charge,radius));assert.ok(Math.abs(radius-1.9)<1e-8);
+  assert.ok(charge);assert.ok(Math.abs(Math.hypot(charge.x-origin.x,charge.z-origin.z)-MOURNING_SIZE.chargeDistance)<1e-8);
+  assert.ok(navigation.segmentClear(origin,charge,radius));assert.ok(Math.abs(radius-1.5)<1e-8);
   let accepted=0;
   for(let angle=0;angle<16;angle++)for(let turn=0;turn<4;turn++){
     const target={x:ELENA_HOME.x+Math.sin(angle*Math.PI/8)*6,z:ELENA_HOME.z+Math.cos(angle*Math.PI/8)*6};

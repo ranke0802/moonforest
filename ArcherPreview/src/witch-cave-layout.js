@@ -4,7 +4,7 @@ import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from './cave-laboratory-geom
 export const CAVE_ENTRY={x:-42,z:43};
 export const CAVE_BOSS={x:29,z:-30,r:14,height:6};
 // Story dressing follows the existing playable shelves; the large arena and
-// the connected water/route footprint are retained for the 5.7 m encounter.
+// the connected water/route footprint are retained for the encounter.
 export const CAVE_STORY_ZONES=Object.freeze({
   refuge:Object.freeze({x:-30,z:19,r:7,height:1}),
   laboratory:Object.freeze({x:-35,z:-18,r:9,height:3}),
@@ -22,6 +22,9 @@ export const CAVE_ROUTES=[
   [[-30,19,1,4.7],[-18,22,1.2,2.5],[-5,25,1.4,2.6],[7,27,1.4,5]],
   [[-35,3,1.8,2.8],[-26,-7,2.5,2.7],[-11,-11,3,3],[6,-7,3.2,2.8],[22,0,3.2,3],[35,9,3.2,5.5]],
 ];
+// Reuse existing lanterns at route edges. Append their placements so stable
+// resource/collision IDs of all existing scenery remain unchanged.
+export const CAVE_WAYFINDING_LANTERNS=Object.freeze([[-32.8,6],[-37,-4],[-18,-23.8],[12,-25.5],[-25,36],[-7,29.5],[24,20.7],[40.8,-18],[-11,-8.8],[7,-4.6]]);
 export const CAVE_SEGMENTS=CAVE_ROUTES.flatMap(points=>points.slice(1).map((b,i)=>({a:points[i],b})));
 export const CAVE_STATIONS=[[-35,10,.2],[-25,-24,1.3]].map(([x,z,yaw])=>{
   let frame;
@@ -206,6 +209,7 @@ function makePlacements(){
     const p=CAVE_LABORATORY_GEOMETRY.placement;
     add(CAVE_LABORATORY_GEOMETRY.assetId,p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,laboratoryStructure:true});
   }
+  for(const [x,z]of CAVE_WAYFINDING_LANTERNS)add(13,x,z,.9,0,{colliderRadius:.36,wayfinding:true});
   return out;
 }
 export const CAVE_PLACEMENTS=makePlacements();

@@ -1,0 +1,8 @@
+.dot-minimap{position:absolute;right: max(12px,env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 65px);width:112px;z-index:5;padding:5px;background:#111622df;border:1px solid #9685a066;border-radius:6px;pointer-events:none;contain:layout paint;color:#e7e0eb;text-align:center;box-sizing:border-box}
+.dot-minimap strong{display:block;font-size:10px;line-height:16px;font-weight:500}
+.dot-minimap canvas{display:block;width:100%;aspect-ratio:1;image-rendering:pixelated;image-rendering:crisp-edges}
+.dot-minimap small{display:block;font-size:9px;line-height:14px;color:#c5c6d0}
+.dot-minimap .map-player{color:#84f6df}.dot-minimap .map-portal{color:#cf9fff}
+@media(max-height:540px){.dot-minimap{top:calc(env(safe-area-inset-top) + 52px);width:90px;padding:3px}.dot-minimap strong{font-size:9px;line-height:13px}.dot-minimap small{font-size:8px;line-height:11px}}
+@media(max-width:380px){.dot-minimap{width:92px}}
+@media(orientation:portrait) and (max-width:600px){.dot-minimap{top:calc(env(safe-area-inset-top) + 136px)}}

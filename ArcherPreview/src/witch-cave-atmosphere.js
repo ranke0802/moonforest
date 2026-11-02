@@ -28,7 +28,7 @@ void main(){
  // The deeper basin and static light field stay unchanged.
  color+=vec3(.16,.21,.20)*(1.-smoothstep(.08,.32,waterDepth));
  color+=vec3(.012,.019,.020)*ripples;
- float haze=smoothstep(22.,48.,length(p-eye));
+ float haze=caveDistanceHaze(p,eye);
  color=caveFogShadeSurface(color*sqrt(cavePaintFactorFromSample(p,painted)),p,1.);
  gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),haze),1.);
 }`;
@@ -54,7 +54,7 @@ ${CAVE_VIEW_GLSL}
 void main(){
  // Keep the ceiling continuous. The camera guard stays below this surface.
  vec3 color=pow(max(caveRockAlbedo(p,caveRoofNormal)*cavePaintFactor(p),vec3(0.)),vec3(.454545));
- float fog=smoothstep(22.,48.,length(p-eye));gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),fog),1.);
+ float fog=caveDistanceHaze(p,eye);gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),fog),1.);
 }`;
 const fallFragment=`precision highp float;varying vec3 p;uniform float time;uniform vec3 eye;
 ${CAVE_FOG_GLSL}
@@ -63,11 +63,11 @@ void main(){
  float ribbon=sin(p.x*9.+p.z*6.+sin(p.y*1.4-time*1.8))*.5+.5;
  float foam=pow(max(0.,sin(p.y*8.+time*4.)),7.);
  vec3 color=mix(vec3(.18,.31,.35),vec3(.48,.61,.62),ribbon*.45+foam*.25);
- float haze=smoothstep(22.,48.,length(p-eye));
+ float haze=caveDistanceHaze(p,eye);
  color=caveFogShadeSurface(color*sqrt(cavePaintFactor(p)),p,1.);
  gl_FragColor=vec4(mix(color,vec3(.024,.028,.038),haze),1.);
 }`;
-const fogUniforms=['caveFogRect','caveFogActive'];
+const fogUniforms=['caveFogRect','caveFogActive','caveFogOrigin'];
 function bindCaveFog(world,material){
  material.setFloat('caveFogActive',0);
  material.onBindObservable.add(()=>{if(world.caveFog)world.caveFog.bind(material,material._activeEffect);else material.setFloat('caveFogActive',0);if(material.options.samplers.includes('cavePaintLightMap'))bindCavePaintLight(material,world,material._activeEffect);if(material.options.uniforms.includes('eye'))material.setVector3('eye',world.camera.globalPosition);});

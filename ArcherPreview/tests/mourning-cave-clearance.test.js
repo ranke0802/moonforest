@@ -7,7 +7,7 @@ import {MOURNING_CAVE_CLEARANCE_DATA as data} from '../src/mourning-cave-clearan
 import {ELENA_HOME,MOURNING_SIZE_SCALE} from '../src/elena-spec.js';
 test('full-pose mask fingerprints match the delivered geometry, layout and animator',()=>{
  for(const [path,expected]of Object.entries(data.hashes)){const actual=createHash('sha256').update(readFileSync(new URL(path,import.meta.url),'utf8').replace(/\r\n?/g,'\n')).digest('hex');assert.equal(actual,expected,path);}
- assert.equal(data.sizeScale,MOURNING_SIZE_SCALE);assert.ok(data.poseSamples>=200);assert.ok(Math.max(...data.bands.map(b=>b.radius))>5.8);
+ assert.equal(data.sizeScale,MOURNING_SIZE_SCALE);assert.ok(data.poseSamples>=200);assert.ok(Math.max(...data.bands.map(b=>b.radius))>4.5);
 });
 test('full-body safety keeps the relocated home and a complete 6.3m charge corridor',()=>{
  assert.ok(mourningCaveClearance(ELENA_HOME.x,ELENA_HOME.z)>.08);

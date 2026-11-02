@@ -42,11 +42,11 @@ test('phase-two brain continuously alternates movement and the five authored cas
 });
 
 test('charge destination crosses the aimed player position, rejects walls and intervening cliffs, and supports moved homes',()=>{
-  const origin={x:29,z:-27},player={x:29,z:-21};let testedRadius;
-  const target=chooseElenaCharge(origin,player,{radius:.9,navigation:{free:()=>true,segmentClear:(a,b,r)=>{testedRadius=r;return true;}},terrain:{heightAt:()=>6}});assert.ok(target);near(target.z-player.z,.3);assert.equal(testedRadius,.9);
+  const origin={x:29,z:-27},player={x:29,z:-23};let testedRadius;
+  const target=chooseElenaCharge(origin,player,{radius:.9,navigation:{free:()=>true,segmentClear:(a,b,r)=>{testedRadius=r;return true;}},terrain:{heightAt:()=>6}});assert.ok(target);near(target.z-player.z,.9);assert.equal(testedRadius,.9);
   assert.equal(chooseElenaCharge(origin,{x:29,z:-25}),null);assert.equal(chooseElenaCharge(origin,player,{navigation:{free:()=>true,segmentClear:()=>false}}),null);
   assert.equal(chooseElenaCharge(origin,player,{terrain:{heightAt:(x,z)=>z>-26&&z<-25?-2:6}}),null,'equal endpoint heights cannot conceal an intervening drop');
-  const shifted=chooseElenaCharge({x:0,z:0},{x:0,z:6},{home:{x:0,z:0}});near(shifted.z,target.z-origin.z);
+  const shifted=chooseElenaCharge({x:0,z:0},{x:0,z:4},{radius:.9,home:{x:0,z:0}});near(shifted.z,target.z-origin.z);
 });
 
 test('actual rig walks, skitters and charges with only the warned slam advance during casts',async t=>{

@@ -45,7 +45,7 @@ test('native far closure gates surface replacement and survives twelve cave/fore
   camera.setTarget(new Vector3(CAVE_ENTRY.x,world.terrain.heightAt(CAVE_ENTRY.x,CAVE_ENTRY.z)+1.1,CAVE_ENTRY.z));
   world.caveFog.update(new Vector3(CAVE_ENTRY.x,world.terrain.heightAt(CAVE_ENTRY.x,CAVE_ENTRY.z),CAVE_ENTRY.z),trip,{force:true});readyRaw(scene);
   const start=await prepareVillageStart(world),record=start.records.find(r=>r.placement.asset===contract.assetId),far=start.assets.get(contract.assetId).levels.find(l=>l.level===2),ceiling=scene.getMeshByName('cave-distant-ceiling'),oldCeiling=Array.from(ceiling.getIndices()),oldCover=world.caveFog.cover,oldFloor=attributes(world.ground),oldIndices=Array.from(world.ground.getIndices()),oldFog=world.caveFog,oldAtmosphere=world.caveAtmosphere;
-  assert.equal(start.records.length,149);assert.equal(start.assets.size,29);assert.deepEqual([start.plan[0].id,start.plan[0].level],[contract.assetId,2]);
+  assert.equal(start.records.length,159);assert.equal(start.assets.size,29);assert.deepEqual([start.plan[0].id,start.plan[0].level],[contract.assetId,2]);
   assert.equal(record.root.isEnabled(),false);assert.equal(scene.metadata.caveLaboratoryGeometry??null,null);assert.equal(world.caveAtmosphere.inspect().laboratoryRevision,null);
   const requested=deferred(),release=deferred();let gated=false;
   const promise=loadStreamedVillage(world,{initialize:async()=>{},ground:async()=>{},loadContainer:async(model,scene)=>{if(!gated&&model.pathname.endsWith(far.model.split('/').at(-1))){gated=true;requested.resolve();await release.promise;}return containerFor(model,scene);}});

@@ -9,11 +9,12 @@ export const ELENA_SIZE=Object.freeze({
 });
 // The authored body is 2.7 m; the manifest's 3.2 m includes the halo.
 // Keep the packed rig untouched and apply this one ratio to world dimensions.
-export const MOURNING_SIZE_SCALE=5.7/2.7;
+export const MOURNING_SIZE_SCALE=4.5/2.7;
 export const MOURNING_SIZE=Object.freeze({
-  bodyHeight:5.7,sourceBodyHeight:2.7,radius:.9*MOURNING_SIZE_SCALE,
+  bodyHeight:4.5,sourceBodyHeight:2.7,radius:.9*MOURNING_SIZE_SCALE,
   separationRadius:1.1*MOURNING_SIZE_SCALE,stopDistance:3*MOURNING_SIZE_SCALE,
   contactScale:3*MOURNING_SIZE_SCALE,renderRangePadding:3*MOURNING_SIZE_SCALE,
+  sightHeight:3.5*(4.5/5.7),sightRadius:6.3*(4.5/5.7),slamAdvance:.9*(4.5/5.7),chargeDistance:6.3*(4.5/5.7),
   homeRadius:9.5,engagementRange:8+.9*(MOURNING_SIZE_SCALE-1),homeDetectionRange:12+.9*(MOURNING_SIZE_SCALE-1),
 });
 export const ELENA_SPELLS=Object.freeze([

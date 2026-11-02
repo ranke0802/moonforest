@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "date": "2026-11-02",
+  "scope": "Node CPU/NullEngine, actual model and compressed-resource tests; no browser automation or physical device measurements",
+  "fullSuite": {
+    "tests": 1087,
+    "passed": 1086,
+    "failed": 1,
+    "failure": "generated full-pose mask fingerprint still referenced the old witch-cave.json placement count"
+  },
+  "correction": {
+    "action": "Regenerated the 541-pose mask after the placement metadata update; geometric safe-region results remained unchanged",
+    "followupTests": 24,
+    "passed": 24,
+    "failed": 0
+  },
+  "quality": {
+    "playerMaxTexture": 8192,
+    "environmentMaxTexture": 4096,
+    "existingLods": true,
+    "newGeneratedAssets": 0
+  },
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "checks": [
+    "162 static LOD models retain geometry/material identity, transforms and bounds",
+    "13 actual compressed-model map visits and timeout/manual-retry resource plateau",
+    "48 application callback map transfers and delayed completion cancellation",
+    "4.5m actual rig melee, charge once per attempt, dodge and warning/impact alignment at 30/60Hz",
+    "zoom-independent cave fill with directional and wall-mask tests",
+    "10 reused path lanterns; actual geometry collision/camera/sight rebaked",
+    "per-map resume with safe relocation, death/loading exclusion and unavailable storage",
+    "96px minimap, bounded drawing and stale generation cancellation"
+  ],
+  "limits": [
+    "S23/iPhone GPU, heat and 2–3s cached travel not measured",
+    "Full map reachability and shader/CPU correctness are not final in-game art approval",
+    "Optional no-storage/private sessions start from the normal entrance"
+  ]
+}

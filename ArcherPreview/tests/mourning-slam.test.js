@@ -9,7 +9,7 @@ function fixture(){
  return {enemy,player:{position:new Vector3(29,6,-20)},state,advance:new MourningSlamAdvance()};
 }
 test('slam step locks its warned endpoint, advances before impact, and resets for another cast',()=>{
- const {enemy,player,advance}=fixture();advance.update(enemy,player);const landing=advance.target.clone(),start=enemy.actor.position.clone();assert.ok(Math.abs(landing.z-start.z-.9)<1e-6);
+ const {enemy,player,advance}=fixture();advance.update(enemy,player);const landing=advance.target.clone(),start=enemy.actor.position.clone();assert.ok(Math.abs(landing.z-start.z-MOURNING_SIZE.slamAdvance)<1e-6);
  player.position.x=40;
  for(const time of [.15,.4,.8,1,1.65,3]){enemy.brain.time=time;advance.update(enemy,player);assert.ok(advance.target.equals(landing));assert.ok(enemy.actor.position.z>=start.z&&enemy.actor.position.z<=landing.z+1e-6);}
  assert.ok(enemy.actor.position.equals(landing));assert.equal(enemy.pendingEvents.length,0,'movement itself never adds damage');

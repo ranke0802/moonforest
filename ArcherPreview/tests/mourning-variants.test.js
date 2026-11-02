@@ -90,11 +90,11 @@ test('three Mourning attacks preserve the original skin/cast, match authored var
    scans[variant]=minimum;
   }
   // Existing scan geometry has a small original floor error. Permit only 2 cm
-  // beyond that measured baseline, with an absolute 8 cm stop at game 5.7 m.
+  // beyond that measured baseline, with an absolute 8 cm stop at game 4.5 m.
   // The baseline itself must also remain within that stop; a large preexisting
   // error cannot silently loosen the two new attacks' acceptance threshold.
   const original=scans.cast.worldY,limit=Math.max(-.08,original-.02);
-  report.checks.floor={space:'game-world metres at 5.7 m actor scale',framesPerVariant:91,originalScanExtraAllowanceMetres:.02,absoluteStopMetres:-.08,measuredLimitMetres:limit,passed:original>=-.08&&['cast_slam','cast_alternate'].every(variant=>scans[variant].worldY>=limit),scans};
+  report.checks.floor={space:'game-world metres at 4.5 m actor scale',framesPerVariant:91,originalScanExtraAllowanceMetres:.02,absoluteStopMetres:-.08,measuredLimitMetres:limit,passed:original>=-.08&&['cast_slam','cast_alternate'].every(variant=>scans[variant].worldY>=limit),scans};
   assert.ok(original>=-.08,'original cast floor reference unexpectedly moved: '+JSON.stringify(scans.cast));
   for(const variant of ['cast_slam','cast_alternate'])assert.ok(scans[variant].worldY>=limit,`${variant} floor below measured original-cast limit ${limit}: ${JSON.stringify(scans[variant])}`);
  });

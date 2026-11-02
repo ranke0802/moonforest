@@ -145,7 +145,7 @@ function replayEscape(f,fps,route,seconds){
   return {damage:hp-f.battle.playerHp,fireAt:fireAt===null?null:round(fireAt),outsideAtFire,warningDamage,end:f.player.position.asArray().map(round),legal:allFramesLegal,maxBossTravel:round(maxBossTravel),events:f.events.filter(e=>['block','evade','player'].includes(e[3])).map(e=>e[3])};
 }
 
-test('actual 160cm packed player attacks, guard and scaled dodge work around the 5.7m witch',async t=>{
+test('actual 160cm packed player attacks, guard and scaled dodge work around the 4.5m witch',async t=>{
   const f=await fixture(t),report={generatedAt:new Date().toISOString(),scope:'Actual warrior-v3 packed rig configured to160cm by the gameplay profile; original geometry and animation, texture loading skipped. No arbitrary skin-point blade probes.',player:{model:f.warrior.config.model,sourceScale:f.warrior.config.scale,scale:f.player.scaling.x,dimensions:f.dimensions,runSpeed:f.speeds.run,dodgeDistance:Math.max(...f.warrior.config.dodge.forward)*f.dimensions.ratio},witch:{model:f.witch.config.model,scale:f.e.actor.scaling.x,radius:f.e.radius,home:ELENA_HOME},melee:[],outOfReach:[],escape:[],horizontalCharge:[]};
   assert.equal(f.dimensions.height,WARRIOR_HEIGHT);assert.equal(f.dimensions.ratio,WARRIOR_SIZE_RATIO);assert.equal(f.player.metadata.playerDimensions,f.dimensions);
   try{
@@ -247,10 +247,10 @@ test('hollow contact keeps planted limbs solid without pose work at range or sta
   const e={player,actor:{position:new Vector3(),rotation:{y:0}},radius:MOURNING_SIZE.radius,nodes:{},brain:{},renderVisible:true,fogVisible:true,animator:{ensurePoseCurrent(){prepared++;}},hurtCapsules(){sampled++;return capsules;}};
   const contact=()=>MourningElenaEncounter.prototype.contactSeparation.call(e),broad=e.radius+dimensions.rollRadius;
   assert.equal(contact(),broad);assert.equal(sampled,0);assert.equal(prepared,0);
-  player.position.z=1.4;e.renderVisible=false;assert.equal(contact(),broad);assert.equal(sampled,0);e.renderVisible=true;
+  player.position.z=.9;e.renderVisible=false;assert.equal(contact(),broad);assert.equal(sampled,0);e.renderVisible=true;
   assert.equal(contact(),1.1,'air below a high arm preserves only the measured melee comfort, not a solid root cylinder');assert.equal(sampled,1);
-  capsules=[{points:[[0,.2,1.4],[0,1.2,1.4]],radius:.2}];e.bodyContactCache=null;
-  const blocked=contact();assert.ok(blocked>1.4+.45&&blocked<broad,'actual planted hand/leg blocks overlap');const calls=sampled;
+  capsules=[{points:[[0,.2,.9],[0,1.2,.9]],radius:.2}];e.bodyContactCache=null;
+  const blocked=contact();assert.ok(blocked>.9+.45&&blocked<broad,'actual planted hand/leg blocks overlap within the resized body');const calls=sampled;
   capsules=[{points:[[0,.2,.9],[0,1.2,.9]],radius:.3}];
   assert.equal(contact(),blocked,'stationary cast-arm movement cannot alter root clearance');assert.equal(sampled,calls);
   player.position.x=.02;assert.ok(contact()>=0);assert.equal(sampled,calls+1,'player movement refreshes the same-frame physical contact');

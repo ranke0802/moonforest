@@ -50,16 +50,16 @@ const snapshots=scene=>[scene.meshes.length,scene.geometries.length,scene.materi
 const part=bone=>bone.replace(/^DEF_/,'').replace(/_(UpperArm|Forearm|Palm|Thigh|Shin|Foot|Finger|Toe).*/,''),isAnatomy=bone=>/Hand|Foot|Prayer|^DEF_Head$|^DEF_Neck$/.test(bone);
 const sampleAt=(point,actionId=1)=>({actionId,window:{id:'blade',damage:18},elapsed:.6,blade:[point,[point[0],point[1]+.01,point[2]]],previous:null,bladeRadius:.055});
 
-test('the unchanged packed body scales from 2.7 to 5.7 metres without accumulating across summons',async t=>{
+test('the unchanged packed body scales from 2.7 to 4.5 metres without accumulating across summons',async t=>{
   const {e,body,player}=await fixture(t),sourceScale=config.scale;
   e.actor.scaling.setAll(sourceScale);pose(e,'idle',0);const source=skin(body,1),height=vertices=>Math.max(...vertices.map(v=>v.p[1]))-Math.min(...vertices.map(v=>v.p[1]));
   const originalHeight=height(source);e.actor.scaling.setAll(sourceScale*MOURNING_SIZE_SCALE);pose(e,'idle',0);const enlarged=skin(body,1),enlargedHeight=height(enlarged);
-  assert.ok(Math.abs(originalHeight-2.7)<.04,originalHeight);assert.ok(Math.abs(enlargedHeight-5.7)<.08,enlargedHeight);
+  assert.ok(Math.abs(originalHeight-2.7)<.04,originalHeight);assert.ok(Math.abs(enlargedHeight-4.5)<.08,enlargedHeight);
   assert.ok(Math.abs(enlargedHeight/originalHeight-MOURNING_SIZE_SCALE)<1e-5);
   for(let i=0;i<source.length;i+=83)for(let k=0;k<3;k++)assert.ok(Math.abs((enlarged[i].p[k]-e.actor.position.asArray()[k])-(source[i].p[k]-e.actor.position.asArray()[k])*MOURNING_SIZE_SCALE)<2e-5);
   const capsules=e.hurtCapsules();for(let i=0;i<capsules.length;i++)assert.equal(capsules[i].radius,MOURNING_HURT_SEGMENTS[i].radius*MOURNING_SIZE_SCALE);
   assert.equal(e.radius,MOURNING_SIZE.radius);assert.equal(e.separationRadius,MOURNING_SIZE.separationRadius);assert.equal(e.contact.mesh.scaling.x,3*MOURNING_SIZE_SCALE);
-  const anchor=e.healthBarPosition();assert.ok(Math.abs(anchor.y-e.actor.position.y-6)<1e-6);assert.strictEqual(e.healthBarPosition(),anchor);
+  const anchor=e.healthBarPosition();assert.ok(Math.abs(anchor.y-e.actor.position.y-(MOURNING_SIZE.bodyHeight+.3))<1e-6);assert.strictEqual(e.healthBarPosition(),anchor);
   for(let i=0;i<4;i++){await e.summon(player,{position:new Vector3(0,6,0),rotationY:0});assert.equal(e.actor.scaling.x,sourceScale*MOURNING_SIZE_SCALE);assert.equal(e.config.scale,sourceScale);assert.strictEqual(e.hurtCapsules(),capsules);}
   t.diagnostic(JSON.stringify({sourceBodyHeight:originalHeight,enlargedBodyHeight:enlargedHeight,ratio:MOURNING_SIZE_SCALE,originalManifestHeight:config.height,collisionRadius:e.radius,hurtCapsules:capsules.length,playerBladeRadius:.055}));
 });

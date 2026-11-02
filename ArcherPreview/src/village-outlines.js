@@ -63,7 +63,7 @@ export class VillageOutlines {
   constructor(world,records,stats){
     this.world=world;this.stats=stats;this.sources=new Set();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
     // A private draw wrapper must not overwrite the base PBR submesh effect.
-    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive'],samplers:['caveFogMap']},false);
+    this.material=new ShaderMaterial('village-ink',world.scene,{vertexSource,fragmentSource},{attributes:['position','normal','villageInk'],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap']},false);
     this.laboratoryRect=new Vector4();this.material.setFloat('inkLegacyLabClip',0);this.material.setVector4('inkLaboratoryRect',this.laboratoryRect);
     this.material.setFloat('caveFogActive',0);
     this.material.setVector2('inkSingle',new Vector2(0,0));

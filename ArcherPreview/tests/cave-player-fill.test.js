@@ -19,7 +19,7 @@ function incoming(world,name,rock=false){const mesh=MeshBuilder.CreateBox(name,{
 
 test('warm fill has bounded3D falloff and raises nearby dark environment without brightening remote or high surfaces',()=>{
  const p={x:0,y:1.05,z:0,w:1},base=[.14,.16,.20];
- const floor=cavePlayerFillFactor({x:0,y:0,z:0},p,1),far=cavePlayerFillFactor({x:5.5,y:1.05,z:0},p,1),ceiling=cavePlayerFillFactor({x:0,y:7,z:0},p,1);
+ const floor=cavePlayerFillFactor({x:0,y:0,z:0},p,1),far=cavePlayerFillFactor({x:CAVE_PLAYER_FILL.radius,y:1.05,z:0},p,1),ceiling=cavePlayerFillFactor({x:0,y:12,z:0},p,1);
  assert.ok(floor[0]>floor[1]&&floor[1]>floor[2]);assert.ok(luma(floor)>luma(base)*3);assert.ok(floor.every((v,i)=>v<=CAVE_PLAYER_FILL.color[i]));
  assert.deepEqual(far,[0,0,0]);assert.deepEqual(ceiling,[0,0,0]);assert.deepEqual(cavePlayerFillFactor({x:0,y:0,z:0},{...p,w:0},1),[0,0,0]);
  let previous=Infinity;for(let x=0;x<=6;x+=.025){const value=luma(cavePlayerFillFactor({x,y:p.y,z:0},p,1));assert.ok(value<=previous+1e-12);previous=value;}
@@ -48,7 +48,7 @@ test('all incoming near/mid/far environment shaders have cave illumination befor
   assert.equal(m.fogEnabled,false);assert.ok(m.pluginManager.getPlugin('CavePaintLight'));assert.ok(m.pluginManager.getPlugin('CaveRockMood'));
   await prepareMapMaterials([mesh]);const s=mesh.subMeshes[0].effect.fragmentSourceCode;
   assert.match(s,/finalDiffuse\*=cavePaintFactor\(vPositionW\)/);assert.match(s,/cavePlayerFillFactor\(p,caveFogLanternVisibility\(p\)\)/);
-  assert.match(s,/float caveDistanceFog=smoothstep\(22\.,48\./);
+  assert.match(s,/float caveDistanceFog=caveDistanceHaze\(vPositionW,vEyePosition.xyz\)/);
  }
  assert.equal(world.scene.materials.length,actorsBefore+3,'one existing material per source; no additional glow/light material');
  const source=readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');

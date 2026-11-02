@@ -10,6 +10,8 @@ export const CAVE_FOG_GLSL=`
 uniform sampler2D caveFogMap;
 uniform vec4 caveFogRect;
 uniform float caveFogActive;
+uniform vec4 caveFogOrigin;
+float caveDistanceHaze(vec3 p,vec3 eye){return smoothstep(22.,48.,length(p-(caveFogActive>.5?caveFogOrigin.xyz:eye)));}
 // The paint/lantern and final fog stages ask about the same fragment. Retain
 // this one existing lookup, never a second visibility texture or frame upload.
 bool caveFogSampleReady=false;
@@ -95,6 +97,6 @@ void main(){
   vec2 state=caveFogState(fogWorldPosition);
   vec3 rock=caveRockShade(fogWorldPosition,fogWorldNormal,state.y);
   rock=mix(caveFogSurfaceMemory(rock),rock,smoothstep(.08,.92,state.x));
-  float haze=smoothstep(22.,48.,length(fogWorldPosition-caveEye));
+  float haze=caveDistanceHaze(fogWorldPosition,caveEye);
   gl_FragColor=vec4(mix(rock,vec3(.024,.028,.038),haze),1.);
 }`;

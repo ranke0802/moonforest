@@ -69,7 +69,7 @@ function outlineMaterial(scene) {
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
       defines: ['#define NORMAL'],
-      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash', 'caveFogRect', 'caveFogActive'],
+      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash', 'caveFogRect', 'caveFogActive','caveFogOrigin'],
       samplers: ['caveFogMap'],
     });
   material.backFaceCulling = true;

@@ -15,12 +15,12 @@ const luma=rgb=>rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;
 const actualTerrain=createWitchCaveTerrain(),actual=buildCavePaintLight(actualTerrain);
 
 test('actual lamps and collector bulbs use existing object/glow positions; workbench is not an invented emitter',()=>{
- assert.equal(actual.emitters.length,12);assert.equal(actual.stats.lanterns,10);assert.equal(actual.stats.collectors,2);assert.equal(actual.emitters.some(e=>e.asset.includes('workbench')),false);
+ assert.equal(actual.emitters.length,22);assert.equal(actual.stats.lanterns,20);assert.equal(actual.stats.collectors,2);assert.equal(actual.emitters.some(e=>e.asset.includes('workbench')),false);
  for(const emitter of actual.emitters){
   const p=CAVE_PLACEMENTS.find(p=>p.id===emitter.id),collector=emitter.kind==='collector',offset=collector?.774:0;
   assert.ok(Math.abs(emitter.x-(p.x+Math.cos(p.yaw)*offset*p.scale))<1e-8);assert.ok(Math.abs(emitter.z-(p.z-Math.sin(p.yaw)*offset*p.scale))<1e-8);assert.ok(Math.abs(emitter.y-((p.elevation??actualTerrain.heightAt(p.x,p.z))+(collector?2.784:.8)*p.scale))<1e-8);
  }
- assert.equal(cavePaintEmitters(actualTerrain,{includeSoulCollectors:false}).length,10);
+ assert.equal(cavePaintEmitters(actualTerrain,{includeSoulCollectors:false}).length,20);
 });
 
 test('every actual lantern retains a readable warm pool, dark spaces contrast, and arena floor has a minimum',()=>{

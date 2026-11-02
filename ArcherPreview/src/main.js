@@ -1,4 +1,7 @@
 import './styles.css';
+import './dot-minimap.css';
+import {DotMinimap} from './dot-minimap.js';
+import {MapResumeStore,readMapResume} from './map-resume.js';
 import './mobile-viewport.css';
 import './mobile-ui.css';
 import './game-selection.css';
@@ -101,7 +104,8 @@ const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
 const isVillage = () => isWorldCharacter(character);
 const isForest=()=>character==='warrior-v4';
 const isCave=()=>character==='warrior-v5';
-const mapSpawn=()=>worldSpawn(character,location.search,VILLAGE_SPAWN);
+let resumePose=null;
+const mapSpawn=()=>resumePose??worldSpawn(character,location.search,VILLAGE_SPAWN);
 let mapPortal;
 let mapDeparture;
 let mapTransition;
@@ -134,6 +138,13 @@ try { travelStorage=sessionStorage; } catch { /* Travel also works without state
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
 const goldLoot=new GoldLoot({storage:equipmentStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 let goldLootView;
+const minimap=new DotMinimap($('#dot-minimap'));
+const resumeStore=new MapResumeStore(equipmentStorage);
+function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||!world||!actor)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
+function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
+function showMinimap(){minimap.setWorld(world).catch(error=>{console.warn('[Minimap]',error);minimap.hide();});}
+window.addEventListener('pagehide',()=>saveMapPosition(true));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)saveMapPosition(true);});
 for (const slot of ['sword', 'shield']) {
   const select = $(`#${slot}-select`);
   for (const style of EQUIPMENT_STYLES) select.add(new Option(equipmentLabel(slot,style), style.id));
@@ -349,6 +360,8 @@ async function loadCharacter() {
   frameFailure=null;if(frameLoop)frameLoop.failed=false;
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
+  const arrival=consumeTravel(travelStorage,character);
+  resumePose=readMapResume(equipmentStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:!!arrival});
   world.caveFog?.update(mapSpawn(),elapsed,{force:true});
   loadingView.begin();if(world.villageStreaming)world.villageStreaming.active=false;
   boss?.hide();combatResult=null;strikeSampler.reset();
@@ -457,8 +470,8 @@ async function loadCharacter() {
     $('#dodge-button').hidden = !isV2();
     $('#guard-button span').textContent = '방패 밀치기';
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
-    if(isVillage()){const travel=consumeTravel(travelStorage,character);if(travel){boss.combat.hp=travel.hp;boss.potions.remaining=travel.potions;}}
-    resetCamera(); updateButtons();
+    if(isVillage()&&arrival){boss.combat.hp=arrival.hp;boss.potions.remaining=arrival.potions;}
+    resetCamera();restoreMapCamera(); updateButtons();
     await skyReady;
     if(isCave())await boss.activateResident(actor);
     await prepareElenaReview();
@@ -469,7 +482,7 @@ async function loadCharacter() {
     assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     assertFrameHealthy();
-    loadingView.reveal();if(world.villageStreaming)world.villageStreaming.active=true;
+    loadingView.reveal();showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
@@ -621,7 +634,7 @@ function render(dt) {
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
-    updateButtons();mapPortal?.update(dt);
+    updateButtons();mapPortal?.update(dt);minimap.update(actor,elapsed);saveMapPosition();
   }
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
@@ -719,6 +732,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
+      saveMapPosition(true);resumePose=null;minimap.hide();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
@@ -759,7 +773,7 @@ try {
       loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
-      applyRenderQuality();loadingView.reveal();world.villageStreaming.active=true;
+      applyRenderQuality();loadingView.reveal();showMinimap();world.villageStreaming.active=true;
       loadDiagnostics.finish();
       const modalOpen=motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
