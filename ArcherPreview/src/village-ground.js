@@ -3,6 +3,7 @@ import {VillageGroundShade} from './village-toon.js';
 import {readMapManifest} from './map-manifests.js';
 import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {releaseMapTexture} from './map-texture-lifetime.js';
+import {repairCachedResource} from './resource-repair.js';
 
 // One small packed texture, two differently rotated scales, zero new draw calls.
 // Macro colors and the road mask are unique across the entire terrain.
@@ -30,7 +31,13 @@ export class VillageGroundDetail extends MaterialPluginBase {
   }
 }
 
-export async function applyVillageGround(world,{signal,lifetime,timeoutMs,timers,createTexture=(scene,callbacks)=>new Texture(null,scene,{noMipmap:false,invertY:true,samplingMode:Texture.TRILINEAR_SAMPLINGMODE,...callbacks})}={}){
+function groundTextureError(role,url,message,cause){
+  const loaderMessage=String(message??'').slice(0,240),loaderCause=String(cause?.message??cause??'').slice(0,400);
+  const moduleFailed=/failed to fetch dynamically imported module|importing a module script failed|error loading dynamically imported module/i.test(`${loaderMessage} ${loaderCause}`);
+  return Object.assign(new Error('마을 바닥 텍스처를 불러오지 못했습니다.',{cause}),{code:moduleFailed?'APP_MODULE_LOAD_FAILED':'GROUND_TEXTURE_LOAD',textureRole:role,resourceUrl:url,loaderMessage,loaderCause});
+}
+
+export async function applyVillageGround(world,{signal,lifetime,timeoutMs,timers,repairResource=repairCachedResource,createTexture=(scene,callbacks)=>new Texture(null,scene,{noMipmap:false,invertY:true,samplingMode:Texture.TRILINEAR_SAMPLINGMODE,...callbacks})}={}){
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'ground'});const snapshot=mapLoadSnapshot(world),scene=snapshot.scene,material=snapshot.floorMaterial,textures=new Set(),disposedTextures=new WeakSet();let released=false,installed=false;
   const disposeTexture=texture=>{if(disposedTextures.has(texture))return;disposedTextures.add(texture);releaseMapTexture(texture,scene);};
   const release=()=>{if(released)return;released=true;if(!installed)lifetime.abort(mapLoadAbortError());for(const texture of textures)disposeTexture(texture);textures.clear();scene.onDisposeObservable.remove(observer);if(world.releaseGround===release)world.releaseGround=null;};
@@ -41,21 +48,33 @@ export async function applyVillageGround(world,{signal,lifetime,timeoutMs,timers
   check();const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${snapshot.groundManifest??'village-ground'}.json`,location.href);
   const config=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));check();
   if(config.span!==world.terrain.size||config.color.width!==2048||config.detail.width!==256||config.soilMaskAlphaRange?.join(',')!=='64,255')throw new Error('마을 바닥 재질 규격이 다릅니다.');
-  const load=resource=>lifetime.run(()=>new Promise((resolve,reject)=>{
+  const loadOnce=(role,resource)=>lifetime.run(()=>new Promise((resolve,reject)=>{
     let texture,settled=false;
-    const finish=error=>{if(settled)return;settled=true;lifetime.signal.removeEventListener('abort',cancel);if(error)reject(error);else resolve(texture);};
+    const resourceUrl=new URL(resource.url,url).href;
+    const finish=error=>{if(settled)return;settled=true;lifetime.signal.removeEventListener('abort',cancel);if(error){if(texture){textures.delete(texture);disposeTexture(texture);}reject(error);}else resolve(texture);};
     const cancel=()=>finish(lifetime.signal.reason??mapLoadAbortError());lifetime.signal.addEventListener('abort',cancel,{once:true});
     try{
-    texture=createTexture(scene,{onLoad:()=>queueMicrotask(()=>{try{check();finish();}catch(error){finish(error);}}),onError:()=>queueMicrotask(()=>finish(new Error('마을 바닥 텍스처를 불러오지 못했습니다.')))});textures.add(texture);
+    texture=createTexture(scene,{onLoad:()=>queueMicrotask(()=>{try{check();finish();}catch(error){finish(error);}}),onError:(message,cause)=>queueMicrotask(()=>finish(groundTextureError(role,resourceUrl,message,cause)))});textures.add(texture);
     // KTX2 blocks cannot be flipped during GPU upload. The old bitmap loader
     // inverted Y for this world map; preserve those UVs explicitly.
     if(resource.codec){texture.vScale=-1;texture.vOffset=1;}
     texture.hasAlpha=false;texture.anisotropicFilteringLevel=4;
-    check();texture.updateURL(new URL(resource.url,url).href);check();
+    check();texture.updateURL(resourceUrl);check();
     }catch(error){finish(error);}
   }));
+  const load=async(role,resource)=>{
+    try{return await loadOnce(role,resource);}catch(error){
+      check();if(error.code!=='GROUND_TEXTURE_LOAD')throw error;
+      let repair;
+      try{repair=await lifetime.run(()=>repairResource(error.resourceUrl,{signal:lifetime.signal,expectedSize:resource.bytes,check}));check();}
+      catch(repairError){check();error.repairStatus='failed';error.repairError=String(repairError?.message??repairError).slice(0,400);throw error;}
+      error.repairStatus=repair.status;
+      if(!repair.repaired)throw error;
+      try{return await loadOnce(role,resource);}catch(retryError){retryError.repairStatus=repair.status;throw retryError;}
+    }
+  };
   // Color alpha stores the soil mask; it never enables transparency/blending.
-  const color=await load(config.color);check();const detail=await load(config.detail);check();
+  const color=await load('color',config.color);check();const detail=await load('detail',config.detail);check();
   color.wrapU=color.wrapV=Texture.CLAMP_ADDRESSMODE;
   detail.wrapU=detail.wrapV=Texture.WRAP_ADDRESSMODE;detail.gammaSpace=false;
   material.unfreeze();if(material.diffuseTexture?.getInternalTexture?.())material.diffuseTexture.dispose();

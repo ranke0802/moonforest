@@ -1,7 +1,7 @@
 // Keep full-resolution frames, but do no scene work while the view is suspended.
 export class FrameLoop {
   constructor(engine, draw, now = () => performance.now()) {
-    this.engine=engine;this.draw=draw;this.now=now;this.running=false;this.last=null;this.frames=0;this.failed=false;this.scheduledAt=now();
+    this.engine=engine;this.draw=draw;this.now=now;this.running=false;this.last=null;this.frames=0;this.failed=false;this.loadingFailed=false;this.scheduledAt=now();
     this.frame=()=>{const time=this.now(),dt=this.last===null?0:Math.min(.1,Math.max(0,(time-this.last)/1000));this.last=time;this.frames++;this.draw(dt);};
     this.once=()=>{this.engine.stopRenderLoop(this.once);this.frames++;this.draw(0);};
   }

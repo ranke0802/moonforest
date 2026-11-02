@@ -6,6 +6,7 @@ import { hash } from './resource-pack.js';
 import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
 import { validVillageTextureProfile } from '../src/village-texture-budget.js';
 import {buildResourceBundles,verifyResourceBundles} from './resource-bundles.mjs';
+import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
@@ -80,7 +81,8 @@ export async function buildVillageSite(){
   }
   // Resolve public URLs in HTML (including the installed-app manifest) while
   // copying only the verified graph below, not public's raw model sources.
-  await build({root:project,publicDir:publicRoot,build:{outDir,emptyOutDir:true,copyPublicDir:false}});
+  let runtimeGraph;
+  await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-runtime-module-graph',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false}});
   const directories=new Set();
   for(const [local,info]of files){
     const target=resolve(outDir,local),folder=dirname(target);
@@ -109,7 +111,7 @@ export async function buildVillageSite(){
   const total=deploymentFiles.reduce((sum,f)=>sum+f.bytes,0);
   if(total>=1_000_000_000)throw new Error('Published site exceeds the 1 GB budget.');
   await writeFile(resolve(outDir,'deployment-files.json'),JSON.stringify({version:2,resourceRevision:resourceIndex.revision,bytes:total,files:deploymentFiles},null,2)+'\n');
-  const result={outDir,manifestCount,contentFiles:[...files.keys()].filter(p=>p.startsWith('assets/content/')).length,publishedResourceFiles:files.size,publishedResourceBytes:[...files.values()].reduce((n,f)=>n+f.bytes,0),sourceAssets:25,bundleAudit};
+  const result={outDir,manifestCount,contentFiles:[...files.keys()].filter(p=>p.startsWith('assets/content/')).length,publishedResourceFiles:files.size,publishedResourceBytes:[...files.values()].reduce((n,f)=>n+f.bytes,0),sourceAssets:25,bundleAudit,runtimeGraph};
   console.log(JSON.stringify(result));return result;
 }
 

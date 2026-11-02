@@ -1,0 +1,30 @@
+{
+  "command": "node --test --test-timeout=30000 tests/ground-retry-sdk.test.js tests/map-setup-timeout.test.js",
+  "passed": true,
+  "tests": 25,
+  "newSDKRegressionCases": 14,
+  "existingTimeoutCases": 11,
+  "durationMs": 3353.2548,
+  "failures": 0,
+  "cases": [
+    "Real SDK constructor/updateURL synchronous color and detail load",
+    "Color callback error context and cleanup",
+    "Detail callback error context and cleanup",
+    "Module import error classification without content-cache repair",
+    "Valid cached SHA content retained without network or texture retry",
+    "Corrupt color cache one-shot targeted repair and stale callback isolation",
+    "Corrupt detail cache one-shot targeted repair and stale callback isolation",
+    "Abort during repair prevents late retry or rebinding",
+    "Second loader failure after repair stops after two attempts",
+    "Actual failed attempt followed by successful same-floor retry and plugin reuse",
+    "Timeout cleanup and later retry preserve foreign pending work",
+    "Scene disposal during pending real texture cancels once and frees its deadline",
+    "Shared pending allocation failure remains bounded without releasing foreign owner",
+    "Disposed PNG reaches actual SDK pre-upload guard without uploading"
+  ],
+  "limitations": [
+    "NullEngine and controlled engine callback I/O boundary; SDK Texture constructor, updateURL, cache lookup and bitmap pre-upload guard remain real.",
+    "No browser, network service, WASM decoder, GPU, mobile device, build or deployment was used by this test run.",
+    "The shared pending SDK allocation branch does not immediately forward its error through updateURL; this test verifies timeout and foreign ownership rather than claiming to fix that SDK behavior."
+  ]
+}

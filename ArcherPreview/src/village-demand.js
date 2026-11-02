@@ -1,6 +1,6 @@
 import {Frustum,Vector3} from '@babylonjs/core';
 import {projectedCoverage,villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
-import {villageRenderRange} from './village-policy.js';
+import {plainsRenderRange} from './plains-view-distance.js';
 
 export function placementBounds(world,p,config){
   const scale=config.height/config.bounds[1]*p.scale;
@@ -23,7 +23,7 @@ export function placementBounds(world,p,config){
 export function villageDemand(world,records){
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
   const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
-  const range=world.villageOverview?(world.plains?420:260):villageRenderRange(world.touchDevice).cellCull;
+  const range=world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull;
   const target=camera.target??camera.getTarget();
   for(const record of records){
     if(world.caveFog?.fog.ready&&!world.caveFog.fog.boundsVisible(record.min??record.bounds.min,record.max??record.bounds.max,2))continue;
@@ -48,7 +48,7 @@ export function villageDemand(world,records){
 // against the current loaded tiers, without rescanning all 698 placements.
 export class VillageDemandCache {
   constructor(world,records,stats={}){
-    Object.assign(this,{world,records,stats});this.previous=new Float64Array(28);this.previous.fill(NaN);this.plan=null;
+    Object.assign(this,{world,records,stats});this.previous=new Float64Array(29);this.previous.fill(NaN);this.plan=null;
     stats.demandEvaluations=0;stats.demandCacheHits=0;
   }
   invalidate(){this.plan=null;}
@@ -56,11 +56,11 @@ export class VillageDemandCache {
     const {world,records}=this,camera=world.camera;
     camera.getViewMatrix();camera.getProjectionMatrix();
     const matrix=camera.getTransformationMatrix().m,position=camera.globalPosition,target=camera.target??camera.getTarget();
-    const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length];
+    const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length,plainsRenderRange(world).cellCull];
     const fogRevision=world.caveFog?.fog.revision??0;
     let changed=!this.plan||this.camera!==camera||this.fogRevision!==fogRevision;this.fogRevision=fogRevision;
     for(let i=0;i<16;i++)if(this.previous[i]!==matrix[i])changed=true;
-    for(let i=0;i<12;i++)if(this.previous[16+i]!==values[i])changed=true;
+    for(let i=0;i<values.length;i++)if(this.previous[16+i]!==values[i])changed=true;
     if(!changed){this.stats.demandCacheHits++;return this.plan;}
     this.camera=camera;this.previous.set(matrix);this.previous.set(values,16);
     this.stats.demandEvaluations++;return this.plan=villageDemand(world,records);

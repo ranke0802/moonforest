@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
-import {createLoadingView,loadingErrorRecord} from '../src/loading-view.js';
+import {createLoadingView,loadingErrorRecord,needsModuleReload} from '../src/loading-view.js';
 import {createFrameDiagnostics} from '../src/frame-diagnostics.js';
 import {LoadDiagnostics} from '../src/load-diagnostics.js';
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8'),flush=async()=>{for(let i=0;i<8;i++)await Promise.resolve();};
@@ -31,4 +31,25 @@ test('diagnostic capture failure preserves the original error and engine failure
 test('error serialization bounds cause chains and normal preparation/reveal hides diagnostic controls',()=>{
  const a=new Error('a'),b=new Error('b');a.cause=b;b.cause=a;assert.doesNotThrow(()=>JSON.stringify(loadingErrorRecord(a)));const f=fixture();f.view.fail('x','x',{error:a});f.view.begin();f.view.download({total:0,loaded:0,ratio:1,complete:true});assert.equal(f.get('loading-error').hidden,true);assert.equal(f.get('copy-loading-diagnostics').hidden,true);f.view.reveal();assert.equal(f.get('loading').hidden,true);
  assert.match(html,/#loading-diagnostics-export\{[^}]*user-select:text/);assert.match(html,/@media\(max-height:450px\)/);
+});
+
+test('stale module failure offers one manual page refresh and preserves map/UI query and resource cache',async()=>{
+ let copied;const f=fixture(async value=>copied=JSON.parse(value)),navigations=[];
+ const cause=new TypeError('Failed to fetch dynamically imported module: https://example.test/assets/old-loader.js');
+ const error=Object.assign(new Error('바닥 준비 실패',{cause}),{textureRole:'color',resourceUrl:'https://example.test/assets/content/file.ktx2',loaderMessage:cause.message,repairStatus:'skipped-module'});
+ f.view.fail('실패','다시 시도',{error,phase:'ground'});
+ assert.equal(f.view.failed,true);assert.equal(f.get('retry-load').textContent,'페이지 새로 불러오기');assert.equal(navigations.length,0);
+ assert.match(f.get('loading-error-stack').textContent,/old-loader/);f.click();await flush();
+ assert.equal(copied.failure.recovery,'reload-page');assert.equal(copied.failure.textureRole,'color');assert.equal(copied.failure.resourceUrl,error.resourceUrl);assert.equal(copied.failure.loaderMessage,cause.message);
+ const page={href:'https://example.test/?character=warrior-v5&uiTest=1&arrival=portal&from=warrior-v4#game',replace:url=>navigations.push(url)};
+ assert.equal(f.view.retryPageIfRequired(page,()=>1234),true);assert.equal(f.view.retryPageIfRequired(page,()=>4567),true);assert.equal(navigations.length,1);
+ const target=new URL(navigations[0]);assert.equal(target.searchParams.get('character'),'warrior-v5');assert.equal(target.searchParams.get('uiTest'),'1');assert.equal(target.searchParams.get('from'),'warrior-v4');assert.equal(target.searchParams.get('_reload'),'1234');assert.equal(target.hash,'#game');
+ f.view.begin();assert.equal(f.view.failed,false);assert.equal(f.view.retryPageIfRequired(page),false);
+ f.view.fail('중단','다시 시도',{error:Error('네트워크 응답 없음')});assert.equal(f.view.retryPageIfRequired(page),false);assert.equal(f.get('retry-load').textContent,'다시 불러오기');
+});
+
+test('module recovery classification supports mobile engines and does not refresh ordinary texture or timeout failures',()=>{
+ for(const message of ['Failed to fetch dynamically imported module','error loading dynamically imported module','Importing a module script failed.'])assert.equal(needsModuleReload(new Error('Texture failed',{cause:Error(message)})),true);
+ for(const error of [Error('Invalid KTX texture'),Error('Network request failed'),Object.assign(Error('시간 초과'),{name:'TimeoutError'})])assert.equal(needsModuleReload(error),false);
+ const circular=Error('not a module error');circular.cause=circular;assert.equal(needsModuleReload(circular),false);
 });

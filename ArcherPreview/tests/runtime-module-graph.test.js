@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {verifyRuntimeModuleGraph} from '../scripts/runtime-module-graph.mjs';
+
+const chunk=(fileName,{imports=[],dynamicImports=[],modules={},isEntry=false}={})=>({type:'chunk',fileName,imports,dynamicImports,modules,isEntry});
+const entry='assets/index.js',village='/project/src/village-ktx2.js',loader='/project/node_modules/@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader.js';
+const good=()=>[chunk(entry,{isEntry:true,imports:['assets/shared.js'],dynamicImports:['assets/other.js'],modules:{[village]:{}}}),chunk('assets/shared.js',{modules:{[loader]:{}}}),chunk('assets/other.js')];
+
+test('village entry statically reaches the KTX loader and all emitted links resolve',()=>{
+  assert.deepEqual(verifyRuntimeModuleGraph(good()),{chunks:3,entriesChecked:1});
+});
+test('rejects missing static or dynamic internal chunks',()=>{
+  for(const field of ['imports','dynamicImports']){
+    const graph=good();graph[0][field].push('assets/missing.js');
+    assert.throws(()=>verifyRuntimeModuleGraph(graph),/Missing runtime chunk assets\/missing.js/);
+  }
+});
+test('a loader reached only lazily does not satisfy the initial graph',()=>{
+  const graph=good();graph[0].imports=[];graph[0].dynamicImports.push('assets/shared.js');
+  assert.throws(()=>verifyRuntimeModuleGraph(graph),/KTX loader is not in the initial module graph/);
+});

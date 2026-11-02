@@ -1,6 +1,6 @@
 import { Frustum, Vector3 } from '@babylonjs/core';
 import { VillageOcclusion } from './village-occlusion.js';
-import { villageRenderRange } from './village-policy.js';
+import { plainsRenderRange } from './plains-view-distance.js';
 import {selectVillageShadowCasters} from './village-shadow-policy.js';
 import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
 import {caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
@@ -54,11 +54,12 @@ export class VillageVisibility {
     this.timer=.16;this.camera.copyFrom(camera);
     this.view??=new Float32Array(16);this.view.set(transform.m);Frustum.GetPlanesToRef(transform,this.planes);
     let activeCells=0,activeInstances=0;
+    const range=this.world.villageOverview?(this.world.plains?420:260):plainsRenderRange(this.world,this.touch).cellCull;
     for(const cell of this.cells.values()){
       const distance=Vector3.Distance(camera,cell.center)-cell.radius;
       // Generous frustum margin prevents camera motion from revealing empty cells.
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
-      const active=distance<(this.world.villageOverview?(this.world.plains?420:260):villageRenderRange(this.touch).cellCull)&&inFrustum;
+      const active=distance<range&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(caveFogRootEnabled(r));}cell.active=active;}
       if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false)activeInstances++;}
     }

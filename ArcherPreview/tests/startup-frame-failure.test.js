@@ -10,6 +10,7 @@ import {LoadDiagnostics} from '../src/load-diagnostics.js';
 import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {configurePlayerSize,WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {MapLoadLifetime} from '../src/map-load-lifetime.js';
+import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const noop=()=>{},results=[];
@@ -69,7 +70,7 @@ function fixture(){
  const input={pressed:new Set(),reset(){owned.inputResets++;this.pressed.clear();},panOffset:{x:0,y:0,z:0}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
- const dependencies={FrameLoop,configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
+ const dependencies={FrameLoop,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>{const value={meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose(){owned.containers.delete(this);}};owned.containers.add(value);return value;}},
@@ -264,6 +265,15 @@ test('actual main frame failure/reload12times releases previous player wrappers 
   trace.push({iteration:i+1,stage,owned:ownedCounts(f),callbacks:f.engineCallbacks.size,listeners:f.listenerCount()});
  }
  assert.ok(trace.every(item=>item.listeners===trace[0].listeners));results.push({kind:'main-frame-error-reload-repeat',retries:12,trace});
+});
+
+test('ordinary initial asset failure stays paused across focus/settings changes and recovers on one manual retry',async()=>{
+ const f=fixture();f.gate.errorStage='map-model';f.gate.errorFactory=()=>Object.assign(Error('마을 바닥 텍스처 실패'),{stage:'ground'});
+ await f.runtime.load();
+ assert.equal(f.runtime.snapshot().ready,false);assert.equal(f.runtime.snapshot().loading,false);assert.equal(f.runtime.snapshot().running,false);
+ assert.equal(f.audioStates.at(-1),true);assert.equal(f.engineCallbacks.size,0);
+ for(let i=0;i<4;i++){f.doc.hidden=i%2===0;f.runtime.reconcile();assert.equal(f.runtime.snapshot().running,false);}
+ f.doc.hidden=false;f.gate.clear();await success(f,{retry:true});assert.equal(f.engineCallbacks.size,1);
 });
 
 test.after(()=>{

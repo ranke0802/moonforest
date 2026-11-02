@@ -1,0 +1,132 @@
+{
+  "scope": "Current HTTP responses and preserved historical build graph, not a browser replay or direct device cache inspection.",
+  "diagnostic": {
+    "createdAt": "2026-11-02T21:02:08.865Z",
+    "bundle": "./assets/index-MFmNTgKU.js",
+    "character": "warrior-v3",
+    "failure": {
+      "name": "Error",
+      "message": "마을 바닥 텍스처를 불러오지 못했습니다.",
+      "stack": "Error: 마을 바닥 텍스처를 불러오지 못했습니다.\n    at https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/index-MFmNTgKU.js:454:1279",
+      "stage": "ground",
+      "phase": "model",
+      "at": "2026-11-02T21:02:08.865Z"
+    },
+    "loadHistory": [
+      {
+        "label": "마을",
+        "phase": "error",
+        "setupMs": 277.2999999821186,
+        "downloadMs": 2280.300000011921,
+        "modelMs": 260.2999999821186,
+        "screenMs": 0,
+        "bytes": 0,
+        "cachedBytes": 77700848,
+        "totalMs": 2817.899999976158,
+        "failedPhase": "model",
+        "error": "마을 바닥 텍스처를 불러오지 못했습니다."
+      },
+      {
+        "label": "마을",
+        "phase": "error",
+        "setupMs": 3.5,
+        "downloadMs": 331.19999998807907,
+        "modelMs": 33.900000005960464,
+        "screenMs": 0,
+        "bytes": 0,
+        "cachedBytes": 77388673,
+        "totalMs": 368.59999999403954,
+        "failedPhase": "model",
+        "error": "마을 바닥 텍스처를 불러오지 못했습니다."
+      },
+      {
+        "label": "마을",
+        "phase": "error",
+        "setupMs": 1.9000000059604645,
+        "downloadMs": 587.8999999761581,
+        "modelMs": 28.30000001192093,
+        "screenMs": 0,
+        "bytes": 0,
+        "cachedBytes": 77388673,
+        "totalMs": 618.0999999940395,
+        "failedPhase": "model",
+        "error": "마을 바닥 텍스처를 불러오지 못했습니다."
+      }
+    ],
+    "resourceDownloads": {
+      "revision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+      "bundleRequests": 0,
+      "fileRequests": 0,
+      "extractedFiles": 0,
+      "cacheHits": 181,
+      "downloadBytes": 0,
+      "waitStage": null,
+      "initialPrefetchReusedFiles": 0
+    }
+  },
+  "oldGraph": {
+    "entry": "index-MFmNTgKU.js",
+    "engine": "babylon~index-Cvd2zNR-.js",
+    "lazyLoader": "babylon~ktxTextureLoader-DLDclLm6.js",
+    "currentStatus": 404
+  },
+  "currentPage": {
+    "status": 200,
+    "entry": "./assets/index-DluAW0K3.js"
+  },
+  "groundHttp": [
+    {
+      "role": "color",
+      "status": 200,
+      "bytes": 754948,
+      "sha256Matches": true
+    },
+    {
+      "role": "detail",
+      "status": 200,
+      "bytes": 119227,
+      "sha256Matches": true
+    }
+  ],
+  "qualityContracts": [
+    {
+      "name": "warrior-v3",
+      "unchanged": true
+    },
+    {
+      "name": "warrior-v3-ios",
+      "unchanged": true
+    },
+    {
+      "name": "village",
+      "unchanged": true
+    },
+    {
+      "name": "monster-forest",
+      "unchanged": true
+    },
+    {
+      "name": "great-plains",
+      "unchanged": true
+    },
+    {
+      "name": "witch-cave",
+      "unchanged": true
+    },
+    {
+      "name": "elena",
+      "unchanged": true
+    },
+    {
+      "name": "mourning-elena",
+      "unchanged": true
+    },
+    {
+      "name": "quest-props",
+      "unchanged": true
+    }
+  ],
+  "interpretation": "The reported old entry can request an unavailable lazy loader today. This matches the before-worker failure; the old generic error omitted the SDK cause, so neither the exact historical server response nor device-cache corruption is proven.",
+  "browserAutomation": false,
+  "physicalDeviceTested": false
+}

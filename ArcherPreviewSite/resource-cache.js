@@ -53,6 +53,11 @@ self.addEventListener('fetch', event => {
   // A revision/query string cannot change bytes identified by a content hash.
   url.search='';url.hash='';const key={url:url.href};
   event.respondWith((async () => {
+    // A failed, checksum-proven bad entry gets one page-owned repair. Bypass
+    // both persistent/HTTP caches and in-flight copies of those same bad bytes.
+    if(request.headers.get('X-Moonforest-Cache-Repair')==='1'){
+      stats.downloads++;return fetch(url.href,{cache:'no-store',signal:request.signal});
+    }
     let cache;
     try { cache = await caches.open(CACHE_NAME); const hit = await cache.match(url.href,{ignoreVary:true}); if (hit) {stats.hits++;return hit;} } catch { /* Storage denied: normal network fallback. */ }
     if(request.headers.get('X-Moonforest-Cache-Writer')==='page'){stats.downloads++;return fetch(url.href);}

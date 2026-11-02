@@ -1,0 +1,601 @@
+{
+  "scope": "Read-only local byte/index inspection and controlled CacheStorage/service-worker boundary reproductions. No browser/GPU or user-device cache access.",
+  "revision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "ground": [
+    {
+      "id": "village",
+      "resources": [
+        {
+          "role": "color",
+          "name": "902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
+          "size": 754948,
+          "manifestSize": 754948,
+          "indexSize": 754948,
+          "sha256": "902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7",
+          "hashMatches": true,
+          "magic": "ab4b5458203230bb0d0a1a0a",
+          "ktx2": {
+            "vkFormat": 0,
+            "width": 2048,
+            "height": 2048,
+            "depth": 0,
+            "layerCount": 0,
+            "faceCount": 1,
+            "levelCount": 12,
+            "supercompression": 1,
+            "levels": [
+              {
+                "start": 255063,
+                "length": 499885,
+                "uncompressed": 0
+              },
+              {
+                "start": 95504,
+                "length": 159559,
+                "uncompressed": 0
+              },
+              {
+                "start": 50105,
+                "length": 45399,
+                "uncompressed": 0
+              },
+              {
+                "start": 37474,
+                "length": 12631,
+                "uncompressed": 0
+              },
+              {
+                "start": 34086,
+                "length": 3388,
+                "uncompressed": 0
+              },
+              {
+                "start": 33167,
+                "length": 919,
+                "uncompressed": 0
+              },
+              {
+                "start": 32899,
+                "length": 268,
+                "uncompressed": 0
+              },
+              {
+                "start": 32813,
+                "length": 86,
+                "uncompressed": 0
+              },
+              {
+                "start": 32790,
+                "length": 23,
+                "uncompressed": 0
+              },
+              {
+                "start": 32781,
+                "length": 9,
+                "uncompressed": 0
+              },
+              {
+                "start": 32771,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 32761,
+                "length": 10,
+                "uncompressed": 0
+              }
+            ]
+          },
+          "bundle": null
+        },
+        {
+          "role": "detail",
+          "name": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "size": 119227,
+          "manifestSize": 119227,
+          "indexSize": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "hashMatches": true,
+          "magic": "89504e470d0a1a0a0000000d",
+          "png": {
+            "width": 256,
+            "height": 256,
+            "bitDepth": 8,
+            "colorType": 2,
+            "chunks": [
+              {
+                "type": "IHDR",
+                "length": 13
+              },
+              {
+                "type": "IDAT",
+                "length": 65536
+              },
+              {
+                "type": "IDAT",
+                "length": 53622
+              },
+              {
+                "type": "IEND",
+                "length": 0
+              }
+            ],
+            "inflatedBytes": 196864
+          },
+          "bundle": null
+        }
+      ]
+    },
+    {
+      "id": "monster-forest",
+      "resources": [
+        {
+          "role": "color",
+          "name": "6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+          "size": 588850,
+          "manifestSize": 588850,
+          "indexSize": 588850,
+          "sha256": "6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64",
+          "hashMatches": true,
+          "magic": "ab4b5458203230bb0d0a1a0a",
+          "ktx2": {
+            "vkFormat": 0,
+            "width": 2048,
+            "height": 2048,
+            "depth": 0,
+            "layerCount": 0,
+            "faceCount": 1,
+            "levelCount": 12,
+            "supercompression": 1,
+            "levels": [
+              {
+                "start": 217525,
+                "length": 371325,
+                "uncompressed": 0
+              },
+              {
+                "start": 84916,
+                "length": 132609,
+                "uncompressed": 0
+              },
+              {
+                "start": 42827,
+                "length": 42089,
+                "uncompressed": 0
+              },
+              {
+                "start": 30879,
+                "length": 11948,
+                "uncompressed": 0
+              },
+              {
+                "start": 27557,
+                "length": 3322,
+                "uncompressed": 0
+              },
+              {
+                "start": 26619,
+                "length": 938,
+                "uncompressed": 0
+              },
+              {
+                "start": 26338,
+                "length": 281,
+                "uncompressed": 0
+              },
+              {
+                "start": 26251,
+                "length": 87,
+                "uncompressed": 0
+              },
+              {
+                "start": 26229,
+                "length": 22,
+                "uncompressed": 0
+              },
+              {
+                "start": 26219,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 26209,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 26199,
+                "length": 10,
+                "uncompressed": 0
+              }
+            ]
+          },
+          "bundle": null
+        },
+        {
+          "role": "detail",
+          "name": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "size": 119227,
+          "manifestSize": 119227,
+          "indexSize": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "hashMatches": true,
+          "magic": "89504e470d0a1a0a0000000d",
+          "png": {
+            "width": 256,
+            "height": 256,
+            "bitDepth": 8,
+            "colorType": 2,
+            "chunks": [
+              {
+                "type": "IHDR",
+                "length": 13
+              },
+              {
+                "type": "IDAT",
+                "length": 65536
+              },
+              {
+                "type": "IDAT",
+                "length": 53622
+              },
+              {
+                "type": "IEND",
+                "length": 0
+              }
+            ],
+            "inflatedBytes": 196864
+          },
+          "bundle": null
+        }
+      ]
+    },
+    {
+      "id": "great-plains",
+      "resources": [
+        {
+          "role": "color",
+          "name": "1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
+          "size": 458550,
+          "manifestSize": 458550,
+          "indexSize": 458550,
+          "sha256": "1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6",
+          "hashMatches": true,
+          "magic": "ab4b5458203230bb0d0a1a0a",
+          "ktx2": {
+            "vkFormat": 0,
+            "width": 2048,
+            "height": 2048,
+            "depth": 0,
+            "layerCount": 0,
+            "faceCount": 1,
+            "levelCount": 12,
+            "supercompression": 1,
+            "levels": [
+              {
+                "start": 172272,
+                "length": 286278,
+                "uncompressed": 0
+              },
+              {
+                "start": 71946,
+                "length": 100326,
+                "uncompressed": 0
+              },
+              {
+                "start": 35829,
+                "length": 36117,
+                "uncompressed": 0
+              },
+              {
+                "start": 24538,
+                "length": 11291,
+                "uncompressed": 0
+              },
+              {
+                "start": 21245,
+                "length": 3293,
+                "uncompressed": 0
+              },
+              {
+                "start": 20309,
+                "length": 936,
+                "uncompressed": 0
+              },
+              {
+                "start": 20027,
+                "length": 282,
+                "uncompressed": 0
+              },
+              {
+                "start": 19940,
+                "length": 87,
+                "uncompressed": 0
+              },
+              {
+                "start": 19917,
+                "length": 23,
+                "uncompressed": 0
+              },
+              {
+                "start": 19907,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 19898,
+                "length": 9,
+                "uncompressed": 0
+              },
+              {
+                "start": 19889,
+                "length": 9,
+                "uncompressed": 0
+              }
+            ]
+          },
+          "bundle": null
+        },
+        {
+          "role": "detail",
+          "name": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "size": 119227,
+          "manifestSize": 119227,
+          "indexSize": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "hashMatches": true,
+          "magic": "89504e470d0a1a0a0000000d",
+          "png": {
+            "width": 256,
+            "height": 256,
+            "bitDepth": 8,
+            "colorType": 2,
+            "chunks": [
+              {
+                "type": "IHDR",
+                "length": 13
+              },
+              {
+                "type": "IDAT",
+                "length": 65536
+              },
+              {
+                "type": "IDAT",
+                "length": 53622
+              },
+              {
+                "type": "IEND",
+                "length": 0
+              }
+            ],
+            "inflatedBytes": 196864
+          },
+          "bundle": null
+        }
+      ]
+    },
+    {
+      "id": "witch-cave",
+      "resources": [
+        {
+          "role": "color",
+          "name": "4135383e18859c032048fff265983d55366f9a1aace0a52cb69c42f55345f52d.ktx2",
+          "size": 312284,
+          "manifestSize": 312284,
+          "indexSize": 312284,
+          "sha256": "4135383e18859c032048fff265983d55366f9a1aace0a52cb69c42f55345f52d",
+          "hashMatches": true,
+          "magic": "ab4b5458203230bb0d0a1a0a",
+          "ktx2": {
+            "vkFormat": 0,
+            "width": 2048,
+            "height": 2048,
+            "depth": 0,
+            "layerCount": 0,
+            "faceCount": 1,
+            "levelCount": 12,
+            "supercompression": 1,
+            "levels": [
+              {
+                "start": 115339,
+                "length": 196945,
+                "uncompressed": 0
+              },
+              {
+                "start": 49668,
+                "length": 65671,
+                "uncompressed": 0
+              },
+              {
+                "start": 25867,
+                "length": 23801,
+                "uncompressed": 0
+              },
+              {
+                "start": 17288,
+                "length": 8579,
+                "uncompressed": 0
+              },
+              {
+                "start": 14504,
+                "length": 2784,
+                "uncompressed": 0
+              },
+              {
+                "start": 13645,
+                "length": 859,
+                "uncompressed": 0
+              },
+              {
+                "start": 13387,
+                "length": 258,
+                "uncompressed": 0
+              },
+              {
+                "start": 13299,
+                "length": 88,
+                "uncompressed": 0
+              },
+              {
+                "start": 13275,
+                "length": 24,
+                "uncompressed": 0
+              },
+              {
+                "start": 13265,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 13255,
+                "length": 10,
+                "uncompressed": 0
+              },
+              {
+                "start": 13245,
+                "length": 10,
+                "uncompressed": 0
+              }
+            ]
+          },
+          "bundle": "bundles/36cad855305f96bb246de259c2d39707a6c3a14b8044caf2745010b63fcaf75b.mfp.gz",
+          "bundleMemberMatches": true
+        },
+        {
+          "role": "detail",
+          "name": "e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56.ktx2",
+          "size": 27269,
+          "manifestSize": 27269,
+          "indexSize": 27269,
+          "sha256": "e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56",
+          "hashMatches": true,
+          "magic": "ab4b5458203230bb0d0a1a0a",
+          "ktx2": {
+            "vkFormat": 0,
+            "width": 256,
+            "height": 256,
+            "depth": 0,
+            "layerCount": 0,
+            "faceCount": 1,
+            "levelCount": 9,
+            "supercompression": 1,
+            "levels": [
+              {
+                "start": 18387,
+                "length": 8882,
+                "uncompressed": 0
+              },
+              {
+                "start": 16167,
+                "length": 2220,
+                "uncompressed": 0
+              },
+              {
+                "start": 15625,
+                "length": 542,
+                "uncompressed": 0
+              },
+              {
+                "start": 15492,
+                "length": 133,
+                "uncompressed": 0
+              },
+              {
+                "start": 15461,
+                "length": 31,
+                "uncompressed": 0
+              },
+              {
+                "start": 15453,
+                "length": 8,
+                "uncompressed": 0
+              },
+              {
+                "start": 15450,
+                "length": 3,
+                "uncompressed": 0
+              },
+              {
+                "start": 15447,
+                "length": 3,
+                "uncompressed": 0
+              },
+              {
+                "start": 15444,
+                "length": 3,
+                "uncompressed": 0
+              }
+            ]
+          },
+          "bundle": "bundles/36cad855305f96bb246de259c2d39707a6c3a14b8044caf2745010b63fcaf75b.mfp.gz",
+          "bundleMemberMatches": true
+        }
+      ]
+    }
+  ],
+  "reproductions": {
+    "existingPoisonedCache2": {
+      "pathCount": 2,
+      "fetches": 0,
+      "matches": 2,
+      "keyEnumerations": 0,
+      "reportedComplete": true,
+      "downloadTotal": 0,
+      "cacheHits": 2,
+      "storedGroundBytes": 33,
+      "expectedGroundBytes": 754948
+    },
+    "existingPoisonedCache16": {
+      "pathCount": 16,
+      "fetches": 0,
+      "matches": 0,
+      "keyEnumerations": 1,
+      "reportedComplete": true,
+      "downloadTotal": 0,
+      "cacheHits": 16,
+      "storedGroundBytes": 33,
+      "expectedGroundBytes": 754948
+    },
+    "standaloneWrongBodyAccepted": {
+      "fetches": 1,
+      "reportedComplete": true,
+      "size": 754948,
+      "type": "text/html",
+      "hashMatches": false
+    },
+    "workerPoisonedCacheRepeated": {
+      "fetches": 0,
+      "attempts": [
+        {
+          "requestCache": "default",
+          "pageWriter": false,
+          "status": 200,
+          "type": "text/html",
+          "bytes": 28
+        },
+        {
+          "requestCache": "reload",
+          "pageWriter": false,
+          "status": 200,
+          "type": "text/html",
+          "bytes": 28
+        },
+        {
+          "requestCache": "no-store",
+          "pageWriter": true,
+          "status": 200,
+          "type": "text/html",
+          "bytes": 28
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Every local ground resource matches its content SHA256, manifest byte count, resource index byte count, and structural header. Bundle entries for those resources match the standalone bytes.",
+    "Both ResourceDownloads cache lookup branches trust presence only. Cached bad/truncated/wrong-type responses report complete with zero new transfers.",
+    "Standalone page downloads check total bytes but do not check SHA256 or normalize/validate Content-Type. Wrong same-length bytes can enter persistent cache.",
+    "The service worker returns cached entries without validating status, size, type, or hash, so the same poisoned entry survives repeated loads.",
+    "Request cache reload/no-store and the page-writer header do not bypass existing CacheStorage hits. The worker network path also discards the incoming request cache mode.",
+    "These are demonstrated recovery gaps, not proof that the user device contains corrupt cache bytes. Ground callback details and a fresh bypassed fetch are required to discriminate from decoder/registration/GPU errors."
+  ]
+}

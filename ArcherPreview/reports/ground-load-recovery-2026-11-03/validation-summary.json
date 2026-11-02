@@ -1,0 +1,81 @@
+{
+  "tests": {
+    "tests": 1208,
+    "pass": 1208,
+    "fail": 0,
+    "cancelled": 0,
+    "duration_ms": 87629.2604
+  },
+  "runtimeGraph": {
+    "chunks": 254,
+    "entriesChecked": 1
+  },
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "resourceFiles": 1105,
+  "resourceGraphUnchanged": true,
+  "qualityContracts": [
+    {
+      "name": "warrior-v3",
+      "unchanged": true
+    },
+    {
+      "name": "warrior-v3-ios",
+      "unchanged": true
+    },
+    {
+      "name": "village",
+      "unchanged": true
+    },
+    {
+      "name": "monster-forest",
+      "unchanged": true
+    },
+    {
+      "name": "great-plains",
+      "unchanged": true
+    },
+    {
+      "name": "witch-cave",
+      "unchanged": true
+    },
+    {
+      "name": "elena",
+      "unchanged": true
+    },
+    {
+      "name": "mourning-elena",
+      "unchanged": true
+    },
+    {
+      "name": "quest-props",
+      "unchanged": true
+    }
+  ],
+  "browserAutomation": false,
+  "newAssetGeneration": false,
+  "physicalDeviceTested": false,
+  "plains": {
+    "default": 1,
+    "steps": [
+      1,
+      1.1,
+      1.2,
+      1.3
+    ],
+    "scope": "great-plains only",
+    "pcCellCull": [
+      110,
+      143
+    ],
+    "touchCellCull": [
+      82,
+      106.6
+    ],
+    "lodThresholds": "unchanged",
+    "shadowBudget": "unchanged"
+  },
+  "limitations": [
+    "Historical SDK cause was missing, so old chunk 404 is a confirmed failure path, not proof of the exact original phone response.",
+    "CPU/SDK/DOM and HTTP validation do not measure mobile GPU, visual fidelity, heat or actual map-load duration."
+  ]
+}

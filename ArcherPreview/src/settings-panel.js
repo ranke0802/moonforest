@@ -47,12 +47,14 @@ export function setupSettingsPanel() {
   const frameSelect=document.createElement('select');frameSelect.id='frame-rate-select';frameSelect.setAttribute('aria-label','목표 프레임');frameSelect.className='quality-select';
   frameSelect.innerHTML='<option value="30">30 FPS · 기본</option><option value="60">60 FPS</option>';frameLabel.append(frameSelect);
   displayOptions.append(qualityLabel,frameLabel);
+  const plainsDistance=document.createElement('div');plainsDistance.className='camera-zoom-options';
+  plainsDistance.innerHTML='<label>대평원 풍경 거리 <select id="plains-view-distance-select" class="quality-select" aria-label="대평원 풍경 거리"><option value="1">기본</option><option value="1.1">조금 멀리 · 110%</option><option value="1.2">더 멀리 · 120%</option><option value="1.3">가장 멀리 · 130%</option></select></label><small>대평원에서 먼 풍경을 더 보여줍니다. 거리가 멀수록 성능에 부담이 늘 수 있습니다.</small>';
   const pitchOptions=document.createElement('div');pitchOptions.id='camera-pitch-options';pitchOptions.className='camera-zoom-options';
   pitchOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-upward-limited" type="checkbox" checked>위쪽 시야 제한</label></div><small>해제하면 거의 수직으로 올려다볼 수 있습니다.</small><small id="camera-pitch-status" role="status" aria-live="polite"></small>';
   const followOptions=document.createElement('div');followOptions.id='camera-follow-options';followOptions.className='camera-zoom-options';
   followOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-follow-motion" type="checkbox">캐릭터 모션 따라가기</label></div><small>기본은 머리 높이 고정입니다. 체크하면 달리기·점프 등 머리 모션에 맞춰 카메라가 움직입니다.</small><small id="camera-follow-status" role="status" aria-live="polite"></small>';
   const characterStyle=document.createElement('button');characterStyle.id='open-character-style';characterStyle.type='button';characterStyle.className='motion-speed-toggle';characterStyle.textContent='캐릭터 선 · 밝기';characterStyle.setAttribute('aria-haspopup','dialog');
-  section('화면 · 카메라', [displayOptions, characterStyle, $('.camera-tools'), $('#camera-zoom-options'), followOptions, pitchOptions]);
+  section('화면 · 카메라', [displayOptions, plainsDistance, characterStyle, $('.camera-tools'), $('#camera-zoom-options'), followOptions, pitchOptions]);
   const diagnosticOptions=$('#frame-diagnostics-options'),diagnosticHelp=document.createElement('details');
   diagnosticHelp.id='frame-diagnostics-help';diagnosticHelp.className='diagnostic-help';
   const diagnosticSummary=document.createElement('summary');diagnosticSummary.textContent='측정 기준과 자세한 설명';diagnosticHelp.append(diagnosticSummary);

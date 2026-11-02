@@ -15,6 +15,7 @@ import {createWorld,replaceWorldMap} from '../src/world.js';
 import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {isWorldCharacter,worldSpawn} from '../src/map-route.js';
 import {VILLAGE_SPAWN} from '../src/village-layout.js';
+import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 function between(start,end){const a=source.indexOf(start),b=source.indexOf(end,a);assert.ok(a>=0&&b>a,`main callback not found: ${start}`);return source.slice(a,b);}
@@ -63,7 +64,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
  const boundary={saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
-  assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,
+  assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
   audio,actionAudio:{reset:noop},updateButtons:noop,toast:noop,canvas:{focus:noop},config:{forwardYaw:0},container:{meshes:[]},applyHitFlash:noop,
   goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
@@ -74,7 +75,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`
   let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
-  let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null;const attackSources=new Set(),mapDeparture=null;
+  let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null,frameFailure=null;const attackSources=new Set(),mapDeparture=null;
   const villageOverview=false,villageHorizon=false;
   const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
   const mapSpawn=()=>worldSpawn(character,location.search,VILLAGE_SPAWN);
@@ -103,6 +104,9 @@ for(const mode of [false,true])test(`actual main portal callbacks and death dial
   const beforeAngle=f.world.camera.alpha+f.actor.rotation.y;
   assert.equal(await f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`),true);travels++;
   assert.equal(f.runtime.character,destination);assert.equal(f.runtime.ready,true);near(Math.sin(f.world.camera.alpha+f.actor.rotation.y),Math.sin(beforeAngle));assertChoice(f,mode,initial,writes);
+  assert.equal(f.world.plainsViewDistance,1.2,'map callbacks retain the selected plains range across every region');
+  if(destination==='warrior-plains'){const range=plainsRenderRange(f.world);near(f.world.scene.fogStart,65*1.2);near(f.world.scene.fogEnd,80*1.2);near(range.cellCull,82*1.2);}
+  else if(destination==='warrior-v3'||destination==='warrior-v4'){near(f.world.scene.fogStart,65);near(f.world.scene.fogEnd,80);}
   f.world.camera.radius=9;f.world.camera.beta=1.2;f.input.panOffset={x:2,y:.4,z:-1};f.actor.position.x+=3;f.controller.captured=true;f.controller.staggerRemaining=2;
   f.doc.querySelector('#motion-speed-dialog').showModal();f.runtime.deathScreen.show();assert.equal(f.runtime.deathScreen.isOpen(),true);assert.equal(f.doc.querySelector('#motion-speed-dialog').open,false);
   f.doc.querySelector('#death-restart').dispatchEvent(new f.dom.window.Event('click'));await Promise.resolve();restarts++;
