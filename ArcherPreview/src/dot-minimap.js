@@ -10,10 +10,11 @@ export const MINIMAP_MAPS=Object.freeze({
  'witch-cave':{label:'마녀의 동굴',rect:[-64,-56,128,120],halfTurn:true,fill:'#141722',road:'#857969'},
 });
 // Forest/cave entrances lie on +Z, opposite the village's outgoing path.
-// Rotate the whole map 180 degrees, never mirror only the marker or Z axis.
-export function minimapPoint(rect,x,z,size=MINIMAP_SIZE,halfTurn=false){const u=(x-rect[0])/rect[2],v=1-(z-rect[1])/rect[3];return {x:(halfTurn?1-u:u)*size,y:(halfTurn?1-v:v)*size};}
-export function minimapWorldPoint(rect,x,y,size=MINIMAP_SIZE,halfTurn=false){return {x:rect[0]+(halfTurn?1-x/size:x/size)*rect[2],z:rect[1]+(halfTurn?y/size:1-y/size)*rect[3]};}
-export function minimapHeading(rect,yaw,halfTurn=false){const sign=halfTurn?-1:1;return {x:sign*Math.sin(yaw)/rect[2],y:-sign*Math.cos(yaw)/rect[3]};}
+// The game renders a right-handed world: facing +Z, screen-right is -X.
+// Use that same handedness for scenery, collision samples, portals and actor.
+export function minimapPoint(rect,x,z,size=MINIMAP_SIZE,halfTurn=false){const u=(x-rect[0])/rect[2],v=1-(z-rect[1])/rect[3];return {x:(halfTurn?u:1-u)*size,y:(halfTurn?1-v:v)*size};}
+export function minimapWorldPoint(rect,x,y,size=MINIMAP_SIZE,halfTurn=false){return {x:rect[0]+(halfTurn?x/size:1-x/size)*rect[2],z:rect[1]+(halfTurn?y/size:1-y/size)*rect[3]};}
+export function minimapHeading(rect,yaw,halfTurn=false){const sign=halfTurn?-1:1;return {x:-sign*Math.sin(yaw)/rect[2],y:-sign*Math.cos(yaw)/rect[3]};}
 async function bakeMap(canvas,mapId,navigation,current=()=>true){
  const spec=MINIMAP_MAPS[mapId],ctx=canvas.getContext('2d');if(!ctx)return;
  const {rect,halfTurn}=spec,size=MINIMAP_SIZE,project=(x,z)=>minimapPoint(rect,x,z,size,halfTurn);canvas.width=canvas.height=size;

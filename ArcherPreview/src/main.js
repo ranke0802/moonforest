@@ -75,6 +75,7 @@ import {inspectMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
 import {inspectMapTerrainCache} from './map-terrain-cache.js';
 import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
+import {setupFrameRateControl} from './frame-rate-settings.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
@@ -137,6 +138,8 @@ let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),storage:equipmentStorage,activity:renderActivity,onChange:fps=>{if(engine)engine.maxFPS=fps;}});
+if(import.meta.hot)import.meta.hot.dispose(()=>frameRateControl.dispose());
 const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,onChange:value=>boss?.setAttackSettings(value)});
 const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
 let travelStorage;
@@ -586,7 +589,6 @@ function render(dt) {
     }
     combatResult=result;
     const busy=!!elenaReview||result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
-    if(qualityMode!=='battery')renderActivity.recordFrame(dt);
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
@@ -664,7 +666,7 @@ function bindMapPortal(){
 try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance',loseContextOnDispose:true });
-  engine.maxFPS=60;
+  engine.maxFPS=renderActivity.limit();
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),warrior:isWarrior(),touchDevice});

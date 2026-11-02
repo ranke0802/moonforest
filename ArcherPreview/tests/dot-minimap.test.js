@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {NullEngine,Scene,FreeCamera,Vector3,Matrix} from '@babylonjs/core';
 import {DotMinimap,MINIMAP_MAPS,MINIMAP_SIZE,minimapPoint,minimapWorldPoint,minimapHeading} from '../src/dot-minimap.js';
 import {mapPortals,FOREST_SPAWN,CAVE_SPAWN} from '../src/map-route.js';
 import {FOREST_ROUTES,FOREST_CLEARINGS} from '../src/monster-forest-layout.js';
@@ -8,7 +9,7 @@ import {CAVE_ROUTES,CAVE_ROOMS} from '../src/witch-cave-layout.js';
 
 function canvas(){const calls={draws:0,fills:[],lines:[],arcs:[]},ctx={fillRect(...args){calls.fills.push({style:this.fillStyle,args});},beginPath(){},moveTo(...args){calls.lines.push(args);},lineTo(...args){calls.lines.push(args);},stroke(){},arc(...args){calls.arcs.push(args);},fill(){},getImageData:()=>({data:new Uint8ClampedArray(MINIMAP_SIZE**2*4)}),putImageData(image){calls.image=image;},drawImage(){calls.draws++;}};return {width:96,height:96,getContext:()=>ctx,calls};}
 function fixture(){const target=canvas(),label={},element={hidden:true,querySelector:s=>s==='canvas'?target:label},document={createElement:()=>canvas()},map=new DotMinimap(element,{document});return {map,target,label,element};}
-test('portals stay inside each map and cardinal headings agree with its projection without mirroring',()=>{
+test('portals, cardinal headings and inverse collision raster use the right-handed game projection',()=>{
  for(const [id,{rect,halfTurn}]of Object.entries(MINIMAP_MAPS)){
   const project=(x,z)=>minimapPoint(rect,x,z,MINIMAP_SIZE,halfTurn),origin=project(0,0);
   for(const portal of mapPortals(id)){const p=project(portal.x,portal.z);assert.ok(p.x>=3&&p.x<93&&p.y>=3&&p.y<93,`${id} ${JSON.stringify(p)}`);}
@@ -19,13 +20,26 @@ test('portals stay inside each map and cardinal headings agree with its projecti
    assert.ok(Math.abs(tip.y-origin.y-heading.y*MINIMAP_SIZE)<1e-10);
   }
   const east=minimapHeading(rect,Math.PI/2,halfTurn),north=minimapHeading(rect,0,halfTurn);
-  assert.ok(east.x*north.y-east.y*north.x<0,'rotation preserves handedness');
+  assert.ok(east.x*north.y-east.y*north.x>0,'projection matches the right-handed world');
   for(const x of [0.5,48.5,95.5])for(const y of [0.5,48.5,95.5]){
    const world=minimapWorldPoint(rect,x,y,MINIMAP_SIZE,halfTurn),p=project(world.x,world.z);
    assert.ok(Math.abs(p.x-x)<1e-10&&Math.abs(p.y-y)<1e-10,'collision raster uses inverse projection');
   }
  }
  assert.ok(minimapHeading(MINIMAP_MAPS.village.rect,0).y<0,'village direction stays unchanged');
+});
+test('all three minimaps match actual right-handed camera left/right and inward movement',t=>{
+ const engine=new NullEngine({renderWidth:800,renderHeight:600}),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>engine.dispose());
+ const camera=new FreeCamera('map-reference',Vector3.Zero(),scene);
+ for(const [id,{rect,halfTurn}]of Object.entries(MINIMAP_MAPS)){
+  const forward=halfTurn?-1:1;camera.position.set(0,20,-forward*30);camera.setTarget(Vector3.Zero());camera.getViewMatrix(true);scene.updateTransformMatrix(true);
+  const screen=p=>Vector3.Project(p,Matrix.Identity(),scene.getTransformMatrix(),camera.viewport.toGlobal(800,600)),center=screen(Vector3.Zero()),origin=minimapPoint(rect,0,0,96,halfTurn);
+  for(const point of [new Vector3(-8,0,0),new Vector3(8,0,0),new Vector3(0,0,forward*8)]){
+   const actual=screen(point),map=minimapPoint(rect,point.x,point.z,96,halfTurn);
+   if(point.x)assert.equal(Math.sign(map.x-origin.x),Math.sign(actual.x-center.x),id+' actual screen horizontal direction');
+   else {assert.ok(actual.y<center.y);assert.ok(map.y<origin.y);}
+  }
+ }
 });
 test('forest and cave entry points are below the map and travelling inward moves upward',()=>{
  for(const [id,spawn]of [['monster-forest',FOREST_SPAWN],['witch-cave',CAVE_SPAWN]]){

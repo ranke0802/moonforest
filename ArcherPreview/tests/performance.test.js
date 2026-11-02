@@ -25,15 +25,15 @@ test('mobile stays capped at 30 during idle, gestures and sustained combat',()=>
   time=12000;assert.equal(activity.limit(),30);
   time=13000;assert.equal(activity.limit(),30);
   assert.equal(activity.limit({busy:true,quality:'battery'}),30);
-  const desktop=new RenderActivity(false,()=>time);time+=10000;assert.equal(desktop.limit(),60);
+  const desktop=new RenderActivity(false,()=>time);time+=10000;assert.equal(desktop.limit(),30);
 });
 
-test('desktop drops to 30 only after sustained inability to reach 60 and never oscillates',()=>{
- const stable=new RenderActivity(false),slow=new RenderActivity(false);
- for(let i=0;i<600;i++)stable.recordFrame(1/60);assert.equal(stable.limit(),60);
- slow.recordFrame(.1);for(let i=0;i<120;i++)slow.recordFrame(1/60);assert.equal(slow.limit(),60);
- for(let i=0;i<200;i++)slow.recordFrame(1/45);assert.equal(slow.limit(),30);
- slow.wake();for(let i=0;i<600;i++)slow.recordFrame(1/60);assert.equal(slow.limit(),30);
+test('an explicit 60 FPS choice survives idle, combat and quality changes on touch and desktop',()=>{
+ for(const touch of [true,false]){
+  const policy=new RenderActivity(touch);assert.equal(policy.limit(),30);policy.setTargetFps(60);
+  for(let i=0;i<600;i++){policy.wake();assert.equal(policy.limit({busy:i%2===0,quality:['high','balanced','battery'][i%3]}),60);}
+  policy.setTargetFps(30);assert.equal(policy.limit({busy:true}),30);
+ }
 });
 
 test('shared HUD projection matches camera transforms across render scale and orientation changes',()=>{

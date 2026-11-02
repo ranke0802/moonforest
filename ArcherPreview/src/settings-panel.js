@@ -43,7 +43,10 @@ export function setupSettingsPanel() {
   const fps=document.createElement('span');
   fps.id='live-fps';fps.className='live-fps';fps.textContent='— FPS';fps.setAttribute('aria-label','현재 게임 프레임');
   fullscreen.before(fps);
-  displayOptions.append(qualityLabel);
+  const frameLabel=document.createElement('label');frameLabel.textContent='프레임';
+  const frameSelect=document.createElement('select');frameSelect.id='frame-rate-select';frameSelect.setAttribute('aria-label','목표 프레임');frameSelect.className='quality-select';
+  frameSelect.innerHTML='<option value="30">30 FPS · 기본</option><option value="60">60 FPS</option>';frameLabel.append(frameSelect);
+  displayOptions.append(qualityLabel,frameLabel);
   const pitchOptions=document.createElement('div');pitchOptions.id='camera-pitch-options';pitchOptions.className='camera-zoom-options';
   pitchOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-upward-limited" type="checkbox" checked>위쪽 시야 제한</label></div><small>해제하면 거의 수직으로 올려다볼 수 있습니다.</small><small id="camera-pitch-status" role="status" aria-live="polite"></small>';
   const followOptions=document.createElement('div');followOptions.id='camera-follow-options';followOptions.className='camera-zoom-options';

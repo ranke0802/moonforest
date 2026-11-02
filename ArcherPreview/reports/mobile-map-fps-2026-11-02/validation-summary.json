@@ -1,0 +1,30 @@
+{
+  "baseline": "5b1d02d96842d5a27eb6c42174c4b0dbc712a1b3",
+  "tests": {
+    "total": 1114,
+    "passed": 1114,
+    "failed": 0
+  },
+  "changedFiles": [
+    "ArcherPreviewSite/assets/index-BcA4k7NF.js",
+    "ArcherPreviewSite/assets/index-BriIGAzc.css",
+    "ArcherPreviewSite/index.html",
+    "ArcherPreviewSite/deployment-files.json"
+  ],
+  "verifiedDeploymentFiles": 1533,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "modelTextureLodAndEngineFilesUnchanged": true,
+  "playerMax": 8192,
+  "backgroundMax": 4096,
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "checks": [
+    "Village/forest/cave map horizontal signs compared against actual Babylon right-handed camera projection; inverse collision raster and markers consistent.",
+    "Short landscape normal-loading centering and error/retry states validated against parsed critical CSS at heights 294, 360, 393, 412, 590, 852.",
+    "Settings default 30 FPS, explicit 60 FPS, persistence, unavailable storage and listener disposal validated.",
+    "Babylon actual limiter checked at 30/60 FPS on simulated 60/90/120 Hz display schedules without simulation speed change.",
+    "Existing map travel, boss combat, pause/resume and iOS playback regression suite passed.",
+    "Full build, resource graph hash verification and deployment staging passed."
+  ],
+  "limits": "CPU/NullEngine, DOM and CSS checks; actual S23/iPhone sustained FPS, visual rendering and temperature were not measured."
+}
