@@ -93,7 +93,7 @@ test('monster shells share a material, keep independent skins and inherit fade, 
   material.onBindObservable.notifyObservers(bear.shell);
   assert.equal(values.outlineOpacity, .5); assert.equal(values.hitFlash, .72);
   assert.equal(values.outlinePixels,0,'bear retains its existing world-width outline');
-  assert.equal(values.outlineWidth,.006,'neutral boss preferences preserve the approved bear width');
+  assert.equal(values.outlineWidth,.006*(.3/.5),'boss width follows the requested 0.30 setting against its authored scale');
   assert.deepEqual(values.outlineViewport,[engine.getRenderWidth(),engine.getRenderHeight()]);
   assert.equal(bear.shell.renderOverlay, false, 'flash must stay in the same outline pass');
   material.onBindObservable.notifyObservers(goblin.shell);

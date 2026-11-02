@@ -1,7 +1,11 @@
 import { Vector3 } from '@babylonjs/core';
 import {playerDimensions} from './player-dimensions.js';
 const chinOffset=new Vector3(0,-.03,-.025);
-export const STABLE_PLAYER_FOCUS_HEIGHT=1.05;
+export const STABLE_PLAYER_FOCUS_HEIGHT=1.5;
+export function playerHeadTarget(actor,head){
+  if(head){head.computeWorldMatrix(true);return Vector3.TransformCoordinates(Vector3.Zero(),head.getWorldMatrix());}
+  return actor.position.add(new Vector3(0,playerDimensions(actor).headHeight,0));
+}
 export function playerChinTarget(actor,head){
   // The reviewed V6 rig's Head joint is above the visible chin. Offset in the
   // bone's local space so terrain height, scale and turning are all respected.
@@ -23,7 +27,7 @@ export class CameraFollow {
   }
   focus(actor,head,enemyPosition=null,radius=Infinity){
     this.stableFocusHeight=playerDimensions(actor).stableFocusHeight;
-    if(this.settings.followMotion)return combatFocus(playerChinTarget(actor,head),enemyPosition,radius);
+    if(this.settings.followMotion)return combatFocus(playerHeadTarget(actor,head),enemyPosition,radius);
     this.center.copyFrom(actor.position);this.center.y+=this.stableFocusHeight;return this.center;
   }
   snapshot(){return {...this.settings,stableFocusHeight:this.stableFocusHeight??STABLE_PLAYER_FOCUS_HEIGHT};}
@@ -31,7 +35,7 @@ export class CameraFollow {
 
 export function setupCameraFollowControls(follow,{doc=document,onChange=()=>{}}={}){
   const input=doc.getElementById('camera-follow-motion'),status=doc.getElementById('camera-follow-status');
-  const sync=()=>{input.checked=follow.settings.followMotion;status.textContent=input.checked?'캐릭터의 머리와 모션을 따라갑니다.':'모션 흔들림 없이 캐릭터 중심을 따라갑니다.';};
+  const sync=()=>{input.checked=follow.settings.followMotion;status.textContent=input.checked?'캐릭터의 머리와 모션을 따라갑니다.':'머리 높이를 기준으로 고정하고 모션 흔들림을 제외합니다.';};
   input.addEventListener('change',()=>{follow.update({followMotion:input.checked});sync();onChange();});sync();return {sync};
 }
 

@@ -13,7 +13,7 @@ export function cavePaintEmitters(terrain,{placements=CAVE_PLACEMENTS,includeSou
     const lantern=placement.asset?.includes('votive-lantern'),collector=includeSoulCollectors&&placement.asset?.includes('soul-collector-arm');
     if(!lantern&&!collector)continue; // A workbench has no verified flame.
     const scale=placement.scale??1,yaw=placement.yaw??0,offset=collector ? .774 : 0;
-    emitters.push(Object.freeze({id:placement.id,asset:placement.asset,kind:lantern?'lantern':'collector',x:placement.x+Math.cos(yaw)*offset*scale,y:(placement.elevation??floorAt(terrain,placement.x,placement.z))+(lantern ? .8 : 2.784)*scale,z:placement.z-Math.sin(yaw)*offset*scale,radius:lantern?CAVE_PAINT_LIGHT_POLICY.lanternRadius:CAVE_PAINT_LIGHT_POLICY.collectorRadius,color:lantern?CAVE_PAINT_LIGHT_POLICY.lanternColor:CAVE_PAINT_LIGHT_POLICY.collectorColor}));
+    emitters.push(Object.freeze({id:placement.id,asset:placement.asset,kind:lantern?'lantern':'collector',x:placement.x+Math.cos(yaw)*offset*scale,y:(placement.elevation??floorAt(terrain,placement.x,placement.z))+(lantern ? .8 : 2.784)*scale,z:placement.z-Math.sin(yaw)*offset*scale,radius:lantern?CAVE_PAINT_LIGHT_POLICY.lanternRadius:CAVE_PAINT_LIGHT_POLICY.collectorRadius,color:lantern?CAVE_PAINT_LIGHT_POLICY.lanternColor:CAVE_PAINT_LIGHT_POLICY.collectorColor,wallNormal:placement.wallMount?.normal??null}));
   }
   return Object.freeze(emitters);
 }
@@ -27,6 +27,14 @@ export function caveRockPaintReceiver(terrain,x,z,floor){
 }
 
 function clearRay(terrain,emitter,x,targetY,z,occludes,stats,surfaceReceiver=false){
+  if(emitter.wallNormal){
+    const [nx,nz]=emitter.wallNormal;
+    // A mounted bulb may overlap a conservative .4m wall cell. Start its CPU
+    // LOS just in front of that cell, while forbidding light behind the wall.
+    // The visible glow, attenuation centre and actual model never move.
+    if((x-emitter.x)*nx+(z-emitter.z)*nz<-.1)return false;
+    emitter={...emitter,x:emitter.x+nx*.65,z:emitter.z+nz*.65};
+  }
   const dx=x-emitter.x,dz=z-emitter.z,distance=Math.hypot(dx,dz),length=Math.hypot(dx,targetY-emitter.y,dz),steps=Math.max(1,Math.ceil(distance/CAVE_PAINT_LIGHT_CONFIG.losStep));
   let terminalSolid=false;
   for(let i=1;i<steps;i++){

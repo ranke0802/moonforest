@@ -8,6 +8,7 @@ import {CAVE_ROCK_GLSL} from './cave-rock-shell.js';
 import {readyShaderEffect} from './cave-fog-binding.js';
 import {CavePaintLightRuntime,bindCavePaintLight,CAVE_PAINT_LIGHT_GLSL,CAVE_PAINT_UNIFORMS,CAVE_PAINT_SAMPLERS} from './cave-painted-light-runtime.js';
 import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled,clipLaboratoryCeiling} from './cave-laboratory-geometry.js';
+import {createCaveLanternSupports} from './cave-lantern-supports.js';
 const vertexSource=`precision highp float;
 attribute vec3 position;uniform mat4 world;uniform mat4 worldViewProjection;varying vec3 p;
 void main(){p=(world*vec4(position,1.)).xyz;gl_Position=worldViewProjection*vec4(position,1.);}`;
@@ -138,7 +139,7 @@ export function configureCaveAtmosphere(world){
   // characters or legacy materials. Their near lighting/style remains intact.
   world.scene.fogColor=new Color3(.024,.028,.038);
   world.scene.fogStart=CAVE_FOG_START;world.scene.fogEnd=CAVE_FOG_END;
-  const paint=new CavePaintLightRuntime(world),water=caveWater(world),style=caveSurfaceStyle(world);
+  const paint=new CavePaintLightRuntime(world),water=caveWater(world),style=caveSurfaceStyle(world),lanternSupports=createCaveLanternSupports(world,style);
   const glows=[caveGlow(world,'votive-lantern','#e6b46b',.8),caveGlow(world,'soul-collector-arm','#ad8dd3',2.784,.774)],ceiling=caveCeiling(world);
   const right=Vector3.Right(),up=Vector3.Up();
   let laboratoryRevision=null;
@@ -151,6 +152,6 @@ export function configureCaveAtmosphere(world){
     const m=world.camera.getWorldMatrix().m;right.set(m[0],m[1],m[2]);up.set(m[4],m[5],m[6]);
     for(const glow of glows){glow.material.setVector3('right',right);glow.material.setVector3('up',up);}
     ceiling.material.setVector3('eye',world.camera.globalPosition);ceiling.material.setVector3('focus',world.camera.target);
-  },inspect:()=>({...style.inspect(),paintedLight:paint.inspect(),projectedRockAtlas:false,laboratoryRevision}),dispose(){style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();paint.dispose();}};
+  },inspect:()=>({...style.inspect(),paintedLight:paint.inspect(),projectedRockAtlas:false,laboratoryRevision}),dispose(){lanternSupports.dispose();style.dispose();ceiling.dispose();for(const glow of glows)glow.dispose();water.dispose();paint.dispose();}};
   world.caveAtmosphere.tick(0);
 }

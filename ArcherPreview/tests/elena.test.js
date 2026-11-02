@@ -163,7 +163,7 @@ test('a late resident download cannot appear after departing the cave',async t=>
   const pending=battle.activateResident(player);battle.hide();world.cave=false;release();assert.equal(await pending,false);assert.equal(models.instances,0);assert.equal(battle.encounters.length,0);
 });
 
-for(const ubo of [false,true])test('S23 shader processing preserves 0.50 px outline / 0.20 inner lines / 1.35 brightness without PBR',async t=>{
+for(const ubo of [false,true])test('S23 shader processing preserves 0.30 px outline / 0.30 inner lines / 1.00 brightness without PBR',async t=>{
   const engine=new NullEngine(),scene=new Scene(engine);t.after(()=>engine.dispose());engine._webGLVersion=2;engine._getShaderProcessor=()=>new WebGL2ShaderProcessor();engine.disableUniformBuffers=!ubo;
   new FreeCamera('camera',new Vector3(0,1,-3),scene);
   const mesh=MeshBuilder.CreateBox('painted-elena',{},scene),m=new PBRMaterial('paint',scene),texture=RawTexture.CreateRGBATexture(new Uint8Array([128,100,150,255]),1,1,scene,true);
@@ -173,6 +173,6 @@ for(const ubo of [false,true])test('S23 shader processing preserves 0.50 px outl
   assert.equal(mesh.material.unlit,true);assert.equal(mesh.material.reflectionTexture,null);assert.equal(mesh.material.metallicTexture,null);assert.deepEqual(mesh.material.metadata.elenaStyle,ELENA_STYLE);
   await mesh.material.forceCompilationAsync(mesh);await asset.meshes[1].material.forceCompilationAsync(asset.meshes[1]);scene.render();
   const fragment=mesh.subMeshes[0].effect.fragmentSourceCode;assert.match(fragment,/elenaPaintStyle\.x \* elenaBand/);assert.match(fragment,/elenaPaintStyle\.y\*max\(elenaCrease,elenaPaintEdge\)/);
-  const uniforms={};mesh.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>uniforms[name]=[x,y]},scene,engine,mesh.subMeshes[0]);assert.deepEqual(uniforms.elenaPaintStyle,[1.35,.2]);
+  const uniforms={};mesh.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>uniforms[name]=[x,y]},scene,engine,mesh.subMeshes[0]);assert.deepEqual(uniforms.elenaPaintStyle,[1,.3]);
   assert.match(asset.meshes[1].subMeshes[0].effect.vertexSourceCode,/outlinePixels \* 2\.0 \/ outlineViewport/);
 });

@@ -2,6 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {prepareBossShaders} from '../src/boss-shader-warmup.js';
 import {createBossPreparation} from '../src/boss-preparation.js';
+
+test('enemy fade variant warms before opaque and restores mesh visibility on cancellation',async()=>{
+ for(const fail of [false,true]){
+  const seen=[],mesh={metadata:{moonforestEnemyFade:true},visibility:1,getTotalVertices:()=>3,material:{metadata:{moonforestMonsterToon:true},allowShaderHotSwapping:true,isReady(m){seen.push(m.visibility);if(fail)throw Error('cancel fade compile');return true;}}};
+  const pending=prepareBossShaders({meshes:[mesh]},{frame:async()=>{}});
+  if(fail)await assert.rejects(pending,/cancel fade/);else await pending;
+  assert.deepEqual(seen,fail?[.5]:[.5,1]);assert.equal(mesh.visibility,1);assert.equal(mesh.material.allowShaderHotSwapping,true);
+ }
+});
 test('hidden boss body and silhouette check the actual variants serially with a frame opportunity between each',async()=>{
   const calls=[];
   const mesh=(name,outline=false)=>({name,metadata:outline?{moonforestOutline:true}:{},getTotalVertices:()=>300,material:{metadata:{moonforestMonsterToon:!outline},isReady(m){calls.push(m.name);return true;},forceCompilationAsync(){throw new Error('private unbounded poll must never be used');}}});

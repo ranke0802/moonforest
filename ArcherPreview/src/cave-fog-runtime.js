@@ -88,7 +88,7 @@ export class CaveFogRuntime {
     // again for paused or asynchronous first draws. Prepare hidden idles before
     // their first body/outline/shadow pass, without waiting another frame.
     for(const enemy of this.encounters)if(enemy.renderVisible!==false&&this.allowsPoint(enemy.actor.position))enemy.prepareVisiblePose?.();
-    this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+playerDimensions(this.playerRoot).stableFocusHeight,position.z,1);this.updateBossView();
+    this.playerView.set(position.x,(position.y??this.world.terrain.heightAt(position.x,position.z))+playerDimensions(this.playerRoot).sightFocusHeight,position.z,1);this.updateBossView();
     if(changed){this.texture.update(this.fog.rgba);this.stats.uploads++;this.updateRecords();this.updateGround();if(this.world.villageVisibility){this.world.villageVisibility.timer=0;this.world.villageVisibility.shadowTimer=0;}this.world.villageStreaming?.demand.invalidate();}
     return changed;
   }

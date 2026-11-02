@@ -12,12 +12,10 @@ export function zoomCamera(camera, factor) {
 export class CameraZoom {
   constructor(camera, {referenceRadius = 17, storage, key = 'moonforest-camera-zoom-world-v1'} = {}) {
     this.camera = camera; this.referenceRadius = referenceRadius; this.storage = storage; this.key = key;
-    this.defaults = Object.freeze({minEnabled:true, maxEnabled:true,
-      minZoom:referenceRadius / (camera.upperRadiusLimit ?? 82),
-      maxZoom:referenceRadius / (camera.lowerRadiusLimit ?? .8)});
+    this.defaults = Object.freeze({minEnabled:true, maxEnabled:true, minZoom:1.2, maxZoom:10, defaultsVersion:2});
     this.settings = {...this.defaults};
-    try { const saved = JSON.parse(storage?.getItem(key) ?? 'null'); if (this.valid(saved)) this.settings = saved; }
-    catch { /* Missing/invalid storage uses the existing camera range. */ }
+    try { const saved = JSON.parse(storage?.getItem(key) ?? 'null'); if (saved?.defaultsVersion===2&&this.valid(saved)) this.settings = saved; }
+    catch { /* Missing/legacy storage adopts the requested 1.20x–10.00x range. */ }
     this.apply();
   }
   valid(s) {

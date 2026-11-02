@@ -129,7 +129,7 @@ test('real phase-one defeat transforms once and preserves player state through p
   await battle.activateResident(player,{reset:true});assert.equal(battle.residentPhase,1);assert.strictEqual(battle.encounters[0],first);assert.equal(first.brain.hp,first.brain.maxHp);assert.equal(second.actor.isEnabled(),false);
   assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);assert.equal(battle.allPooled.length,2);
   await battle.transformResident(player);assert.strictEqual(battle.encounters[0],second);second.brain.hit({damage:9999});
-  for(let i=0;i<360;i++)step(f,1/60,{contacts:false});assert.equal(f.defeats.length,1);assert.equal(f.defeats[0].kind,'elena');assert.equal(second.corpseGone,true);assert.equal(second.actor.isEnabled(),false);
+  for(let i=0;i<601;i++)step(f,1/60,{contacts:false});assert.equal(f.defeats.length,1);assert.equal(f.defeats[0].kind,'elena');assert.equal(second.corpseGone,true);assert.equal(second.actor.isEnabled(),false);
   battle.hide();world.cave=false;world.cave=true;await battle.activateResident(player);step(f,1,{contacts:false});assert.equal(second.brain.hp,0);assert.equal(second.actor.isEnabled(),false);assert.equal(f.defeats.length,1);
   // A complete replay must revive the cached second phase after its first death.
   await battle.activateResident(player,{reset:true});assert.strictEqual(battle.encounters[0],first);assert.equal(first.brain.hp,1200);
@@ -238,7 +238,7 @@ test('phase-two painted body and morph-normal silhouette compile with stable r9 
     await body.material.forceCompilationAsync(body);await outline.material.forceCompilationAsync(outline);f.scene.render();
     const bodyEffect=body.subMeshes[0].effect,outlineEffect=outline.subMeshes[0].effect;
     assert.ok(bodyEffect);assert.ok(outlineEffect);assert.match(bodyEffect.fragmentSourceCode,/elenaPaintStyle\.x \* elenaBand/);assert.match(outlineEffect.vertexSourceCode,/normalUpdated/);assert.match(outlineEffect.vertexSourceCode,/morphTargetInfluences/);
-    const values={};body.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>values[name]=[x,y]},f.scene,f.engine,body.subMeshes[0]);assert.deepEqual(values.elenaPaintStyle,[1.35,.2],'default brightness and internal ink remain exact after becoming uniforms');
+    const values={};body.material.pluginManager.getPlugin('ElenaPaint').hardBindForSubMesh({updateFloat(){},updateFloat2:(name,x,y)=>values[name]=[x,y]},f.scene,f.engine,body.subMeshes[0]);assert.deepEqual(values.elenaPaintStyle,[1,.3],'default brightness and internal ink remain exact after becoming uniforms');
     effects.push([bodyEffect,outlineEffect]);
   }
   assert.strictEqual(effects[0][0],effects[1][0]);assert.strictEqual(effects[1][0],effects[2][0]);assert.strictEqual(effects[0][1],effects[1][1]);assert.strictEqual(effects[1][1],effects[2][1]);

@@ -9,7 +9,7 @@ export const WARRIOR_SIZE_RATIO=WARRIOR_SCALE/WARRIOR_LEGACY_SCALE;
 function dimensions(ratio,height){return Object.freeze({height,ratio,
   moveRadius:.32*ratio,spellRadius:.3*ratio,rollRadius:.25*ratio,
   standingClearance:.65*ratio,guardHeight:.95*ratio,bodyAimHeight:1.1*ratio,
-  feedbackHeight:1.8*ratio,goldHeight:1.6*ratio,stableFocusHeight:1.05*ratio,
+  feedbackHeight:1.8*ratio,goldHeight:1.6*ratio,stableFocusHeight:1.5*ratio,sightFocusHeight:1.05*ratio,
   headHeight:1.5*ratio,chestHeight:.85*ratio,
   chinHeight:1.46*ratio,eyeBelowChin:.35*ratio,markerLength:.7*ratio,
   bladeRadius:.055*ratio,shieldStrikeRadius:.06*ratio});}

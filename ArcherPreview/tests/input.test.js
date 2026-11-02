@@ -5,7 +5,7 @@ import { WarriorV2Controller } from '../src/warrior-v2.js';
 
 class Surface {
   constructor() { this.events = new Map(); this.style = {}; this.hidden = true; this.captured = new Set(); }
-  addEventListener(name, fn) { if (!this.events.has(name)) this.events.set(name, []); this.events.get(name).push(fn); }
+  addEventListener(name, fn, options = {}) { if (!this.events.has(name)) this.events.set(name, []); this.events.get(name).push(fn); options.signal?.addEventListener('abort', () => this.events.set(name, this.events.get(name).filter(f => f !== fn)), {once:true}); }
   emit(name, props = {}) { const event = { type: name, preventDefault() {}, target: this, ...props }; for (const fn of this.events.get(name) || []) fn(event); }
   focus() {}
   getBoundingClientRect() { return { left: 0, top: 0, width: 1000, height: 800 }; }
@@ -23,6 +23,59 @@ function setup(callbacks = {}) {
   function pointer(name, id, x, y) { canvas.emit(name, { pointerId: id, pointerType: 'touch', button: 0, clientX: x, clientY: y }); }
   return { input, camera, canvas, elements, pointer };
 }
+
+test('UI context menu cancels movement without blur and stale repeats cannot resume it',()=>{
+ const {input,canvas}=setup(),root=new Surface(),button=new Surface();root.contains=t=>t===button||t===canvas;canvas.closest=()=>root;
+ window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});window.emit('keydown',{code:'ShiftLeft',target:{tagName:'BODY'}});
+ assert.equal(input.value().y,1);let prevented=false;
+ document.emit('contextmenu',{target:button,preventDefault(){prevented=true;}});
+ assert.equal(prevented,true);assert.deepEqual(input.value(),{x:0,y:0,run:false});
+ for(let i=0;i<20;i++)window.emit('keydown',{code:'KeyW',repeat:true,target:{tagName:'BODY'}});
+ assert.equal(input.value().y,0);window.emit('keyup',{code:'KeyW'});window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});assert.equal(input.value().y,1);input.dispose();
+});
+
+test('captured pointer leaving the game and window exit cancel keys, stick, attack and capture',()=>{
+ for(const cause of ['bounds','pointerout','mouseout','pagehide','cancel']){
+  let cancels=0;const {input,canvas,pointer}=setup({cancelAttackInput:()=>cancels++});
+  window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});pointer('pointerdown',1,120,650);pointer('pointermove',1,174,596);
+  canvas.emit('pointerdown',{pointerId:8,pointerType:'mouse',buttons:1,button:0,clientX:600,clientY:300});
+  if(cause==='bounds')window.emit('pointermove',{pointerType:'mouse',pointerId:8,buttons:1,clientX:1010,clientY:300});
+  else if(cause==='cancel')window.emit('pointercancel',{pointerId:8,pointerType:'mouse'});
+  else window.emit(cause,{pointerType:'mouse',relatedTarget:null});
+  assert.deepEqual(input.value(),{x:0,y:0,run:false},cause);assert.equal(input.cameraPointers.size,0);assert.equal(canvas.captured.size,0);assert.ok(cancels>0);
+  canvas.emit('pointermove',{pointerId:8,pointerType:'mouse',buttons:1,clientX:600,clientY:300});assert.equal(input.mousePointer,null);input.dispose();
+ }
+});
+
+test('normal W plus right drag survives a successfully prevented canvas menu',()=>{
+ const held=[],cancelled=[];const {input,canvas,camera}=setup({setAttackHeld:(v)=>held.push(v),cancelAttackInput:()=>cancelled.push(true)});
+ window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});
+ canvas.emit('pointerdown',{pointerId:8,pointerType:'mouse',buttons:3,button:2,clientX:600,clientY:300});
+ let prevented=false;document.emit('contextmenu',{target:canvas,buttons:3,button:2,preventDefault(){prevented=true;this.defaultPrevented=true;}});
+ assert.equal(prevented,true);assert.equal(input.value().y,1);assert.equal(cancelled.length,0);
+ canvas.emit('pointermove',{pointerId:8,pointerType:'mouse',buttons:3,clientX:620,clientY:300});assert.equal(camera.alpha,1.1);assert.deepEqual(held,[true]);
+ canvas.emit('pointermove',{pointerId:8,pointerType:'mouse',buttons:2,clientX:620,clientY:300});
+ canvas.emit('pointermove',{pointerId:8,pointerType:'mouse',buttons:3,clientX:620,clientY:300});assert.deepEqual(held,[true,false,true],'fresh left press works');input.dispose();
+});
+
+test('an uncancellable native canvas menu clears input even if window focus does not change',()=>{
+ const {input,canvas}=setup();window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});
+ document.emit('contextmenu',{target:canvas,button:2,buttons:2,cancelable:false,defaultPrevented:false});
+ assert.deepEqual(input.value(),{x:0,y:0,run:false});input.dispose();
+});
+
+test('window pointerup catches lost target release and internal UI transitions do not cancel movement',()=>{
+ const {input,canvas,pointer}=setup();pointer('pointerdown',1,120,650);pointer('pointermove',1,174,596);
+ window.emit('pointerup',{pointerId:1,pointerType:'touch'});assert.deepEqual(input.value(),{x:0,y:0,run:false});assert.equal(canvas.captured.size,0);
+ window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});window.emit('pointerout',{pointerType:'mouse',relatedTarget:new Surface()});assert.equal(input.value().y,1);input.dispose();
+});
+
+test('disposal removes global cancellation listeners without retaining old map inputs',()=>{
+ for(let visit=0;visit<12;visit++){
+  const {input}=setup();input.dispose();
+  for(const target of [window,document])for(const list of target.events.values())assert.equal(list.length,0);
+ }
+});
 
 test('E uses one potion per fresh press and ignores autorepeat and form typing',()=>{
   let uses=0;setup({potion:()=>uses++});

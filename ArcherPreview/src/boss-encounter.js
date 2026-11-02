@@ -15,7 +15,7 @@ import {playerDimensions} from './player-dimensions.js';
 import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
-import { EnemyDeath } from './enemy-death.js';
+import { EnemyDeath,enableEnemyFade } from './enemy-death.js';
 import { createTerrainRing } from './terrain-mesh.js';
 import { prepareBossShaders } from './boss-shader-warmup.js';
 import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
@@ -108,6 +108,7 @@ export class BossEncounter {
       this.assetPreparationStep=3;
     }
     if(this.assetPreparationStep<4){await preparation.step('pose-and-warning-resources',()=>{
+      enableEnemyFade(this.asset);
       this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);this.nodes=Object.fromEntries(this.asset.transformNodes.map(node=>[node.name,node]));this.poseNodes=orderPoseNodes(this.asset.transformNodes);
       this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
       this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
@@ -130,6 +131,7 @@ export class BossEncounter {
       this.animator?.dispose();this.animator=this.createAnimator();
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
+      this.deathShadowsRemoved=false;
       for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
@@ -145,6 +147,7 @@ export class BossEncounter {
   }
   hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
+    enabled=enabled&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
     // in the shadow renderer's readiness/caster traversal.
     for(const mesh of this.asset?.meshes??[]){
@@ -176,12 +179,14 @@ export class BossEncounter {
       this.grab.reset();this.gate.reset();
       this.onDefeat({kind:this.kind,position:this.actor.position.clone()});
       if(this.death.holdPose){this.pendingEvents=[];this.bossReaction.reset();this.knockVelocity.setAll(0);}
-      else for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
     }
     // Visibility is per mesh, so living enemies sharing this material do not fade.
-    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=this.death.holdPose?1:visibility*this.death.opacity;
+    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=visibility*this.death.opacity;
+    if(this.death.opacity<1&&!this.deathShadowsRemoved){
+      for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
+      this.deathShadowsRemoved=true;
+    }
     if(this.corpseGone){
-      if(this.death.holdPose)for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
       this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);
     }
   }

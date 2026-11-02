@@ -1,13 +1,12 @@
 export const CHARACTER_STYLE_KEY='moonforest-character-style-v1';
-// The player's baked ink and painted colors are already part of the approved
-// model. Zero pixel adjustment / neutral color preserves that original look.
+// User-approved additive ink correction; source textures and mesh stay intact.
 export const CHARACTER_STYLE_DEFAULTS=Object.freeze({
-  player:Object.freeze({outline:true,outlineWidth:0,internal:true,internalStrength:0,brightness:1}),
-  boss:Object.freeze({outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35}),
+  player:Object.freeze({outline:true,outlineWidth:.15,internal:true,internalStrength:.04,brightness:.95}),
+  boss:Object.freeze({outline:true,outlineWidth:.3,internal:true,internalStrength:.3,brightness:1}),
 });
 const bounded=(value,min,max,fallback)=>typeof value==='number'&&Number.isFinite(value)?Math.round(Math.max(min,Math.min(max,value))*100)/100:fallback;
 export function normalizeCharacterStyles(value){
-  const result={version:1};
+  const result={version:1,defaultsVersion:3};
   for(const group of ['player','boss']){
     const d=CHARACTER_STYLE_DEFAULTS[group],v=value?.[group];
     result[group]={outline:typeof v?.outline==='boolean'?v.outline:d.outline,outlineWidth:bounded(v?.outlineWidth,group==='player'?-1:0,3,d.outlineWidth),internal:typeof v?.internal==='boolean'?v.internal:d.internal,internalStrength:bounded(v?.internalStrength,0,1,d.internalStrength),brightness:bounded(v?.brightness,.25,2.5,d.brightness)};
@@ -15,7 +14,14 @@ export function normalizeCharacterStyles(value){
   return result;
 }
 export class CharacterStyleSettings{
-  constructor(storage){this.storage=storage;let saved;try{saved=JSON.parse(storage?.getItem(CHARACTER_STYLE_KEY));}catch{}this.value=normalizeCharacterStyles(saved);}
+  constructor(storage){this.storage=storage;let saved;try{saved=JSON.parse(storage?.getItem(CHARACTER_STYLE_KEY));}catch{}
+    // Adopt new defaults for an untouched old profile, not a user's custom look.
+    const old={outline:true,outlineWidth:0,internal:true,internalStrength:0,brightness:1};
+    if((saved?.defaultsVersion??0)<2&&saved?.player&&Object.entries(old).every(([key,value])=>saved.player[key]===value))saved={...saved,player:CHARACTER_STYLE_DEFAULTS.player};
+    const oldBoss={outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35};
+    if((saved?.defaultsVersion??0)<3&&saved?.boss&&Object.entries(oldBoss).every(([key,value])=>saved.boss[key]===value))saved={...saved,boss:CHARACTER_STYLE_DEFAULTS.boss};
+    this.value=normalizeCharacterStyles(saved);
+  }
   set(group,change){if(!CHARACTER_STYLE_DEFAULTS[group])return this.value;this.value=normalizeCharacterStyles({...this.value,[group]:{...this.value[group],...change}});try{this.storage?.setItem(CHARACTER_STYLE_KEY,JSON.stringify(this.value));}catch{}return this.value;}
   reset(group){return this.set(group,CHARACTER_STYLE_DEFAULTS[group]);}
 }

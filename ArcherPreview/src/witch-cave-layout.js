@@ -1,4 +1,5 @@
 import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from './cave-laboratory-geometry.js';
+import {CAVE_LANTERN_MOUNTS} from './cave-lantern-mounts.js';
 // Metres. Branches follow eroded ledges around a flooded central cavern;
 // they are deliberately not a rectangular dungeon grid.
 export const CAVE_ENTRY={x:-42,z:43};
@@ -210,7 +211,9 @@ function makePlacements(){
     add(CAVE_LABORATORY_GEOMETRY.assetId,p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,laboratoryStructure:true});
   }
   for(const [x,z]of CAVE_WAYFINDING_LANTERNS)add(13,x,z,.9,0,{colliderRadius:.36,wayfinding:true});
-  return out;
+  // Stable IDs/asset tiers remain shared. Elevated wall fittings are no longer
+  // ground obstacles; actual rock still owns the wall collision and visibility.
+  return out.map(p=>{const mount=CAVE_LANTERN_MOUNTS[p.id];if(!mount)return p;const {colliderRadius,...rest}=p;return {...rest,...mount};});
 }
 export const CAVE_PLACEMENTS=makePlacements();
 export function caveObstacles(){

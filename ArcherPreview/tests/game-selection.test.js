@@ -34,11 +34,19 @@ test('delegated policy covers dialogs mounted later and leaves native controls, 
   assert.equal(clicks,1);assert.equal(dialog.querySelector('input').value,'1');f.control.dispose();
 });
 
-test('root setup is idempotent and dispose removes exactly the two owned listeners',()=>{
+test('root setup is idempotent and dispose removes exactly the three owned listeners',()=>{
   const {document:doc,window}=parseHTML('<main id="app"><span>HUD</span></main>'),root=doc.getElementById('app'),added=[],removed=[];
   const add=root.addEventListener.bind(root),remove=root.removeEventListener.bind(root);root.addEventListener=(...args)=>{added.push(args);return add(...args);};root.removeEventListener=(...args)=>{removed.push(args);return remove(...args);};
-  const first=setupGameSelection(root),second=setupGameSelection(root);assert.equal(first,second);assert.deepEqual(added.map(a=>a[0]),['selectstart','dragstart']);
-  first.dispose();second.dispose();assert.equal(removed.length,2);for(let i=0;i<2;i++)assert.equal(removed[i][1],added[i][1]);
+  const first=setupGameSelection(root),second=setupGameSelection(root);assert.equal(first,second);assert.deepEqual(added.map(a=>a[0]),['selectstart','dragstart','contextmenu']);
+  first.dispose();second.dispose();assert.equal(removed.length,3);for(let i=0;i<3;i++)assert.equal(removed[i][1],added[i][1]);
   const event=new window.Event('selectstart',{bubbles:true,cancelable:true});root.firstChild.dispatchEvent(event);assert.equal(event.defaultPrevented,false);
-  const third=setupGameSelection(root);assert.notEqual(third,first);assert.equal(added.length,4);third.dispose();assert.doesNotThrow(()=>setupGameSelection(null).dispose());
+  const third=setupGameSelection(root);assert.notEqual(third,first);assert.equal(added.length,6);third.dispose();assert.doesNotThrow(()=>setupGameSelection(null).dispose());
+});
+
+test('context menus are prevented on canvas, HUD and late UI dialogs but not outside the game',()=>{
+ const f=fixture(),dialog=f.doc.createElement('dialog');dialog.innerHTML='<button><span>menu</span></button><textarea>diagnostic</textarea>';f.root.append(dialog);
+ for(const target of [f.doc.getElementById('viewport'),dialog.querySelector('span'),dialog.querySelector('textarea')])assert.equal(f.event(target,'contextmenu').defaultPrevented,true);
+ assert.equal(f.event(dialog.querySelector('textarea'),'copy').defaultPrevented,false);
+ const outside=f.doc.createElement('div');f.doc.body.append(outside);assert.equal(f.event(outside,'contextmenu').defaultPrevented,false);
+ f.control.dispose();assert.equal(f.event(dialog,'contextmenu').defaultPrevented,false);
 });

@@ -7,7 +7,7 @@ import {caveClearance} from '../src/witch-cave-terrain.js';
 import {CAVE_BOSS,CAVE_PLACEMENTS} from '../src/witch-cave-layout.js';
 import {ELENA_HOME,MOURNING_SIZE_SCALE} from '../src/elena-spec.js';
 const out=new URL('../reports/elena-clearance/',import.meta.url);mkdirSync(out,{recursive:true});
-const paths=['../src/witch-cave-layout.js','../src/witch-cave-terrain.js','../src/cave-laboratory-geometry.js','../src/cave-laboratory-terrain-data.js','../src/mourning-elena-animation.js','../src/mourning-motion-v2.js','../public/assets/mourning-elena.json','../public/assets/witch-cave.json'];
+const paths=['../src/witch-cave-layout.js','../src/cave-lantern-mounts.js','../src/witch-cave-terrain.js','../src/cave-laboratory-geometry.js','../src/cave-laboratory-terrain-data.js','../src/mourning-elena-animation.js','../src/mourning-motion-v2.js','../public/assets/mourning-elena.json','../public/assets/witch-cave.json'];
 const fingerprint=()=>Object.fromEntries(paths.map(p=>[p,createHash('sha256').update(readFileSync(new URL(p,import.meta.url),'utf8').replace(/\r\n?/g,'\n')).digest('hex')]));
 const hashes=fingerprint();
 const step=.25,minX=8,minZ=-52,width=169,height=177,ground=6,groundTolerance=.12,bandStep=.25,margin=.18;

@@ -89,7 +89,7 @@ function assertChoice(f,mode,instance,writes){
  assert.equal(f.runtime.follow.settings.followMotion,mode);assert.equal(f.checkbox.checked,mode);
  assert.equal(f.counters.constructors,1,'map/restart does not reconstruct CameraFollow');assert.equal(f.storage.writes.length,writes,'lifecycle cannot overwrite the saved checkbox');
  f.runtime.syncCameraFocus(0,{snap:true});const c=f.world.camera;c.getViewMatrix(true);
- near(c.target.y,f.actor.position.y+(mode?1.57:STABLE_PLAYER_FOCUS_HEIGHT));
+ near(c.target.y,f.actor.position.y+(mode?1.6:STABLE_PLAYER_FOCUS_HEIGHT));
 }
 
 for(const mode of [false,true])test(`actual main portal callbacks and death dialog restart retain followMotion=${mode} across repeated trips`,async t=>{

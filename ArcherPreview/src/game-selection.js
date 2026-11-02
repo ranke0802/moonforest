@@ -23,11 +23,14 @@ export function setupGameSelection(root){
   const preventSelection=event=>{if(!nativeSelectionTarget(event.target,root))event.preventDefault();};
   root.addEventListener('selectstart',preventSelection);
   root.addEventListener('dragstart',preventSelection);
+  const preventMenu=event=>event.preventDefault();
+  root.addEventListener('contextmenu',preventMenu,true);
   let disposed=false;
   const control={dispose(){
     if(disposed)return;disposed=true;
     root.removeEventListener('selectstart',preventSelection);
     root.removeEventListener('dragstart',preventSelection);
+    root.removeEventListener('contextmenu',preventMenu,true);
     installed.delete(root);
   }};
   installed.set(root,control);return control;

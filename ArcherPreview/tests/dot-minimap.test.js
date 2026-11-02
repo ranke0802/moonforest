@@ -1,13 +1,56 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {DotMinimap,MINIMAP_MAPS,MINIMAP_SIZE,minimapPoint,minimapHeading} from '../src/dot-minimap.js';
-import {mapPortals} from '../src/map-route.js';
+import {DotMinimap,MINIMAP_MAPS,MINIMAP_SIZE,minimapPoint,minimapWorldPoint,minimapHeading} from '../src/dot-minimap.js';
+import {mapPortals,FOREST_SPAWN,CAVE_SPAWN} from '../src/map-route.js';
+import {FOREST_ROUTES,FOREST_CLEARINGS} from '../src/monster-forest-layout.js';
+import {CAVE_ROUTES,CAVE_ROOMS} from '../src/witch-cave-layout.js';
 
-function canvas(){const calls={draws:0},ctx={fillRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},arc(){},fill(){},getImageData:()=>({data:new Uint8ClampedArray(MINIMAP_SIZE**2*4)}),putImageData(){},drawImage(){calls.draws++;}};return {width:96,height:96,getContext:()=>ctx,calls};}
+function canvas(){const calls={draws:0,fills:[],lines:[],arcs:[]},ctx={fillRect(...args){calls.fills.push({style:this.fillStyle,args});},beginPath(){},moveTo(...args){calls.lines.push(args);},lineTo(...args){calls.lines.push(args);},stroke(){},arc(...args){calls.arcs.push(args);},fill(){},getImageData:()=>({data:new Uint8ClampedArray(MINIMAP_SIZE**2*4)}),putImageData(image){calls.image=image;},drawImage(){calls.draws++;}};return {width:96,height:96,getContext:()=>ctx,calls};}
 function fixture(){const target=canvas(),label={},element={hidden:true,querySelector:s=>s==='canvas'?target:label},document={createElement:()=>canvas()},map=new DotMinimap(element,{document});return {map,target,label,element};}
-test('all authored portals remain within the dot map; heading and coordinates share north-up convention',()=>{
- for(const [id,spec]of Object.entries(MINIMAP_MAPS)){for(const portal of mapPortals(id)){const p=minimapPoint(spec.rect,portal.x,portal.z);assert.ok(p.x>=3&&p.x<93&&p.y>=3&&p.y<93,`${id} ${JSON.stringify(p)}`);}const center=minimapPoint(spec.rect,spec.rect[0]+spec.rect[2]/2,spec.rect[1]+spec.rect[3]/2);assert.deepEqual(center,{x:48,y:48});assert.ok(minimapHeading(spec.rect,0).y<0);assert.ok(minimapHeading(spec.rect,Math.PI/2).x>0);}
+test('portals stay inside each map and cardinal headings agree with its projection without mirroring',()=>{
+ for(const [id,{rect,halfTurn}]of Object.entries(MINIMAP_MAPS)){
+  const project=(x,z)=>minimapPoint(rect,x,z,MINIMAP_SIZE,halfTurn),origin=project(0,0);
+  for(const portal of mapPortals(id)){const p=project(portal.x,portal.z);assert.ok(p.x>=3&&p.x<93&&p.y>=3&&p.y<93,`${id} ${JSON.stringify(p)}`);}
+  assert.deepEqual(project(rect[0]+rect[2]/2,rect[1]+rect[3]/2),{x:48,y:48});
+  for(const yaw of [0,Math.PI/2,Math.PI,3*Math.PI/2]){
+   const tip=project(Math.sin(yaw),Math.cos(yaw)),heading=minimapHeading(rect,yaw,halfTurn);
+   assert.ok(Math.abs(tip.x-origin.x-heading.x*MINIMAP_SIZE)<1e-10);
+   assert.ok(Math.abs(tip.y-origin.y-heading.y*MINIMAP_SIZE)<1e-10);
+  }
+  const east=minimapHeading(rect,Math.PI/2,halfTurn),north=minimapHeading(rect,0,halfTurn);
+  assert.ok(east.x*north.y-east.y*north.x<0,'rotation preserves handedness');
+  for(const x of [0.5,48.5,95.5])for(const y of [0.5,48.5,95.5]){
+   const world=minimapWorldPoint(rect,x,y,MINIMAP_SIZE,halfTurn),p=project(world.x,world.z);
+   assert.ok(Math.abs(p.x-x)<1e-10&&Math.abs(p.y-y)<1e-10,'collision raster uses inverse projection');
+  }
+ }
+ assert.ok(minimapHeading(MINIMAP_MAPS.village.rect,0).y<0,'village direction stays unchanged');
+});
+test('forest and cave entry points are below the map and travelling inward moves upward',()=>{
+ for(const [id,spawn]of [['monster-forest',FOREST_SPAWN],['witch-cave',CAVE_SPAWN]]){
+  const {rect,halfTurn}=MINIMAP_MAPS[id],start=minimapPoint(rect,spawn.x,spawn.z,96,halfTurn),inside=minimapPoint(rect,spawn.x,spawn.z-8,96,halfTurn);
+  assert.ok(start.y>72,`${id} arrival belongs in bottom quarter`);assert.ok(inside.y<start.y);
+  const entry=mapPortals(id)[0],portal=minimapPoint(rect,entry.x,entry.z,96,halfTurn);assert.ok(portal.y>start.y);
+ }
+});
+test('baked paths, rooms, portals, collision mask and live player all share rotated coordinates after repeat travel',async()=>{
+ const f=fixture(),navigation={free:p=>p.x<0&&p.z<0};
+ for(const id of ['monster-forest','witch-cave','village','witch-cave','monster-forest']){
+  await f.map.setWorld({mapId:id,navigation});if(id==='village')continue;
+  const {rect,halfTurn}=MINIMAP_MAPS[id],project=(x,z)=>minimapPoint(rect,x,z,96,halfTurn),baked=f.map.cache.get(id).calls;
+  const point=id==='monster-forest'?FOREST_ROUTES[0].samples[0]:CAVE_ROUTES[0][0],route=project(point[0],point[1]);
+  assert.ok(baked.lines.some(p=>p[0]===route.x&&p[1]===route.y));
+  const room=(id==='monster-forest'?FOREST_CLEARINGS:CAVE_ROOMS)[0],center=project(room.x,room.z);
+  assert.ok(baked.arcs.some(p=>p[0]===center.x&&p[1]===center.y));
+  for(const portal of mapPortals(id)){const p=project(portal.x,portal.z);assert.ok(baked.fills.some(f=>f.style==='#cf9fff'&&f.args[0]===Math.round(p.x)-1&&f.args[1]===Math.round(p.y)-2));}
+  for(const [wx,wz,blocked]of [[10,10,true],[-10,-10,false]]){const p=project(wx,wz),offset=(Math.floor(p.y)*96+Math.floor(p.x))*4;assert.equal(baked.image.data[offset],blocked?12:0);}
+  const spawn=id==='monster-forest'?FOREST_SPAWN:CAVE_SPAWN,actor={position:{...spawn},rotation:{y:Math.PI}};
+  f.map.update(actor,0);const start=project(spawn.x,spawn.z),dot=f.target.calls.fills.findLast(f=>f.style==='#84f6df'),arrow=f.target.calls.fills.findLast(f=>f.style==='#effffa');
+  assert.deepEqual(dot.args,[Math.round(start.x)-1,Math.round(start.y)-1,3,3]);assert.ok(arrow.args[1]<dot.args[1]);
+  actor.position.z-=8;f.map.update(actor,.2);assert.ok(f.target.calls.fills.findLast(f=>f.style==='#84f6df').args[1]<dot.args[1]);
+ }
+ f.map.dispose();
 });
 test('maps build once, update at most 10Hz only when marker changes, and allocate no 3D resources',async()=>{
  const f=fixture(),navigation={free:()=>true},actor={position:{x:0,z:0},rotation:{y:0}};

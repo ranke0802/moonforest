@@ -6,7 +6,7 @@ import {NullEngine,Scene,ArcRotateCamera,TransformNode,Vector3} from '@babylonjs
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
-import {CameraFollow,STABLE_PLAYER_FOCUS_HEIGHT,setupCameraFollowControls,playerChinTarget,combatFocus} from '../src/camera-follow.js';
+import {CameraFollow,STABLE_PLAYER_FOCUS_HEIGHT,setupCameraFollowControls,playerHeadTarget,combatFocus} from '../src/camera-follow.js';
 import {CameraPitch} from '../src/camera-pitch.js';
 import {CameraZoom} from '../src/camera-zoom.js';
 import {CaveCameraGuard,caveCameraBlocked} from '../src/witch-cave-camera.js';
@@ -44,12 +44,12 @@ test('actual V6 running, jumping judgment and rolling poses keep a stable center
   follow.update({followMotion:false});sync(0,{snap:true});camera.getViewMatrix(true);camera.getProjectionMatrix(true);scene.updateTransformMatrix(true);
   near(camera.target.x,actor.position.x);near(camera.target.z,actor.position.z);near(camera.target.y,actor.position.y+STABLE_PLAYER_FOCUS_HEIGHT);
   const projected=projectBossHealth(scene,actor.position.add(new Vector3(0,STABLE_PLAYER_FOCUS_HEIGHT,0)),780,360);near(projected.x,390,1e-3);near(projected.y,180,1e-3);assert.equal(projected.visible,true);
-  const chin=playerChinTarget(actor,head);heights.push(chin.y);follow.update({followMotion:true});
+  const chin=playerHeadTarget(actor,head);heights.push(chin.y);follow.update({followMotion:true});
   const focus=follow.focus(actor,head);assert.ok(focus.equalsWithEpsilon(chin,1e-7));poses++;
  }
  assert.ok(Math.max(...heights)-Math.min(...heights)>.5,'actual clips reproduce head bob, airborne judgment and low roll');
- actor.position.set(33,8,-22);follow.update({followMotion:false});sync(0,{snap:true});near(camera.target.y,9.05);near(camera.target.x,33);near(camera.target.z,-22);
- follow.update({followMotion:true});const enemy=new Vector3(36,8,-20);assert.ok(follow.focus(actor,head,enemy,8.5).equalsWithEpsilon(combatFocus(playerChinTarget(actor,head),enemy,8.5),1e-7));
+ actor.position.set(33,8,-22);follow.update({followMotion:false});sync(0,{snap:true});near(camera.target.y,9.5);near(camera.target.x,33);near(camera.target.z,-22);
+ follow.update({followMotion:true});const enemy=new Vector3(36,8,-20);assert.ok(follow.focus(actor,head,enemy,8.5).equalsWithEpsilon(combatFocus(playerHeadTarget(actor,head),enemy,8.5),1e-7));
  t.diagnostic(JSON.stringify({actualClipPoses:poses,stableTargetHeight:STABLE_PLAYER_FOCUS_HEIGHT,animatedHeadSpan:Math.max(...heights)-Math.min(...heights)}));
 });
 
@@ -58,9 +58,9 @@ test('real camera option defaults unchecked, persists independently and updates 
  const engine=new NullEngine(),scene=new Scene(engine),actor=new TransformNode('settings-player',scene),camera=new ArcRotateCamera('settings-camera',.8,1.18,8.5,Vector3.Zero(),scene),pitch=new CameraPitch(camera,{warrior:true}),saved=storage(),follow=new CameraFollow({storage:saved});t.after(()=>{scene.dispose();engine.dispose();});
  let invalidations=0;const sync=bindMainFocus({actor,follow,pitch,world:{scene,camera}}),controls=setupCameraFollowControls(follow,{doc:dom.document,onChange:()=>{sync(0,{snap:true});invalidations++;}}),input=dom.document.getElementById('camera-follow-motion');
  assert.equal(input.checked,false);assert.equal(input.closest('details').querySelector('summary').textContent,'화면 · 카메라');assert.match(input.parentElement.textContent,/캐릭터 모션 따라가기/);
- sync(0,{snap:true});near(camera.target.y,1.05);const radius=camera.radius,alpha=camera.alpha,beta=camera.beta;
- input.checked=true;input.dispatchEvent(new dom.window.Event('change'));near(camera.target.y,1.46);assert.equal(new CameraFollow({storage:saved}).settings.followMotion,true);
- input.checked=false;input.dispatchEvent(new dom.window.Event('change'));near(camera.target.y,1.05);assert.equal(new CameraFollow({storage:saved}).settings.followMotion,false);assert.equal(invalidations,2);near(camera.radius,radius);near(camera.alpha,alpha);near(camera.beta,beta);controls.sync();
+ sync(0,{snap:true});near(camera.target.y,1.5);const radius=camera.radius,alpha=camera.alpha,beta=camera.beta;
+ input.checked=true;input.dispatchEvent(new dom.window.Event('change'));near(camera.target.y,1.5);assert.equal(new CameraFollow({storage:saved}).settings.followMotion,true);
+ input.checked=false;input.dispatchEvent(new dom.window.Event('change'));near(camera.target.y,1.5);assert.equal(new CameraFollow({storage:saved}).settings.followMotion,false);assert.equal(invalidations,2);near(camera.radius,radius);near(camera.alpha,alpha);near(camera.beta,beta);controls.sync();
  for(const value of ['bad','null','{}','{"followMotion":"true"}'])assert.equal(new CameraFollow({storage:{getItem:()=>value}}).settings.followMotion,false);
  const denied=new CameraFollow({storage:{getItem(){throw Error('denied');},setItem(){throw Error('denied');}}});denied.update({followMotion:true});assert.equal(denied.settings.followMotion,true);assert.throws(()=>denied.update({followMotion:1}),TypeError);
 });
@@ -70,7 +70,7 @@ test('village, forest and cave round trips preserve the chosen mode, orbit, magn
  const camera=world.camera;camera.radius=13;camera.beta=1.35;actor.rotation.y=.8;const originalRear=camera.alpha+actor.rotation.y;
  for(const mode of [false,true]){follow.update({followMotion:mode});for(const map of ['warrior-v4','warrior-v5','warrior-v3','warrior-v5','warrior-v4','warrior-v3']){
   replaceWorldMap(world,map);carryPortalPose(actor,camera,pan);actor.position.set(29,map==='warrior-v5'?6:2,-25.5);pitch.follow(follow.focus(actor,null),0,{snap:true});camera.getViewMatrix(true);
-  assert.equal(world.camera,camera);assert.equal(follow.settings.followMotion,mode);near(camera.radius,13);near(camera.beta,1.35);near(zoom.snapshot().factor,17/13);near(camera.target.y,actor.position.y+(mode?1.46:1.05));near(Math.sin(camera.alpha+actor.rotation.y),Math.sin(originalRear));
+  assert.equal(world.camera,camera);assert.equal(follow.settings.followMotion,mode);near(camera.radius,13);near(camera.beta,1.35);near(zoom.snapshot().factor,17/13);near(camera.target.y,actor.position.y+(mode?1.5:1.5));near(Math.sin(camera.alpha+actor.rotation.y),Math.sin(originalRear));
   assert.equal(new CameraFollow({storage:saved}).settings.followMotion,mode);
  }}
 });
@@ -78,7 +78,7 @@ test('village, forest and cave round trips preserve the chosen mode, orbit, magn
 test('cave guard preserves stable character-center height, including low motion poses and unrestricted upward pitch',t=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;const terrain=createWitchCaveTerrain(),actor=new TransformNode('cave-player',scene),camera=new ArcRotateCamera('cave-camera',1.3,1.18,24,Vector3.Zero(),scene),follow=new CameraFollow(),pitch=new CameraPitch(camera,{warrior:true}),world={scene,camera,terrain,cave:true,caveFog:{playerRoot:actor}},guard=new CaveCameraGuard(world);t.after(()=>{guard.dispose();scene.dispose();engine.dispose();});camera.inputs.clear();
  const sync=bindMainFocus({actor,follow,pitch,world:{...world,caveCamera:guard}});
- actor.position.set(29,terrain.heightAt(29,-25.5),-25.5);sync(0,{snap:true});guard.beginFrame();near(camera.target.y,actor.position.y+1.05);assert.equal(caveCameraBlocked(terrain,...camera.globalPosition.asArray()),false);guard.endFrame();near(camera.radius,24);
+ actor.position.set(29,terrain.heightAt(29,-25.5),-25.5);sync(0,{snap:true});guard.beginFrame();near(camera.target.y,actor.position.y+1.5);assert.equal(caveCameraBlocked(terrain,...camera.globalPosition.asArray()),false);guard.endFrame();near(camera.radius,24);
  pitch.update({upwardLimited:false});for(const beta of [.25,1.18,1.78,Math.PI-.035])for(let turn=0;turn<12;turn++){
   camera.beta=beta;camera.alpha=turn*Math.PI/6;sync(1/30,{snap:true});guard.beginFrame();assert.equal(caveCameraBlocked(terrain,...camera.globalPosition.asArray()),false,JSON.stringify({beta,turn,eye:camera.globalPosition.asArray()}));guard.endFrame();near(camera.radius,24);
  }

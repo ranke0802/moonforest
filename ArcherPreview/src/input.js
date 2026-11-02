@@ -36,6 +36,24 @@ export class PlaygroundInput {
       this.keys.delete(e.code);
       if (e.code === 'KeyJ') this.callbacks.setAttackHeld?.(false);
     }, opts);
+    // Captured pointers can keep reporting outside the canvas; keyup may never
+    // arrive after a browser menu/window exit. Cancel at the application edge.
+    const captureOpts = { ...opts, capture: true };
+    window.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      if (!this.keys.size && this.mousePointer === null && this.joystickPointer === null) return;
+      const box = (canvas.closest?.('#app') ?? canvas).getBoundingClientRect();
+      if (e.clientX < box.left || e.clientX >= box.left + box.width || e.clientY < box.top || e.clientY >= box.top + box.height) this.reset();
+    }, captureOpts);
+    window.addEventListener('pointerup', e => {
+      if (this.ownsPointer(e.pointerId)) this.pointerUp(e);
+    }, captureOpts);
+    window.addEventListener('pointercancel', e => { if (this.ownsPointer(e.pointerId)) this.reset(); }, captureOpts);
+    for (const name of ['pointerout', 'mouseout']) window.addEventListener(name, e => {
+      if (e.relatedTarget == null && (name === 'mouseout' || e.pointerType === 'mouse')) this.reset();
+    }, captureOpts);
+    document.addEventListener('contextmenu', e => this.contextMenu(e), captureOpts);
+    window.addEventListener('pagehide', () => this.reset(), opts);
     window.addEventListener('blur', () => this.reset(), opts);
     document.addEventListener('visibilitychange', () => { if (document.hidden) this.reset(); }, opts);
   }
@@ -45,6 +63,7 @@ export class PlaygroundInput {
     if (!controls.includes(e.code)) return;
     e.preventDefault();
     const wasDown = this.keys.has(e.code);
+    if (e.repeat && !wasDown) return; // A cancelled hold requires a fresh press.
     this.keys.add(e.code);
     if(!wasDown&&!e.repeat&&['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowLeft','ArrowDown','ArrowRight'].includes(e.code))this.callbacks.move?.();
     if (e.code === 'KeyJ') {
@@ -145,6 +164,7 @@ export class PlaygroundInput {
       this.canvas.setPointerCapture(e.pointerId);
       return;
     }
+    if (e.type !== 'pointerup' && this.ownsPointer(e.pointerId)) { this.reset(); return; }
     if (this.mousePointer === e.pointerId) { this.mousePointer = null; this.mouseButtons = 0; this.mouseChordReleased = false; }
     if (this.mouseAttackPointer === e.pointerId) {
       this.mouseAttackPointer = null;
@@ -181,13 +201,27 @@ export class PlaygroundInput {
     if (magnitude > 1) { x /= magnitude; y /= magnitude; }
     return { x, y, run: down('ShiftLeft', 'ShiftRight') };
   }
+  ownsPointer(id) { return id === this.mousePointer || id === this.joystickPointer || this.cameraPointers.has(id); }
+  contextMenu(e) {
+    const root = this.canvas.closest?.('#app') ?? this.canvas;
+    if (e.target === root || root.contains?.(e.target)) e.preventDefault();
+    // Chrome may send contextmenu on right-button DOWN. A successfully blocked
+    // canvas menu is the normal orbit gesture: W + right drag must still work.
+    // UI/keyboard menus, or a native event that could not be cancelled, reset.
+    if (e.target === this.canvas && e.defaultPrevented && (e.button === 2 || (e.buttons & 2))) return;
+    this.reset();
+  }
   reset() {
+    const pointers = new Set([...this.cameraPointers.keys(), this.joystickPointer, this.mousePointer]);
     this.keys.clear(); this.stick = { x: 0, y: 0 }; this.joystickPointer = null; this.cameraPointers.clear(); this.gesture = null; this.joystick.hidden = true; this.hint.style.opacity = 1;
     this.mousePointer = null; this.mouseAttackPointer = null;
     this.mouseButtons = 0; this.mouseChordReleased = false;
     this.stickIntent={x:0,y:0};
     if(this.callbacks.cancelAttackInput)this.callbacks.cancelAttackInput();
     else this.callbacks.setAttackHeld?.(false);
+    for (const id of pointers) if (id !== null && this.canvas.hasPointerCapture(id)) {
+      try { this.canvas.releasePointerCapture(id); } catch { /* Native cancellation may release first. */ }
+    }
   }
   dispose() { this.reset(); this.abort.abort(); }
 }

@@ -5,7 +5,7 @@ import {createHash} from 'node:crypto';
 // their actual files too, so editing a buffer under its old name cannot pass QA.
 export function caveSourceFingerprint(){
   const hash=createHash('sha256');
-  for(const file of ['witch-cave-layout.js','witch-cave-terrain.js','cave-laboratory-geometry.js','cave-laboratory-terrain-data.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
+  for(const file of ['witch-cave-layout.js','cave-lantern-mounts.js','witch-cave-terrain.js','cave-laboratory-geometry.js','cave-laboratory-terrain-data.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
   const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base)));
   for(const [id,asset]of Object.entries(manifest.assets).sort(([a],[b])=>a.localeCompare(b))){
     hash.update(JSON.stringify({id,bounds:asset.bounds,height:asset.height,frontYawOffset:asset.frontYawOffset??0}));

@@ -76,10 +76,10 @@ test('the actual main paused-render and settings callbacks correct the eye befor
  const main=new Function('actor','cameraPitch','cameraFollow','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog',
   'let simulateFrame=false,playerHead=null;'+focusFunction+pausedRender+';return {render,syncCameraFocus};')(
   actor,pitch,follow,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++);
- pitch.update({upwardLimited:false});camera.beta=2.8;camera.radius=17;main.render(0);assert.ok(camera.position.y>=1.46-.35-1e-5);assert.equal(fogCalls,1);assert.equal(hudCalls,1);assert.equal(lootCalls,1);
+ pitch.update({upwardLimited:false});camera.beta=2.8;camera.radius=17;main.render(0);assert.ok(camera.position.y>=1.5-.35-1e-5);assert.equal(fogCalls,1);assert.equal(hudCalls,1);assert.equal(lootCalls,1);
  const settingStart=source.indexOf('const cameraSettingChanged=')+'const cameraSettingChanged='.length,settingEnd=source.indexOf('\n',settingStart),lambda=source.slice(settingStart,settingEnd).trim().replace(/;$/,'');let refresh=0,wake=0,invalidations=0;
  const changed=new Function('syncCameraFocus','frameDiagnostics','renderActivity','frameLoop','return '+lambda)(main.syncCameraFocus,{refresh:()=>refresh++},{wake:()=>wake++},{invalidate:()=>invalidations++});
- pitch.update({upwardLimited:true});changed();camera.getViewMatrix(true);close(camera.beta,1.78);close(camera.target.y,1.46+upwardFocusLift(camera));assert.deepEqual([refresh,wake,invalidations],[1,1,1]);assert.ok(actor.position.equals(Vector3.Zero()));
+ pitch.update({upwardLimited:true});changed();camera.getViewMatrix(true);close(camera.beta,1.78);close(camera.target.y,1.5+upwardFocusLift(camera));assert.deepEqual([refresh,wake,invalidations],[1,1,1]);assert.ok(actor.position.equals(Vector3.Zero()));
 });
 
 test('actual V6 chin and 5.7m boss HP project into S23/iPhone portrait and landscape at the expanded angle',async t=>{

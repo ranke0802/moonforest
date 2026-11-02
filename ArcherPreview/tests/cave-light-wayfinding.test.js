@@ -38,10 +38,10 @@ test('zoom never changes player-centred haze or lantern direction and shader dec
  let initial;for(const radius of [1,13,21,48,80]){world.camera.radius=radius;world.caveFog.update(actor,radius,{force:true});const values=[...world.caveFog.playerView.asArray(),...world.caveFog.playerForward.asArray()];if(initial)assert.deepEqual(values,initial);initial=values;}
  assert.ok(CAVE_PAINT_UNIFORMS.includes('cavePaintForward'));assert.match(CAVE_PAINT_LIGHT_GLSL,/uniform vec4 cavePaintForward/);
 });
-test('ten reused wayfinding lanterns sit beside continuous routes, with no new realtime lights',t=>{
+test('ten reused wayfinding lanterns mount on nearby walls without blocking continuous routes',t=>{
  setWorldCharacter('warrior-v5');t.after(()=>setWorldCharacter('warrior'));
  const lamps=CAVE_PLACEMENTS.filter(p=>p.wayfinding),terrain=createWitchCaveTerrain(),nav=new CaveNavigation(caveObstacles());assert.equal(lamps.length,10);assert.equal(lamps.length,CAVE_WAYFINDING_LANTERNS.length);
- for(const p of lamps){assert.equal(p.asset,'cave-13-votive-lantern');assert.ok(caveSurface(p.x,p.z).distance<0,JSON.stringify(p));assert.ok(Math.abs(terrain.heightAt(p.x,p.z)-caveSurface(p.x,p.z).height)<.8,'lantern sits on route floor');}
+ for(const p of lamps){assert.equal(p.asset,'cave-13-votive-lantern');assert.ok(p.wallMount);assert.equal(p.colliderRadius,undefined);assert.ok(p.elevation-.025>terrain.heightAt(p.x,p.z)+.5,'lantern hangs above the ground');assert.ok(Math.hypot(p.x-p.wallMount.from.x,p.z-p.wallMount.from.z)<13,'unsupported lamps relocate only to an adjacent section');}
  // Existing continuous centerline stays walkable except preexisting obstacles.
  const oldNav=new CaveNavigation(caveObstacles().filter(o=>!lamps.some(p=>o.id===p.id)));let tested=0;
  for(const route of CAVE_ROUTES)for(let i=1;i<route.length;i++){const a=route[i-1],b=route[i],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])*2);for(let j=0;j<=n;j++){const p={x:a[0]+(b[0]-a[0])*j/n,z:a[1]+(b[1]-a[1])*j/n};if(oldNav.free(p,.289,74)){assert.ok(nav.free(p,.289,74),'new lantern must not block route center');tested++;}}}

@@ -1,0 +1,46 @@
+{
+  "baseline": "2656056794a29e1fa189e15d9a05b3e6cdceebcf",
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "resourceRevisionUnchanged": true,
+  "allPublishedFilesHashVerified": 1533,
+  "changedPublishedFiles": [
+    "ArcherPreviewSite/assets/index-BxANbWEP.css",
+    "ArcherPreviewSite/assets/index-tXW5ECv1.js",
+    "ArcherPreviewSite/index.html",
+    "ArcherPreviewSite/deployment-files.json"
+  ],
+  "obsoleteCodeChunksExcludedFromDeployment": [
+    "assets/index-Dq86Zw0n.css",
+    "assets/index-J99Vcjl2.js"
+  ],
+  "assetAndEngineFilesUnchanged": true,
+  "playerTextureMax": 8192,
+  "backgroundTextureMax": 4096,
+  "existingLodPreserved": true,
+  "tests": {
+    "fullExecuted": 1109,
+    "fullInitiallyPassed": 1104,
+    "oldDefaultAndDeathDurationExpectationsUpdated": 5,
+    "relatedRerun": {
+      "tests": 28,
+      "passed": 27,
+      "remaining": "elena-two-phase old style expectation"
+    },
+    "finalRerun": {
+      "tests": 18,
+      "passed": 18,
+      "failed": 0
+    },
+    "unresolvedFailures": 0,
+    "scope": "Node, actual assets and Babylon NullEngine with controlled DOM/GPU boundaries. No browser automation or physical-device visual, thermal, or FPS measurement."
+  },
+  "checks": [
+    "Forest/cave minimap inverse projection and live heading match the rotated static raster.",
+    "All 20 lanterns attached to actual walls; back-facing light blocked; support mesh 480 triangles and no new textures/lights.",
+    "Input release outside the game, context menu, pointer cancel, lost capture, hidden page and disposal; normal right-drag camera preserved.",
+    "Mourning Elena corpse removed at 10 seconds with eased fade after authored collapse; other enemies fade over their existing 5 seconds.",
+    "Shared living materials remain opaque; death/map return/resummon restores visibility and does not accumulate resources.",
+    "Player and boss defaults, custom setting migration, head-based stable camera and optional animated follow preserved across map/restart.",
+    "Build and deployment graph staging succeeded."
+  ]
+}

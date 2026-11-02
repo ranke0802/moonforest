@@ -22,16 +22,16 @@ function controls(zoom){
   return {nodes,updates:()=>updates,change:(id,value)=>{nodes[id].checked=value;nodes[id].listeners.change();},click:id=>nodes[id].listeners.click()};
 }
 
-test('zoom diagnostics use fixed magnification and keep both existing desktop/mobile bounds',()=>{
+test('zoom diagnostics use fixed magnification and use 1.20x to 10.00x defaults on desktop and mobile',()=>{
   for(const upper of [56,82]){
     const f=fixture(upper);
     try{
-      assert.equal(f.zoom.snapshot().factor,1);assert.equal(f.camera.lowerRadiusLimit,.8);close(f.camera.upperRadiusLimit,upper);
+      close(f.zoom.snapshot().factor,1.2);assert.equal(f.camera.lowerRadiusLimit,1.7);close(f.camera.upperRadiusLimit,17/1.2);
       assert.equal(f.zoom.settings.minEnabled,true);assert.equal(f.zoom.settings.maxEnabled,true);
-      f.input.zoom(.5);assert.equal(f.zoom.snapshot().factor,2);
-      f.input.zoom(.001);f.scene.render();assert.equal(f.camera.radius,.8);assert.equal(f.zoom.snapshot().factor,21.25);
-      f.input.zoom(1e6);f.scene.render();close(f.camera.radius,upper);
-      for(const invalid of [0,-1,Infinity,NaN]){f.input.zoom(invalid);close(f.camera.radius,upper);}
+      f.input.zoom(.5);close(f.zoom.snapshot().factor,2.4);
+      f.input.zoom(.001);f.scene.render();assert.equal(f.camera.radius,1.7);assert.equal(f.zoom.snapshot().factor,10);
+      f.input.zoom(1e6);f.scene.render();close(f.camera.radius,17/1.2);
+      for(const invalid of [0,-1,Infinity,NaN]){f.input.zoom(invalid);close(f.camera.radius,17/1.2);}
     }finally{f.engine.dispose();}
   }
 });
@@ -47,7 +47,7 @@ test('independent limit switches really release input/engine bounds, persist, an
     try{assert.deepEqual(restored.zoom.settings,f.zoom.settings);assert.equal(restored.camera.upperRadiusLimit,null);assert.equal(restored.camera.lowerRadiusLimit,null);}finally{restored.engine.dispose();}
     f.zoom.update({maxEnabled:true});f.scene.render();assert.equal(f.camera.radius,8.5);
     f.input.zoom(100);f.zoom.update({minEnabled:true});f.scene.render();assert.equal(f.camera.radius,34);
-    f.zoom.update(f.zoom.defaults);assert.equal(f.camera.lowerRadiusLimit,.8);close(f.camera.upperRadiusLimit,56);
+    f.zoom.update(f.zoom.defaults);assert.equal(f.camera.lowerRadiusLimit,1.7);close(f.camera.upperRadiusLimit,17/1.2);
     for(const invalid of [{minZoom:0},{minZoom:30,maxZoom:2},{maxZoom:Infinity},{maxZoom:171}]){
       const before=data.get(f.zoom.key);assert.throws(()=>f.zoom.update(invalid),RangeError);assert.equal(data.get(f.zoom.key),before);
     }
@@ -57,15 +57,15 @@ test('independent limit switches really release input/engine bounds, persist, an
 test('camera settings validate edits, retain exact default values, reset, and survive unavailable storage',()=>{
   const storage={getItem(){throw Error('denied');},setItem(){throw Error('denied');}},f=fixture(56,storage);
   try{
-    const ui=controls(f.zoom),{nodes}=ui;ui.click('apply-camera-zoom');close(f.camera.upperRadiusLimit,56);
+    const ui=controls(f.zoom),{nodes}=ui;ui.click('apply-camera-zoom');close(f.camera.upperRadiusLimit,17/1.2);
     nodes['camera-min-zoom'].value='2';nodes['camera-max-zoom'].value='1';
-    ui.click('apply-camera-zoom');assert.equal(nodes['camera-min-zoom'].attributes['aria-invalid'],'true');close(f.camera.upperRadiusLimit,56);
+    ui.click('apply-camera-zoom');assert.equal(nodes['camera-min-zoom'].attributes['aria-invalid'],'true');close(f.camera.upperRadiusLimit,17/1.2);
     nodes['camera-min-zoom'].value='.5';nodes['camera-max-zoom'].value='3';ui.click('apply-camera-zoom');
     assert.equal(f.zoom.settings.minZoom,.5);assert.equal(f.zoom.settings.maxZoom,3);
     ui.change('camera-min-enabled',false);assert.equal(nodes['camera-min-zoom'].disabled,true);assert.equal(f.camera.upperRadiusLimit,null);
     ui.change('camera-max-enabled',false);assert.equal(nodes['camera-max-zoom'].disabled,true);assert.equal(f.camera.lowerRadiusLimit,null);
     ui.click('reset-camera-zoom');assert.equal(nodes['camera-min-enabled'].checked,true);assert.equal(nodes['camera-max-enabled'].checked,true);
-    assert.equal(nodes['camera-min-zoom'].disabled,false);assert.equal(nodes['camera-max-zoom'].disabled,false);close(f.camera.upperRadiusLimit,56);
+    assert.equal(nodes['camera-min-zoom'].disabled,false);assert.equal(nodes['camera-max-zoom'].disabled,false);close(f.camera.upperRadiusLimit,17/1.2);
     assert.equal(ui.updates(),5);
   }finally{f.engine.dispose();}
   for(const saved of ['{bad','null','{"minEnabled":false,"maxEnabled":false,"minZoom":0,"maxZoom":2}']){

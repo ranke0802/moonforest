@@ -78,6 +78,6 @@ test('real encounter reuses sampled pose, refreshes after separation, and surviv
   const saved=enemy.actor.position.clone();battle.hide();f.world.cave=false;f.world.cave=true;await battle.activateResident(player);assertMatchesForced(f);assert.ok(Vector3.Distance(enemy.actor.position,saved)<1e-6);
   enemy.reviewMode=false;enemy.brain.hit({damage:9999});for(let i=0;i<156;i++){battle.update(1/30,player);battle.poseAndContacts(player,{state:'idle'},null,null);}
   assert.equal(animator.deathTime,5.2);assert.equal(animator.deathFinished,true);assert.equal(enemy.corpseGone,false);assertMatchesForced(f);
-  for(let i=0;i<21;i++)battle.update(1/30,player);assert.equal(enemy.corpseGone,true);
+  for(let i=0;i<145;i++)battle.update(1/30,player);assert.equal(enemy.corpseGone,true);
   await battle.activateResident(player,{reset:true,phase:2});assert.equal(animator.deathTime,0);assert.equal(animator.deathFinished,false);assertMatchesForced(f);
 });

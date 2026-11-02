@@ -18,7 +18,7 @@ test('160 cm profile uses measured body height without repacking 8K model or sca
 test('stable camera and head fallback follow the smaller body independently of bob and map altitude',t=>{
  const {actor}=fixture(t),follow=new CameraFollow();actor.position.set(29,6,-30);
  near(follow.focus(actor,null).y,6+WARRIOR_DIMENSIONS.stableFocusHeight);near(playerChinTarget(actor,null).y,6+WARRIOR_DIMENSIONS.chinHeight);
- follow.update({followMotion:true});near(follow.focus(actor,null).y,6+WARRIOR_DIMENSIONS.chinHeight);
+ follow.update({followMotion:true});near(follow.focus(actor,null).y,6+WARRIOR_DIMENSIONS.headHeight);
 });
 test('weapon endpoints inherit the actor once while contact margins use its body profile',t=>{
  const {actor,scene}=fixture(t),sword=new TransformNode('sword',scene);sword.parent=actor;sword.computeWorldMatrix(true);

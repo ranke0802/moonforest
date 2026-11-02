@@ -4,11 +4,12 @@
 #app[data-ui-test] button,#app[data-ui-test] select,#app[data-ui-test] input{font-family:var(--uit-font)}
 #app[data-ui-test] button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #app[data-ui-test] button:focus-visible{outline:2px solid #f5d897;outline-offset:2px}
-#app[data-ui-test] .topbar{padding:0;top:calc(env(safe-area-inset-top) + 12px);left:calc(env(safe-area-inset-left) + 18px);right:calc(env(safe-area-inset-right) + 18px);align-items:flex-start}
-#app[data-ui-test] .brand{font:13px Georgia,serif;letter-spacing:2px;color:#f2e7c9}
+#app[data-ui-test] .topbar{padding:0;top:calc(env(safe-area-inset-top) + 12px);left:calc(env(safe-area-inset-left) + 18px);right:calc(env(safe-area-inset-right) + 18px);width:auto;transform:none;min-width:0;gap:12px;align-items:flex-start}
+#app[data-ui-test] .brand{font:13px Georgia,serif;letter-spacing:2px;color:#f2e7c9;min-width:0;overflow:hidden}
+#app[data-ui-test] .brand>span:not(.moon-mark){min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #app[data-ui-test] .brand small{font:9px var(--uit-font);letter-spacing:0;color:#c6b78e;margin-top:5px}
 #app[data-ui-test] .brand .moon-mark{display:block;width:32px;height:32px;font-size:0;background:url('./ui-test-art/crest.webp') center/contain no-repeat}
-#app[data-ui-test] .top-actions{gap:6px;align-items:center}
+#app[data-ui-test] .top-actions{gap:6px;align-items:center;flex-shrink:0}
 #app[data-ui-test] .top-actions button{min-width:44px;min-height:44px;padding:6px 10px;border-radius:3px;border:1px solid #ad965b66;background:#12251de6;color:#ebd8a7;font-size:11px;box-shadow:0 2px 5px #0004}
 #app[data-ui-test] .top-actions .uit-top{display:flex;gap:4px;align-items:center;justify-content:center}
 #app[data-ui-test] .live-fps{font:10px var(--uit-font);color:#d3cfb7;min-width:40px}
@@ -35,14 +36,14 @@
 .uit-skin.uit-down,.uit-skin:active{--uit-skin-y:80.6%;transform:translateY(2px) scale(.985)}
 .uit-skin:disabled{opacity:.4}
 @media(hover:hover){.uit-skin:hover:not(:disabled){--uit-skin-y:50.8%}}
-#app[data-ui-test] .action-controls[data-character=warrior-v2]{--uit-attack:clamp(76px,13vh,112px);--uit-small:clamp(62px,10vh,85px);right:calc(env(safe-area-inset-right) + 32px);bottom:calc(env(safe-area-inset-bottom) + 28px);width:var(--uit-attack);height:var(--uit-attack);transform:none;scale:1;display:block;z-index:14}
+#app[data-ui-test] .action-controls[data-character=warrior-v2]{--uit-attack:clamp(76px,13vh,112px);--uit-small:clamp(62px,10vh,85px);right:calc(clamp(44px,8vw,96px) + env(safe-area-inset-right,0px));bottom:calc(clamp(92px,12vh,120px) + env(safe-area-inset-bottom,0px));width:var(--uit-attack);height:var(--uit-attack);transform:none;scale:1;display:block;z-index:14}
 #app[data-ui-test] .action-controls[data-character=warrior-v2] .action-button{isolation:isolate;--uit-round:0%;color:#f4dfab!important;background:none!important;border:0!important;box-shadow:none!important;overflow:visible;border-radius:50%;padding:10px;touch-action:none;font-size:11px;gap:1px;min-width:0;transition:transform .12s}
 #app[data-ui-test] .action-controls .action-button:before{content:'';position:absolute;inset:0;background:url('./ui-test-art/round.webp') var(--uit-round) 50%/300% 100% no-repeat;z-index:-1;pointer-events:none}
 #app[data-ui-test] .action-controls .action-button.uit-down,#app[data-ui-test] .action-controls .action-button:active{--uit-round:100%;transform:translateY(2px) scale(.96)}
 #app[data-ui-test] .action-controls[data-character=warrior-v2] #attack-button{width:100%;height:100%;position:relative;inset:auto;display:flex;flex-direction:column;justify-content:center;align-items:center}
-#app[data-ui-test] .action-controls[data-character=warrior-v2] #guard-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:calc(100% + 10px);bottom:calc(var(--uit-small) + 7px);display:flex;flex-direction:column;justify-content:center}
-#app[data-ui-test] .action-controls[data-character=warrior-v2] #dodge-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:calc(100% + 26px);bottom:0;display:flex;flex-direction:column;justify-content:center}
-#app[data-ui-test] .action-controls[data-character=warrior-v2] #potion-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:0;bottom:calc(100% + 8px);display:flex;flex-direction:column;justify-content:center}
+#app[data-ui-test] .action-controls[data-character=warrior-v2] #guard-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:calc(100% - 6px);bottom:calc(100% + 12px);display:flex;flex-direction:column;justify-content:center}
+#app[data-ui-test] .action-controls[data-character=warrior-v2] #dodge-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:calc(100% + 14px);bottom:4px;display:flex;flex-direction:column;justify-content:center}
+#app[data-ui-test] .action-controls[data-character=warrior-v2] #potion-button{position:absolute;width:var(--uit-small);height:var(--uit-small);right:8px;bottom:calc(100% + 18px);display:flex;flex-direction:column;justify-content:center}
 #app[data-ui-test] .action-controls[data-character=warrior-v2] #run-button{position:fixed;left:calc(env(safe-area-inset-left) + 152px);right:auto;bottom:calc(env(safe-area-inset-bottom) + 52px);width:60px;height:60px;display:flex;flex-direction:column;justify-content:center;align-items:center}
 #app[data-ui-test] .action-controls svg{width:25px;height:27px;stroke:#ecdaa5}
 #app[data-ui-test] .action-controls #attack-button svg{width:32px;height:34px}
@@ -117,11 +118,19 @@
  #app[data-ui-test] #frame-diagnostics{top:200px;right:12px;max-width:160px}
  #app[data-ui-test] .action-controls[data-character=warrior-v2] #run-button{left:20px;bottom:calc(env(safe-area-inset-bottom) + 146px)}
  .uit-quick{left:18px;bottom:calc(env(safe-area-inset-bottom) + 225px)}
- .uit-interactions{left:auto;right:18px;transform:none;max-width:70vw;bottom:calc(env(safe-area-inset-bottom) + 245px);flex-direction:column}
+ .uit-interactions{left:auto;right:18px;transform:none;max-width:70vw;bottom:calc(env(safe-area-inset-bottom) + clamp(92px,12vh,120px) + clamp(76px,13vh,112px) + clamp(62px,10vh,85px) + 28px);flex-direction:column}
  #ui-test-dialog{padding:14px;width:calc(100vw - 16px);height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)}.uit-heading{gap:8px;flex-wrap:wrap}.uit-heading h1{font-size:20px}.uit-tabs{order:3;width:100%;margin:0}.uit-back{min-width:65px}
  .uit-dialogue-body{grid-template-columns:1fr;gap:12px;overflow:auto;padding-top:80px}.uit-choices{padding:0}.uit-dark{padding:18px 22px}
  .uit-journal-body{grid-template-columns:1fr;grid-template-rows:140px 1fr;gap:12px}.uit-quest-list{display:flex;gap:8px}.uit-quest-list>button{min-width:160px}.uit-quest-list>small{display:none}.uit-paper{padding:20px}
  .uit-inventory-body{display:flex;flex-direction:column;gap:12px;overflow:auto}.uit-filters{flex-direction:row;flex-shrink:0}.uit-items{overflow:visible}.uit-item-grid{grid-template-columns:repeat(4,1fr)}.uit-item-grid .uit-empty{display:none}.uit-item-detail{overflow:visible;min-height:auto;flex-shrink:0}.uit-item-detail>img{height:85px}
  .uit-clue{flex-direction:column;align-items:flex-start}.uit-clue>img{width:70%;align-self:center}.uit-menu-grid{grid-template-columns:1fr;gap:10px}.uit-title-menu{margin:20px 0}.uit-toast{max-width:86vw;top:115px}
+}
+@media(max-height:500px) and (orientation:landscape){
+ #app[data-ui-test] .action-controls[data-character=warrior-v2]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+}
+/* The menu already exposes both destinations. Keep fullscreen/settings reachable
+   on narrow phones without adding a second toolbar row over the health bar. */
+@media(max-width:760px){
+ #app[data-ui-test] .top-actions .uit-top[data-uit-action=journal],#app[data-ui-test] .top-actions .uit-top[data-uit-action=inventory]{display:none}
 }
 @media(prefers-reduced-motion:reduce){#app[data-ui-test] button{transition:none!important}.uit-skin.uit-down,.uit-skin:active{transform:none}}

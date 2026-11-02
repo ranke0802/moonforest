@@ -30,16 +30,28 @@ const counts=scene=>[scene.meshes.length,scene.geometries.length,scene.materials
 function uniforms(mesh,name){
   const result={};mesh.material.pluginManager.getPlugin(name).hardBindForSubMesh({updateFloat:(n,x)=>result[n]=x,updateFloat2:(n,x,y)=>result[n]=[x,y],updateFloat4:(n,x,y,z,w)=>result[n]=[x,y,z,w]},mesh.getScene(),mesh.getScene().getEngine(),mesh.subMeshes[0]);return result;
 }
-test('style preferences preserve original defaults, bound invalid data and persist independent groups',()=>{
+test('style preferences use approved player defaults, bound invalid data and persist independent groups',()=>{
   const s=storage(),prefs=new CharacterStyleSettings(s);
   for(const group of ['player','boss'])assert.deepEqual(prefs.value[group],CHARACTER_STYLE_DEFAULTS[group]);
   prefs.set('player',{outline:false,outlineWidth:99,brightness:NaN,internalStrength:-4});
-  assert.equal(prefs.value.player.outlineWidth,3);assert.equal(prefs.value.player.brightness,1);assert.equal(prefs.value.player.internalStrength,0);
+  assert.equal(prefs.value.player.outlineWidth,3);assert.equal(prefs.value.player.brightness,.95);assert.equal(prefs.value.player.internalStrength,0);
   prefs.set('boss',{brightness:1.8,outlineWidth:1.25,internal:false});assert.deepEqual(new CharacterStyleSettings(s).value,prefs.value);
   prefs.reset('player');assert.equal(prefs.value.player.outline,true);assert.equal(prefs.value.boss.brightness,1.8);
   prefs.set('unknown',{brightness:2});assert.equal(prefs.value.unknown,undefined);
-  assert.equal(normalizeCharacterStyles({boss:{brightness:null}}).boss.brightness,1.35);
+  assert.equal(normalizeCharacterStyles({boss:{brightness:null}}).boss.brightness,1);
   assert.doesNotThrow(()=>new CharacterStyleSettings({getItem(){throw Error();},setItem(){throw Error();}}).set('boss',{outline:false}));
+});
+
+test('untouched legacy defaults migrate once while customized profiles and boss values survive',()=>{
+ const s=storage(),key='moonforest-character-style-v1',old={outline:true,outlineWidth:0,internal:true,internalStrength:0,brightness:1};
+ s.setItem(key,JSON.stringify({version:1,player:old,boss:{brightness:1.8}}));
+ const migrated=new CharacterStyleSettings(s);assert.deepEqual(migrated.value.player,CHARACTER_STYLE_DEFAULTS.player);assert.equal(migrated.value.boss.brightness,1.8);
+ migrated.set('player',old);assert.deepEqual(new CharacterStyleSettings(s).value.player,old,'intentional neutral profile after migration persists');
+ s.setItem(key,JSON.stringify({version:1,player:{...old,brightness:1.1}}));assert.equal(new CharacterStyleSettings(s).value.player.brightness,1.1);
+ const oldBoss={outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35};
+ s.setItem(key,JSON.stringify({version:1,player:old,boss:oldBoss}));const bossMigrated=new CharacterStyleSettings(s);
+ assert.deepEqual(bossMigrated.value.boss,{outline:true,outlineWidth:.3,internal:true,internalStrength:.3,brightness:1});
+ bossMigrated.set('boss',oldBoss);assert.deepEqual(new CharacterStyleSettings(s).value.boss,oldBoss,'intentional old boss style is retained after migration');
 });
 
 test('modal real controls stay inside fullscreen root, save/reset groups and retain camera controls',t=>{
@@ -52,7 +64,7 @@ test('modal real controls stay inside fullscreen root, save/reset groups and ret
   fire('#open-character-style','click');assert.equal(panel.dialog.hasAttribute('open'),true);
   fire('#character-brightness','input','1.6');assert.equal(panel.settings.value.player.brightness,1.6);
   q('#character-outline-enabled').checked=false;fire('#character-outline-enabled','change');assert.equal(q('#character-outline-width').disabled,true);
-  fire('#character-style-group','change','boss');assert.equal(q('#character-brightness').value,'1.35');
+  fire('#character-style-group','change','boss');assert.equal(q('#character-brightness').value,'1');
   fire('#character-internal-strength','input','.72');fire('#character-outline-width','input','1.25');assert.equal(panel.settings.value.boss.outlineWidth,1.25);assert.equal(panel.settings.value.player.outline,false);
   assert.deepEqual(new CharacterStyleSettings(s).value,panel.settings.value);fire('#reset-character-style','click');assert.deepEqual(panel.settings.value.boss,CHARACTER_STYLE_DEFAULTS.boss);assert.equal(panel.settings.value.player.brightness,1.6);
   fire('.close-style','click');assert.equal(panel.dialog.hasAttribute('open'),false);assert.ok(changed>=5);
@@ -86,7 +98,7 @@ for(const ubo of [false,true])test(`uniform-only adjustments preserve shared-mat
   for(const [i,mesh] of [player,boss,other].entries()){mesh.material=material;mesh.position.x=(i-1)*2;}
   applyCharacterSurfaceStyle({meshes:[player]},'player');applyCharacterSurfaceStyle({meshes:[boss]},'boss');
   assert.equal(player.material,boss.material);assert.equal(boss.material,other.material);
-  assert.deepEqual(uniforms(player,'MoonforestCharacterStyle').characterPaint,[1,0]);assert.deepEqual(uniforms(boss,'MoonforestCharacterStyle').characterPaint,[1,0]);
+  assert.deepEqual(uniforms(player,'MoonforestCharacterStyle').characterPaint,[.95,.04]);assert.deepEqual(uniforms(boss,'MoonforestCharacterStyle').characterPaint,[1/1.35,.3-.2]);
   const prefs=new CharacterStyleSettings();setSceneCharacterStyles(scene,prefs.value);
   for(const m of [player,boss,other])await material.forceCompilationAsync(m);scene.render();material.freeze();
   const effect=player.subMeshes[0].effect,before=counts(scene),geometry=player.geometry,draws=[];
@@ -148,14 +160,14 @@ test('real 8K warrior/equipment and bear/saint/r9 witch keep geometry, skins, mo
   const equipment=new WarriorEquipment(player);t.after(()=>equipment.dispose());
   applyCharacterSurfaceStyle(player,'player');attachCharacterOutlines(player,'warrior');
   const originalInk=player.meshes.filter(m=>/outline/i.test(m.name)&&m.getTotalVertices());assert.ok(originalInk.length>=6);
-  for(const m of originalInk){assert.ok(m.metadata.characterInkRegistered);assert.ok(uniforms(m,'MoonforestAuthoredInk').characterInk[0]===0);}
+  for(const m of originalInk){assert.ok(m.metadata.characterInkRegistered);assert.equal(uniforms(m,'MoonforestAuthoredInk').characterInk[0],.15*m.metadata.characterInkNormalSign);}
   const actors=[{asset:player,group:'player'}];
   for(const name of ['guardian-bear','elena','mourning-elena']){
     const {asset}=await realAsset(scene,name);applyMonsterToon(asset);if(name!=='guardian-bear')applyElenaStyle(asset);attachCharacterOutlines(asset,name==='guardian-bear'?'bear':'elena');actors.push({asset,group:'boss',name});
     for(const m of asset.meshes.filter(m=>m.getTotalVertices()&&!m.metadata?.moonforestOutline)){
       assert.equal(m.material.unlit,true);assert.equal(m.material.reflectionTexture,null);
-      assert.deepEqual(uniforms(m,'MoonforestCharacterStyle').characterPaint,[1,0]);
-      if(name!=='guardian-bear')assert.deepEqual(uniforms(m,'ElenaPaint').elenaPaintStyle,[1.35,.2]);
+      assert.deepEqual(uniforms(m,'MoonforestCharacterStyle').characterPaint,name==='guardian-bear'?[1/1.35,.3-.2]:[1,0]);
+      if(name!=='guardian-bear')assert.deepEqual(uniforms(m,'ElenaPaint').elenaPaintStyle,[1,.3]);
     }
     if(name==='mourning-elena')assert.equal(asset.meshes.filter(m=>m.name.includes('Lament_Mouth_Interior')).length,1,'no new mouth silhouette');
   }
@@ -176,5 +188,5 @@ test('real 8K warrior/equipment and bear/saint/r9 witch keep geometry, skins, mo
   const {asset:reloaded}=await realAsset(scene,'warrior-v3');applyCharacterSurfaceStyle(reloaded,'player');
   const reloadedInk=reloaded.meshes.filter(m=>m.metadata?.characterInkRegistered);assert.ok(reloadedInk.length>=6);
   for(const m of [...originalInk,...reloadedInk])assert.equal(m.isEnabled(false),false,'stored switch survives player reload');
-  prefs.reset('player');setSceneCharacterStyles(scene,prefs.value);for(const m of [...originalInk,...reloadedInk]){assert.equal(m.isEnabled(false),true);assert.ok(uniforms(m,'MoonforestAuthoredInk').characterInk[0]===0);}
+  prefs.reset('player');setSceneCharacterStyles(scene,prefs.value);for(const m of [...originalInk,...reloadedInk]){assert.equal(m.isEnabled(false),true);assert.equal(uniforms(m,'MoonforestAuthoredInk').characterInk[0],.15*m.metadata.characterInkNormalSign);}
 });
