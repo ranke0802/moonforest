@@ -50,7 +50,12 @@ export class PlaygroundInput {
     }, captureOpts);
     window.addEventListener('pointercancel', e => { if (this.ownsPointer(e.pointerId)) this.reset(); }, captureOpts);
     for (const name of ['pointerout', 'mouseout']) window.addEventListener(name, e => {
-      if (e.relatedTarget == null && (name === 'mouseout' || e.pointerType === 'mouse')) this.reset();
+      if (e.relatedTarget != null || (name !== 'mouseout' && e.pointerType !== 'mouse')) return;
+      // Removing/relabeling HUD descendants can emit a null relatedTarget
+      // inside the game. It is not a window exit and must not erase a charge.
+      const box=(canvas.closest?.('#app')??canvas).getBoundingClientRect();
+      if(e.target!==window&&e.target!==document&&Number.isFinite(e.clientX)&&Number.isFinite(e.clientY)&&e.clientX>=box.left&&e.clientX<box.left+box.width&&e.clientY>=box.top&&e.clientY<box.top+box.height)return;
+      this.reset();
     }, captureOpts);
     document.addEventListener('contextmenu', e => this.contextMenu(e), captureOpts);
     window.addEventListener('pagehide', () => this.reset(), opts);

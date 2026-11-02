@@ -1,14 +1,16 @@
-const sub=(a,b)=>a.map((v,i)=>v-b[i]);
-const add=(a,b)=>a.map((v,i)=>v+b[i]);
-const mul=(a,s)=>a.map(v=>v*s);
-const dot=(a,b)=>a.reduce((n,v,i)=>n+v*b[i],0);
 const clamp=x=>Math.max(0,Math.min(1,x));
 export function segmentDistanceSquared(p1,q1,p2,q2){
-  const d1=sub(q1,p1),d2=sub(q2,p2),r=sub(p1,p2),a=dot(d1,d1),e=dot(d2,d2),f=dot(d2,r);let s=0,t=0;
-  if(a<=1e-10&&e<=1e-10)return dot(r,r);
+  return segmentDistanceValues(...p1,...q1,...p2,...q2);
+}
+// Detailed sweeps can test thousands of segments in one attack. Use scalar
+// scratch values instead of creating several arrays for every substep.
+function segmentDistanceValues(px,py,pz,qx,qy,qz,ax,ay,az,bx,by,bz){
+  const dx=qx-px,dy=qy-py,dz=qz-pz,ex=bx-ax,ey=by-ay,ez=bz-az,rx=px-ax,ry=py-ay,rz=pz-az;
+  const a=dx*dx+dy*dy+dz*dz,e=ex*ex+ey*ey+ez*ez,f=ex*rx+ey*ry+ez*rz;let s=0,t=0;
+  if(a<=1e-10&&e<=1e-10)return rx*rx+ry*ry+rz*rz;
   if(a<=1e-10)t=clamp(f/e);
-  else {const c=dot(d1,r);if(e<=1e-10)s=clamp(-c/a);else {const b=dot(d1,d2),den=a*e-b*b;s=den?clamp((b*f-c*e)/den):0;t=(b*s+f)/e;if(t<0){t=0;s=clamp(-c/a);}else if(t>1){t=1;s=clamp((b-c)/a);}}}
-  const d=sub(add(p1,mul(d1,s)),add(p2,mul(d2,t)));return dot(d,d);
+  else {const c=dx*rx+dy*ry+dz*rz;if(e<=1e-10)s=clamp(-c/a);else {const b=dx*ex+dy*ey+dz*ez,den=a*e-b*b;s=den?clamp((b*f-c*e)/den):0;t=(b*s+f)/e;if(t<0){t=0;s=clamp(-c/a);}else if(t>1){t=1;s=clamp((b-c)/a);}}}
+  const x=(px+dx*s)-(ax+ex*t),y=(py+dy*s)-(ay+ey*t),z=(pz+dz*s)-(az+ez*t);return x*x+y*y+z*z;
 }
 // Sweep the actual blade, rather than awarding a hit simply because J was pressed.
 export function bladeTouchesCapsule(previous,current,capsule,radius,lateral=null){
@@ -32,13 +34,15 @@ export function bladeTouchesCapsule(previous,current,capsule,radius,lateral=null
     }
     return false;
   }
-  const travel=previous?Math.max(...current.map((p,k)=>Math.sqrt(dot(sub(p,previous[k]),sub(p,previous[k]))))):0;
+  const a=previous?.[0]??current[0],b=previous?.[1]??current[1],p=current[0],q=current[1];
+  const dx=p[0]-a[0],dy=p[1]-a[1],dz=p[2]-a[2],ex=q[0]-b[0],ey=q[1]-b[1],ez=q[2]-b[2];
+  const travel=previous?Math.max(Math.sqrt(dx*dx+dy*dy+dz*dz),Math.sqrt(ex*ex+ey*ey+ez*ez)):0;
   // Bound gaps by the collider radius instead of eight fixed samples. Fast swings
   // on slow devices must not skip narrow arms/legs between rendered frames.
   const steps=Math.max(1,Math.ceil(travel/Math.max(.005,radius*.5)));
   for(let i=0;i<=steps;i++){
-    const t=i/steps,blade=current.map((p,k)=>p.map((v,j)=>previous?previous[k][j]+(v-previous[k][j])*t:v));
-    if(segmentDistanceSquared(...blade,...capsule)<=radius*radius)return true;
+    const t=i/steps;
+    if(segmentDistanceValues(a[0]+dx*t,a[1]+dy*t,a[2]+dz*t,b[0]+ex*t,b[1]+ey*t,b[2]+ez*t,...capsule[0],...capsule[1])<=radius*radius)return true;
   }
   return false;
 }

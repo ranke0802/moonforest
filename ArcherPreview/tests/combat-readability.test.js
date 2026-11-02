@@ -77,6 +77,15 @@ test('original burst offsets remain local to the hit instead of reserving HUD co
  const css=readFileSync(new URL('../src/styles.css',import.meta.url),'utf8');assert.match(css,/#app > #player-hud\[data-hud="fixed"\][^}]*top:calc\(env\(safe-area-inset-top\) \+ 48px\)/);assert.match(css,/#app > \.boss-hud\[data-hud="fixed"\][^}]*top:calc\(env\(safe-area-inset-top\) \+ 82px\)/);
 });
 
+test('downed moving enemy labels follow its torso and retire on reuse or map removal',t=>{
+ const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),point=new Vector3(2,1,3),owner={active:true,brain:{},damageNumberPosition:()=>point};
+ const projected=[],projection={project:p=>{projected.push(p.clone());return {visible:true,x:p.x*10,y:200-p.y*20};}};
+ numbers.show(point,43,true,'enemy',0,true,owner);point.set(7,.3,9);numbers.update(.1,projection);
+ assert.equal(projected[0].x,7);assert.equal(projected[0].z,9);assert.ok(Math.abs(projected[0].y-.365)<1e-8);assert.equal(host.firstElementChild.textContent,'Critical 43');
+ owner.brain={};numbers.update(0,projection);assert.equal(host.children.length,0);
+ numbers.show(point,20,false,'enemy',0,false,owner);owner.active=false;numbers.update(0,projection);assert.equal(host.children.length,0);numbers.dispose();
+});
+
 test('actual camera projection preserves overlapping hit anchors without an automatic screen grid',t=>{
  const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),ray=f.camera.getForwardRay(),a=ray.origin.add(ray.direction.scale(3)),b=ray.origin.add(ray.direction.scale(7));
  assert.ok(Vector3.Distance(a,b)>2);numbers.show(a,29,false,'enemy',0,true);numbers.show(b,33,false,'enemy',0,true);numbers.update(0,f.projection);

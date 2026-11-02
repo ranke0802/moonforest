@@ -1,0 +1,249 @@
+{
+  "generatedAt": "2026-11-02T09:51:05.789Z",
+  "scope": "Actual packed rigs, CPU step scheduling, shader variants and lifecycle in Babylon NullEngine. No browser/GPU/physical temperature measurement.",
+  "reports": [
+    {
+      "case": "sync-async-exact",
+      "results": [
+        {
+          "mesh": "Lament_Mouth_Interior",
+          "slots": 4,
+          "boneBoxes": 1,
+          "vertices": 280,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Attached_Streamers",
+          "slots": 3,
+          "boneBoxes": 5,
+          "vertices": 287,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Rigid_Emblem",
+          "slots": 3,
+          "boneBoxes": 8,
+          "vertices": 4014,
+          "bitExact": true
+        },
+        {
+          "mesh": "Elina_Chimera_Skin",
+          "slots": 4,
+          "boneBoxes": 206,
+          "vertices": 36196,
+          "bitExact": true
+        }
+      ],
+      "scheduler": {
+        "yields": 41,
+        "slices": 49,
+        "blocks": 92,
+        "maxSliceMs": 3.774699999999939,
+        "steps": []
+      },
+      "cancelledAfterYields": 3
+    },
+    {
+      "case": "warm-transform",
+      "frames": 66,
+      "readinessRequests": [
+        "Elena_Meshy_Static",
+        "Elena_Meshy_Static",
+        "Elena_Meshy_Static / silhouette",
+        "Lament_Mouth_Interior",
+        "Lament_Mouth_Interior",
+        "Halo_Attached_Streamers",
+        "Halo_Attached_Streamers",
+        "Halo_Rigid_Emblem",
+        "Halo_Rigid_Emblem",
+        "Elina_Chimera_Skin",
+        "Elina_Chimera_Skin",
+        "Halo_Attached_Streamers / silhouette",
+        "Halo_Rigid_Emblem / silhouette",
+        "Elina_Chimera_Skin / silhouette"
+      ],
+      "scanBlocks": 91,
+      "handoffDesktopMs": 8.70010000000002,
+      "countsBefore": {
+        "meshes": 18,
+        "geometries": 8,
+        "materials": 15,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "countsAfter": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "variants": [
+        {
+          "castVariant": "cast",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        },
+        {
+          "castVariant": "cast_slam",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        },
+        {
+          "castVariant": "cast_alternate",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        }
+      ],
+      "quality": "Same actual morph streams, stable11slots, body/ink geometry/skin/morph shared. NullEngine shader readiness is not a real mobile GPU measurement.",
+      "scheduler": {
+        "yields": 66,
+        "slices": 49,
+        "blocks": 91,
+        "maxSliceMs": 6.551399999999376,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.08820000000014261
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.6669000000001688
+          },
+          {
+            "name": "outline:Halo_Attached_Streamers",
+            "ms": 0.7786999999998443
+          },
+          {
+            "name": "outline:Halo_Rigid_Emblem",
+            "ms": 1.0236999999997352
+          },
+          {
+            "name": "outline:Elina_Chimera_Skin",
+            "ms": 11.71810000000005
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.0244000000002416
+          },
+          {
+            "name": "animator",
+            "ms": 11.207000000000335
+          }
+        ]
+      }
+    },
+    {
+      "case": "cancel-load",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "roundTrips": 4
+    },
+    {
+      "case": "cancel-bounds",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "roundTrips": 4
+    },
+    {
+      "case": "join-death",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "join-selector",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "failure-explicit-recovery",
+      "instances": 1,
+      "compileRequests": 15,
+      "firstAttemptCompileRequests": 4,
+      "counts": {
+        "meshes": 19,
+        "geometries": 11,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "never-ready-cancel-new-foreground",
+      "instances": 1,
+      "oldPendingWaiters": 0,
+      "oldJobStatus": "cancelled",
+      "observerCount": 0,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "shader-timeout-explicit-recovery",
+      "oldPendingWaiters": 0,
+      "sourceClockMs": 45001,
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "never-model-load-cancel",
+      "oldPendingWaiters": 0,
+      "instances": 1
+    }
+  ]
+}

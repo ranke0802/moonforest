@@ -36,6 +36,7 @@ export class BossEncounter {
     this.hitCount=0;this.heavyCount=0;
     this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
     this.bossReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
+    this.damageAnchor=new Vector3();
     this.grab=new BossGrab(captured=>{
       if(captured)this.combat.grabOwner=this;
       else if(this.combat.grabOwner===this)this.combat.grabOwner=null;
@@ -117,9 +118,10 @@ export class BossEncounter {
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
     if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.createAnimator();});this.assetPreparationStep=5;}
     if(this.assetPreparationStep<6){
-      this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation});
+      this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation,shadows:this.world.shadows});
       preparation.check();this.assetPreparationStep=6;
     }
+    await this.prepareAuxiliary(preparation);preparation.check();
     this.assetPrepared=true;this.preparationStats=preparation.stats;this.preparationPhase('model');return this.asset;
   }
   async summon(player,{position,rotationY,preparation}={}){
@@ -193,6 +195,7 @@ export class BossEncounter {
   createBrain(durations){return new BossBrain(durations);}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
   prepareAsset(){}
+  async prepareAuxiliary(){}
   // Actor movement may need a larger environment envelope than its combat body.
   // Player sight, weapon contact and dodge collisions still use world navigation.
   get movementNavigation(){return this.world.navigation;}
@@ -205,6 +208,23 @@ export class BossEncounter {
   hurtCapsules(){
     const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
     return pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
+  }
+  damageNumberPosition(){
+    // Anchor to the posed torso, not the head at the end of a fall/spin. The
+    // same enemy owns the short-lived label through knockback and recovery.
+    const hips=this.nodes['mixamorig:Hips'].getAbsolutePosition(),chest=this.nodes['mixamorig:Spine2']?.getAbsolutePosition()??hips;
+    this.damageAnchor.copyFrom(hips).addInPlace(chest).scaleInPlace(.5);
+    this.damageAnchor.y=Math.max(hips.y,chest.y)+.45*(this.sizeScale??1);
+    return this.damageAnchor;
+  }
+  skillHurtCapsule(){
+    if(this.kind==='goblin'||this.brain.mode!=='attack')return null;
+    // Spell/airborne poses keep a compact, reachable body core. This is a real
+    // contact volume: weapon window, sweep, line of sight and dedup still apply.
+    const p=this.actor.position,r=Math.min(.48,this.radius),h=Math.min(1.55,(this.sizeScale??1)*1.2);
+    const volume=this.skillHurtVolume??={points:[[0,0,0],[0,0,0]],radius:r};
+    volume.points[0][0]=volume.points[1][0]=p.x;volume.points[0][2]=volume.points[1][2]=p.z;
+    volume.points[0][1]=p.y+r;volume.points[1][1]=p.y+h;volume.radius=r;return volume;
   }
   get playerHp(){return this.combat.hp;} set playerHp(value){this.combat.hp=value;}
   get playerMaxHp(){return this.combat.maxHp;} set playerMaxHp(value){this.combat.maxHp=value;}
@@ -251,7 +271,7 @@ export class BossEncounter {
     if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,ENEMY_ARENA_RADIUS);else capPosition(this.actor.position);
     this.world.terrain?.place(this.actor.position);
     const spec=this.motionSpec(this.brain.state);
-    this.ring.isVisible=this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
+    this.ring.isVisible=this.kind!=='elena'&&this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
     this.warningRing.update(this.actor.position,this.attackRange(spec));
     applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
@@ -288,7 +308,8 @@ export class BossEncounter {
     const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;
     const clearSight=!needsSight||!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
     if(sample&&clearSight&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
-      const capsules=this.hurtCapsules();
+      const capsules=this.hurtCapsules(),skillCore=this.skillHurtCapsule();
+      const contactCapsules=skillCore?[...capsules,skillCore]:capsules;
       const grounded=['down','recover'].includes(this.brain.mode);
       // Downed/recovering bosses are always vulnerable within melee range, even
       // when an upright sword swing passes above the lying skeleton. The gate
@@ -298,11 +319,11 @@ export class BossEncounter {
       if(this.brain.defense){
         // Consume this swing without starting a delayed damage burst through a block/roll.
         this.gate.pending=[];
-        for(const contact of sample.contacts??[sample])if(this.gate.check({...sample,...contact,capsules})){
+        for(const contact of sample.contacts??[sample])if(this.gate.check({...sample,...contact,capsules:contactCapsules})){
           if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block')this.playerBlocked();
         }
         contacts={hits:[],hitStop:0};
-      }else contacts=this.gate.collect({...sample,capsules,rangeContact});
+      }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact});
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
         if(!this.brain.hit(hit))continue;
@@ -311,7 +332,7 @@ export class BossEncounter {
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
         if(hit.heavy&&!grounded){this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;this.knockVelocity.copyFrom(away.normalize().scale(8));}
         this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.stun?`방패 명중 · ${this.brain.stagger}초 강한 경직`:this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';
-        this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex,hit.critical);this.onChange(this);
+        this.onDamage(this.damageNumberPosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex,hit.critical,this);this.onChange(this);
       }
     }else this.gate.previous=null;
     for(const event of this.pendingEvents){

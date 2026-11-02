@@ -1,5 +1,6 @@
-import {Color3,Geometry,Mesh,StandardMaterial,VertexBuffer} from '@babylonjs/core';
+import {Color3,Geometry,Material,Mesh,StandardMaterial,VertexBuffer} from '@babylonjs/core';
 import {clipGroundSpellSurface,groundSurfaceContains} from './elena-ground-surface.js';
+import {prepareBossShaders} from './boss-shader-warmup.js';
 
 export const ELENA_GROUND_PATTERNS=Object.freeze(['corridor','fan','ring','cross','cluster']);
 export const ELENA_GROUND_MAX_RANGE=14;
@@ -134,7 +135,9 @@ export function buildGroundSpellGeometry(plan,terrain){
 }
 
 function material(scene,name,color){
-  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.specularColor=Color3.Black();m.disableDepthWrite=true;m.backFaceCulling=false;return m;
+  const m=new StandardMaterial(name,scene);m.disableLighting=true;m.emissiveColor=color;m.diffuseColor=Color3.Black();m.specularColor=Color3.Black();m.disableDepthWrite=true;m.backFaceCulling=false;
+  // Impact reaches alpha 1, but must not switch render queues/shader defines.
+  m.transparencyMode=Material.MATERIAL_ALPHABLEND;return m;
 }
 function matches(geometry,data){const indices=geometry.getIndices()??[];return geometry.getTotalVertices()*3===data.positions.length&&indices.length===data.indices.length&&indices.every((index,i)=>index===data.indices[i]);}
 function makeGeometry(mesh,data){
@@ -160,6 +163,16 @@ export class GroundSpellTelegraph {
     for(const mesh of [this.mesh,this.rim]){mesh.isPickable=false;mesh.receiveShadows=false;mesh.setEnabled(false);}
     this.serial=null;this.plan=null;this.fired=false;this.disposed=false;
     this.topologies=[];this.cacheHits=0;this.cacheMisses=0;
+  }
+  async prepare(preparation){
+    if(this.prepared||this.disposed)return;
+    // Compile the exact position+normal material before the first cast, without
+    // creating a visible warning or retaining an extra topology in the cache.
+    const data={positions:[0,0,0,1,0,0,0,0,1],normals:[0,1,0,0,1,0,0,1,0],indices:[0,1,2]},temporary=[];
+    try{
+      for(const mesh of [this.mesh,this.rim]){mesh.metadata={...mesh.metadata,moonforestWarmMaterial:true};const geometry=makeGeometry(mesh,data);temporary.push(geometry);bindGeometry(mesh,geometry,data.positions);}
+      await prepareBossShaders({meshes:[this.mesh,this.rim]},{preparation});this.prepared=true;
+    }finally{for(const geometry of temporary)geometry.dispose();}
   }
   aim(serial,pattern,origin,target,options={}){
     if(this.disposed)return null;

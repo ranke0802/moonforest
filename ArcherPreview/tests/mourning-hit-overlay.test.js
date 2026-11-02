@@ -87,9 +87,9 @@ test('real r8 ordinary-hit overlay preserves action clocks, feet, cast hands and
   await t.test('real gameplay contact triggers one visual pulse without resetting the active cast; misses and duplicate contacts do not',()=>{
     a.animator.reset();a.animator.transition('cast',{clipTime:1.2,actionId:10});a.animator.sample(0);
     const nodes=Object.fromEntries(a.nodes),brain=new ElenaBrain(a.animator.durations,{mourning:true}),volumes=new MourningHurtVolumes(nodes,MOURNING_SIZE_SCALE);
-    nodes['mixamorig:Head']=nodes.DEF_Head;brain.cast();brain.time=1.2;
+    nodes['mixamorig:Head']=nodes.DEF_Head;nodes['mixamorig:Hips']=nodes.DEF_Abdomen;brain.cast();brain.time=1.2;
     const player=new TransformNode('overlay-contact-player',scene);player.position.set(0,0,4);
-    const encounter={active:true,corpseGone:false,actor:a.actor,animator:a.animator,asset:a.asset,brain,nodes,poseNodes:a.animator.poseNodes,playerAlive:true,radius:1.9,dt:1/60,hitCount:0,
+    const encounter={kind:'elena',sizeScale:MOURNING_SIZE_SCALE,damageAnchor:new Vector3(),skillHurtCapsule:BossEncounter.prototype.skillHurtCapsule,damageNumberPosition:BossEncounter.prototype.damageNumberPosition,active:true,corpseGone:false,actor:a.actor,animator:a.animator,asset:a.asset,brain,nodes,poseNodes:a.animator.poseNodes,playerAlive:true,radius:1.9,dt:1/60,hitCount:0,
       world:{},pendingEvents:[],combat:{},grab:{active:false,update(){}},gate:new MeleeContactGate(),knockVelocity:new Vector3(),
       alignPose:()=>a.animator.refreshPose(),contactSeparation:()=>2.15,hurtCapsules:()=>volumes.sample(),onDamage(){},onChange(){}};
     const contact={actionId:101,window:{id:'one',damage:10},blade:volumes.sample()[0].points.map(p=>[...p])};

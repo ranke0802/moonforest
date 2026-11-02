@@ -76,6 +76,19 @@ function step(f,dt,{move=null,roll=null,sample=true}={}){
 }
 function save(report){if(process.env.ELENA_CLEARANCE_REPORT==='1'){const dir=new URL('../reports/elena-clearance/',import.meta.url);mkdirSync(dir,{recursive:true});report.baseline=previousReport?.baseline??(previousReport?{generatedAt:previousReport.generatedAt,melee:previousReport.melee,escape:previousReport.escape.map(({closest,best,...row})=>({...row,best:best?{...best,path:undefined}:undefined}))}:undefined);writeFileSync(new URL('combat-audit.json',dir),JSON.stringify(report,null,2)+'\n');}}
 function contains(f,plan,p,{reserve=0}={}){return spellContains(plan,p,{radius:f.dimensions.spellRadius+reserve*f.dimensions.ratio});}
+
+test('real reduced witch takes one sword hit through every sampled cast direction and keeps casting',async t=>{
+ const f=await fixture(t),rows=[];
+ for(const pattern of ['corridor','fan','ring'])for(const angle of [0,2,4,6])for(const time of [.2,1,2]){
+  reset(f,angle,1.15);f.e.brain.nextSpell=MOURNING_SPELLS.findIndex(s=>s.pattern===pattern);f.e.brain.cast();f.e.brain.castLeadInRemaining=0;f.e.brain.time=time;
+  f.e.animator.transition('cast',{clipTime:time,castVariant:f.e.brain.spell.motion,actionId:f.e.brain.serial});f.e.animator.update(.2);f.e.alignPose();refreshPoseMatrices(f.e.poseNodes);
+  f.e.update=()=>{};f.controller.startAttack('slash');const hp=f.e.brain.hp;
+  for(let i=0;i<40;i++)step(f,1/30);
+  assert.ok(hp>f.e.brain.hp,`${pattern}/${angle}/${time}`);assert.equal(f.e.brain.mode,'attack');
+  rows.push(hp-f.e.brain.hp);
+ }
+ assert.equal(rows.length,36);assert.ok(rows.every(d=>d>0&&d<40),'one normal hit, without duplicate damage');
+});
 function nearestContact(strike,capsules,delta){
   let closest={gap:Infinity},reduction=Infinity;
   for(const contact of strike.contacts){

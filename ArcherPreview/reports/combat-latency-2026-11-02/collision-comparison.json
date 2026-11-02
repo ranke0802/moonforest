@@ -1,0 +1,69 @@
+{
+  "scope": "Deterministic desktop Node collision microbenchmark, not device FPS/GPU/temperature. Same 12000 sweeps, seven alternating runs after warmup.",
+  "baselineCommit": "e9dcaf0",
+  "cases": 12000,
+  "identicalHits": true,
+  "maxDistanceError": 0,
+  "before": [
+    {
+      "ms": 311.8912,
+      "hits": 4064
+    },
+    {
+      "ms": 308.1269,
+      "hits": 4064
+    },
+    {
+      "ms": 294.70309999999995,
+      "hits": 4064
+    },
+    {
+      "ms": 291.05700000000024,
+      "hits": 4064
+    },
+    {
+      "ms": 299.4094,
+      "hits": 4064
+    },
+    {
+      "ms": 308.6039999999998,
+      "hits": 4064
+    },
+    {
+      "ms": 300.0576000000001,
+      "hits": 4064
+    }
+  ],
+  "after": [
+    {
+      "ms": 54.131799999999885,
+      "hits": 4064
+    },
+    {
+      "ms": 54.316100000000006,
+      "hits": 4064
+    },
+    {
+      "ms": 48.96199999999999,
+      "hits": 4064
+    },
+    {
+      "ms": 48.42939999999999,
+      "hits": 4064
+    },
+    {
+      "ms": 53.335299999999734,
+      "hits": 4064
+    },
+    {
+      "ms": 54.365600000000086,
+      "hits": 4064
+    },
+    {
+      "ms": 48.871700000000146,
+      "hits": 4064
+    }
+  ],
+  "beforeMedianMs": 300.0576000000001,
+  "afterMedianMs": 53.335299999999734
+}

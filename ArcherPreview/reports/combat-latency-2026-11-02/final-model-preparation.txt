@@ -1,0 +1,65 @@
+BJS - [18:50:54]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:55]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:56]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:02]: Babylon.js v9.31.0 - Null engine
+✔ phase-one first summon also yields its preparation and reuses the prepared asset on resummon (1060.2653ms)
+✔ incremental exact-zero weight proof and all-morph bone boxes exactly match synchronous results on actual rigs (918.5877ms)
+✔ one hidden warm actor prepares stable real morph variants and transform performs zero new scans or shader readiness requests (969.7886ms)
+▶ map exit during load or a partially committed outline cancels hidden work and resumes the same single asset on return
+  ✔ load (990.9727ms)
+  ✔ bounds (830.9792ms)
+✔ map exit during load or a partially committed outline cancels hidden work and resumes the same single asset on return (1822.8392ms)
+▶ phase-one death or immediate phase-two selector joins in-flight preparation without exposing its partial actor
+  ✔ death (915.6842ms)
+  ✔ selector (1023.303ms)
+✔ phase-one death or immediate phase-two selector joins in-flight preparation without exposing its partial actor (1939.5336ms)
+✔ failed shader preparation stays hidden, does not retry in the update loop, and one explicit summon reuses its committed work (972.0709ms)
+BJS - [18:51:03]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:04]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:04]: Babylon.js v9.31.0 - Null engine
+✔ a never-ready shader cancels before any late completion, and immediate map return prepares under the new revision (851.5384ms)
+✔ disposing the owning scene during a preparation slice cannot resurrect or register a shadow actor (752.7414ms)
+✔ a shader deadline clears the hidden join, restores borrowed state and permits one explicit fresh request (785.5518ms)
+✔ map cancellation does not wait for a never-resolving model prefetch or leave a deadline timer behind (835.291ms)
+✔ enemy fade variant warms before opaque and restores mesh visibility on cancellation (3.1494ms)
+✔ hidden boss body and silhouette check the actual variants serially with a frame opportunity between each (0.2896ms)
+✔ a failed shader prepare does not proceed to expose subsequent unready variants (0.2212ms)
+✔ a never-ready shader cancels immediately, leaves no polling waiter and restores hot-swapping (45.5781ms)
+✔ the whole shader job has one45second deadline across variants and restores every material on timeout (0.5035ms)
+✔ the exact PBR submesh is polled, compilation errors reject and borrowed shader state is restored (0.2352ms)
+✔ cancelling an owned frame releases both its rAF and fallback/check timers without waiting for a displayed frame (0.3242ms)
+BJS - [18:50:54]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:55]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:55]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:56]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:56]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:50:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:51:01]: Babylon.js v9.31.0 - Null engine
+✔ hidden settled saint skips sampling/contact rig work and wakes to the original weighted pose at 30/60/slow frames (2731.8948ms)
+✔ distance-hidden saint restores during the first paused render without waiting for simulation (718.4876ms)
+✔ FoW beforeRender wakes a hidden idle before a paused shadow/body pass (786.9885ms)
+✔ same-frame approach, attack, hit, return-home, review and death never use deferred bones (375.9658ms)
+✔ phase-two sampling, morphs and cloth retain their existing cadence while hidden (793.3375ms)
+✔ a real blade contact hits a previously hidden idle in the same frame and still deduplicates its action (822.9691ms)
+✔ map hide-return, explicit resummon and scene disposal clear deferred state with stable resources (377.6658ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12961.5955

@@ -21,8 +21,9 @@ export class FrameDiagnostics {
     const time=this.frameStart,interval=this.interval,index=this.cursor;
     this.times[index]=time;this.intervals[index]=interval;this.work[index]=Math.max(0,now-time);
     this.cursor=(index+1)%this.times.length;this.count=Math.min(this.count+1,this.times.length);
-    if(interval>this.thresholdMs+.01){
-      this.events.push({atSeconds:Math.round((time-this.started)/100)/10,frameMs:Math.round(interval*10)/10,jsSubmitMs:Math.round(this.work[index]*10)/10,targetFps:this.targetFps,...context()});
+    const delayed=interval>this.thresholdMs+.01,busy=this.work[index]>this.thresholdMs+.01;
+    if(delayed||busy){
+      this.events.push({atSeconds:Math.round((time-this.started)/100)/10,frameMs:Math.round(interval*10)/10,jsSubmitMs:Math.round(this.work[index]*10)/10,trigger:delayed?(busy?'interval-and-current-work':'interval'):'current-work',targetFps:this.targetFps,...context()});
       if(this.events.length>32)this.events.shift();
     }
   }
@@ -120,6 +121,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
     report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
+    report.measurement+=' A delay event now records either a long preceding frame interval or long current JavaScript submission (trigger). frameMs ends at the current frame start; jsSubmitMs and context describe current work. They are not the same interval and must not be added or assumed to share one cause.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
     return report;
   };

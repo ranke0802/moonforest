@@ -77,6 +77,14 @@ test('disposal removes global cancellation listeners without retaining old map i
  }
 });
 
+test('null-target boundary event from a changing HUD label inside game does not cancel buffered charge',()=>{
+ let cancels=0;const {input,canvas}=setup({cancelAttackInput:()=>cancels++});
+ window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});
+ for(const type of ['pointerout','mouseout'])window.emit(type,{pointerType:'mouse',relatedTarget:null,target:canvas,clientX:500,clientY:300});
+ assert.equal(cancels,0);assert.equal(input.value().y,1);
+ window.emit('pointerout',{pointerType:'mouse',relatedTarget:null,target:canvas,clientX:1001,clientY:300});assert.equal(cancels,1);assert.equal(input.value().y,0);input.dispose();
+});
+
 test('E uses one potion per fresh press and ignores autorepeat and form typing',()=>{
   let uses=0;setup({potion:()=>uses++});
   const event={code:'KeyE',target:{tagName:'BODY'},repeat:false};

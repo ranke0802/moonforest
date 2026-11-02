@@ -104,7 +104,9 @@ export class BossBattle {
     }
     this.currentPlayer=player;
     const request=this.residentRevision,phase=this.residentPhase,models=phase===2?this.mourningModels:this.elenaModels,pool=phase===2?this.mourningPool:this.elenaPool;
-    const preparation=this.residentPreparation(request,{incremental:phase===2});this.residentPendingPreparation=preparation;
+    // Phase one also has a dense skinned mesh. Do not run its first outline/
+    // vertex preparation synchronously while the game or loading UI is live.
+    const preparation=this.residentPreparation(request,{incremental:true});this.residentPendingPreparation=preparation;
     this.residentPendingRevision=request;
     this.residentPendingPhase=phase;
     const pending=(async()=>{

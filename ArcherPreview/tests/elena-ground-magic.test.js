@@ -7,6 +7,11 @@ import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 const at=(plan,across,along,center=plan.origin)=>({x:center.x+plan.direction.z*across+plan.direction.x*along,z:center.z-plan.direction.x*across+plan.direction.z*along});
 const hit=(plan,position,radius=0)=>spellContains(plan,position,{radius});
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-6,`${a} != ${b}`);
+test('warning and full-alpha impact keep the same transparent render queue',t=>{
+ const {world}=fixture(t),fx=new GroundSpellTelegraph(world);
+ for(const alpha of [.65,.95,1,.65]){fx.rimMaterial.alpha=alpha;assert.equal(fx.rimMaterial.needAlphaBlendingForMesh(fx.rim),true);assert.equal(fx.rimMaterial.disableDepthWrite,true);}
+ fx.dispose();
+});
 function fixture(t,terrain){
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;
   t.after(()=>{scene.dispose();engine.dispose();});return {scene,world:{scene,terrain}};

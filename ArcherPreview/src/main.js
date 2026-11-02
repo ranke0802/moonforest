@@ -333,9 +333,13 @@ function setAttackHeld(source, held) {
   } else if (attackSources.delete(source)) controller?.setAttackHeld(attackSources.size > 0);
 }
 
-function cancelAttackInput(source) {
+function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
   if(source){if(!attackSources.delete(source)||attackSources.size)return;}
   else attackSources.clear();
+  // A captured HUD pointer can be released by the browser before pointerup.
+  // Stop holding, but retain an already accepted heavy attack for recovery.
+  // Global blur/pause/cancel still clears everything, including this buffer.
+  if(source&&preserveCompletedCharge&&controller?.queuedAttack==='judgment'){controller.setAttackHeld(false);return;}
   if(controller?.cancelAttackInput)controller.cancelAttackInput();
   else controller?.setAttackHeld(false);
 }
@@ -896,7 +900,8 @@ try {
     attackButton.setPointerCapture(event.pointerId); setAttackHeld(`button:${event.pointerId}`, true);
   });
   attackButton.addEventListener('pointerup', event => setAttackHeld(`button:${event.pointerId}`, false));
-  for (const name of ['pointercancel', 'lostpointercapture']) attackButton.addEventListener(name, event => cancelAttackInput(`button:${event.pointerId}`));
+  attackButton.addEventListener('pointercancel', event => cancelAttackInput(`button:${event.pointerId}`));
+  attackButton.addEventListener('lostpointercapture', event => cancelAttackInput(`button:${event.pointerId}`,{preserveCompletedCharge:true}));
   attackButton.addEventListener('click', event => { if (event.detail === 0 && performance.now() - lastPointerAttack > 350) actions.attack(); });
   const releaseAttack = () => cancelAttackInput();
   window.addEventListener('blur', releaseAttack);

@@ -57,6 +57,13 @@ function assertWarmInvisible(f){
 }
 function step(f,frames=1){for(let i=0;i<frames;i++){f.battle.update(1/30,f.player);f.scene._animate(0);f.battle.poseAndContacts(f.player,{state:'idle'},null,null);}}
 
+test('phase-one first summon also yields its preparation and reuses the prepared asset on resummon',async t=>{
+ const f=await fixture(t);let frames=0;f.battle.preparationOptions={frame:async()=>{frames++;}};
+ await f.battle.activateResident(f.player,{reset:true});const e=f.battle.encounters[0],stats=e.preparationStats;
+ assert.ok(frames>2);assert.ok(stats.steps.some(step=>step.name==='skin-flags'));assert.equal(e.assetPrepared,true);
+ const before=counts(f);await f.battle.activateResident(f.player,{reset:true});assert.strictEqual(e.preparationStats,stats);assert.deepEqual(counts(f),before);
+});
+
 test('incremental exact-zero weight proof and all-morph bone boxes exactly match synchronous results on actual rigs',async t=>{
  const f=await fixture(t),asset=f.mourningModels.container;let yields=0;const preparation=createBossPreparation({frame:async()=>{yields++;},budgetMs:1.5,maxBlocks:2});
  const results=[];

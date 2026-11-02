@@ -2,11 +2,11 @@ import {createBossPreparation} from './boss-preparation.js';
 // Compile body and silhouette before showing the actor. Yield between shader
 // variants, polling the REAL submesh/skin/morph variant ourselves. Babylon's
 // forceCompilationAsync starts a private 16ms loop with no cancellation/timeout.
-export async function prepareBossShaders(asset,{preparation,frame,now,timeoutMs=45000}={}){
+export async function prepareBossShaders(asset,{preparation,frame,now,shadows,timeoutMs=45000}={}){
   const job=preparation??createBossPreparation({frame,now,timeoutMs}),states=new Map(),visibilityStates=new Map();
   try{
     for(const mesh of asset.meshes){
-      if(!mesh.getTotalVertices()||!(mesh.metadata?.moonforestOutline||mesh.material?.metadata?.moonforestMonsterToon))continue;
+      if(!mesh.getTotalVertices()||!(mesh.metadata?.moonforestOutline||mesh.metadata?.moonforestWarmMaterial||mesh.material?.metadata?.moonforestMonsterToon))continue;
       const material=mesh.material,visibility=mesh.visibility;
       visibilityStates.set(mesh,visibility);
       if(!states.has(material)){states.set(material,material.allowShaderHotSwapping);material.allowShaderHotSwapping=false;}
@@ -22,6 +22,20 @@ export async function prepareBossShaders(asset,{preparation,frame,now,timeoutMs=
             const done=subMesh?material.isReadyForSubMesh(mesh,subMesh,false):material.isReady(mesh,false),effect=subMesh?.effect??material.getEffect?.();
             if(!done){ready=false;if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');}
           }
+          if(ready)break;await job.sleep(16);
+        }
+      }
+      // Shadow effects have their own render-pass cache. Warm the exact caster
+      // variant without registering a hidden actor or drawing an extra shadow.
+      const shadowMap=shadows?.getShadowMap?.(),scene=mesh.getScene?.(),engine=scene?.getEngine();
+      if(!mesh.metadata?.moonforestOutline&&shadowMap&&engine){
+        await job.nextFrame();
+        for(;;){
+          job.check();let ready=true;const previous=engine.currentRenderPassId;
+          try{
+            engine.currentRenderPassId=shadowMap.renderPassId;
+            for(const sub of mesh.subMeshes??[])if(!shadows.isReady(sub,false,material.needAlphaBlendingForMesh(mesh)))ready=false;
+          }finally{engine.currentRenderPassId=previous;}
           if(ready)break;await job.sleep(16);
         }
       }

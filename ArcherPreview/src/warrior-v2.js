@@ -38,8 +38,12 @@ export class WarriorV2Controller {
     // Further damage can reduce HP, but cannot shorten a block's control lock.
     if(this.groggy&&reason!=='blocked')return false;
     if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
+    const buffered=!force&&reason!=='blocked'&&['dodge','shieldPush'].includes(this.action?.state)&&this.queuedAttack==='judgment';
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=Math.max(this.groggy?this.staggerRemaining:0,duration);this.staggerLocked=reason==='blocked';
+    // A completed deliberate charge survives ordinary defensive recovery hits.
+    // Forced knockdown/capture, blocked attacks and lost focus still cancel it.
+    if(buffered)this.queuedAttack='judgment';
     return true;
   }
   attack(){
