@@ -1,0 +1,188 @@
+{
+  "tests": {
+    "tests": 1141,
+    "pass": 1141,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "browserAutomation": false,
+  "physicalMobileTest": false,
+  "baseline": "341892c",
+  "resourceAudit": {
+    "baseline": "341892c",
+    "resourceRevision": "681d5d2e004f0541c08af2cf1c6f6cfbc372c8f33c55bdb453fa6b7db5211eb5",
+    "priorFiles": 1006,
+    "currentFiles": 1103,
+    "changedOrRemovedPreviousFiles": [],
+    "newFiles": 97,
+    "newFileBytes": 14190650,
+    "unchangedFiles": 1006,
+    "policyManifests": [
+      {
+        "path": "warrior-v3.json",
+        "unchanged": true
+      },
+      {
+        "path": "warrior-v3-ios.json",
+        "unchanged": true
+      },
+      {
+        "path": "village.json",
+        "unchanged": true
+      },
+      {
+        "path": "monster-forest.json",
+        "unchanged": true
+      },
+      {
+        "path": "witch-cave.json",
+        "unchanged": true
+      },
+      {
+        "path": "elena.json",
+        "unchanged": true
+      },
+      {
+        "path": "mourning-elena.json",
+        "unchanged": true
+      }
+    ],
+    "models": [
+      {
+        "id": "apple",
+        "triangles": 628,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "apple-pie",
+        "triangles": 1512,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "pet-food",
+        "triangles": 1543,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "contaminated-vial",
+        "triangles": 1362,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "clue-bandage",
+        "triangles": 1894,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "moon-dew-herb",
+        "triangles": 1402,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "memory-locket",
+        "triangles": 2226,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "goblin-club",
+        "triangles": 1478,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "clue-journal",
+        "triangles": 1662,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "clue-satchel",
+        "triangles": 3071,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "chest-common",
+        "triangles": 4479,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      },
+      {
+        "id": "waypost",
+        "triangles": 1918,
+        "texture": 1024,
+        "tiers": 3,
+        "compressed": true
+      }
+    ],
+    "newTextureMaximum": 2048
+  },
+  "deployment": {
+    "files": 1636,
+    "bytes": 615326052,
+    "resourceRevision": "681d5d2e004f0541c08af2cf1c6f6cfbc372c8f33c55bdb453fa6b7db5211eb5"
+  },
+  "sourceHashes": {
+    "README.md": "434a6a9606faefaf26be24dd86504b3bf1d817838dfcef90fcc6c62a0d18ff87",
+    "index.html": "735d7de915709b47ef18722ed2a48d416ad72339eb4e3a4839c5ba02ceb5a638",
+    "public/assets/great-plains-ground.json": "3fb3e0ad4934de0786783fc6ddc338e809db6a79fc91ddd4e023759cf1a278dc",
+    "public/assets/great-plains.json": "ec444b35453784ce9a456533cae1395c37ac1c2657456900daa74fa3113589a3",
+    "public/assets/quest-props.json": "fc15eda93d5c6d13d4d7fd017a162fe5121a78dce9173a002657a07c7ce11094",
+    "public/assets/resource-sizes.json": "1a797171c68e5886d049e386028c873999ba73003cfcd439e28bf2487ea16690",
+    "quest-assets.html": "b62a0e960ec1bb4f68b788cf6baa03a5ba1a98020e3b8b54aa813bf6d2cef6bf",
+    "scripts/bake-great-plains-ground.py": "6e3f4d0fa1c9611dc889ce1dd70ace4250dcf422051b6ce0a2ca2aa984687108",
+    "scripts/build-plains-review.mjs": "5ee29fa9870fa1db09723066cd226b62c624371438022ffe434f7d440b399d37",
+    "scripts/pack-plains-assets.mjs": "b86eefa72fcce4ffcc52c41eb68c5239285a1603b0fc8d6cdfc0010895168879",
+    "scripts/plains-texture-tiers.py": "b8b00b1c00341ee25a460eb3e7d936475ac495c99fbb05e8c5b9b1330bb7776a",
+    "src/boss-encounter.js": "35f371526a4103de8eb45d0b91b966dc9a7d4224c3a908dc8bf03d0c284107f8",
+    "src/chapter-quest-data.js": "53ad976f05d548ca463d696ae217ee1419463cfd2236d5ca7825dc205fb477d4",
+    "src/chapter-quest-points.js": "91334605ce64f246de62c3b2c0723784d4705f723184b367cca5e0e034ccd598",
+    "src/chapter-quest-props.js": "4c7ec508b4d1b3bb1d640230213b5328d3da1039e3e0a1fa826db8f7731fe098",
+    "src/chapter-quest-state.js": "0733711598f17b17fd7d62a83ca5c1679f49e57df07fae2c4389878a3face5d6",
+    "src/chapter-quest.css": "ae10503e2d57b6f6862f1e6ebcb8823bee4613b7851677885f39e28a34dff183",
+    "src/chapter-quest.js": "eed15be93c977821c38ace08a16e0a44da464b72726c127138a1eecbe0e6aab3",
+    "src/dot-minimap.js": "3fa4d650e7976979a6ea5da1d14ccd0d711943b80d3421074077ccfdbfec40cf",
+    "src/gold-loot.js": "216d21e922c76bc4bd19ab0158d240ad1616227c23349c4e9a87c7c564392fd0",
+    "src/great-plains-decor.js": "750793876a900e599615b7b645fc0af41c17dd321731525f72a0b6cb89c7e106",
+    "src/great-plains-layout.js": "b86cb0cad23070763deebb15f29289c3571654f7f10e561f6679c8dab4eeb58d",
+    "src/great-plains-terrain.js": "80a04c794bff5791105284e7e7a354746f16aeb057f27fa1aeb3c4029a458c0d",
+    "src/main.js": "b3a979e3ef6de579e898590c9e00a9da14121d7eb3141f730e0786ec8374025b",
+    "src/map-navigation-cache.js": "d4157195e9ffd34cf87b5a159235b647a8765e96e94a52efb5c956f75ca93220",
+    "src/map-resume.js": "415ee5788a59ba96ea89382cce43eaa273ae3c967ba9e6e98160e25001632aaf",
+    "src/map-route.js": "c2896a9789501f9debb3bf3a5a7d25d0d800ca22b2fb527bce6697ae8a7dbd57",
+    "src/map-travel.js": "dd9032fe3721695b86cedfad9761fa72ac7d209f7375be157624d599232d59c3",
+    "src/plains-review-controls.js": "daaac635ecd0443192558c8c26d4982fa94d45a20ffa99eb0183b73a44168577",
+    "src/player-texture-profile.js": "f7d9ee89dc379f3e6a71bb4fa624fffab9e33773ec5e43c548f026719214e02b",
+    "src/quest-asset-review.js": "cc100ff1559eb0df01e4d22e44a4a4d9dfcb0438320a197e93f46d7bdbc981bf",
+    "src/ui-test.css": "0925e261811409d0bdfbc7a6fa52b12faf3202b6b9fed185aacf4ee7c324df17",
+    "src/world-limits.js": "5e076320ae10f10d7b5ceec13b0a0cc86c0da051e5bf4533abdb740a31cbc2f2",
+    "src/world.js": "74c143b6a19e626812f6aa81aa9a6fd7143b7dfd22f17833e0eea652939656cf",
+    "tests/camera-follow-lifecycle.test.js": "996f8b0c4c13c8195f66a850dfd8bc52f6c5fcc92e55da185381637dc3463e56",
+    "tests/cave-portal-facing.test.js": "ffa1fe97c3a27af09fd22ba38aa32c523b4c0bf8ce3e83e5660c4b32699a931b",
+    "tests/chapter-quest.test.js": "b449e22f108e72d8ef100fb92a709794cd51ab2136c28f8b28ba2f55cd8a0720",
+    "tests/dot-minimap.test.js": "038ddfd51ccefcfc311eb788be90c93b34696b9d84ba58b8a12527d02c18a8ef",
+    "tests/great-plains.test.js": "df7db1c92c571ba736b9ae34561e5d0e8b3ebe52255c02a2e7f212d681407f6b",
+    "tests/ios-playback-recovery.test.js": "a7c81877c53bff67108a213154dcb55221d98b6dd36e4dc5088fcd3c7d393520",
+    "tests/quest-prop-lifecycle.test.js": "bc169c6f0bb92332ba218f37a4ce75569b70955ebd6af31e2b01d969f31e63b5",
+    "tests/startup-frame-failure.test.js": "567849e4f1454721d80c355b9a35f518bbc23010333b4c0bb1e1176b9ef54edf"
+  }
+}

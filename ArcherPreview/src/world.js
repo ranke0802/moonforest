@@ -14,6 +14,9 @@ import { villageRenderRange } from './village-policy.js';
 
 import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
 import {createMonsterForestTerrain} from './monster-forest-terrain.js';
+import {PLAINS_PLACEMENTS,plainsObstacles} from './great-plains-layout.js';
+import {createGreatPlainsTerrain} from './great-plains-terrain.js';
+import {configurePlainsDecor} from './great-plains-decor.js';
 import {retainMapEffect} from './map-shader-cache.js';
 import {CAVE_PLACEMENTS,caveObstacles} from './witch-cave-layout.js';
 import {createWitchCaveTerrain} from './witch-cave-terrain.js';
@@ -24,16 +27,16 @@ import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 const caveTrainingSpawn={x:-39,z:39};
-function mapNavigation({cave,forest,village}){
-  const obstacles=cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
-  const training=TRAINING_OBSTACLES.map(o=>cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
+function mapNavigation({cave,forest,plains,village}){
+  const obstacles=plains?plainsObstacles():cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
+  const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
   const Navigation=cave?CaveNavigation:village?VillageNavigation:ArenaNavigation;
   return new Navigation([...obstacles,...training]);
 }
 
-export function createWorld(engine, {village=false,forest=false,cave=false,warrior=village||forest||cave,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
-  village=village||forest||cave;
-  setWorldCharacter(cave?'warrior-v5':forest?'warrior-v4':village?'warrior-v3':'archer');
+export function createWorld(engine, {village=false,forest=false,cave=false,plains=false,warrior=village||forest||cave||plains,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
+  village=village||forest||cave||plains;
+  setWorldCharacter(plains?'warrior-plains':cave?'warrior-v5':forest?'warrior-v4':village?'warrior-v3':'archer');
   const scene = new Scene(engine);
   // Input uses our joystick/camera router and analytic combat shapes, never mesh picking.
   scene.skipPointerMovePicking = scene.skipPointerDownPicking = scene.skipPointerUpPicking = true;
@@ -58,7 +61,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
   camera.inputs.clear();
   const sky = new MovingSky(scene);
   const mountains = createMountainBackdrop(scene);
-  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(1.9,1.3,1.9);mountains.freezeWorldMatrix();}
+  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(plains?3.2:1.9,1.3,plains?3.2:1.9);mountains.freezeWorldMatrix();}
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);
@@ -75,7 +78,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
 
-  const terrain=village?cachedMapTerrain(engine,cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
+  const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
@@ -120,28 +123,29 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
   for(const mat of [ringMaterial,moteMaterial])mat.freeze();
-  const navigation=mapNavigation({cave,forest,village});
+  const navigation=mapNavigation({cave,forest,plains,village});
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
-  const mapId=cave?'witch-cave':forest?'monster-forest':village?'village':'training';
+  const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':village?'village':'training';
   warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS);
-  const world={ground,forest,cave,mapId,environmentManifest:cave?'witch-cave':forest?'monster-forest':'village',groundManifest:cave?'witch-cave-ground':forest?'monster-forest-ground':'village-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
+  const world={ground,forest,cave,plains,mapId,environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);}};
-  world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);return world;
+  world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);configurePlainsDecor(world);return world;
 }
 
 // Called after the old streamed environment has drained and released its GPU
 // resources. Keep the same scene, canvas, camera, player and terrain identity.
 export function replaceWorldMap(world,character){
-  if(!world.village||!['warrior-v3','warrior-v4','warrior-v5'].includes(character))throw new Error('Unsupported map transition');
-  const forest=character==='warrior-v4',cave=character==='warrior-v5';setWorldCharacter(character);
+  if(!world.village||!['warrior-v3','warrior-plains','warrior-v4','warrior-v5'].includes(character))throw new Error('Unsupported map transition');
+  const forest=character==='warrior-v4',cave=character==='warrior-v5',plains=character==='warrior-plains';setWorldCharacter(character);
   world.caveFog?.dispose();world.caveFog=null;
   retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
-  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
-  const mapId=cave?'witch-cave':forest?'monster-forest':'village';
-  Object.assign(world,{forest,cave,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,environment:null});
+  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
+  const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
+  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
+  world.mountains.unfreezeWorldMatrix();world.mountains.scaling.set(plains?3.2:1.9,1.3,plains?3.2:1.9);world.mountains.freezeWorldMatrix();
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
@@ -154,4 +158,5 @@ export function replaceWorldMap(world,character){
   world.scene.fogStart=world.villagePolicy.fogStart;world.scene.fogEnd=world.villagePolicy.fogEnd;
   configureCaveAtmosphere(world);
   configureCaveFog(world);
+  configurePlainsDecor(world);
 }

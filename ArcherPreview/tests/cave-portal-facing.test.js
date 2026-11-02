@@ -50,8 +50,9 @@ test('routed pose rotates actor, camera and world pan together and repeated cave
  }finally{engine.dispose();}
 });
 
-test('village route and legacy callers keep the established half turn; disconnected selections keep their pose',()=>{
- for(const [from,to]of [['warrior-v3','warrior-v4'],['warrior-v4','warrior-v3']])near(portalHeadingTurn(from,to),Math.PI);
+test('village now connects through plains; legacy callers and disconnected selections keep their pose',()=>{
+ for(const [from,to]of [['warrior-v3','warrior-plains'],['warrior-plains','warrior-v3']]){const {outward,inward}=corridors(from,to);assert.ok(Vector3.TransformNormal(outward,Matrix.RotationY(portalHeadingTurn(from,to))).equalsWithEpsilon(inward,1e-7));}
+ for(const [from,to]of [['warrior-v3','warrior-v4'],['warrior-v4','warrior-v3']])near(portalHeadingTurn(from,to),0);
  for(const [from,to]of [['warrior-v3','warrior-v5'],['warrior-v5','warrior-v3'],['warrior-v5','warrior-v5'],['archer','warrior-v5']]){
   assert.equal(portalHeadingTurn(from,to),0);const actor={rotation:{y:1.2}},camera={alpha:-2,beta:1.1,radius:13},pan={x:2,y:.3,z:-4};
   carryPortalPose(actor,camera,pan,{from,to});assert.equal(actor.rotation.y,1.2);assert.deepEqual(camera,{alpha:-2,beta:1.1,radius:13});assert.deepEqual(pan,{x:2,y:.3,z:-4});
@@ -82,7 +83,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}},modelFaults=[];
  const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},hide:noop,activateResident:async()=>{boss.activations++;},activations:0};
  const equipment=Object.freeze({sword:'existing-sword',shield:'existing-shield'}),orientation={type:'landscape-primary'},calls=[];
- const boundary={saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,
+ const boundary={chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},
   frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:new LoadDiagnostics(),loadingView:{begin:noop,download:noop,stream:noop,preparing:noop,reveal:noop,fail:noop},
@@ -94,7 +95,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const runtime=Function(...Object.keys(boundary),`
   let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
   const uiTest=null,uiTestEnabled=false;const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
-  const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4';
+  const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
   ${leaveSource}\n${reviewSource}\n${mapSource}
   return {get transition(){return mapTransition;},prepareElenaReview,snapshot(){return {character,elenaReviewMode,reviewActive:!!elenaReview,ready,loadingAsset,equipment,orientation};}};
  `)(...Object.values(boundary));

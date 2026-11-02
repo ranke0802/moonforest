@@ -1,0 +1,1011 @@
+{
+  "version": 1,
+  "complete": true,
+  "shading": "painted-toon-shadow",
+  "sourceSettings": {
+    "aiModel": "meshy-t2.5",
+    "enablePbr": false,
+    "textureResolution": "2k"
+  },
+  "compression": {
+    "format": "KTX2/Basis",
+    "defaultCodec": "etc1s",
+    "maxResolution": 2048
+  },
+  "meshCompression": {
+    "format": "EXT_meshopt_compression",
+    "lossless": true
+  },
+  "geometryLod": {
+    "nearColorResolution": 2048
+  },
+  "homes": 0,
+  "id": "quest-props",
+  "availableAssetCount": 12,
+  "assets": {
+    "apple": {
+      "name": "apple",
+      "category": "prop",
+      "bounds": [
+        0.895018994808197,
+        0.9555659890174866,
+        0.8364260196685791
+      ],
+      "height": 0.1,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/236c5d4c4a8870e2e6f026cb7ff7cf0a6e02df2d86e8a959c9771a8d4bd76852.gltf",
+          "resources": [
+            "./content/229b935b7937f9866179e3141f4e42aea9bee06b2151e67f19ad429d2b9b9796.bin",
+            "./content/efec09ab38ac4d650c72de2c1a3cdc5b34a5b545cdbe41245b4def9e1cd6faa0.ktx2",
+            "./content/236c5d4c4a8870e2e6f026cb7ff7cf0a6e02df2d86e8a959c9771a8d4bd76852.gltf"
+          ],
+          "bytes": 251718,
+          "textureSize": 1024,
+          "triangles": 628
+        },
+        {
+          "level": 1,
+          "model": "./content/cd852bf08ee492217b8175acec0eb8251f68fa77ce38eaa002eaaaeecf3d718e.gltf",
+          "resources": [
+            "./content/229b935b7937f9866179e3141f4e42aea9bee06b2151e67f19ad429d2b9b9796.bin",
+            "./content/5a71065a98a0f503cfb14a67d7ede85d8b26803ddc201392784b169e82b6f954.ktx2",
+            "./content/cd852bf08ee492217b8175acec0eb8251f68fa77ce38eaa002eaaaeecf3d718e.gltf"
+          ],
+          "bytes": 113162,
+          "textureSize": 512,
+          "triangles": 628
+        },
+        {
+          "level": 2,
+          "model": "./content/ed77ece2c8f8928db65a4f0fdb508a3d06e732fe70d16477f904bb8867aaab35.gltf",
+          "resources": [
+            "./content/229b935b7937f9866179e3141f4e42aea9bee06b2151e67f19ad429d2b9b9796.bin",
+            "./content/8a327fccb1e54aed1966d84d920bc17c9306b594156933ea6cedd22e1f883326.ktx2",
+            "./content/ed77ece2c8f8928db65a4f0fdb508a3d06e732fe70d16477f904bb8867aaab35.gltf"
+          ],
+          "bytes": 56144,
+          "textureSize": 256,
+          "triangles": 628
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/236c5d4c4a8870e2e6f026cb7ff7cf0a6e02df2d86e8a959c9771a8d4bd76852.gltf",
+        "resources": [
+          "./content/229b935b7937f9866179e3141f4e42aea9bee06b2151e67f19ad429d2b9b9796.bin",
+          "./content/efec09ab38ac4d650c72de2c1a3cdc5b34a5b545cdbe41245b4def9e1cd6faa0.ktx2",
+          "./content/236c5d4c4a8870e2e6f026cb7ff7cf0a6e02df2d86e8a959c9771a8d4bd76852.gltf"
+        ],
+        "bytes": 251718,
+        "textureSize": 1024,
+        "triangles": 628
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/56d406f8b519c46e0b0769dcbc7a3f5b99bc64d4d4c1bd70c91311b40bf1aa6f.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 716874,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/56d406f8b519c46e0b0769dcbc7a3f5b99bc64d4d4c1bd70c91311b40bf1aa6f.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-a263-7610-b05f-0fa06868dd41",
+      "triangles": 628
+    },
+    "apple-pie": {
+      "name": "apple-pie",
+      "category": "prop",
+      "bounds": [
+        0.955566018819809,
+        0.2065429985523224,
+        0.947266012430191
+      ],
+      "height": 0.05403682071266449,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/62c0edc50423e98101db791a655af26c2182a06e95872620a4d0f73b15f0d3fe.gltf",
+          "resources": [
+            "./content/3a46273dbb4560a9e657685b4d85b4449cd4d10a049e8dc9382f2e452f2d089f.bin",
+            "./content/1544c8786a77a5243a34f02cfb1ff028c84b8156abcba13e189997e701927349.ktx2",
+            "./content/62c0edc50423e98101db791a655af26c2182a06e95872620a4d0f73b15f0d3fe.gltf"
+          ],
+          "bytes": 295719,
+          "textureSize": 1024,
+          "triangles": 1512
+        },
+        {
+          "level": 1,
+          "model": "./content/77b954a0c9204d690b5b7e2263be8028d5926ea7fa4f4b026821c3a6b8c70fa6.gltf",
+          "resources": [
+            "./content/3a46273dbb4560a9e657685b4d85b4449cd4d10a049e8dc9382f2e452f2d089f.bin",
+            "./content/910e27cf1282b97a3cc5af68a7df04e2c4ee79570893527708ef0675d6bbb8c2.ktx2",
+            "./content/77b954a0c9204d690b5b7e2263be8028d5926ea7fa4f4b026821c3a6b8c70fa6.gltf"
+          ],
+          "bytes": 157602,
+          "textureSize": 512,
+          "triangles": 1512
+        },
+        {
+          "level": 2,
+          "model": "./content/dbb435f10c9dc721ce9204337d61dc877b97b6cd24f64071cf9b03ce904599fe.gltf",
+          "resources": [
+            "./content/3a46273dbb4560a9e657685b4d85b4449cd4d10a049e8dc9382f2e452f2d089f.bin",
+            "./content/ad84059d84f7a083396aae7616dace90947bb19bf2b16ea195e217855f7b3217.ktx2",
+            "./content/dbb435f10c9dc721ce9204337d61dc877b97b6cd24f64071cf9b03ce904599fe.gltf"
+          ],
+          "bytes": 101673,
+          "textureSize": 256,
+          "triangles": 1512
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/62c0edc50423e98101db791a655af26c2182a06e95872620a4d0f73b15f0d3fe.gltf",
+        "resources": [
+          "./content/3a46273dbb4560a9e657685b4d85b4449cd4d10a049e8dc9382f2e452f2d089f.bin",
+          "./content/1544c8786a77a5243a34f02cfb1ff028c84b8156abcba13e189997e701927349.ktx2",
+          "./content/62c0edc50423e98101db791a655af26c2182a06e95872620a4d0f73b15f0d3fe.gltf"
+        ],
+        "bytes": 295719,
+        "textureSize": 1024,
+        "triangles": 1512
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/9a49d7b3332cace8ebf610f6b18617cfcbb6af4a9332b9d565b075d409618610.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 682590,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/9a49d7b3332cace8ebf610f6b18617cfcbb6af4a9332b9d565b075d409618610.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-aea5-74c3-a5e2-e25b8e3a0ebd",
+      "triangles": 1512
+    },
+    "pet-food": {
+      "name": "pet-food",
+      "category": "prop",
+      "bounds": [
+        0.9555659890174866,
+        0.22509799897670746,
+        0.9477540254592896
+      ],
+      "height": 0.05182432228023701,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/4dad8015eda072969740c4310ceaa4241300ff2f04d765943f894dbf97c3412e.gltf",
+          "resources": [
+            "./content/9c8f63c7245fc68c6cd68810c7d41e1bc12464dd7a3b1e8039e66aad9cef12e1.bin",
+            "./content/28ed2ce2726ab33d1cc902f85526e2315e729240f614d6811369b99d677a7aaa.ktx2",
+            "./content/4dad8015eda072969740c4310ceaa4241300ff2f04d765943f894dbf97c3412e.gltf"
+          ],
+          "bytes": 262477,
+          "textureSize": 1024,
+          "triangles": 1543
+        },
+        {
+          "level": 1,
+          "model": "./content/2c5b7affe3ee45f7ce122c7424e3241c65df38f4d07ce79d150949ee7976c75a.gltf",
+          "resources": [
+            "./content/9c8f63c7245fc68c6cd68810c7d41e1bc12464dd7a3b1e8039e66aad9cef12e1.bin",
+            "./content/3e60fe91b69674e29ef4d9f1204bef8d476457297e146a0d8c3073d7985e7a13.ktx2",
+            "./content/2c5b7affe3ee45f7ce122c7424e3241c65df38f4d07ce79d150949ee7976c75a.gltf"
+          ],
+          "bytes": 129214,
+          "textureSize": 512,
+          "triangles": 1543
+        },
+        {
+          "level": 2,
+          "model": "./content/698630fa8e939137c744c81ff703e61b6abe41609bf68611cd1bbfe516f3ed6c.gltf",
+          "resources": [
+            "./content/9c8f63c7245fc68c6cd68810c7d41e1bc12464dd7a3b1e8039e66aad9cef12e1.bin",
+            "./content/0076b640801bd513ab863dc5e7cebedc1dde7b52996cb1c3800ff5cf64e335ba.ktx2",
+            "./content/698630fa8e939137c744c81ff703e61b6abe41609bf68611cd1bbfe516f3ed6c.gltf"
+          ],
+          "bytes": 76232,
+          "textureSize": 256,
+          "triangles": 1543
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/4dad8015eda072969740c4310ceaa4241300ff2f04d765943f894dbf97c3412e.gltf",
+        "resources": [
+          "./content/9c8f63c7245fc68c6cd68810c7d41e1bc12464dd7a3b1e8039e66aad9cef12e1.bin",
+          "./content/28ed2ce2726ab33d1cc902f85526e2315e729240f614d6811369b99d677a7aaa.ktx2",
+          "./content/4dad8015eda072969740c4310ceaa4241300ff2f04d765943f894dbf97c3412e.gltf"
+        ],
+        "bytes": 262477,
+        "textureSize": 1024,
+        "triangles": 1543
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/a58e266d5ceea35f6cd2e19c9ce30ddf1f48da5a8a0cbd6731d95fcc495a179e.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 699540,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/a58e266d5ceea35f6cd2e19c9ce30ddf1f48da5a8a0cbd6731d95fcc495a179e.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-b76f-71c0-a605-b65caeff7ca0",
+      "triangles": 1543
+    },
+    "contaminated-vial": {
+      "name": "contaminated-vial",
+      "category": "prop",
+      "bounds": [
+        0.6616219878196716,
+        0.9521479904651642,
+        0.518066018819809
+      ],
+      "height": 0.18,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/2f5f85bf23544840448b79c323278563514fd6933da1652fe13192ac427faa72.gltf",
+          "resources": [
+            "./content/639f6bfa2288176cebcf8404e0b6e11b9ad110b32bef7a7d6c6ea7ad6b50da1c.bin",
+            "./content/74649b19d9c81aebc69979723b9ae81c456f197c993173923bfa669c6e6199bd.ktx2",
+            "./content/2f5f85bf23544840448b79c323278563514fd6933da1652fe13192ac427faa72.gltf"
+          ],
+          "bytes": 293945,
+          "textureSize": 1024,
+          "triangles": 1362
+        },
+        {
+          "level": 1,
+          "model": "./content/6ce01b59c8b281719a938d99d743e136fda2cc96fcca6e39918ec63cc89ae72d.gltf",
+          "resources": [
+            "./content/639f6bfa2288176cebcf8404e0b6e11b9ad110b32bef7a7d6c6ea7ad6b50da1c.bin",
+            "./content/732d2e165f1d37a82ffb1b458c853c4b499850ccb426b6d25a912dd9918abb6e.ktx2",
+            "./content/6ce01b59c8b281719a938d99d743e136fda2cc96fcca6e39918ec63cc89ae72d.gltf"
+          ],
+          "bytes": 145349,
+          "textureSize": 512,
+          "triangles": 1362
+        },
+        {
+          "level": 2,
+          "model": "./content/03e9ad0aac1a2902578e419f7dbfa4754fe4c39514a3820dec9c69e4b330fe72.gltf",
+          "resources": [
+            "./content/639f6bfa2288176cebcf8404e0b6e11b9ad110b32bef7a7d6c6ea7ad6b50da1c.bin",
+            "./content/f3d3ee1bfed5eca1642537d1a4969d6ae5a74db2874d0ff7c6970e9e11a15291.ktx2",
+            "./content/03e9ad0aac1a2902578e419f7dbfa4754fe4c39514a3820dec9c69e4b330fe72.gltf"
+          ],
+          "bytes": 86122,
+          "textureSize": 256,
+          "triangles": 1362
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/2f5f85bf23544840448b79c323278563514fd6933da1652fe13192ac427faa72.gltf",
+        "resources": [
+          "./content/639f6bfa2288176cebcf8404e0b6e11b9ad110b32bef7a7d6c6ea7ad6b50da1c.bin",
+          "./content/74649b19d9c81aebc69979723b9ae81c456f197c993173923bfa669c6e6199bd.ktx2",
+          "./content/2f5f85bf23544840448b79c323278563514fd6933da1652fe13192ac427faa72.gltf"
+        ],
+        "bytes": 293945,
+        "textureSize": 1024,
+        "triangles": 1362
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/861a8ceac68e43d81ea5f65ac7b659fc6a18a8d1b676ecee27f79f1b18b18722.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 750403,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/861a8ceac68e43d81ea5f65ac7b659fc6a18a8d1b676ecee27f79f1b18b18722.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-f2a0-7679-ba0b-09cc5b029f20",
+      "triangles": 1362
+    },
+    "clue-bandage": {
+      "name": "clue-bandage",
+      "category": "prop",
+      "bounds": [
+        0.589356005191803,
+        0.3779290020465851,
+        0.9497079849243164
+      ],
+      "height": 0.15917692934916317,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/4a49f7fc1354fa1b94cca65cbe0cd80d1eb64705fc1aa2fa2a483f13f3ab1b7c.ktx2",
+            "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf"
+          ],
+          "bytes": 296975,
+          "textureSize": 1024,
+          "triangles": 1894
+        },
+        {
+          "level": 1,
+          "model": "./content/626dc2bebeef93926cca82089e8c8a15fc127a2d8c9a0e9488ba20c5599d973f.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/b6bfb902f9ca0d1816aaa5631cd4e37fe015811441b4010052176ff040bbcc2c.ktx2",
+            "./content/626dc2bebeef93926cca82089e8c8a15fc127a2d8c9a0e9488ba20c5599d973f.gltf"
+          ],
+          "bytes": 163664,
+          "textureSize": 512,
+          "triangles": 1894
+        },
+        {
+          "level": 2,
+          "model": "./content/54209baf2557199c933e162ef2a77e125674d1bf8a17317081f0377ca0e7bf92.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/77bccb39e528c47a0d77618793cd87a87ccbcee5c5bf499ecaefdd99657fc02f.ktx2",
+            "./content/54209baf2557199c933e162ef2a77e125674d1bf8a17317081f0377ca0e7bf92.gltf"
+          ],
+          "bytes": 110803,
+          "textureSize": 256,
+          "triangles": 1894
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf",
+        "resources": [
+          "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+          "./content/4a49f7fc1354fa1b94cca65cbe0cd80d1eb64705fc1aa2fa2a483f13f3ab1b7c.ktx2",
+          "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf"
+        ],
+        "bytes": 296975,
+        "textureSize": 1024,
+        "triangles": 1894
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/cfe90696553ee52e77e1eaae1b4f1c97bf228dc222d466d12d20ca24f8901c03.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 718247,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/cfe90696553ee52e77e1eaae1b4f1c97bf228dc222d466d12d20ca24f8901c03.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-fad8-7185-90a4-808c4b826f15",
+      "triangles": 1894
+    },
+    "moon-dew-herb": {
+      "name": "moon-dew-herb",
+      "category": "plant",
+      "bounds": [
+        0.7221679985523224,
+        0.9541020095348358,
+        0.7084960043430328
+      ],
+      "height": 0.32,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/7fe7cb7ff0a50176202789848c152a4e1307b38be47bd22bdd8fccc762133150.gltf",
+          "resources": [
+            "./content/dba949054e217a830a4757730c1d7a0b423661b1db144af69812c6e99320703a.bin",
+            "./content/9f1842142eed06fe91bd0d10b7f978e206749fc2df58d44097a048c5b09cbdbb.ktx2",
+            "./content/7fe7cb7ff0a50176202789848c152a4e1307b38be47bd22bdd8fccc762133150.gltf"
+          ],
+          "bytes": 293804,
+          "textureSize": 1024,
+          "triangles": 1402
+        },
+        {
+          "level": 1,
+          "model": "./content/f28b1b6ae7abd1242963c87f73db2b1c510e7b672eb5d306f5705f305b1b57aa.gltf",
+          "resources": [
+            "./content/dba949054e217a830a4757730c1d7a0b423661b1db144af69812c6e99320703a.bin",
+            "./content/9a23d5447b157a1874f008d9a8de5e5f5da3461c9d01e28ebcec69a6f80669f2.ktx2",
+            "./content/f28b1b6ae7abd1242963c87f73db2b1c510e7b672eb5d306f5705f305b1b57aa.gltf"
+          ],
+          "bytes": 143169,
+          "textureSize": 512,
+          "triangles": 1402
+        },
+        {
+          "level": 2,
+          "model": "./content/d57d7890b0784a2f186330cbcd7017792a63c779e476bbd1341d8feb99a2dd03.gltf",
+          "resources": [
+            "./content/dba949054e217a830a4757730c1d7a0b423661b1db144af69812c6e99320703a.bin",
+            "./content/11f0c4c1543d0d6aaa9a5a80fbddc2ea0e1433687bcf2120d7614f81221e751e.ktx2",
+            "./content/d57d7890b0784a2f186330cbcd7017792a63c779e476bbd1341d8feb99a2dd03.gltf"
+          ],
+          "bytes": 83862,
+          "textureSize": 256,
+          "triangles": 1402
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/7fe7cb7ff0a50176202789848c152a4e1307b38be47bd22bdd8fccc762133150.gltf",
+        "resources": [
+          "./content/dba949054e217a830a4757730c1d7a0b423661b1db144af69812c6e99320703a.bin",
+          "./content/9f1842142eed06fe91bd0d10b7f978e206749fc2df58d44097a048c5b09cbdbb.ktx2",
+          "./content/7fe7cb7ff0a50176202789848c152a4e1307b38be47bd22bdd8fccc762133150.gltf"
+        ],
+        "bytes": 293804,
+        "textureSize": 1024,
+        "triangles": 1402
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/dcca0dbccc9392d6a0be6f09f02cca7fedc60d82cebd533ff6e3f2a9dba5e918.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 782960,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/dcca0dbccc9392d6a0be6f09f02cca7fedc60d82cebd533ff6e3f2a9dba5e918.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-0416-7616-bd2f-9de6c9d5e701",
+      "triangles": 1402
+    },
+    "memory-locket": {
+      "name": "memory-locket",
+      "category": "prop",
+      "bounds": [
+        0.9614259898662567,
+        0.5625,
+        0.7075200080871582
+      ],
+      "height": 0.046805474861627075,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/8db88418df7454377f8b75369ecdc2074379d025bb24bb02a48c661492c9645e.gltf",
+          "resources": [
+            "./content/c6f8808f094616fdb2fbcb252e545bb91e92f309d1eaf5f5969e7811cf45122a.bin",
+            "./content/e92fd10868e0442f7a6806b0fbd48a0968546b65d19c94be0e28c53a5be38350.ktx2",
+            "./content/8db88418df7454377f8b75369ecdc2074379d025bb24bb02a48c661492c9645e.gltf"
+          ],
+          "bytes": 336780,
+          "textureSize": 1024,
+          "triangles": 2226
+        },
+        {
+          "level": 1,
+          "model": "./content/ebeb2ec5733d017ec210b398d347ff2ed459435e2032274b1fb7848c12bf102a.gltf",
+          "resources": [
+            "./content/c6f8808f094616fdb2fbcb252e545bb91e92f309d1eaf5f5969e7811cf45122a.bin",
+            "./content/8af4daa987a83e2d7dad682f07656121210ac02216a76dcbc321ac99ff049bf9.ktx2",
+            "./content/ebeb2ec5733d017ec210b398d347ff2ed459435e2032274b1fb7848c12bf102a.gltf"
+          ],
+          "bytes": 179033,
+          "textureSize": 512,
+          "triangles": 2226
+        },
+        {
+          "level": 2,
+          "model": "./content/453f3ca3115d8d05bcf5517588853c3da54d2ed500d23977f876ed4b936bc378.gltf",
+          "resources": [
+            "./content/c6f8808f094616fdb2fbcb252e545bb91e92f309d1eaf5f5969e7811cf45122a.bin",
+            "./content/baceb1c625ae27315f4fcccd0f9b13b25127f51d74154e7e79608e49efc74d21.ktx2",
+            "./content/453f3ca3115d8d05bcf5517588853c3da54d2ed500d23977f876ed4b936bc378.gltf"
+          ],
+          "bytes": 118510,
+          "textureSize": 256,
+          "triangles": 2226
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/8db88418df7454377f8b75369ecdc2074379d025bb24bb02a48c661492c9645e.gltf",
+        "resources": [
+          "./content/c6f8808f094616fdb2fbcb252e545bb91e92f309d1eaf5f5969e7811cf45122a.bin",
+          "./content/e92fd10868e0442f7a6806b0fbd48a0968546b65d19c94be0e28c53a5be38350.ktx2",
+          "./content/8db88418df7454377f8b75369ecdc2074379d025bb24bb02a48c661492c9645e.gltf"
+        ],
+        "bytes": 336780,
+        "textureSize": 1024,
+        "triangles": 2226
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/de9a1f77e3496ef805eb397e40ff5250f61ae45449476204a678adeac7f68bbe.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 830192,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/de9a1f77e3496ef805eb397e40ff5250f61ae45449476204a678adeac7f68bbe.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-50c7-72b5-8475-2fbcb38880a6",
+      "triangles": 2226
+    },
+    "goblin-club": {
+      "name": "goblin-club",
+      "category": "prop",
+      "bounds": [
+        0.9541020095348358,
+        0.2973629981279373,
+        0.2895510047674179
+      ],
+      "height": 0.20258415436877045,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/e9aacc53d218043c47ca70c6b19d3ea3af6aa40fc12df5454052d99c41b25613.gltf",
+          "resources": [
+            "./content/85404e37a0e52580e89ad2116dd7ef39a0382e0c399495b03dcd0547e957ea15.bin",
+            "./content/8693bf9adcff2e23925b6839cece20b0f9f445b7fea6a0513f07c04eed58b074.ktx2",
+            "./content/e9aacc53d218043c47ca70c6b19d3ea3af6aa40fc12df5454052d99c41b25613.gltf"
+          ],
+          "bytes": 305033,
+          "textureSize": 1024,
+          "triangles": 1478
+        },
+        {
+          "level": 1,
+          "model": "./content/b700a7fbb8462643f054e0ed3177747a8aa0f2af41f0945e06b79d8f930fcec1.gltf",
+          "resources": [
+            "./content/85404e37a0e52580e89ad2116dd7ef39a0382e0c399495b03dcd0547e957ea15.bin",
+            "./content/33371535eb4a615b3ab8641eef8c9eb24bab2dbb35f350f8a594513064f3aa88.ktx2",
+            "./content/b700a7fbb8462643f054e0ed3177747a8aa0f2af41f0945e06b79d8f930fcec1.gltf"
+          ],
+          "bytes": 147936,
+          "textureSize": 512,
+          "triangles": 1478
+        },
+        {
+          "level": 2,
+          "model": "./content/b5e773bc41243a5cb4a7aff730801ec82f271ecc42bfaeaadddb48dca537acf6.gltf",
+          "resources": [
+            "./content/85404e37a0e52580e89ad2116dd7ef39a0382e0c399495b03dcd0547e957ea15.bin",
+            "./content/8f0e43d0ff533ac186492fd2b4fed274820e03c4433df4119cf4ccd703c338d7.ktx2",
+            "./content/b5e773bc41243a5cb4a7aff730801ec82f271ecc42bfaeaadddb48dca537acf6.gltf"
+          ],
+          "bytes": 86994,
+          "textureSize": 256,
+          "triangles": 1478
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/e9aacc53d218043c47ca70c6b19d3ea3af6aa40fc12df5454052d99c41b25613.gltf",
+        "resources": [
+          "./content/85404e37a0e52580e89ad2116dd7ef39a0382e0c399495b03dcd0547e957ea15.bin",
+          "./content/8693bf9adcff2e23925b6839cece20b0f9f445b7fea6a0513f07c04eed58b074.ktx2",
+          "./content/e9aacc53d218043c47ca70c6b19d3ea3af6aa40fc12df5454052d99c41b25613.gltf"
+        ],
+        "bytes": 305033,
+        "textureSize": 1024,
+        "triangles": 1478
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/0b84a96c6d34e23c5a4e696d54f1606cdfa80b196d542183c2d20d11d2f5f7ba.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 829518,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/0b84a96c6d34e23c5a4e696d54f1606cdfa80b196d542183c2d20d11d2f5f7ba.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-5a29-707d-b826-a6ac73c66ba3",
+      "triangles": 1478
+    },
+    "clue-journal": {
+      "name": "clue-journal",
+      "category": "prop",
+      "bounds": [
+        0.8681640028953552,
+        0.9521479904651642,
+        0.3476559966802597
+      ],
+      "height": 0.25,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/b675d8f000207f268c6d288dc41d415f4a30abd6f1a272a9e0dcb0ab791661a9.gltf",
+          "resources": [
+            "./content/3bc7604a07cebe8efe9e6f432d2531bd2a91d77248b2bfcf63a5bcf8aa887154.bin",
+            "./content/0d0d092cb5ab9d9c4a2e779caceb1615fecfa85b4b9af2137c3a5ab9601a772c.ktx2",
+            "./content/b675d8f000207f268c6d288dc41d415f4a30abd6f1a272a9e0dcb0ab791661a9.gltf"
+          ],
+          "bytes": 291202,
+          "textureSize": 1024,
+          "triangles": 1662
+        },
+        {
+          "level": 1,
+          "model": "./content/b899e5af91bbee2715d882623a88b7dd55aae96555896ea83288844fe9727c66.gltf",
+          "resources": [
+            "./content/3bc7604a07cebe8efe9e6f432d2531bd2a91d77248b2bfcf63a5bcf8aa887154.bin",
+            "./content/c795d29a04e91ce4a8f05f58909faf28230dae87694b9b9ad25f39cce541e3e0.ktx2",
+            "./content/b899e5af91bbee2715d882623a88b7dd55aae96555896ea83288844fe9727c66.gltf"
+          ],
+          "bytes": 146007,
+          "textureSize": 512,
+          "triangles": 1662
+        },
+        {
+          "level": 2,
+          "model": "./content/ef3df1482110a3983e9d9b21764a0f65e7a36518c218bec2f4d4ec96b7ad651b.gltf",
+          "resources": [
+            "./content/3bc7604a07cebe8efe9e6f432d2531bd2a91d77248b2bfcf63a5bcf8aa887154.bin",
+            "./content/21389f1c8e2625b81bc86a5c4d03787a37e11faaad0e09c7223b1c335a282e58.ktx2",
+            "./content/ef3df1482110a3983e9d9b21764a0f65e7a36518c218bec2f4d4ec96b7ad651b.gltf"
+          ],
+          "bytes": 88913,
+          "textureSize": 256,
+          "triangles": 1662
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/b675d8f000207f268c6d288dc41d415f4a30abd6f1a272a9e0dcb0ab791661a9.gltf",
+        "resources": [
+          "./content/3bc7604a07cebe8efe9e6f432d2531bd2a91d77248b2bfcf63a5bcf8aa887154.bin",
+          "./content/0d0d092cb5ab9d9c4a2e779caceb1615fecfa85b4b9af2137c3a5ab9601a772c.ktx2",
+          "./content/b675d8f000207f268c6d288dc41d415f4a30abd6f1a272a9e0dcb0ab791661a9.gltf"
+        ],
+        "bytes": 291202,
+        "textureSize": 1024,
+        "triangles": 1662
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/ec888e358c25782e896ace0440dbde325478e3f4b89bb2a810fcb93d396686ba.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 742285,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ec888e358c25782e896ace0440dbde325478e3f4b89bb2a810fcb93d396686ba.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-6177-7056-bb52-20d51d27ba15",
+      "triangles": 1662
+    },
+    "clue-satchel": {
+      "name": "clue-satchel",
+      "category": "prop",
+      "bounds": [
+        0.8217779994010925,
+        0.9521479904651642,
+        0.3520510047674179
+      ],
+      "height": 0.36,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/fc7c761efb99fe39f5ea4d7611e42036428e062bcc938f00e1b964af0dde51b2.gltf",
+          "resources": [
+            "./content/fadc69c1a6d3db5a9d7dfb4f09015e3a0b7273fd6d2fcada84caff9a101baf98.bin",
+            "./content/fe84b1294b63a7c58265297c66ac940a06fdabb76114769ad1a809c05c419cb5.ktx2",
+            "./content/fc7c761efb99fe39f5ea4d7611e42036428e062bcc938f00e1b964af0dde51b2.gltf"
+          ],
+          "bytes": 332440,
+          "textureSize": 1024,
+          "triangles": 3071
+        },
+        {
+          "level": 1,
+          "model": "./content/9870bd677589cb6d004e5edf9b93b57898077346aa4c20a91879ff14bc04d589.gltf",
+          "resources": [
+            "./content/fadc69c1a6d3db5a9d7dfb4f09015e3a0b7273fd6d2fcada84caff9a101baf98.bin",
+            "./content/39a2e704c4b6c5e2488468ebc0bc4aef86a68b3cdf75744cd41ec6c937a22efa.ktx2",
+            "./content/9870bd677589cb6d004e5edf9b93b57898077346aa4c20a91879ff14bc04d589.gltf"
+          ],
+          "bytes": 199716,
+          "textureSize": 512,
+          "triangles": 3071
+        },
+        {
+          "level": 2,
+          "model": "./content/4d68b793a1b7523878a43326593f043112674eedcfc0e20c13a8831eca305cd5.gltf",
+          "resources": [
+            "./content/fadc69c1a6d3db5a9d7dfb4f09015e3a0b7273fd6d2fcada84caff9a101baf98.bin",
+            "./content/8338d3b400a40319aadfea1884d0286a54aef7d1aeb788ed014fb4e2810df22a.ktx2",
+            "./content/4d68b793a1b7523878a43326593f043112674eedcfc0e20c13a8831eca305cd5.gltf"
+          ],
+          "bytes": 144904,
+          "textureSize": 256,
+          "triangles": 3071
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/fc7c761efb99fe39f5ea4d7611e42036428e062bcc938f00e1b964af0dde51b2.gltf",
+        "resources": [
+          "./content/fadc69c1a6d3db5a9d7dfb4f09015e3a0b7273fd6d2fcada84caff9a101baf98.bin",
+          "./content/fe84b1294b63a7c58265297c66ac940a06fdabb76114769ad1a809c05c419cb5.ktx2",
+          "./content/fc7c761efb99fe39f5ea4d7611e42036428e062bcc938f00e1b964af0dde51b2.gltf"
+        ],
+        "bytes": 332440,
+        "textureSize": 1024,
+        "triangles": 3071
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/a752e65e93af057cc531104d10d5716e5a13e167969b13a392f5bcce03570adb.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 684284,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/a752e65e93af057cc531104d10d5716e5a13e167969b13a392f5bcce03570adb.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-c0a5-7141-b21e-cf9593d06f59",
+      "triangles": 3071
+    },
+    "chest-common": {
+      "name": "chest-common",
+      "category": "prop",
+      "bounds": [
+        0.9575200080871582,
+        0.5019530057907104,
+        0.6577140092849731
+      ],
+      "height": 0.47179975498801086,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
+            "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+          ],
+          "bytes": 339324,
+          "textureSize": 1024,
+          "triangles": 4479
+        },
+        {
+          "level": 1,
+          "model": "./content/095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/ffacbdb4c99059606491ba5b1920841d258649079ec719b34c4db581d04d4485.ktx2",
+            "./content/095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10.gltf"
+          ],
+          "bytes": 225666,
+          "textureSize": 512,
+          "triangles": 4479
+        },
+        {
+          "level": 2,
+          "model": "./content/49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/5e60d1c0aaa77ead806d13d4435c5432b8a795f595ac2a0a708e6b8ad32a765e.ktx2",
+            "./content/49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336.gltf"
+          ],
+          "bytes": 178199,
+          "textureSize": 256,
+          "triangles": 4479
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+        "resources": [
+          "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+          "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
+          "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+        ],
+        "bytes": 339324,
+        "textureSize": 1024,
+        "triangles": 4479
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 599920,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-c8a6-72cd-832f-2f289dfba7a4",
+      "triangles": 4479
+    },
+    "waypost": {
+      "name": "waypost",
+      "category": "prop",
+      "bounds": [
+        0.6601560115814209,
+        0.9516599774360657,
+        0.17822200059890747
+      ],
+      "height": 2.2,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+            "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+          ],
+          "bytes": 307211,
+          "textureSize": 1024,
+          "triangles": 1918
+        },
+        {
+          "level": 1,
+          "model": "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/bfd4bf0c863010ae3f5fce345480126bbb776f2924574da2779a4eada004b947.ktx2",
+            "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf"
+          ],
+          "bytes": 161457,
+          "textureSize": 512,
+          "triangles": 1918
+        },
+        {
+          "level": 2,
+          "model": "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/f184c62017e7bfc147ddc526342421e987cf23d60a02e033bce247fc9a65cdf1.ktx2",
+            "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf"
+          ],
+          "bytes": 103981,
+          "textureSize": 256,
+          "triangles": 1918
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+        "resources": [
+          "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+          "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+          "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+        ],
+        "bytes": 307211,
+        "textureSize": 1024,
+        "triangles": 1918
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 760190,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-d0bc-73d8-a343-fa7b5b5cef4c",
+      "triangles": 1918
+    }
+  }
+}

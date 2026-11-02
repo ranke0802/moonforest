@@ -80,14 +80,14 @@ function fixture(){
   bindMapPortal:noop,carryPortalPose,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop,setBodyScale:noop},applyRenderQuality:()=>{if(gate.errorStage==='finish')throw Error('injected finish failure');},
   frameDiagnostics:{beginFrame:noop,endFrame:noop,mapChanged:noop,suspend:noop},text:noop,
   requestAnimationFrame:callback=>{raf.push(callback);return raf.length;},consumeTravel:()=>null,travelStorage:{},equipmentStorage:{},readMapResume:()=>null,restoreMapCamera:noop,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},
-  replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':'village';w.cave=w.mapId==='cave';w.environment={};},
+  replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':destination==='warrior-plains'?'great-plains':'village';w.cave=w.mapId==='cave';w.environment={};},
  };
  const runtime=Function(...Object.keys(dependencies),`
-  const uiTest=null,uiTestEnabled=false,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,resumePose=null;
+  const uiTest=null,uiTestEnabled=false,chapterQuests=null,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,resumePose=null;
   let config=null,container=null,actor=null,animator=null,controller=null,equipment=null,maxInfluences=0;
   let arrowNode,arrowMesh,reviewFocus,playerHead,shieldNode,swordNode,combatResult=null,shotTarget=null,shotActionId=null,hiddenArrowForAction=null,mapPortal=null;
   const villageReview=null,villageReviewEnabled=false,villageOverview=false,mapDeparture=null,attackSources=new Set(),elapsed=0,qualityMode='high',VertexBuffer={MatricesWeightsExtraKind:'unused'};
-  const isWarrior=()=>true,isV2=()=>true,isVillage=()=>true,isForest=()=>character==='warrior-v4',isCave=()=>character==='warrior-v5';
+  const isWarrior=()=>true,isV2=()=>true,isVillage=()=>true,isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains',isCave=()=>character==='warrior-v5';
   const mapSpawn=()=>({x:0,y:0,z:0});let reconcilePlayback=()=>{},nextDrawError=null;
   const render=()=>{if(nextDrawError){const error=nextDrawError;nextDrawError=null;throw error;}};
   ${healthSource}\n${loadSource}\n${retryFunctionSource}\n${frameSource}\n${mapSource}\n${retrySource}
@@ -191,7 +191,7 @@ test('actual forest transition prepares map while bounded sky work is pending, r
  results.push({kind:'overlapped-sky-and-map-preparation',mapPreparedBeforeSky:true,curtainUntilBothReady:true,playerIdentityAndResourcesPreserved:true});
 });
 
-const destinations=['warrior-v3','warrior-v4','warrior-v5','warrior-v4'];
+const destinations=['warrior-plains','warrior-v4','warrior-v5','warrior-v4','warrior-plains','warrior-v3'];
 const heading=state=>Math.atan2(Math.sin(state.actor.rotation.y+state.camera.alpha),Math.cos(state.actor.rotation.y+state.camera.alpha));
 function ownedCounts(f){return Object.fromEntries(['actors','animators','equipment','containers','lifetimeListeners'].map(key=>[key,f.owned[key].size]));}
 function warmPlayer(f){
@@ -209,7 +209,7 @@ function assertWarmState(f,previous,{paused=false}={}){
  assert.equal(f.engineCallbacks.size,paused?0:1,'one engine loop when playing and none while paused');
 }
 
-test('actual main callbacks complete48 warm three-map transfers without player, camera or callback ownership growth',async()=>{
+test('actual main callbacks complete48 warm four-map transfers without player, camera or callback ownership growth',async()=>{
  const f=fixture();await success(f);const previous=warmPlayer(f),trace=[];
  for(let i=0;i<48;i++){
   const destination=destinations[i%destinations.length];f.input.pressed.add('KeyW');const job=f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`);
@@ -226,7 +226,7 @@ test('actual main callbacks complete48 warm three-map transfers without player, 
 test('actual main repeated45s stage timeouts and double-click manual retries cannot let late old completion reveal a new map',async()=>{
  const f=fixture();await success(f);const previous=warmPlayer(f),trace=[];
  for(let i=0;i<12;i++){
-  const stage=['release','map-download','map-model','scene'][i%4],destination=destinations[i%4],target=`https://example.test/?character=${destination}&arrival=portal`;
+  const stage=['release','map-download','map-model','scene'][i%4],destination=destinations[i%destinations.length],target=`https://example.test/?character=${destination}&arrival=portal`;
   f.gate.clear();f.gate.timeoutStage=stage;const failed=f.runtime.transition.travel(target);await until(()=>f.gate.reached===stage&&f.gate.late,'timeout producer not reached');
   const completeOld=f.gate.late;f.timerClock.advance(45000);assert.equal(await failed,false);assert.equal(f.runtime.transition.inspect().lastFailure.timeoutMs,45000);
   assert.equal(f.engineCallbacks.size,0);assert.equal(f.timerClock.size,0);assert.equal(f.owned.lifetimeListeners.size,0);assert.equal(f.doc.querySelector('#loading').hidden,false);
@@ -245,7 +245,7 @@ test('actual main repeated45s stage timeouts and double-click manual retries can
 test('actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop',async()=>{
  const f=fixture();await success(f);const previous=warmPlayer(f),trace=[];
  for(let i=0;i<18;i++){
-  f.gate.hold('scene');const destination=destinations[i%4],job=f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`);await until(()=>f.gate.reached==='scene','scene wait not reached');
+  f.gate.hold('scene');const destination=destinations[i%destinations.length],job=f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`);await until(()=>f.gate.reached==='scene','scene wait not reached');
   const hidden=i%2===0;f.doc.hidden=hidden;f.doc.querySelector('#diagnostic-detail-dialog').open=!hidden;f.runtime.reconcile();assert.equal(f.runtime.snapshot().running,false);
   f.gate.release();await flushFrame(f);await flushFrame(f);assert.equal(await job,true);assertWarmState(f,previous,{paused:true});assert.equal(f.audioStates.at(-1),true);
   f.doc.hidden=false;f.doc.querySelector('#diagnostic-detail-dialog').open=false;f.runtime.reconcile();assertWarmState(f,previous);assert.equal(f.audioStates.at(-1),false);

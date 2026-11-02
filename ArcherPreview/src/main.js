@@ -4,6 +4,7 @@ import {DotMinimap} from './dot-minimap.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
 import {setupUiTest} from './ui-test.js';
+import {setupChapterQuests} from './chapter-quest.js';
 import './ui-test.css';
 import './mobile-viewport.css';
 import './mobile-ui.css';
@@ -20,7 +21,7 @@ import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {applyPlayerDetail} from './player-detail.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
-import {worldSpawn,mapForCharacter,isWorldCharacter} from './map-route.js';
+import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
 import { PlaygroundInput } from './input.js';
@@ -96,7 +97,7 @@ audio.bindUnlock(document);
 const loading = $('#loading');
 const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
-const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-v4', 'warrior-v5'];
+const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const uiRoute=uiTestRoute(location.href),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 let character = uiRoute.character;
@@ -110,13 +111,16 @@ const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
 const isVillage = () => isWorldCharacter(character);
 const isForest=()=>character==='warrior-v4';
+const isPlains=()=>character==='warrior-plains';
 const isCave=()=>character==='warrior-v5';
 let resumePose=null;
 const mapSpawn=()=>resumePose??worldSpawn(character,location.search,VILLAGE_SPAWN);
 let mapPortal;
+let chapterQuests;
 let mapDeparture;
 let mapTransition;
 const movementLimit=(position=actor.position)=>world?.mapId==='village'?villageTravelLimit(position,ARENA_RADIUS):ARENA_RADIUS;
+const plainsReviewEnabled=(import.meta.env.DEV||import.meta.env.MODE==='plains-review')&&new URLSearchParams(location.search).get('plainsReview')==='1';
 const villageHorizon=import.meta.env.DEV&&new URLSearchParams(location.search).get('villageHorizon')==='1';
 const villageOverview=import.meta.env.DEV&&!villageHorizon&&new URLSearchParams(location.search).get('villageOverview')==='1';
 const villageReviewEnabled=import.meta.env.DEV&&isVillage()&&new URLSearchParams(location.search).get('villageReview')==='1';
@@ -151,7 +155,7 @@ const goldLoot=new GoldLoot({storage:journeyStorage,onBalance:value=>text('#gold
 let goldLootView;
 const minimap=new DotMinimap($('#dot-minimap'));
 const resumeStore=new MapResumeStore(journeyStorage);
-function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||!world||!actor)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
+function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
 function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
 function showMinimap(){minimap.setWorld(world).catch(error=>{console.warn('[Minimap]',error);minimap.hide();});}
 window.addEventListener('pagehide',()=>saveMapPosition(true));
@@ -290,7 +294,7 @@ const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
-  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
+  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){chapterQuests?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
@@ -305,6 +309,7 @@ function startDefense(kind){
   const directionInput=input.value();
   if(kind==='dodge'&&controller.captured){if(!boss.escapeGrab())return;audio.play('grab_escape');}
   if(!controller[kind]())return;
+  chapterQuests?.action(kind);
   attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
     rollDirection=dodgeDirection(directionInput,world.camera.alpha,actor.rotation.y);
@@ -373,7 +378,7 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   frameFailure=null;if(frameLoop)frameLoop.failed=false;
-  loadDiagnostics.begin(isCave()?'마녀의 동굴':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
+  loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
   const arrival=consumeTravel(travelStorage,character);
   resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:!!arrival});
@@ -464,10 +469,10 @@ async function loadCharacter() {
     // rather than revealing the exported bind pose until a simulation tick.
     animator.update(0);
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
-    $('#build-tag').textContent = isCave()?'CAVERN / 05':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
+    $('#build-tag').textContent = isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
     $('#character-select').value = uiTestEnabled?'ui-test':character;
-    $('#character-name').textContent = isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
-    $('#character-subtitle').textContent = isCave()?'마녀의 동굴':isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
+    $('#character-name').textContent = isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
+    $('#character-subtitle').textContent = isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
     $('.character-caption').textContent = isV2() ? '한손 베기 1타 ↔ 베고 찌르기 2타 · 길게: 심판 3타' : isWarrior() ? '이동하면 달리기 · J 또는 공격 버튼으로 찌르기·베기' : '가까운 허수아비를 자동으로 조준합니다.';
     $('.action-controls').hidden = false;
@@ -592,6 +597,7 @@ function render(dt) {
       if(elenaReview)text('#attack-hint',elenaReview.phase===2?'5가지 패턴 순환 · J':'7가지 마법 모션 순환 · J');
     }
     combatResult=result;
+    chapterQuests?.strike(result,actor.position);
     const busy=!!elenaReview||result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
@@ -673,7 +679,7 @@ try {
   engine.maxFPS=renderActivity.limit();
   engine.renderEvenInBackground=false;
   applyRenderQuality();
-  world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),warrior:isWarrior(),touchDevice});
+  world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
@@ -712,7 +718,7 @@ try {
     if(reacted!==false){attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
     return reacted;
-  },{onDefeat:({kind,position})=>goldLoot.drop(kind,position),onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  },{onDefeat:event=>{goldLoot.drop(event.kind,event.position);chapterQuests?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
@@ -746,7 +752,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
-      saveMapPosition(true);resumePose=null;minimap.hide();
+      saveMapPosition(true);resumePose=null;minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
@@ -773,9 +779,9 @@ try {
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing();await loadVillage(world);
       world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
-      $('#build-tag').textContent=isCave()?'CAVERN / 05':isForest()?'FOREST / 04':'VILLAGE / 03';
-      $('#character-name').textContent=isCave()?'Violet Vanguard v5':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
-      $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isForest()?'마물의 숲':'숲의 경계 마을';
+      $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
+      $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
+      $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=uiTestEnabled?'ui-test':character;bindMapPortal();
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
@@ -924,9 +930,12 @@ try {
     if(!button||button.disabled||button.closest('.action-controls')||['summon-boss','summon-goblin','death-restart'].includes(button.id))return;
     audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
   });
+  if(plainsReviewEnabled){const {setupPlainsReview}=await import('./plains-review-controls.js');setupPlainsReview({world,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,x:actor?.position.x,z:actor?.position.z,hp:boss?.playerHp}),moveTo:(x,z)=>{input.reset();actor.position.set(x,0,z);world.terrain.place(actor.position);syncCameraFocus(0,{snap:true});},travel:id=>mapTransition.travel(travelUrl(location.href,id))});}
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
   window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
-  if(uiTestEnabled){
+  if(isWorldCharacter(character)&&!elenaReviewMode&&new URLSearchParams(location.search).get('legacyUiTest')!=='1'){
+    chapterQuests=setupChapterQuests({root:$('#app'),world,storage:journeyStorage,creditGold:total=>goldLoot.creditCumulative('chapter-one',total),getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,map:world.mapId,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy}),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),heal:amount=>{if(!ready||loadingAsset||boss.playerHp<=0||boss.potions.active)return 0;const gained=Math.min(amount,boss.playerMaxHp-boss.playerHp);if(gained>0){boss.combat.hp+=gained;updateHealthBars();boss.onChange(boss);}return gained;}});uiTest=chapterQuests;
+  }else if(uiTestEnabled){
     uiTest=setupUiTest({root:$('#app'),storage:journeyStorage,
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character}),
       resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),

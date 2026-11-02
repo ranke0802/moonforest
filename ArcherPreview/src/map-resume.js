@@ -2,8 +2,8 @@ import {isWorldCharacter,mapForCharacter} from './map-route.js';
 import {villageTravelLimit} from './map-travel.js';
 
 export const MAP_RESUME_KEY='moonforest-map-position-v1';
-const limit=(character,p)=>character==='warrior-v3'?villageTravelLimit(p,48):character==='warrior-v4'?62:74;
-const valid=p=>p&&[p.x,p.z,p.yaw].every(Number.isFinite)&&Math.abs(p.x)<=80&&Math.abs(p.z)<=80&&Math.abs(p.yaw)<1e6;
+const limit=(character,p)=>character==='warrior-plains'?106:character==='warrior-v3'?villageTravelLimit(p,48):character==='warrior-v4'?62:74;
+const valid=p=>p&&[p.x,p.z,p.yaw].every(Number.isFinite)&&Math.abs(p.x)<=110&&Math.abs(p.z)<=110&&Math.abs(p.yaw)<1e6;
 function read(storage){try{const data=JSON.parse(storage?.getItem(MAP_RESUME_KEY)??'null');return data?.version===1&&data.maps&&typeof data.maps==='object'?data.maps:{};}catch{return {};}}
 function free(world,character,p,radius){return Number.isFinite(world.terrain.heightAt(p.x,p.z))&&world.navigation.free(p,radius,limit(character,p));}
 export function readMapResume(storage,character,world,{radius=.289,portalArrival=false}={}){
@@ -33,7 +33,7 @@ export class MapResumeStore{
   const round=n=>Math.round(n*1000)/1000;
   const record={x:round(pose.x),z:round(pose.z),yaw:round(pose.yaw),camera:{alpha:round(camera.alpha),beta:round(camera.beta),radius:round(camera.radius)}};
   const signature=character+JSON.stringify(record);if(signature===this.last)return false;
-  const maps=read(this.storage),clean={};for(const id of ['warrior-v3','warrior-v4','warrior-v5'])if(valid(maps[id]))clean[id]=maps[id];clean[character]=record;
+  const maps=read(this.storage),clean={};for(const id of ['warrior-v3','warrior-plains','warrior-v4','warrior-v5'])if(valid(maps[id]))clean[id]=maps[id];clean[character]=record;
   try{this.storage?.setItem(MAP_RESUME_KEY,JSON.stringify({version:1,maps:clean}));this.last=signature;this.writes++;return !!this.storage;}catch{return false;}
  }
 }

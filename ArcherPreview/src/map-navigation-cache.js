@@ -29,7 +29,7 @@ function restore(grid){
 }
 export function warmMapNavigation(engine,navigation,mapId,limit,{radii=[.34,.7],now=()=>performance.now()}={}){
  const started=now();
- if(!['village','monster-forest','witch-cave'].includes(mapId)){for(const radius of radii)navigation.grid(radius,limit);return;}
+ if(!['village','great-plains','monster-forest','witch-cave'].includes(mapId)){for(const radius of radii)navigation.grid(radius,limit);return;}
  const pool=poolFor(engine),signature=new TextEncoder().encode(JSON.stringify([navigation.obstacles,radii,limit])),hooks=methods(navigation),old=pool.entries.get(mapId);
  // Instance-bound callbacks may capture a scene or mutable collision state.
  // Only the authored prototype methods may enter the cross-map snapshot.

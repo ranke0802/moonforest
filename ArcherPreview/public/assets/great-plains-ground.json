@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "span": 248,
+  "color": {
+    "url": "./content/fe19ea9ec22701516e0e8c1bdc6257487bcea55b368d7855b6b27364849c6dbd.ktx2",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 460357,
+    "codec": "etc1s",
+    "alpha": true,
+    "gpuBlockBytes": 16
+  },
+  "detail": {
+    "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+    "width": 256,
+    "height": 256,
+    "bytes": 119227
+  },
+  "soilMaskAlphaRange": [
+    64,
+    255
+  ],
+  "gpuBytesWithMips": 5941931,
+  "extraDrawCalls": 0,
+  "detailSamples": 2,
+  "method": "approved-plains-crossroads-and-stream",
+  "resources": [
+    "./content/fe19ea9ec22701516e0e8c1bdc6257487bcea55b368d7855b6b27364849c6dbd.ktx2",
+    "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
+  ],
+  "compression": "KTX2 color; lossless linear packed detail"
+}

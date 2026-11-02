@@ -134,3 +134,7 @@
  #app[data-ui-test] .top-actions .uit-top[data-uit-action=journal],#app[data-ui-test] .top-actions .uit-top[data-uit-action=inventory]{display:none}
 }
 @media(prefers-reduced-motion:reduce){#app[data-ui-test] button{transition:none!important}.uit-skin.uit-down,.uit-skin:active{transform:none}}
+
+/* Story entry stays above the action area on desktop and phones. */
+#ui-test-hud .uit-interactions{top:calc(env(safe-area-inset-top) + 76px);bottom:auto;left:50%;right:auto;transform:translateX(-50%);flex-direction:row;max-width:90vw}
+@media(orientation:landscape) and (max-height:550px){#ui-test-hud .uit-interactions{top:calc(env(safe-area-inset-top) + 48px)}}

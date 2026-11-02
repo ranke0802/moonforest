@@ -179,7 +179,7 @@ export class BossEncounter {
     if(this.corpseGone)return;
     if(this.death.advance(dt)){
       this.grab.reset();this.gate.reset();
-      this.onDefeat({kind:this.kind,position:this.actor.position.clone()});
+      this.onDefeat({kind:this.kind,position:this.actor.position.clone(),...(this.phase?{phase:this.phase}:{})});
       if(this.death.holdPose){this.pendingEvents=[];this.bossReaction.reset();this.knockVelocity.setAll(0);}
     }
     // Visibility is per mesh, so living enemies sharing this material do not fade.

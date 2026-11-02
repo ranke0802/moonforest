@@ -69,9 +69,9 @@ test('baked paths, rooms, portals, collision mask and live player all share rota
 test('maps build once, update at most 10Hz only when marker changes, and allocate no 3D resources',async()=>{
  const f=fixture(),navigation={free:()=>true},actor={position:{x:0,z:0},rotation:{y:0}};
  for(const id of Object.keys(MINIMAP_MAPS)){await f.map.setWorld({mapId:id,navigation});assert.equal(f.element.hidden,false);assert.equal(f.label.textContent,MINIMAP_MAPS[id].label);f.map.update(actor,0);}
- assert.equal(f.map.cache.size,3);const count=f.target.calls.draws;for(let i=0;i<300;i++)f.map.update(actor,i/30);assert.equal(f.target.calls.draws,count,'stationary marker does not redraw');
+ assert.equal(f.map.cache.size,Object.keys(MINIMAP_MAPS).length);const count=f.target.calls.draws;for(let i=0;i<300;i++)f.map.update(actor,i/30);assert.equal(f.target.calls.draws,count,'stationary marker does not redraw');
  for(let i=0;i<300;i++){actor.position.x=Math.sin(i)*10;f.map.update(actor,10+i/30);}assert.ok(f.target.calls.draws-count<=100);
- await f.map.setWorld({mapId:'village',navigation:{free:()=>assert.fail('cached map must not resample navigation')}});assert.equal(f.map.cache.size,3);f.map.dispose();assert.equal(f.map.cache.size,0);assert.equal(f.element.hidden,true);
+ await f.map.setWorld({mapId:'village',navigation:{free:()=>assert.fail('cached map must not resample navigation')}});assert.equal(f.map.cache.size,Object.keys(MINIMAP_MAPS).length);f.map.dispose();assert.equal(f.map.cache.size,0);assert.equal(f.element.hidden,true);
 });
 test('late minimap work cannot appear in another map or after disposal',async()=>{
  const f=fixture(),navigation={free:()=>true};const old=f.map.setWorld({mapId:'witch-cave',navigation});const next=f.map.setWorld({mapId:'monster-forest',navigation});await Promise.all([old,next]);assert.equal(f.map.mapId,'monster-forest');assert.equal(f.label.textContent,'마물의 숲');assert.equal(f.map.cache.has('witch-cave'),false);

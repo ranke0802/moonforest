@@ -46,6 +46,8 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  }
  doc.querySelector('#death-restart').focus=noop;
  const engine=new NullEngine(),trainingScene=character==='archer'?new Scene(engine):null;
+ // Raster text is a draw-only boundary; world/map/camera lifecycle remains real.
+ engine.createCanvas=(width,height)=>({width,height,getContext:()=>({fillRect:noop,strokeRect:noop,fillText:noop})});
  const world=trainingScene?{scene:trainingScene,camera:new ArcRotateCamera('training-camera',1,1.18,4.8,Vector3.Zero(),trainingScene),terrain:{place:p=>{p.y=0;}},sky:{}}:createWorld(engine,{village:true,warrior:true,touchDevice:true});
  const actor=new TransformNode('lifecycle-player',world.scene),head=new TransformNode('lifecycle-animated-head',world.scene);head.parent=actor;head.position.y=1.6;
  // The map callback's screen-ready draws are a GPU/asset boundary here. Keep
@@ -71,10 +73,10 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   motionSpeedControls:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),document:doc,location,history,innerWidth:852,console,
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;const uiTest=null,uiTestEnabled=false;
+  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
   let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null;const attackSources=new Set(),mapDeparture=null;
   const villageOverview=false,villageHorizon=false;
-  const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4';
+  const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
   const mapSpawn=()=>worldSpawn(character,location.search,VILLAGE_SPAWN);
   ${resetSource}\n${restartSource}\n${focusSource}\n${actionSource}\n${deathSource}\n${bootSource}\n${mapSource}
   return {actions,resetCamera,resetBeforeBoss,syncCameraFocus,deathScreen,
@@ -96,7 +98,7 @@ for(const mode of [false,true])test(`actual main portal callbacks and death dial
  const f=fixture(t),initial=f.runtime.follow;assert.equal(f.checkbox.checked,false);
  if(mode){f.checkbox.checked=true;f.checkbox.dispatchEvent(new f.dom.window.Event('change'));}
  const writes=f.storage.writes.length;assertChoice(f,mode,initial,writes);
- const sequence=['warrior-v4','warrior-v5','warrior-v4','warrior-v3'];let travels=0,restarts=0;
+ const sequence=['warrior-plains','warrior-v4','warrior-v5','warrior-v4','warrior-plains','warrior-v3'];let travels=0,restarts=0;
  for(let cycle=0;cycle<3;cycle++)for(const destination of sequence){
   const beforeAngle=f.world.camera.alpha+f.actor.rotation.y;
   assert.equal(await f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`),true);travels++;

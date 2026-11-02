@@ -1,0 +1,146 @@
+[
+  {
+    "path": "index.html",
+    "match": true
+  },
+  {
+    "path": "quest-assets.html",
+    "match": true
+  },
+  {
+    "path": "src/boss-encounter.js",
+    "match": true
+  },
+  {
+    "path": "src/dot-minimap.js",
+    "match": true
+  },
+  {
+    "path": "src/gold-loot.js",
+    "match": true
+  },
+  {
+    "path": "src/main.js",
+    "match": true
+  },
+  {
+    "path": "src/map-navigation-cache.js",
+    "match": true
+  },
+  {
+    "path": "src/map-resume.js",
+    "match": true
+  },
+  {
+    "path": "src/map-route.js",
+    "match": true
+  },
+  {
+    "path": "src/map-travel.js",
+    "match": true
+  },
+  {
+    "path": "src/player-texture-profile.js",
+    "match": true
+  },
+  {
+    "path": "src/ui-test.css",
+    "match": true
+  },
+  {
+    "path": "src/world-limits.js",
+    "match": true
+  },
+  {
+    "path": "src/world.js",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest-data.js",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest-points.js",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest-props.js",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest-state.js",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest.css",
+    "match": true
+  },
+  {
+    "path": "src/chapter-quest.js",
+    "match": true
+  },
+  {
+    "path": "src/great-plains-decor.js",
+    "match": true
+  },
+  {
+    "path": "src/great-plains-layout.js",
+    "match": true
+  },
+  {
+    "path": "src/great-plains-terrain.js",
+    "match": true
+  },
+  {
+    "path": "src/plains-review-controls.js",
+    "match": true
+  },
+  {
+    "path": "src/quest-asset-review.js",
+    "match": true
+  },
+  {
+    "path": "scripts/bake-great-plains-ground.py",
+    "match": true
+  },
+  {
+    "path": "scripts/build-plains-review.mjs",
+    "match": true
+  },
+  {
+    "path": "scripts/pack-plains-assets.mjs",
+    "match": true
+  },
+  {
+    "path": "scripts/plains-texture-tiers.py",
+    "match": true
+  },
+  {
+    "path": "tests/cave-portal-facing.test.js",
+    "match": true
+  },
+  {
+    "path": "tests/dot-minimap.test.js",
+    "match": true
+  },
+  {
+    "path": "tests/chapter-quest.test.js",
+    "match": true
+  },
+  {
+    "path": "tests/great-plains.test.js",
+    "match": true
+  },
+  {
+    "path": "public/assets/quest-props.json",
+    "match": true
+  },
+  {
+    "path": "public/assets/great-plains.json",
+    "match": true
+  },
+  {
+    "path": "public/assets/great-plains-ground.json",
+    "match": true
+  }
+]

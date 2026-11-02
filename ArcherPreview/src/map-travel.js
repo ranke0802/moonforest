@@ -25,8 +25,8 @@ export function consumeTravel(storage,character,now=Date.now()){
 }
 export function createMapPortal(world,{button,getState,onTravel,storage,persistTravel=true}){
   const portals=mapPortals(world.mapId);if(!portals.length)return null;
-  let portal=portals[0];const mists=portals.map(p=>createPortalMist(world,p));button.hidden=true;
-  let available=false,disposed=false;
+  let portal=portals[0];const mists=portals.filter(p=>!p.roadPassage).map(p=>createPortalMist(world,p));button.hidden=true;
+  let available=false,disposed=false,automaticPending=false;
   const activate=()=>{
     const state=getState();if(disposed||!portalAvailable(state.position,portal,state))return;
     if(persistTravel)try{storage?.setItem(key,JSON.stringify({destination:portal.destination,hp:state.hp,potions:state.potions,time:Date.now()}));}catch{}
@@ -43,6 +43,7 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
     if(position)portal=portals.reduce((a,b)=>Math.hypot(position.x-a.x,position.z-a.z)<Math.hypot(position.x-b.x,position.z-b.z)?a:b);
     const state=getState(),near=state.position&&Math.hypot(state.position.x-portal.x,state.position.z-portal.z)<6;
     available=portalAvailable(state.position,portal,state);button.hidden=!near;button.disabled=!available;
+    if(portal.roadPassage&&available&&!automaticPending){automaticPending=true;activate();return;}
     const label=available?`${portal.label} · T`:state.enemies>0?'전투 종료 후 이동 가능':'이동 지점에 가까이 가세요';
     if(button.textContent!==label)button.textContent=label;
   }};

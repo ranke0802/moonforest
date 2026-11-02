@@ -1,0 +1,127 @@
+{
+  "baseline": "341892c",
+  "resourceRevision": "681d5d2e004f0541c08af2cf1c6f6cfbc372c8f33c55bdb453fa6b7db5211eb5",
+  "priorFiles": 1006,
+  "currentFiles": 1103,
+  "changedOrRemovedPreviousFiles": [],
+  "newFiles": 97,
+  "newFileBytes": 14190650,
+  "unchangedFiles": 1006,
+  "policyManifests": [
+    {
+      "path": "warrior-v3.json",
+      "unchanged": true
+    },
+    {
+      "path": "warrior-v3-ios.json",
+      "unchanged": true
+    },
+    {
+      "path": "village.json",
+      "unchanged": true
+    },
+    {
+      "path": "monster-forest.json",
+      "unchanged": true
+    },
+    {
+      "path": "witch-cave.json",
+      "unchanged": true
+    },
+    {
+      "path": "elena.json",
+      "unchanged": true
+    },
+    {
+      "path": "mourning-elena.json",
+      "unchanged": true
+    }
+  ],
+  "models": [
+    {
+      "id": "apple",
+      "triangles": 628,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "apple-pie",
+      "triangles": 1512,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "pet-food",
+      "triangles": 1543,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "contaminated-vial",
+      "triangles": 1362,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "clue-bandage",
+      "triangles": 1894,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "moon-dew-herb",
+      "triangles": 1402,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "memory-locket",
+      "triangles": 2226,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "goblin-club",
+      "triangles": 1478,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "clue-journal",
+      "triangles": 1662,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "clue-satchel",
+      "triangles": 3071,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "chest-common",
+      "triangles": 4479,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    },
+    {
+      "id": "waypost",
+      "triangles": 1918,
+      "texture": 1024,
+      "tiers": 3,
+      "compressed": true
+    }
+  ],
+  "newTextureMaximum": 2048
+}

@@ -1,0 +1,830 @@
+{
+  "version": 1,
+  "complete": true,
+  "shading": "painted-toon-shadow",
+  "sourceSettings": {
+    "aiModel": "meshy-t2.5",
+    "enablePbr": false,
+    "textureResolution": "2k"
+  },
+  "compression": {
+    "format": "KTX2/Basis",
+    "defaultCodec": "etc1s",
+    "maxResolution": 2048
+  },
+  "meshCompression": {
+    "format": "EXT_meshopt_compression",
+    "lossless": true
+  },
+  "geometryLod": {
+    "nearColorResolution": 2048
+  },
+  "homes": 0,
+  "id": "great-plains",
+  "availableAssetCount": 9,
+  "assets": {
+    "tree-01-round-oak": {
+      "name": "참나무",
+      "category": "tree",
+      "height": 9,
+      "bounds": [
+        15.79957103729248,
+        15,
+        11.329959869384766
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559.gltf",
+          "resources": [
+            "./content/9ed62d2ee234d1c681c150330392a51c4e2027e2aead6e60854bf9f09fd64aff.bin",
+            "./content/dd00e80c399d184d538e4d9949852e1faf39a4ee1b8991a7d777cecbaa69af9f.ktx2",
+            "./content/5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559.gltf"
+          ],
+          "triangles": 4494,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 884012
+        },
+        {
+          "level": 1,
+          "model": "./content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+          "resources": [
+            "./content/7b24f5735117cf6b1cfad5058fa88da2b85c058b55646d2065928e2359836c9c.bin",
+            "./content/1f04e62fb4236ff01656efff7653f67786649c0698ddb108e697424603af2ae1.ktx2",
+            "./content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf"
+          ],
+          "triangles": 3085,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 407325
+        },
+        {
+          "level": 2,
+          "model": "./content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+          "resources": [
+            "./content/3fa07700a877f4b38b3c9b712fb8dffc1c5aad673be4479ef7e33552a5c0c3dc.bin",
+            "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
+            "./content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf"
+          ],
+          "triangles": 2383,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 233442
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf",
+        "resources": [
+          "./content/9ed62d2ee234d1c681c150330392a51c4e2027e2aead6e60854bf9f09fd64aff.bin",
+          "./content/1f04e62fb4236ff01656efff7653f67786649c0698ddb108e697424603af2ae1.ktx2",
+          "./content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf"
+        ],
+        "triangles": 4494,
+        "textureSize": 1024,
+        "normalMap": false,
+        "bytes": 453506
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2050216,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2"
+        ],
+        "colorResolution": 4096,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f",
+      "treeRefinement": {
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
+        "sourceModelSha256": "72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6",
+        "originalTriangles": [
+          4687,
+          3218,
+          2596
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            11.743156909942627,
+            11.232125759124756
+          ],
+          "rootWidthAfter": [
+            2.951576590538025,
+            2.7273372411727905
+          ],
+          "trunkWidthBefore": [
+            8.181390881538391,
+            6.640306234359741
+          ],
+          "trunkWidthAfter": [
+            4.749637603759766,
+            3.6375392079353333
+          ]
+        }
+      }
+    },
+    "rock-01-mossy-boulder": {
+      "name": "이끼 둥근 바위",
+      "category": "rock",
+      "height": 2.2,
+      "bounds": [
+        1.5569519996643066,
+        1,
+        1.6407029628753662
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "resources": [
+            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
+            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 361154
+        },
+        {
+          "level": 1,
+          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "resources": [
+            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
+            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
+            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
+            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+          ],
+          "triangles": 2626,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 174895
+        },
+        {
+          "level": 2,
+          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "resources": [
+            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
+            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
+            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
+            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
+            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+          ],
+          "triangles": 1156,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 72848
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "resources": [
+          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+        ],
+        "triangles": 5255,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 216760
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 751327,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+    },
+    "rail-fence": {
+      "name": "낮은 가로 목책",
+      "category": "fence",
+      "height": 1.1,
+      "bounds": [
+        3.433094024658203,
+        1,
+        0.35035204887390137
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19.gltf",
+          "resources": [
+            "./content/e71d55c5ab493c22dfc0b914bba31407994dee8e4eac3196273b129e572f4441.bin",
+            "./content/967e34b4019e64549980b152c7e618fa480d058cf6f30971b8b7822744a329a3.ktx2",
+            "./content/4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19.gltf"
+          ],
+          "triangles": 5184,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 381983
+        },
+        {
+          "level": 1,
+          "model": "./content/8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5.gltf",
+          "resources": [
+            "./content/0755c8f5eebecc0319f4efd3ab31e6135018a4ac8487c003f7177cbad55acf16.bin",
+            "./content/b0efdb4bd32b95b960f9e4508e217b403b939230f6183fb2659e5389fded82c4.bin",
+            "./content/4dfa4e510e8343eb873432c6e141886bde378f76bc052f480fe48c4a9b8789b1.bin",
+            "./content/e2ca3aaf9ca0d240c48fe57c2e06b9ba2f34d14864907f049358872476228bea.bin",
+            "./content/0987ca828ea569e5ecc6adc43568a155641013200c75e15e35f7ba046fff01ab.ktx2",
+            "./content/8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5.gltf"
+          ],
+          "triangles": 2592,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 189640
+        },
+        {
+          "level": 2,
+          "model": "./content/80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4.gltf",
+          "resources": [
+            "./content/e1d49067e5209c140672f509b740421c90d038770f6d15fcd07ccade07c40eb3.bin",
+            "./content/76063d9404df36a3f82824bf364aa876773d6ea698f210f2905d47b52438c13f.bin",
+            "./content/d04ba32cc24cb7345fdba1bf19d293561413c69a6e16358a48bacb0e18450568.bin",
+            "./content/a916f74f39a6429b9253469b2a510805ba1948b8e62647a12e90936cb0bf2a4d.bin",
+            "./content/b28850c95fa2fc831142b5d6abef619f42ef3abefd0ef41acef1e0eee5f795d1.ktx2",
+            "./content/80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4.gltf"
+          ],
+          "triangles": 1140,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 81244
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79.gltf",
+        "resources": [
+          "./content/e71d55c5ab493c22dfc0b914bba31407994dee8e4eac3196273b129e572f4441.bin",
+          "./content/0987ca828ea569e5ecc6adc43568a155641013200c75e15e35f7ba046fff01ab.ktx2",
+          "./content/ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79.gltf"
+        ],
+        "triangles": 5184,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 227534
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/3c70b67a661d772ff670ff6e20677294cd48580dc2444556fc1db6b1f81dba12.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 803694,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/3c70b67a661d772ff670ff6e20677294cd48580dc2444556fc1db6b1f81dba12.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "1eaf957c54c33adc8deb946b4206258d43e5ee3a0719f063ea848747e94b20cb"
+    },
+    "covered-wagon": {
+      "name": "천 덮개 짐마차",
+      "category": "prop",
+      "height": 3.1,
+      "bounds": [
+        2.606822967529315,
+        3,
+        5.270194053649911
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 1.5707963267949,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/035abb3f5502e8866bd6dbc90586dda6ef0d7abe6a643f39b6f4a90e0b4c4c42.gltf",
+          "resources": [
+            "./content/4b1f37ea84e193b08c6cac41433cbe04ca2f752b535056eb75528e47ba05cb5c.bin",
+            "./content/cd891963dfdf03b6784f164f959219bce1de3f064c937c71f60a444ba2e9c00f.ktx2",
+            "./content/035abb3f5502e8866bd6dbc90586dda6ef0d7abe6a643f39b6f4a90e0b4c4c42.gltf"
+          ],
+          "triangles": 4611,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 417222
+        },
+        {
+          "level": 1,
+          "model": "./content/5696572c50070ac353ad039c4f17eeb9d5b1cfbfcd9589109f3b7e1d5fb6ad83.gltf",
+          "resources": [
+            "./content/436f7ab9a0a6030830c3a0db10330b0d57a6267fe34493e014ab8b5a2f8330d5.bin",
+            "./content/bad4ec42192d569d593baf7ba252806f8fd17d8452fa8368175157bb34fda7f4.bin",
+            "./content/2a08d0171073ed39868f10cfc7ada33a83c9427f083509ab675e36b7e2fbd4aa.bin",
+            "./content/ac9e41ba3086a0baef870a9811b836dd2d125aacb91ec366b782d69244c865d6.bin",
+            "./content/1aad660338ee2facf8ca9633be5dfa29fd56bcbc09ea765c8a00aa539af2728b.ktx2",
+            "./content/5696572c50070ac353ad039c4f17eeb9d5b1cfbfcd9589109f3b7e1d5fb6ad83.gltf"
+          ],
+          "triangles": 2305,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 225311
+        },
+        {
+          "level": 2,
+          "model": "./content/4d6be4ce3d0473acc7f46431029a512024ff74efb730109d57e30223863108e7.gltf",
+          "resources": [
+            "./content/b9fe2a23f986aab7b87d25a16a0e7bb7984adf4f41a88c4a0689a1e6b813ce78.bin",
+            "./content/a6d88361135b14094ae3d26b1b29e032ca540d141c785c8be0738010853304f9.bin",
+            "./content/40fd1162744e9bf846523d42c945466eedf8cb088ddce25f19eaf0497564623f.bin",
+            "./content/2c33c9bff5a0e626f7286c786053436fa27ca61542da971894872afede0b789c.bin",
+            "./content/e36cb4b2880adce3fd0bdf4c31dea672caeef415bd102e47e95d194c4b5dd411.ktx2",
+            "./content/4d6be4ce3d0473acc7f46431029a512024ff74efb730109d57e30223863108e7.gltf"
+          ],
+          "triangles": 1371,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 116322
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/251960950b7d32dccd05dd787b66e3c57ec954fd9c5e73cc44c9d39ae1fe2552.gltf",
+        "resources": [
+          "./content/4b1f37ea84e193b08c6cac41433cbe04ca2f752b535056eb75528e47ba05cb5c.bin",
+          "./content/1aad660338ee2facf8ca9633be5dfa29fd56bcbc09ea765c8a00aa539af2728b.ktx2",
+          "./content/251960950b7d32dccd05dd787b66e3c57ec954fd9c5e73cc44c9d39ae1fe2552.gltf"
+        ],
+        "triangles": 4611,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 250497
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 10750836,
+            "codec": "uastc",
+            "alpha": false,
+            "gpuBlockBytes": 16
+          }
+        },
+        "resources": [
+          "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2"
+        ],
+        "colorResolution": 4096,
+        "colorEncoding": "KTX2 UASTC / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "5832291fe5c0581a0f2448f65eacf0d249b4f735d97f1073a9d57387af359700"
+    },
+    "crate-barrel-cluster": {
+      "name": "상자와 통 묶음",
+      "category": "prop",
+      "height": 1.6,
+      "bounds": [
+        1.014009952545166,
+        0.8999999761581421,
+        1.0287209749221802
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf",
+          "resources": [
+            "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
+            "./content/025ed1c44b253e7ab51a2e9cb86429c45512b1c04821eb28bd97a85f107aff85.ktx2",
+            "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf"
+          ],
+          "triangles": 4683,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 390785
+        },
+        {
+          "level": 1,
+          "model": "./content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+          "resources": [
+            "./content/2a3cc30b43d704ffdb593e27b8f29e841eeca4c2a9bba37a61139399883db2df.bin",
+            "./content/297b74093fbf6049ea85c0b74f20c1f8a792248d2302155c7f68d9de75a95dfa.bin",
+            "./content/a93a344adecd327f0e1c19f5c85d77e316e0adbeb2db9a0a0737008469847cd0.bin",
+            "./content/82c314b0b562262c1bd476bf2656a96062cbd6cc44aab34ad68537e30268aef7.bin",
+            "./content/1429c47367287cdd8a5db729f96fcb3fa68d3e9d6a38111c31e9be77f53b6c58.ktx2",
+            "./content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf"
+          ],
+          "triangles": 3091,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 228804
+        },
+        {
+          "level": 2,
+          "model": "./content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+          "resources": [
+            "./content/8eb8da6f4817ea1086028c18ed90792aab3a190d4e5c4fadbaa4bfbf52bac268.bin",
+            "./content/8d4101411748cb2491e8d8c69fcaca796a486bd05d2d4bfc3e676ed81ec429ad.bin",
+            "./content/ca8e61cfe291209902b1bdd545f0a03ec7e2919c108733ecbc00c247846fdcdb.bin",
+            "./content/fce396e03a6095fefab21335308c6c641a00b58b50fded80add8fd38b7d6cbd9.bin",
+            "./content/3d9c0e0ea59da77bca69f681e40fe0bbcbf5163da59d5b30189e991bf902fe65.ktx2",
+            "./content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf"
+          ],
+          "triangles": 1969,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 126567
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "resources": [
+          "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
+          "./content/1429c47367287cdd8a5db729f96fcb3fa68d3e9d6a38111c31e9be77f53b6c58.ktx2",
+          "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf"
+        ],
+        "triangles": 4683,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 242895
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 735658,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74"
+    },
+    "grass-tuft": {
+      "name": "풀 군락",
+      "category": "plant",
+      "bounds": [
+        0.5649940073490143,
+        0.3640392585657537,
+        0.43466782569885254
+      ],
+      "height": 0.42,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "resources": [
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
+            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+          ],
+          "bytes": 0,
+          "textureSize": 1024
+        },
+        {
+          "level": 1,
+          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "resources": [
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
+            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+          ],
+          "bytes": 0,
+          "textureSize": 1024
+        },
+        {
+          "level": 2,
+          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "resources": [
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
+            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+          ],
+          "bytes": 0,
+          "textureSize": 1024
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+        "resources": [
+          "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+          "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
+          "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+        ],
+        "bytes": 0,
+        "textureSize": 1024
+      }
+    },
+    "waypost": {
+      "name": "waypost",
+      "category": "prop",
+      "bounds": [
+        0.6601560115814209,
+        0.9516599774360657,
+        0.17822200059890747
+      ],
+      "height": 2.2,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+            "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+          ],
+          "bytes": 307211,
+          "textureSize": 1024,
+          "triangles": 1918
+        },
+        {
+          "level": 1,
+          "model": "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/bfd4bf0c863010ae3f5fce345480126bbb776f2924574da2779a4eada004b947.ktx2",
+            "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf"
+          ],
+          "bytes": 161457,
+          "textureSize": 512,
+          "triangles": 1918
+        },
+        {
+          "level": 2,
+          "model": "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/f184c62017e7bfc147ddc526342421e987cf23d60a02e033bce247fc9a65cdf1.ktx2",
+            "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf"
+          ],
+          "bytes": 103981,
+          "textureSize": 256,
+          "triangles": 1918
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+        "resources": [
+          "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+          "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+          "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+        ],
+        "bytes": 307211,
+        "textureSize": 1024,
+        "triangles": 1918
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 760190,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-d0bc-73d8-a343-fa7b5b5cef4c",
+      "triangles": 1918
+    },
+    "clue-bandage": {
+      "name": "clue-bandage",
+      "category": "prop",
+      "bounds": [
+        0.589356005191803,
+        0.3779290020465851,
+        0.9497079849243164
+      ],
+      "height": 0.15917692934916317,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/4a49f7fc1354fa1b94cca65cbe0cd80d1eb64705fc1aa2fa2a483f13f3ab1b7c.ktx2",
+            "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf"
+          ],
+          "bytes": 296975,
+          "textureSize": 1024,
+          "triangles": 1894
+        },
+        {
+          "level": 1,
+          "model": "./content/626dc2bebeef93926cca82089e8c8a15fc127a2d8c9a0e9488ba20c5599d973f.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/b6bfb902f9ca0d1816aaa5631cd4e37fe015811441b4010052176ff040bbcc2c.ktx2",
+            "./content/626dc2bebeef93926cca82089e8c8a15fc127a2d8c9a0e9488ba20c5599d973f.gltf"
+          ],
+          "bytes": 163664,
+          "textureSize": 512,
+          "triangles": 1894
+        },
+        {
+          "level": 2,
+          "model": "./content/54209baf2557199c933e162ef2a77e125674d1bf8a17317081f0377ca0e7bf92.gltf",
+          "resources": [
+            "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+            "./content/77bccb39e528c47a0d77618793cd87a87ccbcee5c5bf499ecaefdd99657fc02f.ktx2",
+            "./content/54209baf2557199c933e162ef2a77e125674d1bf8a17317081f0377ca0e7bf92.gltf"
+          ],
+          "bytes": 110803,
+          "textureSize": 256,
+          "triangles": 1894
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf",
+        "resources": [
+          "./content/4518a7feae5e94cd7e9d4e23e4f6e32fa17871cd0e30afbcdb06043fa5c6b584.bin",
+          "./content/4a49f7fc1354fa1b94cca65cbe0cd80d1eb64705fc1aa2fa2a483f13f3ab1b7c.ktx2",
+          "./content/3a69d56724865b465999c1268a7105dce216f290b29e13c1e39b5f9961f1ce3a.gltf"
+        ],
+        "bytes": 296975,
+        "textureSize": 1024,
+        "triangles": 1894
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/cfe90696553ee52e77e1eaae1b4f1c97bf228dc222d466d12d20ca24f8901c03.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 718247,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/cfe90696553ee52e77e1eaae1b4f1c97bf228dc222d466d12d20ca24f8901c03.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bda-fad8-7185-90a4-808c4b826f15",
+      "triangles": 1894
+    },
+    "chest-common": {
+      "name": "chest-common",
+      "category": "prop",
+      "bounds": [
+        0.9575200080871582,
+        0.5019530057907104,
+        0.6577140092849731
+      ],
+      "height": 0.47179975498801086,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
+            "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+          ],
+          "bytes": 339324,
+          "textureSize": 1024,
+          "triangles": 4479
+        },
+        {
+          "level": 1,
+          "model": "./content/095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/ffacbdb4c99059606491ba5b1920841d258649079ec719b34c4db581d04d4485.ktx2",
+            "./content/095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10.gltf"
+          ],
+          "bytes": 225666,
+          "textureSize": 512,
+          "triangles": 4479
+        },
+        {
+          "level": 2,
+          "model": "./content/49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336.gltf",
+          "resources": [
+            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/5e60d1c0aaa77ead806d13d4435c5432b8a795f595ac2a0a708e6b8ad32a765e.ktx2",
+            "./content/49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336.gltf"
+          ],
+          "bytes": 178199,
+          "textureSize": 256,
+          "triangles": 4479
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+        "resources": [
+          "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+          "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
+          "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+        ],
+        "bytes": 339324,
+        "textureSize": 1024,
+        "triangles": 4479
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 599920,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-c8a6-72cd-832f-2f289dfba7a4",
+      "triangles": 4479
+    }
+  },
+  "placementCount": 301,
+  "newSourceModels": 3,
+  "reusedSourceModels": 6,
+  "groundManifest": "great-plains-ground"
+}

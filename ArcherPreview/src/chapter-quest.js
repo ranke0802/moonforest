@@ -1,0 +1,83 @@
+import './chapter-quest.css';
+import {CHAPTER_QUESTS} from './chapter-quest-data.js';
+import {ChapterJourney} from './chapter-quest-state.js';
+import {CHAPTER_POINTS,QUEST_APPLE_TREE} from './chapter-quest-points.js';
+import {createQuestProps} from './chapter-quest-props.js';
+const names={apple:'붉은 사과',pie:'따뜻한 애플파이',feed:'반려동물 먹이',herb:'달이슬풀',cargo:'상품 꾸러미',locket:'초상화 펜던트','goblin-iron':'고블린 철붙이',potion:'회복약',bandage:'치료 붕대',antidote:'해독제',gold:'획득한 의뢰 골드','key-2':'II등급 열쇠','key-3':'III등급 열쇠','equipment-voucher':'정제 장비 교환권','armor-voucher':'방어구 보강권','antidote-charm':'해독 부적','church-seal':'교회 인장'};
+const labels={locked:'선행 의뢰 필요',available:'수락 가능',active:'진행 중',ready:'보상 받기',done:'완료'};
+const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+const button=(action,label,id='',disabled=false)=>`<button class="uit-skin" data-chapter="${action}" data-id="${id}" ${disabled?'disabled':''}>${esc(label)}</button>`;
+const npcNames={elder:'노년 여성',smith:'대장장이',farmer:'농부',herbalist:'약초사',youth:'청년',merchant:'상인',guard:'자경단 전사'};
+const npcLines={elder:'받은 건 많지. 마지막으로 뭘 해 줬느냐고 물으면… 말이 잘 안 나오는구나.',smith:'이 리벳, 내가 박은 거야. 가져간 날도 장부에 남아 있어. 묻는 사람이 없었지.',farmer:'그날도 하나 더 구웠는데… 문 앞에 두고 그냥 돌아왔죠.',herbalist:'같은 병이라고, 안에 든 것까지 같은 건 아니지. 그 애가 괜찮은지도 물었어야 했는데.',youth:'다친 것 같았어. 그때라도 누굴 불렀으면… 아니, 길은 여기야.',merchant:'돈은 다시 벌면 되지만… 아내의 초상화는 다시 구할 수 없네.',guard:'지키는 건 맞서 서는 일만 있는 줄 알았지.'};
+export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{},onPauseChange=()=>{},heal=()=>0,creditGold=()=>{}}){
+ const journey=new ChapterJourney(storage),doc=root.ownerDocument,win=doc.defaultView,abort=new AbortController(),props=createQuestProps(world);
+ let currentMap=null,points=[],nearest=null,lastTime=-Infinity,selected=journey.value.tracked,screen='journal',timer,disposed=false,signature='',appleHits=0,appleDrops=0,lastStrike=null;
+ const hud=doc.createElement('section');hud.id='chapter-hud';hud.dataset.ui='';hud.innerHTML=`<button class="chapter-track" data-chapter="journal"><small>첫 장 · 사라진 성녀</small><strong></strong><span></span></button><div class="chapter-story">${button('story','이야기')}${button('interact','조사하기')}</div>`;root.append(hud);root.dataset.uiTest='true';
+ const dialog=doc.createElement('dialog');dialog.id='chapter-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-label','첫 장 의뢰와 소지품');root.append(dialog);
+ const notice=doc.createElement('output');notice.className='chapter-toast';notice.setAttribute('role','status');notice.hidden=true;root.append(notice);
+ const topButtons=[];for(const [action,name]of [['journal','수첩'],['bag','가방']]){const b=doc.createElement('button');b.dataset.chapter=action;b.textContent=name;b.setAttribute('aria-label',name+' 열기');root.querySelector('.top-actions').prepend(b);topButtons.push(b);}
+ function notify(text){clearTimeout(timer);notice.textContent=text;notice.hidden=false;timer=setTimeout(()=>notice.hidden=true,3500);}
+ const safe=()=>{const s=getState();return s.ready&&!s.dead&&!s.combat&&!s.busy;};
+ function open(next){if(!safe()||doc.querySelector('dialog[open]')&&!dialog.open)return;screen=next;resetInput();render();if(!dialog.open)dialog.showModal();onPauseChange();}
+ const close=()=>dialog.close();
+ function detail(){const q=CHAPTER_QUESTS.find(q=>q.id===selected)??CHAPTER_QUESTS[0],status=journey.status(q.id),requires=q.requires.map(id=>CHAPTER_QUESTS.find(q=>q.id===id).name).join(' · ');
+  return `<article class="chapter-paper"><small>${q.id} · ${q.type} · ${labels[status]}</small><h3>${esc(q.name)}</h3><p>${esc(q.story)}</p><ul>${journey.progress(q).map(o=>`<li>${o.value===o.count?'✓':'○'} ${esc(o.label)} <b>${o.value} / ${o.count}</b></li>`).join('')}</ul><blockquote>${esc(q.line)}</blockquote><p>보상: ${esc(q.rewardText)} · XP ${q.xp}</p><div class="chapter-actions">${status==='available'?button('accept','의뢰 수락',q.id):status==='ready'?button('claim','보상 받기',q.id):''}${button('track','목표 추적',q.id)}${q.id==='Q01'?button('apple-guide','사과나무 위치 확인'):''}</div>${status==='locked'?`<p class="chapter-note">선행: ${esc(requires)}</p>`:''}${q.pendingBinding?`<p class="chapter-note">연결 예정: ${esc(q.pendingBinding)}. 현재 완료로 간주하지 않습니다.</p>`:''}</article>`;
+ }
+ function story(){const s=getState();if(s.map==='village')return `<div class="chapter-notes"><p>주민들의 말을 모아 성녀가 떠난 길을 확인하세요.</p><div class="chapter-grid">${Object.entries(npcNames).map(([id,name])=>`<article class="chapter-item"><h3>${name}</h3><p>${npcLines[id]}</p>${button('talk','이야기 듣기',id)}</article>`).join('')}</div>${journey.status('Q02')!=='locked'?button('talk','약초사에게 빈 약통 비교 부탁','vial-compare'):''}${journey.value.done.includes('M08')?button('talk','청년에게 다른 질문을 한다','youth-return'):''}</div>`;
+  if(s.map==='witch-cave'&&journey.value.done.includes('M07'))return `<div class="chapter-paper"><h3>끝나지 않은 의뢰</h3><p>엘레나의 이야기를 기록하고, 비비앙이 남긴 말을 확인한다. 남아 있는 배출 장치와 연구 기록을 보존해야 한다.</p>${button('talk','엘레나의 증언 읽기','elena')}${button('talk','비비앙의 기록 읽기','vivian')}</div>`;
+  return `<div class="chapter-paper"><h3>길 위의 기록</h3><p>금색 표식에 가까이 가면 상단에 조사·수집 버튼이 나타납니다. 다음 목적지는 수첩에서 확인할 수 있습니다.</p>${button('journal','의뢰 목록 보기')}${['archer','warrior','shaman'].map((id,i)=>button('tactic',['궁수: 엄폐 활용','전사: 측후면 공략','주술사: 시전 끊기'][i],id)).join('')}</div>`;
+ }
+ function bag(){return `<div class="chapter-notes"><p>경험치 ${journey.value.xp} · 성장 단계 ${1+Math.floor(journey.value.xp/250)} · ${journey.volatile?'이번 실행에서 보관 중':'자동 저장됨'}</p><div class="chapter-grid">${Object.entries(journey.value.bag).filter(([,n])=>n>0).map(([id,n])=>`<article class="chapter-item"><h3>${names[id]??id} × ${n}</h3>${['pie','potion','bandage'].includes(id)?button('use','사용하기',id):''}${id==='pie'?button('quick',journey.value.quickPie?'퀵슬롯 등록됨 · Z':'퀵슬롯 등록'):''}<p class="chapter-note">${['apple','herb','cargo','locket','goblin-iron'].includes(id)?'의뢰 물품 · 판매하거나 버릴 수 없습니다.':id.includes('voucher')?'장비 제작 NPC 연결 후 사용할 교환권입니다.':''}</p></article>`).join('')||'<p>아직 소지품이 없습니다.</p>'}</div></div>`;}
+ function render(){dialog.innerHTML=`<header><h2>${screen==='bag'?'소지품':screen==='story'?'이야기':'여행 수첩'}</h2>${button('close','돌아가기 ×')}</header><nav>${button('journal','의뢰')}${button('story','이야기')}${button('bag','가방')}</nav>`+(screen==='journal'?`<div class="chapter-body"><div class="chapter-list">${CHAPTER_QUESTS.map(q=>`<button data-chapter="select" data-id="${q.id}" aria-pressed="${selected===q.id}"><small>${q.id} · ${labels[journey.status(q.id)]}</small>${esc(q.name)}</button>`).join('')}</div>${detail()}</div>`:storyOrBag());}
+ function storyOrBag(){return screen==='bag'?bag():story();}
+ function talk(id){if(!safe())return false;const v=journey.value,map=getState().map;
+  if(Object.hasOwn(npcNames,id)&&map==='village'){journey.record('talk:'+id,1,'talk:'+id);if(v.done.includes('M09'))journey.record('talk:after-'+id,1,'talk:after-'+id);notify(npcLines[id]);return true;}
+  if(id==='vial-compare'&&map==='village'&&v.facts['inspect:empty-vial'])return journey.record('talk:'+id,1,'talk:'+id);
+  if(id==='youth-return'&&map==='village'&&v.done.includes('M08'))return journey.record('talk:'+id,1,'talk:'+id);
+  if(['elena','vivian'].includes(id)&&map==='witch-cave'&&v.done.includes('M07')){notify(id==='elena'?'엘레나: 그 방에 가까이 가지 마.':'비비앙: 이 인과율에 엮이다니. 너도 참 안됐구나.');return journey.record('talk:'+id,1,'talk:'+id);}return false;
+ }
+ function allowed(p){if(!p.requires)return true;if(p.requires.includes(':'))return journey.value.facts[p.requires]>0;return ['active','ready','done'].includes(journey.status(p.requires));}
+ function visible(p){if(!allowed(p))return false;if(p.id==='apple-tree')return appleDrops===0&&journey.status('Q01')==='active';if(p.id==='apple-drop')return appleDrops>0;return !journey.seen.has('point:'+p.id);}
+ function interact(){if(!safe()||!nearest||Math.hypot(getState().position.x-nearest.x,getState().position.z-nearest.z)>3)return;const p=nearest;if(!visible(p))return;
+  if(p.id==='apple-tree'){notify('나무 가까이에서 J 또는 공격 버튼을 짧게 누르세요. 떨어진 사과는 G로 줍습니다.');}
+  else if(p.id==='apple-drop'){const count=Math.min(2,Math.max(0,6-(journey.value.bag.apple??0)));if(count){journey.collect('apple',count);appleDrops--;notify(`사과 ${count}개를 주웠습니다.`);}else notify('사과는 충분합니다. 수첩에서 의뢰를 확인하세요.');}
+  else if(p.tier){const tier=p.tier;journey.record(p.key,1,'point:'+p.id);for(const [id,n]of Object.entries(tier===1?{potion:1,gold:15}:tier===2?{'equipment-voucher':1,gold:50}:{'key-3':1,gold:120})){journey.value.bag[id]=(journey.value.bag[id]??0)+n;}journey.save();notify(`${tier}등급 상자 보급품을 받았습니다.`);}
+  else if(p.item){journey.collect(p.item,p.count,'point:'+p.id);notify((names[p.item]??p.label)+' 수집');}
+  else{journey.record(p.key,1,'point:'+p.id);notify(p.text||p.label);}
+  refresh(true);
+ }
+ function action(name,id){if(name==='close'){close();return;}if(!safe())return;
+  if(['journal','story','bag'].includes(name))open(name);
+  if(name==='select'){selected=id;render();}
+  if(name==='accept'){if(journey.accept(id))notify('의뢰를 수락했습니다.');render();}
+  if(name==='claim'){const q=CHAPTER_QUESTS.find(q=>q.id===id);if(['Q01','Q02','Q05','Q06','Q09'].includes(id)&&getState().map!=='village'){notify('마을에서 의뢰 물품을 전달하세요.');return;}const reward=journey.claim(id);if(reward)notify(`${q.name} 완료 · XP ${reward.xp}`);render();}
+  if(name==='track'){journey.track(id);close();}
+  if(name==='talk'){talk(id);render();}
+  if(name==='tactic'){journey.record('read:'+id,1,'read:'+id);notify('전술을 수첩에 기록했습니다.');}
+  if(name==='interact')interact();
+  if(name==='quick'){journey.quick();notify('애플파이를 Z 빠른 사용에 등록했습니다.');render();}
+  if(name==='use'){const amount={pie:120,potion:160,bandage:80}[id];if(amount&&journey.use(id,()=>heal(amount)>0)){notify('체력을 회복했습니다.');render();}else notify('체력이 가득 찼거나 지금은 사용할 수 없습니다.');}
+  if(name==='apple-guide'){notify(`마을 사과나무 · X ${QUEST_APPLE_TREE.x.toFixed(0)}, Z ${QUEST_APPLE_TREE.z.toFixed(0)} · 나무 가까이에서 약공격`);close();}
+  refresh(true);
+ }
+ root.addEventListener('click',e=>{const b=e.target.closest('[data-chapter]');if(b&&!b.disabled)action(b.dataset.chapter,b.dataset.id);},{signal:abort.signal});
+ dialog.addEventListener('close',()=>{resetInput();onPauseChange();root.querySelector('#viewport')?.focus({preventScroll:true});},{signal:abort.signal});
+ win.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;if(doc.querySelector('dialog[open]')&&!dialog.open)return;const name={KeyL:'journal',KeyI:'bag',KeyR:'story',KeyG:'interact',Escape:dialog.open?'close':null,KeyZ:journey.value.quickPie?'use':null}[e.code];if(name&&(name==='close'||safe())){e.preventDefault();e.stopPropagation();action(name,e.code==='KeyZ'?'pie':'');}},{capture:true,signal:abort.signal});
+ function refresh(force=false){creditGold(journey.value.bag.gold??0);const q=CHAPTER_QUESTS.find(q=>q.id===journey.value.tracked)??CHAPTER_QUESTS[0],o=journey.progress(q).find(o=>o.value<o.count),text=journey.status(q.id)==='done'?'완료':o?`${o.label} · ${o.value}/${o.count}`:'수첩에서 보상 받기';const sig=q.id+text+nearest?.id;
+  if(force||sig!==signature){signature=sig;hud.querySelector('strong').textContent=q.name;hud.querySelector('.chapter-track span').textContent=text;const b=hud.querySelector('[data-chapter=interact]');b.hidden=!nearest;b.textContent=nearest?nearest.label+' · G':'';}
+ }
+ const api={journey,talk,isOpen:()=>dialog.open,releaseMap(){props.release();currentMap=null;points=[];nearest=null;},
+  defeat({kind,phase}){const key=kind==='elena'&&phase===2?'mourning-elena':kind;journey.record('kill:'+key);if(kind==='goblin'){journey.collect('goblin-iron');notify('고블린 철붙이 1개 수집');}},
+  action(kind){if(getState().map==='village')journey.record('action:'+kind);},
+  event(key,count=1,token){return journey.record(key,count,token);},
+  strike(result,position){if(getState().map!=='village'||!['active','ready'].includes(journey.status('Q01'))||!['slash','attack','moveAttack'].includes(result.state)||result.actionId===lastStrike||Math.hypot(position.x-QUEST_APPLE_TREE.x,position.z-QUEST_APPLE_TREE.z)>3.4)return;lastStrike=result.actionId;appleHits++;if((journey.value.bag.apple??0)<6)appleDrops=Math.min(3,appleDrops+1);journey.record('apple:strike');notify('사과가 떨어졌습니다. 가까이에서 G로 줍기');},
+  update(time){if(time-lastTime<.15)return;lastTime=time;const s=getState();if(!s.ready)return;
+   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},.2,world.plains?105:world.cave?64:world.forest?55:48);return {...p,x:position.x,z:position.z};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
+   if(s.map==='village')journey.record('visit:village',1,'visit:village');
+   if(s.map==='great-plains'&&Math.hypot(s.position.x+5,s.position.z-25)<8)journey.record('visit:junction',1,'visit:junction');
+   if(s.map==='monster-forest'&&Math.hypot(s.position.x-27,s.position.z+36)<6)journey.record('visit:cave-camp',1,'visit:cave-camp');
+   nearest=safe()&&!dialog.open?points.filter(visible).map(p=>({p,d:Math.hypot(p.x-s.position.x,p.z-s.position.z)})).filter(v=>v.d<3).sort((a,b)=>a.d-b.d)[0]?.p??null:null;
+   props.update(points,s.position,visible);refresh();
+  },inspect:()=>({screen:dialog.open?screen:'explore',...journey.value}),dispose(){if(disposed)return;disposed=true;close();abort.abort();props.dispose();clearTimeout(timer);hud.remove();dialog.remove();notice.remove();topButtons.forEach(b=>b.remove());}};
+ world.scene.onDisposeObservable.addOnce(()=>api.dispose());refresh(true);return api;
+}

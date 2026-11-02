@@ -1,11 +1,13 @@
 import {mapPortals} from './map-route.js';
 import {VILLAGE_GROUND_ROUTES,sampleGroundCurve} from './village-ground-layout.js';
 import {FOREST_ROUTES,FOREST_CLEARINGS} from './monster-forest-layout.js';
+import {PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_RADIUS} from './great-plains-layout.js';
 import {CAVE_ROUTES,CAVE_ROOMS,caveSurface} from './witch-cave-layout.js';
 
 export const MINIMAP_SIZE=96;
 export const MINIMAP_MAPS=Object.freeze({
  village:{label:'마을',rect:[-52,-44,104,128],fill:'#314433',road:'#a49570'},
+ 'great-plains':{label:'대평원',rect:[-110,-110,220,220],fill:'#62663c',road:'#c3ab7d'},
  'monster-forest':{label:'마물의 숲',rect:[-66,-66,132,132],halfTurn:true,fill:'#263830',road:'#8d8763'},
  'witch-cave':{label:'마녀의 동굴',rect:[-64,-56,128,120],halfTurn:true,fill:'#141722',road:'#857969'},
 });
@@ -23,14 +25,15 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
  // texture download, extra GPU camera or per-frame navigation queries.
  for(let y=0;y<size;y++){if(y%8===0){await new Promise(resolve=>setTimeout(resolve,0));if(!current())return false;}for(let x=0;x<size;x++){
   const {x:wx,z:wz}=minimapWorldPoint(rect,x+.5,y+.5,size,halfTurn);
-  const inside=mapId==='witch-cave'?caveSurface(wx,wz).distance<-.2:Math.hypot(wx,wz)<(mapId==='village'?48:62);
-  if(inside&&navigation.free({x:wx,z:wz},.29,80)){ctx.fillStyle=spec.fill;ctx.fillRect(x,y,1,1);}
+  const inside=mapId==='witch-cave'?caveSurface(wx,wz).distance<-.2:Math.hypot(wx,wz)<(mapId==='great-plains'?PLAINS_RADIUS:mapId==='village'?48:62);
+  if(inside&&navigation.free({x:wx,z:wz},.29,mapId==='great-plains'?PLAINS_RADIUS:80)){ctx.fillStyle=spec.fill;ctx.fillRect(x,y,1,1);}
  }}
  const route=(points,width)=>{
   ctx.strokeStyle=spec.road;ctx.lineWidth=Math.max(1,width*size/rect[2]);ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();
   points.forEach(([x,z],i)=>{const p=project(x,z);if(i)ctx.lineTo(p.x,p.y);else ctx.moveTo(p.x,p.y);});ctx.stroke();
  };
  if(mapId==='village')for(const r of VILLAGE_GROUND_ROUTES)route(sampleGroundCurve(r.points,{closed:r.closed,step:1}),r.width);
+ if(mapId==='great-plains'){for(const c of PLAINS_CLEARINGS){const p=project(c.x,c.z);ctx.fillStyle=spec.road;ctx.beginPath();ctx.arc(p.x,p.y,c.r*size/rect[2],0,Math.PI*2);ctx.fill();}for(const r of PLAINS_ROUTES)route(r.samples,r.width);}
  if(mapId==='monster-forest'){for(const c of FOREST_CLEARINGS){const p=project(c.x,c.z);ctx.fillStyle=spec.road;ctx.beginPath();ctx.arc(p.x,p.y,c.r*size/rect[2],0,Math.PI*2);ctx.fill();}for(const r of FOREST_ROUTES)route(r.samples,r.width);}
  if(mapId==='witch-cave'){for(const c of CAVE_ROOMS){const p=project(c.x,c.z);ctx.fillStyle=spec.road;ctx.beginPath();ctx.arc(p.x,p.y,c.r*size/rect[2],0,Math.PI*2);ctx.fill();}for(const r of CAVE_ROUTES)route(r,Math.min(...r.map(p=>p[3]))*2);}
  // Trim route edges and rooms against actual collision, including laboratory
@@ -38,7 +41,7 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
  const image=ctx.getImageData(0,0,size,size);
  for(let y=0;y<size;y++){if(y%8===0){await new Promise(resolve=>setTimeout(resolve,0));if(!current())return false;}for(let x=0;x<size;x++){
   const {x:wx,z:wz}=minimapWorldPoint(rect,x+.5,y+.5,size,halfTurn);
-  if(!navigation.free({x:wx,z:wz},.29,80)){const i=(y*size+x)*4;image.data[i]=12;image.data[i+1]=16;image.data[i+2]=24;}
+  if(!navigation.free({x:wx,z:wz},.29,mapId==='great-plains'?PLAINS_RADIUS:80)){const i=(y*size+x)*4;image.data[i]=12;image.data[i+1]=16;image.data[i+2]=24;}
  }}
  ctx.putImageData(image,0,0);
  for(const portal of mapPortals(mapId)){const p=project(portal.x,portal.z),x=Math.round(p.x),y=Math.round(p.y);ctx.fillStyle='#17101e';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#cf9fff';ctx.fillRect(x-1,y-2,3,5);ctx.fillRect(x-2,y-1,5,3);}
