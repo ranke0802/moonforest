@@ -172,6 +172,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
     map:character,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
+loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
   try{return normalizeAttackSpeed(Number(localStorage.getItem(attackSpeedStorageKey())??1));}
@@ -478,7 +479,7 @@ async function loadCharacter() {
     console.error('[Archer asset load]', error);
     const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);
     if(timedOut)world.cancelResourceDownloads?.();
-    loadingView.fail(frameFailure?'게임 실행이 중단되었습니다':timedOut?'불러오기 시간이 초과되었습니다':'캐릭터를 불러오지 못했습니다',frameFailure?'다시 불러오기를 눌러 주세요. '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
+    loadingView.fail(frameFailure?'게임 실행이 중단되었습니다':timedOut?'불러오기 시간이 초과되었습니다':'캐릭터를 불러오지 못했습니다',frameFailure?'다시 불러오기를 눌러 주세요. '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'startup'});
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
@@ -765,16 +766,16 @@ try {
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
     },
-    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'연결을 확인한 후 아래 버튼으로 다시 시도해 주세요.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도'});},
+    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}catch(error){
-      frameFailure={message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;
+      frameFailure={name:error.name??'Error',message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;
       loadDiagnostics.finish(frameFailure.message);
       frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
-      console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message);
+      console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message,{error,phase:'frame'});
     }finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
   });
   const syncPlayback=()=>{
@@ -894,5 +895,5 @@ try {
   window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   loadCharacter();
 } catch (error) {
-  loading.classList.add('error'); $('#loading-title').textContent = '3D 화면을 시작하지 못했습니다'; $('#loading-text').textContent = error.message; console.error(error);
+  loadingView.fail('3D 화면을 시작하지 못했습니다','진단을 복사해 전달한 뒤 페이지를 새로고침해 주세요.',{error,phase:'engine-initialization',retry:false});console.error(error);
 }

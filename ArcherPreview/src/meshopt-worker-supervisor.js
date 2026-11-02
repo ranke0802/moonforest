@@ -1,3 +1,4 @@
+import {runtimeTimers} from './runtime-timers.js';
 const installations=new WeakMap();let diagnostics={status:'uninitialized'};
 const failure=(message,code,stage,extra={})=>Object.assign(new Error(message),{code,meshoptStage:stage,...extra});
 const copyError=error=>Object.assign(new Error(error.message),{name:error.name,code:error.code,meshoptStage:error.meshoptStage,timeoutMs:error.timeoutMs,detail:error.detail});
@@ -23,7 +24,7 @@ export function meshoptWorkerMain(){
 // decode. Only this worker's own fault/deadline, idle or explicit dispose ends it.
 export class MeshoptWorkerSupervisor{
  constructor({createWorker,decoderUrl,timeoutMs=45000,queueTimeoutMs=45000,initTimeoutMs=45000,decodeTimeoutMs=45000,idleMs=1000,timers={}}){
-  Object.assign(this,{createWorker,decoderUrl,timeoutMs,queueTimeoutMs,initTimeoutMs,decodeTimeoutMs,idleMs});this.now=timers.now??(()=>performance.now());this.schedule=timers.setTimeout??setTimeout;this.unschedule=timers.clearTimeout??clearTimeout;
+  Object.assign(this,{createWorker,decoderUrl,timeoutMs,queueTimeoutMs,initTimeoutMs,decodeTimeoutMs,idleMs});const clock=runtimeTimers(timers);this.now=clock.now;this.schedule=clock.setTimeout;this.unschedule=clock.clearTimeout;
   this.queue=[];this.active=null;this.lease=null;this.failed=null;this.disposed=false;this.sequence=0;
   this.counts={created:0,terminated:0,completed:0,failed:0,recoveries:0,workerFaults:0};
  }

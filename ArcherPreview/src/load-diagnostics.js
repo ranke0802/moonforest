@@ -6,7 +6,7 @@ export class LoadDiagnostics {
   phase(name){const c=this.current;if(!c||c.phase===name)return;const at=this.now();c[c.phase+'Ms']+=Math.max(0,at-c.phaseStarted);c.phase=name;c.phaseStarted=at;}
   download(state){if(this.current){this.current.bytes=state.total??0;this.current.cachedBytes=state.cached??0;}}
   snapshot(){const c=this.current??this.history.at(-1);if(!c)return null;const copy={...c};if(this.current){const at=this.now();copy[copy.phase+'Ms']+=Math.max(0,at-copy.phaseStarted);copy.totalMs=Math.max(0,at-copy.started);}delete copy.phaseStarted;delete copy.started;return copy;}
-  finish(error=null){if(!this.current)return;const snapshot=this.snapshot();snapshot.phase=error?'error':'complete';snapshot.error=error?String(error).slice(0,200):null;this.history.push(snapshot);if(this.history.length>8)this.history.shift();this.current=null;}
+  finish(error=null){if(!this.current)return;const snapshot=this.snapshot();if(error)snapshot.failedPhase=snapshot.phase;snapshot.phase=error?'error':'complete';snapshot.error=error?String(error).slice(0,200):null;this.history.push(snapshot);if(this.history.length>8)this.history.shift();this.current=null;}
 }
 
 export function readDiagnosticMemory(perf=globalThis.performance,resources={}){

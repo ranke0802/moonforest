@@ -115,13 +115,16 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     try{storage?.setItem(key,enabled?'1':'0');}catch{/* Keep session choice. */}sync();
   });
   reset.addEventListener('click',()=>{monitor.reset();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
-  const copyReport=async()=>{
+  const snapshot=()=>{
     if(enabled)refreshGpu();
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
     report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
-    const value=JSON.stringify(report,null,2);
+    return report;
+  };
+  const copyReport=async()=>{
+    const value=JSON.stringify(snapshot(),null,2);
     const exportBox=detailDialog?.open?(get('diagnostic-detail-export')??fallback):fallback,exportStatus=detailDialog?.open?(get('diagnostic-detail-status')??status):status;
     try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);exportBox.hidden=true;exportStatus.textContent='진단 기록을 복사했습니다.';}
     catch{exportBox.value=value;exportBox.hidden=false;exportBox.focus();exportBox.select();exportStatus.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
@@ -129,6 +132,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   copy.addEventListener('click',copyReport);get('diagnostic-detail-copy')?.addEventListener('click',copyReport);
   sync();
   return {
+    snapshot,
     refresh:paint,
     get enabled(){return enabled;},
     mark(){return collecting?now():null;},

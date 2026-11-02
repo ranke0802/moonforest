@@ -1,0 +1,50 @@
+[
+  {
+    "cave": false,
+    "touchDevice": false,
+    "passed": true,
+    "player": "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf",
+    "resources": {
+      "files": 235,
+      "downloadBytes": 0,
+      "cachedBytes": 63002129,
+      "initialLodModels": 36
+    }
+  },
+  {
+    "cave": false,
+    "touchDevice": true,
+    "passed": true,
+    "player": "./content/e7cfa26e517bdd6cd3588727adf7fa21577b022c718c3713c83fbaf2c1a53b94.gltf",
+    "resources": {
+      "files": 227,
+      "downloadBytes": 0,
+      "cachedBytes": 78080637,
+      "initialLodModels": 36
+    }
+  },
+  {
+    "cave": true,
+    "touchDevice": false,
+    "passed": true,
+    "player": "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf",
+    "resources": {
+      "files": 178,
+      "downloadBytes": 0,
+      "cachedBytes": 66115828,
+      "initialLodModels": 28
+    }
+  },
+  {
+    "cave": true,
+    "touchDevice": true,
+    "passed": true,
+    "player": "./content/e7cfa26e517bdd6cd3588727adf7fa21577b022c718c3713c83fbaf2c1a53b94.gltf",
+    "resources": {
+      "files": 177,
+      "downloadBytes": 0,
+      "cachedBytes": 86225536,
+      "initialLodModels": 28
+    }
+  }
+]

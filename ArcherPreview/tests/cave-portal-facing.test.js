@@ -7,6 +7,7 @@ import {portalHeadingTurn,mapPortals,mapForCharacter,worldSpawn,travelUrl,MAP_PO
 import {carryPortalPose,createMapTransition} from '../src/map-transition.js';
 import {CameraPitch} from '../src/camera-pitch.js';
 import {CameraFollow} from '../src/camera-follow.js';
+import {LoadDiagnostics} from '../src/load-diagnostics.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n'),noop=()=>{};
 const near=(a,b,epsilon=1e-10)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
@@ -84,7 +85,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const boundary={initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},
-  frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:{begin:noop,phase:noop,download:noop,finish:noop},loadingView:{begin:noop,download:noop,stream:noop,preparing:noop,reveal:noop,fail:noop},
+  frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:new LoadDiagnostics(),loadingView:{begin:noop,download:noop,stream:noop,preparing:noop,reveal:noop,fail:noop},
   frameLoop:{setPaused:noop},audio:{stopAll:noop,play:noop,setEnvironment:noop,setSuspended:noop},actionAudio:{reset:noop},updateButtons:noop,cancelAttackInput:noop,
   goldLoot:{clearDrops:noop},goldLootView:{clear:noop},projectiles:{clear:noop},strikeSampler:{reset:noop},training:{setSelected:noop,relocate:noop},controller:{cancelAttack:noop},animator:{transition:noop,update:noop},
   prepareMapResources:async()=>{},loadVillage:async()=>{if(modelFaults.length)throw modelFaults.shift();},waitForSceneReady:async()=>{},bindMapPortal:noop,syncCaveFog:noop,assertFrameHealthy:noop,applyRenderQuality:noop,

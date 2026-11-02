@@ -1,6 +1,7 @@
 import {applyConfig,workerFunction,initializeWebWorker} from '@babylonjs/core/Misc/khronosTextureContainer2Worker.js';
 import {watchMapTextureRelease} from './map-texture-lifetime.js';
 import {mapLoadAbortError} from './map-load-lifetime.js';
+import {runtimeTimers} from './runtime-timers.js';
 
 const ownerKey=Symbol('map KTX owner'),installations=new WeakMap();let diagnostics={status:'uninitialized'};
 const resultKeys=['transcodedFormat','isInGammaSpace','hasAlpha','transcoderName'];
@@ -11,7 +12,7 @@ const copyError=error=>Object.assign(new Error(error.message),{name:error.name,c
 // messages, caps, options and decoded blocks are used without conversion.
 export class KtxWorkerSupervisor {
   constructor({createWorker,initialize=initializeWebWorker,urls,timeoutMs=45000,idleMs=1000,timers={}}){
-    Object.assign(this,{createWorker,initialize,urls,timeoutMs,idleMs});this.now=timers.now??(()=>performance.now());this.schedule=timers.setTimeout??setTimeout;this.unschedule=timers.clearTimeout??clearTimeout;
+    Object.assign(this,{createWorker,initialize,urls,timeoutMs,idleMs});const clock=runtimeTimers(timers);this.now=clock.now;this.schedule=clock.setTimeout;this.unschedule=clock.clearTimeout;
     this.queue=[];this.active=null;this.lease=null;this.sequence=0;this.epoch=0;this.failed=null;this.disposed=false;
     this.counts={created:0,terminated:0,completed:0,failed:0,cancelled:0,recoveries:0,workerFaults:0};this.lastFailure=null;this.lastCompleted=null;
   }

@@ -1,0 +1,54 @@
+{
+  "status": "VERIFIED_BEFORE_DEPLOYMENT",
+  "base": "57ce2771bea311910951c36121198fc29b0341e0",
+  "tests": {
+    "tests": 1068,
+    "pass": 1068,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "rootCause": {
+    "base": "57ce2771bea311910951c36121198fc29b0341e0",
+    "oldSourceSha256": "9f98578f7fc12a7b46b4c5f8ac169a5a378935b8fe2707471943829184f83f9a",
+    "reportedStack": {
+      "file": "index-D7c31AED.js",
+      "line": 41,
+      "column": 18373,
+      "excerpt": "tListener(`abort`,this.forward,{once:!0}),this.signal.aborted||(this.timer=this.scheduleTimer(()=>this.abort(yr(t,this.stage)),t))}abort(e=R()){this.si"
+    },
+    "oldError": {
+      "name": "TypeError",
+      "message": "Illegal invocation"
+    },
+    "newPass": true,
+    "conclusion": "The shipped constructor calls the detached Window timer as this.scheduleTimer. Browser host receiver checking rejects this instance receiver. The fixed adapter calls globalThis timers and preserves injected clock receivers.",
+    "limits": "Original shipped source is executed with browser-style receiver validation in Node; no browser automation or physical GPU test."
+  },
+  "resourceIndexIdentical": true,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "resourceFiles": 1037,
+  "bundles": 194,
+  "preservation": {
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "lod": true,
+    "newAssets": false,
+    "browserAutomation": false
+  },
+  "sourceHashes": {
+    "src/runtime-timers.js": "657c5cdc21744337b679d7bfa8e33fc97e8213e981646fc7c087b1786ffe201a",
+    "src/map-load-lifetime.js": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d",
+    "src/ktx-worker-supervisor.js": "12feaa6619a522313cfc67e9ebecb63d01c895bacdaa2fe4a2291df4b0179ba6",
+    "src/meshopt-worker-supervisor.js": "60136804bba7f7a44da40b41e39dd2adeae7e0db65fb2fde1f4e0c7d28399d6a",
+    "src/loading-view.js": "dba745948e3e42c47373fd757afb2ed1b31e19fc5c7b9c713e4c885c192ff509",
+    "src/frame-diagnostics.js": "c20bc103b3a2b030458cb4899531de3f1b80dbe3d299ba2480190d6cc7e9c549",
+    "src/load-diagnostics.js": "e700613e14ae857766386d8a80f428c3cef9c152adbdb279cc372aae64151ce6",
+    "src/main.js": "8dd996d5966fa0542021ff8e60dc9483ae1c639c1d0df67f970d722f7efb15b4",
+    "index.html": "663f2e2d0cd12816e1a0872376be8dd2e7df3a33f4752ee8f03162235bc54034"
+  },
+  "limitations": [
+    "No physical browser/GPU/phone performance measurement.",
+    "Browser receiver checks are simulated against actual old and fixed source; DOM/clipboard behavior uses controlled browser API boundaries."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "base": "57ce2771bea311910951c36121198fc29b0341e0",
+  "oldSourceSha256": "9f98578f7fc12a7b46b4c5f8ac169a5a378935b8fe2707471943829184f83f9a",
+  "reportedStack": {
+    "file": "index-D7c31AED.js",
+    "line": 41,
+    "column": 18373,
+    "excerpt": "tListener(`abort`,this.forward,{once:!0}),this.signal.aborted||(this.timer=this.scheduleTimer(()=>this.abort(yr(t,this.stage)),t))}abort(e=R()){this.si"
+  },
+  "oldError": {
+    "name": "TypeError",
+    "message": "Illegal invocation"
+  },
+  "newPass": true,
+  "conclusion": "The shipped constructor calls the detached Window timer as this.scheduleTimer. Browser host receiver checking rejects this instance receiver. The fixed adapter calls globalThis timers and preserves injected clock receivers.",
+  "limits": "Original shipped source is executed with browser-style receiver validation in Node; no browser automation or physical GPU test."
+}
