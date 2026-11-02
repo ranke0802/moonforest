@@ -44,12 +44,12 @@ async function fixture(t){
   return {engine,scene,config,world,battle,player,models};
 }
 
-test('Elena source inventory is 18 real 60 fps motions; runtime preserves topology and 4K ETC1S',()=>{
+test('Elena source inventory is 18 real 60 fps motions; approved runtime preserves clips and 4K ETC1S',()=>{
   const c=read('elena.json'),g=read(c.model);assert.equal(c.sourceClips.length,18);assert.equal(c.sourceClips.filter(a=>a.name.startsWith('mage_')).length,6);
   assert.ok(c.sourceClips.every(a=>a.fps===60));assert.equal(c.sourceClips.find(a=>a.name==='Axe_Spin_Attack').duration,2.5);
   assert.deepEqual(Object.keys(c.animations),[...ELENA_ACTIVE_CLIPS]);assert.equal(g.animations.length,12);assert.equal(c.magicEffect,'ground-telegraphs-v1');
   assert.deepEqual(c.style,ELENA_STYLE);
-  const triangles=g.meshes.reduce((n,m)=>n+m.primitives.reduce((s,p)=>s+g.accessors[p.indices].count/3,0),0);assert.equal(triangles,103930);
+  const triangles=g.meshes.reduce((n,m)=>n+m.primitives.reduce((s,p)=>s+g.accessors[p.indices].count/3,0),0);assert.equal(triangles,56918);
   assert.equal(g.skins.length,1);assert.ok(g.skins[0].joints.length>=80);
   for(const path of c.resources){const data=readFileSync(new URL(path,base));assert.equal(createHash('sha256').update(data).digest('hex'),path.split('/').at(-1).split('.')[0]);}
   const texture=readFileSync(new URL(g.images[0].uri,new URL(c.model,base)));assert.equal(texture.readUInt32LE(20),4096);assert.equal(texture.readUInt32LE(24),4096);assert.ok(texture.readUInt32LE(40)>1);

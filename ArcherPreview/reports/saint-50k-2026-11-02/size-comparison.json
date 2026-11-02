@@ -1,0 +1,16 @@
+{
+  "modelAndBufferBytes": {
+    "before": 7330147,
+    "after": 5113380
+  },
+  "triangles": {
+    "before": 103930,
+    "after": 56918
+  },
+  "vertices": {
+    "before": 158730,
+    "after": 96734
+  },
+  "gpuTimeMeasured": false,
+  "textureUnchanged": true
+}

@@ -1,0 +1,20 @@
+{
+  "approvedByUser": true,
+  "approvedTriangles": 56918,
+  "paths": [
+    "ArcherPreview/public/assets/content/448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+    "ArcherPreview/public/assets/content/31b50633725fccf74a1146f354fdd1b3aff70fd8d3c258df6e94d04815054f95.bin",
+    "ArcherPreview/public/assets/elena.json"
+  ],
+  "texture": {
+    "width": 4096,
+    "height": 4096,
+    "codec": "ETC1S",
+    "mipmaps": true,
+    "file": "9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a.ktx2",
+    "byteExactExistingTexture": true
+  },
+  "sourceBefore": "./content/e68c1c27eb0d4975714fdd697ec4c017dde11419ee5e8fe5fdd7a9819bc0d03b.gltf",
+  "modelAfter": "./content/448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+  "unchanged": "1.7m scale, animations/catalog/ground and hit tracks, style, combat settings"
+}

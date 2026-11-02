@@ -1,0 +1,36 @@
+{
+  "baseline": "5e7bd063318251afb12c619678c35a3859f49f90",
+  "tests": {
+    "total": 1117,
+    "passed": 1117
+  },
+  "changedFiles": [
+    "assets/content/31b50633725fccf74a1146f354fdd1b3aff70fd8d3c258df6e94d04815054f95.bin",
+    "assets/content/448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+    "assets/elena.json",
+    "assets/resource-index.json",
+    "assets/resource-sizes.json"
+  ],
+  "verifiedDeploymentFiles": 1500,
+  "resourceRevision": "65670b1a267f4d24aa7ea4e79c224ba53915fda9f982207a0d38a3d17b0fcf7b",
+  "oldModelExcluded": true,
+  "allKtx2Unchanged": true,
+  "mourningVillageForestCaveManifestsUnchanged": true,
+  "player8KBackground4KExistingLodPreserved": true,
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "modelAndBufferBytes": {
+    "before": 7330147,
+    "after": 5113380
+  },
+  "triangles": {
+    "before": 103930,
+    "after": 56918
+  },
+  "vertices": {
+    "before": 158730,
+    "after": 96734
+  },
+  "gpuTimeMeasured": false,
+  "textureUnchanged": true
+}

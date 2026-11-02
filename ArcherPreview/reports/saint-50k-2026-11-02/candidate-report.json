@@ -1,0 +1,28 @@
+{
+  "createdAt": "2026-11-02T08:47:57.372Z",
+  "status": "target-not-reached",
+  "source": {
+    "model": "./content/e68c1c27eb0d4975714fdd697ec4c017dde11419ee5e8fe5fdd7a9819bc0d03b.gltf",
+    "triangles": 103930,
+    "vertices": 158730
+  },
+  "candidate": {
+    "model": "448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+    "triangles": 56918,
+    "vertices": 96734,
+    "reportedCombinedAttributeError": 0.004972850438207388,
+    "elapsedMs": 834.4289999999999,
+    "lockedVertices": 22067,
+    "seamProtectedVertices": 78030
+  },
+  "texture": {
+    "width": 4096,
+    "height": 4096,
+    "codec": "ETC1S",
+    "mipmaps": true,
+    "file": "9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a.ktx2",
+    "byteExactExistingTexture": true
+  },
+  "method": "Attribute-aware simplification across export normal splits; UV seam protection, head/hand/true boundary vertex locks. Retained vertex attributes remain exact. Original skin/animations unchanged.",
+  "productionChanged": false
+}

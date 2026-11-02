@@ -11,8 +11,10 @@ test('exact vertex reuse preserves sparse weights and morphs while keeping every
   const g={buffers:[{uri:'v',byteLength:48},{uri:'i',byteLength:6},{uri:'s',byteLength:4}],bufferViews:[{buffer:0,byteLength:48},{buffer:1,byteLength:6},{buffer:2,byteOffset:0,byteLength:2},{buffer:2,byteOffset:2,byteLength:2}],accessors:[{bufferView:0,componentType:5126,type:'VEC3',count:4},{bufferView:1,componentType:5121,type:'SCALAR',count:6},{componentType:5121,type:'SCALAR',count:4,sparse:{count:2,indices:{bufferView:2,componentType:5121},values:{bufferView:3}}}],meshes:[{name:'fixture',primitives:[{attributes:{POSITION:0,COLOR_0:2},indices:1}]}]};
   const files=new Map([['v',{data}],['i',{data:indices}],['s',{data:sparse}]]);const report=weldExactVertices(g,files)[0];assert.equal(report.vertices,2);assert.equal(report.verifiedTriangleCorners,6);assert.deepEqual([...accessorBytes(g,files,2).raw],[0,4]);
 });
-test('packed Elena keeps all original triangle attributes, rig, texture and clip outputs byte-exact',async()=>{
-  const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('elena.json',base))),after=await readRuntimeGltf(new URL(manifest.model,base));
+test('historical lossless-weld Elena keeps all original triangle attributes, rig, texture and clip outputs byte-exact',async()=>{
+  // Preserve the historical exact-weld guarantee; the approved 56,918-triangle
+  // successor has a separate retained-attribute and animation regression test.
+  const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('../reports/saint-50k-2026-11-02/manifest-before.json',import.meta.url))),after=await readRuntimeGltf(new URL(manifest.model,base));
   // Fingerprints were taken from the immutable FBX-derived original. Keeping
   // the audit portable does not require publishing or retaining an obsolete GLB.
   const a=JSON.parse(readFileSync(new URL('./fixtures/elena-original-surface.json',import.meta.url))),b=after.gltf;
