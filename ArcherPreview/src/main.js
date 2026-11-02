@@ -310,7 +310,7 @@ function startDefense(kind){
   if(kind==='dodge'&&controller.captured){if(!boss.escapeGrab())return;audio.play('grab_escape');}
   if(!controller[kind]())return;
   chapterQuests?.action(kind);
-  attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
+  if(!controller.held)attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
     rollDirection=dodgeDirection(directionInput,world.camera.alpha,actor.rotation.y);
     actor.rotation.y=Math.atan2(rollDirection.x,rollDirection.z);
@@ -715,7 +715,7 @@ try {
       attackSources.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
-    if(reacted!==false){attackSources.clear();strikeSampler.reset();}
+    if(reacted!==false){if(!controller.held)attackSources.clear();strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
     return reacted;
   },{onDefeat:event=>{goldLoot.drop(event.kind,event.position);chapterQuests?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
@@ -930,7 +930,7 @@ try {
     if(!button||button.disabled||button.closest('.action-controls')||['summon-boss','summon-goblin','death-restart'].includes(button.id))return;
     audio.play(/close|back/.test(button.id)?'ui_back':/help|toggle/.test(button.id)?'ui_open':'ui_click');
   });
-  if(plainsReviewEnabled){const {setupPlainsReview}=await import('./plains-review-controls.js');setupPlainsReview({world,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,x:actor?.position.x,z:actor?.position.z,hp:boss?.playerHp}),moveTo:(x,z)=>{input.reset();actor.position.set(x,0,z);world.terrain.place(actor.position);syncCameraFocus(0,{snap:true});},travel:id=>mapTransition.travel(travelUrl(location.href,id))});}
+  if(plainsReviewEnabled){const {setupPlainsReview}=await import('./plains-review-controls.js');setupPlainsReview({world,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,x:actor?.position.x,z:actor?.position.z,hp:boss?.playerHp,motion:controller?.state,actionId:controller?.action?.id,charge:controller?.chargeProgress,queued:controller?.queuedAttack}),moveTo:(x,z)=>{input.reset();actor.position.set(x,0,z);world.terrain.place(actor.position);syncCameraFocus(0,{snap:true});},travel:id=>mapTransition.travel(travelUrl(location.href,id))});}
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
   window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   if(isWorldCharacter(character)&&!elenaReviewMode&&new URLSearchParams(location.search).get('legacyUiTest')!=='1'){

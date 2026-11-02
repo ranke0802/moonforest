@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "span": 248,
+  "span": 288,
   "color": {
-    "url": "./content/fe19ea9ec22701516e0e8c1bdc6257487bcea55b368d7855b6b27364849c6dbd.ktx2",
+    "url": "./content/1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
     "width": 2048,
     "height": 2048,
-    "bytes": 460357,
+    "bytes": 458550,
     "codec": "etc1s",
     "alpha": true,
     "gpuBlockBytes": 16
@@ -25,7 +25,7 @@
   "detailSamples": 2,
   "method": "approved-plains-crossroads-and-stream",
   "resources": [
-    "./content/fe19ea9ec22701516e0e8c1bdc6257487bcea55b368d7855b6b27364849c6dbd.ktx2",
+    "./content/1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
     "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
   ],
   "compression": "KTX2 color; lossless linear packed detail"

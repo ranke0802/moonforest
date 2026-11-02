@@ -24,8 +24,8 @@ export function configurePlainsDecor(world){
   const material=new StandardMaterial(name,scene);material.diffuseTexture=texture;material.emissiveColor=new Color3(.35,.35,.35);material.specularColor=Color3.Black();material.backFaceCulling=false;materials.push(material);
   const mesh=MeshBuilder.CreatePlane(name,{width,height},scene);mesh.position.set(x,world.terrain.heightAt(x,z)+y,z);mesh.billboardMode=Mesh.BILLBOARDMODE_Y;mesh.material=material;meshes.push(mesh);
  };
- label('plains-junction-names',['← 마을','마물의 숲 ↗','왕국 가도 ↓'],-16,27.2,1.8,1.9,.95);
- label('plains-village-name',['마을로 돌아가는 길','←  마을'], -85,-12.8,1.8,1.8,.9);
+ label('plains-junction-names',['← 마을','마물의 숲 ↗','왕국 가도 ↓'],-1,18.3,1.6,1.1,.55);
+ label('plains-village-name',['마을','← 귀환'], -85,-35.7,1.6,1,.5);
  for(const p of PLAINS_PLACEMENTS.filter(p=>p.boundaryMarker))label('church-marker-'+p.id,['✥','숲길 경계'],p.x,p.z+.25,.7,.48,.45);
  for(const p of PLAINS_PLACEMENTS.filter(p=>p.lootTier))label('chest-tier-'+p.id,[p.lootTier===2?'II':'I','보급함'],p.x,p.z+.5,.62,.42,.21);
  for(const mesh of meshes){mesh.isPickable=false;if(!mesh.billboardMode)mesh.freezeWorldMatrix();}

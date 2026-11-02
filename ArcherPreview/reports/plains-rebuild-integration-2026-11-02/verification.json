@@ -1,0 +1,37 @@
+{
+  "baseline": "9a8f4d6",
+  "handoffFilesVerified": 61,
+  "tests": {
+    "passed": 1146,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 86229.5292
+  },
+  "targetedDemandTests": 9,
+  "coverage": [
+    "actual compressed village exterior bounds and 187522 triangles",
+    "deferred exterior demand at forest entrance",
+    "identical URL tiers prepare once across repeated changes",
+    "distinct LOD model URLs remain separate",
+    "four-map repeated replacement and resource ownership",
+    "timeout/retry/late task isolation",
+    "HUD held attack during defense and normal-hit recovery",
+    "forced cancellation and lost-focus input",
+    "quest save and rewards"
+  ],
+  "quality": {
+    "playerTextureMax": 8192,
+    "backgroundTextureMax": 4096,
+    "originalLodsUnchanged": true,
+    "existingBossGeometryUnchanged": true
+  },
+  "resourceRevision": "a8e37c5a222957ceb9627b3e4dd507d6ead5bf89922089ff0c965afddf34b5f9",
+  "newAssetsGenerated": false,
+  "browserAutomation": false,
+  "physicalMobileGpuMeasured": false,
+  "limitations": [
+    "Exterior has one authored geometry reused by all three LOD entries, not three simplified meshes.",
+    "Node/NullEngine tests do not measure S23/iPhone GPU heat or guarantee 2-3 second transitions.",
+    "First chapter content still awaiting animals, hobgoblin and ghoul; not an end-to-end completed campaign."
+  ]
+}

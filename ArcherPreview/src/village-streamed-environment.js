@@ -4,7 +4,7 @@ import {readMapManifest} from './map-manifests.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
 import {createVillageTransform} from './village-environment.js';
 import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-demand.js';
-import {villageLodSources,VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {villageLodSources,hasVillageGeometry,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VillageVisibility} from './village-visibility.js';
 import {TreeOcclusion,prepareTreeOcclusion} from './tree-occlusion.js';
 import {VillageOutlines} from './village-outlines.js';
@@ -101,7 +101,7 @@ export function installVillageGeometry(asset,container,level,world){
     }
     asset.baseLevel=level;
   }
-  if(level===0)asset.nearSource=container;
+  if(level===0||asset.levels?.some(l=>l.level===0&&l.model===asset.levels.find(t=>t.level===level)?.model))asset.nearSource=container;
   for(let i=0;i<asset.baseMeshes.length;i++){
     const base=asset.baseMeshes[i];base.useLODScreenCoverage=true;base.isPickable=false;
     for(const tier of [1,2]){
@@ -137,7 +137,7 @@ export function loadStreamedVillage(world,{
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
-    const has=r=>assets.get(r.id).tiers.has(r.level);
+    const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
@@ -175,7 +175,7 @@ export function loadStreamedVillage(world,{
       }
       // Cave rock walls use a narrow eye-to-player cutaway; never fade an
       // entire room wall like a tree canopy and reveal rooms behind it.
-      const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
+      const covered=instances.filter(r=>r.blocksPlayerView&&!r.placement.background&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.plains||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         world.treeOcclusion.refreshRoots([record.root]);

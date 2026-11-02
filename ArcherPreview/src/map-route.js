@@ -6,8 +6,8 @@ export const CAVE_SPAWN=Object.freeze({x:-42,z:43});
 export const FOREST_RADIUS=62;
 export const FOREST_SPAWN=Object.freeze({x:0,z:46});
 export const MAP_PORTALS=Object.freeze({
-  village:{x:.35,z:76,radius:3,destination:'warrior-plains',label:'대평원으로 나가기',arrival:{x:-87,z:-8},roadPassage:true},
-  'great-plains':{x:-94,z:-8,radius:3,destination:'warrior-v3',label:'마을로 돌아가기',arrival:{x:.35,z:70},roadPassage:true},
+  village:{x:.35,z:76,radius:3,destination:'warrior-plains',label:'대평원으로 나가기',arrival:{x:-87,z:-32},roadPassage:true},
+  'great-plains':{x:-94,z:-35,radius:3,destination:'warrior-v3',label:'마을로 돌아가기',arrival:{x:.35,z:70},roadPassage:true},
   'monster-forest':{x:0,z:51,radius:3,destination:'warrior-plains',label:'대평원으로 돌아가기',arrival:{x:61,z:-66},roadPassage:true},
   'witch-cave':{x:-46,z:47,radius:3,destination:'warrior-v4',label:'마물의 숲으로 돌아가기',arrival:{x:28,z:-38}},
 });

@@ -24,6 +24,7 @@ export class WarriorV2Controller {
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
   }
   releaseHold(){this.held=false;this.holdTime=0;this.holdTriggered=false;}
+  heavyIntent(){return {held:this.held,holdTime:this.holdTime,holdTriggered:this.holdTriggered,queuedAttack:this.queuedAttack==='judgment'?'judgment':null};}
   cancelAttackInput(){this.releaseHold();this.queuedAttack=null;}
   cancelAttack(){this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
   requestMovement(){
@@ -38,12 +39,12 @@ export class WarriorV2Controller {
     // Further damage can reduce HP, but cannot shorten a block's control lock.
     if(this.groggy&&reason!=='blocked')return false;
     if(!force&&['judgment','dodge'].includes(this.action?.state))return false;
-    const buffered=!force&&reason!=='blocked'&&['dodge','shieldPush'].includes(this.action?.state)&&this.queuedAttack==='judgment';
+    const buffered=!force&&reason!=='blocked'?this.heavyIntent():null;
     this.hitPose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
     this.cancelAttack();this.staggerRemaining=Math.max(this.groggy?this.staggerRemaining:0,duration);this.staggerLocked=reason==='blocked';
-    // A completed deliberate charge survives ordinary defensive recovery hits.
+    // Keep the physical hold and completed heavy through ordinary recovery.
     // Forced knockdown/capture, blocked attacks and lost focus still cancel it.
-    if(buffered)this.queuedAttack='judgment';
+    if(buffered)Object.assign(this,buffered);
     return true;
   }
   attack(){
@@ -70,7 +71,8 @@ export class WarriorV2Controller {
     // Repeated defense input must not reset its clip, travel, or hit window.
     // Ignore it entirely rather than buffering another cast after completion.
     if(this.action?.state===kind)return false;
-    this.cancelAttack();this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
+    const intent=this.heavyIntent();
+    this.cancelAttack();Object.assign(this,intent);this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
   shieldPush(){return this.interruptWith('shieldPush');}
   dodge(){return this.interruptWith('dodge');}

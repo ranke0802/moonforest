@@ -23,7 +23,7 @@ export function placementBounds(world,p,config){
 export function villageDemand(world,records){
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
   const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
-  const range=world.villageOverview?260:villageRenderRange(world.touchDevice).cellCull;
+  const range=world.villageOverview?(world.plains?420:260):villageRenderRange(world.touchDevice).cellCull;
   const target=camera.target??camera.getTarget();
   for(const record of records){
     if(world.caveFog?.fog.ready&&!world.caveFog.fog.boundsVisible(record.min??record.bounds.min,record.max??record.bounds.max,2))continue;

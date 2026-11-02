@@ -58,7 +58,7 @@ export class VillageVisibility {
       const distance=Vector3.Distance(camera,cell.center)-cell.radius;
       // Generous frustum margin prevents camera motion from revealing empty cells.
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
-      const active=distance<(this.world.villageOverview?260:villageRenderRange(this.touch).cellCull)&&inFrustum;
+      const active=distance<(this.world.villageOverview?(this.world.plains?420:260):villageRenderRange(this.touch).cellCull)&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(caveFogRootEnabled(r));}cell.active=active;}
       if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false)activeInstances++;}
     }

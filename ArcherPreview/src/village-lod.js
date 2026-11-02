@@ -14,3 +14,12 @@ export function villageLodSources(config,touch){
   if(!config.geometryLod)return config.lods.filter(l=>!touch||l.level>0);
   return [touch?config.mobileNear:config.lods[0],config.lods[1],config.lods[2]];
 }
+
+// Some distant prefabs intentionally use the same content-addressed model at
+// every tier. A tier change must not decode/instantiate that exact file again.
+// Different model URLs (including texture-only variants) remain separate LODs.
+export function hasVillageGeometry(asset,level){
+  if(asset.tiers.has(level))return true;
+  const model=asset.levels.find(l=>l.level===level)?.model;
+  return !!model&&asset.levels.some(l=>l.model===model&&asset.tiers.has(l.level));
+}

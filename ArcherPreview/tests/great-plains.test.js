@@ -7,8 +7,9 @@ import {greatPlainsHeight} from '../src/great-plains-terrain.js';
 import {NullEngine} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 
-test('approved 301 placements, reused types and all roads remain walkable',()=>{
- assert.equal(PLAINS_PLACEMENTS.length,301);
+test('authored route network stays walkable through clustered scenery',()=>{
+ assert.equal(new Set(PLAINS_PLACEMENTS.map(p=>p.id)).size,PLAINS_PLACEMENTS.length);
+ assert.ok(PLAINS_PLACEMENTS.some(p=>p.id==='village-exterior'&&p.background));
  const nav=new VillageNavigation(plainsObstacles());
  for(const road of PLAINS_ROUTES)for(const [x,z]of road.samples){
   if(Math.hypot(x,z)>PLAINS_RADIUS-.5)continue;

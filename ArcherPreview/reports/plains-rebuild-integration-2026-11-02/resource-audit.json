@@ -1,0 +1,66 @@
+{
+  "baseline": "9a8f4d6",
+  "resourceRevision": "a8e37c5a222957ceb9627b3e4dd507d6ead5bf89922089ff0c965afddf34b5f9",
+  "priorFiles": 1103,
+  "currentFiles": 1105,
+  "unchangedFiles": 1102,
+  "addedFiles": [
+    "1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
+    "5d0dbd9d5b6dc37dd46754f5398ddb6e1f8defc468c5acc1d1d9875230526cbe.bin",
+    "6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf"
+  ],
+  "addedBytes": 9610451,
+  "removedFiles": [
+    "fe19ea9ec22701516e0e8c1bdc6257487bcea55b368d7855b6b27364849c6dbd.ktx2"
+  ],
+  "removedBytes": 460357,
+  "protectedManifests": [
+    {
+      "path": "warrior-v3.json",
+      "unchangedData": true
+    },
+    {
+      "path": "warrior-v3-ios.json",
+      "unchangedData": true
+    },
+    {
+      "path": "village.json",
+      "unchangedData": true
+    },
+    {
+      "path": "monster-forest.json",
+      "unchangedData": true
+    },
+    {
+      "path": "witch-cave.json",
+      "unchangedData": true
+    },
+    {
+      "path": "elena.json",
+      "unchangedData": true
+    },
+    {
+      "path": "mourning-elena.json",
+      "unchangedData": true
+    },
+    {
+      "path": "quest-props.json",
+      "unchangedData": true
+    }
+  ],
+  "bundles": 228,
+  "exterior": {
+    "triangles": 187522,
+    "primitives": 16,
+    "placementsBatched": 121,
+    "textureSizes": [
+      256,
+      512,
+      2048
+    ],
+    "identicalModelAcrossTiers": true,
+    "sameFilePreparedOnce": true
+  },
+  "browserAutomation": false,
+  "physicalMobileGpuMeasured": false
+}

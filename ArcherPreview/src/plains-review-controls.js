@@ -11,13 +11,13 @@ export function setupPlainsReview({world,getState,moveTo,travel}){
  button('삼거리',()=>jump('warrior-plains',-5,25));
  button('교역 야영지',()=>jump('warrior-plains',16,72));
  button('숲 경계 통과',()=>jump('warrior-plains',64,-70));
- button('마을 귀환 통과',()=>jump('warrior-plains',-92,-8));
+ button('마을 귀환 통과',()=>jump('warrior-plains',-92,-35));
  button('마을에서 출발',()=>jump('warrior-v3',.35,74));
  button('숲에서 귀환',()=>jump('warrior-v4',0,49));
  button('사과나무 옆',()=>jump('warrior-v3',QUEST_APPLE_TREE.x+2,QUEST_APPLE_TREE.z));
- button('붕대 옆',()=>jump('warrior-plains',55,-58));
+ button('붕대 옆',()=>jump('warrior-plains',57,-58));
  button('약초 옆',()=>jump('warrior-v4',-26,17));
  document.body.append(panel);
- const observer=world.scene.onBeforeRenderObservable.add(()=>{const s=getState();state.textContent=`${s.character} · ${s.ready?'준비 완료':'로딩'} · X ${s.x?.toFixed(1)} / Z ${s.z?.toFixed(1)} · HP ${s.hp}`;});
+ const observer=world.scene.onBeforeRenderObservable.add(()=>{const s=getState();state.textContent=`${s.character} · ${s.ready?'준비 완료':'로딩'} · X ${s.x?.toFixed(1)} / Z ${s.z?.toFixed(1)} · HP ${s.hp} · ${s.motion} #${s.actionId??0} · 충전 ${Math.round((s.charge??0)*100)}% · 예약 ${s.queued??"없음"}`;});
  world.scene.onDisposeObservable.addOnce(()=>{world.scene.onBeforeRenderObservable.remove(observer);panel.remove();});
 }

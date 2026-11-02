@@ -61,10 +61,31 @@ test('fresh long press during judgment recovery is accepted and fires when recov
  }
 });
 
-test('shield push cancels a pending charge; a new hold during the cast is accepted',()=>{
- const c=create();c.setAttackHeld(true);c.update(.2);assert.equal(c.shieldPush(),true);assert.equal(c.held,false);
- assert.equal(c.setAttackHeld(true),true);c.update(.45);c.setAttackHeld(false);assert.equal(c.queuedAttack,'judgment');
- c.update(durations.shieldPush-.45+.01);assert.equal(c.action.state,'judgment');assert.equal(c.serial,2);
+test('held charge survives defense transition and fires once after its recovery',()=>{
+ for(const kind of ['shieldPush','dodge']){
+  const c=create();c.setAttackHeld(true);c.update(.2);assert.equal(c[kind](),true);assert.equal(c.held,true);
+  c.update(.25);assert.equal(c.queuedAttack,'judgment');c.setAttackHeld(false);
+  const remaining=(durations[kind]-c.action.time)/c.playbackRate(kind);
+  c.update(remaining+.01);assert.equal(c.action.state,'judgment');assert.equal(c.serial,2);
+  c.update(10);assert.equal(c.serial,2);
+ }
+});
+
+test('ordinary hit recovery preserves held or completed heavy intent without a second press',()=>{
+ for(const charged of [false,true]){
+  const c=create();c.shieldPush();c.setAttackHeld(true);c.update(charged?.5:.2);
+  assert.equal(c.hit(.3),true);assert.equal(c.held,true);
+  assert.equal(c.update(.3).state,'judgment');c.setAttackHeld(false);c.update(10);assert.equal(c.serial,2);
+ }
+ const c=create();c.attack();c.setAttackHeld(true);c.update(.5);c.setAttackHeld(false);
+ assert.equal(c.queuedAttack,'judgment');c.hit(.2);assert.equal(c.update(.2).state,'judgment');
+});
+
+test('forced interruption and lost focus still discard a buffered heavy',()=>{
+ for(const cancel of [c=>c.hit(.2,{force:true}),c=>c.hit(.2,{reason:'blocked'}),c=>c.capture(),c=>c.cancelAttackInput()]){
+  const c=create();c.shieldPush();c.setAttackHeld(true);c.update(.5);cancel(c);
+  assert.equal(c.held,false);assert.equal(c.queuedAttack,null);c.update(5);assert.equal(c.serial,1);
+ }
 });
 
 test('focus loss discards a queued tap or charged heavy without cancelling the current clip',()=>{

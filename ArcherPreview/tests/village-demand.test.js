@@ -5,13 +5,14 @@ import {NullEngine,Scene,ArcRotateCamera,Vector3,MeshBuilder,AssetContainer,Stan
 import {VILLAGE_PLACEMENTS,VILLAGE_SPAWN} from '../src/village-layout.js';
 import {placementBounds,villageDemand,VillageDemandCache,VillageGeometryStreaming} from '../src/village-demand.js';
 import {installVillageGeometry} from '../src/village-streamed-environment.js';
-import {villageLodSources,projectedCoverage,villageLodTier} from '../src/village-lod.js';
+import {villageLodSources,hasVillageGeometry,projectedCoverage,villageLodTier} from '../src/village-lod.js';
 import {VillageOutlines} from '../src/village-outlines.js';
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {createVillageTerrain} from '../src/village-terrain.js';
+import {PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
 const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('village.json',base)));
 function fixture(t,touch=false){
  const engine=new NullEngine({renderWidth:touch?900:1280,renderHeight:touch?450:720}),scene=new Scene(engine);scene.useRightHandedSystem=true;
@@ -53,6 +54,49 @@ test('idle views reuse the exact LOD demand; every camera, projection and policy
   assert.deepEqual(current,villageDemand(world,records));
  }
  const old=cache.get();cache.invalidate();assert.notEqual(cache.get(),old);
+});
+
+test('identical prefab LOD files prepare one container across tier changes; distinct models still load',async t=>{
+ const {world}=fixture(t),config=JSON.parse(readFileSync(new URL('great-plains.json',base))).assets['village-approach'];
+ assert.equal(new Set(config.lods.map(l=>l.model)).size,1);
+ for(const order of [[2,1,0],[0,1,2],[1,0,2]]){
+  const asset={levels:villageLodSources(config,true),tiers:new Map(),baseLevel:Infinity};let loads=0;
+  const stream=new VillageGeometryStreaming(world,[],async r=>{
+   loads++;const c=new AssetContainer(world.scene),m=MeshBuilder.CreateBox('shared-prefab',{size:1},world.scene);
+   m.material=new StandardMaterial('prefab-material',world.scene);c.meshes.push(m);c.materials.push(m.material);c.removeAllFromScene();
+   installVillageGeometry(asset,c,r.level,world);
+  },r=>hasVillageGeometry(asset,r.level),{});
+  try{
+   for(let cycle=0;cycle<8;cycle++)await stream.initial(order.map(level=>({id:'village-approach',level})));
+   assert.equal(loads,1);assert.equal(asset.tiers.size,1);assert.equal(asset.nearSource,asset.source);
+   assert.ok(order.every(level=>hasVillageGeometry(asset,level)));
+   const changed=order.find(level=>!asset.tiers.has(level));
+   asset.levels=asset.levels.map(l=>l.level===changed?{...l,model:'./content/different-texture.gltf'}:l);
+   assert.equal(hasVillageGeometry(asset,changed),false,'different material/texture variant must not be skipped');
+  }finally{
+   stream.dispose();for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();asset.source.dispose();
+  }
+ }
+});
+
+test('real plains village exterior stays inside streaming bounds and is deferred at the forest end',async t=>{
+ const {world}=fixture(t,true),config=JSON.parse(readFileSync(new URL('great-plains.json',base))).assets['village-approach'];
+ const placement=PLAINS_PLACEMENTS.find(p=>p.id==='village-exterior'),record=createVillageTransform(world,placement,config),bounds=placementBounds(world,placement,config);
+ const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));
+ for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(b.uri).data).toString('base64');
+ const loader=new GLTFFileLoader();loader.skipMaterials=true;
+ const container=await loader.loadAssetContainerAsync(world.scene,{json:gltf},'');
+ t.after(()=>{record.root.dispose();container.dispose();loader.dispose();});
+ const copies=container.instantiateModelsToScene(n=>n+'-plains-bounds',false,{doNotInstantiate:false});for(const n of copies.rootNodes)n.parent=record.facing;
+ let triangles=0;
+ for(const m of record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0)){
+  m.computeWorldMatrix(true);triangles+=m.getTotalIndices()/3;const box=m.getBoundingInfo().boundingBox;
+  for(const axis of ['x','y','z'])assert.ok(box.minimumWorld[axis]>=bounds.min[axis]&&box.maximumWorld[axis]<=bounds.max[axis],'prefab '+axis+' bounds');
+ }
+ assert.equal(triangles,187522);
+ const records=[{placement,bounds}];
+ world.camera.setTarget(new Vector3(-87,1,-32));assert.ok(villageDemand(world,records).length>0);
+ world.camera.setTarget(new Vector3(65,1,-72));assert.equal(villageDemand(world,records).length,0);
 });
 
 test('S23-size rotation and movement demand matches the uncached plan, including near trees and LOD boundaries',t=>{

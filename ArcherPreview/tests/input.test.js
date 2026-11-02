@@ -303,7 +303,7 @@ test('focus/reset cancellation discards a pending attack instead of treating it 
 
 function combatInput(){
   const c=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37}});
-  const controls=setup({move:()=>c.requestMovement(),setAttackHeld:v=>c.setAttackHeld(v),cancelAttackInput:()=>c.cancelAttackInput()});
+  const controls=setup({move:()=>c.requestMovement(),guard:()=>c.shieldPush(),setAttackHeld:v=>c.setAttackHeld(v),cancelAttackInput:()=>c.cancelAttackInput()});
   const press=(code,repeat=false)=>window.emit('keydown',{code,target:{tagName:'BODY'},repeat});
   const release=code=>window.emit('keyup',{code});
   return {...controls,c,press,release,tick:(dt=.016)=>c.update(dt,controls.input.value())};
@@ -324,6 +324,12 @@ test('direction keys and a new touch stick remain live through block stun and ca
   assert.equal(c.dodge(),true);assert.equal(tick().state,'dodge');
  }
 });
+test('keyboard: a held J survives F and fires after shield recovery without repressing',()=>{
+ const {c,press,release,tick}=combatInput();press('KeyJ');tick(.2);press('KeyF');tick(.3);
+ assert.equal(c.queuedAttack,'judgment');release('KeyF');release('KeyJ');
+ assert.equal(tick(2.08).state,'judgment');tick(5);assert.equal(c.serial,2);
+});
+
 test('mouse: a short click attacks once; holding triggers Judgment without an extra release attack',()=>{
  const {c,canvas,camera,tick}=combatInput();
  const mouse=(name,buttons,x=600)=>canvas.emit(name,{pointerId:8,pointerType:'mouse',buttons,button:0,clientX:x,clientY:300});

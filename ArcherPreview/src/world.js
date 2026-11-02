@@ -61,7 +61,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   camera.inputs.clear();
   const sky = new MovingSky(scene);
   const mountains = createMountainBackdrop(scene);
-  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(plains?3.2:1.9,1.3,plains?3.2:1.9);mountains.freezeWorldMatrix();}
+  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(plains?4.5:1.9,plains ? .72 : 1.3,plains?4.5:1.9);mountains.freezeWorldMatrix();}
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);
@@ -145,7 +145,7 @@ export function replaceWorldMap(world,character){
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
-  world.mountains.unfreezeWorldMatrix();world.mountains.scaling.set(plains?3.2:1.9,1.3,plains?3.2:1.9);world.mountains.freezeWorldMatrix();
+  world.mountains.unfreezeWorldMatrix();world.mountains.scaling.set(plains?4.5:1.9,plains ? .72 : 1.3,plains?4.5:1.9);world.mountains.freezeWorldMatrix();
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
