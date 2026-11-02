@@ -40,15 +40,15 @@ async function until(check,message){for(let i=0;i<100;i++){if(check())return;awa
 function fixture(){
  const dom=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),doc=dom.document;doc.hidden=false;
  for(const id of ['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
- const $=selector=>doc.querySelector(selector),loadingView=createLoadingView(doc),raf=[],engineCallbacks=new Set();
+ const $=selector=>doc.querySelector(selector),loadingView=createLoadingView(doc),raf=[],engineCallbacks=new Set(),audioStates=[];
  const engine={getCaps:()=>({}),runRenderLoop:callback=>engineCallbacks.add(callback),stopRenderLoop:callback=>engineCallbacks.delete(callback)};
  let now=0;
- const loadDiagnostics=new LoadDiagnostics(()=>++now),gate={stage:null,reached:null,release:null,hold(stage){this.stage=stage;this.reached=null;this.release=null;},clear(){this.stage=null;this.reached=null;this.release=null;},at(stage){if(this.stage!==stage)return Promise.resolve();this.reached=stage;return new Promise(resolve=>{this.release=resolve;});}};
+ const loadDiagnostics=new LoadDiagnostics(()=>++now),gate={stage:null,errorStage:null,reached:null,release:null,hold(stage){this.stage=stage;this.reached=null;this.release=null;},clear(){this.stage=null;this.errorStage=null;this.reached=null;this.release=null;},at(stage){if(this.errorStage===stage)return Promise.reject(Error('injected '+stage+' failure'));if(this.stage!==stage)return Promise.resolve();this.reached=stage;return new Promise(resolve=>{this.release=resolve;});}};
  class PlayerNode{constructor(){this.position=Vector3.Zero();this.rotation=Vector3.Zero();this.scaling=Vector3.One();}dispose(){this.disposed=true;}}
  class Animator{constructor(){this.durations={};}dispose(){}transition(){}update(){}}
  class Controller{constructor(){}cancelAttack(){}}
  class Equipment{dispose(){}}
- const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:async()=>{}};
+ const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release')};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
  const dependencies={FrameLoop,configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
@@ -56,10 +56,10 @@ function fixture(){
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:async()=>{},loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>({meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose:noop})},
   applyPlayerDetail:noop,applyCharacterSurfaceStyle:noop,attachCharacterOutlines:noop,applyAttackSpeed:noop,readAttackSpeed:()=>1,equipmentChoices:{},
-  motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop},actionAudio:{reset:noop},
+  motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:value=>audioStates.push(value),play:noop},actionAudio:{reset:noop},
   updateButtons:noop,cancelAttackInput:noop,input:{reset:noop,panOffset:{x:0,y:0,z:0}},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
   resetCamera:noop,syncCaveFog:noop,prepareElenaReview:()=>gate.at('model'),leaveElenaReview:noop,waitForSceneReady:()=>gate.at('scene'),prepareMapResources:()=>gate.at('map-download'),
-  bindMapPortal:noop,carryPortalPose:noop,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop,setBodyScale:noop},applyRenderQuality:noop,
+  bindMapPortal:noop,carryPortalPose:noop,cameraFollow:{focus:()=>Vector3.Zero()},cameraPitch:{follow:noop,setBodyScale:noop},applyRenderQuality:()=>{if(gate.errorStage==='finish')throw Error('injected finish failure');},
   frameDiagnostics:{beginFrame:noop,endFrame:noop,mapChanged:noop,suspend:noop},text:noop,
   requestAnimationFrame:callback=>{raf.push(callback);return raf.length;},consumeTravel:()=>null,travelStorage:{},
   replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':'village';w.cave=w.mapId==='cave';w.environment={};},
@@ -74,11 +74,11 @@ function fixture(){
   const render=()=>{if(nextDrawError){const error=nextDrawError;nextDrawError=null;throw error;}};
   ${healthSource}\n${loadSource}\n${frameSource}\n${mapSource}\n${retrySource}
   reconcilePlayback=syncPlayback;syncPlayback();
-  return {load:loadCharacter,get transition(){return mapTransition;},get frameLoop(){return frameLoop;},
+  return {load:loadCharacter,reconcile:syncPlayback,get transition(){return mapTransition;},get frameLoop(){return frameLoop;},
    injectFailure(){nextDrawError=new TypeError('_uniforms[e] is undefined');frameLoop.draw(.016);},
    snapshot(){return {ready,loading:loadingAsset,failed:frameLoop.failed,running:frameLoop.running,frameError:frameFailure?.message??null};}};
  `)(...Object.values(dependencies));
- return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks};
+ return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates};
 }
 
 async function flushFrame(f){await until(()=>f.raf.length>0,'expected a pending presentation RAF');f.raf.shift()();await Promise.resolve();}
@@ -123,6 +123,21 @@ for(const stage of ['map-download','scene','second-raf'])test(`actual map callba
  results.push({kind:'map-transition',stage,failure:f.runtime.snapshot()});
 });
 
+for(const stage of ['release','map-download','finish'])test(`actual main ${stage} failure remains paused until explicit reload succeeds; return travel then works`,async()=>{
+ const f=fixture();await success(f);f.gate.errorStage=stage;
+ const travel=f.runtime.transition.travel('https://example.test/?character=warrior-v4&arrival=portal');
+ if(stage==='finish'){await flushFrame(f);await flushFrame(f);}assert.equal(await travel,false);assert.equal(f.runtime.transition.busy,false);assert.equal(f.runtime.transition.failed,true);assert.equal(f.runtime.snapshot().ready,false);assert.equal(f.runtime.frameLoop.running,false);assert.equal(f.doc.querySelector('#loading').hidden,false);assert.equal(f.audioStates.at(-1),true,'finish failure cannot leave newly selected destination music playing');
+ // Modal close and foreground return cannot resume a partially replaced map.
+ f.doc.hidden=true;f.runtime.reconcile();f.doc.hidden=false;f.runtime.reconcile();assert.equal(f.runtime.frameLoop.running,false);assert.equal(f.engineCallbacks.size,0);assert.equal(f.audioStates.at(-1),true,'foreground/settings reconciliation preserves the audio failure latch');
+ assert.equal(await f.runtime.transition.travel('https://example.test/?character=warrior-v5'),false,'failed latch never retries automatically');
+ if(stage==='finish'){
+  f.gate.clear();f.doc.hidden=true;const retry=f.runtime.load();await flushFrame(f);await flushFrame(f);await retry;assert.equal(f.runtime.snapshot().ready,true);assert.equal(f.runtime.transition.failed,false);assert.equal(f.runtime.frameLoop.running,false,'successful hidden reload stays paused');f.doc.hidden=false;f.runtime.reconcile();assert.equal(f.runtime.frameLoop.running,true);
+ }else await success(f,{retry:true});
+ assert.equal(f.runtime.transition.failed,false);assert.equal(f.runtime.transition.busy,false);assert.equal(f.audioStates.at(-1),false);
+ const back=f.runtime.transition.travel('https://example.test/?character=warrior-v5&arrival=portal');await flushFrame(f);await flushFrame(f);assert.equal(await back,true);assert.equal(f.runtime.frameLoop.running,true);assert.equal(f.doc.querySelector('#loading').hidden,true);
+ results.push({kind:'map-explicit-recovery',stage,busyLatchReleased:true,errorLatchUntilSuccessfulReload:true,hiddenReloadPolicy:stage==='finish',returnTravel:true});
+});
+
 test('actual loading view keeps the runtime error latched until an explicit new begin',()=>{
  const f=fixture();f.loadingView.begin();f.loadingView.fail('게임 실행이 중단되었습니다','_uniforms[e] is undefined');
  assert.equal(f.loadingView.reveal(),false);assert.equal(f.doc.querySelector('#loading').hidden,false);assert.equal(f.doc.documentElement.dataset.loading,'true');
@@ -132,5 +147,5 @@ test('actual loading view keeps the runtime error latched until an explicit new 
 
 test.after(()=>{
  const path=new URL('../reports/ios-uniform-fix/',import.meta.url);mkdirSync(path,{recursive:true});
- writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:8,completedCases:results.length,success:results.length===8,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
+ writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:11,completedCases:results.length,success:results.length===11,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
 });

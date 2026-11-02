@@ -3,8 +3,8 @@ import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
 import {characterStyleFor,registerCharacterInk} from './character-style.js';
-import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots} from './character-render-cost.js';
-import {prepareMourningCameraCulling} from './mourning-camera-culling.js';
+import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots,trimEmptyBoneSlotsAsync} from './character-render-cost.js';
+import {prepareMourningCameraCulling,prepareMourningCameraCullingAsync} from './mourning-camera-culling.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -102,7 +102,7 @@ function outlineMaterial(scene) {
   return material;
 }
 
-export function attachCharacterOutlines(asset, kind) {
+export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferCameraCulling=false}={}) {
   const added = [];
   for (const source of [...asset.meshes]) {
     if (!source.getTotalVertices?.() || isRuntimeOutline(source) || /outline/i.test(source.name)) continue;
@@ -116,7 +116,7 @@ export function attachCharacterOutlines(asset, kind) {
     }
     if (!widths[profile] || !source.isVerticesDataPresent(VertexBuffer.NormalKind)) continue;
     if (source.getChildMeshes(true).some(isRuntimeOutline)) continue;
-    if(kind!=='warrior')trimEmptyBoneSlots(source);
+    if(kind!=='warrior'&&!skipBoneProof)trimEmptyBoneSlots(source);
     orderCharacterInkAfterSurfaces(source.getScene(),source.renderingGroupId);
     const shell = source.clone(`${source.name} / silhouette`, source, true);
     // The parent supplies the source's entire animated transform. Copy only its skin bind pose.
@@ -139,6 +139,19 @@ export function attachCharacterOutlines(asset, kind) {
     added.push(shell);
   }
   asset.meshes.push(...added);
-  if(kind==='elena')prepareMourningCameraCulling(asset);
+  if(kind==='elena'&&!deferCameraCulling)prepareMourningCameraCulling(asset);
+  return added;
+}
+export async function attachCharacterOutlinesAsync(asset,kind,preparation){
+  const added=[];
+  for(const source of [...asset.meshes]){
+    if(!source.getTotalVertices?.()||isRuntimeOutline(source)||/outline/i.test(source.name)||/Lament_Mouth_Interior/.test(source.name))continue;
+    if(kind!=='warrior')await trimEmptyBoneSlotsAsync(source,preparation);
+    const shells=await preparation.step('outline:'+source.name,()=>attachCharacterOutlines({meshes:[source]},kind,{skipBoneProof:true,deferCameraCulling:true}));
+    // Commit every completed shell before the next yield. Cancelled jobs resume
+    // without orphan clones, duplicate silhouettes or another morph manager.
+    asset.meshes.push(...shells);added.push(...shells);
+  }
+  if(kind==='elena')await prepareMourningCameraCullingAsync(asset,preparation);
   return added;
 }

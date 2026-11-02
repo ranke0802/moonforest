@@ -1,0 +1,68 @@
+{
+  "status": "SCOPED_FIXES_AND_REGRESSIONS_COMPLETE_PARENT_RELEASE_PENDING",
+  "reportedRelease": "0bd9707 / assets/index-DX7bLT8c.js",
+  "attachment": "C:/Users/ryank/.codex/attachments/6bbef91f-54a0-4169-80d5-0fca9ef276a0/붙여넣은 텍스트.txt",
+  "attachmentEvidence": {
+    "createdAt": "2026-11-01T23:57:09.758Z",
+    "character": "warrior-v5",
+    "playback": {"ready": true, "loading": false, "running": false, "failed": false, "frames": 7209},
+    "lastFrameError": null,
+    "loadHistory": "Only the initial witch-cave load, complete with no error; no failed forest-transfer stage is present.",
+    "initialLoadMs": {"setup": 114, "download": 853.8, "model": 5727.4, "screen": 592.4, "total": 7287.6},
+    "recentSummary": {"fps": 30.21148, "p95Ms": 33.9, "maxMs": 61.2, "samples": 301},
+    "recentLastDelay": {"position": [-41.3, 40.3], "map": "warrior-v5", "bosses": [], "geometryPending": 0, "texturePending": 0},
+    "gpuStatus": "unsupported",
+    "limitation": "This is not a captured failed transition. running=false with ready=true is consistent with opening settings to copy diagnostics. It does not by itself prove a stalled RAF or a particular phone/GPU cause."
+  },
+  "confirmedCodeDefects": [
+    {
+      "id": "T01",
+      "before": "createMapTransition catch left busy=true forever. Even a later successful loadCharacter retry could not resume because syncPlayback returned immediately while busy.",
+      "fix": "Clear busy in finally, retain failed latch and reject automatic travel while failed. Only a fully successful explicit loadCharacter reload invokes recover. Playback and audio remain paused while failed, including errors in finish after destination music selection.",
+      "scope": ["src/map-transition.js", "src/main.js"],
+      "regression": "Actual main prepare/release/load/finish/onError, loadCharacter, retry button DOM and FrameLoop: release, download or finish failure stays covered/paused; closing settings or foreground return does not resume partial world; explicit reload then return travel succeeds; hidden reload stays paused until foreground."
+    },
+    {
+      "id": "T02",
+      "before": "releaseEnvironment waits for high-texture pendingTask, but disposing VillageTextureStreaming did not settle a Texture callback promise if its loader never completed. This could leave release waiting indefinitely.",
+      "fix": "Track each owned high-texture callback waiter and reject it immediately with AbortError on map disposal. Late load/error callbacks cannot reassign the material. Own a Texture wrapper before updateURL starts I/O so synchronous request exceptions can clean it up.",
+      "scope": ["src/village-texture-streaming.js"],
+      "regression": "Actual Babylon Texture construction with deliberately withheld backend completion, late callbacks, synchronous request exception and fresh map material ownership."
+    },
+    {
+      "id": "T03",
+      "before": "Pinned Babylon9.31 AbstractEngine.addPendingData stores an InternalTexture. BaseTexture.dispose removes the wrapper only; a callback that never completes can leave the internal token in scene readiness even after the wrapper is gone.",
+      "fix": "On cancellation/error, remove only the exact owned InternalTexture token when its last reference is about to be disposed. Keep the token if another live Texture still owns the shared internal allocation. Never clear global pendingData.",
+      "pinnedEvidence": ["node_modules/@babylonjs/core/Engines/abstractEngine.pure.js:661", "node_modules/@babylonjs/core/Materials/Textures/baseTexture.pure.js:750", "node_modules/@babylonjs/core/Materials/Textures/internalTexture.js:487"],
+      "regression": "Inject the same internal pending token in the fixture; actual environment release completes with no texture callback, waiting-items0 and references0. After actual map replacement, scene.isReady and waitForSceneReady succeed. Shared internal references2 preserve their other owner's pending token until real completion."
+    }
+  ],
+  "diagnosticAddition": {
+    "surface": "Copied JSON metadata only; no new HUD text or layout.",
+    "field": "mapTransition",
+    "values": ["phase", "busy", "failed", "lastError", "stageElapsedMs", "totalElapsedMs", "lastFailure"],
+    "phases": ["idle", "prepare", "curtain", "release", "load", "finish", "complete", "error"],
+    "policy": "Pending stage elapsed time increases; complete/error times freeze. Explicit reload recovery clears current lastError and returns idle; historical lastFailure retains its original phase/message/totalElapsedMs and recovered:true. A copied snapshot cannot mutate controller state."
+  },
+  "tests": {
+    "latestFocusedPassed": 50,
+    "latestFocusedFailed": 0,
+    "latestFiles": ["tests/map-transition-diagnostics.test.js", "tests/village-texture-cancel.test.js", "tests/startup-frame-failure.test.js", "tests/village-texture-streaming.test.js", "tests/village-texture-pacing.test.js", "tests/cave-portal-facing.test.js", "tests/camera-follow-lifecycle.test.js"],
+    "previousBroaderBeforeFinalPendingTokenAndInspectFollowup": "56/56 passed including10 village/forest environment roundtrips with260 real geometry loads and12 native cave/forest swaps with180 loads. Parent full suite must include latest followups.",
+    "boundary": "CPU/DOM/NullEngine tests. Geometry fixtures and actual current main callbacks are used where stated; image/GPU completion is controlled at loader boundary. The integrated stuck-texture release test enters at a positively admitted upload boundary; ordinary admission/dwell/quality policy is covered separately by existing pacing tests.",
+    "notMeasured": ["Real S23/iPhone GPU rasterization", "Driver/worker peak memory", "Thermal improvement", "The unrecorded reported transfer itself"]
+  },
+  "ownedFiles": {
+    "modifiedSource": ["src/map-transition.js", "src/village-texture-streaming.js", "src/main.js: authorized transition JSON metadata/reload finally/onError/playback+audio latch only"],
+    "newTests": ["tests/map-transition-diagnostics.test.js", "tests/village-texture-cancel.test.js"],
+    "modifiedTests": ["tests/startup-frame-failure.test.js"],
+    "generatedReport": ["reports/ios-uniform-fix/startup-validation.json", "reports/cave-forest-transfer-2026-11-02/review.json"]
+  },
+  "preserved": ["Player8K", "Background4K maximum", "Existing geometry LOD", "Camera follow preference, portal direction, fullscreen/orientation handling", "Health/equipment handling", "Texture pacing/residency and memory budgets"],
+  "sourceExclusions": "No geometry/bake/asset generation, no fog/light surface edit, no damage-number or floating HUD edit, no browser automation. Artist owns the simultaneous synchronous cave material attachment fix.",
+  "remainingLimits": [
+    "The attachment cannot establish which pending stage caused the phone report. Copy diagnostics during a future failed transition now records the relevant phase.",
+    "Actual raw fetch, glTF decoder and GPU shader behavior are not proven by withheld-callback fixtures. Shader readiness has the existing45second timeout; this work does not redesign all I/O cancellation or add forced scene resets.",
+    "Parent owns full suite/build/commit/push/deploy. Child has not deployed or claimed live-device acceptance."
+  ]
+}

@@ -1,0 +1,1514 @@
+{
+  "generatedAt": "2026-11-02T00:14:06.947Z",
+  "source": {
+    "attachment": "C:/Users/ryank/.codex/attachments/6bbef91f-54a0-4169-80d5-0fca9ef276a0/붙여넣은 텍스트.txt",
+    "sha256": "2c8114d4f11696d0962c59c22b0c2c899aee62b6abc98617ec68e4da0c9ebe69",
+    "logCreatedAt": "2026-11-01T23:57:09.758Z",
+    "version": 4,
+    "bundle": "./assets/index-DX7bLT8c.js",
+    "character": "warrior-v5",
+    "renderSize": [
+      1664,
+      768
+    ],
+    "touchDevice": true,
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Mobile Safari/537.36",
+    "deviceModelNotVerified": true
+  },
+  "scope": "Read-only investigation. No game source, quality, LOD, geometry, UI or deployment changed. Browser not automated. This is a single mobile log plus actual packed-rig Node/NullEngine lifecycle tests; GPU time and physical temperature are unavailable.",
+  "finalWindow": {
+    "fps": 30.211480362713257,
+    "frameMs": 33.30000001192093,
+    "maxMs": 61.19999998807907,
+    "p95Ms": 33.900000005960464,
+    "slowFrames": 1,
+    "thresholdMs": 50,
+    "targetFps": 30,
+    "samples": 301,
+    "maxWorkMs": 24.200000017881393
+  },
+  "delaySample": {
+    "count": 32,
+    "fromSeconds": 188.7,
+    "toSeconds": 241.2,
+    "selection": "Only intervals > max(50,1500/targetFPS)+.01 ms are retained. Capped at the most recent32 such events. These events are not a uniform/random sample and cannot give whole-session p95, frequency, death-vs-living probabilities or a sustained FPS average.",
+    "groups": {
+      "cast": {
+        "fromSeconds": 188.7,
+        "toSeconds": 189.3,
+        "frameMs": {
+          "count": 7,
+          "mean": 65.4,
+          "min": 50.9,
+          "max": 92.4
+        },
+        "jsSubmitMs": {
+          "count": 7,
+          "mean": 20.3,
+          "min": 17.4,
+          "max": 23.5
+        },
+        "drawCalls": {
+          "count": 7,
+          "mean": 129.28571428571428,
+          "min": 129,
+          "max": 131
+        },
+        "sceneMs": {
+          "count": 7,
+          "mean": 15.442857146263123,
+          "min": 12.5,
+          "max": 18.5
+        },
+        "animationMs": {
+          "count": 7,
+          "mean": 0.514285717691694,
+          "min": 0.3999999761581421,
+          "max": 0.6000000238418579
+        },
+        "bossUpdateMs": {
+          "count": 7,
+          "mean": 2.185714283159801,
+          "min": 1.4000000059604645,
+          "max": 5.0999999940395355
+        },
+        "contactsMs": {
+          "count": 7,
+          "mean": 0.4142857151372092,
+          "min": 0.19999998807907104,
+          "max": 1.5999999940395355
+        }
+      },
+      "living-other": {
+        "fromSeconds": 189.4,
+        "toSeconds": 189.9,
+        "frameMs": {
+          "count": 4,
+          "mean": 71.7,
+          "min": 55.8,
+          "max": 91.5
+        },
+        "jsSubmitMs": {
+          "count": 4,
+          "mean": 20.95,
+          "min": 19.4,
+          "max": 23
+        },
+        "drawCalls": {
+          "count": 4,
+          "mean": 129,
+          "min": 129,
+          "max": 129
+        },
+        "sceneMs": {
+          "count": 4,
+          "mean": 16,
+          "min": 14.699999988079071,
+          "max": 18.100000023841858
+        },
+        "animationMs": {
+          "count": 4,
+          "mean": 0.6000000089406967,
+          "min": 0.4000000059604645,
+          "max": 0.9000000059604645
+        },
+        "bossUpdateMs": {
+          "count": 4,
+          "mean": 2.024999998509884,
+          "min": 1.5,
+          "max": 2.2999999821186066
+        },
+        "contactsMs": {
+          "count": 4,
+          "mean": 0.5499999970197678,
+          "min": 0.20000001788139343,
+          "max": 0.699999988079071
+        }
+      },
+      "death": {
+        "fromSeconds": 190.3,
+        "toSeconds": 193.6,
+        "frameMs": {
+          "count": 20,
+          "mean": 75.42999999999999,
+          "min": 50.2,
+          "max": 217.5
+        },
+        "jsSubmitMs": {
+          "count": 20,
+          "mean": 31.450000000000006,
+          "min": 14.2,
+          "max": 214.4
+        },
+        "drawCalls": {
+          "count": 20,
+          "mean": 131,
+          "min": 130,
+          "max": 132
+        },
+        "sceneMs": {
+          "count": 20,
+          "mean": 26.4,
+          "min": 10.900000005960464,
+          "max": 210.2000000178814
+        },
+        "animationMs": {
+          "count": 20,
+          "mean": 0.5350000008940696,
+          "min": 0.30000001192092896,
+          "max": 0.9000000059604645
+        },
+        "bossUpdateMs": {
+          "count": 20,
+          "mean": 2.0250000029802324,
+          "min": 1.2000000178813934,
+          "max": 5.800000011920929
+        },
+        "contactsMs": {
+          "count": 20,
+          "mean": 0.054999998211860655,
+          "min": 0,
+          "max": 0.10000002384185791
+        }
+      },
+      "no-boss": {
+        "fromSeconds": 241.2,
+        "toSeconds": 241.2,
+        "frameMs": {
+          "count": 1,
+          "mean": 61.2,
+          "min": 61.2,
+          "max": 61.2
+        },
+        "jsSubmitMs": {
+          "count": 1,
+          "mean": 12.3,
+          "min": 12.3,
+          "max": 12.3
+        },
+        "drawCalls": {
+          "count": 1,
+          "mean": 122,
+          "min": 122,
+          "max": 122
+        },
+        "sceneMs": {
+          "count": 1,
+          "mean": 11,
+          "min": 11,
+          "max": 11
+        },
+        "animationMs": {
+          "count": 1,
+          "mean": 0.29999998211860657,
+          "min": 0.29999998211860657,
+          "max": 0.29999998211860657
+        },
+        "bossUpdateMs": {
+          "count": 1,
+          "mean": 0.09999999403953552,
+          "min": 0.09999999403953552,
+          "max": 0.09999999403953552
+        },
+        "contactsMs": {
+          "count": 1,
+          "mean": 0,
+          "min": 0,
+          "max": 0
+        }
+      }
+    },
+    "peak": {
+      "atSeconds": 190.5,
+      "frameMs": 217.5,
+      "jsSubmitMs": 20.1,
+      "targetFps": 30,
+      "activity": "플레이",
+      "position": [
+        24.9,
+        -28.4
+      ],
+      "camera": [
+        6.96,
+        0.95,
+        21.11
+      ],
+      "cameraZoom": {
+        "factor": 0.8053251865257518,
+        "radius": 21.109485068186668,
+        "referenceRadius": 17,
+        "minEnabled": true,
+        "maxEnabled": true,
+        "minZoom": 0.8,
+        "maxZoom": 13
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 0.945324425995056
+      },
+      "cameraGuard": {
+        "requestedRadius": 21.109485068186668,
+        "effectiveRadius": 21.109485068184288,
+        "requestedBeta": 0.9521875000000004,
+        "effectiveBeta": 0.9521875000000004,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 21.109485068186668,
+        "applied": false,
+        "fieldBytes": 1260096
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "dead",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 16,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.7999999821186066,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    }
+  },
+  "transform": {
+    "id": 2,
+    "label": "비탄의 마녀",
+    "mode": "cached-model",
+    "prepareMs": 536.4000000059605,
+    "stageMs": {
+      "resource": 13.699999988079071,
+      "model": 151.10000002384186,
+      "screen": 371.59999999403954
+    },
+    "baselineReady": true,
+    "comparisonAvailable": true,
+    "before": {
+      "samples": 90,
+      "durationMs": 2995.4000000059605,
+      "frameMs": {
+        "mean": 33.282222222288446,
+        "p95": 33.80000001192093,
+        "max": 36
+      },
+      "cpuMs": {
+        "mean": 15.025555558337105,
+        "p95": 20.599999994039536,
+        "max": 25.69999998807907
+      },
+      "drawCalls": {
+        "mean": 105.12222222222222,
+        "p95": 106,
+        "max": 107
+      },
+      "sceneMs": {
+        "mean": 12.030000001192093,
+        "p95": 16.5,
+        "max": 21
+      },
+      "animationMs": {
+        "mean": 0.5777777777777777,
+        "p95": 0.9000000059604645,
+        "max": 1.2999999821186066
+      },
+      "bossUpdateMs": {
+        "mean": 0.9033333351214726,
+        "p95": 1.5,
+        "max": 3
+      },
+      "contactsMs": {
+        "mean": 0.42333333426051667,
+        "p95": 0.5999999940395355,
+        "max": 10
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "during": {
+      "samples": 9,
+      "durationMs": 574.1999999880791,
+      "frameMs": {
+        "mean": 63.79999999867545,
+        "p95": 149.90000000596046,
+        "max": 149.90000000596046
+      },
+      "cpuMs": {
+        "mean": 35.36666666467985,
+        "p95": 228,
+        "max": 228
+      },
+      "drawCalls": {
+        "mean": 110.88888888888889,
+        "p95": 117,
+        "max": 117
+      },
+      "sceneMs": {
+        "mean": 32.255555560191475,
+        "p95": 219.5,
+        "max": 219.5
+      },
+      "animationMs": {
+        "mean": 0.433333330684238,
+        "p95": 0.5,
+        "max": 0.5
+      },
+      "bossUpdateMs": {
+        "mean": 1.1777777704927657,
+        "p95": 3.7999999821186066,
+        "max": 3.7999999821186066
+      },
+      "contactsMs": {
+        "mean": 0.3000000086095598,
+        "p95": 1,
+        "max": 1
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "after": {
+      "samples": 139,
+      "durationMs": 5019.4000000059605,
+      "frameMs": {
+        "mean": 36.11079136694936,
+        "p95": 50.30000001192093,
+        "max": 234.59999999403954
+      },
+      "cpuMs": {
+        "mean": 16.664028775777748,
+        "p95": 22.599999994039536,
+        "max": 29.599999994039536
+      },
+      "drawCalls": {
+        "mean": 121.35971223021583,
+        "p95": 131,
+        "max": 133
+      },
+      "sceneMs": {
+        "mean": 13.002877697241392,
+        "p95": 17.700000017881393,
+        "max": 24.299999982118607
+      },
+      "animationMs": {
+        "mean": 0.36474820028106086,
+        "p95": 0.5,
+        "max": 0.7000000178813934
+      },
+      "bossUpdateMs": {
+        "mean": 1.5791366908618871,
+        "p95": 2.4000000059604645,
+        "max": 3
+      },
+      "contactsMs": {
+        "mean": 0.3446043157320228,
+        "p95": 0.5,
+        "max": 11.099999994039536
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "delta": {
+      "frameMs": 2.8285691446609107,
+      "cpuMs": 1.6384732174406427,
+      "drawCalls": 16.237490007993614,
+      "sceneMs": 0.9728776960492986,
+      "animationMs": -0.21302957749671686,
+      "bossUpdateMs": 0.6758033557404145,
+      "contactsMs": -0.07872901852849384,
+      "gpuMs": null,
+      "jsUsedBytes": 0
+    },
+    "memoryBefore": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 42100000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 89478592,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 30,
+      "meshes": 475,
+      "geometries": 136,
+      "sampleAtMs": 86236.40000000596
+    },
+    "memoryReady": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 42100000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 89478592,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 31,
+      "meshes": 487,
+      "geometries": 142,
+      "sampleAtMs": 86772.80000001192
+    },
+    "memoryAfter": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 42100000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 89478592,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 31,
+      "meshes": 487,
+      "geometries": 144,
+      "sampleAtMs": 90851.40000000596
+    },
+    "contextBefore": {
+      "activity": "플레이",
+      "position": [
+        27.1,
+        -28.1
+      ],
+      "camera": [
+        3.4,
+        1.11,
+        13
+      ],
+      "cameraZoom": {
+        "factor": 1.3076923076923077,
+        "radius": 13,
+        "referenceRadius": 17,
+        "minEnabled": true,
+        "maxEnabled": true,
+        "minZoom": 0.8,
+        "maxZoom": 13
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 0.945324425995056
+      },
+      "cameraGuard": {
+        "requestedRadius": 13,
+        "effectiveRadius": 13,
+        "requestedBeta": 1.1115625000000082,
+        "effectiveBeta": 1.1115625000000082,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13,
+        "applied": false,
+        "fieldBytes": 1260096
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 1,
+          "state": "Knock_Down",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 30
+    },
+    "contextReady": {
+      "activity": "회전/시점 조작",
+      "position": [
+        26.4,
+        -28.6
+      ],
+      "camera": [
+        3.52,
+        1.2,
+        13
+      ],
+      "cameraZoom": {
+        "factor": 1.3076923076923077,
+        "radius": 13,
+        "referenceRadius": 17,
+        "minEnabled": true,
+        "maxEnabled": true,
+        "minZoom": 0.8,
+        "maxZoom": 13
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 0.945324425995056
+      },
+      "cameraGuard": {
+        "requestedRadius": 13,
+        "effectiveRadius": 13,
+        "requestedBeta": 1.1992187500000082,
+        "effectiveBeta": 1.1992187500000082,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13,
+        "applied": false,
+        "fieldBytes": 1260096
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "idle",
+          "hp": 1800
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 30
+    },
+    "contextAfter": {
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        31,
+        -25.9
+      ],
+      "camera": [
+        4.42,
+        1.21,
+        21.11
+      ],
+      "cameraZoom": {
+        "factor": 0.8053251865257518,
+        "radius": 21.109485068186668,
+        "referenceRadius": 17,
+        "minEnabled": true,
+        "maxEnabled": true,
+        "minZoom": 0.8,
+        "maxZoom": 13
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 0.945324425995056
+      },
+      "cameraGuard": {
+        "requestedRadius": 21.109485068186668,
+        "effectiveRadius": 20.507086652130063,
+        "requestedBeta": 1.21421875,
+        "effectiveBeta": 1.21421875,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 21.109485068186668,
+        "applied": false,
+        "fieldBytes": 1260096
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 1800
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 30
+    },
+    "cameraChanged": true,
+    "positionChanged": true
+  },
+  "phaseOneHistory": [
+    {
+      "id": 1,
+      "label": "타락한 성녀",
+      "mode": "cold",
+      "prepareMs": 1101.1000000238419,
+      "stageMs": {
+        "resource": 933.4000000059605,
+        "model": 53.5,
+        "screen": 114.2000000178814
+      },
+      "baselineReady": false,
+      "comparisonAvailable": false,
+      "before": {
+        "samples": 0,
+        "durationMs": 0,
+        "frameMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "cpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "drawCalls": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "sceneMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "animationMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "bossUpdateMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "contactsMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "pending"
+      },
+      "during": {
+        "samples": 0,
+        "durationMs": 0,
+        "frameMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "cpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "drawCalls": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "sceneMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "animationMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "bossUpdateMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "contactsMs": {
+          "mean": null,
+          "p95": null,
+          "max": null
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "pending"
+      },
+      "after": {
+        "samples": 144,
+        "durationMs": 5005.9000000059605,
+        "frameMs": {
+          "mean": 34.76319444448583,
+          "p95": 38.599999994039536,
+          "max": 156.19999998807907
+        },
+        "cpuMs": {
+          "mean": 13.020833332919413,
+          "p95": 21.69999998807907,
+          "max": 35
+        },
+        "drawCalls": {
+          "mean": 114.15972222222223,
+          "p95": 123,
+          "max": 124
+        },
+        "sceneMs": {
+          "mean": 10.921527777694994,
+          "p95": 18.399999976158142,
+          "max": 27
+        },
+        "animationMs": {
+          "mean": 0.3597222189936373,
+          "p95": 0.6000000238418579,
+          "max": 1.800000011920929
+        },
+        "bossUpdateMs": {
+          "mean": 0.08888888793687026,
+          "p95": 0.20000001788139343,
+          "max": 1.100000023841858
+        },
+        "contactsMs": {
+          "mean": 0.00555555522441864,
+          "p95": 0.09999999403953552,
+          "max": 0.09999999403953552
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "unsupported"
+      },
+      "delta": {
+        "frameMs": null,
+        "cpuMs": null,
+        "drawCalls": null,
+        "sceneMs": null,
+        "animationMs": null,
+        "bossUpdateMs": null,
+        "contactsMs": null,
+        "gpuMs": null,
+        "jsUsedBytes": 0
+      },
+      "memoryBefore": {
+        "jsUsedBytes": 35100000,
+        "jsAllocatedBytes": 42100000,
+        "jsLimitBytes": 1940000000,
+        "backgroundHighTextureEstimateBytes": 0,
+        "backgroundHighTextureBudgetBytes": 100663296,
+        "textures": 20,
+        "meshes": 363,
+        "geometries": 87,
+        "sampleAtMs": 6529.0999999940395
+      },
+      "memoryReady": {
+        "jsUsedBytes": 35100000,
+        "jsAllocatedBytes": 42100000,
+        "jsLimitBytes": 1940000000,
+        "backgroundHighTextureEstimateBytes": 0,
+        "backgroundHighTextureBudgetBytes": 100663296,
+        "textures": 22,
+        "meshes": 370,
+        "geometries": 90,
+        "sampleAtMs": 7630.200000017881
+      },
+      "memoryAfter": {
+        "jsUsedBytes": 35100000,
+        "jsAllocatedBytes": 42100000,
+        "jsLimitBytes": 1940000000,
+        "backgroundHighTextureEstimateBytes": 67108944,
+        "backgroundHighTextureBudgetBytes": 100663296,
+        "textures": 25,
+        "meshes": 377,
+        "geometries": 91,
+        "sampleAtMs": 12729.800000011921
+      },
+      "contextBefore": {
+        "activity": "플레이",
+        "position": [
+          -42,
+          43
+        ],
+        "camera": [
+          1.19,
+          0.88,
+          13
+        ],
+        "cameraZoom": {
+          "factor": 1.3076923076923077,
+          "radius": 13,
+          "referenceRadius": 17,
+          "minEnabled": true,
+          "maxEnabled": true,
+          "minZoom": 0.8,
+          "maxZoom": 13
+        },
+        "cameraFollow": {
+          "followMotion": false,
+          "stableFocusHeight": 0.945324425995056
+        },
+        "cameraGuard": {
+          "requestedRadius": 13,
+          "effectiveRadius": null,
+          "requestedBeta": 0.88,
+          "effectiveBeta": 0.88,
+          "pitchCorrection": 0,
+          "reason": "inactive",
+          "baselineRadius": null,
+          "applied": false,
+          "fieldBytes": 1260096
+        },
+        "geometryPending": 0,
+        "texturePending": 0,
+        "map": "warrior-v5",
+        "bosses": [],
+        "renderSize": [
+          768,
+          1386
+        ],
+        "targetFps": 30
+      },
+      "contextReady": {
+        "activity": "플레이",
+        "position": [
+          -42,
+          43
+        ],
+        "camera": [
+          1.19,
+          0.88,
+          13
+        ],
+        "cameraZoom": {
+          "factor": 1.3076923076923077,
+          "radius": 13,
+          "referenceRadius": 17,
+          "minEnabled": true,
+          "maxEnabled": true,
+          "minZoom": 0.8,
+          "maxZoom": 13
+        },
+        "cameraFollow": {
+          "followMotion": false,
+          "stableFocusHeight": 0.945324425995056
+        },
+        "cameraGuard": {
+          "requestedRadius": 13,
+          "effectiveRadius": null,
+          "requestedBeta": 0.88,
+          "effectiveBeta": 0.88,
+          "pitchCorrection": 0,
+          "reason": "inactive",
+          "baselineRadius": null,
+          "applied": false,
+          "fieldBytes": 1260096
+        },
+        "geometryPending": 0,
+        "texturePending": 0,
+        "map": "warrior-v5",
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 1,
+            "state": "Elena_Idle",
+            "hp": 1200
+          }
+        ],
+        "renderSize": [
+          768,
+          1386
+        ],
+        "targetFps": 30
+      },
+      "contextAfter": {
+        "activity": "이동 · 회전/시점 조작 · 모델 준비",
+        "position": [
+          -34.9,
+          39.9
+        ],
+        "camera": [
+          2.75,
+          1.5,
+          13
+        ],
+        "cameraZoom": {
+          "factor": 1.3076923076923077,
+          "radius": 13,
+          "referenceRadius": 17,
+          "minEnabled": true,
+          "maxEnabled": true,
+          "minZoom": 0.8,
+          "maxZoom": 13
+        },
+        "cameraFollow": {
+          "followMotion": false,
+          "stableFocusHeight": 0.945324425995056
+        },
+        "cameraGuard": {
+          "requestedRadius": 13,
+          "effectiveRadius": 11.979544421408914,
+          "requestedBeta": 1.502499999999999,
+          "effectiveBeta": 1.502499999999999,
+          "pitchCorrection": 0,
+          "reason": "obstruction",
+          "baselineRadius": 12.260156250000007,
+          "applied": false,
+          "fieldBytes": 1260096
+        },
+        "geometryPending": 1,
+        "texturePending": 0,
+        "map": "warrior-v5",
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 1,
+            "state": "Elena_Idle",
+            "hp": 1200
+          }
+        ],
+        "renderSize": [
+          1664,
+          768
+        ],
+        "targetFps": 30
+      },
+      "cameraChanged": true,
+      "positionChanged": true
+    }
+  ],
+  "backgroundLoads": [
+    {
+      "label": "광폭화 모델",
+      "status": "complete",
+      "started": 49143.90000000596,
+      "memoryBefore": {
+        "jsUsedBytes": 35100000,
+        "jsAllocatedBytes": 42100000,
+        "jsLimitBytes": 1940000000,
+        "backgroundHighTextureEstimateBytes": 89478592,
+        "backgroundHighTextureBudgetBytes": 100663296,
+        "textures": 26,
+        "meshes": 475,
+        "geometries": 123,
+        "sampleAtMs": 49143.90000000596
+      },
+      "elapsedMs": 1148.5999999940395,
+      "memoryAfter": {
+        "jsUsedBytes": 35100000,
+        "jsAllocatedBytes": 42100000,
+        "jsLimitBytes": 1940000000,
+        "backgroundHighTextureEstimateBytes": 89478592,
+        "backgroundHighTextureBudgetBytes": 100663296,
+        "textures": 30,
+        "meshes": 475,
+        "geometries": 123,
+        "sampleAtMs": 50292.5
+      },
+      "error": null
+    }
+  ],
+  "memory": {
+    "reported": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 42100000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 89478592,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 31,
+      "meshes": 489,
+      "geometries": 157,
+      "sampleAtMs": 253696.40000000596
+    },
+    "reportedJSUsedDistinctValues": [
+      35100000
+    ],
+    "sampling": "At most once per second; Chrome performance.memory is approximate/coarsened and excludes GPU/driver/native/browser allocations. Identical35.1MB cannot prove exact stability/no leak.",
+    "backgroundTextureScope": "89478592 B (85.333MiB) is ONLY managed near background albedo estimate. It excludes player8K, boss textures/morph textures, base LOD, bone textures, shadow maps, framebuffers and decoded CPU arrays.",
+    "gpu": {
+      "status": "unsupported",
+      "asynchronous": true,
+      "scope": "engine-frame",
+      "intervalMs": 250,
+      "pending": false,
+      "ageMs": null,
+      "samples": 0,
+      "meanMs": null,
+      "p95Ms": null,
+      "latest": null,
+      "retained": null,
+      "disjointEvents": 0,
+      "invalidSamples": 0,
+      "timeouts": 0
+    }
+  },
+  "streaming": {
+    "stats": {
+      "highTextureAssets": 4,
+      "highTexturePending": 0,
+      "highTextureMax": 4096,
+      "highTextureLoads": 16,
+      "highTextureReleases": 12,
+      "highTextureError": null,
+      "highTextureBudget": 100663296,
+      "highTextureBytes": 89478592,
+      "highTextureReserved": 0,
+      "highTexturePeak": 89478592,
+      "highTextureQueued": 3,
+      "highTextureMoving": false,
+      "highTextureMovingLoads": 12,
+      "highTextureCooldownMs": 0,
+      "highTextureLastPrepareMs": 301.59999999403954,
+      "highTextureFormat": 37492
+    },
+    "lastPrepareMeaning": "301.6ms is elapsed start-to-finally wall time across cache/network prefetch, texture load/decode, new Texture setup and material assignment. It is not a measured301.6ms GPU upload, and this single number has no event timestamp tying it to a particular death frame.",
+    "decodedCaches": {
+      "geometry": {
+        "bytes": 8370780,
+        "limit": 8388608,
+        "entries": 227,
+        "hits": 0,
+        "misses": 351,
+        "evictions": 124
+      },
+      "textures": {
+        "bytes": 23811920,
+        "limit": 25165824,
+        "entries": 36,
+        "hits": 0,
+        "misses": 51,
+        "evictions": 15
+      }
+    },
+    "terrainCache": {
+      "bytes": 148996,
+      "limit": 524288,
+      "entries": 1,
+      "hits": 0,
+      "misses": 1,
+      "evictions": 0
+    }
+  },
+  "actualModelValidation": {
+    "tests": [
+      "node --expose-gc --test --test-name-pattern=\"twenty complete|retired Elena\" tests/elena-combat-stress.test.js tests/boss-retired-work.test.js"
+    ],
+    "passed": 2,
+    "failed": 0,
+    "replays": {
+      "cycles": 20,
+      "finalDefeats": 20,
+      "instances": {
+        "phase1": 1,
+        "phase2": 1
+      },
+      "initial": {
+        "meshes": 19,
+        "geometries": 33,
+        "nodes": 359,
+        "groups": 22,
+        "skeletons": 3,
+        "materials": 14,
+        "textures": 3,
+        "managers": 2,
+        "pool": 2
+      },
+      "final": {
+        "meshes": 19,
+        "geometries": 33,
+        "nodes": 359,
+        "groups": 22,
+        "skeletons": 3,
+        "materials": 14,
+        "textures": 3,
+        "managers": 2,
+        "pool": 2
+      },
+      "allCountsEqual": true,
+      "telegraphBuffers": {
+        "maxActivePerResident": 6,
+        "caches": [
+          {
+            "phase": 1,
+            "topologies": 7,
+            "buffers": 42,
+            "hits": 20,
+            "misses": 7
+          },
+          {
+            "phase": 2,
+            "topologies": 5,
+            "buffers": 30,
+            "hits": 140,
+            "misses": 5
+          }
+        ],
+        "buffersReplacedAfterWarmup": 0
+      },
+      "heap": {
+        "explicitGC": true,
+        "afterWarmup": 216984512,
+        "final": 217332744,
+        "delta": 348232
+      }
+    },
+    "retired": {
+      "simulatedSeconds": 120,
+      "frames": 3600,
+      "animationCalls": 0,
+      "contactCalls": 0,
+      "activeMeshesAfterDefeat": 0,
+      "activeSkeletonsAfterDefeat": 0,
+      "shadowCandidatesAfterDefeat": 0,
+      "warmTrips": 4,
+      "resourceCountsUnchanged": true,
+      "elapsedDesktopCpuMs": 5.576599999999871,
+      "limits": "NullEngine lifecycle/submission evaluation; not phone GPU timing or a physical temperature measurement"
+    },
+    "limitations": "Stress fixtures omit texture downloads and replace materials; fixed object counts are strong lifecycle evidence, not total mobile GPU RAM/driver allocation measurements."
+  },
+  "setupProbe": {
+    "scope": "Packed rigs and actual encounter setup in Babylon NullEngine. Texture I/O omitted and forceCompilationAsync intercepted; CPU samples are one desktop sample, NOT mobile/GPU/thermal measurements.",
+    "navigationWarmup": {
+      "desktopMs": 208.6477,
+      "excludedFromSetup": true,
+      "reason": "Matches world.js initialization; avoids attributing the cold cave clearance/grid bake to boss preparation."
+    },
+    "setup": [
+      {
+        "phase": "first-phase",
+        "desktopSetupMs": 40.79209999999989
+      },
+      {
+        "phase": "second-phase-first",
+        "desktopSetupMs": 81.11469999999986
+      },
+      {
+        "phase": "second-phase-reuse",
+        "desktopSetupMs": 1.8091000000001713
+      }
+    ],
+    "shaderWarmup": {
+      "screenYieldsPerFirstPhase": 2,
+      "screenYieldsPerSecondPhase": 7,
+      "reuseShaderRequests": 0,
+      "farAndHiddenQualityUnchanged": true
+    },
+    "animatorSetup": [
+      {
+        "phase": "first-phase",
+        "method": "createAnimator",
+        "ms": 0.14709999999990941
+      },
+      {
+        "phase": "second-phase-first",
+        "method": "createAnimator",
+        "ms": 9.00480000000016
+      },
+      {
+        "phase": "second-phase-reuse",
+        "method": "createAnimator",
+        "ms": 0.6538000000000466
+      }
+    ],
+    "boundsBuild": [
+      {
+        "mesh": "Lament_Mouth_Interior",
+        "vertices": 280,
+        "morphTargets": 1,
+        "boneSlots": 4,
+        "boneBoxes": 1,
+        "desktopMs": 0.06900000000018736,
+        "valid": true
+      },
+      {
+        "mesh": "Halo_Attached_Streamers",
+        "vertices": 287,
+        "morphTargets": 0,
+        "boneSlots": 3,
+        "boneBoxes": 5,
+        "desktopMs": 0.13599999999996726,
+        "valid": true
+      },
+      {
+        "mesh": "Halo_Rigid_Emblem",
+        "vertices": 4014,
+        "morphTargets": 0,
+        "boneSlots": 3,
+        "boneBoxes": 8,
+        "desktopMs": 0.3099000000001979,
+        "valid": true
+      },
+      {
+        "mesh": "Elina_Chimera_Skin",
+        "vertices": 89940,
+        "morphTargets": 11,
+        "boneSlots": 4,
+        "boneBoxes": 206,
+        "desktopMs": 19.332999999999856,
+        "valid": true
+      }
+    ],
+    "runtimeStates": [
+      {
+        "name": "engaged-living",
+        "frames": 90,
+        "elapsedDesktopMs": 48.96330000000012,
+        "samples": 90,
+        "refreshes": 118,
+        "hurtSamples": 6,
+        "contacts": 90,
+        "hp": 1800,
+        "mode": "attack",
+        "corpseGone": false,
+        "actorEnabled": true
+      },
+      {
+        "name": "death-authored-through-hold",
+        "frames": 178,
+        "elapsedDesktopMs": 31.20569999999998,
+        "samples": 156,
+        "refreshes": 156,
+        "hurtSamples": 0,
+        "contacts": 175,
+        "hp": 0,
+        "mode": "dead",
+        "corpseGone": true,
+        "actorEnabled": false
+      },
+      {
+        "name": "retired-postdeath",
+        "frames": 3600,
+        "elapsedDesktopMs": 4.209400000000187,
+        "samples": 0,
+        "refreshes": 0,
+        "hurtSamples": 0,
+        "contacts": 0,
+        "hp": 0,
+        "mode": "dead",
+        "corpseGone": true,
+        "actorEnabled": false
+      }
+    ],
+    "shaderRequests": [
+      {
+        "phase": "first-phase",
+        "mesh": "Elena_Meshy_Static",
+        "material": "tripo_mat_24a31b6e-painted-unlit",
+        "materialId": 9380,
+        "materialClass": "PBRMaterial",
+        "outline": false,
+        "boneInfluencers": 4,
+        "bones": 91,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 158730,
+        "triangles": 103930
+      },
+      {
+        "phase": "first-phase",
+        "mesh": "Elena_Meshy_Static / silhouette",
+        "material": "moonforest-character-outline",
+        "materialId": 9382,
+        "materialClass": "ShaderMaterial",
+        "outline": true,
+        "boneInfluencers": 4,
+        "bones": 91,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 158730,
+        "triangles": 103930
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Lament_Mouth_Interior",
+        "material": "Mouth Interior - Lament-painted-unlit",
+        "materialId": 9395,
+        "materialClass": "PBRMaterial",
+        "outline": false,
+        "boneInfluencers": 4,
+        "bones": 0,
+        "morphs": 1,
+        "morphTexture": false,
+        "vertices": 280,
+        "triangles": 96
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Halo_Attached_Streamers",
+        "material": "tripo_mat_b9a89d0a-painted-unlit",
+        "materialId": 9396,
+        "materialClass": "PBRMaterial",
+        "outline": false,
+        "boneInfluencers": 3,
+        "bones": 8,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 287,
+        "triangles": 376
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Halo_Rigid_Emblem",
+        "material": "tripo_mat_b9a89d0a-painted-unlit",
+        "materialId": 9396,
+        "materialClass": "PBRMaterial",
+        "outline": false,
+        "boneInfluencers": 3,
+        "bones": 8,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 4014,
+        "triangles": 5344
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Elina_Chimera_Skin",
+        "material": "tripo_mat_b9a89d0a-painted-unlit",
+        "materialId": 9396,
+        "materialClass": "PBRMaterial",
+        "outline": false,
+        "boneInfluencers": 4,
+        "bones": 247,
+        "morphs": 11,
+        "morphTexture": false,
+        "vertices": 89940,
+        "triangles": 137412
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Halo_Attached_Streamers / silhouette",
+        "material": "moonforest-character-outline",
+        "materialId": 9382,
+        "materialClass": "ShaderMaterial",
+        "outline": true,
+        "boneInfluencers": 3,
+        "bones": 8,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 287,
+        "triangles": 376
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Halo_Rigid_Emblem / silhouette",
+        "material": "moonforest-character-outline",
+        "materialId": 9382,
+        "materialClass": "ShaderMaterial",
+        "outline": true,
+        "boneInfluencers": 3,
+        "bones": 8,
+        "morphs": 0,
+        "morphTexture": false,
+        "vertices": 4014,
+        "triangles": 5344
+      },
+      {
+        "phase": "second-phase-first",
+        "mesh": "Elina_Chimera_Skin / silhouette",
+        "material": "moonforest-character-outline",
+        "materialId": 9382,
+        "materialClass": "ShaderMaterial",
+        "outline": true,
+        "boneInfluencers": 4,
+        "bones": 247,
+        "morphs": 11,
+        "morphTexture": false,
+        "vertices": 89940,
+        "triangles": 137412
+      }
+    ],
+    "sourceHashes": {
+      "boss-battle": "a93c0ee460ce21d8d8d579ebcece1584852dc0abfda0c566152d2465a05b6173",
+      "boss-encounter": "6d44c7deac7f4052fc295db11a2880bc62e0c1461799d36c1b8c05418c570ad6",
+      "boss-shader-warmup": "a338ed699258b281756bbd9fd9139290c3ce6e2550c634e23140255b6545446e",
+      "mourning-elena-animation": "3ec4d6ac7354af8b09d82afeb5fe1b8b253cd6215b40855da26d7e3b04fff4a0",
+      "mourning-elena-encounter": "32dba6c847012b8d4cd34e34b916e2fc6614bf33f4929f2734ed4f1f45f166c1",
+      "elena-encounter": "09222aae5b21324a7341817cacf47454bce4d708f6680669110d2891263e69a1",
+      "character-outlines": "e503c7378bc5dd9cb6fff6745030dd97234fc87aa4c87444e49b9d8ec1aa2523"
+    }
+  },
+  "confirmed": [
+    "Phase2 model was already downloaded/loaded, yet transform still spent536.4ms preparing:13.7ms resource,151.1ms model,371.6ms screen. First-use CPU/setup and shader-readiness remain at the transformation boundary.",
+    "Current preloadMourning only calls modelLibrary.load. First transform still applies style/plugins, builds silhouettes and all-pose conservative bounds, constructs the animator and requests seven body/ink shader warmups. Warm reset reuses the same actor and animator; no new compile requests in the diagnostic fixture.",
+    "Conservative bounds scans the entire body:89,940vertices and11morphs, plus halo/mouth. The warmed desktop rebuild took19.33ms for body alone; this is a real indivisible CPU loop today. The first setup81.1ms in the controlled fixture excludes warmed navigation and GPU compilation, and must not be called a mobile frame-time measurement.",
+    "After the authored5.2s death plus.65s final hold, actual model actors and shadow casters retire: zero animation/contact calls and zero active skinned meshes/skeletons for120simulated seconds. Repeating20two-phase replays keeps all tested resource counts/buffers bounded."
+  ],
+  "notEstablished": [
+    "The log does not establish the physical device model, temperature, GPU bottleneck or thermal throttling. GPU status is unsupported with zero valid samples.",
+    "Draw105.1→121.4 and mean33.28→36.11ms cannot be attributed solely to the boss: player27.1,-28.1→31,-25.9; camera alpha3.4→4.42/radius13→21.11; streamed environment and visibility changed.",
+    "The largest death interval217.5ms includes scene210.2ms but boss update only1.2ms. CPU sections overlap, and interval/work sample boundaries differ; it does not prove death AI, garbage collection, shader compilation, geometry streaming or high-texture preparation caused this frame.",
+    "There are20death records in the recent32slow-event ring, but there is no denominator for all death frames, no render-driver/GPU time and no full-session trace. The final10sec window returns to30FPS/p9533.9ms/one>50ms frame, so persistent postdeath CPU collapse is not demonstrated.",
+    "31textures/489meshes/157geometries at the final camera is a scene inventory, not submitted work or leak proof. Twelve first phase2meshes, a bounded ground-topology cache and streamed LOD inventory explain possible first-use growth; whole-scene repeated live-device growth was not measured."
+  ],
+  "references": {
+    "preload": "src/boss-battle.js:132",
+    "firstSetup": "src/boss-encounter.js:47-96",
+    "retirement": "src/boss-encounter.js:132-148; src/boss-battle.js:232-245",
+    "bounds": "src/mourning-camera-culling.js:11-33,97-105",
+    "shader": "src/boss-shader-warmup.js:9-14",
+    "animator": "src/mourning-elena-animation.js:64-118,155-175; src/mourning-elena-encounter.js:69-80",
+    "streaming": "src/village-texture-streaming.js:134-154",
+    "sampling": "src/frame-diagnostics.js:18-42,87,120-122"
+  },
+  "recommendation": {
+    "priority": 1,
+    "status": "PROPOSAL_NOT_APPLIED_SOURCE_APPROVAL_REQUIRED",
+    "change": "Extend the existing phase1-engagement prefetch into a single hidden resident preparation job with bounded CPU slices. Do not merely run the current synchronous summon earlier.",
+    "steps": [
+      "Keep initial loading unchanged. Begin only after existing phase1 engagement prefetch has completed and gameplay is active. Use one owned job per phase/scene; real summon/transform joins that job rather than cloning a second model.",
+      "Separate prepare from activate: no actor enable, AI tick, boss shadow registration, health reset, event/reward, contact or telegraph during background preparation.",
+      "Break the confirmed long vertex loops (bounds interval building and exact-zero weight-slot proof) into deterministic incremental chunks with a1-2ms desktop scheduling budget plus a vertex cap; yield between chunks. Same arithmetic/order/results, no geometry or culling approximation.",
+      "Yield between material/outline/animator stages; retain per-shader warmup yield. Measure each nonpreemptible stage. Driver compile or a single large GPU transfer may still spike on a phone; no unsupported smoothness/heat guarantee.",
+      "Tie preparation to scene identity, resident revision, map/job token and disposal. Cancellation must keep actor/shadow/contact/spell disabled and bounded resources reusable or disposable. Concurrent selector summon, death-transform and map exit must join/cancel deterministically.",
+      "Invalidate prepared status when source rig/material/skin/morph variant changes or engine context is recreated. Current brightness/ink width settings are uniforms; apply latest style/attack settings at activation without creating another material or changing combat clocks."
+    ],
+    "proposedFiles": [
+      "src/boss-battle.js",
+      "src/boss-encounter.js",
+      "src/character-outlines.js",
+      "src/mourning-camera-culling.js",
+      "src/character-render-cost.js",
+      "src/boss-shader-warmup.js only if exact variant evidence warrants change",
+      "related focused tests"
+    ],
+    "gates": [
+      "Exact sync-vs-incremental bone boxes and all tested pose bounds equal; all motion and morph positions untouched",
+      "No rendered/skinned/shadow caster/AI/contact/event contribution until activation",
+      "A single resident asset and pending job under transform/selector/map cancel races",
+      "Current20replay fixed counts and retired120sec zero-work stay true",
+      "Record per-step maximum CPU and compile stages; explicit GPU unsupported limitation",
+      "Player8K/background≤4K/allLOD/outline/shadow/motion quality unchanged"
+    ],
+    "deferred": "Do not rewrite cloth/halo integration, reduce triangles/textures, globally disable shadows, change AI rates or infer a leak from this log. Postdeath scene210ms requires a future synchronized long-frame/GPU/streaming trace if it remains reproducible."
+  }
+}

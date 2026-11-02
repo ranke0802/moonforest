@@ -1,0 +1,13 @@
+{
+  "simulatedSeconds": 120,
+  "frames": 3600,
+  "animationCalls": 0,
+  "contactCalls": 0,
+  "activeMeshesAfterDefeat": 0,
+  "activeSkeletonsAfterDefeat": 0,
+  "shadowCandidatesAfterDefeat": 0,
+  "warmTrips": 4,
+  "resourceCountsUnchanged": true,
+  "elapsedDesktopCpuMs": 5.576599999999871,
+  "limits": "NullEngine lifecycle/submission evaluation; not phone GPU timing or a physical temperature measurement"
+}

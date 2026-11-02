@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-11-02T00:08:32.929Z",
+  "scope": "Actual packed models and CPU pose/contact lifecycle in Babylon NullEngine; no GPU, visual screenshot, or frame-rate claim. Heap figures include the entire Node test fixture and decoded source cache, not the browser resident footprint.",
+  "sources": {
+    "elena-spec.js": "595171ad527fbb46bcbbabda05875d60697ce83eb1a21c63e033f16970ef7f61",
+    "elena-encounter.js": "09222aae5b21324a7341817cacf47454bce4d708f6680669110d2891263e69a1",
+    "elena-reposition.js": "446b0576d14905bda8656e9b7dd2b618bccf7b333ddc21c5a748776fa17a0e25",
+    "boss-battle.js": "a93c0ee460ce21d8d8d579ebcece1584852dc0abfda0c566152d2465a05b6173",
+    "elena-ground-magic.js": "7a82f3509609c9c6ab7584973410c1990bb936c1bb60e6c204b0c5b69774982d"
+  },
+  "lifecycle": [],
+  "spellCases": [],
+  "replays": {
+    "cycles": 20,
+    "finalDefeats": 20,
+    "instances": {
+      "phase1": 1,
+      "phase2": 1
+    },
+    "initial": {
+      "meshes": 19,
+      "geometries": 33,
+      "nodes": 359,
+      "groups": 22,
+      "skeletons": 3,
+      "materials": 14,
+      "textures": 3,
+      "managers": 2,
+      "pool": 2
+    },
+    "final": {
+      "meshes": 19,
+      "geometries": 33,
+      "nodes": 359,
+      "groups": 22,
+      "skeletons": 3,
+      "materials": 14,
+      "textures": 3,
+      "managers": 2,
+      "pool": 2
+    },
+    "allCountsEqual": true,
+    "telegraphBuffers": {
+      "maxActivePerResident": 6,
+      "caches": [
+        {
+          "phase": 1,
+          "topologies": 7,
+          "buffers": 42,
+          "hits": 20,
+          "misses": 7
+        },
+        {
+          "phase": 2,
+          "topologies": 5,
+          "buffers": 30,
+          "hits": 140,
+          "misses": 5
+        }
+      ],
+      "buffersReplacedAfterWarmup": 0
+    },
+    "heap": {
+      "explicitGC": true,
+      "afterWarmup": 216984512,
+      "final": 217332744,
+      "delta": 348232
+    }
+  }
+}

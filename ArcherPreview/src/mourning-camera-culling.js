@@ -1,5 +1,6 @@
 import {Matrix,VertexBuffer} from '@babylonjs/core';
 import {characterStyleFor} from './character-style.js';
+import {runPreparationSync} from './boss-preparation.js';
 
 const installed=new WeakMap(),empty=()=>[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
 const extend=(box,lo,hi)=>{for(let a=0;a<3;a++){box[a]=Math.min(box[a],lo[a]);box[a+3]=Math.max(box[a+3],hi[a]);}};
@@ -8,7 +9,7 @@ const extend=(box,lo,hi)=>{for(let a=0;a<3;a++){box[a]=Math.min(box[a],lo[a]);bo
 // shader. A positive, normalized blend is inside the union's AABB. Each bone's
 // source-space box includes every vertex it influences, with all independently
 // varying 0..1 morph deltas added to that vertex's interval. No pose sampling.
-export function buildMourningMeshBounds(mesh){
+export function* mourningMeshBoundsProof(mesh){
   const positions=mesh.getVerticesData(VertexBuffer.PositionKind),count=mesh.getTotalVertices(),manager=mesh.morphTargetManager;
   if(!positions||positions.length!==count*3||!count)return null;
   const targets=Array.from({length:manager?.numTargets??0},(_,i)=>manager.getTarget(i)),morphs=targets.map(t=>t.getPositions());
@@ -22,7 +23,7 @@ export function buildMourningMeshBounds(mesh){
       const at=vertex*3+axis,base=positions[at];if(!Number.isFinite(base))return null;lo[axis]=hi[axis]=base;
       for(const morph of morphs)if(morph){const delta=morph[at]-base;if(!Number.isFinite(delta))return null;lo[axis]+=Math.min(0,delta);hi[axis]+=Math.max(0,delta);}
     }
-    if(!skeleton){let box=boxes.get(-1);if(!box)boxes.set(-1,box=empty());extend(box,lo,hi);continue;}
+    if(!skeleton){let box=boxes.get(-1);if(!box)boxes.set(-1,box=empty());extend(box,lo,hi);if((vertex+1)%512===0)yield;continue;}
     let sum=0;
     for(let slot=0;slot<slots;slot++){
       const at=vertex*4+slot%4,weight=(slot<4?weights:extraWeights)[at],joint=(slot<4?joints:extraJoints)[at];
@@ -30,9 +31,12 @@ export function buildMourningMeshBounds(mesh){
       sum+=weight;if(weight===0)continue;let box=boxes.get(joint);if(!box)boxes.set(joint,box=empty());extend(box,lo,hi);
     }
     maxWeightSumError=Math.max(maxWeightSumError,Math.abs(sum-1));if(Math.abs(sum-1)>1e-5)return null;
+    if((vertex+1)%512===0)yield;
   }
   return {mesh,geometry:mesh.geometry,skeleton,slots,manager,targets,morphs,boxes:[...boxes].map(([joint,box])=>({joint,box})),maxWeightSumError};
 }
+export function buildMourningMeshBounds(mesh){return runPreparationSync(mourningMeshBoundsProof(mesh));}
+export function buildMourningMeshBoundsAsync(mesh,preparation){return preparation.run(mourningMeshBoundsProof(mesh));}
 
 function supportsCurrentPose(part){
   const {mesh,manager}=part;
@@ -99,7 +103,17 @@ export function prepareMourningCameraCulling(asset){
   if(!asset.meshes.some(m=>m.name==='Elina_Chimera_Skin'&&!m.metadata?.moonforestOutline))return null;
   const sources=asset.meshes.filter(m=>m.getTotalVertices()&&!m.metadata?.moonforestOutline),parts=sources.map(buildMourningMeshBounds);
   if(parts.some(p=>!p))return null;
+  return installMourningCameraCulling(asset,sources,parts);
+}
+function installMourningCameraCulling(asset,sources,parts){
   const group=new MourningCameraBounds(parts,sources[0].getScene());
   for(const mesh of asset.meshes)if(mesh.getTotalVertices())group.attach(mesh);
   asset.meshes[0].onDisposeObservable.addOnce(()=>group.dispose());installed.set(asset,group);return group;
+}
+export async function prepareMourningCameraCullingAsync(asset,preparation){
+  const old=installed.get(asset);if(old&&!old.disposed)return old;
+  if(!asset.meshes.some(m=>m.name==='Elina_Chimera_Skin'&&!m.metadata?.moonforestOutline))return null;
+  const sources=asset.meshes.filter(m=>m.getTotalVertices()&&!m.metadata?.moonforestOutline),parts=[];
+  for(const mesh of sources){const part=await buildMourningMeshBoundsAsync(mesh,preparation);if(!part)return null;parts.push(part);}
+  preparation.check();return installMourningCameraCulling(asset,sources,parts);
 }

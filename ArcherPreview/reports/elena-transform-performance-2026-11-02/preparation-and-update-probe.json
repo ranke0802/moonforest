@@ -1,0 +1,493 @@
+{
+  "generatedAt": "2026-11-02T00:11:57.351Z",
+  "scope": "Packed rigs and actual encounter setup in Babylon NullEngine. Texture I/O omitted and forceCompilationAsync intercepted; CPU samples are one desktop sample, NOT mobile/GPU/thermal measurements.",
+  "shaderRequests": [
+    {
+      "phase": "first-phase",
+      "mesh": "Elena_Meshy_Static",
+      "material": "tripo_mat_24a31b6e-painted-unlit",
+      "materialId": 9380,
+      "materialClass": "PBRMaterial",
+      "outline": false,
+      "boneInfluencers": 4,
+      "bones": 91,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 158730,
+      "triangles": 103930
+    },
+    {
+      "phase": "first-phase",
+      "mesh": "Elena_Meshy_Static / silhouette",
+      "material": "moonforest-character-outline",
+      "materialId": 9382,
+      "materialClass": "ShaderMaterial",
+      "outline": true,
+      "boneInfluencers": 4,
+      "bones": 91,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 158730,
+      "triangles": 103930
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Lament_Mouth_Interior",
+      "material": "Mouth Interior - Lament-painted-unlit",
+      "materialId": 9395,
+      "materialClass": "PBRMaterial",
+      "outline": false,
+      "boneInfluencers": 4,
+      "bones": 0,
+      "morphs": 1,
+      "morphTexture": false,
+      "vertices": 280,
+      "triangles": 96
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Halo_Attached_Streamers",
+      "material": "tripo_mat_b9a89d0a-painted-unlit",
+      "materialId": 9396,
+      "materialClass": "PBRMaterial",
+      "outline": false,
+      "boneInfluencers": 3,
+      "bones": 8,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 287,
+      "triangles": 376
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Halo_Rigid_Emblem",
+      "material": "tripo_mat_b9a89d0a-painted-unlit",
+      "materialId": 9396,
+      "materialClass": "PBRMaterial",
+      "outline": false,
+      "boneInfluencers": 3,
+      "bones": 8,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 4014,
+      "triangles": 5344
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Elina_Chimera_Skin",
+      "material": "tripo_mat_b9a89d0a-painted-unlit",
+      "materialId": 9396,
+      "materialClass": "PBRMaterial",
+      "outline": false,
+      "boneInfluencers": 4,
+      "bones": 247,
+      "morphs": 11,
+      "morphTexture": false,
+      "vertices": 89940,
+      "triangles": 137412
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Halo_Attached_Streamers / silhouette",
+      "material": "moonforest-character-outline",
+      "materialId": 9382,
+      "materialClass": "ShaderMaterial",
+      "outline": true,
+      "boneInfluencers": 3,
+      "bones": 8,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 287,
+      "triangles": 376
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Halo_Rigid_Emblem / silhouette",
+      "material": "moonforest-character-outline",
+      "materialId": 9382,
+      "materialClass": "ShaderMaterial",
+      "outline": true,
+      "boneInfluencers": 3,
+      "bones": 8,
+      "morphs": 0,
+      "morphTexture": false,
+      "vertices": 4014,
+      "triangles": 5344
+    },
+    {
+      "phase": "second-phase-first",
+      "mesh": "Elina_Chimera_Skin / silhouette",
+      "material": "moonforest-character-outline",
+      "materialId": 9382,
+      "materialClass": "ShaderMaterial",
+      "outline": true,
+      "boneInfluencers": 4,
+      "bones": 247,
+      "morphs": 11,
+      "morphTexture": false,
+      "vertices": 89940,
+      "triangles": 137412
+    }
+  ],
+  "preparation": [
+    {
+      "phase": "second-phase-first",
+      "method": "prepareAsset",
+      "ms": 0.23069999999984248
+    }
+  ],
+  "animatorSetup": [
+    {
+      "phase": "first-phase",
+      "method": "createAnimator",
+      "ms": 0.14709999999990941
+    },
+    {
+      "phase": "second-phase-first",
+      "method": "createAnimator",
+      "ms": 9.00480000000016
+    },
+    {
+      "phase": "second-phase-reuse",
+      "method": "createAnimator",
+      "ms": 0.6538000000000466
+    }
+  ],
+  "stages": [
+    {
+      "phase": "first-phase",
+      "at": 1878.2534,
+      "type": "begin",
+      "label": "타락한 성녀",
+      "trigger": "선택 소환",
+      "mode": "cached-model"
+    },
+    {
+      "phase": "first-phase",
+      "at": 1878.2686,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "first-phase",
+      "at": 1879.1747,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "first-phase",
+      "at": 1913.11,
+      "type": "stage",
+      "stage": "screen"
+    },
+    {
+      "phase": "first-phase",
+      "at": 1913.2108,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "first-phase",
+      "at": 1918.8688,
+      "type": "ready"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1918.8991,
+      "type": "begin",
+      "label": "비탄의 마녀",
+      "trigger": "선택 소환",
+      "mode": "cached-model"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1918.9096,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1924.1886,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1987.6144,
+      "type": "stage",
+      "stage": "screen"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1987.7059,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "second-phase-first",
+      "at": 1999.9952,
+      "type": "ready"
+    },
+    {
+      "phase": "second-phase-reuse",
+      "at": 2000.1297,
+      "type": "begin",
+      "label": "비탄의 마녀",
+      "trigger": "선택 소환",
+      "mode": "reuse"
+    },
+    {
+      "phase": "second-phase-reuse",
+      "at": 2000.1335,
+      "type": "stage",
+      "stage": "model"
+    },
+    {
+      "phase": "second-phase-reuse",
+      "at": 2001.9259,
+      "type": "ready"
+    }
+  ],
+  "phases": [
+    {
+      "phase": "first-phase",
+      "setupDesktopMs": 40.79209999999989,
+      "before": {
+        "meshes": 0,
+        "geometries": 0,
+        "materials": 0,
+        "skeletons": 0,
+        "animationGroups": 0
+      },
+      "after": {
+        "meshes": 7,
+        "geometries": 3,
+        "materials": 7,
+        "skeletons": 1,
+        "animationGroups": 12
+      },
+      "animator": null
+    },
+    {
+      "phase": "second-phase-first",
+      "setupDesktopMs": 81.11469999999986,
+      "before": {
+        "meshes": 7,
+        "geometries": 3,
+        "materials": 7,
+        "skeletons": 1,
+        "animationGroups": 12
+      },
+      "after": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 15,
+        "skeletons": 3,
+        "animationGroups": 22
+      },
+      "animator": {
+        "state": "idle",
+        "castVariant": "cast",
+        "castTime": 0,
+        "walkTime": 0,
+        "idleTime": 0.2,
+        "hitTime": 0,
+        "hitActive": false,
+        "hitPulseWeight": 0,
+        "hitPulseTime": 0.38,
+        "hitPulseCount": 0,
+        "haloTime": 0.2,
+        "haloSpeed": 1,
+        "deathTime": 0,
+        "deathDuration": 5.2,
+        "deathWeight": 0,
+        "deathFinished": false,
+        "finished": false,
+        "weights": {
+          "walk": 0,
+          "cast": 0,
+          "idle": 0,
+          "hit": 0
+        },
+        "samples": 2,
+        "dynamicChannels": 322,
+        "constantChannels": 374,
+        "deathChannels": 741,
+        "interval": 0,
+        "morphs": {
+          "Death_Scream": 0,
+          "Breath_Rise": 0.6132483837128822,
+          "Bust_Settle": 0,
+          "Bust_ArmFollow": 0,
+          "Cast_Palm_Cleanup": 0,
+          "Cast_Elbow_Form": 0,
+          "Hair_Cast_Wind": 0,
+          "Death_Hair_Cry": 0,
+          "Death_Hair_Settle": 0,
+          "Death_Ground_Contact": 0,
+          "Death_Ground_Early": 0
+        }
+      }
+    },
+    {
+      "phase": "second-phase-reuse",
+      "setupDesktopMs": 1.8091000000001713,
+      "before": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 15,
+        "skeletons": 3,
+        "animationGroups": 22
+      },
+      "after": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 15,
+        "skeletons": 3,
+        "animationGroups": 22
+      },
+      "animator": {
+        "state": "idle",
+        "castVariant": "cast",
+        "castTime": 0,
+        "walkTime": 0,
+        "idleTime": 0.2,
+        "hitTime": 0,
+        "hitActive": false,
+        "hitPulseWeight": 0,
+        "hitPulseTime": 0.38,
+        "hitPulseCount": 0,
+        "haloTime": 0.2,
+        "haloSpeed": 1,
+        "deathTime": 0,
+        "deathDuration": 5.2,
+        "deathWeight": 0,
+        "deathFinished": false,
+        "finished": false,
+        "weights": {
+          "walk": 0,
+          "cast": 0,
+          "idle": 0,
+          "hit": 0
+        },
+        "samples": 4,
+        "dynamicChannels": 322,
+        "constantChannels": 374,
+        "deathChannels": 741,
+        "interval": 0,
+        "morphs": {
+          "Death_Scream": 0,
+          "Breath_Rise": 0.6132483837128822,
+          "Bust_Settle": 0,
+          "Bust_ArmFollow": 0,
+          "Cast_Palm_Cleanup": 0,
+          "Cast_Elbow_Form": 0,
+          "Hair_Cast_Wind": 0,
+          "Death_Hair_Cry": 0,
+          "Death_Hair_Settle": 0,
+          "Death_Ground_Contact": 0,
+          "Death_Ground_Early": 0
+        }
+      }
+    }
+  ],
+  "runtimeStates": [
+    {
+      "name": "engaged-living",
+      "frames": 90,
+      "elapsedDesktopMs": 48.96330000000012,
+      "samples": 90,
+      "refreshes": 118,
+      "hurtSamples": 6,
+      "contacts": 90,
+      "hp": 1800,
+      "mode": "attack",
+      "corpseGone": false,
+      "actorEnabled": true
+    },
+    {
+      "name": "death-authored-through-hold",
+      "frames": 178,
+      "elapsedDesktopMs": 31.20569999999998,
+      "samples": 156,
+      "refreshes": 156,
+      "hurtSamples": 0,
+      "contacts": 175,
+      "hp": 0,
+      "mode": "dead",
+      "corpseGone": true,
+      "actorEnabled": false
+    },
+    {
+      "name": "retired-postdeath",
+      "frames": 3600,
+      "elapsedDesktopMs": 4.209400000000187,
+      "samples": 0,
+      "refreshes": 0,
+      "hurtSamples": 0,
+      "contacts": 0,
+      "hp": 0,
+      "mode": "dead",
+      "corpseGone": true,
+      "actorEnabled": false
+    }
+  ],
+  "boundsBuild": [
+    {
+      "mesh": "Lament_Mouth_Interior",
+      "vertices": 280,
+      "morphTargets": 1,
+      "boneSlots": 4,
+      "boneBoxes": 1,
+      "desktopMs": 0.06900000000018736,
+      "valid": true
+    },
+    {
+      "mesh": "Halo_Attached_Streamers",
+      "vertices": 287,
+      "morphTargets": 0,
+      "boneSlots": 3,
+      "boneBoxes": 5,
+      "desktopMs": 0.13599999999996726,
+      "valid": true
+    },
+    {
+      "mesh": "Halo_Rigid_Emblem",
+      "vertices": 4014,
+      "morphTargets": 0,
+      "boneSlots": 3,
+      "boneBoxes": 8,
+      "desktopMs": 0.3099000000001979,
+      "valid": true
+    },
+    {
+      "mesh": "Elina_Chimera_Skin",
+      "vertices": 89940,
+      "morphTargets": 11,
+      "boneSlots": 4,
+      "boneBoxes": 206,
+      "desktopMs": 19.332999999999856,
+      "valid": true
+    }
+  ],
+  "sources": {
+    "boss-battle": "a93c0ee460ce21d8d8d579ebcece1584852dc0abfda0c566152d2465a05b6173",
+    "boss-encounter": "6d44c7deac7f4052fc295db11a2880bc62e0c1461799d36c1b8c05418c570ad6",
+    "boss-shader-warmup": "a338ed699258b281756bbd9fd9139290c3ce6e2550c634e23140255b6545446e",
+    "mourning-elena-animation": "3ec4d6ac7354af8b09d82afeb5fe1b8b253cd6215b40855da26d7e3b04fff4a0",
+    "mourning-elena-encounter": "32dba6c847012b8d4cd34e34b916e2fc6614bf33f4929f2734ed4f1f45f166c1",
+    "elena-encounter": "09222aae5b21324a7341817cacf47454bce4d708f6680669110d2891263e69a1",
+    "character-outlines": "e503c7378bc5dd9cb6fff6745030dd97234fc87aa4c87444e49b9d8ec1aa2523"
+  },
+  "navigationWarmup": {
+    "desktopMs": 208.6477,
+    "excludedFromSetup": true,
+    "reason": "Matches world.js initialization; avoids attributing the cold cave clearance/grid bake to boss preparation."
+  },
+  "proof": {
+    "screenYieldsPerFirstPhase": 2,
+    "screenYieldsPerSecondPhase": 7,
+    "reuseShaderRequests": 0,
+    "farAndHiddenQualityUnchanged": true
+  }
+}

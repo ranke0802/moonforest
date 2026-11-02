@@ -1,0 +1,254 @@
+{
+  "sourceSha256": "2c8114d4f11696d0962c59c22b0c2c899aee62b6abc98617ec68e4da0c9ebe69",
+  "createdAt": "2026-11-01T23:57:09.758Z",
+  "bundle": "./assets/index-DX7bLT8c.js",
+  "resourceRevision": "7f638aa2b5b40a67a69f34cce0649fa14e0e5c36260acd1d9bb314bcca2b6c66",
+  "playback": {
+    "ready": true,
+    "loading": false,
+    "running": false,
+    "failed": false,
+    "frames": 7209
+  },
+  "lastFrameError": null,
+  "currentSummary": {
+    "fps": 30.211480362713257,
+    "frameMs": 33.30000001192093,
+    "maxMs": 61.19999998807907,
+    "p95Ms": 33.900000005960464,
+    "slowFrames": 1,
+    "thresholdMs": 50,
+    "targetFps": 30,
+    "samples": 301,
+    "maxWorkMs": 24.200000017881393
+  },
+  "currentRender": {
+    "drawCalls": 122,
+    "sceneMs": 12.800000011920929,
+    "animationMs": 0.30000001192092896,
+    "gpu": {
+      "status": "unsupported",
+      "asynchronous": true,
+      "scope": "engine-frame",
+      "intervalMs": 250,
+      "pending": false,
+      "ageMs": null,
+      "samples": 0,
+      "meanMs": null,
+      "p95Ms": null,
+      "latest": null,
+      "retained": null,
+      "disjointEvents": 0,
+      "invalidSamples": 0,
+      "timeouts": 0
+    }
+  },
+  "initialLoad": {
+    "label": "마녀의 동굴",
+    "phase": "complete",
+    "setupMs": 114,
+    "downloadMs": 853.8000000119209,
+    "modelMs": 5727.4000000059605,
+    "screenMs": 592.3999999761581,
+    "bytes": 81441,
+    "cachedBytes": 84832841,
+    "totalMs": 7287.5999999940395,
+    "error": null
+  },
+  "transferEvidence": {
+    "recordedTransfers": 0,
+    "recordedLoadHistory": 1,
+    "note": "The attachment contains the completed initial cave load, not the stuck cave-to-forest transition; it cannot identify that specific failed stage."
+  },
+  "conditionalDelayEvidence": {
+    "count": 32,
+    "fromSeconds": 188.7,
+    "toSeconds": 241.2,
+    "deathSamples": 20,
+    "maxFrameMs": 217.5,
+    "maxSubmitMs": 214.4,
+    "maxSceneMs": 210.2000000178814,
+    "maxAnimationMs": 0.9000000059604645,
+    "maxBossUpdateMs": 5.800000011920929,
+    "maxContactsMs": 1.5999999940395355,
+    "framesWithTexturePending": 0,
+    "framesWithGeometryPending": 0,
+    "note": "These are retained >50ms delayed frames, not an unbiased FPS sample. Frame interval and CPU work refer to different scheduling boundaries and must not be added."
+  },
+  "transformation": {
+    "stageMs": {
+      "resource": 13.699999988079071,
+      "model": 151.10000002384186,
+      "screen": 371.59999999403954
+    },
+    "prepareMs": 536.4000000059605,
+    "before": {
+      "samples": 90,
+      "durationMs": 2995.4000000059605,
+      "frameMs": {
+        "mean": 33.282222222288446,
+        "p95": 33.80000001192093,
+        "max": 36
+      },
+      "cpuMs": {
+        "mean": 15.025555558337105,
+        "p95": 20.599999994039536,
+        "max": 25.69999998807907
+      },
+      "drawCalls": {
+        "mean": 105.12222222222222,
+        "p95": 106,
+        "max": 107
+      },
+      "sceneMs": {
+        "mean": 12.030000001192093,
+        "p95": 16.5,
+        "max": 21
+      },
+      "animationMs": {
+        "mean": 0.5777777777777777,
+        "p95": 0.9000000059604645,
+        "max": 1.2999999821186066
+      },
+      "bossUpdateMs": {
+        "mean": 0.9033333351214726,
+        "p95": 1.5,
+        "max": 3
+      },
+      "contactsMs": {
+        "mean": 0.42333333426051667,
+        "p95": 0.5999999940395355,
+        "max": 10
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "during": {
+      "samples": 9,
+      "durationMs": 574.1999999880791,
+      "frameMs": {
+        "mean": 63.79999999867545,
+        "p95": 149.90000000596046,
+        "max": 149.90000000596046
+      },
+      "cpuMs": {
+        "mean": 35.36666666467985,
+        "p95": 228,
+        "max": 228
+      },
+      "drawCalls": {
+        "mean": 110.88888888888889,
+        "p95": 117,
+        "max": 117
+      },
+      "sceneMs": {
+        "mean": 32.255555560191475,
+        "p95": 219.5,
+        "max": 219.5
+      },
+      "animationMs": {
+        "mean": 0.433333330684238,
+        "p95": 0.5,
+        "max": 0.5
+      },
+      "bossUpdateMs": {
+        "mean": 1.1777777704927657,
+        "p95": 3.7999999821186066,
+        "max": 3.7999999821186066
+      },
+      "contactsMs": {
+        "mean": 0.3000000086095598,
+        "p95": 1,
+        "max": 1
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "after": {
+      "samples": 139,
+      "durationMs": 5019.4000000059605,
+      "frameMs": {
+        "mean": 36.11079136694936,
+        "p95": 50.30000001192093,
+        "max": 234.59999999403954
+      },
+      "cpuMs": {
+        "mean": 16.664028775777748,
+        "p95": 22.599999994039536,
+        "max": 29.599999994039536
+      },
+      "drawCalls": {
+        "mean": 121.35971223021583,
+        "p95": 131,
+        "max": 133
+      },
+      "sceneMs": {
+        "mean": 13.002877697241392,
+        "p95": 17.700000017881393,
+        "max": 24.299999982118607
+      },
+      "animationMs": {
+        "mean": 0.36474820028106086,
+        "p95": 0.5,
+        "max": 0.7000000178813934
+      },
+      "bossUpdateMs": {
+        "mean": 1.5791366908618871,
+        "p95": 2.4000000059604645,
+        "max": 3
+      },
+      "contactsMs": {
+        "mean": 0.3446043157320228,
+        "p95": 0.5,
+        "max": 11.099999994039536
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "cameraChanged": true,
+    "positionChanged": true,
+    "note": "Before and after positions/cameras changed; draw-call and CPU deltas are observational, not a controlled boss-only benchmark."
+  },
+  "constraints": {
+    "gpuStatus": "unsupported",
+    "gpuSupported": false,
+    "heapValues": [
+      35100000,
+      35100000,
+      35100000,
+      35100000,
+      35100000
+    ],
+    "heapConclusion": "The repeated identical approximate heap value does not establish absence of a leak.",
+    "texturePrepareMs": 301.59999999403954,
+    "texturePrepareMeaning": "Wall time of the complete preparation path, not a measured GPU upload time."
+  },
+  "preservation": {
+    "playerHeight": 1.6,
+    "backgroundMaximum": 4096
+  },
+  "findings": {
+    "initialModelPreparationShare": 0.7859103134105391,
+    "initialNetworkBytes": 81441,
+    "initialCachedBytes": 84832841,
+    "wholeLoadMs": 7287.5999999940395
+  }
+}

@@ -5,13 +5,23 @@ import {CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
 // Upload only when fog.revision changes. Bind the same field to ground, rocks,
 // water, glow and ink; otherwise partially visible large meshes can leak detail.
 export const CAVE_FOG_GLSL=`
+#ifndef CAVE_FOG_STATE_DEFINED
+#define CAVE_FOG_STATE_DEFINED
 uniform sampler2D caveFogMap;
 uniform vec4 caveFogRect;
 uniform float caveFogActive;
+// The paint/lantern and final fog stages ask about the same fragment. Retain
+// this one existing lookup, never a second visibility texture or frame upload.
+bool caveFogSampleReady=false;
+vec3 caveFogSamplePosition=vec3(0.);
+vec2 caveFogSampleValue=vec2(0.);
 vec2 caveFogState(vec3 p){
+  if(caveFogSampleReady&&all(equal(p,caveFogSamplePosition)))return caveFogSampleValue;
   vec2 uv=(p.xz-caveFogRect.xy)/caveFogRect.zw;
-  if(uv.x<0.||uv.y<0.||uv.x>1.||uv.y>1.)return vec2(0.);
-  return texture2D(caveFogMap,uv).rg;
+  vec2 state=vec2(0.);
+  if(uv.x>=0.&&uv.y>=0.&&uv.x<=1.&&uv.y<=1.)state=texture2D(caveFogMap,uv).rg;
+  caveFogSampleReady=true;caveFogSamplePosition=p;caveFogSampleValue=state;
+  return state;
 }
 vec3 caveFogMemoryColor(vec3 p,float explored){
   // Low-detail darkness belongs to the real occluding surface, not a moving
@@ -38,6 +48,7 @@ vec3 caveFogShadeSurface(vec3 base,vec3 p,float environment){
   return mix(memory,base,smoothstep(.08,.92,state.x));
 }
 bool caveFogHidesInk(vec3 p){return caveFogActive>.5&&caveFogState(p).x<.92;}
+#endif
 `;
 
 export function caveFogSurfaceMemory(base){const bounded=base.map(v=>Math.max(0,Math.min(1,v))),grey=bounded[0]*.2126+bounded[1]*.7152+bounded[2]*.0722;return bounded.map(v=>(grey*.8+v*.2)*.24);}

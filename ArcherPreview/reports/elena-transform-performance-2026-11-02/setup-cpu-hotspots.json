@@ -1,0 +1,261 @@
+{
+  "scope": "Node desktop CPU-prof self-time samples across entire probe, not mobile timing; includes decoded GLTF setup and a deliberately repeated warm bounds-build diagnostic",
+  "top": [
+    {
+      "ms": 23.031000000000002,
+      "functionName": "buildMourningMeshBounds",
+      "scriptId": "3400",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-camera-culling.js",
+      "lineNumber": 10,
+      "columnNumber": 39
+    },
+    {
+      "ms": 20.373,
+      "functionName": "buildMourningMeshBounds",
+      "scriptId": "3400",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-camera-culling.js",
+      "lineNumber": 10,
+      "columnNumber": 39
+    },
+    {
+      "ms": 9.254,
+      "functionName": "applyWeighted",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 46,
+      "columnNumber": 22
+    },
+    {
+      "ms": 5.382,
+      "functionName": "sample",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 26,
+      "columnNumber": 10
+    },
+    {
+      "ms": 4.77,
+      "functionName": "sampleDeath",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 200,
+      "columnNumber": 13
+    },
+    {
+      "ms": 4.635999999999999,
+      "functionName": "prepareMourningCameraCulling",
+      "scriptId": "3400",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-camera-culling.js",
+      "lineNumber": 96,
+      "columnNumber": 44
+    },
+    {
+      "ms": 3.048,
+      "functionName": "sample",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 26,
+      "columnNumber": 10
+    },
+    {
+      "ms": 2.809,
+      "functionName": "field",
+      "scriptId": "3448",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-cave-clearance.js",
+      "lineNumber": 2,
+      "columnNumber": 14
+    },
+    {
+      "ms": 2.513,
+      "functionName": "MourningElenaAnimator",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 63,
+      "columnNumber": 13
+    },
+    {
+      "ms": 1.66,
+      "functionName": "_checkAnimationGroupEnded",
+      "scriptId": "276",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/node_modules/@babylonjs/core/Animations/animationGroup.pure.js",
+      "lineNumber": 871,
+      "columnNumber": 29
+    },
+    {
+      "ms": 1.625,
+      "functionName": "",
+      "scriptId": "3315",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/node_modules/@babylonjs/loaders/glTF/2.0/Extensions/KHR_animation_pointer.js",
+      "lineNumber": 0,
+      "columnNumber": 0
+    },
+    {
+      "ms": 1.614,
+      "functionName": "alignPose",
+      "scriptId": "3433",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-encounter.js",
+      "lineNumber": 90,
+      "columnNumber": 11
+    },
+    {
+      "ms": 1.603,
+      "functionName": "",
+      "scriptId": "3387",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/boss-battle.js",
+      "lineNumber": 102,
+      "columnNumber": 42
+    },
+    {
+      "ms": 1.599,
+      "functionName": "update",
+      "scriptId": "3387",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/boss-battle.js",
+      "lineNumber": 224,
+      "columnNumber": 8
+    },
+    {
+      "ms": 1.578,
+      "functionName": "hurtCapsules",
+      "scriptId": "3433",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-encounter.js",
+      "lineNumber": 94,
+      "columnNumber": 14
+    },
+    {
+      "ms": 1.576,
+      "functionName": "attach",
+      "scriptId": "3400",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-camera-culling.js",
+      "lineNumber": 88,
+      "columnNumber": 8
+    },
+    {
+      "ms": 1.57,
+      "functionName": "CharacterAnimator",
+      "scriptId": "3389",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/animation.js",
+      "lineNumber": 2,
+      "columnNumber": 13
+    },
+    {
+      "ms": 1.543,
+      "functionName": "poseAndContacts",
+      "scriptId": "3387",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/boss-battle.js",
+      "lineNumber": 237,
+      "columnNumber": 17
+    },
+    {
+      "ms": 1.537,
+      "functionName": "updateRenderRange",
+      "scriptId": "3433",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-encounter.js",
+      "lineNumber": 98,
+      "columnNumber": 19
+    },
+    {
+      "ms": 1.489,
+      "functionName": "channels",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 36,
+      "columnNumber": 17
+    },
+    {
+      "ms": 1.397,
+      "functionName": "update",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 154,
+      "columnNumber": 8
+    },
+    {
+      "ms": 1.213,
+      "functionName": "makeTrack",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 22,
+      "columnNumber": 25
+    },
+    {
+      "ms": 1.034,
+      "functionName": "summon",
+      "scriptId": "3388",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/boss-encounter.js",
+      "lineNumber": 49,
+      "columnNumber": 14
+    },
+    {
+      "ms": 0.94,
+      "functionName": "",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 69,
+      "columnNumber": 144
+    },
+    {
+      "ms": 0.911,
+      "functionName": "key",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 37,
+      "columnNumber": 10
+    },
+    {
+      "ms": 0.908,
+      "functionName": "applyWeighted",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 46,
+      "columnNumber": 22
+    },
+    {
+      "ms": 0.832,
+      "functionName": "applyCharacterSurfaceStyle",
+      "scriptId": "3397",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/character-style.js",
+      "lineNumber": 68,
+      "columnNumber": 42
+    },
+    {
+      "ms": 0.825,
+      "functionName": "setKeys",
+      "scriptId": "169",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/node_modules/@babylonjs/core/Animations/animation.pure.js",
+      "lineNumber": 673,
+      "columnNumber": 11
+    },
+    {
+      "ms": 0.653,
+      "functionName": "findFree",
+      "scriptId": "3437",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-cave-navigation.js",
+      "lineNumber": 26,
+      "columnNumber": 10
+    },
+    {
+      "ms": 0.624,
+      "functionName": "addTargetedAnimation",
+      "scriptId": "276",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/node_modules/@babylonjs/core/Animations/animationGroup.pure.js",
+      "lineNumber": 399,
+      "columnNumber": 24
+    },
+    {
+      "ms": 0.608,
+      "functionName": "",
+      "scriptId": "3434",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/src/mourning-elena-animation.js",
+      "lineNumber": 24,
+      "columnNumber": 28
+    },
+    {
+      "ms": 0.385,
+      "functionName": "Animation",
+      "scriptId": "169",
+      "url": "file:///C:/dev/moonforest-archer/ArcherPreview/node_modules/@babylonjs/core/Animations/animation.pure.js",
+      "lineNumber": 99,
+      "columnNumber": 15
+    }
+  ]
+}

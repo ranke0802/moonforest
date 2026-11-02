@@ -9,6 +9,20 @@ const frame=(frameMs=33,drawCalls=100)=>({frameMs,cpuMs:5,drawCalls,sceneMs:3,an
 const mem=mb=>({jsUsedBytes:mb*1048576,textures:20,meshes:100});
 const gpu=(sampleId,ms,startAtMs,endAtMs)=>({status:'valid',latest:{sampleId,ms,startAtMs,endAtMs,availableAtMs:endAtMs+50}});
 
+test('late cancelled warm jobs cannot finish a newer map job or corrupt its preparation statistics',()=>{
+ const d=new BossDiagnostics(),label='광폭화 모델';
+ d.event({type:'prefetch-start',label,jobId:1},10,mem(100));
+ d.event({type:'prefetch-start',label,jobId:2},100,mem(110));
+ d.event({type:'prefetch-end',label,jobId:1,status:'cancelled'},140,mem(120));
+ assert.equal(d.backgroundLoads[0].status,'cancelled');assert.equal(d.backgroundLoads[0].elapsedMs,130);assert.equal(d.backgroundLoads[1].status,'loading');
+ d.event({type:'prefetch-end',label,jobId:1,status:'prepared'},150,mem(121));assert.equal(d.backgroundLoads[1].status,'loading','duplicate old completion cannot borrow the new job');
+ const stats={yields:4,slices:6,blocks:20,maxSliceMs:1.8,steps:[{name:'outline',ms:7}]};
+ d.event({type:'prefetch-end',label,jobId:2,status:'prepared',preparationStats:stats},240,mem(130));stats.steps[0].ms=999;
+ assert.equal(d.backgroundLoads[1].status,'complete');assert.equal(d.backgroundLoads[1].elapsedMs,140);assert.equal(d.backgroundLoads[1].preparation.steps[0].ms,7);
+ d.reset();d.event({type:'prefetch-start',label,jobId:3},300,mem(130));d.event({type:'prefetch-end',label,jobId:2},310,mem(140));assert.equal(d.backgroundLoads[0].status,'loading');
+ d.event({type:'prefetch-start',label},320,mem(140));d.event({type:'prefetch-end',label},350,mem(141));assert.equal(d.backgroundLoads[1].status,'complete');assert.equal(d.backgroundLoads[0].status,'loading','legacy untagged events do not borrow tagged jobs');
+});
+
 test('GPU stream counts each query once regardless of CPU frame count and keeps bounded sample storage',()=>{
  const w=new FrameWindow(),sample=gpu('one',7,0,10);for(let t=100;t<1000;t+=20)w.add(t,{...frame(20),gpu:sample});
  assert.equal(w.summary().samples,45);assert.equal(w.summary().gpuMs.samples,1);assert.equal(w.summary().gpuMs.mean,7);
@@ -77,8 +91,8 @@ test('production summon emits failure/cancellation and background preparation ma
  const events=[],world={cave:true,scene:{}},elenaModels={async load(){throw new Error('offline');}};
  const battle=new BossBattle(world,()=>{},()=>{},()=>{},{elenaModels,onDiagnosticEvent:e=>events.push(e)});
  await assert.rejects(battle.activateResident({}),/offline/);assert.deepEqual(events.map(e=>e.type),['begin','error']);assert.equal(battle.residentPending,null);
- events.length=0;elenaModels.load=async()=>{world.cave=false;};await battle.activateResident({});assert.deepEqual(events.map(e=>e.type),['begin','stage','cancel']);
- events.length=0;let loads=0;battle.mourningModels={async load(){loads++;}};battle.preloadMourning();battle.preloadMourning();await Promise.resolve();
+ events.length=0;elenaModels.load=async()=>{world.cave=false;};assert.equal(await battle.activateResident({}),false);assert.deepEqual(events.map(e=>e.type),['begin','cancel'],'a cancelled load cannot report a model stage that never began');assert.equal(battle.residentPending,null);assert.equal(battle.residentPendingPreparation,null);
+ events.length=0;let loads=0;battle.mourningModels={async load(){loads++;}};const background=battle.preloadMourning();assert.strictEqual(battle.preloadMourning(),background);await background;
  assert.equal(loads,1);assert.deepEqual(events.map(e=>e.type),['prefetch-start','prefetch-end']);
  const d=new BossDiagnostics();d.event(events[0],0,mem(100));d.event(events[1],200,mem(150));assert.equal(d.backgroundLoads[0].elapsedMs,200);assert.equal(d.snapshot(),null);
 });

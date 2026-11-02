@@ -193,8 +193,6 @@
 .player-ground-marker{position:absolute;z-index:2;width:17px;height:11px;border:2px solid #e8e7ba;border-radius:50%;background:#142b3640;box-shadow:0 1px 3px #000b;pointer-events:none}
 .player-ground-marker[hidden]{display:none}.player-ground-marker i{position:absolute;inset:-7px;display:block;transform-origin:50% 50%}
 .player-ground-marker i::after{content:"";position:absolute;left:50%;top:-3px;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:6px solid #faf1c5;filter:drop-shadow(0 1px 1px #000)}
-#damage-numbers .damage-number{font-size:18px;line-height:20px;white-space:nowrap;width:112px;max-width:112px;text-align:center}
-#damage-numbers .damage-number.heavy{font-size:20px}#damage-numbers .damage-number.critical{font-size:17px}
 @media(max-width:560px) and (orientation:portrait){#app > #frame-diagnostics{top:calc(env(safe-area-inset-top) + 134px);max-width:190px;width:190px}}
 #app{--safe-inset-top:env(safe-area-inset-top,0px);--safe-inset-right:env(safe-area-inset-right,0px);--safe-inset-bottom:env(safe-area-inset-bottom,0px);--safe-inset-left:env(safe-area-inset-left,0px)}
 #app > .diagnostic-detail-dialog > header{gap:8px}

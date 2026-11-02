@@ -15,7 +15,7 @@ export class VillageTextureStreaming {
   constructor(world,assets,records,manifestUrl,stats){
     this.world=world;this.assets=assets;this.records=records;this.url=manifestUrl;this.stats=stats;
     this.resident=new Map();this.failed=new Set();this.wanted=new Map();this.lastWanted=new Map();
-    this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;
+    this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;this.textureWaiters=new Set();
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
     this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
     const caps=world.scene.getEngine().getCaps();
@@ -109,10 +109,30 @@ export class VillageTextureStreaming {
     this.stats.highTexturePeak=Math.max(this.stats.highTexturePeak??0,this.stats.highTextureBytes+this.stats.highTextureReserved);
   }
   async loadTexture(config,old,role){
-    const url=new URL(config.url,this.url).href;
+    if(this.disposed)throw Object.assign(new Error('Map texture released'),{name:'AbortError'});
+    const url=new URL(config.url,this.url).href,scene=this.world.scene;
     const texture=await new Promise((resolve,reject)=>{
-      const item=new Texture(url,this.world.scene,{...highTextureOptions(role,old),
-        onLoad:()=>resolve(item),onError:(message,error)=>{item.dispose();reject(error??new Error(message||'High texture load failed'));}});
+      let item,settled=false;
+      const finish=error=>{
+        if(settled)return;settled=true;this.textureWaiters.delete(cancel);
+        if(error){
+          // Babylon9.31 queues the InternalTexture, while BaseTexture.dispose
+          // removes only its wrapper. Remove this exact abandoned token only
+          // when no other Texture still owns the shared internal allocation.
+          const internal=item?.getInternalTexture();if(internal?._references===1)scene.removePendingData(internal);
+          item?.dispose();reject(error);
+        }else resolve(item);
+      };
+      const cancel=()=>finish(Object.assign(new Error('Map texture released'),{name:'AbortError'}));
+      this.textureWaiters.add(cancel);
+      // Defer callbacks one microtask: even an already-cached/synchronous
+      // loader must finish assigning the owned Texture before settlement.
+      // Own the wrapper before starting I/O so a synchronous loader exception
+      // can dispose it as well. updateURL preserves these sampling/colour options.
+      try{item=new Texture(null,scene,{...highTextureOptions(role,old),
+        onLoad:()=>queueMicrotask(()=>{if(this.disposed)cancel();else finish();}),
+        onError:(message,error)=>queueMicrotask(()=>finish(error??new Error(message||'High texture load failed')))});item.updateURL(url);
+      }catch(error){finish(error);}
     });
     for(const key of ['coordinatesIndex','coordinatesMode','wrapU','wrapV','uScale','vScale','uOffset','vOffset','uAng','vAng','wAng','level','hasAlpha']){
       if(old&&old[key]!==undefined)texture[key]=old[key];
@@ -156,7 +176,8 @@ export class VillageTextureStreaming {
     this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }
   dispose(){
-    this.disposed=true;this.world.scene.onAfterRenderObservable.remove(this.observer);
+    if(this.disposed)return;this.disposed=true;for(const cancel of [...this.textureWaiters])cancel();
+    this.world.scene.onAfterRenderObservable.remove(this.observer);
     for(const id of [...this.resident.keys()])this.release(id);
   }
 }

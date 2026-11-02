@@ -1,6 +1,6 @@
 import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
-import { attachCharacterOutlines, isRuntimeOutline } from './character-outlines.js';
+import { attachCharacterOutlines, attachCharacterOutlinesAsync, isRuntimeOutline } from './character-outlines.js';
 import { applyMonsterToon } from './monster-toon.js';
 import { applyElenaStyle } from './elena-style.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
@@ -18,6 +18,7 @@ import { armoredDamage } from './equipment-stats.js';
 import { EnemyDeath } from './enemy-death.js';
 import { createTerrainRing } from './terrain-mesh.js';
 import { prepareBossShaders } from './boss-shader-warmup.js';
+import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
@@ -47,44 +48,85 @@ export class BossEncounter {
     },{heightAt:world.terrain?(x,z)=>world.terrain.heightAt(x,z):undefined,
       constrainLanding:(to,from)=>world.navigation?.constrain(to,from,playerDimensions(this.player).moveRadius,ENEMY_ARENA_RADIUS)});
   }
-  async summon(player,{position,rotationY}={}){
+  async prepareHidden({preparation=createBossPreparation({incremental:false,isCurrent:()=>!this.world.scene.isDisposed}),onStage}={}){
+    const observers=this.preparationObservers??=new Set();if(onStage){observers.add(onStage);if(this.preparationStage)onStage(this.preparationStage);}
+    try{
+      while(!this.assetPrepared){
+        preparation.check();let pending=this.hiddenPreparationPending;
+        if(!pending){
+          pending=this.prepareHiddenWork(preparation);this.hiddenPreparationPending=pending;
+          const finished=()=>{if(this.hiddenPreparationPending===pending)this.hiddenPreparationPending=null;};pending.then(finished,finished);
+        }
+        try{await preparation.wait(pending);}catch(error){
+          // A foreground request may join a cancelled map's old job. It can
+          // resume committed, hidden steps under its own current scene token.
+          if(error.name!=='AbortError')throw error;preparation.check();
+        }
+      }
+      preparation.check();return this.asset;
+    }finally{if(onStage)observers.delete(onStage);}
+  }
+  preparationPhase(stage){this.preparationStage=stage;for(const observer of this.preparationObservers??[])observer(stage);}
+  async prepareHiddenWork(preparation){
+    if(!this.asset){
+      if(!this.assetAcquisition){
+      const scene=this.world.scene;
+      const acquiring=(async()=>{
+      if(this.loadAsset){const loaded=await this.loadAsset();this.config=loaded.config;this.asset=loaded.asset;}
+      else{
+        const url=new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`,location.href),response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('보스 설정을 불러오지 못했습니다.');
+        this.config=await response.json();const model=new URL(this.config.model,url);
+        this.asset=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),this.world.scene,null,'.gltf');this.asset.addAllToScene();
+      }
+      // Adopt/disable in the same microtask, even if a completed model load
+      // belongs to a map that was just cancelled. It never gets a first draw.
+      for(const group of this.asset.animationGroups)group.stop();
+      if(scene.isDisposed||scene!==this.world.scene){for(const mesh of this.asset.meshes)mesh.setEnabled(false);throw bossPreparationCancelled();}
+      this.actor=new TransformNode('guardian-bear-world',this.world.scene);this.actor.setEnabled(false);
+      this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
+      for(const node of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!node.parent)node.parent=this.carrier;
+      this.actor.scaling.setAll(this.config.scale);this.assetPreparationStep=0;
+      return this.asset;
+      })();
+      this.assetAcquisition=acquiring;acquiring.catch(()=>{if(this.assetAcquisition===acquiring)this.assetAcquisition=null;});
+      }
+      await preparation.wait(this.assetAcquisition);
+    }
+    preparation.check();this.preparationPhase('model');
+    if(this.assetPreparationStep<1){await preparation.step('skin-flags',()=>{
+      this.prepareAsset();for(const mesh of this.asset.meshes){if(!mesh.getTotalVertices())continue;mesh.isPickable=false;mesh.alwaysSelectAsActiveMesh=true;
+        if(mesh.skeleton){if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;mesh.skeleton.useTextureToStoreBoneMatrices=true;}
+        mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;
+      }
+    });this.assetPreparationStep=1;}
+    if(this.assetPreparationStep<2){await preparation.step('paint-materials',()=>{
+      applyMonsterToon(this.asset);if(this.kind==='elena')applyElenaStyle(this.asset);this.world.lighting?.registerMeshes(this.asset.meshes);
+    });this.assetPreparationStep=2;}
+    if(this.assetPreparationStep<3){
+      if(preparation.incremental)await attachCharacterOutlinesAsync(this.asset,this.kind,preparation);
+      else attachCharacterOutlines(this.asset,this.kind);
+      this.assetPreparationStep=3;
+    }
+    if(this.assetPreparationStep<4){await preparation.step('pose-and-warning-resources',()=>{
+      this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);this.nodes=Object.fromEntries(this.asset.transformNodes.map(node=>[node.name,node]));this.poseNodes=orderPoseNodes(this.asset.transformNodes);
+      this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
+      this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
+    });this.assetPreparationStep=4;}
+    // The stable morph-slot contract is configured above. Initialize the real
+    // idle pose before compiling; do not warm an artificial all-zero morph rig.
+    if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.createAnimator();});this.assetPreparationStep=5;}
+    if(this.assetPreparationStep<6){
+      this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation});
+      preparation.check();this.assetPreparationStep=6;
+    }
+    this.assetPrepared=true;this.preparationStats=preparation.stats;this.preparationPhase('model');return this.asset;
+  }
+  async summon(player,{position,rotationY,preparation}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
     try{
-      if(!this.asset){
-        if(this.loadAsset){const loaded=await this.loadAsset();this.config=loaded.config;this.asset=loaded.asset;}
-        else {
-        const url=new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`,location.href);
-        const response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('보스 설정을 불러오지 못했습니다.');
-        this.config=await response.json();const model=new URL(this.config.model,url);
-        this.asset=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),this.world.scene,null,'.gltf');
-        this.asset.addAllToScene();
-        }
-        for(const g of this.asset.animationGroups)g.stop();
-        this.actor=new TransformNode('guardian-bear-world',this.world.scene);
-        this.actor.setEnabled(false);
-        this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
-        for(const n of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!n.parent)n.parent=this.carrier;
-        this.actor.scaling.setAll(this.config.scale);
-        this.onPreparationStage('model');
-        this.prepareAsset();
-        for(const mesh of this.asset.meshes){
-          if(!mesh.getTotalVertices())continue;
-          mesh.isPickable=false;mesh.alwaysSelectAsActiveMesh=true;
-          if(mesh.skeleton){if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;mesh.skeleton.useTextureToStoreBoneMatrices=true;}
-          mesh.overlayColor=Color3.White();mesh.overlayAlpha=0;this.world.shadows.addShadowCaster(mesh,false);
-        }
-        applyMonsterToon(this.asset);
-        if(this.kind==='elena')applyElenaStyle(this.asset);
-        this.world.lighting?.registerMeshes(this.asset.meshes);
-        attachCharacterOutlines(this.asset, this.kind);
-        this.onPreparationStage('screen');await prepareBossShaders(this.asset);this.onPreparationStage('model');
-        this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);
-        this.nodes=Object.fromEntries(this.asset.transformNodes.map(n=>[n.name,n]));
-        this.poseNodes=orderPoseNodes(this.asset.transformNodes);
-        this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;
-        this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
-      }
+      await this.prepareHidden({preparation,onStage:this.assetPrepared?undefined:this.onPreparationStage});
+      preparation?.check();
       this.animator?.dispose();this.animator=this.createAnimator();
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
@@ -92,6 +134,7 @@ export class BossEncounter {
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
       this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
+      this.ring.setEnabled(true);
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.world.terrain?.place(this.actor.position);
       this.active=true;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);

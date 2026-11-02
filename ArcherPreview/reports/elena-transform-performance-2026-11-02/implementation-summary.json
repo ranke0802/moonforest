@@ -1,0 +1,186 @@
+{
+  "generatedAt": "2026-11-02T00:35:51.453Z",
+  "status": "SOURCE_LOCKED_FOR_PARENT_INTEGRATION",
+  "scope": "No browser automation, new assets, geometry/texture/LOD changes, build, commit, push or deployment. Parent owns integration and deployment.",
+  "ownedSource": [
+    "src/boss-preparation.js",
+    "src/boss-battle.js",
+    "src/boss-encounter.js",
+    "src/character-outlines.js",
+    "src/character-render-cost.js",
+    "src/mourning-camera-culling.js",
+    "src/boss-shader-warmup.js"
+  ],
+  "ownedTests": [
+    "tests/boss-hidden-preparation.test.js",
+    "tests/boss-diagnostics.test.js",
+    "tests/elena-two-phase.test.js",
+    "tests/boss-shader-warmup.test.js"
+  ],
+  "sourceSHA256": {
+    "src/boss-preparation.js": "7e1ac6223f3014fe35c937d10776c88ac382f2f5821275621f513a2e358a959b",
+    "src/boss-battle.js": "878d17741588ae2be2f178e92a37039bff73776824938e01d3494ca7f421a200",
+    "src/boss-encounter.js": "5aa39ee091367cc63a9798aef2ee3bc4ad281c3919a2c3231992452e6fbbe77d",
+    "src/character-outlines.js": "0b1c81511b0966d60ee8c087a0a2efcaa18502b2e3ca233f6afea002d2582ad4",
+    "src/character-render-cost.js": "efdc322e500e2aead90b807fbbc66deb968fcde6f174b07a6813bde773188205",
+    "src/mourning-camera-culling.js": "021481d9b61bd76bbc2369c83b217dd79a59a03a963f2cb60b833ac029148c13",
+    "src/boss-shader-warmup.js": "eca1841488a2a6b70c542c89e58f076739f7d0b7610e07136cd82f4170998b8d",
+    "tests/boss-hidden-preparation.test.js": "9977685413984a19e5acb642690b9bf01c4d9e590882dbf7e2faf034b1dc2d2b",
+    "tests/boss-diagnostics.test.js": "5d3711a0acfe92365dd2caf99af310a0bfb4f3934b5dcc872adbf53490911fe4",
+    "tests/elena-two-phase.test.js": "8f559021559ff6993690d939ba1710516edca0202186725a1ebf407e620016a8",
+    "tests/boss-shader-warmup.test.js": "9792f5401808528eda7055ede48baf7f74e95c9f95bfb2baa3709af04021f1b9"
+  },
+  "behavior": [
+    "Existing phase1 engagement prefetch now prepares exactly one hidden pooled phase2 asset. The preparation path does not call summon, create a combat brain, enable the actor, register a shadow caster, grant rewards or emit attacks.",
+    "Separate prepareHidden and summon activation. A foreground transformation or selector joins the same pending job and reuses its committed material/outline/rig/animator/shader preparation. Cancellation checks scene identity, scene disposal, map identity and resident revision.",
+    "The exact existing bounds and zero-weight-slot algorithms now share generator proofs, yielding at512vertex boundaries. Each scheduled slice targets1.5ms and is capped at4blocks (2048vertices) in production, avoiding per-vertex clock calls. Sync and async proof use the identical operation order and do not rewrite vertex/morph/weight buffers.",
+    "Real idle/cloth/morph state is initialized after the stable11slot morph configuration and before shader preparation. No fake morph-zero, reduced influences, changed rig, LOD, outline or shadow quality is used.",
+    "Cancellation preserves disabled partial work. Explicit later activation resumes committed steps without duplicating outlines, morph managers or resident instances. A failed background shader prepare reports failure once; update does not retry. One explicit subsequent summon can reuse completed proofs and finish compilation.",
+    "A final lifetime audit reproduced a never-resolving old shader Promise pinning both background and foreground jobs. Preparation now owns abortable waits with one45000ms deadline; Battle.hide cancels immediately, including queued rAF/fallback/poll timers. Late model acquisition is shared once and can only adopt into a disabled owner.",
+    "Boss warmup no longer calls Babylon forceCompilationAsync or starts its private unbounded16ms polling. The current PBR submesh and ShaderMaterial variants are checked directly, without instances, every16ms while unready; error, cancel or timeout unwinds and restores every borrowed allowShaderHotSwapping value in finally."
+  ],
+  "validation": {
+    "uniqueFocusedTests": 76,
+    "passed": 76,
+    "failed": 0,
+    "broadFocusedLog": "final-focused-tests.log",
+    "rawFinalRun": {
+      "total": 76,
+      "passed": 75,
+      "failed": 1
+    },
+    "diagnosticFollowup": {
+      "owner": "root",
+      "passed": 9,
+      "failed": 0,
+      "confirmation": "Parent confirmed the diagnostic fixture now expects begin/cancel, false return and null residentPending/residentPendingPreparation;9/9passed after updating the expectation. No game source change was needed for that fixture."
+    },
+    "originalFocusedLog": "focused-tests.log",
+    "cancellableSubsetLog": "cancellable-preparation-tests.log",
+    "cancellableSubsetPassed": 28,
+    "note": "76unique focused tests pass after the diagnostic owner followup. The preserved final-focused log records75/76before that one expectation update; parent independently reran its entire9test diagnostic file successfully. This is a union result, not76+9.",
+    "exactProof": {
+      "case": "sync-async-exact",
+      "results": [
+        {
+          "mesh": "Lament_Mouth_Interior",
+          "slots": 4,
+          "boneBoxes": 1,
+          "vertices": 280,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Attached_Streamers",
+          "slots": 3,
+          "boneBoxes": 5,
+          "vertices": 287,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Rigid_Emblem",
+          "slots": 3,
+          "boneBoxes": 8,
+          "vertices": 4014,
+          "bitExact": true
+        },
+        {
+          "mesh": "Elina_Chimera_Skin",
+          "slots": 4,
+          "boneBoxes": 206,
+          "vertices": 89940,
+          "bitExact": true
+        }
+      ],
+      "scheduler": {
+        "yields": 94,
+        "slices": 102,
+        "blocks": 197,
+        "maxSliceMs": 5.052100000000337,
+        "steps": []
+      },
+      "cancelledAfterYields": 3
+    },
+    "hiddenCases": [
+      "sync-async-exact",
+      "warm-transform",
+      "cancel-load",
+      "cancel-bounds",
+      "join-death",
+      "join-selector",
+      "failure-explicit-recovery",
+      "never-ready-cancel-new-foreground",
+      "shader-timeout-explicit-recovery",
+      "never-model-load-cancel"
+    ],
+    "additionalExistingGates": [
+      "724living/death poses and>68million actual skinned vertices in bounds; arbitrary parent transforms and all-morph combinations",
+      "Body/ink exact geometry, skeleton and morph manager sharing; stable11slots and all3castvariants ready",
+      "Actual corpse retirement:120simulated seconds/3600frames without animation/contact/skinned/shadow submissions",
+      "20complete two-phase replays, map trips, spell footprint/release/cancel/dodge/LOS/resource buffers fixed",
+      "Existing iOS pending WebGL uniform safeguards and current Effect/shared bone+texture bindings",
+      "Never-ready shader cancels without later completion; after35ms no readiness callback remains, pendingWaits0; new foreground succeeds under a fresh owner",
+      "Mocked rAF and both fallback/check timers cancel synchronously to0; one45000ms total deadline spans multiple shader variants; compilation error restores all material state",
+      "Actual packed shader deadline and explicit recovery reuse one asset; never-resolving model prefetch cancels without waiting for a displayed frame or a completed network Promise"
+    ],
+    "handoff": {
+      "desktopMs": 14.140300000000025,
+      "additionalProofBlocks": 0,
+      "additionalShaderReadinessRequests": 0,
+      "forceCompilationAsyncUsed": false,
+      "sameAnimator": true,
+      "sameResident": true,
+      "qualityUnchanged": true
+    },
+    "scheduler": {
+      "yields": 109,
+      "slices": 102,
+      "blocks": 196,
+      "maxSliceMs": 7.1500999999998385,
+      "steps": [
+        {
+          "name": "skin-flags",
+          "ms": 0.09910000000036234
+        },
+        {
+          "name": "paint-materials",
+          "ms": 1.0199000000002343
+        },
+        {
+          "name": "outline:Halo_Attached_Streamers",
+          "ms": 0.8415000000004511
+        },
+        {
+          "name": "outline:Halo_Rigid_Emblem",
+          "ms": 1.3677000000002408
+        },
+        {
+          "name": "outline:Elina_Chimera_Skin",
+          "ms": 23.051899999999932
+        },
+        {
+          "name": "pose-and-warning-resources",
+          "ms": 0.8811000000005151
+        },
+        {
+          "name": "animator",
+          "ms": 11.513699999999517
+        }
+      ]
+    }
+  },
+  "limits": [
+    "1.5ms is a scheduling target checked at a block boundary, not a hard real-time guarantee. The final CPU fixture (focused files ran concurrently) measured max slice7.150ms; initial buffer extraction, JIT, garbage collection or OS scheduling can exceed the target.",
+    "Large Mesh.clone, animator initialization, loader decoding/morph texture creation and a single GPU driver compile/upload are still indivisible library operations. The final Node fixture observed body clone23.052ms and animator11.514ms, under the concurrent focused run. These are shifted into separate hidden stages rather than claimed to have disappeared.",
+    "Actual packed-rig CPU/lifecycle proof and NullEngine shader readiness do not measure S23/iPhone GPU time or physical temperature. The attachment has GPU unsupported. Do not promise that all mobile stutter or postdeath heat is fixed.",
+    "A very fast phase1kill or direct cold phase2spawn can still wait for unfinished preparation. No extra initial black-screen phase is added; first phase engagement starts preparation, and hidden preparation adds no gameplay rendering/shadow work.",
+    "Background events now carry a battle-session monotonically increasing jobId plus bounded preparationStats (yields, slices, maxSliceMs, named stage milliseconds only). Parent owns corresponding BossDiagnostics matching/legacy fallback and its tests; those shared diagnostic changes are outside this source lock."
+  ],
+  "artifacts": {
+    "originalReadOnlyAnalysis": "analysis.json",
+    "beforeSourcePreparation": "preparation-and-update-probe.json",
+    "beforeTwentyReplays": "combat-stress.json",
+    "beforeRetired": "retired-work.json",
+    "implementationValidation": "hidden-preparation-validation.json",
+    "neverResolveBefore": "never-resolve-before.json"
+  }
+}

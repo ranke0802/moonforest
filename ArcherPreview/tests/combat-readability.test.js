@@ -5,7 +5,7 @@ import {parseHTML} from 'linkedom';
 import {NullEngine,Scene,ArcRotateCamera,TransformNode,Vector3} from '@babylonjs/core';
 import {BossHealthBars} from '../src/boss-health-bar.js';
 import {PlayerHealthBar} from '../src/player-health-bar.js';
-import {primaryHealthBoss,damageScreenSlot} from '../src/combat-readability.js';
+import {primaryHealthBoss} from '../src/combat-readability.js';
 import {ScreenProjection} from '../src/screen-projection.js';
 import {createDamageNumbers} from '../src/damage-numbers.js';
 
@@ -56,30 +56,31 @@ test('foot/direction marker is fail-closed without structure clearance, follows 
  player.update(f.scene,{...state,hp:0,marker:{enabled:true,clearToPlayer:true}},f.projection);assert.equal(player.marker.hidden,true);assert.deepEqual(counts(),before);assert.equal(f.doc.querySelectorAll('.player-ground-marker').length,1);player.dispose();assert.equal(f.doc.querySelectorAll('.player-ground-marker').length,0);
 });
 
-test('nearby damage uses separate lanes below fixed vital HUD and reuses a bounded 24-element pool without changing values',t=>{
- const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),projection={cssWidth:780,cssHeight:360,project:()=>({visible:true,x:750,y:60})};
+test('damage retains its original hit anchor, Critical wording and sequential rise with a bounded reusable pool',t=>{
+ const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),projection={cssWidth:780,cssHeight:360,project:p=>({visible:true,x:750,y:60-p.y*20})};
+ numbers.show(new Vector3(),29,false,'enemy',0,true);numbers.update(.2,projection);
+ const first=host.firstElementChild;assert.match(first.style.transform,/translate3d\(750px,57\.4px/);
+ numbers.show(new Vector3(),33,false,'enemy',0,true);numbers.update(0,projection);
+ assert.equal(host.lastElementChild.textContent,'Critical 33');assert.match(host.lastElementChild.style.transform,/translate3d\(750px,60px/);assert.notEqual(first.style.transform,host.lastElementChild.style.transform);
  for(let i=1;i<=24;i++)numbers.show(new Vector3(),i,false,'enemy',0,true);numbers.update(.01,projection);
- assert.equal(host.children.length,24);assert.equal(new Set([...host.children].map(n=>n.style.transform)).size,24);assert.deepEqual([...host.children].map(n=>n.textContent),Array.from({length:24},(_,i)=>'치명타 '+(i+1)));
- for(const node of host.children){const [,x,y]=node.style.transform.match(/translate3d\(([^p]+)px,([^p]+)px/);assert.ok(+x-56>=12&&+x+56<=780-190);assert.ok(+y>=142&&+y<=328);}
+ assert.equal(host.children.length,24);assert.equal(new Set([...host.children].map(n=>n.style.transform)).size,1,'simultaneous same-point hits are not relocated into a grid');assert.deepEqual([...host.children].map(n=>n.textContent),Array.from({length:24},(_,i)=>'Critical '+(i+1)));
  numbers.update(2,projection);assert.equal(host.children.length,0);assert.equal(numbers.inspect().pooled,24);
  for(let i=0;i<100;i++){numbers.show(new Vector3(),43,false,'enemy');numbers.update(2,projection);}assert.equal(numbers.inspect().created,24);
  numbers.show(new Vector3(),'+15 G',false,'gold');numbers.show(new Vector3(),'Dodge',false,'evade');numbers.show(new Vector3(),'BLOCK',false,'block');assert.deepEqual([...host.children].map(n=>n.textContent),['+15 G','Dodge','BLOCK']);numbers.dispose();assert.equal(host.children.length,0);
 });
 
-test('damage lane reservation handles both landscape devices and portrait without per-frame DOM layout reads',()=>{
- for(const [width,height] of [[780,360],[844,390],[568,320],[390,844]])for(const safeInsets of [{left:0,right:0,top:0,bottom:0},{left:44,right:20,top:5,bottom:8}]){
-  const boxes=[];for(let lane=0;lane<24;lane++){
-   const point=damageScreenSlot({x:width,y:0},lane,{width,height,safeInsets});assert.ok(Number.isFinite(point.x)&&Number.isFinite(point.y));if(!point.visible)continue;
-   const box={left:point.x-56,right:point.x+56,top:point.y-20,bottom:point.y};assert.ok(box.left>=12+safeInsets.left);assert.ok(box.right<=width-12-safeInsets.right-(width>height?178:0));assert.ok(box.top>=122+safeInsets.top);assert.ok(box.bottom<=height-32-safeInsets.bottom);
-   for(const other of boxes)assert.equal(box.left<other.right&&box.right>other.left&&box.top<other.bottom&&box.bottom>other.top,false,'visible label boxes do not overlap');boxes.push(box);
-  }
- }
+test('original burst offsets remain local to the hit instead of reserving HUD columns or reading DOM layout',t=>{
+ const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),projection={project:()=>({visible:true,x:400,y:220})};
+ for(const burst of [0,1,2,3])numbers.show(new Vector3(),29,false,'enemy',burst);numbers.update(0,projection);
+ assert.deepEqual([...host.children].map(n=>+n.style.transform.match(/translate3d\(([^p]+)px/)[1]),[400,376,400,424]);numbers.dispose();
  const source=readFileSync(new URL('../src/damage-numbers.js',import.meta.url),'utf8');assert.doesNotMatch(source,/getBoundingClientRect|offsetWidth|offsetHeight|clientWidth|clientHeight/);
  const css=readFileSync(new URL('../src/styles.css',import.meta.url),'utf8');assert.match(css,/#app > #player-hud\[data-hud="fixed"\][^}]*top:calc\(env\(safe-area-inset-top\) \+ 48px\)/);assert.match(css,/#app > \.boss-hud\[data-hud="fixed"\][^}]*top:calc\(env\(safe-area-inset-top\) \+ 82px\)/);
 });
 
-test('actual camera projection separates damage from distant limbs that overlap on screen',t=>{
+test('actual camera projection preserves overlapping hit anchors without an automatic screen grid',t=>{
  const f=fixture(t),host=f.doc.getElementById('damage-numbers'),numbers=createDamageNumbers(f.scene,host),ray=f.camera.getForwardRay(),a=ray.origin.add(ray.direction.scale(3)),b=ray.origin.add(ray.direction.scale(7));
  assert.ok(Vector3.Distance(a,b)>2);numbers.show(a,29,false,'enemy',0,true);numbers.show(b,33,false,'enemy',0,true);numbers.update(0,f.projection);
- const nodes=[...host.children];assert.equal(nodes.length,2);assert.equal(nodes.every(n=>n.style.display===''),true);assert.notEqual(nodes[0].style.transform,nodes[1].style.transform,'screen collision solved even when world anchors differ by four metres');numbers.dispose();
+ const nodes=[...host.children];assert.equal(nodes.length,2);assert.equal(nodes.every(n=>n.style.display===''),true);
+ for(const [i,p]of [a,b].entries()){const projected=f.projection.project(p),[,x,y]=nodes[i].style.transform.match(/translate3d\(([^p]+)px,([^p]+)px/);assert.ok(Math.abs(+x-projected.x)<1e-6);assert.ok(Math.abs(+y-projected.y)<1e-6);}
+ numbers.dispose();
 });

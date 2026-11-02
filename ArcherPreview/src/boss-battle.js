@@ -8,6 +8,7 @@ import { MourningElenaEncounter } from './mourning-elena-encounter.js';
 import { ELENA_HOME, ELENA_SIZE, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS } from './world-limits.js';
+import { createBossPreparation } from './boss-preparation.js';
 
 export const MAX_BOSSES = 5;
 export function normalizeBossCount(value) {
@@ -80,6 +81,20 @@ export class BossBattle {
   get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool];}
   setAttackSettings(value){this.attackSettings=value;for(const enemy of this.allPooled)this.applyAttackSettings(enemy);}
   applyAttackSettings(enemy){const kind=enemy.kind==='elena'?(enemy.phase===2?'mourning-elena':'elena'):enemy.kind;enemy.brain?.configureAttacks?.(this.attackSettings?.[kind]??{});}
+  residentForPhase(phase){
+    const pool=phase===2?this.mourningPool:this.elenaPool,models=phase===2?this.mourningModels:this.elenaModels;
+    if(!pool[0]){
+      const Encounter=phase===2?MourningElenaEncounter:ElenaEncounter;
+      const resident=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat,onPreparationStage:stage=>this.onDiagnosticEvent({type:'stage',stage})});
+      resident.id=phase===2?'mourning-elena':'elena';resident.number=1;pool.push(resident);
+      if(phase===1)resident.onTransform=()=>this.transformResident(this.currentPlayer);
+    }
+    return pool[0];
+  }
+  residentPreparation(revision=this.residentRevision,{incremental=true}={}){
+    const scene=this.world.scene,map=this.world.mapId;
+    return createBossPreparation({incremental,...this.preparationOptions,isCurrent:()=>revision===this.residentRevision&&this.world.cave&&this.world.scene===scene&&this.world.mapId===map&&!scene.isDisposed});
+  }
   async activateResident(player,{reset=false,phase:resetPhase=1,home=ELENA_HOME}={}){
     if(!this.world.cave)return false;
     if(reset){this.residentPhase=resetPhase===2?2:1;this.residentHome={x:home.x,z:home.z};this.residentError=null;this.mourningNeedsReset=true;}
@@ -87,26 +102,22 @@ export class BossBattle {
       const revision=this.residentPendingRevision,phase=this.residentPendingPhase,result=await this.residentPending;
       return revision===this.residentRevision&&phase===this.residentPhase?result:this.activateResident(player,{reset,phase:resetPhase,home});
     }
+    this.currentPlayer=player;
     const request=this.residentRevision,phase=this.residentPhase,models=phase===2?this.mourningModels:this.elenaModels,pool=phase===2?this.mourningPool:this.elenaPool;
+    const preparation=this.residentPreparation(request,{incremental:phase===2});this.residentPendingPreparation=preparation;
     this.residentPendingRevision=request;
     this.residentPendingPhase=phase;
     const pending=(async()=>{
       let completed=false;
       this.onDiagnosticEvent({type:'begin',label:phase===2?'비탄의 마녀':'타락한 성녀',trigger:reset?'선택 소환':'거처/변신',mode:pool[0]?.asset?'reuse':models.container?'cached-model':'cold'});
       try{
-      await models.load();
+      await preparation.wait(models.load());
       this.onDiagnosticEvent({type:'stage',stage:'model'});
       if(request!==this.residentRevision||!this.world.cave)return false;
-      let resident=pool[0];
-      if(!resident){
-        const Encounter=phase===2?MourningElenaEncounter:ElenaEncounter;
-        resident=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(...args)=>this.playerHit(...args),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat,onPreparationStage:stage=>this.onDiagnosticEvent({type:'stage',stage})});
-        resident.id=phase===2?'mourning-elena':'elena';resident.number=1;pool.push(resident);
-        if(phase===1)resident.onTransform=()=>this.transformResident(this.currentPlayer??player);
-      }
-      if(!resident.asset||reset||(phase===2&&this.mourningNeedsReset)){
+      const resident=this.residentForPhase(phase);
+      if(!resident.assetPrepared||!resident.brain||reset||(phase===2&&this.mourningNeedsReset)){
         const position=new Vector3(this.residentHome.x,0,this.residentHome.z);
-        await resident.summon(player,{position,rotationY:0});
+        await resident.summon(player,{position,rotationY:0,preparation});
         this.applyAttackSettings(resident);
         this.residentHome={x:resident.home.x,z:resident.home.z};
         if(phase===2)this.mourningNeedsReset=false;
@@ -120,11 +131,11 @@ export class BossBattle {
       this.encounters=this.encounters.filter(b=>b.kind!=='elena'||b===resident);
       if(!this.encounters.includes(resident))this.encounters.push(resident);
       this.active=true;this.onChange(this);completed=true;this.onDiagnosticEvent({type:'ready'});return true;
-      }catch(error){completed=true;this.onDiagnosticEvent({type:'error',error:String(error.message??error).slice(0,160)});throw error;}
+      }catch(error){if(error.name==='AbortError')return false;completed=true;this.onDiagnosticEvent({type:'error',error:String(error.message??error).slice(0,160)});throw error;}
       finally{if(!completed)this.onDiagnosticEvent({type:'cancel',reason:'지역/요청 변경'});}
     })();
     this.residentPending=pending;
-    try{return await pending;}finally{if(this.residentPending===pending)this.residentPending=null;}
+    try{return await pending;}finally{if(this.residentPending===pending){this.residentPending=null;this.residentPendingPreparation=null;}}
   }
   transformResident(player){
     if(this.residentPhase===2||!this.world.cave)return this.residentPending;
@@ -132,9 +143,24 @@ export class BossBattle {
     return this.activateResident(player).catch(error=>{this.residentError=String(error.message??error);this.lastHit='광폭화 모델을 불러오지 못했습니다. 연결을 확인해 주세요.';this.onChange(this);console.error('[Elena transformation]',error);return false;});
   }
   preloadMourning(){
-    if(this.mourningWarmRequested)return;this.mourningWarmRequested=true;
-    this.onDiagnosticEvent({type:'prefetch-start',label:'광폭화 모델'});
-    this.mourningModels.load().then(()=>this.onDiagnosticEvent({type:'prefetch-end',label:'광폭화 모델'})).catch(error=>{this.residentError=String(error.message??error);this.onDiagnosticEvent({type:'prefetch-end',label:'광폭화 모델',error:this.residentError});console.warn('[Elena preload]',error);});
+    if(this.mourningWarmRequested)return this.mourningWarmPending??Promise.resolve(this.mourningWarmJob?.status==='prepared');this.mourningWarmRequested=true;
+    const preparation=this.residentPreparation(),jobId=this.mourningWarmSerial=(this.mourningWarmSerial??0)+1,job={jobId,status:'loading',preparation};this.mourningWarmJob=job;
+    this.onDiagnosticEvent({type:'prefetch-start',label:'광폭화 모델',jobId});
+    const pending=preparation.wait(this.mourningModels.load()).then(async()=>{
+      preparation.check();
+      if(typeof this.mourningModels.instantiate==='function'){
+        job.status='preparing';job.resident=this.residentForPhase(2);
+        await job.resident.prepareHidden({preparation});
+      }
+      job.status='prepared';return true;
+    }).catch(error=>{
+      if(error.name==='AbortError'){job.status='cancelled';return false;}
+      job.status='error';job.error=this.residentError=String(error.message??error);console.warn('[Elena preload]',error);return false;
+    }).finally(()=>{
+      const stats=preparation.stats,preparationStats={yields:stats.yields,slices:stats.slices,maxSliceMs:stats.maxSliceMs,steps:stats.steps.map(({name,ms})=>({name,ms}))};
+      this.onDiagnosticEvent({type:'prefetch-end',label:'광폭화 모델',jobId,status:job.status,preparationStats,...(job.error?{error:job.error}:{})});if(this.mourningWarmPending===pending)this.mourningWarmPending=null;
+    });
+    this.mourningWarmPending=pending;return pending;
   }
   async summonResident(player,phase=1){
     if(this.loading||this.residentPending||!this.world.cave)return false;
@@ -207,6 +233,8 @@ export class BossBattle {
   }
   hide() {
     this.residentRevision++;
+    this.residentPendingPreparation?.cancel();this.mourningWarmJob?.preparation.cancel();
+    this.mourningWarmRequested=false;
     this.revision++; this.active = false; this.updating = true;
     for (const boss of this.allPooled) boss.hide();
     this.encounters = []; this.potions.cancel(); this.playerReaction.reset();

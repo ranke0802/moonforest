@@ -96,15 +96,22 @@ export function caveSurfaceStyle(world){
  // AssetContainer is NOT disposal: its live material still needs the tint.
  const removedObserver=world.scene.onMaterialRemovedObservable.add(track);
  let materialCount=-1;
+ // Incoming LODs must acquire their cave grading BEFORE their real shader is
+ // warmed. Waiting for the next render can prepare an unpainted bright variant
+ // and let shader hot-swapping briefly reuse it on the new distant source.
+ const attach=material=>{
+  if(!material||disposed||dead.has(material))return false;
+  track(material);
+  if(seen.has(material)||plugins.has(material))return plugins.has(material);
+  if(material!==world.floorMaterial&&!material.metadata?.villageToon)return false;
+  material.unfreeze();plugins.set(material,activate(material,material===world.floorMaterial));seen.add(material);pending.delete(material);return true;
+ };
  const bind=()=>{
   // Babylon's material-added event is deferred. Observe newly loaded sources
   // before their first draw as well, avoiding a one-frame ungraded flash.
   if(materialCount!==world.scene.materials.length){materialCount=world.scene.materials.length;for(const material of world.scene.materials)track(material);}
-  for(const material of pending){
-  if(material.metadata?.villageToon&&!seen.has(material)){
-   material.unfreeze();plugins.set(material,activate(material));seen.add(material);pending.delete(material);
-  }
- }};
+  for(const material of pending)attach(material);
+ };
  const renderObserver=world.scene.onBeforeRenderObservable.add(bind);
  const dispose=()=>{
   if(disposed)return;disposed=true;
@@ -122,5 +129,5 @@ export function caveSurfaceStyle(world){
   if(world.caveFog&&typeof world.caveFog.replaceGround!=='function')throw Error('Laboratory ground requires a synchronized fog replacement');
   partitionCaveGround(world.ground,world.terrain,{laboratory:contract});world.caveFog?.replaceGround(world.ground,{force:true});activeLaboratory=contract;world.scene.metadata={...world.scene.metadata,caveLaboratoryGeometry:contract};return true;
  };
- return {dispose,activateLaboratory,inspect:()=>({pending:pending.size,active:plugins.size,tracked:watched.size,disposed})};
+ return {dispose,attach,activateLaboratory,inspect:()=>({pending:pending.size,active:plugins.size,tracked:watched.size,disposed})};
 }

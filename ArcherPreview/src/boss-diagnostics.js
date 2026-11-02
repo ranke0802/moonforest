@@ -2,6 +2,7 @@
 // repeated latest result once per CPU frame or add GPU time to CPU counters.
 const FIELDS=['frameMs','cpuMs','drawCalls','sceneMs','animationMs','bossUpdateMs','contactsMs'];
 const valid=n=>Number.isFinite(n)&&n>=0;
+const preparationSummary=stats=>stats?{yields:valid(stats.yields)?stats.yields:0,slices:valid(stats.slices)?stats.slices:0,blocks:valid(stats.blocks)?stats.blocks:0,maxSliceMs:valid(stats.maxSliceMs)?stats.maxSliceMs:null,steps:(stats.steps??[]).slice(0,32).map(step=>({name:String(step.name).slice(0,100),ms:valid(step.ms)?step.ms:null}))}:null;
 const gpuSample=gpu=>gpu?.status==='valid'&&gpu.latest&&typeof gpu.latest.sampleId==='string'&&valid(gpu.latest.ms)&&Number.isFinite(gpu.latest.startAtMs)&&Number.isFinite(gpu.latest.endAtMs)&&gpu.latest.endAtMs>=gpu.latest.startAtMs?gpu.latest:null;
 export class FrameWindow {
   constructor(){this.times=new Float64Array(2048);this.values=Object.fromEntries(FIELDS.map(k=>[k,new Float64Array(2048)]));this.gpuStarts=new Float64Array(128);this.gpuEnds=new Float64Array(128);this.gpuValues=new Float64Array(128);this.gpuIds=new Array(128);this.clear();}
@@ -30,8 +31,8 @@ export class BossDiagnostics {
   clearBaseline(){this.recent.clear();this.frozenBaseline=null;}
   interrupt(reason){if(this.current&&['preparing','sampling'].includes(this.current.status)){this.current.status='interrupted';this.current.reason=reason;}}
   event(event,at,memory,context={}){
-    if(event.type==='prefetch-start'){this.backgroundLoads.push({label:event.label,status:'loading',started:at,memoryBefore:{...memory}});if(this.backgroundLoads.length>8)this.backgroundLoads.shift();return;}
-    if(event.type==='prefetch-end'){const pending=this.backgroundLoads.findLast(r=>r.status==='loading'&&r.label===event.label);if(pending){pending.status=event.error?'error':'complete';pending.elapsedMs=at-pending.started;pending.memoryAfter={...memory};pending.error=event.error??null;}return;}
+    if(event.type==='prefetch-start'){this.backgroundLoads.push({label:event.label,...(event.jobId!=null?{jobId:event.jobId}:{}),status:'loading',started:at,memoryBefore:{...memory}});if(this.backgroundLoads.length>8)this.backgroundLoads.shift();return;}
+    if(event.type==='prefetch-end'){const pending=this.backgroundLoads.findLast(r=>r.status==='loading'&&r.label===event.label&&(event.jobId!=null?r.jobId===event.jobId:r.jobId==null));if(pending){pending.status=event.error?'error':event.status==='cancelled'?'cancelled':'complete';pending.elapsedMs=Math.max(0,at-pending.started);pending.memoryAfter={...memory};pending.error=event.error??null;if(event.preparationStats)pending.preparation=preparationSummary(event.preparationStats);}return;}
     if(event.type==='begin'){
       this.interrupt('다음 소환');if(this.current){this.history.push(this.snapshot());if(this.history.length>3)this.history.shift();}
       this.during.clear();this.after.clear();this.gpuStageIds.clear();

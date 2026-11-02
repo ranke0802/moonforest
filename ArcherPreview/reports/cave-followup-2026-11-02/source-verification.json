@@ -1,0 +1,107 @@
+{
+  "status": "VERIFIED_BEFORE_SYNC",
+  "generatedAt": "2026-11-02T00:37:38.182Z",
+  "base": "0bd97077c7e3994909148df606c35b0fc084f457",
+  "tests": {
+    "total": 961,
+    "passed": 961,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "sourceLocks": [
+    {
+      "path": "src/boss-preparation.js",
+      "sha256": "7e1ac6223f3014fe35c937d10776c88ac382f2f5821275621f513a2e358a959b"
+    },
+    {
+      "path": "src/boss-battle.js",
+      "sha256": "878d17741588ae2be2f178e92a37039bff73776824938e01d3494ca7f421a200"
+    },
+    {
+      "path": "src/boss-encounter.js",
+      "sha256": "5aa39ee091367cc63a9798aef2ee3bc4ad281c3919a2c3231992452e6fbbe77d"
+    },
+    {
+      "path": "src/character-outlines.js",
+      "sha256": "0b1c81511b0966d60ee8c087a0a2efcaa18502b2e3ca233f6afea002d2582ad4"
+    },
+    {
+      "path": "src/character-render-cost.js",
+      "sha256": "efdc322e500e2aead90b807fbbc66deb968fcde6f174b07a6813bde773188205"
+    },
+    {
+      "path": "src/mourning-camera-culling.js",
+      "sha256": "021481d9b61bd76bbc2369c83b217dd79a59a03a963f2cb60b833ac029148c13"
+    },
+    {
+      "path": "src/boss-shader-warmup.js",
+      "sha256": "eca1841488a2a6b70c542c89e58f076739f7d0b7610e07136cd82f4170998b8d"
+    },
+    {
+      "path": "tests/boss-hidden-preparation.test.js",
+      "sha256": "9977685413984a19e5acb642690b9bf01c4d9e590882dbf7e2faf034b1dc2d2b"
+    },
+    {
+      "path": "tests/boss-diagnostics.test.js",
+      "sha256": "5d3711a0acfe92365dd2caf99af310a0bfb4f3934b5dcc872adbf53490911fe4"
+    },
+    {
+      "path": "tests/elena-two-phase.test.js",
+      "sha256": "8f559021559ff6993690d939ba1710516edca0202186725a1ebf407e620016a8"
+    },
+    {
+      "path": "tests/boss-shader-warmup.test.js",
+      "sha256": "9792f5401808528eda7055ede48baf7f74e95c9f95bfb2baa3709af04021f1b9"
+    },
+    {
+      "path": "src/cave-player-fill.js",
+      "sha256": "cf1c8275c01d146515756fa842f36d016f325a10e4cc0f75d40515d9a01c24fb"
+    },
+    {
+      "path": "src/cave-painted-light-runtime.js",
+      "sha256": "fc6a725c2a68eff3c4ea4e1e9cacf2e295121289e1be78f77f8def9d2ca6e2c4"
+    },
+    {
+      "path": "src/cave-fog-cover.js",
+      "sha256": "ca146a0ef7f24a1059cb474ffca2c88d490c328333dcd6aa36ddfb79b7cba93e"
+    },
+    {
+      "path": "src/witch-cave-surfaces.js",
+      "sha256": "9bc5905d7939f3aabbaa63ad8d718e62b0615ca8de6ecde63050c06ffcc7a4fb"
+    },
+    {
+      "path": "src/witch-cave-atmosphere.js",
+      "sha256": "45f6f7cd849bb8d1da4ac17a820991c55b6699f7967666e96fb2145c390955b6"
+    },
+    {
+      "path": "src/village-streamed-environment.js",
+      "sha256": "955f93e8f09abf4091ec3e16d3825ab503df8d180b44b83c2a05bd2166b4359d"
+    },
+    {
+      "path": "tests/cave-player-fill.test.js",
+      "sha256": "3d0dd7a5ad4d310bd212e3e9a204ff3c99913eb3c9182b8e11546ee4ad7a2532"
+    },
+    {
+      "path": "tests/cave-painted-light-runtime.test.js",
+      "sha256": "359766e07fe08c543232f16f41b37c92ecf09981cc131ac24f84c9eea1f9bc31"
+    }
+  ],
+  "shaderStages": 42,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "unchangedResourceFiles": 1037,
+  "unchangedBundles": 194,
+  "sourceGeometryLayoutAndManifestEdits": 0,
+  "preservation": {
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "lod": true,
+    "newAssetGeneration": false,
+    "browserAutomation": false
+  },
+  "limitations": [
+    "No physical S23/iPhone temperature or GPU driver timing measured.",
+    "Node/NullEngine readiness is not a physical browser or visual inspection.",
+    "One library clone/animator/driver operation can still exceed the soft slice budget."
+  ]
+}

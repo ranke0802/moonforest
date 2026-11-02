@@ -178,7 +178,8 @@ test('leaving during phase-two instantiation hides the completed actor and reuse
   mourningModels.instantiate=async()=>{reached();await gate;return instantiate();};
   const pending=battle.transformResident(player);await entered;assert.equal(battle.mourningPool.length,1);
   battle.hide();world.cave=false;release();assert.equal(await pending,false);assert.equal(battle.encounters.length,0);
-  const resident=battle.mourningPool[0];assert.equal(resident.active,false);assert.equal(resident.actor.isEnabled(),false);assert.equal(resident.spell.mesh.isEnabled(),false);
+  const resident=battle.mourningPool[0];assert.equal(resident.active,false);assert.notEqual(resident.actor?.isEnabled(),true);await resident.assetAcquisition;
+  assert.equal(resident.actor.isEnabled(),false,'a model finishing after cancellation is adopted only into a disabled owner');assert.notEqual(resident.spell?.mesh.isEnabled(),true,'cancelled preparation need not allocate a telegraph, and can never enable it');
   world.cave=true;await battle.activateResident(player);assert.equal(mourningModels.instances,1);assert.strictEqual(battle.encounters[0],resident);assert.equal(resident.actor.isEnabled(),true);
 });
 

@@ -134,15 +134,15 @@ export function configureCaveAtmosphere(world){
   world.lighting.followHeight=world.cave;
   if(!world.cave){world.scene.clearColor=new Color4(.61,.71,.77,1);return;}
   world.scene.clearColor=new Color4(.024,.028,.038,1);
-  // Keep the existing character/boss fog path. Environment materials use the
-  // final dark-air convergence in CaveFogShade instead of the engine fog.
-  world.scene.fogColor=new Color3(.24,.23,.28);
+  // Fog adds the colour of distant cave air, never a separate bright wash on
+  // characters or legacy materials. Their near lighting/style remains intact.
+  world.scene.fogColor=new Color3(.024,.028,.038);
   world.scene.fogStart=CAVE_FOG_START;world.scene.fogEnd=CAVE_FOG_END;
   const paint=new CavePaintLightRuntime(world),water=caveWater(world),style=caveSurfaceStyle(world);
   const glows=[caveGlow(world,'votive-lantern','#e6b46b',.8),caveGlow(world,'soul-collector-arm','#ad8dd3',2.784,.774)],ceiling=caveCeiling(world);
   const right=Vector3.Right(),up=Vector3.Up();
   let laboratoryRevision=null;
-  world.caveAtmosphere={activateLaboratoryGeometry(contract=CAVE_LABORATORY_GEOMETRY){
+  world.caveAtmosphere={attachMaterial:material=>style.attach(material),activateLaboratoryGeometry(contract=CAVE_LABORATORY_GEOMETRY){
     if(!laboratoryEnabled(contract))return false;if(laboratoryRevision===contract.revision)return true;
     const prepared=world.villagePrepared,asset=prepared?.assets.get(contract.assetId);
     if(!asset?.tiers.has(2)||!prepared.records.some(r=>r.placement.asset===contract.assetId&&r.essentialStructural&&r.structuralReady))throw Error('Laboratory enclosure must be ready before retiring source surfaces');

@@ -37,7 +37,7 @@ test('only floor and painted environment get illumination; character materials k
   const shader=mesh.subMeshes.find(s=>s.effect)?.effect.fragmentSourceCode;assert.ok(shader?.includes('cavePaintFactor(vPositionW)'));
  }
  assert.equal(actor.material.pluginManager?.getPlugin('CavePaintLight')??null,null);
- assert.equal(actor.material.fogEnabled,true);assert.deepEqual(scene.fogColor.asArray(),[.24,.23,.28],'character fog colour stays at the original cave value');
+ assert.equal(actor.material.fogEnabled,true);assert.deepEqual(scene.fogColor.asArray(),[.024,.028,.038],'distant character fog matches dark cave air without changing near character lighting');
  assert.equal(rock.material.metallic,0);assert.equal(rock.material.roughness,1);assert.equal(rock.material.environmentIntensity,0);
 });
 

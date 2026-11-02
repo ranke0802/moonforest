@@ -1,0 +1,389 @@
+{
+  "revision": "cave-dark-air-and-player-lantern-v1-fallback-vector4",
+  "status": "SOURCE_LOCKED_FOCUSED_TESTS_AND_STANDALONE_SHADERS_READY",
+  "cause": {
+    "confirmed": "Actual production prepareMapMaterials could compile an incoming environment source before CaveRockMood/CavePaintLight were attached; enginefog remained enabled until first render.",
+    "beforeLifecycle": {
+      "beforeFirstRender": {
+        "fogEnabled": true,
+        "plugins": [
+          {
+            "name": "MoonforestVillageToon",
+            "exists": true
+          },
+          {
+            "name": "CaveRockMood",
+            "exists": false
+          },
+          {
+            "name": "CavePaintLight",
+            "exists": false
+          },
+          {
+            "name": "CaveFogOfWar",
+            "exists": true
+          }
+        ]
+      },
+      "afterFirstRender": {
+        "fogEnabled": false,
+        "plugins": [
+          {
+            "name": "MoonforestVillageToon",
+            "exists": true
+          },
+          {
+            "name": "CaveRockMood",
+            "exists": true
+          },
+          {
+            "name": "CavePaintLight",
+            "exists": true
+          },
+          {
+            "name": "CaveFogOfWar",
+            "exists": true
+          }
+        ]
+      },
+      "beforeShader": {
+        "staticPaint": false,
+        "darkFog": true
+      },
+      "afterShader": {
+        "staticPaint": true,
+        "darkFog": true
+      },
+      "standardMaterials": [
+        {
+          "name": "forest-floor-material",
+          "fogEnabled": false,
+          "environment": true,
+          "paint": true
+        },
+        {
+          "name": "stage-ring-material",
+          "fogEnabled": true,
+          "environment": false,
+          "paint": false
+        },
+        {
+          "name": "mote-light",
+          "fogEnabled": true,
+          "environment": false,
+          "paint": false
+        }
+      ]
+    },
+    "secondary": "Engine fog used bright(.24,.23,.28) on actors and any not-yet-styled material, while environment final fog used dark(.024,.028,.038).",
+    "ruledOut": {
+      "nearFarMaterialFactors": [],
+      "assetsAudited": 29,
+      "existingHighTextureSrgbPolicy": "Already explicit useSRGBBuffer/albedo gamma; no evidence for reintroducing oldgamma bug."
+    },
+    "limits": "GPU flash magnitude and the exact reported object cannot be inferred solely from NullEngine. This fixes the reproduced readiness gap and sharedfog mismatch."
+  },
+  "changes": {
+    "synchronousEnvironment": "toon -> attachMaterial(cave style+paint/fogEnabledfalse) -> CaveFog.attach -> material prewarm, for every incoming LOD. No added per-frame full material sweep.",
+    "sharedFog": "Scene fog gamma colour(.024,.028,.038); Babylon binds the corresponding linear colour for PBR. Actor/boss near style options and texture decoding are unchanged.",
+    "fill": {
+      "radius": 5.5,
+      "core": 0.75,
+      "color": [
+        0.9,
+        0.66,
+        0.38
+      ],
+      "visibleStart": 0.92,
+      "visibleFull": 0.995
+    },
+    "fillOrigin": "Existing caveFog.playerView x/y/z/w; bind-time shared uniform only.",
+    "fillComposition": "max(existingStaticLinearFactor,warmLocalFactor).3Ddistance, CURRENT LOS>.92,0inmemory/unseen. Outside5.5m returns staticfactor before any local visibility lookup.",
+    "resources": {
+      "newLights": 0,
+      "newShadowPasses": 0,
+      "newDraws": 0,
+      "newTextures": 0,
+      "newSamplers": 0,
+      "staticMapUploadsPerFrame": 0,
+      "perFrameFullMaterialScansAdded": 0
+    },
+    "lookupPolicy": "Same fragment FoW position/state cached and reused by local fill and finalfog; one texture2D expression. Far roofs skip localLOSquery entirely.",
+    "scope": [
+      "environment floor",
+      "UV rock",
+      "palette-only rock",
+      "environment props",
+      "existing water/falls/roof"
+    ],
+    "finalFog": "Existing hidden-record omission and final22..48m dark convergence retained."
+  },
+  "validation": {
+    "standaloneShaderStages": 42,
+    "shaderPassed": 42,
+    "shaderFailed": [],
+    "shaderMatrix": [
+      "GLSL ES100 / UBOoff",
+      "GLSL ES300 / UBOoff",
+      "GLSL ES300 / UBOon"
+    ],
+    "shaderFamilies": [
+      "UVrock",
+      "paletteRock",
+      "prop",
+      "floor",
+      "roof",
+      "water",
+      "waterfall"
+    ],
+    "numericCases": [
+      {
+        "name": "near-floor",
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "currentVisibility": 1,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0.8896833940807698,
+          0.6524344889925645,
+          0.3756440997229917
+        ],
+        "combinedLinearFactor": [
+          0.8896833940807698,
+          0.6524344889925645,
+          0.3756440997229917
+        ],
+        "luminanceRatio": 4.304756424197873
+      },
+      {
+        "name": "near-prop",
+        "position": {
+          "x": 1,
+          "y": 1.05,
+          "z": 0
+        },
+        "currentVisibility": 1,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0.892783204548768,
+          0.6547076833357632,
+          0.3769529085872576
+        ],
+        "combinedLinearFactor": [
+          0.892783204548768,
+          0.6547076833357632,
+          0.3769529085872576
+        ],
+        "luminanceRatio": 4.319754938404939
+      },
+      {
+        "name": "3m-floor",
+        "position": {
+          "x": 3,
+          "y": 0,
+          "z": 0
+        },
+        "currentVisibility": 1,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0.434813496245389,
+          0.318863230579952,
+          0.18358792063694201
+        ],
+        "combinedLinearFactor": [
+          0.434813496245389,
+          0.318863230579952,
+          0.2
+        ],
+        "luminanceRatio": 2.1113261290788428
+      },
+      {
+        "name": "5.5m-limit",
+        "position": {
+          "x": 5.5,
+          "y": 1.05,
+          "z": 0
+        },
+        "currentVisibility": 1,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0,
+          0,
+          0
+        ],
+        "combinedLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "luminanceRatio": 1
+      },
+      {
+        "name": "high-ceiling",
+        "position": {
+          "x": 0,
+          "y": 7,
+          "z": 0
+        },
+        "currentVisibility": 1,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0,
+          0,
+          0
+        ],
+        "combinedLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "luminanceRatio": 1
+      },
+      {
+        "name": "behind-wall",
+        "position": {
+          "x": 2,
+          "y": 1.05,
+          "z": 0
+        },
+        "currentVisibility": 0,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0,
+          0,
+          0
+        ],
+        "combinedLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "luminanceRatio": 1
+      },
+      {
+        "name": "explored-memory",
+        "position": {
+          "x": 2,
+          "y": 1.05,
+          "z": 0
+        },
+        "currentVisibility": 0,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0,
+          0,
+          0
+        ],
+        "combinedLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "luminanceRatio": 1
+      },
+      {
+        "name": "partial-boundary",
+        "position": {
+          "x": 2,
+          "y": 1.05,
+          "z": 0
+        },
+        "currentVisibility": 0.5,
+        "staticLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "localLinearFactor": [
+          0,
+          0,
+          0
+        ],
+        "combinedLinearFactor": [
+          0.14,
+          0.16,
+          0.2
+        ],
+        "luminanceRatio": 1
+      }
+    ],
+    "focusedTests": "36/36afterimplementation,20/20afterfar earlyout,and20/20afterrealShaderMaterialfallbackcorrection; see focused-tests-summary.json",
+    "fallbackCorrection": {
+      "problem": "ShaderMaterial has setVector4, not Effect.setFloat4. Inactive-runtime material binding could throw.",
+      "fix": "One shared inactiveVector4 passed to material.setVector4; Effect.setFloat4 retained where supported.",
+      "regression": "Actual ShaderMaterial after painted runtime.dispose and cave->forest replacement binds disabled factor and zero player safely.",
+      "shaderPreservation": "Re-exported84raw/preprocessedshaderfiles are byteidentical; prior42/42standalone compilation remains applicable."
+    },
+    "lifecycle": "1200moving updates and20cave/forest roundtrips keep same lights/meshes/geometries/textures/before/after observercounts; oldmapfill disabled and staticmapneverupdated.",
+    "limitations": [
+      "NullEngine/CPU tests and standalone GLSL compilation, no physical S23/iPhone GPU or heat measurement.",
+      "No browser automation or visual browser test performed."
+    ]
+  },
+  "sourceFiles": [
+    "src/cave-player-fill.js",
+    "src/cave-painted-light-runtime.js",
+    "src/cave-fog-cover.js",
+    "src/witch-cave-surfaces.js",
+    "src/witch-cave-atmosphere.js",
+    "src/village-streamed-environment.js",
+    "tests/cave-player-fill.test.js",
+    "tests/cave-painted-light-runtime.test.js"
+  ],
+  "sourceSha256": {
+    "src/cave-player-fill.js": "cf1c8275c01d146515756fa842f36d016f325a10e4cc0f75d40515d9a01c24fb",
+    "src/cave-painted-light-runtime.js": "fc6a725c2a68eff3c4ea4e1e9cacf2e295121289e1be78f77f8def9d2ca6e2c4",
+    "src/cave-fog-cover.js": "ca146a0ef7f24a1059cb474ffca2c88d490c328333dcd6aa36ddfb79b7cba93e",
+    "src/witch-cave-surfaces.js": "9bc5905d7939f3aabbaa63ad8d718e62b0615ca8de6ecde63050c06ffcc7a4fb",
+    "src/witch-cave-atmosphere.js": "45f6f7cd849bb8d1da4ac17a820991c55b6699f7967666e96fb2145c390955b6",
+    "src/village-streamed-environment.js": "955f93e8f09abf4091ec3e16d3825ab503df8d180b44b83c2a05bd2166b4359d",
+    "tests/cave-player-fill.test.js": "3d0dd7a5ad4d310bd212e3e9a204ff3c99913eb3c9182b8e11546ee4ad7a2532",
+    "tests/cave-painted-light-runtime.test.js": "359766e07fe08c543232f16f41b37c92ecf09981cc131ac24f84c9eea1f9bc31"
+  },
+  "preservation": {
+    "player8K": true,
+    "backgroundMax4K": true,
+    "existingGeometryLOD": true,
+    "actorBossStyleOptions": true,
+    "geometryLayoutAndBakeEdited": false,
+    "assetsOrManifestEdited": false,
+    "newAIOrMeshyCalls": 0,
+    "commitPushDeployByThisAgent": false
+  },
+  "artifacts": {
+    "analysis": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\cave-lighting-analysis\\2026-11-02\\read-only-audit.json",
+    "shaderExport": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\cave-lighting-analysis\\2026-11-02\\shaders\\export.json",
+    "shaderCompiler": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\cave-lighting-analysis\\2026-11-02\\shaders\\compile-results.json"
+  }
+}

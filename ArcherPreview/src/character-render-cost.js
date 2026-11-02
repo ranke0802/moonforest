@@ -1,4 +1,5 @@
 import {RenderingGroup,VertexBuffer} from '@babylonjs/core';
+import {runPreparationSync} from './boss-preparation.js';
 
 const orderedGroups=new WeakMap();
 
@@ -26,7 +27,7 @@ export function orderCharacterInkAfterSurfaces(scene,groupId=0){
 // and shadow vertex shader. Removing only exact-zero trailing slots preserves
 // the original sum, vertex streams, bones and all animated/morphed positions.
 // This runs once while preparing the asset, before shader warmup and cloning ink.
-export function trimEmptyBoneSlots(mesh){
+export function* emptyBoneSlotProof(mesh){
   const declared=mesh.numBoneInfluencers;
   if(!mesh.skeleton||!mesh.computeBonesUsingShaders||!Number.isInteger(declared)||declared<2||declared>8)return declared;
   const count=mesh.getTotalVertices(),weights=mesh.getVerticesData(VertexBuffer.MatricesWeightsKind);
@@ -41,7 +42,10 @@ export function trimEmptyBoneSlots(mesh){
       if(value!==0){needed=slot+1;break;}
     }
     if(needed===declared)return declared;
+    if((vertex+1)%512===0)yield;
   }
   if(needed<declared)mesh.numBoneInfluencers=needed;
   return needed;
 }
+export function trimEmptyBoneSlots(mesh){return runPreparationSync(emptyBoneSlotProof(mesh));}
+export function trimEmptyBoneSlotsAsync(mesh,preparation){return preparation.run(emptyBoneSlotProof(mesh));}

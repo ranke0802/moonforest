@@ -1,0 +1,9 @@
+{
+  "generatedAt": "2026-11-02T00:28:27.465Z",
+  "scope": "Single bounded60ms CPU-only reproduction using the actual prepareHidden join and prepareBossShaders helper. No source modifications.",
+  "oldWarmSettledWithin30msOfMapTokenInvalidation": false,
+  "newForegroundSettledWithin30ms": false,
+  "pendingStillOwned": true,
+  "proof": "The shader Promise has no resolve/reject path, and cancellation is only checked after awaiting it. Therefore both jobs remain pending indefinitely, not merely until the next render frame. Prior resolved-later tests did not cover this case.",
+  "library": "Babylon9.31 Material.forceCompilationAsync wraps forceCompilation without timeout or cancellation. forceCompilation schedules readiness again every16ms until ready/error/scene-engine disappearance. A simple Promise.race can detach our JS waiter but cannot cancel that private polling chain."
+}

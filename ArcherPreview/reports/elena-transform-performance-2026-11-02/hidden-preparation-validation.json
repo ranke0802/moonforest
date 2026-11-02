@@ -1,0 +1,245 @@
+{
+  "generatedAt": "2026-11-02T00:35:59.422Z",
+  "scope": "Actual packed rigs, CPU step scheduling, shader variants and lifecycle in Babylon NullEngine. No browser/GPU/physical temperature measurement.",
+  "reports": [
+    {
+      "case": "sync-async-exact",
+      "results": [
+        {
+          "mesh": "Lament_Mouth_Interior",
+          "slots": 4,
+          "boneBoxes": 1,
+          "vertices": 280,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Attached_Streamers",
+          "slots": 3,
+          "boneBoxes": 5,
+          "vertices": 287,
+          "bitExact": true
+        },
+        {
+          "mesh": "Halo_Rigid_Emblem",
+          "slots": 3,
+          "boneBoxes": 8,
+          "vertices": 4014,
+          "bitExact": true
+        },
+        {
+          "mesh": "Elina_Chimera_Skin",
+          "slots": 4,
+          "boneBoxes": 206,
+          "vertices": 89940,
+          "bitExact": true
+        }
+      ],
+      "scheduler": {
+        "yields": 95,
+        "slices": 103,
+        "blocks": 197,
+        "maxSliceMs": 10.031300000000556,
+        "steps": []
+      },
+      "cancelledAfterYields": 3
+    },
+    {
+      "case": "warm-transform",
+      "frames": 110,
+      "readinessRequests": [
+        "Elena_Meshy_Static",
+        "Elena_Meshy_Static",
+        "Elena_Meshy_Static / silhouette",
+        "Lament_Mouth_Interior",
+        "Halo_Attached_Streamers",
+        "Halo_Rigid_Emblem",
+        "Elina_Chimera_Skin",
+        "Halo_Attached_Streamers / silhouette",
+        "Halo_Rigid_Emblem / silhouette",
+        "Elina_Chimera_Skin / silhouette"
+      ],
+      "scanBlocks": 196,
+      "handoffDesktopMs": 19.117400000001,
+      "countsBefore": {
+        "meshes": 16,
+        "geometries": 8,
+        "materials": 13,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "countsAfter": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "variants": [
+        {
+          "castVariant": "cast",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        },
+        {
+          "castVariant": "cast_slam",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        },
+        {
+          "castVariant": "cast_alternate",
+          "slots": 11,
+          "bodyReady": true,
+          "sharedInk": true
+        }
+      ],
+      "quality": "Same actual morph streams, stable11slots, body/ink geometry/skin/morph shared. NullEngine shader readiness is not a real mobile GPU measurement.",
+      "scheduler": {
+        "yields": 110,
+        "slices": 103,
+        "blocks": 196,
+        "maxSliceMs": 18.457899999999427,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.2500999999992928
+          },
+          {
+            "name": "paint-materials",
+            "ms": 2.284700000000157
+          },
+          {
+            "name": "outline:Halo_Attached_Streamers",
+            "ms": 1.8924000000006345
+          },
+          {
+            "name": "outline:Halo_Rigid_Emblem",
+            "ms": 3.047500000000582
+          },
+          {
+            "name": "outline:Elina_Chimera_Skin",
+            "ms": 48.57560000000012
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.6671999999998661
+          },
+          {
+            "name": "animator",
+            "ms": 30.199000000000524
+          }
+        ]
+      }
+    },
+    {
+      "case": "cancel-load",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "roundTrips": 4
+    },
+    {
+      "case": "cancel-bounds",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      },
+      "roundTrips": 4
+    },
+    {
+      "case": "join-death",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "join-selector",
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "failure-explicit-recovery",
+      "instances": 1,
+      "compileRequests": 10,
+      "firstAttemptCompileRequests": 3,
+      "counts": {
+        "meshes": 19,
+        "geometries": 11,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "never-ready-cancel-new-foreground",
+      "instances": 1,
+      "oldPendingWaiters": 0,
+      "oldJobStatus": "cancelled",
+      "observerCount": 0,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "shader-timeout-explicit-recovery",
+      "oldPendingWaiters": 0,
+      "sourceClockMs": 45001,
+      "instances": 1,
+      "counts": {
+        "meshes": 19,
+        "geometries": 9,
+        "materials": 16,
+        "skeletons": 3,
+        "groups": 22,
+        "managers": 2,
+        "pool": 2
+      }
+    },
+    {
+      "case": "never-model-load-cancel",
+      "oldPendingWaiters": 0,
+      "instances": 1
+    }
+  ]
+}
