@@ -135,14 +135,14 @@ export function loadStreamedVillage(world,{
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
-    let textures,disposed=false;const pendingLoads=new Set();
+    let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const has=r=>assets.get(r.id).tiers.has(r.level);
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
       const operation=lifetime.run(async()=>{
       const work=new VillageWorkBudget(()=>world.villageStreaming?.active,cancelled);
-      await lifetime.run(()=>world.prefetchResources?.(config.resources));lifetime.check();
+      await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
       const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime}),{onLate:container=>container?.dispose()});
       lifetime.check();containers.push(container);
       const meshes=geometry(container);
@@ -210,6 +210,7 @@ export function loadStreamedVillage(world,{
     world.releaseEnvironment=async()=>{stop();await Promise.allSettled([...pendingLoads,streaming.pending,textures?.pendingTask].filter(Boolean));cleanup();};
     try{
       await streaming.initial(plan);
+      initializing=false;
       if(disposed)throw Object.assign(new Error('Map load was released'),{name:'AbortError'});
       textures=new VillageTextureStreaming(world,assets,records,url,stats);
       world.villageRenderRecords=records;stats.ready=true;return stats;

@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "scope": "Optional authored sky logical lifetime and current-camera/shadow scoped readiness, Babylon 9.31.0; no browser automation or GPU/device performance claim",
+  "sourceLocked": true,
+  "sources": {
+    "src/sky.js": {
+      "sha256": "981547c5f8da56922107428835376cddb4d6fde1a98e1b91aba7d61b5e8869fe"
+    },
+    "src/scene-ready.js": {
+      "sha256": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1"
+    },
+    "tests/sky-load-lifetime.test.js": {
+      "sha256": "a8031765bb3e8511beb6b9fec210477ccd8c953d24bb96976e78b868fd431f6e"
+    },
+    "tests/scene-ready-scope.test.js": {
+      "sha256": "2325eb23e4622ef4d777c07b51e80cd979cad8e120aa2fd1cc813995ec0240d3"
+    }
+  },
+  "before": {
+    "record": "before.json",
+    "disabledBossMaterialReadinessCalls": 46,
+    "globalGateTimedOutMs": 45000,
+    "unansweredSkyPendingMemoized": true,
+    "unansweredSkySettledAfter20ms": false,
+    "note": "The original sky had no deadline. before.json records the hidden-mesh/global-gate reproduction. Unrelated global effect behavior is independently demonstrated in scene-ready-scope.test.js with actual ThinEngine.areAllEffectsReady; NullEngine overrides this method so the before probe alone is not evidence for that effect case."
+  },
+  "changes": {
+    "sky": {
+      "optionalFallbackDeadlineMs": 8000,
+      "quality": "Original authored texture, mip sampling, mirror addressing and anisotropy unchanged; successful texture retained and reused",
+      "ownership": "Exact owned candidate release and pending removal; unrelated/shared texture ownership retained; abort/dispose/late callbacks cannot publish",
+      "failure": "Fallback retained and failed memoized Promise evicted for explicit retry",
+      "scheduling": "Parent main.js overlaps sky loading with map resources and models; this report does not own main.js"
+    },
+    "screen": {
+      "deadlineMs": 45000,
+      "scope": "Current camera-selected LOD, enabled visible instances, current base material/instanced ink, actual shadow casters including off-camera casters, camera postprocess and enabled render layers",
+      "excluded": "Unsubmitted disabled retained bosses, unrelated scene pending data and unrelated engine shader programs; no global pending queue clearing",
+      "diagnostic": "Short named current mesh/material blocker on timeout/shader failure, current counts in scene.metadata.screenReady",
+      "statePreserved": "Material allowShaderHotSwapping and engine render pass restored in finally; explicit null LOD remains unsubmitted"
+    }
+  },
+  "verification": {
+    "command": "node --test tests/scene-ready-scope.test.js tests/sky-load-lifetime.test.js tests/map-loading.test.js",
+    "log": "focused-tests.log",
+    "tests": 19,
+    "pass": 19,
+    "fail": 0,
+    "actualSdkCases": [
+      "disabled retained boss/global pending",
+      "unrelated failed global effect versus visible shader failure",
+      "selected/null LOD",
+      "enabled instance with disabled source and actual base draw",
+      "off-camera shadow caster and active/stale FoW flag",
+      "actual custom instanced village ink and draw",
+      "camera postprocess",
+      "8-second manifest fetch/parse/texture bounds",
+      "late old Texture completion and explicit retry",
+      "abort/dispose and exact pending ownership",
+      "20 cached sky calls with no timer/listener growth"
+    ],
+    "controlledBoundaries": "NullEngine plus controlled Texture callbacks, material readiness and fake deadline clock. No real mobile GPU/worker throughput measured."
+  },
+  "limitations": [
+    "Logical timeout cannot physically stop an already executing browser image/GPU call; owned late publication is prevented.",
+    "Required visible shader/postprocess/texture failure still rejects or reaches the existing 45-second screen limit.",
+    "A successful prior sky reuses the existing texture; there is no quality downgrade or asset regeneration."
+  ]
+}

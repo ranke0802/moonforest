@@ -1,0 +1,11 @@
+BJS - [11:04:54]: Babylon.js v9.31.0 - Null engine
+✔ actual three-map foreground plans check cached inventory once, not again for every LOD; streaming still checks eviction (2846.7165ms)
+ℹ {"visits":[{"character":"warrior-v5","models":14,"eliminatedRepeatedFileChecks":52,"eliminatedRepeatedKeyScans":0,"initialKeys":1,"initialMatches":0,"networkBytes":0},{"character":"warrior-v4","models":28,"eliminatedRepeatedFileChecks":102,"eliminatedRepeatedKeyScans":0,"initialKeys":1,"initialMatches":0,"networkBytes":0},{"character":"warrior-v3","models":46,"eliminatedRepeatedFileChecks":225,"eliminatedRepeatedKeyScans":0,"initialKeys":1,"initialMatches":0,"networkBytes":0},{"character":"warrior-v4","models":28,"eliminatedRepeatedFileChecks":102,"eliminatedRepeatedKeyScans":0,"initialKeys":1,"initialMatches":0,"networkBytes":0},{"character":"warrior-v5","models":14,"eliminatedRepeatedFileChecks":52,"eliminatedRepeatedKeyScans":0,"initialKeys":1,"initialMatches":0,"networkBytes":0}],"quality":"existing actual resource graph and LOD plan unchanged","phoneSpeedMeasured":false}
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4938.2008

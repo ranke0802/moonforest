@@ -1,0 +1,26 @@
+{
+  "repo": "C:/dev/moonforest-archer/ArcherPreview",
+  "sourceLocked": true,
+  "sources": [
+    "src/ktx-worker-supervisor.js",
+    "src/village-ktx2.js",
+    "src/map-texture-lifetime.js"
+  ],
+  "tests": [
+    "tests/ktx-worker-supervisor.test.js"
+  ],
+  "reports": [
+    "reports/map-transfer-root-cause-2026-11-02/runtime-review.json",
+    "reports/map-transfer-root-cause-2026-11-02/owned-files.json",
+    "reports/map-transfer-root-cause-2026-11-02/ktx-pool-readonly.mjs",
+    "reports/map-transfer-root-cause-2026-11-02/ktx-pool-readonly.json",
+    "reports/map-transfer-root-cause-2026-11-02/ktx-supervisor-validation.json",
+    "reports/map-transfer-root-cause-2026-11-02/ktx-focused.log",
+    "reports/map-transfer-root-cause-2026-11-02/ktx-final-12.log"
+  ],
+  "sourceSha256": {
+    "src/ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "src/village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "src/map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af"
+  }
+}

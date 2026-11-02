@@ -1,0 +1,42 @@
+{
+  "scope": "Actual pinned decoder worker body+WASM over Node WebWorker API adapter, no browser/device/GPU claim.",
+  "shippedModelViews": 24,
+  "models": [
+    "./content/15334b9ae0090dee2c9bdd9f45844e9e25201793c79afd27a7c6a7ccf0ad9629.gltf",
+    "./content/29c58722102c2edeb1fce7ac7b3e2df52ca05ae13579860a3aec3d9f5c003fb7.gltf",
+    "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf"
+  ],
+  "generatedViewByteIdentical": true,
+  "allShippedViewsByteIdentical": true,
+  "physicalWorkersCreated": 1,
+  "nestedWorkers": 0,
+  "diagnostics": {
+    "status": "idle",
+    "maxWorkers": 1,
+    "totalAwaitTimeoutMs": 45000,
+    "queueTimeoutMs": 45000,
+    "initTimeoutMs": 45000,
+    "decodeTimeoutMs": 45000,
+    "idleReleaseMs": 1000,
+    "queued": 0,
+    "active": null,
+    "counts": {
+      "created": 1,
+      "terminated": 0,
+      "completed": 25,
+      "failed": 0,
+      "recoveries": 0,
+      "workerFaults": 0
+    },
+    "lastFailure": null,
+    "lastCompleted": {
+      "id": 25,
+      "stage": "decode",
+      "bytes": 78876,
+      "queueMs": 0.15550000000007458,
+      "initMs": 0,
+      "decodeMs": 37.175899999999956,
+      "totalMs": 37.33510000000001
+    }
+  }
+}

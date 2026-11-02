@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "status": "PASS",
+  "reviewer": "independent child motion_validation",
+  "readOnlyRuntime": true,
+  "browserAutomation": false,
+  "sourceHashes": {
+    "src/ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "src/map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+    "src/village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "tests/ktx-worker-supervisor.test.js": "8f8c37eca08b7f3d9448ae72efd6699b21a4e71ef2be821e8a55d798c9c304cc"
+  },
+  "focusedTest": {
+    "command": "node --test tests/ktx-worker-supervisor.test.js",
+    "tests": 12,
+    "passed": 12,
+    "log": "ktx-independent-tests.log"
+  },
+  "extraCases": [
+    {
+      "name": "synchronous-post-failure-drains-once-and-explicit-recovery",
+      "passed": true,
+      "oldWorkerTerminations": 1,
+      "lateErrorFaultsAdded": 0,
+      "pendingTimers": 0
+    },
+    {
+      "name": "serial-jobs-post-their-own-defaults-options-and-caps",
+      "passed": true,
+      "pendingTimers": 0,
+      "remainingListeners": 0
+    }
+  ],
+  "reviewed": {
+    "ownership": "Final InternalTexture owner release is observed; shared refs>1 keep their live decode. releaseMapTexture sequential disposal and abandoned WeakSet still enforce exact late GPU allocation guard.",
+    "defaultsAndCache": "Supervisor posts the current job defaults before each dispatch. Cache keys include public defaults+caps+input options; private owner Symbol remains on options until decode boundary but is excluded from cache key and worker structured clone. Warm cache bypasses the worker; the exact _createTexture abandoned-owner guard still executes.",
+    "failures": "Initialization/channel/worker/post/active deadline faults drain original and queued jobs once, remove worker listeners and latch failure; bad image decode rejects only its job. Late messages from an old lease fail identity guard.",
+    "lifetime": "45-second total per decode includes queue/init/active stages. Same-turn cancellation deferred pump prevents old batch worker churn. Idle lease retires after1s. Explicit initializeVillageKtx2 on next map setup recovers only the failure latch.",
+    "sdkCompatibility": "Official SDK workerFunction/applyConfig/init used. Existing external pools/workerless runtime preserved. Actual shipped ETC1S test compares all9mips byte-for-byte with native SDK and proves warm cache hit."
+  },
+  "newRuntimeDefectsFound": [],
+  "limitations": [
+    "No actual browser scheduler or GPU/device thermal measurement.",
+    "A45s total limit may also reject a legitimately slow first8K decode; queued/init/active diagnostic times distinguish this.",
+    "Physical worker termination stops that owned worker but cannot preempt synchronous main-thread execution.",
+    "A pre-existing external pool is preserved and reported, not repaired by this supervisor."
+  ]
+}

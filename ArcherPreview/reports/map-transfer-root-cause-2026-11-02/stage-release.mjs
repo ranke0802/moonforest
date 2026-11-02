@@ -1,0 +1,17 @@
+import {readFile,readdir,writeFile} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {execFileSync} from 'node:child_process';
+const app=resolve(import.meta.dirname,'../..'),repo=resolve(app,'..');
+const run=args=>execFileSync('git',args,{cwd:repo,encoding:'utf8'});
+if(run(['diff','--cached','--name-only']).trim())throw Error('Unrelated staged work must be reviewed first');
+const runtime=['main','map-load-lifetime','map-texture-lifetime','resource-downloads','startup-resources','village-streamed-environment','sky','scene-ready','village-ktx2','ktx-worker-supervisor','village-meshopt','meshopt-worker-supervisor'].map(n=>`ArcherPreview/src/${n}.js`);
+const tests=['startup-frame-failure','ktx-worker-supervisor','meshopt-worker-supervisor','map-travel-download-progress','map-travel-prefetch','sky-load-lifetime','scene-ready-scope'].map(n=>`ArcherPreview/tests/${n}.test.js`);
+const pages=(await readFile(resolve(app,'reports/publish-village-paths.txt'),'utf8')).trim().split(/\r?\n/);
+await writeFile(resolve(import.meta.dirname,'published-files.json'),JSON.stringify(pages,null,2)+'\n');
+const evidence=[];
+for(const folder of ['map-transfer-root-cause-2026-11-02','map-ready-scope-2026-11-02'])for(const item of await readdir(resolve(app,'reports',folder),{withFileTypes:true}))if(item.isFile()&&/\.(json|mjs|py)$/.test(item.name))evidence.push(`ArcherPreview/reports/${folder}/${item.name}`);
+const paths=['ArcherPreview/README.md',...runtime,...tests,...evidence,...pages];
+run(['add','--',...paths]);
+const logs=['map-travel-full.log','map-travel-prefetch-comparison.log','map-travel-main-sky-overlap.log','map-travel-build.log'];
+run(['add','-f','--',...logs.map(n=>`ArcherPreview/reports/${n}`)]);
+console.log(run(['diff','--cached','--stat']));

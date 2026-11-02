@@ -1,0 +1,92 @@
+{
+  "expectedCases": 12,
+  "completedCases": 12,
+  "passed": true,
+  "cases": [
+    {
+      "case": "normal-serialization-byte-equivalence",
+      "passed": true
+    },
+    {
+      "case": "initialization-failure-manual-recovery",
+      "passed": true,
+      "automaticRetries": 0
+    },
+    {
+      "case": "idle-and-active-crash-not-reused",
+      "passed": true
+    },
+    {
+      "case": "finite-queue-initialization-decode-await",
+      "passed": true,
+      "totalAwaitMs": 45000
+    },
+    {
+      "case": "owner-specific-queued-active-shared-cancel",
+      "passed": true,
+      "lateWorkerPublication": false
+    },
+    {
+      "case": "coalesced-batch-release-no-worker-churn",
+      "passed": true,
+      "oldQueuedOwners": 20,
+      "replacementWorkersDuringBatch": 0
+    },
+    {
+      "case": "engine-dispose-and-observer-timer-lifetime",
+      "passed": true
+    },
+    {
+      "case": "same-turn-cancel-before-init-listener-registration",
+      "passed": true,
+      "lateListeners": 0,
+      "lateInitMessages": 0
+    },
+    {
+      "case": "image-error-does-not-poison-worker",
+      "passed": true
+    },
+    {
+      "case": "real-SDK-upload-owner-options-and-late-isolation",
+      "passed": true,
+      "ownerMetadataCloned": false,
+      "abandonedUploads": 0,
+      "sharedUploads": 1
+    },
+    {
+      "case": "real-ETC1S-WASM-native-adapter-byte-equivalence",
+      "passed": true,
+      "transcodedFormat": 37492,
+      "mips": 9,
+      "mipSha256": [
+        "27d6e63a5ee344c99aabcf290caab40c547db0dc812be275d2e8df6b559102f6",
+        "de7b29e548a2101298beffd10d09ff7f68ecf3da53804d2986287ea84922edfb",
+        "1bdad55122cf99fe6484e069c65a578572064f91e505782558474e43af43b511",
+        "8c0f06726bfef35899451ed42dc05ae2bd66691e1c9b79c36a80257a196ec652",
+        "0dec56e511cf65435281b8e54b3568ea1b37862c4eb7395be98534fc8ee247d5",
+        "bbd3afe77d0f1ac04dbcb9d24cac98ff83773841d421656528dca8a7e0edcd20",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8"
+      ],
+      "cacheHit": true,
+      "actualCodec": true,
+      "workerSimulation": "official SDK worker script in isolated VM, not a browser/physical worker/GPU"
+    },
+    {
+      "case": "external-pool-and-workerless-preservation",
+      "passed": true
+    }
+  ],
+  "limitations": [
+    "No browser automation, actual browser worker scheduling, GPU or phone temperature measurement.",
+    "Faults use controlled IPC boundaries with the installed SDK init protocol. The normal ETC1S comparison runs the shipped decoder JavaScript and actual WebAssembly against an existing texture.",
+    "Total per-decode await is 45s including queue/init; a legitimately slower 8K decode can also hit this ceiling. Timers cannot preempt synchronous execution."
+  ],
+  "sourceHashes": {
+    "ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af"
+  },
+  "browserAutomation": false
+}

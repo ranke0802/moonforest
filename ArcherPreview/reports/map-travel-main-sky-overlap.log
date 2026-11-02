@@ -1,0 +1,23 @@
+✔ actual main startup failure during model stays failed; retry DOM starts a successful new generation (19.6187ms)
+✔ actual main startup failure during scene stays failed; retry DOM starts a successful new generation (16.0818ms)
+✔ actual main startup failure during first-raf stays failed; retry DOM starts a successful new generation (5.9479ms)
+✔ actual main startup failure during second-raf stays failed; retry DOM starts a successful new generation (4.9874ms)
+✔ actual map callbacks preserve a frame failure during map-download (6.9084ms)
+✔ actual map callbacks preserve a frame failure during scene (4.5903ms)
+✔ actual map callbacks preserve a frame failure during second-raf (4.5429ms)
+✔ actual main release failure remains paused until explicit reload succeeds; return travel then works (6.1202ms)
+✔ actual main map-download failure remains paused until explicit reload succeeds; return travel then works (7.745ms)
+✔ actual main finish failure remains paused until explicit reload succeeds; return travel then works (6.4467ms)
+✔ actual loading view keeps the runtime error latched until an explicit new begin (2.7426ms)
+✔ actual map release timeout offers same-destination manual retry without reloading the player (7.9021ms)
+✔ actual map map-model timeout offers same-destination manual retry without reloading the player (7.8199ms)
+✔ actual map map-download timeout offers same-destination manual retry without reloading the player (7.617ms)
+✔ actual forest transition prepares map while bounded sky work is pending, revealing only after both finish (4.5026ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1355.2926

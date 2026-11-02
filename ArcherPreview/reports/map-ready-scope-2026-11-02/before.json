@@ -1,0 +1,10 @@
+{
+  "scope": "Actual Babylon9.31 Scene/Mesh readiness and actual MovingSky.load. Controlled hidden material readiness and never-answer fetch, no browser/GPU timing.",
+  "initialReady": true,
+  "disabledBossStillChecked": 46,
+  "globalSceneGateTimeoutMs": 45000,
+  "hiddenGateError": "화면 준비 시간이 초과되었습니다. 새로고침해 주세요.",
+  "skySettledAfter20ms": false,
+  "skyMemoizesSamePending": true,
+  "reason": "Sky has no logical deadline, so a Promise with no resolution/rejection also never reaches fallback; Scene.isReady checks disabled meshes and all engine effects."
+}

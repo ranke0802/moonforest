@@ -1,4 +1,4 @@
-import {ResourceDownloads} from './resource-downloads.js';
+import {ResourceDownloads,resourceUrl} from './resource-downloads.js';
 import {prepareVillageStart} from './village-environment.js';
 import {readMapManifest} from './map-manifests.js';
 import {registerResourceGraph} from './resource-cache.js';
@@ -7,10 +7,10 @@ import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream,context){
   const {lifetime,check}=context;check();const scene=world.scene;
   world.releaseResourceDownloads?.();
-  const downloads=new ResourceDownloads(sizes.files,base,{index:sizes});let released=false;
+  const downloads=new ResourceDownloads(sizes.files,base,{index:sizes});let released=false;const preparedUrls=new Set();
   const cancel=()=>{downloads.cancel();lifetime.abort(mapLoadAbortError());};
   const abort=()=>downloads.cancel();lifetime.signal.addEventListener('abort',abort,{once:true});
-  const release=()=>{if(released)return;released=true;cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null});};
+  const release=()=>{if(released)return;released=true;preparedUrls.clear();cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null});};
   world.resourceDownloadStats=downloads.stats;
   // Protect this document's complete graph (including the other map) before
   // asking the worker to collect obsolete versions from earlier deployments.
@@ -20,7 +20,20 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
   world.releaseResourceDownloads=release;
   const progress=callback=>state=>{try{check();if(!released)callback?.(state);}catch{/* Old traffic cannot report into a new foreground load. */}};
   let state;try{state=await lifetime.run(()=>downloads.prepare(resources,progress(onProgress)));check();}catch(error){release();throw error;}
-  world.prefetchResources=paths=>lifetime.run(()=>{check();return downloads.prepare(paths,progress(onStream));}).catch(error=>{try{check();onStream?.({complete:true,loaded:0,total:0,ratio:0});}catch{}throw error;});
+  if(state.complete&&state.storageAvailable)for(const path of resources)preparedUrls.add(resourceUrl(path,base));
+  downloads.stats.initialPrefetchReusedFiles=0;
+  world.prefetchResources=(paths,{initial=false}={})=>lifetime.run(()=>{
+    check();
+    // The foreground plan was just checked/downloaded as one batch. Do not
+    // reopen CacheStorage and match those same files once per model. This proof
+    // is only for that initial plan; streaming/revisits still check eviction.
+    // Actual model/texture reads always go through the normal cache/network path.
+    if(!initial)preparedUrls.clear();
+    const missing=initial?paths.filter(path=>!preparedUrls.has(resourceUrl(path,base))):paths;
+    downloads.stats.initialPrefetchReusedFiles+=paths.length-missing.length;
+    if(!missing.length)return {complete:true,loaded:0,total:0,ratio:1};
+    return downloads.prepare(missing,progress(onStream));
+  }).catch(error=>{try{check();onStream?.({complete:true,loaded:0,total:0,ratio:0});}catch{}throw error;});
   world.startupResources={files:new Set(resources).size,downloadBytes:state.total,cachedBytes:state.cached,initialLodModels:plan.length};
 }
 

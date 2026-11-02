@@ -1,6 +1,9 @@
 import { Color3, Mesh, MeshBuilder, RawTexture, ShaderMaterial, Texture, Vector2 } from '@babylonjs/core';
+import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
+import {releaseMapTexture} from './map-texture-lifetime.js';
 
 export const SKY_HORIZON = new Color3(.61, .71, .77);
+export const SKY_LOAD_TIMEOUT_MS=8000;
 
 const vertexSource = `
 precision highp float;
@@ -58,27 +61,39 @@ export class MovingSky {
     this.tick(0);
   }
 
-  load(manifestUrl) {
+  load(manifestUrl,{signal,timeoutMs=SKY_LOAD_TIMEOUT_MS,timers,fetcher=globalThis.fetch,createTexture=(scene,callbacks)=>new Texture(null,scene,{noMipmap:false,invertY:false,samplingMode:Texture.TRILINEAR_SAMPLINGMODE,...callbacks})}={}) {
     if (this.loadPromise) return this.loadPromise;
-    this.loadPromise = (async () => {
-      const response = await fetch(manifestUrl, { cache: 'no-cache' });
+    const scene=this.scene,lifetime=new MapLoadLifetime({signal,timeoutMs,timers,stage:'sky'}),revision=this.loadRevision=(this.loadRevision??0)+1;
+    let candidate,installed=false,released=false;
+    const release=()=>{if(candidate&&!installed&&!released){released=true;releaseMapTexture(candidate,scene);}};
+    const check=()=>{if(scene.isDisposed||revision!==this.loadRevision)lifetime.abort(mapLoadAbortError());lifetime.check();};
+    const observer=scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError())),abort=()=>release();lifetime.signal.addEventListener('abort',abort,{once:true});
+    this.lastLoad={status:'loading',timeoutMs};
+    const pending = (async () => {
+      check();const response = await lifetime.run(()=>fetcher(manifestUrl, { cache: 'no-cache',signal:lifetime.signal }));check();
       if (!response.ok) throw new Error(`Sky manifest: ${response.status}`);
-      const manifest = await response.json();
-      const texture = await new Promise((resolve, reject) => {
-        const candidate = new Texture(new URL(manifest.texture, manifestUrl).href, this.scene, false, false,
-          Texture.TRILINEAR_SAMPLINGMODE, () => resolve(candidate), (_, error) => { candidate.dispose(); reject(error ?? new Error('Sky texture unavailable')); });
-      });
+      const manifest = await lifetime.run(()=>response.json());check();
+      const texture = await lifetime.run(()=>new Promise((resolve,reject)=>{
+        let settled=false;const finish=error=>{if(settled)return;settled=true;lifetime.signal.removeEventListener('abort',cancel);if(error)reject(error);else resolve(candidate);},cancel=()=>finish(lifetime.signal.reason??mapLoadAbortError());
+        lifetime.signal.addEventListener('abort',cancel,{once:true});
+        try{candidate=createTexture(scene,{onLoad:()=>queueMicrotask(()=>{try{check();finish();}catch(error){finish(error);}}),onError:(_,error)=>queueMicrotask(()=>finish(error??new Error('Sky texture unavailable')))});check();candidate.updateURL(new URL(manifest.texture,manifestUrl).href);check();}
+        catch(error){finish(error);}
+      }));check();
       texture.wrapU = texture.wrapV = Texture.MIRROR_ADDRESSMODE;
       texture.anisotropicFilteringLevel = 1;
       this.material.setTexture('cloudMap', texture);
-      this.texture.dispose(); this.texture = texture;
+      const previous=this.texture;this.texture=texture;installed=true;releaseMapTexture(previous,scene);
+      this.lastLoad={status:'ready',timeoutMs};
       return true;
     })().catch(error => {
+      release();this.lastLoad={status:'fallback',timeoutMs,error:String(error?.message??error).slice(0,180)};
       console.warn('Using fallback sky:', error);
-      this.loadPromise = null;
       return false;
+    }).finally(()=>{
+      lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);lifetime.close();
+      if(!installed&&this.loadPromise===pending)this.loadPromise=null;
     });
-    return this.loadPromise;
+    this.loadPromise=pending;return pending;
   }
 
   tick(time) {

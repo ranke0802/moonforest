@@ -1,0 +1,41 @@
+{
+  "status": "NO_BLOCKING_FINDING",
+  "mode": "independent source/API review; runtime source edits 0",
+  "reviewed": [
+    "src/meshopt-worker-supervisor.js",
+    "src/village-meshopt.js",
+    "tests/meshopt-worker-supervisor.test.js"
+  ],
+  "sourceSha256": {
+    "src/meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784",
+    "src/village-meshopt.js": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164",
+    "tests/meshopt-worker-supervisor.test.js": "1da0e57bd575e50480e6ae9c1c982fe36479b7990a4ad0695c31507cea5af726"
+  },
+  "checks": [
+    "Installed EXT_meshopt_compression API arguments and Uint8Array result contract agree with the owned adapter.",
+    "Pinned 1.3.0 worker invokes sync decoding inside one owned worker, with nested workers disabled.",
+    "Source bytes are copied at dispatch, while engine/scene/AbortSignal ownership is not retained by the shared decode job.",
+    "Map caller cancellation does not interrupt another healthy shared decode. Worker fault, own total deadline and explicit disposal own termination.",
+    "Queue/init/decode diagnostics do not renew the enclosing 45-second await limit.",
+    "Worker and message identity guards reject late/wrong-generation results; failure latch requires explicit initializer re-entry to recover.",
+    "A pre-existing external SDK default is preserved. The owned adapter disposes only if it still owns that exact SDK default.",
+    "First worker-failure metadata survives rejection of queued waiters."
+  ],
+  "nonBlockingObservations": [
+    "Meshopt historical lastFailure does not carry KTX-style recovered:true; status plus counts.recoveries distinguishes successful recovery. No extra source change requested."
+  ],
+  "testEvidence": {
+    "scope": "Authored runtime tests reviewed, not independently rerun in this read-only pass; parent executes the complete suite.",
+    "actualPinnedShippedViews": 24,
+    "generatedViews": 1,
+    "completed": 25,
+    "physicalWorkersCreated": 1,
+    "nestedWorkers": 0,
+    "byteIdentity": true
+  },
+  "limitations": [
+    "No browser automation, user-device trace, actual phone GPU or temperature measurement.",
+    "The deterministic failure mechanisms and source review do not establish which exact mechanism caused an individual user-reported failed journey."
+  ],
+  "runtimeSourceChanges": 0
+}

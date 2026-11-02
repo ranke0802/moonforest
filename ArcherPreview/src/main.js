@@ -64,6 +64,8 @@ import {createFrameDiagnostics} from './frame-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
 import {inspectMapDecodeCache} from './map-decode-cache.js';
+import {inspectKtxWorkerPool} from './ktx-worker-supervisor.js';
+import {inspectMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
 import {inspectMapTerrainCache} from './map-terrain-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import { ScreenProjection } from './screen-projection.js';
@@ -160,7 +162,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:frameLoop?.failed,frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -736,7 +738,7 @@ try {
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
       cameraPitch.follow(cameraFollow.focus(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
       world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate(world.trainingSpawn);
-      if(!world.cave)await world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
+      const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
       loadDiagnostics.phase('download');
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing();await loadVillage(world);
@@ -747,6 +749,7 @@ try {
       $('#character-select').value=character;bindMapPortal();
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
+      await skyReady;
       assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);assertFrameHealthy();world.scene.render();
     },
     finish:async()=>{

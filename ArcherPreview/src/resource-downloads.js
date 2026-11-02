@@ -1,5 +1,6 @@
 import {CONTENT_NAME as CONTENT,validateResourceIndex,planResourceTransfers} from './resource-index.js';
 import {canExtractResourceBundles,extractResourceBundle} from './resource-bundles.js';
+import {MapLoadLifetime} from './map-load-lifetime.js';
 export function resourceUrl(path,base){
   const url=new URL(path,base);
   if(!CONTENT.test(url.pathname.split('/').at(-1)))throw new Error('Invalid content resource');
@@ -10,29 +11,37 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 // A fixed plan counts only missing files. Stored bytes are never reported as a
 // new download, and file count is never substituted for byte progress.
 export class ResourceDownloads {
-  constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null}={}){
+  constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers}={}){
     this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
     this.index=index?validateResourceIndex(index):null;
     this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0};
     this.abort=new AbortController();
+    this.idleTimeoutMs=idleTimeoutMs;this.timers=timers;
   }
   cancel(){this.abort.abort(new DOMException('Map resources released','AbortError'));}
   prepare(paths,onProgress=()=>{}){
     const job=this.tail.then(()=>this.run(paths,onProgress));this.tail=job.catch(()=>{});return job;
   }
   async run(paths,onProgress){
-    const signal=this.abort.signal;signal.throwIfAborted();
+    const lifetime=new MapLoadLifetime({signal:this.abort.signal,timeoutMs:this.idleTimeoutMs,timers:this.timers,stage:'resource-cache'});
+    try{return await lifetime.run(()=>this.runPlan(paths,state=>{lifetime.check();onProgress(state);},lifetime));}
+    catch(error){lifetime.abort(error);this.stats.lastFailure={stage:lifetime.stage,message:String(error.message??error).slice(0,240),code:error.code??null};throw error;}
+    finally{lifetime.close();this.stats.waitStage=null;}
+  }
+  async runPlan(paths,onProgress,lifetime){
+    const signal=lifetime.signal;signal.throwIfAborted();
+    const step=async(stage,task,onLate)=>{lifetime.check();lifetime.stage=stage;this.stats.waitStage=stage;const value=await lifetime.run(task,{onLate});lifetime.renew(stage);return value;};
     const urls=[...new Set(paths.map(p=>resourceUrl(p,this.base)))];
-    let cache;try{if(!this.storageUnavailable)cache=await this.storage?.open('moonforest-resources-v1');}catch{}
+    let cache;try{if(!this.storageUnavailable)cache=await step('resource-cache-open',()=>this.storage?.open('moonforest-resources-v1'));}catch(error){signal.throwIfAborted();}
     // Enumerate keys once instead of creating a Response/body handle for every
     // cached file. Refresh on every job so eviction/deletion remains visible.
-    const cachedUrls=cache?.keys&&urls.length>=16?new Set((await cache.keys()).map(request=>request.url)):null;
+    const cachedUrls=cache?.keys&&urls.length>=16?new Set((await step('resource-cache-keys',()=>cache.keys())).map(request=>request.url)):null;
     const missing=[];let cached=0;
     for(const url of urls){
       signal.throwIfAborted();
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
       if(!Number.isSafeInteger(size)||size<0)throw new Error('리소스 용량 목록이 일치하지 않습니다. 새로고침해 주세요.');
-      if(cachedUrls?cachedUrls.has(url):await cache?.match(url,{ignoreVary:true})){cached+=size;continue;}
+      if(cachedUrls?cachedUrls.has(url):await step('resource-cache-match',()=>cache?.match(url,{ignoreVary:true}))){cached+=size;continue;}
       missing.push({url,size});
     }
     const plan=planResourceTransfers(missing,canExtractResourceBundles()?this.index:null);
@@ -40,14 +49,14 @@ export class ResourceDownloads {
     const state={loaded:0,total:plan.bytes,cached,complete:false,storageAvailable:!!cache};
     let lastProgress=-Infinity;
     const emit=()=>onProgress({...state,ratio:state.total?state.loaded/state.total:1});emit();
-    const count=bytes=>{state.loaded+=bytes;this.stats.downloadBytes+=bytes;const time=this.now();if(time-lastProgress>=100){lastProgress=time;emit();}};
+    const count=bytes=>{lifetime.check();if(bytes>0)lifetime.renew('resource-transfer');state.loaded+=bytes;this.stats.downloadBytes+=bytes;const time=this.now();if(time-lastProgress>=100){lastProgress=time;emit();}};
     // Without persistent storage, let the actual loader fetch once via normal
     // HTTP caching; prefetching would otherwise risk a second download.
     if(!cache){onProgress({...state,ratio:0,unavailable:true});return state;}
     for(const pack of plan.packs){
       try{
         this.stats.bundleRequests++;
-        await extractResourceBundle({pack,index:this.index,base:this.base,fetcher:this.fetcher,cache,signal,count,onFile:()=>this.stats.extractedFiles++});
+        await step('resource-bundle',()=>extractResourceBundle({pack,index:this.index,base:this.base,fetcher:this.fetcher,cache,signal,count,onFile:()=>{lifetime.renew('resource-bundle-cache');this.stats.extractedFiles++;}}));
       }catch(error){
         if(['QuotaExceededError','NotAllowedError','SecurityError'].includes(error.name)){
           this.storageUnavailable=true;state.storageAvailable=false;onProgress({...state,ratio:0,unavailable:true});return state;
@@ -61,7 +70,7 @@ export class ResourceDownloads {
       // This page writes the stream to CacheStorage. Tell the worker not to tee
       // and write a second copy of large player textures at the same time.
       this.stats.fileRequests++;
-      const response=await this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'},signal});
+      const response=await step('resource-response',()=>this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'},signal}),response=>{response.body?.cancel().catch(()=>{});});
       if(signal.aborted){await response.body?.cancel().catch(()=>{});signal.throwIfAborted();}
       if(!response.ok)throw new Error(`리소스 다운로드 실패 (${response.status})`);
       let received=0;const reader=response.body?.getReader();
@@ -89,9 +98,13 @@ export class ResourceDownloads {
         headers.delete('Content-Encoding');headers.set('Content-Length',String(size));
         let data=body;
         if(!reader){data=await response.arrayBuffer();received=data.byteLength;if(received!==size)throw incomplete();count(received);}
-        await cache.put(url,new Response(data,{status:response.status,statusText:response.statusText,headers}));
+        await step('resource-cache-write',()=>cache.put(url,new Response(data,{status:response.status,statusText:response.statusText,headers})));
       }catch(error){
-        await reader?.cancel(error).catch(()=>{});await cache.delete?.(url);
+        reader?.cancel(error).catch(()=>{});
+        // A late failed write must not delete a successful same-hash retry.
+        // CacheStorage commits complete bodies atomically; aborted writes need
+        // no global cleanup or cache deletion while a new owner may be active.
+        if(!signal.aborted)await step('resource-cache-delete',()=>cache.delete?.(url));
         if(['QuotaExceededError','NotAllowedError','SecurityError'].includes(error.name)){
           this.storageUnavailable=true;state.storageAvailable=false;
           onProgress({...state,ratio:0,unavailable:true});return state;

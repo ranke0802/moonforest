@@ -49,7 +49,7 @@ function fixture(){
  class Animator{constructor(){this.durations={};}dispose(){}transition(){}update(){}}
  class Controller{constructor(){}cancelAttack(){}}
  class Equipment{dispose(){}}
- const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release'),cancelResourceDownloads(){gate.cancelledDownloads=(gate.cancelledDownloads??0)+1;}};
+ const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:()=>gate.at('sky')},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release'),cancelResourceDownloads(){gate.cancelledDownloads=(gate.cancelledDownloads??0)+1;}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
  const dependencies={FrameLoop,configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
@@ -164,7 +164,17 @@ for(const stage of ['release','map-model','map-download'])test(`actual map ${sta
  results.push({kind:'map-timeout-manual-retry',stage,sameDestination:true,playerIdentityAndResourcesPreserved:true,automaticRetries:0,manualRetries:1});
 });
 
+test('actual forest transition prepares map while bounded sky work is pending, revealing only after both finish',async()=>{
+ const f=fixture();await success(f);f.gate.hold('sky');const previous=f.runtime.playerState();
+ const before=f.gate.counts['map-model']??0,job=f.runtime.transition.travel('https://example.test/?character=warrior-v4&arrival=portal');
+ await until(()=>f.gate.reached==='sky'&&(f.gate.counts['map-model']??0)>before,'map preparation should progress independently of sky');
+ assert.equal(f.runtime.snapshot().ready,false);assert.equal(f.doc.querySelector('#loading').hidden,false);assert.equal(f.raf.length,0);
+ f.gate.release();await flushFrame(f);await flushFrame(f);assert.equal(await job,true);assert.equal(f.runtime.snapshot().ready,true);
+ assert.equal(f.runtime.playerState().actor,previous.actor);assert.equal(f.runtime.playerState().hp,previous.hp);assert.equal(f.runtime.playerState().potions,previous.potions);
+ results.push({kind:'overlapped-sky-and-map-preparation',mapPreparedBeforeSky:true,curtainUntilBothReady:true,playerIdentityAndResourcesPreserved:true});
+});
+
 test.after(()=>{
  const path=new URL('../reports/ios-uniform-fix/',import.meta.url);mkdirSync(path,{recursive:true});
- writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:14,completedCases:results.length,success:results.length===14,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
+ writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:15,completedCases:results.length,success:results.length===15,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
 });

@@ -1,0 +1,127 @@
+{
+  "revision": "owned-meshopt-worker-bounded-manual-recovery-v1",
+  "status": "SOURCE_LOCKED_READY_FOR_INDEPENDENT_REVIEW",
+  "sourceFiles": [
+    "src/meshopt-worker-supervisor.js",
+    "src/village-meshopt.js",
+    "tests/meshopt-worker-supervisor.test.js"
+  ],
+  "sourceSha256": {
+    "src/meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784",
+    "src/village-meshopt.js": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164",
+    "tests/meshopt-worker-supervisor.test.js": "1da0e57bd575e50480e6ae9c1c982fe36479b7990a4ad0695c31507cea5af726"
+  },
+  "rootCauses": {
+    "sdk": "Babylon9.31actualimplementation",
+    "decoderSha256": "fabafaaa29cbb1cfa367f20e896d7f6e95b86e575e2ea86ddb6f8cca1a87152d",
+    "initializationRejectionPersistent": true,
+    "workerFatalAndSilentResponse": "ActualSDKrequests and later manualdecode retry stay pending; worker registers only onmessage, without error/deadline recovery.",
+    "idle1000ms": "Not a proven decode-cancellation cause. Official useWorkers(0) queues emptyclose behind pending decode; actual decoder test completes both jobs exactly and terminatecount stays0.",
+    "idleTemporaryOverlap": "A later SDK request before the closing worker drains can create another physical worker; owned supervisor retires only when it has no active/queued jobs."
+  },
+  "implementation": {
+    "ownedWorkerLimit": 1,
+    "decoder": "Originalcontent-addressed pinned script imported inside classicworker; real WASMdecodeGltfBuffer used; nestedworkers0.",
+    "globalOwnership": "Existing external MeshoptCompression._Default is preserved without dispose/reset; diagnosticstatus external. Only install when Default is absent.",
+    "totalAwaitDeadlineMs": 45000,
+    "phaseDiagnostics": [
+      "queueMs",
+      "initMs",
+      "decodeMs",
+      "totalMs"
+    ],
+    "nonrenewingDeadline": "Queue/init/decode transitions never renew total45s.44sinit+1sdecode timesout,not44+44.",
+    "failure": "First triggering job/stage retained; all waiters fail once; failedlatch blocks newjobs; no automatic failedjob replay.",
+    "recovery": "Only explicit initializeVillageMeshopt re-entry clears owned failedlatch. Next request creates a cleanworker.",
+    "healthySharing": "No map AbortSignal/engine/scene ownership is held by decode API. One map stopping its await cannot terminate a healthy shared job or another caller.",
+    "idleReleaseMs": 1000,
+    "diagnosticExport": "inspectMeshoptWorkerPool from src/meshopt-worker-supervisor.js",
+    "input": "One copy only when queuedjob is sent; callercompressed buffer is never detached.",
+    "result": "No quality conversion. Returned decoded bytes pass to normal Babylon glTF/accessor paths and existing bounded geometry decodecache."
+  },
+  "lifecycle": {
+    "scope": "Module/page-level decoder because SDKdecode API has no engine argument.",
+    "normalIdle": "Owned WASM worker terminates after1s only when active/queue areempty.",
+    "shutdown": "Explicit owned adapter.dispose releasesworker,pendingjobsandblobURL; never automatically invoked on individualmap/engine cancellation.",
+    "retainedBetweenIdleUses": "One small BlobURL/functionfactory+bounded diagnosticrecords remain until explicit dispose/documentteardown; no scene,material,textureorengine retained.",
+    "externalModeLimit": "An already external poisoneddecoder is not repaired behind its ownerback; preserving externalsharedwork is intentional. Workerlessmode is reported and leaves SDK behavior unchanged."
+  },
+  "validation": {
+    "focusedTests": 34,
+    "passed": 34,
+    "failed": 0,
+    "durationMs": 5224.454,
+    "newSupervisorTests": 14,
+    "realPinnedWasm": {
+      "scope": "Actual pinned decoder worker body+WASM over Node WebWorker API adapter, no browser/device/GPU claim.",
+      "shippedModelViews": 24,
+      "models": [
+        "./content/15334b9ae0090dee2c9bdd9f45844e9e25201793c79afd27a7c6a7ccf0ad9629.gltf",
+        "./content/29c58722102c2edeb1fce7ac7b3e2df52ca05ae13579860a3aec3d9f5c003fb7.gltf",
+        "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf"
+      ],
+      "generatedViewByteIdentical": true,
+      "allShippedViewsByteIdentical": true,
+      "physicalWorkersCreated": 1,
+      "nestedWorkers": 0,
+      "diagnostics": {
+        "status": "idle",
+        "maxWorkers": 1,
+        "totalAwaitTimeoutMs": 45000,
+        "queueTimeoutMs": 45000,
+        "initTimeoutMs": 45000,
+        "decodeTimeoutMs": 45000,
+        "idleReleaseMs": 1000,
+        "queued": 0,
+        "active": null,
+        "counts": {
+          "created": 1,
+          "terminated": 0,
+          "completed": 25,
+          "failed": 0,
+          "recoveries": 0,
+          "workerFaults": 0
+        },
+        "lastFailure": null,
+        "lastCompleted": {
+          "id": 25,
+          "stage": "decode",
+          "bytes": 78876,
+          "queueMs": 0.15550000000007458,
+          "initMs": 0,
+          "decodeMs": 37.175899999999956,
+          "totalMs": 37.33510000000001
+        }
+      }
+    },
+    "checks": [
+      "fatal/error/messageerror/initerror/decodeerror",
+      "missinginitresponse",
+      "missingdecoderesponse",
+      "overall45snonrenewingcap",
+      "firstfailurepreservation",
+      "queuedwaitertimeoutpreservesactivejob",
+      "onecancelledmapwaiterpreservesotherwaiter",
+      "idlejobserialization",
+      "explicitactualinitializeVillageMeshoptrecovery",
+      "externalSDKdefaultpreservation"
+    ]
+  },
+  "preserved": {
+    "player8K": true,
+    "backgroundMax4K": true,
+    "existingLOD": true,
+    "decodedGeometryBitIdentity": true,
+    "pinnedDecoderScriptUnchanged": true,
+    "assetManifestOrModelChanges": false,
+    "newAssets": false,
+    "browserAutomation": false,
+    "commitOrDeployByThisAgent": false
+  },
+  "limits": [
+    "Injected failure scenarios and actual WASM decoding use isolatedVM/NodeWorker APIadapters,not browserautomation or physicaldevice observations.",
+    "No physicalGalaxyS23/iPhone14Pro GPU,thermalorend-to-endconnection measurement.",
+    "A legitimate decode takinglongerthan45s is also rejected; this is a boundedfailurepolicy,notspeedupclaimevidence.",
+    "Root owns fullsuite/main integration/deployment; stable_camera independently reviews this source."
+  ]
+}

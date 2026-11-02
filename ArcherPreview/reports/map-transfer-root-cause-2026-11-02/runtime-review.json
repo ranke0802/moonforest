@@ -1,0 +1,129 @@
+{
+  "status": "PASS",
+  "baseRevision": "1f881ac",
+  "sourceLocked": true,
+  "scope": "KTX2 worker lifecycle and recovery only. Parent owns startup/resource/main and final full-suite/build/deployment.",
+  "confirmedMechanisms": [
+    {
+      "name": "SDK worker initialization rejection poisons a single-worker pool",
+      "evidence": "ktx-pool-readonly.json",
+      "result": "Original and explicit retry remained pending; rejected worker slot stayed non-idle and queued action could not run."
+    },
+    {
+      "name": "SDK returns an errored worker to idle without health recovery",
+      "evidence": "ktx-pool-readonly.json",
+      "result": "A fatal/no-response worker boundary was reused; explicit retry could remain pending."
+    }
+  ],
+  "changes": [
+    "Single worker supervisor reuses the official SDK applyConfig/workerFunction/initializeWebWorker; no decoder/transcoder or SDK source copy is deployed.",
+    "Failed initialization, worker/channel errors and total-await timeout terminate that exact worker, settle queued jobs, and latch failure. Failed jobs are never retried automatically.",
+    "The next explicit map setup/manual retry invokes initializeVillageKtx2 and recovers the latch; a fresh worker is created only when a new decode request arrives.",
+    "Final InternalTexture owner release cancels only its active/queued decode. Shared references survive. Same-turn cancellation is coalesced before pumping, so 20 old queued owners cause zero replacement-worker churn.",
+    "Healthy queue is serial and copied only at dispatch; existing caps, decoder options, compressed format, mipmaps and output option metadata remain intact.",
+    "Owner metadata is a non-enumerable Symbol on a private options copy and is excluded from cache keys and worker message options.",
+    "Engine disposal and stale worker completion cannot retain an active slot, publish a decoded result or install a texture into a newer map.",
+    "Existing external/native pools and workerless runtimes are preserved and explicitly identified in diagnostics.",
+    "Root failure stage/detail is preserved separately from errors of jobs waiting in the queue; successful manual recovery marks the historical failure recovered.",
+    "Before invoking SDK initialization in its scheduled microtask, verify the same live lease/job; same-turn cancellation cannot attach late init listeners to an already terminated worker."
+  ],
+  "diagnostics": {
+    "export": "inspectKtxWorkerPool",
+    "module": "src/ktx-worker-supervisor.js",
+    "fields": [
+      "status",
+      "maxWorkers",
+      "totalAwaitTimeoutMs",
+      "queued",
+      "active.stage",
+      "active.queuedMs",
+      "active.initMs",
+      "active.activeDecodeMs",
+      "active.totalMs",
+      "counts",
+      "lastFailure",
+      "lastCompleted"
+    ],
+    "codes": [
+      "KTX_WORKER_CREATE",
+      "KTX_WORKER_INIT",
+      "KTX_WORKER_ERROR",
+      "KTX_WORKER_POST",
+      "KTX_WORKER_TIMEOUT",
+      "KTX_TRANSCODE_ERROR",
+      "KTX_EXTERNAL_POOL_PRESERVED"
+    ],
+    "totalAwaitMs": 45000,
+    "automaticRetries": 0,
+    "idleReleaseMs": 1000
+  },
+  "verification": {
+    "newTests": 12,
+    "newPassed": 12,
+    "newFailed": 0,
+    "focusedTests": 44,
+    "focusedPassed": 44,
+    "focusedFailed": 0,
+    "actualCodecCase": {
+      "case": "real-ETC1S-WASM-native-adapter-byte-equivalence",
+      "passed": true,
+      "transcodedFormat": 37492,
+      "mips": 9,
+      "mipSha256": [
+        "27d6e63a5ee344c99aabcf290caab40c547db0dc812be275d2e8df6b559102f6",
+        "de7b29e548a2101298beffd10d09ff7f68ecf3da53804d2986287ea84922edfb",
+        "1bdad55122cf99fe6484e069c65a578572064f91e505782558474e43af43b511",
+        "8c0f06726bfef35899451ed42dc05ae2bd66691e1c9b79c36a80257a196ec652",
+        "0dec56e511cf65435281b8e54b3568ea1b37862c4eb7395be98534fc8ee247d5",
+        "bbd3afe77d0f1ac04dbcb9d24cac98ff83773841d421656528dca8a7e0edcd20",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+        "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8"
+      ],
+      "cacheHit": true,
+      "actualCodec": true,
+      "workerSimulation": "official SDK worker script in isolated VM, not a browser/physical worker/GPU"
+    },
+    "evidence": [
+      "ktx-pool-readonly.json",
+      "ktx-supervisor-validation.json",
+      "ktx-focused.log",
+      "ktx-final-12.log"
+    ],
+    "finalUnitLog": "ktx-final-12.log",
+    "focusedLogScope": "44/44 before the final one-guard same-turn init-listener correction; final supervisor suite then passed 12/12. Parent executes the complete suite after this source lock."
+  },
+  "preserved": {
+    "playerTextureMax": 8192,
+    "backgroundTextureMax": 4096,
+    "LOD": "unchanged",
+    "compressionFormats": "unchanged",
+    "newAssets": 0,
+    "activeWorkersMaximum": 1
+  },
+  "limitations": [
+    "These deterministic SDK failure mechanisms are reachable, but no new user-device trace proves which one caused a specific reported failed journey.",
+    "No browser automation, actual browser worker scheduler, GPU timing or phone temperature measurement. The codec comparison runs the official worker source and shipped JavaScript/WASM in an isolated VM.",
+    "The 45-second ceiling is total decode wait including queue and worker initialization. A legitimately slower first 8K decode can also hit this ceiling; queue/init/active timing is reported separately.",
+    "A timeout callback cannot preempt synchronous JavaScript/WASM execution before the event loop runs. Worker termination stops that owned worker; it does not cancel unrelated normal/shared textures.",
+    "If an external/native pool was already registered before installation, it is preserved rather than silently taking ownership; inspect reports external-pool and this supervisor does not claim to repair that foreign pool."
+  ],
+  "ownedSources": [
+    "src/ktx-worker-supervisor.js",
+    "src/village-ktx2.js",
+    "src/map-texture-lifetime.js"
+  ],
+  "ownedTests": [
+    "tests/ktx-worker-supervisor.test.js"
+  ],
+  "sourceSha256": {
+    "src/ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "src/village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "src/map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af"
+  },
+  "testSha256": {
+    "tests/ktx-worker-supervisor.test.js": "8f8c37eca08b7f3d9448ae72efd6699b21a4e71ef2be821e8a55d798c9c304cc"
+  },
+  "browserAutomation": false,
+  "commitBuildPushByThisAgent": false
+}

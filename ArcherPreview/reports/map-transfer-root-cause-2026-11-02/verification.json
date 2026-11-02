@@ -1,0 +1,116 @@
+{
+  "status": "VERIFIED_BEFORE_SYNC",
+  "baseRevision": "1f881ac9c48ad5e1a04ae21154a463539267f6d0",
+  "createdAt": "2026-11-02T02:21:09.014Z",
+  "tests": {
+    "total": 1046,
+    "passed": 1046,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "sourceHashes": {
+    "src/main.js": "d52fc52f084eaf99eb3ea7d8595dc0827f79c795610dba1bd5eb77b650fd18b9",
+    "src/map-load-lifetime.js": "9f98578f7fc12a7b46b4c5f8ac169a5a378935b8fe2707471943829184f83f9a",
+    "src/map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+    "src/resource-downloads.js": "b8ccf37cd5f8c22b298f871002a185d6725cf10677c7fed67176f2316c6153f1",
+    "src/startup-resources.js": "6632c51988e3c2e98b5d35da7cab4ebfb75cf922d5b1d711de30e6c6397edd90",
+    "src/village-streamed-environment.js": "71901a6989041133a2ffc8e412f9a8175b165f1e34e33a94c5dd8f750cb2db60",
+    "src/sky.js": "981547c5f8da56922107428835376cddb4d6fde1a98e1b91aba7d61b5e8869fe",
+    "src/scene-ready.js": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1",
+    "src/village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "src/ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "src/village-meshopt.js": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164",
+    "src/meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784"
+  },
+  "mainDomCases": 15,
+  "ktxCases": 12,
+  "cacheComparison": {
+    "visits": [
+      {
+        "character": "warrior-v5",
+        "models": 14,
+        "eliminatedRepeatedFileChecks": 52,
+        "eliminatedRepeatedKeyScans": 0,
+        "initialKeys": 1,
+        "initialMatches": 0,
+        "networkBytes": 0
+      },
+      {
+        "character": "warrior-v4",
+        "models": 28,
+        "eliminatedRepeatedFileChecks": 102,
+        "eliminatedRepeatedKeyScans": 0,
+        "initialKeys": 1,
+        "initialMatches": 0,
+        "networkBytes": 0
+      },
+      {
+        "character": "warrior-v3",
+        "models": 46,
+        "eliminatedRepeatedFileChecks": 225,
+        "eliminatedRepeatedKeyScans": 0,
+        "initialKeys": 1,
+        "initialMatches": 0,
+        "networkBytes": 0
+      },
+      {
+        "character": "warrior-v4",
+        "models": 28,
+        "eliminatedRepeatedFileChecks": 102,
+        "eliminatedRepeatedKeyScans": 0,
+        "initialKeys": 1,
+        "initialMatches": 0,
+        "networkBytes": 0
+      },
+      {
+        "character": "warrior-v5",
+        "models": 14,
+        "eliminatedRepeatedFileChecks": 52,
+        "eliminatedRepeatedKeyScans": 0,
+        "initialKeys": 1,
+        "initialMatches": 0,
+        "networkBytes": 0
+      }
+    ],
+    "quality": "existing actual resource graph and LOD plan unchanged",
+    "phoneSpeedMeasured": false
+  },
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "resourceFiles": 1037,
+  "bundles": 194,
+  "preservation": {
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "lod": true,
+    "newAssets": false,
+    "browserAutomation": false
+  },
+  "limitations": [
+    "No physical S23/iPhone GPU, temperature or final-screen timing measurement.",
+    "The old supplied log is an entry-performance sample, not proof of which current failure branch the phone reached.",
+    "Worker fault tests inject failures at the real SDK/protocol boundary; actual pinned WASM bytes are compared separately.",
+    "Healthy large downloads have an idle-progress deadline, not a total30second cap.",
+    "Unrelated externally installed decoder pools and workerless hosts are not forcibly reset."
+  ],
+  "meshoptShippedViews": 24,
+  "meshoptByteIdentity": true,
+  "scopedReadinessCases": 19,
+  "independentReviews": {
+    "ktx": "PASS",
+    "meshopt": "NO_BLOCKING_FINDING"
+  },
+  "reviewedHashes": {
+    "src/ktx-worker-supervisor.js": "03048b61182aaac85e73c4ab60e355113b415c2d355a64a63bdd508a789908ff",
+    "src/map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+    "src/village-ktx2.js": "ae479fd0b6ac8d69b3cf8ecdd182003aee43d301365f4d39f645c7d9b95b263c",
+    "tests/ktx-worker-supervisor.test.js": "8f8c37eca08b7f3d9448ae72efd6699b21a4e71ef2be821e8a55d798c9c304cc",
+    "src/meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784",
+    "src/village-meshopt.js": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164",
+    "tests/meshopt-worker-supervisor.test.js": "1da0e57bd575e50480e6ae9c1c982fe36479b7990a4ad0695c31507cea5af726",
+    "src/sky.js": "981547c5f8da56922107428835376cddb4d6fde1a98e1b91aba7d61b5e8869fe",
+    "src/scene-ready.js": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1",
+    "tests/sky-load-lifetime.test.js": "a8031765bb3e8511beb6b9fec210477ccd8c953d24bb96976e78b868fd431f6e",
+    "tests/scene-ready-scope.test.js": "2325eb23e4622ef4d777c07b51e80cd979cad8e120aa2fd1cc813995ec0240d3"
+  }
+}

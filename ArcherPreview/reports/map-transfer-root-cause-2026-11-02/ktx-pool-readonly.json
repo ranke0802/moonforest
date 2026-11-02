@@ -1,0 +1,39 @@
+{
+  "head": "1f881ac",
+  "mode": "READ_ONLY_SOURCE",
+  "sdk": "Babylon.js installed 9.31.0",
+  "cases": [
+    {
+      "case": "SDK worker initialization rejects",
+      "initialDecodeSettled": false,
+      "explicitRetrySettled": false,
+      "workerCreates": 1,
+      "workerSlots": 1,
+      "workerIdle": false,
+      "queuedActions": 1,
+      "unhandledRejections": [
+        "controlled worker initialization/import failure"
+      ],
+      "verdict": "CONFIRMED: caller deadlines alone cannot recover the poisoned pool."
+    },
+    {
+      "case": "SDK returns a worker that emitted error to idle pool",
+      "firstDecodeRejected": true,
+      "errorWorkerReused": true,
+      "explicitRetrySettled": false,
+      "workerCreates": 1,
+      "posts": [
+        "setDefaultDecoderOptions",
+        "decode",
+        "setDefaultDecoderOptions",
+        "decode"
+      ],
+      "verdict": "CONFIRMED under injected fatal/no-response worker boundary: SDK has no replacement/health recovery."
+    }
+  ],
+  "limitations": [
+    "No browser, real worker process, KTX transcode or GPU ran. Real installed SDK _decodeAsync and AutoReleaseWorkerPool exercised against controlled worker IPC/initialization boundaries.",
+    "These are deterministic reachable failure mechanisms. Whether the user device hit one requires actual failure-stage/decoder logs."
+  ],
+  "runtimeSourceChanges": 0
+}

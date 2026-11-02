@@ -15,12 +15,14 @@ export class MapLoadLifetime {
   constructor({signal,timeoutMs=MAP_MODEL_TIMEOUT_MS,timers={},stage='model'}={}){
     if(!Number.isFinite(timeoutMs)||timeoutMs<=0)throw new RangeError('Invalid map model timeout');
     this.timeoutMs=timeoutMs;this.stage=stage;this.controller=new AbortController();this.signal=this.controller.signal;
-    this.now=timers.now??(()=>performance.now());this.cancelTimer=timers.clearTimeout??clearTimeout;
+    this.now=timers.now??(()=>performance.now());this.cancelTimer=timers.clearTimeout??clearTimeout;this.scheduleTimer=timers.setTimeout??setTimeout;
     this.started=this.now();this.parent=signal;this.forward=()=>this.abort(signal.reason??mapLoadAbortError());
     if(signal?.aborted)this.forward();else signal?.addEventListener('abort',this.forward,{once:true});
-    if(!this.signal.aborted)this.timer=(timers.setTimeout??setTimeout)(()=>this.abort(mapLoadTimeoutError(timeoutMs,this.stage)),timeoutMs);
+    if(!this.signal.aborted)this.timer=this.scheduleTimer(()=>this.abort(mapLoadTimeoutError(timeoutMs,this.stage)),timeoutMs);
   }
   abort(reason=mapLoadAbortError()){if(!this.signal.aborted)this.controller.abort(reason);}
+  // Opt-in idle deadline for byte/cache progress. Model deadlines never renew.
+  renew(stage=this.stage){this.check();if(this.closed)return;this.stage=stage;this.started=this.now();if(this.timer!==undefined)this.cancelTimer(this.timer);this.timer=this.scheduleTimer(()=>this.abort(mapLoadTimeoutError(this.timeoutMs,this.stage)),this.timeoutMs);}
   noteCleanupError(error){
     this.cleanupFailures=(this.cleanupFailures??0)+1;this.lastCleanupError=String(error?.message??error).slice(0,240);
     const reason=this.signal.reason;if(reason instanceof Error)try{reason.cleanupFailures=this.cleanupFailures;reason.lastCleanupError=this.lastCleanupError;}catch{/* External abort reasons can be frozen; the local bounded record remains available. */}
