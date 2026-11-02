@@ -348,7 +348,7 @@ function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
   // A captured HUD pointer can be released by the browser before pointerup.
   // Stop holding, but retain an already accepted heavy attack for recovery.
   // Global blur/pause/cancel still clears everything, including this buffer.
-  if(source&&preserveCompletedCharge&&controller?.queuedAttack==='judgment'){controller.setAttackHeld(false);return;}
+  if(source&&preserveCompletedCharge){controller?.syncHeldCharge?.();if(controller?.queuedAttack==='judgment'){controller.setAttackHeld(false);return;}}
   if(controller?.cancelAttackInput)controller.cancelAttackInput();
   else controller?.setAttackHeld(false);
 }
@@ -455,7 +455,7 @@ async function loadCharacter() {
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
     animator = new CharacterAnimator(container.animationGroups, config.animations);
     const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
-    controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds });
+    controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds, ...(isV2()?{holdNow:()=>performance.now()}:{}) });
     applyAttackSpeed(readAttackSpeed());
     if(isV2())motionSpeedControls.apply(controller);
     motionSpeedControls.setVisible(isV2());

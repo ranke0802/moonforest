@@ -1,0 +1,1040 @@
+{
+  "passed": true,
+  "chests": 29,
+  "counts": {
+    "village": 6,
+    "great-plains": 9,
+    "monster-forest": 7,
+    "witch-cave": 7
+  },
+  "points": [
+    {
+      "id": "village-relief",
+      "map": "village",
+      "tier": 3,
+      "x": 4.63,
+      "y": 0.11999999731779099,
+      "z": -3.22,
+      "yaw": -0.2618,
+      "context": {
+        "anchorId": "tree-01-round-oak-131",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 2.4181466448549034,
+        "distance": 2.804514218184675,
+        "anchorPosition": {
+          "x": 5,
+          "z": -6
+        }
+      },
+      "footprintHeightRange": 0,
+      "approach": {
+        "x": 4.215888581691065,
+        "z": -1.6745189314565638,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 1
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "village-treasure-orchard",
+      "map": "village",
+      "tier": 1,
+      "x": -23.54,
+      "y": 0.11999999731779099,
+      "z": 11,
+      "yaw": 1.0472,
+      "context": {
+        "anchorId": "home-07",
+        "kind": "house",
+        "asset": "house-04-forest-hut",
+        "gap": 1.4260189151134173,
+        "distance": 3.996448423287858,
+        "anchorPosition": {
+          "x": -27,
+          "z": 9
+        }
+      },
+      "footprintHeightRange": 0,
+      "approach": {
+        "x": -22.15435739490633,
+        "z": 11.799996606836073,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 32
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "village-treasure-stable",
+      "map": "village",
+      "tier": 1,
+      "x": 17.8,
+      "y": 0.12017586678266526,
+      "z": 17,
+      "yaw": 1.5707963267948966,
+      "context": {
+        "anchorId": "home-19",
+        "kind": "house",
+        "asset": "house-02-tall-home",
+        "gap": 1.4598804587721401,
+        "distance": 4.800000000000001,
+        "anchorPosition": {
+          "x": 13,
+          "z": 17
+        }
+      },
+      "footprintHeightRange": 0.007955735977273518,
+      "approach": {
+        "x": 19.400000000000002,
+        "z": 17,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 29
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "village-treasure-garden",
+      "map": "village",
+      "tier": 2,
+      "x": -24.32,
+      "y": 0.11999999731779099,
+      "z": -7.49,
+      "yaw": 2.8798,
+      "context": {
+        "anchorId": "home-06",
+        "kind": "house",
+        "asset": "house-01-cottage",
+        "gap": 1.4645704953347685,
+        "distance": 4.40028408173836,
+        "anchorPosition": {
+          "x": -27,
+          "z": -4
+        }
+      },
+      "footprintHeightRange": 0.0002463145157147323,
+      "approach": {
+        "x": -23.905899935440136,
+        "z": -9.035484110734082,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 35
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "village-treasure-chapel",
+      "map": "village",
+      "tier": 2,
+      "x": 10.86,
+      "y": 0.11999999731779099,
+      "z": -17.04,
+      "yaw": 1.8326,
+      "context": {
+        "anchorId": "home-20",
+        "kind": "house",
+        "asset": "house-04-forest-hut",
+        "gap": 1.4963708036219896,
+        "distance": 3.9976493092816425,
+        "anchorPosition": {
+          "x": 7,
+          "z": -16
+        }
+      },
+      "footprintHeightRange": 0,
+      "approach": {
+        "x": 12.405479547416835,
+        "z": -17.45411709517509,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 43
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "village-treasure-north-wall",
+      "map": "village",
+      "tier": 3,
+      "x": -5.8,
+      "y": 0.11999999731779099,
+      "z": -29,
+      "yaw": 1.5707963267948966,
+      "context": {
+        "anchorId": "home-02",
+        "kind": "house",
+        "asset": "house-02-tall-home",
+        "gap": 1.0962052377959584,
+        "distance": 3.2,
+        "anchorPosition": {
+          "x": -9,
+          "z": -29
+        }
+      },
+      "footprintHeightRange": 0,
+      "approach": {
+        "x": -4.199999999999999,
+        "z": -29,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 6
+        },
+        "routeWaypoints": 49
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "supply-chest",
+      "map": "great-plains",
+      "tier": 1,
+      "x": 18,
+      "y": 0.2470906786620617,
+      "z": 81,
+      "yaw": 3.141592653589793,
+      "context": {
+        "anchorId": "meadow-oak-11",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 2.02842712474619,
+        "distance": 2.8284271247461903,
+        "anchorPosition": {
+          "x": 20,
+          "z": 83
+        }
+      },
+      "footprintHeightRange": 0.0023975843832193255,
+      "approach": {
+        "x": 18,
+        "z": 79.4,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 151
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "meadow-chest",
+      "map": "great-plains",
+      "tier": 1,
+      "x": -61.5,
+      "y": 2.8332912325859074,
+      "z": 58.5,
+      "yaw": 0.7,
+      "context": {
+        "anchorId": "meadow-oak-4",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 1.3213203435596428,
+        "distance": 2.121320343559643,
+        "anchorPosition": {
+          "x": -63,
+          "z": 57
+        }
+      },
+      "footprintHeightRange": 0.13446691413320622,
+      "approach": {
+        "x": -60.4692517004197,
+        "z": 59.72374749965518,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 125
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "lookout-chest",
+      "map": "great-plains",
+      "tier": 2,
+      "x": -30.2,
+      "y": 8.105825781822205,
+      "z": -23.7,
+      "yaw": 1.8849555921538759,
+      "context": {
+        "anchorId": "lookout-oak",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 1.211320791582797,
+        "distance": 1.931320791582797,
+        "anchorPosition": {
+          "x": -32,
+          "z": -23
+        }
+      },
+      "footprintHeightRange": 0.014004182342464588,
+      "approach": {
+        "x": -28.678309573927752,
+        "z": -24.194427190999914,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 80
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-village-grove",
+      "map": "great-plains",
+      "tier": 1,
+      "x": -78.02,
+      "y": 0.2767135947942736,
+      "z": -23.98,
+      "yaw": 2.3562,
+      "context": {
+        "anchorId": "grove-gate-cart",
+        "kind": "cart",
+        "asset": "handcart",
+        "gap": 1.2001428534987313,
+        "distance": 2.8001428534987314,
+        "anchorPosition": {
+          "x": -80,
+          "z": -22
+        }
+      },
+      "footprintHeightRange": 0.013925592862508274,
+      "approach": {
+        "x": -76.88863538375446,
+        "z": -25.111377083517073,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 1
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-stream-bank",
+      "map": "great-plains",
+      "tier": 2,
+      "x": -38.77,
+      "y": 0.5156973969191307,
+      "z": 60.91,
+      "yaw": 1.8326,
+      "context": {
+        "anchorId": "grove-meadow-south-tree-3",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 2.2576051588110864,
+        "distance": 2.8001051588110863,
+        "anchorPosition": {
+          "x": -41.3576693145332,
+          "z": 61.979839436094856
+        }
+      },
+      "footprintHeightRange": 0.07377483245659389,
+      "approach": {
+        "x": -37.22452045258317,
+        "z": 60.49588290482491,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 126
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-western-ridge",
+      "map": "great-plains",
+      "tier": 2,
+      "x": -56.59,
+      "y": 0.29141744121909063,
+      "z": -30.93,
+      "yaw": -1.309,
+      "context": {
+        "anchorId": "grove-lookout-west-tree-0",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 2.1443204670415588,
+        "distance": 2.8023204670415587,
+        "anchorPosition": {
+          "x": -54,
+          "z": -32
+        }
+      },
+      "footprintHeightRange": 0.06908990601307019,
+      "approach": {
+        "x": -58.135482589649186,
+        "z": -30.515894258562806,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 40
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-hill-grove",
+      "map": "great-plains",
+      "tier": 3,
+      "x": -45.59,
+      "y": 0.30278876289725315,
+      "z": -35.41,
+      "yaw": 1.5707963267948966,
+      "context": {
+        "anchorId": "grove-lookout-west-tree-2",
+        "kind": "tree",
+        "asset": "tree-02-slender-pine",
+        "gap": 2.298193108622237,
+        "distance": 2.802193108622237,
+        "anchorPosition": {
+          "x": -48.368664312445205,
+          "z": -35.04763160077982
+        }
+      },
+      "footprintHeightRange": 0.07172816816902622,
+      "approach": {
+        "x": -43.99,
+        "z": -35.41,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 59
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-forest-fringe",
+      "map": "great-plains",
+      "tier": 3,
+      "x": 40.69,
+      "y": 0.19837085310369662,
+      "z": -49.78,
+      "yaw": 1.5707963267948966,
+      "context": {
+        "anchorId": "grove-forest-middle-tree-2",
+        "kind": "tree",
+        "asset": "forest-01-sickly-oak",
+        "gap": 1.8600654214996986,
+        "distance": 2.7980654214996985,
+        "anchorPosition": {
+          "x": 37.91578430632596,
+          "z": -49.41544905984902
+        }
+      },
+      "footprintHeightRange": 0.030302941460582877,
+      "approach": {
+        "x": 42.29,
+        "z": -49.78,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 174
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "great-plains-treasure-forest-cache",
+      "map": "great-plains",
+      "tier": 4,
+      "x": 63.67,
+      "y": 0.29247365638613704,
+      "z": -77.01,
+      "yaw": 0.5236,
+      "context": {
+        "anchorId": "forest-north-14",
+        "kind": "tree",
+        "asset": "tree-01-round-oak",
+        "gap": 1.8968879267966798,
+        "distance": 2.7968879267966797,
+        "anchorPosition": {
+          "x": 62.269803476836756,
+          "z": -79.43116330956477
+        }
+      },
+      "footprintHeightRange": 0.008992775024871336,
+      "approach": {
+        "x": 64.47000169658017,
+        "z": -75.62436033346731,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -87,
+          "z": -32
+        },
+        "routeWaypoints": 204
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "goblin-relic",
+      "map": "monster-forest",
+      "tier": 3,
+      "x": 36.42,
+      "y": 0.19367763057351078,
+      "z": 7.21,
+      "yaw": -1.5707963267948966,
+      "context": {
+        "anchorId": "forest-forest-01-sickly-oak-62",
+        "kind": "tree",
+        "asset": "forest-01-sickly-oak",
+        "gap": 1.4779584649012023,
+        "distance": 2.001926219724451,
+        "anchorPosition": {
+          "x": 38.405192727374796,
+          "z": 6.951700901282144
+        }
+      },
+      "footprintHeightRange": 0.02966910362165609,
+      "approach": {
+        "x": 34.82,
+        "z": 7.21,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 57
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-trail-cache",
+      "map": "monster-forest",
+      "tier": 1,
+      "x": -36.13,
+      "y": 1.2263388073444375,
+      "z": 29.84,
+      "yaw": 2.618,
+      "context": {
+        "anchorId": "forest-forest-01-sickly-oak-7",
+        "kind": "tree",
+        "asset": "forest-01-sickly-oak",
+        "gap": 2.2624999590461394,
+        "distance": 2.796211763677166,
+        "anchorPosition": {
+          "x": -36.49663657957189,
+          "z": 32.61207103910531
+        }
+      },
+      "footprintHeightRange": 0.1682778301379828,
+      "approach": {
+        "x": -35.330008482918814,
+        "z": 28.454354456364058,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 50
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-spring-cache",
+      "map": "monster-forest",
+      "tier": 2,
+      "x": -27.36,
+      "y": 0.30897878736257556,
+      "z": 26.75,
+      "yaw": 2.0944,
+      "context": {
+        "anchorId": "forest-tree-02-slender-pine-94",
+        "kind": "tree",
+        "asset": "tree-02-slender-pine",
+        "gap": 2.3106271739887374,
+        "distance": 2.7975205608928877,
+        "anchorPosition": {
+          "x": -29.780793006030507,
+          "z": 28.152099322648805
+        }
+      },
+      "footprintHeightRange": 0.05243639295210606,
+      "approach": {
+        "x": -25.974363272046958,
+        "z": 25.94999321368654,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 37
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-fallen-log",
+      "map": "monster-forest",
+      "tier": 2,
+      "x": -28.73,
+      "y": 0.17199029736220878,
+      "z": -7.14,
+      "yaw": 3.141592653589793,
+      "context": {
+        "anchorId": "forest-forest-01-sickly-oak-43",
+        "kind": "tree",
+        "asset": "forest-01-sickly-oak",
+        "gap": 2.0563867569666767,
+        "distance": 2.801512165202288,
+        "anchorPosition": {
+          "x": -28.727278910340097,
+          "z": -4.338489156285938
+        }
+      },
+      "footprintHeightRange": 0.17190301325200816,
+      "approach": {
+        "x": -28.73,
+        "z": -8.74,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 75
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-old-camp",
+      "map": "monster-forest",
+      "tier": 3,
+      "x": 14.68,
+      "y": 2.2805613160133364,
+      "z": 19.13,
+      "yaw": -0.7854,
+      "context": {
+        "anchorId": "forest-tree-02-slender-pine-135",
+        "kind": "tree",
+        "asset": "tree-02-slender-pine",
+        "gap": 2.2668708782627935,
+        "distance": 2.8022004662532116,
+        "anchorPosition": {
+          "x": 15.749707143754012,
+          "z": 16.54000886494348
+        }
+      },
+      "footprintHeightRange": 0.03923260386502214,
+      "approach": {
+        "x": 13.548627072224843,
+        "z": 20.261368772017978,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 40
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-stone-circle",
+      "map": "monster-forest",
+      "tier": 3,
+      "x": 8.94,
+      "y": 1.9941303992271422,
+      "z": -16.82,
+      "yaw": -1.309,
+      "context": {
+        "anchorId": "forest-tree-02-slender-pine-112",
+        "kind": "tree",
+        "asset": "tree-02-slender-pine",
+        "gap": 2.2682180207306994,
+        "distance": 2.803909017003561,
+        "anchorPosition": {
+          "x": 11.369431054408592,
+          "z": -18.219918043140037
+        }
+      },
+      "footprintHeightRange": 0.045984779078362514,
+      "approach": {
+        "x": 7.394517410350814,
+        "z": -16.405894258562807,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 86
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "monster-forest-treasure-cave-approach",
+      "map": "monster-forest",
+      "tier": 4,
+      "x": 20.12,
+      "y": 0.12936739452183244,
+      "z": -27.29,
+      "yaw": 2.3562,
+      "context": {
+        "anchorId": "forest-tree-02-slender-pine-48",
+        "kind": "tree",
+        "asset": "tree-02-slender-pine",
+        "gap": 2.2713148731366566,
+        "distance": 2.7981369315163067,
+        "anchorPosition": {
+          "x": 18.142549515803374,
+          "z": -25.310287932535132
+        }
+      },
+      "footprintHeightRange": 0.02825390994359435,
+      "approach": {
+        "x": 21.251364616245535,
+        "z": -28.421377083517072,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": 0,
+          "z": 46
+        },
+        "routeWaypoints": 107
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-entry-cache",
+      "map": "witch-cave",
+      "tier": 1,
+      "x": -40.4,
+      "y": 0.13231642723083506,
+      "z": 36.4,
+      "yaw": 0.5236,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": -41.73336855924704,
+          "z": 34.40447293047389,
+          "height": 1.4661596457323154,
+          "rise": 1.3338432185014804
+        }
+      },
+      "footprintHeightRange": 0.05560527802301771,
+      "approach": {
+        "x": -39.59999830341983,
+        "z": 37.7856396665327,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 1
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-guard-stores",
+      "map": "witch-cave",
+      "tier": 2,
+      "x": -31.2,
+      "y": 0.6399020767211917,
+      "z": 27.8,
+      "yaw": -2.0944,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": -29.20447293047389,
+          "z": 29.133368559247046,
+          "height": 2.380897473988128,
+          "rise": 1.740995397266936
+        }
+      },
+      "footprintHeightRange": 0.067256924218555,
+      "approach": {
+        "x": -32.58563672795304,
+        "z": 26.99999321368654,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 24
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-water-cache",
+      "map": "witch-cave",
+      "tier": 2,
+      "x": -12.2,
+      "y": 1.2787040185928344,
+      "z": 24.6,
+      "yaw": 2.8798,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": -12.668216772838708,
+          "z": 26.953884672967753,
+          "height": 2.63540685897004,
+          "rise": 1.3567028403772057
+        }
+      },
+      "footprintHeightRange": 0.018798745270007133,
+      "approach": {
+        "x": -11.785899935440135,
+        "z": 23.054515889265918,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 49
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-laboratory-cache",
+      "map": "witch-cave",
+      "tier": 3,
+      "x": -36.4,
+      "y": 2.9933959007263184,
+      "z": -21.6,
+      "yaw": 0.2618,
+      "context": {
+        "anchorId": "cavern-123",
+        "kind": "cart",
+        "asset": "handcart",
+        "gap": 1.2223748416156692,
+        "distance": 2.0223748416156693,
+        "anchorPosition": {
+          "x": -36.7,
+          "z": -23.6
+        }
+      },
+      "footprintHeightRange": 0.01775652991044696,
+      "approach": {
+        "x": -35.985888581691064,
+        "z": -20.054518931456563,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 86
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-lower-stores",
+      "map": "witch-cave",
+      "tier": 3,
+      "x": 8.2,
+      "y": 5.369260578155518,
+      "z": -30.4,
+      "yaw": 0,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": 8.2,
+          "z": -32.8,
+          "height": 7.390484619140571,
+          "rise": 2.021224040985053
+        }
+      },
+      "footprintHeightRange": 0.06380165752550848,
+      "approach": {
+        "x": 8.2,
+        "z": -28.799999999999997,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 129
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-sanctum-cache",
+      "map": "witch-cave",
+      "tier": 4,
+      "x": 40.6,
+      "y": 5.991169204711913,
+      "z": -26.4,
+      "yaw": -1.8326,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": 42.95388467296775,
+          "z": -25.93178322716129,
+          "height": 7.513871163165884,
+          "rise": 1.522701958453971
+        }
+      },
+      "footprintHeightRange": 0.025025958646709867,
+      "approach": {
+        "x": 39.05452045258317,
+        "z": -26.81411709517509,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 150
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    },
+    {
+      "id": "witch-cave-treasure-reliquary",
+      "map": "witch-cave",
+      "tier": 5,
+      "x": 34.2,
+      "y": 6.003577461242676,
+      "z": -41.2,
+      "yaw": 0.7854,
+      "context": {
+        "anchorId": "cave-terrain-wall",
+        "kind": "wall",
+        "source": "src/witch-cave-terrain.js",
+        "gap": 2.4,
+        "anchorPosition": {
+          "x": 35.53336855924705,
+          "z": -43.195527069526115,
+          "height": 7.503525427468724,
+          "rise": 1.4999479662260482
+        }
+      },
+      "footprintHeightRange": 0.01715625587196712,
+      "approach": {
+        "x": 35.33137292777516,
+        "z": -40.068631227982024,
+        "distance": 1.6,
+        "playerRadius": 0.35,
+        "lineOfSight": true,
+        "reachableFrom": {
+          "x": -42,
+          "z": 43
+        },
+        "routeWaypoints": 167
+      },
+      "runtimeFindFreeUnchanged": true,
+      "bodyClear": true
+    }
+  ],
+  "limitations": [
+    "Deterministic layout, actual terrain/collision/navigation and interaction-line checks. No browser automation, GPU rendering, visual-quality or phone-FPS claim.",
+    "Natural cave wall context is certified by an actual impassable terrain sample at least 1.2m higher within 2.4m; the lab cache uses the existing handcart.",
+    "Only chest coordinates and yaw changed. Original point identity/reward/model/condition metadata is checked against a d03de5b SHA-256 snapshot."
+  ],
+  "browserAutomation": false,
+  "newAssets": false
+}

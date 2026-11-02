@@ -1,0 +1,1901 @@
+{
+  "maps": {
+    "village": {
+      "placements": 698,
+      "kinds": {
+        "building": 21,
+        "landmark": 1,
+        "prop": 45,
+        "tower": 2,
+        "wall": 77,
+        "tree": 211,
+        "shrub": 175,
+        "rock": 26,
+        "fence": 52,
+        "garden": 35,
+        "ground-detail": 53
+      },
+      "uniqueAssets": 25,
+      "chests": 6,
+      "assets": [
+        {
+          "id": "house-01-cottage",
+          "count": 10,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4106,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 2050,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1136,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "house-02-tall-home",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4738,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 2818,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2336,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "house-03-workshop",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4915,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 2757,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2025,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "house-04-forest-hut",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4652,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3209,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2615,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "chapel",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4547,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 2273,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1180,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "well",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4822,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2466,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1556,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "market-stall",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4895,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2670,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1893,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "covered-wagon",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4611,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2305,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1371,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "handcart",
+          "count": 6,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4737,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2367,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1387,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "watchtower",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4590,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2767,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 2393,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wood-03-plank-gate",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4933,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2465,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1520,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wood-01-palisade",
+          "count": 8,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5265,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2631,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1647,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wall-01-straight",
+          "count": 54,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5142,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2570,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1130,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wall-03-breached",
+          "count": 6,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5264,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2632,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1158,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wall-02-corner",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5276,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2638,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1159,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "wood-02-cross-barricade",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5173,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2586,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1137,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "crate-barrel-cluster",
+          "count": 23,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4683,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3091,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1969,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "firewood",
+          "count": 13,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4815,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2407,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1719,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "tree-01-round-oak",
+          "count": 150,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4494,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3085,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2383,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "tree-02-slender-pine",
+          "count": 61,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5003,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3649,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 3000,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "bush",
+          "count": 175,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4359,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3314,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 2238,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-01-mossy-boulder",
+          "count": 71,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5255,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2626,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1156,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-02-jagged-outcrop",
+          "count": 8,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5268,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2634,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1158,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rail-fence",
+          "count": 52,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5184,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2592,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1140,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "garden-bed",
+          "count": 35,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 3308,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 1769,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1219,
+              "textureSize": 256
+            }
+          ]
+        }
+      ]
+    },
+    "great-plains": {
+      "placements": 1209,
+      "kinds": {
+        "landmark": 1,
+        "prop": 10,
+        "rock": 364,
+        "tree": 198,
+        "fence": 23,
+        "ground-detail": 580,
+        "shrub": 33
+      },
+      "uniqueAssets": 17,
+      "chests": 9,
+      "assets": [
+        {
+          "id": "village-approach",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 187522,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 187522,
+              "textureSize": 2048
+            },
+            {
+              "level": 2,
+              "triangles": 187522,
+              "textureSize": 2048
+            }
+          ]
+        },
+        {
+          "id": "waypost",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 1918,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 1918,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1918,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "covered-wagon",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4611,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2305,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1371,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "crate-barrel-cluster",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4683,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3091,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1969,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-01-mossy-boulder",
+          "count": 297,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5255,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2626,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1156,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "clue-bandage",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 1894,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 1894,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1894,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-02-jagged-outcrop",
+          "count": 67,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5268,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2634,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1158,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "tree-01-round-oak",
+          "count": 105,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4494,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3085,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2383,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-01-sickly-oak",
+          "count": 25,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2499,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1799,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "tree-02-slender-pine",
+          "count": 52,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5003,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3649,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 3000,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-02-dead-tree",
+          "count": 16,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4994,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2734,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1383,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "rail-fence",
+          "count": 23,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5184,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2592,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1140,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "grass-tuft",
+          "count": 580,
+          "lods": [
+            {
+              "level": 0,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "textureSize": 1024
+            }
+          ]
+        },
+        {
+          "id": "bush",
+          "count": 33,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4359,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3314,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 2238,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "handcart",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4737,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2367,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1387,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "firewood",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4815,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2407,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1719,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "forest-03-fallen-log",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2749,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1399,
+              "textureSize": 512
+            }
+          ]
+        }
+      ]
+    },
+    "monster-forest": {
+      "placements": 891,
+      "kinds": {
+        "tree": 368,
+        "prop": 18,
+        "rock": 148,
+        "shrub": 300,
+        "garden": 56,
+        "landmark": 1
+      },
+      "uniqueAssets": 10,
+      "chests": 7,
+      "assets": [
+        {
+          "id": "forest-01-sickly-oak",
+          "count": 128,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2499,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1799,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-02-dead-tree",
+          "count": 32,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4994,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2734,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1383,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "tree-02-slender-pine",
+          "count": 208,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5003,
+              "textureSize": 2048
+            },
+            {
+              "level": 1,
+              "triangles": 3649,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 3000,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-03-fallen-log",
+          "count": 18,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2749,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1399,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "rock-01-mossy-boulder",
+          "count": 84,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5255,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2626,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1156,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-02-jagged-outcrop",
+          "count": 64,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5268,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2634,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1158,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "forest-05-thorn-bramble",
+          "count": 140,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 3981,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3405,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 3066,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "bush",
+          "count": 160,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4359,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3314,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 2238,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "forest-04-poison-fungi",
+          "count": 56,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2750,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2000,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-06-witch-cave-mouth",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4809,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2605,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1305,
+              "textureSize": 512
+            }
+          ]
+        }
+      ]
+    },
+    "witch-cave": {
+      "placements": 159,
+      "kinds": {
+        "rock": 102,
+        "landmark": 1,
+        "prop": 56
+      },
+      "uniqueAssets": 29,
+      "chests": 7,
+      "assets": [
+        {
+          "id": "cave-01-eroded-wall",
+          "count": 55,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2750,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1400,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-06-stalactite-canopy",
+          "count": 8,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2750,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1400,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-s01-solid-cliff-base",
+          "count": 19,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2749,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1399,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-05-stalagmites",
+          "count": 7,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2750,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1400,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-03-great-column",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2749,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1399,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-02-rock-ledge",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2749,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1399,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-04-natural-arch",
+          "count": 3,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4998,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2747,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1397,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "forest-06-witch-cave-mouth",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4809,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2605,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1305,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-07-scree-ramp",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2750,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1398,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-08-timber-brace",
+          "count": 5,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3500,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2250,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-09-iron-gate-leaf",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4866,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3405,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2189,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-10-hand-winch",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4822,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3372,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2162,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-14-hidden-pressure-stone",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3499,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2250,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-11-sluice-shutter",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3500,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2250,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-12-lift-platform",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3500,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2250,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-13-votive-lantern",
+          "count": 20,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4587,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3209,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2059,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-20-modest-cot",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4999,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 4248,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 3499,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-17-faded-sacred-emblem",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4717,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3300,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2121,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "crate-barrel-cluster",
+          "count": 4,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4683,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3091,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1969,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "firewood",
+          "count": 3,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4815,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2407,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1719,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "cave-18-alchemy-workbench",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4736,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3312,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2120,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-19-apothecary-shelf",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5000,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3492,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2238,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "handcart",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4737,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2367,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1387,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "cave-15-resurrection-altar",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 3986,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2741,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1702,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-16-soul-collector-arm",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4723,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 3282,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 2095,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "rock-02-jagged-outcrop",
+          "count": 3,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5268,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2634,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1158,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "rock-01-mossy-boulder",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 5255,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2626,
+              "textureSize": 512
+            },
+            {
+              "level": 2,
+              "triangles": 1156,
+              "textureSize": 256
+            }
+          ]
+        },
+        {
+          "id": "cave-s03-dry-spillway-rock",
+          "count": 2,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4995,
+              "textureSize": 1024
+            },
+            {
+              "level": 1,
+              "triangles": 2747,
+              "textureSize": 1024
+            },
+            {
+              "level": 2,
+              "triangles": 1398,
+              "textureSize": 512
+            }
+          ]
+        },
+        {
+          "id": "cave-derived-laboratory-rock",
+          "count": 1,
+          "lods": [
+            {
+              "level": 0,
+              "triangles": 4512,
+              "textureSize": 0
+            },
+            {
+              "level": 1,
+              "triangles": 3158,
+              "textureSize": 0
+            },
+            {
+              "level": 2,
+              "triangles": 2374,
+              "textureSize": 0
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "plainsTriangleInventory": {
+    "before": {
+      "0": {
+        "knownTriangles": 3342630,
+        "unknownPlacements": 580
+      },
+      "1": {
+        "knownTriangles": 1960283,
+        "unknownPlacements": 580
+      },
+      "2": {
+        "knownTriangles": 1198021,
+        "unknownPlacements": 580
+      }
+    },
+    "after": {
+      "0": {
+        "knownTriangles": 3340479,
+        "unknownPlacements": 580
+      },
+      "1": {
+        "knownTriangles": 1957281,
+        "unknownPlacements": 580
+      },
+      "2": {
+        "knownTriangles": 1198775,
+        "unknownPlacements": 580
+      }
+    },
+    "meaning": "Every placement at the same LOD, one base pass. NOT actual submitted triangles or frame/GPU cost."
+  },
+  "findings": [
+    {
+      "priority": "P1",
+      "area": "일반 풍경의 여러 순회",
+      "status": "반복 경로 확인 / 실기기 비용 미측정",
+      "evidence": [
+        "src/village-visibility.js:33",
+        "src/village-demand.js:23",
+        "src/village-texture-streaming.js:31",
+        "src/village-outlines.js:173"
+      ],
+      "detail": "가시 셀·지오메트리 수요·고해상도 텍스처·외곽선이 서로 다른 주기로 같은 배치를 순회한다. 이동·회전 중 카메라 변화로 가시성 캐시가 자주 무효화된다.",
+      "proposal": "보수적으로 넓힌 셀 후보 목록을 공용으로 제공하고 각 기능의 정확한 조건은 그대로 적용. 카메라/플레이어/안개/모델 도착 revision을 분리한다.",
+      "validation": "이전과 동일한 카메라 궤적에서 보이는 객체/LOD/그림자 집합 동등성, 누락·깜빡임 0, CPU 각 구간 p95 비교.",
+      "risk": "최종 표시 목록을 그대로 공유하면 화면 밖 그림자와 회전 예비 로딩을 잃을 수 있어 금지."
+    },
+    {
+      "priority": "P1",
+      "area": "가림 판정 준비와 중복 제출",
+      "status": "코드 구조 확인 / 영향 미측정",
+      "evidence": [
+        "src/village-occlusion.js:44",
+        "src/village-occlusion.js:72"
+      ],
+      "detail": "beforeRender에서 view 배열·통계용 filter를 매 프레임 만들고, 쿼리 제출 전 준비용 bounding box draw와 실제 쿼리 draw가 연속 실행된다.",
+      "proposal": "고정 배열/카운터 재사용. 준비된 셰이더의 정확한 효과·상태가 같을 때만 준비용 draw 생략 후보를 검증한다.",
+      "validation": "가림 미지원/차가운 셰이더/카메라 이동/벽 뒤 시야 복원 회귀와 query GPU 비용을 함께 측정.",
+      "risk": "준비되지 않은 쿼리를 0으로 오인하면 오브젝트가 사라지므로 단순 삭제 금지."
+    },
+    {
+      "priority": "P1",
+      "area": "캐시 맵 이동의 모델 재구성",
+      "status": "구조적 재작업 확인 / 최신 이동시간 미측정",
+      "evidence": [
+        "src/map-decode-cache.js:14",
+        "src/village-demand.js:76",
+        "src/village-streamed-environment.js:133",
+        "src/map-shader-cache.js:9"
+      ],
+      "detail": "파일 캐시가 있어도 씬 메시/재질/인스턴스/LOD·셰이더 준비는 다시 필요하다. CPU 디코드 캐시는 geometry 8MiB + texture 24MiB, 셰이더 보존은 최대 12개로 제한되어 있다. 초기 모델 로드는 순차다.",
+      "proposal": "현재 캐시 hit/miss와 단계별 시간을 먼저 비교. 반복 이동에 쓰이는 소수 source의 메타데이터/불변 준비 결과를 바이트 예산 안에서 우선 유지. 독립 I/O만 겹치고 GPU 준비는 분산.",
+      "validation": "캐시 상태로 네 맵 3회 순환, 다운로드·모델·화면 시간을 분리, 시간초과/수동재시도/지연완료 격리와 자원 plateau 확인.",
+      "risk": "전체 맵/모든8K·4K텍스처 상주 또는 무제한 Promise.all은 메모리·발열·긴 정지를 악화시킬 수 있다."
+    },
+    {
+      "priority": "P1",
+      "area": "나뭇잎·거리색·외곽선의 화면 채움 비용",
+      "status": "GPU 병목 가설",
+      "evidence": [
+        "src/village-toon.js:34",
+        "src/village-toon.js:61",
+        "src/village-streamed-environment.js:33",
+        "src/village-outlines.js:130"
+      ],
+      "detail": "수목은 양면 렌더와 겹친 잎이 있고 본체·외곽선·그림자에서 반복 처리될 수 있다. 거리 감쇠와 fade에는 픽셀별 거리 계산이 포함된다. 화면을 넓힐수록 보이는 중첩이 늘 수 있다.",
+      "proposal": "같은 픽셀에서 중복되는 거리 계산을 하나로 공유하는 셰이더 후보부터 비교. 이후 기존 LOD별 재질/불필요한 플러그인 분기 제거 여부 검토.",
+      "validation": "동일 구도·해상도의 GPU time 지원기기 A/B. 미지원기기에서는 GPU 수치를 CPU로 대체하지 말고 frame/submit/전력 별도 기록.",
+      "risk": "잎 양면·alpha cutoff·외곽선을 임의로 끄거나 다른 LOD를 강제로 쓰는 해결은 제외."
+    },
+    {
+      "priority": "P1",
+      "area": "그림자 패스",
+      "status": "매 프레임 갱신 구조 확인 / 병목 여부 미측정",
+      "evidence": [
+        "src/world.js:77",
+        "src/scene-lighting.js:57",
+        "src/village-shadow-policy.js:3"
+      ],
+      "detail": "그림자는 모바일1024/PC2048 단일 맵, 기존 caster 제한28/44. 움직이는 포즈와 조명 정합을 위해 매 프레임 갱신한다. 60FPS는 초당 갱신 수도 증가한다.",
+      "proposal": "광원 투영·수광·cast목록·캐릭터포즈가 모두 정지일 때에만 dirty 기반 재사용 가능성 검토. 정적/동적 분리는 추가 타깃 메모리와 패스가 이득인지 먼저 측정.",
+      "validation": "회피·달리기·보스시전·광원움직임·shadow fade 비교, 그림자 해상도·모션빈도 유지.",
+      "risk": "격프레임 갱신은 과거 그림자 흔들림/지연을 재발시키므로 금지."
+    },
+    {
+      "priority": "P2",
+      "area": "고해상도 텍스처 상주와 업로드",
+      "status": "제한·안정화 적용됨 / 남은 비용 가설",
+      "evidence": [
+        "src/village-texture-streaming.js:7",
+        "src/village-texture-streaming.js:115",
+        "src/village-texture-budget.js:1"
+      ],
+      "detail": "고해상도는 하나씩 준비하며 터치 이동 중 간격2초, 최소 상주6초·교체대기3초. 압축 추가배경 예산96MiB이며 플레이어·기본LOD·프레임버퍼를 포함한 전체 메모리가 아니다.",
+      "proposal": "새 업로드 전후 CPU submit 지연과 highTextureLastPrepareMs, 교체횟수를 같은 경로에서 비교. 다른 무거운 준비와의 중첩을 공통 작업예산으로 억제.",
+      "validation": "좌우 반복회전/동일길왕복에서 화질상한·상주예산·최종선명도 유지, 반복재디코드/교체 감소.",
+      "risk": "현재 간격을 무작정 늘리면 가까운 물체 선명도 도착이 늦어진다. 8K/4K 하향 제외."
+    },
+    {
+      "priority": "P2",
+      "area": "동굴 안개·가림·랜턴",
+      "status": "갱신과 부가 패스 구조 확인",
+      "evidence": [
+        "src/cave-fog-runtime.js:82",
+        "src/cave-fog-runtime.js:149",
+        "src/cave-fog-runtime.js:97"
+      ],
+      "detail": "안개 revision 변화는 텍스처 업로드와 객체 가시성·지면·그림자 후보를 다시 검사한다. pre-render에서도 캐릭터와 동적 객체 가림 정합을 확인한다.",
+      "proposal": "플레이어/보스/카메라 변화에 따른 갱신 책임을 분리해 동일 revision의 중복 스캔 방지 검토. 벽/랜턴/장판 가림은 유지.",
+      "validation": "벽 뒤 빛·보스·장판 누출0, 숨김에서복귀 첫포즈/외곽선/그림자누락0,맵퇴장후관찰자0.",
+      "risk": "숨기기만 했다고 CPU·모프·행동·셰이더비용이 전부 없어졌다고 가정하지 않는다."
+    }
+  ],
+  "browserAutomation": false,
+  "actualDeviceMeasured": false,
+  "scope": "Source inventory and optimization proposals, not current device FPS proof"
+}

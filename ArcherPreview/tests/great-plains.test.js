@@ -13,12 +13,52 @@ import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-dist
 test('treasure anchors preserve quest identities without duplicate static chests',()=>{
  assert.deepEqual(PLAINS_TREASURE_ANCHORS.map(({id,x,z,lootTier})=>({id,x,z,lootTier})),[
   {id:'supply-chest',x:18,z:81,lootTier:1},
-  {id:'meadow-chest',x:-55,z:45,lootTier:1},
-  {id:'lookout-chest',x:-27,z:-22,lootTier:2},
+  {id:'meadow-chest',x:-61.5,z:58.5,lootTier:1},
+  {id:'lookout-chest',x:-30.2,z:-23.7,lootTier:2},
  ]);
  const ids=new Set(PLAINS_TREASURE_ANCHORS.map(p=>p.id));
  assert.equal(PLAINS_PLACEMENTS.some(p=>ids.has(p.id)||p.asset==='chest-common'),false);
  for(const anchor of PLAINS_TREASURE_ANCHORS)for(const p of PLAINS_PLACEMENTS.filter(p=>p.grove))assert.ok(Math.hypot(p.x-anchor.x,p.z-anchor.z)>p.colliderRadius+anchor.colliderRadius+.6,p.id+' covers a treasure anchor');
+});
+
+test('each authored supply chest sits under an existing tree and remains reachable',()=>{
+ const nav=new VillageNavigation(plainsObstacles());
+ const trees=['meadow-oak-11','meadow-oak-4','lookout-oak'];
+ for(const [i,chest] of PLAINS_TREASURE_ANCHORS.entries()){
+  const tree=PLAINS_PLACEMENTS.find(p=>p.id===trees[i]),distance=Math.hypot(chest.x-tree.x,chest.z-tree.z);
+  assert.ok(distance>=tree.colliderRadius+chest.colliderRadius&&distance<=3,`${chest.id} is not beside its tree`);
+  assert.ok(nav.free(chest,.65,105),`${chest.id} is blocked`);
+  assert.deepEqual(nav.findFree(chest,.65,105),{x:chest.x,z:chest.z});
+  let approaches=0;
+  for(let a=0;a<Math.PI*2;a+=Math.PI/4){const point={x:chest.x+2.2*Math.cos(a),z:chest.z+2.2*Math.sin(a)};if(nav.free(point,.35,105)&&nav.segmentClear(point,chest,.05))approaches++;}
+  assert.ok(approaches>=2,`${chest.id} needs open interaction approaches`);
+ }
+});
+
+test('arrival and crossroads gain distinct framing within the existing placement budget',()=>{
+ const nearby=(x,z,r,kind)=>PLAINS_PLACEMENTS.filter(p=>p.kind===kind&&Math.hypot(p.x-x,p.z-z)<r);
+ assert.ok(nearby(-87,-32,22,'tree').length>=9,'village arrival needs framing trees');
+ assert.ok(nearby(-5,25,22,'tree').length>=2,'crossroads needs a middle-distance grove');
+ assert.ok(PLAINS_PLACEMENTS.filter(p=>p.composition==='village-arrival').length===2);
+ assert.ok(PLAINS_PLACEMENTS.filter(p=>p.grove==='forest-gate'&&p.kind==='tree').length>=3,'forest approach should not be an empty grove');
+ assert.ok(PLAINS_PLACEMENTS.length<=1210,'reuse existing scenery rather than increase the instance budget');
+});
+
+test('crossroads groves keep both road shoulders, the summit and the east ramp open',()=>{
+ const composition=PLAINS_PLACEMENTS.filter(p=>p.composition==='crossroads-grove');
+ assert.equal(composition.filter(p=>p.kind==='tree').length,5);
+ assert.equal(composition.filter(p=>p.kind==='shrub').length,2);
+ assert.equal(composition.filter(p=>p.kind==='rock').length,2);
+ const obstacles=plainsObstacles().filter(o=>composition.some(p=>p.id===o.id));
+ const nav=new VillageNavigation(obstacles);
+ for(const road of PLAINS_ROUTES)for(let i=1;i<road.samples.length;i++){
+  const [x,z]=road.samples[i],[px,pz]=road.samples[i-1],length=Math.hypot(x-px,z-pz);if(length<1e-8)continue;
+  for(const side of [-1,0,1]){
+   const point={x:x-(z-pz)/length*road.width*.5*side,z:z+(x-px)/length*road.width*.5*side};
+   if(Math.hypot(point.x,point.z)<PLAINS_RADIUS-.5)assert.ok(nav.free(point,.35,PLAINS_RADIUS),road.id+' shoulder obstructed');
+  }
+ }
+ for(const p of composition)assert.ok(Math.hypot((p.x+28)/1.1,p.z+20)>=15,p.id+' covers the lookout');
 });
 
 test('groves add bounded scenery outside full road widths, clearings and the lookout ramp',()=>{

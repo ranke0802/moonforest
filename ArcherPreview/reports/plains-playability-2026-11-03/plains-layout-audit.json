@@ -1,0 +1,142 @@
+{
+  "baseline": "reports/plains-composition-review-2026-11-03/baseline-layout.json",
+  "candidate": "reports/plains-composition-review-2026-11-03/candidate-layout.json",
+  "staticCount": {
+    "before": 1210,
+    "after": 1209
+  },
+  "counts": {
+    "before": {
+      "landmark": 1,
+      "prop": 10,
+      "rock": 364,
+      "tree": 193,
+      "fence": 23,
+      "ground-detail": 580,
+      "shrub": 39
+    },
+    "after": {
+      "landmark": 1,
+      "prop": 10,
+      "rock": 364,
+      "tree": 198,
+      "fence": 23,
+      "ground-detail": 580,
+      "shrub": 33
+    }
+  },
+  "arrivalTreesWithin22": {
+    "before": 3,
+    "after": 10
+  },
+  "junctionTreesWithin22": {
+    "before": 0,
+    "after": 2
+  },
+  "centralGrove": [
+    {
+      "id": "forest-north-8",
+      "asset": "tree-01-round-oak",
+      "x": -23,
+      "z": -4,
+      "kind": "tree"
+    },
+    {
+      "id": "forest-north-9",
+      "asset": "tree-01-round-oak",
+      "x": -35,
+      "z": 16,
+      "kind": "tree"
+    },
+    {
+      "id": "forest-north-10",
+      "asset": "tree-02-slender-pine",
+      "x": -29,
+      "z": 20,
+      "kind": "tree"
+    },
+    {
+      "id": "forest-east-99",
+      "asset": "tree-01-round-oak",
+      "x": -17,
+      "z": -4,
+      "kind": "tree"
+    },
+    {
+      "id": "forest-east-100",
+      "asset": "tree-02-slender-pine",
+      "x": -11,
+      "z": 2,
+      "kind": "tree"
+    },
+    {
+      "id": "river-stone-112",
+      "asset": "rock-01-mossy-boulder",
+      "x": -20,
+      "z": 2,
+      "kind": "rock"
+    },
+    {
+      "id": "river-stone-113",
+      "asset": "rock-01-mossy-boulder",
+      "x": -37,
+      "z": 19,
+      "kind": "rock"
+    },
+    {
+      "id": "grove-caravan-east-bush-0",
+      "asset": "bush",
+      "x": -14,
+      "z": 0,
+      "kind": "shrub"
+    },
+    {
+      "id": "grove-caravan-east-bush-1",
+      "asset": "bush",
+      "x": -32,
+      "z": 18,
+      "kind": "shrub"
+    }
+  ],
+  "chestAnchors": [
+    {
+      "id": "supply-chest",
+      "x": 18,
+      "z": 81,
+      "lootTier": 1
+    },
+    {
+      "id": "meadow-chest",
+      "x": -61.5,
+      "z": 58.5,
+      "lootTier": 1
+    },
+    {
+      "id": "lookout-chest",
+      "x": -30.2,
+      "z": -23.7,
+      "lootTier": 2
+    }
+  ],
+  "checks": [
+    "great-plains.test.js: route center, new grove road shoulders, clearings, summit, portal travel, 3 chest support and reachable approaches, asset and LOD references, 200% floor border and repeated map replacement",
+    "plains-view-distance.test.js: restored 100–200% setting, selection and map isolation"
+  ],
+  "focusedTests": {
+    "passed": 15,
+    "failed": 0
+  },
+  "visual": {
+    "before": [
+      "reports/plains-playability-2026-11-03/before-entry.png",
+      "reports/plains-playability-2026-11-03/before-junction.png",
+      "reports/plains-playability-2026-11-03/before-summit.png"
+    ],
+    "after": [
+      "reports/plains-playability-2026-11-03/after-entry.png",
+      "reports/plains-playability-2026-11-03/after-junction.png",
+      "reports/plains-playability-2026-11-03/after-summit.png"
+    ],
+    "note": "Offline existing LOD1 models; rendering does not reproduce game shaders or fog. Not a gameplay screenshot or a mobile performance test."
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baseline": "d03de5b",
+  "tests": {
+    "tests": 1230,
+    "pass": 1230,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "resourceGraphUnchanged": true,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "deploymentFiles": 1637,
+  "deploymentBytes": 623711864,
+  "chests": {
+    "village": 6,
+    "great-plains": 9,
+    "monster-forest": 7,
+    "witch-cave": 7
+  },
+  "plainsPlacementCount": {
+    "before": 1210,
+    "after": 1209
+  },
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "offlineCompositionRender": true,
+  "limits": [
+    "No phone FPS, thermal, GPU rasterization or total GPU memory measurement.",
+    "Offline Blender views verify composition, not the exact game shader/fog/camera output.",
+    "Four-map SDK fixture uses actual chest geometry and quest points; scenery/LOD and occluding wall fixtures are controlled."
+  ],
+  "preserved": [
+    "Player 8K",
+    "Background maximum 4K",
+    "Existing LOD and budgets",
+    "Five chest colors/thickness/IDs/rewards/save keys",
+    "Plains range 100–200%"
+  ],
+  "release": {
+    "status": "pending"
+  }
+}

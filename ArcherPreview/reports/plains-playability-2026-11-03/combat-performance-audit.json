@@ -1,0 +1,69 @@
+{
+  "scope": "2026-11-03 읽기 전용 소스 감사. 마을·대평원·숲·동굴의 메인 프레임, 전투, 충돌, 애니메이션, HUD와 진단. 실제 기기, GPU, FPS는 측정하지 않았고 2026-11-01 구버전 기록을 현재 증거로 사용하지 않았다.",
+  "findings": [
+    {
+      "id": "navigation-line-of-sight",
+      "sources": ["src/boss-encounter.js:240", "src/boss-encounter.js:247", "src/boss-encounter.js:308", "src/village-navigation.js:129", "src/village-navigation.js:134", "src/navigation.js:90", "src/world.js:32"],
+      "confirmed": "활성 적은 매 프레임 플레이어까지 시야 검사를 하고 조건부로 공격 판정에서 다시 검사한다. 맵 탐색의 nearby는 선분이 지난 셀만이 아닌 두 끝점을 둘러싼 사각형의 4m 셀을 스캔하여 Set을 만든다. 장애물에 막힌 이동은 경로가 없거나 약 0.65초 경과 또는 목표 변경 시 경로를 재계산한다.",
+      "cost": "적 수와 사각형 셀 면적 및 후보 장애물에 비례한다. 예를 들어 100m 대각선의 축별 변화가 100m라면 반경 0에서 약 26×26=676개 셀 조회가 가능하다. 실제 대상 거리·장애물에 따라 달라진다.",
+      "hypothesis": "넓은 대평원에서 먼 적이 활성일 때 CPU 반복과 할당의 후보이나 실측은 없다.",
+      "quality_preserving_option": "같은 프레임의 동일 엔드포인트와 반경에 한해 시야 결과를 공유하고, 실제 선분을 통과하는 셀 및 충돌 반경 확장 셀을 정확히 순회하는 broad phase를 검토한다. 상자·벽 경계, 장애물 중복, 충돌 방향과 공격 판정 동등성을 먼저 증명한다.",
+      "measurement": "맵별 같은 좌표에서 적 0/1/복수, 근거리/원거리, 빈 공간/벽 너머를 비교해 호출 수·셀 수·후보 수·실행 시간 p95와 frame p95를 기록한다. 길찾기 결과와 기존 판정의 차이가 0인지 비교한다."
+    },
+    {
+      "id": "duplicate-movement-and-ring",
+      "sources": ["src/boss-encounter.js:240", "src/boss-encounter.js:271", "src/boss-encounter.js:275", "src/boss-battle.js:32", "src/boss-battle.js:255", "src/boss-battle.js:265", "src/terrain-mesh.js:28"],
+      "confirmed": "각 적은 자체 이동 후 지형·충돌·경고 고리를 갱신하고, 적들 사이의 2회 pairwise 분리 후 전원에 대해 충돌·지형·고리를 다시 처리한다. 두 번째 처리는 다른 적에 의해 실제 위치가 바뀐 경우 필요하다. 고리는 보일 때 .025m 이상 움직이거나 반경이 바뀐 경우 130개 높이 샘플과 정점 업데이트를 한다.",
+      "cost": "매 활성 프레임 적 수 N에 비례한 두 단계와 2×N(N-1)/2의 pair 비교; 경고 고리는 조건 충족 시 각 호출당 130개 terrain.heightAt. 분리 전후 둘 다 임계값을 넘으면 한 프레임에 두 번 갱신 가능하다.",
+      "hypothesis": "여러 적이 겹치거나 이동 중 경고 고리가 보일 때 중복 작업이 CPU와 버퍼 갱신에 기여할 수 있다. 실제 동시 갱신 빈도는 모른다.",
+      "quality_preserving_option": "분리 과정에서 실제 변경된 적만 두 번째 위치 보정 대상으로 삼고 관리되는 encounter의 고리는 최종 위치에서 한 번 갱신한다. 단독 encounter 경로·포획·지형 접촉은 그대로 보존한다.",
+      "measurement": "각 호출 및 실제 위치 변경, ring rebuild 횟수를 계측하고 1/5/혼합 적, 좁은 장애물과 포획 시뮬레이션에서 최종 좌표, 반경, 충돌, warning vertex 동등성을 비교한다."
+    },
+    {
+      "id": "player-pose-per-enemy",
+      "sources": ["src/main.js:634", "src/main.js:731", "src/boss-battle.js:268", "src/boss-encounter.js:279", "src/boss-encounter.js:292", "src/boss-encounter.js:355", "src/pose-matrices.js:9"],
+      "confirmed": "장면 애니메이션 후 각 활성 적에서 pose/contact를 처리한다. 일반 보스는 root/hip 세계행렬과 애니메이션 pose를 갱신하고, grab owner가 없을 때 매 적마다 플레이어의 terrain.place와 강제 world matrix 갱신을 호출한다.",
+      "cost": "적 수와 pose 노드 수에 따라 증가하며 플레이어 갱신도 적마다 반복된다. 비탄 엘레나는 이미 루트 상태를 비교해 불필요한 pose 갱신을 피하는 경로가 있다.",
+      "hypothesis": "여러 근접 적이나 복잡한 rig에서 CPU 비용이 커질 수 있다. 중복 호출이 실제 오래 걸리는지와 더 안전한 병합 여부는 실측해야 한다.",
+      "quality_preserving_option": "플레이어 위치가 실제로 바뀐 시점을 추적해 필요한 때에만 배치 및 행렬 갱신하고, pose 공유는 동일 프레임 및 동작/루트 변경 여부를 증명한 경우에만 한다. 잡기, 밀림, 낙하, hitstop, 칼·방패 위치는 같은 순서로 정확하게 유지한다.",
+      "measurement": "강제 행렬 계산 수 및 시간과 contactsMs를 적 수별로 계측하고 포획/해제·다중 접촉·경사 지형·저 FPS 경계에서 각 접촉 포즈와 판정 결과를 비교한다."
+    },
+    {
+      "id": "attack-inactive-window",
+      "sources": ["src/main.js:731", "src/player-strikes.js:17", "src/boss-encounter.js:308", "src/boss-encounter.js:310", "src/targets.js:155", "src/melee-collision.js:53"],
+      "confirmed": "공격 액션 중 strike sampler는 실제 타격 창에 들어오지 않은 프레임에도 sample 객체와 빈 contacts를 반환한다. 그때 허수아비 캡슐을 만들고, 살아 있는 보스의 조건부 시야 검사 및 hurt volume 계산 경로에 들어간다. 허수아비는 현재 하나다.",
+      "cost": "공격 준비·회복 동안 표적 수에 비례하는 반복 계산 및 배열/벡터 할당. MeleeContactGate의 pending burst는 빈 contacts에서도 처리되어야 한다.",
+      "hypothesis": "전투 중 CPU/GC 미세 비용 후보이며 평상시 전체 맵 FPS 저하의 증거는 아니다.",
+      "quality_preserving_option": "swept blade의 이전 포즈 샘플링은 계속하되, 타격 창도 pending burst도 없을 때만 volume 계산과 실제 교차 검사를 생략하는 빠른 경로를 검토한다. hitstop 및 burst 타이밍을 유지한다.",
+      "measurement": "타격 창 밖 판정 호출/할당과 contactsMs를 계측하고 모든 기술·히트버스트, 고속 공격 및 저 FPS의 연속 샘플 hit 결과와 타이밍을 기존과 비교한다."
+    },
+    {
+      "id": "character-and-witch-animation",
+      "sources": ["src/main.js:609", "src/animation.js:50", "src/animation.js:72", "src/mourning-elena-encounter.js:101", "src/mourning-elena-animation.js:155", "src/mourning-elena-animation.js:176", "src/mourning-elena-animation.js:224", "src/mourning-elena-animation.js:248"],
+      "confirmed": "플레이어는 매 활성 프레임 active animation group을 샘플하며, 교전 중 비탄 엘레나는 몸·머리카락·후광 채널, pose 및 cloth를 매 프레임 샘플한다. 비교전 상태에서는 이미 화면 상태에 따라 15/30Hz 간격을 둔다.",
+      "cost": "활성 animation track 및 동적 rig/cloth 노드 수에 비례한다. 각 프레임 실제 GPU skinning 비용은 이 코드만으로 알 수 없다.",
+      "hypothesis": "비탄 전투나 다수 스킨 캐릭터에서 CPU pose와 GPU skinning이 각각 병목일 수 있으나 단순히 채널 수만으로 FPS 원인을 판단할 수 없다.",
+      "quality_preserving_option": "현재 화면·판정 샘플 빈도와 모습을 유지하면서 반복된 pose 계산의 소유권/dirty 체크, 상수 채널 추가 제거 및 scratch 재사용을 검토한다. hit·cast·피격 윈도 재생 빈도를 낮추지 않는다.",
+      "measurement": "animationMs와 GPU 비동기 타이머를 독립 수집해 동일 전투 장면에서 채널·pose refresh 횟수, p95 및 시각/접촉 결과를 비교한다. 두 시간을 합산하지 않는다."
+    },
+    {
+      "id": "loot-and-screen-projection",
+      "sources": ["src/main.js:648", "src/main.js:649", "src/main.js:667", "src/main.js:669", "src/gold-loot.js:13", "src/gold-loot.js:21", "src/gold-loot-view.js:13", "src/gold-loot-view.js:19", "src/gold-loot-view.js:29"],
+      "confirmed": "금화 더미는 최대 64개로 제한되며 더미당 같은 원통의 mesh clone 세 개를 만든다. 존재하는 더미를 매 프레임 동기화·시야 확인·화면 투영하고 라벨 transform을 쓴다. 이미 공유된 geometry와 화면 투영 객체는 존재한다.",
+      "cost": "최대 192개 동전 mesh와 64개 레코드에 비례한다. 실제 보이는 draw 수는 frustum, 장면 및 드라이버에 따라 다르다.",
+      "hypothesis": "드롭이 많이 남은 장면에서 draw submission과 DOM 쓰기가 부담일 수 있다. 더미가 없으면 이 항목은 전체 맵 성능을 설명하지 못한다.",
+      "quality_preserving_option": "같은 geometry/material 및 세 코인의 위치·색을 유지하며 native instance batching을 검토하고, 라벨 좌표·가시성 값이 변할 때만 DOM을 갱신한다. 줍기, 가시성, 임시 튀어오름의 동작을 보존한다.",
+      "measurement": "동일 카메라에서 0/16/64개 더미의 draw calls, DOM 작업, CPU p95, GPU p95를 비교하고 픽업·안개·좌표 정확성을 확인한다."
+    },
+    {
+      "id": "diagnostics-overhead-and-measurement",
+      "sources": ["src/main.js:813", "src/frame-diagnostics.js:30", "src/frame-diagnostics.js:90", "src/frame-diagnostics.js:144", "src/frame-diagnostics.js:150", "src/scene-diagnostics.js:24", "src/scene-diagnostics.js:67", "src/scene-diagnostics.js:91", "src/dot-minimap.js:62"],
+      "confirmed": "진단이 켜져 플레이 중이면 매 프레임 counters/GPU sample summary를 읽고, 약 0.5초마다 10초 프레임 표본을 정렬해 HUD를 갱신한다. 비동기 GPU 쿼리는 약 250ms 간격이며, 미니맵은 0.1초로 제한하고 픽셀/방향 불변 시 다시 그리지 않는다. 진단이 꺼지면 scene instrumentation이 해제된다.",
+      "cost": "진단 활성에 한정된 매 프레임 샘플 정리 및 정기 정렬/DOM; GPU 표본 최대 64개. 미니맵 전체 베이크는 초기 진입 작업이지 매 프레임 작업이 아니다.",
+      "hypothesis": "저사양 기기에서 진단 자체의 관찰 오버헤드가 있을 수 있으나, 꺼진 상태의 저하를 이 경로로 설명할 수 없다.",
+      "quality_preserving_option": "새 비동기 GPU sample이나 유효기간 상태가 바뀔 때만 요약을 재계산하고, 원본 측정·정확한 시점·진단 기능은 유지한다.",
+      "measurement": "같은 장면·기기에서 진단 OFF/ON을 순서 교차 반복하여 프레임 p95 및 수집 오버헤드를 따로 비교한다. GPU 결과는 이전 프레임 비동기 샘플이고 유효하지 않은 경우 0으로 처리하지 않는다."
+    }
+  ],
+  "protocol": "같은 빌드·기기·화면 배율·목표 FPS·카메라·좌표·적 상태로 각 맵을 warm-up 후 반복한다. frame interval p95, JS submit, scene CPU, contacts, animation, 유효 GPU 시간, draw calls와 적/드롭 수를 함께 보되 겹치는 CPU 구간과 GPU 시간을 합산하지 않는다. 품질·상자·시야 설정 변경은 별도 변수로 기록한다."
+}

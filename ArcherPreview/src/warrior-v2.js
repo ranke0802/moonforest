@@ -8,10 +8,10 @@ export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기
 export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7,knockdown:1,getUp:1};
 
 export class WarriorV2Controller {
-  constructor({durations,speeds={}}) {
+  constructor({durations,speeds={},holdNow=null}) {
     this.durations=durations;this.runSpeed=speeds.run||4.4371;
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
-    this.held=false;this.holdTime=0;this.holdTriggered=false;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
+    this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdNow=holdNow;this.holdStartedAt=null;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
     this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.queuedAttack=null;
     this.motionSpeeds={...V2_MOTION_DEFAULTS};
   }
@@ -23,8 +23,17 @@ export class WarriorV2Controller {
     kind??=V2_COMBO[this.attackIndex++%V2_COMBO.length];
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
   }
-  releaseHold(){this.held=false;this.holdTime=0;this.holdTriggered=false;}
-  heavyIntent(){return {held:this.held,holdTime:this.holdTime,holdTriggered:this.holdTriggered,queuedAttack:this.queuedAttack==='judgment'?'judgment':null};}
+  releaseHold(){this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdStartedAt=null;}
+  heavyIntent(){return {held:this.held,holdTime:this.holdTime,holdTriggered:this.holdTriggered,holdStartedAt:this.holdStartedAt,queuedAttack:this.queuedAttack==='judgment'?'judgment':null};}
+  heldSeconds(){
+    if(!this.holdNow||!Number.isFinite(this.holdStartedAt))return 0;
+    const now=this.holdNow();return Number.isFinite(now)?Math.max(0,(now-this.holdStartedAt)/1000):0;
+  }
+  syncHeldCharge(){
+    if(!this.held||this.holdTriggered)return;
+    this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime,this.heldSeconds()));
+    if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
+  }
   cancelAttackInput(){this.releaseHold();this.queuedAttack=null;}
   cancelAttack(){this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
   requestMovement(){
@@ -57,11 +66,11 @@ export class WarriorV2Controller {
     if(held){
       if(this.held)return true;
       if(this.dead||this.captured||this.knockedDown||this.groggy)return false;
-      this.held=true;this.holdTime=0;this.holdTriggered=false;
+      this.held=true;this.holdTime=0;this.holdTriggered=false;this.holdStartedAt=this.holdNow?.()??null;
       if(this.queuedAttack==='normal')this.queuedAttack=null;
     }else{
       // A short press fires on release; a completed hold never also fires a normal attack.
-      const tap=this.held&&!this.holdTriggered;this.releaseHold();
+      this.syncHeldCharge();const tap=this.held&&!this.holdTriggered;this.releaseHold();
       if(tap)this.attack();
     }
     return true;
@@ -108,8 +117,9 @@ export class WarriorV2Controller {
     // A fresh press is accepted during recovery or hit-stun. Charging runs alongside
     // the current clip; only one next action is buffered, regardless of tap spam.
     if(this.held&&!this.holdTriggered){
-      readyAt=Math.max(0,V2_HOLD_SECONDS-this.holdTime);
-      this.holdTime=Math.min(V2_HOLD_SECONDS,this.holdTime+dt);
+      const physicalTime=this.heldSeconds(),missedTime=Math.max(0,physicalTime-this.holdTime-dt);
+      readyAt=Math.max(0,V2_HOLD_SECONDS-this.holdTime-missedTime);
+      this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime+dt,physicalTime));
       if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
     }
     if(this.staggerRemaining>0){

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
-  "bytes": 623709016,
+  "bytes": 623711864,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8014,14 +8014,14 @@
       "sha256": "6eae8b449a5e23f487d2fe5e7cb99d8067e95d337b97d6e97dd79f7ccd583cbc"
     },
     {
+      "path": "assets/index-BFYz5j8z.js",
+      "bytes": 2527652,
+      "sha256": "cc8d93dd99e284acb3c7856bf1276c9d0800815d6ab092746a9f78e3bdc76dbc"
+    },
+    {
       "path": "assets/index-D0On8spf.css",
       "bytes": 79695,
       "sha256": "cf0e0a541bb87bbd08472880fc7d7b8c684532baaa59953827c663773a34858c"
-    },
-    {
-      "path": "assets/index-D4tVkQLa.js",
-      "bytes": 2524804,
-      "sha256": "4a43589a668f24028d44c5b0fffa8f47c7e8e80b161da315e4d0ea29511a3710"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -8161,7 +8161,7 @@
     {
       "path": "index.html",
       "bytes": 59027,
-      "sha256": "cc9c4cd5fefb69f579763c020c8192be51472802fbb74f6dbf5b97917f1ab138"
+      "sha256": "a021821175748bb0bb68ad3cae41824862178ed29012dfbf8f1e804147d54656"
     },
     {
       "path": "KTX2_NOTICES.txt",

@@ -48,7 +48,7 @@ export class PlaygroundInput {
     window.addEventListener('pointerup', e => {
       if (this.ownsPointer(e.pointerId)) this.pointerUp(e);
     }, captureOpts);
-    window.addEventListener('pointercancel', e => { if (this.ownsPointer(e.pointerId)) this.reset(); }, captureOpts);
+    window.addEventListener('pointercancel', e => { if (this.ownsPointer(e.pointerId)) this.pointerUp(e); }, captureOpts);
     for (const name of ['pointerout', 'mouseout']) window.addEventListener(name, e => {
       if (e.relatedTarget != null || (name !== 'mouseout' && e.pointerType !== 'mouse')) return;
       // Removing/relabeling HUD descendants can emit a null relatedTarget
@@ -169,7 +169,10 @@ export class PlaygroundInput {
       this.canvas.setPointerCapture(e.pointerId);
       return;
     }
-    if (e.type !== 'pointerup' && this.ownsPointer(e.pointerId)) { this.reset(); return; }
+    // A cancelled mouse pointer may own attack and camera buttons together;
+    // clear that whole chord. A separate touch/pen pointer owns only its stick
+    // or camera gesture and must not erase a HUD or keyboard attack hold.
+    if (e.type !== 'pointerup' && this.mousePointer === e.pointerId) { this.reset(); return; }
     if (this.mousePointer === e.pointerId) { this.mousePointer = null; this.mouseButtons = 0; this.mouseChordReleased = false; }
     if (this.mouseAttackPointer === e.pointerId) {
       this.mouseAttackPointer = null;
@@ -180,7 +183,9 @@ export class PlaygroundInput {
     if (e.pointerId === this.joystickPointer) { this.stick = { x: 0, y: 0 }; this.stickIntent={x:0,y:0}; this.joystickPointer = null; this.joystick.hidden = true; this.hint.style.opacity = 1; }
     this.cameraPointers.delete(e.pointerId);
     this.gesture = this.measureGesture();
-    if (this.canvas.hasPointerCapture(e.pointerId)) this.canvas.releasePointerCapture(e.pointerId);
+    if (this.canvas.hasPointerCapture(e.pointerId)) {
+      try { this.canvas.releasePointerCapture(e.pointerId); } catch { /* Native cancellation may release first. */ }
+    }
   }
   drag(dx, dy, pan) {
     if (!pan) {

@@ -20,15 +20,19 @@ export const PLAINS_STREAM=sampleGroundCurve([[95,-97],[89,-82],[85,-67],[79,-51
 // stable anchors out of scenery instances to avoid drawing each chest twice.
 export const PLAINS_TREASURE_ANCHORS=[
  {id:'supply-chest',asset:'chest-common',x:18,z:81,kind:'prop',scale:1,colliderRadius:.6,yaw:Math.PI,lootTier:1},
- {id:'meadow-chest',asset:'chest-common',x:-55,z:45,kind:'prop',scale:1,colliderRadius:.6,yaw:.7,lootTier:1},
- {id:'lookout-chest',asset:'chest-common',x:-27,z:-22,kind:'prop',scale:1,colliderRadius:.6,yaw:Math.PI*.6,lootTier:2},
+ {id:'meadow-chest',asset:'chest-common',x:-61.5,z:58.5,kind:'prop',scale:1,colliderRadius:.6,yaw:.7,lootTier:1},
+ {id:'lookout-chest',asset:'chest-common',x:-30.2,z:-23.7,kind:'prop',scale:1,colliderRadius:.6,yaw:Math.PI*.6,lootTier:2},
 ];
 export function plainsRoadDistance(x,z){let best=Infinity;for(const r of PLAINS_ROUTES)for(const [px,pz]of r.samples)best=Math.min(best,Math.hypot(x-px,z-pz)-r.width*.5);for(const c of PLAINS_CLEARINGS)best=Math.min(best,Math.hypot(x-c.x,z-c.z)-c.r);return best;}
 export function plainsStreamDistance(x,z){let best=Infinity;for(const [px,pz]of PLAINS_STREAM)best=Math.min(best,Math.hypot(x-px,z-pz));return best;}
 const seedRandom=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 // Small, authored islands leave the meadow and the landmark sightlines open.
 // These offsets only vary within each grove; they never scatter over the map.
-const GROVE_OFFSETS=[[0,0],[-5,2],[4,4],[1,-5],[-6,-4],[7,-2],[-3,7],[6,9]];
+const GROVE_OFFSETS=[
+ [[0,0],[-5,2],[4,4],[1,-5],[-6,-4],[7,-2],[-3,7],[6,9]],
+ [[0,0],[-4,-3],[4,-5],[6,1],[2,6],[-5,6],[-8,1],[8,-6]],
+ [[0,0],[-6,1],[2,5],[5,-3],[-3,-6],[7,3],[-6,7],[3,-9]],
+];
 const GROVE_TREES={
  village:['tree-01-round-oak','tree-01-round-oak','tree-01-round-oak','tree-02-slender-pine'],
  meadow:['tree-01-round-oak','tree-01-round-oak','tree-02-slender-pine','tree-01-round-oak'],
@@ -37,14 +41,14 @@ const GROVE_TREES={
 };
 function addGroveScenery(out,add){
  const groves=[
-  ['gate-north','village',-84,-57,.2,4],['gate-south','village',-84,-9,-.5,5],
+  ['gate-north','village',-80,-50,.2,4],['gate-south','village',-86,-14,-.5,5],
   ['village-field','village',-77,16,.8,4],['meadow-west','meadow',-84,43,-.8,4],
   ['lookout-west','meadow',-54,-32,.4,4],['lookout-north','meadow',-29,-50,-.3,5],
-  ['meadow-south','meadow',-48,59,.7,5],['meadow-east','meadow',28,34,-.5,5],
+  ['meadow-south','meadow',-48,59,.7,5],['meadow-east','meadow',12,40,-.5,5],
   ['caravan-east','meadow',42,65,.3,4],
   ['forest-outer','fringe',22,-22,.8,4],['forest-middle','fringe',32,-48,-.4,5],
   ['forest-west','forest',17,-66,.4,6],['forest-rest-back','forest',45,-68,-.6,6],
-  ['forest-bank','forest',69,-35,.2,5],['forest-gate','forest',55,-85,.8,5],
+  ['forest-bank','forest',69,-35,.2,5],['forest-gate','forest',28,-78,.8,5],
  ];
  const room=(x,z,r,kind)=>{
   if(Math.hypot(x,z)>104||plainsRoadDistance(x,z)<r+1.3||plainsStreamDistance(x,z)<r+4.2)return false;
@@ -60,7 +64,7 @@ function addGroveScenery(out,add){
  for(const [index,[grove,zone,cx,cz,angle,count]]of groves.entries()){
   const cs=Math.cos(angle),sn=Math.sin(angle),position=([dx,dz])=>[cx+dx*cs-dz*sn,cz+dx*sn+dz*cs];
   let placed=0;
-  for(const [slot,offset]of GROVE_OFFSETS.entries()){
+  for(const [slot,offset]of GROVE_OFFSETS[index%GROVE_OFFSETS.length].entries()){
    if(placed>=count)break;
    const [x,z]=position(offset),asset=GROVE_TREES[zone][placed%4];
    const scale=(asset.startsWith('forest-')?1.12:.72)+((index+slot*3)%5)*.055;
@@ -92,6 +96,42 @@ function addGroveScenery(out,add){
   const asset=(deep?['tree-02-slender-pine','forest-01-sickly-oak','tree-02-slender-pine','forest-02-dead-tree','tree-01-round-oak']:GROVE_TREES.fringe)[index%(deep?5:4)];
   if(asset==='tree-01-round-oak')continue;
   p.asset=asset;p.scale*=asset==='tree-02-slender-pine'?.75:1.2;
+ }
+ // Break up the regular boundary rows without increasing the instance count.
+ // Keep the road, stream and neighbouring trunks clear after each move.
+ for(const p of out.filter(p=>p.id.startsWith('forest-north-')||p.id.startsWith('forest-east-'))){
+  const index=Number(p.id.split('-').at(-1)),x=p.x+Math.sin(index*2.41)*2.4,z=p.z+Math.cos(index*1.79)*2.4;
+  if(plainsRoadDistance(x,z)<=p.colliderRadius+1||plainsStreamDistance(x,z)<=p.colliderRadius+4.2)continue;
+  if([...out,...PLAINS_TREASURE_ANCHORS].some(other=>other!==p&&!other.background&&other.kind!=='ground-detail'&&Math.hypot(x-other.x,z-other.z)<p.colliderRadius+(other.colliderRadius??0)+1.2))continue;
+  p.x=x;p.z=z;
+ }
+ // Reuse two far-off boundary trees to frame the village arrival. Their shared
+ // source remains the existing oak; no extra geometry or instances are added.
+ const frame=out.filter(p=>p.id.startsWith('forest-east-')&&Math.hypot(p.x,p.z)>125).slice(0,2);
+ for(const [i,[x,z]]of [[-92,-44],[-96,-24]].entries())if(frame[i]){
+  Object.assign(frame[i],{x,z,asset:'tree-01-round-oak',scale:.85+i*.1,colliderRadius:.8,composition:'village-arrival'});
+ }
+ // Shape the broad open space between the hill and crossroads as two loose,
+ // asymmetric groups, reusing trees from beyond the playable forest boundary.
+ // The sightline to the summit and the road shoulders remain open.
+ const trees=[
+  ['forest-east-99',-17,-4,'tree-01-round-oak',1.05],
+  ['forest-east-100',-11,2,'tree-02-slender-pine',.83],
+  ['forest-north-8',-23,-4,'tree-01-round-oak',.72],
+  ['forest-north-9',-35,16,'tree-01-round-oak',.92],
+  ['forest-north-10',-29,20,'tree-02-slender-pine',.72],
+ ];
+ for(const [id,x,z,asset,scale]of trees){
+  const p=out.find(p=>p.id===id);if(!p)throw new Error('Missing plains composition tree '+id);
+  Object.assign(p,{x,z,asset,scale,colliderRadius:.8,composition:'crossroads-grove'});
+ }
+ for(const [id,x,z]of [['grove-caravan-east-bush-0',-14,0],['grove-caravan-east-bush-1',-32,18]]){
+  const p=out.find(p=>p.id===id);if(!p)throw new Error('Missing plains composition shrub '+id);
+  Object.assign(p,{x,z,grove:'crossroads-approach',zone:'meadow',composition:'crossroads-grove'});
+ }
+ for(const [id,x,z]of [['river-stone-112',-20,2],['river-stone-113',-37,19]]){
+  const p=out.find(p=>p.id===id);if(!p)throw new Error('Missing plains composition stone '+id);
+  Object.assign(p,{x,z,scale:.4,colliderRadius:.26,composition:'crossroads-grove'});
  }
 }
 function makePlacements(){

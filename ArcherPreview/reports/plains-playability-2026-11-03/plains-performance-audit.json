@@ -1,0 +1,86 @@
+{
+  "scope": "Source inspection and layout counts; no physical-device FPS, GPU timing or total GPU memory measurement.",
+  "confirmed": {
+    "layoutCounts": {
+      "before": 1210,
+      "after": 1209
+    },
+    "defaultMultiplier": 1,
+    "rangeByDevice": {
+      "desktop100": {
+        "fogStart": 88,
+        "fogEnd": 105,
+        "cellCull": 110,
+        "meshCull": 118,
+        "maxCameraRadius": 82
+      },
+      "desktop200": {
+        "fogStart": 176,
+        "fogEnd": 210,
+        "cellCull": 220,
+        "meshCull": 236,
+        "maxCameraRadius": 82
+      },
+      "touch100": {
+        "fogStart": 65,
+        "fogEnd": 80,
+        "cellCull": 82,
+        "meshCull": 90,
+        "maxCameraRadius": 56
+      },
+      "touch200": {
+        "fogStart": 130,
+        "fogEnd": 160,
+        "cellCull": 164,
+        "meshCull": 180,
+        "maxCameraRadius": 56
+      }
+    },
+    "distanceScope": "great-plains only, applied to fog and environment demand/visibility; camera, geometry LOD thresholds and texture profiles are unchanged",
+    "visibility": "16-unit cells, frustum and per-cell conservative bounds; active cells are refreshed on camera motion or after 0.16s",
+    "demand": "requests deduplicated by asset and tier; initial plan loaded serially; post-start streaming runs one geometry request at a time, with 200ms scheduling gap",
+    "texture": "separate high-texture budget 96 MiB compressed touch / 128 MiB touch fallback / 256 MiB desktop; excludes baseline LOD, player, framebuffer and other allocations; one high texture load at a time",
+    "shadows": "selection every 0.35s; at most 28 touch / 44 desktop selected records; the number of mesh casters may differ",
+    "lifetime": "environment GPU resources disposed on map release; decoded CPU geometry/texture pools bounded at 8/24 MiB respectively; terrain/navigation caches capped separately",
+    "unchanged": [
+      "player 8K profile",
+      "background maximum 4K",
+      "existing LOD geometry and screen thresholds",
+      "100–200% setting",
+      "shadow and texture budgets"
+    ]
+  },
+  "risks": [
+    "Total static placement count is unchanged in practical terms, but relocating trees and props into frequently viewed central cells can increase active instances, visible triangles, overdraw and selected shadows at the same camera view. No FPS equivalence is claimed.",
+    "200% admits more visible cells and extends prefetch; actual cost depends on orientation, device, LOD and current residency, and need not scale quadratically in the bounded map.",
+    "A larger initial plan can increase load time; geometry loaded while exploring remains resident until the map release, independently of the budget for high textures.",
+    "Frame-rate and memory behavior on actual mobile GPU, thermal state and shader/fog appearance remain unmeasured."
+  ],
+  "priorities": [
+    {
+      "rank": 1,
+      "action": "Measure matched 100% and 200% on target phones at gate, crossroads, hill and forest approach after warmup; record 1% low, CPU/GPU timing where available, draw calls, active cells/instances, loaded LOD and shadow casters.",
+      "quality": "No image quality change."
+    },
+    {
+      "rank": 2,
+      "action": "If CPU-bound, reduce repeated visibility and demand work using conservative spatial indexing and caching with exact selection/culling and turn invalidation tests.",
+      "quality": "Preserve visible instances, thresholds, fade and occlusion."
+    },
+    {
+      "rank": 3,
+      "action": "If load spikes dominate, coordinate environment and quest-prop model work under bounded scheduling and verify readiness, cancellation and transitions.",
+      "quality": "Preserve models, textures and interaction availability."
+    },
+    {
+      "rank": 4,
+      "action": "If shadows or outlines dominate, profile pass selection and instancing, deduplicate CPU work or submissions only where pixel output and caster choice are proven equivalent.",
+      "quality": "Preserve silhouette, LOD thresholds and shadow policy."
+    },
+    {
+      "rank": 5,
+      "action": "Inspect texture residency and decoded-cache hit/miss after repeated map trips before changing limits; distinguish bounded caches from GPU leak.",
+      "quality": "Do not reduce texture resolution or evict all caches."
+    }
+  ]
+}

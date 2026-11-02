@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import { PlaygroundInput } from '../src/input.js';
 import { WarriorV2Controller } from '../src/warrior-v2.js';
 
@@ -394,4 +395,48 @@ test('touch stick: direction changes do not interrupt; releasing stick avoids de
  press('KeyJ');tick(.45);release('KeyJ');assert.equal(tick().state,'judgment');
  pointer('pointerdown',2,120,650);pointer('pointermove',2,120,596);assert.equal(tick().state,'judgment');
  assert.equal(tick(3).state,'run');
+});
+
+test('separate joystick and camera touch cancellation preserves the charged HUD attack',()=>{
+ const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+ const functions=source.slice(source.indexOf('function setAttackHeld('),source.indexOf('function faceHeading('));
+ const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
+ for(const cancelled of ['stick','camera'])for(const type of ['pointercancel','lostpointercapture'])for(const release of [true,false]){
+  const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
+  const actions=new Function('attackSources','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,controller,true,null,null);
+  const {input,canvas,pointer,elements}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
+  const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
+  controller.shieldPush();pointer('pointerdown',31,120,650);pointer('pointermove',31,174,596);
+  pointer('pointerdown',32,700,250);pointer('pointerdown',33,850,250);
+  button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);assert.equal(controller.queuedAttack,'judgment');
+  const id=cancelled==='stick'?31:32;
+  // Window capture receives pointercancel before the canvas target does.
+  if(type==='pointercancel')window.emit(type,{pointerId:id,pointerType:'touch'});
+  canvas.emit(type,{pointerId:id,pointerType:'touch'});
+  assert.equal(controller.queuedAttack,'judgment',`${cancelled}/${type}`);assert.ok(attackSources.has('button:7'));
+  if(cancelled==='stick'){assert.deepEqual(input.value(),{x:0,y:0,run:false});assert.equal(elements['#joystick'].hidden,true);assert.equal(input.cameraPointers.size,2);}
+  else {assert.equal(input.cameraPointers.size,1);assert.equal(input.gesture,null);assert.ok(input.value().y>.7);}
+  if(release)button.emit('pointerup',{pointerId:7,button:0});
+  for(let i=0;i<180&&controller.action?.state!=='judgment';i++)controller.update(1/60);
+  assert.equal(controller.action?.state,'judgment');assert.equal(controller.serial,2);
+  button.emit('pointerup',{pointerId:7,button:0});controller.update(5);assert.equal(controller.serial,2);
+  input.dispose();
+ }
+});
+
+test('HUD pointer cancellation and global blur discard the charged attack safely',()=>{
+ const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+ const functions=source.slice(source.indexOf('function setAttackHeld('),source.indexOf('function faceHeading('));
+ const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
+ for(const cancellation of ['pointercancel','blur','visibilitychange']){
+  const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
+  const actions=new Function('attackSources','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,controller,true,null,null);
+  const {input}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
+  const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
+  controller.shieldPush();button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);assert.equal(controller.queuedAttack,'judgment');
+  if(cancellation==='pointercancel')button.emit('pointercancel',{pointerId:7});
+  else if(cancellation==='blur')window.emit('blur');else{document.hidden=true;document.emit('visibilitychange');}
+  assert.equal(controller.queuedAttack,null);assert.equal(controller.held,false);assert.equal(attackSources.size,0);
+  button.emit('pointerup',{pointerId:7});controller.update(4);assert.equal(controller.serial,1);input.dispose();
+ }
 });
