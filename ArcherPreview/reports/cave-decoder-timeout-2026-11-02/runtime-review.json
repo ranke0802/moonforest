@@ -1,0 +1,125 @@
+{
+  "status": "PASS",
+  "scope": "Core runtime and focused regression only; final full suite, build and deployment belong to parent agent.",
+  "baseRevision": "6dc5538",
+  "sourceLocked": true,
+  "policy": {
+    "modelTimeoutMs": 45000,
+    "setupGroupTimeoutMs": 45000,
+    "sharedManifestEntryTimeoutMs": 45000,
+    "setupStages": [
+      "resource-manifests",
+      "manifest",
+      "map-plan",
+      "decoder-init",
+      "ground"
+    ],
+    "healthyContentTransferTotal45sCap": false,
+    "automaticRetries": 0,
+    "timeoutError": {
+      "name": "TimeoutError",
+      "codes": [
+        "MAP_MODEL_TIMEOUT",
+        "MAP_SETUP_TIMEOUT"
+      ],
+      "metadata": [
+        "timeoutMs",
+        "stage",
+        "assetId when model",
+        "level when model"
+      ]
+    },
+    "cancelError": "AbortError",
+    "playerMaxTexture": 8192,
+    "backgroundMaxTexture": 4096,
+    "LOD": "unchanged",
+    "newAssets": 0
+  },
+  "verification": {
+    "focusedTests": 107,
+    "passed": 107,
+    "failed": 0,
+    "coreCases": 8,
+    "setupCases": 11,
+    "actualCompressedRoundTrips": 6,
+    "modelLoads": 228,
+    "uniqueCompressedModels": 37,
+    "geometryCacheBytes": 7135082,
+    "geometryCacheLimit": 8388608,
+    "warmRevisitDecodeCalls": 0,
+    "shaderProgramCacheLimit": 12,
+    "finalGroundRetrySuite": {
+      "tests": 11,
+      "passed": 11,
+      "failed": 0,
+      "includes": "same floor three retries, actual NullEngine StandardMaterial readiness and exactly one detail/shade plugin"
+    },
+    "focusedLogScope": "107/107 before the final narrowly scoped ground plugin-reuse fix; the final same-floor/ground/setup suite then passed 11/11. Parent executes the complete suite after this final source lock."
+  },
+  "ownership": [
+    "Per-import container, partial meshes/materials/textures and accessor/view data only; no scene-wide pending clear.",
+    "Sequential owned texture wrapper release marks and removes only the final InternalTexture owner; external shared owners retain pending/cache/upload rights.",
+    "Marked final-owner texture is synchronously removed from exact engine cache entry before disposal; SDK late _createTexture throws AbortError before bind/upload.",
+    "Every abandoned promise retains fulfillment/rejection handling, but model owner release settles immediately.",
+    "Late source/ground/resource callbacks use map, floor, scene, lifetime and generation identities before publication.",
+    "Immutable shared manifest entries own their own deadline; caller cancellation does not abort another caller. Failed entries and initialization promises reset only if still current."
+  ],
+  "limitations": [
+    "No browser automation, actual WebGL GPU execution, phone FPS, temperature, or driver timing was measured.",
+    "Actual shipped Meshopt buffers and real WASM decoding are exercised with a controlled response boundary. Image upload/late KTX guards use the installed SDK and a stub engine sink.",
+    "The logical timeout cannot preempt synchronous JavaScript/WASM/driver execution. Timers run when the event loop can run.",
+    "The Babylon global worker is not terminated/restarted. A persistent worker fault can make explicit retry time out again.",
+    "A permanently unanswered worker may retain detached CPU input and promise data until it returns; cleanup does not claim forced physical memory reclamation.",
+    "Normal shared texture SDK callbacks may still run; abandoned map-owner publication is guarded, rather than claiming that every raw callback is suppressed."
+  ],
+  "ownedSources": [
+    "src/map-load-lifetime.js",
+    "src/map-texture-lifetime.js",
+    "src/map-container.js",
+    "src/map-manifests.js",
+    "src/startup-resources.js",
+    "src/village-streamed-environment.js",
+    "src/village-ground.js",
+    "src/village-ktx2.js",
+    "src/village-meshopt.js",
+    "src/village-outlines.js",
+    "src/village-texture-streaming.js"
+  ],
+  "ownedTests": [
+    "tests/map-decoder-timeout.test.js",
+    "tests/map-setup-timeout.test.js",
+    "tests/cave-forest-repeat-lifecycle.test.js",
+    "tests/map-loading.test.js",
+    "tests/village-initial-cancel.test.js"
+  ],
+  "sourceSha256": {
+    "src/map-load-lifetime.js": "1bf1261a88432b277d3caec34bcfacfa74955c888603aaf6bc7aa51596fa39e1",
+    "src/map-texture-lifetime.js": "5d7c790ca4bc4f7f54942935a414c8f954bda93019d343797d60fc30cbe9e970",
+    "src/map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "src/map-manifests.js": "ff926a92670432e6ed96b39da1731be37e430641b87f19818592315db7be6d21",
+    "src/startup-resources.js": "9d18488b38e1f30b8e35c2ee2443eae96bf033652ed3a7672f4612b8f08efbd5",
+    "src/village-streamed-environment.js": "120c586fcfaa08d400b2e65fa55310b093f5ca9c835cd7136d743bc7a3d17f14",
+    "src/village-ground.js": "db1e8660705f88bf3b7ae8f11e38a2a26726af4fe37114b0ef3dfdf9828cd9a2",
+    "src/village-ktx2.js": "3755ee9e2e4ab527753579211967c4aaff395123daf11558e70a20da9edd74ce",
+    "src/village-meshopt.js": "17c26fb9366dbc0d4a3f50f8a18630473d7d5f597f9453bbbff77a8740b8c9ac",
+    "src/village-outlines.js": "2ea35770b43185b7d5fe61cfa063a970c9cd70e430299d0ee57c8d4e519bb8d1",
+    "src/village-texture-streaming.js": "0cb776c061ee5042d88fb5d01bb2d332bc5bb6ba35e6d77c506d237d60d72bfe"
+  },
+  "testSha256": {
+    "tests/map-decoder-timeout.test.js": "aa50503c1970da5c2ed928aaa9e25d14b16002a18ee181aedf314c874d72b4b5",
+    "tests/map-setup-timeout.test.js": "dfaad50ed3f5b56bfade8aaf9b30f17af3345a8b00da1b5f087256603898696d",
+    "tests/cave-forest-repeat-lifecycle.test.js": "54293112e168e3fc6b45db932946ed51c0c1d44dfe8c7eec1bb981aed8227348",
+    "tests/map-loading.test.js": "a067986166edfe8301cfc9094a1ed7bda83929a561cf896ee68ec39058ac5cff",
+    "tests/village-initial-cancel.test.js": "6298dd2c45c8c87e00728650f9a3a6d0e8350a584d4e15205faa8befd4ed1f95"
+  },
+  "evidenceFiles": [
+    "core-validation.json",
+    "setup-validation.json",
+    "focused-tests.log",
+    "../cave-repeat-review-2026-11-02/map-compressed-lifecycle.json"
+  ],
+  "browserAutomation": false,
+  "buildRunByThisAgent": false,
+  "commitOrPushByThisAgent": false,
+  "finalFix": "Same-floor manual retry reuses registered ground detail and shade plugins instead of accumulating active duplicate plugins referencing disposed textures."
+}

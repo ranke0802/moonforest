@@ -1,0 +1,45 @@
+{
+  "repo": "C:/dev/moonforest-archer/ArcherPreview",
+  "sourceLocked": true,
+  "sources": [
+    "src/map-load-lifetime.js",
+    "src/map-texture-lifetime.js",
+    "src/map-container.js",
+    "src/map-manifests.js",
+    "src/startup-resources.js",
+    "src/village-streamed-environment.js",
+    "src/village-ground.js",
+    "src/village-ktx2.js",
+    "src/village-meshopt.js",
+    "src/village-outlines.js",
+    "src/village-texture-streaming.js"
+  ],
+  "tests": [
+    "tests/map-decoder-timeout.test.js",
+    "tests/map-setup-timeout.test.js",
+    "tests/cave-forest-repeat-lifecycle.test.js",
+    "tests/map-loading.test.js",
+    "tests/village-initial-cancel.test.js"
+  ],
+  "reports": [
+    "reports/cave-decoder-timeout-2026-11-02/core-validation.json",
+    "reports/cave-decoder-timeout-2026-11-02/setup-validation.json",
+    "reports/cave-decoder-timeout-2026-11-02/runtime-review.json",
+    "reports/cave-decoder-timeout-2026-11-02/owned-files.json",
+    "reports/cave-decoder-timeout-2026-11-02/focused-tests.log",
+    "reports/cave-repeat-review-2026-11-02/map-compressed-lifecycle.json"
+  ],
+  "sha256": {
+    "src/map-load-lifetime.js": "1bf1261a88432b277d3caec34bcfacfa74955c888603aaf6bc7aa51596fa39e1",
+    "src/map-texture-lifetime.js": "5d7c790ca4bc4f7f54942935a414c8f954bda93019d343797d60fc30cbe9e970",
+    "src/map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "src/map-manifests.js": "ff926a92670432e6ed96b39da1731be37e430641b87f19818592315db7be6d21",
+    "src/startup-resources.js": "9d18488b38e1f30b8e35c2ee2443eae96bf033652ed3a7672f4612b8f08efbd5",
+    "src/village-streamed-environment.js": "120c586fcfaa08d400b2e65fa55310b093f5ca9c835cd7136d743bc7a3d17f14",
+    "src/village-ground.js": "db1e8660705f88bf3b7ae8f11e38a2a26726af4fe37114b0ef3dfdf9828cd9a2",
+    "src/village-ktx2.js": "3755ee9e2e4ab527753579211967c4aaff395123daf11558e70a20da9edd74ce",
+    "src/village-meshopt.js": "17c26fb9366dbc0d4a3f50f8a18630473d7d5f597f9453bbbff77a8740b8c9ac",
+    "src/village-outlines.js": "2ea35770b43185b7d5fe61cfa063a970c9cd70e430299d0ee57c8d4e519bb8d1",
+    "src/village-texture-streaming.js": "0cb776c061ee5042d88fb5d01bb2d332bc5bb6ba35e6d77c506d237d60d72bfe"
+  }
+}

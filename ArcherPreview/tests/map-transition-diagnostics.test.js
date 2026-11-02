@@ -18,3 +18,14 @@ for(const failing of ['release','load','finish'])test('failed '+failing+' releas
  const copy=t.inspect();copy.lastFailure.phase='mutated';assert.equal(t.inspect().lastFailure.phase,failing,'copied diagnostics cannot change state');
  assert.equal(t.recover(),true);assert.equal(t.failed,false);assert.equal(t.inspect().lastError,null);assert.equal(t.inspect().phase,'idle');assert.equal(t.inspect().lastFailure.phase,failing);assert.equal(t.inspect().lastFailure.recovered,true);fail=false;assert.equal(await t.travel('forest'),true);assert.equal(t.inspect().lastFailure.phase,failing,'previous failure remains explicitly historical after later success');
 });
+
+test('only explicit retries reuse the failed destination, preserve timeout diagnostics and reject duplicate requests',async()=>{
+ const targets=[],held=deferred();let attempts=0;
+ const timeout=()=>Object.assign(Error('맵 모델 준비 시간이 초과되었습니다.'),{name:'TimeoutError',code:'MAP_MODEL_TIMEOUT',timeoutMs:45000,stage:'model',assetId:'cave-derived-laboratory-rock',level:2});
+ const t=createMapTransition({prepare(){},frame:async()=>{},release:async()=>{},load:async url=>{targets.push(url);if(++attempts<3)throw timeout();await held.promise;},finish:async()=>{},onError(){}});
+ assert.equal(await t.retry(),false);assert.equal(await t.travel('cave-destination'),false);assert.equal(t.inspect().retryAvailable,true);assert.equal(t.inspect().lastFailure.timeoutMs,45000);assert.equal(t.inspect().lastFailure.operation,'model');assert.equal(t.inspect().lastFailure.assetId,'cave-derived-laboratory-rock');assert.equal(t.inspect().lastFailure.level,2);
+ assert.equal(await t.travel('different-map'),false);assert.equal(attempts,1,'ordinary portal events cannot automatically recover a failed map');
+ assert.equal(await t.retry(),false);assert.equal(t.inspect().retryCount,1);assert.equal(t.inspect().retryAvailable,true);assert.equal(t.inspect().lastFailure.recovered,false);
+ const final=t.retry();await until(()=>targets.length===3);assert.equal(t.inspect().retryAvailable,false);assert.equal(await t.retry(),false);assert.equal(await t.travel('different-map'),false);
+ held.resolve();assert.equal(await final,true);assert.deepEqual(targets,['cave-destination','cave-destination','cave-destination']);assert.equal(t.inspect().retryCount,2);assert.equal(t.inspect().lastFailure.code,'MAP_MODEL_TIMEOUT');assert.equal(t.inspect().lastFailure.recovered,true);assert.equal(t.inspect().retryAvailable,false);assert.equal(await t.retry(),false);
+});

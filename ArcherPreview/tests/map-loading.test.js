@@ -39,6 +39,7 @@ test('concurrent map containers detach only their own constructor callbacks',asy
   await assert.rejects(readMapContainer(scene,{asset:{version:'3.0'}},''),/버전/);assert.equal(scene.onDisposeObservable.observers.length,initial);
   const json={asset:{version:'2.0'},scenes:[{nodes:[0]}],scene:0,nodes:[{name:'root'}]};
   const containers=await Promise.all(Array.from({length:12},()=>readMapContainer(scene,structuredClone(json),'',{skipMaterials:true})));
+  await new Promise(r=>setTimeout(r,0)); // completed per-load cancel hooks are removed on Babylon's timer turn
   assert.equal(scene.onDisposeObservable.observers.length,initial+12);
   for(const c of containers)c.dispose();await new Promise(r=>setTimeout(r,10));
   assert.equal(scene.onDisposeObservable.observers.length,initial);assert.ok(scene.onDisposeObservable.observers.includes(original));assert.equal(unrelated,0);

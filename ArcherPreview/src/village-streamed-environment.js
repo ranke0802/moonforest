@@ -16,6 +16,7 @@ import {prepareVillageInstancing} from './village-instancing.js';
 import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
+import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -33,10 +34,16 @@ export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category
 }
 export function caveStructuralRecord(record,asset){return record.placement.kind==='rock'||asset?.config?.category==='rock';}
 
-export async function prepareVillageStart(world){
+export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timers}={}){
   if(world.villagePrepared)return world.villagePrepared;
+  const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'map-plan'});const snapshot=mapLoadSnapshot(world);
+  const observer=world.scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
+  try{
+  checkMapLoadSnapshot(world,snapshot,lifetime);
   const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${world.environmentManifest??'village'}.json`,location.href);
-  const manifest=await readMapManifest(url);if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
+  const manifest=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));checkMapLoadSnapshot(world,snapshot,lifetime);
+  if(world.villagePrepared)return world.villagePrepared;
+  if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));
   const records=(world.placements??VILLAGE_PLACEMENTS).map(placement=>{
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
@@ -55,6 +62,7 @@ export async function prepareVillageStart(world){
   }
   const resources=[...new Set(plan.flatMap(r=>assets.get(r.id).levels.find(l=>l.level===r.level).resources))];
   return world.villagePrepared={url,manifest,assets,records,plan,resources};
+  }finally{snapshot.scene.onDisposeObservable.remove(observer);if(ownLifetime)lifetime.close();}
 }
 
 // Promote only the routing mesh. Its existing instances keep their transforms,
@@ -103,39 +111,51 @@ export function installVillageGeometry(asset,container,level,world){
 }
 
 export function loadStreamedVillage(world,{
-  initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},
+  initialize=async options=>{await initializeVillageKtx2(options);await initializeVillageMeshopt(options);},
   ground=applyVillageGround,
   loadContainer=loadMapContainer,
+  signal,modelTimeoutMs=MAP_MODEL_TIMEOUT_MS,modelTimers,setupTimeoutMs=modelTimeoutMs,setupTimers=modelTimers,
 }={}){
   if(world.villagePromise)return world.villagePromise;
-  const owner={};world.villageLoadOwner=owner;let ownedPrepared=null;
+  const owner={},controller=new AbortController();world.villageLoadOwner=owner;let ownedPrepared=null;
+  const forwardAbort=()=>controller.abort(signal.reason??mapLoadAbortError());
+  if(signal?.aborted)forwardAbort();else signal?.addEventListener('abort',forwardAbort,{once:true});
+  // Release is available even while a manifest/decoder config has not answered.
+  // Only this owner can clear the fields; a retry may already own the same world.
+  world.releaseEnvironment=async()=>{controller.abort(mapLoadAbortError());if(world.villageLoadOwner===owner){for(const r of ownedPrepared?.records??[])r.root.dispose();Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,releaseEnvironment:null});}};
   world.villagePromise=(async()=>{
-    const prepared=await prepareVillageStart(world),{url,manifest,assets,records,plan}=prepared,containers=[];ownedPrepared=prepared;
-    await initialize();await ground(world);
-    const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,initialLodModels:plan.length};
+    if(controller.signal.aborted)throw controller.signal.reason;
+    const setup=new MapLoadLifetime({signal:controller.signal,timeoutMs:setupTimeoutMs,timers:setupTimers,stage:'map-plan'}),snapshot=mapLoadSnapshot(world),setupObserver=world.scene.onDisposeObservable.addOnce(()=>controller.abort(mapLoadAbortError()));let prepared;
+    try{
+      prepared=await setup.run(()=>prepareVillageStart(world,{lifetime:setup,timeoutMs:setupTimeoutMs,timers:setupTimers}));checkMapLoadSnapshot(world,snapshot,setup);ownedPrepared=prepared;
+      setup.stage='decoder-init';await setup.run(()=>initialize({timeoutMs:setupTimeoutMs,timers:setupTimers}));checkMapLoadSnapshot(world,snapshot,setup);
+      setup.stage='ground';await setup.run(()=>ground(world,{lifetime:setup}));checkMapLoadSnapshot(world,snapshot,setup);
+    }catch(error){setup.abort(error);error.stage??=setup.stage;throw error;}finally{setup.close();snapshot.scene.onDisposeObservable.remove(setupObserver);}
+    const {url,manifest,assets,records,plan}=prepared,containers=[];
+    const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
-    let textures,disposed=false;
+    let textures,disposed=false;const pendingLoads=new Set();
     const has=r=>assets.get(r.id).tiers.has(r.level);
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
-      const work=new VillageWorkBudget(()=>world.villageStreaming?.active,()=>disposed);
-      await world.prefetchResources?.(config.resources);
-      if(disposed)return;
-      const model=new URL(config.model,url),container=await loadContainer(model,world.scene);
-      if(disposed){container.dispose();return;}containers.push(container);
+      const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
+      const operation=lifetime.run(async()=>{
+      const work=new VillageWorkBudget(()=>world.villageStreaming?.active,cancelled);
+      await lifetime.run(()=>world.prefetchResources?.(config.resources));lifetime.check();
+      const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime}),{onLate:container=>container?.dispose()});
+      lifetime.check();containers.push(container);
       const meshes=geometry(container);
       if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
       prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
       for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category});}
       world.lighting.registerMeshes(meshes);
-      await prepareMapMaterials(meshes,{cancelled:()=>disposed});
-      if(disposed)return;
+      await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
       installVillageGeometry(asset,container,level,world);
       const instances=records.filter(r=>r.placement.asset===id);
       for(const record of instances)if(!record.meshes.length){
-        if(work.due())await work.yield();if(disposed)return;
+        if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         const instance=asset.source.instantiateModelsToScene(name=>record.root.name+'-'+name,false,{doNotInstantiate:false});
         for(const node of instance.rootNodes)node.parent=record.facing;
         record.meshes=record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0);
@@ -146,8 +166,7 @@ export function loadStreamedVillage(world,{
       const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])];
       world.lighting.registerMeshes(activeSources);
       for(const mesh of activeSources)outlines.sourceFor(mesh);
-      outlines.addRecords(instances);await outlines.prepare(activeSources);
-      if(disposed)return;
+      outlines.addRecords(instances);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
       if(level===2&&instances.some(r=>r.essentialStructural)){
         for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
         world.caveFog?.updateRecords(instances);
@@ -157,14 +176,19 @@ export function loadStreamedVillage(world,{
       // entire room wall like a tree canopy and reveal rooms behind it.
       const covered=instances.filter(r=>r.blocksPlayerView&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
       for(const record of covered){
-        if(work.due())await work.yield();if(disposed)return;
+        if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         world.treeOcclusion.refreshRoots([record.root]);
       }
       stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
+      });pendingLoads.add(operation);
+      try{return await operation;}catch(error){
+        if(error.name!=='AbortError'){error.assetId??=id;error.level??=level;stats.modelFailure={name:error.name,code:error.code??null,timeoutMs:error.timeoutMs??null,assetId:id,level,message:String(error.message??error)};}
+        throw error;
+      }finally{pendingLoads.delete(operation);lifetime.close();}
     };
     const streaming=new VillageGeometryStreaming(world,records,load,has,stats);world.villageStreaming=streaming;
     let cleaned=false;
-    const stop=()=>{if(disposed)return;disposed=true;streaming.dispose();textures?.dispose();};
+    const stop=()=>{if(disposed)return;disposed=true;controller.abort(mapLoadAbortError());streaming.dispose();textures?.dispose();};
     const cleanup=()=>{
       if(cleaned)return;cleaned=true;
       // Capture the variants that really drew (including active shadows), not
@@ -178,17 +202,18 @@ export function loadStreamedVillage(world,{
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();
       world.scene.onDisposeObservable.remove(disposeObserver);
+      signal?.removeEventListener('abort',forwardAbort);
       if(world.villageLoadOwner===owner)Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,villageRenderRecords:null,releaseEnvironment:null});
     };
     const dispose=()=>{stop();cleanup();};
     const disposeObserver=world.scene.onDisposeObservable.addOnce(dispose);
-    world.releaseEnvironment=async()=>{stop();await Promise.allSettled([streaming.pending,textures?.pendingTask].filter(Boolean));cleanup();};
+    world.releaseEnvironment=async()=>{stop();await Promise.allSettled([...pendingLoads,streaming.pending,textures?.pendingTask].filter(Boolean));cleanup();};
     try{
       await streaming.initial(plan);
       if(disposed)throw Object.assign(new Error('Map load was released'),{name:'AbortError'});
       textures=new VillageTextureStreaming(world,assets,records,url,stats);
       world.villageRenderRecords=records;stats.ready=true;return stats;
     }catch(error){dispose();throw error;}
-  })().catch(error=>{if(world.villageLoadOwner===owner){for(const r of ownedPrepared?.records??[])r.root.dispose();Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null});}throw error;});
+  })().catch(error=>{signal?.removeEventListener('abort',forwardAbort);if(world.villageLoadOwner===owner){for(const r of ownedPrepared?.records??[])r.root.dispose();Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,releaseEnvironment:null});}throw error;});
   return world.villagePromise;
 }

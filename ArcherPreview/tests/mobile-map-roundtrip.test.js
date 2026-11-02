@@ -53,7 +53,7 @@ for(const [device,agent,width,height]of [
    if(trip>=3)assert.equal(state.total,0,'revisiting the same arrival view is entirely cached');
    assert.ok([...network.values()].every(n=>n===1),'every content hash fetched at most once across routes/revisions');
    phases.push({character,arrival:trip>0,downloadBytes:state.total,cachedBytes:state.cached,initialLods:world.startupResources.initialLodModels});
-   scene.dispose();await assert.rejects(world.prefetchResources(manifest.resources),{name:'AbortError'});
+   const obsoletePrefetch=world.prefetchResources;scene.dispose();assert.equal(world.prefetchResources,null,'disposed world publishes no prefetch handle');await assert.rejects(obsoletePrefetch(manifest.resources),{name:'AbortError'});
   }finally{engine.dispose();}
  }
  const original=read('warrior-v3'),model=JSON.parse(readFileSync(new URL(original.model,base)));

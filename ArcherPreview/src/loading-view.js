@@ -4,7 +4,7 @@ export function createLoadingView(doc=document){
   const get=id=>doc.getElementById(id),overlay=get('loading'),track=overlay.querySelector('[role="progressbar"]');
   let failed=false;
   return {
-    begin(){failed=false;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');get('retry-load').hidden=true;get('loading-title').textContent='불러오는 중';get('loading-text').textContent='필요한 리소스를 확인합니다.';get('loading-bytes').textContent='0.0 / 0.0 MB';get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');},
+    begin(){failed=false;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');get('retry-load').hidden=true;get('retry-load').textContent='다시 불러오기';get('loading-title').textContent='불러오는 중';get('loading-text').textContent='필요한 리소스를 확인합니다.';get('loading-bytes').textContent='0.0 / 0.0 MB';get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');},
     download(state){
       get('loading-text').textContent=state.unavailable?'리소스를 불러옵니다.':state.complete||state.total===0?'화면을 준비합니다.':'리소스 다운로드';
       get('loading-bytes').textContent=state.unavailable?'용량 확인 중':downloadText(state);
@@ -12,11 +12,11 @@ export function createLoadingView(doc=document){
     },
     preparing(){get('loading-text').textContent='화면을 준비합니다.';},
     reveal(){if(failed)return false;overlay.hidden=true;delete doc.documentElement.dataset.loading;return true;},
-    fail(title,message,{retry=true}={}){
+    fail(title,message,{retry=true,retryLabel='다시 불러오기'}={}){
       failed=true;
       doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.add('error');
       get('loading-title').textContent=title;get('loading-text').textContent=message;
-      get('retry-load').hidden=!retry;get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
+      get('retry-load').hidden=!retry;get('retry-load').textContent=retryLabel;get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
     },
     stream(state){
       get('stream-loading').hidden=state.complete||state.total===0||state.unavailable;

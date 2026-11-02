@@ -1,4 +1,5 @@
 import {Frustum,Texture} from '@babylonjs/core';
+import {releaseMapTexture} from './map-texture-lifetime.js';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
 
@@ -119,8 +120,7 @@ export class VillageTextureStreaming {
           // Babylon9.31 queues the InternalTexture, while BaseTexture.dispose
           // removes only its wrapper. Remove this exact abandoned token only
           // when no other Texture still owns the shared internal allocation.
-          const internal=item?.getInternalTexture();if(internal?._references===1)scene.removePendingData(internal);
-          item?.dispose();reject(error);
+          releaseMapTexture(item,scene);reject(error);
         }else resolve(item);
       };
       const cancel=()=>finish(Object.assign(new Error('Map texture released'),{name:'AbortError'}));
@@ -160,19 +160,19 @@ export class VillageTextureStreaming {
       if(this.disposed)return;
       for(const [role,slot]of Object.entries(slots)){
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
-        if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>t.dispose());return;}
+        if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));return;}
         const size=textures[slot].getSize(),expected=config.textures[role];
         if(size.width!==expected.width||size.height!==expected.height)throw new Error('Texture dimensions differ from the budgeted profile');
       }
       for(const {material}of originals){material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
       this.resident.set(id,{textures,originals,bytes:highTextureBytes(config,this.compressedSupported),resolution:config.textures.albedo.width,readyAt:this.clock?.()??performance.now()});this.stats.highTextureLoads++;this.syncStats();
       this.stats.highTextureFormat=textures.albedoTexture.getInternalTexture?.()?.format??null;
-    }catch(error){Object.values(textures).forEach(t=>t.dispose());throw error;}
+    }catch(error){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));throw error;}
   }
   release(id){
     const entry=this.resident.get(id);if(!entry)return;
     for(const {material,values}of entry.originals){material.unfreeze();Object.assign(material,values);if(!material.metadata?.villageToon)material.freeze();}
-    for(const t of Object.values(entry.textures))t.dispose();
+    for(const t of Object.values(entry.textures))releaseMapTexture(t,this.world?.scene);
     this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }
   dispose(){

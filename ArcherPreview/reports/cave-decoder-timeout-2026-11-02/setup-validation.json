@@ -1,0 +1,75 @@
+{
+  "expectedCases": 11,
+  "completedCases": 11,
+  "passed": true,
+  "cases": [
+    {
+      "case": "shared-manifest-entry-fetch-and-parse-deadline",
+      "passed": true,
+      "lateCacheReplacement": false
+    },
+    {
+      "case": "shared-manifest-independent-caller-cancel",
+      "passed": true,
+      "otherCallerCancelled": false
+    },
+    {
+      "case": "late-plan-different-map-owner",
+      "passed": true,
+      "lateRoots": 0
+    },
+    {
+      "case": "decoder-config-failure-explicit-retry",
+      "passed": true,
+      "automaticRetries": 0
+    },
+    {
+      "case": "ground-no-response-timeout-and-late-binding-isolation",
+      "passed": true,
+      "lateFloorBindings": 0
+    },
+    {
+      "case": "partial-ground-caller-cancel",
+      "passed": true,
+      "ownedTexturesFreed": 2
+    },
+    {
+      "case": "same-floor-three-manual-retries-material-readiness",
+      "passed": true,
+      "retries": 3,
+      "detailPlugins": 1,
+      "shadePlugins": 1,
+      "oldDisposedTextureUsed": false,
+      "actualNullEngineMaterialReady": true
+    },
+    {
+      "case": "setup-group-init-timeout-and-immediate-release",
+      "passed": true
+    },
+    {
+      "case": "resource-manifest-timeout-retry-and-progressing-download-policy",
+      "passed": true,
+      "latePreparedPlan": false,
+      "healthyTransferTotalCap": false
+    },
+    {
+      "case": "cancelled-download-callback-owner-isolation",
+      "passed": true,
+      "lateProgressUpdates": 0
+    },
+    {
+      "case": "real-sdk-late-ktx-create-boundary-owned-vs-shared",
+      "passed": true,
+      "abandonedUploadCalls": 0,
+      "normalUploadCalls": 1,
+      "sharedUploadCalls": 1,
+      "simulatedGPU": true
+    }
+  ],
+  "limitations": [
+    "NullEngine and controlled decoder/Texture callback boundaries; no real browser, GPU, worker scheduling or phone temperature measurement.",
+    "45s applies to manifest/setup/ground/model response boundaries. Healthy byte transfers keep the existing progress-driven download path without a total 45s cutoff.",
+    "Abandoned GPU upload is blocked at the actual SDK _createTexture call for exactly marked final-owner InternalTextures; the physical worker or one synchronous WASM call is not terminated."
+  ],
+  "browserAutomation": false
+}

@@ -53,7 +53,7 @@ test('all incoming near/mid/far environment shaders have cave illumination befor
  assert.equal(world.scene.materials.length,actorsBefore+3,'one existing material per source; no additional glow/light material');
  const source=readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');
  assert.ok(source.indexOf('applyVillageToon(meshes')<source.indexOf('attachMaterial(mesh.material)'));
- assert.ok(source.indexOf('attachMaterial(mesh.material)')<source.indexOf('await prepareMapMaterials(meshes'));
+ const prepareIndex=source.indexOf('prepareMapMaterials(meshes');assert.ok(prepareIndex>=0,'actual material preparation remains present inside its lifetime');assert.ok(source.indexOf('attachMaterial(mesh.material)')<prepareIndex);
 });
 
 test('player uniform follows existing fog focus at bind time while character options stay unchanged',t=>{

@@ -27,10 +27,10 @@ function namedFunction(name){
  }
  assert.fail(`unterminated main function: ${name}`);
 }
-const loadSource=namedFunction('loadCharacter'),healthSource=namedFunction('assertFrameHealthy');
+const loadSource=namedFunction('loadCharacter'),healthSource=namedFunction('assertFrameHealthy'),retryFunctionSource=namedFunction('retryLoading');
 const frameSource=between('  frameLoop=new FrameLoop(','\n  const dialogObserver=');
 const mapSource=between('  mapTransition=createMapTransition({','\n  bindMapPortal();');
-const retrySource=source.split('\n').find(line=>line.includes("$('#retry-load').addEventListener('click', loadCharacter)"));assert.ok(retrySource);
+const retrySource=source.split('\n').find(line=>line.includes("$('#retry-load').addEventListener('click', retryLoading)"));assert.ok(retrySource);
 
 async function until(check,message){for(let i=0;i<100;i++){if(check())return;await new Promise(resolve=>setImmediate(resolve));}assert.fail(message);}
 
@@ -40,21 +40,22 @@ async function until(check,message){for(let i=0;i<100;i++){if(check())return;awa
 function fixture(){
  const dom=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),doc=dom.document;doc.hidden=false;
  for(const id of ['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
+ for(const dialog of doc.querySelectorAll('dialog'))dialog.open=false;
  const $=selector=>doc.querySelector(selector),loadingView=createLoadingView(doc),raf=[],engineCallbacks=new Set(),audioStates=[];
  const engine={getCaps:()=>({}),runRenderLoop:callback=>engineCallbacks.add(callback),stopRenderLoop:callback=>engineCallbacks.delete(callback)};
  let now=0;
- const loadDiagnostics=new LoadDiagnostics(()=>++now),gate={stage:null,errorStage:null,reached:null,release:null,hold(stage){this.stage=stage;this.reached=null;this.release=null;},clear(){this.stage=null;this.errorStage=null;this.reached=null;this.release=null;},at(stage){if(this.errorStage===stage)return Promise.reject(Error('injected '+stage+' failure'));if(this.stage!==stage)return Promise.resolve();this.reached=stage;return new Promise(resolve=>{this.release=resolve;});}};
+ const loadDiagnostics=new LoadDiagnostics(()=>++now),gate={stage:null,errorStage:null,errorFactory:null,counts:{},reached:null,release:null,hold(stage){this.stage=stage;this.reached=null;this.release=null;},clear(){this.stage=null;this.errorStage=null;this.errorFactory=null;this.reached=null;this.release=null;},at(stage){this.counts[stage]=(this.counts[stage]??0)+1;if(this.errorStage===stage)return Promise.reject(this.errorFactory?.()??Error('injected '+stage+' failure'));if(this.stage!==stage)return Promise.resolve();this.reached=stage;return new Promise(resolve=>{this.release=resolve;});}};
  class PlayerNode{constructor(){this.position=Vector3.Zero();this.rotation=Vector3.Zero();this.scaling=Vector3.One();}dispose(){this.disposed=true;}}
  class Animator{constructor(){this.durations={};}dispose(){}transition(){}update(){}}
  class Controller{constructor(){}cancelAttack(){}}
  class Equipment{dispose(){}}
- const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release')};
+ const world={cave:true,mapId:'cave',environment:{},scene:{render:noop},camera:{alpha:0,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:async()=>{}},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release'),cancelResourceDownloads(){gate.cancelledDownloads=(gate.cancelledDownloads??0)+1;}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
  const dependencies={FrameLoop,configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
-  loadVillage:async()=>{},loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>({meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose:noop})},
+  loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>({meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose:noop})},
   applyPlayerDetail:noop,applyCharacterSurfaceStyle:noop,attachCharacterOutlines:noop,applyAttackSpeed:noop,readAttackSpeed:()=>1,equipmentChoices:{},
   motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:value=>audioStates.push(value),play:noop},actionAudio:{reset:noop},
   updateButtons:noop,cancelAttackInput:noop,input:{reset:noop,panOffset:{x:0,y:0,z:0}},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
@@ -72,10 +73,11 @@ function fixture(){
   const isWarrior=()=>true,isV2=()=>true,isVillage=()=>true,isForest=()=>character==='warrior-v4',isCave=()=>character==='warrior-v5';
   const mapSpawn=()=>({x:0,y:0,z:0});let reconcilePlayback=()=>{},nextDrawError=null;
   const render=()=>{if(nextDrawError){const error=nextDrawError;nextDrawError=null;throw error;}};
-  ${healthSource}\n${loadSource}\n${frameSource}\n${mapSource}\n${retrySource}
+  ${healthSource}\n${loadSource}\n${retryFunctionSource}\n${frameSource}\n${mapSource}\n${retrySource}
   reconcilePlayback=syncPlayback;syncPlayback();
   return {load:loadCharacter,reconcile:syncPlayback,get transition(){return mapTransition;},get frameLoop(){return frameLoop;},
    injectFailure(){nextDrawError=new TypeError('_uniforms[e] is undefined');frameLoop.draw(.016);},
+   playerState(){return {character,actor,equipment,hp:boss.combat.hp,potions:boss.potions.remaining};},
    snapshot(){return {ready,loading:loadingAsset,failed:frameLoop.failed,running:frameLoop.running,frameError:frameFailure?.message??null};}};
  `)(...Object.values(dependencies));
  return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates};
@@ -85,7 +87,7 @@ async function flushFrame(f){await until(()=>f.raf.length>0,'expected a pending 
 async function success(f,{retry=false}={}){
  f.gate.clear();let job;
  if(retry)f.doc.querySelector('#retry-load').dispatchEvent(new f.dom.window.Event('click'));else job=f.runtime.load();
- await flushFrame(f);await flushFrame(f);if(job)await job;else await until(()=>!f.runtime.snapshot().loading,'retry did not settle');
+ await flushFrame(f);await flushFrame(f);if(job)await job;else await until(()=>!f.runtime.snapshot().loading&&!f.runtime.transition.busy,'retry did not settle');
  assert.deepEqual(f.runtime.snapshot(),{ready:true,loading:false,failed:false,running:true,frameError:null});
  assert.equal(f.doc.querySelector('#loading').hidden,true);assert.equal(f.doc.documentElement.dataset.loading,undefined);
  assert.equal(f.loadDiagnostics.snapshot().phase,'complete');assert.equal(f.engineCallbacks.size,1,'retry resumes one RAF callback');
@@ -145,7 +147,24 @@ test('actual loading view keeps the runtime error latched until an explicit new 
  results.push({kind:'loading-view',errorLatch:true,explicitBeginResetsLatch:true});
 });
 
+for(const stage of ['release','map-model','map-download'])test(`actual map ${stage} timeout offers same-destination manual retry without reloading the player`,async()=>{
+ const f=fixture();await success(f);const previous=f.runtime.playerState();f.gate.errorStage=stage;
+ const code=stage==='map-download'?'MAP_SETUP_TIMEOUT':'MAP_MODEL_TIMEOUT';
+ f.gate.errorFactory=()=>Object.assign(Error('맵 준비 시간이 초과되었습니다.'),{name:'TimeoutError',code,timeoutMs:45000});
+ const target='https://example.test/?character=warrior-v4&arrival=portal';assert.equal(await f.runtime.transition.travel(target),false);
+ assert.match(f.doc.querySelector('#loading-title').textContent,/시간이 초과/);assert.equal(f.doc.querySelector('#retry-load').textContent,'맵 이동 다시 시도');assert.equal(f.doc.querySelector('#retry-load').hidden,false);
+ assert.equal(f.runtime.transition.inspect().lastFailure.code,code);assert.equal(f.runtime.transition.inspect().lastFailure.timeoutMs,45000);assert.equal(f.runtime.transition.inspect().retryAvailable,true);
+ assert.equal(f.runtime.snapshot().running,false);assert.equal(f.audioStates.at(-1),true);assert.equal(f.doc.querySelector('#loading').hidden,false);
+ assert.equal(f.gate.cancelledDownloads,2,'departure cancels old traffic and timeout cancels the failed attempt traffic');
+ const counts={...f.gate.counts};for(let i=0;i<20;i++)f.runtime.reconcile();assert.deepEqual(f.gate.counts,counts,'no automatic retry while waiting for a user');
+ f.gate.clear();f.doc.querySelector('#retry-load').dispatchEvent(new f.dom.window.Event('click'));f.doc.querySelector('#retry-load').dispatchEvent(new f.dom.window.Event('click'));
+ await flushFrame(f);await flushFrame(f);await until(()=>!f.runtime.snapshot().loading&&!f.runtime.transition.busy,'manual map retry did not finish');
+ assert.equal(f.runtime.playerState().character,'warrior-v4');assert.equal(f.runtime.playerState().actor,previous.actor);assert.equal(f.runtime.playerState().equipment,previous.equipment);assert.equal(f.runtime.playerState().hp,previous.hp);assert.equal(f.runtime.playerState().potions,previous.potions);
+ assert.equal(f.runtime.transition.inspect().retryCount,1,'double click starts only one explicit attempt');assert.equal(f.runtime.transition.failed,false);assert.equal(f.runtime.snapshot().running,true);assert.equal(f.doc.querySelector('#loading').hidden,true);assert.equal(f.audioStates.at(-1),false);
+ results.push({kind:'map-timeout-manual-retry',stage,sameDestination:true,playerIdentityAndResourcesPreserved:true,automaticRetries:0,manualRetries:1});
+});
+
 test.after(()=>{
  const path=new URL('../reports/ios-uniform-fix/',import.meta.url);mkdirSync(path,{recursive:true});
- writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:11,completedCases:results.length,success:results.length===11,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
+ writeFileSync(new URL('startup-validation.json',path),JSON.stringify({mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:14,completedCases:results.length,success:results.length===14,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'},null,2)+'\n');
 });

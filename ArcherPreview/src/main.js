@@ -473,11 +473,19 @@ async function loadCharacter() {
     loadDiagnostics.finish(error.message);
     ready=false;
     console.error('[Archer asset load]', error);
-    loadingView.fail(frameFailure?'게임 실행이 중단되었습니다':'캐릭터를 불러오지 못했습니다',frameFailure?'다시 불러오기를 눌러 주세요. '+frameFailure.message:/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
+    const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);
+    if(timedOut)world.cancelResourceDownloads?.();
+    loadingView.fail(frameFailure?'게임 실행이 중단되었습니다':timedOut?'불러오기 시간이 초과되었습니다':'캐릭터를 불러오지 못했습니다',frameFailure?'다시 불러오기를 눌러 주세요. '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':/^(필수 동작|모델의 스키닝|화면 셰이더|화면 준비)/.test(error.message) ? error.message : '연결을 확인한 후 다시 시도해 주세요. 캐릭터 파일이 준비되지 않았을 수도 있습니다.');
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
   } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready){mapTransition?.recover();reconcilePlayback();} }
+}
+
+async function retryLoading(){
+  if(loadingAsset||mapTransition?.busy)return;
+  if(mapTransition?.failed&&!frameFailure)await mapTransition.retry();
+  else await loadCharacter();
 }
 
 function constrainPlayerPosition(previous){
@@ -753,7 +761,7 @@ try {
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
     },
-    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);loadDiagnostics.finish(error.message);console.error('[Map transition]',error);loadingView.fail('맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:'연결을 확인한 후 다시 불러와 주세요.');},
+    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'연결을 확인한 후 아래 버튼으로 다시 시도해 주세요.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도'});},
   });
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
@@ -862,7 +870,7 @@ try {
   document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAttack(); });
   $('#hit-button').addEventListener('click', actions.hit);
   $('#death-button').addEventListener('click', () => controller?.dead ? actions.revive() : actions.death());
-  $('#retry-load').addEventListener('click', loadCharacter);
+  $('#retry-load').addEventListener('click', retryLoading);
   for (const mode of ['orbit', 'pan']) $(`#${mode}-mode`).addEventListener('click', () => {
     input.cameraMode = mode;
     for (const candidate of ['orbit', 'pan']) { $(`#${candidate}-mode`).classList.toggle('selected', mode === candidate); $(`#${candidate}-mode`).setAttribute('aria-pressed', String(mode === candidate)); }

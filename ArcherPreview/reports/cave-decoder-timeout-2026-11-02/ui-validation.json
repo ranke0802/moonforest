@@ -1,0 +1,174 @@
+{
+  "mainSourceSha256": "11a7b9592c0589be19c1f6ca4db459093242aaa1e3d0f23a9373b8c2fcccd82e",
+  "scope": "Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.",
+  "expectedCases": 14,
+  "completedCases": 14,
+  "success": true,
+  "results": [
+    {
+      "kind": "startup",
+      "stage": "model",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "scene",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "first-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "second-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "map-transition",
+      "stage": "map-download",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-transition",
+      "stage": "scene",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-transition",
+      "stage": "second-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "release",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": false,
+      "returnTravel": true
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "map-download",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": false,
+      "returnTravel": true
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "finish",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": true,
+      "returnTravel": true
+    },
+    {
+      "kind": "loading-view",
+      "errorLatch": true,
+      "explicitBeginResetsLatch": true
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "release",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "map-model",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "map-download",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    }
+  ],
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "limitations": "Deterministic CPU/DOM async-interleaving tests. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement."
+}

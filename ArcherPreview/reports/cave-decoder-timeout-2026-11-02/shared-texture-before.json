@@ -1,0 +1,17 @@
+{
+  "scope": "Actual shipped glTF/Meshopt geometry and actual GLTF/PBR/Texture wrappers, controlled shared InternalTexture/upload boundary in NullEngine; not real KTX/GPU execution.",
+  "before": {
+    "wrappers": 2,
+    "refs": 2,
+    "pending": 2
+  },
+  "after": {
+    "error": "TimeoutError",
+    "refs": 0,
+    "pending": 2,
+    "oldOwnedTokenStillPending": true,
+    "unrelatedTokenPreserved": true,
+    "modelTextureWrappers": 0,
+    "timers": 0
+  }
+}

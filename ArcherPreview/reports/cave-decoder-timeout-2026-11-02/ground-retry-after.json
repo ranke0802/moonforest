@@ -1,0 +1,41 @@
+{
+  "scope": "Actual StandardMaterial/plugin manager and actual applyVillageGround twice on the same live floor. Controlled ready Texture/InternalTexture boundary; no GPU/browser.",
+  "first": {
+    "ok": true,
+    "plugins": [
+      "DetailMap",
+      "MoonforestGroundDetail",
+      "MoonforestVillageToon"
+    ],
+    "textures": 2
+  },
+  "second": {
+    "ok": true
+  },
+  "after": {
+    "created": 4,
+    "plugins": [
+      "DetailMap",
+      "MoonforestGroundDetail",
+      "MoonforestVillageToon"
+    ],
+    "activePlugins": [
+      {
+        "name": "MoonforestGroundDetail",
+        "detailReady": true,
+        "detailHasLiveInternal": true
+      },
+      {
+        "name": "MoonforestVillageToon",
+        "detailReady": null,
+        "detailHasLiveInternal": null
+      }
+    ],
+    "textures": 2,
+    "pending": 0,
+    "diffuseTextureStillAlive": true,
+    "sameDetail": true,
+    "sameShade": true,
+    "actualMaterialReady": true
+  }
+}

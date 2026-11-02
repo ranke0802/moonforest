@@ -1,6 +1,8 @@
 import {Texture,Color3,MaterialPluginBase} from '@babylonjs/core';
 import {VillageGroundShade} from './village-toon.js';
 import {readMapManifest} from './map-manifests.js';
+import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
+import {releaseMapTexture} from './map-texture-lifetime.js';
 
 // One small packed texture, two differently rotated scales, zero new draw calls.
 // Macro colors and the road mask are unique across the entire terrain.
@@ -28,25 +30,41 @@ export class VillageGroundDetail extends MaterialPluginBase {
   }
 }
 
-export async function applyVillageGround(world){
-  const url=new URL(`${import.meta.env.BASE_URL}assets/${world.groundManifest??'village-ground'}.json`,location.href);
-  const config=await readMapManifest(url);
+export async function applyVillageGround(world,{signal,lifetime,timeoutMs,timers,createTexture=(scene,callbacks)=>new Texture(null,scene,{noMipmap:false,invertY:true,samplingMode:Texture.TRILINEAR_SAMPLINGMODE,...callbacks})}={}){
+  const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'ground'});const snapshot=mapLoadSnapshot(world),scene=snapshot.scene,material=snapshot.floorMaterial,textures=new Set(),disposedTextures=new WeakSet();let released=false,installed=false;
+  const disposeTexture=texture=>{if(disposedTextures.has(texture))return;disposedTextures.add(texture);releaseMapTexture(texture,scene);};
+  const release=()=>{if(released)return;released=true;if(!installed)lifetime.abort(mapLoadAbortError());for(const texture of textures)disposeTexture(texture);textures.clear();scene.onDisposeObservable.remove(observer);if(world.releaseGround===release)world.releaseGround=null;};
+  world.releaseGround?.();const observer=scene.onDisposeObservable.addOnce(release);world.releaseGround=release;
+  const abort=()=>release();lifetime.signal.addEventListener('abort',abort,{once:true});
+  const check=()=>{checkMapLoadSnapshot(world,snapshot,lifetime);if(released)throw mapLoadAbortError();};
+  try{
+  check();const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${snapshot.groundManifest??'village-ground'}.json`,location.href);
+  const config=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));check();
   if(config.span!==world.terrain.size||config.color.width!==2048||config.detail.width!==256||config.soilMaskAlphaRange?.join(',')!=='64,255')throw new Error('마을 바닥 재질 규격이 다릅니다.');
-  const load=resource=>new Promise((resolve,reject)=>{
-    const texture=new Texture(new URL(resource.url,url).href,world.scene,false,true,Texture.TRILINEAR_SAMPLINGMODE,()=>resolve(texture),()=>reject(new Error('마을 바닥 텍스처를 불러오지 못했습니다.')));
+  const load=resource=>lifetime.run(()=>new Promise((resolve,reject)=>{
+    let texture,settled=false;
+    const finish=error=>{if(settled)return;settled=true;lifetime.signal.removeEventListener('abort',cancel);if(error)reject(error);else resolve(texture);};
+    const cancel=()=>finish(lifetime.signal.reason??mapLoadAbortError());lifetime.signal.addEventListener('abort',cancel,{once:true});
+    try{
+    texture=createTexture(scene,{onLoad:()=>queueMicrotask(()=>{try{check();finish();}catch(error){finish(error);}}),onError:()=>queueMicrotask(()=>finish(new Error('마을 바닥 텍스처를 불러오지 못했습니다.')))});textures.add(texture);
     // KTX2 blocks cannot be flipped during GPU upload. The old bitmap loader
     // inverted Y for this world map; preserve those UVs explicitly.
     if(resource.codec){texture.vScale=-1;texture.vOffset=1;}
     texture.hasAlpha=false;texture.anisotropicFilteringLevel=4;
-  });
+    check();texture.updateURL(new URL(resource.url,url).href);check();
+    }catch(error){finish(error);}
+  }));
   // Color alpha stores the soil mask; it never enables transparency/blending.
-  const color=await load(config.color),detail=await load(config.detail);
-  const release=()=>{color.dispose();detail.dispose();world.scene.onDisposeObservable.remove(observer);if(world.releaseGround===release)world.releaseGround=null;};
-  const observer=world.scene.onDisposeObservable.addOnce(release);world.releaseGround=release;
+  const color=await load(config.color);check();const detail=await load(config.detail);check();
   color.wrapU=color.wrapV=Texture.CLAMP_ADDRESSMODE;
   detail.wrapU=detail.wrapV=Texture.WRAP_ADDRESSMODE;detail.gammaSpace=false;
-  const material=world.floorMaterial;material.unfreeze();material.diffuseTexture?.dispose();
+  material.unfreeze();if(material.diffuseTexture?.getInternalTexture?.())material.diffuseTexture.dispose();
   material.diffuseTexture=color;material.diffuseColor=Color3.White();material.specularColor=Color3.Black();
-  new VillageGroundDetail(material,detail);new VillageGroundShade(material,world.lighting);
+  const existingDetail=material.pluginManager?.getPlugin('MoonforestGroundDetail');
+  if(existingDetail)existingDetail.texture=detail;else new VillageGroundDetail(material,detail);
+  const existingShade=material.pluginManager?.getPlugin('MoonforestVillageToon');
+  if(existingShade)existingShade.lighting=world.lighting;else new VillageGroundShade(material,world.lighting);
   world.groundProfile={colorSize:2048,detailSize:256,gpuBytes:config.gpuBytesWithMips,extraDrawCalls:0};
+  installed=true;
+  }catch(error){lifetime.abort(error);release();error.stage??='ground';throw error;}finally{lifetime.signal.removeEventListener('abort',abort);if(ownLifetime)lifetime.close();}
 }

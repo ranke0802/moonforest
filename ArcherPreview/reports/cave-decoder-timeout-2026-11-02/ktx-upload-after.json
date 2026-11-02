@@ -1,0 +1,54 @@
+{
+  "scope": "Exact pinned Babylon9.31 _uploadAsync and _createTexture with a controlled decode Promise and stub engine upload sink. No real worker scheduling/GPU execution.",
+  "results": [
+    {
+      "mode": "abandoned",
+      "before": {
+        "refs": 0,
+        "pending": false,
+        "marked": true
+      },
+      "result": {
+        "status": "AbortError"
+      },
+      "actualCreateUploadCalls": 0,
+      "binds": 0,
+      "oldWrapperRawOnLoadCallbacks": 0,
+      "externalOwnerOnLoadCallbacks": 0,
+      "unrelatedPendingPreserved": true
+    },
+    {
+      "mode": "active",
+      "before": {
+        "refs": 1,
+        "pending": true,
+        "marked": false
+      },
+      "result": {
+        "status": "ready"
+      },
+      "actualCreateUploadCalls": 1,
+      "binds": 2,
+      "oldWrapperRawOnLoadCallbacks": 1,
+      "externalOwnerOnLoadCallbacks": 0,
+      "unrelatedPendingPreserved": true
+    },
+    {
+      "mode": "still-shared",
+      "before": {
+        "refs": 1,
+        "pending": true,
+        "marked": false
+      },
+      "result": {
+        "status": "ready"
+      },
+      "actualCreateUploadCalls": 1,
+      "binds": 2,
+      "oldWrapperRawOnLoadCallbacks": 1,
+      "externalOwnerOnLoadCallbacks": 1,
+      "unrelatedPendingPreserved": true,
+      "notes": "Babylon can invoke a disposed cached wrapper raw onLoad closure; map-level owner/settled guards must prevent publication. A still-live external owner receives its load normally."
+    }
+  ]
+}

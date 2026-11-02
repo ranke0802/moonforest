@@ -95,8 +95,8 @@ export class VillageOutlines {
     }
     this.next=0;
   }
-  async prepare(sources=this.sources){
-    await prepareMapMaterials(sources,{material:this.material,cancelled:()=>this.world.scene.isDisposed});
+  async prepare(sources=this.sources,{cancelled=()=>false}={}){
+    await prepareMapMaterials(sources,{material:this.material,cancelled:()=>this.world.scene.isDisposed||cancelled()});
   }
   afterBase(mesh,subMesh,batch){
     const scene=this.world.scene,engine=scene.getEngine();
