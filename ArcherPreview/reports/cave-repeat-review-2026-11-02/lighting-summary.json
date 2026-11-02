@@ -1,0 +1,165 @@
+{
+  "revision": "cave-lantern-conservative-b-mask-v2",
+  "status": "SOURCE_LOCKED_LIGHTING_COMPONENT_REVIEW_COMPLETE",
+  "originalBug": {
+    "productionHead": "4c5de0c",
+    "description": "The real1m first opaque cell stays visible. Its bilinearR can be nearly1just beyond a thin physical wall, so gating local illumination fromR alone reproduced a light fringe.",
+    "sample": {
+      "position": {
+        "x": 0.506,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "oldTexture": [
+        0.9939999999999998,
+        0.9939999999999998,
+        0,
+        1
+      ],
+      "oldLocalFill": [
+        0.7441047911640157,
+        0.5456768468536115,
+        0.31417757849147326
+      ]
+    },
+    "proof": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\cave-repeat-review-2026-11-02\\lighting-boundary-probe.json"
+  },
+  "correction": {
+    "channel": "ExistingRGBA.B=current visible&&!opaque",
+    "unchangedChannels": [
+      "Rcurrent sight",
+      "Gexplored memory",
+      "A255"
+    ],
+    "localLookup": "One existing fog texture sample/cache; B gates moving lantern only.",
+    "composition": "max(staticFactor,localFactor) retained",
+    "sample": {
+      "position": {
+        "x": 0.506,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "texture": [
+        0.9939999999999998,
+        0.9939999999999998,
+        0,
+        1
+      ],
+      "newLocalFill": [
+        0,
+        0,
+        0
+      ]
+    },
+    "sourceFiles": [
+      "src/cave-fog-of-war.js",
+      "src/cave-fog-cover.js",
+      "src/cave-player-fill.js",
+      "src/cave-painted-light-runtime.js",
+      "tests/cave-fog-of-war.test.js",
+      "tests/cave-player-fill.test.js",
+      "tests/cave-lantern-lifecycle.test.js"
+    ],
+    "resources": {
+      "newTextures": 0,
+      "newSamplers": 0,
+      "newPasses": 0,
+      "newLights": 0,
+      "newShadowPasses": 0,
+      "newRayQueries": 0,
+      "newArrays": 0,
+      "additionalUploadFrequency": 0
+    },
+    "tradeoff": "The first opaque cell and its interpolated edge receive reduced/no extra moving lantern; their existing static firelight and surface colour remain. This is conservative1mgrid handling, not precise subcell/height-aware shadowing."
+  },
+  "productionOpacityProof": {
+    "authority": "Actual createWorld/replaceWorldMap production terrain+sight opacity. No synthetic visibility arguments.",
+    "roundtrips": 20,
+    "cellsChecked": 512000,
+    "violations": 0,
+    "rule": "For every cell B==(currentVisible&&!opaque)*255;R/G unchanged."
+  },
+  "actualLifecycle": {
+    "retainedPBR": "Real isReadyForSubMesh and bindForSubMesh drive the retained material; hardBind is not invoked with a fake buffer.",
+    "outside": "paint/fog disabled,playerVector0,newfallbacktexture",
+    "entryBeforePlayer": "playerVector0/foginactive",
+    "entryReady": "newruntime light/fogtexture andplayerVector, no disposedtexture rebound",
+    "originalCharacterStyles": "Actual CharacterSurfaceStyle per-draw uniforms preserve playerbrightness1.35/internal.31 andboss1.8/internal.44.",
+    "counts": {
+      "textures": 6,
+      "materials": 14,
+      "meshes": 56,
+      "lights": 3,
+      "before": 2,
+      "after": 1
+    },
+    "resourceOrObserverCountGrowth": 0,
+    "roundtrips": 20
+  },
+  "checks": {
+    "actualUploadedFogBytes": true,
+    "normalizedBilinearSampling": true,
+    "thinWall": true,
+    "firstWallFrontAndBack": true,
+    "diagonalCorner": true,
+    "memory": true,
+    "heightLimit": true,
+    "staticLightBytesUnchanged": true,
+    "firstEnvironmentWarmShaderContainsPaint": true,
+    "uploadPacing": {
+      "cameraOnlyFrames": 300,
+      "cameraOnlyUploads": 0,
+      "movementFrames": 120,
+      "totalFogUploads": 6,
+      "totalRevisions": 6,
+      "staticUploads": 0,
+      "newFogByteArrays": 0
+    }
+  },
+  "testing": {
+    "focused": {
+      "tests": 50,
+      "passed": 50,
+      "failed": 0,
+      "durationMs": 17307.387
+    },
+    "strengthenedFinalLifecycle": {
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "durationMs": 8093.696
+    },
+    "standaloneShaders": {
+      "scope": "Actual expanded production shaders, independent GLSL compiler; not GPU pixel/thermal test.",
+      "directory": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\cave-repeat-lighting-review\\2026-11-02\\shaders\\",
+      "stages": 42,
+      "passed": 42,
+      "failed": []
+    },
+    "shaderVersions": [
+      "ES100/noUBO",
+      "ES300/noUBO",
+      "ES300/UBO"
+    ]
+  },
+  "limits": [
+    "No browser automation or physical GalaxyS23/iPhone14Pro GPU/FPS/temperature measurement.",
+    "B inherits the original1mXZ opacity field and is height-independent. Unrepresented subcell thin geometry is not newly detected.",
+    "The wall-front lantern reduction is deliberate; existing static torch light, R/Gvisibility and source material appearance are retained.",
+    "No geometry/model/LOD/texture-resolution/resource manifest changes. Player8K/backgroundmax4K remain policy-invariant."
+  ],
+  "artifacts": {
+    "lifecycle": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\cave-repeat-review-2026-11-02\\lighting-lifecycle.json",
+    "boundaryAfter": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\cave-repeat-review-2026-11-02\\lighting-boundary-after.json",
+    "shaderCompile": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\cave-repeat-review-2026-11-02\\lighting-shader-compile.json"
+  },
+  "sourceSHA256": {
+    "src/cave-fog-of-war.js": "430ac7b32fe34b704848a78eec566147f59641dbf25d0ab6411fbf12d59b082e",
+    "src/cave-fog-cover.js": "8ee6b97fe992d403cfc786ed017409496d2a44619babb2716994a405ccafd4ec",
+    "src/cave-player-fill.js": "4c85d9aced737623c9e7b5189c2557ffcb6fd56c8f11cb4392bbe0b64397dac0",
+    "src/cave-painted-light-runtime.js": "b04c64c369c80261b70af4e2834231916f0a9ff6ede7d6f75ea02026a7317d74",
+    "tests/cave-fog-of-war.test.js": "d73d0951a7e86c546924f6af2fede88650af763722f838eb225a895633ca69c5",
+    "tests/cave-player-fill.test.js": "d6c9b24cce8f29f2d8b88d5a19e1ca1456bc1c2b7d2d78b149ce7deedad9b5be",
+    "tests/cave-lantern-lifecycle.test.js": "1343779d4bcd3b2690668d67313dd53b4eb497f40bbeec89bb1b69a99ec112d5"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "status": "VERIFICATION_LOCKED_NO_RUNTIME_CHANGE_BY_THIS_TASK",
+  "baseRevision": "4c5de0c",
+  "implementation": "tests/cave-forest-repeat-lifecycle.test.js",
+  "evidence": "reports/cave-repeat-review-2026-11-02/map-compressed-lifecycle.json",
+  "actualPath": {
+    "entry": "createWorld/replaceWorldMap -> prepareVillageStart -> loadVillage/loadStreamedVillage -> readMapContainer -> Babylon EXT_meshopt_compression -> cacheMapBufferViews -> local real Meshopt WASM adapter",
+    "release": "world.releaseEnvironment -> streaming/texture stop -> in-flight owned LOD drain -> source/archive/instance/material/observer disposal -> replaceWorldMap",
+    "wrapperNames": "HEAD4c5de0c has no standalone loadWorldEnvironment/releaseWorldEnvironment functions. Tests follow the actual names above.",
+    "differenceFromEarlierCoverage": "Compressed shipped glTF bufferViews remain intact. Earlier geometry lifecycle tests decoded buffers before Babylon loading and therefore skipped its EXT/runtime decode cache path."
+  },
+  "normalTrips": {
+    "roundTrips": 6,
+    "mapVisits": 12,
+    "actualModelLoads": 228,
+    "uniqueActualModels": 37,
+    "coldDecodeCalls": 168,
+    "subsequentVisitDecodeCalls": 0,
+    "runtimeGeometryCacheHits": 870,
+    "runtimeGeometryCacheBytes": 7135082,
+    "runtimeGeometryCacheLimitBytes": 8388608,
+    "runtimeGeometryCacheEntries": 168,
+    "runtimeGeometryCacheEvictions": 0,
+    "shaderProgramsRetained": 12,
+    "shaderProgramCap": 12,
+    "sceneReadyEveryVisit": true,
+    "pendingSceneItemsAfterEachLoadAndRelease": 0,
+    "sameMapCountsStable": ["meshes", "transforms", "materials", "textures", "geometries", "lighting receivers", "observers", "mesh render stages"],
+    "byteEquivalentWarmGeometry": "Indices/POSITION/NORMAL/UV hashes match every repeat of each actual glTF. Public model and buffer filenames are verified against SHA256.",
+    "retainedIdentity": ["scene", "camera", "terrain object", "player anchor and body profile"]
+  },
+  "lateCompletionCases": {
+    "mapRelease": "Pause a real EXT decoder promise for an unvisited cave eroded-wall midLOD. Release waits; after controlled completion, the old container is disposed without installation, pending0, and forest initial load succeeds.",
+    "cachePolicy": "Completed old-map bytes may enter the detached bounded CPU cache for warm reuse. This is intentional and does not retain a scene/GPU owner.",
+    "engineDispose": "Dispose engine during actual EXT decode, then allow completion. Pool stays disposed with geometry/texture cache bytes0, no late world ownership or scene render observer remains.",
+    "limit": "A geometry decoder which permanently never resolves remains an unbounded release dependency in this design. Controlled-late completion passing does not prove such a driver/worker stall cannot happen. No unreviewed timeout/forced termination was added."
+  },
+  "fixtureCorrections": [
+    "setTarget changes orbit angles, so canonical arrival alpha/beta/radius are fixed before comparing startup plans.",
+    "Babylon's one scene OutlineRenderer is explicitly warmed before baselines; its one-time stage is not counted as per-map growth.",
+    "Observable.remove marks _willBeUnregistered immediately but removes array entries on a timer. Inspection confirmed active callbacks unchanged; await a timer turn before comparing raw observer arrays, rather than misreport setImmediate ordering as a leak.",
+    "NullEngine has no GPU RawTexture upload. Scene-owned RawTextures are marked ready at the explicit upload boundary before readiness checks, including a fallback created by the first draw. This is a test boundary, not a production change."
+  ],
+  "testRuns": {
+    "newTests": {"pass": 3, "fail": 0},
+    "focusedFiles": ["tests/cave-forest-repeat-lifecycle.test.js", "tests/map-warm-cache.test.js", "tests/village-initial-cancel.test.js", "tests/village-texture-cancel.test.js"],
+    "focusedPass": 17,
+    "focusedFail": 0
+  },
+  "preserved": {
+    "runtimeSourceChangedByThisTask": false,
+    "assetFilesChanged": false,
+    "playerManifestMaximum": 8192,
+    "backgroundManifestMaximum": 4096,
+    "geometryLODChanged": false,
+    "browserAutomation": false,
+    "buildCommitPush": false
+  },
+  "limits": [
+    "Actual geometry and cache verification; image decode/transcode and image GPU memory are excluded.",
+    "The real WASM decoder runs via a local in-process test adapter; browser worker scheduling, context restoration and driver behavior are not measured.",
+    "Player8K manifest is checked and retained player-anchor identity is exercised. The full player image allocation, boss/transform lifecycle, portal input and UI are the parent agent's independent scope.",
+    "Stable object counts are not a process heap/RSS/VRAM measurement and do not establish phone thermals or FPS.",
+    "Warmer cache removes repeat geometry decoding; AssetContainer import, setup and image/GPU work can still take time. No phone loading-speed improvement is inferred from this fixture."
+  ]
+}

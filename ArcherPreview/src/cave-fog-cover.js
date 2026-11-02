@@ -1,7 +1,7 @@
 import {CAVE_ROCK_GLSL} from './cave-rock-shell.js';
 import {CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
 
-// R = current player line-of-sight, G = explored memory. RGBA8, no mipmaps.
+// R = current sight, G = memory, B = current non-opaque lantern space. RGBA8.
 // Upload only when fog.revision changes. Bind the same field to ground, rocks,
 // water, glow and ink; otherwise partially visible large meshes can leak detail.
 export const CAVE_FOG_GLSL=`
@@ -14,15 +14,17 @@ uniform float caveFogActive;
 // this one existing lookup, never a second visibility texture or frame upload.
 bool caveFogSampleReady=false;
 vec3 caveFogSamplePosition=vec3(0.);
-vec2 caveFogSampleValue=vec2(0.);
-vec2 caveFogState(vec3 p){
+vec3 caveFogSampleValue=vec3(0.);
+vec3 caveFogSample(vec3 p){
   if(caveFogSampleReady&&all(equal(p,caveFogSamplePosition)))return caveFogSampleValue;
   vec2 uv=(p.xz-caveFogRect.xy)/caveFogRect.zw;
-  vec2 state=vec2(0.);
-  if(uv.x>=0.&&uv.y>=0.&&uv.x<=1.&&uv.y<=1.)state=texture2D(caveFogMap,uv).rg;
+  vec3 state=vec3(0.);
+  if(uv.x>=0.&&uv.y>=0.&&uv.x<=1.&&uv.y<=1.)state=texture2D(caveFogMap,uv).rgb;
   caveFogSampleReady=true;caveFogSamplePosition=p;caveFogSampleValue=state;
   return state;
 }
+vec2 caveFogState(vec3 p){return caveFogSample(p).xy;}
+float caveFogLanternVisibility(vec3 p){return caveFogSample(p).z;}
 vec3 caveFogMemoryColor(vec3 p,float explored){
   // Low-detail darkness belongs to the real occluding surface, not a moving
   // black hemisphere. No repeated rock atlas or pattern is drawn in memory.

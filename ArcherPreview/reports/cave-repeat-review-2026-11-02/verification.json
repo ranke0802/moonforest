@@ -1,0 +1,90 @@
+{
+  "status": "VERIFIED_BEFORE_SYNC",
+  "generatedAt": "2026-11-02T01:04:07.706Z",
+  "base": "4c5de0c86028e6e25f077df8b88e025d32d87364",
+  "tests": {
+    "total": 972,
+    "passed": 972,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "sourceLocks": [
+    {
+      "path": "src/cave-fog-of-war.js",
+      "sha256": "430ac7b32fe34b704848a78eec566147f59641dbf25d0ab6411fbf12d59b082e"
+    },
+    {
+      "path": "src/cave-fog-cover.js",
+      "sha256": "8ee6b97fe992d403cfc786ed017409496d2a44619babb2716994a405ccafd4ec"
+    },
+    {
+      "path": "src/cave-player-fill.js",
+      "sha256": "4c85d9aced737623c9e7b5189c2557ffcb6fd56c8f11cb4392bbe0b64397dac0"
+    },
+    {
+      "path": "src/cave-painted-light-runtime.js",
+      "sha256": "b04c64c369c80261b70af4e2834231916f0a9ff6ede7d6f75ea02026a7317d74"
+    },
+    {
+      "path": "tests/cave-fog-of-war.test.js",
+      "sha256": "d73d0951a7e86c546924f6af2fede88650af763722f838eb225a895633ca69c5"
+    },
+    {
+      "path": "tests/cave-player-fill.test.js",
+      "sha256": "d6c9b24cce8f29f2d8b88d5a19e1ca1456bc1c2b7d2d78b149ce7deedad9b5be"
+    },
+    {
+      "path": "tests/cave-lantern-lifecycle.test.js",
+      "sha256": "1343779d4bcd3b2690668d67313dd53b4eb497f40bbeec89bb1b69a99ec112d5"
+    },
+    {
+      "path": "src/world.js",
+      "sha256": "e39806ee1a34487ca5f00dcaaa514fa7fad3a81718e96f500afb8ceecb2d1dd9"
+    },
+    {
+      "path": "tests/cave-hidden-effects.test.js",
+      "sha256": "9690971d1b285ef36b317d585e7666790f14fab5b3490afa615d1ae83994e006"
+    },
+    {
+      "path": "tests/cave-forest-repeat-lifecycle.test.js",
+      "sha256": "6909d1c4b2057925f596d2ca04603c78752516e8f972a20e0744b2fb4e284348"
+    },
+    {
+      "path": "README.md",
+      "sha256": "3fddf3f1906e33542440c0dacbcffcdee370c2c8e1c90c9376c35005c6fc3192"
+    }
+  ],
+  "shaderStages": 42,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "unchangedResourceFiles": 1037,
+  "unchangedBundles": 194,
+  "normalMapRoundTrips": 6,
+  "actualModelLoads": 228,
+  "lightingRoundTrips": 20,
+  "productionOpacityCells": 512000,
+  "coreFocusedTests": 41,
+  "hiddenEffectTests": 2,
+  "newLights": 0,
+  "newTextures": 0,
+  "newShadowPasses": 0,
+  "preservation": {
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "lod": true,
+    "newAssetGeneration": false,
+    "browserAutomation": false
+  },
+  "limitations": [
+    "No browser automation or physical GalaxyS23/iPhone14Pro GPU/FPS/temperature measurement.",
+    "B inherits the original1mXZ opacity field and is height-independent. Unrepresented subcell thin geometry is not newly detected.",
+    "The wall-front lantern reduction is deliberate; existing static torch light, R/Gvisibility and source material appearance are retained.",
+    "No geometry/model/LOD/texture-resolution/resource manifest changes. Player8K/backgroundmax4K remain policy-invariant.",
+    "Actual geometry and cache verification; image decode/transcode and image GPU memory are excluded.",
+    "The real WASM decoder runs via a local in-process test adapter; browser worker scheduling, context restoration and driver behavior are not measured.",
+    "Player8K manifest is checked and retained player-anchor identity is exercised. The full player image allocation, boss/transform lifecycle, portal input and UI are the parent agent's independent scope.",
+    "Stable object counts are not a process heap/RSS/VRAM measurement and do not establish phone thermals or FPS.",
+    "Warmer cache removes repeat geometry decoding; AssetContainer import, setup and image/GPU work can still take time. No phone loading-speed improvement is inferred from this fixture.",
+    "A geometry decoder which permanently never resolves remains an unbounded release dependency in this design. Controlled-late completion passing does not prove such a driver/worker stall cannot happen. No unreviewed timeout/forced termination was added."
+  ]
+}

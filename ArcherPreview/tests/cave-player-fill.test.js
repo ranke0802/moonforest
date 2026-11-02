@@ -47,7 +47,7 @@ test('all incoming near/mid/far environment shaders have cave illumination befor
   const mesh=incoming(world,'incoming-lod-'+index,rock),m=mesh.material;
   assert.equal(m.fogEnabled,false);assert.ok(m.pluginManager.getPlugin('CavePaintLight'));assert.ok(m.pluginManager.getPlugin('CaveRockMood'));
   await prepareMapMaterials([mesh]);const s=mesh.subMeshes[0].effect.fragmentSourceCode;
-  assert.match(s,/finalDiffuse\*=cavePaintFactor\(vPositionW\)/);assert.match(s,/cavePlayerFillFactor\(p,caveFogState\(p\)\.x\)/);
+  assert.match(s,/finalDiffuse\*=cavePaintFactor\(vPositionW\)/);assert.match(s,/cavePlayerFillFactor\(p,caveFogLanternVisibility\(p\)\)/);
   assert.match(s,/float caveDistanceFog=smoothstep\(22\.,48\./);
  }
  assert.equal(world.scene.materials.length,actorsBefore+3,'one existing material per source; no additional glow/light material');

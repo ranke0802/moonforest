@@ -85,6 +85,10 @@ export class CaveFogOfWar {
         const i=row*this.cols+col,v=this.visible[i];rowSum+=v;count+=v;
         if(v&&!this.explored[i]){this.explored[i]=1;this.stats.exploredCells++;}
         this.rgba[i*4]=v?255:0;this.rgba[i*4+1]=this.explored[i]?255:0;
+        // R still reveals the first wall, G still preserves exploration. A
+        // separate conservative moving-lantern mask must not treat that whole
+        // opaque cell as a receiving surface beyond the wall's real far face.
+        this.rgba[i*4+2]=v&&!this.opaque[i]?255:0;
         this.sums[(row+1)*(this.cols+1)+col+1]=this.sums[row*(this.cols+1)+col+1]+rowSum;
       }
     }

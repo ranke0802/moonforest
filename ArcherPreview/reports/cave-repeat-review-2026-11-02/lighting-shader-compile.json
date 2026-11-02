@@ -1,0 +1,7 @@
+{
+  "scope": "Actual expanded production shaders, independent GLSL compiler; not GPU pixel/thermal test.",
+  "directory": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\cave-repeat-lighting-review\\2026-11-02\\shaders\\",
+  "stages": 42,
+  "passed": 42,
+  "failed": []
+}

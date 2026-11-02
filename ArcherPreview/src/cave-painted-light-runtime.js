@@ -15,7 +15,7 @@ uniform vec4 cavePaintRect;
 uniform float cavePaintActive;
 uniform vec4 cavePaintPlayer;
 #ifndef CAVE_FOG_STATE_DEFINED
-vec2 caveFogState(vec3 p);
+float caveFogLanternVisibility(vec3 p);
 #endif
 ${CAVE_PLAYER_FILL_GLSL}
 vec4 cavePaintSample(vec3 p){
@@ -32,9 +32,9 @@ vec3 cavePaintFactorFromSample(vec3 p,vec4 light){
  // In particular, distant roofs need no moving-light visibility lookup at all.
  if(cavePaintPlayer.w<.5||dot(toPlayer,toPlayer)>=${(CAVE_PLAYER_FILL.radius**2).toFixed(2)})return staticFactor;
  // Both contributions are linear illumination factors. The lantern can only
- // lift the same currently visible surface; existing firelight is never dimmed
- // or overexposed, and explored/hidden rooms receive no moving contribution.
- return max(staticFactor,cavePlayerFillFactor(p,caveFogState(p).x));
+ // lift current non-opaque cells only. The first wall retains its existing
+ // static light/surface colour, while its conservative cell adds no lantern.
+ return max(staticFactor,cavePlayerFillFactor(p,caveFogLanternVisibility(p)));
 }
 vec3 cavePaintFactor(vec3 p){
  if(cavePaintActive<.5)return vec3(1.);

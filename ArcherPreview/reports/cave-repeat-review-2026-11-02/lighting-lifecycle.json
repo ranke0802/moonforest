@@ -1,0 +1,645 @@
+{
+  "scope": "Actual RawTexture upload bytes/bilinear emulation and real retained PBR bind/readiness lifecycle; no GPU pixels/device thermals.",
+  "checks": {
+    "actualTexture": {
+      "front": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "rear": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "exploredRear": [
+        0,
+        1,
+        0,
+        1
+      ],
+      "textureUploadMatchesAuthoritativeBytes": true
+    },
+    "thinWall": {
+      "samples": [
+        {
+          "x": 0.4,
+          "rgba": [
+            1,
+            1,
+            0.09999999999999432,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.5,
+          "rgba": [
+            1,
+            1,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.506,
+          "rgba": [
+            0.9939999999999998,
+            0.9939999999999998,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.52,
+          "rgba": [
+            0.9800000000000039,
+            0.9800000000000039,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.55,
+          "rgba": [
+            0.950000000000003,
+            0.950000000000003,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.58,
+          "rgba": [
+            0.9200000000000016,
+            0.9200000000000016,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 0.75,
+          "rgba": [
+            0.75,
+            0.75,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "x": 1.5,
+          "rgba": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "local": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "staticMapBytesUnchanged": true,
+      "firstWallTradeoff": "First opaque cell receives no added moving lantern; R/G and existing static surface light stay unchanged.",
+      "limit": "Actual1m opacity field, not a proof of subcell geometry shadow accuracy."
+    },
+    "diagonal": {
+      "samples": [
+        {
+          "p": {
+            "x": 0.5,
+            "y": 1.05,
+            "z": 0.5
+          },
+          "rgba": [
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "p": {
+            "x": 0.51,
+            "y": 1.05,
+            "z": 0.51
+          },
+          "rgba": [
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "p": {
+            "x": 0.5,
+            "y": 1.05,
+            "z": -0.5
+          },
+          "rgba": [
+            1,
+            1,
+            0,
+            1
+          ]
+        },
+        {
+          "p": {
+            "x": -0.5,
+            "y": 1.05,
+            "z": 0.5
+          },
+          "rgba": [
+            1,
+            1,
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "uploadPacing": {
+      "cameraOnlyFrames": 300,
+      "cameraOnlyUploads": 0,
+      "movementFrames": 120,
+      "totalFogUploads": 6,
+      "totalRevisions": 6,
+      "staticUploads": 0,
+      "newFogByteArrays": 0
+    },
+    "realRetainedBind": {
+      "baseline": {
+        "textures": 6,
+        "materials": 14,
+        "meshes": 56,
+        "lights": 3,
+        "before": 2,
+        "after": 1
+      },
+      "cycles": [
+        {
+          "roundtrip": 1,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 724,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 2,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 727,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 3,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 727,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 4,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 727,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 5,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 727,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 6,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 727,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 7,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 8,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 9,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 10,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 11,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 12,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 13,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 14,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 728,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 15,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 16,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 17,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 18,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 19,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        },
+        {
+          "roundtrip": 20,
+          "outsideActive": 0,
+          "beforePlayerReady": 0,
+          "enteredActive": 1,
+          "newTexture": true,
+          "counts": {
+            "textures": 6,
+            "materials": 14,
+            "meshes": 56,
+            "lights": 3,
+            "before": 2,
+            "after": 1
+          },
+          "productionOpacityInvariant": {
+            "cells": 25600,
+            "litCells": 729,
+            "visibleOpaqueCellsWithoutLantern": 51,
+            "violations": 0
+          }
+        }
+      ],
+      "firstWarmShaderIncludesPaint": true,
+      "oldGpuTexturesRetained": 0,
+      "productionOpacityCellsChecked": 512000
+    }
+  }
+}

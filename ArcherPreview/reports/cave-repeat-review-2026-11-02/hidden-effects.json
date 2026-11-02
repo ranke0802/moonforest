@@ -1,0 +1,25 @@
+{
+  "scope": "Actual world tick and map replacement in NullEngine; no GPU or physical temperature measurement.",
+  "results": [
+    {
+      "case": "hidden120seconds",
+      "frames": 3600,
+      "motes": 28,
+      "positions": 0,
+      "toggles": 0,
+      "hiddenBeforeFirstFrame": true,
+      "previousPositionWrites": 100800,
+      "previousVisibilityCalls": 100800
+    },
+    {
+      "case": "twentyRoundtrips",
+      "roundTrips": 20,
+      "outdoorFrames": 600,
+      "positions": 16800,
+      "toggles": 1120,
+      "motes": 28,
+      "originalOutdoorTrajectory": true,
+      "hiddenUpdates": 0
+    }
+  ]
+}

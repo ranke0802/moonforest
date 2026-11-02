@@ -117,8 +117,17 @@ test('low-cost opaque cover is bounded and follows the injected terrain',()=>{
  assert.match(CAVE_FOG_GLSL,/caveFogHidesInk/);
 });
 test('RGBA mask carries no stale current vision when memory remains',()=>{
- const f=make();f.update(p(3.5,3.5),0);const i=(3*32+3)*4;assert.deepEqual(Array.from(f.rgba.slice(i,i+4)),[255,255,0,255]);
+ const f=make();f.update(p(3.5,3.5),0);const i=(3*32+3)*4;assert.deepEqual(Array.from(f.rgba.slice(i,i+4)),[255,255,255,255]);
  f.update(p(24.5,24.5),.01);assert.deepEqual(Array.from(f.rgba.slice(i,i+4)),[0,255,0,255]);
+});
+
+test('lantern B channel is current non-opaque space while R/G sight and memory keep their original authority',()=>{
+ const f=make({radius:24,isOpaque:x=>Math.floor(x)===10});f.update(p(5.5,12.5),0);
+ const wall=(12*32+10)*4;assert.equal(f.rgba[wall],255,'first wall remains visible');assert.equal(f.rgba[wall+1],255);assert.equal(f.rgba[wall+2],0,'moving lantern does not illuminate its opaque cell');
+ for(let i=0;i<f.visible.length;i++){
+  assert.equal(f.rgba[i*4],f.visible[i]?255:0);assert.equal(f.rgba[i*4+1],f.explored[i]?255:0);assert.equal(f.rgba[i*4+2],f.visible[i]&&!f.opaque[i]?255:0);assert.equal(f.rgba[i*4+3],255);
+ }
+ f.update(p(24.5,12.5),1);for(let i=0;i<f.visible.length;i++)if(!f.visible[i])assert.equal(f.rgba[i*4+2],0);
 });
 test('invalid budgets and invalid player inputs fail explicitly without allocating unbounded data',()=>{
  assert.throws(()=>make({cellSize:.01}),RangeError);assert.throws(()=>make({width:Infinity}),RangeError);

@@ -1,0 +1,287 @@
+{
+  "scope": "Actual production CaveFogRuntime/RawTexture data and exact normalized bilinear sampling; CPU lighting math, no GPU pixels.",
+  "wall": {
+    "nearX": 0.4,
+    "farX": 0.505,
+    "sampledOpaqueCell": {
+      "minX": 0,
+      "maxX": 1
+    }
+  },
+  "texture": {
+    "size": {
+      "width": 160,
+      "height": 160
+    },
+    "samplingMode": 2,
+    "gammaSpace": false,
+    "noMipmap": true,
+    "uploadSameByteArray": true
+  },
+  "samples": [
+    {
+      "position": {
+        "x": -0.5,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": false,
+      "rgba": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "fill": [
+        0.892783204548768,
+        0.6547076833357632,
+        0.3769529085872576
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.892783204548768,
+        0.6547076833357632,
+        0.3769529085872576
+      ]
+    },
+    {
+      "position": {
+        "x": 0.4,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": false,
+      "rgba": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "fill": [
+        0.7672833940807697,
+        0.5626744889925646,
+        0.32396409972299167
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.7672833940807697,
+        0.5626744889925646,
+        0.32396409972299167
+      ]
+    },
+    {
+      "position": {
+        "x": 0.5,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": false,
+      "rgba": [
+        1,
+        1,
+        0,
+        1
+      ],
+      "fill": [
+        0.7458230062691354,
+        0.5469368712640327,
+        0.31490304709141276
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.7458230062691354,
+        0.5469368712640327,
+        0.31490304709141276
+      ]
+    },
+    {
+      "position": {
+        "x": 0.506,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0.9939999999999998,
+        0.9939999999999998,
+        0,
+        1
+      ],
+      "fill": [
+        0.7441047911640157,
+        0.5456768468536115,
+        0.31417757849147326
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.7441047911640157,
+        0.5456768468536115,
+        0.31417757849147326
+      ]
+    },
+    {
+      "position": {
+        "x": 0.52,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0.9800000000000039,
+        0.9800000000000039,
+        0,
+        1
+      ],
+      "fill": [
+        0.6642869280994098,
+        0.48714374727290055,
+        0.28047670297530636
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.6642869280994098,
+        0.48714374727290055,
+        0.28047670297530636
+      ]
+    },
+    {
+      "position": {
+        "x": 0.55,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0.950000000000003,
+        0.950000000000003,
+        0,
+        1
+      ],
+      "fill": [
+        0.25860080548189,
+        0.18964059068671937,
+        0.10918700675902024
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.25860080548189,
+        0.18964059068671937,
+        0.2
+      ]
+    },
+    {
+      "position": {
+        "x": 0.58,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0.9200000000000016,
+        0.9200000000000016,
+        0,
+        1
+      ],
+      "fill": [
+        9.377938051588922e-28,
+        6.87715457116521e-28,
+        3.9595738440042114e-28
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.14,
+        0.16,
+        0.2
+      ]
+    },
+    {
+      "position": {
+        "x": 0.75,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0.75,
+        0.75,
+        0,
+        1
+      ],
+      "fill": [
+        0,
+        0,
+        0
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.14,
+        0.16,
+        0.2
+      ]
+    },
+    {
+      "position": {
+        "x": 1.5,
+        "y": 1.05,
+        "z": 0.5
+      },
+      "analyticWallBehind": true,
+      "rgba": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "fill": [
+        0,
+        0,
+        0
+      ],
+      "staticFactor": [
+        0.14,
+        0.16,
+        0.2
+      ],
+      "combinedFactor": [
+        0.14,
+        0.16,
+        0.2
+      ]
+    }
+  ],
+  "finding": "The first opaque grid cell is deliberately current-visible. A thin wall ending just after its center can leave nearly-full bilinear R in a few cm behind its actual far face. Existing .92/.995 fill gating cannot distinguish that from a visible first-wall surface.",
+  "productionModified": false,
+  "physicalGpuOrTemperatureMeasured": false
+}

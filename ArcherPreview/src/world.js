@@ -109,6 +109,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
   const moteMaterial = new StandardMaterial('mote-light', scene);
   moteMaterial.emissiveColor = new Color3(.25, .5, .58); moteMaterial.disableLighting = true;
   const motes = [];
+  let motesVisible;
   let moteSource;
   for (let i = 0; i < 28; i++) {
     const mote = i ? moteSource.createInstance(`mote-${i}`) : (moteSource=MeshBuilder.CreateSphere('mote-0',{diameter:.018,segments:3},scene));
@@ -123,8 +124,10 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
   // combat frame when a bear or goblin needs to route around a tree.
   navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
   const mapId=cave?'witch-cave':forest?'monster-forest':village?'village':'training';
-  const world={ground,forest,cave,mapId,environmentManifest:cave?'witch-cave':forest?'monster-forest':'village',groundManifest:cave?'witch-cave-ground':forest?'monster-forest-ground':'village-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,tick(time){if(!this.cave)sky.tick(time);this.caveAtmosphere?.tick(time);for(const mote of motes){mote.mesh.setEnabled(!this.cave);mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}}};
-  configureCaveAtmosphere(world);configureCaveFog(world);return world;
+  const world={ground,forest,cave,mapId,environmentManifest:cave?'witch-cave':forest?'monster-forest':'village',groundManifest:cave?'witch-cave-ground':forest?'monster-forest-ground':'village-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
+    setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
+    tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);}};
+  world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);return world;
 }
 
 // Called after the old streamed environment has drained and released its GPU
@@ -138,6 +141,7 @@ export function replaceWorldMap(world,character){
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,environment:null});
+  world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   world.navigation.grid(.34,ENEMY_ARENA_RADIUS);world.navigation.grid(.7,ENEMY_ARENA_RADIUS);
   world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
