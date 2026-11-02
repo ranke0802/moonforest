@@ -27,6 +27,9 @@ import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 const caveTrainingSpawn={x:-39,z:39};
+// Cover the 200% desktop fog end from the playable rim plus the normal maximum
+// camera radius. Only stretch the non-playable outer ring; add no triangles.
+const PLAINS_GROUND_BORDER=260;
 function mapNavigation({cave,forest,plains,village}){
   const obstacles=plains?plainsObstacles():cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
@@ -79,7 +82,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
 
   const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
-  const ground = createTerrainGround(scene,terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
+  const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
@@ -149,7 +152,7 @@ export function replaceWorldMap(world,character){
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
-  world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
+  world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE});
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;
   world.ground.isPickable=false;world.ground.freezeWorldMatrix();world.lighting.registerMeshes([world.ground]);

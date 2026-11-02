@@ -5,8 +5,10 @@ import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS
 import {VillageNavigation} from '../src/village-navigation.js';
 import {mapPortals,mapForCharacter,worldSpawn,portalHeadingTurn,portalAvailable,travelUrl} from '../src/map-route.js';
 import {greatPlainsHeight} from '../src/great-plains-terrain.js';
-import {NullEngine} from '@babylonjs/core';
+import {NullEngine,VertexBuffer} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
+import {createTerrainGround} from '../src/terrain-mesh.js';
+import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
 
 test('treasure anchors preserve quest identities without duplicate static chests',()=>{
  assert.deepEqual(PLAINS_TREASURE_ANCHORS.map(({id,x,z,lootTier})=>({id,x,z,lootTier})),[
@@ -99,6 +101,19 @@ test('plains entry, exit and terrain stay finite with gentle road gradients',()=
  assert.match(travelUrl('http://localhost/?character=warrior-v3','warrior-plains'),/character=warrior-plains/);
 });
 
+test('plains 200% floor border covers the normal camera range without adding playable geometry',t=>{
+ const engine=new NullEngine();engine.createCanvas=(width,height)=>({width,height,getContext:()=>({fillRect(){},strokeRect(){},fillText(){}})});
+ const world=createWorld(engine,{plains:true,touchDevice:false});t.after(()=>{world.scene.dispose();engine.dispose();});
+ const original=createTerrainGround(world.scene,world.terrain,{borderExtension:105}),actual=world.ground;
+ assert.equal(actual.getTotalVertices(),original.getTotalVertices());assert.deepEqual(actual.getIndices(),original.getIndices());
+ const before=original.getVerticesData(VertexBuffer.PositionKind),after=actual.getVerticesData(VertexBuffer.PositionKind);
+ for(let i=0;i<before.length;i+=3)if(Math.abs(before[i])<world.terrain.half&&Math.abs(before[i+2])<world.terrain.half)assert.deepEqual(after.slice(i,i+3),before.slice(i,i+3));
+ applyPlainsViewDistance(world,2);const bounds=actual.getBoundingInfo().boundingBox;
+ assert.ok(bounds.maximum.x-PLAINS_RADIUS-world.camera.upperRadiusLimit>plainsRenderRange(world).fogEnd);
+ assert.ok(-bounds.minimum.z-PLAINS_RADIUS-world.camera.upperRadiusLimit>plainsRenderRange(world).fogEnd);
+ assert.ok(world.camera.maxZ>plainsRenderRange(world).fogEnd);original.dispose();
+});
+
 test('plains signs and river release across repeated four-map replacement without scene ownership growth',async t=>{
  const engine=new NullEngine();engine.createCanvas=(width,height)=>({width,height,getContext:()=>({fillRect(){},strokeRect(){},fillText(){}})});
  const world=createWorld(engine,{village:true,touchDevice:true});t.after(()=>{world.scene.dispose();engine.dispose();});
@@ -107,6 +122,7 @@ test('plains signs and river release across repeated four-map replacement withou
   replaceWorldMap(world,character);await new Promise(resolve=>setTimeout(resolve,5));
   const scene=world.scene,counts={meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,before:scene.onBeforeRenderObservable.observers.length,dispose:scene.onDisposeObservable.observers.length};
   assert.equal(!!world.plainsDecor,character==='warrior-plains');
+  if(character!=='warrior-v5')assert.equal(world.ground.getBoundingInfo().boundingBox.maximum.x,world.terrain.half+(character==='warrior-plains'?260:105));
   if(character!=='warrior-plains')assert.equal(scene.meshes.some(m=>m.name==='plains-stream'),false);
   if(cycle===1)baseline.set(character,counts);if(cycle>1)assert.deepEqual(counts,baseline.get(character),character+' resources grew');
  }

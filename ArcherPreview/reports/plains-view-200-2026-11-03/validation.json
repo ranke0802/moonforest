@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "log": "tests.log",
+      "tests": 43,
+      "pass": 43,
+      "fail": 0,
+      "cancelled": 0
+    },
+    {
+      "log": "outline-tests.log",
+      "tests": 11,
+      "pass": 11,
+      "fail": 0,
+      "cancelled": 0
+    }
+  ],
+  "passed": 54,
+  "plainsOnly": true,
+  "steps": [
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    160,
+    170,
+    180,
+    190,
+    200
+  ],
+  "defaultPercent": 100,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "resourceGraphUnchanged": true,
+  "groundTrianglesUnchanged": true,
+  "playableTerrainUnchanged": true,
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "visualReview": "User will review on device."
+}

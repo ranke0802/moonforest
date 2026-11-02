@@ -1,7 +1,7 @@
 import {villageRenderRange} from './village-policy.js';
 
 export const PLAINS_VIEW_DISTANCE_KEY='moonforest-plains-view-distance-v1';
-export const PLAINS_VIEW_DISTANCE_STEPS=Object.freeze([1,1.1,1.2,1.3]);
+export const PLAINS_VIEW_DISTANCE_STEPS=Object.freeze([1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2]);
 export function normalizePlainsViewDistance(value){
   const number=Number(value);
   return PLAINS_VIEW_DISTANCE_STEPS.includes(number)?number:1;

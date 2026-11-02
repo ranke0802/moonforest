@@ -85,7 +85,8 @@ export class VillageOutlines {
     this.material.metadata={villageOutline:true};
     Object.assign(this.material.stencil,{enabled:true,func:Constants.NOTEQUAL,backFunc:Constants.NOTEQUAL,funcRef:4,funcMask:4,mask:0,opStencilDepthPass:Constants.KEEP,backOpStencilDepthPass:Constants.KEEP});
     this.material.setColor3('inkColor',new Color3(.065,.052,.044));
-    this.material.setVector2('inkFogRange',new Vector2(world.scene.fogStart,world.scene.fogEnd));
+    this.fogRange=new Vector2(world.scene.fogStart,world.scene.fogEnd);
+    this.material.setVector2('inkFogRange',this.fogRange);
     this.sourceFor=original=>{
       if(this.sources.has(original)){for(const lod of original.getLODLevels())if(lod.mesh)this.sourceFor(lod.mesh);return;}
       this.sources.add(original);
@@ -149,6 +150,8 @@ export class VillageOutlines {
     }
   }
   update(now){
+    const {fogStart,fogEnd}=this.world.scene;
+    if(this.fogRange.x!==fogStart||this.fogRange.y!==fogEnd){this.fogRange.set(fogStart,fogEnd);this.material.setVector2('inkFogRange',this.fogRange);}
     bindCaveFogMaterial(this.world.scene,this.material);
     this.material.setVector3('inkCamera',this.world.camera.globalPosition);
     this.material.setFloat('inkCaveActive',this.world.cave?1:0);

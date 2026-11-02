@@ -1,5 +1,6 @@
 // Move the existing controls, keeping their IDs, values and event handlers intact.
 import {setupRuntimeVersionPanel} from './runtime-version.js';
+import {PLAINS_VIEW_DISTANCE_STEPS} from './plains-view-distance.js';
 export function setupSettingsPanel() {
   const $ = selector => document.querySelector(selector);
   const dialog = $('#motion-speed-dialog');
@@ -48,7 +49,7 @@ export function setupSettingsPanel() {
   frameSelect.innerHTML='<option value="30">30 FPS · 기본</option><option value="60">60 FPS</option>';frameLabel.append(frameSelect);
   displayOptions.append(qualityLabel,frameLabel);
   const plainsDistance=document.createElement('div');plainsDistance.className='camera-zoom-options';
-  plainsDistance.innerHTML='<label>대평원 풍경 거리 <select id="plains-view-distance-select" class="quality-select" aria-label="대평원 풍경 거리"><option value="1">기본</option><option value="1.1">조금 멀리 · 110%</option><option value="1.2">더 멀리 · 120%</option><option value="1.3">가장 멀리 · 130%</option></select></label><small>대평원에서 먼 풍경을 더 보여줍니다. 거리가 멀수록 성능에 부담이 늘 수 있습니다.</small>';
+  plainsDistance.innerHTML=`<label>대평원 풍경 거리 <select id="plains-view-distance-select" class="quality-select" aria-label="대평원 풍경 거리">${PLAINS_VIEW_DISTANCE_STEPS.map(value=>`<option value="${value}">${value===1?'기본 · 100%':`${Math.round(value*100)}%`}</option>`).join('')}</select></label><small>대평원에서 먼 풍경을 더 보여줍니다. 거리가 멀수록 성능에 부담이 늘 수 있습니다.</small>`;
   const pitchOptions=document.createElement('div');pitchOptions.id='camera-pitch-options';pitchOptions.className='camera-zoom-options';
   pitchOptions.innerHTML='<div class="camera-zoom-row"><label><input id="camera-upward-limited" type="checkbox" checked>위쪽 시야 제한</label></div><small>해제하면 거의 수직으로 올려다볼 수 있습니다.</small><small id="camera-pitch-status" role="status" aria-live="polite"></small>';
   const followOptions=document.createElement('div');followOptions.id='camera-follow-options';followOptions.className='camera-zoom-options';

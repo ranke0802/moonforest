@@ -64,7 +64,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
  const boundary={saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
-  assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
+  assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
   audio,actionAudio:{reset:noop},updateButtons:noop,toast:noop,canvas:{focus:noop},config:{forwardYaw:0},container:{meshes:[]},applyHitFlash:noop,
   goldLoot:{clearDrops:noop},goldLootView:{clear:noop},strikeSampler:{reset:noop},projectiles:{clear:noop},training:{setSelected:noop,relocate:noop},
@@ -104,8 +104,8 @@ for(const mode of [false,true])test(`actual main portal callbacks and death dial
   const beforeAngle=f.world.camera.alpha+f.actor.rotation.y;
   assert.equal(await f.runtime.transition.travel(`https://example.test/?character=${destination}&arrival=portal`),true);travels++;
   assert.equal(f.runtime.character,destination);assert.equal(f.runtime.ready,true);near(Math.sin(f.world.camera.alpha+f.actor.rotation.y),Math.sin(beforeAngle));assertChoice(f,mode,initial,writes);
-  assert.equal(f.world.plainsViewDistance,1.2,'map callbacks retain the selected plains range across every region');
-  if(destination==='warrior-plains'){const range=plainsRenderRange(f.world);near(f.world.scene.fogStart,65*1.2);near(f.world.scene.fogEnd,80*1.2);near(range.cellCull,82*1.2);}
+  assert.equal(f.world.plainsViewDistance,2,'map callbacks retain the selected plains range across every region');
+  if(destination==='warrior-plains'){const range=plainsRenderRange(f.world);near(f.world.scene.fogStart,65*2);near(f.world.scene.fogEnd,80*2);near(range.cellCull,82*2);}
   else if(destination==='warrior-v3'||destination==='warrior-v4'){near(f.world.scene.fogStart,65);near(f.world.scene.fogEnd,80);}
   f.world.camera.radius=9;f.world.camera.beta=1.2;f.input.panOffset={x:2,y:.4,z:-1};f.actor.position.x+=3;f.controller.captured=true;f.controller.staggerRemaining=2;
   f.doc.querySelector('#motion-speed-dialog').showModal();f.runtime.deathScreen.show();assert.equal(f.runtime.deathScreen.isOpen(),true);assert.equal(f.doc.querySelector('#motion-speed-dialog').open,false);
