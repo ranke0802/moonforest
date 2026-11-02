@@ -74,7 +74,7 @@ test('complete r9 living/death frame ranges and arbitrary parent yaw/scale remai
    checked+=checkAllVertices(f,`${state}/${frame}`);poses++;
   }
  }
- assert.equal(poses,724);assert.ok(checked>68_000_000);assert.ok(f.bounds.parts.every(part=>part.maxWeightSumError<=1e-5));
+ assert.equal(poses,724);assert.equal(checked,poses*f.sources.reduce((n,m)=>n+m.getTotalVertices(),0));assert.ok(f.bounds.parts.every(part=>part.maxWeightSumError<=1e-5));
  t.diagnostic(JSON.stringify({poses,checkedVertices:checked,boneBoxes:f.bounds.parts.reduce((n,p)=>n+p.boxes.length,0),maxWeightSumError:Math.max(...f.bounds.parts.map(p=>p.maxWeightSumError))}));
 });
 

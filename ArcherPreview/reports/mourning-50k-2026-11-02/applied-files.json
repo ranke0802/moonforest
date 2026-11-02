@@ -1,0 +1,18 @@
+{
+  "approvedByUser": true,
+  "paths": [
+    "ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+    "ArcherPreview/public/assets/content/e1f363e87344cf26f53f6a8b6ae448b9a70b810798c259b632c9a46ad2146793.bin",
+    "ArcherPreview/public/assets/mourning-elena.json"
+  ],
+  "texture": {
+    "sha256": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9",
+    "file": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
+    "bytes": 2120278,
+    "width": 4096,
+    "height": 4096,
+    "byteExactExistingTexture": true
+  },
+  "sourceBefore": "./content/10eb3c62c2f2cc308a19bd211e774dc083e20de6f2e0e1782eeb948dc87d6a44.gltf",
+  "modelAfter": "./content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf"
+}

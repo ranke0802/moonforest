@@ -44,7 +44,7 @@ for(const id of ['elena','mourning-elena'])test(`${id} keeps one packed resident
   for(let i=0;i<20;i++)assert.strictEqual((await library.instantiate()).asset,first.asset);
   assert.equal(clones,0);assert.deepEqual(counts(scene),before);
   assert.deepEqual(first.asset.meshes,container.meshes);assert.strictEqual(first.asset.skeletons,container.skeletons);assert.strictEqual(first.asset.animationGroups,container.animationGroups);
-  assert.equal(first.asset.meshes.filter(m=>m.getTotalVertices()).reduce((n,m)=>n+m.getTotalIndices()/3,0),id==='elena'?103930:143228);
+  assert.equal(first.asset.meshes.filter(m=>m.getTotalVertices()).reduce((n,m)=>n+m.getTotalIndices()/3,0),id==='elena'?103930:49982);
 });
 
 test('counted bear instances still receive separate actors',async t=>{

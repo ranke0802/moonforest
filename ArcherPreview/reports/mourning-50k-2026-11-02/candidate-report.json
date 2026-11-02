@@ -1,0 +1,244 @@
+{
+  "createdAt": "2026-11-02T08:30:54.669Z",
+  "status": "candidate-needs-visual-validation",
+  "source": {
+    "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-motion-expansion/2026-10-31/models/model.glb",
+    "sha256": "2e0b4cf4883b333b99a83c77ab7b49180507eeb1a956dbfde85478bfe5a2b0ed",
+    "runtimeModel": "./content/10eb3c62c2f2cc308a19bd211e774dc083e20de6f2e0e1782eeb948dc87d6a44.gltf",
+    "triangles": 143228,
+    "vertices": 94521
+  },
+  "candidate": {
+    "model": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+    "triangles": 49982,
+    "bodyTriangles": 44166,
+    "vertices": 40777,
+    "bodyVertices": 36196,
+    "elapsedMs": 206.2682,
+    "reportedCombinedAttributeError": 0.0034525971859693527,
+    "targetError": 0.008,
+    "protectedVertices": 7730,
+    "protected": "head, neck, prayer arms/hands, fingers and toes",
+    "otherMeshesUnchanged": true
+  },
+  "texture": {
+    "sha256": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9",
+    "file": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
+    "bytes": 2120278,
+    "width": 4096,
+    "height": 4096,
+    "byteExactExistingTexture": true
+  },
+  "preserved": {
+    "nodes": true,
+    "skinBonesAndOrder": true,
+    "animationChannelsAndKeys": true,
+    "morphNames": [
+      "Breath_Rise",
+      "Bust_Settle",
+      "Bust_ArmFollow",
+      "Cast_Palm_Cleanup",
+      "Cast_Elbow_Form",
+      "Hair_Cast_Wind",
+      "Death_Scream",
+      "Death_Hair_Cry",
+      "Death_Hair_Settle",
+      "Death_Ground_Contact",
+      "Death_Ground_Early"
+    ],
+    "attributes": [
+      {
+        "id": 0,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 1,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 2,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 3,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 4,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 6,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 7,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 8,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 9,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 10,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 11,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 12,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 13,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 14,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 15,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 16,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 17,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 18,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 19,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 20,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 21,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 22,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 23,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 24,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 25,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 26,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      },
+      {
+        "id": 27,
+        "elements": 36196,
+        "byteExactAtRetainedVertices": true
+      }
+    ]
+  },
+  "morphMemory": {
+    "before": {
+      "format": "RGBA32F 2D-array; Babylon 9.31 float texture storage, shared by body/outline",
+      "maxTextureSize": 4096,
+      "meshes": [
+        {
+          "mesh": "tripo_mesh_b9a89d0a",
+          "vertices": 89940,
+          "targets": 11,
+          "attributes": 2,
+          "width": 4096,
+          "height": 44,
+          "bytes": 31719424
+        },
+        {
+          "mesh": "Lament_Mouth_Interior",
+          "vertices": 280,
+          "targets": 1,
+          "attributes": 2,
+          "width": 560,
+          "height": 1,
+          "bytes": 8960
+        }
+      ],
+      "bytes": 31728384
+    },
+    "after": {
+      "format": "RGBA32F 2D-array; Babylon 9.31 float texture storage, shared by body/outline",
+      "maxTextureSize": 4096,
+      "meshes": [
+        {
+          "mesh": "tripo_mesh_b9a89d0a",
+          "vertices": 36196,
+          "targets": 11,
+          "attributes": 2,
+          "width": 4096,
+          "height": 18,
+          "bytes": 12976128
+        },
+        {
+          "mesh": "Lament_Mouth_Interior",
+          "vertices": 280,
+          "targets": 1,
+          "attributes": 2,
+          "width": 560,
+          "height": 1,
+          "bytes": 8960
+        }
+      ],
+      "bytes": 12985088
+    }
+  },
+  "limits": [
+    "Triangle reduction is lossy geometry simplification, not lossless compression.",
+    "Retained vertices are exact, but surface interpolation may differ.",
+    "Not deployed; visual and motion evaluation pending."
+  ]
+}

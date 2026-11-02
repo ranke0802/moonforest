@@ -18,7 +18,9 @@ test('expanded package preserves r9 clips and adds two attack variants with a fi
 });
 
 test('r8 body triangle-corner coordinates, normals, UVs and weights survive corrective export vertex splits',async()=>{
- const before=await readRuntimeGltf(new URL('content/e1c21f783d411793239f361df18a72d9f79e7723f66c293720fa87e6795089d4.gltf',assets)),after=await packed(),comparison=compareBodyCorners(before,after);
+ // Historical authoring/export invariant; the approved topology reduction has
+ // its own retained-vertex/morph/skin regression in mourning-50k-assets.test.js.
+ const before=await readRuntimeGltf(new URL('content/e1c21f783d411793239f361df18a72d9f79e7723f66c293720fa87e6795089d4.gltf',assets)),after=await readRuntimeGltf(new URL('content/10eb3c62c2f2cc308a19bd211e774dc083e20de6f2e0e1782eeb948dc87d6a44.gltf',assets)),comparison=compareBodyCorners(before,after);
  assert.equal(comparison.oldVertices,89909);assert.equal(comparison.newVertices,89940);assert.equal(comparison.triangles,137412);
  for(const [name,value]of Object.entries(comparison.attributes))assert.equal(value.byteExact,true,name+' changed');
 });
@@ -30,8 +32,8 @@ test('eleven independent body targets and the neutral-degenerate mouth remain fi
  const base=accessorBytes(source,mouth.primitives[0].attributes.POSITION);for(let i=0;i<base.length;i+=4)assert.equal(base.readFloatLE(i),base.readFloatLE(i%12));
  const opened=accessorBytes(source,mouth.primitives[0].targets[0].POSITION);assert.ok([...new Float32Array(opened.buffer,opened.byteOffset,opened.length/4)].some(v=>Math.abs(v)>.001));
  for(let i=0;i<g.accessors.length;i++)if(g.accessors[i].componentType===5126){const b=accessorBytes(source,i);for(let k=0;k<b.length;k+=4)assert.ok(Number.isFinite(b.readFloatLE(k)),'nonfinite accessor '+i);}
- assert.equal(g.meshes.reduce((n,m)=>n+m.primitives.reduce((n,p)=>n+g.accessors[p.indices].count/3,0),0),143228);
- const memory=morphTextureEstimate(g);assert.equal(memory.bytes,31728384);assert.equal(memory.meshes.length,2);
+ assert.equal(g.meshes.reduce((n,m)=>n+m.primitives.reduce((n,p)=>n+g.accessors[p.indices].count/3,0),0),49982);
+ const memory=morphTextureEstimate(g);assert.equal(memory.bytes,12985088);assert.equal(memory.meshes.length,2);
 });
 
 test('r9 reuses the exact existing 4K texture and every content-addressed resource verifies',async()=>{

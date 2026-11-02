@@ -9,6 +9,7 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {MourningElenaAnimator} from '../src/mourning-elena-animation.js';
 import {MOURNING_SIZE_SCALE,MOURNING_SPELLS} from '../src/elena-spec.js';
 import {accessorBytes,compareBodyCorners} from '../scripts/pack-mourning-elena-v2-1.mjs';
+import {compareRetainedMourning} from './helpers/mourning-50k.js';
 
 const base=new URL('../public/assets/',import.meta.url),config=JSON.parse(readFileSync(new URL('mourning-elena.json',base)));
 const baselineUrl=new URL('content/fe2359ec90de38679823bf5d99cffa3399ef620bcf1effd2ec9b1f228acd7c7c.gltf',base);
@@ -45,15 +46,15 @@ function kneeAngle(f){
 
 test('three Mourning attacks preserve the original skin/cast, match authored variant poses and keep independent morphs',{timeout:90000},async t=>{
  const f=await fixture(t);assert.equal(config.rigRevision,'r10-attack-variants-knee');
- await t.test('same geometry, skin weights and exact original one-arm clip bytes',async()=>{
-  const before=await readRuntimeGltf(baselineUrl),comparison=compareBodyCorners(before,f.source);
+ await t.test('approved reduced geometry keeps retained skin weights and exact original one-arm clip bytes',async()=>{
+  const before=await readRuntimeGltf(baselineUrl),comparison=compareRetainedMourning(before,f.source);
   for(const [name,result]of Object.entries(comparison.attributes))assert.equal(result.byteExact,true,name);
   const a=clipStreams(before,clips.cast),b=clipStreams(f.source,clips.cast);assert.equal(a.size,b.size);
   for(const [name,old]of a){const current=b.get(name);assert.ok(current,name);assert.equal(current.interpolation,old.interpolation);assert.ok(current.times.equals(old.times),name+' times');assert.ok(current.values.equals(old.values),name+' values');}
-  assert.equal(f.source.gltf.meshes.reduce((sum,m)=>sum+m.primitives.reduce((n,p)=>n+f.source.gltf.accessors[p.indices].count/3,0),0),143228);
+  assert.equal(f.source.gltf.meshes.reduce((sum,m)=>sum+m.primitives.reduce((n,p)=>n+f.source.gltf.accessors[p.indices].count/3,0),0),49982);
   assert.equal(f.source.gltf.skins.reduce((sum,s)=>sum+s.joints.length,0),255);
   assert.deepEqual(MOURNING_SPELLS.map(s=>s.motion),['cast','cast_alternate','cast_slam','cast_alternate','cast_slam']);
-  report.checks.preserved={bodyVertices:comparison.newVertices,bodyTriangles:comparison.triangles,originalCastChannels:a.size,exactGeometryAndCast:true};
+  report.checks.preserved={bodyVertices:comparison.newVertices,bodyTriangles:comparison.triangles,originalCastChannels:a.size,exactRetainedVerticesAndCast:true,geometrySimplified:true};
  });
  await t.test('both new variants sample the actual source at full weight and have distinct limb poses',()=>{
   const procedural=new Set(f.animator.halo.map(c=>c.target.uniqueId+':'+c.property)),samples={},signatures={};let comparisons=0,maxError=0,vertices=0;

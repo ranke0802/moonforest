@@ -1,0 +1,20 @@
+import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
+import {resolve,basename} from 'node:path';
+import assert from 'node:assert/strict';
+import {hash} from './resource-pack.js';
+const root=resolve(import.meta.dirname,'..'),review=resolve(root,'reports/mourning-50k-2026-11-02'),assets=resolve(root,'public/assets');
+const read=async p=>JSON.parse(await readFile(p,'utf8'));
+const r=await read(resolve(review,'candidate-report.json')),v=await read(resolve(review,'motion-validation.json')),c=await read(resolve(assets,'mourning-elena.json'));
+assert.equal(c.model,r.source.runtimeModel,'Apply once to the reviewed source revision');
+assert.equal(r.candidate.triangles,49982);assert.ok(v.samples.every(s=>s.maximumRetainedVertexDifference===0));
+const g=await read(resolve(review,'candidate',r.candidate.model));
+const names=[r.candidate.model,...g.buffers.map(b=>b.uri).filter(Boolean),...g.images.map(i=>i.uri).filter(Boolean)];
+await writeFile(resolve(review,'manifest-before.json'),JSON.stringify(c,null,2)+'\n');
+const newPaths=[];for(const name of new Set(names)){const bytes=await readFile(resolve(review,'candidate',name));assert.equal(hash(bytes),name.split('.')[0]);if(name.endsWith('.ktx2'))assert.ok(bytes.equals(await readFile(resolve(assets,'content',name))));else{await writeFile(resolve(assets,'content',name),bytes);newPaths.push('ArcherPreview/public/assets/content/'+name);}}
+c.model='./content/'+r.candidate.model;c.resources=[...new Set(names)].map(n=>'./content/'+n);
+c.version='Mourning Elena · r10 motion · approved 49,982 triangles';
+c.geometry={...c.geometry,triangles:49982,vertices:40777,bodyVertices:36196,originalTopology:false,lossless:false,optimization:{revision:'2026-11-02-approved-50k',method:'attribute-aware index simplification; exact retained vertices',sourceTriangles:143228,sourceVertices:94521,sourceModelFile:basename(r.source.runtimeModel),textureUnchanged:true,bonesAndAnimationUnchanged:true,morphsPreserved:11,remainingVisualDifference:'User approved same-pose original/candidate renders; geometry reduction is lossy.'}};
+await writeFile(resolve(assets,'mourning-elena.json'),JSON.stringify(c,null,2)+'\n');
+await copyFile(resolve(review,'retained-vertices.u32'),resolve(root,'tests/fixtures/mourning-50k-retained.u32'));
+await writeFile(resolve(review,'applied-files.json'),JSON.stringify({approvedByUser:true,paths:[...newPaths,'ArcherPreview/public/assets/mourning-elena.json'],texture:r.texture,sourceBefore:r.source.runtimeModel,modelAfter:c.model},null,2)+'\n');
+console.log(JSON.stringify({model:c.model,triangles:c.geometry.triangles,resources:c.resources.length,textureUnchanged:true}));

@@ -90,7 +90,7 @@ test('r9 body, prayer hands, cloth, halo and all morph streams remain exact thro
   for(const mesh of before.keys()){mesh.material=painted;if(mesh.skeleton)mesh.skeleton.useTextureToStoreBoneMatrices=true;}
   const shells=attachCharacterOutlines(asset,'elena'),changed=[...before].filter(([mesh,old])=>mesh.numBoneInfluencers!==old.slots);
   assert.equal(changed.length,2);assert.equal(changed.reduce((sum,[mesh])=>sum+mesh.getTotalVertices(),0),4301);
-  const body=asset.meshes.find(m=>m.name==='Elina_Chimera_Skin');assert.equal(body.numBoneInfluencers,4);assert.equal(body.getTotalVertices(),89940);
+  const body=asset.meshes.find(m=>m.name==='Elina_Chimera_Skin');assert.equal(body.numBoneInfluencers,4);assert.equal(body.getTotalVertices(),36196);
   for(const [mesh,old]of before){assert.deepEqual(streams(mesh),old.streams);assert.equal(checksum(mesh.getIndices()),old.indices);assert.strictEqual(mesh.geometry,old.geometry);assert.strictEqual(mesh.skeleton,old.skeleton);assert.strictEqual(mesh.morphTargetManager,old.manager);}
   assert.deepEqual(morphs(),originalMorphs);
   const animator=new MourningElenaAnimator(asset,config,actor);
