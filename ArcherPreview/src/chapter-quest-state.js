@@ -1,4 +1,5 @@
 import {CHAPTER_QUESTS} from './chapter-quest-data.js';
+import {chestRewards} from './loot-rarity.js';
 export const CHAPTER_SAVE='moonforest-chapter-one-v1';
 const lookup=new Map(CHAPTER_QUESTS.map(q=>[q.id,q]));
 const integer=n=>Number.isSafeInteger(n)&&n>=0?Math.min(n,100000):0;
@@ -21,6 +22,18 @@ export class ChapterJourney{
  record(key,amount=1,token=null){if(!Number.isSafeInteger(amount)||amount<=0||!key||token&&this.seen.has(token))return false;
   if(token){this.seen.add(token);this.value.seen.push(token);}this.value.facts[key]=Math.min(100000,(this.value.facts[key]??0)+amount);this.save();return true;}
  collect(item,count=1,token){if(!this.record('item:'+item,count,token))return false;this.value.bag[item]=(this.value.bag[item]??0)+count;this.save();return true;}
+ openChest(point){
+  const rewards=chestRewards(point?.tier),token='point:'+point?.id;
+  if(!rewards||!point?.id||!point?.key||this.seen.has(token))return null;
+  // Record and reward together. Re-entry, repeated clicks and reload cannot duplicate loot.
+  this.seen.add(token);this.value.seen.push(token);
+  this.value.facts[point.key]=Math.min(100000,(this.value.facts[point.key]??0)+1);
+  // Preserve quest-specific rewards from existing saves and authored quest chests.
+  if(point.id==='lookout-chest')rewards['equipment-voucher']=1;
+  if(['goblin-relic','village-relief'].includes(point.id))rewards['key-3']=1;
+  for(const [id,count]of Object.entries(rewards))this.value.bag[id]=Math.min(100000,(this.value.bag[id]??0)+count);
+  this.save();return rewards;
+ }
  claim(id){if(this.status(id)!=='ready')return null;const q=lookup.get(id),v=this.value;
   v.done.push(id);v.active=v.active.filter(k=>k!==id);v.xp+=q.xp;
   for(const [key,n]of Object.entries(q.rewards))v.bag[key]=(v.bag[key]??0)+n;

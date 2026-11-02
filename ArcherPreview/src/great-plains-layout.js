@@ -16,9 +16,84 @@ export const PLAINS_ROUTES=[
  {id:'forest-rest',width:2.5,points:[[49,-32],[48,-44],[51,-51],[59,-50]]},
 ].map(r=>({...r,samples:sampleGroundCurve(r.points,{step:.8})}));
 export const PLAINS_STREAM=sampleGroundCurve([[95,-97],[89,-82],[85,-67],[79,-51],[85,-33],[78,-15],[83,3],[75,22],[84,39],[77,57],[66,79],[62,106]],{step:1.4});
+// The common quest-prop system owns chest rendering and opening. Keep these
+// stable anchors out of scenery instances to avoid drawing each chest twice.
+export const PLAINS_TREASURE_ANCHORS=[
+ {id:'supply-chest',asset:'chest-common',x:18,z:81,kind:'prop',scale:1,colliderRadius:.6,yaw:Math.PI,lootTier:1},
+ {id:'meadow-chest',asset:'chest-common',x:-55,z:45,kind:'prop',scale:1,colliderRadius:.6,yaw:.7,lootTier:1},
+ {id:'lookout-chest',asset:'chest-common',x:-27,z:-22,kind:'prop',scale:1,colliderRadius:.6,yaw:Math.PI*.6,lootTier:2},
+];
 export function plainsRoadDistance(x,z){let best=Infinity;for(const r of PLAINS_ROUTES)for(const [px,pz]of r.samples)best=Math.min(best,Math.hypot(x-px,z-pz)-r.width*.5);for(const c of PLAINS_CLEARINGS)best=Math.min(best,Math.hypot(x-c.x,z-c.z)-c.r);return best;}
 export function plainsStreamDistance(x,z){let best=Infinity;for(const [px,pz]of PLAINS_STREAM)best=Math.min(best,Math.hypot(x-px,z-pz));return best;}
 const seedRandom=seed=>()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+// Small, authored islands leave the meadow and the landmark sightlines open.
+// These offsets only vary within each grove; they never scatter over the map.
+const GROVE_OFFSETS=[[0,0],[-5,2],[4,4],[1,-5],[-6,-4],[7,-2],[-3,7],[6,9]];
+const GROVE_TREES={
+ village:['tree-01-round-oak','tree-01-round-oak','tree-01-round-oak','tree-02-slender-pine'],
+ meadow:['tree-01-round-oak','tree-01-round-oak','tree-02-slender-pine','tree-01-round-oak'],
+ fringe:['tree-01-round-oak','tree-02-slender-pine','forest-01-sickly-oak','tree-01-round-oak'],
+ forest:['tree-02-slender-pine','forest-01-sickly-oak','tree-02-slender-pine','forest-02-dead-tree'],
+};
+function addGroveScenery(out,add){
+ const groves=[
+  ['gate-north','village',-84,-57,.2,4],['gate-south','village',-84,-9,-.5,5],
+  ['village-field','village',-77,16,.8,4],['meadow-west','meadow',-84,43,-.8,4],
+  ['lookout-west','meadow',-54,-32,.4,4],['lookout-north','meadow',-29,-50,-.3,5],
+  ['meadow-south','meadow',-48,59,.7,5],['meadow-east','meadow',28,34,-.5,5],
+  ['caravan-east','meadow',42,65,.3,4],
+  ['forest-outer','fringe',22,-22,.8,4],['forest-middle','fringe',32,-48,-.4,5],
+  ['forest-west','forest',17,-66,.4,6],['forest-rest-back','forest',45,-68,-.6,6],
+  ['forest-bank','forest',69,-35,.2,5],['forest-gate','forest',55,-85,.8,5],
+ ];
+ const room=(x,z,r,kind)=>{
+  if(Math.hypot(x,z)>104||plainsRoadDistance(x,z)<r+1.3||plainsStreamDistance(x,z)<r+4.2)return false;
+  // Keep the summit, east ramp and the central junction readable from the road.
+  if(Math.hypot((x+28)/1.1,z+20)<15||Math.hypot(x+5,z-25)<14)return false;
+  return ![...out,...PLAINS_TREASURE_ANCHORS].some(p=>{
+   if(p.background||p.kind==='ground-detail')return false;
+   const other=p.colliderFootprint?Math.hypot(...p.colliderFootprint)/2:p.colliderRadius;
+   const spacing=kind==='tree'&&p.kind==='tree'?4.7:Math.max(.7,r)+other+.6;
+   return Math.hypot(x-p.x,z-p.z)<spacing;
+  });
+ };
+ for(const [index,[grove,zone,cx,cz,angle,count]]of groves.entries()){
+  const cs=Math.cos(angle),sn=Math.sin(angle),position=([dx,dz])=>[cx+dx*cs-dz*sn,cz+dx*sn+dz*cs];
+  let placed=0;
+  for(const [slot,offset]of GROVE_OFFSETS.entries()){
+   if(placed>=count)break;
+   const [x,z]=position(offset),asset=GROVE_TREES[zone][placed%4];
+   const scale=(asset.startsWith('forest-')?1.12:.72)+((index+slot*3)%5)*.055;
+   if(!room(x,z,2.1*scale,'tree'))continue;
+   add(`grove-${grove}-tree-${placed++}`,asset,x,z,'tree',scale,.7*scale,angle+slot*1.37,{grove,zone});
+  }
+  for(const [slot,offset]of [[-3,-3],[5,1],[-1,5]].entries()){
+   const [x,z]=position(offset),scale=.7+((index+slot)%3)*.12;
+   if(room(x,z,.65,'shrub'))add(`grove-${grove}-bush-${slot}`,'bush',x,z,'shrub',scale,.45*scale,angle+slot,{grove,zone});
+  }
+  for(const [slot,offset]of [[-8,1],[4,-7]].entries()){
+   const [x,z]=position(offset),scale=.48+((index+slot)%4)*.11;
+   if(room(x,z,.8*scale,'rock'))add(`grove-${grove}-stone-${slot}`,'rock-01-mossy-boulder',x,z,'rock',scale,.8*scale,angle+slot,{grove,zone});
+  }
+ }
+ // Props belong to a place: roadside wood supply, a caravan stop and forest decay.
+ for(const [id,asset,x,z,scale,radius,yaw]of [
+  ['gate-cart','handcart',-80,-22,1,1.6,-.7],['gate-wood','firewood',-77,-20,.85,1.05,.3],
+  ['caravan-wood','firewood',25,81,.8,1,.5],
+  ['forest-log-west','forest-03-fallen-log',22,-61,.85,2.1,.6],
+  ['forest-log-bank','forest-03-fallen-log',70,-47,.85,2.1,-.5],
+  ['forest-log-gate','forest-03-fallen-log',55,-76,.75,1.9,.3],
+ ])if(room(x,z,radius,'prop'))add('grove-'+id,asset,x,z,'prop',scale,radius,yaw,{grove:id,zone:id.startsWith('forest')?'forest':'village'});
+ // The existing boundary keeps its positions and count. Species change towards
+ // the forest, so the canopy transition costs no additional boundary instances.
+ for(const p of out){
+  if(!p.id.startsWith('forest-north-')&&!(p.id.startsWith('forest-east-')&&p.z<-18))continue;
+  const index=Number(p.id.split('-').at(-1)),deep=p.z<-76||p.x>105;
+  const asset=(deep?['tree-02-slender-pine','forest-01-sickly-oak','tree-02-slender-pine','forest-02-dead-tree','tree-01-round-oak']:GROVE_TREES.fringe)[index%(deep?5:4)];
+  if(asset==='tree-01-round-oak')continue;
+  p.asset=asset;p.scale*=asset==='tree-02-slender-pine'?.75:1.2;
+ }
+}
 function makePlacements(){
  const random=seedRandom(26110202),out=[];
  const add=(id,asset,x,z,kind,scale=1,radius=0,yaw=0,extra={})=>out.push({id,asset,x,z,kind,scale,yaw,colliderRadius:radius,...extra});
@@ -29,9 +104,6 @@ function makePlacements(){
  add('caravan','covered-wagon',19,73,'prop',1,1.8,Math.PI*.12);
  add('cargo-a','crate-barrel-cluster',26,70,'prop',.65,.7);
  add('cargo-b','crate-barrel-cluster',24,77,'prop',.55,.6);
- add('supply-chest','chest-common',18,81,'prop',1,.6,Math.PI,{lootTier:1});
- add('meadow-chest','chest-common',-55,45,'prop',1,.6,.7,{lootTier:1});
- add('lookout-chest','chest-common',-27,-22,'prop',1,.6,Math.PI*.6,{lootTier:2});
  for(const [id,x,z]of [['boundary-a',57,-57],['boundary-b',68,-64]])add(id,'rock-01-mossy-boulder',x,z,'rock',.55,.6,0,{boundaryMarker:true});
  add('saint-bandage','clue-bandage',57,-58,'prop',1,0,.4,{questId:'M02'});
  // A raised stone shelf, with an east-side walking ramp and a west cliff face.
@@ -71,6 +143,7 @@ function makePlacements(){
   if(plainsRoadDistance(x,z)>=6&&random()<.3)continue;
   add('grass-'+grass++,'grass-tuft',x,z,'ground-detail',.55+random()*.65,0,random()*6.28);
  }
+ addGroveScenery(out,add);
  return out;
 }
 export const PLAINS_PLACEMENTS=makePlacements();

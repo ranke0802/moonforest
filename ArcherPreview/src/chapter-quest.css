@@ -16,3 +16,7 @@
 @media(prefers-reduced-motion:no-preference){#chapter-dialog[open]{animation:chapter-open .16s ease-out}@keyframes chapter-open{from{opacity:0;transform:translateY(8px) scale(.99)}to{opacity:1;transform:none}}}
 
 @media(orientation:portrait){.chapter-stack{left:18px;top:145px;width:190px}}
+
+.chapter-loot{border:2px solid var(--rarity-color);box-shadow:inset 3px 0 var(--rarity-color)}
+.chapter-loot>small{color:var(--rarity-color)}
+.chapter-toast{border-color:var(--rarity-color,#baa36e)}

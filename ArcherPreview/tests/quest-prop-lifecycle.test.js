@@ -17,8 +17,8 @@ function fixture(t,options={}){
 test('quest props use the map transfer plan, stay hidden until eligible, and release model/ink ownership on 24 trips',async t=>{
  const f=fixture(t),baseline={meshes:f.scene.meshes.length,materials:f.scene.materials.length,observers:f.scene.onBeforeRenderObservable.observers.length};
  for(let trip=0;trip<24;trip++){
-  const p=points();assert.equal(await f.props.load(p),true);assert.equal(p[0].visual.isEnabled(),false);assert.equal(p[0].marker.isEnabled(),false);
-  f.props.update(p,{x:2,z:3},()=>true);assert.equal(p[0].visual.isEnabled(),true);
+  const p=points();assert.equal(await f.props.load(p),true);assert.equal(p[0].visual,undefined);assert.equal(p[0].marker.isEnabled(),false);
+  f.props.update(p,{x:2,z:3},()=>true);await f.props.whenIdle();assert.equal(p[0].visual.isEnabled(),true);
   f.props.update(p,{x:2,z:3},()=>false);assert.equal(p[0].visual.isEnabled(),false);
   f.props.release();await new Promise(resolve=>setTimeout(resolve,5));assert.equal(f.scene.meshes.length,baseline.meshes);assert.equal(f.scene.materials.length,baseline.materials);assert.equal(f.scene.onBeforeRenderObservable.observers.length,baseline.observers);
  }
@@ -27,8 +27,8 @@ test('quest props use the map transfer plan, stay hidden until eligible, and rel
 test('old map decode completion is disposed without changing the next map props',async t=>{
  const old=deferred(),entered=deferred();let calls=0;
  const f=fixture(t,{loadContainer:()=>{if(++calls===1){entered.resolve();return old.promise;}return Promise.resolve(f.container());}});
- const first=f.props.load(points());await entered.promise;f.props.release();assert.equal(await first,false);
- const next=points();assert.equal(await f.props.load(next),true);f.props.update(next,{x:2,z:3},()=>true);
+ const p=points();assert.equal(await f.props.load(p),true);f.props.update(p,{x:2,z:3},()=>true);await entered.promise;f.props.release();
+ const next=points();assert.equal(await f.props.load(next),true);f.props.update(next,{x:2,z:3},()=>true);await f.props.whenIdle();
  const late=f.container(),mesh=late.meshes[0];old.resolve(late);await new Promise(resolve=>setImmediate(resolve));
  assert.equal(mesh.isDisposed(),true);assert.equal(next[0].visual.isEnabled(),true);
 });
@@ -39,6 +39,8 @@ test('late old manifest failure is silent and a stalled current decode times out
  assert.equal(await f.props.load(points()),true);
  const stalled=deferred();let calls=0;
  const g=fixture(t,{timeoutMs:20,loadContainer:()=>++calls===1?stalled.promise:Promise.resolve(g.container())});
- await assert.rejects(g.props.load(points()),error=>error.name==='TimeoutError');assert.equal(await g.props.load(points()),true);
+ const p=points();assert.equal(await g.props.load(p),true);g.props.update(p,{x:2,z:3},()=>true);await g.props.whenIdle();assert.equal(g.props.inspect().lastError.name,'TimeoutError');
+ for(let i=0;i<10;i++)g.props.update(p,{x:2,z:3},()=>true);await g.props.whenIdle();assert.equal(calls,1,'failed model must not retry every update');
+ const retry=points();assert.equal(await g.props.load(retry),true);g.props.update(retry,{x:2,z:3},()=>true);await g.props.whenIdle();
  const late=g.container(),mesh=late.meshes[0];stalled.resolve(late);await new Promise(resolve=>setImmediate(resolve));assert.equal(mesh.isDisposed(),true);
 });

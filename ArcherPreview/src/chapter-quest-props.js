@@ -1,33 +1,102 @@
-import {SceneLoader,TransformNode,Vector3,MeshBuilder,StandardMaterial,Color3} from '@babylonjs/core';
+import {Mesh,TransformNode,Vector3,VertexData,StandardMaterial,Color3} from '@babylonjs/core';
 import {applyVillageToon} from './village-toon.js';
 import {prepareVillageInstancing} from './village-instancing.js';
-import {VillageOutlines} from './village-outlines.js';
+import {VillageOutlines,prepareVillageInkSource} from './village-outlines.js';
 import {readMapManifest} from './map-manifests.js';
 import {MapLoadLifetime} from './map-load-lifetime.js';
-export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loadContainer=url=>SceneLoader.LoadAssetContainerAsync(new URL('.',url).href,url.pathname.split('/').pop(),world.scene,null,'.gltf'),timeoutMs,timers}={}){
- let version=0,owned=[],containers=[],outlines=null,records=[],disposed=false,pending=null;
- const release=()=>{version++;pending?.abort();pending?.close();pending=null;outlines?.dispose();outlines=null;for(const root of owned)root.dispose();for(const c of containers)c.dispose();owned=[];containers=[];records=[];};
- const markerMaterial=new StandardMaterial('quest-point-marker',world.scene);markerMaterial.diffuseColor=new Color3(.76,.65,.28);markerMaterial.emissiveColor=new Color3(.2,.16,.05);markerMaterial.specularColor=Color3.Black();
- return {release,async load(points){release();if(disposed)return false;const revision=version,base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href),lifetime=new MapLoadLifetime({timeoutMs,timers,stage:'quest-props'});pending=lifetime;
-  const current=()=>!disposed&&revision===version&&!world.scene.isDisposed;
-  try{const manifest=await lifetime.run(()=>readManifest(base));if(!current())return false;
-  for(const point of points){const ring=MeshBuilder.CreateTorus('quest-marker-'+point.id,{diameter:.65,thickness:.025,tessellation:24},world.scene);ring.position.set(point.x,world.terrain.heightAt(point.x,point.z)+.05,point.z);ring.material=markerMaterial;ring.isPickable=false;ring.setEnabled(false);owned.push(ring);point.marker=ring;}
-  for(const id of [...new Set(points.map(p=>p.model).filter(Boolean))]){
-   const config=manifest.assets[id];if(!config)continue;const profile=config.lods[1],url=new URL(profile.model,base);
-   // Use the live map's hash/pack plan so unchanged props are cached and their
-   // downloads appear in the same diagnostics as streamed map assets.
-   await lifetime.run(()=>world.prefetchResources?.(profile.resources??[]));if(!current())return false;
-   const container=await lifetime.run(()=>loadContainer(url),{onLate:value=>value.dispose()});
-   if(!current()){container.dispose();return false;}containers.push(container);
-   const sources=container.meshes.filter(m=>m.getTotalVertices?.()>0);for(const m of sources)m.receiveShadows=true;prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);
-   for(const point of points.filter(p=>p.model===id)){
-    const root=new TransformNode('quest-prop-'+point.id,world.scene);root.position.set(point.x,world.terrain.heightAt(point.x,point.z),point.z);root.scaling.setAll(config.height/config.bounds[1]);root.setEnabled(false);owned.push(root);
-    const instance=container.instantiateModelsToScene(n=>'quest-'+point.id+'-'+n,false,{doNotInstantiate:false});for(const n of instance.rootNodes)n.parent=root;
-    const meshes=root.getChildMeshes();for(const m of meshes){m.isPickable=false;}point.visual=root;
-    records.push({root,meshes,placement:{...point,kind:'ground-detail',scale:1},config,center:new Vector3(point.x,root.position.y+config.height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
+import {loadMapContainer} from './map-container.js';
+import {instantiateStaticMap} from './static-map-instances.js';
+import {prepareMapMaterials} from './map-shader-cache.js';
+
+// An opaque 24-segment annulus replaces the separate 1,250-triangle torus.
+// The points share one 48-triangle geometry and use native instances.
+function markerSource(scene,material){
+ const mesh=new Mesh('quest-marker-source',scene),data=new VertexData(),positions=[],normals=[],indices=[];
+ for(let i=0;i<24;i++)for(const radius of [.3125,.3375]){const a=i*Math.PI/12;positions.push(Math.cos(a)*radius,0,Math.sin(a)*radius);normals.push(0,1,0);}
+ for(let i=0;i<24;i++){const a=i*2,b=((i+1)%24)*2;indices.push(a,b,a+1,a+1,b,b+1);}
+ data.positions=positions;data.normals=normals;data.indices=indices;data.applyToMesh(mesh);
+ mesh.material=material;mesh.isPickable=false;mesh.receiveShadows=false;mesh._instanceDataStorage.useMonoDataStorageRenderPass=false;
+ scene.removeMesh(mesh);return mesh;
+}
+
+export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,timeoutMs,timers}={}){
+ const scene=world.scene;
+ let version=0,disposed=false,scope=null,manifest=null,mapPoints=[],owned=[],containers=[],records=[],outlines=null,marker=null,markerMaterial=null,worker=null;
+ let models=new Map(),demand=new Set();
+ const stats={modelLoads:0,modelFailures:0,instances:0,markerTriangles:48,markerInstances:0,outlineDraws:0,lastError:null};
+ const current=revision=>!disposed&&revision===version&&!scene.isDisposed;
+ const release=()=>{
+  version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;
+  outlines?.dispose();outlines=null;for(const root of owned)root.dispose();for(const c of containers)c.dispose();
+  for(const p of mapPoints){delete p.marker;delete p.visual;}
+  marker?.dispose();markerMaterial?.dispose();marker=null;markerMaterial=null;
+  owned=[];containers=[];records=[];mapPoints=[];
+  Object.assign(stats,{instances:0,markerInstances:0,outlineInstances:0,outlineTriangles:0,lastError:null});
+ };
+ const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p));p.visual?.setEnabled(demand.has(p));}};
+ async function install(id,revision,signal){
+  const config=manifest?.assets[id],profile=config?.lods?.[1]??config?.lods?.[0];if(!profile){models.set(id,'unavailable');return;}
+  const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href),url=new URL(profile.model,base);
+  const lifetime=new MapLoadLifetime({signal,timeoutMs,timers,stage:'quest-prop-model'}),cancelled=()=>!current(revision)||lifetime.signal.aborted;
+  let container,localRoots=[],localRecords=[];
+  try{
+   await lifetime.run(()=>world.prefetchResources?.(profile.resources??[]));lifetime.check();stats.modelLoads++;
+   container=await lifetime.run(()=>loadContainer(url,scene,{signal:lifetime.signal,lifetime}),{onLate:value=>value?.dispose()});lifetime.check();
+   const sources=container.meshes.filter(m=>m.getTotalVertices?.()>0);
+   prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);world.lighting?.registerMeshes?.(sources);
+   for(const mesh of sources){mesh.isPickable=false;world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
+   await lifetime.run(()=>prepareMapMaterials(sources,{cancelled}));lifetime.check();
+   for(const point of mapPoints.filter(p=>p.model===id)){
+    const root=new TransformNode('quest-prop-'+point.id,scene),height=point.height??config.height;
+    root.position.set(point.x,world.terrain.heightAt(point.x,point.z),point.z);root.rotation.y=point.yaw??0;
+    root.scaling.setAll((height/config.bounds[1])*(point.scale??1));root.setEnabled(false);localRoots.push(root);
+    const instance=instantiateStaticMap(container,name=>'quest-'+point.id+'-'+name);for(const node of instance.rootNodes)node.parent=root;
+    root.computeWorldMatrix(true);const meshes=root.getChildMeshes().filter(m=>m.getTotalVertices?.()>0);
+    for(const mesh of meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
+    for(const node of root.getChildTransformNodes())node.freezeWorldMatrix();root.freezeWorldMatrix();
+    localRecords.push({point,root,meshes,placement:{...point,kind:'ground-detail',scale:point.scale??1},config,center:new Vector3(point.x,root.position.y+height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
    }
-  }
-  if(current())outlines=new VillageOutlines(world,records,{});return current();
-  }catch(error){if(!current())return false;throw error;}finally{lifetime.close();if(pending===lifetime)pending=null;}
- },update(points,position,visible){for(const p of points){const near=position&&Math.hypot(position.x-p.x,position.z-p.z)<30,show=visible(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z}));p.marker?.setEnabled(!!near&&show);p.visual?.setEnabled(!!near&&show);}},dispose(){disposed=true;release();markerMaterial.dispose();}};
+   for(const source of sources)prepareVillageInkSource(source);
+   if(!outlines)outlines=new VillageOutlines(world,[],stats);
+   await lifetime.run(()=>outlines.prepare(sources,{cancelled}));lifetime.check();if(!current(revision))return;
+   outlines.addRecords(localRecords);
+   containers.push(container);container=null;owned.push(...localRoots);records.push(...localRecords);localRoots=[];
+   for(const record of localRecords)record.point.visual=record.root;
+   stats.instances=records.length;models.set(id,'ready');sync();
+  }catch(error){
+   if(current(revision)&&!signal.aborted){models.set(id,'failed');stats.modelFailures++;stats.lastError={model:id,name:error.name,message:error.message,code:error.code??null};}
+  }finally{for(const root of localRoots)root.dispose();container?.dispose();lifetime.close();}
+ }
+ function pump(){
+  if(worker||!manifest||!scope||disposed)return;
+  const revision=version,signal=scope.signal,next=[...demand].find(p=>p.model&&!models.has(p.model));if(!next)return;
+  models.set(next.model,'loading');const operation=install(next.model,revision,signal);worker=operation;
+  void operation.finally(()=>{if(current(revision)&&worker===operation){worker=null;pump();}});
+ }
+ const api={
+  stats,release,
+  async load(points){
+   release();if(disposed||scene.isDisposed)return false;
+   const revision=version;scope=new AbortController();mapPoints=points;
+   const lifetime=new MapLoadLifetime({signal:scope.signal,timeoutMs,timers,stage:'quest-props'});
+   try{
+    const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href);
+    const value=await lifetime.run(()=>readManifest(base));lifetime.check();if(!current(revision))return false;manifest=value;
+    markerMaterial=new StandardMaterial('quest-point-marker',scene);markerMaterial.diffuseColor=new Color3(.76,.65,.28);markerMaterial.emissiveColor=world.cave?Color3.Black():new Color3(.05,.04,.01);markerMaterial.specularColor=Color3.Black();
+    world.caveFog?.attach(markerMaterial);marker=markerSource(scene,markerMaterial);
+    await lifetime.run(()=>prepareMapMaterials([marker],{cancelled:()=>!current(revision)||lifetime.signal.aborted}));lifetime.check();
+    for(const point of points){const ring=marker.createInstance('quest-marker-'+point.id);ring.position.set(point.x,world.terrain.heightAt(point.x,point.z)+.05,point.z);ring.isPickable=false;ring.setEnabled(false);ring.freezeWorldMatrix();owned.push(ring);point.marker=ring;}
+    stats.markerInstances=points.length;sync();pump();return true;
+   }catch(error){if(!current(revision))return false;release();throw error;}finally{lifetime.close();}
+  },
+  update(points,position,visible){
+   demand.clear();for(const p of points)if(position&&Math.hypot(position.x-p.x,position.z-p.z)<30&&visible(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z})))demand.add(p);
+   sync();pump();
+  },
+  async whenIdle(){while(worker){const pending=worker;await pending;if(worker===pending)await Promise.resolve();}},
+  isReady(point){return !point.model||point.visual?.isEnabled()===true;},
+  inspect(){return {...stats,loading:!!worker,models:Object.fromEntries(models),visible:mapPoints.filter(p=>p.visual?.isEnabled()).length};},
+  dispose(){if(disposed)return;disposed=true;release();scene.onDisposeObservable.remove(observer);}
+ };
+ const observer=scene.onDisposeObservable.addOnce(()=>api.dispose());return api;
 }

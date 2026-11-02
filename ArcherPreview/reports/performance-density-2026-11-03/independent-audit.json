@@ -1,0 +1,393 @@
+{
+  "timestamp": "2026-11-02T15:35:02.394Z",
+  "baseline": "01fa3ba",
+  "hashes": {
+    "src/great-plains-layout.js": "227514ca58ee48f2c7a6ec6a76ff6c59288adcfda5d7aa50f2c237ea0adc810c",
+    "src/chapter-quest-points.js": "f40efc5dbdce5f39db670f03e5a555d6992b5c03bcd459618831fad9992bce04",
+    "src/chapter-quest.js": "84935d93b939079f5924412cdfe2af7dca5d4a86f200017dd7f845b9732632b2",
+    "src/chapter-quest-props.js": "4c7ec508b4d1b3bb1d640230213b5328d3da1039e3e0a1fa826db8f7731fe098",
+    "src/world.js": "7f85d5be8345d900151d97d721244ff0b90c22ab351d416fdd1c32254de5016e",
+    "src/village-demand.js": "ccc8eb43bd42501e17bf22226dad3adb77c13f22584d6601e278e641e7b4b65e",
+    "public/assets/great-plains.json": "d9ee29d449c7c7387b6fe97b235f488ae1bd8c3bb4d59dc71f2c1810aebfd99e"
+  },
+  "counts": {
+    "baseline": 1079,
+    "plains": 1210,
+    "village": 698,
+    "forest": 891,
+    "reachableGridPoints": 31169
+  },
+  "treasures": [
+    {
+      "id": "supply-chest",
+      "tier": 1,
+      "original": {
+        "x": 18,
+        "z": 81
+      },
+      "runtime": {
+        "x": 18,
+        "z": 81
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": 18,
+        "z": 81,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "meadow-chest",
+      "tier": 1,
+      "original": {
+        "x": -55,
+        "z": 45
+      },
+      "runtime": {
+        "x": -55,
+        "z": 45
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -55,
+        "z": 45,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "lookout-chest",
+      "tier": 2,
+      "original": {
+        "x": -27,
+        "z": -22
+      },
+      "runtime": {
+        "x": -27,
+        "z": -22
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -27,
+        "z": -22,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-village-grove",
+      "tier": 1,
+      "original": {
+        "x": -78,
+        "z": -24
+      },
+      "runtime": {
+        "x": -78,
+        "z": -24
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -78,
+        "z": -24,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-stream-bank",
+      "tier": 2,
+      "original": {
+        "x": -28,
+        "z": 56
+      },
+      "runtime": {
+        "x": -28,
+        "z": 56
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -28,
+        "z": 56,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-western-ridge",
+      "tier": 2,
+      "original": {
+        "x": -65,
+        "z": -27
+      },
+      "runtime": {
+        "x": -65,
+        "z": -27
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -65,
+        "z": -27,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-hill-grove",
+      "tier": 3,
+      "original": {
+        "x": -38,
+        "z": -36
+      },
+      "runtime": {
+        "x": -38,
+        "z": -36
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": -38,
+        "z": -36,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-forest-fringe",
+      "tier": 3,
+      "original": {
+        "x": 43,
+        "z": -50
+      },
+      "runtime": {
+        "x": 43,
+        "z": -50
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": 43,
+        "z": -50,
+        "distance": 0
+      },
+      "otherPointsWithin3m": []
+    },
+    {
+      "id": "great-plains-treasure-forest-cache",
+      "tier": 4,
+      "original": {
+        "x": 66,
+        "z": -66
+      },
+      "runtime": {
+        "x": 66,
+        "z": -66
+      },
+      "displacement": 0,
+      "reachableGridPoint": {
+        "x": 66,
+        "z": -66,
+        "distance": 0
+      },
+      "otherPointsWithin3m": [
+        "boundary-b"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "touch": false,
+      "view": "village-gate",
+      "before": {
+        "demandEntries": 13,
+        "uniqueAssetTypes": 8,
+        "roughUncachedBytes": 13304992,
+        "exteriorDemand": [
+          0
+        ],
+        "medianMs": 0.15439999999989595
+      },
+      "after": {
+        "demandEntries": 19,
+        "uniqueAssetTypes": 11,
+        "roughUncachedBytes": 15295742,
+        "exteriorDemand": [
+          0
+        ],
+        "medianMs": 0.13789999999994507
+      }
+    },
+    {
+      "touch": false,
+      "view": "junction",
+      "before": {
+        "demandEntries": 9,
+        "uniqueAssetTypes": 7,
+        "roughUncachedBytes": 1376395,
+        "exteriorDemand": [],
+        "medianMs": 0.19249999999988177
+      },
+      "after": {
+        "demandEntries": 15,
+        "uniqueAssetTypes": 12,
+        "roughUncachedBytes": 2715416,
+        "exteriorDemand": [],
+        "medianMs": 0.19119999999998072
+      }
+    },
+    {
+      "touch": false,
+      "view": "lookout",
+      "before": {
+        "demandEntries": 11,
+        "uniqueAssetTypes": 8,
+        "roughUncachedBytes": 2618129,
+        "exteriorDemand": [],
+        "medianMs": 0.07650000000012369
+      },
+      "after": {
+        "demandEntries": 17,
+        "uniqueAssetTypes": 12,
+        "roughUncachedBytes": 4132781,
+        "exteriorDemand": [],
+        "medianMs": 0.17869999999993524
+      }
+    },
+    {
+      "touch": false,
+      "view": "forest-edge",
+      "before": {
+        "demandEntries": 8,
+        "uniqueAssetTypes": 5,
+        "roughUncachedBytes": 1901548,
+        "exteriorDemand": [],
+        "medianMs": 0.11599999999998545
+      },
+      "after": {
+        "demandEntries": 18,
+        "uniqueAssetTypes": 10,
+        "roughUncachedBytes": 5740188,
+        "exteriorDemand": [],
+        "medianMs": 0.13029999999980646
+      }
+    },
+    {
+      "touch": true,
+      "view": "village-gate",
+      "before": {
+        "demandEntries": 9,
+        "uniqueAssetTypes": 5,
+        "roughUncachedBytes": 12802280,
+        "exteriorDemand": [
+          0
+        ],
+        "medianMs": 0.06610000000000582
+      },
+      "after": {
+        "demandEntries": 17,
+        "uniqueAssetTypes": 10,
+        "roughUncachedBytes": 15044077,
+        "exteriorDemand": [
+          0
+        ],
+        "medianMs": 0.08890000000019427
+      }
+    },
+    {
+      "touch": true,
+      "view": "junction",
+      "before": {
+        "demandEntries": 8,
+        "uniqueAssetTypes": 6,
+        "roughUncachedBytes": 1265592,
+        "exteriorDemand": [],
+        "medianMs": 0.09920000000010987
+      },
+      "after": {
+        "demandEntries": 12,
+        "uniqueAssetTypes": 9,
+        "roughUncachedBytes": 2294452,
+        "exteriorDemand": [],
+        "medianMs": 0.12370000000009895
+      }
+    },
+    {
+      "touch": true,
+      "view": "lookout",
+      "before": {
+        "demandEntries": 10,
+        "uniqueAssetTypes": 7,
+        "roughUncachedBytes": 2507326,
+        "exteriorDemand": [],
+        "medianMs": 0.04860000000007858
+      },
+      "after": {
+        "demandEntries": 15,
+        "uniqueAssetTypes": 10,
+        "roughUncachedBytes": 3865655,
+        "exteriorDemand": [],
+        "medianMs": 0.0644999999999527
+      }
+    },
+    {
+      "touch": true,
+      "view": "forest-edge",
+      "before": {
+        "demandEntries": 8,
+        "uniqueAssetTypes": 5,
+        "roughUncachedBytes": 1901548,
+        "exteriorDemand": [],
+        "medianMs": 0.06550000000015643
+      },
+      "after": {
+        "demandEntries": 18,
+        "uniqueAssetTypes": 10,
+        "roughUncachedBytes": 5740188,
+        "exteriorDemand": [],
+        "medianMs": 0.07339999999976499
+      }
+    }
+  ],
+  "geometry": {
+    "lods": [
+      {
+        "level": 0,
+        "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+        "triangles": 187522,
+        "textureSize": 2048
+      },
+      {
+        "level": 1,
+        "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+        "triangles": 187522,
+        "textureSize": 2048
+      },
+      {
+        "level": 2,
+        "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+        "triangles": 187522,
+        "textureSize": 2048
+      }
+    ],
+    "primitives": 16,
+    "nativeMeshCount": 1,
+    "sharedModel": true,
+    "reuseCheck": true
+  },
+  "renderRange": {
+    "desktop": {
+      "fogStart": 88,
+      "fogEnd": 105,
+      "cellCull": 110,
+      "meshCull": 118,
+      "maxCameraRadius": 82
+    },
+    "mobile": {
+      "fogStart": 65,
+      "fogEnd": 80,
+      "cellCull": 82,
+      "meshCull": 90,
+      "maxCameraRadius": 56
+    }
+  },
+  "method": "1m grid BFS plus swept segment; radius .35, interaction <3m and LOS radius .05. Demand: Babylon NullEngine artificial 1280x720 camera, no models loaded; timings are local JS CPU warm sample medians and not FPS/GPU benchmarks.",
+  "limitations": "No browser, actual mesh rendering, quest unlock states, concurrent prop updates, real device or FPS measurement. A negative grid result may reflect resolution."
+}

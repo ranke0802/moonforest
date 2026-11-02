@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "fingerprint": "a601f2d172b24e570dd9c8c17ea426715fd5bb224c6e59f418279a635181ca1c",
+  "changes": {
+    "body": [
+      "fingerprint"
+    ],
+    "sight": [
+      "fingerprint",
+      "runs"
+    ],
+    "camera": [
+      "fingerprint",
+      "lookup",
+      "profiles"
+    ],
+    "nativeFine": [
+      "fingerprint"
+    ],
+    "mourning": [
+      "hashes"
+    ]
+  },
+  "cohorts": [
+    {
+      "radius": 0.32,
+      "before": 11084,
+      "after": 11084,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    {
+      "radius": 0.34,
+      "before": 11044,
+      "after": 11044,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    {
+      "radius": 0.7,
+      "before": 9490,
+      "after": 9490,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    },
+    {
+      "radius": 0.28809887268420753,
+      "before": 11109,
+      "after": 11109,
+      "lost": 0,
+      "gained": 0,
+      "examples": []
+    }
+  ],
+  "preservation": {
+    "bodyRuns": true,
+    "effectiveFogOpacity": true,
+    "nativeFineValues": true,
+    "nativeFineCertificateWithoutEpoch": true,
+    "mourningMaskAndPoses": true,
+    "rooms": true,
+    "routes": true,
+    "placements": true
+  },
+  "rawSightRunsIdentical": false,
+  "effectiveFog": {
+    "samples": 25600,
+    "changed": 0,
+    "rule": "terrain.heightAt>caveSurface.height+1.5 OR caveRockOccludes(x,z,.2), exact default runtime grid"
+  },
+  "changedMourningHashes": [
+    "../public/assets/witch-cave.json"
+  ],
+  "camera": "Regenerated from exact final near triangles. Upper-wall occupancy follows the changed surfaces; separate eye/framing QA required.",
+  "scope": "Actual integrated source/bakes and original runtime-free lattice across the whole cave. No browser/device/GPU measurement."
+}

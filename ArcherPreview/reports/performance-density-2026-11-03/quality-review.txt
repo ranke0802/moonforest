@@ -1,0 +1,17 @@
+Independent integration quality review (2026-11-03)
+
+Scope: treasure rewards/UI, fog and collision eligibility, native per-instance outline tint, GLSL ES compatibility, and quest-prop ownership. Runtime files were not modified by this reviewer.
+
+Found and resolved during review:
+The initial chapter visible(p) predicate did not use caveFog.allowsPoint even though quest-prop visibility did. This allowed an eligible hidden treasure within interaction range to be selected/opened when segmentClear returned true. Reported to integration owner. The current source includes that gate; quality-integration.mjs verifies initial hidden-target exclusion and a second fog/LOS check at click time.
+
+Verified against the hashes in quality-integration.json:
+- All five outline tints reach Babylon's actual native instance Float32 buffers, stride 3. The shader uses exactly eight vertex attribute slots, including four world-matrix columns, so it fits the WebGL 1 minimum of eight.
+- Babylon-processed GLSL ES 100 and ES 300 outline vertex and fragment stages independently compile and link with the existing local glslang executable. Exported source is in quality-shaders/.
+- Five grades share one outline material and one source geometry. The existing real Babylon draw-submission test asserts a single ink draw for the five colours, exact base/LOD-batch coupling, no geometry copies, and restoration of depth state.
+- The focused current suite passes 25/25: chapter-quest, treasure-loot, village-outline-render, quest-prop-lifecycle, map-warm-cache, environment-distance-shading. This includes one-time rewards across reload/map reentry, matching item borders and usable healing, 24 prop load/release trips, stale/timeout completion cleanup, bounded linked-program cache, and preserved player 8K/background max4K geometric-LOD policy.
+- No duplicate scenery chest ownership remains in PLAINS_PLACEMENTS. Existing three anchors are rendered through quest-props.
+- Runtime dependency src/loot-rarity.js is untracked and must be included in the final change/package; integration owner was notified. The other untracked src/witch-cave-laboratory-shell.js is a pre-existing experiment with no current src/tests/scripts imports and is excluded by the integration owner.
+
+Limits:
+NullEngine tests verify JavaScript state, resource ownership, shader generation and draw submission. glslang verifies language compilation/link compatibility. Neither is a physical GPU driver/rasterization check or a measurement of browser, phone FPS, GPU memory, heat, or visual colour accuracy. No browser automation or paid asset generation was used. Other agents independently review density/navigation and cave geometry. Sources are still changing, so rerun quality-integration.mjs if the five hashed runtime modules change.

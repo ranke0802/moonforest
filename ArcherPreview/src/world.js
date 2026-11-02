@@ -51,7 +51,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   scene.fogColor = SKY_HORIZON.clone();
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
-  if(forest){scene.fogColor=new Color3(.40,.42,.46);scene.imageProcessingConfiguration.exposure=1.08;}
+  if(forest){scene.fogColor=new Color3(.19,.23,.21);scene.imageProcessingConfiguration.exposure=1.08;}
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = villagePolicy?.maxCameraRadius??14;
@@ -153,7 +153,7 @@ export function replaceWorldMap(world,character){
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;
   world.ground.isPickable=false;world.ground.freezeWorldMatrix();world.lighting.registerMeshes([world.ground]);
-  world.scene.fogColor=forest?new Color3(.40,.42,.46):SKY_HORIZON.clone();
+  world.scene.fogColor=forest?new Color3(.19,.23,.21):SKY_HORIZON.clone();
   world.scene.imageProcessingConfiguration.exposure=forest?1.08:1.15;
   world.scene.fogStart=world.villagePolicy.fogStart;world.scene.fogEnd=world.villagePolicy.fogEnd;
   configureCaveAtmosphere(world);

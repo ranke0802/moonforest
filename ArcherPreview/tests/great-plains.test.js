@@ -1,11 +1,71 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_RADIUS,plainsObstacles} from '../src/great-plains-layout.js';
+import {readFileSync,existsSync} from 'node:fs';
+import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS,PLAINS_RADIUS,plainsObstacles,plainsRoadDistance,plainsStreamDistance} from '../src/great-plains-layout.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {mapPortals,mapForCharacter,worldSpawn,portalHeadingTurn,portalAvailable,travelUrl} from '../src/map-route.js';
 import {greatPlainsHeight} from '../src/great-plains-terrain.js';
 import {NullEngine} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
+
+test('treasure anchors preserve quest identities without duplicate static chests',()=>{
+ assert.deepEqual(PLAINS_TREASURE_ANCHORS.map(({id,x,z,lootTier})=>({id,x,z,lootTier})),[
+  {id:'supply-chest',x:18,z:81,lootTier:1},
+  {id:'meadow-chest',x:-55,z:45,lootTier:1},
+  {id:'lookout-chest',x:-27,z:-22,lootTier:2},
+ ]);
+ const ids=new Set(PLAINS_TREASURE_ANCHORS.map(p=>p.id));
+ assert.equal(PLAINS_PLACEMENTS.some(p=>ids.has(p.id)||p.asset==='chest-common'),false);
+ for(const anchor of PLAINS_TREASURE_ANCHORS)for(const p of PLAINS_PLACEMENTS.filter(p=>p.grove))assert.ok(Math.hypot(p.x-anchor.x,p.z-anchor.z)>p.colliderRadius+anchor.colliderRadius+.6,p.id+' covers a treasure anchor');
+});
+
+test('groves add bounded scenery outside full road widths, clearings and the lookout ramp',()=>{
+ const added=PLAINS_PLACEMENTS.filter(p=>p.grove);
+ assert.ok(added.length>70&&added.length<=150,'keep the added instance budget bounded');
+ assert.ok(PLAINS_PLACEMENTS.length<=1250,'density must not grow without a new performance review');
+ assert.equal(PLAINS_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,580,'do not spend more instances on uniform grass');
+ for(const p of added){
+  assert.ok(plainsRoadDistance(p.x,p.z)>p.colliderRadius+.65,p.id+' narrows a road or clearing');
+  assert.ok(plainsStreamDistance(p.x,p.z)>p.colliderRadius+3.6,p.id+' is inside the river bank');
+  assert.ok(Math.hypot((p.x+28)/1.1,p.z+20)>=15,p.id+' obscures the summit');
+  for(const c of PLAINS_CLEARINGS)assert.ok(Math.hypot(p.x-c.x,p.z-c.z)>c.r+p.colliderRadius+.6,p.id+' blocks an exploration clearing');
+ }
+ // Test the road shoulders as well as its center with only the new obstacles.
+ const nav=new VillageNavigation(plainsObstacles().filter(o=>added.some(p=>p.id===o.id)));
+ for(const road of PLAINS_ROUTES)for(let i=1;i<road.samples.length;i++){
+  const [x,z]=road.samples[i],[px,pz]=road.samples[i-1],length=Math.hypot(x-px,z-pz);
+  if(length<1e-8)continue;
+  for(const side of [-1,0,1]){
+   const point={x:x-(z-pz)/length*road.width*.5*side,z:z+(x-px)/length*road.width*.5*side};
+   if(Math.hypot(point.x,point.z)<PLAINS_RADIUS-.5)assert.ok(nav.free(point,.35,PLAINS_RADIUS),road.id+' shoulder obstructed');
+  }
+ }
+});
+
+test('forest species increase towards the entrance while village groves stay healthy',()=>{
+ const addedTrees=PLAINS_PLACEMENTS.filter(p=>p.grove&&p.kind==='tree');
+ const ratio=zone=>{const trees=addedTrees.filter(p=>p.zone===zone);assert.ok(trees.length>=8);return trees.filter(p=>p.asset.startsWith('forest-')).length/trees.length;};
+ assert.equal(ratio('village'),0);
+ assert.ok(ratio('forest')>ratio('fringe')&&ratio('fringe')>0);
+ assert.ok(new Set(addedTrees.map(p=>p.grove)).size>=12,'trees should form separate islands around traversable spaces');
+ const boundary=PLAINS_PLACEMENTS.filter(p=>p.id.startsWith('forest-north-'));
+ assert.ok(boundary.some(p=>p.asset==='tree-01-round-oak'));
+ for(const asset of ['tree-02-slender-pine','forest-01-sickly-oak','forest-02-dead-tree'])assert.ok(boundary.some(p=>p.asset===asset));
+});
+
+test('plains reuses complete existing forest and village LOD graphs',()=>{
+ const read=name=>JSON.parse(readFileSync(new URL('../public/assets/'+name+'.json',import.meta.url),'utf8'));
+ const plains=read('great-plains'),village=read('village'),forest=read('monster-forest');
+ for(const [source,ids]of [[village,['tree-02-slender-pine','bush','handcart','firewood']],[forest,['forest-01-sickly-oak','forest-02-dead-tree','forest-03-fallen-log']]])for(const id of ids){
+  assert.deepEqual(plains.assets[id],source.assets[id],id+' must preserve the source LOD and texture metadata');
+  for(const lod of plains.assets[id].lods)for(const ref of lod.resources)assert.ok(existsSync(new URL('../public/assets/'+ref,import.meta.url)),id+' missing '+ref);
+ }
+ assert.equal(plains.availableAssetCount,Object.keys(plains.assets).length);
+ for(const p of PLAINS_PLACEMENTS)assert.ok(plains.assets[p.asset],p.id+' has no asset config');
+ const exterior=plains.assets['village-approach'];
+ assert.equal(new Set(exterior.lods.map(l=>l.model)).size,1,'preserve integrated shared exterior geometry');
+ assert.ok(exterior.lods.every(l=>l.textureSize===2048),'retain actual exterior 2K metadata');
+});
 
 test('authored route network stays walkable through clustered scenery',()=>{
  assert.equal(new Set(PLAINS_PLACEMENTS.map(p=>p.id)).size,PLAINS_PLACEMENTS.length);

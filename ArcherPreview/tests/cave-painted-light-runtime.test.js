@@ -47,7 +47,7 @@ test('twenty map roundtrips release GPU maps, keep one detached CPU map, and reb
  for(let i=0;i<20;i++){
   const old=scene.metadata.cavePaintLighting;oldMaps.push(old);
   replaceWorldMap(world,'warrior-v4');assert.equal(old.disposed,true);assert.equal(scene.metadata.cavePaintLighting,null);
-  assert.equal(mesh.material.fogEnabled,true,'outside-cave retained materials recover their engine fog policy');
+  assert.equal(mesh.material.fogEnabled,false,'outside-cave painted scenery returns to hue-preserving distance tone instead of pale engine fog');
   const p=mesh.material.pluginManager.getPlugin('CavePaintLight'),calls={},buffer={setTexture:(n,v)=>calls[n]=v,updateFloat:(n,v)=>calls[n]=v,updateFloat4(){}};
   p.hardBindForSubMesh(buffer);assert.equal(calls.cavePaintActive,0);assert.notStrictEqual(calls.cavePaintLightMap,old.texture);
   replaceWorldMap(world,'warrior-v5');readyRaw(world);scene.render();

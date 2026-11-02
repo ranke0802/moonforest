@@ -94,7 +94,7 @@ test('real retained PBR bind is inactive outside cave, then follows new ready fo
  for(let i=0;i<20;i++){
   const oldPaint=scene.metadata.cavePaintLighting,oldFog=world.caveFog;
   replaceWorldMap(world,'warrior-v4');await prepareMapMaterials([mesh]);
-  const outside=captureRealBind(mesh);assert.equal(outside.cavePaintActive,0);assert.deepEqual(outside.cavePaintPlayer,[0,0,0,0]);assert.equal(outside.caveFogActive,0);assert.notStrictEqual(outside.cavePaintLightMap,oldPaint.texture);assert.equal(oldPaint.disposed,true);assert.equal(oldFog.disposed,true);assert.equal(m.fogEnabled,true);
+  const outside=captureRealBind(mesh);assert.equal(outside.cavePaintActive,0);assert.deepEqual(outside.cavePaintPlayer,[0,0,0,0]);assert.equal(outside.caveFogActive,0);assert.notStrictEqual(outside.cavePaintLightMap,oldPaint.texture);assert.equal(oldPaint.disposed,true);assert.equal(oldFog.disposed,true);assert.equal(m.fogEnabled,false);
   replaceWorldMap(world,'warrior-v5');ready(world);world.caveAtmosphere.attachMaterial(m);world.caveFog.attach(m);await prepareMapMaterials([mesh]);
   const beforePlayer=captureRealBind(mesh);assert.deepEqual(beforePlayer.cavePaintPlayer,[0,0,0,0]);assert.equal(beforePlayer.caveFogActive,0);
   world.caveFog.update(new Vector3(-35+i*.01,3,-18),i+1,{force:true});const entered=captureRealBind(mesh);

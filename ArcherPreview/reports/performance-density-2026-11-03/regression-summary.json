@@ -1,0 +1,83 @@
+{
+  "comparedRevisions": [
+    "341892c",
+    "9a8f4d6",
+    "01fa3ba"
+  ],
+  "runtimeSourceLocked": true,
+  "ownedFiles": {
+    "src/chapter-quest-props.js": "358c34c530d7ae046c9c7c55e2e4453de62c91b8ed4086cf0e40f0d3bf6fff32",
+    "tests/quest-prop-lifecycle.test.js": "07ca30fa7327f334e7a6d66ff9d8d9cb0d3697bcb4b1af037c5d7b6a34683ae0",
+    "tests/quest-prop-performance.test.js": "579026dc355f22880f81b9df0c26dc4e8fca9a2fe0921db092499fd54953a5d5"
+  },
+  "dependency": {
+    "path": "src/village-outlines.js",
+    "owner": "root",
+    "requiredExport": "prepareVillageInkSource",
+    "sha256": "444554c9869195e97866f6c798d5dd64b6edce4270cf2deb728d9440fcdb2dc2"
+  },
+  "findings": [
+    {
+      "id": "R01",
+      "confirmed": true,
+      "impact": "Map-transfer pending/decode ownership regression, not a proven sole cause of sustained sub-30 mobile FPS.",
+      "before": "Generic SceneLoader promise returned false after release while a real pending Meshopt import left scene pending=1. It reached zero only after the decoder gate was released.",
+      "fix": "The same owned loadMapContainer/MapLoadLifetime signal path as streamed map assets; cancellation disposes partial resources and guards late buffer publication.",
+      "evidence": [
+        "regression-quest-cancel.json",
+        "regression-quest-cancel-after.json"
+      ]
+    },
+    {
+      "id": "R02",
+      "confirmed": true,
+      "impact": "Avoidable draw submissions, geometry and vertex work for ground point markers.",
+      "before": "Actual Babylon 9.31 torus tessellation24 produces 1250 triangles, not the initially estimated 1152. 24 individually created rings submitted 24 draws and held 24 unique geometries.",
+      "fix": "A 24-segment flat annulus, 48 triangles, one shared geometry and native instancing. In the same 24-marker fixture: one draw with 24 instances. Ground-circle width/radius remain unchanged; the tube cross-section is intentionally flattened.",
+      "evidence": [
+        "regression-marker-after.json"
+      ]
+    },
+    {
+      "id": "R03",
+      "confirmed": true,
+      "impact": "Unnecessary foreground preparation and retained hidden quest models.",
+      "before": "The initial 01fa3ba points required importing all 4 village / 7 forest unique model IDs even when distant, ineligible or already collected. Later root additions are outside those historical counts.",
+      "fix": "Only near+eligible/FoW-visible demand starts a model. One model loads at a time. Failed models never retry on periodic updates; explicit map lifecycle restart permits retry. Marker/interaction fallback remains available, with isReady(point) for root interaction gating."
+    },
+    {
+      "id": "R04",
+      "confirmed": true,
+      "impact": "First-visible shader compilation and missing environment registration.",
+      "before": "Generic props did not register source receivers, attach cave paint/FoW or prepare the instanced material/ink variant before exposure.",
+      "fix": "Register sources, preserve authored mesh/UV/texture profile, apply toon, attach cave PBR paint/FoW, warm the actual PBR and ink variants, then publish frozen native instances. Failed ink preparation never adds source callbacks or records to the live outline."
+    }
+  ],
+  "ruledOutOrLimited": [
+    "Historical hidden AssetContainer source meshes were not in scene; hidden instances produced active=0. No ghost-origin render claim.",
+    "Quest visit facts use persistent dedupe tokens; cumulative gold credits return before storage writes when the total is unchanged. No evidence of unconditional localStorage writes every 0.15s during ordinary exploration.",
+    "The compared normal village/forest paths do not raise render distance, target FPS, device pixel ratio or player texture profile. Plains-only geometry/decor is gated by world.plains.",
+    "New quest DOM updates are throttled to 0.15s and the tracked label uses a signature guard. Browser compositor/font cost was not measured, and this audit does not declare it zero.",
+    "An old November 1 cave diagnostic is not evidence of current village/forest regression. No actual phone GPU/FPS/temperature improvement was measured."
+  ],
+  "validation": {
+    "tests": 9,
+    "passed": 9,
+    "failed": 0,
+    "log": "regression-quest-tests.log",
+    "cases": [
+      "24 map prop load/release trips with resource/observer plateaus",
+      "Only eligible-near models demand loading, serial imports, no failed-model retry loop",
+      "24 markers before/after actual Babylon draw submission comparison",
+      "Geometry-sharing, frozen transforms, optional height/scale/yaw and cave material ordering",
+      "Default owned glTF path with actual deployed Meshopt geometry, cancellation pending0, late vertex construction0, explicit retry retains889vertices/628triangles",
+      "Warmup failure and permanent-wait timeout followed by another successful model: one live ink record, no stale source callbacks; release returns resources/hooks/pending to baseline"
+    ]
+  },
+  "limits": [
+    "Node/NullEngine exercises loader, ownership, shader-readiness and submission logic; it is not real GL compilation or phone GPU timing.",
+    "The actual Meshopt race fixture omits image/KTX upload, so its texture/GPU behavior is not claimed measured. Existing map texture ownership tests remain relevant.",
+    "No new AI/Meshy asset, original background/player texture, LOD, mesh simplification or deployment change was made by this subtask.",
+    "Parent remains responsible for integration UI gating, rarity outline tint, full suite and deployment."
+  ]
+}

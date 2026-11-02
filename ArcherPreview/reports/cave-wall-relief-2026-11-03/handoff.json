@@ -1,0 +1,160 @@
+{
+  "status": "PASS_SOURCE_LOCKED",
+  "base": "01fa3ba",
+  "applied": "One existing cave-01-eroded-wall asset across55original placements; no extra placed objects.",
+  "notApplied": "Laboratory r3 same-topology prototype rejected after before/after clay review: additional thin diagonal stitching folds outweighed its small broad-face improvement. Original r3 source/3LODs/contract preserved.",
+  "geometry": {
+    "trianglesBeforeAfter": [
+      5000,
+      2750,
+      1400
+    ],
+    "changedVertices": [
+      697,
+      389,
+      207
+    ],
+    "maxLocalDisplacement": 0.16171061992645264,
+    "maxWorldDisplacementBound": 0.4034560266802663,
+    "protectedTriangleChanges": 0,
+    "flippedFaces": 0,
+    "topology": "One component,10pre-existing boundary edges,0new/nonmanifold/degenerate/duplicate faces at each LOD. All original open-boundary vertices unchanged.",
+    "uvColorIndices": "All original UV/COLOR/index attributes and source materials/images byte-identical; lossless Meshopt roundtrip proved. Authored split/smooth normals transported by the deformation Jacobian.",
+    "newTriangles": 0,
+    "newDrawCalls": 0,
+    "newTextures": 0,
+    "additionalRuntimeVertexWork": 0
+  },
+  "resources": {
+    "uniqueBeforeBytes": 611740,
+    "uniqueAfterBytes": 611752,
+    "deltaBytes": 12,
+    "highTextureMax": 4096,
+    "highTextureURLUnchanged": true,
+    "player8KUnchanged": true,
+    "provenance": "sourceModelHashes contains SHA-only strings, not live resource links; historic source URLs stay only in reports, so obsolete versions are excluded from deployment traversal.",
+    "newResources": [
+      "./content/8261a2e3f78cf2cd01a75855cf20572191d9925d1fd17234d322f8118de903d1.bin",
+      "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+      "./content/c301ddf06b41ba1531235e9836be90c52d6058ec4bb72aaeabedba97b8253380.bin",
+      "./content/a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+      "./content/a9e65a816b9e911aca47984f01d2f310cf0870253760ad0cd2e174a8c39eaaa7.bin",
+      "./content/4de4b912ff903f96f9e7ec969404e6b43437b3affeae6b952f65109ad6d5f0e3.gltf"
+    ]
+  },
+  "gameplay": {
+    "cohorts": [
+      {
+        "radius": 0.32,
+        "before": 11084,
+        "after": 11084,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.34,
+        "before": 11044,
+        "after": 11044,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.7,
+        "before": 9490,
+        "after": 9490,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      },
+      {
+        "radius": 0.28809887268420753,
+        "before": 11109,
+        "after": 11109,
+        "lost": 0,
+        "gained": 0,
+        "examples": []
+      }
+    ],
+    "nativeFineValuesAndCertificateUnchanged": true,
+    "bodyRunsUnchanged": true,
+    "roomsRoutesPlacementsUnchanged": true,
+    "bossFullPoseMaskAndPosesUnchanged": true,
+    "fullPoseSamples": 541,
+    "bossSafeCells": 2590,
+    "rawSightChanges": {
+      "changed": 115,
+      "removed": 71,
+      "added": 44,
+      "allOnUnwalkableHighRidges": true
+    },
+    "effectiveFogOpacity": {
+      "samples": 25600,
+      "changed": 0,
+      "rule": "terrain.heightAt>caveSurface.height+1.5 OR caveRockOccludes(x,z,.2), exact default runtime grid"
+    },
+    "camera": {
+      "global": {
+        "fixedCases": 4896,
+        "oldBlocked": 0,
+        "newBlocked": 0,
+        "newlyBlocked": 0,
+        "changedFraming": 1,
+        "retains80PercentOfBefore": 4896,
+        "retentionPercent": 100,
+        "failures": []
+      },
+      "actualGuard": {
+        "cases": 372,
+        "framesPerCase": 61,
+        "rawFloat32BoundaryFlags": 0,
+        "withinTenMicronPaddingBoundary": 0,
+        "meaningfullyBlocked": 0,
+        "requestedInputChanged": 0,
+        "examples": []
+      }
+    }
+  },
+  "verification": {
+    "focusedTests": {
+      "passed": 32,
+      "failed": 0,
+      "log": "focused-tests.log"
+    },
+    "finalMetadataTests": {
+      "passed": 12,
+      "failed": 0,
+      "log": "final-metadata-tests.log"
+    },
+    "integration": "PASS",
+    "camera": "PASS"
+  },
+  "visualReview": {
+    "compared": [
+      "wall-front-before.png",
+      "wall-front-after.png",
+      "wall-three-quarter-before.png",
+      "wall-three-quarter-after.png"
+    ],
+    "verdict": "Small conservative upper/mid-wall relief; keeps the existing large silhouette and does not claim a complete cave art rebuild. No new repetitive nodule pattern.",
+    "excludedEvidence": "game-default-* renders are mostly occluded/black and are NOT used as user-camera appearance evidence. r3 front pairs show why that prototype was rejected.",
+    "renderer": "Blender4.5.14 headless, same exposure/light/camera and neutral material before/after; not Babylon/mobile rasterization."
+  },
+  "ownedFiles": {
+    "scripts/cave-wall-relief.mjs": "56c71324bfd659be7344d8e7dd514d523e0ebc1b0ccee2fa16e369401166c024",
+    "scripts/pack-cave-wall-relief.mjs": "e55e19ac4675ae4939101d527647c5aac7478e1dde6bd0015a4388420ddbde9e",
+    "tests/cave-wall-relief.test.js": "11b48af3e294dcfe6fc916d797dd43c7053ebfe4d8f0b04a5916095746b722e1",
+    "public/assets/witch-cave.json": "ff09d071a378a7fdb6e5aa1bde56c14724fa6fc7ee6bbf2a09d6caaa61842ead",
+    "src/witch-cave-collision-data.js": "6d221eab7e69558daebda5857e1fe2f0dce60956bcc27c3581d48e6ec72c6479",
+    "src/witch-cave-sight-data.js": "59a9a28538521c732fcd1bbcb1d51573b72edcd5d025c2fa66d3575710d68e86",
+    "src/witch-cave-camera-data.js": "0f01473d0f91ce5c3bf821f28fa6ed2558408cd7ce2c6eede9d732faecb43d21",
+    "src/cave-laboratory-collision-data.js": "d2bed9c9fdb4fd4045ea6e095a5796f1a942081b397ef4ba136e3baaa7584d2b",
+    "src/mourning-cave-clearance-data.js": "18dc2fff969bcc45918baafb4ba37f72b2974e793f1712588f9cd417cfe1d9cc"
+  },
+  "limitations": [
+    "No browser automation, new AI/Meshy assets, mobile GPU/heat measurement, build/commit/push/deployment by this agent.",
+    "Current eroded wall source retains its pre-existing small rocky corners; this is conservative relief, not a full topology redesign."
+  ],
+  "sourceLocked": true
+}

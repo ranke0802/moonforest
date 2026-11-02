@@ -1,0 +1,8 @@
+{
+  "case": "owned-quest-prop-cancel-real-meshopt",
+  "pendingAfterRelease": 0,
+  "lateVertexCreations": 0,
+  "retryTriangles": 628,
+  "retryVertices": 889,
+  "images": "Image/KTX boundary omitted; actual shipped Meshopt geometry and owned glTF loader used."
+}

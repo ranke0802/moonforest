@@ -1,0 +1,178 @@
+{
+  "baseline": "01fa3ba",
+  "browserAutomation": false,
+  "paidAssetGenerations": 0,
+  "deviceFpsMeasured": false,
+  "contracts": [
+    {
+      "name": "warrior-v3",
+      "unchanged": true
+    },
+    {
+      "name": "warrior-v3-ios",
+      "unchanged": true
+    },
+    {
+      "name": "village",
+      "unchanged": true
+    },
+    {
+      "name": "monster-forest",
+      "unchanged": true
+    },
+    {
+      "name": "elena",
+      "unchanged": true
+    },
+    {
+      "name": "mourning-elena",
+      "unchanged": true
+    },
+    {
+      "name": "quest-props",
+      "unchanged": true
+    }
+  ],
+  "diagnostic": {
+    "createdAt": "2026-11-01T23:57:09.758Z",
+    "bundle": "index-DX7bLT8c.js",
+    "map": "warrior-v5",
+    "targetFps": 30,
+    "summaryFps": 30.211,
+    "scope": "Historical cave combat; not evidence of current village/forest regression",
+    "gpuStatus": "unsupported"
+  },
+  "plains": {
+    "beforeStaticPlacements": 1079,
+    "staticPlacements": 1210,
+    "externalTreasureAnchors": 3,
+    "counts": {
+      "landmark": 1,
+      "prop": 10,
+      "rock": 364,
+      "tree": 193,
+      "fence": 23,
+      "ground-detail": 580,
+      "shrub": 39
+    }
+  },
+  "treasures": {
+    "counts": {
+      "village": 6,
+      "great-plains": 9,
+      "monster-forest": 7,
+      "witch-cave": 7
+    },
+    "grades": [
+      {
+        "tier": 1,
+        "name": "일반",
+        "color": "#c6cbc8",
+        "chest": "여행자 보급함",
+        "item": "travel-tonic",
+        "itemName": "여행자 회복약",
+        "heal": 160,
+        "gold": 15
+      },
+      {
+        "tier": 2,
+        "name": "고급",
+        "color": "#72b87a",
+        "chest": "순찰대 보급함",
+        "item": "concentrated-tonic",
+        "itemName": "농축 회복약",
+        "heal": 240,
+        "gold": 35
+      },
+      {
+        "tier": 3,
+        "name": "희귀",
+        "color": "#689edf",
+        "chest": "탐험가 보물함",
+        "item": "refined-tonic",
+        "itemName": "정제 회복약",
+        "heal": 320,
+        "gold": 70
+      },
+      {
+        "tier": 4,
+        "name": "영웅",
+        "color": "#df7873",
+        "chest": "봉인된 보물함",
+        "item": "greater-tonic",
+        "itemName": "상급 회복약",
+        "heal": 420,
+        "gold": 140
+      },
+      {
+        "tier": 5,
+        "name": "전설",
+        "color": "#e9c55c",
+        "chest": "빛바랜 성물함",
+        "item": "restoration-water",
+        "itemName": "완전 회복 성수",
+        "heal": 500,
+        "gold": 280
+      }
+    ]
+  },
+  "wall": {
+    "lodTriangles": [
+      5000,
+      2750,
+      1400
+    ],
+    "texturesPreserved": true,
+    "labR3Unchanged": true
+  },
+  "transfer": {
+    "revision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+    "files": 1105,
+    "bundles": 228,
+    "added": [
+      "1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+      "4de4b912ff903f96f9e7ec969404e6b43437b3affeae6b952f65109ad6d5f0e3.gltf",
+      "8261a2e3f78cf2cd01a75855cf20572191d9925d1fd17234d322f8118de903d1.bin",
+      "a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+      "a9e65a816b9e911aca47984f01d2f310cf0870253760ad0cd2e174a8c39eaaa7.bin",
+      "c301ddf06b41ba1531235e9836be90c52d6058ec4bb72aaeabedba97b8253380.bin"
+    ],
+    "removed": [
+      "070d7abbcb85162e3fcb3f25f9e8f8b7814fc0ae1046e7e144cc1cfdfa141411.bin",
+      "29aec96c67e6e296617909e5e7e8216269cd48adbc1d2e5ff616a45bec7f93c9.gltf",
+      "590328f924cb948291ae3b6c5d78b0e387c0ff5f6231fa117ba74dc8d3df6615.gltf",
+      "a840bcbd0f159075d3ec2cdf6f382412a647ba598cc72952e18422a0090fdc82.bin",
+      "aad5eeef28f2f17f80442f6a90b9deb41080c2a57a7c0e86c82959a3e19223e3.bin",
+      "ef930570501f371f48fa54a3578a98430e2317831893a19a876cb9a9111812ff.gltf"
+    ],
+    "unchanged": 1099
+  },
+  "sources": {
+    "public/assets/great-plains.json": "d9ee29d449c7c7387b6fe97b235f488ae1bd8c3bb4d59dc71f2c1810aebfd99e",
+    "public/assets/witch-cave.json": "ff09d071a378a7fdb6e5aa1bde56c14724fa6fc7ee6bbf2a09d6caaa61842ead",
+    "src/cave-laboratory-collision-data.js": "d2bed9c9fdb4fd4045ea6e095a5796f1a942081b397ef4ba136e3baaa7584d2b",
+    "src/chapter-quest-points.js": "c062f49c560d74b5f37687adee583b747f8f4ebc5f92c6df6b6b33893f67e083",
+    "src/chapter-quest-props.js": "358c34c530d7ae046c9c7c55e2e4453de62c91b8ed4086cf0e40f0d3bf6fff32",
+    "src/chapter-quest-state.js": "b92578115b6dc587c181a2ee0757d35cd2ec610e2ba571ccc3c1030476bb4e8b",
+    "src/chapter-quest.css": "4ce6cff3b26ea50af58b86b5b05a396131920ee9f5f080794ed4f9067514cb86",
+    "src/chapter-quest.js": "058bb4145ba20859064bebe17051e129801fa352757cfa49cbe92862e4087087",
+    "src/great-plains-layout.js": "227514ca58ee48f2c7a6ec6a76ff6c59288adcfda5d7aa50f2c237ea0adc810c",
+    "src/main.js": "4bd6135a102f58538ab855908624f55df3607af8c9ffbd8e9add9192f7db9e70",
+    "src/mourning-cave-clearance-data.js": "18dc2fff969bcc45918baafb4ba37f72b2974e793f1712588f9cd417cfe1d9cc",
+    "src/village-outlines.js": "444554c9869195e97866f6c798d5dd64b6edce4270cf2deb728d9440fcdb2dc2",
+    "src/village-toon.js": "29b6e92ffe4d8a7214bf6cdcc44eda818286233db599e8c5e755b9e02c2826a6",
+    "src/witch-cave-camera-data.js": "0f01473d0f91ce5c3bf821f28fa6ed2558408cd7ce2c6eede9d732faecb43d21",
+    "src/witch-cave-collision-data.js": "6d221eab7e69558daebda5857e1fe2f0dce60956bcc27c3581d48e6ec72c6479",
+    "src/witch-cave-sight-data.js": "59a9a28538521c732fcd1bbcb1d51573b72edcd5d025c2fa66d3575710d68e86",
+    "src/world.js": "7f85d5be8345d900151d97d721244ff0b90c22ab351d416fdd1c32254de5016e",
+    "tests/cave-lantern-lifecycle.test.js": "fe60a85ba813c8defcfaed2212ed86822c997822ce36030a6d17e759b1ad4f5c",
+    "tests/cave-painted-light-runtime.test.js": "3e1204a0cf4a1b9819c76ebd69ca7b7e7dfd3392f6683bad65919fb7cd13fe01",
+    "tests/great-plains.test.js": "a4c794b7d4b31649592e3e591121d5305bee4704335f2fa5310e0f99c530cbad",
+    "tests/quest-prop-lifecycle.test.js": "07ca30fa7327f334e7a6d66ff9d8d9cb0d3697bcb4b1af037c5d7b6a34683ae0",
+    "tests/village-outline-render.test.js": "cba1bfbd40b208d03e4e01d478e9ed01e3977578a01a5c827cec66855c86eaa3",
+    "src/loot-rarity.js": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+    "tests/treasure-loot.test.js": "e6398187098a86517db1d716c17ac24f791b67d87a9982e476b1f6300612976d",
+    "tests/quest-prop-performance.test.js": "579026dc355f22880f81b9df0c26dc4e8fca9a2fe0921db092499fd54953a5d5",
+    "tests/environment-distance-shading.test.js": "84dc17c0119857b1def4740c183aca1f65d9d02297def6942218562db1cf8f7a"
+  }
+}

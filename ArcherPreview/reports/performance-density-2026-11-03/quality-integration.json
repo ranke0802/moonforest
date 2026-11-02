@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-11-02T15:46:52.052Z",
+  "gpuRasterizationMeasured": false,
+  "phoneFpsMeasured": false,
+  "browserAutomationUsed": false,
+  "hashes": {
+    "src/chapter-quest.js": "058bb4145ba20859064bebe17051e129801fa352757cfa49cbe92862e4087087",
+    "src/chapter-quest-state.js": "b92578115b6dc587c181a2ee0757d35cd2ec610e2ba571ccc3c1030476bb4e8b",
+    "src/chapter-quest-props.js": "61aec1d0376e4605d4e7be3d07c90d612da6edc4004888f7ebeef1406bf16dd9",
+    "src/village-outlines.js": "444554c9869195e97866f6c798d5dd64b6edce4270cf2deb728d9440fcdb2dc2",
+    "src/loot-rarity.js": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698"
+  },
+  "checks": [
+    {
+      "name": "hidden cave treasure cannot be opened",
+      "pass": true,
+      "point": "witch-cave-treasure-reliquary",
+      "fogAllowsPoint": false,
+      "segmentClear": true,
+      "renderEligible": false,
+      "buttonHidden": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "name": "LOS rechecked after target selection",
+      "pass": true
+    },
+    {
+      "name": "fog rechecked after target selection",
+      "pass": true
+    },
+    {
+      "name": "ES100 native outline instance attributes fit eight slots",
+      "pass": true,
+      "attributes": [
+        "position",
+        "normal",
+        "villageInk",
+        "villageInkTint",
+        "world0",
+        "world1",
+        "world2",
+        "world3"
+      ],
+      "attributeSlots": 8
+    },
+    {
+      "name": "ES100 native tint float buffer contains every grade",
+      "pass": true,
+      "tintStride": 3,
+      "actualTintBuffer": [
+        0.7764706015586853,
+        0.7960784435272217,
+        0.7843137383460999,
+        0.4470588266849518,
+        0.7215686440467834,
+        0.47843137383461,
+        0.40784314274787903,
+        0.6196078658103943,
+        0.8745098114013672,
+        0.8745098114013672,
+        0.47058823704719543,
+        0.45098039507865906,
+        0.9137254953384399,
+        0.772549033164978,
+        0.3607843220233917
+      ]
+    },
+    {
+      "name": "ES300 native outline instance attributes fit eight slots",
+      "pass": true,
+      "attributes": [
+        "position",
+        "normal",
+        "villageInk",
+        "villageInkTint",
+        "world0",
+        "world1",
+        "world2",
+        "world3"
+      ],
+      "attributeSlots": 8
+    },
+    {
+      "name": "ES300 native tint float buffer contains every grade",
+      "pass": true,
+      "tintStride": 3,
+      "actualTintBuffer": [
+        0.7764706015586853,
+        0.7960784435272217,
+        0.7843137383460999,
+        0.4470588266849518,
+        0.7215686440467834,
+        0.47843137383461,
+        0.40784314274787903,
+        0.6196078658103943,
+        0.8745098114013672,
+        0.8745098114013672,
+        0.47058823704719543,
+        0.45098039507865906,
+        0.9137254953384399,
+        0.772549033164978,
+        0.3607843220233917
+      ]
+    }
+  ],
+  "shaders": [
+    {
+      "version": 100,
+      "stage": "vert",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "version": 100,
+      "stage": "frag",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "version": 100,
+      "stage": "link",
+      "exit": 0,
+      "output": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\performance-density-2026-11-03\\quality-shaders\\es100.vert\r\nC:\\dev\\moonforest-archer\\ArcherPreview\\reports\\performance-density-2026-11-03\\quality-shaders\\es100.frag\r\n"
+    },
+    {
+      "version": 300,
+      "stage": "vert",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "version": 300,
+      "stage": "frag",
+      "exit": 0,
+      "output": ""
+    },
+    {
+      "version": 300,
+      "stage": "link",
+      "exit": 0,
+      "output": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\performance-density-2026-11-03\\quality-shaders\\es300.vert\r\nC:\\dev\\moonforest-archer\\ArcherPreview\\reports\\performance-density-2026-11-03\\quality-shaders\\es300.frag\r\n"
+    }
+  ],
+  "success": true
+}

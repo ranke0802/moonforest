@@ -1,0 +1,413 @@
+{
+  "revision": "environment-hue-preserving-distance-tone-v2-cull-safe",
+  "status": "SOURCE_LOCKED_COMPONENT_VALIDATED",
+  "base": "01fa3ba",
+  "sourceFiles": [
+    "src/village-toon.js",
+    "src/world.js",
+    "tests/environment-distance-shading.test.js",
+    "tests/cave-painted-light-runtime.test.js",
+    "tests/cave-lantern-lifecycle.test.js"
+  ],
+  "sourceSha256": {
+    "src/village-toon.js": "29b6e92ffe4d8a7214bf6cdcc44eda818286233db599e8c5e755b9e02c2826a6",
+    "src/world.js": "7f85d5be8345d900151d97d721244ff0b90c22ab351d416fdd1c32254de5016e",
+    "tests/environment-distance-shading.test.js": "84dc17c0119857b1def4740c183aca1f65d9d02297def6942218562db1cf8f7a",
+    "tests/cave-painted-light-runtime.test.js": "3e1204a0cf4a1b9819c76ebd69ca7b7e7dfd3392f6683bad65919fb7cd13fe01",
+    "tests/cave-lantern-lifecycle.test.js": "fe60a85ba813c8defcfaed2212ed86822c997822ce36030a6d17e759b1ad4f5c"
+  },
+  "cause": "Village painted diffuse was computed first, then engine fog mixed it toward bright SKY_HORIZON(.61,.71,.77) or forest(.40,.42,.46) before imageprocessing. That can turn distant LOD tree pixels pale regardless of texture resolution.",
+  "changes": {
+    "environment": "PaintedenvironmentPBRenginefogdisabled; originaldiffuseband/shadow/sRGBtexturepath retained. World-fragment-to-cameradistance applies continuouslinear factor1→.62.",
+    "policy": {
+      "startRatio": 0.45,
+      "endRatio": 0.8,
+      "minimumStart": 18,
+      "farFactor": 0.62
+    },
+    "mobileRange": {
+      "start": 29.25,
+      "end": 64
+    },
+    "desktopRange": {
+      "start": 39.6,
+      "end": 84
+    },
+    "near": "Distance0..18mandusualmobile<=29.25m exactlyfactor1; originalgeometry/UV/albedo/nearhightextures unchanged.",
+    "cave": "Current scene cavePaintLighting disables outdoor factor and skips its distanceALU. CavePaint/FoW retains its own existing finaldarkair. Root owns missingquestpropattachments separately.",
+    "forestFog": "Only two worldfogColorassignments changed to(.19,.23,.21)forfloor/legacyhaze; village/plainsrestoreexistingSKY_HORIZON,caveretainsownclearcolour.",
+    "cullCoverage": "Removing engine fog exposed the old hard cell-cull edge. Existing colour pass now uses the same fixed4x4Bayer as tree-view/ink, continuous coverage1→0 over originalfogStart→fogEnd (mobile65→80, desktop88→105). Exactlyzero before CPUcull82/110. Samepattern sequentialdiscards composeasmin(nearTreeCoverage,distanceCoverage), not multiplied opacity. Caveoff; noalpha-blendpass; shadows and selection unchanged.",
+    "lifecycle": "Newuniform hard-bound on every actualdraw, including retained/frozenLODmaterials; no capturedmapregion.20actualmapchanges verify cavefactor0/outdoorfactor1.",
+    "resources": {
+      "newTextures": 0,
+      "newSamplers": 0,
+      "newLights": 0,
+      "newShadowPasses": 0,
+      "newFullscreenEffects": 0,
+      "newGeometry": 0,
+      "newPerFrameMaterialScans": 0
+    }
+  },
+  "validation": {
+    "finalFocused": {
+      "tests": 24,
+      "passed": 24,
+      "durationMs": 14248.1055,
+      "includes": "Actual6249visiblebase-draws/160rotations, nearcoverage/Bayer/Cave+PBRlifecycle"
+    },
+    "actualGeometryCullBoundary": [
+      {
+        "map": "village",
+        "trees": 211,
+        "cameraFrames": 1800,
+        "treeFrustumSamples": 184695,
+        "hardDistanceCullEvents": 242,
+        "allActualTriangleSurfacesCoverageZeroAtCull": true
+      },
+      {
+        "map": "monster-forest",
+        "trees": 368,
+        "cameraFrames": 1800,
+        "treeFrustumSamples": 341226,
+        "hardDistanceCullEvents": 532,
+        "allActualTriangleSurfacesCoverageZeroAtCull": true
+      }
+    ],
+    "standaloneShaderStages": 36,
+    "standaloneShaderPassed": 36,
+    "standaloneShaderFailures": [],
+    "shaderMatrix": [
+      "village/forest/cave actualinstancedTreeCoverage+VillageToon andfloor",
+      "ES100/noUBO",
+      "ES300/noUBO",
+      "ES300/UBO"
+    ],
+    "engineFogAfterChange": [
+      {
+        "name": "village-es100-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "village-es100-ubo0-floor",
+        "engineFog": true
+      },
+      {
+        "name": "forest-es100-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "forest-es100-ubo0-floor",
+        "engineFog": true
+      },
+      {
+        "name": "cave-es100-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "cave-es100-ubo0-floor",
+        "engineFog": false
+      },
+      {
+        "name": "village-es300-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "village-es300-ubo0-floor",
+        "engineFog": true
+      },
+      {
+        "name": "forest-es300-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "forest-es300-ubo0-floor",
+        "engineFog": true
+      },
+      {
+        "name": "cave-es300-ubo0-tree",
+        "engineFog": false
+      },
+      {
+        "name": "cave-es300-ubo0-floor",
+        "engineFog": false
+      },
+      {
+        "name": "village-es300-ubo1-tree",
+        "engineFog": false
+      },
+      {
+        "name": "village-es300-ubo1-floor",
+        "engineFog": true
+      },
+      {
+        "name": "forest-es300-ubo1-tree",
+        "engineFog": false
+      },
+      {
+        "name": "forest-es300-ubo1-floor",
+        "engineFog": true
+      },
+      {
+        "name": "cave-es300-ubo1-tree",
+        "engineFog": false
+      },
+      {
+        "name": "cave-es300-ubo1-floor",
+        "engineFog": false
+      }
+    ],
+    "numerical": [
+      {
+        "map": "village",
+        "description": "Representative80/103/53testtextureRGB, existing.92toonband/noshadow; CPU approximation of Babylon linearfog+gamma/exposure/contrast, not sampled GPU pixels. New RGB is surviving pixel colour; screen-door coverage separately exposes existing background.",
+        "samples": [
+          {
+            "distance": 0,
+            "newLinearFactor": 1,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085795
+            ],
+            "newSurvivingPixelDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085798
+            ]
+          },
+          {
+            "distance": 15,
+            "newLinearFactor": 1,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085795
+            ],
+            "newSurvivingPixelDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085798
+            ]
+          },
+          {
+            "distance": 30,
+            "newLinearFactor": 0.9994766122819357,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085795
+            ],
+            "newSurvivingPixelDisplay": [
+              0.31557001621740777,
+              0.41098122359485273,
+              0.20549019915669794
+            ]
+          },
+          {
+            "distance": 50,
+            "newLinearFactor": 0.7553365462487419,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085795
+            ],
+            "newSurvivingPixelDisplay": [
+              0.27628830035374674,
+              0.35977128446249895,
+              0.1800859862366593
+            ]
+          },
+          {
+            "distance": 65,
+            "newLinearFactor": 0.62,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.31564849745780943,
+              0.4110834234801541,
+              0.20554096304085795
+            ],
+            "newSurvivingPixelDisplay": [
+              0.25160713491133463,
+              0.3275498562792806,
+              0.16412320862289098
+            ]
+          },
+          {
+            "distance": 72.5,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0.5,
+            "oldPaleFogDisplay": [
+              0.6005350428954274,
+              0.7057188215683327,
+              0.7460276048544211
+            ],
+            "newSurvivingPixelDisplay": [
+              0.25160713491133463,
+              0.3275498562792806,
+              0.16412320862289098
+            ]
+          },
+          {
+            "distance": 80,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0,
+            "oldPaleFogDisplay": [
+              0.6554698674560927,
+              0.7641289988171197,
+              0.8280563747760151
+            ],
+            "newSurvivingPixelDisplay": null
+          },
+          {
+            "distance": 100,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0,
+            "oldPaleFogDisplay": [
+              0.6554698674560927,
+              0.7641289988171197,
+              0.8280563747760151
+            ],
+            "newSurvivingPixelDisplay": null
+          }
+        ]
+      },
+      {
+        "map": "forest",
+        "description": "Representative80/103/53testtextureRGB, existing.92toonband/noshadow; CPU approximation of Babylon linearfog+gamma/exposure/contrast, not sampled GPU pixels. New RGB is surviving pixel colour; screen-door coverage separately exposes existing background.",
+        "samples": [
+          {
+            "distance": 0,
+            "newLinearFactor": 1,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680752
+            ],
+            "newSurvivingPixelDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680744
+            ]
+          },
+          {
+            "distance": 15,
+            "newLinearFactor": 1,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680752
+            ],
+            "newSurvivingPixelDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680744
+            ]
+          },
+          {
+            "distance": 30,
+            "newLinearFactor": 0.9994766122819357,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680752
+            ],
+            "newSurvivingPixelDisplay": [
+              0.30629697512916376,
+              0.39890220411409477,
+              0.19949251318445757
+            ]
+          },
+          {
+            "distance": 50,
+            "newLinearFactor": 0.7553365462487419,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680752
+            ],
+            "newSurvivingPixelDisplay": [
+              0.2681822463683237,
+              0.34919189222396607,
+              0.17484375060656634
+            ]
+          },
+          {
+            "distance": 65,
+            "newLinearFactor": 0.62,
+            "newCoverage": 1,
+            "oldPaleFogDisplay": [
+              0.306373129496185,
+              0.39900142973402986,
+              0.19954176614680752
+            ],
+            "newSurvivingPixelDisplay": [
+              0.24423591866116004,
+              0.3179218976502319,
+              0.15935473156867316
+            ]
+          },
+          {
+            "distance": 72.5,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0.5,
+            "oldPaleFogDisplay": [
+              0.3907863159862998,
+              0.42537656969224896,
+              0.4320476676314096
+            ],
+            "newSurvivingPixelDisplay": [
+              0.24423591866116004,
+              0.3179218976502319,
+              0.15935473156867316
+            ]
+          },
+          {
+            "distance": 80,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0,
+            "oldPaleFogDisplay": [
+              0.4109110871413862,
+              0.4323947144946753,
+              0.47543380455787665
+            ],
+            "newSurvivingPixelDisplay": null
+          },
+          {
+            "distance": 100,
+            "newLinearFactor": 0.62,
+            "newCoverage": 0,
+            "oldPaleFogDisplay": [
+              0.4109110871413862,
+              0.4323947144946753,
+              0.47543380455787665
+            ],
+            "newSurvivingPixelDisplay": null
+          }
+        ]
+      }
+    ]
+  },
+  "preserved": {
+    "player8K": true,
+    "backgroundMax4K": true,
+    "existingLODselectionAndThresholds": true,
+    "nearTextureReferencesAndColour": true,
+    "actorBossNearBrightness": true,
+    "modelAndResourceManifestsEdited": false,
+    "worldOtherThanFogAssignmentsEdited": false
+  },
+  "limitations": [
+    "Actual expanded GLSL compilation and NullEnginebind/lifecycle, not mobileGPU rasterization or physicalS23/iPhone heat measurement.",
+    "Screen-door has16fixedsubpixelcoveragelevels; mathematicalcontinuousdistancecoverage and actualgeometrycullmaskareverified, not a promiseofzeroGPUrasteraliasingonaphysicalphone. Existingvisibility/cullingdistances unchanged.",
+    "CPUdisplaynumbers use a representative testcolour, not measured tree/groundtexturepixels. Forestfogpalette and.62lowerbound avoid forcedblack silhouettes but are not a claim of visual approval from a realphone.",
+    "QuestpropCavePaint/FoWattachment is a parallelrootchange,notthiscomponent."
+  ]
+}

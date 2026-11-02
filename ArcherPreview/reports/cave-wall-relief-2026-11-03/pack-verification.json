@@ -1,0 +1,114 @@
+{
+  "status": "APPLIED_PENDING_COLLISION_AND_FINAL_QA",
+  "assetId": "cave-01-eroded-wall",
+  "revision": "broad-wall-relief-v1",
+  "stats": {
+    "revision": "broad-wall-relief-v1",
+    "assetId": "cave-01-eroded-wall",
+    "perLod": [
+      {
+        "level": 0,
+        "triangles": 5000,
+        "changedVertices": 697,
+        "changedNormals": 697
+      },
+      {
+        "level": 1,
+        "triangles": 2750,
+        "changedVertices": 389,
+        "changedNormals": 389
+      },
+      {
+        "level": 2,
+        "triangles": 1400,
+        "changedVertices": 207,
+        "changedNormals": 207
+      }
+    ],
+    "protectedPhysicalVertices": 3322,
+    "orientationLocks": 13,
+    "constraintPasses": 3,
+    "maxDisplacement": 0.16171061992645264,
+    "minimumAreaRatio": 0.2508694355738532,
+    "flippedFaces": 0,
+    "protectedTriangleChanges": 0,
+    "newTriangles": 0,
+    "newDrawCalls": 0,
+    "newTextures": 0
+  },
+  "proofs": [
+    {
+      "level": 0,
+      "parts": [
+        {
+          "vertices": 4323,
+          "triangles": 5000,
+          "indicesSha256": "7a55f89739e33cc6deae9de3f7599c477d093b5f6a5345da9a3cac0a2f4a741a",
+          "channels": {
+            "POSITION": "ef9f5de8364bd3263874ede4949e7f90283274ef63741930fb36656367648acc",
+            "NORMAL": "663888a25fffe1c2c531e112cedfd31479b78009b0561b24b88cc47cc2b43739",
+            "TEXCOORD_0": "106c380e959ce48487637b28cf19cc6ec0533f9bc4d0d9dfeebb3d91c11a78db",
+            "COLOR_0": "19794aac49d4778d9580ad9a20a8a0cb9f54088fbcd501e16683754c107dd5bb"
+          },
+          "protectedPositionsSha256": "bc126bda885cc57c3e136e289628f6a9700571d8bb2f21818e730da611094f4f",
+          "protectedNormalsSha256": "68cda27347f4c630536c6360eda84fdd835fff53fe785883b9074f31446c1afb"
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "parts": [
+        {
+          "vertices": 2796,
+          "triangles": 2750,
+          "indicesSha256": "e74138daeccee442e9043622c125d0df148069d79699b5a29c73151c92b2352a",
+          "channels": {
+            "POSITION": "41ba5aab2a80b0f2e9f879bd571acc1e76432666e87f3018b4b1b49176488ff8",
+            "NORMAL": "a42dd834020ab5a7d2c6dcc9c78e328ddd1f0cf1141be0a8d7c9f095ef4ab9c5",
+            "TEXCOORD_0": "e14afe8543f2c2587630ff94ad74462fedb5d99c3afd5c793fd1e26c95c29a7b",
+            "COLOR_0": "2746450b803074bc65c7df0564333203b991aabbcbacc4d9785d16c7a37750d4"
+          },
+          "protectedPositionsSha256": "5445257902fdb6fab926be472cc3595f01fc070b855ecd72bed33c310e216cb8",
+          "protectedNormalsSha256": "a7d1601d2ab6d7dddc492fa9403c67d37e647c74fafc8c5021c222b6d7cd0a51"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "parts": [
+        {
+          "vertices": 1752,
+          "triangles": 1400,
+          "indicesSha256": "b41f798e1d5b21af87ae18e4808d4fb7c6cddea88d75a59c3c3e11f87e7d2cc6",
+          "channels": {
+            "POSITION": "39120e92d5eedf6c9c460c0327c5c7df5f0021411b69ca1fbf243287035c67d7",
+            "NORMAL": "612b6bb367cdd4f3a18edc19a99914a98911694e569fa60c12930f9aad810afd",
+            "TEXCOORD_0": "4573181ab10f822f8ef5d1fb1bd43c9ff1a5581779c627f94af989eaa70d6372",
+            "COLOR_0": "53d1a979de2bd8d58dc3ed87ca665af42bb6c9333e40bca215b6c60817f9de79"
+          },
+          "protectedPositionsSha256": "4e8aaee4f5af176c8aa52c26eeef992c122abfbf32a73f40c30e2c13797410ad",
+          "protectedNormalsSha256": "45ef7220b2cfac1c2e80e77f7e5e3d85c47ef9ee0c32388dcdd3e7e02ab24cea"
+        }
+      ]
+    }
+  ],
+  "oldModels": [
+    "./content/29aec96c67e6e296617909e5e7e8216269cd48adbc1d2e5ff616a45bec7f93c9.gltf",
+    "content/590328f924cb948291ae3b6c5d78b0e387c0ff5f6231fa117ba74dc8d3df6615.gltf",
+    "content/ef930570501f371f48fa54a3578a98430e2317831893a19a876cb9a9111812ff.gltf"
+  ],
+  "newModels": [
+    "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+    "./content/a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+    "./content/4de4b912ff903f96f9e7ec969404e6b43437b3affeae6b952f65109ad6d5f0e3.gltf"
+  ],
+  "beforeBytes": 611740,
+  "afterBytes": 611752,
+  "byteDelta": 12,
+  "textureUrlsUnchanged": true,
+  "highTextureMax": 4096,
+  "nativeLaboratoryUnchanged": true,
+  "terrainUnchanged": true,
+  "newGenerationCalls": 0,
+  "additionalRuntimeWork": 0
+}

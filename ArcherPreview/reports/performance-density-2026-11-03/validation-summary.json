@@ -1,0 +1,15 @@
+{
+  "baseline": "01fa3ba",
+  "tests": 1172,
+  "passed": 1172,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 90869.7801,
+  "browserAutomation": false,
+  "physicalDeviceFpsMeasured": false,
+  "sourceContracts": "integration-audit.json",
+  "propLifecycle": "regression-summary.json",
+  "independentQuality": "quality-integration.json",
+  "distanceShading": "../environment-distance-tone-2026-11-03/summary.json",
+  "wallGeometry": "../cave-wall-relief-2026-11-03/handoff.json"
+}

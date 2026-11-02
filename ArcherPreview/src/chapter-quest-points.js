@@ -1,5 +1,6 @@
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
-import {PLAINS_PLACEMENTS} from './great-plains-layout.js';
+import {PLAINS_PLACEMENTS,PLAINS_TREASURE_ANCHORS} from './great-plains-layout.js';
+import {lootRarity} from './loot-rarity.js';
 const tree=VILLAGE_PLACEMENTS.filter(p=>p.kind==='tree').sort((a,b)=>Math.hypot(a.x,a.z)-Math.hypot(b.x,b.z))[0];
 const points=[];
 const p=(map,id,label,x,z,{key='inspect:'+id,model='clue-journal',item=null,count=1,text='',requires=null,tier=0}={})=>points.push({map,id,label,x,z,key,model,item,count,text,requires,tier});
@@ -11,7 +12,7 @@ p('village','evidence-link','증언과 기록 연결',0,0,{requires:'M09',text:'
 p('village','village-relief','공동 구호함 · III',3,1,{key:'chest:village-relief',model:'chest-common',tier:3,requires:'Q09',text:'주민들의 진술과 함께 다음 여정을 위한 구호 물자를 받는다.'});
 for(const [id,label,x,z]of [['boundary-a','첫 숲길 경계석',53,-57],['boundary-b','두 번째 경계석',63,-64]])p('great-plains',id,label,x,z,{model:null,text:'낡은 경계 표식 아래에 성녀의 행방을 가리키는 흰 실이 걸려 있다.'});
 p('great-plains','bandage','교회 문장 붕대',55,-58,{model:null,text:'익숙한 교회 문장. 서둘러 숲에 들어간 사람의 흔적이다.'});
-for(const [id,x,z,tier]of [['supply-chest',20,79,1],['meadow-chest',-55,43,1],['lookout-chest',-27,-23,2]])p('great-plains',id,`보급 상자 · ${tier===1?'I':'II'}`,x,z,{model:null,key:'chest:'+id,tier});
+for(const anchor of PLAINS_TREASURE_ANCHORS){p('great-plains',anchor.id,lootRarity(anchor.lootTier).chest,anchor.x,anchor.z,{model:'chest-common',key:'chest:'+anchor.id,tier:anchor.lootTier});Object.assign(points.at(-1),{yaw:anchor.yaw,scale:anchor.scale});}
 for(let i=0;i<5;i++)p('monster-forest','herb-'+i,'달이슬풀 채집',-26+i*1.2,17+i*.8,{model:'moon-dew-herb',item:'herb'});
 for(const [id,x,z]of [['vial-a',-12,-16],['vial-b',-17,-24]])p('monster-forest',id,'보랏빛 침전 약병',x,z,{model:'contaminated-vial',text:'깨끗한 약과 달리 바닥에 보랏빛 침전물이 남아 있다.'});
 p('monster-forest','herbal-note','약초사의 비교 메모',-24,19,{text:'같은 병이라도 같은 약은 아니다. 달이슬풀은 깨끗한 샘 가까이에만 자란다.'});
@@ -37,4 +38,17 @@ for(const [id,label,x,z,text]of [
  ['valve','실험실 배출 장치',26,-34,'배출 장치를 정지하고 남아 있는 기록을 보존한다.'],
  ['church-seal','교회 인장과 연구 기록',28,-35,'결론을 지어 버리기 전에 이 기록을 가져가야 한다.']])p('witch-cave',id,label,x,z,{text,requires:id==='pressure'?'kill:ghoul':id==='lever'?'inspect:pressure':id==='joachim'?'kill:mourning-elena':['valve','church-seal'].includes(id)?'M08':null});
 for(const point of points.filter(p=>p.map==='great-plains')){const placement=PLAINS_PLACEMENTS.find(p=>p.id===(point.id==='bandage'?'saint-bandage':point.id));if(placement)Object.assign(point,{x:placement.x,z:placement.z});}
+// Small discoveries off the principal route, never a uniform grid or a wall of
+// rewards at the spawn. The same authored chest is instanced with five grades.
+const treasures={
+ village:[['orchard',-20,13,1],['stable',20,18,1],['garden',-23,-9,2],['chapel',16,-18,2],['north-wall',-8,-29,3]],
+ 'great-plains':[['village-grove',-78,-24,1],['stream-bank',-28,56,2],['western-ridge',-65,-27,2],['hill-grove',-38,-36,3],['forest-fringe',43,-50,3],['forest-cache',63,-72,4]],
+ 'monster-forest':[['trail-cache',-35,30,1],['spring-cache',-22,24,2],['fallen-log',-30,-9,2],['old-camp',15,20,3],['stone-circle',8,-16,3],['cave-approach',22,-29,4]],
+ 'witch-cave':[['entry-cache',-39,39,1],['guard-stores',-31,28,2],['water-cache',-10,18,2],['laboratory-cache',-31,-17,3],['lower-stores',8,-29,3],['sanctum-cache',32,-29,4],['reliquary',32,-39,5]],
+};
+for(const [map,entries]of Object.entries(treasures))for(const [suffix,x,z,tier]of entries){
+ const id=map+'-treasure-'+suffix,grade=lootRarity(tier);
+ p(map,id,`${grade.chest} · ${grade.name}`,x,z,{model:'chest-common',tier,key:'chest:'+id});
+ Object.assign(points.at(-1),{yaw:(x*.173+z*.237)%(Math.PI*2),height:tier>=4?.68:.56,treasure:true});
+}
 export const CHAPTER_POINTS=points;

@@ -5,6 +5,7 @@ import {VillageOutlines} from '../src/village-outlines.js';
 import {applyVillageToon} from '../src/village-toon.js';
 import {prepareTreeOcclusion} from '../src/tree-occlusion.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {LOOT_RARITIES} from '../src/loot-rarity.js';
 
 test('real Babylon render couples ink to a successful base/LOD batch through turns and cold shaders',async t=>{
   const engine=new NullEngine(),scene=new Scene(engine);
@@ -53,4 +54,26 @@ test('real Babylon render couples ink to a successful base/LOD batch through tur
   const steps=scene._afterRenderingMeshStage.length;ink.dispose();
   assert.equal(scene._afterRenderingMeshStage.length,steps-1);
   assert.equal(near.material.metadata.villageToon,true,'base material remains attached');
+});
+
+test('all treasure grades share geometry and a single ink material with stable instance tint',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);engine.getCaps().instancedArrays=true;
+ const camera=new FreeCamera('camera',new Vector3(0,2,-5),scene);camera.setTarget(new Vector3(0,0,0));
+ caveFogFallback(scene).getInternalTexture().isReady=true;
+ const source=MeshBuilder.CreateBox('chest',{size:1},scene);source.material=new PBRMaterial('wood',scene);source.isVisible=false;
+ applyVillageToon([source],{direction:Vector3.Up(),shadowsActive:false});
+ const root=new TransformNode('treasure-root',scene),records=LOOT_RARITIES.map((grade,i)=>{
+  const mesh=source.createInstance('chest-'+grade.tier);mesh.parent=root;mesh.position.x=(i-2)*1.2;mesh.computeWorldMatrix(true);
+  return {root,meshes:[mesh],placement:{kind:'ground-detail',tier:grade.tier}};
+ });
+ const geometries=scene.geometries.length,count=scene.meshes.length;
+ const ink=new VillageOutlines({scene,camera,touchDevice:true},records,{});t.after(()=>{ink.dispose();scene.dispose();engine.dispose();});
+ await ink.prepare();await source.material.forceCompilationAsync(source,{useInstances:true});
+ let draws=0;const process=source._processRendering;source._processRendering=function(...args){if(ink.drawing)draws++;return process.apply(this,args);};
+ scene.render();assert.equal(draws,1,'five colours must not add five ink passes');
+ assert.equal(scene.meshes.length,count);assert.equal(scene.geometries.length,geometries);
+ for(let i=0;i<records.length;i++){
+  const mesh=records[i].meshes[0];assert.equal(mesh.instancedBuffers.villageInkTint.toHexString().toLowerCase(),LOOT_RARITIES[i].color);
+  assert.equal(ink.entries[i].inkWidth,.028);assert.equal(mesh.geometry,source.geometry);
+ }
 });
