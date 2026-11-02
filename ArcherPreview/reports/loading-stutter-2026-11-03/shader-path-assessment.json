@@ -1,0 +1,52 @@
+{
+  "baseline": "71f9165",
+  "sdk": "@babylonjs/core 9.31.0",
+  "ownedRuntimeFilesChanged": ["src/boss-shader-warmup.js"],
+  "verifiedAndFixed": [
+    {
+      "finding": "A scheduling frame can leave scene renderId unchanged. Babylon PBR accepts its previous same-renderId submesh readiness before checking the new visibility defines, so the old warmup could skip either the living or translucent body variant.",
+      "evidence": ["node_modules/@babylonjs/core/Materials/pushMaterial.js:28", "src/boss-shader-warmup.js:25", "reports/loading-stutter-2026-11-03/shader-cache-baseline.json"],
+      "before": "With no scene render between warmup yields, fade is prepared but the first living readiness request creates one new PBR Effect.",
+      "after": "checkReadyOnEveryCall is borrowed only during each readiness call and restored in finally. Both variants prepare without requiring or forcing a scene render; first living and death body draws create zero new Effects."
+    },
+    {
+      "finding": "Elena uses an inline flash while opaque, but a still-white fading corpse switches to the existing builtin overlay renderer. This separate pass was not prepared by warming the body and character silhouette.",
+      "evidence": ["src/hit-feedback.js:7", "src/hit-feedback.js:17", "node_modules/@babylonjs/core/Rendering/outlineRenderer.pure.js:268", "node_modules/@babylonjs/core/Rendering/outlineRenderer.pure.js:334", "src/boss-shader-warmup.js:38"],
+      "before": "First opacity .999 plus a remaining hit flash creates one new builtin outline Effect; later fades create zero.",
+      "after": "Only actual fade body meshes prepare the builtin overlay's exact existing pass 3, submesh, skin, morph and batch through isReady. No hidden draw or visible overlay activation is performed. The existing cancellation/deadline owns every poll. First death plus flash creates zero new Effects."
+    }
+  ],
+  "verifiedExistingBehavior": [
+    "An already-warmed translucent body requests its cached PBR Effect at the first fade transition; this does not itself mean a fresh program is compiled. Death is not universally a shader compilation event.",
+    "Actual packed Elena and Mourning Elena geometry, including shipped skin slots and texture morph targets, reused body, ink, shadow and hit-overlay Effects across first display and fade in the SDK tests.",
+    "Those packed-geometry fixtures created zero additional RawTextures on first display/fade and retained stable mesh, geometry, material, texture, skeleton and morph-manager counts. This does not measure the timing of already-scheduled GPU uploads."
+  ],
+  "separateConfirmedAuxiliaryPathsFixedByOwner": [
+    {
+      "path": "src/elena-encounter.js:19",
+      "finding": "The contact patch is created after super.summon, outside asset warmup. The unchanged helper creates one mesh, geometry and ShaderMaterial; its first visible draw creates one SDK Effect.",
+      "evidence": "reports/loading-stutter-2026-11-03/auxiliary-shader-audit.json",
+      "ownership": "Encounter integration implemented by the encounter owner; this agent did not edit it.",
+      "after": "Actual packed Elena and Mourning encounter prepareHidden to summon to first visible contact scene.render creates zero new Effects and reuses the same auxiliary geometry/material."
+    },
+    {
+      "path": "src/boss-encounter.js:114",
+      "finding": "The non-Elena gold attack warning ring is outside body asset warmup. Its first visible attack draw creates one default-material Effect.",
+      "evidence": "reports/loading-stutter-2026-11-03/auxiliary-shader-audit.json",
+      "ownership": "Encounter integration implemented by the encounter owner; this agent did not edit it.",
+      "after": "Actual packed bear encounter prepareHidden to summon to first attack warning scene.render creates zero new Effects and reuses the same auxiliary geometry/material."
+    }
+  ],
+  "verification": {
+    "focusedTests": 49,
+    "passed": 49,
+    "elapsedSeconds": 12.428,
+    "actualGeometryManifests": ["guardian-bear", "elena", "mourning-elena"],
+    "cancellationTimeoutAndCompileError": true,
+    "lateReadinessPollsAfterCompletion": 0,
+    "report": "reports/loading-stutter-2026-11-03/shader-cache-validation.json"
+  },
+  "preserved": ["Existing toon, outline, white-hit and death alpha composition", "Existing motion, damage, skeleton/morph data and 8K/4K texture/LOD policy", "Original mesh visibility and material hot-swap/readiness values on completion, error and cancellation"],
+  "unmeasured": ["Actual GPU driver program compile/link duration", "GPU texture/buffer upload or fence stalls", "Mobile FPS/thermal behavior", "Visual quality in the browser"],
+  "limitations": ["All execution used actual Babylon SDK with NullEngine. Effect creation is a software cache event, not an actual GPU timing measurement.", "Actual packed model geometry was decoded, but model images/KTX were omitted.", "The overlay render-pass index is a pinned SDK internal; the actual-scene regression verifies pass 3 is the same pass used on the first visible overlay draw.", "The shipped boss materials are unfrozen, now asserted in real packed-model and encounter tests. Arbitrary frozen PBR inputs use an earlier SDK readiness fast path; freeze/unfreeze behavior was not expanded by this fix."]
+}

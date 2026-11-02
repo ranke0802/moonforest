@@ -1,0 +1,67 @@
+{
+  "expectedCases": 8,
+  "completedCases": 8,
+  "passed": true,
+  "timeoutMs": 45000,
+  "cases": [
+    {
+      "case": "shared-deadline-and-logical-cancel",
+      "passed": true,
+      "timeoutMs": 45000,
+      "automaticRetries": 0
+    },
+    {
+      "case": "actual-compressed-timeout-late-success-explicit-retry",
+      "passed": true,
+      "partialContainerDisposes": 1,
+      "lateVertexCreations": 0,
+      "unrelatedPendingPreserved": true
+    },
+    {
+      "case": "actual-compressed-cancel-late-rejection-new-import",
+      "passed": true,
+      "lateWorldPublication": false
+    },
+    {
+      "case": "ordinary-decode-error-cancels-late-sibling",
+      "passed": true,
+      "lateVertexCreations": 0
+    },
+    {
+      "case": "actual-compressed-scene-dispose-before-decoder-response",
+      "passed": true,
+      "logicalJobSettledBeforePhysicalResponse": true
+    },
+    {
+      "case": "actual-compressed-partial-materials-texture-pending-boundary",
+      "passed": true,
+      "ownedPendingRemoved": true,
+      "unrelatedPendingPreserved": true,
+      "imageDecodeUpload": "controlled callback boundary, not GPU execution"
+    },
+    {
+      "case": "native-essential-structure-timeout-explicit-same-world-retry",
+      "passed": true,
+      "sceneAndCameraPreserved": true,
+      "automaticRetries": 0,
+      "lateOwnershipChanges": 0
+    },
+    {
+      "case": "fetch-deadline-late-response",
+      "passed": true,
+      "importsAfterTimeout": 0
+    }
+  ],
+  "sourceHashes": {
+    "map-load-lifetime.js": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d",
+    "map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "village-streamed-environment.js": "3d22da7bc8c3a2893058882695b35ee1e3b810a59927ed97f500757e9d81ac2f",
+    "village-outlines.js": "efc4bf519e9afa1f17b2eba5eb9d48789a91d5a8fbed7029848cb38ee9371696"
+  },
+  "limitations": [
+    "NullEngine does not execute a real browser/GPU or worker scheduling. Actual shipped Meshopt EXT bytes and actual WASM decode are used behind a controlled response boundary.",
+    "Logical deadlines prevent unbounded map waits; they cannot interrupt one synchronous WASM/driver call, terminate Babylon global workers or guarantee that a permanently faulty worker recovers on manual retry.",
+    "An unanswered physical decoder may retain its detached CPU input/promise until it returns. No world, scene observer, pending token or geometry may be published by that abandoned owner."
+  ],
+  "browserAutomation": false
+}

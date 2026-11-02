@@ -1,0 +1,61 @@
+{
+  "scope": "Real 4-map decoded LOD geometry, frozen native instances, NullEngine; CPU timing excludes GPU upload and is not FPS/device timing.",
+  "results": [
+    {
+      "map": "village",
+      "id": "tree-01-round-oak",
+      "instances": 150,
+      "vertices": 7783,
+      "initialDataReads": 0,
+      "optimizedDataReads": 2,
+      "oracleDataReads": 150,
+      "medianMs": {
+        "original": 5.941899999999805,
+        "optimized": 0.29569999999989705
+      },
+      "exactBoundsAndFrustum": true
+    },
+    {
+      "map": "great-plains",
+      "id": "rock-01-mossy-boulder",
+      "instances": 180,
+      "vertices": 3943,
+      "initialDataReads": 0,
+      "optimizedDataReads": 2,
+      "oracleDataReads": 180,
+      "medianMs": {
+        "original": 3.72199999999998,
+        "optimized": 0.17029999999999745
+      },
+      "exactBoundsAndFrustum": true
+    },
+    {
+      "map": "monster-forest",
+      "id": "tree-02-slender-pine",
+      "instances": 180,
+      "vertices": 9288,
+      "initialDataReads": 0,
+      "optimizedDataReads": 2,
+      "oracleDataReads": 180,
+      "medianMs": {
+        "original": 8.23129999999992,
+        "optimized": 0.24919999999997344
+      },
+      "exactBoundsAndFrustum": true
+    },
+    {
+      "map": "witch-cave",
+      "id": "cave-01-eroded-wall",
+      "instances": 55,
+      "vertices": 4323,
+      "initialDataReads": 0,
+      "optimizedDataReads": 2,
+      "oracleDataReads": 55,
+      "medianMs": {
+        "original": 1.3205000000000382,
+        "optimized": 0.03530000000000655
+      },
+      "exactBoundsAndFrustum": true
+    }
+  ]
+}

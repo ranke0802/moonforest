@@ -1,4 +1,5 @@
 import {createBossPreparation} from './boss-preparation.js';
+import {canInlineHitFlash} from './hit-feedback.js';
 // Compile body and silhouette before showing the actor. Yield between shader
 // variants, polling the REAL submesh/skin/morph variant ourselves. Babylon's
 // forceCompilationAsync starts a private 16ms loop with no cancellation/timeout.
@@ -18,11 +19,38 @@ export async function prepareBossShaders(asset,{preparation,frame,now,shadows,ti
         for(;;){
           job.check();let ready=true;
           const subMeshes=material._storeEffectOnSubMeshes?mesh.subMeshes:null;
-          for(const subMesh of subMeshes?.length?subMeshes:[null]){
-            const done=subMesh?material.isReadyForSubMesh(mesh,subMesh,false):material.isReady(mesh,false),effect=subMesh?.effect??material.getEffect?.();
-            if(!done){ready=false;if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');}
-          }
+          // A scheduling frame need not render the scene (pause/FPS cap).
+          // PBR otherwise accepts the previous visibility variant solely from
+          // its matching renderId, even after visibility dirtied the defines.
+          const everyCall=material.checkReadyOnEveryCall;
+          try{
+            material.checkReadyOnEveryCall=true;
+            for(const subMesh of subMeshes?.length?subMeshes:[null]){
+              const done=subMesh?material.isReadyForSubMesh(mesh,subMesh,false):material.isReady(mesh,false),effect=subMesh?.effect??material.getEffect?.();
+              if(!done){ready=false;if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');}
+            }
+          }finally{material.checkReadyOnEveryCall=everyCall;}
           if(ready)break;await job.sleep(16);
+        }
+        // A hit can remain white as death begins. At that opacity Elena also
+        // uses Babylon's existing overlay pass rather than its opaque inline
+        // flash. Prepare that exact pass/skin/morph/batch without drawing it.
+        const scene=mesh.getScene?.(),renderer=mesh.metadata?.moonforestEnemyFade&&!mesh.metadata?.moonforestOutline&&!canInlineHitFlash(mesh)?scene?.getOutlineRenderer?.():null;
+        const overlayPass=renderer?._passIdForDrawWrapper?.[3];
+        if(overlayPass!==undefined){
+          await job.nextFrame();
+          for(;;){
+            job.check();let ready=true;
+            for(const sub of mesh.subMeshes??[]){
+              const batch=mesh._getInstancesRenderList?.(sub._id,mesh._internalAbstractMeshDataInfo?._actAsRegularMesh===true);
+              const instances=!!(scene.getEngine().getCaps().instancedArrays&&((batch?.visibleInstances?.[sub._id]!==null&&batch?.visibleInstances?.[sub._id]!==undefined)||sub.getRenderingMesh().hasThinInstances));
+              if(!renderer.isReady(sub,instances,overlayPass)){
+                ready=false;const effect=sub._getDrawWrapper(overlayPass)?.effect;
+                if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');
+              }
+            }
+            if(ready)break;await job.sleep(16);
+          }
         }
       }
       // Shadow effects have their own render-pass cache. Warm the exact caster

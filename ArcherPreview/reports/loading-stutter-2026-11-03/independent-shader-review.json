@@ -1,0 +1,35 @@
+{
+  "baseline": "71f9165",
+  "review": "Read-only independent source review against installed Babylon.js 9.31 implementation",
+  "status": "passed for current authored unfrozen boss materials",
+  "findings": [
+    {
+      "area": "visibility and variant readiness",
+      "result": "The Babylon visibility setter dirties misc and prepass defines at the opaque/fade boundary. For an unfrozen PBR material, temporarily setting checkReadyOnEveryCall bypasses PushMaterial renderId reuse; the synchronous inner finally restores the prior flag before any await. The outer finally restores every recorded mesh visibility and material allowShaderHotSwapping after success, error, timeout or cancellation."
+    },
+    {
+      "area": "overlay pass and instancing",
+      "result": "The pinned OutlineRenderer uses pass index 3 for renderOverlay and selects hardware instances from caps, batch.visibleInstances and renderingMesh.hasThinInstances. The warmup requests that same pass and predicate, calls isReady without drawing or toggling renderOverlay, and uses the same submesh skin, morph, alpha-test and clip-plane define path."
+    },
+    {
+      "area": "shadow pass and cancellation",
+      "result": "Warmup retains the existing shadow test, sets currentRenderPassId only inside a synchronous try/finally and restores it before sleep or frame yield. Preparation checks cancellation and deadline before polling; pending waits reject through the preparation owner, and outer finally restores visibility/hot-swap settings."
+    },
+    {
+      "area": "authored material scope",
+      "result": "applyMonsterToon creates a new PBR material without freezing it; the boss preparation path applies that material and the paint/outline plugins without introducing a freeze. SceneLighting preserves a preexisting frozen state if it handles an already-frozen emissive material; no freeze of the newly created boss toon is present in the inspected authored path."
+    }
+  ],
+  "limitation": {
+    "case": "Externally frozen PBR materials are not supported by the new variant readiness claim.",
+    "evidence": "Independent NullEngine reproduction: precompile opaque PBR with enemy fade, freeze it, then prepare. Fade at visibility .5 uses ALPHABLEND; subsequent visibility 1 can return ready with ALPHABLEND still present because PBRBaseMaterial checks its frozen previous-ready shortcut before checkReadyOnEveryCall.",
+    "impact": "No authored boss path was found that freezes the newly created toon material, so this is not established as a current game regression. A future frozen-material workflow must be separately handled and tested."
+  },
+  "limitations": [
+    "No browser automation, real GPU shader compilation, driver behavior, phone FPS, heat or visual comparison was performed.",
+    "Shadow hardware-instance warmup assumes current authored bosses are non-instanced; future instanced boss assets require revalidation.",
+    "Independent reproduction uses a simple real Babylon PBR mesh, not a physical-device asset with loaded KTX images.",
+    "Existing shader-cache-validation.json covers actual packed skin/morph geometry under NullEngine, not real GPU rendering."
+  ],
+  "changes": "No runtime source changes in this review."
+}

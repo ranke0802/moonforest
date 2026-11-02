@@ -1,0 +1,213 @@
+{
+  "baseline": "71f9165",
+  "records": [
+    {
+      "renderedFrames": false,
+      "warm": {
+        "frames": 4,
+        "renderId": 0,
+        "bodyAlpha": true,
+        "created": [
+          {
+            "shader": "pbr",
+            "alpha": true,
+            "id": 0,
+            "renderId": 0
+          },
+          {
+            "shader": "shadowMap",
+            "alpha": false,
+            "id": 1,
+            "renderId": 0
+          },
+          {
+            "shader": "source",
+            "alpha": false,
+            "id": 2,
+            "renderId": 0
+          }
+        ],
+        "requests": 3
+      },
+      "transitions": [
+        {
+          "visibility": 1,
+          "ready": true,
+          "alpha": false,
+          "newEffects": 1,
+          "effectRequests": 1
+        },
+        {
+          "visibility": 0.999,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 1
+        },
+        {
+          "visibility": 0.5,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 0
+        },
+        {
+          "visibility": 0.1,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 0
+        },
+        {
+          "visibility": 1,
+          "ready": true,
+          "alpha": false,
+          "newEffects": 0,
+          "effectRequests": 1
+        }
+      ],
+      "overlays": [
+        {
+          "visibility": 1,
+          "builtinOverlay": false,
+          "newEffects": 0,
+          "newPrograms": []
+        },
+        {
+          "visibility": 0.999,
+          "builtinOverlay": true,
+          "newEffects": 1,
+          "newPrograms": [
+            {
+              "shader": "outline",
+              "alpha": false,
+              "id": 4,
+              "renderId": 13
+            }
+          ]
+        },
+        {
+          "visibility": 0.5,
+          "builtinOverlay": true,
+          "newEffects": 0,
+          "newPrograms": []
+        },
+        {
+          "visibility": 1,
+          "builtinOverlay": false,
+          "newEffects": 0,
+          "newPrograms": []
+        }
+      ]
+    },
+    {
+      "renderedFrames": true,
+      "warm": {
+        "frames": 4,
+        "renderId": 4,
+        "bodyAlpha": false,
+        "created": [
+          {
+            "shader": "pbr",
+            "alpha": true,
+            "id": 5,
+            "renderId": 1
+          },
+          {
+            "shader": "pbr",
+            "alpha": false,
+            "id": 6,
+            "renderId": 2
+          },
+          {
+            "shader": "shadowMap",
+            "alpha": false,
+            "id": 7,
+            "renderId": 3
+          },
+          {
+            "shader": "source",
+            "alpha": false,
+            "id": 8,
+            "renderId": 4
+          }
+        ],
+        "requests": 4
+      },
+      "transitions": [
+        {
+          "visibility": 1,
+          "ready": true,
+          "alpha": false,
+          "newEffects": 0,
+          "effectRequests": 0
+        },
+        {
+          "visibility": 0.999,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 1
+        },
+        {
+          "visibility": 0.5,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 0
+        },
+        {
+          "visibility": 0.1,
+          "ready": true,
+          "alpha": true,
+          "newEffects": 0,
+          "effectRequests": 0
+        },
+        {
+          "visibility": 1,
+          "ready": true,
+          "alpha": false,
+          "newEffects": 0,
+          "effectRequests": 1
+        }
+      ],
+      "overlays": [
+        {
+          "visibility": 1,
+          "builtinOverlay": false,
+          "newEffects": 0,
+          "newPrograms": []
+        },
+        {
+          "visibility": 0.999,
+          "builtinOverlay": true,
+          "newEffects": 1,
+          "newPrograms": [
+            {
+              "shader": "outline",
+              "alpha": false,
+              "id": 9,
+              "renderId": 17
+            }
+          ]
+        },
+        {
+          "visibility": 0.5,
+          "builtinOverlay": true,
+          "newEffects": 0,
+          "newPrograms": []
+        },
+        {
+          "visibility": 1,
+          "builtinOverlay": false,
+          "newEffects": 0,
+          "newPrograms": []
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Actual Babylon SDK effect-cache logic under NullEngine; no GPU program compilation or texture upload timing.",
+    "The no-render case also represents preparation yields that do not advance a capped or paused scene render ID."
+  ]
+}

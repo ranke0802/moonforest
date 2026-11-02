@@ -18,6 +18,7 @@ import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
+import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -69,6 +70,28 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
 // Promote only the routing mesh. Its existing instances keep their transforms,
 // shadow/occlusion identity and native screen-coverage LOD selection. Coarser
 // geometry stays in separate LOD sources before a finer geometry is installed.
+export function refreshVillagePromotionBounds(base){
+  const safe=!base.skeleton&&!base.morphTargetManager&&base.refreshBoundingInfo===Mesh.prototype.refreshBoundingInfo&&
+    base._getData===Mesh.prototype._getData&&base._refreshBoundingInfo===Mesh.prototype._refreshBoundingInfo&&
+    base.getVerticesData===Mesh.prototype.getVerticesData&&base.hasBoundingInfo&&!base.getBoundingInfo().isLocked&&base.subMeshes?.length===1&&base.subMeshes[0].IsGlobal;
+  const bounds=safe?base.getBoundingInfo():null;
+  for(const instance of base.instances){
+    // Global submeshes use their parent bounds. Multi-submesh, deformed, locked
+    // or custom instances retain Babylon's complete per-instance refresh.
+    if(!safe||instance.sourceMesh!==base||instance.refreshBoundingInfo!==InstancedMesh.prototype.refreshBoundingInfo||
+       instance._refreshBoundingInfo!==InstancedMesh.prototype._refreshBoundingInfo||instance.getTotalVertices!==InstancedMesh.prototype.getTotalVertices||
+       instance._updateBoundingInfo!==InstancedMesh.prototype._updateBoundingInfo||!instance.hasBoundingInfo||
+       instance.getBoundingInfo().isLocked||instance.subMeshes?.length!==1||!instance.subMeshes[0].IsGlobal||
+       instance.subMeshes[0].refreshBoundingInfo!==SubMesh.prototype.refreshBoundingInfo){
+      instance.refreshBoundingInfo();continue;
+    }
+    instance.getBoundingInfo().reConstruct(bounds.minimum,bounds.maximum);
+    // Even a global submesh invalidates its cached collision vertices before
+    // returning; this is a constant-time SDK call with no vertex scan.
+    instance.subMeshes[0].refreshBoundingInfo();
+    instance._updateBoundingInfo();
+  }
+}
 export function installVillageGeometry(asset,container,level,world){
   const incoming=geometry(container);
   if(!asset.source){
@@ -97,7 +120,7 @@ export function installVillageGeometry(asset,container,level,world){
         base.synchronizeInstances();
       }
       base.material=next.material;base.metadata={...next.metadata,villageLodLevel:level};base.refreshBoundingInfo();
-      for(const instance of base.instances)instance.refreshBoundingInfo();
+      refreshVillagePromotionBounds(base);
     }
     asset.baseLevel=level;
   }

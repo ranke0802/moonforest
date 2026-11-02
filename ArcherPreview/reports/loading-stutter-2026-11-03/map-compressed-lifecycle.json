@@ -1,0 +1,720 @@
+{
+  "baseRevision": "4c5de0c",
+  "reviewRevision": "model-deadline-and-immediate-owner-cancel",
+  "expectedCases": 3,
+  "completedCases": 3,
+  "passed": true,
+  "runtimeSourceHashes": {
+    "world.js": "73b5103de93ca83cb23452fbd805242518c97219e1007a2ec34af872fc2c97b4",
+    "village-streamed-environment.js": "3d22da7bc8c3a2893058882695b35ee1e3b810a59927ed97f500757e9d81ac2f",
+    "map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "map-load-lifetime.js": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d",
+    "map-decode-cache.js": "712b16b9fe9c56e97615c1397fdfb1b52ea12c15fcd3d449ba386eb83074546d",
+    "map-terrain-cache.js": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100"
+  },
+  "cases": [
+    {
+      "status": "PASS",
+      "roundTrips": 6,
+      "visits": [
+        {
+          "visit": 0,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 73,
+          "cacheHits": 0,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 2918058,
+            "limit": 8388608,
+            "entries": 73,
+            "hits": 0,
+            "misses": 73,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 1,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 95,
+          "cacheHits": 5,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 5,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 2,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 0,
+          "cacheHits": 73,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 78,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 3,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 0,
+          "cacheHits": 100,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 178,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 4,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 0,
+          "cacheHits": 73,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 251,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 5,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 0,
+          "cacheHits": 100,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 351,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 6,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 0,
+          "cacheHits": 73,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 424,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 7,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 0,
+          "cacheHits": 100,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 524,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 8,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 0,
+          "cacheHits": 73,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 597,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 9,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 0,
+          "cacheHits": 100,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 697,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 10,
+          "map": "witch-cave",
+          "startupRequests": 16,
+          "decodeCalls": 0,
+          "cacheHits": 73,
+          "loaded": {
+            "meshes": 324,
+            "transforms": 319,
+            "materials": 30,
+            "textures": 6,
+            "geometries": 20,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 64,
+            "transforms": 1,
+            "materials": 13,
+            "textures": 6,
+            "geometries": 15,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 770,
+            "misses": 168,
+            "evictions": 0
+          }
+        },
+        {
+          "visit": 11,
+          "map": "monster-forest",
+          "startupRequests": 22,
+          "decodeCalls": 0,
+          "cacheHits": 100,
+          "loaded": {
+            "meshes": 1827,
+            "transforms": 1783,
+            "materials": 29,
+            "textures": 4,
+            "geometries": 6,
+            "receivers": 25,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              25,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStage": 1
+          },
+          "cache": {
+            "bytes": 7135082,
+            "limit": 8388608,
+            "entries": 168,
+            "hits": 870,
+            "misses": 168,
+            "evictions": 0
+          }
+        }
+      ],
+      "modelLoads": 228,
+      "uniqueModels": 37,
+      "decodeCalls": 168,
+      "decodedBytes": 7135082,
+      "adapterPeakDecoderPromises": 1,
+      "cache": {
+        "geometry": {
+          "bytes": 7135082,
+          "limit": 8388608,
+          "entries": 168,
+          "hits": 870,
+          "misses": 168,
+          "evictions": 0
+        },
+        "textures": {
+          "bytes": 0,
+          "limit": 25165824,
+          "entries": 0,
+          "hits": 0,
+          "misses": 0,
+          "evictions": 0
+        }
+      },
+      "shaderCache": 8,
+      "limits": "Actual shipped Meshopt bytes and Babylon EXT/cache path, real WASM in-process adapter; browser worker scheduling and material image decode/upload excluded. Player8K manifest is preserved but its images are not allocated here. No browser/driver/GPU/phone timing or heap claim."
+    },
+    {
+      "status": "PASS",
+      "case": "logical release while actual Meshopt is still pending, then late completion after new forest",
+      "request": {
+        "id": "cave-01-eroded-wall",
+        "level": 1
+      },
+      "lateModelPublication": false,
+      "cache": {
+        "geometry": {
+          "bytes": 7263422,
+          "limit": 8388608,
+          "entries": 173,
+          "hits": 5,
+          "misses": 173,
+          "evictions": 0
+        },
+        "textures": {
+          "bytes": 0,
+          "limit": 25165824,
+          "entries": 0,
+          "hits": 0,
+          "misses": 0,
+          "evictions": 0
+        }
+      },
+      "limitation": "The logical job is cancelled immediately. Worker/WASM promises and their detached input memory cannot be forcibly interrupted here; only scoped Babylon publication and scene ownership are prevented."
+    },
+    {
+      "status": "PASS",
+      "case": "engine disposal during actual EXT decoder promise",
+      "cacheBytes": 0,
+      "lateWorldOwnership": false
+    }
+  ],
+  "browserAutomation": false,
+  "sourceChangedByThisTask": true
+}

@@ -1,0 +1,133 @@
+{
+  "scope": "Actual packed resident rigs, desktop NullEngine CPU scheduling; no physical GPU or mobile FPS.",
+  "cases": [
+    {
+      "label": "saint-cold",
+      "elapsedDesktopMs": 170.10450000000128,
+      "preparationStats": {
+        "yields": 14,
+        "slices": 1,
+        "blocks": 1,
+        "maxSliceMs": 0.011300000005576294,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.027099999999336433
+          },
+          {
+            "name": "paint-materials",
+            "ms": 1.2427999999999884
+          },
+          {
+            "name": "outline:Elena_Meshy_Static",
+            "ms": 80.35369999999966
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.592899999996007
+          },
+          {
+            "name": "animator",
+            "ms": 0.11409999999887077
+          },
+          {
+            "name": "contact-resources",
+            "ms": 0.9549000000042724
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.10100000000238651
+          }
+        ]
+      }
+    },
+    {
+      "label": "saint-reset",
+      "elapsedDesktopMs": 2.266300000002957,
+      "preparationStats": {
+        "yields": 0,
+        "slices": 0,
+        "blocks": 0,
+        "maxSliceMs": 0,
+        "steps": [
+          {
+            "name": "summon-animator",
+            "ms": 0.5967999999993481
+          }
+        ]
+      }
+    },
+    {
+      "label": "witch-warm-transform",
+      "elapsedDesktopMs": 5.850400000002992,
+      "preparationStats": {
+        "yields": 0,
+        "slices": 0,
+        "blocks": 0,
+        "maxSliceMs": 0,
+        "steps": [
+          {
+            "name": "summon-animator",
+            "ms": 2.4927999999999884
+          }
+        ]
+      }
+    },
+    {
+      "label": "witch-reset",
+      "elapsedDesktopMs": 5.307600000000093,
+      "preparationStats": {
+        "yields": 0,
+        "slices": 0,
+        "blocks": 0,
+        "maxSliceMs": 0,
+        "steps": [
+          {
+            "name": "summon-animator",
+            "ms": 2.9452999999994063
+          }
+        ]
+      }
+    }
+  ],
+  "prefetch": {
+    "yields": 51,
+    "slices": 27,
+    "blocks": 91,
+    "maxSliceMs": 17.370699999999488,
+    "steps": [
+      {
+        "name": "skin-flags",
+        "ms": 0.08320000000094296
+      },
+      {
+        "name": "paint-materials",
+        "ms": 1.8483000000051106
+      },
+      {
+        "name": "outline:Halo_Attached_Streamers",
+        "ms": 1.91639999999461
+      },
+      {
+        "name": "outline:Halo_Rigid_Emblem",
+        "ms": 2.939299999998184
+      },
+      {
+        "name": "outline:Elina_Chimera_Skin",
+        "ms": 29.557700000004843
+      },
+      {
+        "name": "pose-and-warning-resources",
+        "ms": 1.902699999998731
+      },
+      {
+        "name": "animator",
+        "ms": 29.458900000005087
+      },
+      {
+        "name": "contact-resources",
+        "ms": 0.5280000000057044
+      }
+    ]
+  }
+}

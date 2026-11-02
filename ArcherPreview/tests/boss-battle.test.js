@@ -46,6 +46,16 @@ test('monsters summon near an outer-arena player and continue past the former wa
  battle.update(.1,player);assert.ok(enemy.actor.position.x>15,'enemy chases beyond old 10.5 m boundary');
 });
 
+test('group preparation keeps all requested actors hidden while the other kind continues',async t=>{
+ const {battle,player}=fixture(t);battle.preparationOptions={frame:async()=>{}};
+ await battle.summon(player,1,'goblin');const goblin=battle.encounters[0];await battle.summon(player,2,'bear');const old=[...battle.pool];let frames=0;
+ battle.preparationOptions={frame:async()=>{frames++;assert.equal(goblin.active,true);assert.equal(goblin.actor.isEnabled(),true);assert.ok(battle.encounters.includes(goblin));
+  for(const boss of battle.pool){assert.equal(boss.active,false);if(boss.actor)assert.equal(boss.actor.isEnabled(),false);}
+  battle.update(1/60,player);
+ }};
+ assert.equal(await battle.summon(player,5,'bear'),true);assert.ok(frames>0);assert.equal(battle.encounters.length,6);assert.strictEqual(battle.pool[0],old[0]);assert.ok(battle.pool.every(b=>b.active&&b.actor.isEnabled()));assert.equal(goblin.active,true);
+});
+
 test('far enemy draw suppression is reversible and leaves combat/model state intact',async t=>{
  const {battle,player}=fixture(t);await battle.summon(player,1);const enemy=battle.encounters[0],hp=enemy.brain.hp;
  enemy.actor.position.set(-20,0,0);enemy.updateRenderRange(new Vector3(20,1,0));

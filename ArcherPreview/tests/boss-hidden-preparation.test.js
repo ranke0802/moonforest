@@ -8,6 +8,7 @@ import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {BossBattle} from '../src/boss-battle.js';
+import {ELENA_SIZE} from '../src/elena-spec.js';
 import {BossModelLibrary} from '../src/boss-models.js';
 import {createBossPreparation} from '../src/boss-preparation.js';
 import {trimEmptyBoneSlots,trimEmptyBoneSlotsAsync} from '../src/character-render-cost.js';
@@ -51,7 +52,7 @@ async function fixture(t){
 function assertWarmInvisible(f){
  const e=f.battle.mourningPool[0];if(!e)return;
  assert.equal(e.active,false);if(e.actor)assert.equal(e.actor.isEnabled(),false);
- assert.equal(f.battle.encounters.includes(e),false);assert.notEqual(e.ring?.isEnabled(),true);assert.notEqual(e.spell?.mesh.isEnabled(),true);
+ assert.equal(f.battle.encounters.includes(e),false);assert.notEqual(e.ring?.isEnabled(),true);assert.notEqual(e.spell?.mesh.isEnabled(),true);assert.notEqual(e.contact?.mesh.isEnabled(),true);
  assert.ok((e.asset?.meshes??[]).every(mesh=>!mesh.isEnabled()));
  assert.ok(f.world.shadows.getShadowMap().renderList.every(mesh=>!e.asset?.meshes.includes(mesh)),'hidden preparation never registers a shadow caster');
 }
@@ -161,6 +162,47 @@ test('map cancellation does not wait for a never-resolving model prefetch or lea
  const warm=f.battle.preloadMourning();await Promise.resolve();const job=f.battle.mourningWarmJob;f.battle.hide();f.world.cave=false;assert.equal(await warm,false);assert.equal(job.status,'cancelled');assert.equal(job.preparation.pendingWaits,0);assert.equal(f.battle.mourningPool.length,0);
  f.mourningModels.load=load;f.world.cave=true;assert.equal(await f.battle.activateResident(f.player,{reset:true,phase:2}),true);assert.equal(f.mourningModels.instances,1);
  reports.push({case:'never-model-load-cancel',oldPendingWaiters:job.preparation.pendingWaits,instances:f.mourningModels.instances});
+});
+
+test('real resident cold and warm activation reports animator work and preserves the initial pose on reset',async t=>{
+ const f=await fixture(t);f.battle.preparationOptions={frame:async()=>{}};const cases=[];
+ const nearPose=(actual,expected)=>{if(typeof actual==='number'){assert.ok(Math.abs(actual-expected)<1e-8,`${actual} != ${expected}`);return;}if(Array.isArray(actual)){assert.equal(actual.length,expected.length);for(let i=0;i<actual.length;i++)nearPose(actual[i],expected[i]);return;}if(actual&&typeof actual==='object'){assert.deepEqual(Object.keys(actual),Object.keys(expected));for(const key of Object.keys(actual))nearPose(actual[key],expected[key]);return;}assert.equal(actual,expected);};
+ const pose=e=>({hp:e.brain.hp,state:e.brain.state,actor:e.actor.position.asArray(),nodes:e.asset.transformNodes.map(n=>[n.name,...n.position.asArray(),...(n.rotationQuaternion?.asArray()??[0,0,0,1])]),morph:e.asset.meshes.filter(m=>m.morphTargetManager&&!m.metadata?.moonforestOutline).map(m=>Array.from({length:m.morphTargetManager.numTargets},(_,i)=>m.morphTargetManager.getTarget(i).influence))});
+ async function activation(label,fn){const before=f.events.length,start=performance.now();assert.equal(await fn(),true);const elapsed=performance.now()-start,event=f.events.slice(before).find(e=>e.type==='ready');assert.ok(event?.preparationStats);cases.push({label,elapsedDesktopMs:elapsed,preparationStats:structuredClone(event.preparationStats)});return f.battle.encounters.find(e=>e.kind==='elena');}
+ let e=await activation('saint-cold',()=>f.battle.activateResident(f.player,{reset:true}));const saint=pose(e);
+ e=await activation('saint-reset',()=>f.battle.activateResident(f.player,{reset:true}));nearPose(pose(e),saint);
+ assert.equal(await f.battle.preloadMourning(),true);const prefetch=structuredClone(f.battle.mourningWarmJob.preparation.stats);
+ e=await activation('witch-warm-transform',()=>f.battle.transformResident(f.player));const witch=pose(e);
+ e=await activation('witch-reset',()=>f.battle.activateResident(f.player,{reset:true,phase:2}));nearPose(pose(e),witch);
+ const dir=new URL('../reports/loading-stutter-2026-11-03/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('resident-preparation.json',dir),JSON.stringify({scope:'Actual packed resident rigs, desktop NullEngine CPU scheduling; no physical GPU or mobile FPS.',cases,prefetch},null,2)+'\n');
+});
+
+test('foreground preparation includes bounded-consumer stats on error and cancellation',async t=>{
+ const f=await fixture(t);f.battle.preparationOptions={frame:async()=>{}};f.fail();
+ await assert.rejects(f.battle.activateResident(f.player,{reset:true}),/injected shader preparation failure/);
+ const failure=f.events.findLast(event=>event.type==='error');assert.ok(failure.preparationStats.steps.some(step=>step.name==='animator'));
+ assert.equal(await f.battle.activateResident(f.player,{reset:true}),true);
+ const gate=deferred(),entered=deferred();let blocked=false;f.battle.preparationOptions={frame:async()=>{if(!blocked){blocked=true;entered.resolve();await gate.promise;}}};
+ const pending=f.battle.activateResident(f.player,{reset:true,phase:2});await entered.promise;f.battle.hide();assert.equal(await pending,false);gate.resolve();
+ const cancelled=f.events.findLast(event=>event.type==='cancel');assert.ok(cancelled.preparationStats);assert.ok(cancelled.preparationStats.yields>=1);
+});
+
+test('contact creation stays hidden through cancellation and resumes on the same mesh',async t=>{
+ const f=await fixture(t),gate=deferred(),entered=deferred();let held=false;
+ f.battle.preparationOptions={frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
+ const pending=f.battle.activateResident(f.player,{reset:true});await entered.promise;const e=f.battle.elenaPool[0],contact=e.contact;
+ assert.equal(contact.mesh.isEnabled(),false);assert.equal(e.actor.isEnabled(),false);f.battle.hide();f.world.cave=false;assert.equal(await pending,false);
+ gate.resolve();await Promise.resolve();assert.equal(contact.mesh.isEnabled(),false);assert.equal(e.active,false);
+ f.world.cave=true;f.battle.preparationOptions={frame:async()=>{}};assert.equal(await f.battle.activateResident(f.player,{reset:true}),true);
+ assert.strictEqual(e.contact,contact);assert.equal(contact.prepared,true);assert.equal(f.scene.meshes.filter(mesh=>mesh.name==='elena-contact-ground').length,1);
+ assert.equal(contact.mesh.scaling.x,ELENA_SIZE.contactScale);assert.equal(contact.mesh.isEnabled(),false);
+});
+
+test('disposing the scene while contact shader preparation waits cannot expose a late mesh',async t=>{
+ const f=await fixture(t),gate=deferred(),entered=deferred();let held=false;
+ f.battle.preparationOptions={frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
+ const pending=f.battle.activateResident(f.player,{reset:true});await entered.promise;const e=f.battle.elenaPool[0],contact=e.contact;f.scene.dispose();
+ assert.equal(await pending,false);gate.resolve();await Promise.resolve();assert.equal(contact.mesh.isDisposed(),true);assert.equal(e.active,false);
 });
 
 test.after(()=>{const dir=new URL('../reports/elena-transform-performance-2026-11-02/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('hidden-preparation-validation.json',dir),JSON.stringify({generatedAt:new Date().toISOString(),scope:'Actual packed rigs, CPU step scheduling, shader variants and lifecycle in Babylon NullEngine. No browser/GPU/physical temperature measurement.',reports},null,2)+'\n');});

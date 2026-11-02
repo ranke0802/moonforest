@@ -1,0 +1,414 @@
+{
+  "baseline": "71f9165",
+  "passed": true,
+  "cases": [
+    {
+      "case": "same-render-id-and-death-overlay",
+      "precompiledOpaque": false,
+      "frames": 5,
+      "checks": [
+        {
+          "visibility": 0.5,
+          "alpha": true
+        },
+        {
+          "visibility": 0.5,
+          "alpha": true
+        },
+        {
+          "visibility": 1,
+          "alpha": false
+        }
+      ],
+      "preparedEffects": [
+        {
+          "shader": "pbr",
+          "alpha": true,
+          "id": 0,
+          "renderPass": 0
+        },
+        {
+          "shader": "outline",
+          "alpha": false,
+          "id": 1,
+          "renderPass": 0
+        },
+        {
+          "shader": "pbr",
+          "alpha": false,
+          "id": 2,
+          "renderPass": 0
+        },
+        {
+          "shader": "shadowMap",
+          "alpha": false,
+          "id": 3,
+          "renderPass": 2
+        },
+        {
+          "shader": "source",
+          "alpha": false,
+          "id": 4,
+          "renderPass": 0
+        }
+      ],
+      "postWarmEffectRequests": 7,
+      "transitions": [
+        {
+          "visibility": 1,
+          "newEffects": 0,
+          "overlay": false
+        },
+        {
+          "visibility": 0.999,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 0.5,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 0.1,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 1,
+          "newEffects": 0,
+          "overlay": false
+        }
+      ],
+      "postWarmNewEffects": 0,
+      "resourcesStable": true
+    },
+    {
+      "case": "same-render-id-and-death-overlay",
+      "precompiledOpaque": true,
+      "frames": 5,
+      "checks": [
+        {
+          "visibility": 0.5,
+          "alpha": true
+        },
+        {
+          "visibility": 1,
+          "alpha": false
+        }
+      ],
+      "preparedEffects": [
+        {
+          "shader": "pbr",
+          "alpha": false,
+          "id": 5,
+          "renderPass": 0
+        },
+        {
+          "shader": "pbr",
+          "alpha": true,
+          "id": 6,
+          "renderPass": 0
+        },
+        {
+          "shader": "outline",
+          "alpha": false,
+          "id": 7,
+          "renderPass": 0
+        },
+        {
+          "shader": "shadowMap",
+          "alpha": false,
+          "id": 8,
+          "renderPass": 8
+        },
+        {
+          "shader": "source",
+          "alpha": false,
+          "id": 9,
+          "renderPass": 0
+        }
+      ],
+      "postWarmEffectRequests": 7,
+      "transitions": [
+        {
+          "visibility": 1,
+          "newEffects": 0,
+          "overlay": false
+        },
+        {
+          "visibility": 0.999,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 0.5,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 0.1,
+          "newEffects": 0,
+          "overlay": true
+        },
+        {
+          "visibility": 1,
+          "newEffects": 0,
+          "overlay": false
+        }
+      ],
+      "postWarmNewEffects": 0,
+      "resourcesStable": true
+    },
+    {
+      "case": "first-non-inline-hit",
+      "hiddenDraws": 0,
+      "firstHitNewEffects": 0
+    },
+    {
+      "case": "readiness-option-restoration",
+      "originalValues": [
+        false,
+        true
+      ],
+      "restoredAfterError": true
+    },
+    {
+      "case": "overlay-cancel",
+      "readinessCalls": 1,
+      "lateCalls": 0,
+      "stateRestored": true
+    },
+    {
+      "case": "overlay-timeout",
+      "readinessCalls": 1,
+      "lateCalls": 0,
+      "stateRestored": true
+    },
+    {
+      "case": "overlay-shader",
+      "readinessCalls": 1,
+      "lateCalls": 0,
+      "stateRestored": true
+    },
+    {
+      "case": "actual-packed-model-effects",
+      "manifest": "elena",
+      "allBossMaterialsUnfrozen": true,
+      "bodies": [
+        {
+          "name": "Elena_Meshy_Static",
+          "vertices": 96734,
+          "boneInfluencers": 4,
+          "morphTargets": 0,
+          "textureMorphs": false
+        }
+      ],
+      "transitions": [
+        {
+          "visibility": 1,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.999,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.7,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.1,
+          "newEffects": 0
+        },
+        {
+          "visibility": 1,
+          "newEffects": 0
+        }
+      ],
+      "newEffectsOnFirstDisplayOrDeath": 0,
+      "rawTexturesDuringWarm": 0,
+      "rawTexturesAfterFirstDisplay": 0,
+      "resourcesBeforeDisplay": {
+        "meshes": 3,
+        "geometry": 1,
+        "materials": 3,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "resourcesAfterDisplay": {
+        "meshes": 3,
+        "geometry": 1,
+        "materials": 3,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "sourceImagesLoaded": false
+    },
+    {
+      "case": "actual-packed-model-effects",
+      "manifest": "mourning-elena",
+      "allBossMaterialsUnfrozen": true,
+      "bodies": [
+        {
+          "name": "Lament_Mouth_Interior",
+          "vertices": 280,
+          "boneInfluencers": 4,
+          "morphTargets": 1,
+          "textureMorphs": true
+        },
+        {
+          "name": "Halo_Attached_Streamers",
+          "vertices": 287,
+          "boneInfluencers": 3,
+          "morphTargets": 0,
+          "textureMorphs": false
+        },
+        {
+          "name": "Halo_Rigid_Emblem",
+          "vertices": 4014,
+          "boneInfluencers": 3,
+          "morphTargets": 0,
+          "textureMorphs": false
+        },
+        {
+          "name": "Elina_Chimera_Skin",
+          "vertices": 36196,
+          "boneInfluencers": 4,
+          "morphTargets": 11,
+          "textureMorphs": true
+        }
+      ],
+      "transitions": [
+        {
+          "visibility": 1,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.999,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.7,
+          "newEffects": 0
+        },
+        {
+          "visibility": 0.1,
+          "newEffects": 0
+        },
+        {
+          "visibility": 1,
+          "newEffects": 0
+        }
+      ],
+      "newEffectsOnFirstDisplayOrDeath": 0,
+      "rawTexturesDuringWarm": 0,
+      "rawTexturesAfterFirstDisplay": 0,
+      "resourcesBeforeDisplay": {
+        "meshes": 8,
+        "geometry": 4,
+        "materials": 3,
+        "textures": 7,
+        "skeletons": 2,
+        "morphManagers": 2
+      },
+      "resourcesAfterDisplay": {
+        "meshes": 8,
+        "geometry": 4,
+        "materials": 3,
+        "textures": 7,
+        "skeletons": 2,
+        "morphManagers": 2
+      },
+      "sourceImagesLoaded": false
+    },
+    {
+      "case": "actual-encounter-auxiliary-first-draw",
+      "manifest": "guardian-bear",
+      "auxiliary": "boss-attack-warning",
+      "allBossMaterialsUnfrozen": true,
+      "hiddenDraws": 0,
+      "firstDrawNewEffects": 0,
+      "resourcesBeforeSummon": {
+        "meshes": 4,
+        "geometry": 2,
+        "materials": 4,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "resourcesAfterDraw": {
+        "meshes": 4,
+        "geometry": 2,
+        "materials": 4,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "materialAndGeometryReused": true
+    },
+    {
+      "case": "actual-encounter-auxiliary-first-draw",
+      "manifest": "elena",
+      "auxiliary": "elena-contact-ground",
+      "allBossMaterialsUnfrozen": true,
+      "hiddenDraws": 0,
+      "firstDrawNewEffects": 0,
+      "resourcesBeforeSummon": {
+        "meshes": 7,
+        "geometry": 3,
+        "materials": 7,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "resourcesAfterDraw": {
+        "meshes": 7,
+        "geometry": 3,
+        "materials": 7,
+        "textures": 4,
+        "skeletons": 1,
+        "morphManagers": 0
+      },
+      "materialAndGeometryReused": true
+    },
+    {
+      "case": "actual-encounter-auxiliary-first-draw",
+      "manifest": "mourning-elena",
+      "auxiliary": "elena-contact-ground",
+      "allBossMaterialsUnfrozen": true,
+      "hiddenDraws": 0,
+      "firstDrawNewEffects": 0,
+      "resourcesBeforeSummon": {
+        "meshes": 12,
+        "geometry": 6,
+        "materials": 7,
+        "textures": 7,
+        "skeletons": 2,
+        "morphManagers": 2
+      },
+      "resourcesAfterDraw": {
+        "meshes": 12,
+        "geometry": 6,
+        "materials": 7,
+        "textures": 7,
+        "skeletons": 2,
+        "morphManagers": 2
+      },
+      "materialAndGeometryReused": true
+    }
+  ],
+  "scope": "Pinned Babylon 9.31 actual Effect creation/cache, PBR readiness, built-in overlay pass 3, body/ink skin/morph geometry and shadow readiness; actual encounter hidden preparation and first contact/warning draws.",
+  "unchanged": [
+    "No hidden actor draw, caster registration or visible overlay activation during preparation",
+    "Existing body/outline/hit colors, alpha composition, material ownership, skeleton/morph streams, combat and LOD"
+  ],
+  "limitations": [
+    "NullEngine does not compile GPU driver programs or measure GPU upload/fence latency, device FPS, temperature or visual quality.",
+    "Actual packed geometry is decoded, but downloaded model images/KTX are omitted. Synthetic opaque paint exercises the shipped skin/morph material variants.",
+    "RawTexture allocation counts are SDK resource events, not measured GPU upload duration.",
+    "The shipped boss materials remain unfrozen, explicitly asserted on actual packed assets and encounters. Frozen arbitrary inputs have a separate SDK fast path and are outside this fix."
+  ]
+}

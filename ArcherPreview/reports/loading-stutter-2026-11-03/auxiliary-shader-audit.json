@@ -1,0 +1,66 @@
+{
+  "baseline": "71f9165",
+  "contact": {
+    "beforeCreation": {
+      "meshes": 0,
+      "geometries": 0,
+      "materials": 0,
+      "effects": 0
+    },
+    "afterCreation": {
+      "meshes": 1,
+      "geometries": 1,
+      "materials": 1,
+      "effects": 0
+    },
+    "beforeFirstVisible": {
+      "meshes": 1,
+      "geometries": 1,
+      "materials": 1,
+      "effects": 0
+    },
+    "firstVisible": {
+      "meshes": 1,
+      "geometries": 1,
+      "materials": 1,
+      "effects": 1
+    },
+    "secondVisible": {
+      "meshes": 1,
+      "geometries": 1,
+      "materials": 1,
+      "effects": 1
+    },
+    "firstEffects": [
+      {
+        "shader": "source",
+        "id": 0
+      }
+    ]
+  },
+  "warningRing": {
+    "beforeFirstVisible": {
+      "meshes": 2,
+      "geometries": 2,
+      "materials": 2,
+      "effects": 1
+    },
+    "firstVisible": {
+      "meshes": 2,
+      "geometries": 2,
+      "materials": 2,
+      "effects": 2
+    },
+    "secondVisible": {
+      "meshes": 2,
+      "geometries": 2,
+      "materials": 2,
+      "effects": 2
+    }
+  },
+  "scope": "Actual unchanged createElenaContact/createTerrainRing helpers plus Babylon material readiness/render. Current boss warmup does not receive either helper mesh.",
+  "limitations": [
+    "NullEngine SDK Effect/resource events only, no real GPU time or visual validation.",
+    "The contact is a confirmed first-summon/phase-switch auxiliary allocation path; the non-Elena warning ring is a first-attack path, not necessarily the reported death event."
+  ]
+}

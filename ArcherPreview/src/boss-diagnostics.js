@@ -45,6 +45,10 @@ export class BossDiagnostics {
     if(event.type==='stage'&&event.stage!==c.stage){close();c.stage=event.stage;c.stageStarted=at;}
     else if(event.type==='ready'||event.type==='error'||event.type==='cancel'){
       close();c.prepareMs=at-c.started;c.memoryReady={...memory};c.readyAt=at;c.contextReady=context;
+      // Retain a bounded value snapshot, not the live job or asset graph. The
+      // synchronous preparation steps are CPU work, separate from elapsed
+      // download/wait time and the asynchronous GPU query stream.
+      if(event.preparationStats)c.preparation=preparationSummary(event.preparationStats);
       c.status=event.type==='ready'?'sampling':event.type==='error'?'error':'interrupted';c.reason=event.error??event.reason??null;
     }
   }

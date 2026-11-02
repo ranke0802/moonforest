@@ -11,11 +11,16 @@ import {MourningLocomotion} from './mourning-locomotion.js';
 import {chargeTouchesPlayer} from './elena-charge.js';
 import {refreshPoseMatrices} from './pose-matrices.js';
 import {playerDimensions} from './player-dimensions.js';
+import {prepareBossShaders} from './boss-shader-warmup.js';
 
 export class ElenaEncounter extends BossEncounter {
   constructor(...args){super(...args);this.kind='elena';this.phase=1;this.home=ELENA_HOME;this.displayName='타락한 성녀 엘레나';this.radius=ELENA_SIZE.radius;this.stopDistance=ELENA_SIZE.stopDistance;this.separationRadius=ELENA_SIZE.separationRadius;this.sizeScale=ELENA_SIZE.scale;this.reviewFocusHeight=ELENA_SIZE.reviewFocusHeight;this.healthAnchor=new Vector3();this.engaged=false;this.motionRootTravel=false;}
   createBrain(durations){return new ElenaBrain(durations);}
-  async prepareAuxiliary(preparation){this.spell??=new GroundSpellTelegraph(this.world);await this.spell.prepare(preparation);}
+  async prepareAuxiliary(preparation){
+    this.spell??=new GroundSpellTelegraph(this.world);await this.spell.prepare(preparation);
+    if(!this.contact)await preparation.step('contact-resources',()=>{this.contact=createElenaContact(this.world);this.contact.mesh.metadata={...this.contact.mesh.metadata,moonforestWarmMaterial:true};});
+    if(!this.contact.prepared){await prepareBossShaders({meshes:[this.contact.mesh]},{preparation});preparation.check();this.contact.prepared=true;}
+  }
   async summon(...args){this.residentPoseDeferred=false;this.residentPosePrepared=false;await super.summon(...args);this.home={x:this.actor.position.x,z:this.actor.position.z};this.repositionTarget=null;this.locomotion?.reset();this.transformRequested=false;this.contact??=createElenaContact(this.world);if(this.phase===1)this.contact.mesh.scaling.set(ELENA_SIZE.contactScale,1,ELENA_SIZE.contactScale);this.spell??=new GroundSpellTelegraph(this.world);this.spell.reset();const ground=this.config.catalog?.find(c=>c.name===this.brain.idle)?.groundTrack;this.residentIdleGround=ground?.length&&ground.every(v=>v===ground[0])?ground[0]:null;}
   healthBarPosition(){return this.healthAnchor.copyFrom(this.actor.position).addInPlaceFromFloats(0,ELENA_SIZE.bodyHeight+.3,0);}
   hide(){this.residentPoseDeferred=false;this.residentPosePrepared=false;this.brain?.cancelCast();if(this.phase===2)this.brain?.cancelMovement();super.hide();this.contact?.hide();this.spell?.reset();this.engaged=false;this.repositionTarget=null;this.chargeOrigin=null;this.locomotion?.reset();}

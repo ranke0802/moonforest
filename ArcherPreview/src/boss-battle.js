@@ -146,9 +146,9 @@ export class BossBattle {
       for(const old of this.encounters)if(old.kind==='elena'&&old!==resident)old.hide();
       this.encounters=this.encounters.filter(b=>b.kind!=='elena'||b===resident);
       if(!this.encounters.includes(resident))this.encounters.push(resident);
-      this.active=true;this.onChange(this);completed=true;this.onDiagnosticEvent({type:'ready'});return true;
-      }catch(error){if(error.name==='AbortError')return false;completed=true;this.onDiagnosticEvent({type:'error',error:String(error.message??error).slice(0,160)});throw error;}
-      finally{if(!completed)this.onDiagnosticEvent({type:'cancel',reason:'지역/요청 변경'});}
+      this.active=true;this.onChange(this);completed=true;this.onDiagnosticEvent({type:'ready',preparationStats:preparation.stats});return true;
+      }catch(error){if(error.name==='AbortError')return false;completed=true;this.onDiagnosticEvent({type:'error',error:String(error.message??error).slice(0,160),preparationStats:preparation.stats});throw error;}
+      finally{if(!completed)this.onDiagnosticEvent({type:'cancel',reason:'지역/요청 변경',preparationStats:preparation.stats});}
     })();
     this.residentPending=pending;
     try{return await pending;}finally{if(this.residentPending===pending){this.residentPending=null;this.residentPendingPreparation=null;}}
@@ -219,9 +219,12 @@ export class BossBattle {
     const others=this.encounters.filter(b=>b.kind!==kind);
     const request = ++this.revision, count = normalizeBossCount(value);
     const models=kind==='goblin'?this.goblinModels:this.models,pool=kind==='goblin'?this.goblinPool:this.pool,Encounter=kind==='goblin'?GoblinEncounter:BossEncounter,radius=kind==='goblin'?.34:.7;
+    const scene=this.world.scene,map=this.world.mapId;
+    const preparation=createBossPreparation({...this.preparationOptions,incremental:true,isCurrent:()=>request===this.revision&&this.world.scene===scene&&this.world.mapId===map&&!scene?.isDisposed});
+    this.summonPreparation=preparation;
     this.loading = true; this.onChange(this);
     try {
-      await models.load();
+      await preparation.wait(models.load());
       if (request !== this.revision) return false;
       for(const old of pool)old.hide();
       if(!others.some(b=>b.brain.hp>0))this.combat.reset();
@@ -234,8 +237,16 @@ export class BossBattle {
             (duration, options) => this.playerHit(duration, options), { combat: this.combat, loadAsset: () => models.instantiate(), onDefeat:this.onDefeat });
           boss.number=index+1;boss.id=kind==='goblin'?`g${index+1}`:index+1;pool.push(boss);
         }
+        const boss = pool[index];
+        if(!boss.assetPrepared)await preparation.pause();
+        await boss.prepareHidden({preparation});
+      }
+      // Keep every requested actor hidden through all frame-yielding work. Once
+      // the whole group is ready, summon only joins already-completed promises,
+      // so activation and encounter publication finish in the same task.
+      for (let index = 0; index < count; index++) {
         const boss = pool[index], position = positions[index];
-        await boss.summon(player, { position, rotationY: Math.atan2(player.position.x - position.x, player.position.z - position.z) });
+        await boss.summon(player, { position, rotationY: Math.atan2(player.position.x - position.x, player.position.z - position.z),preparation });
         this.applyAttackSettings(boss);
         if (request !== this.revision) { boss.hide(); return false; }
         boss.brain.wait += index * .17;
@@ -244,12 +255,13 @@ export class BossBattle {
       this.encounters = [...others,...pool.slice(0,count)];
       this.active = true; this.lastHit = null; this.actionVersion++;
       return true;
-    } catch (error) { this.hide(); throw error; }
-    finally { this.loading = false; this.onChange(this); }
+    } catch (error) { if(request===this.revision)this.hide();if(error.name==='AbortError')return false;throw error; }
+    finally { if(this.summonPreparation===preparation)this.summonPreparation=null;this.loading = false; this.onChange(this); }
   }
   hide() {
     this.residentRevision++;
     this.residentPendingPreparation?.cancel();this.mourningWarmJob?.preparation.cancel();
+    this.summonPreparation?.cancel();
     this.mourningWarmRequested=false;
     this.revision++; this.active = false; this.updating = true;
     for (const boss of this.allPooled) boss.hide();

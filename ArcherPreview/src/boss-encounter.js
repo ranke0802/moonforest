@@ -113,12 +113,14 @@ export class BossEncounter {
       this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);this.nodes=Object.fromEntries(this.asset.transformNodes.map(node=>[node.name,node]));this.poseNodes=orderPoseNodes(this.asset.transformNodes);
       this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
       this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
+      if(this.kind!=='elena')this.ring.metadata={...this.ring.metadata,moonforestWarmMaterial:true};
     });this.assetPreparationStep=4;}
     // The stable morph-slot contract is configured above. Initialize the real
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
     if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.createAnimator();});this.assetPreparationStep=5;}
     if(this.assetPreparationStep<6){
       this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation,shadows:this.world.shadows});
+      if(this.kind!=='elena')await prepareBossShaders({meshes:[this.ring]},{preparation});
       preparation.check();this.assetPreparationStep=6;
     }
     await this.prepareAuxiliary(preparation);preparation.check();
@@ -130,7 +132,9 @@ export class BossEncounter {
     try{
       await this.prepareHidden({preparation,onStage:this.assetPrepared?undefined:this.onPreparationStage});
       preparation?.check();
+      const animatorStart=performance.now();
       this.animator?.dispose();this.animator=this.createAnimator();
+      preparation?.stats.steps.push({name:'summon-animator',ms:Math.max(0,performance.now()-animatorStart)});
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
       this.deathShadowsRemoved=false;

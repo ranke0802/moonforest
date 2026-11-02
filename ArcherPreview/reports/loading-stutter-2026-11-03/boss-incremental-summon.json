@@ -1,0 +1,349 @@
+{
+  "scope": "Actual packed assets and four map navigation/terrain in Babylon NullEngine; no mobile GPU or FPS measurement.",
+  "cases": [
+    {
+      "map": "village",
+      "kind": "bear",
+      "frames": 28,
+      "cloneDesktopMs": [
+        58.58860000000004,
+        33.21099999999933
+      ],
+      "syncReferenceTotalDesktopMs": 68.19660000000022,
+      "stats": {
+        "yields": 28,
+        "blocks": 82,
+        "maxSliceMs": 0.7057999999997264,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.23040000000037253
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.37229999999999563
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 32.68509999999969
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 21.486899999999878
+          },
+          {
+            "name": "animator",
+            "ms": 0.4296999999996842
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.1555000000007567
+          }
+        ]
+      }
+    },
+    {
+      "map": "village",
+      "kind": "goblin",
+      "frames": 8,
+      "cloneDesktopMs": [
+        23.221999999999753,
+        11.909299999999348
+      ],
+      "syncReferenceTotalDesktopMs": 24.759299999999712,
+      "stats": {
+        "yields": 8,
+        "blocks": 1,
+        "maxSliceMs": 0.10239999999976135,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.10210000000006403
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.07970000000022992
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 9.165200000000368
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 3.4107999999996537
+          },
+          {
+            "name": "animator",
+            "ms": 0.09509999999954744
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.09220000000004802
+          }
+        ]
+      }
+    },
+    {
+      "map": "great-plains",
+      "kind": "bear",
+      "frames": 28,
+      "cloneDesktopMs": [
+        27.316400000000613,
+        33.59609999999975
+      ],
+      "syncReferenceTotalDesktopMs": 68.9962000000005,
+      "stats": {
+        "yields": 28,
+        "blocks": 82,
+        "maxSliceMs": 0.40049999999973807,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.06040000000029977
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.03989999999976135
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 21.69759999999951
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.233100000000377
+          },
+          {
+            "name": "animator",
+            "ms": 0.09609999999975116
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.11889999999948486
+          }
+        ]
+      }
+    },
+    {
+      "map": "great-plains",
+      "kind": "goblin",
+      "frames": 8,
+      "cloneDesktopMs": [
+        11.640500000001339,
+        13.336999999999534
+      ],
+      "syncReferenceTotalDesktopMs": 26.027400000000853,
+      "stats": {
+        "yields": 8,
+        "blocks": 1,
+        "maxSliceMs": 0.024900000000343425,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.04680000000007567
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.018200000000433647
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 8.409200000000055
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.0247999999992317
+          },
+          {
+            "name": "animator",
+            "ms": 0.06259999999929278
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.08169999999881838
+          }
+        ]
+      }
+    },
+    {
+      "map": "monster-forest",
+      "kind": "bear",
+      "frames": 28,
+      "cloneDesktopMs": [
+        35.08289999999943,
+        28.049299999998766
+      ],
+      "syncReferenceTotalDesktopMs": 53.777099999999336,
+      "stats": {
+        "yields": 28,
+        "blocks": 82,
+        "maxSliceMs": 0.12370000000009895,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.039099999999962165
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.0485000000007858
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 23.264500000001135
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.1059000000004744
+          },
+          {
+            "name": "animator",
+            "ms": 0.11059999999997672
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.09829999999965366
+          }
+        ]
+      }
+    },
+    {
+      "map": "monster-forest",
+      "kind": "goblin",
+      "frames": 8,
+      "cloneDesktopMs": [
+        13.869899999999689,
+        10.889199999999619
+      ],
+      "syncReferenceTotalDesktopMs": 21.03389999999854,
+      "stats": {
+        "yields": 8,
+        "blocks": 1,
+        "maxSliceMs": 0.029200000000855653,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.03800000000046566
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.022500000000945874
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 8.956000000000131
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 0.9324000000015076
+          },
+          {
+            "name": "animator",
+            "ms": 0.06889999999839347
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.0684000000001106
+          }
+        ]
+      }
+    },
+    {
+      "map": "witch-cave",
+      "kind": "bear",
+      "frames": 28,
+      "cloneDesktopMs": [
+        36.09439999999995,
+        26.510800000000017
+      ],
+      "syncReferenceTotalDesktopMs": 50.66159999999945,
+      "stats": {
+        "yields": 28,
+        "blocks": 82,
+        "maxSliceMs": 0.06869999999980791,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.026400000000649015
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.05459999999948195
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 20.944100000000617
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 1.1965000000000146
+          },
+          {
+            "name": "animator",
+            "ms": 0.16480000000046857
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.11759999999958382
+          }
+        ]
+      }
+    },
+    {
+      "map": "witch-cave",
+      "kind": "goblin",
+      "frames": 8,
+      "cloneDesktopMs": [
+        16.950600000000122,
+        10.819000000001324
+      ],
+      "syncReferenceTotalDesktopMs": 20.92449999999917,
+      "stats": {
+        "yields": 8,
+        "blocks": 1,
+        "maxSliceMs": 0.03360000000066066,
+        "steps": [
+          {
+            "name": "skin-flags",
+            "ms": 0.03410000000076252
+          },
+          {
+            "name": "paint-materials",
+            "ms": 0.06469999999899301
+          },
+          {
+            "name": "outline:output_unwrapped",
+            "ms": 8.33770000000004
+          },
+          {
+            "name": "pose-and-warning-resources",
+            "ms": 0.7961000000013883
+          },
+          {
+            "name": "animator",
+            "ms": 0.0871000000006461
+          },
+          {
+            "name": "summon-animator",
+            "ms": 0.10820000000057917
+          }
+        ]
+      }
+    },
+    {
+      "case": "cancel-resume",
+      "clones": 1,
+      "silhouettes": 1
+    },
+    {
+      "case": "map-change-resume",
+      "clones": 1,
+      "oldActorHidden": true
+    },
+    {
+      "case": "five-actual-bears",
+      "frames": 84,
+      "clones": 5,
+      "independentSkeletons": 5
+    }
+  ]
+}

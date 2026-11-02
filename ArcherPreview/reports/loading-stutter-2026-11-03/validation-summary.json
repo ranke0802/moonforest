@@ -1,0 +1,38 @@
+{
+  "baseline": "71f9165",
+  "tests": {
+    "tests": 1285,
+    "pass": 1285,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "resourceGraphUnchanged": true,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "unchangedRuntimeContracts": [
+    "src/input.js",
+    "src/warrior-v2.js",
+    "src/player-strikes.js",
+    "src/enemy-death.js",
+    "src/elena-spec.js",
+    "src/mourning-elena-animation.js",
+    "src/village-lod.js",
+    "src/village-shadow-policy.js"
+  ],
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "deployment": {
+    "status": "pending"
+  },
+  "verified": [
+    "Four-map actual static LOD bounds and frustum equivalence",
+    "Four-map revisit, cancellation, retry and stale completion isolation",
+    "Real packed bear/goblin incremental preparation and hidden group publication",
+    "Packed saint/witch cold/reset/transform initial pose and shader Effect reuse",
+    "Bounded foreground preparation diagnostic snapshots"
+  ],
+  "limits": [
+    "Node/NullEngine is not a browser or physical GPU/thermal/FPS measurement.",
+    "SDK model and outline cloning remain synchronous; no claim that every 100-250ms pause is eliminated.",
+    "Preparation is distributed to reduce per-frame work; total load/summon latency is not guaranteed to decrease."
+  ]
+}
