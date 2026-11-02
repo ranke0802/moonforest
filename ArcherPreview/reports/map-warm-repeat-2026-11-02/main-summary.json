@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "status": "PASS",
+  "baseRevision": "82b0d02",
+  "scope": "Independent actual main-callback repeat and error-lifetime validation; runtime sources read-only",
+  "ownedChanges": [
+    "tests/startup-frame-failure.test.js"
+  ],
+  "sourceHashes": {
+    "src/main.js": "3069703d173a869f79df6e0df0fde5e5051be2dfe569e32488364c6c4a5edee0",
+    "src/map-transition.js": "1fbe101b4320df6b084d118496c9c14a0493b47e44b3b80650cc2bb98aca2493",
+    "src/frame-loop.js": "68cbd89041c504b8e1ccc74d35587669a132afa5f1ca63986c443ca98cbc35d1",
+    "src/scene-ready.js": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1",
+    "src/sky.js": "981547c5f8da56922107428835376cddb4d6fde1a98e1b91aba7d61b5e8869fe",
+    "src/loading-view.js": "0be9647c47d71d28f770d4fe5cd401d5d462f361dc4647a2c805deed9b22b700",
+    "src/map-load-lifetime.js": "9f98578f7fc12a7b46b4c5f8ac169a5a378935b8fe2707471943829184f83f9a",
+    "src/map-navigation-cache.js": "4171d062c546a706af34f71e806758f80496f77a1b89efb6909408a660985544",
+    "src/world.js": "de1f39952ccf17862610aaca505d9d757594aa88c2735c279053bb6c390dbf4a"
+  },
+  "testSha256": "5fb76f0cf08dc941a15b437450bbcbb40dea0d5a3023dbd234b43bb614904c28",
+  "tests": {
+    "main": {
+      "pass": 19,
+      "fail": 0,
+      "log": "main-navigation-tests.log"
+    },
+    "supporting": {
+      "pass": 10,
+      "fail": 0,
+      "log": "main-supporting-tests.log"
+    },
+    "totalPass": 33,
+    "totalFail": 0,
+    "navigation": {
+      "pass": 4,
+      "fail": 0,
+      "log": "main-navigation-final.log"
+    }
+  },
+  "repetitions": {
+    "warmThreeMapTransfers": 48,
+    "timeoutManualRetryPairs": 12,
+    "timeoutStages": [
+      "release",
+      "map-download",
+      "map-model",
+      "scene"
+    ],
+    "eachTimeoutStageRepeats": 3,
+    "oldLateResultsDiscarded": 12,
+    "hiddenOrDialogTransfers": 18,
+    "frameFailureReloads": 12,
+    "fullscreenOrientationSupportingTransfers": 20
+  },
+  "results": {
+    "player": "Main map transfer/retry retains exact actor/equipment/controller identities; HP317 and potion1 plus selected sword/shield preserved.",
+    "camera": "Actual carryPortalPose preserves wrapped player-back/camera angle and pan magnitude. Radius17,beta1.18 and panY.2 unchanged through repeated transitions/retries.",
+    "playback": "Every successful visible finish has exactly one engine loop; paused/failed finish has zero. All presentation RAF queues drain; held movement resets at departure; no duplicate retry binding.",
+    "lateIsolation": "Abandoned old producer is wrapped in actual MapLoadLifetime; completing it during a newer screen wait calls its cleanup and cannot reveal curtain, resume playback, replace world.environment or overwrite current diagnostic phase.",
+    "ownership": "At each completed main fixture iteration: actor/animator/equipment/container counts remain1, lifetime listeners0, fake-clock timers0. Repeated whole-player reload releases preceding controlled wrappers.",
+    "fullscreen": "Supporting test uses actual setupFullscreen with controlled document/orientation, actual equipment/battle/transform modules and20transfers; no exit/unlock or camera/player resource loss.",
+    "diagnostics": "Timeout/manualretry keeps named code/45s and retry count; failed stage remains explicit until successful same-destination manual retry; duplicate clicks launch one attempt."
+  },
+  "mainLatencyReview": {
+    "confirmed": "Map sky starts before resource/model preparation and is awaited only after model/resident/review work. Current tests verify maps progress while sky is pending. Main no longer introduces a serial sky delay ahead of preparation.",
+    "guardsRetained": "Two departure curtain RAFs and two presentation RAFs remain. Removing them has no current device evidence and could expose old UI/partially bound material, so no removal was requested.",
+    "screen": "Current required-frame readiness remains45s and optional sky fallback8s. Successful immediate readiness adds no polling delay; only unready required work uses polling.",
+    "recommendation": "Use current download/model/screen and decoder queue/init/active timings on device to select further work. This review found no additional safe main-only wait to remove.",
+    "navigation": "New compact navigation cache independently reviewed:3actual maps retain339659payload bytes,6warm restores preserve exact node/edge/component/path values. Runtime analytic collision remains unchanged."
+  },
+  "newConfirmedRuntimeDefects": [],
+  "limitations": [
+    "Model/network/audio/GPU boundaries of the main fixture are controlled. It cannot prove actual mobile throughput, GPU heap or thermal stability.",
+    "Owned-wrapper and listener counters prove bounded modeled ownership, not physical worker/GPU memory reclamation. Actual loader/decoder ownership is validated by the separate SDK-level suites.",
+    "The12late-completion cases exercise actual MapLoadLifetime plus main/UI/RAF ordering, not a second implementation of the GLTF loader.",
+    "No browser automation, additional assets, quality/LOD changes, whole-suite run, build, commit or deployment by this agent."
+  ],
+  "evidence": [
+    "main-validation.json",
+    "main-tests.log",
+    "main-supporting-tests.log",
+    "main-navigation-review.json",
+    "main-navigation-tests.log",
+    "main-navigation-final.log"
+  ],
+  "sourceLocked": true,
+  "updatedFor": "Parent navigation-cache diagnostics/world warming change after base82b0d02"
+}

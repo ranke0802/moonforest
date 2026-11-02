@@ -1,0 +1,27 @@
+✔ actual main startup failure during model stays failed; retry DOM starts a successful new generation (31.2066ms)
+✔ actual main startup failure during scene stays failed; retry DOM starts a successful new generation (20.9344ms)
+✔ actual main startup failure during first-raf stays failed; retry DOM starts a successful new generation (8.4751ms)
+✔ actual main startup failure during second-raf stays failed; retry DOM starts a successful new generation (7.0834ms)
+✔ actual map callbacks preserve a frame failure during map-download (9.0988ms)
+✔ actual map callbacks preserve a frame failure during scene (6.0774ms)
+✔ actual map callbacks preserve a frame failure during second-raf (6.124ms)
+✔ actual main release failure remains paused until explicit reload succeeds; return travel then works (7.866ms)
+✔ actual main map-download failure remains paused until explicit reload succeeds; return travel then works (10.8694ms)
+✔ actual main finish failure remains paused until explicit reload succeeds; return travel then works (8.7175ms)
+✔ actual loading view keeps the runtime error latched until an explicit new begin (3.6987ms)
+✔ actual map release timeout offers same-destination manual retry without reloading the player (11.2277ms)
+✔ actual map map-model timeout offers same-destination manual retry without reloading the player (11.719ms)
+✔ actual map map-download timeout offers same-destination manual retry without reloading the player (10.5041ms)
+✔ actual forest transition prepares map while bounded sky work is pending, revealing only after both finish (5.675ms)
+✔ actual main callbacks complete48 warm three-map transfers without player, camera or callback ownership growth (30.6927ms)
+✔ actual main repeated45s stage timeouts and double-click manual retries cannot let late old completion reveal a new map (49.3641ms)
+✔ actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop (25.8288ms)
+✔ actual main frame failure/reload12times releases previous player wrappers and never accumulates a second input/render generation (36.4862ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1936.1903

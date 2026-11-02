@@ -1,0 +1,834 @@
+{
+  "status": "PASS",
+  "baseRevision": "82b0d02",
+  "testLocked": true,
+  "runtimeSourceChangesByThisAgent": 0,
+  "scope": "Actual source/geometry/cache lifecycle verification. Parent owns runtime optimization and final suite/build/deployment.",
+  "verification": {
+    "testCases": 2,
+    "passed": 2,
+    "normalBidirectionalRoundTrips": 3,
+    "normalVisits": 13,
+    "actualModelImports": 324,
+    "uniqueCompressedModels": 63,
+    "physicalPinnedWasmDecodeCalls": 665,
+    "actualExistingLodTimeoutRetries": [
+      {
+        "map": "witch-cave",
+        "id": "cave-01-eroded-wall",
+        "level": 1,
+        "timeoutMs": 45000,
+        "manualRetries": 1
+      },
+      {
+        "map": "monster-forest",
+        "id": "forest-04-poison-fungi",
+        "level": 0,
+        "timeoutMs": 45000,
+        "manualRetries": 1
+      },
+      {
+        "map": "village",
+        "id": "house-01-cottage",
+        "level": 0,
+        "timeoutMs": 45000,
+        "manualRetries": 1
+      }
+    ],
+    "automaticRetries": 0,
+    "lateSourcePublications": 0,
+    "sourceFilesChangedDuringMeasuredRun": []
+  },
+  "resources": {
+    "loadedPlateaus": {
+      "village": {
+        "meshes": 1441,
+        "transforms": 1397,
+        "materials": 37,
+        "textures": 4,
+        "geometries": 22,
+        "receivers": 49,
+        "pending": 0,
+        "observers": [
+          1,
+          2,
+          33,
+          0,
+          0,
+          0,
+          0
+        ],
+        "meshStages": 2
+      },
+      "monster-forest": {
+        "meshes": 1829,
+        "transforms": 1783,
+        "materials": 33,
+        "textures": 4,
+        "geometries": 5,
+        "receivers": 28,
+        "pending": 0,
+        "observers": [
+          1,
+          2,
+          29,
+          0,
+          0,
+          0,
+          0
+        ],
+        "meshStages": 2
+      },
+      "witch-cave": {
+        "meshes": 293,
+        "transforms": 299,
+        "materials": 29,
+        "textures": 6,
+        "geometries": 19,
+        "receivers": 22,
+        "pending": 0,
+        "observers": [
+          3,
+          3,
+          22,
+          2,
+          2,
+          1,
+          1
+        ],
+        "meshStages": 2
+      }
+    },
+    "releasedPlateaus": {
+      "village": {
+        "meshes": 31,
+        "transforms": 1,
+        "materials": 6,
+        "textures": 4,
+        "geometries": 4,
+        "receivers": 1,
+        "pending": 0,
+        "observers": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "meshStages": 1
+      },
+      "monster-forest": {
+        "meshes": 31,
+        "transforms": 1,
+        "materials": 6,
+        "textures": 4,
+        "geometries": 4,
+        "receivers": 1,
+        "pending": 0,
+        "observers": [
+          0,
+          0,
+          2,
+          0,
+          0,
+          0,
+          0
+        ],
+        "meshStages": 1
+      },
+      "witch-cave": {
+        "meshes": 53,
+        "transforms": 1,
+        "materials": 12,
+        "textures": 6,
+        "geometries": 14,
+        "receivers": 1,
+        "pending": 0,
+        "observers": [
+          2,
+          1,
+          5,
+          2,
+          2,
+          1,
+          1
+        ],
+        "meshStages": 1
+      }
+    },
+    "scenePendingAfterReadyAndRelease": 0,
+    "geometryCache": {
+      "bytes": 8345680,
+      "limit": 8388608,
+      "entries": 217,
+      "hits": 742,
+      "misses": 665,
+      "evictions": 448
+    },
+    "textureDecodeCache": {
+      "bytes": 0,
+      "limit": 25165824,
+      "entries": 0,
+      "hits": 0,
+      "misses": 0,
+      "evictions": 0
+    },
+    "navigationCache": {
+      "bytes": 339659,
+      "limit": 524288,
+      "entries": 3,
+      "hits": 10,
+      "misses": 3,
+      "evictions": 0,
+      "last": {
+        "map": "village",
+        "hit": true,
+        "milliseconds": 24.85360000000037
+      }
+    },
+    "terrainCache": {
+      "bytes": 356364,
+      "limit": 524288,
+      "entries": 3,
+      "hits": 10,
+      "misses": 3,
+      "evictions": 0
+    },
+    "shaderPrograms": 11
+  },
+  "findings": [
+    {
+      "finding": "Resource plateaus return exactly to the same per-map baseline",
+      "evidence": "Meshes/transforms/materials/textures/geometries/lighting receivers/live observers/render stages matched on every repeat; owned roots/containers disposed and scene pending remained zero."
+    },
+    {
+      "finding": "Warm geometry cache cannot hold this three-map working set under the unchanged 8MiB cap",
+      "evidence": "665 decode calls and448 LRU evictions over13 visits; warm village84 decodes, cave69, forest0. Cache maximum stays within8,388,608B. This is bounded repeated work, not unbounded memory growth."
+    },
+    {
+      "finding": "Parent navigation compact cache removes repeated collision-grid recomputation",
+      "evidence": "339,659B/3entries/0evictions stable after all maps warm. Actual grid calls are cache lookups; wrapper VillageNavigation.grid time includes component metadata while parent warmMapNavigation.last includes grid reconstruction. See separate parent before/after benchmark for a controlled speed comparison."
+    },
+    {
+      "finding": "Remaining local preparation cost is primarily instance recreation",
+      "evidence": "Warm village/forest instantiate hundreds of retained-source instances each entry. In this harness instances cost more than AssetContainer import; no high-risk whole-map scene/GPU retention was introduced."
+    },
+    {
+      "finding": "Initial heap growth was caused in part by test instrumentation retaining old calls",
+      "evidence": "The initial diagnostic used MockFunctionContext on instance construction, which retained arguments/results. Replaced with direct reversible wrappers. Before-instrumentation files are retained only as a harness diagnostic, not valid memory-leak proof or controlled performance comparison."
+    }
+  ],
+  "afterRuntimeMeasurements": {
+    "village": {
+      "visits": [
+        4,
+        8,
+        12
+      ],
+      "timing": {
+        "replace": {
+          "wallMs": {
+            "count": 3,
+            "min": 30.16570000000047,
+            "median": 30.893600000000333,
+            "max": 40.20990000000165
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 32,
+            "median": 94,
+            "max": 109
+          }
+        },
+        "navigation": {
+          "wallMs": {
+            "count": 3,
+            "min": 6.333700000000135,
+            "median": 7.226300000000265,
+            "max": 11.30450000000019
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "navigationBase": {
+          "wallMs": {
+            "count": 3,
+            "min": 0.010500000000320142,
+            "median": 0.013200000000324508,
+            "max": 0.020000000000436557
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "plan": {
+          "wallMs": {
+            "count": 3,
+            "min": 2.3324000000002343,
+            "median": 3.238199999999779,
+            "max": 3.6084000000009837
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 0,
+            "median": 0,
+            "max": 31
+          }
+        },
+        "environment": {
+          "wallMs": {
+            "count": 3,
+            "min": 339.9440999999997,
+            "median": 347.2452000000012,
+            "max": 354.76980000000003
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 359,
+            "median": 391,
+            "max": 407
+          }
+        },
+        "import": {
+          "wallMs": {
+            "count": 3,
+            "min": 44.49299999999948,
+            "median": 45.30920000000333,
+            "max": 45.34620000000541
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 47,
+            "median": 48,
+            "max": 63
+          }
+        },
+        "instances": {
+          "wallMs": {
+            "count": 3,
+            "min": 163.90950000000703,
+            "median": 175.60630000002675,
+            "max": 186.48590000002605
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 187,
+            "median": 203,
+            "max": 204
+          }
+        },
+        "occlusion": {
+          "wallMs": {
+            "count": 3,
+            "min": 36.13560000000598,
+            "median": 36.58160000000589,
+            "max": 37.57119999997849
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 31,
+            "median": 47,
+            "max": 62
+          }
+        },
+        "outlines": {
+          "wallMs": {
+            "count": 3,
+            "min": 1.0227000000068074,
+            "median": 1.2965000000012878,
+            "max": 1.5861999999997352
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "release": {
+          "wallMs": {
+            "count": 3,
+            "min": 7.616799999999785,
+            "median": 8.482700000000477,
+            "max": 10.529700000000048
+          },
+          "cpuMs": {
+            "count": 3,
+            "min": 0,
+            "median": 15,
+            "max": 16
+          }
+        }
+      },
+      "heapUsedMiB": {
+        "count": 3,
+        "min": 175.0546875,
+        "median": 176.28943634033203,
+        "max": 176.6153793334961
+      },
+      "decodeCallsPerVisit": [
+        84,
+        84,
+        84
+      ],
+      "cacheHitsPerVisit": [
+        36,
+        36,
+        36
+      ],
+      "cacheEvictionsPerVisit": [
+        72,
+        72,
+        72
+      ]
+    },
+    "monster-forest": {
+      "visits": [
+        3,
+        5,
+        7,
+        9,
+        11
+      ],
+      "timing": {
+        "replace": {
+          "wallMs": {
+            "count": 5,
+            "min": 27.59780000000046,
+            "median": 40.507800000000316,
+            "max": 43.796400000000176
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 47,
+            "median": 78,
+            "max": 78
+          }
+        },
+        "navigation": {
+          "wallMs": {
+            "count": 5,
+            "min": 7.465799999999945,
+            "median": 10.623900000000503,
+            "max": 16.95090000000073
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 15,
+            "median": 16,
+            "max": 31
+          }
+        },
+        "navigationBase": {
+          "wallMs": {
+            "count": 5,
+            "min": 0.014900000000125146,
+            "median": 0.016000000000531145,
+            "max": 0.01929999999993015
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "plan": {
+          "wallMs": {
+            "count": 5,
+            "min": 2.5468000000000757,
+            "median": 2.831000000000131,
+            "max": 10.473399999999856
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 0,
+            "median": 0,
+            "max": 31
+          }
+        },
+        "environment": {
+          "wallMs": {
+            "count": 5,
+            "min": 324.89819999999963,
+            "median": 364.72019999999975,
+            "max": 446.16759999999977
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 437,
+            "median": 547,
+            "max": 656
+          }
+        },
+        "import": {
+          "wallMs": {
+            "count": 5,
+            "min": 11.26969999999801,
+            "median": 13.04769999999644,
+            "max": 14.554600000001301
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 0,
+            "median": 0,
+            "max": 31
+          }
+        },
+        "instances": {
+          "wallMs": {
+            "count": 5,
+            "min": 201.8448000000135,
+            "median": 228.5203999999958,
+            "max": 285.4600000000237
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 281,
+            "median": 345,
+            "max": 437
+          }
+        },
+        "occlusion": {
+          "wallMs": {
+            "count": 5,
+            "min": 36.53920000000289,
+            "median": 44.22460000002957,
+            "max": 47.96080000000802
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 31,
+            "median": 77,
+            "max": 110
+          }
+        },
+        "outlines": {
+          "wallMs": {
+            "count": 5,
+            "min": 0.9160000000019863,
+            "median": 1.2102000000013504,
+            "max": 1.4718999999968219
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "release": {
+          "wallMs": {
+            "count": 5,
+            "min": 10.68539999999939,
+            "median": 13.537800000000061,
+            "max": 23.422899999999572
+          },
+          "cpuMs": {
+            "count": 5,
+            "min": 15,
+            "median": 16,
+            "max": 31
+          }
+        }
+      },
+      "heapUsedMiB": {
+        "count": 5,
+        "min": 179.6089096069336,
+        "median": 181.04364776611328,
+        "max": 198.44039154052734
+      },
+      "decodeCallsPerVisit": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "cacheHitsPerVisit": [
+        118,
+        118,
+        118,
+        118,
+        118
+      ],
+      "cacheEvictionsPerVisit": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "witch-cave": {
+      "visits": [
+        6,
+        10
+      ],
+      "timing": {
+        "replace": {
+          "wallMs": {
+            "count": 2,
+            "min": 120.22800000000007,
+            "median": 139.86180000000058,
+            "max": 139.86180000000058
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 188,
+            "median": 188,
+            "max": 188
+          }
+        },
+        "navigation": {
+          "wallMs": {
+            "count": 2,
+            "min": 4.822100000000319,
+            "median": 6.219899999999143,
+            "max": 6.219899999999143
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 16,
+            "median": 31,
+            "max": 31
+          }
+        },
+        "navigationBase": {
+          "wallMs": {
+            "count": 2,
+            "min": 0.012500000000727596,
+            "median": 0.014599999999518332,
+            "max": 0.014599999999518332
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "plan": {
+          "wallMs": {
+            "count": 2,
+            "min": 0.7184999999999491,
+            "median": 0.7479999999995925,
+            "max": 0.7479999999995925
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "environment": {
+          "wallMs": {
+            "count": 2,
+            "min": 137.10469999999987,
+            "median": 147.73050000000057,
+            "max": 147.73050000000057
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 172,
+            "median": 172,
+            "max": 172
+          }
+        },
+        "import": {
+          "wallMs": {
+            "count": 2,
+            "min": 28.134499999998297,
+            "median": 30.219100000001163,
+            "max": 30.219100000001163
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 31,
+            "median": 62,
+            "max": 62
+          }
+        },
+        "instances": {
+          "wallMs": {
+            "count": 2,
+            "min": 31.828600000003462,
+            "median": 42.2659999999978,
+            "max": 42.2659999999978
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 15,
+            "median": 47,
+            "max": 47
+          }
+        },
+        "occlusion": {
+          "wallMs": {
+            "count": 2,
+            "min": 0.006199999999807915,
+            "median": 0.008199999999305874,
+            "max": 0.008199999999305874
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "outlines": {
+          "wallMs": {
+            "count": 2,
+            "min": 0.7855999999983396,
+            "median": 0.8107000000009066,
+            "max": 0.8107000000009066
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        },
+        "release": {
+          "wallMs": {
+            "count": 2,
+            "min": 1.939900000000307,
+            "median": 2.20049999999992,
+            "max": 2.20049999999992
+          },
+          "cpuMs": {
+            "count": 2,
+            "min": 0,
+            "median": 0,
+            "max": 0
+          }
+        }
+      },
+      "heapUsedMiB": {
+        "count": 2,
+        "min": 151.3499526977539,
+        "median": 152.18431854248047,
+        "max": 152.18431854248047
+      },
+      "decodeCallsPerVisit": [
+        69,
+        69
+      ],
+      "cacheHitsPerVisit": [
+        4,
+        4
+      ],
+      "cacheEvictionsPerVisit": [
+        81,
+        81
+      ]
+    }
+  },
+  "memory": {
+    "mode": "Local Node process with exposed main-isolate GC; not browser/device memory.",
+    "weakReferences": {
+      "gcExposed": true,
+      "reachableVisits": {
+        "prepared": [
+          12
+        ],
+        "source": [
+          12
+        ],
+        "navigation": [
+          12
+        ]
+      },
+      "notes": "WeakRef/GC observations are supporting evidence, not a cross-browser collection guarantee. Final visit locals may remain in the active test frame; the current navigator is intentionally owned by the world."
+    },
+    "beforeExistingWorkerIdleRelease": {
+      "heapUsed": 184993608,
+      "external": 21345514,
+      "arrayBuffers": 27188479,
+      "rss": 536313856,
+      "gcExposed": true
+    },
+    "afterExistingWorkerIdleRelease": {
+      "heapUsed": 184998504,
+      "external": 21318550,
+      "arrayBuffers": 14131095,
+      "rss": 510795776,
+      "gcExposed": true
+    },
+    "workerIdleWaitMs": 1100,
+    "worker": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "queueTimeoutMs": 45000,
+      "initTimeoutMs": 45000,
+      "decodeTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 1,
+        "terminated": 1,
+        "completed": 665,
+        "failed": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 665,
+        "stage": "decode",
+        "bytes": 15941,
+        "queueMs": 0.3876000000000204,
+        "initMs": 0,
+        "decodeMs": 0.10150000000066939,
+        "totalMs": 0.4896000000007916
+      }
+    },
+    "interpretation": "No older prepared/source/navigation generations were reachable through the captured WeakRefs after GC. Last-iteration locals can remain in the active test frame, and the final navigator is intentionally live. Node ArrayBuffers fell from25.93MiB to13.48MiB after the existing one-second worker idle release; main-isolate GC cannot collect all transferred worker inputs. These finite observations do not prove all browser/GPU leaks absent."
+  },
+  "limits": [
+    "Actual shipped Meshopt bytes, current Babylon EXT/AssetContainer/geometry-cache/streamed lifecycle, and pinned decoder/WASM in a Node worker are exercised.",
+    "All texture image decoding/upload, sky image and live player images are excluded; the 8K player and <=4K environment profiles/LOD definitions are checked, with a retained player anchor.",
+    "PBR material and image-ready boundaries are explicit NullEngine substitutions. No actual WebGL shader compilation, mobile GPU memory, phone FPS, temperature or browser cache/network latency claim.",
+    "Wall and process CPU time belong to this local Node/NullEngine harness; stage metrics overlap and must not be summed blindly. ArenaNavigation.grid time is nested in VillageNavigation.grid and replace time. Heap/RSS are Node figures, not browser/device RAM. GC availability is recorded and resource/cache plateaus are the hard bounds.",
+    "The controlled LOD retry calls actual streaming.load directly; map-transition button/UI behavior is verified separately by parent.",
+    "The decoder fault is a held result from a real pinned decode at the response boundary. It does not emulate physical worker crash/recovery or real KTX/GPU memory; those have separate tests.",
+    "Process CPU samples are coarse, include worker/GC work and overlap nested scopes; do not sum stage values or interpret zero samples as zero cost.",
+    "The final measured run includes parent runtime navigation optimization. No navigation-before evidence file was changed by this task."
+  ],
+  "evidenceFiles": [
+    "three-way-after-gc.json",
+    "three-way-after-gc.log",
+    "three-way-before-instrumentation.json",
+    "three-way-before-instrumentation.log",
+    "navigation-before.json"
+  ],
+  "ownedTest": "tests/map-three-way-repeat.test.js",
+  "testSha256": "5f1d1870b29df3c3ccb795e21f822f8275a43d5174b28a93bc405f17327e5731",
+  "runtimeSourceHashes": {
+    "world.js": "de1f39952ccf17862610aaca505d9d757594aa88c2735c279053bb6c390dbf4a",
+    "village-streamed-environment.js": "71901a6989041133a2ffc8e412f9a8175b165f1e34e33a94c5dd8f750cb2db60",
+    "map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "map-decode-cache.js": "712b16b9fe9c56e97615c1397fdfb1b52ea12c15fcd3d449ba386eb83074546d",
+    "map-terrain-cache.js": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100",
+    "meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784",
+    "navigation.js": "fa60c92087ff2cc7f5abb4fc0b817131eda8c6909720a5629ca63d515f915adf",
+    "village-navigation.js": "ec2ba9d407a5a57396c0c9c8cf2c77361006d04bf747c2402d25607596ead0b0",
+    "map-navigation-cache.js": "4171d062c546a706af34f71e806758f80496f77a1b89efb6909408a660985544"
+  },
+  "browserAutomation": false,
+  "buildCommitPushByThisAgent": false
+}

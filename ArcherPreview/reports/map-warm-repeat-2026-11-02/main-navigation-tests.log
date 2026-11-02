@@ -1,0 +1,33 @@
+BJS - [11:35:09]: Babylon.js v9.31.0 - Null engine
+✔ three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget (2092.5815ms)
+ℹ {"bytes":339659,"limit":524288,"entries":3,"hits":6,"misses":3,"evictions":0,"last":{"map":"village","hit":true,"milliseconds":9.017100000000028}}
+✔ changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned (13.862ms)
+✔ repeated signatures do not grow the pool and oversized maps retain no snapshot (41.8013ms)
+✔ noncanonical edge layouts bypass the compact cache without changing the navigator result (2.7926ms)
+✔ actual main startup failure during model stays failed; retry DOM starts a successful new generation (32.6897ms)
+✔ actual main startup failure during scene stays failed; retry DOM starts a successful new generation (30.0506ms)
+✔ actual main startup failure during first-raf stays failed; retry DOM starts a successful new generation (9.7398ms)
+✔ actual main startup failure during second-raf stays failed; retry DOM starts a successful new generation (8.4787ms)
+✔ actual map callbacks preserve a frame failure during map-download (10.8794ms)
+✔ actual map callbacks preserve a frame failure during scene (7.165ms)
+✔ actual map callbacks preserve a frame failure during second-raf (7.8291ms)
+✔ actual main release failure remains paused until explicit reload succeeds; return travel then works (9.4984ms)
+✔ actual main map-download failure remains paused until explicit reload succeeds; return travel then works (12.8517ms)
+✔ actual main finish failure remains paused until explicit reload succeeds; return travel then works (9.3538ms)
+✔ actual loading view keeps the runtime error latched until an explicit new begin (4.4285ms)
+✔ actual map release timeout offers same-destination manual retry without reloading the player (12.6095ms)
+✔ actual map map-model timeout offers same-destination manual retry without reloading the player (12.3911ms)
+✔ actual map map-download timeout offers same-destination manual retry without reloading the player (12.4991ms)
+✔ actual forest transition prepares map while bounded sky work is pending, revealing only after both finish (7.5291ms)
+✔ actual main callbacks complete48 warm three-map transfers without player, camera or callback ownership growth (37.9192ms)
+✔ actual main repeated45s stage timeouts and double-click manual retries cannot let late old completion reveal a new map (53.8108ms)
+✔ actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop (34.7991ms)
+✔ actual main frame failure/reload12times releases previous player wrappers and never accumulates a second input/render generation (47.009ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4052.2874

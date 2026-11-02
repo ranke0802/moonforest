@@ -1,0 +1,19 @@
+{
+  "repo": "C:/dev/moonforest-archer/ArcherPreview",
+  "runtimeSourceChanges": 0,
+  "testLocked": true,
+  "tests": [
+    "tests/map-three-way-repeat.test.js"
+  ],
+  "testSha256": "5f1d1870b29df3c3ccb795e21f822f8275a43d5174b28a93bc405f17327e5731",
+  "reports": [
+    "reports/map-warm-repeat-2026-11-02/runtime-review.json",
+    "reports/map-warm-repeat-2026-11-02/owned-files.json",
+    "reports/map-warm-repeat-2026-11-02/three-way-after-gc.json",
+    "reports/map-warm-repeat-2026-11-02/three-way-after-gc.log",
+    "reports/map-warm-repeat-2026-11-02/three-way-validation.json",
+    "reports/map-warm-repeat-2026-11-02/three-way-tests.log",
+    "reports/map-warm-repeat-2026-11-02/three-way-before-instrumentation.json",
+    "reports/map-warm-repeat-2026-11-02/three-way-before-instrumentation.log"
+  ]
+}

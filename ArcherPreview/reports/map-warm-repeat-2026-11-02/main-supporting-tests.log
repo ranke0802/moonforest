@@ -1,0 +1,20 @@
+BJS - [11:30:55]: Babylon.js v9.31.0 - Null engine
+✔ manifest requests coalesce and stay consistent across revisits; failures are explicit (2.3158ms)
+✔ cached plans use one key inventory, no Response bodies, and still notice eviction (19.5203ms)
+✔ GPU readiness fails explicitly on shader errors or deadline and accepts a ready scene (0.3794ms)
+BJS - [11:30:55]: Babylon.js v9.31.0 - Null engine
+✔ concurrent map containers detach only their own constructor callbacks (25.2527ms)
+✔ 20 map transfers preserve fullscreen/orientation, camera relation, HP, potions and selected equipment (16.5259ms)
+✔ transition diagnostics show the actual pending stage and elapsed time without touching callbacks or graphics (1.7665ms)
+✔ failed release releases busy but keeps its error until explicit successful-reload recovery (0.3669ms)
+✔ failed load releases busy but keeps its error until explicit successful-reload recovery (0.1608ms)
+✔ failed finish releases busy but keeps its error until explicit successful-reload recovery (0.1415ms)
+✔ only explicit retries reuse the failed destination, preserve timeout diagnostics and reject duplicate requests (1.2132ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2983.2069

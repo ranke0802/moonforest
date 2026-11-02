@@ -1,0 +1,2389 @@
+{
+  "baseRevision": "82b0d02",
+  "expectedCases": 2,
+  "completedCases": 2,
+  "passed": true,
+  "cases": [
+    {
+      "case": "three-map-normal-bidirectional-repeat",
+      "passed": true,
+      "visits": 13,
+      "roundTrips": 3,
+      "modelImports": 324,
+      "uniqueModels": 63,
+      "decodeCalls": 665,
+      "decodedBytes": 25104894,
+      "physicalWorkersCreated": 6,
+      "worker": {
+        "status": "ready",
+        "maxWorkers": 1,
+        "totalAwaitTimeoutMs": 45000,
+        "queueTimeoutMs": 45000,
+        "initTimeoutMs": 45000,
+        "decodeTimeoutMs": 45000,
+        "idleReleaseMs": 1000,
+        "queued": 0,
+        "active": null,
+        "counts": {
+          "created": 6,
+          "terminated": 6,
+          "completed": 665,
+          "failed": 0,
+          "recoveries": 0,
+          "workerFaults": 0
+        },
+        "lastFailure": null,
+        "lastCompleted": {
+          "id": 665,
+          "stage": "decode",
+          "bytes": 15941,
+          "queueMs": 1.018099999993865,
+          "initMs": 0,
+          "decodeMs": 0.24949999999807915,
+          "totalMs": 1.2687999999980093
+        }
+      },
+      "cache": {
+        "geometry": {
+          "bytes": 8345680,
+          "limit": 8388608,
+          "entries": 217,
+          "hits": 742,
+          "misses": 665,
+          "evictions": 448
+        },
+        "textures": {
+          "bytes": 0,
+          "limit": 25165824,
+          "entries": 0,
+          "hits": 0,
+          "misses": 0,
+          "evictions": 0
+        }
+      },
+      "resourcePlateaus": {
+        "village": {
+          "meshes": 1441,
+          "transforms": 1397,
+          "materials": 37,
+          "textures": 4,
+          "geometries": 22,
+          "receivers": 49,
+          "pending": 0,
+          "observers": [
+            1,
+            2,
+            33,
+            0,
+            0,
+            0,
+            0
+          ],
+          "meshStages": 2
+        },
+        "monster-forest": {
+          "meshes": 1829,
+          "transforms": 1783,
+          "materials": 33,
+          "textures": 4,
+          "geometries": 5,
+          "receivers": 28,
+          "pending": 0,
+          "observers": [
+            1,
+            2,
+            29,
+            0,
+            0,
+            0,
+            0
+          ],
+          "meshStages": 2
+        },
+        "witch-cave": {
+          "meshes": 293,
+          "transforms": 299,
+          "materials": 29,
+          "textures": 6,
+          "geometries": 19,
+          "receivers": 22,
+          "pending": 0,
+          "observers": [
+            3,
+            3,
+            22,
+            2,
+            2,
+            1,
+            1
+          ],
+          "meshStages": 2
+        }
+      },
+      "releasedPlateaus": {
+        "village": {
+          "meshes": 31,
+          "transforms": 1,
+          "materials": 6,
+          "textures": 4,
+          "geometries": 4,
+          "receivers": 1,
+          "pending": 0,
+          "observers": [
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          "meshStages": 1
+        },
+        "monster-forest": {
+          "meshes": 31,
+          "transforms": 1,
+          "materials": 6,
+          "textures": 4,
+          "geometries": 4,
+          "receivers": 1,
+          "pending": 0,
+          "observers": [
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          "meshStages": 1
+        },
+        "witch-cave": {
+          "meshes": 53,
+          "transforms": 1,
+          "materials": 12,
+          "textures": 6,
+          "geometries": 14,
+          "receivers": 1,
+          "pending": 0,
+          "observers": [
+            2,
+            1,
+            5,
+            2,
+            2,
+            1,
+            1
+          ],
+          "meshStages": 1
+        }
+      },
+      "weakReferenceObservations": {
+        "gcExposed": false,
+        "reachableVisits": {
+          "prepared": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "source": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          "navigation": [
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        "notes": "WeakRef/GC observations are supporting evidence, not a cross-browser collection guarantee. Final visit locals may remain in the active test frame; the current navigator is intentionally owned by the world."
+      },
+      "memoryBeforeWorkerIdle": {
+        "heapUsed": 546039944,
+        "external": 51806124,
+        "arrayBuffers": 41219836,
+        "rss": 811192320,
+        "gcExposed": false
+      },
+      "quiescentWorkerWaitMs": 1100,
+      "finalMemory": {
+        "heapUsed": 546067808,
+        "external": 51806124,
+        "arrayBuffers": 38913324,
+        "rss": 805744640,
+        "gcExposed": false
+      },
+      "measurements": [
+        {
+          "index": 0,
+          "character": "warrior-v3",
+          "map": "village",
+          "initialLods": 30,
+          "modelImports": 30,
+          "actualDecodeCalls": 120,
+          "cacheHits": 0,
+          "cacheMisses": 120,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 4377556,
+            "limit": 8388608,
+            "entries": 120,
+            "hits": 0,
+            "misses": 120,
+            "evictions": 0
+          },
+          "terrainCache": {
+            "bytes": 103684,
+            "limit": 524288,
+            "entries": 1,
+            "hits": 0,
+            "misses": 1,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 84347,
+            "limit": 524288,
+            "entries": 1,
+            "hits": 0,
+            "misses": 1,
+            "evictions": 0,
+            "last": {
+              "map": "village",
+              "hit": false,
+              "milliseconds": 1075.0419999999995
+            }
+          },
+          "shaderCache": 3,
+          "loaded": {
+            "meshes": 1441,
+            "transforms": 1397,
+            "materials": 37,
+            "textures": 4,
+            "geometries": 22,
+            "receivers": 49,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              33,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 179363536,
+            "external": 18800765,
+            "arrayBuffers": 13648926,
+            "rss": 373952512,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 0,
+              "cpuMs": 0,
+              "calls": 0
+            },
+            "navigation": {
+              "wallMs": 0,
+              "cpuMs": 0,
+              "calls": 0
+            },
+            "navigationBase": {
+              "wallMs": 0,
+              "cpuMs": 0,
+              "calls": 0
+            },
+            "plan": {
+              "wallMs": 157.23580000000038,
+              "cpuMs": 141,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 4737.346999999998,
+              "cpuMs": 2234,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 233.40099999999802,
+              "cpuMs": 110,
+              "calls": 30
+            },
+            "import": {
+              "wallMs": 2596.398200000007,
+              "cpuMs": 627,
+              "calls": 30
+            },
+            "materialBoundary": {
+              "wallMs": 110.33489999999438,
+              "cpuMs": 62,
+              "calls": 30
+            },
+            "instances": {
+              "wallMs": 1123.1019000000015,
+              "cpuMs": 829,
+              "calls": 691
+            },
+            "occlusion": {
+              "wallMs": 159.26389999999083,
+              "cpuMs": 125,
+              "calls": 365
+            },
+            "outlines": {
+              "wallMs": 12.457000000003973,
+              "cpuMs": 32,
+              "calls": 30
+            },
+            "renderReady": {
+              "wallMs": 294.925900000002,
+              "cpuMs": 281,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 102.66839999999866,
+              "cpuMs": 109,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 1,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 86,
+          "cacheHits": 32,
+          "cacheMisses": 86,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 7988796,
+            "limit": 8388608,
+            "entries": 206,
+            "hits": 32,
+            "misses": 206,
+            "evictions": 0
+          },
+          "terrainCache": {
+            "bytes": 207368,
+            "limit": 524288,
+            "entries": 2,
+            "hits": 0,
+            "misses": 2,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 248877,
+            "limit": 524288,
+            "entries": 2,
+            "hits": 0,
+            "misses": 2,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": false,
+              "milliseconds": 1280.933100000002
+            }
+          },
+          "shaderCache": 6,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 270616200,
+            "external": 34492313,
+            "arrayBuffers": 24467394,
+            "rss": 470679552,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 3279.0267999999996,
+              "cpuMs": 2563,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 1235.673399999996,
+              "cpuMs": 704,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 1199.3335000000006,
+              "cpuMs": 642,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 86.82440000000133,
+              "cpuMs": 78,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 3765.1214999999975,
+              "cpuMs": 1735,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 87.49139999999898,
+              "cpuMs": 31,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 1543.8157000000174,
+              "cpuMs": 296,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 104.0447000000022,
+              "cpuMs": 64,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 1407.5610999999662,
+              "cpuMs": 986,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 178.78100000000632,
+              "cpuMs": 155,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 7.96460000001025,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 133.5427000000018,
+              "cpuMs": 140,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 115.58789999999863,
+              "cpuMs": 94,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 2,
+          "character": "warrior-v5",
+          "map": "witch-cave",
+          "initialLods": 16,
+          "modelImports": 16,
+          "actualDecodeCalls": 69,
+          "cacheHits": 4,
+          "cacheMisses": 69,
+          "cacheEvictions": 70,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 36,
+            "misses": 275,
+            "evictions": 70
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 0,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 0,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "witch-cave",
+              "hit": false,
+              "milliseconds": 1321.7091999999975
+            }
+          },
+          "shaderCache": 10,
+          "loaded": {
+            "meshes": 293,
+            "transforms": 299,
+            "materials": 29,
+            "textures": 6,
+            "geometries": 19,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 53,
+            "transforms": 1,
+            "materials": 12,
+            "textures": 6,
+            "geometries": 14,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 301563688,
+            "external": 40148689,
+            "arrayBuffers": 25557799,
+            "rss": 537726976,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 2467.2463000000025,
+              "cpuMs": 2344,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 1301.9995999999992,
+              "cpuMs": 1093,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 1261.4553000000014,
+              "cpuMs": 1047,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 8.13720000000103,
+              "cpuMs": 15,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 2265.489600000001,
+              "cpuMs": 969,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 186.27719999998953,
+              "cpuMs": 156,
+              "calls": 16
+            },
+            "import": {
+              "wallMs": 1091.0924000000123,
+              "cpuMs": 251,
+              "calls": 16
+            },
+            "materialBoundary": {
+              "wallMs": 41.147299999993265,
+              "cpuMs": 16,
+              "calls": 16
+            },
+            "instances": {
+              "wallMs": 300.2290000000103,
+              "cpuMs": 186,
+              "calls": 116
+            },
+            "occlusion": {
+              "wallMs": 0.02449999999953434,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "outlines": {
+              "wallMs": 2.9389999999948486,
+              "cpuMs": 0,
+              "calls": 16
+            },
+            "renderReady": {
+              "wallMs": 148.70829999999842,
+              "cpuMs": 62,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 9.417399999998452,
+              "cpuMs": 32,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 3,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 0,
+          "cacheHits": 118,
+          "cacheMisses": 0,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 154,
+            "misses": 275,
+            "evictions": 70
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 1,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 1,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": true,
+              "milliseconds": 239.36669999999867
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 243443880,
+            "external": 31707860,
+            "arrayBuffers": 24608624,
+            "rss": 511959040,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 331.22769999999946,
+              "cpuMs": 687,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 80.35279999999693,
+              "cpuMs": 94,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.1974000000009255,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 29.06159999999727,
+              "cpuMs": 15,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1789.332400000003,
+              "cpuMs": 1829,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 50.78900000001158,
+              "cpuMs": 31,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 59.11519999999291,
+              "cpuMs": 46,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 61.61860000000888,
+              "cpuMs": 140,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 1156.0647999999674,
+              "cpuMs": 1016,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 177.83959999995932,
+              "cpuMs": 235,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 4.024999999997817,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 61.284200000001874,
+              "cpuMs": 141,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 50.69710000000123,
+              "cpuMs": 62,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 4,
+          "character": "warrior-v3",
+          "map": "village",
+          "initialLods": 30,
+          "modelImports": 30,
+          "actualDecodeCalls": 84,
+          "cacheHits": 36,
+          "cacheMisses": 84,
+          "cacheEvictions": 72,
+          "cache": {
+            "bytes": 8345680,
+            "limit": 8388608,
+            "entries": 217,
+            "hits": 190,
+            "misses": 359,
+            "evictions": 142
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 2,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 2,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "village",
+              "hit": true,
+              "milliseconds": 24.454600000000937
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1441,
+            "transforms": 1397,
+            "materials": 37,
+            "textures": 4,
+            "geometries": 22,
+            "receivers": 49,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              33,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 307564736,
+            "external": 35599913,
+            "arrayBuffers": 27896925,
+            "rss": 527810560,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 42.805599999999686,
+              "cpuMs": 32,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 11.055799999998271,
+              "cpuMs": 16,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.025600000000849832,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 80.26670000000013,
+              "cpuMs": 172,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 2675.227600000002,
+              "cpuMs": 1577,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 169.8379000000059,
+              "cpuMs": 79,
+              "calls": 30
+            },
+            "import": {
+              "wallMs": 1062.0007999999907,
+              "cpuMs": 423,
+              "calls": 30
+            },
+            "materialBoundary": {
+              "wallMs": 81.13669999997364,
+              "cpuMs": 32,
+              "calls": 30
+            },
+            "instances": {
+              "wallMs": 940.4156000000803,
+              "cpuMs": 688,
+              "calls": 691
+            },
+            "occlusion": {
+              "wallMs": 81.78289999995104,
+              "cpuMs": 46,
+              "calls": 365
+            },
+            "outlines": {
+              "wallMs": 48.00689999999304,
+              "cpuMs": 15,
+              "calls": 30
+            },
+            "renderReady": {
+              "wallMs": 47.08550000000105,
+              "cpuMs": 47,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 28.26640000000043,
+              "cpuMs": 110,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 5,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 0,
+          "cacheHits": 118,
+          "cacheMisses": 0,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 8345680,
+            "limit": 8388608,
+            "entries": 217,
+            "hits": 308,
+            "misses": 359,
+            "evictions": 142
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 3,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 3,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": true,
+              "milliseconds": 65.94709999999759
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 378938560,
+            "external": 39795664,
+            "arrayBuffers": 29786164,
+            "rss": 605962240,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 87.46050000000105,
+              "cpuMs": 63,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 25.716300000007323,
+              "cpuMs": 16,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.03619999999500578,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 15.652600000001257,
+              "cpuMs": 15,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1668.7567999999956,
+              "cpuMs": 1640,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 90.10560000001715,
+              "cpuMs": 94,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 79.64090000002034,
+              "cpuMs": 63,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 49.61770000000979,
+              "cpuMs": 47,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 1044.3781000000017,
+              "cpuMs": 1125,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 107.96550000007846,
+              "cpuMs": 62,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 4.950500000006286,
+              "cpuMs": 16,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 49.981699999996636,
+              "cpuMs": 63,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 55.459600000001956,
+              "cpuMs": 62,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 6,
+          "character": "warrior-v5",
+          "map": "witch-cave",
+          "initialLods": 16,
+          "modelImports": 16,
+          "actualDecodeCalls": 69,
+          "cacheHits": 4,
+          "cacheMisses": 69,
+          "cacheEvictions": 81,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 312,
+            "misses": 428,
+            "evictions": 223
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 4,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 4,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "witch-cave",
+              "hit": true,
+              "milliseconds": 53.82870000000548
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 293,
+            "transforms": 299,
+            "materials": 29,
+            "textures": 6,
+            "geometries": 19,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 53,
+            "transforms": 1,
+            "materials": 12,
+            "textures": 6,
+            "geometries": 14,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 439211320,
+            "external": 48206305,
+            "arrayBuffers": 37202521,
+            "rss": 681324544,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 570.3770000000004,
+              "cpuMs": 563,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 21.445599999999104,
+              "cpuMs": 16,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.03080000000045402,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 2.336699999999837,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1638.6372999999949,
+              "cpuMs": 734,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 32.63579999999638,
+              "cpuMs": 47,
+              "calls": 16
+            },
+            "import": {
+              "wallMs": 1165.3824999999924,
+              "cpuMs": 327,
+              "calls": 16
+            },
+            "materialBoundary": {
+              "wallMs": 19.223499999985506,
+              "cpuMs": 16,
+              "calls": 16
+            },
+            "instances": {
+              "wallMs": 140.59820000000764,
+              "cpuMs": 93,
+              "calls": 116
+            },
+            "occlusion": {
+              "wallMs": 0.06320000000414439,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "outlines": {
+              "wallMs": 2.4778000000005704,
+              "cpuMs": 0,
+              "calls": 16
+            },
+            "renderReady": {
+              "wallMs": 55.59880000000703,
+              "cpuMs": 47,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 11.153299999998126,
+              "cpuMs": 0,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 7,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 0,
+          "cacheHits": 118,
+          "cacheMisses": 0,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 430,
+            "misses": 428,
+            "evictions": 223
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 5,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 5,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": true,
+              "milliseconds": 82.80270000000019
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 516002920,
+            "external": 52556341,
+            "arrayBuffers": 39751739,
+            "rss": 756391936,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 103.58370000000286,
+              "cpuMs": 125,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 48.90150000000722,
+              "cpuMs": 78,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.035199999998440035,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 37.69940000000497,
+              "cpuMs": 78,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1382.8092000000033,
+              "cpuMs": 1344,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 75.76010000002861,
+              "cpuMs": 93,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 46.46219999996538,
+              "cpuMs": 61,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 41.108500000002095,
+              "cpuMs": 31,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 917.5773000000117,
+              "cpuMs": 893,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 81.13230000015756,
+              "cpuMs": 157,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 4.470399999991059,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 34.03790000000299,
+              "cpuMs": 31,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 41.07430000000022,
+              "cpuMs": 47,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 8,
+          "character": "warrior-v3",
+          "map": "village",
+          "initialLods": 30,
+          "modelImports": 30,
+          "actualDecodeCalls": 84,
+          "cacheHits": 36,
+          "cacheMisses": 84,
+          "cacheEvictions": 72,
+          "cache": {
+            "bytes": 8345680,
+            "limit": 8388608,
+            "entries": 217,
+            "hits": 466,
+            "misses": 512,
+            "evictions": 295
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 6,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 6,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "village",
+              "hit": true,
+              "milliseconds": 29.02429999999731
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1441,
+            "transforms": 1397,
+            "materials": 37,
+            "textures": 4,
+            "geometries": 22,
+            "receivers": 49,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              33,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 273547440,
+            "external": 29805325,
+            "arrayBuffers": 24924403,
+            "rss": 757673984,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 47.87399999999616,
+              "cpuMs": 47,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 15.157500000001164,
+              "cpuMs": 32,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.029199999997217674,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 6.657200000001467,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 2011.2932999999975,
+              "cpuMs": 2204,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 69.00779999997758,
+              "cpuMs": 96,
+              "calls": 30
+            },
+            "import": {
+              "wallMs": 726.1467000000121,
+              "cpuMs": 813,
+              "calls": 30
+            },
+            "materialBoundary": {
+              "wallMs": 68.5680999999895,
+              "cpuMs": 61,
+              "calls": 30
+            },
+            "instances": {
+              "wallMs": 764.0780000000159,
+              "cpuMs": 702,
+              "calls": 691
+            },
+            "occlusion": {
+              "wallMs": 65.392399999997,
+              "cpuMs": 94,
+              "calls": 365
+            },
+            "outlines": {
+              "wallMs": 4.65650000001915,
+              "cpuMs": 16,
+              "calls": 30
+            },
+            "renderReady": {
+              "wallMs": 57.25920000000042,
+              "cpuMs": 15,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 40.66330000000016,
+              "cpuMs": 32,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 9,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 0,
+          "cacheHits": 118,
+          "cacheMisses": 0,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 8345680,
+            "limit": 8388608,
+            "entries": 217,
+            "hits": 584,
+            "misses": 512,
+            "evictions": 295
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 7,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 7,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": true,
+              "milliseconds": 120.35829999999987
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 347100056,
+            "external": 35252470,
+            "arrayBuffers": 28065036,
+            "rss": 757833728,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 175.43160000000353,
+              "cpuMs": 62,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 54.83400000000256,
+              "cpuMs": 15,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.03149999999732245,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 40.76340000000346,
+              "cpuMs": 94,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1445.2211000000025,
+              "cpuMs": 1515,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 56.98050000000512,
+              "cpuMs": 63,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 38.112600000000384,
+              "cpuMs": 79,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 44.535599999988335,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 997.046400000203,
+              "cpuMs": 1060,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 76.71850000004633,
+              "cpuMs": 110,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 3.9448999999876833,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 54.063600000001315,
+              "cpuMs": 62,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 54.67990000000282,
+              "cpuMs": 79,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 10,
+          "character": "warrior-v5",
+          "map": "witch-cave",
+          "initialLods": 16,
+          "modelImports": 16,
+          "actualDecodeCalls": 69,
+          "cacheHits": 4,
+          "cacheMisses": 69,
+          "cacheEvictions": 81,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 588,
+            "misses": 581,
+            "evictions": 376
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 8,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 8,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "witch-cave",
+              "hit": true,
+              "milliseconds": 30.810199999999895
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 293,
+            "transforms": 299,
+            "materials": 29,
+            "textures": 6,
+            "geometries": 19,
+            "receivers": 22,
+            "pending": 0,
+            "observers": [
+              3,
+              3,
+              22,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 53,
+            "transforms": 1,
+            "materials": 12,
+            "textures": 6,
+            "geometries": 14,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              2,
+              1,
+              5,
+              2,
+              2,
+              1,
+              1
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 401113952,
+            "external": 42077961,
+            "arrayBuffers": 33896243,
+            "rss": 786960384,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 532.5348000000013,
+              "cpuMs": 454,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 12.941500000000815,
+              "cpuMs": 31,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.02500000000145519,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 2.7370999999984633,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 822.2171000000017,
+              "cpuMs": 640,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 27.789099999994505,
+              "cpuMs": 46,
+              "calls": 16
+            },
+            "import": {
+              "wallMs": 406.30620000000636,
+              "cpuMs": 203,
+              "calls": 16
+            },
+            "materialBoundary": {
+              "wallMs": 19.57449999999517,
+              "cpuMs": 32,
+              "calls": 16
+            },
+            "instances": {
+              "wallMs": 147.63760000003822,
+              "cpuMs": 125,
+              "calls": 116
+            },
+            "occlusion": {
+              "wallMs": 0.015100000004167669,
+              "cpuMs": 0,
+              "calls": 1
+            },
+            "outlines": {
+              "wallMs": 3.7660000000032596,
+              "cpuMs": 16,
+              "calls": 16
+            },
+            "renderReady": {
+              "wallMs": 23.054799999998068,
+              "cpuMs": 31,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 6.627499999995052,
+              "cpuMs": 0,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 11,
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "initialLods": 26,
+          "modelImports": 26,
+          "actualDecodeCalls": 0,
+          "cacheHits": 118,
+          "cacheMisses": 0,
+          "cacheEvictions": 0,
+          "cache": {
+            "bytes": 8357146,
+            "limit": 8388608,
+            "entries": 205,
+            "hits": 706,
+            "misses": 581,
+            "evictions": 376
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 9,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 9,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "monster-forest",
+              "hit": true,
+              "milliseconds": 49.878399999994144
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1829,
+            "transforms": 1783,
+            "materials": 33,
+            "textures": 4,
+            "geometries": 5,
+            "receivers": 28,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              29,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 474930256,
+            "external": 44351335,
+            "arrayBuffers": 34368799,
+            "rss": 796516352,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 68.77680000000692,
+              "cpuMs": 63,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 29.80999999999767,
+              "cpuMs": 31,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.047299999998358544,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 31.81880000000092,
+              "cpuMs": 62,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1333.6322,
+              "cpuMs": 1204,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 71.46920000000682,
+              "cpuMs": 125,
+              "calls": 26
+            },
+            "import": {
+              "wallMs": 45.832599999986996,
+              "cpuMs": 32,
+              "calls": 26
+            },
+            "materialBoundary": {
+              "wallMs": 48.19099999998434,
+              "cpuMs": 48,
+              "calls": 26
+            },
+            "instances": {
+              "wallMs": 887.0652999999074,
+              "cpuMs": 798,
+              "calls": 890
+            },
+            "occlusion": {
+              "wallMs": 76.12299999998504,
+              "cpuMs": 31,
+              "calls": 1549
+            },
+            "outlines": {
+              "wallMs": 3.99740000001475,
+              "cpuMs": 0,
+              "calls": 26
+            },
+            "renderReady": {
+              "wallMs": 44.18289999999979,
+              "cpuMs": 47,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 49.30159999999887,
+              "cpuMs": 46,
+              "calls": 1
+            }
+          }
+        },
+        {
+          "index": 12,
+          "character": "warrior-v3",
+          "map": "village",
+          "initialLods": 30,
+          "modelImports": 30,
+          "actualDecodeCalls": 84,
+          "cacheHits": 36,
+          "cacheMisses": 84,
+          "cacheEvictions": 72,
+          "cache": {
+            "bytes": 8345680,
+            "limit": 8388608,
+            "entries": 217,
+            "hits": 742,
+            "misses": 665,
+            "evictions": 448
+          },
+          "terrainCache": {
+            "bytes": 356364,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 10,
+            "misses": 3,
+            "evictions": 0
+          },
+          "navigationCache": {
+            "bytes": 339659,
+            "limit": 524288,
+            "entries": 3,
+            "hits": 10,
+            "misses": 3,
+            "evictions": 0,
+            "last": {
+              "map": "village",
+              "hit": true,
+              "milliseconds": 28.878399999994144
+            }
+          },
+          "shaderCache": 11,
+          "loaded": {
+            "meshes": 1441,
+            "transforms": 1397,
+            "materials": 37,
+            "textures": 4,
+            "geometries": 22,
+            "receivers": 49,
+            "pending": 0,
+            "observers": [
+              1,
+              2,
+              33,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 2
+          },
+          "released": {
+            "meshes": 31,
+            "transforms": 1,
+            "materials": 6,
+            "textures": 4,
+            "geometries": 4,
+            "receivers": 1,
+            "pending": 0,
+            "observers": [
+              0,
+              0,
+              2,
+              0,
+              0,
+              0,
+              0
+            ],
+            "meshStages": 1
+          },
+          "memory": {
+            "heapUsed": 546031656,
+            "external": 51806124,
+            "arrayBuffers": 41219836,
+            "rss": 811192320,
+            "gcExposed": false
+          },
+          "timing": {
+            "replace": {
+              "wallMs": 45.70880000000034,
+              "cpuMs": 47,
+              "calls": 1
+            },
+            "navigation": {
+              "wallMs": 15.808799999998882,
+              "cpuMs": 16,
+              "calls": 2
+            },
+            "navigationBase": {
+              "wallMs": 0.026000000005296897,
+              "cpuMs": 0,
+              "calls": 2
+            },
+            "plan": {
+              "wallMs": 7.377599999999802,
+              "cpuMs": 16,
+              "calls": 1
+            },
+            "environment": {
+              "wallMs": 1350.9657000000007,
+              "cpuMs": 1328,
+              "calls": 1
+            },
+            "files": {
+              "wallMs": 53.5574000000197,
+              "cpuMs": 32,
+              "calls": 30
+            },
+            "import": {
+              "wallMs": 291.8481999999931,
+              "cpuMs": 482,
+              "calls": 30
+            },
+            "materialBoundary": {
+              "wallMs": 41.36010000000533,
+              "cpuMs": 16,
+              "calls": 30
+            },
+            "instances": {
+              "wallMs": 699.5931000000273,
+              "cpuMs": 561,
+              "calls": 691
+            },
+            "occlusion": {
+              "wallMs": 54.95709999999235,
+              "cpuMs": 63,
+              "calls": 365
+            },
+            "outlines": {
+              "wallMs": 3.383300000015879,
+              "cpuMs": 0,
+              "calls": 30
+            },
+            "renderReady": {
+              "wallMs": 26.450000000004366,
+              "cpuMs": 32,
+              "calls": 1
+            },
+            "release": {
+              "wallMs": 31.232199999998556,
+              "cpuMs": 31,
+              "calls": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "three-map-warm-then-existing-deferred-model-timeout-retry",
+      "passed": true,
+      "cachedMaps": 3,
+      "timeoutMs": 45000,
+      "manualRetries": 3,
+      "automaticRetries": 0,
+      "lateSourcePublications": 0,
+      "attempts": [
+        {
+          "map": "witch-cave",
+          "request": {
+            "id": "cave-01-eroded-wall",
+            "level": 1
+          },
+          "timeoutMs": 45000,
+          "manualRetries": 1,
+          "lateSourcePublications": 0,
+          "cacheAtFailure": {
+            "geometry": {
+              "bytes": 8386222,
+              "limit": 8388608,
+              "entries": 206,
+              "hits": 109,
+              "misses": 280,
+              "evictions": 71
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          },
+          "cacheAfter": {
+            "geometry": {
+              "bytes": 8388290,
+              "limit": 8388608,
+              "entries": 207,
+              "hits": 111,
+              "misses": 283,
+              "evictions": 73
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          }
+        },
+        {
+          "map": "monster-forest",
+          "request": {
+            "id": "forest-04-poison-fungi",
+            "level": 0
+          },
+          "timeoutMs": 45000,
+          "manualRetries": 1,
+          "lateSourcePublications": 0,
+          "cacheAtFailure": {
+            "geometry": {
+              "bytes": 8369730,
+              "limit": 8388608,
+              "entries": 207,
+              "hits": 229,
+              "misses": 288,
+              "evictions": 76
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          },
+          "cacheAfter": {
+            "geometry": {
+              "bytes": 8367686,
+              "limit": 8388608,
+              "entries": 207,
+              "hits": 232,
+              "misses": 290,
+              "evictions": 78
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          }
+        },
+        {
+          "map": "village",
+          "request": {
+            "id": "house-01-cottage",
+            "level": 0
+          },
+          "timeoutMs": 45000,
+          "manualRetries": 1,
+          "lateSourcePublications": 0,
+          "cacheAtFailure": {
+            "geometry": {
+              "bytes": 8369856,
+              "limit": 8388608,
+              "entries": 215,
+              "hits": 268,
+              "misses": 378,
+              "evictions": 157
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          },
+          "cacheAfter": {
+            "geometry": {
+              "bytes": 8377992,
+              "limit": 8388608,
+              "entries": 215,
+              "hits": 271,
+              "misses": 379,
+              "evictions": 158
+            },
+            "textures": {
+              "bytes": 0,
+              "limit": 25165824,
+              "entries": 0,
+              "hits": 0,
+              "misses": 0,
+              "evictions": 0
+            }
+          }
+        }
+      ],
+      "limitation": "Actual streaming.load is invoked explicitly for each deferred tier; this validates the real loader retry boundary, not the map-transition UI (tested separately). A real pinned decode result is held at its response boundary, not an actual hung browser worker."
+    }
+  ],
+  "runtimeSourceHashes": {
+    "world.js": "de1f39952ccf17862610aaca505d9d757594aa88c2735c279053bb6c390dbf4a",
+    "village-streamed-environment.js": "71901a6989041133a2ffc8e412f9a8175b165f1e34e33a94c5dd8f750cb2db60",
+    "map-container.js": "e49afda47573cb864e752874cc49ec26e9d85fb9014a97fb457d196005f787a2",
+    "map-decode-cache.js": "712b16b9fe9c56e97615c1397fdfb1b52ea12c15fcd3d449ba386eb83074546d",
+    "map-terrain-cache.js": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100",
+    "meshopt-worker-supervisor.js": "263b875b332d97bd67df54d32eb351d95e8c04f303c29669d4a4e162e468b784",
+    "navigation.js": "fa60c92087ff2cc7f5abb4fc0b817131eda8c6909720a5629ca63d515f915adf",
+    "village-navigation.js": "ec2ba9d407a5a57396c0c9c8cf2c77361006d04bf747c2402d25607596ead0b0",
+    "map-navigation-cache.js": "4171d062c546a706af34f71e806758f80496f77a1b89efb6909408a660985544"
+  },
+  "sourceFilesChangedDuringRun": [],
+  "limits": [
+    "Actual shipped Meshopt bytes, current Babylon EXT/AssetContainer/geometry-cache/streamed lifecycle, and pinned decoder/WASM in a Node worker are exercised.",
+    "All texture image decoding/upload, sky image and live player images are excluded; the 8K player and <=4K environment profiles/LOD definitions are checked, with a retained player anchor.",
+    "PBR material and image-ready boundaries are explicit NullEngine substitutions. No actual WebGL shader compilation, mobile GPU memory, phone FPS, temperature or browser cache/network latency claim.",
+    "Wall and process CPU time belong to this local Node/NullEngine harness; stage metrics overlap and must not be summed blindly. ArenaNavigation.grid time is nested in VillageNavigation.grid and replace time. Heap/RSS are Node figures, not browser/device RAM. GC availability is recorded and resource/cache plateaus are the hard bounds."
+  ],
+  "browserAutomation": false,
+  "runtimeSourceChanges": 0
+}

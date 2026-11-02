@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "status": "PASS",
+  "readOnlyRuntime": true,
+  "sourceHashes": {
+    "src/map-navigation-cache.js": "4171d062c546a706af34f71e806758f80496f77a1b89efb6909408a660985544",
+    "src/world.js": "de1f39952ccf17862610aaca505d9d757594aa88c2735c279053bb6c390dbf4a",
+    "src/main.js": "3069703d173a869f79df6e0df0fde5e5051be2dfe569e32488364c6c4a5edee0",
+    "src/navigation.js": "fa60c92087ff2cc7f5abb4fc0b817131eda8c6909720a5629ca63d515f915adf",
+    "src/village-navigation.js": "ec2ba9d407a5a57396c0c9c8cf2c77361006d04bf747c2402d25607596ead0b0",
+    "src/witch-cave-navigation.js": "7f22e6454689f94e854e94b6ce343e3d35416133e960b55d31907d4d9bc3e645",
+    "tests/map-navigation-cache.test.js": "01999374e4c615fd53669c0353f9103f29ba7f93129efc5761940060ba196946",
+    "tests/startup-frame-failure.test.js": "5fb76f0cf08dc941a15b437450bbcbb40dea0d5a3023dbd234b43bb614904c28"
+  },
+  "verification": {
+    "command": "node --test tests/map-navigation-cache.test.js tests/startup-frame-failure.test.js",
+    "passed": 23,
+    "failed": 0,
+    "log": "main-navigation-tests.log",
+    "navigationCases": 4,
+    "mainCases": 19,
+    "actualThreeMaps": {
+      "retainedBytes": 339659,
+      "byteLimit": 524288,
+      "entries": 3,
+      "misses": 3,
+      "hits": 6,
+      "evictions": 0,
+      "comparison": "Entire restored node arrays including free bits, ordered [next,cost] edges and coordinates, reconstructed connected components and selected full-grid paths are hashed against first uncached navigator results."
+    },
+    "finalGuardRetest": {
+      "passed": 4,
+      "failed": 0,
+      "log": "main-navigation-final.log",
+      "guard": "Any own constructor/grid/free/segmentClear/clearanceAt property bypasses both snapshot reads and writes. Old entry is removed, current navigator builds normal grids; own free callback regression asserts retained entries0."
+    }
+  },
+  "checks": {
+    "signature": "Exact UTF-8 bytes of JSON obstacles/radii/limit plus constructor/grid/free/segmentClear/clearanceAt identity. Current three authored navigator implementations have no additional per-instance mutable grid dependency.",
+    "semantics": "Grid coordinates/step/node order and8neighbour order/cost match ArenaNavigation.grid. Village component metadata is freshly computed when navigation.grid receives restored nodes. Analytic free/sweep/segmentClear methods stay on the new navigator; no physical collision result is replaced.",
+    "ownership": "Snapshots keep only typed bits, numeric grid descriptors, UTF-8 signature and prototype method identities. Nodes/edge arrays are rebuilt per navigator and caller mutation cannot change retained bits. Current hooks are unbound prototype methods and do not capture a scene/world. Final own-method bypass prevents the new pool retaining per-instance bound/free callbacks.",
+    "budget": "Three entries and339659payload bytes in actual authored maps;512KiB payload cap includes grid arrays and signature. Changed signature replaces old entry; oversize and noncanonical grid bypass; engine disposal empties the WeakMap-owned pool.",
+    "integration": "Both createWorld and replaceWorldMap call warmMapNavigation after selecting actual map/obstacles and setting world-limit globals. Main adds only navigation-cache diagnostics; all actual callback repeat/retry tests remain passing."
+  },
+  "newConfirmedRuntimeDefects": [],
+  "notes": [
+    "Byte cap is the encoded typed-array/signature payload, not an exact browser-JS heap total; small Map/object/function-reference overhead remains.",
+    "No browser/mobile GPU, real phone RAM or thermal measurement. No runtime source edits, asset generation, build or deployment.",
+    "Future non-authored prototype implementations with extra mutable grid inputs still require extending invalidation/eligibility. Current authored classes use signed obstacles and fixed imported clearance fields."
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "visits": [
+    {
+      "map": "village",
+      "totalMs": 333.1023,
+      "gridMs": 219.8445999999999,
+      "gridCalls": 2
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 755.9936000000002,
+      "gridMs": 179.59000000000015,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900
+    },
+    {
+      "map": "witch-cave",
+      "totalMs": 567.9136000000003,
+      "gridMs": 264.0439000000001,
+      "gridCalls": 2,
+      "nodes": [
+        38809,
+        38809
+      ],
+      "compactBytes": 155236
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 163.79620000000023,
+      "gridMs": 142.18409999999994,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900
+    },
+    {
+      "map": "village",
+      "totalMs": 197.5365999999999,
+      "gridMs": 188.05340000000024,
+      "gridCalls": 2,
+      "nodes": [
+        16129,
+        16129
+      ],
+      "compactBytes": 64516
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 135.23559999999998,
+      "gridMs": 122.79239999999982,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900
+    },
+    {
+      "map": "witch-cave",
+      "totalMs": 134.14959999999974,
+      "gridMs": 51.49559999999974,
+      "gridCalls": 2,
+      "nodes": [
+        38809,
+        38809
+      ],
+      "compactBytes": 155236
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 137.02459999999974,
+      "gridMs": 123.6202000000003,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900
+    },
+    {
+      "map": "village",
+      "totalMs": 205.9345999999996,
+      "gridMs": 196.78949999999895,
+      "gridCalls": 2,
+      "nodes": [
+        16129,
+        16129
+      ],
+      "compactBytes": 64516
+    }
+  ],
+  "limits": "Node/NullEngine CPU only. No phone, image decode, browser, GPU or end-to-end map loading measurement."
+}

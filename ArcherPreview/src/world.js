@@ -20,6 +20,7 @@ import {createWitchCaveTerrain} from './witch-cave-terrain.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
 import {configureCaveAtmosphere} from './witch-cave-atmosphere.js';
 import {cachedMapTerrain} from './map-terrain-cache.js';
+import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 const caveTrainingSpawn={x:-39,z:39};
@@ -122,8 +123,8 @@ export function createWorld(engine, {village=false,forest=false,cave=false,warri
   const navigation=mapNavigation({cave,forest,village});
   // Build immutable obstacle grids during initial loading, not on the first
   // combat frame when a bear or goblin needs to route around a tree.
-  navigation.grid(.34,ENEMY_ARENA_RADIUS);navigation.grid(.7,ENEMY_ARENA_RADIUS);
   const mapId=cave?'witch-cave':forest?'monster-forest':village?'village':'training';
+  warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS);
   const world={ground,forest,cave,mapId,environmentManifest:cave?'witch-cave':forest?'monster-forest':'village',groundManifest:cave?'witch-cave-ground':forest?'monster-forest-ground':'village-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);}};
@@ -143,7 +144,7 @@ export function replaceWorldMap(world,character){
   Object.assign(world,{forest,cave,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:cave?caveTrainingSpawn:null,environment:null});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
-  world.navigation.grid(.34,ENEMY_ARENA_RADIUS);world.navigation.grid(.7,ENEMY_ARENA_RADIUS);
+  warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
   world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:SCENERY_VIEW_DISTANCE});
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;

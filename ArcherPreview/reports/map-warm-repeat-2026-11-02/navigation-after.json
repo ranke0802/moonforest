@@ -1,0 +1,203 @@
+{
+  "visits": [
+    {
+      "map": "village",
+      "totalMs": 413.79830000000015,
+      "gridMs": 262.90520000000015,
+      "gridCalls": 2
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 897.4445000000001,
+      "gridMs": 201.92110000000002,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900,
+      "cache": {
+        "bytes": 248877,
+        "limit": 524288,
+        "entries": 2,
+        "hits": 0,
+        "misses": 2,
+        "evictions": 0,
+        "last": {
+          "map": "monster-forest",
+          "hit": false,
+          "milliseconds": 221.88009999999986
+        }
+      }
+    },
+    {
+      "map": "witch-cave",
+      "totalMs": 755.1491999999998,
+      "gridMs": 386.1189999999997,
+      "gridCalls": 2,
+      "nodes": [
+        38809,
+        38809
+      ],
+      "compactBytes": 155236,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 0,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "witch-cave",
+          "hit": false,
+          "milliseconds": 397.7026000000001
+        }
+      }
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 52.58640000000014,
+      "gridMs": 0.02889999999979409,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 1,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "monster-forest",
+          "hit": true,
+          "milliseconds": 34.14579999999978
+        }
+      }
+    },
+    {
+      "map": "village",
+      "totalMs": 21.39519999999993,
+      "gridMs": 0.018400000000383443,
+      "gridCalls": 2,
+      "nodes": [
+        16129,
+        16129
+      ],
+      "compactBytes": 64516,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 2,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "village",
+          "hit": true,
+          "milliseconds": 12.792500000000018
+        }
+      }
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 29.16440000000057,
+      "gridMs": 0.013699999999971624,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 3,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "monster-forest",
+          "hit": true,
+          "milliseconds": 21.146600000000035
+        }
+      }
+    },
+    {
+      "map": "witch-cave",
+      "totalMs": 161.692,
+      "gridMs": 0.011999999999716238,
+      "gridCalls": 2,
+      "nodes": [
+        38809,
+        38809
+      ],
+      "compactBytes": 155236,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 4,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "witch-cave",
+          "hit": true,
+          "milliseconds": 15.552400000000489
+        }
+      }
+    },
+    {
+      "map": "monster-forest",
+      "totalMs": 36.39170000000013,
+      "gridMs": 0.011700000000928412,
+      "gridCalls": 2,
+      "nodes": [
+        27225,
+        27225
+      ],
+      "compactBytes": 108900,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 5,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "monster-forest",
+          "hit": true,
+          "milliseconds": 26.190700000000106
+        }
+      }
+    },
+    {
+      "map": "village",
+      "totalMs": 18.84769999999935,
+      "gridMs": 0.007999999999810825,
+      "gridCalls": 2,
+      "nodes": [
+        16129,
+        16129
+      ],
+      "compactBytes": 64516,
+      "cache": {
+        "bytes": 339659,
+        "limit": 524288,
+        "entries": 3,
+        "hits": 6,
+        "misses": 3,
+        "evictions": 0,
+        "last": {
+          "map": "village",
+          "hit": true,
+          "milliseconds": 10.508700000000317
+        }
+      }
+    }
+  ],
+  "limits": "Node/NullEngine CPU only. No phone, image decode, browser, GPU or end-to-end map loading measurement."
+}

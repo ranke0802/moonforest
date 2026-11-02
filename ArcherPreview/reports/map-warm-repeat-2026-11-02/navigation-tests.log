@@ -1,0 +1,14 @@
+BJS - [11:33:43]: Babylon.js v9.31.0 - Null engine
+✔ three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget (2061.5234ms)
+ℹ {"bytes":339659,"limit":524288,"entries":3,"hits":6,"misses":3,"evictions":0,"last":{"map":"village","hit":true,"milliseconds":9.7820999999999}}
+✔ changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned (9.1717ms)
+✔ repeated signatures do not grow the pool and oversized maps retain no snapshot (41.6382ms)
+✔ noncanonical edge layouts bypass the compact cache without changing the navigator result (5.9008ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3782.9729
