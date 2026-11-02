@@ -1,0 +1,29 @@
+{
+  "before": {
+    "boundActualCaveMask": true,
+    "ready": true
+  },
+  "after": [
+    {
+      "ready": true,
+      "blockers": [],
+      "retainsDisposedMask": false
+    },
+    {
+      "ready": true,
+      "blockers": [],
+      "retainsDisposedMask": false
+    },
+    {
+      "ready": true,
+      "blockers": [],
+      "retainsDisposedMask": false
+    },
+    {
+      "ready": true,
+      "blockers": [],
+      "retainsDisposedMask": false
+    }
+  ],
+  "limitation": "Actual Babylon material/readiness/render callbacks, NullEngine instead of browser GPU. No manual sampler rebind after disposal."
+}

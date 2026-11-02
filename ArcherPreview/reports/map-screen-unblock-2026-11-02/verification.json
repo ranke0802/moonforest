@@ -1,0 +1,89 @@
+{
+  "status": "VERIFIED_BEFORE_DEPLOYMENT",
+  "base": "f32eb853fd8d37b8c72ada8a306daf0683ee891c",
+  "tests": {
+    "tests": 1073,
+    "pass": 1073,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "deviceEvidence": {
+    "source": "User diagnostic copy, 2026-11-02T04:32:43.917Z; selected fields preserved verbatim, not a new device test",
+    "bundle": "./assets/index-Aq-NslP2.js",
+    "character": "warrior-v4",
+    "touchDevice": false,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+    "loading": {
+      "setupMs": 362.09999990463257,
+      "downloadMs": 400.90000009536743,
+      "modelMs": 1114.5,
+      "screenMs": 45045.09999990463,
+      "totalMs": 46922.59999990463,
+      "bytes": 0,
+      "cachedBytes": 7234360,
+      "failedPhase": "screen"
+    },
+    "blockers": [
+      "Bunnyguard_Shield / silhouette",
+      "Golden_Oathblade / silhouette"
+    ],
+    "material": "moonforest-character-outline",
+    "ktxWorker": {
+      "queued": 0,
+      "active": null,
+      "completed": 50,
+      "failed": 0,
+      "workerFaults": 0
+    },
+    "meshoptWorker": {
+      "queued": 0,
+      "active": null,
+      "completed": 4092,
+      "failed": 0,
+      "workerFaults": 0
+    },
+    "interpretation": "This reported transfer was blocked by screen readiness, not transfer bandwidth or an outstanding decoder. The measured pre-screen stages total 1877.5ms. Fixed device end-to-end latency is not yet measured."
+  },
+  "regression": {
+    "originalReproduced": true,
+    "fixedReady": true,
+    "screenCases": 5,
+    "otherEvidence": {
+      "main-validation": {
+        "passed": true,
+        "path": "main-validation.json"
+      },
+      "three-way-validation": {
+        "passed": true,
+        "path": "three-way-validation.json"
+      },
+      "decoder-repeat-validation": {
+        "passed": true,
+        "path": "decoder-repeat-validation.json"
+      }
+    }
+  },
+  "resourceIndexIdentical": true,
+  "resourceRevision": "8a9f21b377274b1b90643e0293f27b300212c9e3f7b08b1cfca0b4ff6ccb149d",
+  "resourceFiles": 1037,
+  "bundles": 194,
+  "preservation": {
+    "playerMax": 8192,
+    "backgroundMax": 4096,
+    "lod": true,
+    "newAssets": false,
+    "browserAutomation": false
+  },
+  "sourceHashes": {
+    "src/cave-fog-runtime.js": "19ec8fed4868b9f706c9c9e8a5d5eab06453f8b17eaa04691f1e5a165f73f07c",
+    "src/map-transition.js": "ac505bb83f0d72b8757bd811439b4a1b7ee84f9b90b858bc96ab60327c9cfc4a",
+    "src/scene-ready.js": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1",
+    "src/character-outlines.js": "0b1c81511b0966d60ee8c087a0a2efcaa18502b2e3ca233f6afea002d2582ad4"
+  },
+  "limitations": [
+    "User-supplied failed transfer was desktop Chrome, not a new S23 measurement.",
+    "Actual SDK models, rig, outlines and lifecycle are exercised with NullEngine and controlled texture/GPU boundaries.",
+    "No physical browser/GPU/phone time or temperature measurement. The supplied successful pre-screen stages total1877.5ms; final patched device latency remains unmeasured."
+  ]
+}

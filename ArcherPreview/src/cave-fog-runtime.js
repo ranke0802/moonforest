@@ -4,7 +4,7 @@ import {CAVE_FOG_GLSL,CAVE_FOG_COVER_FRAGMENT} from './cave-fog-cover.js';
 import {caveSurface} from './witch-cave-layout.js';
 import {playerDimensions} from './player-dimensions.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
-import {caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
+import {bindCaveFogMaterial,caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_ROCK_GLSL,bindCaveRock,buildCaveRockShell,caveRockTexture} from './cave-rock-shell.js';
 
 const fogFunctions=CAVE_FOG_GLSL.replace('uniform vec4 caveFogRect;','').replace('uniform float caveFogActive;','');
@@ -42,7 +42,7 @@ export class CaveFogRuntime {
     this.world=world;this.fog=new CaveFogOfWar({...options,isOpaque,memory,mapKey:'witch-cave'});this.rect=new Vector4(this.fog.minX,this.fog.minZ,this.fog.cols*this.fog.cellSize,this.fog.rows*this.fog.cellSize);
     this.texture=new RawTexture(this.fog.rgba,this.fog.cols,this.fog.rows,Constants.TEXTUREFORMAT_RGBA,world.scene,false,false,Texture.BILINEAR_SAMPLINGMODE,Constants.TEXTURETYPE_UNSIGNED_BYTE);
     this.texture.name='cave-player-visibility';this.texture.wrapU=this.texture.wrapV=Texture.CLAMP_ADDRESSMODE;this.texture.gammaSpace=false;
-    this.plugins=new Set();this.materials=new WeakSet();this.materialDisposals=new Map();this.recordMeshes=new WeakSet();this.hidden=new Map();this.hiddenOverlays=new Set();this.owned=new Set();this.shadowScratch=[];this.shadowOriginal=null;this.encounters=[];this.time=0;this.disposed=false;this.patches=[];this.dynamic=[];this.inventoryDirty=true;this.materialDirty=true;this.meshCount=-1;this.materialCount=-1;
+    this.plugins=new Set();this.materials=new WeakSet();this.materialDisposals=new Map();this.shaderDisposals=new Map();this.recordMeshes=new WeakSet();this.hidden=new Map();this.hiddenOverlays=new Set();this.owned=new Set();this.shadowScratch=[];this.shadowOriginal=null;this.encounters=[];this.time=0;this.disposed=false;this.patches=[];this.dynamic=[];this.inventoryDirty=true;this.materialDirty=true;this.meshCount=-1;this.materialCount=-1;
     this.stats={uploads:0,hiddenRecords:0,hiddenMeshes:0,hiddenShadowCasters:0,detailPatches:0,coverPatches:0,coverDraws:0,coverTriangles:0,distanceHiddenCoverPatches:0};
     this.coverDistanceCulling=coverDistanceCulling;this.coverDistanceEye=new Float64Array(3).fill(NaN);
     this.playerView=new Vector4(0,0,0,0);this.bossView=new Vector4(0,0,0,0);
@@ -64,6 +64,11 @@ export class CaveFogRuntime {
     this.materialDisposals.set(material,material.onDisposeObservable.addOnce(()=>{this.plugins.delete(plugin);this.materialDisposals.delete(material);}));
   }
   bind(material,effect=null){
+    if(this.disposed){bindCaveFogMaterial(this.world.scene,material,effect);return;}
+    // Retained player/boss ShaderMaterials test their samplers BEFORE onBind.
+    // Replace our mask during teardown, not on the next draw: an unready
+    // disposed sampler would prevent that next draw and its repair callback.
+    if(!this.shaderDisposals.has(material))this.shaderDisposals.set(material,material.onDisposeObservable?.addOnce(()=>this.shaderDisposals.delete(material)));
     const active=!this.disposed&&this.fog.ready?1:0;
     material.setTexture('caveFogMap',this.texture);material.setVector4('caveFogRect',this.rect);material.setFloat('caveFogActive',active);
     material.setVector4('cavePlayerView',this.playerView);material.setVector4('caveBossView',this.bossView);
@@ -174,6 +179,12 @@ export class CaveFogRuntime {
     for(const p of this.patches){p.source.isInFrustum=p.sourceCull;p.source.render=p.sourceRender;}
     for(const plugin of this.plugins)if(plugin.runtime===this)plugin.runtime=null;this.plugins.clear();
     for(const [material,observer]of this.materialDisposals)material.onDisposeObservable.remove(observer);this.materialDisposals.clear();
+    for(const [material,observer]of this.shaderDisposals){
+      material.onDisposeObservable?.remove(observer);
+      // Do not overwrite a sampler already handed to a newer map owner.
+      if(!scene.isDisposed&&material._textures?.caveFogMap===this.texture)bindCaveFogMaterial(scene,material);
+    }
+    this.shaderDisposals.clear();
     this.cover?.dispose();this.coverMaterial?.dispose();this.texture.dispose();this.fog.dispose();
     if(scene.clearColor===this.clearColor)scene.clearColor=this.previousClearColor;
     if(scene.metadata?.caveFogRuntime===this)scene.metadata.caveFogRuntime=null;

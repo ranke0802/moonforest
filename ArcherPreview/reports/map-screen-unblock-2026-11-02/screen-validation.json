@@ -1,0 +1,302 @@
+{
+  "base": "f32eb85",
+  "passed": true,
+  "cases": [
+    {
+      "case": "reported-shield-sword-stale-mask",
+      "passed": true,
+      "blockers": []
+    },
+    {
+      "case": "shipped-player-mask-lifecycle",
+      "passed": true,
+      "cycles": [
+        {
+          "cycle": 1,
+          "outdoorReadyMs": 9.79110000000037,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 2,
+          "outdoorReadyMs": 8.278399999999237,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 3,
+          "outdoorReadyMs": 7.5385000000005675,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 4,
+          "outdoorReadyMs": 10.768200000000434,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 5,
+          "outdoorReadyMs": 5.720099999998638,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 6,
+          "outdoorReadyMs": 6.825400000001537,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 7,
+          "outdoorReadyMs": 3.2965000000003783,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 8,
+          "outdoorReadyMs": 12.69340000000011,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 9,
+          "outdoorReadyMs": 3.8249999999989086,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 10,
+          "outdoorReadyMs": 3.50669999999991,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 11,
+          "outdoorReadyMs": 3.2378000000007887,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        },
+        {
+          "cycle": 12,
+          "outdoorReadyMs": 3.2507000000005064,
+          "cave": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 2,
+            "pending": 0,
+            "before": 1,
+            "after": 1
+          },
+          "outdoor": {
+            "meshes": 36,
+            "materials": 2,
+            "textures": 1,
+            "pending": 0,
+            "before": 0,
+            "after": 0
+          }
+        }
+      ],
+      "model": "./content/e7cfa26e517bdd6cd3588727adf7fa21577b022c718c3713c83fbaf2c1a53b94.gltf",
+      "modelHash": "e7cfa26e517bdd6cd3588727adf7fa21577b022c718c3713c83fbaf2c1a53b94",
+      "plateaus": {
+        "cave": {
+          "meshes": 36,
+          "materials": 2,
+          "textures": 2,
+          "pending": 0,
+          "before": 1,
+          "after": 1
+        },
+        "outdoor": {
+          "meshes": 36,
+          "materials": 2,
+          "textures": 1,
+          "pending": 0,
+          "before": 0,
+          "after": 0
+        }
+      },
+      "limits": "Actual geometry, weights, idle and outlines; original texture images/GPU upload replaced with an unlit material in NullEngine. These wall times are not device load times."
+    },
+    {
+      "case": "hidden-pool-and-observer-lifetime",
+      "passed": true
+    },
+    {
+      "case": "late-old-map-bind",
+      "passed": true
+    },
+    {
+      "case": "screen-timeout-explicit-retry",
+      "passed": true,
+      "attempts": 2,
+      "automaticRetries": 0
+    }
+  ],
+  "sourceHashes": {
+    "cave-fog-runtime.js": "19ec8fed4868b9f706c9c9e8a5d5eab06453f8b17eaa04691f1e5a165f73f07c",
+    "map-transition.js": "ac505bb83f0d72b8757bd811439b4a1b7ee84f9b90b858bc96ab60327c9cfc4a",
+    "scene-ready.js": "e08ccb9522f976d43a0019ead79af986d12470df737aa6e1a88b37f84e1214a1"
+  },
+  "browserAutomation": false,
+  "limits": [
+    "NullEngine and controlled asynchronous boundaries; no actual device GPU, WebGL image output or mobile end-to-end timing measurement.",
+    "Scene/resource/observer plateaus are bounded ownership evidence, not a promise about immediate OS/GPU memory reclamation."
+  ]
+}

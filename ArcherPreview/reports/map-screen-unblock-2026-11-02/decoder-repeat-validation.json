@@ -1,0 +1,1063 @@
+{
+  "base": "82b0d02",
+  "fixture": "Controlled WebWorker IPC with exact KTX SDK init-message protocol; production owned supervisor/lifetime code and actual Babylon texture/engine ownership. Fake deterministic clock, no repeated WASM or browser.",
+  "cyclesPerCodec": 20,
+  "cases": {
+    "ktx": {
+      "kind": "ktx",
+      "cycles": [
+        {
+          "cycle": 1,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 1,
+            "terminated": 1,
+            "completed": 3,
+            "failed": 0,
+            "cancelled": 0,
+            "recoveries": 0,
+            "workerFaults": 0
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 1000
+        },
+        {
+          "cycle": 2,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 3,
+            "terminated": 3,
+            "completed": 4,
+            "failed": 2,
+            "cancelled": 0,
+            "recoveries": 1,
+            "workerFaults": 1
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 47000
+        },
+        {
+          "cycle": 3,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 5,
+            "terminated": 5,
+            "completed": 5,
+            "failed": 4,
+            "cancelled": 0,
+            "recoveries": 2,
+            "workerFaults": 2
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 48000
+        },
+        {
+          "cycle": 4,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 7,
+            "terminated": 7,
+            "completed": 6,
+            "failed": 6,
+            "cancelled": 0,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 94000
+        },
+        {
+          "cycle": 5,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 9,
+            "terminated": 9,
+            "completed": 7,
+            "failed": 6,
+            "cancelled": 3,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 95000
+        },
+        {
+          "cycle": 6,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 10,
+            "terminated": 10,
+            "completed": 10,
+            "failed": 6,
+            "cancelled": 3,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 96000
+        },
+        {
+          "cycle": 7,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 12,
+            "terminated": 12,
+            "completed": 11,
+            "failed": 8,
+            "cancelled": 3,
+            "recoveries": 4,
+            "workerFaults": 4
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 142000
+        },
+        {
+          "cycle": 8,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 14,
+            "terminated": 14,
+            "completed": 12,
+            "failed": 10,
+            "cancelled": 3,
+            "recoveries": 5,
+            "workerFaults": 5
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 143000
+        },
+        {
+          "cycle": 9,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 16,
+            "terminated": 16,
+            "completed": 13,
+            "failed": 12,
+            "cancelled": 3,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 189000
+        },
+        {
+          "cycle": 10,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 18,
+            "terminated": 18,
+            "completed": 14,
+            "failed": 12,
+            "cancelled": 6,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 190000
+        },
+        {
+          "cycle": 11,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 19,
+            "terminated": 19,
+            "completed": 17,
+            "failed": 12,
+            "cancelled": 6,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 191000
+        },
+        {
+          "cycle": 12,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 21,
+            "terminated": 21,
+            "completed": 18,
+            "failed": 14,
+            "cancelled": 6,
+            "recoveries": 7,
+            "workerFaults": 7
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 237000
+        },
+        {
+          "cycle": 13,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 23,
+            "terminated": 23,
+            "completed": 19,
+            "failed": 16,
+            "cancelled": 6,
+            "recoveries": 8,
+            "workerFaults": 8
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 238000
+        },
+        {
+          "cycle": 14,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 25,
+            "terminated": 25,
+            "completed": 20,
+            "failed": 18,
+            "cancelled": 6,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 284000
+        },
+        {
+          "cycle": 15,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 27,
+            "terminated": 27,
+            "completed": 21,
+            "failed": 18,
+            "cancelled": 9,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 285000
+        },
+        {
+          "cycle": 16,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 28,
+            "terminated": 28,
+            "completed": 24,
+            "failed": 18,
+            "cancelled": 9,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 286000
+        },
+        {
+          "cycle": 17,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 30,
+            "terminated": 30,
+            "completed": 25,
+            "failed": 20,
+            "cancelled": 9,
+            "recoveries": 10,
+            "workerFaults": 10
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 332000
+        },
+        {
+          "cycle": 18,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 32,
+            "terminated": 32,
+            "completed": 26,
+            "failed": 22,
+            "cancelled": 9,
+            "recoveries": 11,
+            "workerFaults": 11
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 333000
+        },
+        {
+          "cycle": 19,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 34,
+            "terminated": 34,
+            "completed": 27,
+            "failed": 24,
+            "cancelled": 9,
+            "recoveries": 12,
+            "workerFaults": 12
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 379000
+        },
+        {
+          "cycle": 20,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 36,
+            "terminated": 36,
+            "completed": 28,
+            "failed": 24,
+            "cancelled": 12,
+            "recoveries": 12,
+            "workerFaults": 12
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 380000
+        }
+      ],
+      "passed": true,
+      "final": {
+        "liveWorkers": 0,
+        "listeners": 0,
+        "timers": 0,
+        "queued": 0,
+        "active": 0,
+        "engineObservers": 0,
+        "pendingSceneTokens": 0,
+        "retainedInputRefs": 0
+      },
+      "counts": {
+        "created": 36,
+        "terminated": 36,
+        "completed": 28,
+        "failed": 24,
+        "cancelled": 12,
+        "recoveries": 12,
+        "workerFaults": 12
+      },
+      "peakWorkers": 1,
+      "peakTimers": 3,
+      "allRetiredWorkerListenersBalanced": true,
+      "noWasmRepetition": true
+    },
+    "meshopt": {
+      "kind": "meshopt",
+      "cycles": [
+        {
+          "cycle": 1,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 1,
+            "terminated": 1,
+            "completed": 3,
+            "failed": 0,
+            "recoveries": 0,
+            "workerFaults": 0
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 1000
+        },
+        {
+          "cycle": 2,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 3,
+            "terminated": 3,
+            "completed": 4,
+            "failed": 2,
+            "recoveries": 1,
+            "workerFaults": 1
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 47000
+        },
+        {
+          "cycle": 3,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 5,
+            "terminated": 5,
+            "completed": 5,
+            "failed": 4,
+            "recoveries": 2,
+            "workerFaults": 2
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 48000
+        },
+        {
+          "cycle": 4,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 7,
+            "terminated": 7,
+            "completed": 6,
+            "failed": 6,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 94000
+        },
+        {
+          "cycle": 5,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 8,
+            "terminated": 8,
+            "completed": 8,
+            "failed": 6,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 95000
+        },
+        {
+          "cycle": 6,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 9,
+            "terminated": 9,
+            "completed": 11,
+            "failed": 6,
+            "recoveries": 3,
+            "workerFaults": 3
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 96000
+        },
+        {
+          "cycle": 7,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 11,
+            "terminated": 11,
+            "completed": 12,
+            "failed": 8,
+            "recoveries": 4,
+            "workerFaults": 4
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 142000
+        },
+        {
+          "cycle": 8,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 13,
+            "terminated": 13,
+            "completed": 13,
+            "failed": 10,
+            "recoveries": 5,
+            "workerFaults": 5
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 143000
+        },
+        {
+          "cycle": 9,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 15,
+            "terminated": 15,
+            "completed": 14,
+            "failed": 12,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 189000
+        },
+        {
+          "cycle": 10,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 16,
+            "terminated": 16,
+            "completed": 16,
+            "failed": 12,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 190000
+        },
+        {
+          "cycle": 11,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 17,
+            "terminated": 17,
+            "completed": 19,
+            "failed": 12,
+            "recoveries": 6,
+            "workerFaults": 6
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 191000
+        },
+        {
+          "cycle": 12,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 19,
+            "terminated": 19,
+            "completed": 20,
+            "failed": 14,
+            "recoveries": 7,
+            "workerFaults": 7
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 237000
+        },
+        {
+          "cycle": 13,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 21,
+            "terminated": 21,
+            "completed": 21,
+            "failed": 16,
+            "recoveries": 8,
+            "workerFaults": 8
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 238000
+        },
+        {
+          "cycle": 14,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 23,
+            "terminated": 23,
+            "completed": 22,
+            "failed": 18,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 284000
+        },
+        {
+          "cycle": 15,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 24,
+            "terminated": 24,
+            "completed": 24,
+            "failed": 18,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 285000
+        },
+        {
+          "cycle": 16,
+          "scenario": "normal-queue",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 25,
+            "terminated": 25,
+            "completed": 27,
+            "failed": 18,
+            "recoveries": 9,
+            "workerFaults": 9
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 286000
+        },
+        {
+          "cycle": 17,
+          "scenario": "init-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 27,
+            "terminated": 27,
+            "completed": 28,
+            "failed": 20,
+            "recoveries": 10,
+            "workerFaults": 10
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 332000
+        },
+        {
+          "cycle": 18,
+          "scenario": "fatal-active",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 29,
+            "terminated": 29,
+            "completed": 29,
+            "failed": 22,
+            "recoveries": 11,
+            "workerFaults": 11
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 333000
+        },
+        {
+          "cycle": 19,
+          "scenario": "decode-timeout",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 31,
+            "terminated": 31,
+            "completed": 30,
+            "failed": 24,
+            "recoveries": 12,
+            "workerFaults": 12
+          },
+          "workersCreatedThisCycle": 2,
+          "virtualTimeMs": 379000
+        },
+        {
+          "cycle": 20,
+          "scenario": "abandon-drain",
+          "snapshot": {
+            "liveWorkers": 0,
+            "listeners": 0,
+            "timers": 0,
+            "queued": 0,
+            "active": 0,
+            "engineObservers": 0,
+            "pendingSceneTokens": 0,
+            "retainedInputRefs": 0
+          },
+          "counts": {
+            "created": 32,
+            "terminated": 32,
+            "completed": 32,
+            "failed": 24,
+            "recoveries": 12,
+            "workerFaults": 12
+          },
+          "workersCreatedThisCycle": 1,
+          "virtualTimeMs": 380000
+        }
+      ],
+      "passed": true,
+      "final": {
+        "liveWorkers": 0,
+        "listeners": 0,
+        "timers": 0,
+        "queued": 0,
+        "active": 0,
+        "engineObservers": 0,
+        "pendingSceneTokens": 0,
+        "retainedInputRefs": 0
+      },
+      "counts": {
+        "created": 32,
+        "terminated": 32,
+        "completed": 32,
+        "failed": 24,
+        "recoveries": 12,
+        "workerFaults": 12
+      },
+      "peakWorkers": 1,
+      "peakTimers": 6,
+      "allRetiredWorkerListenersBalanced": true,
+      "noWasmRepetition": true
+    }
+  },
+  "sourceBefore": {
+    "ktx-worker-supervisor.js": "12feaa6619a522313cfc67e9ebecb63d01c895bacdaa2fe4a2291df4b0179ba6",
+    "meshopt-worker-supervisor.js": "60136804bba7f7a44da40b41e39dd2adeae7e0db65fb2fde1f4e0c7d28399d6a",
+    "map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+    "map-load-lifetime.js": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d"
+  },
+  "limitations": [
+    "No physical worker scheduling, GPU texture uploads, device heap/temperature or real-network measurements.",
+    "Worker history is intentionally retained by the test fixture for listener audits; this is not a JS heap-retention benchmark.",
+    "Previous pinned WASM byte-identity evidence is not rerun here."
+  ],
+  "sourceAfter": {
+    "ktx-worker-supervisor.js": "12feaa6619a522313cfc67e9ebecb63d01c895bacdaa2fe4a2291df4b0179ba6",
+    "meshopt-worker-supervisor.js": "60136804bba7f7a44da40b41e39dd2adeae7e0db65fb2fde1f4e0c7d28399d6a",
+    "map-texture-lifetime.js": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+    "map-load-lifetime.js": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d"
+  },
+  "runtimeSourceUnchanged": true,
+  "passed": true
+}

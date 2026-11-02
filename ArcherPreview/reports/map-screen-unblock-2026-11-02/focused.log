@@ -1,0 +1,114 @@
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+[Map transition] Error [TimeoutError]: 맵 모델 준비 시간이 초과되었습니다.
+    at Object.failNextModel (file:///C:/dev/moonforest-archer/ArcherPreview/tests/cave-portal-facing.test.js:101:147)
+    at TestContext.<anonymous> (file:///C:/dev/moonforest-archer/ArcherPreview/tests/cave-portal-facing.test.js:107:5)
+    at Test.runInAsyncScope (node:async_hooks:227:14)
+    at Test.run (node:internal/test_runner/test:1382:25)
+    at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    at Test.postRun (node:internal/test_runner/test:1522:19)
+    at Test.run (node:internal/test_runner/test:1447:12)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+  code: 'MAP_MODEL_TIMEOUT',
+  timeoutMs: 45000
+}
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+[Map transition] Error [TimeoutError]: 맵 모델 준비 시간이 초과되었습니다.
+    at Object.failNextModel (file:///C:/dev/moonforest-archer/ArcherPreview/tests/cave-portal-facing.test.js:101:147)
+    at TestContext.<anonymous> (file:///C:/dev/moonforest-archer/ArcherPreview/tests/cave-portal-facing.test.js:107:5)
+    at async Test.run (node:internal/test_runner/test:1389:7)
+    at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+  code: 'MAP_MODEL_TIMEOUT',
+  timeoutMs: 45000
+}
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:53]: Babylon.js v9.31.0 - Null engine
+✔ actual forest and cave portal corridors require opposite 45 degree turns (1.7047ms)
+✔ routed pose rotates actor, camera and world pan together and repeated cave trips do not drift (11.3125ms)
+✔ village route and legacy callers keep the established half turn; disconnected selections keep their pose (0.578ms)
+✔ normal travel URLs remove Elena review presets without changing the direct review URL (0.7996ms)
+✔ manual retry after a model timeout keeps the already-carried camera and player pose instead of rotating twice (38.5151ms)
+✔ actual main forest/cave round trips use source direction and keep rear view, health, equipment and fullscreen (15.8704ms)
+✔ direct cave review remains available, but leaving it disables staging before ordinary return (5.6535ms)
+✔ actual main disconnected map selection does not apply a fabricated portal half turn (6.9114ms)
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+✔ ktx:20mixed failure/manual-recovery/normal/drain cycles leave no worker listeners timers or queues (1429.4932ms)
+✔ meshopt:20mixed failure/manual-recovery/normal/drain cycles leave no worker listeners timers or queues (1562.7016ms)
+BJS - [13:38:51]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:51]: Babylon.js v9.31.0 - Null engine
+✔ actual shield/sword draw callbacks survive cave exit without a manual sampler repair or skipped readiness check (65.4936ms)
+BJS - [13:38:52]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:38:52]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:38:52]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:52]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:52]: Babylon.js v9.31.0 - Null engine
+✔ shipped player geometry/rig/idle and both weapon outlines remain ready across 12 cave outdoor cycles (486.34ms)
+✔ removed and hidden pooled shader materials release mask references and do not accumulate disposal observers (12.7941ms)
+✔ late old fog callbacks cannot restore an old mask or overwrite a newer owner (11.0542ms)
+✔ a genuine screen timeout remains finite, reports retryable state, then an explicit map retry restores live outline readiness (46.0804ms)
+BJS - [13:38:52]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:53]: PBRMaterial: Normals have been created for the mesh: forest-mountain-backdrop
+BJS - [13:39:00]: Babylon.js v9.31.0 - Null engine
+✔ three bidirectional village/forest/cave tours retain exact owned-resource plateaus and bounded caches with real compressed model workers (8116.8631ms)
+ℹ {"case":"three-map-normal-bidirectional-repeat","passed":true,"visits":13,"roundTrips":3,"modelImports":324,"uniqueModels":63,"decodeCalls":665,"decodedBytes":25104894,"physicalWorkersCreated":1,"worker":{"status":"ready","maxWorkers":1,"totalAwaitTimeoutMs":45000,"queueTimeoutMs":45000,"initTimeoutMs":45000,"decodeTimeoutMs":45000,"idleReleaseMs":1000,"queued":0,"active":null,"counts":{"created":1,"terminated":1,"completed":665,"failed":0,"recoveries":0,"workerFaults":0},"lastFailure":null,"lastCompleted":{"id":665,"stage":"decode","bytes":15941,"queueMs":0.22369999999864376,"initMs":0,"decodeMs":0.05309999999917636,"totalMs":0.2768999999989319}},"cache":{"geometry":{"bytes":8345680,"limit":8388608,"entries":217,"hits":742,"misses":665,"evictions":448},"textures":{"bytes":0,"limit":25165824,"entries":0,"hits":0,"misses":0,"evictions":0}},"resourcePlateaus":{"village":{"meshes":1441,"transforms":1397,"materials":37,"textures":4,"geometries":22,"receivers":49,"pending":0,"observers":[1,2,33,0,0,0,0],"meshStages":2},"monster-forest":{"meshes":1829,"transforms":1783,"materials":33,"textures":4,"geometries":5,"receivers":28,"pending":0,"observers":[1,2,29,0,0,0,0],"meshStages":2},"witch-cave":{"meshes":293,"transforms":299,"materials":29,"textures":6,"geometries":19,"receivers":22,"pending":0,"observers":[3,3,22,2,2,1,1],"meshStages":2}},"releasedPlateaus":{"village":{"meshes":31,"transforms":1,"materials":6,"textures":4,"geometries":4,"receivers":1,"pending":0,"observers":[0,0,2,0,0,0,0],"meshStages":1},"monster-forest":{"meshes":31,"transforms":1,"materials":6,"textures":4,"geometries":4,"receivers":1,"pending":0,"observers":[0,0,2,0,0,0,0],"meshStages":1},"witch-cave":{"meshes":53,"transforms":1,"materials":12,"textures":6,"geometries":14,"receivers":1,"pending":0,"observers":[2,1,5,2,2,1,1],"meshStages":1}},"weakReferenceObservations":{"gcExposed":false,"reachableVisits":{"prepared":[11,12],"source":[11,12],"navigation":[12]},"notes":"WeakRef/GC observations are supporting evidence, not a cross-browser collection guarantee. Final visit locals may remain in the active test frame; the current navigator is intentionally owned by the world."},"memoryBeforeWorkerIdle":{"heapUsed":270773352,"external":28299373,"arrayBuffers":34528002,"rss":984854528,"gcExposed":false},"quiescentWorkerWaitMs":1100,"finalMemory":{"heapUsed":270832680,"external":28299373,"arrayBuffers":21084975,"rss":964521984,"gcExposed":false},"measurements":[{"map":"village","lods":30,"decodes":120,"hits":0,"evictions":0,"wallMs":{"replace":0,"navigation":0,"navigationBase":0,"plan":46,"environment":595,"import":122,"instances":233,"outlines":2,"occlusion":39,"release":15}},{"map":"monster-forest","lods":26,"decodes":86,"hits":32,"evictions":0,"wallMs":{"replace":716,"navigation":155,"navigationBase":145,"plan":8,"environment":372,"import":43,"instances":211,"outlines":1,"occlusion":23,"release":18}},{"map":"witch-cave","lods":16,"decodes":69,"hits":4,"evictions":70,"wallMs":{"replace":500,"navigation":245,"navigationBase":241,"plan":3,"environment":164,"import":23,"instances":35,"outlines":1,"occlusion":0,"release":3}},{"map":"monster-forest","lods":26,"decodes":0,"hits":118,"evictions":0,"wallMs":{"replace":31,"navigation":14,"navigationBase":0,"plan":4,"environment":320,"import":11,"instances":208,"outlines":1,"occlusion":23,"release":41}},{"map":"village","lods":30,"decodes":84,"hits":36,"evictions":72,"wallMs":{"replace":19,"navigation":6,"navigationBase":0,"plan":3,"environment":347,"import":52,"instances":167,"outlines":2,"occlusion":26,"release":22}},{"map":"monster-forest","lods":26,"decodes":0,"hits":118,"evictions":0,"wallMs":{"replace":28,"navigation":12,"navigationBase":0,"plan":14,"environment":403,"import":13,"instances":265,"outlines":1,"occlusion":30,"release":12}},{"map":"witch-cave","lods":16,"decodes":69,"hits":4,"evictions":81,"wallMs":{"replace":115,"navigation":2,"navigationBase":0,"plan":1,"environment":118,"import":23,"instances":28,"outlines":1,"occlusion":0,"release":2}},{"map":"monster-forest","lods":26,"decodes":0,"hits":118,"evictions":0,"wallMs":{"replace":20,"navigation":6,"navigationBase":0,"plan":8,"environment":310,"import":11,"instances":209,"outlines":1,"occlusion":22,"release":13}},{"map":"village","lods":30,"decodes":84,"hits":36,"evictions":72,"wallMs":{"replace":13,"navigation":3,"navigationBase":0,"plan":3,"environment":314,"import":54,"instances":158,"outlines":1,"occlusion":18,"release":8}},{"map":"monster-forest","lods":26,"decodes":0,"hits":118,"evictions":0,"wallMs":{"replace":24,"navigation":7,"navigationBase":0,"plan":12,"environment":315,"import":10,"instances":208,"outlines":1,"occlusion":30,"release":11}},{"map":"witch-cave","lods":16,"decodes":69,"hits":4,"evictions":81,"wallMs":{"replace":99,"navigation":2,"navigationBase":0,"plan":1,"environment":114,"import":23,"instances":29,"outlines":1,"occlusion":0,"release":2}},{"map":"monster-forest","lods":26,"decodes":0,"hits":118,"evictions":0,"wallMs":{"replace":22,"navigation":6,"navigationBase":0,"plan":3,"environment":317,"import":10,"instances":210,"outlines":1,"occlusion":22,"release":10}},{"map":"village","lods":30,"decodes":84,"hits":36,"evictions":72,"wallMs":{"replace":26,"navigation":7,"navigationBase":0,"plan":6,"environment":329,"import":61,"instances":155,"outlines":1,"occlusion":24,"release":9}}]}
+✔ cached village/forest/cave each survive an actual deferred-LOD timeout, explicit retry and late original decode result (2935.9ms)
+✔ transition diagnostics show the actual pending stage and elapsed time without touching callbacks or graphics (3.2152ms)
+✔ failed release releases busy but keeps its error until explicit successful-reload recovery (0.4245ms)
+✔ failed load releases busy but keeps its error until explicit successful-reload recovery (0.1794ms)
+✔ failed finish releases busy but keeps its error until explicit successful-reload recovery (0.1507ms)
+✔ only explicit retries reuse the failed destination, preserve timeout diagnostics and reject duplicate requests (3.0011ms)
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+✔ the original error requires an uninitialized WebGL pipeline uniform table, not a missing Effect (3.8102ms)
+✔ village fallback queues values through 200 pending-variant frames without any uniform/texture GPU write (11.6827ms)
+✔ ready effects receive explicit live binds while default calls and disposed-ready effects remain queue-only (2.2168ms)
+✔ fog activation, pending replacement variants and eight cave round trips never bind the previous mask or pipeline (26.1122ms)
+✔ the actual village before-render observer can see a pending shared shader without binding it (13.5481ms)
+✔ the real village draw stage and character onBind update the current ready Effect during their first fogged draw (56.5275ms)
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+BJS - [13:38:49]: Babylon.js v9.31.0 - Null engine
+✔ actual SDK global readiness checks a disabled boss, while scoped readiness ignores its unsubmitted material and unrelated pending token (38.3979ms)
+✔ an unused failed/pending engine program cannot fail a ready camera frame, but a required visible failure names its mesh/material (6.7576ms)
+✔ visible geometry/material wait is finite, retains exact hot-swapping state and reports current blocker on timeout (5.4416ms)
+✔ only selected LOD is checked and an intentional null LOD remains unsubmitted (5.2117ms)
+✔ enabled instances still check their rendering source while a disabled source or unrelated parent stays unsubmitted (14.0318ms)
+✔ FoW-hidden and off-camera objects are omitted while active shadow casters remain required, with render-pass state restored (10.6094ms)
+✔ current custom instanced outline is checked and matches a selected base draw without enabling hidden sources (14.4067ms)
+✔ camera postprocess readiness stays required and names the camera (4.4854ms)
+✔ actual main startup failure during model stays failed; retry DOM starts a successful new generation (48.3214ms)
+✔ actual main startup failure during scene stays failed; retry DOM starts a successful new generation (14.3683ms)
+✔ actual main startup failure during first-raf stays failed; retry DOM starts a successful new generation (10.6519ms)
+✔ actual main startup failure during second-raf stays failed; retry DOM starts a successful new generation (8.5519ms)
+✔ actual map callbacks preserve a frame failure during map-download (10.7154ms)
+✔ actual map callbacks preserve a frame failure during scene (7.7833ms)
+✔ actual map callbacks preserve a frame failure during second-raf (7.3833ms)
+✔ actual main release failure remains paused until explicit reload succeeds; return travel then works (9.6507ms)
+✔ actual main map-download failure remains paused until explicit reload succeeds; return travel then works (13.2912ms)
+✔ actual main finish failure remains paused until explicit reload succeeds; return travel then works (10.6103ms)
+✔ actual loading view keeps the runtime error latched until an explicit new begin (4.7733ms)
+✔ actual map release timeout offers same-destination manual retry without reloading the player (13.0687ms)
+✔ actual map map-model timeout offers same-destination manual retry without reloading the player (12.2398ms)
+✔ actual map map-download timeout offers same-destination manual retry without reloading the player (12.8559ms)
+✔ actual forest transition prepares map while bounded sky work is pending, revealing only after both finish (6.4047ms)
+✔ actual main callbacks complete48 warm three-map transfers without player, camera or callback ownership growth (34.3972ms)
+✔ actual main repeated45s stage timeouts and double-click manual retries cannot let late old completion reveal a new map (69.3755ms)
+✔ actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop (28.731ms)
+✔ actual main frame failure/reload12times releases previous player wrappers and never accumulates a second input/render generation (41.9623ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 55
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16549.7922

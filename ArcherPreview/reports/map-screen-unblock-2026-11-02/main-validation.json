@@ -1,0 +1,1232 @@
+{
+  "mainSourceSha256": "7ecc948d8b0d0fd53e1b2d974c6cb05080aa0be153b63bf260c927a0beb16cc4",
+  "scope": "Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.",
+  "expectedCases": 19,
+  "completedCases": 19,
+  "success": true,
+  "results": [
+    {
+      "kind": "startup",
+      "stage": "model",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "scene",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "first-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "startup",
+      "stage": "second-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      },
+      "retry": {
+        "ready": true,
+        "loading": false,
+        "failed": false,
+        "running": true,
+        "frameError": null
+      },
+      "retryViaActualDom": true
+    },
+    {
+      "kind": "map-transition",
+      "stage": "map-download",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-transition",
+      "stage": "scene",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-transition",
+      "stage": "second-raf",
+      "failure": {
+        "ready": false,
+        "loading": false,
+        "failed": true,
+        "running": false,
+        "frameError": "_uniforms[e] is undefined"
+      }
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "release",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": false,
+      "returnTravel": true
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "map-download",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": false,
+      "returnTravel": true
+    },
+    {
+      "kind": "map-explicit-recovery",
+      "stage": "finish",
+      "busyLatchReleased": true,
+      "errorLatchUntilSuccessfulReload": true,
+      "hiddenReloadPolicy": true,
+      "returnTravel": true
+    },
+    {
+      "kind": "loading-view",
+      "errorLatch": true,
+      "explicitBeginResetsLatch": true
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "release",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "map-model",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    },
+    {
+      "kind": "map-timeout-manual-retry",
+      "stage": "map-download",
+      "sameDestination": true,
+      "playerIdentityAndResourcesPreserved": true,
+      "automaticRetries": 0,
+      "manualRetries": 1
+    },
+    {
+      "kind": "overlapped-sky-and-map-preparation",
+      "mapPreparedBeforeSky": true,
+      "curtainUntilBothReady": true,
+      "playerIdentityAndResourcesPreserved": true
+    },
+    {
+      "kind": "warm-three-map-repeat",
+      "trips": 48,
+      "trace": [
+        {
+          "trip": 1,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 2,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 3,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 4,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 5,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 6,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 7,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 8,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 9,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 10,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 11,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 12,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 13,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 14,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 15,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 16,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 17,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 18,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 19,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 20,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 21,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 22,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 23,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 24,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 25,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 26,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 27,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 28,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 29,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 30,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 31,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 32,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 33,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 34,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 35,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 36,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 37,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 38,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 39,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 40,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 41,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 42,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 43,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 44,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 45,
+          "character": "warrior-v3",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 46,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 47,
+          "character": "warrior-v5",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "trip": 48,
+          "character": "warrior-v4",
+          "phase": "complete",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        }
+      ],
+      "assetBoundary": "Resolved injected cached asset readiness; cache/network bytes are verified by separate resource tests, not this main-callback fixture."
+    },
+    {
+      "kind": "main-timeout-retry-late-owner-repeat",
+      "attempts": 12,
+      "trace": [
+        {
+          "attempt": 1,
+          "stage": "release",
+          "timeoutMs": 45000,
+          "manualRetryCount": 1,
+          "lateResultsDisposed": 1,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 2,
+          "stage": "map-download",
+          "timeoutMs": 45000,
+          "manualRetryCount": 2,
+          "lateResultsDisposed": 2,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 3,
+          "stage": "map-model",
+          "timeoutMs": 45000,
+          "manualRetryCount": 3,
+          "lateResultsDisposed": 3,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 4,
+          "stage": "scene",
+          "timeoutMs": 45000,
+          "manualRetryCount": 4,
+          "lateResultsDisposed": 4,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 5,
+          "stage": "release",
+          "timeoutMs": 45000,
+          "manualRetryCount": 5,
+          "lateResultsDisposed": 5,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 6,
+          "stage": "map-download",
+          "timeoutMs": 45000,
+          "manualRetryCount": 6,
+          "lateResultsDisposed": 6,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 7,
+          "stage": "map-model",
+          "timeoutMs": 45000,
+          "manualRetryCount": 7,
+          "lateResultsDisposed": 7,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 8,
+          "stage": "scene",
+          "timeoutMs": 45000,
+          "manualRetryCount": 8,
+          "lateResultsDisposed": 8,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 9,
+          "stage": "release",
+          "timeoutMs": 45000,
+          "manualRetryCount": 9,
+          "lateResultsDisposed": 9,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 10,
+          "stage": "map-download",
+          "timeoutMs": 45000,
+          "manualRetryCount": 10,
+          "lateResultsDisposed": 10,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 11,
+          "stage": "map-model",
+          "timeoutMs": 45000,
+          "manualRetryCount": 11,
+          "lateResultsDisposed": 11,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        },
+        {
+          "attempt": 12,
+          "stage": "scene",
+          "timeoutMs": 45000,
+          "manualRetryCount": 12,
+          "lateResultsDisposed": 12,
+          "pendingTimers": 0,
+          "lifetimeListeners": 0
+        }
+      ],
+      "lateIsolationBoundary": "Actual MapLoadLifetime wraps a controlled old asset producer. GLTF/worker-specific late ownership is covered separately; this test verifies actual main callbacks/UI/RAF cannot be resumed by the abandoned Promise."
+    },
+    {
+      "kind": "main-repeated-pause-return",
+      "trips": 18,
+      "trace": [
+        {
+          "trip": 1,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 2,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 3,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 4,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 5,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 6,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 7,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 8,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 9,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 10,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 11,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 12,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 13,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 14,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 15,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 16,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 17,
+          "pausedBy": "document-hidden",
+          "callbacksAfterResume": 1
+        },
+        {
+          "trip": 18,
+          "pausedBy": "diagnostic-dialog",
+          "callbacksAfterResume": 1
+        }
+      ]
+    },
+    {
+      "kind": "main-frame-error-reload-repeat",
+      "retries": 12,
+      "trace": [
+        {
+          "iteration": 1,
+          "stage": "model",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 2,
+          "stage": "scene",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 3,
+          "stage": "first-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 4,
+          "stage": "second-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 5,
+          "stage": "model",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 6,
+          "stage": "scene",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 7,
+          "stage": "first-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 8,
+          "stage": "second-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 9,
+          "stage": "model",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 10,
+          "stage": "scene",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 11,
+          "stage": "first-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        },
+        {
+          "iteration": 12,
+          "stage": "second-raf",
+          "owned": {
+            "actors": 1,
+            "animators": 1,
+            "equipment": 1,
+            "containers": 1,
+            "lifetimeListeners": 0
+          },
+          "callbacks": 1,
+          "listeners": 1
+        }
+      ]
+    }
+  ],
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "limitations": "Deterministic CPU/DOM async-interleaving tests. Ownership counters track the controlled player/asset/DOM/RAF fixture, not real device JS/GPU heap. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement."
+}

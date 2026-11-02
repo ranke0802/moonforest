@@ -1,0 +1,22 @@
+{
+  "source": "User diagnostic copy, 2026-11-02T04:32:43.917Z; selected fields preserved verbatim, not a new device test",
+  "bundle": "./assets/index-Aq-NslP2.js",
+  "character": "warrior-v4",
+  "touchDevice": false,
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+  "loading": {
+    "setupMs": 362.09999990463257,
+    "downloadMs": 400.90000009536743,
+    "modelMs": 1114.5,
+    "screenMs": 45045.09999990463,
+    "totalMs": 46922.59999990463,
+    "bytes": 0,
+    "cachedBytes": 7234360,
+    "failedPhase": "screen"
+  },
+  "blockers": ["Bunnyguard_Shield / silhouette", "Golden_Oathblade / silhouette"],
+  "material": "moonforest-character-outline",
+  "ktxWorker": {"queued": 0, "active": null, "completed": 50, "failed": 0, "workerFaults": 0},
+  "meshoptWorker": {"queued": 0, "active": null, "completed": 4092, "failed": 0, "workerFaults": 0},
+  "interpretation": "This reported transfer was blocked by screen readiness, not transfer bandwidth or an outstanding decoder. The measured pre-screen stages total 1877.5ms. Fixed device end-to-end latency is not yet measured."
+}
