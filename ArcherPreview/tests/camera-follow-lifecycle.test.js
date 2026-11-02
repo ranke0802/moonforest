@@ -71,7 +71,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   motionSpeedControls:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),document:doc,location,history,innerWidth:852,console,
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;
+  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;const uiTest=null,uiTestEnabled=false;
   let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null;const attackSources=new Set(),mapDeparture=null;
   const villageOverview=false,villageHorizon=false;
   const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4';

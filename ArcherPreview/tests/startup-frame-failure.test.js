@@ -83,7 +83,7 @@ function fixture(){
   replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':'village';w.cave=w.mapId==='cave';w.environment={};},
  };
  const runtime=Function(...Object.keys(dependencies),`
-  let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,resumePose=null;
+  const uiTest=null,uiTestEnabled=false,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,resumePose=null;
   let config=null,container=null,actor=null,animator=null,controller=null,equipment=null,maxInfluences=0;
   let arrowNode,arrowMesh,reviewFocus,playerHead,shieldNode,swordNode,combatResult=null,shotTarget=null,shotActionId=null,hiddenArrowForAction=null,mapPortal=null;
   const villageReview=null,villageReviewEnabled=false,villageOverview=false,mapDeparture=null,attackSources=new Set(),elapsed=0,qualityMode='high',VertexBuffer={MatricesWeightsExtraKind:'unused'};

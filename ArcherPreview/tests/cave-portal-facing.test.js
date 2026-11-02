@@ -93,7 +93,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  };
  const runtime=Function(...Object.keys(boundary),`
   let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
-  const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
+  const uiTest=null,uiTestEnabled=false;const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
   const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4';
   ${leaveSource}\n${reviewSource}\n${mapSource}
   return {get transition(){return mapTransition;},prepareElenaReview,snapshot(){return {character,elenaReviewMode,reviewActive:!!elenaReview,ready,loadingAsset,equipment,orientation};}};

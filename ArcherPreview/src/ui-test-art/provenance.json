@@ -1,0 +1,105 @@
+{
+  "source": "MOONFOREST_모바일_가로전체화면.html",
+  "purpose": "UI test only; reused user-supplied art",
+  "images": [
+    {
+      "file": "dialogue.webp",
+      "sourceBytes": 1906036,
+      "bytes": 139420,
+      "size": [
+        1280,
+        720
+      ]
+    },
+    {
+      "file": "panel.webp",
+      "sourceBytes": 3421848,
+      "bytes": 214490,
+      "size": [
+        1024,
+        576
+      ]
+    },
+    {
+      "file": "paper.webp",
+      "sourceBytes": 2782634,
+      "bytes": 103498,
+      "size": [
+        768,
+        576
+      ]
+    },
+    {
+      "file": "button.webp",
+      "sourceBytes": 2063917,
+      "bytes": 84598,
+      "size": [
+        512,
+        768
+      ]
+    },
+    {
+      "file": "round.webp",
+      "sourceBytes": 2134524,
+      "bytes": 60618,
+      "size": [
+        768,
+        256
+      ]
+    },
+    {
+      "file": "pie.webp",
+      "sourceBytes": 1978569,
+      "bytes": 19868,
+      "size": [
+        384,
+        256
+      ]
+    },
+    {
+      "file": "apple.webp",
+      "sourceBytes": 1552386,
+      "bytes": 11980,
+      "size": [
+        384,
+        351
+      ]
+    },
+    {
+      "file": "bandage.webp",
+      "sourceBytes": 1850907,
+      "bytes": 12128,
+      "size": [
+        384,
+        307
+      ]
+    },
+    {
+      "file": "sword.webp",
+      "sourceBytes": 1022785,
+      "bytes": 3850,
+      "size": [
+        256,
+        384
+      ]
+    },
+    {
+      "file": "crest.webp",
+      "sourceBytes": 1310944,
+      "bytes": 16790,
+      "size": [
+        192,
+        192
+      ]
+    },
+    {
+      "file": "icons.webp",
+      "sourceBytes": 2382039,
+      "bytes": 123312,
+      "size": [
+        768,
+        512
+      ]
+    }
+  ]
+}

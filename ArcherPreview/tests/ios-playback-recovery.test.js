@@ -23,7 +23,7 @@ const renderSource=main.slice(main.indexOf('function render(dt)'),main.indexOf('
 function evaluate(source,env){return Function('env','with(env){return ('+source+');}')(env);}
 function playback(){
  let wall=0;const queued=new Set(),engine={runRenderLoop:fn=>queued.add(fn),stopRenderLoop:fn=>queued.delete(fn),getFps:()=>30,getRenderWidth:()=>780,getRenderHeight:()=>1688},nodes=Object.fromEntries(['help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog'].map(id=>[id,{open:false}]));
- const state={document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
+ const state={uiTest:null,document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
  const loop=state.frameLoop=new FrameLoop(engine,()=>{},()=>wall);state.syncPlayback=evaluate(syncSource,state);state.reconcilePlayback=state.syncPlayback;
  return {state,loop,queued,nodes,wake:evaluate(wakeSource,state),restore:evaluate(restoreSource,state),time:t=>wall=t,tick:t=>{wall=t;for(const fn of [...queued])fn();}};
 }
