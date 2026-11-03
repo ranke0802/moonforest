@@ -9,13 +9,15 @@ import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
 import {configureOutdoorVista} from './outdoor-vista.js';
 import { createVillageTerrain } from './village-terrain.js';
-import { villageObstacles } from './village-layout.js';
+import { VILLAGE_PLACEMENTS,villageObstacles } from './village-layout.js';
 import { VillageNavigation } from './village-navigation.js';
 import { villageRenderRange } from './village-policy.js';
 
 import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
 import {createMonsterForestTerrain} from './monster-forest-terrain.js';
 import {PLAINS_PLACEMENTS,plainsObstacles} from './great-plains-layout.js';
+import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
+import {villageOutskirtsSkirtHeight} from './village-outskirts-skirt.js';
 import {createGreatPlainsTerrain} from './great-plains-terrain.js';
 import {configurePlainsDecor} from './great-plains-decor.js';
 import {retainMapEffect} from './map-shader-cache.js';
@@ -27,6 +29,7 @@ import {cachedMapTerrain} from './map-terrain-cache.js';
 import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
+const villageWithOutskirts=Object.freeze([...VILLAGE_PLACEMENTS,...VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS]);
 const caveTrainingSpawn={x:-39,z:39};
 // Cover the 240% desktop fog end from the playable rim plus the normal maximum
 // camera radius. Only stretch the non-playable outer ring; add no triangles.
@@ -83,7 +86,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   configureOutdoorVista({mountains,sky,lighting,camera},{village,plains});
 
   const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
-  const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE});
+  const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE,borderHeight:village&&!plains&&!forest&&!cave?villageOutskirtsSkirtHeight:null});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
   material.specularColor = new Color3(.03, .04, .05);
@@ -132,7 +135,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   // combat frame when a bear or goblin needs to route around a tree.
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':village?'village':'training';
   warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS);
-  const world={ground,forest,cave,plains,mapId,environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
+  const world={ground,forest,cave,plains,mapId,environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);}};
   world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);configurePlainsDecor(world);return world;
@@ -148,12 +151,12 @@ export function replaceWorldMap(world,character){
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
-  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
+  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
   configureOutdoorVista(world,{village:true,plains});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
-  world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE});
+  world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE,borderHeight:!plains&&!forest&&!cave?villageOutskirtsSkirtHeight:null});
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;
   world.ground.isPickable=false;world.ground.freezeWorldMatrix();world.lighting.registerMeshes([world.ground]);

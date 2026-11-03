@@ -3,17 +3,20 @@ import {isSoftVegetation} from './scenery-collision-policy.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
 import {villageHeight} from './village-terrain.js';
 import {VILLAGE_PLAINS_BOUNDARY as boundary,villageToPlains,boundaryExteriorPlacement,isVillageBoundaryTree} from './village-plains-boundary.js';
+import {FOREST_EDGE_ROAD,FOREST_EDGE_CLEARINGS,joinForestEdge} from './plains-forest-edge.js';
+import {forestToPlains} from './plains-forest-boundary.js';
 
 // Authored against plains-exterior.png; all landmarks have deliberate locations.
 export const PLAINS_RADIUS=106;
 export const PLAINS_SPAN=288;
 export const PLAINS_SPAWN=Object.freeze({x:-87,z:-32});
 export const PLAINS_LOOKOUT=Object.freeze({x:-28,z:-20,height:8,capRadius:9,cliffWidth:3,stretchX:1.1,rampStartX:-61,rampTopX:-37,rampHalfWidth:3,rampShoulder:6});
-export const PLAINS_CLEARINGS=[{x:-5,z:25,r:7,y:.3},{x:-26,z:-19,r:6,y:8.1},{x:16,z:72,r:8,y:.25},{x:51,z:-51,r:7,y:.35},{x:-55,z:37,r:9,y:.4}];
+export const PLAINS_CLEARINGS=[{x:-5,z:25,r:7,y:.3},{x:-26,z:-19,r:6,y:8.1},{x:16,z:72,r:8,y:.25},{x:51,z:-51,r:7,y:.35},{x:-55,z:37,r:9,y:.4},...FOREST_EDGE_CLEARINGS];
 const villageGatewaySamples=boundary.villageSamples.map(([x,z])=>{const p=villageToPlains({x,z});return [p.x,p.z];}),villageRoadExtension=[villageGatewaySamples.at(-1),[-79,-30],[-61,-20],[-41,-8],[-23,6],[-5,25]];
+const forestApproach=[[-5,25],[10,13],[28,-4],[43,-22],[55,-41],...[[7,78],[11,70],[0,58]].map(([x,z])=>{const p=forestToPlains({x,z});return [p.x,p.z];}),FOREST_EDGE_ROAD[0]];
 export const PLAINS_ROUTES=[
  {id:'village-road',width:boundary.roadWidth,gateway:true,points:[...boundary.villageRoad.filter(p=>p[1]>=40).map(([x,z])=>{const p=villageToPlains({x,z});return [p.x,p.z];}),...villageRoadExtension.slice(1)],samples:[...villageGatewaySamples,...sampleGroundCurve(villageRoadExtension,{step:.8}).slice(1)]},
- {id:'forest-road',width:4.8,points:[[-5,25],[10,13],[28,-4],[43,-22],[55,-41],[61,-58],[65,-72],[74,-90]]},
+ {id:'forest-road',width:4.8,gateway:true,points:[...forestApproach,...FOREST_EDGE_ROAD.slice(1)],samples:[...sampleGroundCurve(forestApproach,{step:.65}).slice(0,-1),...FOREST_EDGE_ROAD]},
  {id:'royal-road',width:5.1,points:[[-5,25],[1,40],[2,57],[1,77],[-3,107]]},
  {id:'lookout-loop',width:2.8,points:[[-61,-20],[-57,-37],[-41,-43],[-24,-42],[-9,-34],[2,-20],[-1,-7],[-5,25]]},
  {id:'lookout-top',width:2.8,points:[[-61,-20],[-52,-20],[-43,-20],[-35,-20],[-26,-19]]},
@@ -235,7 +238,7 @@ function makePlacements(){
  addGroundScenery(out,add);
  return out;
 }
-export const PLAINS_PLACEMENTS=makePlacements();
+export const PLAINS_PLACEMENTS=joinForestEdge(makePlacements());
 export function plainsObstacles(){
  const out=PLAINS_PLACEMENTS.filter(p=>!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint)).map(p=>{
   // Boundary offsets are physical metres after the original source's refined

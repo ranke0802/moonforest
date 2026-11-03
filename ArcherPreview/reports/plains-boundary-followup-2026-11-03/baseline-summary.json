@@ -1,0 +1,184 @@
+{
+  "revision": "547b3a4",
+  "scope": "Immutable pre-change source/placement and exact sampled terrain snapshots for independent two-boundary QA. No Blender render, browser or GPU measurement.",
+  "sources": {
+    "src/village-layout.js": {
+      "sha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "normalizedSha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2"
+    },
+    "src/village-terrain.js": {
+      "sha256": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "normalizedSha256": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3"
+    },
+    "src/village-ground-layout.js": {
+      "sha256": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "normalizedSha256": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed"
+    },
+    "src/monster-forest-layout.js": {
+      "sha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "normalizedSha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a"
+    },
+    "src/monster-forest-terrain.js": {
+      "sha256": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "normalizedSha256": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9"
+    },
+    "src/scenery-collision-policy.js": {
+      "sha256": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9",
+      "normalizedSha256": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9"
+    },
+    "src/terrain.js": {
+      "sha256": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9",
+      "normalizedSha256": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9"
+    },
+    "src/great-plains-layout.js": {
+      "sha256": "dcaa883e8e80d0d1ba9b2a543b614826fa8205fca8a3549567092289356c5ca8",
+      "normalizedSha256": "dcaa883e8e80d0d1ba9b2a543b614826fa8205fca8a3549567092289356c5ca8"
+    },
+    "src/great-plains-terrain.js": {
+      "sha256": "fe881ebcc75dafc74142f59a8ef930a4a93460bfffbc578a2a84897530cea566",
+      "normalizedSha256": "fe881ebcc75dafc74142f59a8ef930a4a93460bfffbc578a2a84897530cea566"
+    },
+    "src/map-route.js": {
+      "sha256": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "normalizedSha256": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323"
+    },
+    "src/village-plains-boundary.js": {
+      "sha256": "8de2ea94680080b2c852c8b50419f14e80e849d543290679fe3c2eb414e96304",
+      "normalizedSha256": "8de2ea94680080b2c852c8b50419f14e80e849d543290679fe3c2eb414e96304"
+    },
+    "src/village-plains-handoff.js": {
+      "sha256": "9e91dde55f0bf2e412725ae6beedc5f46fe509979b8eef1c313b1a756e28c5bb",
+      "normalizedSha256": "9e91dde55f0bf2e412725ae6beedc5f46fe509979b8eef1c313b1a756e28c5bb"
+    },
+    "src/outdoor-vista.js": {
+      "sha256": "552200a0838875cfa7731be602a2a27e944d6960ca75d7800988680003868b6d",
+      "normalizedSha256": "552200a0838875cfa7731be602a2a27e944d6960ca75d7800988680003868b6d"
+    },
+    "public/assets/village.json": {
+      "sha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "normalizedSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f"
+    },
+    "public/assets/village-ground.json": {
+      "sha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "normalizedSha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+    },
+    "public/assets/monster-forest.json": {
+      "sha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "normalizedSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded"
+    },
+    "public/assets/monster-forest-ground.json": {
+      "sha256": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "normalizedSha256": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94"
+    },
+    "public/assets/great-plains.json": {
+      "sha256": "c30dcf49ca3fed8cbeb9f35b7a7348aea27ce6591b970620eb86c8050fe4d534",
+      "normalizedSha256": "c30dcf49ca3fed8cbeb9f35b7a7348aea27ce6591b970620eb86c8050fe4d534"
+    },
+    "public/assets/great-plains-ground.json": {
+      "sha256": "8ed4a1912bf63b3a612256592eff25984068732618700ae2baec98fa67aa9277",
+      "normalizedSha256": "8ed4a1912bf63b3a612256592eff25984068732618700ae2baec98fa67aa9277"
+    }
+  },
+  "protectedFiles": [
+    "src/village-layout.js",
+    "src/village-terrain.js",
+    "src/village-ground-layout.js",
+    "src/monster-forest-layout.js",
+    "src/monster-forest-terrain.js",
+    "src/scenery-collision-policy.js",
+    "src/terrain.js",
+    "public/assets/village.json",
+    "public/assets/village-ground.json",
+    "public/assets/monster-forest.json",
+    "public/assets/monster-forest-ground.json"
+  ],
+  "layouts": {
+    "village": {
+      "placements": 698,
+      "sha256": "93399892315600808eae01f6e6060f476341db1d032b46deb59dfdf72f47d623",
+      "assetKinds": 25
+    },
+    "monster-forest": {
+      "placements": 891,
+      "sha256": "5634f528e23e1d1f70c2b133edd8ea94189febc38f7c119671f213ee15fab818",
+      "assetKinds": 10
+    },
+    "great-plains": {
+      "placements": 1448,
+      "sha256": "b6b8944221cf2e105816afdd24c085fb9ed5e87d9ca8cdb47babbe4e203b06dd",
+      "assetKinds": 17
+    }
+  },
+  "terrains": {
+    "village": {
+      "size": 160,
+      "subdivisions": 160,
+      "step": 1,
+      "heightBytes": 103684,
+      "heightSha256": "a5f9aa763b0bb608820b18abc042f35be4a7a158db1534aea0f32e995e617f7f",
+      "file": "baseline/village-terrain.f32"
+    },
+    "monster-forest": {
+      "size": 160,
+      "subdivisions": 160,
+      "step": 1,
+      "heightBytes": 103684,
+      "heightSha256": "014606f03dd9c5ad69f4378b20bbe3ab1eac8113d91c9f6c7d726801b8731ed3",
+      "file": "baseline/monster-forest-terrain.f32"
+    },
+    "great-plains": {
+      "size": 288,
+      "subdivisions": 216,
+      "step": 1.3333333333333333,
+      "heightBytes": 188356,
+      "heightSha256": "7d13661dfca55140bd9f35438a4f634e6e50574c66290ba09371de3edd204836",
+      "file": "baseline/great-plains-terrain.f32"
+    }
+  },
+  "protectedAssets": {
+    "village": {
+      "manifestSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "groundManifestSha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "ground": [
+        {
+          "role": "color",
+          "url": "./content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
+          "sha256": "902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7",
+          "bytes": 754948,
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "role": "detail",
+          "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "bytes": 119227,
+          "width": 256,
+          "height": 256
+        }
+      ]
+    },
+    "monster-forest": {
+      "manifestSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "groundManifestSha256": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "ground": [
+        {
+          "role": "color",
+          "url": "./content/6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+          "sha256": "6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64",
+          "bytes": 588850,
+          "width": 2048,
+          "height": 2048
+        },
+        {
+          "role": "detail",
+          "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "bytes": 119227,
+          "width": 256,
+          "height": 256
+        }
+      ]
+    }
+  }
+}

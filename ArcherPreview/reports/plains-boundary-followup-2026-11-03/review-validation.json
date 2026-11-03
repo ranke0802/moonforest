@@ -1,0 +1,1584 @@
+{
+  "baseline": "547b3a4",
+  "status": "Independent source/SDK/geometry review complete; full-suite/deployment status is owned by the parent agent.",
+  "scope": "마을↔대평원 및 마물의 숲↔대평원. 원본 숲·마을 source 보존, 실제 포털 pose와 geometry의 독립 검증.",
+  "authoredRuntimeChange": {
+    "file": "src/great-plains-layout.js",
+    "scope": "Only const forestApproach",
+    "forestCoordinateWaypoints": [
+      [
+        7,
+        78
+      ],
+      [
+        11,
+        70
+      ],
+      [
+        0,
+        58
+      ]
+    ],
+    "unchangedOriginalRoadFromZ": 55,
+    "sourceTreesRemoved": 0,
+    "reason": "표지석/나무를 피하면서 기존4.8m 길의 실제 전폭을 보행 가능하게 만든다."
+  },
+  "focusedTests": [
+    {
+      "file": "tests/plains-two-boundary-regression.test.js",
+      "passed": 8,
+      "failed": 0,
+      "ms": 5533.9625
+    },
+    {
+      "file": "tests/great-plains.test.js",
+      "passed": 15,
+      "failed": 0,
+      "ms": 8858.0979,
+      "note": "Final nearby-grass bound is derived as600 minus only66 overlap removals; actual current count568."
+    },
+    {
+      "file": "tests/plains-landscape-render.test.js",
+      "passed": 2,
+      "failed": 0,
+      "ms": 2285.2046
+    }
+  ],
+  "protectedFiles": {
+    "src/village-layout.js": {
+      "original": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "current": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "unchanged": true
+    },
+    "src/village-terrain.js": {
+      "original": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "current": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "unchanged": true
+    },
+    "src/village-ground-layout.js": {
+      "original": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "current": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "unchanged": true
+    },
+    "src/monster-forest-layout.js": {
+      "original": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "current": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "unchanged": true
+    },
+    "src/monster-forest-terrain.js": {
+      "original": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "current": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "unchanged": true
+    },
+    "src/scenery-collision-policy.js": {
+      "original": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9",
+      "current": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9",
+      "unchanged": true
+    },
+    "src/terrain.js": {
+      "original": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9",
+      "current": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9",
+      "unchanged": true
+    },
+    "public/assets/village.json": {
+      "original": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "current": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "unchanged": true
+    },
+    "public/assets/village-ground.json": {
+      "original": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "current": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "unchanged": true
+    },
+    "public/assets/monster-forest.json": {
+      "original": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "current": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "unchanged": true
+    },
+    "public/assets/monster-forest-ground.json": {
+      "original": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "current": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "unchanged": true
+    }
+  },
+  "actualSdkFacts": [
+    {
+      "case": "native-forest-preserved",
+      "baseline": "547b3a4",
+      "protectedFiles": 4,
+      "placements": 891,
+      "terrainHeights": 25921,
+      "groundImageHashVerified": true
+    },
+    {
+      "case": "physical-first-trigger-rigid-scale",
+      "pointComparisons": 50,
+      "directions": 4
+    },
+    {
+      "case": "actual-sdk-first-trigger-camera",
+      "cases": [
+        {
+          "id": "village-native-to-plains",
+          "boundary": "village",
+          "reverse": false,
+          "canonicalTrigger": {
+            "x": -0.4184620943906628,
+            "z": 73.10009462733096
+          },
+          "before": {
+            "map": "village",
+            "character": "warrior-v3",
+            "actor": {
+              "position": [
+                -0.4184620943906628,
+                0.11999999731779099,
+                73.10009462733096
+              ],
+              "yaw": 0.19831543831411624
+            },
+            "camera": {
+              "alpha": -1.7691117651090127,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                -3.1417930126190186,
+                4.57305908203125,
+                59.548274993896484
+              ],
+              "target": [
+                -0.4184620943906628,
+                1.4704634630250137,
+                73.10009462733096
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -3.4184620943906627,
+                  0.11999999731779099,
+                  69.10009462733096
+                ],
+                "screen": [
+                  868.6868766574656,
+                  604.9213704349016,
+                  0.9950779704346859
+                ]
+              },
+              {
+                "position": [
+                  2.5815379056093373,
+                  0.11999999731779099,
+                  77.10009462733096
+                ],
+                "screen": [
+                  518.061697733324,
+                  378.6537108231107,
+                  0.9973982913408804
+                ]
+              },
+              {
+                "position": [
+                  -0.4184620943906628,
+                  3.119999997317791,
+                  73.10009462733096
+                ],
+                "screen": [
+                  640.0001916606906,
+                  235.4398117311923,
+                  0.9964267949107642
+                ]
+              },
+              {
+                "position": [
+                  -6.418462094390663,
+                  4.119999997317791,
+                  81.10009462733096
+                ],
+                "screen": [
+                  1036.7394383929386,
+                  144.88713504384788,
+                  0.9975593077036244
+                ]
+              },
+              {
+                "position": [
+                  5.581537905609337,
+                  2.119999997317791,
+                  65.10009462733096
+                ],
+                "screen": [
+                  -418.9743729718956,
+                  477.1425980350943,
+                  0.9934038969957252
+                ]
+              }
+            ]
+          },
+          "after": {
+            "map": "great-plains",
+            "character": "warrior-plains",
+            "actor": {
+              "position": [
+                -96.96814566001845,
+                0.11999999731779099,
+                -35.4360005755313
+              ],
+              "yaw": 1.3642199788239293
+            },
+            "camera": {
+              "alpha": -2.935016305618826,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                -110.49700164794922,
+                4.573058128356934,
+                -38.27118682861328
+              ],
+              "target": [
+                -96.96814566001845,
+                1.4704634630250137,
+                -35.4360005755313
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -99.96814566001845,
+                  0.11999999731779099,
+                  -39.4360005755313
+                ],
+                "screen": [
+                  313.4856001460893,
+                  571.8046617349083,
+                  0.9954172887996263
+                ]
+              },
+              {
+                "position": [
+                  -93.96814566001845,
+                  0.11999999731779099,
+                  -31.436000575531303
+                ],
+                "screen": [
+                  834.4722994973989,
+                  389.17093043499136,
+                  0.9972902720687794
+                ]
+              },
+              {
+                "position": [
+                  -96.96814566001845,
+                  3.119999997317791,
+                  -35.4360005755313
+                ],
+                "screen": [
+                  640.0002236382132,
+                  235.43975945698378,
+                  0.9964265732885724
+                ]
+              },
+              {
+                "position": [
+                  -102.96814566001845,
+                  4.119999997317791,
+                  -27.436000575531303
+                ],
+                "screen": [
+                  1663.5661206756627,
+                  172.64317241979342,
+                  0.9947613542653969
+                ]
+              },
+              {
+                "position": [
+                  -90.96814566001845,
+                  2.119999997317791,
+                  -43.4360005755313
+                ],
+                "screen": [
+                  106.7370760436964,
+                  268.15588038145813,
+                  0.9972941285092993
+                ]
+              }
+            ]
+          },
+          "handoff": {
+            "from": "warrior-v3",
+            "to": "warrior-plains",
+            "position": {
+              "x": -96.96814566001845,
+              "z": -35.4360005755313
+            },
+            "yaw": 0.19831543831411624,
+            "alpha": -1.7691117651090127,
+            "pan": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          }
+        },
+        {
+          "id": "village-plains-to-native",
+          "boundary": "village",
+          "reverse": true,
+          "canonicalTrigger": {
+            "x": 0.8070898500757234,
+            "z": 78.96497213902606
+          },
+          "before": {
+            "map": "great-plains",
+            "character": "warrior-plains",
+            "actor": {
+              "position": [
+                -91.0947040811427,
+                0.11999999731779099,
+                -34.25217211865688
+              ],
+              "yaw": -1.7795288801561182
+            },
+            "camera": {
+              "alpha": 0.20873255336122165,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                -77.57199096679688,
+                4.573058605194092,
+                -31.387821197509766
+              ],
+              "target": [
+                -91.0947040811427,
+                1.4704634630250137,
+                -34.25217211865688
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -94.0947040811427,
+                  0.11999999731779099,
+                  -38.25217211865688
+                ],
+                "screen": [
+                  833.9197018866714,
+                  389.068087337101,
+                  0.9972916010856301
+                ]
+              },
+              {
+                "position": [
+                  -88.0947040811427,
+                  0.11999999731779099,
+                  -30.25217211865688
+                ],
+                "screen": [
+                  314.0777770416153,
+                  572.0948354144886,
+                  0.9954147483985814
+                ]
+              },
+              {
+                "position": [
+                  -91.0947040811427,
+                  3.119999997317791,
+                  -34.25217211865688
+                ],
+                "screen": [
+                  639.9995130200479,
+                  235.4397713727818,
+                  0.9964269237452611
+                ]
+              },
+              {
+                "position": [
+                  -97.0947040811427,
+                  4.119999997317791,
+                  -26.25217211865688
+                ],
+                "screen": [
+                  92.41299483097936,
+                  148.22236691485338,
+                  0.9972232471014825
+                ]
+              },
+              {
+                "position": [
+                  -85.0947040811427,
+                  2.119999997317791,
+                  -42.25217211865688
+                ],
+                "screen": [
+                  1617.3575376667811,
+                  391.1094734277614,
+                  0.9950056085803235
+                ]
+              }
+            ]
+          },
+          "after": {
+            "map": "village",
+            "character": "warrior-v3",
+            "actor": {
+              "position": [
+                0.8070898500757254,
+                0.11999999731779099,
+                78.96497213902606
+              ],
+              "yaw": -2.945433420665932
+            },
+            "camera": {
+              "alpha": 1.374637093871035,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                3.5011937618255615,
+                4.573056221008301,
+                92.52262878417969
+              ],
+              "target": [
+                0.8070898500757254,
+                1.4704634630250137,
+                78.96497213902606
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -2.1929101499242747,
+                  0.11999999731779099,
+                  74.96497213902606
+                ],
+                "screen": [
+                  517.4811769502596,
+                  378.71588013618214,
+                  0.997397541131434
+                ]
+              },
+              {
+                "position": [
+                  3.8070898500757253,
+                  0.11999999731779099,
+                  82.96497213902606
+                ],
+                "screen": [
+                  869.6159091685959,
+                  604.7027292694212,
+                  0.9950799720071929
+                ]
+              },
+              {
+                "position": [
+                  0.8070898500757254,
+                  3.119999997317791,
+                  78.96497213902606
+                ],
+                "screen": [
+                  639.9998901764551,
+                  235.43968066653073,
+                  0.9964266305455081
+                ]
+              },
+              {
+                "position": [
+                  -5.192910149924274,
+                  4.119999997317791,
+                  86.96497213902606
+                ],
+                "screen": [
+                  -484.74587216677907,
+                  190.34400631274482,
+                  0.9929771920446122
+                ]
+              },
+              {
+                "position": [
+                  6.807089850075726,
+                  2.119999997317791,
+                  70.96497213902606
+                ],
+                "screen": [
+                  1027.2278590968376,
+                  250.96523939433735,
+                  0.9976142047594664
+                ]
+              }
+            ]
+          },
+          "handoff": {
+            "from": "warrior-plains",
+            "to": "warrior-v3",
+            "position": {
+              "x": 0.8070898500757254,
+              "z": 78.96497213902606
+            },
+            "yaw": -1.7795288801561182,
+            "alpha": 0.20873255336122165,
+            "pan": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          }
+        },
+        {
+          "id": "forest-native-to-plains",
+          "boundary": "forest",
+          "reverse": false,
+          "canonicalTrigger": {
+            "x": -0.3533778268900135,
+            "z": 48.02089269610353
+          },
+          "before": {
+            "map": "monster-forest",
+            "character": "warrior-v4",
+            "actor": {
+              "position": [
+                -0.3533778268900135,
+                0.17999702091900968,
+                48.02089269610353
+              ],
+              "yaw": -0.024013935164722895
+            },
+            "camera": {
+              "alpha": -1.5467823916301737,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                -0.02147117629647255,
+                4.633054733276367,
+                34.20212936401367
+              ],
+              "target": [
+                -0.3533778268900135,
+                1.5304604866262324,
+                48.02089269610353
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -3.3533778268900134,
+                  0.17999702091900968,
+                  44.02089269610353
+                ],
+                "screen": [
+                  951.0672527925293,
+                  578.8574877155381,
+                  0.9953452893190614
+                ]
+              },
+              {
+                "position": [
+                  2.6466221731099866,
+                  0.17999702091900968,
+                  52.02089269610353
+                ],
+                "screen": [
+                  459.2328391234713,
+                  386.72978761081265,
+                  0.9973155086211537
+                ]
+              },
+              {
+                "position": [
+                  -0.3533778268900135,
+                  3.17999702091901,
+                  48.02089269610353
+                ],
+                "screen": [
+                  640.0000289094249,
+                  235.4397284386679,
+                  0.9964268344771966
+                ]
+              },
+              {
+                "position": [
+                  -6.353377826890013,
+                  4.17999702091901,
+                  56.02089269610353
+                ],
+                "screen": [
+                  928.1217171301565,
+                  143.22974147371613,
+                  0.9977263961562977
+                ]
+              },
+              {
+                "position": [
+                  5.646622173109987,
+                  2.17999702091901,
+                  40.02089269610353
+                ],
+                "screen": [
+                  -380.2459719278577,
+                  561.9575654651438,
+                  0.9918250545343811
+                ]
+              }
+            ]
+          },
+          "after": {
+            "map": "great-plains",
+            "character": "warrior-plains",
+            "actor": {
+              "position": [
+                66.35848328117108,
+                0.1798942180050295,
+                -74.67478585898861
+              ],
+              "yaw": -0.6120165387122903
+            },
+            "camera": {
+              "alpha": -0.9587797880826063,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                74.29991912841797,
+                4.632952690124512,
+                -85.98858642578125
+              ],
+              "target": [
+                66.35848328117108,
+                1.5303576837122523,
+                -74.67478585898861
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  63.358483281171075,
+                  0.1798942180050295,
+                  -78.67478585898861
+                ],
+                "screen": [
+                  1032.1930646619094,
+                  496.73003351458055,
+                  0.9961878946027133
+                ]
+              },
+              {
+                "position": [
+                  69.35848328117108,
+                  0.1798942180050295,
+                  -70.67478585898861
+                ],
+                "screen": [
+                  322.0846427011332,
+                  425.4168966239821,
+                  0.9969191135359596
+                ]
+              },
+              {
+                "position": [
+                  66.35848328117108,
+                  3.1798942180050296,
+                  -74.67478585898861
+                ],
+                "screen": [
+                  640.0002308585766,
+                  235.43979055259712,
+                  0.9964272179446861
+                ]
+              },
+              {
+                "position": [
+                  60.358483281171075,
+                  4.179894218005029,
+                  -66.67478585898861
+                ],
+                "screen": [
+                  654.4109021732688,
+                  141.4445242622563,
+                  0.9979065584779233
+                ]
+              },
+              {
+                "position": [
+                  72.35848328117108,
+                  2.1798942180050296,
+                  -82.67478585898861
+                ],
+                "screen": [
+                  561.2721415420456,
+                  748.9528364224559,
+                  0.9883453145352641
+                ]
+              }
+            ]
+          },
+          "handoff": {
+            "from": "warrior-v4",
+            "to": "warrior-plains",
+            "position": {
+              "x": 66.35848328117108,
+              "z": -74.67478585898861
+            },
+            "yaw": -0.024013935164722895,
+            "alpha": -1.5467823916301737,
+            "pan": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          }
+        },
+        {
+          "id": "forest-plains-to-native",
+          "boundary": "forest",
+          "reverse": true,
+          "canonicalTrigger": {
+            "x": -0.054275625085611415,
+            "z": 53.999504369838654
+          },
+          "before": {
+            "map": "great-plains",
+            "character": "warrior-plains",
+            "actor": {
+              "position": [
+                63.29101428764421,
+                0.08998997692360627,
+                -69.53436820609333
+              ],
+              "yaw": 2.633955272099438
+            },
+            "camera": {
+              "alpha": -4.204751598894335,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                56.57158279418945,
+                4.543047904968262,
+                -57.454734802246094
+              ],
+              "target": [
+                63.29101428764421,
+                1.440453442630829,
+                -69.53436820609333
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  60.29101428764421,
+                  0.08998997692360627,
+                  -73.53436820609333
+                ],
+                "screen": [
+                  343.4359805997408,
+                  416.60312120912687,
+                  0.9970089713911832
+                ]
+              },
+              {
+                "position": [
+                  66.2910142876442,
+                  0.08998997692360627,
+                  -65.53436820609333
+                ],
+                "screen": [
+                  1031.075586295502,
+                  511.06811325478253,
+                  0.9960402123458384
+                ]
+              },
+              {
+                "position": [
+                  63.29101428764421,
+                  3.089989976923606,
+                  -69.53436820609333
+                ],
+                "screen": [
+                  639.9995826039888,
+                  235.43971674676328,
+                  0.9964266107756686
+                ]
+              },
+              {
+                "position": [
+                  57.29101428764421,
+                  4.089989976923606,
+                  -61.53436820609333
+                ],
+                "screen": [
+                  270.74708630883066,
+                  246.77314047706744,
+                  0.9872892252120136
+                ]
+              },
+              {
+                "position": [
+                  69.2910142876442,
+                  2.089989976923606,
+                  -77.53436820609333
+                ],
+                "screen": [
+                  701.0812545047397,
+                  233.5649441270727,
+                  0.9979381152140406
+                ]
+              }
+            ]
+          },
+          "after": {
+            "map": "monster-forest",
+            "character": "warrior-v4",
+            "actor": {
+              "position": [
+                -0.054275625085613566,
+                0.09010920044476627,
+                53.99950436983866
+              ],
+              "yaw": 3.2219578756470053
+            },
+            "camera": {
+              "alpha": -4.792754202441902,
+              "beta": 1.35,
+              "radius": 14.166666666666668,
+              "fov": 0.65,
+              "verticalFov": true,
+              "minZ": 0.05,
+              "maxZ": 1024,
+              "position": [
+                1.0553964376449585,
+                4.543166637420654,
+                67.77763366699219
+              ],
+              "target": [
+                -0.054275625085613566,
+                1.440572666151989,
+                53.99950436983866
+              ],
+              "pan": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "projectionProbes": [
+              {
+                "position": [
+                  -3.0542756250856136,
+                  0.09010920044476627,
+                  49.99950436983866
+                ],
+                "screen": [
+                  486.57532813317977,
+                  382.5168305225926,
+                  0.9973587625694698
+                ]
+              },
+              {
+                "position": [
+                  2.9457243749143864,
+                  0.09010920044476627,
+                  57.99950436983866
+                ],
+                "screen": [
+                  915.8809120322634,
+                  591.8941311433208,
+                  0.9952116793332607
+                ]
+              },
+              {
+                "position": [
+                  -0.054275625085613566,
+                  3.090109200444766,
+                  53.99950436983866
+                ],
+                "screen": [
+                  640.000200795618,
+                  235.43982251103773,
+                  0.9964268962805775
+                ]
+              },
+              {
+                "position": [
+                  -6.054275625085614,
+                  4.090109200444767,
+                  61.99950436983866
+                ],
+                "screen": [
+                  -487.5032843870282,
+                  199.23773527030923,
+                  0.9920813146932085
+                ]
+              },
+              {
+                "position": [
+                  5.945724374914386,
+                  2.090109200444766,
+                  45.99950436983866
+                ],
+                "screen": [
+                  971.6598219792795,
+                  246.088810029132,
+                  0.9977051663365285
+                ]
+              }
+            ]
+          },
+          "handoff": {
+            "from": "warrior-plains",
+            "to": "warrior-v4",
+            "position": {
+              "x": -0.054275625085613566,
+              "z": 53.99950436983866
+            },
+            "yaw": 2.633955272099438,
+            "alpha": -4.204751598894335,
+            "pan": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            }
+          }
+        }
+      ],
+      "method": "Deterministic original-road first trigger; actual Babylon ArcRotate + production CameraFollow/CameraPitch/CameraZoom + capture/carry helpers. Forward orbit, beta1.35, stable focus, default zoom clamp. This is a reproducible review pose, not a recorded player session.",
+      "browserAutomation": false,
+      "measurements": [
+        {
+          "direction": "village-native-to-plains",
+          "actualHeightStepMetres": 0,
+          "sourceActor": [
+            -0.4184620943906628,
+            0.11999999731779099,
+            73.10009462733096
+          ],
+          "destinationActor": [
+            -96.96814566001845,
+            0.11999999731779099,
+            -35.4360005755313
+          ]
+        },
+        {
+          "direction": "village-plains-to-native",
+          "actualHeightStepMetres": 0,
+          "sourceActor": [
+            -91.0947040811427,
+            0.11999999731779099,
+            -34.25217211865688
+          ],
+          "destinationActor": [
+            0.8070898500757254,
+            0.11999999731779099,
+            78.96497213902606
+          ]
+        },
+        {
+          "direction": "forest-native-to-plains",
+          "actualHeightStepMetres": -0.00010280291398018226,
+          "sourceActor": [
+            -0.3533778268900135,
+            0.17999702091900968,
+            48.02089269610353
+          ],
+          "destinationActor": [
+            66.35848328117108,
+            0.1798942180050295,
+            -74.67478585898861
+          ]
+        },
+        {
+          "direction": "forest-plains-to-native",
+          "actualHeightStepMetres": 0.0001192235211599918,
+          "sourceActor": [
+            63.29101428764421,
+            0.08998997692360627,
+            -69.53436820609333
+          ],
+          "destinationActor": [
+            -0.054275625085613566,
+            0.09010920044476627,
+            53.99950436983866
+          ]
+        }
+      ],
+      "gpuMeasured": false
+    },
+    {
+      "case": "retry-snapshot-isolation",
+      "directions": 4
+    },
+    {
+      "case": "actual-spline-portal-shoulders",
+      "exactSourceSamples": 52,
+      "walkableSamples": 51,
+      "shoulderOffsetMetres": 2.0619011273157923,
+      "maximumSampledHeightGapMetres": 0.0070445929283294295,
+      "range": "original forest z45..55; unlike the visual vista, all these samples are within both maps playable radius"
+    },
+    {
+      "case": "native-source-scenery-graph",
+      "copiedPlacements": 158,
+      "physicalObstacles": 97,
+      "maximumSourceRootHeightGapMetres": 2.7755575615628914e-15,
+      "totalPlainsPlacements": 1424,
+      "newRuntimeModelSourceKinds": 0
+    },
+    {
+      "case": "full-plains-forest-approach",
+      "samples": 3420,
+      "shoulderOffsetMetres": 2.0619011273157923,
+      "blocked": 0,
+      "continuousSegments": 1139,
+      "continuousSweepRadiusMetres": 2.35,
+      "fullWidthBlocked": 0
+    },
+    {
+      "case": "actual-native-floor-and-forest-isolation",
+      "townFarRowVerticesLowered": 83,
+      "originalTownWalkingVertices": 25921,
+      "trianglesPreserved": true,
+      "uvsPreserved": true,
+      "actualForestWorldPositionsNormalsUvsAndIndicesUnchanged": true
+    }
+  ],
+  "passage": {
+    "samples": 3420,
+    "reached": true,
+    "shoulderOffsetMetres": 2.0619011273157923,
+    "blocked": [],
+    "continuousSegments": 1139,
+    "continuousSweepRadiusMetres": 2.35,
+    "fullWidthBlocked": [],
+    "scope": "Actual current plains navigation, full junction-to-forest-trigger road; original forest untouched",
+    "note": "중앙/양어깨3420점 및 연속1139선분을 반경2.35m로 검사.3개의 검사선 사이에 숨은 trunk까지 차단검사한다."
+  },
+  "workloads": {
+    "baselinePlainsPlacements": 1448,
+    "currentPlainsPlacements": 1424,
+    "sourceForestPlacements": 891,
+    "copiedForestPlacements": 158,
+    "copiedForestTrees": 68,
+    "copiedPhysicalObstacles": 97,
+    "baseTownPlacements": 698,
+    "townOutskirtsSidecarPlacements": 55,
+    "townOutskirtsGroundTriangles": 9434,
+    "grassGenerated": 760,
+    "grassRemovedOnlyInSharedForest": 66,
+    "grassRetained": 694,
+    "grassSourceTriangles": 2323,
+    "grassSharedGeometries": 1,
+    "grassExtraGeometryAllocations": 0,
+    "grassMaximumCpuNativeBaseDraws": 1,
+    "grassMaximumCpuNativeSubmittedInstances": 429,
+    "additionalReferencedExistingForestAssets": [
+      "forest-04-poison-fungi",
+      "forest-05-thorn-bramble"
+    ],
+    "gpuMeasured": false,
+    "note": "합계 배치 감소는 GPU/FPS 개선 증거가 아니다. 나무/바위 종류·가시성·거리·추가 마을 지면1primitive의 실제 workload는 별도다."
+  },
+  "finalResources": {
+    "plainsGround": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+    "townSidecarGround": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+    "townSidecarMacro": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2"
+  },
+  "renders": {
+    "output": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-boundary-followup/2026-11-03",
+    "sets": [
+      {
+        "blender": "4.5.14 LTS",
+        "stage": "baseline",
+        "profile": "reset-default",
+        "lod": 2,
+        "neutral": false,
+        "renders": [
+          {
+            "file": "baseline-reset-default-village-native-to-plains-before-texture.png",
+            "map": "village",
+            "placements": 698,
+            "cameraProjectionMaxPixelError": 0.000782812723759302,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-village-native-to-plains-before-texture.png",
+            "bytes": 966576,
+            "sha256": "9d53a18a02eb1ba51ce6112d9573f5225130a563e2df20b0cbf18336f35a9899"
+          },
+          {
+            "file": "baseline-reset-default-village-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1448,
+            "cameraProjectionMaxPixelError": 0.0007012305265475131,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-village-native-to-plains-after-texture.png",
+            "bytes": 990031,
+            "sha256": "082d2966769e8ea34e054944d632215a41919bfab8292ab867d1691768b65998"
+          },
+          {
+            "file": "baseline-reset-default-village-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1448,
+            "cameraProjectionMaxPixelError": 0.0012832815937659807,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-village-plains-to-native-before-texture.png",
+            "bytes": 899836,
+            "sha256": "a6a5d47da7e0dc3266602e2800c8061a4325ccc8ff92322fce3de93f5aecceae"
+          },
+          {
+            "file": "baseline-reset-default-village-plains-to-native-after-texture.png",
+            "map": "village",
+            "placements": 698,
+            "cameraProjectionMaxPixelError": 0.0005987673177472063,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-village-plains-to-native-after-texture.png",
+            "bytes": 900725,
+            "sha256": "1d5f1614b4a8bffe7406a40b55d7d8a2b0fee73a02dee3df8b2ac20e8280a2c0"
+          },
+          {
+            "file": "baseline-reset-default-forest-native-to-plains-before-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.00018682613477486002,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-forest-native-to-plains-before-texture.png",
+            "bytes": 1042215,
+            "sha256": "6eace1660193951dc72ae8b249177b7e4d1ac3dbc44a466bf79e1ec03ba74ad7"
+          },
+          {
+            "file": "baseline-reset-default-forest-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1448,
+            "cameraProjectionMaxPixelError": 0.0009594939995700941,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-forest-native-to-plains-after-texture.png",
+            "bytes": 964783,
+            "sha256": "af6c8b8aad96b29b25b48c3e90f4a2719899c94446c92fbe6b7c88a335d0798a"
+          },
+          {
+            "file": "baseline-reset-default-forest-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1448,
+            "cameraProjectionMaxPixelError": 0.0019690701883289152,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-forest-plains-to-native-before-texture.png",
+            "bytes": 966334,
+            "sha256": "560cb0c2bc563f6ab674c0a695c3ce00e97837dad8a1635659b16809110c038b"
+          },
+          {
+            "file": "baseline-reset-default-forest-plains-to-native-after-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0010423348453288614,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\baseline-reset-default-forest-plains-to-native-after-texture.png",
+            "bytes": 1099441,
+            "sha256": "f3889fb35c88516f7c30315d6de3daeef844108ae4b6af133e599ca1b1b2a169"
+          }
+        ],
+        "nativeGameScreenshot": false,
+        "gpuPerformanceMeasured": false,
+        "limitations": [
+          "All selected placements are exported; native visibility/LOD policy, outline, dither, toon, shadows, sky and fog are not reproduced.",
+          "LOD is fixed explicitly, not selected by the native frame.",
+          "The current village sidecar is included when its manifest exists. This does not include world-level mountains/sky/stream/sign labels outside the placement contract.",
+          "Production createTerrainGround positions/indices/UV/normals and outer-ring extension are included, including the current town-only lowered far skirt.",
+          "Reproducible first-trigger canonical camera, not a recorded player session or a native gameplay screenshot."
+        ]
+      },
+      {
+        "blender": "4.5.14 LTS",
+        "stage": "current",
+        "profile": "reset-default",
+        "lod": 2,
+        "neutral": false,
+        "renders": [
+          {
+            "file": "current-reset-default-village-native-to-plains-before-texture.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.000782812723759302,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-village-native-to-plains-before-texture.png",
+            "bytes": 973522,
+            "sha256": "9f1648e5a6492da829d6b5ec87fdf90fa8273cbbbde83887f3554efda666b5eb"
+          },
+          {
+            "file": "current-reset-default-village-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0007012305265475131,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-village-native-to-plains-after-texture.png",
+            "bytes": 985210,
+            "sha256": "c49f36caae54cb7209264c2ed1188cb27b3062231e9c2e67c4ff44ec948334d5"
+          },
+          {
+            "file": "current-reset-default-village-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0012832815937659807,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-village-plains-to-native-before-texture.png",
+            "bytes": 901871,
+            "sha256": "ecaec9e8458f1264dd558d457baf77a3fcdf701818f395ff388beb08c9b8ccc3"
+          },
+          {
+            "file": "current-reset-default-village-plains-to-native-after-texture.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.0005987673177472063,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-village-plains-to-native-after-texture.png",
+            "bytes": 913773,
+            "sha256": "7b1a699b16a708135315d7ffb6b1c076582177210544042bb1d285217e72922a"
+          },
+          {
+            "file": "current-reset-default-forest-native-to-plains-before-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.00018682613477486002,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-forest-native-to-plains-before-texture.png",
+            "bytes": 1042215,
+            "sha256": "d6689fd380eb6216e3a00a2b7bbbd5f84d908d35df7cca4633af38451aba5d78"
+          },
+          {
+            "file": "current-reset-default-forest-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0008061623153572787,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-forest-native-to-plains-after-texture.png",
+            "bytes": 1029947,
+            "sha256": "78e6ef95469501962405c51c6ede86b44f0cbf2322d6d9b2762b437a23ef01ef"
+          },
+          {
+            "file": "current-reset-default-forest-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0009671146923766015,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-forest-plains-to-native-before-texture.png",
+            "bytes": 1104753,
+            "sha256": "1bcaba9857061db57b621180fa3ca35c5e30639b78aee202f3ca11b719ef84e2"
+          },
+          {
+            "file": "current-reset-default-forest-plains-to-native-after-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0010423348453288614,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-reset-default-forest-plains-to-native-after-texture.png",
+            "bytes": 1099441,
+            "sha256": "51530c308173a1eee4081f42a5d74c2a25d4f076116554fa21b3716dc0abe715"
+          }
+        ],
+        "nativeGameScreenshot": false,
+        "gpuPerformanceMeasured": false,
+        "limitations": [
+          "All selected placements are exported; native visibility/LOD policy, outline, dither, toon, shadows, sky and fog are not reproduced.",
+          "LOD is fixed explicitly, not selected by the native frame.",
+          "The current village sidecar is included when its manifest exists. This does not include world-level mountains/sky/stream/sign labels outside the placement contract.",
+          "Production createTerrainGround positions/indices/UV/normals and outer-ring extension are included, including the current town-only lowered far skirt.",
+          "Reproducible first-trigger canonical camera, not a recorded player session or a native gameplay screenshot."
+        ]
+      },
+      {
+        "blender": "4.5.14 LTS",
+        "stage": "current",
+        "profile": "low-orbit",
+        "lod": 2,
+        "neutral": false,
+        "renders": [
+          {
+            "file": "current-low-orbit-village-native-to-plains-before-texture.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.0006158363523641907,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-native-to-plains-before-texture.png",
+            "bytes": 1065762,
+            "sha256": "928a7b3dcd0753cfe10d494854f02e260a4ba188510000404944e51166f91e86"
+          },
+          {
+            "file": "current-low-orbit-village-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0010574103698411618,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-native-to-plains-after-texture.png",
+            "bytes": 1107875,
+            "sha256": "4f7c385132697c9941f1fdbbe6cd9c25b0a258cce07e1ef06dd34b29b09f2991"
+          },
+          {
+            "file": "current-low-orbit-village-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0016315760711816789,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-plains-to-native-before-texture.png",
+            "bytes": 1077646,
+            "sha256": "c2c1c4192708a603951ad2b29d4610a588dac02ffbbee547c1a27182ad317b8e"
+          },
+          {
+            "file": "current-low-orbit-village-plains-to-native-after-texture.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.0011017264534497393,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-plains-to-native-after-texture.png",
+            "bytes": 1132353,
+            "sha256": "f3f735964421c95a3a3887d18c73a3aade9a71806d4fa86101951bb84fb4211c"
+          },
+          {
+            "file": "current-low-orbit-forest-native-to-plains-before-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0004580358282156811,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-native-to-plains-before-texture.png",
+            "bytes": 1152074,
+            "sha256": "a82693619a2693a7b40443ac70069e7efdfa7bc117619a4d9baf61781943c3f5"
+          },
+          {
+            "file": "current-low-orbit-forest-native-to-plains-after-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.001281487947385738,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-native-to-plains-after-texture.png",
+            "bytes": 1151249,
+            "sha256": "0cb2563d606689f08f6880a642accf81439b9054b94e9208829332efb6e68032"
+          },
+          {
+            "file": "current-low-orbit-forest-plains-to-native-before-texture.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.002979585400428122,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-plains-to-native-before-texture.png",
+            "bytes": 1207780,
+            "sha256": "c7e442021dbea576a4556babf35172afc6275d0ebbf3a5ee4fc090a7658a3a0c"
+          },
+          {
+            "file": "current-low-orbit-forest-plains-to-native-after-texture.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0007313539479697796,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-plains-to-native-after-texture.png",
+            "bytes": 1209612,
+            "sha256": "d179f1f0f182bf3cdedbf42bbbfc26d21d3755fe758d2c32a6d2a4807f0e5c92"
+          }
+        ],
+        "nativeGameScreenshot": false,
+        "gpuPerformanceMeasured": false,
+        "limitations": [
+          "All selected placements are exported; native visibility/LOD policy, outline, dither, toon, shadows, sky and fog are not reproduced.",
+          "LOD is fixed explicitly, not selected by the native frame.",
+          "The current village sidecar is included when its manifest exists. This does not include world-level mountains/sky/stream/sign labels outside the placement contract.",
+          "Production createTerrainGround positions/indices/UV/normals and outer-ring extension are included, including the current town-only lowered far skirt.",
+          "Reproducible first-trigger canonical camera, not a recorded player session or a native gameplay screenshot."
+        ]
+      },
+      {
+        "blender": "4.5.14 LTS",
+        "stage": "current",
+        "profile": "low-orbit",
+        "lod": 2,
+        "neutral": true,
+        "renders": [
+          {
+            "file": "current-low-orbit-village-native-to-plains-before-neutral.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.0006158363523641907,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-native-to-plains-before-neutral.png",
+            "bytes": 561511,
+            "sha256": "7f4f5642b0bf80ff5ef448f52287e82077de8f73fe69757eb0fb47cb304762b7"
+          },
+          {
+            "file": "current-low-orbit-village-native-to-plains-after-neutral.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0010574103698411618,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-native-to-plains-after-neutral.png",
+            "bytes": 597201,
+            "sha256": "24a38d2a355bbb7054b0c9c529cc2de43200751b2d4e376698d8715e56ef45d6"
+          },
+          {
+            "file": "current-low-orbit-village-plains-to-native-before-neutral.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.0016315760711816789,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-plains-to-native-before-neutral.png",
+            "bytes": 550966,
+            "sha256": "c72095401360da457c40c8d383b4be0e855a80878ce9a138e7ed9c96dd0a946c"
+          },
+          {
+            "file": "current-low-orbit-village-plains-to-native-after-neutral.png",
+            "map": "village",
+            "placements": 753,
+            "cameraProjectionMaxPixelError": 0.0011017264534497393,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-village-plains-to-native-after-neutral.png",
+            "bytes": 614296,
+            "sha256": "f52e8649a9dafe6b24b25dd381502bc7f6a2a26b8d538f7dd827611cc2d5f24c"
+          },
+          {
+            "file": "current-low-orbit-forest-native-to-plains-before-neutral.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0004580358282156811,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-native-to-plains-before-neutral.png",
+            "bytes": 636644,
+            "sha256": "a7e10a35eebd547390d3fe1ea5acb200861151cdda685aac51909a7a11e32154"
+          },
+          {
+            "file": "current-low-orbit-forest-native-to-plains-after-neutral.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.001281487947385738,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-native-to-plains-after-neutral.png",
+            "bytes": 615464,
+            "sha256": "9b180f59929438d04ead41ddc2d8f84c202a6c66df11001f57a7970bb627c6b6"
+          },
+          {
+            "file": "current-low-orbit-forest-plains-to-native-before-neutral.png",
+            "map": "great-plains",
+            "placements": 1424,
+            "cameraProjectionMaxPixelError": 0.002979585400428122,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-plains-to-native-before-neutral.png",
+            "bytes": 721318,
+            "sha256": "3cc468c8cb1d3bbfd8522126766e6453bc7c16aef93df084effa726962adbc7b"
+          },
+          {
+            "file": "current-low-orbit-forest-plains-to-native-after-neutral.png",
+            "map": "monster-forest",
+            "placements": 891,
+            "cameraProjectionMaxPixelError": 0.0007313539479697796,
+            "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-boundary-followup\\2026-11-03\\current-low-orbit-forest-plains-to-native-after-neutral.png",
+            "bytes": 722160,
+            "sha256": "4445cf1289e5a4054c921fb660a3606b186723c20f09c6cd1fdd6e0adb8cda33"
+          }
+        ],
+        "nativeGameScreenshot": false,
+        "gpuPerformanceMeasured": false,
+        "limitations": [
+          "All selected placements are exported; native visibility/LOD policy, outline, dither, toon, shadows, sky and fog are not reproduced.",
+          "LOD is fixed explicitly, not selected by the native frame.",
+          "The current village sidecar is included when its manifest exists. This does not include world-level mountains/sky/stream/sign labels outside the placement contract.",
+          "Production createTerrainGround positions/indices/UV/normals and outer-ring extension are included, including the current town-only lowered far skirt.",
+          "Reproducible first-trigger canonical camera, not a recorded player session or a native gameplay screenshot."
+        ]
+      }
+    ],
+    "finalCurrentImages": 24,
+    "baselineDefaultImages": 8,
+    "maximumCameraProjectionErrorPixels": 0.002979585400428122,
+    "method": "실제 원본 spline 반경3 첫trigger + captureRoadHandoff/carryPortalPose + Babylon ArcRotate/CameraFollow/CameraPitch/CameraZoom; 수직FOV.65. 정면 도보 회전각을 고정한 재현 시점이며 실제 사용자의 녹화된 시점이 아니다.",
+    "viewed": "Current textured16장 전부와 neutral 대표4장을 view_image로 직접 확인. Baseline textured 대표4장과 초기 neutral2장도 열어 확인.",
+    "productionFloor": "Native createTerrainGround positions/normals/indices/UV 및 outer skirt 포함. 현재 마을 farrow83개 lowering 포함.",
+    "blender": "4.5.14 LTS headless factory startup; one own Blender process at a time; all jobs exited0."
+  },
+  "visualFindings": [
+    {
+      "status": "확인",
+      "claim": "현재 두 경계 네방향에서 가까운 도로 중심·폭과 공유 나무/바위 구도가 이어진다.",
+      "evidence": "Actual SDK identity + default-pitch/low-orbit source/destination image pairs."
+    },
+    {
+      "status": "확인",
+      "claim": "마을→평원 저각 시점에 원래 없던 언덕·수레·표지판 구도가 reciprocal sidecar에 존재하며 이동 뒤 위치와 맞는다.",
+      "evidence": "current-low-orbit-village-native-to-plains-{before,after}-texture.png"
+    },
+    {
+      "status": "관찰",
+      "claim": "검토한 기본/저각 시점에서 낮은 sidecar 지면의 사각 테두리 또는 구멍이 노출되지는 않았다.",
+      "limit": "검토 시점에 한정. 전체 월드의 모든 카메라가 아니라0.88/1.35 pitch의 재현 시점이다."
+    },
+    {
+      "status": "남는 차이",
+      "claim": "공유 forest z>=24 창 바깥의 먼 내부 바위/나무는 숲으로 이동한 뒤 추가로 보이고, 원본 숲 바깥z77 이후 원경은 평원 풍경으로 바뀐다.",
+      "limit": "Offline에는 native fog/culling/dither가 없으므로 휴대폰에서 이 차이가 실제로 얼마만큼 노출되는지는 미측정."
+    },
+    {
+      "status": "근사재질 한계",
+      "claim": "평원→마을 저각의 통합 facade 문 안 바닥은 밝은 cream 사각으로 보인다.",
+      "evidence": "facade last primitive material15 village-streets(PBR) versus actual town StandardMaterial+VillageGroundShade.",
+      "limit": "Blender는 해당 native shader를 재현하지 않으므로 실제 게임 밝기 결함으로 단정하지 않는다."
+    }
+  ],
+  "limitations": [
+    "Actual game screenshot/browser automation/mobile GPU test 없음.",
+    "원본 mesh/texture를 쓴 고정LOD2 오프라인 그림이며 native toon/outline/fog/sky/dither/visibility/shadow 결과와 다르다.",
+    "검수 camera far clip은 양쪽1024m로 고정했다. 실제 village/forest는350m, plains는1024m이며, 이 그림은 native frustum/거리별 표시 검증을 대체하지 않는다.",
+    "중립광 pass는 leaf alpha-cutout을 제거하므로 최종 잎 실루엣/색 판단에 사용하지 않는다.",
+    "원경·광원·노출까지 완전히 같은 화면이라고 주장하지 않는다.",
+    "CPU draw submission과 NullEngine 결과를 GPU elapsed/FPS/하드웨어 메모리 측정으로 표기하지 않는다.",
+    "review-data/ decoded/textures JSON은 재생성 가능한 중간 자료다. 이전 low-orbit baseline 파일들은 exploratory이며 최종 비교목록은 renders.sets의32개다."
+  ]
+}

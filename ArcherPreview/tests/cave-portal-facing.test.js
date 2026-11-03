@@ -14,6 +14,7 @@ import {travelWaypoint} from '../src/map-waypoints.js';
 import {captureVillagePlainsHandoff} from '../src/village-plains-handoff.js';
 import {villageToPlains,plainsToVillage} from '../src/village-plains-boundary.js';
 import {createMapPortal} from '../src/map-travel.js';
+import {forestToPlains,plainsToForest} from '../src/plains-forest-boundary.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n'),noop=()=>{};
 const near=(a,b,epsilon=1e-10)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
@@ -86,12 +87,12 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  for(const id of ['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
  doc.fullscreenElement=doc.documentElement;let fullscreenExits=0;doc.exitFullscreen=()=>{fullscreenExits++;};
  const engine=new NullEngine(),scene=new Scene(engine),actor=new TransformNode('player',scene),residentActor=new TransformNode('elena',scene),camera=new ArcRotateCamera('camera',-.8,1.07,17,Vector3.Zero(),scene);t.after(()=>engine.dispose());
- const initialMap=mapForCharacter(character),world={scene,camera,mapId:initialMap,cave:initialMap==='witch-cave',environment:{},villageStreaming:{active:true},trainingSpawn:Vector3.Zero(),terrain:{place:position=>{position.y=2;}},navigation:{free:()=>true},sky:{load:async()=>{}},lighting:{follow:noop},releaseEnvironment:async()=>{}};
+ const initialMap=mapForCharacter(character),world={scene,camera,mapId:initialMap,cave:initialMap==='witch-cave',environment:{},villageStreaming:{active:true},trainingSpawn:Vector3.Zero(),terrain:{place:position=>{position.y=2;},heightAt:()=>2},navigation:{free:()=>true},sky:{load:async()=>{}},lighting:{follow:noop},releaseEnvironment:async()=>{}};
  const cameraPitch=new CameraPitch(camera,{warrior:true}),cameraFollow=new CameraFollow(),pan={x:.9,y:.3,z:-1.7},location={href:`https://example.test/?character=${character}&elenaReview=${reviewMode}`,search:`?character=${character}&elenaReview=${reviewMode}`};
  const history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}},modelFaults=[];
  const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},combat:{passiveRecovery:{reset:noop}},combatCount:0,hide(){boss.hides++;},hides:0,activateResident:async()=>{boss.activations++;},activations:0};
  const equipment=Object.freeze({sword:'existing-sword',shield:'existing-shield'}),orientation={type:'landscape-primary'},calls=[];
- const boundary={setupMinimapTravel,travelWaypoint,chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
+ const boundary={setupMinimapTravel,travelWaypoint,updatePlainsBoundaryAtmosphere:noop,chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},
   frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:new LoadDiagnostics(),loadingView:{begin:noop,download:noop,stream:noop,preparing:noop,reveal:noop,fail:noop},
@@ -174,6 +175,21 @@ test('real road portal activation invokes the production main callback and trans
  const create=new Function('world','actor','boss','controller','input','mapTransition','captureVillagePlainsHandoff','createMapPortal','$',`let character='warrior-v3',mapPortal=null,ready=true,loadingAsset=false;${portalSource};bindMapPortal();return mapPortal;`);
  const portal=create(f.world,f.actor,{loading:false,playerHp:317,potions:{active:false,remaining:1},combatCount:0},{}, {panOffset:f.pan},transition,captureVillagePlainsHandoff,createMapPortal,selector=>f.doc.querySelector(selector));
  try{portal.update();assert.equal(requests.length,1);assert.equal(await requests[0].promise,true);near(f.actor.position.x,expected.x);near(f.actor.position.z,expected.z);assert.equal(requests[0].context.boundary.from,'warrior-v3');}finally{portal.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
+});
+
+test('actual forest road trigger uses main handoff and retry preserves exact pose without a second rotation',async t=>{
+ const f=mainFixture(t,{character:'warrior-v4',reviewMode:null}),oldDocument=globalThis.document,oldLocation=globalThis.location;globalThis.document=f.doc;globalThis.location=f.location;
+ f.actor.position.set(.4,0,50.4);f.actor.rotation.y=.9;f.camera.alpha=-1.6;const expected=forestToPlains(f.actor.position),requests=[];f.failNextModel();
+ const transition={busy:false,travel(url,context){const promise=f.runtime.transition.travel(url,context);requests.push({url,context,promise});return promise;}};
+ const create=new Function('world','actor','boss','controller','input','mapTransition','captureVillagePlainsHandoff','createMapPortal','$',`let character='warrior-v4',mapPortal=null,ready=true,loadingAsset=false;${portalSource};bindMapPortal();return mapPortal;`);
+ const portal=create(f.world,f.actor,{loading:false,playerHp:317,potions:{active:false,remaining:1},combatCount:0},{},{panOffset:f.pan},transition,captureVillagePlainsHandoff,createMapPortal,selector=>f.doc.querySelector(selector));
+ try{
+  portal.update();assert.equal(requests.length,1);assert.equal(await requests[0].promise,false);const after={x:f.actor.position.x,z:f.actor.position.z,yaw:f.actor.rotation.y,alpha:f.camera.alpha,pan:{...f.pan}};
+  assert.equal(await f.runtime.transition.retry(),true);near(f.actor.position.x,expected.x);near(f.actor.position.z,expected.z);near(f.actor.position.x,after.x);near(f.actor.position.z,after.z);near(f.actor.rotation.y,after.yaw);near(f.camera.alpha,after.alpha);assert.deepEqual(f.pan,after.pan);
+  for(let i=0;i<5;i++)for(const [from,to,transform]of [['warrior-plains','warrior-v4',plainsToForest],['warrior-v4','warrior-plains',forestToPlains]]){
+   const target=transform(f.actor.position),handoff=captureVillagePlainsHandoff(from,to,f.actor,f.camera,f.pan);assert.equal(await f.runtime.transition.travel(travelUrl(f.location.href,to),{boundary:handoff}),true);near(f.actor.position.x,target.x);near(f.actor.position.z,target.z);
+  }
+ }finally{portal.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
 });
 
 test('actual minimap sanctuary callback moves in the existing cave without hiding or reviving the resident',async t=>{

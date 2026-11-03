@@ -1,0 +1,1772 @@
+{
+  "version": 1,
+  "assets": {
+    "waypost": {
+      "name": "waypost",
+      "category": "prop",
+      "bounds": [
+        0.6601560115814209,
+        0.9516599774360657,
+        0.17822200059890747
+      ],
+      "height": 2.2,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+            "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+          ],
+          "bytes": 307211,
+          "textureSize": 1024,
+          "triangles": 1918
+        },
+        {
+          "level": 1,
+          "model": "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/bfd4bf0c863010ae3f5fce345480126bbb776f2924574da2779a4eada004b947.ktx2",
+            "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf"
+          ],
+          "bytes": 161457,
+          "textureSize": 512,
+          "triangles": 1918
+        },
+        {
+          "level": 2,
+          "model": "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+          "resources": [
+            "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+            "./content/f184c62017e7bfc147ddc526342421e987cf23d60a02e033bce247fc9a65cdf1.ktx2",
+            "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf"
+          ],
+          "bytes": 103981,
+          "textureSize": 256,
+          "triangles": 1918
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+        "resources": [
+          "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+          "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+          "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf"
+        ],
+        "bytes": 307211,
+        "textureSize": 1024,
+        "triangles": 1918
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 760190,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2"
+        ]
+      },
+      "sourceTask": "01a19bdb-d0bc-73d8-a343-fa7b5b5cef4c",
+      "triangles": 1918
+    },
+    "rock-02-jagged-outcrop": {
+      "name": "솟은 바위",
+      "category": "rock",
+      "height": 4.5,
+      "bounds": [
+        4.221744060516357,
+        4,
+        3.0721168518066406
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+          "resources": [
+            "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+            "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
+            "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+          ],
+          "triangles": 5268,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 369163
+        },
+        {
+          "level": 1,
+          "model": "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "resources": [
+            "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
+            "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
+            "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
+            "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+            "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
+            "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf"
+          ],
+          "triangles": 2634,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 177112
+        },
+        {
+          "level": 2,
+          "model": "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "resources": [
+            "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
+            "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
+            "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
+            "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+            "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
+            "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf"
+          ],
+          "triangles": 1158,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 74553
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+        "resources": [
+          "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+          "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
+          "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf"
+        ],
+        "triangles": 5268,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 219765
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 795702,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541"
+    },
+    "tree-01-round-oak": {
+      "name": "참나무",
+      "category": "tree",
+      "height": 9,
+      "bounds": [
+        15.79957103729248,
+        15,
+        11.329959869384766
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559.gltf",
+          "resources": [
+            "./content/9ed62d2ee234d1c681c150330392a51c4e2027e2aead6e60854bf9f09fd64aff.bin",
+            "./content/dd00e80c399d184d538e4d9949852e1faf39a4ee1b8991a7d777cecbaa69af9f.ktx2",
+            "./content/5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559.gltf"
+          ],
+          "triangles": 4494,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 884012
+        },
+        {
+          "level": 1,
+          "model": "./content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+          "resources": [
+            "./content/7b24f5735117cf6b1cfad5058fa88da2b85c058b55646d2065928e2359836c9c.bin",
+            "./content/1f04e62fb4236ff01656efff7653f67786649c0698ddb108e697424603af2ae1.ktx2",
+            "./content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf"
+          ],
+          "triangles": 3085,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 407325
+        },
+        {
+          "level": 2,
+          "model": "./content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+          "resources": [
+            "./content/3fa07700a877f4b38b3c9b712fb8dffc1c5aad673be4479ef7e33552a5c0c3dc.bin",
+            "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
+            "./content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf"
+          ],
+          "triangles": 2383,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 233442
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf",
+        "resources": [
+          "./content/9ed62d2ee234d1c681c150330392a51c4e2027e2aead6e60854bf9f09fd64aff.bin",
+          "./content/1f04e62fb4236ff01656efff7653f67786649c0698ddb108e697424603af2ae1.ktx2",
+          "./content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf"
+        ],
+        "triangles": 4494,
+        "textureSize": 1024,
+        "normalMap": false,
+        "bytes": 453506
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2050216,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2"
+        ],
+        "colorResolution": 4096,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "eb8a3e873044253fb6f22949b7d4ac22c1fdfac36026f3e8d937e90c8d3d783f",
+      "treeRefinement": {
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
+        "sourceModelSha256": "72adf091488def3d272a6879346a05819ff82c27138dfbf14095e312be2cb2a6",
+        "originalTriangles": [
+          4687,
+          3218,
+          2596
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            11.743156909942627,
+            11.232125759124756
+          ],
+          "rootWidthAfter": [
+            2.951576590538025,
+            2.7273372411727905
+          ],
+          "trunkWidthBefore": [
+            8.181390881538391,
+            6.640306234359741
+          ],
+          "trunkWidthAfter": [
+            4.749637603759766,
+            3.6375392079353333
+          ]
+        }
+      }
+    },
+    "tree-02-slender-pine": {
+      "name": "침엽수",
+      "category": "tree",
+      "height": 12,
+      "bounds": [
+        7.039412021636963,
+        15,
+        7.891507148742676
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249.gltf",
+          "resources": [
+            "./content/13592054946b33997a701577cf14d0175dbedc9296c39d295677ef8aa32fa569.bin",
+            "./content/e31b69980fe617807ecd27ae96459a7d91865abdd6b85027cc9a285b42513207.ktx2",
+            "./content/cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249.gltf"
+          ],
+          "triangles": 5003,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 860337
+        },
+        {
+          "level": 1,
+          "model": "./content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "resources": [
+            "./content/a7ff7377958d2b7ea4f80bd05e7cda0ad9ff0fef87e404e01122c2e68ab099b1.bin",
+            "./content/0ae3360a6a3d75c9a923864a0c9913c14df2433513263e6fa799831af0948bdb.ktx2",
+            "./content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf"
+          ],
+          "triangles": 3649,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 412205
+        },
+        {
+          "level": 2,
+          "model": "./content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf",
+          "resources": [
+            "./content/516e240aed56b3cda64c648aa0eda7290c0299832d690df9c062084cbb618042.bin",
+            "./content/cfbc08b297aa71bfa8f9eeaa65be2d64a53b3177d93f1e3eb0119aa84e89ab68.ktx2",
+            "./content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf"
+          ],
+          "triangles": 3000,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 259418
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+        "resources": [
+          "./content/13592054946b33997a701577cf14d0175dbedc9296c39d295677ef8aa32fa569.bin",
+          "./content/0ae3360a6a3d75c9a923864a0c9913c14df2433513263e6fa799831af0948bdb.ktx2",
+          "./content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf"
+        ],
+        "triangles": 5003,
+        "textureSize": 1024,
+        "normalMap": false,
+        "bytes": 471185
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 1720066,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2"
+        ],
+        "colorResolution": 4096,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "b28de9db6c8986262fdc6437d36bee17e7710f99b4814737243891a3f764f8f7",
+      "treeRefinement": {
+        "version": 2,
+        "method": "existing-canopy-refinement-with-natural-root-and-trunk-proportions",
+        "sourceModelSha256": "b3a1f3df305ce36b6ab563f0a2a2eaf3b823609c0c387af8ad191740eff09118",
+        "originalTriangles": [
+          5352,
+          3848,
+          3671
+        ],
+        "leafPositionsSharedAcrossLods": true,
+        "newTextures": 0,
+        "proportions": {
+          "sourceRevision": "286a9f5",
+          "rootWidthBefore": [
+            3.7308000326156616,
+            4.536846995353699
+          ],
+          "rootWidthAfter": [
+            2.038594961166382,
+            2.142397701740265
+          ],
+          "trunkWidthBefore": [
+            6.155935287475586,
+            7.754019260406494
+          ],
+          "trunkWidthAfter": [
+            4.794400215148926,
+            5.75468635559082
+          ]
+        }
+      }
+    },
+    "rock-01-mossy-boulder": {
+      "name": "이끼 둥근 바위",
+      "category": "rock",
+      "height": 2.2,
+      "bounds": [
+        1.5569519996643066,
+        1,
+        1.6407029628753662
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "resources": [
+            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
+            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+          ],
+          "triangles": 5255,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 361154
+        },
+        {
+          "level": 1,
+          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "resources": [
+            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
+            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
+            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
+            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+          ],
+          "triangles": 2626,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 174895
+        },
+        {
+          "level": 2,
+          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "resources": [
+            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
+            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
+            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
+            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
+            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+          ],
+          "triangles": 1156,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 72848
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "resources": [
+          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+        ],
+        "triangles": 5255,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 216760
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 751327,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+    },
+    "handcart": {
+      "name": "두 바퀴 손수레",
+      "category": "prop",
+      "height": 1.5,
+      "bounds": [
+        1.3336839675903391,
+        1,
+        2.0656750202179
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 1.5707963267949,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf",
+          "resources": [
+            "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+            "./content/35b3f819b45d015baa72f4acf5d4d124e18721e05607abdce9f0e41d9536ab3e.ktx2",
+            "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf"
+          ],
+          "triangles": 4737,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 410738
+        },
+        {
+          "level": 1,
+          "model": "./content/85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512.gltf",
+          "resources": [
+            "./content/3407be9e4a95d33e63791fe5a8215bb17c600f7842128ea69e984e56801ac2a6.bin",
+            "./content/1dd9531c0d25fcf52aa4167aff0935057ec5d26a2350aed6721af1f78b30f00a.bin",
+            "./content/97ae5388c54de2eaca12af2753204e11cbcc243ba90afd350129edfc2fb4eeca.bin",
+            "./content/29ac340019fac3ec4b247379179432970b3d2cbbe8294474a951963e19bfd281.bin",
+            "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
+            "./content/85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512.gltf"
+          ],
+          "triangles": 2367,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 220987
+        },
+        {
+          "level": 2,
+          "model": "./content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+          "resources": [
+            "./content/0395a5c717c9d019591fbebb65f84167b7063c845c2843bebb5fed906489ce38.bin",
+            "./content/8850c729e2ad30a9e46d444922cd0125a7adf78cd915dfb40bdf862bc9dbd645.bin",
+            "./content/3fbc90ef6280ef2c5ee03305dffc8284d3a66f8fae028d984c8293b99038be68.bin",
+            "./content/2a06db94bf08441e0f81713e2f3307e6f3ad0dd784aee66c63a60b888099f268.bin",
+            "./content/83b1f79d832612a00c90ba7ef3858dba0ed4247db95bf6f02579bf82d8bb253d.ktx2",
+            "./content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf"
+          ],
+          "triangles": 1387,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 120421
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+        "resources": [
+          "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+          "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
+          "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf"
+        ],
+        "triangles": 4737,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 249690
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 800904,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204"
+    },
+    "firewood": {
+      "name": "장작 거치대",
+      "category": "prop",
+      "height": 1.2,
+      "bounds": [
+        1.4825549125671387,
+        0.800000011920929,
+        0.7191600203514099
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "visualReview": "APPROVED",
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf",
+          "resources": [
+            "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
+            "./content/abd36d58cfd1c85553cced694a8ed27a3c3a0f56477cd4b5105a1ec234833e9e.ktx2",
+            "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf"
+          ],
+          "triangles": 4815,
+          "textureSize": 1024,
+          "normalMap": false,
+          "bytes": 391870
+        },
+        {
+          "level": 1,
+          "model": "./content/2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9.gltf",
+          "resources": [
+            "./content/bc8755b759a4cc9204312729e3bea00d41d36b3edc759f8707d4e1d6a43528fe.bin",
+            "./content/db9a6e29d5f72446baef7d0c7cfca8496f8f665a74e3843d5d1c27f7bf4be2a9.bin",
+            "./content/ad3e350d6006552e788942cbd362a120470a2f497f5d0f8d50a882a77ff53657.bin",
+            "./content/3f79422c52a185e28afc4de198aace388c3229ee5263236917937df158369859.bin",
+            "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
+            "./content/2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9.gltf"
+          ],
+          "triangles": 2407,
+          "textureSize": 512,
+          "normalMap": false,
+          "bytes": 216584
+        },
+        {
+          "level": 2,
+          "model": "./content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+          "resources": [
+            "./content/d885256d8399ad4b86bbc2d671bf7a8f8dfa7bedb62557977dbd487fb4064a38.bin",
+            "./content/63092846bb1932ecbfad690c10956312b64dab70a6ff4120aacabf0d3d660909.bin",
+            "./content/b85b23385ba98ad21c9bd3922f3f86086d31e1b6e2178beea2c1eef23f313547.bin",
+            "./content/a7b54e904e0f1f4357bc36df12943b4a4c7ec64f4f3df29ac6aaf8c38ac1def0.bin",
+            "./content/2274c97252f7a9feeca642a220f4d5cead6dae976a15820dd25cdea069205b9d.ktx2",
+            "./content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf"
+          ],
+          "triangles": 1719,
+          "textureSize": 256,
+          "normalMap": false,
+          "bytes": 128129
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf",
+        "resources": [
+          "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
+          "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
+          "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf"
+        ],
+        "triangles": 4815,
+        "textureSize": 512,
+        "normalMap": false,
+        "bytes": 241797
+      },
+      "geometryLod": true,
+      "highTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 731878,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
+        "shading": "toon-color"
+      },
+      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9"
+    },
+    "village-plains-outskirts-ground": {
+      "name": "대평원 입구 지면 · 기존 지형 조각",
+      "category": "background",
+      "height": 8.289731845259666,
+      "bounds": [
+        80,
+        8.289731845259666,
+        98
+      ],
+      "origin": "bottom-center",
+      "frontYawOffset": 0,
+      "surfaceStyle": "outskirts-ground",
+      "geometryLod": true,
+      "sharedLowPolyGeometry": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+          "resources": [
+            "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+            "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+            "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf"
+          ],
+          "triangles": 9434,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 1335308
+        },
+        {
+          "level": 1,
+          "model": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+          "resources": [
+            "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+            "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+            "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf"
+          ],
+          "triangles": 9434,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 1335308
+        },
+        {
+          "level": 2,
+          "model": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+          "resources": [
+            "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+            "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+            "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf"
+          ],
+          "triangles": 9434,
+          "textureSize": 2048,
+          "normalMap": false,
+          "bytes": 1335308
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+        "resources": [
+          "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+          "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+          "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf"
+        ],
+        "triangles": 9434,
+        "textureSize": 2048,
+        "normalMap": false,
+        "bytes": 1335308
+      }
+    }
+  },
+  "placements": [
+    {
+      "id": "village-plains-outskirts-village-waypost",
+      "asset": "waypost",
+      "x": 4.814418717230567,
+      "z": 83.87838597158336,
+      "kind": "prop",
+      "scale": 1,
+      "yaw": 0.4048917862850834,
+      "colliderRadius": 0,
+      "sourcePlacementId": "village-waypost",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-0",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 14.531094748850037,
+      "z": 147.1680866099696,
+      "kind": "rock",
+      "scale": 2.03,
+      "yaw": -0.8659045405098131,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-0",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-1",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 20.439884227537554,
+      "z": 145.72371584851265,
+      "kind": "rock",
+      "scale": 1.9575,
+      "yaw": -0.16590454050981318,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-1",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-2",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 21.62164212327506,
+      "z": 140.86537783270293,
+      "kind": "rock",
+      "scale": 1.885,
+      "yaw": 0.5340954594901868,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-2",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-3",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 20.571190660397278,
+      "z": 135.87573338403348,
+      "kind": "rock",
+      "scale": 1.74,
+      "yaw": 1.2340954594901867,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-3",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-4",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 17.68244913748338,
+      "z": 131.67392753252236,
+      "kind": "rock",
+      "scale": 1.45,
+      "yaw": 1.6340954594901866,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-4",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-5",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 17.551142704623658,
+      "z": 149.13768310286545,
+      "kind": "rock",
+      "scale": 1.2325,
+      "yaw": -0.5659045405098132,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-5",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-rock-6",
+      "asset": "rock-02-jagged-outcrop",
+      "x": 24.24777078046951,
+      "z": 141.91582929558072,
+      "kind": "rock",
+      "scale": 0.9425,
+      "yaw": 0.7340954594901867,
+      "colliderRadius": 0,
+      "elevation": 0,
+      "sourcePlacementId": "lookout-rock-6",
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-lookout-oak",
+      "asset": "tree-01-round-oak",
+      "x": 13.743256151691703,
+      "z": 137.7140234440696,
+      "kind": "tree",
+      "scale": 0.8,
+      "yaw": -0.9659045405098132,
+      "colliderRadius": 0,
+      "sourcePlacementId": "lookout-oak",
+      "elevation": 8.090000629425049,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-forest-north-8",
+      "asset": "tree-01-round-oak",
+      "x": -0.1752257314388892,
+      "z": 153.4707953872363,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": 4.831934229864843,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "forest-north-8",
+      "elevation": -0.008739504788536873,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-forest-north-9",
+      "asset": "tree-01-round-oak",
+      "x": -23.285157914750062,
+      "z": 150.31944099860294,
+      "kind": "tree",
+      "scale": 0.92,
+      "yaw": 4.522484243384667,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "forest-north-9",
+      "elevation": -0.028741240967065096,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-forest-north-10",
+      "asset": "tree-02-slender-pine",
+      "x": -24.598222243347287,
+      "z": 157.40998837302797,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": 3.286470965950854,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "forest-north-10",
+      "elevation": -0.021325963782146573,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-forest-east-99",
+      "asset": "tree-01-round-oak",
+      "x": 2.188290060036117,
+      "z": 158.98566556734465,
+      "kind": "tree",
+      "scale": 1.05,
+      "yaw": 4.864253473172999,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "forest-east-99",
+      "elevation": -0.07028596848249465,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-forest-east-100",
+      "asset": "tree-02-slender-pine",
+      "x": -0.9630643285972198,
+      "z": 166.86405153892798,
+      "kind": "tree",
+      "scale": 0.83,
+      "yaw": 3.958446940708078,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "forest-east-100",
+      "elevation": -0.05442998744547367,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-meadow-oak-0",
+      "asset": "tree-01-round-oak",
+      "x": 18.995513466080602,
+      "z": 94.1202877346417,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": 2.8833828331093407,
+      "colliderRadius": 0,
+      "sourcePlacementId": "meadow-oak-0",
+      "elevation": 1.5736300945281947,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-meadow-oak-1",
+      "asset": "tree-01-round-oak",
+      "x": -15.406771943166707,
+      "z": 123.00770296378067,
+      "kind": "tree",
+      "scale": 0.7,
+      "yaw": 4.782175751424498,
+      "colliderRadius": 0,
+      "sourcePlacementId": "meadow-oak-1",
+      "elevation": 0.45487502217292786,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-29",
+      "asset": "rock-01-mossy-boulder",
+      "x": 18.87043454804865,
+      "z": 114.80109236241965,
+      "kind": "rock",
+      "scale": 0.537950952402316,
+      "yaw": 4.420771433788455,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-29",
+      "elevation": 0.7545016040747463,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-30",
+      "asset": "rock-01-mossy-boulder",
+      "x": 20.88333801439194,
+      "z": 104.79781685155588,
+      "kind": "rock",
+      "scale": 0.45811975761782375,
+      "yaw": 3.1268894238426457,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-30",
+      "elevation": 2.3367797300093103,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-31",
+      "asset": "rock-01-mossy-boulder",
+      "x": 27.391709205389773,
+      "z": 110.10247566618838,
+      "kind": "rock",
+      "scale": 0.18017526352312416,
+      "yaw": 4.653221986445702,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-31",
+      "elevation": 2.4663148513900968,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-32",
+      "asset": "rock-01-mossy-boulder",
+      "x": 26.541816330159364,
+      "z": 112.483180649793,
+      "kind": "rock",
+      "scale": 0.21751951727550478,
+      "yaw": -0.5009561191097728,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-32",
+      "elevation": 1.9204684691741705,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-33",
+      "asset": "rock-01-mossy-boulder",
+      "x": 26.61658799353021,
+      "z": 106.2835127099644,
+      "kind": "rock",
+      "scale": 0.6629910184256732,
+      "yaw": 3.2935929510492006,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-33",
+      "elevation": 3.0685427475071965,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-34",
+      "asset": "rock-01-mossy-boulder",
+      "x": 29.066900007805884,
+      "z": 111.96155852074187,
+      "kind": "rock",
+      "scale": 0.5030225285887718,
+      "yaw": 4.045614631709746,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-34",
+      "elevation": 2.2434022757899648,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-35",
+      "asset": "rock-01-mossy-boulder",
+      "x": 22.277848424621702,
+      "z": 104.92295139141635,
+      "kind": "rock",
+      "scale": 0.35734491543844343,
+      "yaw": 4.597506982808105,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-35",
+      "elevation": 2.5921235294597955,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-36",
+      "asset": "rock-01-mossy-boulder",
+      "x": 23.556310664203764,
+      "z": 105.42053599700773,
+      "kind": "rock",
+      "scale": 0.28836644027382136,
+      "yaw": 2.6878088703873675,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-36",
+      "elevation": 2.7506730156384926,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-37",
+      "asset": "rock-01-mossy-boulder",
+      "x": 29.607690690828598,
+      "z": 106.93022936147182,
+      "kind": "rock",
+      "scale": 0.7255376770161093,
+      "yaw": 2.1771631949144523,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-37",
+      "elevation": 3.271801737978923,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-outcrop-stone-38",
+      "asset": "rock-01-mossy-boulder",
+      "x": 29.899110748544807,
+      "z": 107.09629505005698,
+      "kind": "rock",
+      "scale": 0.30732883512042464,
+      "yaw": 0.3087937423522691,
+      "colliderRadius": 0,
+      "sourcePlacementId": "outcrop-stone-38",
+      "elevation": 3.2738199408594415,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-river-stone-112",
+      "asset": "rock-01-mossy-boulder",
+      "x": -4.508338015809731,
+      "z": 158.59174626876546,
+      "kind": "rock",
+      "scale": 0.4,
+      "yaw": 4.106881735700287,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "river-stone-112",
+      "elevation": -0.12518998235464096,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-river-stone-113",
+      "asset": "rock-01-mossy-boulder",
+      "x": -26.83043160196257,
+      "z": 149.66290883430435,
+      "kind": "rock",
+      "scale": 0.4,
+      "yaw": 4.158009695907228,
+      "colliderRadius": 0,
+      "composition": "crossroads-grove",
+      "sourcePlacementId": "river-stone-113",
+      "elevation": 0.0014605028554797173,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-north-tree-0",
+      "asset": "tree-01-round-oak",
+      "x": 19.652045630379217,
+      "z": 82.9592409415653,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": -0.9659045405098132,
+      "colliderRadius": 0,
+      "grove": "gate-north",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-north-tree-0",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-north-tree-2",
+      "asset": "tree-01-round-oak",
+      "x": 16.549558443744203,
+      "z": 87.68941781529483,
+      "kind": "tree",
+      "scale": 0.775,
+      "yaw": 1.7740954594901872,
+      "colliderRadius": 0,
+      "grove": "gate-north",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-north-tree-2",
+      "elevation": 0.12283840658195357,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-north-tree-3",
+      "asset": "tree-02-slender-pine",
+      "x": 24.750921878993857,
+      "z": 82.9210178946768,
+      "kind": "tree",
+      "scale": 0.94,
+      "yaw": 3.1440954594901873,
+      "colliderRadius": 0,
+      "grove": "gate-north",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-north-tree-3",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-north-stone-1",
+      "asset": "rock-01-mossy-boulder",
+      "x": 27.319471526745435,
+      "z": 85.45134449553989,
+      "kind": "rock",
+      "scale": 0.59,
+      "yaw": 0.034095459490186775,
+      "colliderRadius": 0,
+      "grove": "gate-north",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-north-stone-1",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-tree-0",
+      "asset": "tree-01-round-oak",
+      "x": -15.800691241745874,
+      "z": 91.62546551030698,
+      "kind": "tree",
+      "scale": 0.775,
+      "yaw": -1.6659045405098132,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-tree-0",
+      "elevation": 0.18074568361043905,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-tree-1",
+      "asset": "tree-01-round-oak",
+      "x": -17.092812440021238,
+      "z": 86.79530787219957,
+      "kind": "tree",
+      "scale": 0.94,
+      "yaw": -0.2959045405098131,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-tree-1",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-tree-2",
+      "asset": "tree-01-round-oak",
+      "x": -9.566404617037366,
+      "z": 90.16475668203881,
+      "kind": "tree",
+      "scale": 0.83,
+      "yaw": 1.074095459490187,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-tree-2",
+      "elevation": 0.13446979580636553,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-tree-3",
+      "asset": "tree-02-slender-pine",
+      "x": -11.700312070268325,
+      "z": 96.11844788842879,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": 2.444095459490187,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-tree-3",
+      "elevation": 0.3392669718586181,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-tree-4",
+      "asset": "tree-01-round-oak",
+      "x": -17.93459869497684,
+      "z": 97.57915671669697,
+      "kind": "tree",
+      "scale": 0.885,
+      "yaw": 3.8140954594901872,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-tree-4",
+      "elevation": 0.5060425764074461,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-stone-0",
+      "asset": "rock-01-mossy-boulder",
+      "x": -22.709328386425604,
+      "z": 87.46965839217079,
+      "kind": "rock",
+      "scale": 0.59,
+      "yaw": -1.6659045405098132,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-stone-0",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-south-stone-1",
+      "asset": "rock-01-mossy-boulder",
+      "x": -8.330863260429084,
+      "z": 88.5920400654449,
+      "kind": "rock",
+      "scale": 0.7,
+      "yaw": -0.6659045405098132,
+      "colliderRadius": 0,
+      "grove": "gate-south",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-south-stone-1",
+      "elevation": 0.12123234084481159,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-lookout-west-tree-0",
+      "asset": "tree-01-round-oak",
+      "x": 13.349336853112536,
+      "z": 113.94755909645981,
+      "kind": "tree",
+      "scale": 0.94,
+      "yaw": -0.7659045405098132,
+      "colliderRadius": 0,
+      "grove": "lookout-west",
+      "zone": "meadow",
+      "sourcePlacementId": "grove-lookout-west-tree-0",
+      "elevation": 0.36971232295036316,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-lookout-west-tree-2",
+      "asset": "tree-02-slender-pine",
+      "x": 18.368844096400707,
+      "z": 117.92305240353224,
+      "kind": "tree",
+      "scale": 0.72,
+      "yaw": 1.974095459490187,
+      "colliderRadius": 0,
+      "grove": "lookout-west",
+      "zone": "meadow",
+      "sourcePlacementId": "grove-lookout-west-tree-2",
+      "elevation": 0.44421901673464664,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-lookout-west-tree-1",
+      "asset": "tree-01-round-oak",
+      "x": 12.378699418527486,
+      "z": 119.95237907465918,
+      "kind": "tree",
+      "scale": 0.885,
+      "yaw": 3.3440954594901875,
+      "colliderRadius": 0,
+      "grove": "lookout-west",
+      "zone": "meadow",
+      "sourcePlacementId": "grove-lookout-west-tree-1",
+      "elevation": 0.5003659025640446,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-lookout-west-tree-3",
+      "asset": "tree-01-round-oak",
+      "x": 7.359192175239315,
+      "z": 115.97688576758677,
+      "kind": "tree",
+      "scale": 0.775,
+      "yaw": 4.714095459490188,
+      "colliderRadius": 0,
+      "grove": "lookout-west",
+      "zone": "meadow",
+      "sourcePlacementId": "grove-lookout-west-tree-3",
+      "elevation": 1.2249134870090348,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-lookout-west-stone-1",
+      "asset": "rock-01-mossy-boulder",
+      "x": 20.36882016687537,
+      "z": 117.91326886998147,
+      "kind": "rock",
+      "scale": 0.59,
+      "yaw": 0.23409545949018673,
+      "colliderRadius": 0,
+      "grove": "lookout-west",
+      "zone": "meadow",
+      "sourcePlacementId": "grove-lookout-west-stone-1",
+      "elevation": 0.5572135436757506,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-cart",
+      "asset": "handcart",
+      "x": -6.084015210126406,
+      "z": 93.98898130178199,
+      "kind": "prop",
+      "scale": 1,
+      "yaw": -1.8659045405098131,
+      "colliderRadius": 0,
+      "grove": "gate-cart",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-cart",
+      "elevation": 0.19862163811922107,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-grove-gate-wood",
+      "asset": "firewood",
+      "x": -6.740547374425018,
+      "z": 97.53425498899449,
+      "kind": "prop",
+      "scale": 0.85,
+      "yaw": -0.8659045405098131,
+      "colliderRadius": 0,
+      "grove": "gate-wood",
+      "zone": "village",
+      "sourcePlacementId": "grove-gate-wood",
+      "elevation": 0.3050648868083954,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-0",
+      "asset": "rock-01-mossy-boulder",
+      "x": 18.601594167501435,
+      "z": 85.58536959875974,
+      "kind": "rock",
+      "scale": 0.58,
+      "yaw": 1.0507680701962232,
+      "colliderRadius": 0,
+      "yOffset": -0.17482,
+      "landscape": "ground-rock",
+      "rockGroup": 0,
+      "sourcePlacementId": "landscape-rock-0",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-1",
+      "asset": "rock-01-mossy-boulder",
+      "x": -26.567818736243126,
+      "z": 107.11962458775425,
+      "kind": "rock",
+      "scale": 1.0899999999999999,
+      "yaw": 0.9708281391429381,
+      "colliderRadius": 0,
+      "yOffset": -0.24061,
+      "landscape": "ground-rock",
+      "rockGroup": 1,
+      "sourcePlacementId": "landscape-rock-1",
+      "elevation": 2.0178444385528564,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-9",
+      "asset": "rock-01-mossy-boulder",
+      "x": -14.618933346008369,
+      "z": 147.6933123414085,
+      "kind": "rock",
+      "scale": 1.0899999999999999,
+      "yaw": 4.863126322014144,
+      "colliderRadius": 0,
+      "yOffset": -0.24061,
+      "landscape": "ground-rock",
+      "rockGroup": 13,
+      "sourcePlacementId": "landscape-rock-9",
+      "elevation": 0.015597599791362882,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-11",
+      "asset": "rock-01-mossy-boulder",
+      "x": 18.732900600361155,
+      "z": 90.96893334600837,
+      "kind": "rock",
+      "scale": 0.75,
+      "yaw": 2.4489581584713176,
+      "colliderRadius": 0,
+      "yOffset": -0.19675,
+      "landscape": "ground-rock",
+      "rockGroup": 0,
+      "sourcePlacementId": "landscape-rock-11",
+      "elevation": 0.5307270810008049,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-12",
+      "asset": "rock-01-mossy-boulder",
+      "x": -26.436512303383402,
+      "z": 112.50318833500286,
+      "kind": "rock",
+      "scale": 1.26,
+      "yaw": 0.0738083856410805,
+      "colliderRadius": 0,
+      "yOffset": -0.26254,
+      "landscape": "ground-rock",
+      "rockGroup": 1,
+      "sourcePlacementId": "landscape-rock-12",
+      "elevation": 2.201986312866211,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-20",
+      "asset": "rock-01-mossy-boulder",
+      "x": 13.349336853112533,
+      "z": 83.48446667300418,
+      "kind": "rock",
+      "scale": 0.9199999999999999,
+      "yaw": 3.634462478181879,
+      "colliderRadius": 0,
+      "yOffset": -0.21867999999999999,
+      "landscape": "ground-rock",
+      "rockGroup": 0,
+      "sourcePlacementId": "landscape-rock-20",
+      "elevation": 0.11999999731779099,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-21",
+      "asset": "rock-02-jagged-outcrop",
+      "x": -31.820076050632025,
+      "z": 105.01872166199868,
+      "kind": "rock",
+      "scale": 0.67,
+      "yaw": 4.474001787015352,
+      "colliderRadius": 0,
+      "yOffset": -0.2130625,
+      "landscape": "ground-rock",
+      "rockGroup": 1,
+      "sourcePlacementId": "landscape-rock-21",
+      "elevation": 1.9415125250816345,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-landscape-rock-31",
+      "asset": "rock-02-jagged-outcrop",
+      "x": -19.871190660397268,
+      "z": 145.59240941565295,
+      "kind": "rock",
+      "scale": 0.34,
+      "yaw": 3.320901086668459,
+      "colliderRadius": 0,
+      "yOffset": -0.157375,
+      "landscape": "ground-rock",
+      "rockGroup": 13,
+      "sourcePlacementId": "landscape-rock-31",
+      "elevation": 0.060493601486086845,
+      "background": true,
+      "villagePlainsOutskirts": true
+    },
+    {
+      "id": "village-plains-outskirts-ground",
+      "asset": "village-plains-outskirts-ground",
+      "kind": "ground-detail",
+      "x": 0,
+      "z": 129,
+      "yaw": 0,
+      "scale": 1,
+      "elevation": -0.1147913545370102,
+      "colliderRadius": 0,
+      "background": true,
+      "villagePlainsOutskirts": true
+    }
+  ],
+  "resources": [
+    "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+    "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+    "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+    "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf",
+    "./content/bfd4bf0c863010ae3f5fce345480126bbb776f2924574da2779a4eada004b947.ktx2",
+    "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+    "./content/f184c62017e7bfc147ddc526342421e987cf23d60a02e033bce247fc9a65cdf1.ktx2",
+    "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+    "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+    "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+    "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
+    "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+    "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
+    "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
+    "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
+    "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+    "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
+    "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+    "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
+    "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
+    "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
+    "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+    "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
+    "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2",
+    "./content/5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559.gltf",
+    "./content/9ed62d2ee234d1c681c150330392a51c4e2027e2aead6e60854bf9f09fd64aff.bin",
+    "./content/dd00e80c399d184d538e4d9949852e1faf39a4ee1b8991a7d777cecbaa69af9f.ktx2",
+    "./content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+    "./content/7b24f5735117cf6b1cfad5058fa88da2b85c058b55646d2065928e2359836c9c.bin",
+    "./content/1f04e62fb4236ff01656efff7653f67786649c0698ddb108e697424603af2ae1.ktx2",
+    "./content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+    "./content/3fa07700a877f4b38b3c9b712fb8dffc1c5aad673be4479ef7e33552a5c0c3dc.bin",
+    "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
+    "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+    "./content/cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249.gltf",
+    "./content/13592054946b33997a701577cf14d0175dbedc9296c39d295677ef8aa32fa569.bin",
+    "./content/e31b69980fe617807ecd27ae96459a7d91865abdd6b85027cc9a285b42513207.ktx2",
+    "./content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+    "./content/a7ff7377958d2b7ea4f80bd05e7cda0ad9ff0fef87e404e01122c2e68ab099b1.bin",
+    "./content/0ae3360a6a3d75c9a923864a0c9913c14df2433513263e6fa799831af0948bdb.ktx2",
+    "./content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf",
+    "./content/516e240aed56b3cda64c648aa0eda7290c0299832d690df9c062084cbb618042.bin",
+    "./content/cfbc08b297aa71bfa8f9eeaa65be2d64a53b3177d93f1e3eb0119aa84e89ab68.ktx2",
+    "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+    "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+    "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+    "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
+    "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+    "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
+    "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
+    "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
+    "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+    "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
+    "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+    "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
+    "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
+    "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
+    "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+    "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
+    "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2",
+    "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf",
+    "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+    "./content/35b3f819b45d015baa72f4acf5d4d124e18721e05607abdce9f0e41d9536ab3e.ktx2",
+    "./content/85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512.gltf",
+    "./content/3407be9e4a95d33e63791fe5a8215bb17c600f7842128ea69e984e56801ac2a6.bin",
+    "./content/1dd9531c0d25fcf52aa4167aff0935057ec5d26a2350aed6721af1f78b30f00a.bin",
+    "./content/97ae5388c54de2eaca12af2753204e11cbcc243ba90afd350129edfc2fb4eeca.bin",
+    "./content/29ac340019fac3ec4b247379179432970b3d2cbbe8294474a951963e19bfd281.bin",
+    "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
+    "./content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+    "./content/0395a5c717c9d019591fbebb65f84167b7063c845c2843bebb5fed906489ce38.bin",
+    "./content/8850c729e2ad30a9e46d444922cd0125a7adf78cd915dfb40bdf862bc9dbd645.bin",
+    "./content/3fbc90ef6280ef2c5ee03305dffc8284d3a66f8fae028d984c8293b99038be68.bin",
+    "./content/2a06db94bf08441e0f81713e2f3307e6f3ad0dd784aee66c63a60b888099f268.bin",
+    "./content/83b1f79d832612a00c90ba7ef3858dba0ed4247db95bf6f02579bf82d8bb253d.ktx2",
+    "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+    "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf",
+    "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
+    "./content/abd36d58cfd1c85553cced694a8ed27a3c3a0f56477cd4b5105a1ec234833e9e.ktx2",
+    "./content/2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9.gltf",
+    "./content/bc8755b759a4cc9204312729e3bea00d41d36b3edc759f8707d4e1d6a43528fe.bin",
+    "./content/db9a6e29d5f72446baef7d0c7cfca8496f8f665a74e3843d5d1c27f7bf4be2a9.bin",
+    "./content/ad3e350d6006552e788942cbd362a120470a2f497f5d0f8d50a882a77ff53657.bin",
+    "./content/3f79422c52a185e28afc4de198aace388c3229ee5263236917937df158369859.bin",
+    "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
+    "./content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+    "./content/d885256d8399ad4b86bbc2d671bf7a8f8dfa7bedb62557977dbd487fb4064a38.bin",
+    "./content/63092846bb1932ecbfad690c10956312b64dab70a6ff4120aacabf0d3d660909.bin",
+    "./content/b85b23385ba98ad21c9bd3922f3f86086d31e1b6e2178beea2c1eef23f313547.bin",
+    "./content/a7b54e904e0f1f4357bc36df12943b4a4c7ec64f4f3df29ac6aaf8c38ac1def0.bin",
+    "./content/2274c97252f7a9feeca642a220f4d5cead6dae976a15820dd25cdea069205b9d.ktx2",
+    "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+    "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+    "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+    "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2"
+  ],
+  "ground": {
+    "version": 1,
+    "span": 288,
+    "color": {
+      "url": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 1197481,
+      "codec": "etc1s",
+      "alpha": true,
+      "gpuBlockBytes": 16
+    },
+    "detail": {
+      "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 119227
+    },
+    "soilMaskAlphaRange": [
+      64,
+      255
+    ],
+    "gpuBytesWithMips": 5941931,
+    "extraDrawCalls": 0,
+    "detailSamples": 2,
+    "method": "plains-village-palette-brushwork-own-roads-lookout-and-stream",
+    "resources": [
+      "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+      "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
+    ],
+    "compression": "KTX2 color; lossless linear packed detail",
+    "asset": "village-plains-outskirts-ground",
+    "pivot": {
+      "x": 0,
+      "z": 129,
+      "y": -0.1397913545370102
+    },
+    "sourceUv": "u=.5+plainsX/span,v=.5-plainsZ/span",
+    "min": [
+      -40,
+      -0.1397913545370102,
+      80
+    ],
+    "max": [
+      40,
+      8.149940490722656,
+      178
+    ]
+  },
+  "source": {
+    "window": {
+      "minX": -32,
+      "maxX": 32,
+      "minZ": 80,
+      "maxZ": 170
+    },
+    "groundWindow": {
+      "minX": -40,
+      "maxX": 40,
+      "minZ": 80,
+      "maxZ": 178
+    },
+    "boundaryYaw": 1.1659045405098132,
+    "plainsManifestSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+    "groundManifestSha256": "fae2d5c32dc7efe9c1994c168809d59d9c1453e2351ff22b722feac376d7a66f",
+    "terrainSha256": "97eb8b1678ada2929067f26a92be6d8887a1171c3d8ea2c66a936804416dfc88"
+  }
+}

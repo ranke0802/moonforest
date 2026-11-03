@@ -2,6 +2,8 @@ import {instantiateStaticMap} from './static-map-instances.js';
 import {loadMapContainer} from './map-container.js';
 import {readMapManifest} from './map-manifests.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
+import outskirtsManifest from '../public/assets/village-plains-outskirts.json' with {type:'json'};
+import {applyVillagePlainsOutskirtsGround} from './village-plains-outskirts-ground.js';
 import {createVillageTransform} from './village-environment.js';
 import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-demand.js';
 import {villageLodSources,hasVillageGeometry,VILLAGE_LOD_COVERAGE} from './village-lod.js';
@@ -43,7 +45,10 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
   try{
   checkMapLoadSnapshot(world,snapshot,lifetime);
   const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${world.environmentManifest??'village'}.json`,location.href);
-  const manifest=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));checkMapLoadSnapshot(world,snapshot,lifetime);
+  const original=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));checkMapLoadSnapshot(world,snapshot,lifetime);
+  // The village's approved 25-asset graph stays intact. A bounded reciprocal
+  // vista reuses its sources and this same streaming/lifetime path, town only.
+  const manifest=world.mapId==='village'?{...original,assets:{...original.assets,...outskirtsManifest.assets}}:original;
   if(world.villagePrepared)return world.villagePrepared;
   if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));
@@ -170,8 +175,9 @@ export function loadStreamedVillage(world,{
       const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime}),{onLate:container=>container?.dispose()});
       lifetime.check();containers.push(container);
       const meshes=geometry(container);
+      const outskirtsGround=applyVillagePlainsOutskirtsGround(world,container,{config:asset.config});
       if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
-      prepareVillageInstancing(meshes);applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);
+      prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
       for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category});}
       world.lighting.registerMeshes(meshes);
@@ -189,8 +195,10 @@ export function loadStreamedVillage(world,{
       world.caveFog?.updateRecords(instances);
       const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])];
       world.lighting.registerMeshes(activeSources);
-      for(const mesh of activeSources)outlines.sourceFor(mesh);
-      outlines.addRecords(instances);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
+      if(!outskirtsGround){
+        for(const mesh of activeSources)outlines.sourceFor(mesh);
+        outlines.addRecords(instances);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
+      }
       if(level===2&&instances.some(r=>r.essentialStructural)){
         for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
         world.caveFog?.updateRecords(instances);

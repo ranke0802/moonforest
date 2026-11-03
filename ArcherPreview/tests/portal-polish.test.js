@@ -17,6 +17,7 @@ import {CharacterAnimator} from '../src/animation.js';
 import {prepareMapResources} from '../src/startup-resources.js';
 import {WebGL2ShaderProcessor} from '@babylonjs/core/Engines/WebGL/webGL2ShaderProcessors.js';
 import {readMapContainer} from '../src/map-container.js';
+import {VillageGroundDetail} from '../src/village-ground.js';
 const base=new URL('../public/assets/',import.meta.url);
 
 test('in-document travel serializes release/load, keeps the curtain until ready, and accepts the return trip',async()=>{
@@ -106,12 +107,18 @@ test('actual streamed village/forest round trips retain the player and drain in-
   // Warm its upload and disposal observer before capturing the retained baseline.
   caveFogFallback(scene).getInternalTexture().isReady=true;
   const initial=counts();let loaded=0,holdNext=false,unblock,entered;const loadedContainers=[];
-  const services={initialize:async()=>{},ground:async()=>{},loadContainer:async(model,scene)=>{
+  const services={initialize:async()=>{},ground:async world=>{
+    // Keep real floor-plugin readiness and ownership while omitting image decode.
+    const detail=RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]),1,1,scene,true);
+    detail.getInternalTexture().isReady=true;new VillageGroundDetail(world.floorMaterial,detail);
+    world.releaseGround=()=>{detail.dispose();world.releaseGround=null;};
+  },loadContainer:async(model,scene)=>{
     const {gltf,files}=await readRuntimeGltf(new URL(model.pathname.split('/').at(-1),new URL('content/',base)));
     for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+files.get(b.uri).data.toString('base64');
     const c=await readMapContainer(scene,gltf,'',{skipMaterials:true});
     // Match OPAQUE authored materials while excluding network/GPU image decode.
-    for(const mesh of c.meshes)if(mesh.getTotalVertices()){const m=new PBRMaterial('map-'+loaded+'-'+mesh.name,scene);m.transparencyMode=0;mesh.material=m;c.materials.push(m);}
+    const color=RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]),1,1,scene,true);color.getInternalTexture().isReady=true;c.textures.push(color);
+    for(const mesh of c.meshes)if(mesh.getTotalVertices()){const m=new PBRMaterial('map-'+loaded+'-'+mesh.name,scene);m.transparencyMode=0;m.albedoTexture=color;mesh.material=m;c.materials.push(m);}
     loaded++;loadedContainers.push(c);
     if(holdNext){holdNext=false;await new Promise(resolve=>{unblock=resolve;entered();});}
     return c;
@@ -135,6 +142,7 @@ test('actual streamed village/forest round trips retain the player and drain in-
       unblock();await release;assert.equal(loadedContainers.at(-1).meshes.length,0,'late container disposed without installation');
     }
     world.releaseResourceDownloads();
+    world.releaseGround?.();
     // Observable.remove() unregisters on Babylon's next task.
     await new Promise(resolve=>setTimeout(resolve,10));
     assert.ok(oldRecords.every(r=>r.root.isDisposed()));assert.equal(world.villageStreaming,null);

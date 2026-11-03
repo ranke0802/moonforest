@@ -11,6 +11,23 @@ import {createTerrainGround} from '../src/terrain-mesh.js';
 import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
 import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
 import {isVillageBoundaryTree} from '../src/village-plains-boundary.js';
+import {FOREST_PLACEMENTS} from '../src/monster-forest-layout.js';
+import {plainsToForest} from '../src/plains-forest-boundary.js';
+
+// Run the production authoring generator before its boundary join. This keeps
+// its original760-tuft/32-rock budget observable without restoring duplicates
+// in the playable scene or introducing a production-only testing API.
+const layoutUrl=new URL('../src/great-plains-layout.js',import.meta.url),layoutSource=readFileSync(layoutUrl,'utf8');
+assert.match(layoutSource,/export const PLAINS_PLACEMENTS=joinForestEdge\(makePlacements\(\)\);/);
+const unjoinedSource=layoutSource.replace('export const PLAINS_PLACEMENTS=joinForestEdge(makePlacements());','export const PLAINS_PLACEMENTS=makePlacements();').replace(/(from\s*['"])(\.[^'"]+)(['"])/g,(_all,a,spec,b)=>a+new URL(spec,layoutUrl).href+b);
+const {PLAINS_PLACEMENTS:GENERATED_PLACEMENTS}=await import('data:text/javascript;base64,'+Buffer.from(unjoinedSource).toString('base64'));
+const currentIds=new Set(PLAINS_PLACEMENTS.map(p=>p.id));
+function assertBoundaryRemoval(placements,expectedRemoved){
+ const removed=placements.filter(p=>!currentIds.has(p.id));assert.equal(removed.length,expectedRemoved);
+ for(const p of removed){const q=plainsToForest(p);assert.ok(Math.abs(q.x)<38&&q.z>14&&q.z<89,p.id+' was removed outside the forest overlap');assert.ok(!p.villageBoundary&&!p.questId&&!p.boundaryMarker,p.id+' protected anchor was removed');}
+ for(const p of placements){const q=plainsToForest(p);if(Math.abs(q.x)>=38||q.z<=14||q.z>=89)assert.ok(currentIds.has(p.id),p.id+' outside shared section disappeared');}
+ return removed;
+}
 
 test('treasure anchors preserve quest identities without duplicate static chests',()=>{
  assert.deepEqual(PLAINS_TREASURE_ANCHORS.map(({id,x,z,lootTier})=>({id,x,z,lootTier})),[
@@ -42,7 +59,7 @@ test('arrival and crossroads keep their framing within the bounded landscape bud
  assert.ok(nearby(-87,-32,22,'tree').length>=9,'village arrival needs framing trees');
  assert.ok(nearby(-5,25,22,'tree').length>=2,'crossroads needs a middle-distance grove');
  assert.equal(PLAINS_PLACEMENTS.filter(p=>p.composition==='village-arrival').length,VILLAGE_PLACEMENTS.filter(isVillageBoundaryTree).length);
- assert.ok(PLAINS_PLACEMENTS.filter(p=>p.grove==='forest-gate'&&p.kind==='tree').length>=3,'forest approach should not be an empty grove');
+ assert.equal(PLAINS_PLACEMENTS.filter(p=>p.forestBoundary&&p.kind==='tree').length,68,'forest entry uses its actual68 source trees');
  assert.ok(PLAINS_PLACEMENTS.length<=1450,'landscape additions stay bounded');
 });
 
@@ -67,7 +84,9 @@ test('groves add bounded scenery outside full road widths, clearings and the loo
  const added=PLAINS_PLACEMENTS.filter(p=>p.grove);
  assert.ok(added.length>70&&added.length<=150,'keep the added instance budget bounded');
  assert.ok(PLAINS_PLACEMENTS.length<=1450,'bound the requested grass and rock additions');
- assert.equal(PLAINS_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,760,'reuse 580 grass placements and add only 180 shared tufts');
+ assert.equal(GENERATED_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,760,'authoring budget remains580 original+180 shared tufts');
+ assert.equal(PLAINS_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,694,'remove66 overlapping tufts before native forest is attached');
+ assertBoundaryRemoval(GENERATED_PLACEMENTS.filter(p=>p.kind==='ground-detail'),66);
  for(const p of added){
   assert.ok(plainsRoadDistance(p.x,p.z)>p.colliderRadius+.65,p.id+' narrows a road or clearing');
   assert.ok(plainsStreamDistance(p.x,p.z)>p.colliderRadius+3.6,p.id+' is inside the river bank');
@@ -86,14 +105,15 @@ test('groves add bounded scenery outside full road widths, clearings and the loo
  }
 });
 
-test('forest species increase towards the entrance while village groves stay healthy',()=>{
+test('native forest entry preserves source species while retained village and fringe groves stay distinct',()=>{
  const addedTrees=PLAINS_PLACEMENTS.filter(p=>p.grove&&p.kind==='tree');
  const ratio=zone=>{const trees=addedTrees.filter(p=>p.zone===zone);assert.ok(trees.length>=8);return trees.filter(p=>p.asset.startsWith('forest-')).length/trees.length;};
  assert.equal(ratio('village'),0);
- assert.ok(ratio('forest')>ratio('fringe')&&ratio('fringe')>0);
+ assert.ok(ratio('fringe')>0);
  assert.ok(new Set(addedTrees.map(p=>p.grove)).size>=12,'trees should form separate islands around traversable spaces');
- const boundary=PLAINS_PLACEMENTS.filter(p=>p.id.startsWith('forest-north-'));
- assert.ok(boundary.some(p=>p.asset==='tree-01-round-oak'));
+ const originals=FOREST_PLACEMENTS.filter(p=>p.kind==='tree'&&Math.abs(p.x)<29&&p.z>24),boundary=PLAINS_PLACEMENTS.filter(p=>p.forestBoundary&&p.kind==='tree');
+ assert.deepEqual(boundary.map(p=>p.sourcePlacement),originals.map(p=>p.id),'copy actual entry tree species and counts; do not regenerate an approximate forest grove');
+ assert.equal(boundary.some(p=>p.asset==='tree-01-round-oak'),false,'the native forest owns its species at the boundary');
  for(const asset of ['tree-02-slender-pine','forest-01-sickly-oak','forest-02-dead-tree'])assert.ok(boundary.some(p=>p.asset===asset));
 });
 
@@ -172,7 +192,7 @@ test('plains signs and river release across repeated four-map replacement withou
 
 test('flat-based dome rocks vary in scale across the map and leave paths and reward approaches open',()=>{
  const rocks=PLAINS_PLACEMENTS.filter(p=>p.landscape==='ground-rock'),nav=new VillageNavigation(plainsObstacles()),newRockNav=new VillageNavigation(plainsObstacles().filter(o=>rocks.some(p=>p.id===o.id)));
- assert.equal(rocks.length,32);assert.ok(new Set(rocks.map(p=>p.rockGroup)).size>=12);
+ assert.equal(GENERATED_PLACEMENTS.filter(p=>p.landscape==='ground-rock').length,32);assert.equal(rocks.length,31);assertBoundaryRemoval(GENERATED_PLACEMENTS.filter(p=>p.landscape==='ground-rock'),1);assert.ok(new Set(rocks.map(p=>p.rockGroup)).size>=12);
  const domes=rocks.filter(p=>p.asset==='rock-01-mossy-boulder');assert.ok(domes.length>=20);assert.ok(Math.min(...domes.map(p=>p.scale))<.65);assert.ok(Math.max(...domes.map(p=>p.scale))>1.25);assert.ok(new Set(domes.map(p=>p.scale)).size>=5);
  assert.ok(rocks.filter(p=>p.asset==='rock-02-jagged-outcrop').length>=6);
  for(const sx of [-1,1])for(const sz of [-1,1])assert.ok(rocks.filter(p=>p.x*sx>0&&p.z*sz>0).length>=3);
@@ -185,8 +205,9 @@ test('flat-based dome rocks vary in scale across the map and leave paths and rew
 
 test('grass forms small passable irregular patches at tree and rock bases, with bounded extra instances',()=>{
  const grass=PLAINS_PLACEMENTS.filter(p=>p.asset==='grass-tuft'),clustered=grass.filter(p=>p.nearScenery),anchors=PLAINS_PLACEMENTS.filter(p=>['tree','rock'].includes(p.kind)&&Math.hypot(p.x,p.z)<103),obstacles=plainsObstacles();
- assert.equal(grass.length,760);assert.equal(grass.filter(p=>p.id.startsWith('grass-cluster-')).length,180);assert.equal(clustered.length,640);
- assert.ok(grass.filter(p=>anchors.some(a=>Math.hypot(p.x-a.x,p.z-a.z)<3)).length>=600,'previous uniform field had only 115 tufts within 3m of scenery');
+ const generated=GENERATED_PLACEMENTS.filter(p=>p.asset==='grass-tuft'),removed=assertBoundaryRemoval(generated,66);assert.equal(generated.length,760);assert.equal(generated.filter(p=>p.id.startsWith('grass-cluster-')).length,180);assert.equal(generated.filter(p=>p.nearScenery).length,640);
+ assert.equal(grass.length,694);assert.equal(grass.filter(p=>p.id.startsWith('grass-cluster-')).length,168);assert.equal(clustered.length,584);assert.equal(removed.filter(p=>p.nearScenery).length,56);assert.equal(removed.filter(p=>p.id.startsWith('grass-cluster-')).length,12);
+ const nearOriginal=p=>anchors.some(a=>Math.hypot(p.x-a.x,p.z-a.z)<3);assert.ok(grass.filter(nearOriginal).length>=600-removed.length,'retain the original600-near-scenery guarantee minus only the66 removed overlap tufts');
  assert.ok(new Set(clustered.map(p=>p.nearScenery)).size>=100);
  for(const p of clustered){assert.ok(p.scale>=.38&&p.scale<=1.08);assert.equal(p.colliderRadius,0);assert.ok(!obstacles.some(o=>o.id===p.id));assert.ok(plainsRoadDistance(p.x,p.z)>.4);}
 });

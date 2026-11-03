@@ -1,0 +1,217 @@
+{
+  "reviewedAt": "2026-11-03T06:51:05.210Z",
+  "sidecarSha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+  "groundModel": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+  "macroTexture": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+  "sourceInvariants": [
+    {
+      "path": "src/village-layout.js",
+      "sha256Lf": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "equals547b3a4": true
+    },
+    {
+      "path": "src/village-terrain.js",
+      "sha256Lf": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "equals547b3a4": true
+    },
+    {
+      "path": "src/village-ground-layout.js",
+      "sha256Lf": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "equals547b3a4": true
+    },
+    {
+      "path": "public/assets/village.json",
+      "sha256Lf": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "equals547b3a4": true
+    },
+    {
+      "path": "public/assets/village-ground.json",
+      "sha256Lf": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "equals547b3a4": true
+    },
+    {
+      "path": "src/monster-forest-layout.js",
+      "sha256Lf": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "equals547b3a4": true
+    },
+    {
+      "path": "src/monster-forest-terrain.js",
+      "sha256Lf": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "equals547b3a4": true
+    },
+    {
+      "path": "public/assets/monster-forest.json",
+      "sha256Lf": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "equals547b3a4": true
+    },
+    {
+      "path": "public/assets/monster-forest-ground.json",
+      "sha256Lf": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "equals547b3a4": true
+    }
+  ],
+  "focusedTests": {
+    "passed": 8,
+    "files": [
+      "tests/village-plains-outskirts.test.js",
+      "tests/village-plains-outskirts-ground.test.js"
+    ],
+    "scope": "Production transform, source LOD graph, all 5023 published ground vertices height/UV/bounds, caster exclusion, original inner floor invariants, shared/owned material lifetime over 20 round trips."
+  },
+  "nativeShaderValidation": {
+    "passed": true,
+    "programs": 4,
+    "driver": {
+      "vendor": "NVIDIA Corporation",
+      "renderer": "NVIDIA GeForce RTX 4060 Laptop GPU/PCIe/SSE2",
+      "version": "4.6.0 NVIDIA 560.94",
+      "shadingLanguage": "4.60 NVIDIA"
+    },
+    "evidence": "reports/region-continuity-2026-11-03/outskirts-native-shader-validation.json"
+  },
+  "cost": {
+    "scope": "Actual source bytes, native Babylon instancing, production transform and visibility with forced far LOD. Textures, PBR/ink, shadows and GPU rasterization omitted. Incremental vista only; not whole-town total.",
+    "cases": [
+      {
+        "touch": true,
+        "z": 60,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.2984397411346436,
+          55.5618896484375
+        ],
+        "activePlacements": 45,
+        "baseDraws": 8,
+        "submittedTriangles": 60624,
+        "submittedInstances": 28
+      },
+      {
+        "touch": true,
+        "z": 70,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.2984397411346436,
+          65.5618896484375
+        ],
+        "activePlacements": 54,
+        "baseDraws": 8,
+        "submittedTriangles": 67635,
+        "submittedInstances": 33
+      },
+      {
+        "touch": true,
+        "z": 73.1,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.298438787460327,
+          68.6618881225586
+        ],
+        "activePlacements": 54,
+        "baseDraws": 8,
+        "submittedTriangles": 65323,
+        "submittedInstances": 31
+      },
+      {
+        "touch": true,
+        "z": 76,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.298440933227539,
+          71.5618896484375
+        ],
+        "activePlacements": 54,
+        "baseDraws": 8,
+        "submittedTriangles": 65323,
+        "submittedInstances": 31
+      },
+      {
+        "touch": false,
+        "z": 70,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.2984397411346436,
+          65.5618896484375
+        ],
+        "activePlacements": 55,
+        "baseDraws": 8,
+        "submittedTriangles": 67635,
+        "submittedInstances": 33
+      },
+      {
+        "touch": true,
+        "z": 70,
+        "towardPlains": false,
+        "camera": [
+          0.3499999940395355,
+          3.2984392642974854,
+          74.4381103515625
+        ],
+        "activePlacements": 2,
+        "baseDraws": 1,
+        "submittedTriangles": 9434,
+        "submittedInstances": 1
+      },
+      {
+        "touch": true,
+        "z": 0,
+        "towardPlains": true,
+        "camera": [
+          0.3499999940395355,
+          3.2984390258789062,
+          -4.438108921051025
+        ],
+        "activePlacements": 11,
+        "baseDraws": 3,
+        "submittedTriangles": 15356,
+        "submittedInstances": 4
+      }
+    ],
+    "newDerivedGeometryBytes": 137827,
+    "note": "Existing plains artwork/model/texture graphs are reused. New derived clipped terrain glTF+compressed bin only. Six scenery sources can join already visible native town instance batches; waypost and ground are additional source groups."
+  },
+  "visualReview": {
+    "images": [
+      {
+        "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-boundary-followup/2026-11-03/current-low-orbit-village-native-to-plains-before-texture.png",
+        "sha256": "928a7b3dcd0753cfe10d494854f02e260a4ba188510000404944e51166f91e86",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-boundary-followup/2026-11-03/current-low-orbit-village-native-to-plains-after-texture.png",
+        "sha256": "4f7c385132697c9941f1fdbbe6cd9c25b0a258cce07e1ef06dd34b29b09f2991",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-boundary-followup/2026-11-03/current-low-orbit-village-plains-to-native-before-texture.png",
+        "sha256": "c2c1c4192708a603951ad2b29d4610a588dac02ffbbee547c1a27182ad317b8e",
+        "width": 1280,
+        "height": 720
+      },
+      {
+        "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-boundary-followup/2026-11-03/current-low-orbit-village-plains-to-native-after-texture.png",
+        "sha256": "f3f735964421c95a3a3887d18c73a3aade9a71806d4fa86101951bb84fb4211c",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "label": "These are before/after TRAVEL views, both rendered from final current assets; not before/after code versions.",
+    "villageToPlains": "Large flanking trees, waypost, cart, lookout cliff and summit oak align. No rectangular terrain cut edge, exposed low-area truncation or floating rock was visible in these final low orbit views. Small grass/quest props and scenery beyond the limited vista window become visible in the full destination.",
+    "plainsToVillage": "Major tree/building/waypost silhouettes align. The offline facade entrance floor appears lighter/cream relative to the native town floor. The Blender approximation does not reproduce the different native StandardMaterial/PBR toon/shadow/fog paths; this image difference is not evidence of a measured in-game color regression.",
+    "limitations": [
+      "Offline actual-geometry review, not a gameplay capture.",
+      "Native compile/link validates shader programs, not rasterized map appearance or device FPS.",
+      "The reciprocal vista covers only the selected entrance/lookout window, not the whole plains."
+    ]
+  },
+  "newArtwork": false,
+  "fullSceneDuplicated": false,
+  "forestOriginalEdited": false,
+  "player8kAndBackground4kLodPolicyChanged": false
+}

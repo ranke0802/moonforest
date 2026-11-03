@@ -2,10 +2,10 @@
   "version": 1,
   "span": 288,
   "color": {
-    "url": "./content/31341a0ef10364a5b27513164d2635340768d5429fdd6a899f204265cca404e5.ktx2",
+    "url": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
     "width": 2048,
     "height": 2048,
-    "bytes": 1201904,
+    "bytes": 1197481,
     "codec": "etc1s",
     "alpha": true,
     "gpuBlockBytes": 16
@@ -25,7 +25,7 @@
   "detailSamples": 2,
   "method": "plains-village-palette-brushwork-own-roads-lookout-and-stream",
   "resources": [
-    "./content/31341a0ef10364a5b27513164d2635340768d5429fdd6a899f204265cca404e5.ktx2",
+    "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
     "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
   ],
   "compression": "KTX2 color; lossless linear packed detail"

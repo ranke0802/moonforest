@@ -80,6 +80,17 @@ if boundary and village_paint.exists():
  blend=(1-smooth((np.abs(vx)-38)/8))*(1-smooth((30-vz)/8))*(1-smooth((vz-88)/10))
  source=np.asarray(Image.open(village_paint).convert('RGBA'));sx=np.clip(np.rint((vx+80)/160*source.shape[1]).astype(int),0,source.shape[1]-1);sy=np.clip(np.rint((80-vz)/160*source.shape[0]).astype(int),0,source.shape[0]-1)
  paint=Image.fromarray(np.uint8(np.clip(np.asarray(paint)*(1-blend[:,:,None])+source[sy,sx]*blend[:,:,None],0,255)))
+forest_boundary=layout.get('forestBoundary');forest_paint=out/'forest-ground-color.png'
+if forest_boundary and forest_paint.exists():
+ y,x=np.mgrid[0:size,0:size];px=x/unit-span/2-forest_boundary['plainsPortal']['x'];pz=span/2-y/unit-forest_boundary['plainsPortal']['z'];c=math.cos(forest_boundary['yaw']);s=math.sin(forest_boundary['yaw'])
+ fx=forest_boundary['forestPortal']['x']+c*px-s*pz;fz=forest_boundary['forestPortal']['z']+s*px+c*pz
+ def forest_smooth(v):
+  t=np.clip(v,0,1);return t*t*(3-2*t)
+ # The native road ends at z55. Keep its exact painted gate, then blend to
+ # the plains' traversable continuation around the existing outer trunks.
+ blend=(1-forest_smooth((np.abs(fx)-29)/9))*(1-forest_smooth((24-fz)/10))*(1-forest_smooth((fz-58)/12))
+ source=np.asarray(Image.open(forest_paint).convert('RGBA'));sx=np.clip(np.rint((fx+80)/160*source.shape[1]).astype(int),0,source.shape[1]-1);sy=np.clip(np.rint((80-fz)/160*source.shape[0]).astype(int),0,source.shape[0]-1)
+ paint=Image.fromarray(np.uint8(np.clip(np.asarray(paint)*(1-blend[:,:,None])+source[sy,sx]*blend[:,:,None],0,255)))
 paint.save(out/'plains-ground.png')
 ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe');target=out/'plains-ground.ktx2'
 subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-lz','--qlevel','235','--clevel','1','--generate-mipmap','--threads','4',str(out/'plains-ground.png'),str(target)],check=True,capture_output=True)

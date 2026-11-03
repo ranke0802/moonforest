@@ -1,0 +1,45 @@
+{
+  "baseline": "547b3a4",
+  "scope": "마을↔대평원, 마물의 숲↔대평원 실제 포털 길·거리·높이·풍경 검수",
+  "protected": "마을·마물의 숲의 기존 배치/지형/원본 manifest·바닥 텍스처를 변경하지 않는다. 별도 마을 외경 sidecar는 명시하여 독립 검수한다.",
+  "method": [
+    "원본 도로의 완전한 sample 배열에서 반경3 첫 진입 선분을 구한다. 축 방향 control point만 새로 연결하지 않는다.",
+    "네 이동 방향에서 생산 captureRoadHandoff/carryPortalPose와 실제 Babylon ArcRotate/CameraFollow/CameraPitch/CameraZoom을 실행한다.",
+    "1280×720, 수직FOV0.65, default-pitch0.88 및 low-orbit1.35; 정면 도보 회전을 고정한 재현 가능한 실제SDK 카메라. 실제 녹화 세션은 아니다.",
+    "원본 기준과 현재 기준을 분리한 JSON에 원본 sampled terrain, 생산 createVillageTransform의 각 placement matrix, 실제 고정 LOD 모델/텍스처를 기록한다.",
+    "Blender 카메라의 sensor_fit을 VERTICAL로 설정하고 다섯 랜드마크의 투영을 실제 Babylon 좌표와0.1px 이내로 검증한 뒤 렌더한다.",
+    "바닥 row0는 world z=+half이므로 Blender y=-half로 옮긴다. 원래 a-d 삼각형 분할과 월드 UV를 보존한다.",
+    "중립광 geometry pass와 실제 텍스처를 쓴 근사 appearance pass를 구분한다. 최종 전후 source/destination은 같은 camera 사례를 사용한다.",
+    "수정 후 두 길의 중앙과 양어깨에서 실제 navigation과 sampled heightAt을 검사하고 도로 offset, 실제 높이차, 원본 tree/rock pose/LOD/재질 그래프와 추가 workload를 보고한다."
+  ],
+  "knownBaselineFindings": {
+    "villageBothTriggerHeightStepMetres": 0,
+    "forestToPlainsHeightStepMetres": 0.0029527709296883475,
+    "plainsToForestHeightStepMetres": -0.046476976133097384,
+    "oldRendererDefect": "기존 render-boundary-review.py의 heightfield row 방향이 placement의 world-z 방향과 반대였다. 이번 독립 renderer는 corrected coordinate conversion을 사용하며, 과거 이미지를 이 검사의 terrain 증거로 재사용하지 않는다.",
+    "baselineCameraProjectionMaximumPixelError": 0.0016632891993369554
+  },
+  "performanceChecks": [
+    "공유 모델/LOD/texture resource graph가 유지되는지 확인한다. 추가 placement 수와 파생 ground primitive 수는 늘면 그대로 공개한다.",
+    "복제물의 near-playable trunk/rock collider와 도로 reserve가 겹치지 않는지 검증한다.",
+    "원래 visible/LOD 범위 밖의 모든 풍경을 항상 그리는 방식으로 검수를 통과시키지 않는다. offline renderer 자체는 visibility 정책을 재현하지 않으므로 separate native policy assertion이 필요하다.",
+    "숲·마을 원본 변경 방지와 map-local sidecar/material 설정을 검사하여 다른 지도로 밝기나 geometry state가 누출되지 않게 한다."
+  ],
+  "limitations": [
+    "브라우저 자동조작 없음. 그림은 오프라인 소스 geometry 렌더이며 실제 게임 화면이나 휴대폰 스크린샷이 아니다.",
+    "Blender의 조명·재질은 Babylon toon/outline/alpha dither/fog/sky/shadow를 재현하지 않는다. 중립광 pass는 leaf alpha-cutout을 생략하므로 최종 잎 실루엣 판단에는 사용하지 않는다.",
+    "원본 숲은 고유 fog(.19,.23,.21)와 exposure1.08을 유지하고, 마을/평원 기본 exposure는1.15이다. 원경·조명·노출이 완전히 동일하다고 주장하지 않는다.",
+    "마을→평원의 회전66.80도와 숲→평원의 회전-33.69도가 달라, 단일 평원 전역 광원/하늘 방향이 두 원본의 고정 방향을 동시에 완벽히 맞출 수 없다.",
+    "NullEngine 결과와 offline render 시간은 모바일 GPU/FPS/메모리 실측 증거가 아니다."
+  ],
+  "files": {
+    "baseline": "baseline-summary.json + baseline-layouts.json + baseline/*",
+    "camera": "boundary-cases.mjs",
+    "export": "export-review.mjs --baseline 또는 기본 current; --lod=0/1/2",
+    "render": "render-review.py -- review-data/<stage>-lod2.json <output-directory> [--neutral] [--case=<id>]",
+    "independentTests": "tests/plains-two-boundary-regression.test.js",
+    "results": "independent-validation.json",
+    "finalValidation": "review-validation.json"
+  },
+  "status": "Complete: protected baseline; focused25tests pass; final current24images + baseline default8images; source runtime frozen; native GPU/mobile visual unmeasured."
+}

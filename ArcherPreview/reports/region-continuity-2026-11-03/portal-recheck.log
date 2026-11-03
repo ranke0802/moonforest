@@ -1,0 +1,27 @@
+BJS - [15:52:29]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:29]: Babylon.js v9.31.0 - Null engine
+✔ in-document travel serializes release/load, keeps the curtain until ready, and accepts the return trip (2.3635ms)
+✔ failed map loading remains covered and never automatically retries (0.4164ms)
+✔ portal arrival keeps the same rear-view angle, zoom, and pan across repeated turns (6.4924ms)
+BJS - [15:52:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:30]: PBRMaterial: Normals have been created for the mesh: forest-mountain-backdrop
+BJS - [15:52:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:52:31]: PBRMaterial: Normals have been created for the mesh: forest-mountain-backdrop
+✔ real V6 idle rig focuses at its visible chin and orbit/pinch keep that target (287.1976ms)
+✔ WebGL 1 / UBO false player detail preserves complete GLSL statements, textures and mips (26.6022ms)
+✔ WebGL 2 / UBO false player detail preserves complete GLSL statements, textures and mips (20.8759ms)
+✔ WebGL 2 / UBO true player detail preserves complete GLSL statements, textures and mips (14.8672ms)
+✔ portal smoke owns only two non-shadowed quads and releases its small texture (362.9915ms)
+✔ actual streamed village/forest round trips retain the player and drain in-flight LODs before releasing old map resources (4273.9302ms)
+ℹ {"roundTrips":10,"modelLoads":380,"retainedResources":[32,0,7,5,5,0,0,2,1]}
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7897.7606

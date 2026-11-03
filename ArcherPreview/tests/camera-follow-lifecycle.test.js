@@ -65,7 +65,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const input={panOffset:{x:0,y:0,z:0},reset(){counters.inputResets++;}},audio={stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop};
  const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
- const boundary={setupMinimapTravel,travelWaypoint,attackPointerTypes:new Map(),saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
+ const boundary={setupMinimapTravel,travelWaypoint,updatePlainsBoundaryAtmosphere:noop,attackPointerTypes:new Map(),saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
   assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
   audio,actionAudio:{reset:noop},updateButtons:noop,toast:noop,canvas:{focus:noop},config:{forwardYaw:0},container:{meshes:[]},applyHitFlash:noop,

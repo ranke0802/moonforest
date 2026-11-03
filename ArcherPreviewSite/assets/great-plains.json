@@ -21,7 +21,7 @@
   },
   "homes": 0,
   "id": "great-plains",
-  "availableAssetCount": 18,
+  "availableAssetCount": 20,
   "assets": {
     "tree-01-round-oak": {
       "name": "참나무",
@@ -1901,9 +1901,313 @@
         ]
       },
       "visualReview": "APPROVED"
+    },
+    "forest-05-thorn-bramble": {
+      "name": "가시덤불",
+      "category": "plant",
+      "bounds": [
+        2.4799774885177612,
+        1.299999966575708,
+        0.9424675107002258
+      ],
+      "height": 1.299999966575708,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "resources": [
+            "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+            "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
+            "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+          ],
+          "bytes": 385247,
+          "triangles": 3981,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf",
+          "resources": [
+            "content/3cdda882035ace405f2a514348a6504f4171648c4adc6b5bb66623c3cecad420.bin",
+            "content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
+            "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf"
+          ],
+          "bytes": 368264,
+          "triangles": 3405,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf",
+          "resources": [
+            "content/ca0216b15837500d56f7178fc6a211ad55f2816b4c10714a18688d2159e55175.bin",
+            "content/a1c7c71b8cda477099ef43958bfb12afc1e65f64cffc19ebb79e9056b666bfbc.ktx2",
+            "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf"
+          ],
+          "bytes": 219289,
+          "triangles": 3066,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -1.2387257814407349,
+              -0.47186487913131714,
+              -1.4259423863904885e-8
+            ],
+            [
+              1.2412517070770264,
+              0.4706026315689087,
+              1.2999999523162842
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+        "resources": [
+          "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
+          "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+        ],
+        "bytes": 385247,
+        "triangles": 3981,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -1.2387257814407349,
+            -0.47186487913131714,
+            -1.4259423863904885e-8
+          ],
+          [
+            1.2412517070770264,
+            0.4706026315689087,
+            1.2999999523162842
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2215782,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
+    },
+    "forest-04-poison-fungi": {
+      "name": "독버섯 군락",
+      "category": "plant",
+      "bounds": [
+        0.6909146308898926,
+        0.5500000220174517,
+        0.44343291223049164
+      ],
+      "height": 0.5500000220174517,
+      "frontYawOffset": 0,
+      "geometryLod": true,
+      "lods": [
+        {
+          "level": 0,
+          "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+          "resources": [
+            "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+            "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
+            "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+          ],
+          "bytes": 402167,
+          "triangles": 5000,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3444054424762726,
+              -0.22276830673217773,
+              -1.0096522728986201e-8
+            ],
+            [
+              0.34650918841362,
+              0.2206646054983139,
+              0.550000011920929
+            ]
+          ]
+        },
+        {
+          "level": 1,
+          "model": "content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf",
+          "resources": [
+            "content/c978366b3afca0c7106c285262d009bd016fa24938b04eb3262fb7cc73c37f61.bin",
+            "content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2",
+            "content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf"
+          ],
+          "bytes": 352403,
+          "triangles": 2750,
+          "textureSize": 1024,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3435744643211365,
+              -0.22125114500522614,
+              -0.00011275491124251857
+            ],
+            [
+              0.3457062542438507,
+              0.22115157544612885,
+              0.5497400164604187
+            ]
+          ]
+        },
+        {
+          "level": 2,
+          "model": "content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf",
+          "resources": [
+            "content/98e999961066978594983198ecded798f3668b4a06162be4df2af64bf9a3949f.bin",
+            "content/13c5b26e4ee84b3b3f577bb3a8b162a1bb43c012ab6db9b8933f9f01d20d5699.ktx2",
+            "content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf"
+          ],
+          "bytes": 164530,
+          "triangles": 2000,
+          "textureSize": 512,
+          "codec": "ETC1S",
+          "compression": {
+            "encodedViews": 5,
+            "rawViews": 0,
+            "verifiedViews": 5
+          },
+          "bounds": [
+            [
+              -0.3435744643211365,
+              -0.22125114500522614,
+              -0.0006617243052460253
+            ],
+            [
+              0.34366631507873535,
+              0.22149628400802612,
+              0.5497400164604187
+            ]
+          ]
+        }
+      ],
+      "mobileNear": {
+        "level": 0,
+        "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+        "resources": [
+          "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+          "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
+          "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+        ],
+        "bytes": 402167,
+        "triangles": 5000,
+        "textureSize": 1024,
+        "codec": "ETC1S",
+        "compression": {
+          "encodedViews": 5,
+          "rawViews": 0,
+          "verifiedViews": 5
+        },
+        "bounds": [
+          [
+            -0.3444054424762726,
+            -0.22276830673217773,
+            -1.0096522728986201e-8
+          ],
+          [
+            0.34650918841362,
+            0.2206646054983139,
+            0.550000011920929
+          ]
+        ]
+      },
+      "highTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2",
+            "width": 4096,
+            "height": 4096,
+            "bytes": 2998974,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2"
+        ]
+      },
+      "visualReview": "APPROVED"
     }
   },
-  "placementCount": 1448,
+  "placementCount": 1424,
   "newSourceModels": 3,
   "reusedSourceModels": 6,
   "groundManifest": "great-plains-ground"

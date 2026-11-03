@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "resourceRevision": "8b96336470c1d4e53c7f55c07bcd40f56f4eac78697814d00ff407e9d4525519",
-  "bytes": 628474230,
+  "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "bytes": 628811318,
   "files": [
     {
       "path": "app.webmanifest",
@@ -2334,6 +2334,11 @@
       "sha256": "e5a6975dd7576b25ef9b5ac8e0de986b46321caaf12fd45bdfe6f8ebb30c6cef"
     },
     {
+      "path": "assets/bundles/e6ff62e22595ff3b35ed0dc95c487381fa52b5a43105bb9b6d384f7d655b9e56.mfp.gz",
+      "bytes": 73580,
+      "sha256": "e6ff62e22595ff3b35ed0dc95c487381fa52b5a43105bb9b6d384f7d655b9e56"
+    },
+    {
       "path": "assets/bundles/e769155e8485aec0325ac5474bbe7f9042dbadae7e768f36ee93c60e07cd9a3d.mfp.gz",
       "bytes": 66984,
       "sha256": "e769155e8485aec0325ac5474bbe7f9042dbadae7e768f36ee93c60e07cd9a3d"
@@ -3539,11 +3544,6 @@
       "sha256": "312d9d4fc443fc6937329557933312a20d93d83ff13c4f67ef51a48b95918ca3"
     },
     {
-      "path": "assets/content/31341a0ef10364a5b27513164d2635340768d5429fdd6a899f204265cca404e5.ktx2",
-      "bytes": 1201904,
-      "sha256": "31341a0ef10364a5b27513164d2635340768d5429fdd6a899f204265cca404e5"
-    },
-    {
       "path": "assets/content/316899c6b861b0c2a5f2509346ccb38337a1dfe9ef3847c3968b87df3ae8a7bc.gltf",
       "bytes": 2784,
       "sha256": "316899c6b861b0c2a5f2509346ccb38337a1dfe9ef3847c3968b87df3ae8a7bc"
@@ -4714,6 +4714,11 @@
       "sha256": "6733c0b4843bad56c6cda6ecdb51702f8f01cf210e1e5aa87c71919b47dbee6e"
     },
     {
+      "path": "assets/content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+      "bytes": 1197481,
+      "sha256": "675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38"
+    },
+    {
       "path": "assets/content/67d12d34f82ef700ec3a3795a77590252858c70330908a87ed1e73efc268cb4b.wasm",
       "bytes": 29232,
       "sha256": "67d12d34f82ef700ec3a3795a77590252858c70330908a87ed1e73efc268cb4b"
@@ -4897,6 +4902,11 @@
       "path": "assets/content/6eb5ff1d3ae9b286ae2ab88358c5b37092408136fb24c6f7ea515f4816c7cfbe.bin",
       "bytes": 37979,
       "sha256": "6eb5ff1d3ae9b286ae2ab88358c5b37092408136fb24c6f7ea515f4816c7cfbe"
+    },
+    {
+      "path": "assets/content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+      "bytes": 2269,
+      "sha256": "6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0"
     },
     {
       "path": "assets/content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
@@ -6012,6 +6022,11 @@
       "path": "assets/content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
       "bytes": 2941,
       "sha256": "a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e"
+    },
+    {
+      "path": "assets/content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+      "bytes": 135558,
+      "sha256": "a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead"
     },
     {
       "path": "assets/content/a4427dd3408e1e62fc36e2b980483b118d9f19c544c48de6bd0363acb14537e2.gltf",
@@ -8016,12 +8031,12 @@
     {
       "path": "assets/great-plains-ground.json",
       "bytes": 897,
-      "sha256": "8ed4a1912bf63b3a612256592eff25984068732618700ae2baec98fa67aa9277"
+      "sha256": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38"
     },
     {
       "path": "assets/great-plains.json",
-      "bytes": 75611,
-      "sha256": "c30dcf49ca3fed8cbeb9f35b7a7348aea27ce6591b970620eb86c8050fe4d534"
+      "bytes": 85341,
+      "sha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde"
     },
     {
       "path": "assets/guardian-bear.json",
@@ -8039,9 +8054,9 @@
       "sha256": "6eae8b449a5e23f487d2fe5e7cb99d8067e95d337b97d6e97dd79f7ccd583cbc"
     },
     {
-      "path": "assets/index-BpOXe7-9.js",
-      "bytes": 2684021,
-      "sha256": "9bf8a1a092c836453c1824ebd9d7c638b6ae73d77393a9c98f82f4f7e383babe"
+      "path": "assets/index-CNcl-n-t.js",
+      "bytes": 2738018,
+      "sha256": "c951944602e0c14414e1c19f2f158454a502add79c4176a02b7350a886cf4079"
     },
     {
       "path": "assets/index-CyQXSVRE.css",
@@ -8115,13 +8130,13 @@
     },
     {
       "path": "assets/resource-index.json",
-      "bytes": 178070,
-      "sha256": "f29408120fc0051ab56f08cb7e6fd0905a2d1fc20b92f3bcd213e159a9e89c0a"
+      "bytes": 178505,
+      "sha256": "9e3fb9f5539bef9cdb766c48cb1a222bd519bcbc080d2c0684718aaa65491565"
     },
     {
       "path": "assets/resource-sizes.json",
-      "bytes": 86095,
-      "sha256": "c3ac06c7a5ab8ea74a7b712a86b0cf16eaacc17946e5d00910282d53f416b06d"
+      "bytes": 86250,
+      "sha256": "39055c38e594cfcbbd28480e186d1ea957c6a6978f7bc55647e7bc58931f6b60"
     },
     {
       "path": "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -8142,6 +8157,11 @@
       "path": "assets/village-ground.json",
       "bytes": 882,
       "sha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+    },
+    {
+      "path": "assets/village-plains-outskirts.json",
+      "bytes": 65787,
+      "sha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce"
     },
     {
       "path": "assets/village.json",
@@ -8191,7 +8211,7 @@
     {
       "path": "index.html",
       "bytes": 60127,
-      "sha256": "5b42444b227733386f486a4d085778d23ff0fb70d5f9a146e7fb4b101e7cc7fb"
+      "sha256": "0937c7dba6c2e60af954fd38c295fcb86b33b8ba60192e9b84ffe605f317cb27"
     },
     {
       "path": "KTX2_NOTICES.txt",

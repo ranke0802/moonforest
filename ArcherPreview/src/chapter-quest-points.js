@@ -44,7 +44,7 @@ for(const point of points.filter(p=>p.map==='great-plains')){const placement=PLA
 // The chest fronts face a clear approach; IDs and five reward grades stay stable.
 const treasures={
  village:[['orchard',-23.54,11,1,1.0472],['stable',17.8,17,1,Math.PI/2],['garden',-24.32,-7.49,2,2.8798],['chapel',10.86,-17.04,2,1.8326],['north-wall',-5.8,-29,3,Math.PI/2]],
- 'great-plains':[['village-grove',-78.02,-23.98,1,2.3562],['stream-bank',-38.77,60.91,2,1.8326],['western-ridge',-56.59,-30.93,2,-1.309],['hill-grove',-45.59,-35.41,3,Math.PI/2],['forest-fringe',40.69,-49.78,3,Math.PI/2],['forest-cache',63.67,-77.01,4,.5236]],
+ 'great-plains':[['village-grove',-78.02,-23.98,1,2.3562],['stream-bank',-38.77,60.91,2,1.8326],['western-ridge',-56.59,-30.93,2,-1.309],['hill-grove',-45.59,-35.41,3,Math.PI/2],['forest-fringe',37.73423,-45.58059,3,2.552544031041707],['forest-cache',63.67,-77.01,4,.5236]],
  'monster-forest':[['trail-cache',-36.13,29.84,1,2.618],['spring-cache',-27.36,26.75,2,2.0944],['fallen-log',-28.73,-7.14,2,Math.PI],['old-camp',14.68,19.13,3,-.7854],['stone-circle',8.94,-16.82,3,-1.309],['cave-approach',20.12,-27.29,4,2.3562]],
  'witch-cave':[['entry-cache',-40.4,36.4,1,.5236],['guard-stores',-31.2,27.8,2,-2.0944],['water-cache',-12.2,24.6,2,2.8798],['laboratory-cache',-36.4,-21.6,3,.2618],['lower-stores',8.2,-30.4,3,0],['sanctum-cache',40.6,-26.4,4,-1.8326],['reliquary',34.2,-41.2,5,.7854]],
 };

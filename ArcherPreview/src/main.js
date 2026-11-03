@@ -21,6 +21,7 @@ import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
+import {updatePlainsBoundaryAtmosphere} from './plains-boundary-atmosphere.js';
 import {travelWaypoint} from './map-waypoints.js';
 import {applyPlayerDetail} from './player-detail.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
@@ -532,7 +533,7 @@ async function loadCharacter() {
     loadDiagnostics.phase('screen');
     // Keep the loading artwork through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
-    assertFrameHealthy();syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});
+    assertFrameHealthy();updatePlainsBoundaryAtmosphere(world,actor.position,true);syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});
     assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     assertFrameHealthy();
@@ -688,7 +689,7 @@ function render(dt) {
     syncCameraFocus(dt);
     world.caveCamera?.beginFrame();
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
-    world.lighting.follow(actor.position);
+    updatePlainsBoundaryAtmosphere(world,actor.position);world.lighting.follow(actor.position);
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     syncCaveFog();
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt,playerDimensions(actor));
@@ -839,7 +840,7 @@ try {
       loadDiagnostics.phase('download');
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s,loadingGeneration);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing(undefined,loadingGeneration);await loadVillage(world);
-      world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
+      world.environment.legacyTrainingModel='scarecrow';updatePlainsBoundaryAtmosphere(world,actor.position,true);world.lighting.follow(actor.position,true);
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';

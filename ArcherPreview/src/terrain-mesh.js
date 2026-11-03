@@ -1,7 +1,7 @@
 import {Mesh,MeshBuilder,VertexBuffer,VertexData} from '@babylonjs/core';
 import {restoreLaboratoryFloorNormals} from './cave-laboratory-terrain.js';
 
-export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
+export function createTerrainGround(scene,terrain,{borderExtension=0,borderHeight=null}={}){
   const mesh=MeshBuilder.CreateGround('forest-floor',{width:terrain.size,height:terrain.size,subdivisions:terrain.subdivisions},scene);
   const positions=mesh.getVerticesData(VertexBuffer.PositionKind),normals=mesh.getVerticesData(VertexBuffer.NormalKind),uvs=mesh.getVerticesData(VertexBuffer.UVKind);
   for(let i=0;i<terrain.heights.length;i++){
@@ -11,6 +11,7 @@ export function createTerrainGround(scene,terrain,{borderExtension=0}={}){
     if(borderExtension){
       if(Math.abs(positions[i*3])>=terrain.half-.001)positions[i*3]+=Math.sign(positions[i*3])*borderExtension;
       if(Math.abs(positions[i*3+2])>=terrain.half-.001)positions[i*3+2]+=Math.sign(positions[i*3+2])*borderExtension;
+      if(borderHeight&&(Math.abs(positions[i*3])>terrain.half||Math.abs(positions[i*3+2])>terrain.half))positions[i*3+1]=borderHeight(positions[i*3],positions[i*3+2],positions[i*3+1]);
       // Preserve world-space texel density on the extended skirt as well.
       uvs[i*2]=(positions[i*3]+terrain.half)/terrain.size;
       uvs[i*2+1]=(positions[i*3+2]+terrain.half)/terrain.size;

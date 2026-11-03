@@ -1,0 +1,341 @@
+{
+  "generatedAt": "2026-11-03T06:47:08.901Z",
+  "sidecarSha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+  "scope": "Actual source bytes, native Babylon instancing, production transform and visibility with forced far LOD. Textures, PBR/ink, shadows and GPU rasterization omitted. Incremental vista only; not whole-town total.",
+  "assetCounts": [
+    {
+      "id": "waypost",
+      "placements": 1,
+      "reusesNativeTownSource": false,
+      "farSourceTriangles": 1918,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": true
+    },
+    {
+      "id": "rock-02-jagged-outcrop",
+      "placements": 9,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 1158,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "tree-01-round-oak",
+      "placements": 15,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 2383,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "tree-02-slender-pine",
+      "placements": 5,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 3000,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "rock-01-mossy-boulder",
+      "placements": 22,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 1156,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "handcart",
+      "placements": 1,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 1387,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "firewood",
+      "placements": 1,
+      "reusesNativeTownSource": true,
+      "farSourceTriangles": 1719,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": false
+    },
+    {
+      "id": "village-plains-outskirts-ground",
+      "placements": 1,
+      "reusesNativeTownSource": false,
+      "farSourceTriangles": 9434,
+      "submeshes": 1,
+      "sameGeometryAtAllTiers": true
+    }
+  ],
+  "cases": [
+    {
+      "touch": true,
+      "z": 60,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.2984397411346436,
+        55.5618896484375
+      ],
+      "activePlacements": 45,
+      "baseDraws": 8,
+      "submittedTriangles": 60624,
+      "submittedInstances": 28,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": true,
+      "z": 70,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.2984397411346436,
+        65.5618896484375
+      ],
+      "activePlacements": 54,
+      "baseDraws": 8,
+      "submittedTriangles": 67635,
+      "submittedInstances": 33,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": true,
+      "z": 73.1,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.298438787460327,
+        68.6618881225586
+      ],
+      "activePlacements": 54,
+      "baseDraws": 8,
+      "submittedTriangles": 65323,
+      "submittedInstances": 31,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": true,
+      "z": 76,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.298440933227539,
+        71.5618896484375
+      ],
+      "activePlacements": 54,
+      "baseDraws": 8,
+      "submittedTriangles": 65323,
+      "submittedInstances": 31,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": false,
+      "z": 70,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.2984397411346436,
+        65.5618896484375
+      ],
+      "activePlacements": 55,
+      "baseDraws": 8,
+      "submittedTriangles": 67635,
+      "submittedInstances": 33,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": true,
+      "z": 70,
+      "towardPlains": false,
+      "camera": [
+        0.3499999940395355,
+        3.2984392642974854,
+        74.4381103515625
+      ],
+      "activePlacements": 2,
+      "baseDraws": 1,
+      "submittedTriangles": 9434,
+      "submittedInstances": 1,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    },
+    {
+      "touch": true,
+      "z": 0,
+      "towardPlains": true,
+      "camera": [
+        0.3499999940395355,
+        3.2984390258789062,
+        -4.438108921051025
+      ],
+      "activePlacements": 11,
+      "baseDraws": 3,
+      "submittedTriangles": 15356,
+      "submittedInstances": 4,
+      "drawGroups": [
+        {
+          "asset": "tree-01-round-oak",
+          "triangles": 2383,
+          "instances": 2
+        },
+        {
+          "asset": "rock-01-mossy-boulder",
+          "triangles": 1156,
+          "instances": 1
+        },
+        {
+          "asset": "village-plains-outskirts-ground",
+          "triangles": 9434,
+          "instances": 1
+        }
+      ]
+    }
+  ],
+  "allNewResources": [
+    {
+      "url": "./content/16c0bd4793689fa4e5d2e9031e23ca9c998749ee38b6bfbb8749034c50583b11.gltf",
+      "bytes": 2757
+    },
+    {
+      "url": "./content/e4bce36cbad6fbdec96fbaa93e0b1907e7d271f9bebc0703e1274b3f490f3fdc.bin",
+      "bytes": 77025
+    },
+    {
+      "url": "./content/1eb5b27f146c932aa25b86eaf883221eb738e22dbc7452c7e48f969c4f948925.ktx2",
+      "bytes": 227429
+    },
+    {
+      "url": "./content/980db92480e4ffd5b731103eb5b5f9dc5c83a110d973f90a7f4ab2934ec828cc.gltf",
+      "bytes": 2757
+    },
+    {
+      "url": "./content/bfd4bf0c863010ae3f5fce345480126bbb776f2924574da2779a4eada004b947.ktx2",
+      "bytes": 81675
+    },
+    {
+      "url": "./content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+      "bytes": 2757
+    },
+    {
+      "url": "./content/f184c62017e7bfc147ddc526342421e987cf23d60a02e033bce247fc9a65cdf1.ktx2",
+      "bytes": 24199
+    },
+    {
+      "url": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+      "bytes": 760190
+    },
+    {
+      "url": "./content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+      "bytes": 2269
+    },
+    {
+      "url": "./content/a4240543ffbd31c4246c8c0430458caf8f7a65db2e0836998c632fcedaa06ead.bin",
+      "bytes": 135558
+    },
+    {
+      "url": "./content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+      "bytes": 1197481
+    }
+  ],
+  "allNewResourceBytes": 2514097,
+  "additionalMainPassDrawUpperBound": 8,
+  "mainPassNote": "One tier per source; LOD mixtures can use more source groups. Six native sources may merge into already drawn town groups; waypost and ground introduce at most two new groups per active tier. Ink/shadows remain subject to existing shared budgets.",
+  "newArtBytes": 0,
+  "gpuPerformanceMeasured": false
+}

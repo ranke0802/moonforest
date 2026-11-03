@@ -23,7 +23,7 @@ const anchors={
  'village-relief':'tree-01-round-oak-131',
  'village-treasure-orchard':'home-07','village-treasure-stable':'home-19','village-treasure-garden':'home-06','village-treasure-chapel':'home-20','village-treasure-north-wall':'home-02',
  'supply-chest':'meadow-oak-11','meadow-chest':'meadow-oak-4','lookout-chest':'lookout-oak',
- 'great-plains-treasure-village-grove':'grove-gate-cart','great-plains-treasure-stream-bank':'grove-meadow-south-tree-3','great-plains-treasure-western-ridge':'grove-lookout-west-tree-0','great-plains-treasure-hill-grove':'grove-lookout-west-tree-2','great-plains-treasure-forest-fringe':'grove-forest-middle-tree-2','great-plains-treasure-forest-cache':'forest-north-14',
+ 'great-plains-treasure-village-grove':'grove-gate-cart','great-plains-treasure-stream-bank':'grove-meadow-south-tree-3','great-plains-treasure-western-ridge':'grove-lookout-west-tree-0','great-plains-treasure-hill-grove':'grove-lookout-west-tree-2','great-plains-treasure-forest-fringe':'grove-forest-middle-tree-3','great-plains-treasure-forest-cache':'forest-boundary-forest-tree-02-slender-pine-105',
  'goblin-relic':'forest-forest-01-sickly-oak-62','monster-forest-treasure-trail-cache':'forest-forest-01-sickly-oak-7','monster-forest-treasure-spring-cache':'forest-tree-02-slender-pine-94','monster-forest-treasure-fallen-log':'forest-forest-01-sickly-oak-43','monster-forest-treasure-old-camp':'forest-tree-02-slender-pine-135','monster-forest-treasure-stone-circle':'forest-tree-02-slender-pine-112','monster-forest-treasure-cave-approach':'forest-tree-02-slender-pine-48',
  'witch-cave-treasure-laboratory-cache':'cavern-123',
 };
