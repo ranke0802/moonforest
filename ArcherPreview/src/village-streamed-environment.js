@@ -226,7 +226,7 @@ export function loadStreamedVillage(world,{
       // Capture the variants that really drew (including active shadows), not
       // only the prewarm variants compiled before the first caster selection.
       if(!world.scene.isDisposed){
-        retainMapEffect(outlines.material.getEffect());
+        for(const material of [outlines.material,outlines.tintedMaterial,outlines.vertexColorMaterial,outlines.tintedVertexColorMaterial])if(material)retainMapEffect(material.getEffect());
         for(const c of containers)for(const mesh of c.meshes)for(const sub of mesh.subMeshes??[])retainMapEffect(sub.effect);
       }
       outlines.dispose();visibility.dispose();

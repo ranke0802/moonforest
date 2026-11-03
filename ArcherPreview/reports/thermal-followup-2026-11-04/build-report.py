@@ -1,0 +1,21 @@
+import html,json
+from pathlib import Path
+p=Path(__file__).resolve().parent
+def read(name,default={}):
+ return json.loads((p/name).read_text(encoding='utf-8-sig')) if (p/name).exists() else default
+e=lambda v:html.escape(str(v))
+d=read('device-log-summary.json');r=read('release-review.json')
+rows=''.join(f'<tr><td>{e(a["map"])}</td><td>{b["effectRequests"]}</td><td>{a["effectRequests"]}</td><td>{a["inkDraws"]}</td></tr>' for b,a in zip(read('outline-variant-before.json').get('cases',[]),read('outline-variant-probe.json').get('cases',[])))
+loads=''.join('<tr><td>'+str(i+1)+'</td>'+''.join(f'<td>{v[k]/1000:.2f}</td>' for k in ['setupMs','downloadMs','modelMs','screenMs','totalMs'])+'</tr>' for i,v in enumerate(d.get('loadHistory',[])))
+changes=''.join('<li>'+e(v)+'</li>' for v in r.get('changes',[]))
+checks=''.join('<li>'+e(v)+'</li>' for v in r.get('validation',[]))
+out='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MOONFOREST 모바일 발열·프레임 후속 개선</title><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#111b18;color:#e7eee5;font:16px/1.75 system-ui,sans-serif}main{max-width:1020px;margin:auto;padding:48px 24px 72px}h1{font-size:clamp(28px,5vw,42px);line-height:1.3}h2{margin-top:38px;font-size:23px}small,.muted{color:#b0c0b3}.card{padding:24px;border:1px solid #405b49;border-radius:12px;background:#19271f;margin:20px 0}.notice{border-left:4px solid #d6b46e;padding:16px 20px;background:#282a21}table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #425649}.scroll{overflow:auto}a{color:#b6dbc5}li{margin:8px 0}code{overflow-wrap:anywhere}@media print{:root{color-scheme:light}body,.card,.notice{background:white;color:#111}small,.muted{color:#444}}</style><main><small>MOONFOREST / 2026.11.04 / 브라우저 자동조작 없음</small><h1>발열과 프레임 하락<br>확인된 낭비부터 제거</h1>
+<p>사용자 진단: 2026년 11월 4일 00:28 KST · BUNDLE</p><div class="notice">마지막 마을 표본이 약 60FPS여도 이전 구간의 하락이나 발열이 해결됐다는 의미는 아닙니다. 기기의 GPU 시간과 온도는 이번 로그에 없습니다.</div><p>플레이어 8K · 배경 최대 4K · LOD·표시 거리 · 전투·입력·판정 유지</p>
+<h2>로그에서 확인한 문제</h2><div class="card"><ul><li>비탄의 마녀 변신 준비 중 장면 CPU 최대 약 148ms. 사망 시 약 199ms, 약 5.6초 뒤 사라지는 과정에서 약 134ms.</li><li>대평원 426.8~427.6초에 CPU 45~126.5ms가 연속 기록됐습니다. 마지막 126.5ms 중 장면 처리는 11ms여서 장면 렌더링만 원인이라고 단정할 수 없습니다.</li><li>GPU 측정 미지원. CPU 장면 처리에는 여러 관찰자 작업과 드라이버 제출이 포함됩니다. GPU 실행 시간이나 기기 온도와 같지 않습니다.</li><li>네 번의 로딩은 네트워크 다운로드가 0B여도 4.35~7.26초입니다. 캐시·모델 처리와 워커 초기화 경로를 조사했습니다.</li></ul></div>
+<h2>이번 반영</h2><div class="card"><ul>CHANGES</ul></div><h2>풍경 외곽선: 실제 에셋으로 재현</h2><p>색상 속성이 있는 모델과 없는 모델이 같은 외곽선 재질을 번갈아 사용하면 준비된 효과를 다시 조회했습니다. 속성별 재질을 분리해 이 반복을 제거했습니다. 새 GPU 셰이더를 매번 컴파일했다는 뜻은 아닙니다.</p><div class="scroll"><table><thead><tr><th>맵</th><th>수정 전 조회</th><th>수정 후 조회</th><th>동일 외곽선 그리기</th></tr></thead><tbody>ROWS</tbody></table></div><p class="muted">각 맵의 실제 배포 에셋 두 개를 120프레임 렌더링한 Babylon NullEngine 검사. 특정 모델 조합의 결과이며 전체 맵 평균 비용·폰 FPS·발열 감소율이 아닙니다.</p>
+<h2>기존 로그의 로딩 단계 (초)</h2><div class="scroll"><table><thead><tr><th>차례</th><th>정리·설정</th><th>캐시·파일 준비</th><th>모델</th><th>화면</th><th>총계</th></tr></thead><tbody>LOADS</tbody></table></div><p class="muted">수정 전 사용자 로그입니다. 기기에서 2~3초 이동을 달성했다는 자료가 아닙니다.</p>
+<h2>검증과 배포</h2><div class="card"><ul>CHECKS</ul><p>상태: STATUS</p>LINK</div><h2>남은 확인 범위</h2><p>실제 폰에서 장시간 플레이한 뒤 60FPS 유지율과 발열 변화는 다시 확인해야 합니다. 진단에 목표 프레임 미달 횟수, CPU 평균·p95, 풍경 갱신·HUD·장면 세부 처리 시간을 추가했습니다. GPU 미지원 값을 0으로 표시하거나 CPU 수치로 대신 계산하지 않습니다.</p><p class="muted">최근 지연 목록은 느린 프레임을 선택한 기록이므로 전체 세션 평균이 아닙니다. 프레임 간격과 현재 CPU 작업 시간은 측정 구간이 달라 더하지 않습니다. 반복 처리 감소는 확인했지만 실제 온도 하락·완전한 60FPS 보장은 미검증입니다.</p></main></html>'''
+for key,value in {'BUNDLE':e(d.get('bundle','')),'CHANGES':changes,'ROWS':rows,'LOADS':loads,'CHECKS':checks,'STATUS':e(r.get('status','검증 진행 중')),'LINK':('<a href="'+e(r['url'])+'">수정본 열기</a>') if r.get('url') else ''}.items():out=out.replace(key,value)
+(p/'index.html').write_text(out,encoding='utf-8')
+target=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/thermal-followup/2026-11-04');target.mkdir(parents=True,exist_ok=True);(target/'index.html').write_text(out,encoding='utf-8');print(target/'index.html')

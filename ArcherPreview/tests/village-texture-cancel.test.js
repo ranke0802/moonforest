@@ -5,6 +5,7 @@ import {VillageTextureStreaming} from '../src/village-texture-streaming.js';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {loadStreamedVillage} from '../src/village-streamed-environment.js';
 import {waitForSceneReady} from '../src/scene-ready.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 // Hold the actual Babylon Texture callback, not the streaming load method.
 // No image decode/GPU/real phone behavior is simulated by this NullEngine test.
@@ -45,7 +46,7 @@ test('late old-map load/error callbacks cannot change the new map material or re
 
 test('actual environment release drains a stuck high-texture waiter and the destination scene is ready without its callback',async t=>{
  const oldLocation=globalThis.location;globalThis.location={href:'https://cancel.test/game/?character=warrior-v4'};t.after(()=>globalThis.location=oldLocation);
- const engine=new NullEngine({textureSize:4096}),world=createWorld(engine,{forest:true,touchDevice:true}),scene=world.scene;engine.getCaps().astc={};engine.getCaps().maxTextureSize=8192;t.after(()=>engine.dispose());
+ const engine=new NullEngine({textureSize:4096}),world=createWorld(engine,{forest:true,touchDevice:true}),scene=world.scene;engine.getCaps().astc={};engine.getCaps().maxTextureSize=8192;caveFogFallback(scene).getInternalTexture().isReady=true;t.after(()=>engine.dispose());
  const lod=level=>({level,model:'https://cancel.test/assets/tree-'+level+'.gltf',resources:[],triangles:12,textureSize:0}),profile={shading:'toon-color',textures:{albedo:{url:'https://cancel.test/assets/stuck.ktx2',width:4096,height:4096,codec:'etc1s'}},resources:[]},config={category:'tree',bounds:[2,3,2],height:3,geometryLod:true,lods:[lod(0),lod(1),lod(2)],mobileNear:lod(0),highTextures:profile};
  t.mock.method(globalThis,'fetch',async()=>({ok:true,json:async()=>({complete:true,assets:{tree:config}})}));world.placements=[{id:'test',asset:'tree',x:0,z:0,yaw:0,scale:1,kind:'tree'}];world.camera.setTarget(new Vector3(0,world.terrain.heightAt(0,0)+1.5,0));world.camera.radius=3;
  const create=engine.createTexture.bind(engine);let pending;

@@ -18,18 +18,40 @@ export function mapDecodePools(engine){
 }
 export function inspectMapDecodeCache(engine){const p=engine&&pools.get(engine);return p?{geometry:p.geometry.inspect(),textures:p.textures.inspect()}:null;}
 
-// The URL's SHA-256 identifies immutable glTF and its external buffer links.
-// Returning copies keeps Babylon's accessor/geometry mutations out of the cache.
+// Texture tiers can have different glTF hashes while sharing the same immutable
+// compressed buffer. Every input to meshopt belongs in this identity; glTF view
+// offsets/accessor types are interpreted separately after decoding by Babylon.
+export function meshoptCacheKey(extension,view,fileName,context){
+  const input=view.extensions?.EXT_meshopt_compression,buffer=extension._loader?.gltf?.buffers?.[input?.buffer];
+  const uri=buffer?.uri,offset=input?.byteOffset??0,filter=input?.filter??'NONE';
+  if(typeof uri==='string'&&/^(?:\.\/)?[a-f0-9]{64}\.bin$/.test(uri)&&
+    Number.isSafeInteger(offset)&&offset>=0&&Number.isSafeInteger(input.byteLength)&&input.byteLength>0&&
+    Number.isSafeInteger(buffer.byteLength)&&offset+input.byteLength<=buffer.byteLength&&
+    Number.isSafeInteger(input.count)&&input.count>0&&Number.isSafeInteger(input.byteStride)&&input.byteStride>0&&
+    Number.isSafeInteger(input.count*input.byteStride)&&typeof input.mode==='string'&&typeof filter==='string'){
+    return JSON.stringify(['meshopt',uri.replace(/^\.\//,''),offset,input.byteLength,input.count,input.byteStride,input.mode,filter]);
+  }
+  // Inline, unversioned or noncanonical sources keep their immutable glTF-local
+  // identity. Never infer content equality from a mutable URL or view index.
+  return fileName+context;
+}
+
+// Returning one copy per loader keeps accessor/geometry mutations out of the
+// shared CPU pool, while preserving Babylon's same-view sharing within a load.
 export function cacheMapBufferViews(loader,scene,fileName){
   if(!/^[a-f0-9]{64}\.gltf$/.test(fileName))return;
   loader.onExtensionLoadedObservable.add(extension=>{
     if(extension.name!=='EXT_meshopt_compression')return;
-    const original=extension.loadBufferViewAsync.bind(extension),pool=mapDecodePools(scene.getEngine());
+    const original=extension.loadBufferViewAsync.bind(extension),pool=mapDecodePools(scene.getEngine()),pending=new WeakMap();
     extension.loadBufferViewAsync=(context,view)=>{
       if(!view.extensions?.EXT_meshopt_compression)return original(context,view);
-      const key=fileName+context,cached=pool.geometry.get(key);if(cached)return Promise.resolve(cached.slice());
+      if(pending.has(view))return pending.get(view);
+      const key=meshoptCacheKey(extension,view,fileName,context),cached=pool.geometry.get(key);
+      if(cached){const result=Promise.resolve(cached.slice());pending.set(view,result);return result;}
       const result=original(context,view);
-      return result?.then(data=>{if(!pool.disposed&&data.byteLength<=pool.geometry.limit)pool.geometry.put(key,data.slice(),data.byteLength);return data;});
+      const decoded=result?.then(data=>{if(!pool.disposed&&data.byteLength<=pool.geometry.limit)pool.geometry.put(key,data.slice(),data.byteLength);return data;});
+      if(decoded){pending.set(view,decoded);decoded.catch(()=>{if(pending.get(view)===decoded)pending.delete(view);});}
+      return decoded;
     };
   });
 }

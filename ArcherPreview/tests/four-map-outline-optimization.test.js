@@ -41,14 +41,14 @@ function scenery(f,x,z){
 }
 function capture(sources,owner){
   const calls=[];
-  for(const source of sources){const original=source._processRendering;source._processRendering=function(mesh,sub,effect,fill,batch,...rest){const ink=owner(source),drawing=ink?.drawing===true,selectedMaterial=drawing?(ink.tintedSources.has(source)?ink.tintedMaterial:ink.material):null;calls.push({source,ink:drawing,effect,expectedInkEffect:selectedMaterial?.getEffect(),instances:[...(batch.visibleInstances[sub._id]??[])]});return original.call(this,mesh,sub,effect,fill,batch,...rest);};}
+  for(const source of sources){const original=source._processRendering;source._processRendering=function(mesh,sub,effect,fill,batch,...rest){const ink=owner(source),drawing=ink?.drawing===true,selectedMaterial=drawing?ink.materialFor(source):null;calls.push({source,ink:drawing,effect,expectedInkEffect:selectedMaterial?.getEffect(),instances:[...(batch.visibleInstances[sub._id]??[])]});return original.call(this,mesh,sub,effect,fill,batch,...rest);};}
   return calls;
 }
 function coupled(calls){
   for(let i=0;i<calls.length;i++)if(calls[i].ink){const base=calls[i-1];assert.equal(base?.ink,false,'ink must immediately follow a successful base submission');assert.equal(calls[i].source,base.source);assert.ok(calls[i].instances.length>0);assert.ok(calls[i].instances.every(mesh=>base.instances.includes(mesh)),'ink can only use instances from that exact base/LOD batch');}
 }
 function noTint(source){assert.equal(Object.hasOwn(source.instancedBuffers,'villageInkTint'),false);assert.equal(Object.hasOwn(source._userInstancedBuffersStorage.strides,'villageInkTint'),false);}
-function fogUniform(ink,start,end){for(const material of [ink.material,ink.tintedMaterial])if(material){assert.equal(material._vectors2.inkFogRange.x,start);assert.equal(material._vectors2.inkFogRange.y,end);}}
+function fogUniform(ink,start,end){for(const material of [ink.material,ink.tintedMaterial,ink.vertexColorMaterial,ink.tintedVertexColorMaterial])if(material){assert.equal(material._vectors2.inkFogRange.x,start);assert.equal(material._vectors2.inkFogRange.y,end);}}
 
 test('four actual map point sets render shipped chest geometry with graded ink and return to a resource plateau on repeated trips',async t=>{
   await MeshoptDecoder.ready;const previous=MeshoptCompression._Default;
@@ -88,9 +88,8 @@ test('four actual map point sets render shipped chest geometry with graded ink a
     for(const scale of [1,1.5,2,1]){
       applyPlainsViewDistance(f.world,scale);ink.next=ordinary.ink.next=0;calls.length=0;f.scene.render();coupled(calls);
       assert.ok(calls.some(call=>call.ink&&sources.includes(call.source)),'real chest ink submission must occur');assert.ok(calls.some(call=>call.ink&&call.source===ordinary.source),'real monochrome scenery ink submission must occur');
-      // Body vertex colours and the uncoloured lid use separate cached variants
-      // of the same tinted material. Compare at submission, before the next
-      // source selects its own effect; the final getEffect() is only the last one.
+      // Compare the actual source-specific tinted variant at submission; both
+      // chest meshes retain their authored color and graded ink.
       for(const call of calls.filter(call=>call.ink&&sources.includes(call.source))){assert.equal(call.effect,call.expectedInkEffect);assert.equal(/#define VERTEXCOLOR\b/.test(call.effect.defines),call.source.isVerticesDataPresent('color'));}
       if(map==='great-plains'){fogUniform(ink,65*scale,80*scale);fogUniform(ordinary.ink,65*scale,80*scale);}else{fogUniform(ink,65,80);fogUniform(ordinary.ink,65,80);}
       assert.equal(f.engine.getDepthWrite(),true);noTint(ordinary.source);if(target.tier===5)tier5Draws++;

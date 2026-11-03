@@ -1,0 +1,1058 @@
+{
+  "baseline": "5a6abaa",
+  "attachment": {
+    "sha256": "3245c50028c0fd1a8f167df1e5626a24e063a817485a0b82c66cf2bc2bafd459",
+    "createdAt": "2026-11-03T15:28:28.648Z",
+    "bundle": "./assets/index-CrHAQqw8.js",
+    "gpuStatus": "unsupported",
+    "gpuMeasured": false
+  },
+  "observed": {
+    "comparison": {
+      "label": "비탄의 마녀",
+      "mode": "reuse",
+      "prepareMs": 18,
+      "preparation": {
+        "yields": 0,
+        "slices": 0,
+        "blocks": 0,
+        "maxSliceMs": 0,
+        "steps": [
+          {
+            "name": "summon-animator",
+            "ms": 1.5999999642372131
+          }
+        ]
+      },
+      "during": {
+        "samples": 2,
+        "durationMs": 37.39999997615814,
+        "frameMs": {
+          "mean": 18.69999998807907,
+          "p95": 21,
+          "max": 21
+        },
+        "cpuMs": {
+          "mean": 82.59999999403954,
+          "p95": 155.30000001192093,
+          "max": 155.30000001192093
+        },
+        "drawCalls": {
+          "mean": 131,
+          "p95": 134,
+          "max": 134
+        },
+        "sceneMs": {
+          "mean": 77.34999999403954,
+          "p95": 148,
+          "max": 148
+        },
+        "animationMs": {
+          "mean": 0.5,
+          "p95": 0.5,
+          "max": 0.5
+        },
+        "bossUpdateMs": {
+          "mean": 2.800000011920929,
+          "p95": 3.800000011920929,
+          "max": 3.800000011920929
+        },
+        "contactsMs": {
+          "mean": 0.3499999940395355,
+          "p95": 0.5999999642372131,
+          "max": 0.5999999642372131
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "unsupported"
+      },
+      "before": {
+        "samples": 180,
+        "durationMs": 3002.900000035763,
+        "frameMs": {
+          "mean": 16.68277777797646,
+          "p95": 17.30000001192093,
+          "max": 20.30000001192093
+        },
+        "cpuMs": {
+          "mean": 7.989444444245763,
+          "p95": 12.100000023841858,
+          "max": 15.300000011920929
+        },
+        "drawCalls": {
+          "mean": 108.77222222222223,
+          "p95": 119,
+          "max": 124
+        },
+        "sceneMs": {
+          "mean": 6.468333335386382,
+          "p95": 10.199999988079071,
+          "max": 11.800000011920929
+        },
+        "animationMs": {
+          "mean": 0.3738888935910331,
+          "p95": 0.5,
+          "max": 2.5
+        },
+        "bossUpdateMs": {
+          "mean": 0.36333333551883695,
+          "p95": 0.6000000238418579,
+          "max": 2
+        },
+        "contactsMs": {
+          "mean": 0.15444444318612416,
+          "p95": 0.2999999523162842,
+          "max": 0.6000000238418579
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "unsupported"
+      },
+      "after": {
+        "samples": 271,
+        "durationMs": 5011.600000023842,
+        "frameMs": {
+          "mean": 18.492988929977276,
+          "p95": 32.30000001192093,
+          "max": 160.30000001192093
+        },
+        "cpuMs": {
+          "mean": 12.039114392111662,
+          "p95": 18,
+          "max": 22.400000035762787
+        },
+        "drawCalls": {
+          "mean": 136.10332103321034,
+          "p95": 144,
+          "max": 145
+        },
+        "sceneMs": {
+          "mean": 9.458302582102068,
+          "p95": 14.600000023841858,
+          "max": 18.600000023841858
+        },
+        "animationMs": {
+          "mean": 0.2892988926810092,
+          "p95": 0.40000003576278687,
+          "max": 0.6000000238418579
+        },
+        "bossUpdateMs": {
+          "mean": 1.1583025800785895,
+          "p95": 1.899999976158142,
+          "max": 3.099999964237213
+        },
+        "contactsMs": {
+          "mean": 0.1867158665868189,
+          "p95": 0.3999999761581421,
+          "max": 6
+        },
+        "gpuMs": {
+          "mean": null,
+          "p95": null,
+          "max": null,
+          "samples": 0,
+          "asynchronous": true
+        },
+        "gpuStatus": "unsupported"
+      },
+      "cameraChanged": true,
+      "positionChanged": true
+    },
+    "sceneSpikes": [
+      {
+        "atSeconds": 236.7,
+        "frameMs": 24.8,
+        "cpuSubmitMs": 202.4,
+        "sceneMs": 199.30000001192093,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 1.300000011920929,
+        "contactsMs": 0.10000002384185791,
+        "drawCalls": 137,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 242.3,
+        "frameMs": 14.9,
+        "cpuSubmitMs": 135.7,
+        "sceneMs": 134.20000004768372,
+        "animationMs": 0.40000003576278687,
+        "bossUpdateMs": 0.3999999761581421,
+        "contactsMs": 0,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 313.1,
+        "frameMs": 16.7,
+        "cpuSubmitMs": 90.2,
+        "sceneMs": 88.5,
+        "animationMs": 0.19999998807907104,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 139,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 426.8,
+        "frameMs": 79.8,
+        "cpuSubmitMs": 92.2,
+        "sceneMs": 80.39999997615814,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 111,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      }
+    ],
+    "noBossSceneSpikes": [
+      {
+        "atSeconds": 313.1,
+        "frameMs": 16.7,
+        "cpuSubmitMs": 90.2,
+        "sceneMs": 88.5,
+        "animationMs": 0.19999998807907104,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 139,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 426.8,
+        "frameMs": 79.8,
+        "cpuSubmitMs": 92.2,
+        "sceneMs": 80.39999997615814,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 111,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      }
+    ],
+    "recentDelaySamples": [
+      {
+        "atSeconds": 214.7,
+        "frameMs": 67.4,
+        "cpuSubmitMs": 22.4,
+        "sceneMs": 17.900000035762787,
+        "animationMs": 0.5,
+        "bossUpdateMs": 1.800000011920929,
+        "contactsMs": 0.19999998807907104,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "cast",
+            "hp": 380
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 216.2,
+        "frameMs": 51.2,
+        "cpuSubmitMs": 19.5,
+        "sceneMs": 14.699999988079071,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 2.099999964237213,
+        "contactsMs": 1.300000011920929,
+        "drawCalls": 135,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "walk",
+            "hp": 261
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 217,
+        "frameMs": 33.4,
+        "cpuSubmitMs": 57.4,
+        "sceneMs": 25.600000023841858,
+        "animationMs": 0.6000000238418579,
+        "bossUpdateMs": 1.7999999523162842,
+        "contactsMs": 1.0999999642372131,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "walk",
+            "hp": 261
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 217,
+        "frameMs": 66.1,
+        "cpuSubmitMs": 24.3,
+        "sceneMs": 20.30000001192093,
+        "animationMs": 0.6000000238418579,
+        "bossUpdateMs": 2,
+        "contactsMs": 0.5,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "walk",
+            "hp": 261
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 218,
+        "frameMs": 58.4,
+        "cpuSubmitMs": 20.9,
+        "sceneMs": 17.30000001192093,
+        "animationMs": 0.5,
+        "bossUpdateMs": 1.5,
+        "contactsMs": 0,
+        "drawCalls": 135,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "cast",
+            "hp": 261
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 228.8,
+        "frameMs": 58.4,
+        "cpuSubmitMs": 16,
+        "sceneMs": 12.800000011920929,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 1.600000023841858,
+        "contactsMs": 0.3999999761581421,
+        "drawCalls": 127,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "walk",
+            "hp": 223
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 236.7,
+        "frameMs": 24.8,
+        "cpuSubmitMs": 202.4,
+        "sceneMs": 199.30000001192093,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 1.300000011920929,
+        "contactsMs": 0.10000002384185791,
+        "drawCalls": 137,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 236.9,
+        "frameMs": 204.4,
+        "cpuSubmitMs": 32.9,
+        "sceneMs": 26.30000001192093,
+        "animationMs": 0.699999988079071,
+        "bossUpdateMs": 2.300000011920929,
+        "contactsMs": 0.09999996423721313,
+        "drawCalls": 137,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 242.3,
+        "frameMs": 14.9,
+        "cpuSubmitMs": 135.7,
+        "sceneMs": 134.20000004768372,
+        "animationMs": 0.40000003576278687,
+        "bossUpdateMs": 0.3999999761581421,
+        "contactsMs": 0,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 242.4,
+        "frameMs": 137.1,
+        "cpuSubmitMs": 15.6,
+        "sceneMs": 13.799999952316284,
+        "animationMs": 0.5,
+        "bossUpdateMs": 0.19999998807907104,
+        "contactsMs": 0.09999996423721313,
+        "drawCalls": 131,
+        "bosses": [
+          {
+            "kind": "elena",
+            "phase": 2,
+            "state": "dead",
+            "hp": 0
+          }
+        ],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 248.2,
+        "frameMs": 52.3,
+        "cpuSubmitMs": 19.6,
+        "sceneMs": 17.799999952316284,
+        "animationMs": 0.5,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 128,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 280.9,
+        "frameMs": 103.8,
+        "cpuSubmitMs": 12.5,
+        "sceneMs": 8.400000035762787,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0.09999996423721313,
+        "contactsMs": 0,
+        "drawCalls": 114,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 313.1,
+        "frameMs": 16.7,
+        "cpuSubmitMs": 90.2,
+        "sceneMs": 88.5,
+        "animationMs": 0.19999998807907104,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 139,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 313.2,
+        "frameMs": 91.7,
+        "cpuSubmitMs": 11.8,
+        "sceneMs": 10.199999988079071,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0.09999996423721313,
+        "contactsMs": 0,
+        "drawCalls": 135,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 324.7,
+        "frameMs": 105.3,
+        "cpuSubmitMs": 30.5,
+        "sceneMs": 26.80000001192093,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 117,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 1
+      },
+      {
+        "atSeconds": 347.7,
+        "frameMs": 56.5,
+        "cpuSubmitMs": 22.7,
+        "sceneMs": 21.30000001192093,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 139,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 362.2,
+        "frameMs": 296.3,
+        "cpuSubmitMs": 27.5,
+        "sceneMs": 24.5,
+        "animationMs": 0.19999998807907104,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 137,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 362.2,
+        "frameMs": 56.1,
+        "cpuSubmitMs": 24.4,
+        "sceneMs": 22.899999976158142,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 137,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 409,
+        "frameMs": 50.4,
+        "cpuSubmitMs": 23.6,
+        "sceneMs": 21.100000023841858,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 105,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 411.3,
+        "frameMs": 51.1,
+        "cpuSubmitMs": 28.3,
+        "sceneMs": 26.400000035762787,
+        "animationMs": 0.6000000238418579,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 107,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 421.1,
+        "frameMs": 51.6,
+        "cpuSubmitMs": 14.9,
+        "sceneMs": 13.5,
+        "animationMs": 0.2999999523162842,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 125,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 423.3,
+        "frameMs": 50.1,
+        "cpuSubmitMs": 20.3,
+        "sceneMs": 18.200000047683716,
+        "animationMs": 0.40000003576278687,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 104,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 426.8,
+        "frameMs": 79.8,
+        "cpuSubmitMs": 92.2,
+        "sceneMs": 80.39999997615814,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 111,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 426.9,
+        "frameMs": 106.6,
+        "cpuSubmitMs": 78.9,
+        "sceneMs": 37.5,
+        "animationMs": 6.600000023841858,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 109,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427,
+        "frameMs": 87.1,
+        "cpuSubmitMs": 45,
+        "sceneMs": 27.69999998807907,
+        "animationMs": 0.19999998807907104,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 109,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.1,
+        "frameMs": 86.2,
+        "cpuSubmitMs": 74.5,
+        "sceneMs": 43.59999996423721,
+        "animationMs": 0.3999999761581421,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 110,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.2,
+        "frameMs": 77.9,
+        "cpuSubmitMs": 68,
+        "sceneMs": 42.10000002384186,
+        "animationMs": 9.100000023841858,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 108,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.3,
+        "frameMs": 75.7,
+        "cpuSubmitMs": 57.4,
+        "sceneMs": 42.69999998807907,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 105,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.3,
+        "frameMs": 64.1,
+        "cpuSubmitMs": 57.1,
+        "sceneMs": 36.5,
+        "animationMs": 0.5,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 108,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.4,
+        "frameMs": 80,
+        "cpuSubmitMs": 66,
+        "sceneMs": 43.10000002384186,
+        "animationMs": 5.5,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 108,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.5,
+        "frameMs": 68.5,
+        "cpuSubmitMs": 126.5,
+        "sceneMs": 11,
+        "animationMs": 0.30000001192092896,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 109,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      },
+      {
+        "atSeconds": 427.6,
+        "frameMs": 130.2,
+        "cpuSubmitMs": 11.2,
+        "sceneMs": 7.800000011920929,
+        "animationMs": 0.20000004768371582,
+        "bossUpdateMs": 0,
+        "contactsMs": 0,
+        "drawCalls": 108,
+        "bosses": [],
+        "pendingGeometry": 0,
+        "pendingTexture": 0
+      }
+    ]
+  },
+  "confirmedFix": {
+    "path": "src/character-outlines.js",
+    "scope": "Remove only repeated morph-parameter/texture-manager bind from the shared ink onBind observer. Preserve explicit bone binding.",
+    "beforeTextureManagerBindsPerDraw": 2,
+    "afterTextureManagerBindsPerDraw": 1,
+    "baselineEvidence": "boss-material-baseline.log: actual packed11-target manager binds2, expected1",
+    "passEvidence": "boss-material-validation.json",
+    "reason": "Babylon9.31 unfrozen ShaderMaterial.bind calls BindMorphTargetParameters and manager._bind immediately before _afterBind/onBind, for every mesh even on cached consecutive draws.",
+    "gpuCallSavingsMeasured": false,
+    "phoneFpsSavingsMeasured": false
+  },
+  "excludedInTestedScope": {
+    "perSubmeshInk": true,
+    "phase1And2AnimatedIdleFrames": 240,
+    "postDeathFrames": 120,
+    "steadyEffectRequests": [
+      {
+        "label": "phase1-animated-idle",
+        "frames": 120,
+        "effectRequests": 0,
+        "refGrowth": 0
+      },
+      {
+        "label": "phase2-animated-idle",
+        "frames": 120,
+        "effectRequests": 0,
+        "refGrowth": 0
+      },
+      {
+        "label": "after-death-steady",
+        "frames": 120,
+        "effectRequests": 0,
+        "refGrowth": 0
+      }
+    ],
+    "deathFrames": 606,
+    "deathDurationSeconds": 10,
+    "deathNewEffects": 0,
+    "deathNewRawTextures": 0,
+    "deathCachedRequests": [
+      {
+        "frame": 0,
+        "seconds": 0.016666666666666666,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 10,
+        "seconds": 0.18333333333333332,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 18,
+        "seconds": 0.31666666666666665,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 9,
+            "defines": "28a918fedd9e9607caf984311e8f31f7b3f2a562bb59360894362cd1cd264dde",
+            "shader": "pbr"
+          },
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 120,
+        "seconds": 2.0166666666666666,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 173,
+        "seconds": 2.9,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 185,
+        "seconds": 3.1,
+        "opacity": 1,
+        "requests": [
+          {
+            "id": 17,
+            "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+            "shader": "pbr"
+          }
+        ]
+      },
+      {
+        "frame": 351,
+        "seconds": 5.866666666666666,
+        "opacity": 0.9999517432320207,
+        "requests": [
+          {
+            "id": 15,
+            "defines": "f739cb8d0e6d041ada89cfbbdf7eb6edb4e3014d7d1b5e59ff7850c08b19c291",
+            "shader": "pbr"
+          },
+          {
+            "id": 11,
+            "defines": "effbcfb856c4a9581101cf96b5e40f3a5ca8c4641c6c53c66731c1288c025c69",
+            "shader": "pbr"
+          },
+          {
+            "id": 11,
+            "defines": "effbcfb856c4a9581101cf96b5e40f3a5ca8c4641c6c53c66731c1288c025c69",
+            "shader": "pbr"
+          }
+        ]
+      }
+    ],
+    "resourceInventoryStable": true
+  },
+  "findings": [
+    {
+      "certainty": "confirmed",
+      "finding": "Duplicate morph bindings in unfrozen character ink were present; exact current manager/independent bone binding is retained after removal."
+    },
+    {
+      "certainty": "confirmed-in-CPU-SDK-probe",
+      "finding": "Actual warrior vertex attributes alongside both packed Elena phases do not reproduce the scenery global-wrapper COLOR_0 churn: shared character ink stores effects per submesh. Animated idle and post-death360frames request0 cached effects and grow0 effect references."
+    },
+    {
+      "certainty": "confirmed-in-CPU-SDK-probe",
+      "finding": "Actual encounter first death plus all10seconds, including fade firstopacity at5.8667s, introduces0 new Effect objects and0 new RawTexture allocations. A few existing PBR cache requests occur only at discrete state/morph/visibility transitions; they were not rewritten."
+    },
+    {
+      "certainty": "unresolved-on-device",
+      "finding": "The148ms transformation,199.3ms death and134.2ms later scene peaks are not reproduced as new SDK shader compilation/effect creation. Warm preparation18ms is not the measured148ms scene call. Driver first draw/pipeline cost, GC and full-map render work remain unseparated in the old diagnostics."
+    },
+    {
+      "certainty": "confirmed-log-scope",
+      "finding": "Large scene spikes also occur with no active boss, so neither death animation nor the small morph-binding duplication alone explains all delays. The attachment has no usable GPU timings or temperature measurement."
+    }
+  ],
+  "sources": [
+    {
+      "path": "src/character-outlines.js",
+      "line": 87
+    },
+    {
+      "path": "src/character-outlines.js",
+      "line": 108
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/shaderMaterial.pure.js",
+      "line": 36
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/shaderMaterial.pure.js",
+      "line": 987
+    },
+    {
+      "path": "src/boss-shader-warmup.js",
+      "line": 17
+    },
+    {
+      "path": "src/boss-shader-warmup.js",
+      "line": 28
+    },
+    {
+      "path": "src/enemy-death.js",
+      "line": 3
+    }
+  ],
+  "preservation": [
+    {
+      "path": "src/boss-shader-warmup.js",
+      "baselineSha256": "1584f8d6eb0216c4561f115b7cffdb4fea9acae16952ef51b05170990ec14926",
+      "currentSha256": "1584f8d6eb0216c4561f115b7cffdb4fea9acae16952ef51b05170990ec14926",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/enemy-death.js",
+      "baselineSha256": "18eb6e692f53bc72396a46ddaa1aece176e80171333b73fa951f597a2321e20b",
+      "currentSha256": "18eb6e692f53bc72396a46ddaa1aece176e80171333b73fa951f597a2321e20b",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/hit-feedback.js",
+      "baselineSha256": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c",
+      "currentSha256": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/monster-toon.js",
+      "baselineSha256": "1825a938c70913c52c19e3b9ca2a5486ccde05bfe01aea0a9a97b87b7600d03a",
+      "currentSha256": "1825a938c70913c52c19e3b9ca2a5486ccde05bfe01aea0a9a97b87b7600d03a",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-elena-animation.js",
+      "baselineSha256": "6ca34225c0fc8c201512c56256b5c6d495da68cb1d1d30467805e75c72b17e52",
+      "currentSha256": "6ca34225c0fc8c201512c56256b5c6d495da68cb1d1d30467805e75c72b17e52",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-knee.js",
+      "baselineSha256": "ae1a40ecb75efc65724a05b84d0bddf9a7de135e56d67a669f7009e4aa74a011",
+      "currentSha256": "ae1a40ecb75efc65724a05b84d0bddf9a7de135e56d67a669f7009e4aa74a011",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-knee-data.js",
+      "baselineSha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d",
+      "currentSha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-depth.js",
+      "baselineSha256": "ea0262fc4d39a39d5c992c182c17f286656c78b1ecbc1c03e1c56b292b8e9d3c",
+      "currentSha256": "ea0262fc4d39a39d5c992c182c17f286656c78b1ecbc1c03e1c56b292b8e9d3c",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-depth-data.js",
+      "baselineSha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93",
+      "currentSha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/player-texture-profile.js",
+      "baselineSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "currentSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/warrior-v3.json",
+      "baselineSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "currentSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/elena.json",
+      "baselineSha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "currentSha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/mourning-elena.json",
+      "baselineSha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "currentSha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    }
+  ],
+  "allProtectedPathsUnchanged": true,
+  "validation": {
+    "passed": true,
+    "focusedTests": 20,
+    "failed": 0,
+    "log": "boss-material-focused.log",
+    "newTest": "tests/character-material-steady-state.test.js",
+    "command": "node --test tests/character-material-steady-state.test.js tests/character-outlines.test.js tests/boss-shader-warmup.test.js tests/character-render-cost.test.js"
+  },
+  "limitations": [
+    "Babylon9.31 NullEngine SDK call/effect identity validation; GPU programs, upload durations, driver pipeline stalls, thermal behavior and phone FPS are unmeasured.",
+    "Production player/boss geometry, all vertex attributes, skeletons, morph targets and encounter preparation/animation are used; downloaded model textures are omitted and replaced with opaque unlit PBR paint.",
+    "This test can exclude repeated SDK effect-cache requests and missing tested geometry/opacity variants; it cannot exclude GPU driver first-use costs or rendering work from the full map."
+  ],
+  "nextDeviceEvidence": "Use the parent-added CPU scene substage and target-overrun diagnostics on a fresh same-position replay. Effect creation/cache identity counts here do not measure GPU driver compilation, GPU time, phone thermal behavior or FPS improvement."
+}

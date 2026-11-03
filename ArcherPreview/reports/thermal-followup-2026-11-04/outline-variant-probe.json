@@ -1,0 +1,73 @@
+{
+  "cases": [
+    {
+      "map": "village",
+      "assets": [
+        "tree-01-round-oak",
+        "rock-01-mossy-boulder"
+      ],
+      "hasVertexColors": [
+        false,
+        false
+      ],
+      "sceneRenders": 120,
+      "inkDraws": 240,
+      "effectRequests": 0,
+      "newEffects": 0,
+      "elapsedMs": 11.990999999998849
+    },
+    {
+      "map": "great-plains",
+      "assets": [
+        "forest-01-sickly-oak",
+        "tree-02-slender-pine"
+      ],
+      "hasVertexColors": [
+        true,
+        false
+      ],
+      "sceneRenders": 120,
+      "inkDraws": 240,
+      "effectRequests": 0,
+      "newEffects": 0,
+      "elapsedMs": 8.65900000000238
+    },
+    {
+      "map": "monster-forest",
+      "assets": [
+        "forest-01-sickly-oak",
+        "tree-02-slender-pine"
+      ],
+      "hasVertexColors": [
+        true,
+        false
+      ],
+      "sceneRenders": 120,
+      "inkDraws": 240,
+      "effectRequests": 0,
+      "newEffects": 0,
+      "elapsedMs": 8.766999999999825
+    },
+    {
+      "map": "witch-cave",
+      "assets": [
+        "cave-02-rock-ledge",
+        "crate-barrel-cluster"
+      ],
+      "hasVertexColors": [
+        true,
+        false
+      ],
+      "sceneRenders": 120,
+      "inkDraws": 240,
+      "effectRequests": 0,
+      "newEffects": 0,
+      "elapsedMs": 5.775299999998197
+    }
+  ],
+  "scope": "Actual packed map models/geometry + Babylon 9.31 NullEngine, image loading omitted, 120 scene.render calls per map.",
+  "limitations": [
+    "Node CPU timings and Effect cache requests do not measure phone CPU, GPU time, FPS or temperature.",
+    "Only two intentionally visible sources per map; not representative of complete actual frame or draw ordering."
+  ]
+}

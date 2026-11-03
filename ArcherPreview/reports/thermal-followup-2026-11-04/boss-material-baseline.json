@@ -1,0 +1,868 @@
+{
+  "baseline": "5a6abaa",
+  "cases": [
+    {
+      "case": "actual-player-both-phases-complete-death",
+      "attributes": {
+        "player": [
+          {
+            "name": "Bunnyguard_Shield",
+            "vertices": 6914,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Forearm_Strap",
+            "vertices": 480,
+            "attributes": [
+              "position",
+              "normal"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_MountPad_0",
+            "vertices": 24,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_MountPad_1",
+            "vertices": 24,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_MountPad_2",
+            "vertices": 24,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_MountPad_3",
+            "vertices": 24,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rear_Leather_Pad",
+            "vertices": 24,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_0_-0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_0_0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_1_-0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_1_0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_2_-0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_2_0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_3_-0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Shield_Rivet_3_0.007",
+            "vertices": 220,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Golden_Oathblade",
+            "vertices": 6855,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Body_primitive0",
+            "vertices": 17089,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Body_primitive1",
+            "vertices": 60,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Body_primitive2",
+            "vertices": 82,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Body_Outline",
+            "vertices": 17124,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Cape_primitive0",
+            "vertices": 7863,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Cape_primitive1",
+            "vertices": 23,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Cape_primitive2",
+            "vertices": 29,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Ear.L",
+            "vertices": 73,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "uv2",
+              "uv3",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Ear.L_Outline",
+            "vertices": 267,
+            "attributes": [
+              "position",
+              "normal",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Ear.R",
+            "vertices": 61,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "uv2",
+              "uv3",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Ear.R_Outline",
+            "vertices": 213,
+            "attributes": [
+              "position",
+              "normal",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Face",
+            "vertices": 1229,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "uv2",
+              "uv3",
+              "uv4",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Face_Outline",
+            "vertices": 2557,
+            "attributes": [
+              "position",
+              "normal",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Hair",
+            "vertices": 16555,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "uv2",
+              "uv3",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Hair_Outline",
+            "vertices": 37639,
+            "attributes": [
+              "position",
+              "normal",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Neck",
+            "vertices": 395,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "uv2",
+              "uv3",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Warrior_Neck_Outline",
+            "vertices": 561,
+            "attributes": [
+              "position",
+              "normal",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Bunnyguard_Shield / silhouette",
+            "vertices": 6914,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": true,
+            "perSubmesh": true
+          },
+          {
+            "name": "Golden_Oathblade / silhouette",
+            "vertices": 6855,
+            "attributes": [
+              "position",
+              "normal",
+              "uv"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": true,
+            "perSubmesh": true
+          }
+        ],
+        "phase1": [
+          {
+            "name": "Elena_Meshy_Static",
+            "vertices": 96734,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Elena_Meshy_Static / silhouette",
+            "vertices": 96734,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": true,
+            "perSubmesh": true
+          }
+        ],
+        "phase2": [
+          {
+            "name": "Lament_Mouth_Interior",
+            "vertices": 280,
+            "attributes": [
+              "position",
+              "normal",
+              "color"
+            ],
+            "bones": 4,
+            "morphTargets": 1,
+            "morphSlots": 1,
+            "textureMorphs": true,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Halo_Attached_Streamers",
+            "vertices": 287,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 3,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Halo_Rigid_Emblem",
+            "vertices": 4014,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 3,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Elina_Chimera_Skin",
+            "vertices": 36196,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 11,
+            "morphSlots": 11,
+            "textureMorphs": true,
+            "ink": false,
+            "perSubmesh": true
+          },
+          {
+            "name": "Halo_Attached_Streamers / silhouette",
+            "vertices": 287,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 3,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": true,
+            "perSubmesh": true
+          },
+          {
+            "name": "Halo_Rigid_Emblem / silhouette",
+            "vertices": 4014,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 3,
+            "morphTargets": 0,
+            "morphSlots": 0,
+            "textureMorphs": false,
+            "ink": true,
+            "perSubmesh": true
+          },
+          {
+            "name": "Elina_Chimera_Skin / silhouette",
+            "vertices": 36196,
+            "attributes": [
+              "position",
+              "normal",
+              "uv",
+              "matricesIndices",
+              "matricesWeights"
+            ],
+            "bones": 4,
+            "morphTargets": 11,
+            "morphSlots": 11,
+            "textureMorphs": true,
+            "ink": true,
+            "perSubmesh": true
+          }
+        ]
+      },
+      "steady": [
+        {
+          "label": "phase1-steady",
+          "frames": 120,
+          "effectRequests": 0,
+          "newEffects": 0,
+          "newRawTextures": 0,
+          "refGrowth": 0
+        },
+        {
+          "label": "phase2-steady",
+          "frames": 120,
+          "effectRequests": 0,
+          "newEffects": 0,
+          "newRawTextures": 0,
+          "refGrowth": 0
+        },
+        {
+          "label": "after-death-steady",
+          "frames": 120,
+          "effectRequests": 0,
+          "newEffects": 0,
+          "newRawTextures": 0,
+          "refGrowth": 0
+        }
+      ],
+      "deathFrames": [
+        {
+          "frame": 0,
+          "seconds": 0.016666666666666666,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 10,
+          "seconds": 0.18333333333333332,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 18,
+          "seconds": 0.31666666666666665,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 9,
+              "defines": "28a918fedd9e9607caf984311e8f31f7b3f2a562bb59360894362cd1cd264dde",
+              "shader": "pbr"
+            },
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 120,
+          "seconds": 2.0166666666666666,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 173,
+          "seconds": 2.9,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 185,
+          "seconds": 3.1,
+          "opacity": 1,
+          "requests": [
+            {
+              "id": 17,
+              "defines": "0689c4caed573c4af364610ffdf2ceae249be55dda0fc1a151e7da68384cb890",
+              "shader": "pbr"
+            }
+          ]
+        },
+        {
+          "frame": 351,
+          "seconds": 5.866666666666666,
+          "opacity": 0.9999517432320207,
+          "requests": [
+            {
+              "id": 15,
+              "defines": "f739cb8d0e6d041ada89cfbbdf7eb6edb4e3014d7d1b5e59ff7850c08b19c291",
+              "shader": "pbr"
+            },
+            {
+              "id": 11,
+              "defines": "effbcfb856c4a9581101cf96b5e40f3a5ca8c4641c6c53c66731c1288c025c69",
+              "shader": "pbr"
+            },
+            {
+              "id": 11,
+              "defines": "effbcfb856c4a9581101cf96b5e40f3a5ca8c4641c6c53c66731c1288c025c69",
+              "shader": "pbr"
+            }
+          ]
+        }
+      ],
+      "deathEffectRequests": 10,
+      "deathNewEffects": 0,
+      "deathNewRawTextures": 0,
+      "deathDuration": 10,
+      "resourcesStable": true
+    }
+  ],
+  "limitations": [
+    "Babylon9.31 NullEngine SDK call/effect identity validation; GPU programs, upload durations, driver pipeline stalls, thermal behavior and phone FPS are unmeasured.",
+    "Production player/boss geometry, all vertex attributes, skeletons, morph targets and encounter preparation/animation are used; downloaded model textures are omitted and replaced with opaque unlit PBR paint.",
+    "This test can exclude repeated SDK effect-cache requests and missing tested geometry/opacity variants; it cannot exclude GPU driver first-use costs or rendering work from the full map."
+  ]
+}

@@ -28,18 +28,23 @@ export class FrameDiagnostics {
     }
   }
   summary(){
-    const now=this.last??this.times[(this.cursor+this.times.length-1)%this.times.length],values=[];
-    let recentCount=0,recentTotal=0,slowFrames=0,maxWorkMs=0;
+    const now=this.last??this.times[(this.cursor+this.times.length-1)%this.times.length],values=[],workValues=[];
+    let recentCount=0,recentTotal=0,slowFrames=0,maxWorkMs=0,frameTotal=0,workTotal=0,missedTargetFrames=0;
     for(let i=0;i<this.count;i++){
       if(now-this.times[i]>10000)continue;
-      const ms=this.intervals[i];values.push(ms);if(ms>this.thresholdMs+.01)slowFrames++;
+      const ms=this.intervals[i];values.push(ms);workValues.push(this.work[i]);frameTotal+=ms;workTotal+=this.work[i];if(ms>this.thresholdMs+.01)slowFrames++;
+      // Allow ordinary refresh/timer jitter. This catches sustained 40 FPS at a
+      // 60 FPS target even when no individual interval exceeds the 50 ms gate.
+      if(ms>1250/this.targetFps)missedTargetFrames++;
       maxWorkMs=Math.max(maxWorkMs,this.work[i]);
       if(now-this.times[i]<=1000){recentCount++;recentTotal+=ms;}
     }
     values.sort((a,b)=>a-b);
+    workValues.sort((a,b)=>a-b);
     return {fps:recentTotal?1000*recentCount/recentTotal:null,frameMs:values.length?this.intervals[(this.cursor+this.times.length-1)%this.times.length]:null,
       maxMs:values.at(-1)??null,p95Ms:values.length?values[Math.ceil(values.length*.95)-1]:null,
-      slowFrames,thresholdMs:this.thresholdMs,targetFps:this.targetFps,samples:values.length,maxWorkMs};
+      slowFrames,thresholdMs:this.thresholdMs,targetFps:this.targetFps,samples:values.length,maxWorkMs,
+      meanFrameMs:values.length?frameTotal/values.length:null,meanWorkMs:values.length?workTotal/values.length:null,p95WorkMs:workValues.length?workValues[Math.ceil(workValues.length*.95)-1]:null,missedTargetFrames,missedTargetThresholdMs:1250/this.targetFps};
   }
 }
 
@@ -79,7 +84,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
-  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0};
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};};
@@ -122,6 +127,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
     report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     report.measurement+=' A delay event now records either a long preceding frame interval or long current JavaScript submission (trigger). frameMs ends at the current frame start; jsSubmitMs and context describe current work. They are not the same interval and must not be added or assumed to share one cause.';
+    report.measurement+=' activeMeshesMs, renderTargetsMs and drawSubmissionMs are CPU scene counters, not GPU time. They overlap with sceneMs and may overlap each other. worldUpdateMs covers camera/lighting/visibility before scene.render; hudUpdateMs covers HUD/quest/save work before rendering and projected feedback after rendering. These are current-frame CPU sections and do not measure browser compositing, temperature or GPU utilization.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
     return report;
   };
@@ -145,7 +151,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
       if(panel.dataset?.expanded!=='false'||panel.dataset?.presentation!=='compact')compactView();
       setCollecting(enabled&&active);
       if(!collecting){if(enabled){monitor.suspend();if(!paused){refreshGpu();bosses.suspend();paused=true;paint();}}return;}
-      paused=false;sections.bossUpdateMs=0;sections.contactsMs=0;monitor.begin(now(),targetFps);
+      paused=false;for(const name in sections)sections[name]=0;monitor.begin(now(),targetFps);
     },
     endFrame(){if(!collecting)return;const time=now();metrics={...renderMetrics()};
       monitor.end(time,()=>({...context(),render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));

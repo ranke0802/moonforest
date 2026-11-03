@@ -1,5 +1,5 @@
 import { Color3, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
-import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
+import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
 import {characterStyleFor,registerCharacterInk} from './character-style.js';
@@ -106,7 +106,8 @@ function outlineMaterial(scene) {
     // ShaderMaterial caches bone bindings with the shared material. Consecutive
     // silhouettes must bind their own rig even when the material/effect is unchanged.
     BindBonesParameters(mesh, effect);
-    if(mesh.morphTargetManager){BindMorphTargetParameters(mesh,effect);if(mesh.morphTargetManager.isUsingTextureForTargets)mesh.morphTargetManager._bind(effect);}
+    // The unfrozen ShaderMaterial already binds each mesh's morph influences
+    // and texture immediately before this observer, including cached draws.
     const group=mesh.metadata.characterStyleGroup,style=characterStyleFor(mesh);
     const pixelOutline=mesh.metadata.outlinePixels!==undefined;
     effect?.setFloat('outlineWidth',pixelOutline?0:mesh.metadata.outlineWidth*(group==='boss'?style.outlineWidth/.5:1));

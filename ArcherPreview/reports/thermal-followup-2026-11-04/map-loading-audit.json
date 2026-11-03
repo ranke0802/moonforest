@@ -1,0 +1,318 @@
+{
+  "generatedAt": "2026-11-03T15:56:40.279Z",
+  "sourceSampleSha256": "3245c50028c0fd1a8f167df1e5626a24e063a817485a0b82c66cf2bc2bafd459",
+  "focusedTests": {
+    "passed": 66,
+    "failed": 0,
+    "log": "reports/thermal-followup-2026-11-04/map-loading-focused.log"
+  },
+  "sample": {
+    "loading": {
+      "label": "지역 이동",
+      "phase": "complete",
+      "setupMs": 526.6999999880791,
+      "downloadMs": 2275.600000023842,
+      "modelMs": 1492.8999999761581,
+      "screenMs": 56,
+      "bytes": 0,
+      "cachedBytes": 9760304,
+      "totalMs": 4351.199999988079,
+      "error": null
+    },
+    "loadHistory": [
+      {
+        "label": "마녀의 동굴",
+        "phase": "complete",
+        "setupMs": 282,
+        "downloadMs": 1582.7999999523163,
+        "modelMs": 5194.300000011921,
+        "screenMs": 203.10000002384186,
+        "bytes": 0,
+        "cachedBytes": 85441434,
+        "totalMs": 7262.199999988079,
+        "error": null
+      },
+      {
+        "label": "지역 이동",
+        "phase": "complete",
+        "setupMs": 1338.5,
+        "downloadMs": 2401.400000035763,
+        "modelMs": 1853.8999999761581,
+        "screenMs": 277,
+        "bytes": 0,
+        "cachedBytes": 6433266,
+        "totalMs": 5870.800000011921,
+        "error": null
+      },
+      {
+        "label": "지역 이동",
+        "phase": "complete",
+        "setupMs": 1624,
+        "downloadMs": 1498.5,
+        "modelMs": 1795.6000000238419,
+        "screenMs": 268.7999999523163,
+        "bytes": 0,
+        "cachedBytes": 20716097,
+        "totalMs": 5186.899999976158,
+        "error": null
+      },
+      {
+        "label": "지역 이동",
+        "phase": "complete",
+        "setupMs": 526.6999999880791,
+        "downloadMs": 2275.600000023842,
+        "modelMs": 1492.8999999761581,
+        "screenMs": 56,
+        "bytes": 0,
+        "cachedBytes": 9760304,
+        "totalMs": 4351.199999988079,
+        "error": null
+      }
+    ],
+    "mapDecodeCache": {
+      "geometry": {
+        "bytes": 8358852,
+        "limit": 8388608,
+        "entries": 197,
+        "hits": 174,
+        "misses": 876,
+        "evictions": 679
+      },
+      "textures": {
+        "bytes": 22326704,
+        "limit": 25165824,
+        "entries": 58,
+        "hits": 46,
+        "misses": 149,
+        "evictions": 91
+      }
+    },
+    "ktxWorker": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 49,
+        "terminated": 49,
+        "completed": 192,
+        "failed": 0,
+        "cancelled": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 192,
+        "stage": "decode",
+        "bytes": 2738921,
+        "queuedMs": 0.10000002384185791,
+        "initMs": 42.5,
+        "activeDecodeMs": 260.69999998807907,
+        "totalMs": 303.30000001192093
+      }
+    },
+    "meshoptWorker": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "queueTimeoutMs": 45000,
+      "initTimeoutMs": 45000,
+      "decodeTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 32,
+        "terminated": 32,
+        "completed": 5370,
+        "failed": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 5370,
+        "stage": "decode",
+        "bytes": 46628,
+        "queueMs": 34.09999996423721,
+        "initMs": 0,
+        "decodeMs": 0.30000001192092896,
+        "totalMs": 34.39999997615814
+      }
+    },
+    "resourceDownloads": {
+      "revision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+      "bundleRequests": 0,
+      "fileRequests": 0,
+      "extractedFiles": 0,
+      "cacheHits": 395,
+      "downloadBytes": 0,
+      "waitStage": null,
+      "initialPrefetchReusedFiles": 207
+    }
+  },
+  "catalog": {
+    "models": 247,
+    "verifiedExternalBufferHashes": 357,
+    "eligibleViews": 9184,
+    "distinctDecodeInputs": 5318,
+    "duplicateViewEntries": 3866,
+    "cumulativeOldDecodedBytes": 94766298,
+    "cumulativeDistinctDecodedBytes": 73748142,
+    "note": "Whole authored catalog, not resident memory or an observed phone load sequence.",
+    "examples": [
+      {
+        "key": "[\"meshopt\",\"4b1f37ea84e193b08c6cac41433cbe04ca2f752b535056eb75528e47ba05cb5c.bin\",0,39898,5759,12,\"ATTRIBUTES\",\"NONE\"]",
+        "bytes": 69108,
+        "models": [
+          "./content/035abb3f5502e8866bd6dbc90586dda6ef0d7abe6a643f39b6f4a90e0b4c4c42.gltf",
+          "./content/251960950b7d32dccd05dd787b66e3c57ec954fd9c5e73cc44c9d39ae1fe2552.gltf"
+        ]
+      },
+      {
+        "key": "[\"meshopt\",\"4b1f37ea84e193b08c6cac41433cbe04ca2f752b535056eb75528e47ba05cb5c.bin\",39900,46562,5759,12,\"ATTRIBUTES\",\"NONE\"]",
+        "bytes": 69108,
+        "models": [
+          "./content/035abb3f5502e8866bd6dbc90586dda6ef0d7abe6a643f39b6f4a90e0b4c4c42.gltf",
+          "./content/251960950b7d32dccd05dd787b66e3c57ec954fd9c5e73cc44c9d39ae1fe2552.gltf"
+        ]
+      },
+      {
+        "key": "[\"meshopt\",\"4b1f37ea84e193b08c6cac41433cbe04ca2f752b535056eb75528e47ba05cb5c.bin\",86464,40130,5759,8,\"ATTRIBUTES\",\"NONE\"]",
+        "bytes": 46072,
+        "models": [
+          "./content/035abb3f5502e8866bd6dbc90586dda6ef0d7abe6a643f39b6f4a90e0b4c4c42.gltf",
+          "./content/251960950b7d32dccd05dd787b66e3c57ec954fd9c5e73cc44c9d39ae1fe2552.gltf"
+        ]
+      }
+    ]
+  },
+  "warmContract": {
+    "visits": [
+      {
+        "character": "warrior-v3",
+        "records": 753,
+        "initialModels": 38,
+        "localPlanMs": 20.168699999999944,
+        "localCachedPreparationMs": 5.322799999999916,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 189
+      },
+      {
+        "character": "warrior-plains",
+        "records": 1424,
+        "initialModels": 16,
+        "localPlanMs": 6.166699999999764,
+        "localCachedPreparationMs": 1.8622000000000298,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 81
+      },
+      {
+        "character": "warrior-v4",
+        "records": 891,
+        "initialModels": 25,
+        "localPlanMs": 3.963799999999992,
+        "localCachedPreparationMs": 1.9666000000001986,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 93
+      },
+      {
+        "character": "warrior-v5",
+        "records": 212,
+        "initialModels": 19,
+        "localPlanMs": 2.5580000000004475,
+        "localCachedPreparationMs": 2.890200000000277,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 73
+      },
+      {
+        "character": "warrior-v4",
+        "records": 891,
+        "initialModels": 27,
+        "localPlanMs": 3.4328999999997905,
+        "localCachedPreparationMs": 1.565299999999752,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 99
+      },
+      {
+        "character": "warrior-plains",
+        "records": 1424,
+        "initialModels": 18,
+        "localPlanMs": 3.6293000000000575,
+        "localCachedPreparationMs": 1.4558000000001812,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 87
+      },
+      {
+        "character": "warrior-v3",
+        "records": 753,
+        "initialModels": 43,
+        "localPlanMs": 2.7858000000001084,
+        "localCachedPreparationMs": 1.7898000000000138,
+        "inventoryScans": 1,
+        "responseMatches": 0,
+        "contentFetches": 0,
+        "networkBytes": 0,
+        "initialReuseFiles": 216
+      }
+    ],
+    "io": {
+      "keyCalls": 7,
+      "matchCalls": 0,
+      "contentFetches": 0,
+      "jsonFetches": 10
+    },
+    "note": "CacheStorage inventory is a deterministic in-memory fixture. Timings are local Node CPU probes, not browser storage/phone speed."
+  },
+  "sequentialInitialPlanReplay": {
+    "old": {
+      "bytes": 8173896,
+      "limit": 8388608,
+      "entries": 197,
+      "hits": 186,
+      "misses": 701,
+      "evictions": 504,
+      "decodedBytes": 48139276
+    },
+    "content": {
+      "bytes": 8069088,
+      "limit": 8388608,
+      "entries": 193,
+      "hits": 190,
+      "misses": 697,
+      "evictions": 504,
+      "decodedBytes": 48034468
+    },
+    "note": "Same bounded 8MiB/256-entry LRU, fixed spawn camera initial model plans in declared visit order. Sequential replay, not runtime concurrent decoder timing or a phone FPS result."
+  },
+  "conclusions": [
+    "Changed only completed meshopt CPU cache identity and same-loader view promise reuse; no global pending loader/network work is shared.",
+    "The cache uses the existing content-addressed file SHA contract, not a new per-view runtime byte hash. Authored external buffers were SHA-verified by this audit; a successfully decoded corrupt cache entry under a correct SHA filename remains an existing integrity assumption, now shared across matching texture variants.",
+    "8MiB geometry / 24MiB texture caps and existing texture/geometry quality are unchanged. 4K/8K decoded textures still bypass the CPU texture pool.",
+    "Warm resource preparation opens the cache inventory once and does not consume cached model/texture bodies. Later initial model prefetches reuse that fresh inventory proof; normal streaming still checks actual eviction.",
+    "The download diagnostic phase also includes prepareVillageStart transform/bounds/demand work and manifest waits. Its 1.5–2.4s is not a direct CacheStorage or network timing.",
+    "No burst job timestamp history proves that retaining decoder WASM longer would help this sample. Both worker counts show all created workers terminated, zero active/queued jobs at capture; keep 1s idle retirement and max one worker rather than increase retained memory.",
+    "No claim that this transition CPU reduction fixes persistent phone heat or the observed 40FPS. Browser/GPU/phone validation was not performed."
+  ]
+}

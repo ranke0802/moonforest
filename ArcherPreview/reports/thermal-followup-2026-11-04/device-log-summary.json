@@ -1,0 +1,3071 @@
+{
+  "createdAt": "2026-11-03T15:28:28.648Z",
+  "bundle": "./assets/index-CrHAQqw8.js",
+  "quality": "high",
+  "renderSize": [
+    1664,
+    768
+  ],
+  "character": "warrior-v3",
+  "summary": {
+    "fps": 59.683676513765555,
+    "frameMs": 19.899999976158142,
+    "maxMs": 24.30000001192093,
+    "p95Ms": 17.600000023841858,
+    "slowFrames": 0,
+    "thresholdMs": 50,
+    "targetFps": 60,
+    "samples": 601,
+    "maxWorkMs": 19.899999976158142
+  },
+  "renderMetrics": {
+    "drawCalls": 123,
+    "sceneMs": 8.400000035762787,
+    "animationMs": 0.19999998807907104,
+    "gpu": {
+      "status": "unsupported",
+      "asynchronous": true,
+      "scope": "engine-frame",
+      "intervalMs": 250,
+      "pending": false,
+      "ageMs": null,
+      "samples": 0,
+      "meanMs": null,
+      "p95Ms": null,
+      "latest": null,
+      "retained": null,
+      "disjointEvents": 0,
+      "invalidSamples": 0,
+      "timeouts": 0
+    }
+  },
+  "memory": {
+    "jsUsedBytes": 35100000,
+    "jsAllocatedBytes": 53500000,
+    "jsLimitBytes": 1940000000,
+    "backgroundHighTextureEstimateBytes": 95071024,
+    "backgroundHighTextureBudgetBytes": 100663296,
+    "textures": 29,
+    "meshes": 1732,
+    "geometries": 192,
+    "sampleAtMs": 555964.8999999762
+  },
+  "loadHistory": [
+    {
+      "label": "마녀의 동굴",
+      "phase": "complete",
+      "setupMs": 282,
+      "downloadMs": 1582.7999999523163,
+      "modelMs": 5194.300000011921,
+      "screenMs": 203.10000002384186,
+      "bytes": 0,
+      "cachedBytes": 85441434,
+      "totalMs": 7262.199999988079,
+      "error": null
+    },
+    {
+      "label": "지역 이동",
+      "phase": "complete",
+      "setupMs": 1338.5,
+      "downloadMs": 2401.400000035763,
+      "modelMs": 1853.8999999761581,
+      "screenMs": 277,
+      "bytes": 0,
+      "cachedBytes": 6433266,
+      "totalMs": 5870.800000011921,
+      "error": null
+    },
+    {
+      "label": "지역 이동",
+      "phase": "complete",
+      "setupMs": 1624,
+      "downloadMs": 1498.5,
+      "modelMs": 1795.6000000238419,
+      "screenMs": 268.7999999523163,
+      "bytes": 0,
+      "cachedBytes": 20716097,
+      "totalMs": 5186.899999976158,
+      "error": null
+    },
+    {
+      "label": "지역 이동",
+      "phase": "complete",
+      "setupMs": 526.6999999880791,
+      "downloadMs": 2275.600000023842,
+      "modelMs": 1492.8999999761581,
+      "screenMs": 56,
+      "bytes": 0,
+      "cachedBytes": 9760304,
+      "totalMs": 4351.199999988079,
+      "error": null
+    }
+  ],
+  "ktxWorker": {
+    "status": "ready",
+    "maxWorkers": 1,
+    "totalAwaitTimeoutMs": 45000,
+    "idleReleaseMs": 1000,
+    "queued": 0,
+    "active": null,
+    "counts": {
+      "created": 49,
+      "terminated": 49,
+      "completed": 192,
+      "failed": 0,
+      "cancelled": 0,
+      "recoveries": 0,
+      "workerFaults": 0
+    },
+    "lastFailure": null,
+    "lastCompleted": {
+      "id": 192,
+      "stage": "decode",
+      "bytes": 2738921,
+      "queuedMs": 0.10000002384185791,
+      "initMs": 42.5,
+      "activeDecodeMs": 260.69999998807907,
+      "totalMs": 303.30000001192093
+    }
+  },
+  "meshoptWorker": {
+    "status": "ready",
+    "maxWorkers": 1,
+    "totalAwaitTimeoutMs": 45000,
+    "queueTimeoutMs": 45000,
+    "initTimeoutMs": 45000,
+    "decodeTimeoutMs": 45000,
+    "idleReleaseMs": 1000,
+    "queued": 0,
+    "active": null,
+    "counts": {
+      "created": 32,
+      "terminated": 32,
+      "completed": 5370,
+      "failed": 0,
+      "recoveries": 0,
+      "workerFaults": 0
+    },
+    "lastFailure": null,
+    "lastCompleted": {
+      "id": 5370,
+      "stage": "decode",
+      "bytes": 46628,
+      "queueMs": 34.09999996423721,
+      "initMs": 0,
+      "decodeMs": 0.30000001192092896,
+      "totalMs": 34.39999997615814
+    }
+  },
+  "mapDecodeCache": {
+    "geometry": {
+      "bytes": 8358852,
+      "limit": 8388608,
+      "entries": 197,
+      "hits": 174,
+      "misses": 876,
+      "evictions": 679
+    },
+    "textures": {
+      "bytes": 22326704,
+      "limit": 25165824,
+      "entries": 58,
+      "hits": 46,
+      "misses": 149,
+      "evictions": 91
+    }
+  },
+  "textureStreaming": {
+    "highTextureAssets": 5,
+    "highTexturePending": 0,
+    "highTextureMax": 4096,
+    "highTextureLoads": 19,
+    "highTextureReleases": 14,
+    "highTextureError": null,
+    "highTextureBudget": 100663296,
+    "highTextureBytes": 95071024,
+    "highTextureReserved": 0,
+    "highTexturePeak": 95071024,
+    "highTextureQueued": 1,
+    "highTextureMoving": false,
+    "highTextureMovingLoads": 17,
+    "highTextureCooldownMs": 0,
+    "highTextureLastPrepareMs": 18.400000035762787,
+    "highTextureFormat": 37492
+  },
+  "recentDelays": [
+    {
+      "atSeconds": 214.7,
+      "frameMs": 67.4,
+      "jsSubmitMs": 22.4,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -29.3
+      ],
+      "camera": [
+        49.53,
+        1.14,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1449062499999936,
+        "effectiveBeta": 1.1449062499999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "cast",
+          "hp": 380
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 17.900000035762787,
+        "animationMs": 0.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.800000011920929,
+      "contactsMs": 0.19999998807907104,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 216.2,
+      "frameMs": 51.2,
+      "jsSubmitMs": 19.5,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -29.3
+      ],
+      "camera": [
+        49.53,
+        1.14,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1449062499999936,
+        "effectiveBeta": 1.1449062499999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 261
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 14.699999988079071,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 2.099999964237213,
+      "contactsMs": 1.300000011920929,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 217,
+      "frameMs": 33.4,
+      "jsSubmitMs": 57.4,
+      "trigger": "current-work",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -29.3
+      ],
+      "camera": [
+        49.53,
+        1.14,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1449062499999936,
+        "effectiveBeta": 1.1449062499999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 261
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 25.600000023841858,
+        "animationMs": 0.6000000238418579,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.7999999523162842,
+      "contactsMs": 1.0999999642372131,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 217,
+      "frameMs": 66.1,
+      "jsSubmitMs": 24.3,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -29.3
+      ],
+      "camera": [
+        49.53,
+        1.14,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1449062499999936,
+        "effectiveBeta": 1.1449062499999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 261
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 20.30000001192093,
+        "animationMs": 0.6000000238418579,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 2,
+      "contactsMs": 0.5,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 218,
+      "frameMs": 58.4,
+      "jsSubmitMs": 20.9,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.1,
+        -29.6
+      ],
+      "camera": [
+        49.53,
+        1.14,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1449062499999936,
+        "effectiveBeta": 1.1449062499999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "cast",
+          "hp": 261
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 17.30000001192093,
+        "animationMs": 0.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.5,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 228.8,
+      "frameMs": 58.4,
+      "jsSubmitMs": 16,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        26.8,
+        -27.5
+      ],
+      "camera": [
+        53.85,
+        1.3,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242970696383857,
+        "requestedBeta": 1.2981874999999936,
+        "effectiveBeta": 1.2981874999999936,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 223
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 127,
+        "sceneMs": 12.800000011920929,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.600000023841858,
+      "contactsMs": 0.3999999761581421,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 236.7,
+      "frameMs": 24.8,
+      "jsSubmitMs": 202.4,
+      "trigger": "current-work",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        27.8,
+        -24.3
+      ],
+      "camera": [
+        53.26,
+        1.31,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.3136562499999935,
+        "effectiveBeta": 1.3136562499999935,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "dead",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 137,
+        "sceneMs": 199.30000001192093,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 1.300000011920929,
+      "contactsMs": 0.10000002384185791,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 236.9,
+      "frameMs": 204.4,
+      "jsSubmitMs": 32.9,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        27.8,
+        -24.3
+      ],
+      "camera": [
+        53.26,
+        1.31,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.243,
+        "requestedBeta": 1.3136562499999935,
+        "effectiveBeta": 1.3136562499999935,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "dead",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 137,
+        "sceneMs": 26.30000001192093,
+        "animationMs": 0.699999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 2.300000011920929,
+      "contactsMs": 0.09999996423721313,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 242.3,
+      "frameMs": 14.9,
+      "jsSubmitMs": 135.7,
+      "trigger": "current-work",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -23.9
+      ],
+      "camera": [
+        52.93,
+        1.28,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.240461099383428,
+        "requestedBeta": 1.2817812499999928,
+        "effectiveBeta": 1.2817812499999928,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "dead",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 134.20000004768372,
+        "animationMs": 0.40000003576278687,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.3999999761581421,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 242.4,
+      "frameMs": 137.1,
+      "jsSubmitMs": 15.6,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        28.4,
+        -23.9
+      ],
+      "camera": [
+        52.93,
+        1.28,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.241859198415959,
+        "requestedBeta": 1.2817812499999928,
+        "effectiveBeta": 1.2817812499999928,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "dead",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 131,
+        "sceneMs": 13.799999952316284,
+        "animationMs": 0.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.19999998807907104,
+      "contactsMs": 0.09999996423721313,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 248.2,
+      "frameMs": 52.3,
+      "jsSubmitMs": 19.6,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        32.3,
+        -28.2
+      ],
+      "camera": [
+        57.61,
+        1.26,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.239285528518955,
+        "requestedBeta": 1.2602187499999922,
+        "effectiveBeta": 1.2602187499999922,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 17.799999952316284,
+        "animationMs": 0.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 280.9,
+      "frameMs": 103.8,
+      "jsSubmitMs": 12.5,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        2.9,
+        -27.1
+      ],
+      "camera": [
+        56.44,
+        1.23,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.2316249999999924,
+        "effectiveBeta": 1.2316249999999924,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 114,
+        "sceneMs": 8.400000035762787,
+        "animationMs": 0.30000001192092896,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.09999996423721313,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 313.1,
+      "frameMs": 16.7,
+      "jsSubmitMs": 90.2,
+      "trigger": "current-work",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -32.8,
+        27.4
+      ],
+      "camera": [
+        55.09,
+        1.22,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999997,
+        "requestedBeta": 1.2161562499999923,
+        "effectiveBeta": 1.2161562499999923,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 139,
+        "sceneMs": 88.5,
+        "animationMs": 0.19999998807907104,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 313.2,
+      "frameMs": 91.7,
+      "jsSubmitMs": 11.8,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -33,
+        28
+      ],
+      "camera": [
+        55.09,
+        1.22,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.2161562499999923,
+        "effectiveBeta": 1.2161562499999923,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 10.199999988079071,
+        "animationMs": 0.30000001192092896,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.09999996423721313,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 324.7,
+      "frameMs": 105.3,
+      "jsSubmitMs": 30.5,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "텍스처 준비",
+      "position": [
+        28,
+        -38
+      ],
+      "camera": [
+        54.73,
+        1.19,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 1,
+      "map": "warrior-v4",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 117,
+        "sceneMs": 26.80000001192093,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 347.7,
+      "frameMs": 56.5,
+      "jsSubmitMs": 22.7,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        67.9,
+        -72.4
+      ],
+      "camera": [
+        55.96,
+        1.34,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 139,
+        "sceneMs": 21.30000001192093,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 362.2,
+      "frameMs": 296.3,
+      "jsSubmitMs": 27.5,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        48.1,
+        -38.3
+      ],
+      "camera": [
+        49.9,
+        1.36,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 137,
+        "sceneMs": 24.5,
+        "animationMs": 0.19999998807907104,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 362.2,
+      "frameMs": 56.1,
+      "jsSubmitMs": 24.4,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        47.9,
+        -38.2
+      ],
+      "camera": [
+        49.9,
+        1.36,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 137,
+        "sceneMs": 22.899999976158142,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 409,
+      "frameMs": 50.4,
+      "jsSubmitMs": 23.6,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        -24.2,
+        -13.8
+      ],
+      "camera": [
+        53.99,
+        1.42,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 105,
+        "sceneMs": 21.100000023841858,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 411.3,
+      "frameMs": 51.1,
+      "jsSubmitMs": 28.3,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -24.9,
+        -13.9
+      ],
+      "camera": [
+        53.55,
+        1.38,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 107,
+        "sceneMs": 26.400000035762787,
+        "animationMs": 0.6000000238418579,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 421.1,
+      "frameMs": 51.6,
+      "jsSubmitMs": 14.9,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        -27.5,
+        -15
+      ],
+      "camera": [
+        56.95,
+        1.33,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 125,
+        "sceneMs": 13.5,
+        "animationMs": 0.2999999523162842,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 423.3,
+      "frameMs": 50.1,
+      "jsSubmitMs": 20.3,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -24.5,
+        -14.2
+      ],
+      "camera": [
+        54.05,
+        1.3,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 104,
+        "sceneMs": 18.200000047683716,
+        "animationMs": 0.40000003576278687,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 426.8,
+      "frameMs": 79.8,
+      "jsSubmitMs": 92.2,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -22.6,
+        -16.1
+      ],
+      "camera": [
+        52.62,
+        1.33,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 111,
+        "sceneMs": 80.39999997615814,
+        "animationMs": 0.30000001192092896,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 426.9,
+      "frameMs": 106.6,
+      "jsSubmitMs": 78.9,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -22.3,
+        -16.4
+      ],
+      "camera": [
+        52.62,
+        1.33,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 109,
+        "sceneMs": 37.5,
+        "animationMs": 6.600000023841858,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427,
+      "frameMs": 87.1,
+      "jsSubmitMs": 45,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -22.1,
+        -16.7
+      ],
+      "camera": [
+        52.62,
+        1.33,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 109,
+        "sceneMs": 27.69999998807907,
+        "animationMs": 0.19999998807907104,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.1,
+      "frameMs": 86.2,
+      "jsSubmitMs": 74.5,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -21.9,
+        -17
+      ],
+      "camera": [
+        52.54,
+        1.36,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 110,
+        "sceneMs": 43.59999996423721,
+        "animationMs": 0.3999999761581421,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.2,
+      "frameMs": 77.9,
+      "jsSubmitMs": 68,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -21.8,
+        -17.3
+      ],
+      "camera": [
+        52.34,
+        1.4,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 108,
+        "sceneMs": 42.10000002384186,
+        "animationMs": 9.100000023841858,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.3,
+      "frameMs": 75.7,
+      "jsSubmitMs": 57.4,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -21.8,
+        -17.6
+      ],
+      "camera": [
+        52.15,
+        1.42,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 105,
+        "sceneMs": 42.69999998807907,
+        "animationMs": 0.30000001192092896,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.3,
+      "frameMs": 64.1,
+      "jsSubmitMs": 57.1,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -21.7,
+        -17.8
+      ],
+      "camera": [
+        52.02,
+        1.42,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 108,
+        "sceneMs": 36.5,
+        "animationMs": 0.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.4,
+      "frameMs": 80,
+      "jsSubmitMs": 66,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        -21.5,
+        -17.8
+      ],
+      "camera": [
+        51.91,
+        1.4,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 108,
+        "sceneMs": 43.10000002384186,
+        "animationMs": 5.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.5,
+      "frameMs": 68.5,
+      "jsSubmitMs": 126.5,
+      "trigger": "interval-and-current-work",
+      "targetFps": 60,
+      "activity": "이동",
+      "position": [
+        -21.4,
+        -17.9
+      ],
+      "camera": [
+        51.9,
+        1.39,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 109,
+        "sceneMs": 11,
+        "animationMs": 0.30000001192092896,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    },
+    {
+      "atSeconds": 427.6,
+      "frameMs": 130.2,
+      "jsSubmitMs": 11.2,
+      "trigger": "interval",
+      "targetFps": 60,
+      "activity": "플레이",
+      "position": [
+        -21.4,
+        -17.9
+      ],
+      "camera": [
+        51.9,
+        1.39,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": null,
+        "requestedBeta": 1.1866249999999925,
+        "effectiveBeta": 1.1866249999999925,
+        "pitchCorrection": 0,
+        "reason": "inactive",
+        "baselineRadius": null,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-plains",
+      "bosses": [],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "render": {
+        "drawCalls": 108,
+        "sceneMs": 7.800000011920929,
+        "animationMs": 0.20000004768371582,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "bossPreparation": null,
+      "bossBackground": []
+    }
+  ],
+  "bossComparison": {
+    "id": 2,
+    "label": "비탄의 마녀",
+    "trigger": "거처/변신",
+    "mode": "reuse",
+    "status": "complete",
+    "started": 103006.09999996424,
+    "stage": "model",
+    "stageStarted": 103015.09999996424,
+    "stageMs": {
+      "resource": 9,
+      "model": 9,
+      "screen": 0
+    },
+    "before": {
+      "samples": 180,
+      "durationMs": 3002.900000035763,
+      "frameMs": {
+        "mean": 16.68277777797646,
+        "p95": 17.30000001192093,
+        "max": 20.30000001192093
+      },
+      "cpuMs": {
+        "mean": 7.989444444245763,
+        "p95": 12.100000023841858,
+        "max": 15.300000011920929
+      },
+      "drawCalls": {
+        "mean": 108.77222222222223,
+        "p95": 119,
+        "max": 124
+      },
+      "sceneMs": {
+        "mean": 6.468333335386382,
+        "p95": 10.199999988079071,
+        "max": 11.800000011920929
+      },
+      "animationMs": {
+        "mean": 0.3738888935910331,
+        "p95": 0.5,
+        "max": 2.5
+      },
+      "bossUpdateMs": {
+        "mean": 0.36333333551883695,
+        "p95": 0.6000000238418579,
+        "max": 2
+      },
+      "contactsMs": {
+        "mean": 0.15444444318612416,
+        "p95": 0.2999999523162842,
+        "max": 0.6000000238418579
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "baselineSource": "recent-play",
+    "baselineAgeMs": 0,
+    "memoryBefore": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 53500000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 95071024,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 32,
+      "meshes": 596,
+      "geometries": 146,
+      "sampleAtMs": 103006.09999996424
+    },
+    "contextBefore": {
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        29,
+        -20.5
+      ],
+      "camera": [
+        50.71,
+        1.19,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1917812499999976,
+        "effectiveBeta": 1.1917812499999976,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 1,
+          "state": "Knock_Down",
+          "hp": 0
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 60
+    },
+    "targets": [
+      60
+    ],
+    "stages": [
+      {
+        "stage": "resource",
+        "endedMs": 9
+      },
+      {
+        "stage": "model",
+        "endedMs": 18
+      }
+    ],
+    "pauses": 0,
+    "gpuBoundaryExcluded": 0,
+    "prepareMs": 18,
+    "memoryReady": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 53500000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 95071024,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 32,
+      "meshes": 596,
+      "geometries": 146,
+      "sampleAtMs": 103024.09999996424
+    },
+    "readyAt": 103024.09999996424,
+    "contextReady": {
+      "activity": "이동 · 회전/시점 조작",
+      "position": [
+        29,
+        -20.5
+      ],
+      "camera": [
+        50.71,
+        1.19,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.242999999999999,
+        "requestedBeta": 1.1936562499999976,
+        "effectiveBeta": 1.1936562499999976,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "idle",
+          "hp": 1800
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 60
+    },
+    "preparation": {
+      "yields": 0,
+      "slices": 0,
+      "blocks": 0,
+      "maxSliceMs": 0,
+      "steps": [
+        {
+          "name": "summon-animator",
+          "ms": 1.5999999642372131
+        }
+      ]
+    },
+    "reason": null,
+    "memoryAfter": {
+      "jsUsedBytes": 35100000,
+      "jsAllocatedBytes": 53500000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 95071024,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 32,
+      "meshes": 596,
+      "geometries": 148,
+      "sampleAtMs": 107086.39999997616
+    },
+    "contextAfter": {
+      "activity": "플레이",
+      "position": [
+        30.8,
+        -27.8
+      ],
+      "camera": [
+        54.05,
+        1.23,
+        13.24
+      ],
+      "cameraZoom": {
+        "factor": 1.2836970474967908,
+        "radius": 13.243,
+        "referenceRadius": 17,
+        "minEnabled": false,
+        "maxEnabled": true,
+        "minZoom": 1.2,
+        "maxZoom": 10,
+        "defaultsVersion": 2
+      },
+      "cameraFollow": {
+        "followMotion": false,
+        "stableFocusHeight": 1.3504634657072228
+      },
+      "cameraGuard": {
+        "requestedRadius": 13.243,
+        "effectiveRadius": 13.24299346282335,
+        "requestedBeta": 1.2269374999999962,
+        "effectiveBeta": 1.2269374999999962,
+        "pitchCorrection": 0,
+        "reason": "requested",
+        "baselineRadius": 13.243,
+        "applied": false,
+        "fieldBytes": 1333088
+      },
+      "geometryPending": 0,
+      "texturePending": 0,
+      "map": "warrior-v5",
+      "bosses": [
+        {
+          "kind": "elena",
+          "phase": 2,
+          "state": "walk",
+          "hp": 1800
+        }
+      ],
+      "renderSize": [
+        1664,
+        768
+      ],
+      "targetFps": 60
+    },
+    "completedAt": 108049.89999997616,
+    "during": {
+      "samples": 2,
+      "durationMs": 37.39999997615814,
+      "frameMs": {
+        "mean": 18.69999998807907,
+        "p95": 21,
+        "max": 21
+      },
+      "cpuMs": {
+        "mean": 82.59999999403954,
+        "p95": 155.30000001192093,
+        "max": 155.30000001192093
+      },
+      "drawCalls": {
+        "mean": 131,
+        "p95": 134,
+        "max": 134
+      },
+      "sceneMs": {
+        "mean": 77.34999999403954,
+        "p95": 148,
+        "max": 148
+      },
+      "animationMs": {
+        "mean": 0.5,
+        "p95": 0.5,
+        "max": 0.5
+      },
+      "bossUpdateMs": {
+        "mean": 2.800000011920929,
+        "p95": 3.800000011920929,
+        "max": 3.800000011920929
+      },
+      "contactsMs": {
+        "mean": 0.3499999940395355,
+        "p95": 0.5999999642372131,
+        "max": 0.5999999642372131
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "after": {
+      "samples": 271,
+      "durationMs": 5011.600000023842,
+      "frameMs": {
+        "mean": 18.492988929977276,
+        "p95": 32.30000001192093,
+        "max": 160.30000001192093
+      },
+      "cpuMs": {
+        "mean": 12.039114392111662,
+        "p95": 18,
+        "max": 22.400000035762787
+      },
+      "drawCalls": {
+        "mean": 136.10332103321034,
+        "p95": 144,
+        "max": 145
+      },
+      "sceneMs": {
+        "mean": 9.458302582102068,
+        "p95": 14.600000023841858,
+        "max": 18.600000023841858
+      },
+      "animationMs": {
+        "mean": 0.2892988926810092,
+        "p95": 0.40000003576278687,
+        "max": 0.6000000238418579
+      },
+      "bossUpdateMs": {
+        "mean": 1.1583025800785895,
+        "p95": 1.899999976158142,
+        "max": 3.099999964237213
+      },
+      "contactsMs": {
+        "mean": 0.1867158665868189,
+        "p95": 0.3999999761581421,
+        "max": 6
+      },
+      "gpuMs": {
+        "mean": null,
+        "p95": null,
+        "max": null,
+        "samples": 0,
+        "asynchronous": true
+      },
+      "gpuStatus": "unsupported"
+    },
+    "delta": {
+      "frameMs": 1.8102111520008144,
+      "cpuMs": 4.049669947865899,
+      "drawCalls": 27.33109881098811,
+      "sceneMs": 2.9899692467156855,
+      "animationMs": -0.08459000091002389,
+      "bossUpdateMs": 0.7949692445597526,
+      "contactsMs": 0.03227142340069475,
+      "gpuMs": null,
+      "jsUsedBytes": 0
+    },
+    "cameraChanged": true,
+    "positionChanged": true,
+    "baselineReady": true,
+    "comparisonAvailable": true,
+    "afterProgress": 1
+  },
+  "limits": [
+    "User device log; no temperature telemetry.",
+    "GPU timer unsupported; no direct GPU time.",
+    "Recent delay entries are selected slow events, not all frames.",
+    "CPU work and preceding frame interval must not be added.",
+    "Last village snapshot does not disprove earlier sustained drops."
+  ]
+}

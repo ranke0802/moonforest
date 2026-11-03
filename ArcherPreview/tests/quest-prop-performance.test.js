@@ -7,6 +7,7 @@ import {MeshoptDecoder} from 'meshoptimizer';
 import '@babylonjs/loaders/glTF/index.js';
 import {createQuestProps} from '../src/chapter-quest-props.js';
 import {VillageOutlines} from '../src/village-outlines.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return{promise,resolve};},tick=()=>new Promise(r=>setTimeout(r,0));
 const profile={model:'model.gltf',resources:['model.gltf','model.bin']};
@@ -14,6 +15,9 @@ const assets={a:{height:1,bounds:[1,1,1],lods:[profile,profile,profile]},b:{heig
 function fixture(t,options={}){
  const engine=new NullEngine({renderWidth:800,renderHeight:400});engine.getCaps().instancedArrays=true;
  const scene=new Scene(engine),camera=new ArcRotateCamera('c',-.8,.9,12,new Vector3(2,0,3),scene);new HemisphericLight('light',Vector3.Up(),scene);
+ // Real WebGL completes this existing fallback upload; NullEngine needs it
+ // signalled explicitly before the ink material's actual readiness check.
+ caveFogFallback(scene).getInternalTexture().isReady=true;
  const calls=[],world={scene,camera,lighting:{direction:Vector3.Up(),shadowsActive:false,registerMeshes:meshes=>calls.push(['register',...meshes])},terrain:{heightAt:()=>2},prefetchResources:async resources=>calls.push(['prefetch',resources]),touchDevice:true};
  const container=()=>{const a=new AssetContainer(scene),mesh=MeshBuilder.CreateBox('source',{},scene),material=new PBRMaterial('material',scene);material.transparencyMode=0;mesh.material=material;a.meshes.push(mesh);a.materials.push(material);a.removeAllFromScene();return a;};
  const props=createQuestProps(world,{baseUrl:new URL('https://quest.test/assets/quest-props.json'),readManifest:async()=>({assets}),loadContainer:async()=>{calls.push(['load']);return container();},...options});

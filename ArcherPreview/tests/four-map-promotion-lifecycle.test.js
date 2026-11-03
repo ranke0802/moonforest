@@ -7,6 +7,7 @@ import {loadStreamedVillage} from '../src/village-streamed-environment.js';
 import {readMapContainer} from '../src/map-container.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {waitForSceneReady} from '../src/scene-ready.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 import '@babylonjs/loaders/glTF/index.js';
 
 const base=new URL('../public/assets/',import.meta.url),maps=[['warrior-v3','village',0,6],['warrior-plains','great-plains',-87,-32],['warrior-v4','monster-forest',0,45],['warrior-v5','witch-cave',-42,43]];
@@ -18,7 +19,7 @@ test('four maps revisit, cancel and retry with decoded real geometry and isolate
  const previous=globalThis.location,engine=new NullEngine({renderWidth:900,renderHeight:450});globalThis.location={href:'https://four-map-promotion.test/game/'};
  engine.createCanvas=(width,height)=>({width,height,getContext:()=>({fillRect(){},strokeRect(){},fillText(){}})});
  const world=createWorld(engine,{village:true,touchDevice:true}),scene=world.scene,plateaus=new Map(),results=[];
- scene.defaultMaterial;scene.getOutlineRenderer();engine.getCaps().instancedArrays=true;
+ scene.defaultMaterial;scene.getOutlineRenderer();engine.getCaps().instancedArrays=true;caveFogFallback(scene).getInternalTexture().isReady=true;
  t.mock.method(globalThis,'fetch',async url=>new Response(readFileSync(new URL(new URL(url).pathname.split('/').at(-1),base))));
  const loadContainer=async(model,target,options)=>{
   const source=new URL('content/'+model.pathname.split('/').at(-1),base),{gltf,files}=await readRuntimeGltf(source);
@@ -31,7 +32,7 @@ test('four maps revisit, cancel and retry with decoded real geometry and isolate
  const services={initialize:async()=>{},ground:async()=>{},loadContainer};
  t.after(async()=>{await world.releaseEnvironment?.();scene.dispose();engine.dispose();globalThis.location=previous;});
  function arrive(character,x,z){
-  replaceWorldMap(world,character);const p=new Vector3(x,world.terrain.heightAt(x,z),z);world.camera.setTarget(p.add(new Vector3(0,1,0)));world.camera.alpha=1.2;world.camera.beta=.95;world.camera.radius=13;world.camera.getViewMatrix();world.camera.getProjectionMatrix();world.caveFog?.update(p,0,{force:true});
+  replaceWorldMap(world,character);const p=new Vector3(x,world.terrain.heightAt(x,z),z);world.camera.setTarget(p.add(new Vector3(0,1,0)));world.camera.alpha=1.2;world.camera.beta=.95;world.camera.radius=13;world.camera.getViewMatrix();world.camera.getProjectionMatrix();world.caveFog?.update(p,0,{force:true});readyRaw(scene);
  }
  for(let cycle=0;cycle<2;cycle++)for(const [character,map,x,z]of maps){
   arrive(character,x,z);await loadStreamedVillage(world,services);assert.equal(world.environment.ready,true);assert.equal(world.mapId,map);assert.equal(scene.getWaitingItemsCount(),0);

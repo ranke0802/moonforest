@@ -695,7 +695,7 @@ function render(dt) {
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,playerDimensions(actor).goldHeight,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
-    syncCameraFocus(dt);
+    const worldUpdateStart=frameDiagnostics.mark();syncCameraFocus(dt);
     world.caveCamera?.beginFrame();
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     updatePlainsBoundaryAtmosphere(world,actor.position);world.lighting.follow(actor.position);
@@ -703,19 +703,24 @@ function render(dt) {
     syncCaveFog();
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt,playerDimensions(actor));
     world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);
+    frameDiagnostics.measure('worldUpdateMs',worldUpdateStart);
+    const hudUpdateStart=frameDiagnostics.mark();
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
     updateButtons();mapPortal?.update(dt);minimap.update(actor,elapsed);saveMapPosition();uiTest?.update(elapsed);
+    frameDiagnostics.measure('hudUpdateMs',hudUpdateStart);
   }
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   world.scene.render(!world.caveCamera?.applied);
+  const projectedHudStart=frameDiagnostics.mark();
   screenProjection.beginFrame();
   damageNumbers?.update(dt,screenProjection);
   goldLootView.project(screenProjection);
   updateHealthBars();
   world.caveCamera?.endFrame();
+  frameDiagnostics.measure('hudUpdateMs',projectedHudStart);
 }
 
 function bindMapPortal(disarmRoadDestination=null){

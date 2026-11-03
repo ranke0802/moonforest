@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {NullEngine,Scene,ArcRotateCamera,Vector3,AssetContainer,MeshBuilder,PBRMaterial} from '@babylonjs/core';
 import {createQuestProps} from '../src/chapter-quest-props.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 const deferred=()=>{let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});return {promise,resolve,reject};};
 const points=()=>[{id:'evidence',model:'sample',x:2,z:3}];
@@ -9,6 +10,9 @@ const profile={model:'./content/fixture.gltf',resources:['./content/fixture.gltf
 const manifest={assets:{sample:{height:1,bounds:[1,1,1],lods:[profile,profile,profile]}}};
 function fixture(t,options={}){
  const engine=new NullEngine(),scene=new Scene(engine),camera=new ArcRotateCamera('camera',0,1,10,Vector3.Zero(),scene);
+ // NullEngine does not finish raw GPU uploads. The real fallback is required
+ // during outline warmup, so model that completion without bypassing readiness.
+ caveFogFallback(scene).getInternalTexture().isReady=true;
  const requested=[],world={scene,camera,lighting:{direction:Vector3.Up(),shadowsActive:false},terrain:{heightAt:()=>0},prefetchResources:async paths=>requested.push(paths),touchDevice:true};
  const container=()=>{const asset=new AssetContainer(scene),mesh=MeshBuilder.CreateBox('source',{},scene),material=new PBRMaterial('sample',scene);mesh.material=material;asset.meshes.push(mesh);asset.materials.push(material);asset.removeAllFromScene();return asset;};
  const props=createQuestProps(world,{baseUrl:new URL('https://example.test/assets/quest-props.json'),readManifest:async()=>manifest,loadContainer:async()=>container(),...options});

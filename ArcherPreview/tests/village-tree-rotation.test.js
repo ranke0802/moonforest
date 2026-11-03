@@ -17,9 +17,12 @@ import {applyVillageToon} from '../src/village-toon.js';
 import {SceneLighting} from '../src/scene-lighting.js';
 import {MovingSky} from '../src/sky.js';
 import {prepareVillageInstancing} from '../src/village-instancing.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 test('real tree instances keep all visible base draws and coverage through horizontal rotation',async t=>{
  const engine=new NullEngine({renderWidth:1204,renderHeight:652}),scene=new Scene(engine);scene.useRightHandedSystem=true;engine.getCaps().instancedArrays=true;
+ // The NullEngine does not complete the inactive fallback GPU texture upload.
+ caveFogFallback(scene).getInternalTexture().isReady=true;
  t.after(()=>engine.dispose());const camera=new ArcRotateCamera('camera',1.2,1.14,23,new Vector3(0,1.22,6),scene);camera.fov=.65;camera.minZ=.05;camera.maxZ=300;
  const ambient=new HemisphericLight('light',Vector3.Up(),scene),key=new DirectionalLight('sun',new Vector3(-.4,-1,-.6),scene),rim=new DirectionalLight('rim',Vector3.Down(),scene),shadows=new ShadowGenerator(256,key),sky=new MovingSky(scene);scene.fogStart=88;scene.fogEnd=105;
  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice:false,village:true}),world={scene,camera,terrain:createVillageTerrain(),touchDevice:false,lighting,shadows};

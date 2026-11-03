@@ -84,11 +84,15 @@ export class SceneDiagnostics {
   setEnabled(enabled,scene){
     if(!enabled)this.setActive(false);
     if(this.instrumentation&&(!enabled||scene!==this.scene)){this.gpu.dispose();this.gpu=null;this.scene.onDisposeObservable.remove(this.sceneDispose);this.instrumentation.dispose();this.instrumentation=null;this.scene=null;this.result={};}
-    if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
+    if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;i.captureActiveMeshesEvaluationTime=true;i.captureRenderTargetsRenderTime=true;i.captureRenderTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
   }
   setActive(active){this.active=Boolean(active);this.gpu?.setActive(this.active);}
   resetGpu(){this.gpu?.reset(this.active?'pending':'paused');}
   sample(){const i=this.instrumentation;if(!i)return {};
-    this.result.drawCalls=i.drawCallsCounter.current;this.result.sceneMs=i.frameTimeCounter.current;this.result.animationMs=i.animationsTimeCounter.current;this.result.gpu=this.gpu.sample();return this.result;}
+    this.result.drawCalls=i.drawCallsCounter.current;this.result.sceneMs=i.frameTimeCounter.current;this.result.animationMs=i.animationsTimeCounter.current;
+    // CPU submission counters can overlap (draw submission also occurs inside
+    // shadow/render targets). They are never a substitute for GPU elapsed time.
+    this.result.activeMeshesMs=i.activeMeshesEvaluationTimeCounter.current;this.result.renderTargetsMs=i.renderTargetsRenderTimeCounter.current;this.result.drawSubmissionMs=i.renderTimeCounter.current;
+    this.result.gpu=this.gpu.sample();return this.result;}
   dispose(){this.active=false;this.setEnabled(false);}
 }

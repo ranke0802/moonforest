@@ -79,10 +79,10 @@ test('FPS target changes and insufficient baseline remain visible instead of pro
 });
 test('scene probe reports completed-frame calls and releases all observers on repeated toggles and scene replacement',async()=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.activeCamera=new FreeCamera('camera',new Vector3(0,0,-5),scene);
- const observables=[scene.onBeforeAnimationsObservable,scene.onAfterAnimationsObservable,scene.onAfterRenderObservable];
- const counts=()=>observables.map(o=>o.observers.length),before=counts(),probe=new SceneDiagnostics();
+ const observables=[scene.onBeforeAnimationsObservable,scene.onAfterAnimationsObservable,scene.onAfterRenderObservable,scene.onBeforeActiveMeshesEvaluationObservable,scene.onAfterActiveMeshesEvaluationObservable,scene.onBeforeRenderTargetsRenderObservable,scene.onAfterRenderTargetsRenderObservable,scene.onBeforeDrawPhaseObservable,scene.onAfterDrawPhaseObservable];
  const observer=scene.onBeforeDrawPhaseObservable.add(()=>engine._drawCalls.addCount(7,false));
- for(let i=0;i<30;i++){probe.setEnabled(true,scene);scene.render();const sample=probe.sample();assert.equal(sample.drawCalls,7);assert.ok(sample.sceneMs>=0);probe.setEnabled(false);await new Promise(resolve=>setTimeout(resolve,0));assert.deepEqual(counts(),before);}
+ const counts=()=>observables.map(o=>o.observers.length),before=counts(),probe=new SceneDiagnostics();
+ for(let i=0;i<30;i++){probe.setEnabled(true,scene);scene.render();const sample=probe.sample();assert.equal(sample.drawCalls,7);for(const field of ['sceneMs','activeMeshesMs','renderTargetsMs','drawSubmissionMs'])assert.ok(Number.isFinite(sample[field])&&sample[field]>=0,field);probe.setEnabled(false);await new Promise(resolve=>setTimeout(resolve,0));assert.deepEqual(counts(),before);}
  probe.setEnabled(true,scene);const next=new Scene(engine);next.activeCamera=new FreeCamera('next',Vector3.Zero(),next);probe.setEnabled(true,next);await new Promise(resolve=>setTimeout(resolve,0));assert.deepEqual(counts(),before);probe.dispose();
  scene.onBeforeDrawPhaseObservable.remove(observer);next.dispose();scene.dispose();engine.dispose();
 });

@@ -11,6 +11,14 @@ test('normal mobile pacing is 30 FPS / 33ms and is never counted as a delayed fr
  const s=m.summary();assert.ok(Math.abs(s.fps-30)<1e-8);assert.ok(Math.abs(s.frameMs-1000/30)<1e-8);
  assert.equal(s.slowFrames,0);assert.equal(s.thresholdMs,50);assert.equal(s.samples,90);assert.equal(m.events.length,0);
 });
+test('sustained 40 FPS at a 60 FPS target is visible without fabricating 50 ms stalls',()=>{
+ const m=new FrameDiagnostics();for(let i=0;i<=200;i++)draw(m,i*25,60,18);
+ const s=m.summary();assert.equal(s.fps,40);assert.equal(s.slowFrames,0);assert.equal(s.missedTargetFrames,200);
+ assert.equal(s.meanFrameMs,25);assert.equal(s.meanWorkMs,18);assert.equal(s.p95WorkMs,18);
+ m.reset();assert.equal(m.summary().meanWorkMs,null);assert.equal(m.summary().missedTargetFrames,0);
+ for(let i=0;i<=100;i++)draw(m,i*1000/60,60,8);
+ assert.equal(m.summary().missedTargetFrames,0);
+});
 test('raw stalls are not capped at simulation delta; reports retain location and bounded event history',()=>{
  const m=new FrameDiagnostics();let contexts=0;
  const context=()=>{contexts++;return {position:[12.3,-8.2],camera:[1.2,.9,13],activity:'이동 · 모델 준비'};};
@@ -56,6 +64,18 @@ test('disabled diagnostics perform no timing, context collection or HUD updates;
  f.toggle(true);assert.equal(f.nodes['frame-diagnostics'].hidden,false);assert.equal(f.counts().stored,'1');
  f.frame(0);f.frame(100);assert.equal(f.counts().contextCalls,1);
  f.toggle(false);const calls=f.counts().clockCalls;f.frame(1000);assert.equal(f.counts().clockCalls,calls);
+});
+test('CPU stage counters accumulate only during play and reset on the next frame',()=>{
+ const f=ui({stored:'1'});f.setTime(0);f.diagnostic.beginFrame(true,60);f.setTime(4);f.diagnostic.endFrame();
+ f.setTime(100);f.diagnostic.beginFrame(true,60);
+ const world=f.diagnostic.mark();f.setTime(110);f.diagnostic.measure('worldUpdateMs',world);
+ const hud=f.diagnostic.mark();f.setTime(112);f.diagnostic.measure('hudUpdateMs',hud);
+ const projection=f.diagnostic.mark();f.setTime(115);f.diagnostic.measure('hudUpdateMs',projection);
+ f.setTime(170);f.diagnostic.endFrame();
+ let e=f.diagnostic.snapshot().recentDelays.at(-1);assert.equal(e.worldUpdateMs,10);assert.equal(e.hudUpdateMs,5);
+ f.setTime(200);f.diagnostic.beginFrame(true,60);f.setTime(202);f.diagnostic.endFrame();
+ e=f.diagnostic.snapshot().recentDelays.at(-1);assert.equal(e.worldUpdateMs,0);assert.equal(e.hudUpdateMs,0);
+ f.toggle(false);const before=f.counts().clockCalls;assert.equal(f.diagnostic.mark(),null);f.diagnostic.measure('hudUpdateMs',null);assert.equal(f.counts().clockCalls,before);
 });
 
 test('GPU collecting hooks transition once and reset/map/pause stop pending measurement without enabling disabled work',()=>{
