@@ -1,0 +1,4022 @@
+{
+  "scope": "Read-only actual candidate posed-vertex diff and source-skin influence audit. No new sculpt, parameter trial, rendering or runtime changes.",
+  "candidate": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\mourning-death-knee-2026-11-03\\r3\\runtime-final",
+  "model": "./content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+  "sourceModelSha256": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff",
+  "exportSourceHashMatches": true,
+  "bodyVertices": 36196,
+  "positionChanged": 528,
+  "normalChanged": 528,
+  "changedPositionBoundsBlender": {
+    "min": [
+      0.7717047929763794,
+      -1.4853183031082153,
+      0.00023777058231644332
+    ],
+    "max": [
+      1.6528396606445312,
+      0.2614462971687317,
+      1.3228765726089478
+    ]
+  },
+  "dominantBoneCounts": {
+    "DEF_Abdomen": 205,
+    "DEF_FrontFoot.R_Thigh": 109,
+    "DEF_Cloth_1_1": 9,
+    "DEF_FrontFoot.R_Shin": 117,
+    "DEF_FrontFoot.R_Foot": 88
+  },
+  "verticesWithMoreThan5PercentNonAbdomenOrNonRightLegInfluence": [
+    {
+      "index": 10058,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8168520331382751
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.18314795196056366
+        }
+      ]
+    },
+    {
+      "index": 10421,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ]
+    },
+    {
+      "index": 10422,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ]
+    },
+    {
+      "index": 10423,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ]
+    },
+    {
+      "index": 10525,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8655548095703125
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.1344452053308487
+        }
+      ]
+    },
+    {
+      "index": 10526,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8655548095703125
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.1344452053308487
+        }
+      ]
+    },
+    {
+      "index": 10527,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ]
+    },
+    {
+      "index": 10528,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ]
+    },
+    {
+      "index": 10529,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ]
+    },
+    {
+      "index": 10568,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ]
+    },
+    {
+      "index": 10569,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ]
+    },
+    {
+      "index": 10570,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ]
+    },
+    {
+      "index": 10581,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5530861616134644
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44691380858421326
+        }
+      ]
+    },
+    {
+      "index": 10582,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5530861616134644
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44691380858421326
+        }
+      ]
+    },
+    {
+      "index": 10640,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ]
+    },
+    {
+      "index": 10641,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ]
+    },
+    {
+      "index": 10642,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ]
+    },
+    {
+      "index": 10654,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7141573429107666
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.22806915640830994
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05777355656027794
+        }
+      ]
+    },
+    {
+      "index": 10655,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7141573429107666
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.22806915640830994
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05777355656027794
+        }
+      ]
+    },
+    {
+      "index": 10687,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5874608159065247
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.41253918409347534
+        }
+      ]
+    },
+    {
+      "index": 10804,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5284090638160706
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.47159090638160706
+        }
+      ]
+    },
+    {
+      "index": 10805,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5284090638160706
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.47159090638160706
+        }
+      ]
+    },
+    {
+      "index": 10867,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ]
+    },
+    {
+      "index": 10868,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ]
+    },
+    {
+      "index": 10869,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ]
+    },
+    {
+      "index": 10903,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5051350593566895
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.49486491084098816
+        }
+      ]
+    },
+    {
+      "index": 10919,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5517446398735046
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44825536012649536
+        }
+      ]
+    },
+    {
+      "index": 10920,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5517446398735046
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44825536012649536
+        }
+      ]
+    },
+    {
+      "index": 11095,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5512176752090454
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4487823247909546
+        }
+      ]
+    },
+    {
+      "index": 11347,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8944181799888611
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.10558182746171951
+        }
+      ]
+    },
+    {
+      "index": 11585,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ]
+    },
+    {
+      "index": 11586,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ]
+    },
+    {
+      "index": 11587,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ]
+    },
+    {
+      "index": 11618,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6443324089050293
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3556675612926483
+        }
+      ]
+    },
+    {
+      "index": 11619,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6443324089050293
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3556675612926483
+        }
+      ]
+    },
+    {
+      "index": 11632,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ]
+    },
+    {
+      "index": 11633,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ]
+    },
+    {
+      "index": 11634,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ]
+    },
+    {
+      "index": 11672,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5482808351516724
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4500768184661865
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0016424079658463597
+        }
+      ]
+    },
+    {
+      "index": 11673,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5482808351516724
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4500768184661865
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0016424079658463597
+        }
+      ]
+    },
+    {
+      "index": 11763,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.940048098564148
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05995187535881996
+        }
+      ]
+    },
+    {
+      "index": 11764,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.940048098564148
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05995187535881996
+        }
+      ]
+    },
+    {
+      "index": 11795,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ]
+    },
+    {
+      "index": 11796,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ]
+    },
+    {
+      "index": 11797,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ]
+    },
+    {
+      "index": 11824,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7077541351318359
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2862820625305176
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.004322148393839598
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0016415733844041824
+        }
+      ]
+    },
+    {
+      "index": 11825,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7077541351318359
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2862820625305176
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.004322148393839598
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0016415733844041824
+        }
+      ]
+    },
+    {
+      "index": 11955,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5580868124961853
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4323672354221344
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0069679804146289825
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0025779670104384422
+        }
+      ]
+    },
+    {
+      "index": 11956,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5580868124961853
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4323672354221344
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0069679804146289825
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0025779670104384422
+        }
+      ]
+    },
+    {
+      "index": 12007,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5069129467010498
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4874594807624817
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00562755111604929
+        }
+      ]
+    },
+    {
+      "index": 12008,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5069129467010498
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4874594807624817
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00562755111604929
+        }
+      ]
+    },
+    {
+      "index": 12083,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5658318996429443
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.35446855425834656
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.0796995535492897
+        }
+      ]
+    },
+    {
+      "index": 12084,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5658318996429443
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.35446855425834656
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.0796995535492897
+        }
+      ]
+    },
+    {
+      "index": 12105,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6008230447769165
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3910566568374634
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.004448621068149805
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0036716912873089314
+        }
+      ]
+    },
+    {
+      "index": 12106,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6008230447769165
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3910566568374634
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.004448621068149805
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0036716912873089314
+        }
+      ]
+    },
+    {
+      "index": 12114,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5779649019241333
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.22197237610816956
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.20006272196769714
+        }
+      ]
+    },
+    {
+      "index": 12166,
+      "influences": [
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.46871840953826904
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4319368004798889
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.09934478998184204
+        }
+      ]
+    },
+    {
+      "index": 12167,
+      "influences": [
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.46871840953826904
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4319368004798889
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.09934478998184204
+        }
+      ]
+    },
+    {
+      "index": 12216,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ]
+    },
+    {
+      "index": 12217,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ]
+    },
+    {
+      "index": 12218,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ]
+    },
+    {
+      "index": 12333,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.78572016954422
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.21276170015335083
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0015181098133325577
+        }
+      ]
+    },
+    {
+      "index": 12334,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.78572016954422
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.21276170015335083
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0015181098133325577
+        }
+      ]
+    },
+    {
+      "index": 12432,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5865408182144165
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.3384208679199219
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07503831386566162
+        }
+      ]
+    },
+    {
+      "index": 12433,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5865408182144165
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.3384208679199219
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07503831386566162
+        }
+      ]
+    },
+    {
+      "index": 12442,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5796815752983093
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.36981332302093506
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05050509795546532
+        }
+      ]
+    },
+    {
+      "index": 12443,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5796815752983093
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.36981332302093506
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05050509795546532
+        }
+      ]
+    },
+    {
+      "index": 12444,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5796815752983093
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.36981332302093506
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05050509795546532
+        }
+      ]
+    },
+    {
+      "index": 12485,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44159188866615295
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3497447073459625
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.20866340398788452
+        }
+      ]
+    },
+    {
+      "index": 12687,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6038393974304199
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.3112013339996338
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.0849592536687851
+        }
+      ]
+    },
+    {
+      "index": 12688,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6038393974304199
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.3112013339996338
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.0849592536687851
+        }
+      ]
+    },
+    {
+      "index": 12689,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6038393974304199
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.3112013339996338
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.0849592536687851
+        }
+      ]
+    }
+  ],
+  "nearPureAbdomenChanged": [
+    {
+      "index": 10058,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8168520331382751
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.18314795196056366
+        }
+      ],
+      "positionBlender": [
+        0.9197928309440613,
+        -1.2263232469558716,
+        1.2157703638076782
+      ]
+    },
+    {
+      "index": 10421,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ],
+      "positionBlender": [
+        0.8298951387405396,
+        -1.2959754467010498,
+        0.9661859273910522
+      ]
+    },
+    {
+      "index": 10422,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ],
+      "positionBlender": [
+        0.8298951387405396,
+        -1.2959754467010498,
+        0.9661859273910522
+      ]
+    },
+    {
+      "index": 10423,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.566792905330658
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.43213558197021484
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0010715064126998186
+        }
+      ],
+      "positionBlender": [
+        0.8298951387405396,
+        -1.2959754467010498,
+        0.9661859273910522
+      ]
+    },
+    {
+      "index": 10525,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8655548095703125
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.1344452053308487
+        }
+      ],
+      "positionBlender": [
+        0.947860598564148,
+        -1.2601996660232544,
+        1.2452476024627686
+      ]
+    },
+    {
+      "index": 10526,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8655548095703125
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.1344452053308487
+        }
+      ],
+      "positionBlender": [
+        0.947860598564148,
+        -1.2601996660232544,
+        1.2452476024627686
+      ]
+    },
+    {
+      "index": 10527,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ],
+      "positionBlender": [
+        0.834579586982727,
+        -1.3100534677505493,
+        0.9812272191047668
+      ]
+    },
+    {
+      "index": 10528,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ],
+      "positionBlender": [
+        0.834579586982727,
+        -1.3100534677505493,
+        0.9812272191047668
+      ]
+    },
+    {
+      "index": 10529,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5126595497131348
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.48734042048454285
+        }
+      ],
+      "positionBlender": [
+        0.834579586982727,
+        -1.3100534677505493,
+        0.9812272191047668
+      ]
+    },
+    {
+      "index": 10568,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ],
+      "positionBlender": [
+        0.7836477160453796,
+        -1.3054567575454712,
+        1.0269261598587036
+      ]
+    },
+    {
+      "index": 10569,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ],
+      "positionBlender": [
+        0.7836477160453796,
+        -1.3054567575454712,
+        1.0269261598587036
+      ]
+    },
+    {
+      "index": 10570,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5309643149375916
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.46903565526008606
+        }
+      ],
+      "positionBlender": [
+        0.7836477160453796,
+        -1.3054567575454712,
+        1.0269261598587036
+      ]
+    },
+    {
+      "index": 10581,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5530861616134644
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44691380858421326
+        }
+      ],
+      "positionBlender": [
+        0.8223017454147339,
+        -1.3166691064834595,
+        1.0318735837936401
+      ]
+    },
+    {
+      "index": 10582,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5530861616134644
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44691380858421326
+        }
+      ],
+      "positionBlender": [
+        0.8223017454147339,
+        -1.3166691064834595,
+        1.0318735837936401
+      ]
+    },
+    {
+      "index": 10640,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ],
+      "positionBlender": [
+        0.8292083740234375,
+        -1.2743666172027588,
+        1.1193420886993408
+      ]
+    },
+    {
+      "index": 10641,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ],
+      "positionBlender": [
+        0.8292083740234375,
+        -1.2743666172027588,
+        1.1193420886993408
+      ]
+    },
+    {
+      "index": 10642,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8084632754325867
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.19153670966625214
+        }
+      ],
+      "positionBlender": [
+        0.8292083740234375,
+        -1.2743666172027588,
+        1.1193420886993408
+      ]
+    },
+    {
+      "index": 10687,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5874608159065247
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.41253918409347534
+        }
+      ],
+      "positionBlender": [
+        0.7746146321296692,
+        -1.2988920211791992,
+        1.109060287475586
+      ]
+    },
+    {
+      "index": 10804,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5284090638160706
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.47159090638160706
+        }
+      ],
+      "positionBlender": [
+        0.7960957288742065,
+        -1.3192222118377686,
+        1.0677578449249268
+      ]
+    },
+    {
+      "index": 10805,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5284090638160706
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.47159090638160706
+        }
+      ],
+      "positionBlender": [
+        0.7960957288742065,
+        -1.3192222118377686,
+        1.0677578449249268
+      ]
+    },
+    {
+      "index": 10830,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9525996446609497
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.04740036651492119
+        }
+      ],
+      "positionBlender": [
+        0.9418076872825623,
+        -1.2768810987472534,
+        1.2305175065994263
+      ]
+    },
+    {
+      "index": 10831,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9525996446609497
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.04740036651492119
+        }
+      ],
+      "positionBlender": [
+        0.9418076872825623,
+        -1.2768810987472534,
+        1.2305175065994263
+      ]
+    },
+    {
+      "index": 10867,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ],
+      "positionBlender": [
+        0.8297755122184753,
+        -1.3159244060516357,
+        1.0434318780899048
+      ]
+    },
+    {
+      "index": 10868,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ],
+      "positionBlender": [
+        0.8297755122184753,
+        -1.3159244060516357,
+        1.0434318780899048
+      ]
+    },
+    {
+      "index": 10869,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6223346590995789
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.37766531109809875
+        }
+      ],
+      "positionBlender": [
+        0.8297755122184753,
+        -1.3159244060516357,
+        1.0434318780899048
+      ]
+    },
+    {
+      "index": 10903,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5051350593566895
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.49486491084098816
+        }
+      ],
+      "positionBlender": [
+        0.7810360789299011,
+        -1.3265233039855957,
+        1.0911266803741455
+      ]
+    },
+    {
+      "index": 10919,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5517446398735046
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44825536012649536
+        }
+      ],
+      "positionBlender": [
+        0.838324248790741,
+        -1.3476688861846924,
+        0.9948849678039551
+      ]
+    },
+    {
+      "index": 10920,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5517446398735046
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.44825536012649536
+        }
+      ],
+      "positionBlender": [
+        0.838324248790741,
+        -1.3476688861846924,
+        0.9948849678039551
+      ]
+    },
+    {
+      "index": 11095,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5512176752090454
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4487823247909546
+        }
+      ],
+      "positionBlender": [
+        0.7717047929763794,
+        -1.338377594947815,
+        1.0624510049819946
+      ]
+    },
+    {
+      "index": 11347,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.8944181799888611
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.10558182746171951
+        }
+      ],
+      "positionBlender": [
+        0.9231225252151489,
+        -1.3149752616882324,
+        1.15920889377594
+      ]
+    },
+    {
+      "index": 11450,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.97849440574646
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.02150558866560459
+        }
+      ],
+      "positionBlender": [
+        0.9053848385810852,
+        -1.321893572807312,
+        1.162546157836914
+      ]
+    },
+    {
+      "index": 11471,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9944794178009033
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.005520596168935299
+        }
+      ],
+      "positionBlender": [
+        0.9274260997772217,
+        -1.3204765319824219,
+        1.1993672847747803
+      ]
+    },
+    {
+      "index": 11539,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9966264367103577
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.003373590996488929
+        }
+      ],
+      "positionBlender": [
+        0.8675001263618469,
+        -1.331503987312317,
+        1.126573920249939
+      ]
+    },
+    {
+      "index": 11562,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9690245389938354
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.03097546100616455
+        }
+      ],
+      "positionBlender": [
+        0.9151749014854431,
+        -1.3308911323547363,
+        1.1553831100463867
+      ]
+    },
+    {
+      "index": 11585,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ],
+      "positionBlender": [
+        0.9378468990325928,
+        -1.3731416463851929,
+        0.891032874584198
+      ]
+    },
+    {
+      "index": 11586,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ],
+      "positionBlender": [
+        0.9378468990325928,
+        -1.3731416463851929,
+        0.891032874584198
+      ]
+    },
+    {
+      "index": 11587,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7396718263626099
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2568857669830322
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.002316807396709919
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0011255200952291489
+        }
+      ],
+      "positionBlender": [
+        0.9378468990325928,
+        -1.3731416463851929,
+        0.891032874584198
+      ]
+    },
+    {
+      "index": 11618,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6443324089050293
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3556675612926483
+        }
+      ],
+      "positionBlender": [
+        0.9016652703285217,
+        -1.36866295337677,
+        1.061153531074524
+      ]
+    },
+    {
+      "index": 11619,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6443324089050293
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3556675612926483
+        }
+      ],
+      "positionBlender": [
+        0.9016652703285217,
+        -1.36866295337677,
+        1.061153531074524
+      ]
+    },
+    {
+      "index": 11632,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ],
+      "positionBlender": [
+        0.9270497560501099,
+        -1.3868402242660522,
+        0.9467811584472656
+      ]
+    },
+    {
+      "index": 11633,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ],
+      "positionBlender": [
+        0.9270497560501099,
+        -1.3868402242660522,
+        0.9467811584472656
+      ]
+    },
+    {
+      "index": 11634,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6356862187385559
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3618953824043274
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00241840654052794
+        }
+      ],
+      "positionBlender": [
+        0.9270497560501099,
+        -1.3868402242660522,
+        0.9467811584472656
+      ]
+    },
+    {
+      "index": 11672,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5482808351516724
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4500768184661865
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0016424079658463597
+        }
+      ],
+      "positionBlender": [
+        0.9213564395904541,
+        -1.4042412042617798,
+        1.003710150718689
+      ]
+    },
+    {
+      "index": 11673,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5482808351516724
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4500768184661865
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0016424079658463597
+        }
+      ],
+      "positionBlender": [
+        0.9213564395904541,
+        -1.4042412042617798,
+        1.003710150718689
+      ]
+    },
+    {
+      "index": 11738,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9956214427947998
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.004378557205200195
+        }
+      ],
+      "positionBlender": [
+        0.8844188451766968,
+        -1.3483822345733643,
+        1.129447102546692
+      ]
+    },
+    {
+      "index": 11763,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.940048098564148
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05995187535881996
+        }
+      ],
+      "positionBlender": [
+        0.8959565162658691,
+        -1.3541136980056763,
+        1.1050137281417847
+      ]
+    },
+    {
+      "index": 11764,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.940048098564148
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.05995187535881996
+        }
+      ],
+      "positionBlender": [
+        0.8959565162658691,
+        -1.3541136980056763,
+        1.1050137281417847
+      ]
+    },
+    {
+      "index": 11795,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ],
+      "positionBlender": [
+        0.9639168381690979,
+        -1.4029253721237183,
+        0.9186398983001709
+      ]
+    },
+    {
+      "index": 11796,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ],
+      "positionBlender": [
+        0.9639168381690979,
+        -1.4029253721237183,
+        0.9186398983001709
+      ]
+    },
+    {
+      "index": 11797,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6335499882698059
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3522503972053528
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.008093670010566711
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0061059496365487576
+        }
+      ],
+      "positionBlender": [
+        0.9639168381690979,
+        -1.4029253721237183,
+        0.9186398983001709
+      ]
+    },
+    {
+      "index": 11824,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7077541351318359
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2862820625305176
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.004322148393839598
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0016415733844041824
+        }
+      ],
+      "positionBlender": [
+        0.9528891444206238,
+        -1.4022226333618164,
+        0.8894359469413757
+      ]
+    },
+    {
+      "index": 11825,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.7077541351318359
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.2862820625305176
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.004322148393839598
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0016415733844041824
+        }
+      ],
+      "positionBlender": [
+        0.9528891444206238,
+        -1.4022226333618164,
+        0.8894359469413757
+      ]
+    },
+    {
+      "index": 11955,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5580868124961853
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4323672354221344
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0069679804146289825
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0025779670104384422
+        }
+      ],
+      "positionBlender": [
+        0.9693214297294617,
+        -1.4279741048812866,
+        0.9310244917869568
+      ]
+    },
+    {
+      "index": 11956,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.5580868124961853
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.4323672354221344
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0069679804146289825
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.0025779670104384422
+        }
+      ],
+      "positionBlender": [
+        0.9693214297294617,
+        -1.4279741048812866,
+        0.9310244917869568
+      ]
+    },
+    {
+      "index": 12007,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5069129467010498
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4874594807624817
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00562755111604929
+        }
+      ],
+      "positionBlender": [
+        0.9499819874763489,
+        -1.4455105066299438,
+        0.9520673155784607
+      ]
+    },
+    {
+      "index": 12008,
+      "influences": [
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.5069129467010498
+        },
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.4874594807624817
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.00562755111604929
+        }
+      ],
+      "positionBlender": [
+        0.9499819874763489,
+        -1.4455105066299438,
+        0.9520673155784607
+      ]
+    },
+    {
+      "index": 12105,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6008230447769165
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3910566568374634
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.004448621068149805
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0036716912873089314
+        }
+      ],
+      "positionBlender": [
+        0.9643800258636475,
+        -1.425047516822815,
+        0.9961369633674622
+      ]
+    },
+    {
+      "index": 12106,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.6008230447769165
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.3910566568374634
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.004448621068149805
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0036716912873089314
+        }
+      ],
+      "positionBlender": [
+        0.9643800258636475,
+        -1.425047516822815,
+        0.9961369633674622
+      ]
+    },
+    {
+      "index": 12116,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9758254289627075
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.024174578487873077
+        }
+      ],
+      "positionBlender": [
+        0.9431737065315247,
+        -1.3792678117752075,
+        1.130806803703308
+      ]
+    },
+    {
+      "index": 12117,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9758254289627075
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.024174578487873077
+        }
+      ],
+      "positionBlender": [
+        0.9431737065315247,
+        -1.3792678117752075,
+        1.130806803703308
+      ]
+    },
+    {
+      "index": 12118,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9758254289627075
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.024174578487873077
+        }
+      ],
+      "positionBlender": [
+        0.9431737065315247,
+        -1.3792678117752075,
+        1.130806803703308
+      ]
+    },
+    {
+      "index": 12139,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9876270890235901
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.012372897937893867
+        }
+      ],
+      "positionBlender": [
+        0.8916066884994507,
+        -1.3969553709030151,
+        1.0803337097167969
+      ]
+    },
+    {
+      "index": 12140,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9876270890235901
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.012372897937893867
+        }
+      ],
+      "positionBlender": [
+        0.8916066884994507,
+        -1.3969553709030151,
+        1.0803337097167969
+      ]
+    },
+    {
+      "index": 12141,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9876270890235901
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.012372897937893867
+        }
+      ],
+      "positionBlender": [
+        0.8916066884994507,
+        -1.3969553709030151,
+        1.0803337097167969
+      ]
+    },
+    {
+      "index": 12193,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 1
+        }
+      ],
+      "positionBlender": [
+        0.8877342343330383,
+        -1.4034985303878784,
+        1.0291481018066406
+      ]
+    },
+    {
+      "index": 12194,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 1
+        }
+      ],
+      "positionBlender": [
+        0.8877342343330383,
+        -1.4034985303878784,
+        1.0291481018066406
+      ]
+    },
+    {
+      "index": 12216,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ],
+      "positionBlender": [
+        0.9228943586349487,
+        -1.4017220735549927,
+        1.0732636451721191
+      ]
+    },
+    {
+      "index": 12217,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ],
+      "positionBlender": [
+        0.9228943586349487,
+        -1.4017220735549927,
+        1.0732636451721191
+      ]
+    },
+    {
+      "index": 12218,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9248915910720825
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.07510841637849808
+        }
+      ],
+      "positionBlender": [
+        0.9228943586349487,
+        -1.4017220735549927,
+        1.0732636451721191
+      ]
+    },
+    {
+      "index": 12310,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9826393127441406
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.017360668629407883
+        }
+      ],
+      "positionBlender": [
+        0.9151080250740051,
+        -1.4076628684997559,
+        1.1042758226394653
+      ]
+    },
+    {
+      "index": 12311,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9826393127441406
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.017360668629407883
+        }
+      ],
+      "positionBlender": [
+        0.9151080250740051,
+        -1.4076628684997559,
+        1.1042758226394653
+      ]
+    },
+    {
+      "index": 12312,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9826393127441406
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.017360668629407883
+        }
+      ],
+      "positionBlender": [
+        0.9151080250740051,
+        -1.4076628684997559,
+        1.1042758226394653
+      ]
+    },
+    {
+      "index": 12333,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.78572016954422
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.21276170015335083
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0015181098133325577
+        }
+      ],
+      "positionBlender": [
+        0.9342552423477173,
+        -1.4346808195114136,
+        1.0052151679992676
+      ]
+    },
+    {
+      "index": 12334,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.78572016954422
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.21276170015335083
+        },
+        {
+          "bone": "DEF_Cloth_1_2",
+          "weight": 0.0015181098133325577
+        }
+      ],
+      "positionBlender": [
+        0.9342552423477173,
+        -1.4346808195114136,
+        1.0052151679992676
+      ]
+    },
+    {
+      "index": 12375,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9786339998245239
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.02136601135134697
+        }
+      ],
+      "positionBlender": [
+        0.8934805989265442,
+        -1.4200421571731567,
+        1.0917450189590454
+      ]
+    },
+    {
+      "index": 12376,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9786339998245239
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.02136601135134697
+        }
+      ],
+      "positionBlender": [
+        0.8934805989265442,
+        -1.4200421571731567,
+        1.0917450189590454
+      ]
+    },
+    {
+      "index": 12377,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9786339998245239
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.02136601135134697
+        }
+      ],
+      "positionBlender": [
+        0.8934805989265442,
+        -1.4200421571731567,
+        1.0917450189590454
+      ]
+    },
+    {
+      "index": 12392,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9768089056015015
+        },
+        {
+          "bone": "DEF_Cloth_1_1",
+          "weight": 0.023191122338175774
+        }
+      ],
+      "positionBlender": [
+        0.9364567399024963,
+        -1.4059232473373413,
+        1.1501471996307373
+      ]
+    },
+    {
+      "index": 12518,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 1
+        }
+      ],
+      "positionBlender": [
+        0.9342379570007324,
+        -1.419838786125183,
+        1.0879385471343994
+      ]
+    },
+    {
+      "index": 12519,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 1
+        }
+      ],
+      "positionBlender": [
+        0.9342379570007324,
+        -1.419838786125183,
+        1.0879385471343994
+      ]
+    },
+    {
+      "index": 13349,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 1
+        }
+      ],
+      "positionBlender": [
+        1.4979362487792969,
+        -1.27108633518219,
+        1.2042518854141235
+      ]
+    },
+    {
+      "index": 13395,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9974842667579651
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.002515721833333373
+        }
+      ],
+      "positionBlender": [
+        1.5331419706344604,
+        -1.280293345451355,
+        1.1890439987182617
+      ]
+    },
+    {
+      "index": 13396,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9974842667579651
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.002515721833333373
+        }
+      ],
+      "positionBlender": [
+        1.5331419706344604,
+        -1.280293345451355,
+        1.1890439987182617
+      ]
+    },
+    {
+      "index": 13401,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9977676272392273
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.002232383703812957
+        }
+      ],
+      "positionBlender": [
+        1.5071039199829102,
+        -1.2825534343719482,
+        1.1821916103363037
+      ]
+    },
+    {
+      "index": 13402,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9977676272392273
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.002232383703812957
+        }
+      ],
+      "positionBlender": [
+        1.5071039199829102,
+        -1.2825534343719482,
+        1.1821916103363037
+      ]
+    },
+    {
+      "index": 13405,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9923936724662781
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.007606314495205879
+        }
+      ],
+      "positionBlender": [
+        1.5915741920471191,
+        -1.296906590461731,
+        1.1469335556030273
+      ]
+    },
+    {
+      "index": 13406,
+      "influences": [
+        {
+          "bone": "DEF_Abdomen",
+          "weight": 0.9923936724662781
+        },
+        {
+          "bone": "DEF_FrontFoot.R_Thigh",
+          "weight": 0.007606314495205879
+        }
+      ],
+      "positionBlender": [
+        1.5915741920471191,
+        -1.296906590461731,
+        1.1469335556030273
+      ]
+    }
+  ],
+  "otherMeshChanges": [],
+  "positionMaskBoundaryTriangles": 234,
+  "newDegenerateTriangles": [],
+  "largeFaceNormalReversals": [
+    33488,
+    36880
+  ],
+  "normalRotationDiagnostics": [
+    {
+      "triangle": 33488,
+      "indices": [
+        12464,
+        12261,
+        12124
+      ],
+      "beforeArea": 0.00032136102172666717,
+      "afterArea": 0.00006065811329889868,
+      "faceNormalDot": -0.5670312749702934,
+      "frontProjectedSignedAreaBefore": -0.0000392049953887863,
+      "frontProjectedSignedAreaAfter": -0.00003919738308866272,
+      "frontProjectedWindingChanged": false
+    },
+    {
+      "triangle": 36880,
+      "indices": [
+        13430,
+        13479,
+        13447
+      ],
+      "beforeArea": 0.002754145461716754,
+      "afterArea": 0.008263125505279977,
+      "faceNormalDot": -0.19177055373395382,
+      "frontProjectedSignedAreaBefore": 0.0023993219078874972,
+      "frontProjectedSignedAreaAfter": 0.002399322590582287,
+      "frontProjectedWindingChanged": false
+    }
+  ],
+  "normalChangesOutsidePositionOneRing": [],
+  "duplicatePositionSeamsSplit": [],
+  "topologyUvPreservation": [
+    {
+      "mesh": "Lament_Mouth_Interior",
+      "field": "indices",
+      "bytes": 1152,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Lament_Mouth_Interior",
+      "field": "uv",
+      "bytes": 2240,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Halo_Attached_Streamers",
+      "field": "indices",
+      "bytes": 4512,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Halo_Attached_Streamers",
+      "field": "uv",
+      "bytes": 2296,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Halo_Rigid_Emblem",
+      "field": "indices",
+      "bytes": 64128,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Halo_Rigid_Emblem",
+      "field": "uv",
+      "bytes": 32112,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Elina_Chimera_Skin",
+      "field": "indices",
+      "bytes": 529992,
+      "exactMatch": true
+    },
+    {
+      "mesh": "Elina_Chimera_Skin",
+      "field": "uv",
+      "bytes": 289568,
+      "exactMatch": true
+    }
+  ],
+  "positionMask": [
+    9780,
+    9781,
+    9782,
+    9793,
+    9794,
+    9908,
+    9909,
+    9910,
+    10058,
+    10192,
+    10262,
+    10263,
+    10286,
+    10287,
+    10375,
+    10376,
+    10377,
+    10383,
+    10421,
+    10422,
+    10423,
+    10470,
+    10471,
+    10472,
+    10473,
+    10474,
+    10475,
+    10510,
+    10511,
+    10521,
+    10522,
+    10525,
+    10526,
+    10527,
+    10528,
+    10529,
+    10537,
+    10538,
+    10540,
+    10541,
+    10542,
+    10568,
+    10569,
+    10570,
+    10581,
+    10582,
+    10616,
+    10617,
+    10636,
+    10637,
+    10638,
+    10640,
+    10641,
+    10642,
+    10654,
+    10655,
+    10677,
+    10678,
+    10687,
+    10698,
+    10699,
+    10703,
+    10704,
+    10708,
+    10709,
+    10783,
+    10784,
+    10785,
+    10786,
+    10787,
+    10788,
+    10789,
+    10804,
+    10805,
+    10811,
+    10821,
+    10822,
+    10823,
+    10830,
+    10831,
+    10832,
+    10833,
+    10846,
+    10847,
+    10848,
+    10849,
+    10867,
+    10868,
+    10869,
+    10878,
+    10879,
+    10880,
+    10881,
+    10882,
+    10899,
+    10900,
+    10901,
+    10902,
+    10903,
+    10908,
+    10909,
+    10910,
+    10919,
+    10920,
+    10921,
+    10949,
+    10950,
+    10951,
+    10952,
+    10960,
+    10961,
+    10964,
+    10965,
+    10966,
+    10967,
+    10968,
+    11001,
+    11034,
+    11035,
+    11036,
+    11047,
+    11048,
+    11049,
+    11095,
+    11098,
+    11099,
+    11100,
+    11101,
+    11121,
+    11164,
+    11165,
+    11166,
+    11177,
+    11198,
+    11199,
+    11200,
+    11214,
+    11215,
+    11234,
+    11235,
+    11238,
+    11239,
+    11240,
+    11274,
+    11275,
+    11281,
+    11328,
+    11329,
+    11330,
+    11347,
+    11350,
+    11351,
+    11369,
+    11375,
+    11423,
+    11429,
+    11430,
+    11431,
+    11445,
+    11446,
+    11450,
+    11471,
+    11522,
+    11535,
+    11536,
+    11537,
+    11539,
+    11562,
+    11585,
+    11586,
+    11587,
+    11596,
+    11618,
+    11619,
+    11623,
+    11632,
+    11633,
+    11634,
+    11648,
+    11672,
+    11673,
+    11728,
+    11738,
+    11763,
+    11764,
+    11789,
+    11790,
+    11795,
+    11796,
+    11797,
+    11818,
+    11820,
+    11821,
+    11824,
+    11825,
+    11855,
+    11883,
+    11891,
+    11892,
+    11949,
+    11955,
+    11956,
+    11981,
+    11986,
+    11987,
+    12006,
+    12007,
+    12008,
+    12034,
+    12035,
+    12036,
+    12037,
+    12082,
+    12083,
+    12084,
+    12101,
+    12102,
+    12103,
+    12105,
+    12106,
+    12111,
+    12112,
+    12114,
+    12116,
+    12117,
+    12118,
+    12124,
+    12139,
+    12140,
+    12141,
+    12142,
+    12143,
+    12144,
+    12166,
+    12167,
+    12193,
+    12194,
+    12216,
+    12217,
+    12218,
+    12224,
+    12251,
+    12258,
+    12259,
+    12261,
+    12262,
+    12290,
+    12310,
+    12311,
+    12312,
+    12333,
+    12334,
+    12343,
+    12344,
+    12345,
+    12368,
+    12375,
+    12376,
+    12377,
+    12390,
+    12391,
+    12392,
+    12393,
+    12394,
+    12397,
+    12398,
+    12409,
+    12422,
+    12423,
+    12432,
+    12433,
+    12442,
+    12443,
+    12444,
+    12455,
+    12464,
+    12475,
+    12476,
+    12485,
+    12518,
+    12519,
+    12522,
+    12523,
+    12526,
+    12529,
+    12539,
+    12540,
+    12541,
+    12584,
+    12585,
+    12586,
+    12587,
+    12687,
+    12688,
+    12689,
+    12713,
+    12755,
+    12756,
+    12757,
+    12801,
+    12802,
+    12819,
+    12825,
+    12826,
+    12846,
+    12854,
+    12895,
+    12896,
+    12897,
+    12919,
+    12968,
+    12990,
+    13018,
+    13019,
+    13108,
+    13109,
+    13154,
+    13155,
+    13225,
+    13248,
+    13277,
+    13324,
+    13349,
+    13365,
+    13382,
+    13383,
+    13385,
+    13386,
+    13390,
+    13395,
+    13396,
+    13401,
+    13402,
+    13405,
+    13406,
+    13413,
+    13420,
+    13427,
+    13429,
+    13430,
+    13441,
+    13447,
+    13448,
+    13451,
+    13452,
+    13463,
+    13464,
+    13465,
+    13468,
+    13469,
+    13470,
+    13471,
+    13472,
+    13479,
+    13483,
+    13484,
+    13485,
+    13488,
+    13496,
+    13497,
+    13498,
+    13508,
+    13509,
+    13510,
+    13511,
+    13514,
+    13521,
+    13522,
+    13523,
+    13524,
+    13528,
+    13530,
+    13533,
+    13535,
+    13536,
+    13541,
+    13565,
+    13568,
+    13569,
+    13578,
+    13579,
+    13588,
+    13589,
+    13590,
+    13596,
+    13597,
+    13611,
+    13612,
+    13614,
+    13615,
+    13619,
+    13620,
+    13624,
+    13625,
+    13627,
+    13628,
+    13630,
+    13634,
+    13635,
+    13636,
+    13639,
+    13640,
+    13642,
+    13643,
+    13644,
+    13647,
+    13648,
+    13649,
+    13650,
+    13654,
+    13655,
+    13662,
+    13663,
+    13666,
+    13673,
+    13684,
+    13685,
+    13686,
+    13691,
+    13694,
+    13697,
+    13702,
+    13710,
+    13713,
+    13716,
+    13721,
+    13724,
+    13725,
+    13726,
+    13727,
+    13728,
+    13732,
+    13738,
+    13739,
+    13750,
+    13751,
+    13752,
+    13753,
+    13761,
+    13762,
+    13763,
+    13764,
+    13768,
+    13774,
+    13777,
+    13778,
+    13779,
+    13780,
+    13781,
+    13785,
+    13786,
+    13787,
+    13788,
+    13808,
+    13823,
+    13826,
+    13827,
+    13828,
+    13834,
+    13838,
+    13839,
+    13840,
+    13841,
+    13842,
+    13850,
+    13859,
+    13860,
+    13861,
+    13862,
+    13863,
+    13867,
+    13868,
+    13877,
+    13893,
+    13894,
+    13904,
+    13910,
+    13930,
+    13931,
+    13932,
+    13943,
+    13944,
+    13948,
+    13952,
+    13956,
+    13957,
+    13964,
+    13965,
+    13966,
+    13990,
+    14004,
+    14008,
+    14032,
+    14033,
+    14036,
+    14058,
+    14068,
+    14081,
+    14082,
+    14092,
+    14093,
+    14098,
+    14099,
+    14107,
+    14117,
+    14123,
+    14124,
+    14129,
+    14130,
+    14135,
+    14136,
+    14146,
+    14147,
+    14149,
+    14160,
+    14161,
+    14162,
+    14176,
+    14186,
+    14192,
+    14193,
+    14194,
+    14195,
+    14202,
+    14203,
+    14210,
+    14211,
+    14272
+  ],
+  "normalMask": [
+    9780,
+    9781,
+    9782,
+    9793,
+    9794,
+    9908,
+    9909,
+    9910,
+    10058,
+    10192,
+    10262,
+    10263,
+    10286,
+    10287,
+    10375,
+    10376,
+    10377,
+    10383,
+    10421,
+    10422,
+    10423,
+    10470,
+    10471,
+    10472,
+    10473,
+    10474,
+    10475,
+    10510,
+    10511,
+    10521,
+    10522,
+    10525,
+    10526,
+    10527,
+    10528,
+    10529,
+    10537,
+    10538,
+    10540,
+    10541,
+    10542,
+    10568,
+    10569,
+    10570,
+    10581,
+    10582,
+    10616,
+    10617,
+    10636,
+    10637,
+    10638,
+    10640,
+    10641,
+    10642,
+    10654,
+    10655,
+    10677,
+    10678,
+    10687,
+    10698,
+    10699,
+    10703,
+    10704,
+    10708,
+    10709,
+    10783,
+    10784,
+    10785,
+    10786,
+    10787,
+    10788,
+    10789,
+    10804,
+    10805,
+    10811,
+    10821,
+    10822,
+    10823,
+    10830,
+    10831,
+    10832,
+    10833,
+    10846,
+    10847,
+    10848,
+    10849,
+    10867,
+    10868,
+    10869,
+    10878,
+    10879,
+    10880,
+    10881,
+    10882,
+    10899,
+    10900,
+    10901,
+    10902,
+    10903,
+    10908,
+    10909,
+    10910,
+    10919,
+    10920,
+    10921,
+    10949,
+    10950,
+    10951,
+    10952,
+    10960,
+    10961,
+    10964,
+    10965,
+    10966,
+    10967,
+    10968,
+    11001,
+    11034,
+    11035,
+    11036,
+    11047,
+    11048,
+    11049,
+    11095,
+    11098,
+    11099,
+    11100,
+    11101,
+    11121,
+    11164,
+    11165,
+    11166,
+    11177,
+    11198,
+    11199,
+    11200,
+    11214,
+    11215,
+    11234,
+    11235,
+    11238,
+    11239,
+    11240,
+    11274,
+    11275,
+    11281,
+    11328,
+    11329,
+    11330,
+    11347,
+    11350,
+    11351,
+    11369,
+    11375,
+    11423,
+    11429,
+    11430,
+    11431,
+    11445,
+    11446,
+    11450,
+    11471,
+    11522,
+    11535,
+    11536,
+    11537,
+    11539,
+    11562,
+    11585,
+    11586,
+    11587,
+    11596,
+    11618,
+    11619,
+    11623,
+    11632,
+    11633,
+    11634,
+    11648,
+    11672,
+    11673,
+    11728,
+    11738,
+    11763,
+    11764,
+    11789,
+    11790,
+    11795,
+    11796,
+    11797,
+    11818,
+    11820,
+    11821,
+    11824,
+    11825,
+    11855,
+    11883,
+    11891,
+    11892,
+    11949,
+    11955,
+    11956,
+    11981,
+    11986,
+    11987,
+    12006,
+    12007,
+    12008,
+    12034,
+    12035,
+    12036,
+    12037,
+    12082,
+    12083,
+    12084,
+    12101,
+    12102,
+    12103,
+    12105,
+    12106,
+    12111,
+    12112,
+    12114,
+    12116,
+    12117,
+    12118,
+    12124,
+    12139,
+    12140,
+    12141,
+    12142,
+    12143,
+    12144,
+    12166,
+    12167,
+    12193,
+    12194,
+    12216,
+    12217,
+    12218,
+    12224,
+    12251,
+    12258,
+    12259,
+    12261,
+    12262,
+    12290,
+    12310,
+    12311,
+    12312,
+    12333,
+    12334,
+    12343,
+    12344,
+    12345,
+    12368,
+    12375,
+    12376,
+    12377,
+    12390,
+    12391,
+    12392,
+    12393,
+    12394,
+    12397,
+    12398,
+    12409,
+    12422,
+    12423,
+    12432,
+    12433,
+    12442,
+    12443,
+    12444,
+    12455,
+    12464,
+    12475,
+    12476,
+    12485,
+    12518,
+    12519,
+    12522,
+    12523,
+    12526,
+    12529,
+    12539,
+    12540,
+    12541,
+    12584,
+    12585,
+    12586,
+    12587,
+    12687,
+    12688,
+    12689,
+    12713,
+    12755,
+    12756,
+    12757,
+    12801,
+    12802,
+    12819,
+    12825,
+    12826,
+    12846,
+    12854,
+    12895,
+    12896,
+    12897,
+    12919,
+    12968,
+    12990,
+    13018,
+    13019,
+    13108,
+    13109,
+    13154,
+    13155,
+    13225,
+    13248,
+    13277,
+    13324,
+    13349,
+    13365,
+    13382,
+    13383,
+    13385,
+    13386,
+    13390,
+    13395,
+    13396,
+    13401,
+    13402,
+    13405,
+    13406,
+    13413,
+    13420,
+    13427,
+    13429,
+    13430,
+    13441,
+    13447,
+    13448,
+    13451,
+    13452,
+    13463,
+    13464,
+    13465,
+    13468,
+    13469,
+    13470,
+    13471,
+    13472,
+    13479,
+    13483,
+    13484,
+    13485,
+    13488,
+    13496,
+    13497,
+    13498,
+    13508,
+    13509,
+    13510,
+    13511,
+    13514,
+    13521,
+    13522,
+    13523,
+    13524,
+    13528,
+    13530,
+    13533,
+    13535,
+    13536,
+    13541,
+    13565,
+    13568,
+    13569,
+    13578,
+    13579,
+    13588,
+    13589,
+    13590,
+    13596,
+    13597,
+    13611,
+    13612,
+    13614,
+    13615,
+    13619,
+    13620,
+    13624,
+    13625,
+    13627,
+    13628,
+    13630,
+    13634,
+    13635,
+    13636,
+    13639,
+    13640,
+    13642,
+    13643,
+    13644,
+    13647,
+    13648,
+    13649,
+    13650,
+    13654,
+    13655,
+    13662,
+    13663,
+    13666,
+    13673,
+    13684,
+    13685,
+    13686,
+    13691,
+    13694,
+    13697,
+    13702,
+    13710,
+    13713,
+    13716,
+    13721,
+    13724,
+    13725,
+    13726,
+    13727,
+    13728,
+    13732,
+    13738,
+    13739,
+    13750,
+    13751,
+    13752,
+    13753,
+    13761,
+    13762,
+    13763,
+    13764,
+    13768,
+    13774,
+    13777,
+    13778,
+    13779,
+    13780,
+    13781,
+    13785,
+    13786,
+    13787,
+    13788,
+    13808,
+    13823,
+    13826,
+    13827,
+    13828,
+    13834,
+    13838,
+    13839,
+    13840,
+    13841,
+    13842,
+    13850,
+    13859,
+    13860,
+    13861,
+    13862,
+    13863,
+    13867,
+    13868,
+    13877,
+    13893,
+    13894,
+    13904,
+    13910,
+    13930,
+    13931,
+    13932,
+    13943,
+    13944,
+    13948,
+    13952,
+    13956,
+    13957,
+    13964,
+    13965,
+    13966,
+    13990,
+    14004,
+    14008,
+    14032,
+    14033,
+    14036,
+    14058,
+    14068,
+    14081,
+    14082,
+    14092,
+    14093,
+    14098,
+    14099,
+    14107,
+    14117,
+    14123,
+    14124,
+    14129,
+    14130,
+    14135,
+    14136,
+    14146,
+    14147,
+    14149,
+    14160,
+    14161,
+    14162,
+    14176,
+    14186,
+    14192,
+    14193,
+    14194,
+    14195,
+    14202,
+    14203,
+    14210,
+    14211,
+    14272
+  ],
+  "interpretation": [
+    "Abdomen-dominated vertices are expected only in the local right socket. Their exact spatial/topological extent still needs artist approval; a dominant-bone label alone is not permission to change all abdomen.",
+    "A listed other-limb influence or face-normal rotation needs review; it is not automatically an artistic rejection. A depth-only surface reshape can rotate face normals past90degrees while preserving its signed front projection; see normalRotationDiagnostics.",
+    "Normal-only adjacent1ring is allowed around the local position mask. Other meshes/limbs/rest must remain unchanged.",
+    "This is a posed-space candidate audit, not proof of a final inverse-skinned existing-target bake at all animation times."
+  ]
+}

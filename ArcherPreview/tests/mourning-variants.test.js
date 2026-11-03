@@ -111,13 +111,16 @@ test('three Mourning attacks preserve the original skin/cast, match authored var
   }
   report.checks.correctives=results;
  });
- await t.test('death captures all three live attacks and naturally extends the front knee',()=>{
+ await t.test('death captures all three live attacks and keeps the front-right knee bent',()=>{
   const angles=[];
   for(const variant of Object.keys(clips)){
    setPose(f,variant,1.65);const live=f.animator.deathChannels.map(c=>c.target[c.property].clone());f.animator.transition('dead');f.animator.sample(0);
    f.animator.deathChannels.forEach((c,i)=>assert.ok(difference(c.target[c.property],live[i])<5e-6,variant+' death entry discontinuity'));
    f.animator.update(.18);near(f.animator.deathWeight,1);f.animator.update(5.02);near(f.animator.deathTime,5.2);assert.equal(f.animator.deathFinished,true);
-   angles.push({from:variant,finalKneeDegrees:kneeAngle(f)});assert.ok(angles.at(-1).finalKneeDegrees>=165&&angles.at(-1).finalKneeDegrees<=179.9,JSON.stringify(angles.at(-1)));
+   // The approved death pose now folds this leg instead of extending it.
+   // Preserve the entry continuity checks above and reject either a straight
+   // leg or a fully collapsed knee independently of the sampled key data.
+   angles.push({from:variant,finalKneeDegrees:kneeAngle(f)});assert.ok(angles.at(-1).finalKneeDegrees>=50&&angles.at(-1).finalKneeDegrees<=90,JSON.stringify(angles.at(-1)));
   }
   report.checks.death={angles,deathSeconds:5.2,blendSeconds:.18};
  });

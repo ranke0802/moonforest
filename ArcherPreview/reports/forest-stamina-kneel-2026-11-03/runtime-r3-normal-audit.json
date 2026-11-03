@@ -1,0 +1,1155 @@
+{
+  "scope": "Read-only final CPU-skinned runtime normals vs actual indexed geometry in the same exported Blender basis; tests both Babylon ComputeNormals handedness choices. No new rendering.",
+  "source": "C:\\dev\\moonforest-archer\\ArcherPreview\\reports\\mourning-death-knee-2026-11-03\\r3\\runtime-final",
+  "bodyVertices": 36196,
+  "maskCount": 528,
+  "stats": {
+    "all": {
+      "beforeNormalsVsGeometricRH": {
+        "count": 36196,
+        "minimum": -0.999944814022607,
+        "p10": -0.08679598488961945,
+        "median": 0.9252269179506135,
+        "mean": 0.6847279911875332,
+        "belowZero": 4038,
+        "belowMinusHalf": 1986
+      },
+      "beforeNormalsVsGeometricLH": {
+        "count": 36196,
+        "minimum": -0.9999997883128199,
+        "p10": -0.9978093602261129,
+        "median": -0.9252131402754813,
+        "mean": -0.6847279911875233,
+        "belowZero": 32156,
+        "belowMinusHalf": 28423
+      },
+      "afterNormalsVsGeometricRH": {
+        "count": 36196,
+        "minimum": -0.999944814022607,
+        "p10": -0.08679598488961945,
+        "median": 0.9252131402754813,
+        "mean": 0.6847204716405569,
+        "belowZero": 4038,
+        "belowMinusHalf": 1986
+      },
+      "oldVsNewNormals": {
+        "count": 36196,
+        "minimum": 0.4795551347006419,
+        "p10": 0.9999999999999998,
+        "median": 1,
+        "mean": 0.999622416315661,
+        "belowZero": 0,
+        "belowMinusHalf": 0
+      }
+    },
+    "outsideMask": {
+      "beforeNormalsVsGeometricRH": {
+        "count": 35668,
+        "minimum": -0.999944814022607,
+        "p10": -0.091625619757411,
+        "median": 0.9252879054932881,
+        "mean": 0.6834041675678247,
+        "belowZero": 4009,
+        "belowMinusHalf": 1975
+      },
+      "beforeNormalsVsGeometricLH": {
+        "count": 35668,
+        "minimum": -0.9999997883128199,
+        "p10": -0.9978489126650771,
+        "median": -0.9252737265636244,
+        "mean": -0.6834041675678123,
+        "belowZero": 31657,
+        "belowMinusHalf": 27971
+      },
+      "afterNormalsVsGeometricRH": {
+        "count": 35668,
+        "minimum": -0.999944814022607,
+        "p10": -0.091625619757411,
+        "median": 0.9252737265636244,
+        "mean": 0.6833965388528295,
+        "belowZero": 4009,
+        "belowMinusHalf": 1975
+      },
+      "oldVsNewNormals": {
+        "count": 35668,
+        "minimum": 0.9999999999999993,
+        "p10": 0.9999999999999998,
+        "median": 1,
+        "mean": 1,
+        "belowZero": 0,
+        "belowMinusHalf": 0
+      }
+    },
+    "mask": {
+      "beforeNormalsVsGeometricRH": {
+        "count": 528,
+        "minimum": -0.9967210266326714,
+        "p10": 0.35727822711099233,
+        "median": 0.9175450650208362,
+        "mean": 0.7741562882856267,
+        "belowZero": 29,
+        "belowMinusHalf": 11
+      },
+      "beforeNormalsVsGeometricLH": {
+        "count": 528,
+        "minimum": -0.9998533355262039,
+        "p10": -0.993681667870299,
+        "median": -0.9173985746781419,
+        "mean": -0.7741562882856271,
+        "belowZero": 499,
+        "belowMinusHalf": 452
+      },
+      "afterNormalsVsGeometricRH": {
+        "count": 528,
+        "minimum": -0.9967209666449632,
+        "p10": 0.3572788223942728,
+        "median": 0.9175459118277015,
+        "mean": 0.7741561433690756,
+        "belowZero": 29,
+        "belowMinusHalf": 11
+      },
+      "oldVsNewNormals": {
+        "count": 528,
+        "minimum": 0.4795551347006419,
+        "p10": 0.9199694915669465,
+        "median": 0.996581206627176,
+        "mean": 0.9741154942455734,
+        "belowZero": 0,
+        "belowMinusHalf": 0
+      }
+    },
+    "tinyPositionChange": {
+      "beforeNormalsVsGeometricRH": {
+        "count": 3,
+        "minimum": -0.28607746942241846,
+        "p10": -0.28607746942241846,
+        "median": 0.9390567834159277,
+        "mean": 0.548569671776102,
+        "belowZero": 1,
+        "belowMinusHalf": 0
+      },
+      "beforeNormalsVsGeometricLH": {
+        "count": 3,
+        "minimum": -0.9927297013347969,
+        "p10": -0.9927297013347969,
+        "median": -0.9390567834159277,
+        "mean": -0.548569671776102,
+        "belowZero": 2,
+        "belowMinusHalf": 2
+      },
+      "afterNormalsVsGeometricRH": {
+        "count": 3,
+        "minimum": -0.28607750279893296,
+        "p10": -0.28607750279893296,
+        "median": 0.9390567970063398,
+        "mean": 0.5485698929166376,
+        "belowZero": 1,
+        "belowMinusHalf": 0
+      },
+      "oldVsNewNormals": {
+        "count": 3,
+        "minimum": 0.9936215327457836,
+        "p10": 0.9936215327457836,
+        "median": 0.9997548143797143,
+        "mean": 0.9977920629720859,
+        "belowZero": 0,
+        "belowMinusHalf": 0
+      }
+    }
+  },
+  "normalPreservation": {
+    "customGeometricDeviationError": {
+      "count": 528,
+      "minimum": 1.5123235996838957e-11,
+      "p10": 3.5321396918419623e-9,
+      "median": 7.499316800885225e-8,
+      "mean": 5.107306696136645e-7,
+      "belowZero": 0,
+      "belowMinusHalf": 0
+    },
+    "maximumCustomGeometricDeviationError": 0.000025507642865130187,
+    "maximumShortestArcRotationError": 0.00009486179587048173,
+    "worstDeviation": [
+      {
+        "index": 10846,
+        "error": 0.000025507642865130187
+      },
+      {
+        "index": 10908,
+        "error": 0.00001968292980436548
+      },
+      {
+        "index": 10880,
+        "error": 0.00001929509917919514
+      },
+      {
+        "index": 10822,
+        "error": 0.00001720878869396203
+      },
+      {
+        "index": 10849,
+        "error": 0.000009520550124098026
+      }
+    ],
+    "worstRotation": [
+      {
+        "index": 10908,
+        "error": 0.00009486179587048173
+      },
+      {
+        "index": 10846,
+        "error": 0.00004773876508009671
+      },
+      {
+        "index": 10849,
+        "error": 0.00003385861653377594
+      },
+      {
+        "index": 10880,
+        "error": 0.000026599198669433552
+      },
+      {
+        "index": 10789,
+        "error": 0.000025213221963698575
+      }
+    ]
+  },
+  "worst": [
+    {
+      "index": 12006,
+      "positionDelta": 0.14887976646432885,
+      "normalDelta": 1.0202400330791177,
+      "oldVsNewNormalDot": 0.4795551347006419,
+      "beforeVsGeometricRH": 0.8452932243196394,
+      "beforeVsGeometricLH": -0.8452932243196394,
+      "afterVsGeometricRH": 0.8452928266017246,
+      "geometricNormalChange": 0.45962589288074274,
+      "maxNeighborPositionDelta": 0.32802033424379606,
+      "beforeNormal": [
+        -0.006565667223185301,
+        -0.3167646527290344,
+        0.9484814405441284
+      ],
+      "afterNormal": [
+        -0.08764148503541946,
+        0.6767237186431885,
+        0.7310020327568054
+      ],
+      "beforeGeometricRH": [
+        -0.27450376749038696,
+        0.17069613933563232,
+        0.9463141560554504
+      ],
+      "afterGeometricRH": [
+        -0.20008964836597443,
+        0.9454377293586731,
+        0.257121741771698
+      ]
+    },
+    {
+      "index": 13019,
+      "positionDelta": 0.09622120857268307,
+      "normalDelta": 0.982423559619515,
+      "oldVsNewNormalDot": 0.5174219801481047,
+      "beforeVsGeometricRH": 0.9737669625815242,
+      "beforeVsGeometricLH": -0.9737669625815242,
+      "afterVsGeometricRH": 0.9737664773968594,
+      "geometricNormalChange": 0.517422767449232,
+      "maxNeighborPositionDelta": 0.28432178497314453,
+      "beforeNormal": [
+        -0.709147036075592,
+        -0.5785130858421326,
+        0.4030299484729767
+      ],
+      "afterNormal": [
+        0.18049997091293335,
+        -0.9567660093307495,
+        0.22807572782039642
+      ],
+      "beforeGeometricRH": [
+        -0.8364757299423218,
+        -0.3888612389564514,
+        0.38612857460975647
+      ],
+      "afterGeometricRH": [
+        -0.038114551454782486,
+        -0.9543020129203796,
+        0.29640334844589233
+      ]
+    },
+    {
+      "index": 13386,
+      "positionDelta": 0.28432178497314453,
+      "normalDelta": 0.9219900556631714,
+      "oldVsNewNormalDot": 0.5749671830630276,
+      "beforeVsGeometricRH": 0.9576871161886027,
+      "beforeVsGeometricLH": -0.9576871161886027,
+      "afterVsGeometricRH": 0.9576876110049121,
+      "geometricNormalChange": 0.5582371822375715,
+      "maxNeighborPositionDelta": 0.33061015605926514,
+      "beforeNormal": [
+        -0.7287308573722839,
+        -0.6519094109535217,
+        0.2096794694662094
+      ],
+      "afterNormal": [
+        0.1120179072022438,
+        -0.9926815629005432,
+        0.04511483758687973
+      ],
+      "beforeGeometricRH": [
+        -0.813752293586731,
+        -0.435666024684906,
+        0.3847106695175171
+      ],
+      "afterGeometricRH": [
+        -0.03604469448328018,
+        -0.9555109739303589,
+        0.29274478554725647
+      ]
+    },
+    {
+      "index": 12896,
+      "positionDelta": 0.20487439632415771,
+      "normalDelta": 0.8301454227935476,
+      "oldVsNewNormalDot": 0.6554292872347507,
+      "beforeVsGeometricRH": 0.6402490917609202,
+      "beforeVsGeometricLH": -0.6402490917609202,
+      "afterVsGeometricRH": 0.6402490226132231,
+      "geometricNormalChange": 0.6369033640885859,
+      "maxNeighborPositionDelta": 0.23858726024627686,
+      "beforeNormal": [
+        0.8349002599716187,
+        -0.022124215960502625,
+        0.5499564409255981
+      ],
+      "afterNormal": [
+        0.6595625877380371,
+        0.7189134955406189,
+        0.21940957009792328
+      ],
+      "beforeGeometricRH": [
+        0.7641691565513611,
+        0.6443178057670593,
+        0.0300007164478302
+      ],
+      "afterGeometricRH": [
+        0.050378791987895966,
+        0.9439343214035034,
+        -0.3262667953968048
+      ]
+    },
+    {
+      "index": 12755,
+      "positionDelta": 0.07255303859720487,
+      "normalDelta": 0.7790483181359444,
+      "oldVsNewNormalDot": 0.6965418710785976,
+      "beforeVsGeometricRH": 0.7477816955060312,
+      "beforeVsGeometricLH": -0.7477816955060312,
+      "afterVsGeometricRH": 0.7477749624615985,
+      "geometricNormalChange": 0.6963559838752318,
+      "maxNeighborPositionDelta": 0.10329461097719006,
+      "beforeNormal": [
+        -0.08157502859830856,
+        -0.7836186289787292,
+        0.6158631443977356
+      ],
+      "afterNormal": [
+        0.08651401847600937,
+        -0.9894193410873413,
+        -0.1164676696062088
+      ],
+      "beforeGeometricRH": [
+        -0.18210838735103607,
+        -0.17484521865844727,
+        0.9676082134246826
+      ],
+      "afterGeometricRH": [
+        -0.041120439767837524,
+        -0.8256092071533203,
+        0.5627419948577881
+      ]
+    },
+    {
+      "index": 13447,
+      "positionDelta": 0.007306337357114414,
+      "normalDelta": 0.6883092760742133,
+      "oldVsNewNormalDot": 0.7631151679808776,
+      "beforeVsGeometricRH": 0.936308109596445,
+      "beforeVsGeometricLH": -0.936308109596445,
+      "afterVsGeometricRH": 0.9363077735536629,
+      "geometricNormalChange": 0.7628309960155438,
+      "maxNeighborPositionDelta": 0.1726219654083252,
+      "beforeNormal": [
+        0.023711349815130234,
+        -0.9568127393722534,
+        -0.2897363305091858
+      ],
+      "afterNormal": [
+        -0.6193961501121521,
+        -0.7141884565353394,
+        -0.32601112127304077
+      ],
+      "beforeGeometricRH": [
+        0.362957626581192,
+        -0.9126371741294861,
+        -0.18802958726882935
+      ],
+      "afterGeometricRH": [
+        -0.31770041584968567,
+        -0.9019265174865723,
+        -0.2925662696361542
+      ]
+    },
+    {
+      "index": 13787,
+      "positionDelta": 0.03314421311728356,
+      "normalDelta": 0.6868704787601859,
+      "oldVsNewNormalDot": 0.7641044761351264,
+      "beforeVsGeometricRH": 0.9967295173474413,
+      "beforeVsGeometricLH": -0.9967295173474413,
+      "afterVsGeometricRH": 0.996729466311014,
+      "geometricNormalChange": 0.7629528482237158,
+      "maxNeighborPositionDelta": 0.13112302355155223,
+      "beforeNormal": [
+        0.8099076747894287,
+        0.419310599565506,
+        0.41015633940696716
+      ],
+      "afterNormal": [
+        0.41213753819465637,
+        0.14661984145641327,
+        0.8992470502853394
+      ],
+      "beforeGeometricRH": [
+        0.7872739434242249,
+        0.48890501260757446,
+        0.37572818994522095
+      ],
+      "afterGeometricRH": [
+        0.40615326166152954,
+        0.22607703506946564,
+        0.8853974938392639
+      ]
+    },
+    {
+      "index": 11536,
+      "positionDelta": 0.03117239475250244,
+      "normalDelta": 0.6757822619099979,
+      "oldVsNewNormalDot": 0.7716591731945032,
+      "beforeVsGeometricRH": 0.3560471988152546,
+      "beforeVsGeometricLH": -0.3560471988152546,
+      "afterVsGeometricRH": 0.3560502689982862,
+      "geometricNormalChange": 0.7703980070792349,
+      "maxNeighborPositionDelta": 0.09284305572540377,
+      "beforeNormal": [
+        -0.040691062808036804,
+        -0.9600738883018494,
+        0.2767714262008667
+      ],
+      "afterNormal": [
+        -0.5824034810066223,
+        -0.8070732951164246,
+        -0.09715388715267181
+      ],
+      "beforeGeometricRH": [
+        0.7942882180213928,
+        -0.24413910508155823,
+        0.5563293099403381
+      ],
+      "afterGeometricRH": [
+        0.3666750192642212,
+        -0.7688277363777161,
+        0.5238829255104065
+      ]
+    },
+    {
+      "index": 13932,
+      "positionDelta": 0.059404690817977994,
+      "normalDelta": 0.6619269120492355,
+      "oldVsNewNormalDot": 0.7809263763588352,
+      "beforeVsGeometricRH": 0.9412817887526093,
+      "beforeVsGeometricLH": -0.9412817887526093,
+      "afterVsGeometricRH": 0.9412813768109711,
+      "geometricNormalChange": 0.7607512985754201,
+      "maxNeighborPositionDelta": 0.10174829780212236,
+      "beforeNormal": [
+        -0.9617710113525391,
+        -0.12757237255573273,
+        -0.24232585728168488
+      ],
+      "afterNormal": [
+        -0.626934289932251,
+        0.07754543423652649,
+        -0.7752032279968262
+      ],
+      "beforeGeometricRH": [
+        -0.8969988226890564,
+        -0.4312039017677307,
+        -0.097243532538414
+      ],
+      "afterGeometricRH": [
+        -0.6452900171279907,
+        -0.25990092754364014,
+        -0.7183678150177002
+      ]
+    },
+    {
+      "index": 12897,
+      "positionDelta": 0.20487439632415771,
+      "normalDelta": 0.6590177525097077,
+      "oldVsNewNormalDot": 0.7828478075934489,
+      "beforeVsGeometricRH": 0.9175450650208362,
+      "beforeVsGeometricLH": -0.9175450650208362,
+      "afterVsGeometricRH": 0.9175459118277015,
+      "geometricNormalChange": 0.7473970335502933,
+      "maxNeighborPositionDelta": 0.318830490112327,
+      "beforeNormal": [
+        0.8349002599716187,
+        -0.022124215960502625,
+        0.5499564409255981
+      ],
+      "afterNormal": [
+        0.4611707627773285,
+        -0.5433388948440552,
+        0.7015015482902527
+      ],
+      "beforeGeometricRH": [
+        0.9145544171333313,
+        -0.3031078577041626,
+        0.26779818534851074
+      ],
+      "afterGeometricRH": [
+        0.4328286349773407,
+        -0.8097012639045715,
+        0.39628687500953674
+      ]
+    },
+    {
+      "index": 13406,
+      "positionDelta": 0.318830490112327,
+      "normalDelta": 0.6152275509303216,
+      "oldVsNewNormalDot": 0.8107475384104034,
+      "beforeVsGeometricRH": 0.8676197004310584,
+      "beforeVsGeometricLH": -0.8676197004310584,
+      "afterVsGeometricRH": 0.8676183266566484,
+      "geometricNormalChange": 0.810340750003803,
+      "maxNeighborPositionDelta": 0.32802033424379606,
+      "beforeNormal": [
+        0.48879486322402954,
+        -0.6870791912078857,
+        0.537588894367218
+      ],
+      "afterNormal": [
+        -0.0400179922580719,
+        -0.9370579719543457,
+        0.34687310457229614
+      ],
+      "beforeGeometricRH": [
+        0.778975784778595,
+        -0.26332947611808777,
+        0.5690819621086121
+      ],
+      "afterGeometricRH": [
+        0.3843249976634979,
+        -0.736013650894165,
+        0.5572954416275024
+      ]
+    },
+    {
+      "index": 11034,
+      "positionDelta": 0.03166544437430886,
+      "normalDelta": 0.5815697952824543,
+      "oldVsNewNormalDot": 0.8308882812368596,
+      "beforeVsGeometricRH": 0.9275874536997685,
+      "beforeVsGeometricLH": -0.9275874536997685,
+      "afterVsGeometricRH": 0.9275874535713727,
+      "geometricNormalChange": 0.8303522154084382,
+      "maxNeighborPositionDelta": 0.06100916862499439,
+      "beforeNormal": [
+        0.6463518738746643,
+        0.7443583607673645,
+        0.16780903935432434
+      ],
+      "afterNormal": [
+        0.18072237074375153,
+        0.9794660806655884,
+        -0.0893620178103447
+      ],
+      "beforeGeometricRH": [
+        0.8560202121734619,
+        0.44265323877334595,
+        0.26699724793434143
+      ],
+      "afterGeometricRH": [
+        0.5209668874740601,
+        0.8532057404518127,
+        0.025167807936668396
+      ]
+    },
+    {
+      "index": 11596,
+      "positionDelta": 0.05133485794067383,
+      "normalDelta": 0.5785450737324167,
+      "oldVsNewNormalDot": 0.8326428011151118,
+      "beforeVsGeometricRH": 0.7465982032825909,
+      "beforeVsGeometricLH": -0.7465982032825909,
+      "afterVsGeometricRH": 0.7465981679054801,
+      "geometricNormalChange": 0.7862485366872884,
+      "maxNeighborPositionDelta": 0.3174518346786499,
+      "beforeNormal": [
+        -0.32701826095581055,
+        -0.2114521861076355,
+        0.9210575819015503
+      ],
+      "afterNormal": [
+        -0.4073166847229004,
+        0.35588574409484863,
+        0.8410935997962952
+      ],
+      "beforeGeometricRH": [
+        -0.7903969883918762,
+        0.2054319530725479,
+        0.5771224498748779
+      ],
+      "afterGeometricRH": [
+        -0.5934422612190247,
+        0.7541728615760803,
+        0.28115761280059814
+      ]
+    },
+    {
+      "index": 12895,
+      "positionDelta": 0.20487439632415771,
+      "normalDelta": 0.5622082030471497,
+      "oldVsNewNormalDot": 0.8419609696883945,
+      "beforeVsGeometricRH": 0.6339632868056372,
+      "beforeVsGeometricLH": -0.6339632868056372,
+      "afterVsGeometricRH": 0.6339630418484601,
+      "geometricNormalChange": 0.6177715825891266,
+      "maxNeighborPositionDelta": 0.318830490112327,
+      "beforeNormal": [
+        0.8349002599716187,
+        -0.022124215960502625,
+        0.5499564409255981
+      ],
+      "afterNormal": [
+        0.43732184171676636,
+        -0.27584514021873474,
+        0.8559550642967224
+      ],
+      "beforeGeometricRH": [
+        0.8959091305732727,
+        -0.3843223750591278,
+        -0.22280731797218323
+      ],
+      "afterGeometricRH": [
+        0.37341031432151794,
+        -0.8895456790924072,
+        0.26319804787635803
+      ]
+    },
+    {
+      "index": 12101,
+      "positionDelta": 0.05769085884094238,
+      "normalDelta": 0.5548728422935963,
+      "oldVsNewNormalDot": 0.846058063226204,
+      "beforeVsGeometricRH": 0.6006546619404701,
+      "beforeVsGeometricLH": -0.6006546619404701,
+      "afterVsGeometricRH": 0.6006546568474742,
+      "geometricNormalChange": 0.8336293625415245,
+      "maxNeighborPositionDelta": 0.06335806846618652,
+      "beforeNormal": [
+        0.2889130711555481,
+        -0.8794887065887451,
+        -0.37819159030914307
+      ],
+      "afterNormal": [
+        0.6496480107307434,
+        -0.5037301182746887,
+        -0.5693973898887634
+      ],
+      "beforeGeometricRH": [
+        -0.36711862683296204,
+        -0.9017250537872314,
+        0.2282889485359192
+      ],
+      "afterGeometricRH": [
+        0.1526380181312561,
+        -0.9882610440254211,
+        -0.006457339972257614
+      ]
+    },
+    {
+      "index": 13155,
+      "positionDelta": 0.10329461097719006,
+      "normalDelta": 0.5487727868285042,
+      "oldVsNewNormalDot": 0.8494242110183347,
+      "beforeVsGeometricRH": 0.8724318846543766,
+      "beforeVsGeometricLH": -0.8724318846543766,
+      "afterVsGeometricRH": 0.872430141856448,
+      "geometricNormalChange": 0.84884740601335,
+      "maxNeighborPositionDelta": 0.10809576511383057,
+      "beforeNormal": [
+        0.18524834513664246,
+        -0.8419563174247742,
+        0.5067470669746399
+      ],
+      "afterNormal": [
+        -0.23505403101444244,
+        -0.9564622044563293,
+        0.17300182580947876
+      ],
+      "beforeGeometricRH": [
+        0.5526861548423767,
+        -0.5250840783119202,
+        0.6471666693687439
+      ],
+      "afterGeometricRH": [
+        0.18873263895511627,
+        -0.8795062899589539,
+        0.4368623197078705
+      ]
+    },
+    {
+      "index": 12464,
+      "positionDelta": 0.07839643955239775,
+      "normalDelta": 0.5447395838137234,
+      "oldVsNewNormalDot": 0.8516293985849703,
+      "beforeVsGeometricRH": 0.6807031145960298,
+      "beforeVsGeometricLH": -0.6807031145960298,
+      "afterVsGeometricRH": 0.6806996241873794,
+      "geometricNormalChange": 0.8027194603774889,
+      "maxNeighborPositionDelta": 0.09888482093811035,
+      "beforeNormal": [
+        -0.305970698595047,
+        -0.43878546357154846,
+        0.8448960185050964
+      ],
+      "afterNormal": [
+        -0.06781316548585892,
+        -0.8312844634056091,
+        0.5516951680183411
+      ],
+      "beforeGeometricRH": [
+        0.42024821043014526,
+        -0.6735382080078125,
+        0.6080605983734131
+      ],
+      "afterGeometricRH": [
+        0.5236291885375977,
+        -0.851819634437561,
+        0.014689568430185318
+      ]
+    },
+    {
+      "index": 11036,
+      "positionDelta": 0.03166544437430886,
+      "normalDelta": 0.5404701094441763,
+      "oldVsNewNormalDot": 0.8539460258563236,
+      "beforeVsGeometricRH": 0.27948988032763195,
+      "beforeVsGeometricLH": -0.27948988032763195,
+      "afterVsGeometricRH": 0.27948989654068657,
+      "geometricNormalChange": 0.8534398217263087,
+      "maxNeighborPositionDelta": 0.04042899608629636,
+      "beforeNormal": [
+        0.6463518738746643,
+        0.7443583607673645,
+        0.16780903935432434
+      ],
+      "afterNormal": [
+        0.9177566766738892,
+        0.288861483335495,
+        0.272546648979187
+      ],
+      "beforeGeometricRH": [
+        0.8456494212150574,
+        -0.4300852417945862,
+        0.3160755932331085
+      ],
+      "afterGeometricRH": [
+        0.5097849369049072,
+        -0.8375499844551086,
+        0.1965435892343521
+      ]
+    },
+    {
+      "index": 11214,
+      "positionDelta": 0.03541839122772217,
+      "normalDelta": 0.5402944672973954,
+      "oldVsNewNormalDot": 0.854040940666572,
+      "beforeVsGeometricRH": 0.8817210319143588,
+      "beforeVsGeometricLH": -0.8817210319143588,
+      "afterVsGeometricRH": 0.8817210165744664,
+      "geometricNormalChange": 0.8125583464966198,
+      "maxNeighborPositionDelta": 0.06100916862499439,
+      "beforeNormal": [
+        0.5212653875350952,
+        0.28536489605903625,
+        0.8042693734169006
+      ],
+      "afterNormal": [
+        0.33377447724342346,
+        0.7410401105880737,
+        0.5826269388198853
+      ],
+      "beforeGeometricRH": [
+        0.862151026725769,
+        0.17748235166072845,
+        0.4745478630065918
+      ],
+      "afterGeometricRH": [
+        0.6693258881568909,
+        0.7057126760482788,
+        0.2323196679353714
+      ]
+    },
+    {
+      "index": 11446,
+      "positionDelta": 0.06100916862499439,
+      "normalDelta": 0.5365455972525291,
+      "oldVsNewNormalDot": 0.8560594113192482,
+      "beforeVsGeometricRH": 0.5550660292822239,
+      "beforeVsGeometricLH": -0.5550660292822239,
+      "afterVsGeometricRH": 0.5550660297026024,
+      "geometricNormalChange": 0.8453672728103963,
+      "maxNeighborPositionDelta": 0.04276919364929199,
+      "beforeNormal": [
+        -0.3017568588256836,
+        -0.9368408918380737,
+        0.17683881521224976
+      ],
+      "afterNormal": [
+        0.139371857047081,
+        -0.8690682649612427,
+        0.47465336322784424
+      ],
+      "beforeGeometricRH": [
+        0.5710582733154297,
+        -0.6935140490531921,
+        0.4392387866973877
+      ],
+      "afterGeometricRH": [
+        0.8010837435722351,
+        -0.20261353254318237,
+        0.5632162690162659
+      ]
+    },
+    {
+      "index": 10821,
+      "positionDelta": 0.01417076587677002,
+      "normalDelta": 0.5357608706213285,
+      "oldVsNewNormalDot": 0.8564801506260101,
+      "beforeVsGeometricRH": 0.557051796088387,
+      "beforeVsGeometricLH": -0.557051796088387,
+      "afterVsGeometricRH": 0.5570511281486527,
+      "geometricNormalChange": 0.8316574426374599,
+      "maxNeighborPositionDelta": 0.020378708840113845,
+      "beforeNormal": [
+        -0.9647872447967529,
+        0.05555432662367821,
+        0.25709792971611023
+      ],
+      "afterNormal": [
+        -0.9352995157241821,
+        -0.3377683162689209,
+        -0.10548651963472366
+      ],
+      "beforeGeometricRH": [
+        -0.6484623551368713,
+        -0.7541399002075195,
+        -0.10377632826566696
+      ],
+      "afterGeometricRH": [
+        -0.23962409794330597,
+        -0.8266894817352295,
+        -0.5090823173522949
+      ]
+    },
+    {
+      "index": 12142,
+      "positionDelta": 0.06335806846618652,
+      "normalDelta": 0.5273776491454207,
+      "oldVsNewNormalDot": 0.8609364101000576,
+      "beforeVsGeometricRH": 0.9414844639317799,
+      "beforeVsGeometricLH": -0.9414844639317799,
+      "afterVsGeometricRH": 0.9414844525457908,
+      "geometricNormalChange": 0.8560124816841701,
+      "maxNeighborPositionDelta": 0.05769085884094238,
+      "beforeNormal": [
+        -0.34299588203430176,
+        -0.6299916505813599,
+        0.6967527270317078
+      ],
+      "afterNormal": [
+        0.13909795880317688,
+        -0.8059893846511841,
+        0.5753545761108398
+      ],
+      "beforeGeometricRH": [
+        -0.16119687259197235,
+        -0.8476666212081909,
+        0.5054472088813782
+      ],
+      "afterGeometricRH": [
+        0.3362652659416199,
+        -0.8897581696510315,
+        0.30863574147224426
+      ]
+    },
+    {
+      "index": 12432,
+      "positionDelta": 0.027860164642333984,
+      "normalDelta": 0.509355646028582,
+      "oldVsNewNormalDot": 0.8702784118608006,
+      "beforeVsGeometricRH": 0.9058531905734954,
+      "beforeVsGeometricLH": -0.9058531905734954,
+      "afterVsGeometricRH": 0.9058531803140422,
+      "geometricNormalChange": 0.8665708084058981,
+      "maxNeighborPositionDelta": 0.038626909255981445,
+      "beforeNormal": [
+        -0.6112633943557739,
+        -0.7259156703948975,
+        0.3152831196784973
+      ],
+      "afterNormal": [
+        -0.1585172414779663,
+        -0.9525824189186096,
+        0.2597288191318512
+      ],
+      "beforeGeometricRH": [
+        -0.29845818877220154,
+        -0.9477967619895935,
+        0.11226760596036911
+      ],
+      "afterGeometricRH": [
+        0.21135404706001282,
+        -0.9768140316009521,
+        0.034114763140678406
+      ]
+    },
+    {
+      "index": 13401,
+      "positionDelta": 0.33061015605926514,
+      "normalDelta": 0.5069381132822808,
+      "oldVsNewNormalDot": 0.8715068756269786,
+      "beforeVsGeometricRH": 0.8704642470619939,
+      "beforeVsGeometricLH": -0.8704642470619939,
+      "afterVsGeometricRH": 0.8704643877769941,
+      "geometricNormalChange": 0.8714114864452136,
+      "maxNeighborPositionDelta": 0.32802033424379606,
+      "beforeNormal": [
+        -0.27381521463394165,
+        -0.8306460976600647,
+        0.48482194542884827
+      ],
+      "afterNormal": [
+        -0.35674095153808594,
+        -0.45555388927459717,
+        0.8156019449234009
+      ],
+      "beforeGeometricRH": [
+        -0.1010918989777565,
+        -0.9942662119865417,
+        0.034859027713537216
+      ],
+      "afterGeometricRH": [
+        -0.24802856147289276,
+        -0.8339344263076782,
+        0.4929860532283783
+      ]
+    },
+    {
+      "index": 12124,
+      "positionDelta": 0.09284305572540377,
+      "normalDelta": 0.49251203019632,
+      "oldVsNewNormalDot": 0.8787159485636644,
+      "beforeVsGeometricRH": 0.7916297962198987,
+      "beforeVsGeometricLH": -0.7916297962198987,
+      "afterVsGeometricRH": 0.791631786337444,
+      "geometricNormalChange": 0.8510567788023798,
+      "maxNeighborPositionDelta": 0.09888482093811035,
+      "beforeNormal": [
+        0.08415522426366806,
+        -0.6518023014068604,
+        0.7537052631378174
+      ],
+      "afterNormal": [
+        -0.1890050619840622,
+        -0.8881438374519348,
+        0.4189004898071289
+      ],
+      "beforeGeometricRH": [
+        0.6175737380981445,
+        -0.28887832164764404,
+        0.7315407991409302
+      ],
+      "afterGeometricRH": [
+        0.436043918132782,
+        -0.7484323978424072,
+        0.49971455335617065
+      ]
+    },
+    {
+      "index": 13788,
+      "positionDelta": 0.03314421311728356,
+      "normalDelta": 0.4904386618273198,
+      "oldVsNewNormalDot": 0.8797349649617108,
+      "beforeVsGeometricRH": 0.9903481467342653,
+      "beforeVsGeometricLH": -0.9903481467342653,
+      "afterVsGeometricRH": 0.9903480224042945,
+      "geometricNormalChange": 0.8788873941957984,
+      "maxNeighborPositionDelta": 0.13112302355155223,
+      "beforeNormal": [
+        0.8099076747894287,
+        0.419310599565506,
+        0.41015633940696716
+      ],
+      "afterNormal": [
+        0.49761340022087097,
+        0.36907538771629333,
+        0.7849613428115845
+      ],
+      "beforeGeometricRH": [
+        0.8227826356887817,
+        0.48856595158576965,
+        0.2903997600078583
+      ],
+      "afterGeometricRH": [
+        0.5462229251861572,
+        0.46484676003456116,
+        0.6968199014663696
+      ]
+    },
+    {
+      "index": 12261,
+      "positionDelta": 0.09888482093811035,
+      "normalDelta": 0.48846069295516814,
+      "oldVsNewNormalDot": 0.8807030717165878,
+      "beforeVsGeometricRH": 0.9425750960529088,
+      "beforeVsGeometricLH": -0.9425750960529088,
+      "afterVsGeometricRH": 0.9425761520674424,
+      "geometricNormalChange": 0.8658793980195804,
+      "maxNeighborPositionDelta": 0.09284305572540377,
+      "beforeNormal": [
+        0.18704861402511597,
+        -0.9691289663314819,
+        0.16062940657138824
+      ],
+      "afterNormal": [
+        0.07878486812114716,
+        -0.9457795023918152,
+        -0.31510961055755615
+      ],
+      "beforeGeometricRH": [
+        0.5043981075286865,
+        -0.8514465689659119,
+        0.14360123872756958
+      ],
+      "afterGeometricRH": [
+        0.3979434370994568,
+        -0.8424611687660217,
+        -0.36318063735961914
+      ]
+    },
+    {
+      "index": 11099,
+      "positionDelta": 0.03083014488220215,
+      "normalDelta": 0.4869632058090026,
+      "oldVsNewNormalDot": 0.8814334147494473,
+      "beforeVsGeometricRH": 0.7132265789896941,
+      "beforeVsGeometricLH": -0.7132265789896941,
+      "afterVsGeometricRH": 0.713226570483472,
+      "geometricNormalChange": 0.8040967537751077,
+      "maxNeighborPositionDelta": 0.04042899608629636,
+      "beforeNormal": [
+        -0.3125300407409668,
+        0.5836001038551331,
+        -0.7494903802871704
+      ],
+      "afterNormal": [
+        0.16191408038139343,
+        0.6857855916023254,
+        -0.7095646262168884
+      ],
+      "beforeGeometricRH": [
+        -0.7953958511352539,
+        0.5828964710235596,
+        -0.16606350243091583
+      ],
+      "afterGeometricRH": [
+        -0.28532928228378296,
+        0.9455872774124146,
+        -0.15637089312076569
+      ]
+    },
+    {
+      "index": 12757,
+      "positionDelta": 0.07255303859720487,
+      "normalDelta": 0.4844986478839654,
+      "oldVsNewNormalDot": 0.8826305356541846,
+      "beforeVsGeometricRH": 0.5058075217173714,
+      "beforeVsGeometricLH": -0.5058075217173714,
+      "afterVsGeometricRH": 0.5058055193204991,
+      "geometricNormalChange": 0.8741173800796054,
+      "maxNeighborPositionDelta": 0.09739565849304199,
+      "beforeNormal": [
+        -0.08157502859830856,
+        -0.7836186289787292,
+        0.6158631443977356
+      ],
+      "afterNormal": [
+        0.3742230534553528,
+        -0.8088641166687012,
+        0.4535371959209442
+      ],
+      "beforeGeometricRH": [
+        -0.880622148513794,
+        -0.22688771784305573,
+        0.41596469283103943
+      ],
+      "afterGeometricRH": [
+        -0.6060439348220825,
+        -0.6437074542045593,
+        0.46728092432022095
+      ]
+    },
+    {
+      "index": 12368,
+      "positionDelta": 0.061450719833402924,
+      "normalDelta": 0.4810237612641469,
+      "oldVsNewNormalDot": 0.8843080683452605,
+      "beforeVsGeometricRH": 0.826795277988237,
+      "beforeVsGeometricLH": -0.826795277988237,
+      "afterVsGeometricRH": 0.8267946156071999,
+      "geometricNormalChange": 0.8842372387395956,
+      "maxNeighborPositionDelta": 0.10329461097719006,
+      "beforeNormal": [
+        0.4160546362400055,
+        -0.7117041349411011,
+        0.5660174489021301
+      ],
+      "afterNormal": [
+        0.04567153379321098,
+        -0.9339860081672668,
+        0.3543786406517029
+      ],
+      "beforeGeometricRH": [
+        0.7421529293060303,
+        -0.2260579764842987,
+        0.6309570670127869
+      ],
+      "afterGeometricRH": [
+        0.5041418671607971,
+        -0.6409730911254883,
+        0.578787088394165
+      ]
+    }
+  ],
+  "tinyPositionLargeNormal": [],
+  "notes": [
+    "A vertex with small own displacement can need a changed normal when adjacent triangle vertices move. Neighbor displacement and old-vs-new geometric normals are included.",
+    "The original authored/skinned custom normal can differ from an angle-averaged recomputation. Its relative change must be distinguished from a global handedness/basis error.",
+    "The normal-preservation gate measures custom-vs-geometric deviation and the required shortest-arc surface rotation; a fixed old/new normal dot threshold is not a valid gate for an approved shin/foot bend."
+  ]
+}

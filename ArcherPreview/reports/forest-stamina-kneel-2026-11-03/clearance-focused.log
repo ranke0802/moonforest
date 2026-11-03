@@ -1,0 +1,17 @@
+✔ full-pose mask fingerprints match the delivered geometry, layout and animator (4.5519ms)
+✔ local death correction preserves the delivered living combat safety region (0.1684ms)
+✔ full-body safety keeps the relocated home and a complete 6.3m charge corridor (6.0452ms)
+✔ positive clearance never escapes the conservatively baked cell union (5.8299ms)
+✔ full-pose navigation preserves player paths and finds safe oversized summons from narrow passages (170.6854ms)
+✔ repeated high-speed movement and pushes slide along the full-body boundary without jumping (34.4569ms)
+✔ reposition and charge paths validate the entire actor envelope while combat width is 1.5m (90.0979ms)
+✔ refuge, laboratory and resurrection apparatus form three readable functional clusters (1.0127ms)
+✔ rearranging the apparatus preserves or expands the original complete-motion safe area (5.1954ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2255.0549

@@ -1,0 +1,21 @@
+{
+  "poseSummary": "빨간 가이드에 맞춰 정면 오른쪽 다리의 허벅지·무릎·종아리·발목 연결을 보정했습니다. 몸통에 붙어 움직이던 허벅지의 각진 돌출을 줄이고, 몸 아래에서 뾰족하게 끝나 보이던 종아리에 두께를 남겨 발까지 이어지게 했습니다. 앞서 지정한 정면 자세를 유지하며, 다른 팔다리와 생존 모션은 바꾸지 않았습니다.",
+  "images": [
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/forest-stamina-kneel/2026-11-03/user-front-reference.png","caption":"사용자가 유지하도록 지정한 정면 기준"},
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-death-knee/2026-11-03/r3/runtime-final/after-5.2-front.png","caption":"최종 적용 데이터 · 정면"},
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/forest-stamina-kneel/2026-11-03/user-side-guide.png","caption":"사용자가 빨간 선으로 지정한 측면 윤곽"},
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-death-knee/2026-11-03/r3/runtime-final/after-5.2-side.png","caption":"최종 적용 데이터 · 측면 / 종아리와 발목 연결"},
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-death-knee/2026-11-03/r3/runtime-final/after-5.2-quarter.png","caption":"최종 적용 데이터 · 사선"},
+    {"path":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-death-knee/2026-11-03/concept-v2/side-target.png","caption":"최초 AI 예상안 · 이후 사용자의 정면 기준과 빨간 가이드로 수정한 참고 이미지"}
+  ],
+  "checks": [
+    "프로젝트 전체 자동 회귀 검사 1,450개가 모두 통과했습니다. 맵 이동·시간 초과·재시도·전투 입력·자원 해제 관련 기존 검사도 포함합니다. 브라우저 자동조작은 사용하지 않았습니다.",
+    "실제 보스 준비 과정과 애니메이션을 거친 모델이 승인한 수정 형태와 일치합니다. 정면 오른쪽 다리와 작은 옷자락에 속한 528개 정점만 보정했고, 다른 메시·UV·삼각형 수는 그대로입니다.",
+    "사망 5.2초 구간의 157개 프레임에서 바닥 관통·갑작스러운 단일 프레임 이동을 검사했습니다. 반복 사망·재소환·복제·재시도 검사와 생존 모션의 원본 일치 검사를 통과했습니다.",
+    "원래 표면 법선의 특성을 유지해, 형태 보정과 무관하게 음영이 뒤집히던 부분도 수정했습니다.",
+    "기존 11개 변형 데이터를 재사용합니다. 최초 준비 이후 사망 시 새 셰이더 객체나 변형 텍스처를 만들지 않는 것을 엔진 검사로 확인했습니다. 실제 기기 GPU 시간을 측정한 결과는 아닙니다.",
+    "동굴 안의 541개 자세를 다시 계산했습니다. 기존 안전 이동 영역 2,590칸은 동일하게 유지돼 보스의 이동·공격 경로 제한은 달라지지 않습니다.",
+    "마을·숲·동굴의 기존 배치와 품질 자료를 유지했고, 대평원에서는 기존 나무 24그루의 수종·높이만 조정했습니다. 기존 충돌 배치와 LOD 기준도 유지했습니다."
+  ],
+  "promptPath":"C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-death-knee/2026-11-03/concept-v2/prompt.txt"
+}

@@ -34,8 +34,13 @@ function fixture(){
 const down=f=>f.button.emit('pointerdown',{button:0,pointerId:7,pointerType:'touch'});
 const up=f=>f.button.emit('pointerup',{pointerId:7,pointerType:'touch'});
 test('production HUD pointer tap rolls once; hold sprints and release does not roll',()=>{
- let f=fixture();down(f);f.step(100);up(f);assert.equal(f.controller.action?.state,'dodge');assert.equal(f.controller.serial,1);f.input.dispose();
- f=fixture();f.controller.stamina=50;down(f);for(let i=0;i<30;i++)f.step(1000/30);assert.equal(f.controller.sprintHeld,true);assert.equal(f.controller.serial,0);assert.ok(f.last().speed>4);assert.ok(f.controller.stamina<50);up(f);f.step(1000/30);assert.equal(f.controller.sprintHeld,false);assert.equal(f.controller.serial,0);assert.equal(f.last().speed,4);f.input.dispose();
+ let f=fixture();down(f);f.step(100);up(f);assert.equal(f.controller.action?.state,'dodge');assert.equal(f.controller.serial,1);assert.equal(f.controller.stamina,90);f.input.dispose();
+ f=fixture();f.controller.stamina=50;down(f);for(let i=0;i<30;i++)f.step(1000/30);assert.equal(f.controller.sprintHeld,true);assert.equal(f.controller.serial,0);assert.equal(f.last().speed,7.2);assert.equal(f.last().timeScale,1.8);assert.ok(f.controller.stamina<50);up(f);f.step(1000/30);assert.equal(f.controller.sprintHeld,false);assert.equal(f.controller.serial,0);assert.equal(f.last().speed,4);f.input.dispose();
+});
+test('actual HUD dodge tap rejects insufficient stamina without starting the roll or spending',()=>{
+ const f=fixture();f.controller.stamina=8;down(f);f.step(100);up(f);
+ assert.equal(f.controller.action,null);assert.equal(f.controller.serial,0);assert.equal(f.controller.staminaRejectSerial,1);assert.equal(f.controller.stamina,9.5);
+ f.controller.stamina=10;down(f);f.step(100);up(f);assert.equal(f.controller.action?.state,'dodge');assert.equal(f.controller.serial,1);assert.equal(f.controller.stamina,1.5);f.input.dispose();
 });
 test('HUD cancellation, blur and modal reset never become a roll; touch menu retains hold',()=>{
  for(const reason of ['pointercancel','lostpointercapture','blur','reset']){const f=fixture();down(f);f.step(100);if(reason==='blur')window.emit('blur');else if(reason==='reset')f.input.reset();else f.button.emit(reason,{pointerId:7});f.step(300);up(f);assert.equal(f.controller.serial,0,reason);assert.equal(f.controller.sprintHeld,false);f.input.dispose();}

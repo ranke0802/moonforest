@@ -1,0 +1,659 @@
+{
+  "scope": "Actual shipped tree vertices/indices, production projected-coverage LOD selection and Babylon native instance submission. Images/materials, GPU time and native scene cell/occlusion/shadow policies are excluded.",
+  "browserAutomation": false,
+  "gpuPerformanceMeasured": false,
+  "sourceModelsLoaded": 12,
+  "uniqueSourceGeometries": 0,
+  "placementGeometryAllocations": 0,
+  "rows": [
+    {
+      "version": "baseline",
+      "view": "approach-in",
+      "selectedTiers": [
+        8,
+        131,
+        103
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 9,
+      "submittedInstances": 98,
+      "submittedTriangles": 284270,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 2,
+          "triangles": 8988,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 9,
+          "triangles": 27765,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 1,
+          "triangles": 5003,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 41,
+          "triangles": 149609,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 9,
+          "triangles": 27000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 10,
+          "triangles": 13830,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 22,
+          "triangles": 39578,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 3,
+          "triangles": 7497,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:0",
+          "instances": 1,
+          "triangles": 5000,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "baseline",
+      "view": "forest-out",
+      "selectedTiers": [
+        86,
+        67,
+        89
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 10,
+      "submittedInstances": 107,
+      "submittedTriangles": 343692,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 7,
+          "triangles": 21595,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:2",
+          "instances": 52,
+          "triangles": 123916,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 20,
+          "triangles": 100060,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 4,
+          "triangles": 14596,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 13,
+          "triangles": 39000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:0",
+          "instances": 1,
+          "triangles": 4994,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:1",
+          "instances": 1,
+          "triangles": 2734,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 1,
+          "triangles": 1799,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 2,
+          "triangles": 4998,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:0",
+          "instances": 6,
+          "triangles": 30000,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "baseline",
+      "view": "meadow-east",
+      "selectedTiers": [
+        13,
+        109,
+        120
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 4,
+      "submittedInstances": 12,
+      "submittedTriangles": 45138,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 4,
+          "triangles": 17976,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 6,
+          "triangles": 18510,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 1,
+          "triangles": 5003,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 1,
+          "triangles": 3649,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "baseline",
+      "view": "eastern-edge",
+      "selectedTiers": [
+        26,
+        95,
+        121
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 8,
+      "submittedInstances": 66,
+      "submittedTriangles": 228103,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 21,
+          "triangles": 94374,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 11,
+          "triangles": 33935,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 14,
+          "triangles": 51086,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 6,
+          "triangles": 18000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 3,
+          "triangles": 4149,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:1",
+          "instances": 2,
+          "triangles": 5468,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 2,
+          "triangles": 3598,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 7,
+          "triangles": 17493,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "baseline",
+      "view": "wide",
+      "selectedTiers": [
+        0,
+        44,
+        198
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 6,
+      "submittedInstances": 141,
+      "submittedTriangles": 359414,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 24,
+          "triangles": 74040,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:2",
+          "instances": 30,
+          "triangles": 71490,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 1,
+          "triangles": 3649,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 49,
+          "triangles": 147000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 29,
+          "triangles": 52171,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 8,
+          "triangles": 11064,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "view": "approach-in",
+      "selectedTiers": [
+        6,
+        123,
+        113
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 9,
+      "submittedInstances": 98,
+      "submittedTriangles": 278902,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 1,
+          "triangles": 4494,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 6,
+          "triangles": 18510,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 1,
+          "triangles": 5003,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 39,
+          "triangles": 142311,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 9,
+          "triangles": 27000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 11,
+          "triangles": 15213,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 23,
+          "triangles": 41377,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 6,
+          "triangles": 14994,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:0",
+          "instances": 2,
+          "triangles": 10000,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "view": "forest-out",
+      "selectedTiers": [
+        83,
+        60,
+        99
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 10,
+      "submittedInstances": 106,
+      "submittedTriangles": 333147,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 3,
+          "triangles": 9255,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:2",
+          "instances": 49,
+          "triangles": 116767,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 20,
+          "triangles": 100060,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 3,
+          "triangles": 10947,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 13,
+          "triangles": 39000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:0",
+          "instances": 1,
+          "triangles": 4994,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:1",
+          "instances": 1,
+          "triangles": 2734,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 8,
+          "triangles": 14392,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 2,
+          "triangles": 4998,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:0",
+          "instances": 6,
+          "triangles": 30000,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "view": "meadow-east",
+      "selectedTiers": [
+        8,
+        103,
+        131
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 6,
+      "submittedInstances": 11,
+      "submittedTriangles": 36777,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 2,
+          "triangles": 8988,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 4,
+          "triangles": 12340,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 1,
+          "triangles": 5003,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 1,
+          "triangles": 3649,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 1,
+          "triangles": 1799,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 2,
+          "triangles": 4998,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "view": "eastern-edge",
+      "selectedTiers": [
+        18,
+        100,
+        124
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 9,
+      "submittedInstances": 66,
+      "submittedTriangles": 218356,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:0",
+          "instances": 14,
+          "triangles": 62916,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 10,
+          "triangles": 30850,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:0",
+          "instances": 1,
+          "triangles": 5003,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 16,
+          "triangles": 58384,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 6,
+          "triangles": 18000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 3,
+          "triangles": 4149,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:1",
+          "instances": 2,
+          "triangles": 5468,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 2,
+          "triangles": 3598,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:1",
+          "instances": 12,
+          "triangles": 29988,
+          "nativeInstancing": true
+        }
+      ]
+    },
+    {
+      "version": "current",
+      "view": "wide",
+      "selectedTiers": [
+        0,
+        35,
+        207
+      ],
+      "trees": 242,
+      "nativeBaseDraws": 6,
+      "submittedInstances": 140,
+      "submittedTriangles": 342856,
+      "batches": [
+        {
+          "source": "tree-01-round-oak:1",
+          "instances": 16,
+          "triangles": 49360,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-01-round-oak:2",
+          "instances": 21,
+          "triangles": 50043,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:1",
+          "instances": 1,
+          "triangles": 3649,
+          "nativeInstancing": true
+        },
+        {
+          "source": "tree-02-slender-pine:2",
+          "instances": 50,
+          "triangles": 150000,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-01-sickly-oak:2",
+          "instances": 43,
+          "triangles": 77357,
+          "nativeInstancing": true
+        },
+        {
+          "source": "forest-02-dead-tree:2",
+          "instances": 9,
+          "triangles": 12447,
+          "nativeInstancing": true
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "view": "approach-in",
+      "drawDelta": 0,
+      "submittedTriangleDelta": -5368,
+      "beforeTriangles": 284270,
+      "afterTriangles": 278902
+    },
+    {
+      "view": "forest-out",
+      "drawDelta": 0,
+      "submittedTriangleDelta": -10545,
+      "beforeTriangles": 343692,
+      "afterTriangles": 333147
+    },
+    {
+      "view": "meadow-east",
+      "drawDelta": 2,
+      "submittedTriangleDelta": -8361,
+      "beforeTriangles": 45138,
+      "afterTriangles": 36777
+    },
+    {
+      "view": "eastern-edge",
+      "drawDelta": 1,
+      "submittedTriangleDelta": -9747,
+      "beforeTriangles": 228103,
+      "afterTriangles": 218356
+    },
+    {
+      "view": "wide",
+      "drawDelta": 0,
+      "submittedTriangleDelta": -16558,
+      "beforeTriangles": 359414,
+      "afterTriangles": 342856
+    }
+  ]
+}

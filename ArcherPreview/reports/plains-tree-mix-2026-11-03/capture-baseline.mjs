@@ -1,0 +1,10 @@
+import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {resolve} from 'node:path';
+import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_LOOKOUT,PLAINS_TREASURE_ANCHORS,plainsObstacles} from '../../src/great-plains-layout.js';
+import {CHAPTER_POINTS} from '../../src/chapter-quest-points.js';
+const repo=resolve(import.meta.dirname,'../..'),hash=x=>createHash('sha256').update(x).digest('hex'),read=file=>readFileSync(resolve(repo,file)),json=file=>JSON.parse(read(file));
+const files=['src/monster-forest-layout.js','src/monster-forest-terrain.js','public/assets/monster-forest.json','public/assets/monster-forest-ground.json','src/village-layout.js','src/village-terrain.js','src/village-ground-layout.js','public/assets/village.json','public/assets/village-ground.json','public/assets/great-plains.json','public/assets/great-plains-ground.json','public/assets/village-plains-outskirts.json','src/plains-view-distance.js'];
+mkdirSync(import.meta.dirname,{recursive:true});
+const result={revision:'062feb6',placements:PLAINS_PLACEMENTS,routes:PLAINS_ROUTES,lookout:PLAINS_LOOKOUT,treasureAnchors:PLAINS_TREASURE_ANCHORS,chests:CHAPTER_POINTS.filter(p=>p.map==='great-plains'),obstacles:plainsObstacles(),manifests:{plains:json('public/assets/great-plains.json'),forest:json('public/assets/monster-forest.json'),sidecar:json('public/assets/village-plains-outskirts.json')},hashes:Object.fromEntries(files.map(file=>[file,hash(read(file).toString('utf8').replaceAll('\r\n','\n'))]))};
+writeFileSync(resolve(import.meta.dirname,'baseline.json'),JSON.stringify(result)+'\n');console.log(JSON.stringify({revision:result.revision,placements:PLAINS_PLACEMENTS.length,obstacles:result.obstacles.length,protectedFiles:files.length,report:resolve(import.meta.dirname,'baseline.json')}));

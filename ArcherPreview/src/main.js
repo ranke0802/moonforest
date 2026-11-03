@@ -67,6 +67,7 @@ import {setupBossPatternPanel} from './boss-pattern-settings.js';
 import {setupCharacterStylePanel} from './character-style-settings.js';
 import {applyCharacterSurfaceStyle,setSceneCharacterStyles} from './character-style.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
+import {StaminaFailureFeedback,applyPlayerFlash} from './stamina-feedback.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
@@ -136,6 +137,7 @@ let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
+const staminaFeedback=new StaminaFailureFeedback();
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let screenProjection;
 let reconcilePlayback=()=>{};
@@ -225,7 +227,7 @@ function applyAttackSpeed(value) {
 }
 applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
-const deathScreen=setupDeathScreen({beforeOpen:()=>{cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
+const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
 
 function resizeScreenProjection(){
   if(!screenProjection)return;
@@ -282,7 +284,7 @@ function leaveElenaReview() {
 function updateButtons() {
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0;
-  if(rejected!==updateButtons.staminaRejectSerial){updateButtons.staminaRejectSerial=rejected;if(rejected>0){toast('스태미나가 부족합니다.');audio.play('ui_error');}}
+  if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.');audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}
   const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft,rejected].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
@@ -344,6 +346,7 @@ function resetBeforeBoss(){
   audio.stopAll();actionAudio.reset();audio.play('revive');
   boss.resetBattle();audio.setEnvironment(character);controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   controller.resetStamina?.();
+  staminaFeedback.reset(controller);
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
   if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
@@ -411,7 +414,7 @@ async function loadCharacter() {
   if (loadingAsset) return;
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
-  loadingAsset = true; ready = false;audio.stopAll();actionAudio.reset();updateButtons();
+  loadingAsset = true; ready = false;staminaFeedback.reset(controller);audio.stopAll();actionAudio.reset();updateButtons();
   boss?.combat?.passiveRecovery?.reset();
   const arrival=consumeTravel(travelStorage,character);
   resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:!!arrival});
@@ -465,6 +468,7 @@ async function loadCharacter() {
     maxInfluences = 0;
     for (const mesh of container.meshes) {
       if (!mesh.getTotalVertices()) continue;
+      if(isV2())mesh.metadata={...mesh.metadata,moonforestPlayerFlash:true};
       mesh.isPickable = false;
       if (mesh.skeleton) {
         const extra = mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind);
@@ -608,7 +612,7 @@ function render(dt) {
     if(isV2()){
       const beforeRecoil=actor.position.clone();
       const recoiled=boss.playerReaction.update(dt,actor);
-      applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
+      staminaFeedback.advance(dt);applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
       if(recoiled)constrainPlayerPosition(beforeRecoil);
     }
     const rawMovement=input.value();
@@ -772,7 +776,7 @@ try {
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
     if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
-    applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
+    applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
   },{onDefeat:event=>{goldLoot.drop(event.kind,event.position);chapterQuests?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
@@ -813,10 +817,10 @@ try {
       saveMapPosition(true);resumePose=null;minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
-      ready=false;loadingAsset=true;mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
+      ready=false;loadingAsset=true;staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
-      boss.hide();for(const enemy of boss.allPooled)enemy.routeState={};
+      boss.hide();applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;strikeSampler.reset();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();

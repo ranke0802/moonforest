@@ -1,0 +1,22 @@
+[
+  "ArcherPreview/reports/forest-stamina-kneel-2026-11-03/reviewed-extra-paths.json",
+  "ArcherPreview/reports/forest-stamina-kneel-2026-11-03/audit-local-knee-mask.mjs",
+  "ArcherPreview/reports/forest-stamina-kneel-2026-11-03/audit-knee-normals.mjs",
+  "ArcherPreview/reports/forest-stamina-kneel-2026-11-03/clearance-bake.log",
+  "ArcherPreview/reports/forest-stamina-kneel-2026-11-03/clearance-focused.log",
+  "ArcherPreview/reports/elena-clearance/mask-current.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/bake-curves.mjs",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/solve-knee.mjs",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/original-front-right-tracks.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/reproduce.mjs",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/export-review.mjs",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/validate-runtime.mjs",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/runtime-validation.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/patch-validation.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/pose-validation.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/runtime-final/source-hashes.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/reproduction-validation.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/STATUS.json",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/render-final.py",
+  "ArcherPreview/reports/mourning-death-knee-2026-11-03/r3/REPRODUCTION.md"
+]

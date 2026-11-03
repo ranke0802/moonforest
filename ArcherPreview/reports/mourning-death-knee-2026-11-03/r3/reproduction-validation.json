@@ -1,0 +1,8 @@
+{
+  "sourceModel": "./content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+  "source": "Packed glTF/buffers plus the three shipped local death tracks; no historical geometry.bin input.",
+  "changedVertices": 528,
+  "maximumBindValueError": 0,
+  "withinFloat32SkinTolerance": true,
+  "runtimeSourceWritten": false
+}

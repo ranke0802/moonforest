@@ -1,5 +1,6 @@
 import {createBossPreparation} from './boss-preparation.js';
 import {canInlineHitFlash} from './hit-feedback.js';
+import {overlaySubMeshReadiness} from './overlay-readiness.js';
 // Compile body and silhouette before showing the actor. Yield between shader
 // variants, polling the REAL submesh/skin/morph variant ourselves. Babylon's
 // forceCompilationAsync starts a private 16ms loop with no cancellation/timeout.
@@ -35,17 +36,15 @@ export async function prepareBossShaders(asset,{preparation,frame,now,shadows,ti
         // A hit can remain white as death begins. At that opacity Elena also
         // uses Babylon's existing overlay pass rather than its opaque inline
         // flash. Prepare that exact pass/skin/morph/batch without drawing it.
-        const scene=mesh.getScene?.(),renderer=mesh.metadata?.moonforestEnemyFade&&!mesh.metadata?.moonforestOutline&&!canInlineHitFlash(mesh)?scene?.getOutlineRenderer?.():null;
-        const overlayPass=renderer?._passIdForDrawWrapper?.[3];
-        if(overlayPass!==undefined){
+        const scene=mesh.getScene?.(),overlay=mesh.metadata?.moonforestEnemyFade&&!mesh.metadata?.moonforestOutline&&!canInlineHitFlash(mesh)&&scene?.getOutlineRenderer;
+        if(overlay){
           await job.nextFrame();
           for(;;){
             job.check();let ready=true;
             for(const sub of mesh.subMeshes??[]){
-              const batch=mesh._getInstancesRenderList?.(sub._id,mesh._internalAbstractMeshDataInfo?._actAsRegularMesh===true);
-              const instances=!!(scene.getEngine().getCaps().instancedArrays&&((batch?.visibleInstances?.[sub._id]!==null&&batch?.visibleInstances?.[sub._id]!==undefined)||sub.getRenderingMesh().hasThinInstances));
-              if(!renderer.isReady(sub,instances,overlayPass)){
-                ready=false;const effect=sub._getDrawWrapper(overlayPass)?.effect;
+              const result=overlaySubMeshReadiness(scene,sub);
+              if(!result.ready){
+                ready=false;const effect=result.effect;
                 if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');
               }
             }

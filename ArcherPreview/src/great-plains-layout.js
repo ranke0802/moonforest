@@ -5,6 +5,7 @@ import {villageHeight} from './village-terrain.js';
 import {VILLAGE_PLAINS_BOUNDARY as boundary,villageToPlains,boundaryExteriorPlacement,isVillageBoundaryTree} from './village-plains-boundary.js';
 import {FOREST_EDGE_ROAD,FOREST_EDGE_CLEARINGS,joinForestEdge} from './plains-forest-edge.js';
 import {forestToPlains} from './plains-forest-boundary.js';
+import {applyPlainsTreeTransition} from './plains-tree-transition.js';
 
 // Authored against plains-exterior.png; all landmarks have deliberate locations.
 export const PLAINS_RADIUS=106;
@@ -236,7 +237,7 @@ function makePlacements(){
  }
  addGroveScenery(out,add);
  addGroundScenery(out,add);
- return out;
+ return applyPlainsTreeTransition(out);
 }
 export const PLAINS_PLACEMENTS=joinForestEdge(makePlacements());
 export function plainsObstacles(){

@@ -7,8 +7,8 @@ export const V2_COMBO_GRACE = .8;
 export const V2_STAMINA_MAX=100;
 export const V2_STAMINA_REGEN=15;
 export const V2_SPRINT_COST=5;
-export const V2_SPRINT_MULTIPLIER=1.5;
-export const V2_STAMINA_COST=Object.freeze({slash:20,attack:20,judgment:50,shieldPush:40,dodge:0});
+export const V2_SPRINT_MULTIPLIER=1.8;
+export const V2_STAMINA_COST=Object.freeze({slash:10,attack:10,judgment:30,shieldPush:20,dodge:10});
 export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기',knockdown:'넉다운',getUp:'기상'};
 export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7,knockdown:1,getUp:1};
 

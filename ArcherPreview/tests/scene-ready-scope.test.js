@@ -1,9 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NullEngine,ThinEngine,Scene,MeshBuilder,StandardMaterial,ShaderMaterial,TransformNode,FreeCamera,ArcRotateCamera,Vector3,Vector2,DirectionalLight,ShadowGenerator} from '@babylonjs/core';
+import {NullEngine,ThinEngine,Scene,MeshBuilder,StandardMaterial,ShaderMaterial,TransformNode,FreeCamera,ArcRotateCamera,Vector3,Vector2,DirectionalLight,ShadowGenerator,MorphTarget,MorphTargetManager,VertexBuffer} from '@babylonjs/core';
 import {currentFrameReadiness,waitForSceneReady} from '../src/scene-ready.js';
 import {VillageOutlines} from '../src/village-outlines.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {readFileSync} from 'node:fs';
+import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
+import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
+import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+import {applyHitFlash} from '../src/hit-feedback.js';
+import {attachCharacterOutlines} from '../src/character-outlines.js';
 
 async function fixture(t,{arc=false}={}){
  const engine=new NullEngine({renderWidth:1280,renderHeight:720}),scene=new Scene(engine);scene.useRightHandedSystem=true;engine.getCaps().instancedArrays=true;
@@ -57,6 +64,41 @@ test('current custom instanced outline is checked and matches a selected base dr
 test('camera postprocess readiness stays required and names the camera',async t=>{
  const f=await fixture(t);f.camera.isReady=()=>false;let time=0;
  await assert.rejects(waitForSceneReady(f.scene,{now:()=>time,wait:async()=>{time+=45000;}}),error=>error.blocker.kind==='camera'&&error.blocker.mesh===f.camera.name);
+});
+
+test('actual packed warrior skin flash is prepared without drawing or extra scene resources',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>{scene.dispose();engine.dispose();});
+ const base=new URL('../public/assets/',import.meta.url),config=JSON.parse(readFileSync(new URL('warrior-v3-ios.json',base))),packed=await readRuntimeGltf(new URL(config.model,base)),gltf=structuredClone(packed.gltf);
+ for(const key of ['extensionsUsed','extensionsRequired'])gltf[key]=(gltf[key]??[]).filter(x=>x!=='EXT_meshopt_compression');
+ for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+packed.files.get(b.uri).data.toString('base64');
+ const loader=new GLTFFileLoader();loader.skipMaterials=true;const asset=await loader.loadAssetContainerAsync(scene,{json:gltf},'');asset.addAllToScene();t.after(()=>loader.dispose());
+ const camera=new ArcRotateCamera('camera',1.2,1.18,17,Vector3.Zero(),scene),material=new StandardMaterial('player',scene);material.disableLighting=true;
+ const bodies=asset.meshes.filter(m=>m.getTotalVertices());assert.ok(bodies.some(m=>m.skeleton));for(const m of bodies){m.material=material;m.metadata={...m.metadata,moonforestPlayerFlash:true};if(m.skeleton)m.skeleton.useTextureToStoreBoneMatrices=true;}
+ scene.render();const counts=()=>[scene.meshes.length,scene.materials.length,scene.textures.length,scene.geometries.length];const before=counts();let creates=0;const create=engine.createEffect.bind(engine);engine.createEffect=(...args)=>{creates++;return create(...args);};
+ const original=material.markAsDirty.bind(material);let dirty=0;material.markAsDirty=(...args)=>{dirty++;return original(...args);};
+ await waitForSceneReady(scene,{timeoutMs:5000,wait:()=>new Promise(r=>setTimeout(r,1))});assert.deepEqual(counts(),before);assert.ok(bodies.every(m=>!m.renderOverlay));assert.equal(dirty,0);
+ scene.render();const after=creates;applyHitFlash(asset.meshes,.2,.2);scene.render();assert.equal(creates,after);assert.equal(dirty,0);assert.deepEqual(counts(),before);assert.ok(bodies.some(m=>m.renderOverlay));
+});
+
+test('player flash readiness uses existing bounded timeout and shader-error diagnostics',async t=>{
+ const f=await fixture(t);f.box.metadata={moonforestPlayerFlash:true};const renderer=f.scene.getOutlineRenderer();let clock=0;renderer.isReady=()=>false;
+ await assert.rejects(waitForSceneReady(f.scene,{now:()=>clock,wait:async()=>{clock+=15000;}}),error=>error.name==='TimeoutError'&&error.blocker.kind==='player-flash'&&error.blocker.mesh===f.box.name);assert.equal(clock,45000);
+ const sub=f.box.subMeshes[0],get=sub._getDrawWrapper.bind(sub);sub._getDrawWrapper=pass=>pass===renderer._passIdForDrawWrapper[3]?{effect:fault()}:get(pass);
+ try{await assert.rejects(waitForSceneReady(f.scene),error=>error.blocker.kind==='player-flash'&&error.message.includes('visible-player/visible-paint'));}finally{sub._getDrawWrapper=get;}
+});
+
+test('morph-target overlay variant also needs no new first-flash effect',async t=>{
+ const f=await fixture(t),target=new MorphTarget('pose',.5,f.scene),manager=new MorphTargetManager(f.scene);
+ const positions=f.box.getVerticesData(VertexBuffer.PositionKind);target.setPositions(positions.map((x,i)=>x+(i%3===1?.1:0)));manager.addTarget(target);f.box.morphTargetManager=manager;f.box.metadata={moonforestPlayerFlash:true};
+ f.scene.render();await waitForSceneReady(f.scene,{wait:()=>new Promise(r=>setTimeout(r,1))});const renderer=f.scene.getOutlineRenderer(),effect=f.box.subMeshes[0]._getDrawWrapper(renderer._passIdForDrawWrapper[3]).effect;assert.match(effect.defines,/#define MORPHTARGETS/);f.scene.render();let effects=0;const create=f.engine.createEffect.bind(f.engine);f.engine.createEffect=(...args)=>{effects++;return create(...args);};
+ applyHitFlash([f.box],.2,.2);f.scene.render();assert.equal(effects,0);assert.equal(f.box.renderOverlay,true);
+});
+
+test('player equipment outline clones never inherit the player flash readiness tag',async t=>{
+ const f=await fixture(t);f.box.name='Golden_Oathblade';f.box.metadata={moonforestPlayerFlash:true};const asset={meshes:[f.box]};
+ const shells=attachCharacterOutlines(asset,'warrior');assert.equal(shells.length,1);assert.equal(shells[0].metadata.moonforestOutline,true);assert.equal(shells[0].metadata.moonforestPlayerFlash,undefined);
+ const renderer=f.scene.getOutlineRenderer(),original=renderer.isReady.bind(renderer),checked=[];renderer.isReady=(sub,...args)=>{checked.push(sub.getMesh());return original(sub,...args);};
+ await waitForSceneReady(f.scene,{wait:()=>new Promise(r=>setTimeout(r,1))});assert.ok(checked.includes(f.box));assert.ok(!checked.includes(shells[0]));
 });
 
 test('outline readiness uses only the matching source and selected LOD variant',async t=>{

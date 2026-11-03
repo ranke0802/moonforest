@@ -1,0 +1,44 @@
+{
+  "scope": "Actual Babylon SDK buffers and prepareAsset lifecycle; NullEngine is not GPU shader compilation.",
+  "facts": [
+    {
+      "case": "scope",
+      "bodyVertices": 36196,
+      "changedVertices": 528,
+      "newTargets": 0,
+      "bodyTargets": 11,
+      "allocatedPositionNormalBytes": 868704,
+      "otherTargetHashesExact": true,
+      "baseGeometryAndNativeClipsExact": true,
+      "liveSkinAndNormalsExact": true
+    },
+    {
+      "case": "idempotency",
+      "summons": 20,
+      "synchronizations": 1,
+      "outerFreezeDepthPreserved": true,
+      "sharedCloneDoublePatch": false
+    },
+    {
+      "case": "rollback",
+      "bothOriginalArraysRestored": true,
+      "retryApplied": true
+    },
+    {
+      "case": "disposed-reload",
+      "newIdentityPatched": true
+    },
+    {
+      "case": "authored-custom-normals",
+      "minimumNormalDot": 0.479555118718151,
+      "outsideMaskNormalsExact": true
+    },
+    {
+      "case": "whole-death-skin",
+      "frames": 157,
+      "minimumSkinY": -0.00016847912117362758,
+      "maximumCorrectedVertexStepAt30Hz": 0.09247155479023715,
+      "revivalInfluence": 0
+    }
+  ]
+}

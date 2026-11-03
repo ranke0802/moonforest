@@ -63,8 +63,10 @@ test('texture morph pruning keeps stable r9 shader slots, identical skin/normals
   assert.notStrictEqual(mouthManager,manager);assert.equal(mouthManager.numTargets,1);assert.equal(new Set(asset.meshes.map(m=>m.morphTargetManager).filter(Boolean)).size,2);
   const original={positions:hash(body.getVerticesData(VertexBuffer.PositionKind)),normals:hash(body.getVerticesData(VertexBuffer.NormalKind)),targets:targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())])};
   let synchronizations=0;const synchronize=manager.synchronize.bind(manager);manager.synchronize=()=>{synchronizations++;return synchronize();};
-  MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,0,'keep the texture already prepared by the glTF loader');
-  const texture=manager._targetStoreTexture;MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,0);assert.strictEqual(manager._targetStoreTexture,texture);
+  MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,1,'one initial upload folds the local death correction into the existing target');
+  const preparedTargets=targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]);
+  targets.forEach((target,i)=>{if(target.name==='Death_Ground_Contact')assert.notDeepEqual(preparedTargets[i],original.targets[i]);else assert.deepEqual(preparedTargets[i],original.targets[i]);});
+  const texture=manager._targetStoreTexture;MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,1);assert.strictEqual(manager._targetStoreTexture,texture);
   assert.equal(mouthManager.isUsingTextureForTargets,true);assert.equal(mouthManager.numMaxInfluencers,1);assert.notStrictEqual(mouthManager._targetStoreTexture,texture);
   const painted=new PBRMaterial('test-elena-painted',scene);painted.unlit=true;
   for(const mesh of asset.meshes)if(mesh.getTotalVertices())mesh.material=painted;
@@ -99,8 +101,8 @@ test('texture morph pruning keeps stable r9 shader slots, identical skin/normals
   const uniforms={},effect={isReady:()=>true,getUniformIndex:()=>0,setFloat:(name,value)=>uniforms[name]=value,setFloat2(){},setFloat3(){},setFloatArray(){},setArray(){},setTexture(){},setMatrices(){},setMatrix(){},setColor3(){}};
   shell.skeleton.prepare(true);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,.72);
   applyHitFlash(asset.meshes,0);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,0);
-  assert.equal(hash(body.getVerticesData(VertexBuffer.PositionKind)),original.positions);assert.equal(hash(body.getVerticesData(VertexBuffer.NormalKind)),original.normals);assert.deepEqual(targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]),original.targets);
-  assert.equal(synchronizations,0,'weight changes only update bindings, never rebuild the morph texture');
+  assert.equal(hash(body.getVerticesData(VertexBuffer.PositionKind)),original.positions);assert.equal(hash(body.getVerticesData(VertexBuffer.NormalKind)),original.normals);assert.deepEqual(targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]),preparedTargets);
+  assert.equal(synchronizations,1,'after initial preparation, weight changes only update bindings and never rebuild the morph texture');
 });
 
 test('attribute-mode fallback preserves r9 body/mouth targets and binds each manager within the engine limit',async t=>{

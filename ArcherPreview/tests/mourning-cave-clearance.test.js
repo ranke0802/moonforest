@@ -7,7 +7,14 @@ import {MOURNING_CAVE_CLEARANCE_DATA as data} from '../src/mourning-cave-clearan
 import {ELENA_HOME,MOURNING_SIZE_SCALE} from '../src/elena-spec.js';
 test('full-pose mask fingerprints match the delivered geometry, layout and animator',()=>{
  for(const [path,expected]of Object.entries(data.hashes)){const actual=createHash('sha256').update(readFileSync(new URL(path,import.meta.url),'utf8').replace(/\r\n?/g,'\n')).digest('hex');assert.equal(actual,expected,path);}
- assert.equal(data.sizeScale,MOURNING_SIZE_SCALE);assert.ok(data.poseSamples>=200);assert.ok(Math.max(...data.bands.map(b=>b.radius))>4.5);
+ for(const path of ['../src/mourning-death-knee.js','../src/mourning-death-knee-data.js','../src/mourning-death-depth.js','../src/mourning-death-depth-data.js','../src/mourning-elena-encounter.js'])assert.ok(data.hashes[path],`actual prepared correction must invalidate the bake: ${path}`);
+ assert.equal(data.sizeScale,MOURNING_SIZE_SCALE);assert.ok(data.poseSamples>=541);assert.ok(Math.max(...data.bands.map(b=>b.radius))>4.5);
+});
+test('local death correction preserves the delivered living combat safety region',()=>{
+ // The new prepared pose envelope is unioned with the previous conservative
+ // bands. Keep the complete cell union, not only a few accepted home samples.
+ assert.equal(data.runs.filter((_,i)=>i%2).reduce((a,b)=>a+b,0),2590);
+ assert.equal(createHash('sha256').update(JSON.stringify(data.runs)).digest('hex'),'7d3ff2e93a8fd1e215c7eae8665f593b0e8a562d2eb9d46770c59e0879a2698f');
 });
 test('full-body safety keeps the relocated home and a complete 6.3m charge corridor',()=>{
  assert.ok(mourningCaveClearance(ELENA_HOME.x,ELENA_HOME.z)>.08);

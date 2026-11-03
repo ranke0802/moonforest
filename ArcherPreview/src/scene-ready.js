@@ -1,4 +1,5 @@
 import {Frustum} from '@babylonjs/core/Maths/math.frustum.js';
+import {overlaySubMeshReadiness} from './overlay-readiness.js';
 
 const label=value=>String(value?.name??value?.id??'unknown').slice(0,72);
 const enabled=mesh=>{
@@ -41,6 +42,18 @@ export function currentFrameReadiness(scene){
       const hardware=hardwareFor(mesh,source,engine);
       for(const sub of source.subMeshes??[]){if(!hardware&&source.subMeshes.length>1&&sub.isInFrustum&&!sub.isInFrustum(planes))continue;useMaterial(source,sub,hardware,'view');
         if(hardware&&mesh.instancedBuffers?.villageInk?.x>0&&!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh)for(const material of scene.materials)if(material.metadata?.villageOutline&&(!material.metadata.villageOutlineUsesSource||material.metadata.villageOutlineUsesSource(source))){outlines.push(label(mesh));useMaterial(source,sub,true,'outline',material);}
+      }
+      checked(blockers.length===blockedBefore);
+    }
+    // Warm the player's actual flash pass even for currently hidden equipment;
+    // it may become visible later. Never enable a mesh or display a flash here.
+    for(const mesh of scene.meshes){
+      if(!mesh.metadata?.moonforestPlayerFlash||mesh.isDisposed?.()||!mesh.getTotalVertices?.())continue;
+      const blockedBefore=blockers.length;
+      for(const sub of mesh.subMeshes??[]){
+        const material=sub.getMaterial?.();if(!material)continue;
+        const result=overlaySubMeshReadiness(scene,sub);
+        if(!result.ready)block('player-flash',mesh,material,'overlay',result.effect);
       }
       checked(blockers.length===blockedBefore);
     }

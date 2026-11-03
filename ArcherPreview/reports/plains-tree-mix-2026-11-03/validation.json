@@ -1,0 +1,79 @@
+{
+  "scope": "Source/resource preservation, actual analytic navigation and bounded authoring costs; no browser/GPU measurements",
+  "facts": [
+    {
+      "case": "restricted-tree-only-edit",
+      "changedTrees": 24,
+      "changedSpecies": 19,
+      "addedPlacements": 0,
+      "forestBoundaryTrees": 68,
+      "townBoundaryTrees": 32,
+      "sidecarSourcesChanged": 0,
+      "chestSupportsChanged": 0
+    },
+    {
+      "case": "source-quality-and-solid-envelope",
+      "protectedSourceFiles": 13,
+      "newModels": 0,
+      "newTextures": 0,
+      "allOriginalLodsAndTextureBudgetsUnchanged": true,
+      "trunkEnvelopesExpanded": 0
+    },
+    {
+      "case": "actual-navigation",
+      "identicalObstacles": 775,
+      "fullWidthApproachSegments": 196,
+      "allChestApproachesPreserved": true
+    },
+    {
+      "case": "gradient-and-theoretical-budget",
+      "before": {
+        "village": {
+          "trees": 22,
+          "forestOaksAndDeadTrees": 0
+        },
+        "meadow": {
+          "trees": 12,
+          "forestOaksAndDeadTrees": 0
+        },
+        "approach": {
+          "trees": 15,
+          "forestOaksAndDeadTrees": 4
+        }
+      },
+      "after": {
+        "village": {
+          "trees": 22,
+          "forestOaksAndDeadTrees": 0
+        },
+        "meadow": {
+          "trees": 12,
+          "forestOaksAndDeadTrees": 4
+        },
+        "approach": {
+          "trees": 15,
+          "forestOaksAndDeadTrees": 10
+        }
+      },
+      "allTreesSingleTierTriangleUpperBounds": {
+        "before": [
+          1151981,
+          768118,
+          594807
+        ],
+        "after": [
+          1160580,
+          759541,
+          585664
+        ],
+        "delta": [
+          8599,
+          -8577,
+          -9143
+        ]
+      },
+      "gpuPerformanceMeasured": false,
+      "note": "Simultaneous whole-map single-tier upper bounds; does not assert submitted geometry or FPS."
+    }
+  ]
+}

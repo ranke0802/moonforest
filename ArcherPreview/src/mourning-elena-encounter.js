@@ -9,6 +9,7 @@ import {MourningCaveNavigation} from './mourning-cave-navigation.js';
 import {CaveNavigation} from './witch-cave-navigation.js';
 import {MourningSlamAdvance} from './mourning-slam.js';
 import {playerDimensions} from './player-dimensions.js';
+import {prepareMourningDeathDepth} from './mourning-death-depth.js';
 
 // Distance to the player's upright vertical segment without per-limb scratch
 // arrays or scanning skinned vertices. The fitted hurt endpoints are reused.
@@ -64,7 +65,11 @@ export class MourningElenaEncounter extends ElenaEncounter {
     // Keep stable shader slots for the authored targets while texture-mode
     // shaders skip zero-weight targets, including the r9 death corrections.
     // The attribute fallback needs all slots bound; keep the loader's texture.
-    for(const manager of new Set(this.asset.meshes.map(m=>m.morphTargetManager).filter(Boolean))){manager.areUpdatesFrozen=true;manager.optimizeInfluencers=manager.isUsingTextureForTargets;manager.numMaxInfluencers=manager.numTargets;manager.areUpdatesFrozen=false;}
+    for(const manager of new Set(this.asset.meshes.map(m=>m.morphTargetManager).filter(Boolean))){
+      manager.areUpdatesFrozen=true;
+      try{prepareMourningDeathDepth(manager,this.asset.meshes);manager.optimizeInfluencers=manager.isUsingTextureForTargets;manager.numMaxInfluencers=manager.numTargets;}
+      finally{manager.areUpdatesFrozen=false;}
+    }
   }
   createAnimator(){
     // Absolute assignment also makes repeated summons immune to scale growth.

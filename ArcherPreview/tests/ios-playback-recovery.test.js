@@ -15,6 +15,7 @@ import {createLoadingView} from '../src/loading-view.js';
 import {configurePlayerSize,playerDimensions} from '../src/player-dimensions.js';
 import {PlayerCombat} from '../src/player-combat.js';
 import {updatePlainsBoundaryAtmosphere} from '../src/plains-boundary-atmosphere.js';
+import {StaminaFailureFeedback,applyPlayerFlash} from '../src/stamina-feedback.js';
 
 const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const block=(start,end)=>main.slice(main.indexOf(start)+start.length,main.indexOf(end,main.indexOf(start))).trim().replace(/;$/,'');
@@ -69,7 +70,7 @@ test('actual 8K iOS player is posed before reveal and moves through the real ren
  let movement={x:0,y:0},hudFrames=0;const f=playback(),noop=()=>{},world={scene,camera,tick:noop,terrain:{place:p=>{p.y=0;}},lighting:{follow:noop}};
  // CPU simulation uses the real app callback and model; no WebGL/phone GPU claim.
  scene.render=()=>{scene._animate(0);camera.getViewMatrix(true);scene.updateTransformMatrix(true);};
- const env={minimap:{update:noop},saveMapPosition:noop,updatePlainsBoundaryAtmosphere,...f.state,Vector3,playerDimensions,audio:{...f.state.audio,setBossContext:noop},character:'warrior-v3',chapterQuests:null,ready:true,simulateFrame:false,elapsed:0,statusTime:0,world,actor,container:asset,config,animator,controller,elenaReview:null,qualityMode:'high',input:{value:()=>movement,cameraPointers:new Map()},isV2:()=>true,isWarrior:()=>true,isVillage:()=>true,
+ const env={minimap:{update:noop},saveMapPosition:noop,updatePlainsBoundaryAtmosphere,staminaFeedback:new StaminaFailureFeedback(),applyPlayerFlash,...f.state,Vector3,playerDimensions,audio:{...f.state.audio,setBossContext:noop},character:'warrior-v3',chapterQuests:null,ready:true,simulateFrame:false,elapsed:0,statusTime:0,world,actor,container:asset,config,animator,controller,elenaReview:null,qualityMode:'high',input:{value:()=>movement,cameraPointers:new Map()},isV2:()=>true,isWarrior:()=>true,isVillage:()=>true,
  boss:{combat:f.state.boss.combat,get playerHp(){return this.combat.hp;},get playerMaxHp(){return this.combat.maxHp;},onDamage:noop,playerReaction:{update:()=>0},active:false,playerAlive:true,combatCount:0,loading:false,grab:{active:false},encounters:[],update:noop},applyHitFlash:noop,constrainPlayerPosition:noop,attackSources:new Set(),shotActionId:null,shotTarget:null,hiddenArrowForAction:null,arrowMesh:null,
  training:{update:noop,setSelected:noop},projectiles:{update:noop},actionAudio:{player:noop,boss:noop},goldLoot:{drops:[],update:()=>[]},goldLootView:{sync:noop,project:noop},damageNumbers:{update:noop},syncCameraFocus:noop,syncCaveFog:noop,faceHeading:noop,updateButtons:noop,mapPortal:null,screenProjection:{beginFrame:noop},updateHealthBars:()=>hudFrames++,V2_LABELS,combatResult:null,frameDiagnostics:{mark:()=>0,measure:noop},
  $:s=>document.querySelector(s),text:noop};

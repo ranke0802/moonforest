@@ -9,6 +9,7 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {MourningElenaAnimator,mourningMorphs} from '../src/mourning-elena-animation.js';
 import {deathHaloAdvance,deathHaloSpeedAt,windAt,shotWeight} from '../src/mourning-motion-v2.js';
 import {MOURNING_SIZE_SCALE} from '../src/elena-spec.js';
+import {MOURNING_DEATH_KNEE_BONES} from '../src/mourning-death-knee.js';
 
 const base=new URL('../public/assets/',import.meta.url),config=JSON.parse(readFileSync(new URL('mourning-elena.json',base)));
 const smooth=x=>{x=Math.max(0,Math.min(1,x));return x*x*(3-2*x);},close=(a,b,label='value',epsilon=3e-6)=>assert.ok(Math.abs(a-b)<epsilon,`${label}: ${a} != ${b}`);
@@ -66,7 +67,12 @@ test('real r9 death captures each live pose, advances independently of cast spee
  const dead=asset.animationGroups.find(g=>g.name==='Chimera_Death_Lament_5p2s');assert.ok(dead);close(dead.to/dead.targetedAnimations[0].animation.framePerSecond,5.2);
  const sourceTracks=new Map(dead.targetedAnimations.map(c=>[c.target.uniqueId+':'+c.animation.targetProperty,c.animation]));
  let formerlyFixedChanged=0,maxError=0;
- for(const c of animator.deathChannels)for(const time of [.09,.18,.65,1.3,2.8,5.2]){const original=sourceTracks.get(c.target.uniqueId+':'+c.property).evaluate(time*c.track.fps),difference=error(c.track.sample(time),original);maxError=Math.max(maxError,difference);assert.ok(difference<3e-6);}
+ let kneeOverrides=0;
+ for(const c of animator.deathChannels){
+  if(c.property==='rotationQuaternion'&&MOURNING_DEATH_KNEE_BONES.includes(c.target.name)){kneeOverrides++;continue;}
+  for(const time of [.09,.18,.65,1.3,2.8,5.2]){const original=sourceTracks.get(c.target.uniqueId+':'+c.property).evaluate(time*c.track.fps),difference=error(c.track.sample(time),original);maxError=Math.max(maxError,difference);assert.ok(difference<3e-6);}
+ }
+ assert.equal(kneeOverrides,3,'only the explicitly authored front-right knee rotations replace source channels');
  for(const fps of [30,60])for(const state of ['idle','walk','cast','cast_slam','cast_alternate','hit','pulse']){
   living(animator,state);const frozen={walk:animator.walkTime,hair:animator.hairTime,idle:animator.idleTime,breath:animator.breathClock,hit:animator.hitTime},halo=animator.haloTime;
   animator.transition('dead',{clipTime:999,actionId:90});assert.equal(animator.deathTime,0);assert.equal(animator.reactToHit(),false);close(animator.hitPulseWeight,0);animator.sample(0);assertDeathPose(animator,0);

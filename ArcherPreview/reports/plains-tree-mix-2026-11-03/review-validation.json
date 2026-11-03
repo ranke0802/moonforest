@@ -1,0 +1,1320 @@
+{
+  "baseline": "062feb6",
+  "status": "Implementation and focused validation frozen; parent owns final full suite/build/deployment.",
+  "intent": "기존 평원 군락에서 숲 수종이 점차 섞이게 만들며 원본 숲·두 경계와 보행/보상 접근을 보존한다.",
+  "plan": [
+    {
+      "id": "meadow-oak-6",
+      "asset": "forest-01-sickly-oak",
+      "height": 6.4,
+      "band": "meadow"
+    },
+    {
+      "id": "meadow-oak-7",
+      "asset": "forest-01-sickly-oak",
+      "height": 5.7,
+      "band": "meadow"
+    },
+    {
+      "id": "grove-meadow-east-tree-0",
+      "asset": "forest-01-sickly-oak",
+      "height": 5.2,
+      "band": "meadow"
+    },
+    {
+      "id": "grove-caravan-east-tree-3",
+      "asset": "forest-01-sickly-oak",
+      "height": 5.3,
+      "band": "meadow"
+    },
+    {
+      "id": "grove-forest-outer-tree-0",
+      "asset": "forest-01-sickly-oak",
+      "height": 6,
+      "band": "fringe"
+    },
+    {
+      "id": "grove-forest-outer-tree-2",
+      "asset": "forest-01-sickly-oak",
+      "height": 5.8,
+      "band": "fringe"
+    },
+    {
+      "id": "meadow-oak-8",
+      "asset": "forest-01-sickly-oak",
+      "height": 6.8,
+      "band": "fringe"
+    },
+    {
+      "id": "grove-forest-middle-tree-0",
+      "asset": "forest-01-sickly-oak",
+      "height": 4.6,
+      "band": "woodland"
+    },
+    {
+      "id": "grove-forest-middle-tree-4",
+      "asset": "forest-01-sickly-oak",
+      "height": 4.6,
+      "band": "woodland"
+    },
+    {
+      "id": "grove-forest-west-tree-0",
+      "asset": "forest-01-sickly-oak",
+      "height": 4.6,
+      "band": "woodland"
+    },
+    {
+      "id": "grove-forest-west-tree-1",
+      "asset": "forest-01-sickly-oak",
+      "height": 7.3,
+      "band": "woodland"
+    },
+    {
+      "id": "grove-forest-west-tree-4",
+      "asset": "forest-02-dead-tree",
+      "height": 5.6,
+      "band": "woodland"
+    },
+    {
+      "id": "forest-east-55",
+      "asset": "forest-01-sickly-oak",
+      "height": 8.4,
+      "band": "woodland"
+    },
+    {
+      "id": "forest-east-56",
+      "asset": "tree-02-slender-pine",
+      "height": 10.2,
+      "band": "woodland"
+    },
+    {
+      "id": "forest-east-58",
+      "asset": "forest-01-sickly-oak",
+      "height": 7,
+      "band": "woodland"
+    },
+    {
+      "id": "forest-east-59",
+      "asset": "tree-01-round-oak",
+      "height": 10.6,
+      "band": "fringe"
+    },
+    {
+      "id": "forest-east-60",
+      "asset": "forest-01-sickly-oak",
+      "height": 6.4,
+      "band": "fringe"
+    },
+    {
+      "id": "forest-east-62",
+      "asset": "tree-02-slender-pine",
+      "height": 10.5,
+      "band": "fringe"
+    },
+    {
+      "id": "forest-east-64",
+      "asset": "forest-01-sickly-oak",
+      "height": 5.8,
+      "band": "meadow"
+    },
+    {
+      "id": "forest-east-70",
+      "asset": "forest-01-sickly-oak",
+      "height": 8.1,
+      "band": "woodland"
+    },
+    {
+      "id": "forest-east-72",
+      "asset": "forest-01-sickly-oak",
+      "height": 7.3,
+      "band": "fringe"
+    },
+    {
+      "id": "forest-east-74",
+      "asset": "forest-01-sickly-oak",
+      "height": 6.4,
+      "band": "fringe"
+    },
+    {
+      "id": "forest-east-76",
+      "asset": "tree-02-slender-pine",
+      "height": 9.2,
+      "band": "meadow"
+    },
+    {
+      "id": "forest-east-78",
+      "asset": "tree-01-round-oak",
+      "height": 9.8,
+      "band": "meadow"
+    }
+  ],
+  "changes": [
+    {
+      "id": "forest-east-55",
+      "band": "woodland",
+      "x": 96.65814594362662,
+      "z": -35.76570535300567,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 16.34227528955089,
+      "heightAfter": 8.274193498009538,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-56",
+      "band": "woodland",
+      "x": 92.59683592807029,
+      "z": -28.400258008936923,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "tree-02-slender-pine",
+      "heightBefore": 14.664198179414962,
+      "heightAfter": 10.2,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-58",
+      "band": "woodland",
+      "x": 95.6774026947096,
+      "z": -15.335316613316536,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 11.772382840665523,
+      "heightAfter": 7,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-59",
+      "band": "fringe",
+      "x": 92.80478258451619,
+      "z": -8.080326697239421,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "tree-01-round-oak",
+      "heightBefore": 14.009318740584423,
+      "heightAfter": 10.6,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-60",
+      "band": "fringe",
+      "x": 92.93465836886497,
+      "z": 2.5833434745435495,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 12.263832863105927,
+      "heightAfter": 6.4,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-62",
+      "band": "fringe",
+      "x": 90.00863585869773,
+      "z": 10.517084568339563,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "tree-02-slender-pine",
+      "heightBefore": 15.986438242311124,
+      "heightAfter": 10.5,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-64",
+      "band": "meadow",
+      "x": 92.93487836179267,
+      "z": 26.303664947200875,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 13.589318832254504,
+      "heightAfter": 5.8,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-70",
+      "band": "woodland",
+      "x": 97.56104007939567,
+      "z": -25.755369194732094,
+      "assetBefore": "forest-01-sickly-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 10.865078434627144,
+      "heightAfter": 8.1,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-72",
+      "band": "fringe",
+      "x": 99.15883011836559,
+      "z": -12.352955631911755,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 15.995441672822928,
+      "heightAfter": 7.3,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-74",
+      "band": "fringe",
+      "x": 103.35196755017381,
+      "z": 2.1134045122306278,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 14.909423982503359,
+      "heightAfter": 6.4,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-76",
+      "band": "meadow",
+      "x": 102.5780054719122,
+      "z": 13.548217876786019,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "tree-02-slender-pine",
+      "heightBefore": 12.034383903129493,
+      "heightAfter": 9.2,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "forest-east-78",
+      "band": "meadow",
+      "x": 99.5876331801323,
+      "z": 31.177213316252,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "tree-01-round-oak",
+      "heightBefore": 14.95500342246378,
+      "heightAfter": 9.8,
+      "colliderRadius": 0.9
+    },
+    {
+      "id": "meadow-oak-6",
+      "band": "meadow",
+      "x": 27,
+      "z": 49,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 6.75,
+      "heightAfter": 6.4,
+      "colliderRadius": 0.8
+    },
+    {
+      "id": "meadow-oak-7",
+      "band": "meadow",
+      "x": 39,
+      "z": 12,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 5.8500000000000005,
+      "heightAfter": 5.7,
+      "colliderRadius": 0.8
+    },
+    {
+      "id": "meadow-oak-8",
+      "band": "fringe",
+      "x": 25,
+      "z": -43,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 6.84,
+      "heightAfter": 6.8,
+      "colliderRadius": 0.8
+    },
+    {
+      "id": "grove-meadow-east-tree-0",
+      "band": "meadow",
+      "x": 12,
+      "z": 40,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 7.47,
+      "heightAfter": 5.2,
+      "colliderRadius": 0.581
+    },
+    {
+      "id": "grove-caravan-east-tree-3",
+      "band": "meadow",
+      "x": 47.66324306561204,
+      "z": 63.61159156592988,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 7.47,
+      "heightAfter": 5.3,
+      "colliderRadius": 0.581
+    },
+    {
+      "id": "grove-forest-outer-tree-0",
+      "band": "fringe",
+      "x": 22,
+      "z": -22,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 8.459999999999999,
+      "heightAfter": 6.000000000000001,
+      "colliderRadius": 0.6579999999999999
+    },
+    {
+      "id": "grove-forest-outer-tree-2",
+      "band": "fringe",
+      "x": 21.91740247379057,
+      "z": -16.343748799013245,
+      "assetBefore": "forest-01-sickly-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 6.7199999590851744,
+      "heightAfter": 5.8,
+      "colliderRadius": 0.784
+    },
+    {
+      "id": "grove-forest-middle-tree-0",
+      "band": "woodland",
+      "x": 32,
+      "z": -48,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 6.4799999999999995,
+      "heightAfter": 4.6,
+      "colliderRadius": 0.504
+    },
+    {
+      "id": "grove-forest-middle-tree-4",
+      "band": "woodland",
+      "x": 29.731205083837477,
+      "z": -40.52654232443944,
+      "assetBefore": "tree-01-round-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 6.4799999999999995,
+      "heightAfter": 4.6,
+      "colliderRadius": 0.504
+    },
+    {
+      "id": "grove-forest-west-tree-0",
+      "band": "woodland",
+      "x": 17,
+      "z": -66,
+      "assetBefore": "tree-02-slender-pine",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 9.3,
+      "heightAfter": 4.6,
+      "colliderRadius": 0.5425
+    },
+    {
+      "id": "grove-forest-west-tree-1",
+      "band": "woodland",
+      "x": 11.08421569367404,
+      "z": -67.41544905984901,
+      "assetBefore": "forest-01-sickly-oak",
+      "assetAfter": "forest-01-sickly-oak",
+      "heightBefore": 8.039999951048333,
+      "heightAfter": 7.3,
+      "colliderRadius": 0.938
+    },
+    {
+      "id": "grove-forest-west-tree-4",
+      "band": "woodland",
+      "x": 16.57332707184325,
+      "z": -72.69462099094326,
+      "assetBefore": "tree-02-slender-pine",
+      "assetAfter": "forest-02-dead-tree",
+      "heightBefore": 10.620000000000001,
+      "heightAfter": 5.6,
+      "colliderRadius": 0.6194999999999999
+    }
+  ],
+  "counts": {
+    "total": 1424,
+    "addedPlacements": 0,
+    "modifiedTrees": 24,
+    "changedSpecies": 19,
+    "preservedNativeForestBoundaryTrees": 68,
+    "preservedTownBoundaryTrees": 32,
+    "preservedSourceForestPlacements": 891,
+    "identicalObstacles": 775
+  },
+  "resources": {
+    "newModels": 0,
+    "newTextures": 0,
+    "existingManifestChanges": 0,
+    "sidecarSourceChanges": 0,
+    "regenerationRequired": false,
+    "preservedQuality": "Original model/texture/LOD references and240% option remain byte-identical."
+  },
+  "focused": {
+    "passed": 29,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 9462.7749,
+    "files": [
+      "plains-tree-transition.test.js",
+      "great-plains.test.js",
+      "plains-two-boundary-regression.test.js",
+      "plains-landscape-render.test.js"
+    ]
+  },
+  "validation": {
+    "scope": "Source/resource preservation, actual analytic navigation and bounded authoring costs; no browser/GPU measurements",
+    "facts": [
+      {
+        "case": "restricted-tree-only-edit",
+        "changedTrees": 24,
+        "changedSpecies": 19,
+        "addedPlacements": 0,
+        "forestBoundaryTrees": 68,
+        "townBoundaryTrees": 32,
+        "sidecarSourcesChanged": 0,
+        "chestSupportsChanged": 0
+      },
+      {
+        "case": "source-quality-and-solid-envelope",
+        "protectedSourceFiles": 13,
+        "newModels": 0,
+        "newTextures": 0,
+        "allOriginalLodsAndTextureBudgetsUnchanged": true,
+        "trunkEnvelopesExpanded": 0
+      },
+      {
+        "case": "actual-navigation",
+        "identicalObstacles": 775,
+        "fullWidthApproachSegments": 196,
+        "allChestApproachesPreserved": true
+      },
+      {
+        "case": "gradient-and-theoretical-budget",
+        "before": {
+          "village": {
+            "trees": 22,
+            "forestOaksAndDeadTrees": 0
+          },
+          "meadow": {
+            "trees": 12,
+            "forestOaksAndDeadTrees": 0
+          },
+          "approach": {
+            "trees": 15,
+            "forestOaksAndDeadTrees": 4
+          }
+        },
+        "after": {
+          "village": {
+            "trees": 22,
+            "forestOaksAndDeadTrees": 0
+          },
+          "meadow": {
+            "trees": 12,
+            "forestOaksAndDeadTrees": 4
+          },
+          "approach": {
+            "trees": 15,
+            "forestOaksAndDeadTrees": 10
+          }
+        },
+        "allTreesSingleTierTriangleUpperBounds": {
+          "before": [
+            1151981,
+            768118,
+            594807
+          ],
+          "after": [
+            1160580,
+            759541,
+            585664
+          ],
+          "delta": [
+            8599,
+            -8577,
+            -9143
+          ]
+        },
+        "gpuPerformanceMeasured": false,
+        "note": "Simultaneous whole-map single-tier upper bounds; does not assert submitted geometry or FPS."
+      }
+    ]
+  },
+  "drawAudit": {
+    "scope": "Actual shipped tree vertices/indices, production projected-coverage LOD selection and Babylon native instance submission. Images/materials, GPU time and native scene cell/occlusion/shadow policies are excluded.",
+    "browserAutomation": false,
+    "gpuPerformanceMeasured": false,
+    "sourceModelsLoaded": 12,
+    "uniqueSourceGeometries": 0,
+    "placementGeometryAllocations": 0,
+    "rows": [
+      {
+        "version": "baseline",
+        "view": "approach-in",
+        "selectedTiers": [
+          8,
+          131,
+          103
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 9,
+        "submittedInstances": 98,
+        "submittedTriangles": 284270,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 2,
+            "triangles": 8988,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 9,
+            "triangles": 27765,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 1,
+            "triangles": 5003,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 41,
+            "triangles": 149609,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 9,
+            "triangles": 27000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 10,
+            "triangles": 13830,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 22,
+            "triangles": 39578,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 3,
+            "triangles": 7497,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:0",
+            "instances": 1,
+            "triangles": 5000,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "baseline",
+        "view": "forest-out",
+        "selectedTiers": [
+          86,
+          67,
+          89
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 10,
+        "submittedInstances": 107,
+        "submittedTriangles": 343692,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 7,
+            "triangles": 21595,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:2",
+            "instances": 52,
+            "triangles": 123916,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 20,
+            "triangles": 100060,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 4,
+            "triangles": 14596,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 13,
+            "triangles": 39000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:0",
+            "instances": 1,
+            "triangles": 4994,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:1",
+            "instances": 1,
+            "triangles": 2734,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 1,
+            "triangles": 1799,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 2,
+            "triangles": 4998,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:0",
+            "instances": 6,
+            "triangles": 30000,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "baseline",
+        "view": "meadow-east",
+        "selectedTiers": [
+          13,
+          109,
+          120
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 4,
+        "submittedInstances": 12,
+        "submittedTriangles": 45138,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 4,
+            "triangles": 17976,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 6,
+            "triangles": 18510,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 1,
+            "triangles": 5003,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 1,
+            "triangles": 3649,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "baseline",
+        "view": "eastern-edge",
+        "selectedTiers": [
+          26,
+          95,
+          121
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 8,
+        "submittedInstances": 66,
+        "submittedTriangles": 228103,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 21,
+            "triangles": 94374,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 11,
+            "triangles": 33935,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 14,
+            "triangles": 51086,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 6,
+            "triangles": 18000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 3,
+            "triangles": 4149,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:1",
+            "instances": 2,
+            "triangles": 5468,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 2,
+            "triangles": 3598,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 7,
+            "triangles": 17493,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "baseline",
+        "view": "wide",
+        "selectedTiers": [
+          0,
+          44,
+          198
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 6,
+        "submittedInstances": 141,
+        "submittedTriangles": 359414,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 24,
+            "triangles": 74040,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:2",
+            "instances": 30,
+            "triangles": 71490,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 1,
+            "triangles": 3649,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 49,
+            "triangles": 147000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 29,
+            "triangles": 52171,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 8,
+            "triangles": 11064,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "current",
+        "view": "approach-in",
+        "selectedTiers": [
+          6,
+          123,
+          113
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 9,
+        "submittedInstances": 98,
+        "submittedTriangles": 278902,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 1,
+            "triangles": 4494,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 6,
+            "triangles": 18510,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 1,
+            "triangles": 5003,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 39,
+            "triangles": 142311,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 9,
+            "triangles": 27000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 11,
+            "triangles": 15213,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 23,
+            "triangles": 41377,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 6,
+            "triangles": 14994,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:0",
+            "instances": 2,
+            "triangles": 10000,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "current",
+        "view": "forest-out",
+        "selectedTiers": [
+          83,
+          60,
+          99
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 10,
+        "submittedInstances": 106,
+        "submittedTriangles": 333147,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 3,
+            "triangles": 9255,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:2",
+            "instances": 49,
+            "triangles": 116767,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 20,
+            "triangles": 100060,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 3,
+            "triangles": 10947,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 13,
+            "triangles": 39000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:0",
+            "instances": 1,
+            "triangles": 4994,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:1",
+            "instances": 1,
+            "triangles": 2734,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 8,
+            "triangles": 14392,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 2,
+            "triangles": 4998,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:0",
+            "instances": 6,
+            "triangles": 30000,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "current",
+        "view": "meadow-east",
+        "selectedTiers": [
+          8,
+          103,
+          131
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 6,
+        "submittedInstances": 11,
+        "submittedTriangles": 36777,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 2,
+            "triangles": 8988,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 4,
+            "triangles": 12340,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 1,
+            "triangles": 5003,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 1,
+            "triangles": 3649,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 1,
+            "triangles": 1799,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 2,
+            "triangles": 4998,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "current",
+        "view": "eastern-edge",
+        "selectedTiers": [
+          18,
+          100,
+          124
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 9,
+        "submittedInstances": 66,
+        "submittedTriangles": 218356,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:0",
+            "instances": 14,
+            "triangles": 62916,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 10,
+            "triangles": 30850,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:0",
+            "instances": 1,
+            "triangles": 5003,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 16,
+            "triangles": 58384,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 6,
+            "triangles": 18000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 3,
+            "triangles": 4149,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:1",
+            "instances": 2,
+            "triangles": 5468,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 2,
+            "triangles": 3598,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:1",
+            "instances": 12,
+            "triangles": 29988,
+            "nativeInstancing": true
+          }
+        ]
+      },
+      {
+        "version": "current",
+        "view": "wide",
+        "selectedTiers": [
+          0,
+          35,
+          207
+        ],
+        "trees": 242,
+        "nativeBaseDraws": 6,
+        "submittedInstances": 140,
+        "submittedTriangles": 342856,
+        "batches": [
+          {
+            "source": "tree-01-round-oak:1",
+            "instances": 16,
+            "triangles": 49360,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-01-round-oak:2",
+            "instances": 21,
+            "triangles": 50043,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:1",
+            "instances": 1,
+            "triangles": 3649,
+            "nativeInstancing": true
+          },
+          {
+            "source": "tree-02-slender-pine:2",
+            "instances": 50,
+            "triangles": 150000,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-01-sickly-oak:2",
+            "instances": 43,
+            "triangles": 77357,
+            "nativeInstancing": true
+          },
+          {
+            "source": "forest-02-dead-tree:2",
+            "instances": 9,
+            "triangles": 12447,
+            "nativeInstancing": true
+          }
+        ]
+      }
+    ],
+    "comparisons": [
+      {
+        "view": "approach-in",
+        "drawDelta": 0,
+        "submittedTriangleDelta": -5368,
+        "beforeTriangles": 284270,
+        "afterTriangles": 278902
+      },
+      {
+        "view": "forest-out",
+        "drawDelta": 0,
+        "submittedTriangleDelta": -10545,
+        "beforeTriangles": 343692,
+        "afterTriangles": 333147
+      },
+      {
+        "view": "meadow-east",
+        "drawDelta": 2,
+        "submittedTriangleDelta": -8361,
+        "beforeTriangles": 45138,
+        "afterTriangles": 36777
+      },
+      {
+        "view": "eastern-edge",
+        "drawDelta": 1,
+        "submittedTriangleDelta": -9747,
+        "beforeTriangles": 228103,
+        "afterTriangles": 218356
+      },
+      {
+        "view": "wide",
+        "drawDelta": 0,
+        "submittedTriangleDelta": -16558,
+        "beforeTriangles": 359414,
+        "afterTriangles": 342856
+      }
+    ]
+  },
+  "sourceFiles": [
+    {
+      "file": "src/great-plains-layout.js",
+      "sha256": "609ab3fe0a5bdd87ac6078df8ede899dc6f051a70cc71e1c3d5d675cab57c301"
+    },
+    {
+      "file": "src/plains-tree-transition.js",
+      "sha256": "94ff36d429d6c33dda8463a3ffc6aea10108d7fab055b2f946136ffd87c684a6"
+    },
+    {
+      "file": "tests/plains-tree-transition.test.js",
+      "sha256": "5ce7f40fd8fa68865b6c7bd46c52b48c5c1468fdd22862bdbbaaf9e83fc3f793"
+    }
+  ],
+  "render": {
+    "blender": "4.5.14 LTS",
+    "stage": "composition",
+    "profile": "tree-mix",
+    "lod": 2,
+    "neutral": false,
+    "renders": [
+      {
+        "file": "composition-tree-mix-approach-in-before-texture.png",
+        "map": "baseline",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0003050288026337706,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-approach-in-before-texture.png",
+        "bytes": 1313088,
+        "sha256": "1ddc59ff129b0c7e81a978cf1dbbd6b48d8f4f960c4025e411b14ca70a5f19a2"
+      },
+      {
+        "file": "composition-tree-mix-approach-in-after-texture.png",
+        "map": "current",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0003050288026337706,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-approach-in-after-texture.png",
+        "bytes": 1338798,
+        "sha256": "21f13d075798d947a9bc0b91ed8b401d3935e0e2be6b3a46399a534e3e1da903"
+      },
+      {
+        "file": "composition-tree-mix-forest-out-before-texture.png",
+        "map": "baseline",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.000712091371409524,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-forest-out-before-texture.png",
+        "bytes": 1141151,
+        "sha256": "2ab08feda4efc9e446bd531ba35d9737a419db05e379557a69b22b7edf2a05ea"
+      },
+      {
+        "file": "composition-tree-mix-forest-out-after-texture.png",
+        "map": "current",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.000712091371409524,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-forest-out-after-texture.png",
+        "bytes": 1141367,
+        "sha256": "40f1e7a11e4649f928c62e637c67887eaaeded6c775bc656d395c75cf3fd9350"
+      },
+      {
+        "file": "composition-tree-mix-meadow-east-before-texture.png",
+        "map": "baseline",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.00016640197578205967,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-meadow-east-before-texture.png",
+        "bytes": 1063414,
+        "sha256": "7070e024e9cf92b7d410e6b6e7937f7f09f8d98250aa7f2475b967bb43bf3edf"
+      },
+      {
+        "file": "composition-tree-mix-meadow-east-after-texture.png",
+        "map": "current",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.00016640197578205967,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-meadow-east-after-texture.png",
+        "bytes": 1061983,
+        "sha256": "e19b5fd0f504760f9fe4c7af6b220c035d0d719d1aef2d2e1b70f07e118f9d4b"
+      },
+      {
+        "file": "composition-tree-mix-eastern-edge-before-texture.png",
+        "map": "baseline",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0006164373737777963,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-eastern-edge-before-texture.png",
+        "bytes": 1124163,
+        "sha256": "1d84f54438f260f200b123a8a20cd8d9679893df73a77ecd2a6f7e63dc8241d4"
+      },
+      {
+        "file": "composition-tree-mix-eastern-edge-after-texture.png",
+        "map": "current",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0006164373737777963,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-eastern-edge-after-texture.png",
+        "bytes": 1154083,
+        "sha256": "e1da1083796cacf8bffc8f0c3da99b33e4efee6ac07b80f93ca0b0e247dba75f"
+      },
+      {
+        "file": "composition-tree-mix-overview-before-texture.png",
+        "map": "baseline",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0002798497106962959,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-overview-before-texture.png",
+        "bytes": 1302975,
+        "sha256": "dc5ffd344236cf843d016d0d45764978fa3120b578fa61d60446023ac92394ac"
+      },
+      {
+        "file": "composition-tree-mix-overview-after-texture.png",
+        "map": "current",
+        "placements": 1424,
+        "cameraProjectionMaxPixelError": 0.0002798497106962959,
+        "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\plains-tree-mix\\2026-11-03\\composition-tree-mix-overview-after-texture.png",
+        "bytes": 1298859,
+        "sha256": "72067bdcde4aaf70099d20eb133322b05f837de1919dd2093fe353d746f21851"
+      }
+    ],
+    "nativeGameScreenshot": false,
+    "gpuPerformanceMeasured": false,
+    "limitations": [
+      "Offline re-creation using actual fixedLOD2 source geometry/textures and production placement/floor matrices.",
+      "Before/after means062feb6 versus tree-species composition in the same plains, not a map transition.",
+      "Native toon, fog, sky, outline, dither, runtime LOD/visibility and shadows are not reproduced.",
+      "No browser automation, actual game screenshots, S23 measurement or GPU performance measurement."
+    ],
+    "viewedAllImages": true,
+    "viewFindings": [
+      "접근 군락의 캐노피를 부분적으로 낮춰 기존 숲 활엽수의 굽은 가지가 드러나며, 원래 길과 공터는 유지된다.",
+      "동쪽 수림의 동일한 큰 활엽수 반복이 낮은 숲 활엽수와 높은 침엽수의 층으로 바뀐다.",
+      "초원 동쪽 기존 군락에 작은 숲 활엽수4그루가 섞인다. 나무를 추가하지 않는다.",
+      "숲에서 나오는 경계 시점의 원본 복제68나무는 그대로이며 이 장면의 변화는 작다."
+    ],
+    "gpuMeasured": false
+  },
+  "limitations": [
+    "고정LOD2/근사광 오프라인 재구성. 실제 게임 캡처나 S23/휴대폰 FPS 측정이 아니다.",
+    "Native toon/fog/sky/outline/dither/visibility/shadow 정책은 재현하지 않았다.",
+    "NullEngine 실제 모델/LOD/native-instance CPU 제출 검증에서5시점 모두삼각형감소. 그러나2시점base draw는각+2/+1이며GPU성능향상으로단정하지않는다.",
+    "전나무동시단일tier 이론상한은near+8599tri(+0.75%),mid−8577tri,far−9143tri이다. 실제동시LOD/가시성과다르다."
+  ]
+}

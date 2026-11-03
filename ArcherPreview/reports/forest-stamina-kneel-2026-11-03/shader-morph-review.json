@@ -1,0 +1,43 @@
+{
+  "case": {
+    "case": "corrected-witch-first-death",
+    "targetCount": 11,
+    "slots": 11,
+    "initialCorrectionUploads": 1,
+    "firstLiveAndDeathNewEffects": 0,
+    "firstLiveAndDeathNewMorphTextures": 0,
+    "deathEffectRequestsReusingCache": [
+      {
+        "shader": "pbr",
+        "alpha": false,
+        "id": 77,
+        "renderPass": 71
+      },
+      {
+        "shader": "pbr",
+        "alpha": false,
+        "id": 69,
+        "renderPass": 71
+      },
+      {
+        "shader": "pbr",
+        "alpha": false,
+        "id": 77,
+        "renderPass": 71
+      },
+      {
+        "shader": "pbr",
+        "alpha": false,
+        "id": 77,
+        "renderPass": 71
+      }
+    ],
+    "warmReprepareUploads": 0,
+    "resourcesStable": true
+  },
+  "scope": "Actual packed geometry, actual encounter prepareAsset and hidden preparation, summon, sampled death and warm reprepare; Babylon NullEngine with image data omitted.",
+  "limitations": [
+    "Effect cache identity and SDK allocation calls are measured; real GPU compilation, upload duration and mobile/iOS are not measured.",
+    "Existing attribute fallback remains outside this texture-mode validation."
+  ]
+}

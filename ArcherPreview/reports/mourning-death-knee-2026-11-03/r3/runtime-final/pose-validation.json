@@ -1,0 +1,83 @@
+{
+  "scope": "Actual prepared runtime rig/skin CPU verification; original source data and 10-second lifecycle tested separately.",
+  "facts": [
+    {
+      "case": "three-local-rotation-only",
+      "unchangedChannelSamples": 6642,
+      "changed": [
+        "DEF_FrontFoot.R_Thigh:rotationQuaternion",
+        "DEF_FrontFoot.R_Shin:rotationQuaternion",
+        "DEF_FrontFoot.R_Foot:rotationQuaternion"
+      ]
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 30,
+      "from": "idle",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 30,
+      "from": "cast",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 30,
+      "from": "cast_slam",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 30,
+      "from": "cast_alternate",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 60,
+      "from": "idle",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 60,
+      "from": "cast",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 60,
+      "from": "cast_slam",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "prepared-skin-no-penetration",
+      "fps": 60,
+      "from": "cast_alternate",
+      "bodyMin": -0.0000013967975706578246,
+      "footMin": -0.0000013967975706578246,
+      "kneeMin": 0.002295106978765643
+    },
+    {
+      "case": "continuity",
+      "maximumFootMetresPerSecond": 6.900200777884473,
+      "per60HzFrameMetres": 0.11500334629807456
+    }
+  ]
+}

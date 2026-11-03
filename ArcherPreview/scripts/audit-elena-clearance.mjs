@@ -103,6 +103,9 @@ for(const id of new Set(nearby.map(p=>p.asset))){
 const container=await load(new URL(config.model,base)),asset=instantiateBossModel(container),actor=new TransformNode('clearance-actor',scene),carrier=new TransformNode('clearance-center',scene);
 carrier.parent=actor;carrier.position.copyFromFloats(...config.centerOffset);actor.scaling.setAll(config.scale*MOURNING_SIZE_SCALE);
 for(const n of new Set([...asset.meshes,...asset.transformNodes]))if(!n.parent)n.parent=carrier;
+// The caller may run the same preparation as the live encounter before the
+// animator samples its existing morph targets. Default audit callers are unchanged.
+const assetPreparation=await options.prepareAsset?.(asset);
 const animator=new MourningElenaAnimator(asset,config,actor),body=asset.meshes.filter(m=>m.getTotalVertices());
 const baseHashes=body.map(m=>createHash('sha256').update(Buffer.from(Float32Array.from(m.getVerticesData(VertexBuffer.PositionKind)).buffer)).digest('hex'));
 const schedules=options.schedules??(quick?[['idle',0],['walk',.6],['cast',1.2],['hit',.35]]:[...Array.from({length:4},(_,i)=>['idle',i*1.5]),...Array.from({length:4},(_,i)=>['walk',i*.6]),...[0,.3,.75,1.2,1.8,2.4,2.85,3].map(t=>['cast',t]),...[.1,.35,.65,1.1].map(t=>['hit',t])]);
@@ -124,7 +127,7 @@ for(const schedule of schedules){
  const pose={state,time,haloTime:animator.haloTime,hitPulseTime,from,meshes,bounds:{lo,hi},radius};options.onPose?.(pose);poses.push(options.retainPoses===false?{...pose,meshes:undefined}:pose);
 }
 const dispose=()=>{animator.dispose();for(const c of containers)c.dispose();for(const l of loaders)l.dispose();scene.dispose();engine.dispose();};
-if(options.geometryOnly)return {geometry,poses,terrain,navigation,config,placements:nearby,dispose};
+if(options.geometryOnly)return {geometry,poses,terrain,navigation,config,placements:nearby,assetPreparation,dispose};
 console.log(JSON.stringify({stage:'geometry loaded',placements:nearby.length,environmentMeshes:geometry.length,environmentTriangles:geometry.reduce((n,g)=>n+g.indices.length/3,0),poses:poses.map(({state,time,bounds,radius})=>({state,time,bounds,radius}))}));
 
 // Full triangle SAT. The extra in-plane axes handle coplanar triangles; zero

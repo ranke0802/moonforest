@@ -1,6 +1,7 @@
 import {Quaternion,Vector3} from '@babylonjs/core';
 import {orderPoseNodes,refreshPoseMatrices} from './pose-matrices.js';
 import {haloSpeedAt,windAt,shotWeight,smooth01,mourningMotionWeights,deathHaloSpeedAt,deathHaloAdvance,MOURNING_DEATH_SECONDS,MOURNING_DEATH_BLEND_SECONDS} from './mourning-motion-v2.js';
+import {applyMourningDeathKneeTracks} from './mourning-death-knee.js';
 
 const clamp=v=>Math.max(0,Math.min(1,v)),smooth=v=>v*v*(3-2*v),TAU=Math.PI*2;
 const REACH=[[0,0],[.25,.08],[.72,.48],[1.18,1],[1.82,1],[2.08,.97],[2.60,.42],[3,0]];
@@ -78,6 +79,7 @@ export class MourningElenaAnimator {
     for(const c of combined)c.castVariants=Object.fromEntries(Object.entries(variants).map(([name,tracks])=>[name,tracks.get(key(c))??c.cast]));
     const dead=channels(group('Chimera_Death_Lament_5p2s'));
     this.deathChannels=dead.map(c=>({...c,from:c.target[c.property].clone()}));
+    applyMourningDeathKneeTracks(this.deathChannels,makeTrack);
     this.deathFromWeights={walk:0,cast:0,idle:1,hit:0};
     this.hair=combined.filter(c=>c.target.name.startsWith('DEF_Hair_'));
     this.body=combined.filter(c=>!c.target.name.startsWith('DEF_Hair_'));
