@@ -5,13 +5,14 @@ import {isSoftVegetation} from './scenery-collision-policy.js';
 export const PLAINS_RADIUS=106;
 export const PLAINS_SPAN=288;
 export const PLAINS_SPAWN=Object.freeze({x:-87,z:-32});
+export const PLAINS_LOOKOUT=Object.freeze({x:-28,z:-20,height:8,capRadius:9,cliffWidth:3,stretchX:1.1,rampStartX:-61,rampTopX:-37,rampHalfWidth:3,rampShoulder:6});
 export const PLAINS_CLEARINGS=[{x:-5,z:25,r:7,y:.3},{x:-26,z:-19,r:6,y:8.1},{x:16,z:72,r:8,y:.25},{x:51,z:-51,r:7,y:.35},{x:-55,z:37,r:9,y:.4}];
 export const PLAINS_ROUTES=[
  {id:'village-road',width:4.8,points:[[-106,-39],[-94,-35],[-79,-30],[-61,-20],[-41,-8],[-23,6],[-5,25]]},
  {id:'forest-road',width:4.8,points:[[-5,25],[10,13],[28,-4],[43,-22],[55,-41],[61,-58],[65,-72],[74,-90]]},
  {id:'royal-road',width:5.1,points:[[-5,25],[1,40],[2,57],[1,77],[-3,107]]},
- {id:'lookout-loop',width:2.8,points:[[-40,-8],[-46,-17],[-40,-36],[-27,-39],[-10,-31],[2,-20],[-1,-7],[-5,25]]},
- {id:'lookout-top',width:2.8,points:[[2,-20],[-8,-20],[-18,-20],[-26,-19]]},
+ {id:'lookout-loop',width:2.8,points:[[-61,-20],[-57,-37],[-41,-43],[-24,-42],[-9,-34],[2,-20],[-1,-7],[-5,25]]},
+ {id:'lookout-top',width:2.8,points:[[-61,-20],[-52,-20],[-43,-20],[-35,-20],[-26,-19]]},
  {id:'meadow-loop',width:2.8,points:[[-61,-20],[-64,-2],[-64,18],[-55,37],[-35,42],[-18,35],[-5,25]]},
  {id:'caravan-spur',width:3.5,points:[[2,57],[13,62],[16,72],[8,82],[1,84]]},
  {id:'forest-rest',width:2.5,points:[[49,-32],[48,-44],[51,-51],[59,-50]]},
@@ -53,7 +54,7 @@ function addGroveScenery(out,add){
  ];
  const room=(x,z,r,kind)=>{
   if(Math.hypot(x,z)>104||plainsRoadDistance(x,z)<r+1.3||plainsStreamDistance(x,z)<r+4.2)return false;
-  // Keep the summit, east ramp and the central junction readable from the road.
+  // Keep the summit, village-facing ramp and junction readable from the road.
   if(Math.hypot((x+28)/1.1,z+20)<15||Math.hypot(x+5,z-25)<14)return false;
   return ![...out,...PLAINS_TREASURE_ANCHORS].some(p=>{
    if(p.background||p.kind==='ground-detail')return false;
@@ -64,13 +65,17 @@ function addGroveScenery(out,add){
  };
  for(const [index,[grove,zone,cx,cz,angle,count]]of groves.entries()){
   const cs=Math.cos(angle),sn=Math.sin(angle),position=([dx,dz])=>[cx+dx*cs-dz*sn,cz+dx*sn+dz*cs];
+  // The hill cache belongs to authored offset 2. Its tree identity must not
+  // shift when the village-facing loop excludes an earlier candidate offset.
+  const cacheTree=grove==='lookout-west'?2:null,available=Array.from({length:count},(_,i)=>i).filter(i=>i!==cacheTree);
   let placed=0;
   for(const [slot,offset]of GROVE_OFFSETS[index%GROVE_OFFSETS.length].entries()){
    if(placed>=count)break;
-   const [x,z]=position(offset),asset=GROVE_TREES[zone][placed%4];
+   const treeNumber=cacheTree===null?placed:slot===2?cacheTree:available[0];if(treeNumber===undefined)continue;
+   const [x,z]=position(offset),asset=GROVE_TREES[zone][treeNumber%4];
    const scale=(asset.startsWith('forest-')?1.12:.72)+((index+slot*3)%5)*.055;
    if(!room(x,z,2.1*scale,'tree'))continue;
-   add(`grove-${grove}-tree-${placed++}`,asset,x,z,'tree',scale,.7*scale,angle+slot*1.37,{grove,zone});
+   add(`grove-${grove}-tree-${treeNumber}`,asset,x,z,'tree',scale,.7*scale,angle+slot*1.37,{grove,zone});placed++;if(cacheTree!==null&&treeNumber!==cacheTree)available.shift();
   }
   for(const [slot,offset]of [[-3,-3],[5,1],[-1,5]].entries()){
    const [x,z]=position(offset),scale=.7+((index+slot)%3)*.12;
@@ -130,9 +135,44 @@ function addGroveScenery(out,add){
   const p=out.find(p=>p.id===id);if(!p)throw new Error('Missing plains composition shrub '+id);
   Object.assign(p,{x,z,grove:'crossroads-approach',zone:'meadow',composition:'crossroads-grove'});
  }
- for(const [id,x,z]of [['river-stone-112',-20,2],['river-stone-113',-37,19]]){
-  const p=out.find(p=>p.id===id);if(!p)throw new Error('Missing plains composition stone '+id);
+ for(const [i,[x,z]]of [[-20,2],[-37,19]].entries()){
+  const p=out.filter(p=>p.id.startsWith('river-stone-'))[i];if(!p)throw new Error('Missing plains composition river stone');
   Object.assign(p,{x,z,scale:.4,colliderRadius:.26,composition:'crossroads-grove'});
+ }
+}
+function addGroundScenery(out,add){
+ const random=seedRandom(26110317),rocks=[],patches=[];
+ const sites=[[-78,-48],[-76,2],[-84,29],[-66,63],[-45,73],[-42,-58],[-8,-64],[12,-43],[31,-16],[26,39],[42,65],[45,86],[-20,62],[-34,7],[19,-66],[61,-26]];
+ const offsets=[[0,0],[5,2],[-4,4],[3,-5],[-6,-3],[8,7],[-9,6],[1,10]];
+ const solid=p=>!p.background&&!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint);
+ for(const [slot,[dx,dz]]of offsets.entries())for(const [group,[cx,cz]]of sites.entries()){
+  if(rocks.length>=32)break;
+  // The actual existing round boulder is a flat-based dome; spires provide a
+  // contrasting silhouette. No rotated/floating stand-in or new model is used.
+  const dome=(group+slot)%4!==3,scale=dome?.58+((group*3+slot)%6)*.17:.34+((group+slot)%5)*.11;
+  const x=cx+dx,z=cz+dz,radius=(dome?1.72:2.25)*scale;
+  if(Math.hypot(x,z)>101||plainsRoadDistance(x,z)<radius+1||plainsStreamDistance(x,z)<radius+4.1||Math.hypot((x+28)/1.1,z+20)<16)continue;
+  if([...out,...PLAINS_TREASURE_ANCHORS].some(p=>solid(p)&&Math.hypot(p.x-x,p.z-z)<radius+(p.colliderRadius??Math.hypot(...p.colliderFootprint)/2)+.75))continue;
+  const id='landscape-rock-'+rocks.length;add(id,dome?'rock-01-mossy-boulder':'rock-02-jagged-outcrop',x,z,'rock',scale,radius,random()*Math.PI*2,{yOffset:-.10-radius*.075,landscape:'ground-rock',rockGroup:group});rocks.push(out.at(-1));
+ }
+ const grass=out.filter(p=>p.asset==='grass-tuft'),existing=460,extra=180,target=existing+extra;
+ const anchors=[...rocks,...out.filter(p=>!rocks.includes(p)&&['tree','rock'].includes(p.kind)&&!p.background&&p.scale>.35&&Math.hypot(p.x,p.z)<102)
+  .sort((a,b)=>Math.sin(a.x*1.71+a.z*.63)-Math.sin(b.x*1.71+b.z*.63))];
+ const solids=out.filter(solid);
+ for(const [index,anchor]of anchors.entries()){
+  if(patches.length>=target)break;
+  const count=anchor.landscape==='ground-rock'?7:4+index%3,start=random()*Math.PI*2;
+  for(let slot=0;slot<count&&patches.length<target;slot++){
+   const angle=start+slot*2.399963+random()*.35,distance=(anchor.colliderRadius??.7)+.30+random()*1.05;
+   const x=anchor.x+Math.cos(angle)*distance,z=anchor.z+Math.sin(angle)*distance;
+   if(Math.hypot(x,z)>104||plainsRoadDistance(x,z)<.45||plainsStreamDistance(x,z)<3.4)continue;
+   if(solids.some(p=>Math.hypot(p.x-x,p.z-z)<(p.colliderRadius??0)+.08))continue;
+   if(patches.some(p=>Math.hypot(p.x-x,p.z-z)<.42))continue;
+   const data={x,z,scale:.38+random()*.7,yaw:random()*Math.PI*2,landscape:'ground-grass',nearScenery:anchor.id};
+   if(patches.length<existing)Object.assign(grass[patches.length],data);
+   else add('grass-cluster-'+(patches.length-existing),'grass-tuft',x,z,'ground-detail',data.scale,0,data.yaw,{landscape:data.landscape,nearScenery:anchor.id});
+   patches.push(data);
+  }
  }
 }
 function makePlacements(){
@@ -147,8 +187,8 @@ function makePlacements(){
  add('cargo-b','crate-barrel-cluster',24,77,'prop',.55,.6);
  for(const [id,x,z]of [['boundary-a',57,-57],['boundary-b',68,-64]])add(id,'rock-01-mossy-boulder',x,z,'rock',.55,.6,0,{boundaryMarker:true});
  add('saint-bandage','clue-bandage',57,-58,'prop',1,0,.4,{questId:'M02'});
- // A raised stone shelf, with an east-side walking ramp and a west cliff face.
- for(const [i,[x,z,scale,yaw]]of [[-33,-20,1.4,.3],[-34,-14,1.35,1],[-30,-11,1.3,1.7],[-25,-10,1.2,2.4],[-20,-11,1,2.8],[-36,-18,.85,.6],[-32,-9,.65,1.9]].entries())add('lookout-rock-'+i,'rock-02-jagged-outcrop',x,z,'rock',scale*1.45,1.65*scale,yaw,{elevation:0});
+ // The climb opens towards the village; tall buttresses now frame its east.
+ for(const [i,[x,z,scale,yaw]]of [[-23,-20,1.4,.3],[-22,-26,1.35,1],[-26,-29,1.3,1.7],[-31,-30,1.2,2.4],[-36,-29,1,2.8],[-20,-22,.85,.6],[-24,-31,.65,1.9]].entries())add('lookout-rock-'+i,'rock-02-jagged-outcrop',x,z,'rock',scale*1.45,1.65*scale,yaw,{elevation:0});
  add('lookout-oak','tree-01-round-oak',-32,-23,'tree',.8,.72,.2);
  // Dense canopy layers stop at the authored forest corridor.
  let forest=0;
@@ -185,6 +225,7 @@ function makePlacements(){
   add('grass-'+grass++,'grass-tuft',x,z,'ground-detail',.55+random()*.65,0,random()*6.28);
  }
  addGroveScenery(out,add);
+ addGroundScenery(out,add);
  return out;
 }
 export const PLAINS_PLACEMENTS=makePlacements();

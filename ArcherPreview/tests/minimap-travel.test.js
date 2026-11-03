@@ -5,6 +5,7 @@ import {parseHTML} from 'linkedom';
 import {MINIMAP_REGIONS,minimapTravelBlocked,setupMinimapTravel} from '../src/minimap-travel.js';
 import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {worldSpawn} from '../src/map-route.js';
+import {DotMinimap} from '../src/dot-minimap.js';
 
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 function fixture(options={}){
@@ -30,6 +31,21 @@ test('a minimap tap opens four accessible regions, keeps the current one selecte
  for(const region of MINIMAP_REGIONS){const button=f.root.querySelector(`[data-region="${region.character}"]`);assert.equal(button.querySelector('strong').textContent,region.label);assert.equal(button.disabled,region.character===f.state.character);}
  f.click('footer [data-region-close]');await tick();assert.equal(f.api.isOpen(),false);assert.deepEqual(f.pause,[true,false]);assert.equal(launcher.getAttribute('aria-expanded'),'false');assert.equal(f.requests.length,0);
  f.click('.minimap-travel-launch');f.root.querySelector('#minimap-travel-dialog').dispatchEvent(new f.window.Event('cancel',{cancelable:true}));await tick();assert.equal(f.api.isOpen(),false);assert.deepEqual(f.pause,[true,false,true,false]);
+});
+
+test('actual chooser and warm minimap header show region names separately from destination notes',async t=>{
+ const f=fixture();t.after(()=>f.api.dispose());f.click('.minimap-travel-launch');
+ for(const [character,label,note]of [
+  ['warrior-v3','마을','현재 지역'],['warrior-plains','대평원','길의 입구로 이동'],
+  ['warrior-v4','마물의 숲','숲 입구로 이동'],['warrior-v5','마녀의 동굴','동굴 입구로 이동'],
+ ]){
+  const button=f.root.querySelector(`[data-region="${character}"]`);assert.equal(button.querySelector('strong').textContent,label);assert.equal(button.querySelector('small').textContent,note);assert.doesNotMatch(button.textContent,/undefined|null/);
+ }
+ f.api.close();await tick();f.state.character='warrior-plains';f.click('.minimap-travel-launch');
+ const current=f.root.querySelector('[data-region="warrior-plains"]');assert.equal(current.querySelector('strong').textContent,'대평원');assert.equal(current.querySelector('small').textContent,'현재 지역');assert.equal(current.disabled,true);
+ f.element.querySelector('canvas').getContext=()=>({});const map=new DotMinimap(f.element,{document:f.document});
+ // The normal cached-raster path updates the real header without new rendering.
+ map.cache.set('great-plains',{});await map.setWorld({mapId:'great-plains'});assert.equal(f.element.querySelector('strong').textContent,'대평원');assert.equal(f.element.hidden,false);map.dispose();
 });
 
 test('travel safety is checked again at selection, while other dialogs and loading never open another modal',async t=>{

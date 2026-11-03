@@ -27,6 +27,9 @@ export function createVillageTransform(world,placement,config){
   root.position.set(placement.x,groundY-.025+(placement.yOffset??0),placement.z);root.rotation.y=placement.yaw;
   root.scaling.setAll(config.height/config.bounds[1]*placement.scale);
   if(placement.length)root.scaling.x=placement.length/config.bounds[0];
+  // Optional shallow wall dressing keeps authored face detail while fitting
+  // behind the walking lane. All existing placements retain their exact scale.
+  if(placement.depth)root.scaling.z=placement.depth/config.bounds[2];
   const facing=new TransformNode(`${root.name}-front`,world.scene);facing.parent=root;facing.rotation.y=config.frontYawOffset??0;
   return {root,facing};
 }

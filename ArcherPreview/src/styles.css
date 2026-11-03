@@ -206,3 +206,8 @@
 .frame-diagnostics-options .diagnostic-help summary::before{content:"▸";display:inline-block;width:18px}
 .frame-diagnostics-options .diagnostic-help[open] summary::before{content:"▾"}
 .frame-diagnostics-options .diagnostic-help small,.frame-diagnostics-options .diagnostic-help p{display:block;margin:8px 0;font-size:11px;line-height:1.65}
+/* HP retains its existing anchor; stamina is the thin line before its label. */
+#app #player-hud #player-stamina{height:3px;margin:2px 0 1px;border:0;border-radius:1px;background:#342c16;box-shadow:none}
+#app #player-hud #player-stamina::-webkit-progress-bar{background:#342c16}
+#app #player-hud #player-stamina::-webkit-progress-value{background:#f0ce55}
+#app #player-hud #player-stamina::-moz-progress-bar{background:#f0ce55}

@@ -1,0 +1,15 @@
+✔ native body field pins the actual source/ground epoch while all real camera and sight surfaces stay delivered (15.3141ms)
+✔ exact native physical radius plus2mm is normalized once to the unchanged legacy radius+.08 policy (0.7735ms)
+✔ the real narrow-route regressions stay open without globally clearing old walls or closed native rock (130.6699ms)
+✔ all whole-cell certificates are constant within a cell, bounded in memory and safe outside their padded authority (0.6638ms)
+BJS - [12:43:41]: Babylon.js v9.31.0 - Null engine
+✔ native far closure gates surface replacement and survives twelve cave/forest round trips without retained scene resources (3373.7176ms)
+ℹ {"roundTrips":12,"actualGeometryLoads":240,"loaded":{"meshes":433,"materials":33,"textures":6,"geometries":29,"observers":[3,3,26,2,2,1,1]},"forestAfterRelease":{"meshes":31,"materials":5,"textures":4,"geometries":4,"observers":[0,0,2,0,0,0,0]},"retainedLinkedPrograms":5,"nativeTriangles":[4512,3158,2374],"limits":"NullEngine; offline geometry; no image decode, real mobile GPU time or thermal measurement"}
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4896.5431

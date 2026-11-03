@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
-import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS,PLAINS_RADIUS,plainsObstacles,plainsRoadDistance,plainsStreamDistance} from '../src/great-plains-layout.js';
+import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS,PLAINS_LOOKOUT,PLAINS_RADIUS,plainsObstacles,plainsRoadDistance,plainsStreamDistance} from '../src/great-plains-layout.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {mapPortals,mapForCharacter,worldSpawn,portalHeadingTurn,portalAvailable,travelUrl} from '../src/map-route.js';
-import {greatPlainsHeight} from '../src/great-plains-terrain.js';
+import {greatPlainsHeight,createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {NullEngine,VertexBuffer} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {createTerrainGround} from '../src/terrain-mesh.js';
@@ -35,16 +35,16 @@ test('each authored supply chest sits under an existing tree and remains reachab
  }
 });
 
-test('arrival and crossroads gain distinct framing within the existing placement budget',()=>{
+test('arrival and crossroads keep their framing within the bounded landscape budget',()=>{
  const nearby=(x,z,r,kind)=>PLAINS_PLACEMENTS.filter(p=>p.kind===kind&&Math.hypot(p.x-x,p.z-z)<r);
  assert.ok(nearby(-87,-32,22,'tree').length>=9,'village arrival needs framing trees');
  assert.ok(nearby(-5,25,22,'tree').length>=2,'crossroads needs a middle-distance grove');
  assert.ok(PLAINS_PLACEMENTS.filter(p=>p.composition==='village-arrival').length===2);
  assert.ok(PLAINS_PLACEMENTS.filter(p=>p.grove==='forest-gate'&&p.kind==='tree').length>=3,'forest approach should not be an empty grove');
- assert.ok(PLAINS_PLACEMENTS.length<=1210,'reuse existing scenery rather than increase the instance budget');
+ assert.ok(PLAINS_PLACEMENTS.length<=1450,'landscape additions stay bounded');
 });
 
-test('crossroads groves keep both road shoulders, the summit and the east ramp open',()=>{
+test('crossroads groves keep both road shoulders, summit and village-facing ramp open',()=>{
  const composition=PLAINS_PLACEMENTS.filter(p=>p.composition==='crossroads-grove');
  assert.equal(composition.filter(p=>p.kind==='tree').length,5);
  assert.equal(composition.filter(p=>p.kind==='shrub').length,2);
@@ -64,8 +64,8 @@ test('crossroads groves keep both road shoulders, the summit and the east ramp o
 test('groves add bounded scenery outside full road widths, clearings and the lookout ramp',()=>{
  const added=PLAINS_PLACEMENTS.filter(p=>p.grove);
  assert.ok(added.length>70&&added.length<=150,'keep the added instance budget bounded');
- assert.ok(PLAINS_PLACEMENTS.length<=1250,'density must not grow without a new performance review');
- assert.equal(PLAINS_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,580,'do not spend more instances on uniform grass');
+ assert.ok(PLAINS_PLACEMENTS.length<=1450,'bound the requested grass and rock additions');
+ assert.equal(PLAINS_PLACEMENTS.filter(p=>p.kind==='ground-detail').length,760,'reuse 580 grass placements and add only 180 shared tufts');
  for(const p of added){
   assert.ok(plainsRoadDistance(p.x,p.z)>p.colliderRadius+.65,p.id+' narrows a road or clearing');
   assert.ok(plainsStreamDistance(p.x,p.z)>p.colliderRadius+3.6,p.id+' is inside the river bank');
@@ -141,14 +141,14 @@ test('plains entry, exit and terrain stay finite with gentle road gradients',()=
  assert.match(travelUrl('http://localhost/?character=warrior-v3','warrior-plains'),/character=warrior-plains/);
 });
 
-test('plains 200% floor border covers the normal camera range without adding playable geometry',t=>{
+test('plains 240% floor border covers the normal camera range without adding playable geometry',t=>{
  const engine=new NullEngine();engine.createCanvas=(width,height)=>({width,height,getContext:()=>({fillRect(){},strokeRect(){},fillText(){}})});
  const world=createWorld(engine,{plains:true,touchDevice:false});t.after(()=>{world.scene.dispose();engine.dispose();});
  const original=createTerrainGround(world.scene,world.terrain,{borderExtension:105}),actual=world.ground;
  assert.equal(actual.getTotalVertices(),original.getTotalVertices());assert.deepEqual(actual.getIndices(),original.getIndices());
  const before=original.getVerticesData(VertexBuffer.PositionKind),after=actual.getVerticesData(VertexBuffer.PositionKind);
  for(let i=0;i<before.length;i+=3)if(Math.abs(before[i])<world.terrain.half&&Math.abs(before[i+2])<world.terrain.half)assert.deepEqual(after.slice(i,i+3),before.slice(i,i+3));
- applyPlainsViewDistance(world,2);const bounds=actual.getBoundingInfo().boundingBox;
+ applyPlainsViewDistance(world,2.4);const bounds=actual.getBoundingInfo().boundingBox;
  assert.ok(bounds.maximum.x-PLAINS_RADIUS-world.camera.upperRadiusLimit>plainsRenderRange(world).fogEnd);
  assert.ok(-bounds.minimum.z-PLAINS_RADIUS-world.camera.upperRadiusLimit>plainsRenderRange(world).fogEnd);
  assert.ok(world.camera.maxZ>plainsRenderRange(world).fogEnd);original.dispose();
@@ -162,8 +162,38 @@ test('plains signs and river release across repeated four-map replacement withou
   replaceWorldMap(world,character);await new Promise(resolve=>setTimeout(resolve,5));
   const scene=world.scene,counts={meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,before:scene.onBeforeRenderObservable.observers.length,dispose:scene.onDisposeObservable.observers.length};
   assert.equal(!!world.plainsDecor,character==='warrior-plains');
-  if(character!=='warrior-v5')assert.equal(world.ground.getBoundingInfo().boundingBox.maximum.x,world.terrain.half+(character==='warrior-plains'?260:105));
+  if(character!=='warrior-v5')assert.equal(world.ground.getBoundingInfo().boundingBox.maximum.x,world.terrain.half+(character==='warrior-plains'?310:105));
   if(character!=='warrior-plains')assert.equal(scene.meshes.some(m=>m.name==='plains-stream'),false);
   if(cycle===1)baseline.set(character,counts);if(cycle>1)assert.deepEqual(counts,baseline.get(character),character+' resources grew');
  }
+});
+
+test('flat-based dome rocks vary in scale across the map and leave paths and reward approaches open',()=>{
+ const rocks=PLAINS_PLACEMENTS.filter(p=>p.landscape==='ground-rock'),nav=new VillageNavigation(plainsObstacles()),newRockNav=new VillageNavigation(plainsObstacles().filter(o=>rocks.some(p=>p.id===o.id)));
+ assert.equal(rocks.length,32);assert.ok(new Set(rocks.map(p=>p.rockGroup)).size>=12);
+ const domes=rocks.filter(p=>p.asset==='rock-01-mossy-boulder');assert.ok(domes.length>=20);assert.ok(Math.min(...domes.map(p=>p.scale))<.65);assert.ok(Math.max(...domes.map(p=>p.scale))>1.25);assert.ok(new Set(domes.map(p=>p.scale)).size>=5);
+ assert.ok(rocks.filter(p=>p.asset==='rock-02-jagged-outcrop').length>=6);
+ for(const sx of [-1,1])for(const sz of [-1,1])assert.ok(rocks.filter(p=>p.x*sx>0&&p.z*sz>0).length>=3);
+ for(const p of rocks){assert.ok(p.yOffset<0&&p.yOffset>-.4);assert.ok(!p.elevation,'rocks follow the actual undulating terrain');assert.ok(plainsRoadDistance(p.x,p.z)>p.colliderRadius+.9);assert.equal(nav.free(p,.35,PLAINS_RADIUS),false);}
+ for(const road of PLAINS_ROUTES)for(let i=1;i<road.samples.length;i++){
+  const [x,z]=road.samples[i],[px,pz]=road.samples[i-1],length=Math.hypot(x-px,z-pz);if(length<1e-8)continue;
+  for(const sign of [-1,0,1]){const point={x:x-(z-pz)/length*road.width*.5*sign,z:z+(x-px)/length*road.width*.5*sign};if(Math.hypot(point.x,point.z)<PLAINS_RADIUS-.5)assert.ok(newRockNav.free(point,.35,PLAINS_RADIUS),road.id+' new rock blocks shoulder');}
+ }
+});
+
+test('grass forms small passable irregular patches at tree and rock bases, with bounded extra instances',()=>{
+ const grass=PLAINS_PLACEMENTS.filter(p=>p.asset==='grass-tuft'),clustered=grass.filter(p=>p.nearScenery),anchors=PLAINS_PLACEMENTS.filter(p=>['tree','rock'].includes(p.kind)&&Math.hypot(p.x,p.z)<103),obstacles=plainsObstacles();
+ assert.equal(grass.length,760);assert.equal(grass.filter(p=>p.id.startsWith('grass-cluster-')).length,180);assert.equal(clustered.length,640);
+ assert.ok(grass.filter(p=>anchors.some(a=>Math.hypot(p.x-a.x,p.z-a.z)<3)).length>=600,'previous uniform field had only 115 tufts within 3m of scenery');
+ assert.ok(new Set(clustered.map(p=>p.nearScenery)).size>=100);
+ for(const p of clustered){assert.ok(p.scale>=.38&&p.scale<=1.08);assert.equal(p.colliderRadius,0);assert.ok(!obstacles.some(o=>o.id===p.id));assert.ok(plainsRoadDistance(p.x,p.z)>.4);}
+});
+
+test('town-facing hill climb reaches the unchanged summit, while the former east entrance is a cliff',()=>{
+ const hill=PLAINS_LOOKOUT,route=PLAINS_ROUTES.find(r=>r.id==='lookout-top'),terrain=createGreatPlainsTerrain(),nav=new VillageNavigation(plainsObstacles());
+ assert.deepEqual(route.points[0],[hill.rampStartX,hill.z]);assert.ok(route.points[0][0]<hill.x);assert.ok(terrain.heightAt(hill.rampStartX,hill.z)<1);assert.ok(terrain.heightAt(-26,-19)>8);
+ let previous;for(const [x,z]of route.samples){const h=terrain.heightAt(x,z);assert.ok(nav.free({x,z},.35,PLAINS_RADIUS));if(previous)assert.ok(Math.abs(h-previous.h)/Math.hypot(x-previous.x,z-previous.z)<.7);previous={x,z,h};}
+ assert.equal(nav.segmentClear({x:0,z:-20},{x:-28,z:-20},.35),false,'old eastern approach is framed by solid rock');
+ assert.ok(greatPlainsHeight(-18,-20)-greatPlainsHeight(-13,-20)>5,'old ramp must no longer exist');
+ const samples=[[-71,7],[-18,49],[21,3],[41,76],[-40,-63]].map(([x,z])=>greatPlainsHeight(x,z));assert.ok(samples.every(h=>h>1));assert.ok(Math.max(...samples)-Math.min(...samples)>.5);
 });

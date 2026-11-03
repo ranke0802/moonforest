@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {FrameLoop} from '../src/frame-loop.js';
 import {createMapTransition} from '../src/map-transition.js';
 import {ElenaBrain} from '../src/elena-spec.js';
+import {PlayerCombat} from '../src/player-combat.js';
 
 // Exercise the application callbacks themselves with injected DOM/engine
 // boundaries. main.js initializes WebGL at import time, so importing it directly
@@ -20,16 +21,16 @@ function fixture(){
   const brain=new ElenaBrain({cast:3,walk:2.4,idle:6},{mourning:true});brain.cast();
   const frameLoop=new FrameLoop({runRenderLoop:cb=>callbacks.add(cb),stopRenderLoop:cb=>callbacks.delete(cb)},dt=>{if(dt>0)brain.update(dt,4,true,{manual:true});},()=>wall);
   const audio={suspended:false,resumes:0,setSuspended(v){if(this.suspended&&!v)this.resumes++;this.suspended=v;},setEnvironment(){},play(){}};
-  const document={hidden:false},transition={busy:false};
-  const env={minimapTravel:null,uiTest:{isOpen:()=>nodes['ui-test-dialog'].open},showMinimap(){},assertFrameHealthy(){},audio,document,frameLoop,mapDeparture:{departing:false},mapTransition:transition,motionSpeedControls:{isOpen:()=>nodes['motion-speed-dialog'].open},deathScreen:{isOpen:()=>nodes['death-dialog'].open},$:selector=>nodes[selector.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},character:'warrior-v5',updateButtons(){},requestAnimationFrame:callback=>callback(),applyRenderQuality(){},loadingView:{reveal(){}},world:{villageStreaming:{}},loadDiagnostics:{finish(){}},canvas:{focus(){}}};
+  const document={hidden:false},transition={busy:false},combat=new PlayerCombat();combat.hp=317;
+  const env={boss:{combat},minimapTravel:null,uiTest:{isOpen:()=>nodes['ui-test-dialog'].open},showMinimap(){},assertFrameHealthy(){},audio,document,frameLoop,mapDeparture:{departing:false},mapTransition:transition,motionSpeedControls:{isOpen:()=>nodes['motion-speed-dialog'].open},deathScreen:{isOpen:()=>nodes['death-dialog'].open},$:selector=>nodes[selector.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},character:'warrior-v5',updateButtons(){},requestAnimationFrame:callback=>callback(),applyRenderQuality(){},loadingView:{reveal(){}},world:{villageStreaming:{}},loadDiagnostics:{finish(){}},canvas:{focus(){}}};
   const sync=compile(syncSource,env),finish=compile(finishSource,env);
-  return {brain,frameLoop,audio,document,nodes,transition,sync,finish,tick:ms=>{wall+=ms;for(const cb of [...callbacks])cb();}};
+  return {brain,combat,frameLoop,audio,document,nodes,transition,sync,finish,tick:ms=>{wall+=ms;for(const cb of [...callbacks])cb();}};
 }
 
 test('nested settings/pattern/style dialogs pause actual cast time until the final modal closes, with no resume time jump',()=>{
  for(const modal of ['boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog','ui-test-dialog']){
   const f=fixture();f.sync();f.tick(0);f.tick(100);const before=f.brain.castWarningElapsed;
-  f.nodes['motion-speed-dialog'].open=true;f.sync();f.nodes[modal].open=true;f.sync();f.tick(10000);assert.equal(f.brain.castWarningElapsed,before);assert.equal(f.audio.suspended,true);
+  f.combat.passiveRecovery.elapsed=1.9;f.nodes['motion-speed-dialog'].open=true;f.sync();f.nodes[modal].open=true;f.sync();f.tick(10000);assert.equal(f.brain.castWarningElapsed,before);assert.equal(f.audio.suspended,true);assert.equal(f.combat.passiveRecovery.elapsed,0);assert.equal(f.combat.hp,317);
   f.nodes[modal].open=false;f.sync();f.tick(10000);assert.equal(f.brain.castWarningElapsed,before);assert.equal(f.frameLoop.running,false);assert.equal(f.audio.suspended,true);
   f.nodes['motion-speed-dialog'].open=false;f.sync();assert.equal(f.frameLoop.running,true);assert.equal(f.audio.suspended,false);f.tick(10000);assert.equal(f.brain.castWarningElapsed,before,'first resumed frame has dt=0');f.tick(100);assert.ok(f.brain.castWarningElapsed>before);assert.equal(f.audio.resumes,1);
  }

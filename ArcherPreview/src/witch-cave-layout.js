@@ -1,5 +1,6 @@
 import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from './cave-laboratory-geometry.js';
 import {CAVE_LANTERN_MOUNTS} from './cave-lantern-mounts.js';
+import {CAVE_NATURAL_DRESSING} from './cave-natural-dressing-data.js';
 // Metres. Branches follow eroded ledges around a flooded central cavern;
 // they are deliberately not a rectangular dungeon grid.
 export const CAVE_ENTRY={x:-42,z:43};
@@ -39,7 +40,28 @@ export const CAVE_STATIONS=[[-35,10,.2],[-25,-24,1.3]].map(([x,z,yaw])=>{
 // They share its elevation and are included in the same continuous terrain.
 for(const p of CAVE_STATIONS)for(const side of [-1,1])CAVE_ROOMS.push({x:p.x+p.nx*(p.r+1.2)*side,z:p.z+p.nz*(p.r+1.2)*side,r:2.7,height:p.height});
 export const CAVE_RIM=[[-60,50],[-55,20],[-62,-5],[-51,-34],[-35,-52],[-12,-48],[11,-58],[43,-54],[58,-35],[55,-4],[63,20],[48,45],[25,53],[8,47],[-15,53],[-38,58]];
-export const caveRoofHeight=(x,z)=>7+.4*Math.sqrt(Math.max(0,67*67-x*x-z*z));
+// Broad eroded vaults descend over passages, then open into the existing rooms.
+// Render and camera clearance sample this exact function into the same triangles.
+// Keep the boss arena and central flooded cavern high enough for the full cast.
+export const CAVE_LOW_VAULTS=Object.freeze([
+  {x:-34,z:31,rx:9,rz:11,height:7.6},
+  {x:-24,z:37,rx:13,rz:7,height:6.8},
+  {x:-35,z:5,rx:8,rz:13,height:8.2},
+  {x:-13,z:-26,rx:13,rz:8,height:11.3},
+  {x:41,z:-7,rx:8,rz:13,height:11.2},
+  {x:23,z:23,rx:12,rz:9,height:9.2},
+  {x:0,z:-8,rx:13,rz:10,height:10},
+].map(Object.freeze));
+const outerVault=(x,z)=>7+.4*Math.sqrt(Math.max(0,67*67-x*x-z*z));
+export function caveRoofHeight(x,z){
+  const outer=outerVault(x,z);let height=outer;
+  for(const vault of CAVE_LOW_VAULTS){
+    const d=((x-vault.x)/vault.rx)**2+((z-vault.z)/vault.rz)**2;
+    const t=Math.max(0,1-d),weight=t*t*(3-2*t);
+    height=Math.min(height,outer+(vault.height-outer)*weight);
+  }
+  return height;
+}
 export const CAVE_POOLS=[
   {x:-10,z:7,rx:22,rz:17,height:-2.8},
   {x:1,z:-17,rx:29,rz:9,height:-.8},
@@ -110,7 +132,7 @@ function makePlacements(){
       const jitter=(random()-.5)*1.3,scale=2.05+random()*.45;
       add(1,x+dz/length*jitter,z-dx/length*jitter,scale,yaw+(random()-.5)*.24,{topElevation:14.5+1.1*Math.sin(segment*.77),length:8*scale*(.94+.06*Math.sin(segment*1.7+i)),outerMass:true});
       // A few hanging forms frame turns. They no longer ring the entire map.
-      if(i===0&&segment%2===0){const xx=x-dz/length*3,zz=z+dx/length*3;add(6,xx,zz,1.5,yaw,{elevation:caveRoofHeight(xx,zz)-3,outerCanopy:true});}
+      if(i===0&&segment%2===0){const xx=x-dz/length*3,zz=z+dx/length*3;add(6,xx,zz,1.5,yaw,{elevation:outerVault(xx,zz)-3,outerCanopy:true});}
     }
   }
   // Broad authored shoulders meet the continuous rock terrain in one course.
@@ -211,6 +233,11 @@ function makePlacements(){
     add(CAVE_LABORATORY_GEOMETRY.assetId,p.x,p.z,p.scale,p.yaw,{kind:'rock',elevation:p.elevation,laboratoryStructure:true});
   }
   for(const [x,z]of CAVE_WAYFINDING_LANTERNS)add(13,x,z,.9,0,{colliderRadius:.36,wayfinding:true});
+  // This cap previously had air below its entire footprint. An existing narrow
+  // outcrop now joins its underside to the basin without moving the walking lane.
+  const cap=out.find(p=>p.id==='cavern-70');
+  add('rock-02-jagged-outcrop',cap.x,cap.z,1.85,cap.yaw,{kind:'rock',elevation:-3.85,naturalSupport:true,attachedTo:cap.id});
+  out.push(...CAVE_NATURAL_DRESSING);
   // Stable IDs/asset tiers remain shared. Elevated wall fittings are no longer
   // ground obstacles; actual rock still owns the wall collision and visibility.
   return out.map(p=>{const mount=CAVE_LANTERN_MOUNTS[p.id];if(!mount)return p;const {colliderRadius,...rest}=p;return {...rest,...mount};});

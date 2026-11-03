@@ -1,0 +1,10 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import {execFileSync} from 'node:child_process';
+import {PLAINS_SPAN,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_STREAM,PLAINS_LOOKOUT,PLAINS_PLACEMENTS} from '../../src/great-plains-layout.js';
+await writeFile(new URL('layout.json',import.meta.url),JSON.stringify({span:PLAINS_SPAN,routes:PLAINS_ROUTES,clearings:PLAINS_CLEARINGS,stream:PLAINS_STREAM,lookout:PLAINS_LOOKOUT}));
+const manifestUrl=new URL('../../public/assets/great-plains.json',import.meta.url),manifest=JSON.parse(await readFile(manifestUrl,'utf8'));
+manifest.placementCount=PLAINS_PLACEMENTS.length;await writeFile(manifestUrl,JSON.stringify(manifest,null,2)+'\n');
+const python='C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe';
+const output=execFileSync(python,[fileURLToPath(new URL('../../scripts/bake-great-plains-ground.py',import.meta.url))],{cwd:fileURLToPath(new URL('../../',import.meta.url)),env:{...process.env,PLAINS_REVIEW_DIR:'reports/plains-landscape-2026-11-03'},encoding:'utf8',windowsHide:true});
+console.log(output);

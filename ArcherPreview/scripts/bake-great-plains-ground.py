@@ -19,12 +19,14 @@ variation=(broad-.5)*18+(patch-.5)*12+(fine-.5)*5
 soil=np.array([189,163,117])+variation[:,:,None]*[.8,.75,.6]
 grass=np.array([144,148,83])+variation[:,:,None]*[.9,.9,.6]
 paint=Image.fromarray(np.uint8(np.clip(grass*(1-wear[:,:,None])+soil*wear[:,:,None],0,255))).convert('RGBA')
-# Exposed stone on the lookout's steep face, with a grass cap and east ramp.
+# Exposed stone follows the same village-facing hill contract as the terrain.
 wx=np.linspace(-span/2,span/2,size)[None,:];wz=np.linspace(span/2,-span/2,size)[:,None]
-d=np.sqrt(((wx+28)/1.1)**2+(wz+20)**2)
-t=np.clip((d-9)/3,0,1);height=8*(1-t*t*(3-2*t))
-cliff=np.clip((d-9.1)*2,0,1)*np.clip((12-d)*2,0,1)
-cliff*=1-np.clip((wx+20)/3,0,1)*(1-np.clip((np.abs(wz+20)-3)/6,0,1))
+hill=layout.get('lookout',{'x':-28,'z':-20,'height':8,'stretchX':1.1,'capRadius':9,'cliffWidth':3,'rampTopX':-37,'rampHalfWidth':3,'rampShoulder':6})
+d=np.sqrt(((wx-hill['x'])/hill['stretchX'])**2+(wz-hill['z'])**2)
+t=np.clip((d-hill['capRadius'])/hill['cliffWidth'],0,1);height=hill['height']*(1-t*t*(3-2*t))
+cliff=np.clip((d-hill['capRadius']-.1)*2,0,1)*np.clip((hill['capRadius']+hill['cliffWidth']-d)*2,0,1)
+ramp=(wx<hill['rampTopX']+2)*(1-np.clip((np.abs(wz-hill['z'])-hill['rampHalfWidth'])/hill['rampShoulder'],0,1))
+cliff*=1-ramp
 stone=np.array([162,158,140])+(variation*.6+np.sin(height*5)*3)[:,:,None]
 rgb=np.asarray(paint)[:,:,:3];rgb=rgb*(1-cliff[:,:,None])+stone*cliff[:,:,None]
 paint=Image.fromarray(np.uint8(np.clip(rgb,0,255))).convert('RGBA')
@@ -50,6 +52,6 @@ ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe');target=out/'plains-ground.
 subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-lz','--qlevel','235','--clevel','1','--generate-mipmap','--threads','4',str(out/'plains-ground.png'),str(target)],check=True,capture_output=True)
 data=target.read_bytes();url='./content/'+hashlib.sha256(data).hexdigest()+'.ktx2';(assets/url).write_bytes(data)
 v=json.loads((assets/'village-ground.json').read_text());detail=v['detail']
-manifest={**v,'span':span,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'resources':[url,detail['url']],'method':'approved-plains-crossroads-and-stream'}
+manifest={**v,'span':span,'color':{'url':url,'width':size,'height':size,'bytes':len(data),'codec':'etc1s','alpha':True,'gpuBlockBytes':16},'resources':[url,detail['url']],'method':'plains-village-facing-lookout-and-stream'}
 (assets/'great-plains-ground.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps({'bytes':len(data),'span':span,'paidCalls':0}))

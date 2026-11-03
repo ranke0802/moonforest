@@ -1,0 +1,235 @@
+{
+  "scope": "Actual shipped grass vertices/indices, real Babylon native-instance draw submissions and conservative frustum-only per-view counts; texture/image decoding and physical GPU timing excluded.",
+  "browserAutomation": false,
+  "gpuTimingMeasured": false,
+  "baselineGrass": 580,
+  "currentGrass": 760,
+  "baselineGrassWithin3m": 115,
+  "currentGrassWithin3m": 637,
+  "additionalRockInstances": 32,
+  "placementCount": 1418,
+  "uniqueSourceGeometries": 1,
+  "extraSceneGeometryAllocations": 0,
+  "sourceTriangles": 2323,
+  "globalGrassTriangleUpperBound": 1765480,
+  "baselineGlobalGrassTriangleUpperBound": 1347340,
+  "maximumGrassBaseDraws": 1,
+  "maximumSubmittedGrass": 499,
+  "views": [
+    {
+      "name": "village",
+      "alpha": 0,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 10,
+      "triangles": 23230
+    },
+    {
+      "name": "village",
+      "alpha": 1.5707963267948966,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 43,
+      "triangles": 99889
+    },
+    {
+      "name": "village",
+      "alpha": 3.141592653589793,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 499,
+      "triangles": 1159177
+    },
+    {
+      "name": "village",
+      "alpha": 4.71238898038469,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 239,
+      "triangles": 555197
+    },
+    {
+      "name": "crossroads",
+      "alpha": 0,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 215,
+      "triangles": 499445
+    },
+    {
+      "name": "crossroads",
+      "alpha": 1.5707963267948966,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 226,
+      "triangles": 524998
+    },
+    {
+      "name": "crossroads",
+      "alpha": 3.141592653589793,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 235,
+      "triangles": 545905
+    },
+    {
+      "name": "crossroads",
+      "alpha": 4.71238898038469,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 117,
+      "triangles": 271791
+    },
+    {
+      "name": "summit",
+      "alpha": 0,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 158,
+      "triangles": 367034
+    },
+    {
+      "name": "summit",
+      "alpha": 1.5707963267948966,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 87,
+      "triangles": 202101
+    },
+    {
+      "name": "summit",
+      "alpha": 3.141592653589793,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 232,
+      "triangles": 538936
+    },
+    {
+      "name": "summit",
+      "alpha": 4.71238898038469,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 242,
+      "triangles": 562166
+    },
+    {
+      "name": "meadow",
+      "alpha": 0,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 74,
+      "triangles": 171902
+    },
+    {
+      "name": "meadow",
+      "alpha": 1.5707963267948966,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 287,
+      "triangles": 666701
+    },
+    {
+      "name": "meadow",
+      "alpha": 3.141592653589793,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 351,
+      "triangles": 815373
+    },
+    {
+      "name": "meadow",
+      "alpha": 4.71238898038469,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 97,
+      "triangles": 225331
+    },
+    {
+      "name": "forest",
+      "alpha": 0,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 345,
+      "triangles": 801435
+    },
+    {
+      "name": "forest",
+      "alpha": 1.5707963267948966,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 15,
+      "triangles": 34845
+    },
+    {
+      "name": "forest",
+      "alpha": 3.141592653589793,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 27,
+      "triangles": 62721
+    },
+    {
+      "name": "forest",
+      "alpha": 4.71238898038469,
+      "radius": 17,
+      "nativeDraws": 1,
+      "submittedInstances": 370,
+      "triangles": 859510
+    },
+    {
+      "name": "wide",
+      "alpha": 0,
+      "radius": 82,
+      "nativeDraws": 1,
+      "submittedInstances": 402,
+      "triangles": 933846
+    },
+    {
+      "name": "wide",
+      "alpha": 1.5707963267948966,
+      "radius": 82,
+      "nativeDraws": 1,
+      "submittedInstances": 462,
+      "triangles": 1073226
+    },
+    {
+      "name": "wide",
+      "alpha": 3.141592653589793,
+      "radius": 82,
+      "nativeDraws": 1,
+      "submittedInstances": 409,
+      "triangles": 950107
+    },
+    {
+      "name": "wide",
+      "alpha": 4.71238898038469,
+      "radius": 82,
+      "nativeDraws": 1,
+      "submittedInstances": 304,
+      "triangles": 706192
+    }
+  ],
+  "sourceAssetGraphsUnchanged": true,
+  "sourceTextureBudgetsUnchanged": true,
+  "groundTexture": {
+    "url": "./content/fa9ffbb5b033f54a60bd2d69208981d319f43641a6d78e64d4f2caab4ed5a0d8.ktx2",
+    "width": 2048,
+    "height": 2048,
+    "bytes": 453332,
+    "codec": "etc1s",
+    "alpha": true,
+    "gpuBlockBytes": 16
+  },
+  "lookout": {
+    "x": -28,
+    "z": -20,
+    "height": 8,
+    "capRadius": 9,
+    "cliffWidth": 3,
+    "stretchX": 1.1,
+    "rampStartX": -61,
+    "rampTopX": -37,
+    "rampHalfWidth": 3,
+    "rampShoulder": 6
+  }
+}

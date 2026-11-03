@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {WarriorV2Controller,V2_ATTACKS,V2_ATTACK_BASE_RATE,V2_HOLD_SECONDS,V2_COMBO_GRACE} from '../src/warrior-v2.js';
 const durations={idle:56/30,run:.8,attack:3,slash:1.5,judgment:130/30,shieldPush:71/30,dodge:74/30};
-const create=()=>{const c=new WarriorV2Controller({durations,speeds:{run:4.4371}});c.setAttackSpeed(1/V2_ATTACK_BASE_RATE);return c;};
+// These tests isolate the authored motion and combo timing from resource gates.
+const create=()=>{const c=new WarriorV2Controller({durations,speeds:{run:4.4371},staminaEnabled:false});c.setAttackSpeed(1/V2_ATTACK_BASE_RATE);return c;};
 const tap=c=>{c.setAttackHeld(true);c.update(.05);c.setAttackHeld(false);};
 
 test('short presses alternate only slash and thrust/slash, across all attack speeds',()=>{

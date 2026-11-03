@@ -2,6 +2,7 @@ import {Vector3} from '@babylonjs/core';
 import {upwardFocusLift} from './camera-pitch.js';
 import {playerDimensions} from './player-dimensions.js';
 import {caveRoofHeight} from './witch-cave-layout.js';
+import {laboratoryVaultHeight} from './cave-laboratory-vault.js';
 import {CAVE_CAMERA_DATA as DATA} from './witch-cave-camera-data.js';
 
 // Sparse occupancy: a 16-bit cell lookup plus one 256-bit profile per run.
@@ -21,7 +22,8 @@ function roofTriangleHeight(x,z,a,b,c){
 export function caveCameraCeilingHeight(x,z){
  const angle=(Math.atan2(z,x)+Math.PI*2)%(Math.PI*2),sector=Math.min(63,Math.floor(angle/(Math.PI*2)*64)),width=Math.PI*2/64;
  const ring=Math.max(1,Math.min(12,Math.ceil(Math.hypot(x,z)*Math.cos(angle-(sector+.5)*width)/(6*Math.cos(width*.5))))),at=ring*65+sector+1;
- const first=roofTriangleHeight(x,z,at,at-1,at-66);return Number.isFinite(first)?first:roofTriangleHeight(x,z,at,at-66,at-65);
+ const first=roofTriangleHeight(x,z,at,at-1,at-66),outer=Number.isFinite(first)?first:roofTriangleHeight(x,z,at,at-66,at-65);
+ return Math.min(outer,laboratoryVaultHeight(x,z));
 }
 // Conservative near-LOD voxels, not body navigation: an arch can block a
 // raised camera while remaining open to a player underneath it.

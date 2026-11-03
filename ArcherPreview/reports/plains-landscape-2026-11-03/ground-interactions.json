@@ -1,0 +1,120 @@
+{
+  "hashes": {
+    "great-plains-layout.js": "b3121d52a84f63a8115c5e5647dba3e380d36e8ffb2adb51bc3f4058637ca096",
+    "great-plains-terrain.js": "5a7d560ec43bf3e2c47876528812a0cf3a2e5c02f2cb7c0893a8dc941ade945b",
+    "plains-view-distance.js": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597"
+  },
+  "checks": [
+    {
+      "id": "boundary-a",
+      "placed": {
+        "x": 57.85,
+        "z": -57
+      },
+      "groundHeight": 0.21735632773488825,
+      "approaches": 11
+    },
+    {
+      "id": "boundary-b",
+      "placed": {
+        "x": 68.85,
+        "z": -64
+      },
+      "groundHeight": 0.3865482058376069,
+      "approaches": 11
+    },
+    {
+      "id": "bandage",
+      "placed": {
+        "x": 57,
+        "z": -58
+      },
+      "groundHeight": 0.1805112026631832,
+      "approaches": 13
+    },
+    {
+      "id": "supply-chest",
+      "placed": {
+        "x": 18,
+        "z": 81
+      },
+      "groundHeight": 0.24566759541630745,
+      "approaches": 15
+    },
+    {
+      "id": "meadow-chest",
+      "placed": {
+        "x": -61.5,
+        "z": 58.5
+      },
+      "groundHeight": 2.9999685883522034,
+      "approaches": 13
+    },
+    {
+      "id": "lookout-chest",
+      "placed": {
+        "x": -30.2,
+        "z": -23.7
+      },
+      "groundHeight": 8.09812994003296,
+      "approaches": 13
+    },
+    {
+      "id": "great-plains-treasure-village-grove",
+      "placed": {
+        "x": -78.02,
+        "z": -23.98
+      },
+      "groundHeight": 0.22183757871389415,
+      "approaches": 13
+    },
+    {
+      "id": "great-plains-treasure-stream-bank",
+      "placed": {
+        "x": -38.77,
+        "z": 60.91
+      },
+      "groundHeight": 0.7707872089743615,
+      "approaches": 16
+    },
+    {
+      "id": "great-plains-treasure-western-ridge",
+      "placed": {
+        "x": -56.59,
+        "z": -30.93
+      },
+      "groundHeight": 0.3263743097335094,
+      "approaches": 15
+    },
+    {
+      "id": "great-plains-treasure-hill-grove",
+      "placed": {
+        "x": -45.59,
+        "z": -35.41
+      },
+      "groundHeight": 0.376789831519127,
+      "approaches": 15
+    },
+    {
+      "id": "great-plains-treasure-forest-fringe",
+      "placed": {
+        "x": 40.69,
+        "z": -49.78
+      },
+      "groundHeight": -0.09737071440555332,
+      "approaches": 14
+    },
+    {
+      "id": "great-plains-treasure-forest-cache",
+      "placed": {
+        "x": 63.67,
+        "z": -77.01
+      },
+      "groundHeight": 0.14835120126605023,
+      "approaches": 11
+    }
+  ],
+  "terrainVertices": 47089,
+  "subdivisions": 216,
+  "noBrowserAutomation": true
+}

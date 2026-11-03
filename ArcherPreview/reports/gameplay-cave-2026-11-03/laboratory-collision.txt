@@ -1,0 +1,2 @@
+BJS - [12:43:38]: Babylon.js v9.31.0 - Null engine
+{"cells":51920,"bytes":103840,"solidCells":5719,"zeroSurfaceCells":2718,"triangleCellTests":577177,"windingFallbacks":1,"elapsedMilliseconds":1063.4753,"fingerprint":"5e7a47f6c6ca4deeea58368b47004e60eb1c4b1ddbc595c10ff418c8e6913594"}

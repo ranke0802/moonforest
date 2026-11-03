@@ -54,3 +54,15 @@ test('a compatibility mouse menu cannot be mistaken for touch when both devices 
   document.emit('contextmenu',{target:f.label,pointerType,button:2});assert.equal(f.controller.queuedAttack,pointerType==='touch'?'judgment':null);f.input.dispose();
  }
 });
+test('real sword HUD queues one heavy and spends stamina only at execution',()=>{
+ for(const sufficient of [true,false]){
+  const f=fixture('shieldPush'),c=f.controller;assert.equal(c.stamina,60);if(!sufficient)c.stamina=49;
+  f.attackButton.emit('pointerdown',{button:0,pointerId:7,pointerType:'touch'});for(let i=0;i<16;i++)f.step(1000/30);
+  assert.equal(c.queuedAttack,'judgment');assert.equal(c.stamina,sufficient?60:49);
+  f.attackButton.emit('pointerup',{pointerId:7,pointerType:'touch'});
+  for(let i=0;i<100&&c.action?.state==='shieldPush';i++)f.step(1000/30);
+  assert.equal(c.serial,sufficient?2:1);assert.equal(c.staminaRejectSerial,sufficient?0:1);
+  if(sufficient){assert.equal(c.action?.state,'judgment');assert.equal(c.stamina,10);}else assert.equal(c.queuedAttack,null);
+  for(let i=0;i<120;i++)f.step(1000/30);assert.equal(c.serial,sufficient?2:1);f.input.dispose();
+ }
+});

@@ -128,10 +128,12 @@
 @media(max-height:500px) and (orientation:landscape){
  #app[data-ui-test] .action-controls[data-character=warrior-v2]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}
 }
-/* The menu already exposes both destinations. Keep fullscreen/settings reachable
-   on narrow phones without adding a second toolbar row over the health bar. */
+/* Keep all six requested actions in the same order on narrow phones too. */
 @media(max-width:760px){
- #app[data-ui-test] .top-actions .uit-top[data-uit-action=journal],#app[data-ui-test] .top-actions .uit-top[data-uit-action=inventory]{display:none}
+ #app[data-ui-test]>.topbar .top-actions{gap:3px}
+ #app[data-ui-test]>.topbar .top-actions button{min-width:40px;min-height:44px;padding:4px 6px;font-size:10px}
+ #app[data-ui-test]>.topbar .top-actions #live-fps{display:inline-block;min-width:36px;font-size:10px}
+ #app[data-ui-test] .top-actions .uit-top[data-uit-action=journal],#app[data-ui-test] .top-actions .uit-top[data-uit-action=inventory]{display:flex}
 }
 @media(prefers-reduced-motion:reduce){#app[data-ui-test] button{transition:none!important}.uit-skin.uit-down,.uit-skin:active{transform:none}}
 

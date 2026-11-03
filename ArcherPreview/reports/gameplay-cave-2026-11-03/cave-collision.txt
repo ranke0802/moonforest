@@ -1,0 +1,2 @@
+BJS - [12:40:11]: Babylon.js v9.31.0 - Null engine
+{"collision":{"triangles":1044175,"occupiedCells":1623,"runs":432,"bytes":3720,"fingerprint":"5e7a47f6c6ca4deeea58368b47004e60eb1c4b1ddbc595c10ff418c8e6913594","newModels":0},"visibility":{"triangles":1044175,"occupiedCells":4397,"runs":1182,"bytes":10214,"fingerprint":"5e7a47f6c6ca4deeea58368b47004e60eb1c4b1ddbc595c10ff418c8e6913594","heightRange":[1.5,2.1],"kind":"rock-or-rock-asset","newModels":0}}

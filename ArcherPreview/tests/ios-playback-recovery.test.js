@@ -13,6 +13,7 @@ import {FrameLoop} from '../src/frame-loop.js';
 import {RenderActivity} from '../src/render-policy.js';
 import {createLoadingView} from '../src/loading-view.js';
 import {configurePlayerSize,playerDimensions} from '../src/player-dimensions.js';
+import {PlayerCombat} from '../src/player-combat.js';
 
 const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const block=(start,end)=>main.slice(main.indexOf(start)+start.length,main.indexOf(end,main.indexOf(start))).trim().replace(/;$/,'');
@@ -23,14 +24,14 @@ const renderSource=main.slice(main.indexOf('function render(dt)'),main.indexOf('
 function evaluate(source,env){return Function('env','with(env){return ('+source+');}')(env);}
 function playback(){
  let wall=0;const queued=new Set(),engine={runRenderLoop:fn=>queued.add(fn),stopRenderLoop:fn=>queued.delete(fn),getFps:()=>30,getRenderWidth:()=>780,getRenderHeight:()=>1688},nodes=Object.fromEntries(['help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog'].map(id=>[id,{open:false}]));
- const state={minimapTravel:null,uiTest:null,document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
+ const state={boss:{combat:new PlayerCombat()},loadingAsset:false,minimapTravel:null,uiTest:null,document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
  const loop=state.frameLoop=new FrameLoop(engine,()=>{},()=>wall);state.syncPlayback=evaluate(syncSource,state);state.reconcilePlayback=state.syncPlayback;
  return {state,loop,queued,nodes,wake:evaluate(wakeSource,state),restore:evaluate(restoreSource,state),time:t=>wall=t,tick:t=>{wall=t;for(const fn of [...queued])fn();}};
 }
 
 test('iOS suspended startup, pageshow and touch recover one simulation loop without advancing hidden/modal/dead games',()=>{
  const f=playback();let simulation=0;f.loop.draw=dt=>simulation+=dt;
- f.state.document.hidden=true;f.state.syncPlayback();assert.equal(f.queued.size,0);
+ f.state.boss.combat.passiveRecovery.elapsed=1.9;f.state.document.hidden=true;f.state.syncPlayback();assert.equal(f.queued.size,0);assert.equal(f.state.boss.combat.passiveRecovery.elapsed,0);
  // Loading completes after the earlier visibility event, but no pageshow follows.
  f.state.document.hidden=false;f.wake();assert.equal(f.loop.running,true);f.tick(5000);assert.equal(simulation,0);f.tick(5033);assert.ok(simulation>0);
  // Model WebKit dropping its RAF registration while our flag still says running.
@@ -68,7 +69,7 @@ test('actual 8K iOS player is posed before reveal and moves through the real ren
  // CPU simulation uses the real app callback and model; no WebGL/phone GPU claim.
  scene.render=()=>{scene._animate(0);camera.getViewMatrix(true);scene.updateTransformMatrix(true);};
  const env={minimap:{update:noop},saveMapPosition:noop,...f.state,Vector3,playerDimensions,audio:{...f.state.audio,setBossContext:noop},character:'warrior-v3',chapterQuests:null,ready:true,simulateFrame:false,elapsed:0,statusTime:0,world,actor,container:asset,config,animator,controller,elenaReview:null,qualityMode:'high',input:{value:()=>movement,cameraPointers:new Map()},isV2:()=>true,isWarrior:()=>true,isVillage:()=>true,
- boss:{playerReaction:{update:()=>0},active:false,playerAlive:true,combatCount:0,loading:false,grab:{active:false},encounters:[],update:noop},applyHitFlash:noop,constrainPlayerPosition:noop,attackSources:new Set(),shotActionId:null,shotTarget:null,hiddenArrowForAction:null,arrowMesh:null,
+ boss:{combat:f.state.boss.combat,get playerHp(){return this.combat.hp;},get playerMaxHp(){return this.combat.maxHp;},onDamage:noop,playerReaction:{update:()=>0},active:false,playerAlive:true,combatCount:0,loading:false,grab:{active:false},encounters:[],update:noop},applyHitFlash:noop,constrainPlayerPosition:noop,attackSources:new Set(),shotActionId:null,shotTarget:null,hiddenArrowForAction:null,arrowMesh:null,
  training:{update:noop,setSelected:noop},projectiles:{update:noop},actionAudio:{player:noop,boss:noop},goldLoot:{drops:[],update:()=>[]},goldLootView:{sync:noop,project:noop},damageNumbers:{update:noop},syncCameraFocus:noop,syncCaveFog:noop,faceHeading:noop,updateButtons:noop,mapPortal:null,screenProjection:{beginFrame:noop},updateHealthBars:()=>hudFrames++,V2_LABELS,combatResult:null,frameDiagnostics:{mark:()=>0,measure:noop},
  $:s=>document.querySelector(s),text:noop};
  const render=evaluate(renderSource,env);f.loop.draw=render;f.state.document.hidden=true;f.state.syncPlayback();

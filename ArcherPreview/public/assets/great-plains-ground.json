@@ -2,10 +2,10 @@
   "version": 1,
   "span": 288,
   "color": {
-    "url": "./content/1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
+    "url": "./content/fa9ffbb5b033f54a60bd2d69208981d319f43641a6d78e64d4f2caab4ed5a0d8.ktx2",
     "width": 2048,
     "height": 2048,
-    "bytes": 458550,
+    "bytes": 453332,
     "codec": "etc1s",
     "alpha": true,
     "gpuBlockBytes": 16
@@ -23,9 +23,9 @@
   "gpuBytesWithMips": 5941931,
   "extraDrawCalls": 0,
   "detailSamples": 2,
-  "method": "approved-plains-crossroads-and-stream",
+  "method": "plains-village-facing-lookout-and-stream",
   "resources": [
-    "./content/1c96cd9372e084c7f3829088649d3227af45a98c1403c1b90221b5642622c1e6.ktx2",
+    "./content/fa9ffbb5b033f54a60bd2d69208981d319f43641a6d78e64d4f2caab4ed5a0d8.ktx2",
     "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
   ],
   "compression": "KTX2 color; lossless linear packed detail"

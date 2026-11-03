@@ -54,7 +54,8 @@ async function fixture(t){
   t.after(()=>{f.animator?.dispose();f.battle.hide();for(const asset of [witch,warrior]){asset.container.dispose();asset.loader.dispose();}scene.dispose();engine.dispose();setWorldCharacter('warrior');});return f;
 }
 function reset(f,angle,distance=f.e.radius+f.dimensions.rollRadius,{review=true,pose='idle',poseTime=0}={}){
-  f.animator?.dispose();f.animator=new CharacterAnimator(f.warrior.container.animationGroups,f.warrior.config.animations);f.controller=new WarriorV2Controller({durations:f.animator.durations,speeds:f.speeds});
+  // This exhaustive geometry oracle repeats attacks without player resource management.
+  f.animator?.dispose();f.animator=new CharacterAnimator(f.warrior.container.animationGroups,f.warrior.config.animations);f.controller=new WarriorV2Controller({durations:f.animator.durations,speeds:f.speeds,staminaEnabled:false});
   f.sampler.reset();f.events.length=0;f.battle.combat.reset();f.e.gate.reset();f.e.brain.hp=1800;f.e.brain.stagger=0;f.e.brain.start('idle','idle');f.e.brain.wait=100;f.e.knockVelocity.setAll(0);f.e.bossReaction.reset();f.e.dodgeContactClearance=false;
   f.e.reviewMode=review;f.e.reviewMovement={x:0,z:0};f.e.actor.position.set(ELENA_HOME.x,0,ELENA_HOME.z);f.world.terrain.place(f.e.actor.position);f.e.actor.rotation.y=0;f.e.home=ELENA_HOME;f.e.spell.reset();f.e.repositionTarget=null;f.e.chargeOrigin=null;f.e.animator.reset();
   const dir=direction(angle);f.player.position.set(ELENA_HOME.x+dir.x*distance,0,ELENA_HOME.z+dir.z*distance);f.world.terrain.place(f.player.position);f.player.rotation.y=Math.atan2(-dir.x,-dir.z);

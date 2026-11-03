@@ -1,13 +1,21 @@
 import {villageRenderRange} from './village-policy.js';
 
-export const PLAINS_VIEW_DISTANCE_KEY='moonforest-plains-view-distance-v1';
-export const PLAINS_VIEW_DISTANCE_STEPS=Object.freeze([1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2]);
+export const PLAINS_VIEW_DISTANCE_KEY='moonforest-plains-view-distance-v2';
+export const PLAINS_VIEW_DISTANCE_DEFAULT=2.4;
+export const PLAINS_VIEW_DISTANCE_STEPS=Object.freeze(Array.from({length:15},(_,i)=>(10+i)/10));
 export function normalizePlainsViewDistance(value){
   const number=Number(value);
-  return PLAINS_VIEW_DISTANCE_STEPS.includes(number)?number:1;
+  return PLAINS_VIEW_DISTANCE_STEPS.includes(number)?number:PLAINS_VIEW_DISTANCE_DEFAULT;
 }
 export function readPlainsViewDistance(storage){
-  try{return normalizePlainsViewDistance(storage?.getItem(PLAINS_VIEW_DISTANCE_KEY));}catch{return 1;}
+  try{
+    const saved=storage?.getItem(PLAINS_VIEW_DISTANCE_KEY);
+    if(saved!==null&&saved!==undefined)return normalizePlainsViewDistance(saved);
+    // A new epoch applies the requested 240% once, including old 100/200%
+    // defaults. Subsequent explicit choices under this key remain untouched.
+    try{storage?.setItem(PLAINS_VIEW_DISTANCE_KEY,String(PLAINS_VIEW_DISTANCE_DEFAULT));}catch{}
+    return PLAINS_VIEW_DISTANCE_DEFAULT;
+  }catch{return PLAINS_VIEW_DISTANCE_DEFAULT;}
 }
 export function plainsRenderRange(world,touch=world.touchDevice){
   const base=villageRenderRange(touch);

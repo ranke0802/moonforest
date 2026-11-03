@@ -4,27 +4,29 @@ import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
 import {FreeCamera,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
 import {setupSettingsPanel} from '../src/settings-panel.js';
-import {PLAINS_VIEW_DISTANCE_KEY,applyPlainsViewDistance,plainsRenderRange,readPlainsViewDistance,setupPlainsViewDistanceControl} from '../src/plains-view-distance.js';
+import {PLAINS_VIEW_DISTANCE_KEY,PLAINS_VIEW_DISTANCE_DEFAULT,applyPlainsViewDistance,plainsRenderRange,readPlainsViewDistance,setupPlainsViewDistanceControl} from '../src/plains-view-distance.js';
 import {villageRenderRange} from '../src/village-policy.js';
 import {VillageDemandCache,VillageGeometryStreaming} from '../src/village-demand.js';
 import {VillageVisibility} from '../src/village-visibility.js';
 import {VillageOutlines} from '../src/village-outlines.js';
 
-test('settings default to existing range, persist only valid steps, and tolerate unavailable storage',t=>{
+test('settings migrate the old range once to 240%, then persist explicit choices and tolerate unavailable storage',t=>{
  const {document}=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8'));
  const previous=globalThis.document;globalThis.document=document;t.after(()=>globalThis.document=previous);setupSettingsPanel();
  const select=document.getElementById('plains-view-distance-select');
- assert.deepEqual([...select.options].map(o=>o.value),['1','1.1','1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','2']);
+ assert.deepEqual([...select.options].map(o=>o.value),['1','1.1','1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','2','2.1','2.2','2.3','2.4']);
  Object.defineProperty(select,'value',{configurable:true,writable:true,value:''});
  const saved=new Map(),storage={getItem:k=>saved.get(k),setItem:(k,v)=>saved.set(k,v)},seen=[];
  const control=setupPlainsViewDistanceControl({select,storage,onChange:v=>seen.push(v)});
- assert.equal(control.value,1);
+ assert.equal(control.value,PLAINS_VIEW_DISTANCE_DEFAULT);
  for(const option of select.options){select.value=option.value;select.dispatchEvent(new document.defaultView.Event('change'));assert.equal(control.value,Number(option.value));}
- assert.equal(saved.get(PLAINS_VIEW_DISTANCE_KEY),'2');control.dispose();
- const restored=setupPlainsViewDistanceControl({select,storage});assert.equal(restored.value,2);restored.dispose();
- for(const invalid of ['1.45','2.1','999','NaN','',null])assert.equal(readPlainsViewDistance({getItem:()=>invalid}),1);
+ assert.equal(saved.get(PLAINS_VIEW_DISTANCE_KEY),'2.4');control.dispose();
+ const restored=setupPlainsViewDistanceControl({select,storage});assert.equal(restored.value,2.4);restored.dispose();
+ for(const invalid of ['1.45','2.5','999','NaN','',null])assert.equal(readPlainsViewDistance({getItem:()=>invalid}),2.4);
  for(const previous of ['1.1','1.2','1.3'])assert.equal(readPlainsViewDistance({getItem:()=>previous}),Number(previous));
- assert.equal(readPlainsViewDistance({getItem(){throw Error('denied');}}),1);
+ assert.equal(readPlainsViewDistance({getItem(){throw Error('denied');}}),2.4);
+ saved.delete(PLAINS_VIEW_DISTANCE_KEY);saved.set('moonforest-plains-view-distance-v1','2');assert.equal(readPlainsViewDistance(storage),2.4);assert.equal(saved.get(PLAINS_VIEW_DISTANCE_KEY),'2.4');
+ saved.set(PLAINS_VIEW_DISTANCE_KEY,'1.3');assert.equal(readPlainsViewDistance(storage),1.3);assert.equal(saved.get('moonforest-plains-view-distance-v1'),'2');
 });
 
 test('scenery demand and visibility extend together only on plains and return on map switch',async t=>{
@@ -40,9 +42,9 @@ test('scenery demand and visibility extend together only on plains and return on
  applyPlainsViewDistance(world,1);assert.equal(plainsRenderRange(world),villageRenderRange(false));
  assert.deepEqual([scene.fogStart,scene.fogEnd],[88,105]);assert.deepEqual(cache.get().map(x=>x.id),['near']);
  visibility.update(camera.globalPosition,camera.target,.2);assert.equal(records[1].cellActive,false);
- applyPlainsViewDistance(world,2);assert.deepEqual([scene.fogStart,scene.fogEnd],[88*2,105*2]);
- outlines.update(0);assert.deepEqual(outlines.fogRange.asArray(),[88*2,105*2]);
- assert.equal(plainsRenderRange(world).cellCull,110*2);
+ applyPlainsViewDistance(world,2.4);assert.deepEqual([scene.fogStart,scene.fogEnd],[88*2.4,105*2.4]);
+ outlines.update(0);assert.deepEqual(outlines.fogRange.asArray(),[88*2.4,105*2.4]);
+ assert.equal(plainsRenderRange(world).cellCull,110*2.4);
  const plan=cache.get();assert.deepEqual(plan.map(x=>x.id),['near','far']);assert.equal(plan.filter(x=>x.id==='far').length,1);assert.equal(plan.find(x=>x.id==='far').level,2);
  visibility.update(camera.globalPosition,camera.target,.2);assert.equal(records[1].cellActive,true);
  let loads=0;const loaded=new Set(),stream=new VillageGeometryStreaming(world,records,async r=>{loads++;loaded.add(r.id+':'+r.level);},r=>loaded.has(r.id+':'+r.level),{});

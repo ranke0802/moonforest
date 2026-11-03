@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
 import {createFrameDiagnostics} from '../src/frame-diagnostics.js';
 import {FrameLoop} from '../src/frame-loop.js';
+import {PlayerCombat} from '../src/player-combat.js';
 
 function fixture({clipboardFails=false,stored='1',legacyExpanded=false}={}){
  const {document:doc,window}=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8'));
@@ -14,18 +15,19 @@ function fixture({clipboardFails=false,stored='1',legacyExpanded=false}={}){
  const diagnostic=createFrameDiagnostics({doc,storage:{getItem:()=>stored,setItem:(_key,value)=>stored=value},now:()=>time,onCollecting:v=>transitions.push(v),renderMetrics:()=>({drawCalls:123,sceneMs:7,gpu:{status:'unsupported',meanMs:null,latest:null}}),clipboard:{writeText:async value=>{if(clipboardFails)throw Error('denied');copied=JSON.parse(value);}}});
  const loop=new FrameLoop({runRenderLoop:cb=>callbacks.add(cb),stopRenderLoop:cb=>callbacks.delete(cb)},()=>{diagnostic.beginFrame(true,30);diagnostic.endFrame();},()=>time);
  const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n'),start=main.indexOf('const syncPlayback='),end=main.indexOf('\n  const dialogObserver',start),source=main.slice(start+'const syncPlayback='.length,end).trim().replace(/;$/,'');
- const env={minimapTravel:null,uiTest:null,document:doc,mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>doc.getElementById('motion-speed-dialog').open},deathScreen:{isOpen:()=>false},$:selector=>doc.querySelector(selector),input:{reset(){}},cancelAttackInput(){},text:(selector,text)=>{doc.querySelector(selector).textContent=text;},frameLoop:loop,frameDiagnostics:diagnostic,audio:{setSuspended(){}}};
+ const combat=new PlayerCombat();combat.hp=317;
+ const env={boss:{combat},minimapTravel:null,uiTest:null,document:doc,mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>doc.getElementById('motion-speed-dialog').open},deathScreen:{isOpen:()=>false},$:selector=>doc.querySelector(selector),input:{reset(){}},cancelAttackInput(){},text:(selector,text)=>{doc.querySelector(selector).textContent=text;},frameLoop:loop,frameDiagnostics:diagnostic,audio:{setSuspended(){}}};
  const sync=Function('env','with(env){return ('+source+');}')(env);
  for(const dialog of doc.querySelectorAll('dialog')){dialog.open=false;dialog.showModal=()=>{dialog.open=true;sync();};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));sync();};}
  for(const box of doc.querySelectorAll('textarea')){box.focus=()=>box.focused=true;box.select=()=>box.selected=true;}
  const click=id=>doc.getElementById(id).dispatchEvent(new window.Event('click',{bubbles:true}));
- return {doc,window,diagnostic,loop,transitions,sync,click,tick:at=>{time=at;for(const callback of [...callbacks])callback();},setTime:at=>time=at,copy:()=>copied,stored:()=>stored};
+ return {doc,window,combat,diagnostic,loop,transitions,sync,click,tick:at=>{time=at;for(const callback of [...callbacks])callback();},setTime:at=>time=at,copy:()=>copied,stored:()=>stored};
 }
 
 test('actual main pause callback treats diagnostic detail as a modal and resumed frames exclude inspection time',async()=>{
- const f=fixture();f.sync();f.tick(0);f.tick(33);f.tick(66);
+ const f=fixture();f.sync();f.tick(0);f.tick(33);f.tick(66);f.combat.passiveRecovery.elapsed=1.9;
  f.setTime(80);f.click('diagnostic-expand');assert.equal(f.doc.getElementById('diagnostic-detail-dialog').open,true);assert.equal(f.loop.running,false);assert.equal(f.doc.getElementById('live-fps').textContent,'일시정지');assert.match(f.doc.getElementById('diagnostic-fps').textContent,/일시정지/);assert.equal(f.doc.getElementById('frame-diagnostics').dataset.expanded,'false');
- f.tick(6000);assert.equal(f.loop.running,false);f.click('diagnostic-detail-done');assert.equal(f.loop.running,true);assert.equal(f.doc.getElementById('diagnostic-expand').getAttribute('aria-expanded'),'false');
+ f.tick(6000);assert.equal(f.loop.running,false);assert.equal(f.combat.hp,317);assert.equal(f.combat.passiveRecovery.elapsed,0);f.click('diagnostic-detail-done');assert.equal(f.loop.running,true);assert.equal(f.doc.getElementById('diagnostic-expand').getAttribute('aria-expanded'),'false');
  f.tick(6033);f.tick(6066);await f.doc.getElementById('copy-frame-diagnostics').dispatchEvent(new f.window.Event('click'));await Promise.resolve();assert.ok(f.copy().summary.maxMs<34);assert.equal(f.copy().recentDelays.length,0);assert.deepEqual(f.transitions,[true,false,true]);
 });
 

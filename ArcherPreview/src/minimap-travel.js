@@ -2,7 +2,7 @@ import {isWorldCharacter,travelUrl} from './map-route.js';
 
 export const MINIMAP_REGIONS=Object.freeze([
  {map:'village',character:'warrior-v3',label:'마을',note:'성문 앞길로 이동'},
- {map:'great-plains',character:'warrior-plains',label:'길의 입구로 이동'},
+ {map:'great-plains',character:'warrior-plains',label:'대평원',note:'길의 입구로 이동'},
  {map:'monster-forest',character:'warrior-v4',label:'마물의 숲',note:'숲 입구로 이동'},
  {map:'witch-cave',character:'warrior-v5',label:'마녀의 동굴',note:'동굴 입구로 이동'},
 ].map(region=>Object.freeze(region)));

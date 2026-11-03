@@ -13,15 +13,17 @@ export class PlayerHealthBar {
     this.element.hidden = true;
     this.progress = document.createElement('progress');
     this.progress.setAttribute('aria-label', '플레이어 HP');
+    this.stamina=document.createElement('progress');this.stamina.id='player-stamina';
+    this.stamina.setAttribute('aria-label','플레이어 스태미나');this.stamina.max=100;this.stamina.value=100;
     this.label = label;
-    this.element.append(this.progress, label);
+    this.element.append(this.progress,this.stamina,label);
     document.querySelector('#app').append(this.element);
     this.anchor = new Vector3();
     this.foot=new Vector3();this.forward=new Vector3(0,0,1);this.direction=new Vector3();this.tip=new Vector3();
     this.marker=document.createElement('div');this.marker.className='player-ground-marker';this.marker.hidden=true;this.marker.setAttribute('aria-hidden','true');
     this.arrow=document.createElement('i');this.marker.append(this.arrow);this.element.parentElement.append(this.marker);
   }
-  update(scene, { visible, actor, head, hp, maxHp, marker }, projection) {
+  update(scene, { visible, actor, head, hp, maxHp, stamina=100, maxStamina=100, marker }, projection) {
     this.marker.hidden=true;
     if (!visible || !actor) { this.element.hidden = true; return; }
     const value = Math.max(0, Math.min(maxHp, hp));
@@ -32,6 +34,11 @@ export class PlayerHealthBar {
       this.progress.value = value;
       this.label.textContent = `HP ${value} / ${maxHp}`;
       this.element.dataset.low = String(value / maxHp <= .3);
+    }
+    const staminaMax=Number.isFinite(maxStamina)&&maxStamina>0?maxStamina:100;
+    const staminaValue=Math.max(0,Math.min(staminaMax,Number.isFinite(stamina)?stamina:staminaMax));
+    if(staminaValue!==this.staminaValue||staminaMax!==this.staminaMax){
+      this.staminaValue=staminaValue;this.staminaMax=staminaMax;this.stamina.max=staminaMax;this.stamina.value=staminaValue;
     }
     this.element.hidden=false;
     // A marker is opt-in only with a positive structure line-of-sight check.

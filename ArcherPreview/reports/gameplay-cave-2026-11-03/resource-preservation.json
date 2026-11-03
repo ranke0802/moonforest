@@ -1,0 +1,94 @@
+{
+  "baseline": "73c79fe",
+  "unchanged": [
+    {
+      "file": "warrior-v3.json",
+      "sha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067"
+    },
+    {
+      "file": "warrior-v3-ios.json",
+      "sha256": "8fd4bceb04d02117fe6cfbac0d9e5ab128b419a56cb05cde3a17d0fa76de6253"
+    },
+    {
+      "file": "village.json",
+      "sha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f"
+    },
+    {
+      "file": "monster-forest.json",
+      "sha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded"
+    },
+    {
+      "file": "witch-cave-ground.json",
+      "sha256": "0581c2fd9665837af9a55a0859d09a5fbb08dc0a7ba1b4d631be60021bd61aa0"
+    },
+    {
+      "file": "village-ground.json",
+      "sha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+    },
+    {
+      "file": "monster-forest-ground.json",
+      "sha256": "cbd93b63f78036fd0d9413b95520a1b06e23dcf22a54b7ff37ae19994f054599"
+    },
+    {
+      "file": "elena.json",
+      "sha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2"
+    },
+    {
+      "file": "mourning-elena.json",
+      "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e"
+    },
+    {
+      "file": "quest-props.json",
+      "sha256": "fc15eda93d5c6d13d4d7fd017a162fe5121a78dce9173a002657a07c7ce11094"
+    }
+  ],
+  "mapAssetGraphs": {
+    "great-plains.json": {
+      "manifestSourceTypes": 18,
+      "beforeManifestPlacementCount": 301,
+      "afterManifestPlacementCount": 1418,
+      "assetSourcesIdentical": true
+    },
+    "witch-cave.json": {
+      "manifestSourceTypes": 29,
+      "beforeManifestPlacementCount": 159,
+      "afterManifestPlacementCount": 212,
+      "assetSourcesIdentical": true
+    }
+  },
+  "passed": true,
+  "gpuMeasured": false,
+  "plainsCountNote": "Previous manifest count 301 was stale. Actual baseline layout was 1209 placements using 17 of 18 manifest assets; current layout is 1418 using the same 17.",
+  "changedGround": {
+    "version": 1,
+    "span": 288,
+    "color": {
+      "url": "./content/fa9ffbb5b033f54a60bd2d69208981d319f43641a6d78e64d4f2caab4ed5a0d8.ktx2",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 453332,
+      "codec": "etc1s",
+      "alpha": true,
+      "gpuBlockBytes": 16
+    },
+    "detail": {
+      "url": "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 119227
+    },
+    "soilMaskAlphaRange": [
+      64,
+      255
+    ],
+    "gpuBytesWithMips": 5941931,
+    "extraDrawCalls": 0,
+    "detailSamples": 2,
+    "method": "plains-village-facing-lookout-and-stream",
+    "resources": [
+      "./content/fa9ffbb5b033f54a60bd2d69208981d319f43641a6d78e64d4f2caab4ed5a0d8.ktx2",
+      "./content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png"
+    ],
+    "compression": "KTX2 color; lossless linear packed detail"
+  }
+}

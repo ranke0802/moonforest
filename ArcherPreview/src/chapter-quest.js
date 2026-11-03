@@ -3,6 +3,7 @@ import {ChapterJourney} from './chapter-quest-state.js';
 import {CHAPTER_POINTS,QUEST_APPLE_TREE} from './chapter-quest-points.js';
 import {createQuestProps} from './chapter-quest-props.js';
 import {lootRarity,lootItem,itemRarity} from './loot-rarity.js';
+import {arrangeTopActions} from './hud-top-actions.js';
 const names={apple:'붉은 사과',pie:'따뜻한 애플파이',feed:'반려동물 먹이',herb:'달이슬풀',cargo:'상품 꾸러미',locket:'초상화 펜던트','goblin-iron':'고블린 철붙이',potion:'회복약',bandage:'치료 붕대',antidote:'해독제',gold:'획득한 의뢰 골드','key-2':'II등급 열쇠','key-3':'III등급 열쇠','equipment-voucher':'정제 장비 교환권','armor-voucher':'방어구 보강권','antidote-charm':'해독 부적','church-seal':'교회 인장'};
 const labels={locked:'선행 의뢰 필요',available:'수락 가능',active:'진행 중',ready:'보상 받기',done:'완료'};
 const esc=s=>String(s??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
@@ -15,7 +16,7 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
  const hud=doc.createElement('section');hud.id='chapter-hud';hud.dataset.ui='';hud.innerHTML=`<div class="chapter-stack"><button class="chapter-track uit-track" data-chapter="journal"><small>첫 장 · 사라진 성녀</small><strong></strong><span></span></button><div class="chapter-story">${button('story','이야기')}</div></div><div class="chapter-context">${button('interact','조사하기')}</div>`;root.append(hud);root.dataset.uiTest='true';
  const dialog=doc.createElement('dialog');dialog.id='chapter-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-label','첫 장 의뢰와 소지품');root.append(dialog);
  const notice=doc.createElement('output');notice.className='chapter-toast';notice.setAttribute('role','status');notice.hidden=true;root.append(notice);
- const topButtons=[];for(const [action,name]of [['journal','수첩'],['bag','가방']]){const b=doc.createElement('button');b.dataset.chapter=action;b.textContent=name;b.setAttribute('aria-label',name+' 열기');root.querySelector('.top-actions').prepend(b);topButtons.push(b);}
+ const topButtons=[];for(const [action,name]of [['journal','수첩'],['bag','가방']]){const b=doc.createElement('button');b.dataset.chapter=action;b.textContent=name;b.setAttribute('aria-label',name+' 열기');root.querySelector('.top-actions').prepend(b);topButtons.push(b);}arrangeTopActions(root);
  function notify(text,tier=0){clearTimeout(timer);notice.textContent=text;notice.style.setProperty('--rarity-color',tier?lootRarity(tier).color:'#baa36e');notice.hidden=false;timer=setTimeout(()=>notice.hidden=true,3500);}
  const safe=()=>{const s=getState();return s.ready&&!s.dead&&!s.combat&&!s.busy;};
  function open(next){if(!safe()||doc.querySelector('dialog[open]')&&!dialog.open)return;screen=next;resetInput();render();if(!dialog.open)dialog.showModal();onPauseChange();}

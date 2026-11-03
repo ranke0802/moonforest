@@ -27,9 +27,9 @@ import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 const caveTrainingSpawn={x:-39,z:39};
-// Cover the 200% desktop fog end from the playable rim plus the normal maximum
+// Cover the 240% desktop fog end from the playable rim plus the normal maximum
 // camera radius. Only stretch the non-playable outer ring; add no triangles.
-const PLAINS_GROUND_BORDER=260;
+const PLAINS_GROUND_BORDER=310;
 function mapNavigation({cave,forest,plains,village}){
   const obstacles=plains?plainsObstacles():cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);

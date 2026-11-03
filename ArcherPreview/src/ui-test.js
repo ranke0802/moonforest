@@ -1,4 +1,5 @@
 import {UiTestJourney,UI_TEST_QUESTS} from './ui-test-state.js';
+import {arrangeTopActions} from './hud-top-actions.js';
 
 const art={pie:new URL('./ui-test-art/pie.webp',import.meta.url).href,apple:new URL('./ui-test-art/apple.webp',import.meta.url).href,bandage:new URL('./ui-test-art/bandage.webp',import.meta.url).href,sword:new URL('./ui-test-art/sword.webp',import.meta.url).href};
 const license=new URL('./ui-test-art/LICENSE.txt',import.meta.url).href;
@@ -27,6 +28,7 @@ export function setupUiTest({root,storage,getState,heal,prepareHealing,onPauseCh
  }
  const settings=document.createElement('details');settings.className='settings-section';settings.innerHTML='<summary>UI테스트 · 표시와 체험</summary><div class="settings-section-body"><label><input id="uit-large-text" type="checkbox">대화·수첩 글자 크게</label><button type="button" data-uit-action="settings-menu">체험 메뉴 열기</button><small>테스트 의뢰·물품·골드·위치는 기존 플레이와 별도로 저장됩니다.</small><a href="'+license+'" target="_blank" rel="noopener">Galmuri 글꼴 라이선스</a></div>';
  root.querySelector('.settings-sections').prepend(settings);
+ arrangeTopActions(root);
  const applyText=()=>{root.dataset.uiText=journey.value.largeText?'large':'normal';settings.querySelector('input').checked=journey.value.largeText;};applyText();
  listen(settings.querySelector('input'),'change',e=>{journey.value.largeText=e.target.checked;journey.save();applyText();});
  const nowState=()=>getState()??{};

@@ -11,7 +11,7 @@ const binding=main.slice(main.indexOf('  let lastPointerAttack'),main.indexOf(' 
 const durations={idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46};
 
 function fixture(kind){
- let now=0;const controller=new WarriorV2Controller({durations,holdNow:()=>now});controller.startAttack(kind);
+ let now=0;const controller=new WarriorV2Controller({durations,holdNow:()=>now,staminaEnabled:false});controller.startAttack(kind);
  const attackSources=new Set(),{document,Event}=parseHTML('<button id="attack"></button>'),attackButton=document.getElementById('attack');attackButton.setPointerCapture=()=>{};
  const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview',attackFunctions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null);
  new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(attackButton,true,{now:()=>now},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
