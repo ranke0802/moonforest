@@ -1,0 +1,12 @@
+{
+  "date": "2026-11-03",
+  "scope": "Destination loading artwork, real progress counters and startup precache",
+  "passed": true,
+  "automatedTests": {"total": 1406, "passed": 1406, "failed": 0},
+  "art": {"count": 4, "width": 1672, "height": 941, "sourceBytes": 12421849, "webpBytes": 1926640, "quality": 90, "generatedImages": 0},
+  "display": {"progressHeightPx": 3, "fullViewportWidth": true, "status": "single line above bottom-left edge", "downloadCounters": "actual transferred MB", "preparationCounters": "ready/required visible meshes, shadow casters and ancillary renderers", "artworkWaitBlocksReveal": false},
+  "cache": {"precacheAt": "first game asset download", "precacheImages": 4, "decodedImagesAtOnce": 1, "controlledWorkerWarmImageRequests": 16, "controlledWorkerWarmNetworkFetches": 0, "evictionRefetchFiles": 1, "hashChangeRefetchFiles": 1},
+  "preserved": ["player 8K textures", "background maximum 4K", "existing geometry LODs", "combat controls and hit rules", "manual timeout retry", "error diagnostics copy"],
+  "browserAutomation": false,
+  "limitations": ["Automated checks use real application/SDK/worker code with controlled I/O and DOM/NullEngine fixtures; actual mobile rendering, thermal behavior and disk/network traces were not measured.", "Persistent reuse requires available storage and the controlling resource service worker. Browser cache eviction or changed content requires only missing/new files.", "Artwork is shown from application startup onward; the first HTML/JavaScript bundle fetch precedes application initialization."]
+}

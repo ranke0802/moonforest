@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "format": "WebP",
+  "artworks": {
+    "village": {
+      "url": "./content/70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350.webp",
+      "label": "마을",
+      "position": "55% 50%",
+      "width": 1672,
+      "height": 941,
+      "bytes": 588204
+    },
+    "great-plains": {
+      "url": "./content/5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9.webp",
+      "label": "대평원",
+      "position": "50% 50%",
+      "width": 1672,
+      "height": 941,
+      "bytes": 564230
+    },
+    "monster-forest": {
+      "url": "./content/1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b.webp",
+      "label": "마물의 숲",
+      "position": "50% 50%",
+      "width": 1672,
+      "height": 941,
+      "bytes": 562954
+    },
+    "witch-cave": {
+      "url": "./content/388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30.webp",
+      "label": "마녀의 동굴",
+      "position": "42% 50%",
+      "width": 1672,
+      "height": 941,
+      "bytes": 211252
+    }
+  },
+  "characters": {
+    "warrior-v3": "village",
+    "warrior-plains": "great-plains",
+    "warrior-v4": "monster-forest",
+    "warrior-v5": "witch-cave"
+  },
+  "resources": [
+    "./content/70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350.webp",
+    "./content/5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9.webp",
+    "./content/1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b.webp",
+    "./content/388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30.webp"
+  ]
+}

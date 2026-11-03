@@ -8,7 +8,7 @@ export function createMapDeparture({prepare,release,navigate,frame=()=>new Promi
     async leave(url){
       if(departing)return false;departing=true;
       try{
-        prepare();await frame();await frame();
+        prepare(url);await frame();await frame();
         release();navigate(url);return true;
       }catch(error){onError(error);return false;}
     },

@@ -15,10 +15,10 @@ test('actual map prepare cancels held sprint and resets recovery time while pres
   const combat=new PlayerCombat(),controller=new WarriorV2Controller({durations:{idle:1}}),actor={position:Vector3.Zero()},events=[];
   combat.hp=317;controller.stamina=37;combat.recover(1.9,actor,(...args)=>events.push(args));
   const gesture=new DodgeSprintGesture({now:()=>0,onSprint:held=>controller.setSprintHeld(held)});gesture.begin('button:7',{pointerType:'touch'});
-  const marker=source.indexOf('mapTransition=createMapTransition({'),start=source.indexOf('    prepare:()=>{',marker),end=source.indexOf('\n    release:',start);assert.ok(start>marker&&end>start);
+  const marker=source.indexOf('mapTransition=createMapTransition({'),start=source.indexOf('    prepare:href=>{',marker),end=source.indexOf('\n    release:',start);assert.ok(start>marker&&end>start);
   const boss={combat,allPooled:[],hide:noop},env={boss,input:{reset:()=>gesture.cancel()},saveMapPosition:noop,minimapTravel:null,minimap:{hide:noop},chapterQuests:null,leaveElenaReview:noop,frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:{begin:noop},loadingView:{begin:noop},updateButtons:noop,cancelAttackInput:noop,frameLoop:{setPaused:noop},audio:{stopAll:noop,play:noop},actionAudio:{reset:noop},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},projectiles:{clear:noop},training:{setSelected:noop},strikeSampler:{reset:noop},world:{}};
-  const runtime=bind(env,`let resumePose={},ready=true,loadingAsset=false,combatResult={},mapPortal=null;const hooks=({${source.slice(start,end)}});return {prepare:hooks.prepare,state:()=>({ready,loadingAsset})};`);
-  runtime.prepare();assert.deepEqual(runtime.state(),{ready:false,loadingAsset:true});assert.equal(combat.hp,317);assert.equal(controller.stamina,37);
+  const runtime=bind(env,`let resumePose={},ready=true,loadingAsset=false,combatResult={},mapPortal=null,mapLoadingGeneration;const location={href:'https://example.test/'};const hooks=({${source.slice(start,end)}});return {prepare:hooks.prepare,state:()=>({ready,loadingAsset})};`);
+  runtime.prepare('https://example.test/?character=warrior-v5');assert.deepEqual(runtime.state(),{ready:false,loadingAsset:true});assert.equal(combat.hp,317);assert.equal(controller.stamina,37);
   assert.equal(gesture.sources.size,0);assert.equal(combat.passiveRecovery.elapsed,0);assert.equal(combat.recover(.1,actor,(...args)=>events.push(args)),0);assert.equal(events.length,0);
 });
 

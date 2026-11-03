@@ -1,0 +1,24 @@
+✔ nested settings/pattern/style dialogs pause actual cast time until the final modal closes, with no resume time jump (1.5159ms)
+✔ map completion reconciles audio and rendering after a modal closes or visibility changes during loading (1.5817ms)
+✔ actual map prepare cancels held sprint and resets recovery time while preserving carried HP/stamina (1.4324ms)
+✔ actual new-life restart restores resource owners and cannot inherit the old recovery or held input (0.3865ms)
+✔ actual zero/loading render cannot retain recovery debt (loading=false) (0.6424ms)
+✔ actual zero/loading render cannot retain recovery debt (loading=true) (0.5376ms)
+✔ byte progress has a fixed missing-byte denominator, streams chunks, deduplicates revisions and survives reload (24.0374ms)
+✔ queued streaming jobs never download concurrently or repeat a shared resource (54.3618ms)
+✔ failed or truncated downloads cannot complete progress or remain cached; no automatic retry (1.404ms)
+✔ denied persistent storage avoids prefetching a second copy and reports unknown progress (0.2508ms)
+✔ large downloads have one body consumer, bounded reads and throttled byte progress (7.8285ms)
+✔ mid-stream network failure and oversized bodies never become cache hits (0.9077ms)
+✔ quota rejection cancels the stream and stops prefetch without retrying the plan (1.8533ms)
+✔ map departure cancels the active stream and queued jobs but preserves completed files for the next map (1.8998ms)
+✔ departure before the queue runs causes no network calls or completed progress (0.5341ms)
+✔ initial loading curtain stays up after all download bytes until the first scene is ready (11.7523ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1461.8168

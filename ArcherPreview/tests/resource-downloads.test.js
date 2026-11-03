@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {parseHTML} from 'linkedom';
 import {ResourceDownloads,resourceUrl} from '../src/resource-downloads.js';
 import {createLoadingView} from '../src/loading-view.js';
 const base='https://example.test/ArcherPreviewSite/assets/',a='content/'+'a'.repeat(64)+'.bin',b='content/'+'b'.repeat(64)+'.ktx2';
@@ -96,12 +97,11 @@ test('departure before the queue runs causes no network calls or completed progr
  await assert.rejects(pending,{name:'AbortError'});assert.equal(s.calls.length,0);assert.equal(s.events.length,0);
 });
 
-test('black curtain is in the initial document and stays up after 100% until the first scene is ready',()=>{
+test('initial loading curtain stays up after all download bytes until the first scene is ready',()=>{
  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
  assert.match(html,/<html[^>]+data-loading="true"/);assert.match(html,/#app>#loading\{[^}]+background:#000/);assert.match(html,/html\[data-loading\] #app>:not\(#loading\)\{visibility:hidden!important/);
- const nodes=new Map(),get=id=>{if(!nodes.has(id))nodes.set(id,{hidden:false,textContent:'',style:{},classList:{remove(){}},attrs:{},setAttribute(k,v){this.attrs[k]=v;},querySelector(){return get('track');}});return nodes.get(id);};
- const doc={getElementById:get,documentElement:{dataset:{}}},view=createLoadingView(doc);view.begin();
- view.download({loaded:25e6,total:100e6,ratio:.25});assert.equal(get('loading-bytes').textContent,'25.0 / 100.0 MB');assert.equal(get('loading-progress').style.width,'25%');assert.equal(get('track').attrs['aria-valuenow'],'25');
+ const {document:doc}=parseHTML(html),get=id=>doc.getElementById(id),view=createLoadingView(doc);view.begin('warrior-v3');
+ view.download({loaded:25e6,total:100e6,ratio:.25});assert.equal(get('loading-text').textContent,'불러오는 중 (25.0/100.0MB)');assert.equal(get('loading-progress').style.width,'17.5%');assert.equal(doc.querySelector('[role="progressbar"]').getAttribute('aria-valuenow'),'18');
  view.download({loaded:100e6,total:100e6,ratio:1,complete:true});view.preparing();assert.equal(get('loading').hidden,false);assert.equal(doc.documentElement.dataset.loading,'true');
- view.reveal();assert.equal(get('loading').hidden,true);assert.equal(doc.documentElement.dataset.loading,undefined);
+ assert.equal(get('loading-progress').style.width,'70%');view.reveal();assert.equal(get('loading-progress').style.width,'100%');assert.equal(get('loading').hidden,true);assert.equal(doc.documentElement.dataset.loading,undefined);
 });

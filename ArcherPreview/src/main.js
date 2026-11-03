@@ -415,7 +415,7 @@ async function loadCharacter() {
   const arrival=consumeTravel(travelStorage,character);
   resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:!!arrival});
   world.caveFog?.update(mapSpawn(),elapsed,{force:true});
-  loadingView.begin();if(world.villageStreaming)world.villageStreaming.active=false;
+  const loadingGeneration=loadingView.begin(character);if(world.villageStreaming)world.villageStreaming.active=false;
   boss?.hide();combatResult=null;strikeSampler.reset();
   goldLoot.clearDrops();goldLootView?.clear();$('#gold-balance').hidden=!isV2();
   $('#equipment-panel').hidden = !isWarrior();
@@ -433,9 +433,9 @@ async function loadCharacter() {
     resetCamera();
     if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+WARRIOR_DIMENSIONS.stableFocusHeight,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     loadDiagnostics.phase('download');
-    if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
+    if(isVillage()&&!villageReviewEnabled)config=await prepareStartupResources(world,manifestUrl,s=>{loadingView.download(s,loadingGeneration);loadDiagnostics.download(s);},s=>loadingView.stream(s));
     else {const response=await fetch(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('캐릭터 설정 파일을 불러오지 못했습니다.');config=await response.json();}
-    loadDiagnostics.phase('model');loadingView.preparing();
+    loadDiagnostics.phase('model');loadingView.preparing(undefined,loadingGeneration);
     const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     if(isVillage()){
       await loadVillage(world);
@@ -530,13 +530,13 @@ async function loadCharacter() {
     if(isCave())await boss.activateResident(actor);
     await prepareElenaReview();
     loadDiagnostics.phase('screen');
-    // Keep the black curtain through shader readiness and the first correctly
+    // Keep the loading artwork through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
-    assertFrameHealthy();syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);
+    assertFrameHealthy();syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});
     assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     assertFrameHealthy();
-    loadingView.reveal();showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
+    loadingView.reveal(loadingGeneration);showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
@@ -801,17 +801,18 @@ try {
   for(const name of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(name,syncDiagnosticFullscreen);
   syncDiagnosticFullscreen();
   mapDeparture=createMapDeparture({
-    prepare:()=>{ready=false;loadingView.begin();input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    prepare:href=>{ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>location.replace(url),
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
   });
+  let mapLoadingGeneration;
   mapTransition=createMapTransition({
-    prepare:()=>{
+    prepare:href=>{
       saveMapPosition(true);resumePose=null;minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
-      ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
+      ready=false;loadingAsset=true;mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();for(const enemy of boss.allPooled)enemy.routeState={};
@@ -821,7 +822,7 @@ try {
     },
     release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
     load:async (href,context)=>{
-      const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url);
+      const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url),loadingGeneration=mapLoadingGeneration;
       url.searchParams.delete('elenaReview');
       url.searchParams.delete('waypoint');
       replaceWorldMap(world,destination);applyPlainsViewDistance(world,plainsViewDistanceControl.value);character=destination;history.replaceState(null,'',url);
@@ -836,8 +837,8 @@ try {
       world.camera.getViewMatrix();world.camera.getProjectionMatrix();training.relocate(world.trainingSpawn);
       const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`,location.href));
       loadDiagnostics.phase('download');
-      await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s);loadDiagnostics.download(s);},s=>loadingView.stream(s));
-      loadDiagnostics.phase('model');loadingView.preparing();await loadVillage(world);
+      await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s,loadingGeneration);loadDiagnostics.download(s);},s=>loadingView.stream(s));
+      loadDiagnostics.phase('model');loadingView.preparing(undefined,loadingGeneration);await loadVillage(world);
       world.environment.legacyTrainingModel='scarecrow';world.lighting.follow(actor.position,true);
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
@@ -846,14 +847,14 @@ try {
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
       await skyReady;
-      assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene);assertFrameHealthy();world.scene.render();
+      assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});assertFrameHealthy();world.scene.render();
     },
     finish:async()=>{
       assertFrameHealthy();
       loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
-      applyRenderQuality();loadingView.reveal();showMinimap();world.villageStreaming.active=true;
+      applyRenderQuality();loadingView.reveal(mapLoadingGeneration);showMinimap();world.villageStreaming.active=true;
       loadDiagnostics.finish();
       const modalOpen=minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());

@@ -14,7 +14,7 @@ const syncStart=main.indexOf('const syncPlayback='),syncEnd=main.indexOf('\n  co
 const syncSource=main.slice(syncStart+'const syncPlayback='.length,syncEnd).trim().replace(/;$/,'');
 const transitionStart=main.indexOf('mapTransition=createMapTransition('),finishStart=main.indexOf('finish:async()=>{',transitionStart),finishEnd=main.indexOf('\n    onError:',finishStart);
 const finishSource=main.slice(finishStart+'finish:'.length,finishEnd).trim().replace(/,$/,'');
-function compile(source,environment){assert.ok(source.length>20);return Function(...Object.keys(environment),'let ready=false,loadingAsset=true;return ('+source+');')(...Object.values(environment));}
+function compile(source,environment){assert.ok(source.length>20);return Function(...Object.keys(environment),'let ready=false,loadingAsset=true,mapLoadingGeneration=1;return ('+source+');')(...Object.values(environment));}
 
 function fixture(){
   let wall=0;const callbacks=new Set(),nodes=Object.fromEntries(['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog','death-dialog','ui-test-dialog'].map(id=>[id,{open:false}]));

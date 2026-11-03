@@ -101,7 +101,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
   motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),canvas:{focus:noop},console,
  };
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,minimapTravel,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
+  let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapLoadingGeneration,minimapTravel,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
   const uiTest=null,uiTestEnabled=false;const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
   const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
   ${leaveSource}\n${reviewSource}\n${minimapSource}\n${mapSource}

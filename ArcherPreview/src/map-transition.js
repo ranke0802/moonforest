@@ -24,7 +24,7 @@ export function createMapTransition({prepare,release,load,finish,frame=()=>new P
     async retry(){if(!failed||busy||retryUrl===null)return false;failed=false;retryCount++;return this.travel(retryUrl,retryContext);},
     async travel(url,context){
     if(busy||failed)return false;busy=true;retryUrl=url;retryContext=context;started=now();ended=null;lastError=null;let notifyError;
-    try{stage('prepare');prepare();stage('curtain');await frame();await frame();stage('release');await release();stage('load');await load(url,context);stage('finish');await finish();stage('complete');ended=now();if(lastFailure)lastFailure={...lastFailure,recovered:true};return true;}
+    try{stage('prepare');prepare(url,context);stage('curtain');await frame();await frame();stage('release');await release();stage('load');await load(url,context);stage('finish');await finish();stage('complete');ended=now();if(lastFailure)lastFailure={...lastFailure,recovered:true};return true;}
     catch(error){const failedPhase=phase;failed=true;lastError=String(error?.message??error).slice(0,240);ended=now();lastFailure={phase:failedPhase,message:lastError,...(error?.code?{code:String(error.code).slice(0,80)}:{}),...(Number.isFinite(error?.timeoutMs)?{timeoutMs:error.timeoutMs}:{}),...(error?.stage?{operation:String(error.stage).slice(0,80)}:{}),...(error?.assetId?{assetId:String(error.assetId).slice(0,120)}:{}),...(Number.isFinite(error?.level)?{level:error.level}:{}),totalElapsedMs:Math.max(0,ended-started),recovered:false};phase='error';stageStarted=ended;notifyError=error;return false;}
     // The error curtain captures diagnostics synchronously. Publish the settled
     // retry state first, without clearing it after a callback starts a retry.

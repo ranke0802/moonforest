@@ -1,4 +1,5 @@
 import {downloadText} from './resource-downloads.js';
+import {loadingArtFor} from './loading-art.js';
 
 export function needsModuleReload(error){
   const seen=new Set();
@@ -19,7 +20,12 @@ export function loadingErrorRecord(error,depth=0){
 export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.clipboard}={}){
   const get=id=>doc.getElementById(id),overlay=get('loading'),track=overlay.querySelector('[role="progressbar"]');
   const detail=get('loading-error'),summary=get('loading-error-message'),stack=get('loading-error-stack'),copy=get('copy-loading-diagnostics'),status=get('loading-copy-status'),fallback=get('loading-diagnostics-export');
-  let failed=false,reloadRequired=false,reloadRequested=false,generation=0,diagnostics=()=>({}),report=null;
+  const art=get('loading-art');
+  let failed=false,reloadRequired=false,reloadRequested=false,generation=0,diagnostics=()=>({}),report=null,phase='download',progress=0;
+  const progressTo=value=>{progress=Math.max(progress,Math.max(0,Math.min(100,value)));get('loading-progress').style.width=progress+'%';track.setAttribute('aria-valuenow',String(Math.round(progress)));};
+  const current=expected=>!failed&&(expected===undefined||expected===generation);
+  // Loading artwork is decorative and never participates in scene readiness.
+  art?.addEventListener?.('error',()=>{art.hidden=true;});
   const resetError=()=>{generation++;report=null;reloadRequired=false;reloadRequested=false;if(detail){detail.hidden=true;const disclosure=detail.querySelector('details');if(disclosure)disclosure.open=false;}if(summary)summary.textContent='';if(stack)stack.textContent='';if(copy){copy.hidden=true;copy.disabled=false;}if(status)status.textContent='';if(fallback){fallback.hidden=true;fallback.value='';}};
   const copyReport=async()=>{
     if(!failed||!report||copy?.disabled)return;const id=generation,value=report;if(copy)copy.disabled=true;
@@ -38,14 +44,26 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
       return true;
     },
     setDiagnostics(provider){diagnostics=provider;},
-    begin(){failed=false;resetError();doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');get('retry-load').hidden=true;get('retry-load').textContent='다시 불러오기';get('loading-title').textContent='불러오는 중';get('loading-text').textContent='필요한 리소스를 확인합니다.';get('loading-bytes').textContent='0.0 / 0.0 MB';get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');},
-    download(state){
-      get('loading-text').textContent=state.unavailable?'리소스를 불러옵니다.':state.complete||state.total===0?'화면을 준비합니다.':'리소스 다운로드';
-      get('loading-bytes').textContent=state.unavailable?'용량 확인 중':downloadText(state);
-      const percent=Math.max(0,Math.min(100,state.ratio*100));get('loading-progress').style.width=percent+'%';track.setAttribute('aria-valuenow',String(Math.round(percent)));
+    begin(character){
+      failed=false;resetError();phase='download';progress=0;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');
+      get('retry-load').hidden=true;get('retry-load').textContent='다시 불러오기';get('loading-title').textContent='불러오는 중';get('loading-text').textContent='불러오는 중';get('loading-bytes').textContent='0.0 / 0.0 MB';get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
+      if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');}}
+      return generation;
     },
-    preparing(){get('loading-text').textContent='화면을 준비합니다.';},
-    reveal(){if(failed)return false;overlay.hidden=true;delete doc.documentElement.dataset.loading;return true;},
+    download(state={},expectedGeneration){
+      if(!current(expectedGeneration)||phase!=='download')return;
+      const validBytes=Number.isFinite(state.loaded)&&state.loaded>=0&&Number.isFinite(state.total)&&state.total>=0;
+      get('loading-bytes').textContent=state.unavailable||!validBytes?'용량 확인 중':downloadText(state);
+      get('loading-text').textContent=state.complete||(!state.unavailable&&state.total===0)?'화면 준비하는 중':validBytes&&!state.unavailable?`불러오는 중 (${(state.loaded/1e6).toFixed(1)}/${(state.total/1e6).toFixed(1)}MB)`:'불러오는 중';
+      const ratio=state.unavailable?0:state.complete||state.total===0?1:Number.isFinite(state.ratio)?state.ratio:validBytes&&state.total>0?state.loaded/state.total:0;
+      progressTo(Math.max(0,Math.min(1,ratio))*70);
+    },
+    preparing(state,expectedGeneration){
+      if(!current(expectedGeneration))return;phase='preparing';progressTo(70);get('loading-bytes').textContent='';
+      if(Number.isFinite(state?.completed)&&Number.isFinite(state?.total)&&state.total>0&&state.completed>=0){const total=Math.floor(state.total),completed=Math.min(total,Math.floor(state.completed));if(total>0){get('loading-text').textContent=`화면 준비하는 중 (${completed}/${total})`;progressTo(70+29*completed/total);return;}}
+      get('loading-text').textContent='화면 준비하는 중';
+    },
+    reveal(expectedGeneration){if(!current(expectedGeneration))return false;progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete doc.documentElement.dataset.loading;return true;},
     fail(title,message,{retry=true,retryLabel='다시 불러오기',error,phase}={}){
       resetError();const failure={...loadingErrorRecord(error??message),phase:phase??null,at:new Date().toISOString()};
       reloadRequired=needsModuleReload(error);

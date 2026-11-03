@@ -1,0 +1,118 @@
+{
+  "passed": true,
+  "completedCases": 7,
+  "cases": [
+    {
+      "case": "actual-four-map-WebP-and-nested-route",
+      "images": [
+        {
+          "character": "warrior-v3",
+          "map": "village",
+          "bytes": 588204,
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "character": "warrior-plains",
+          "map": "great-plains",
+          "bytes": 564230,
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "character": "warrior-v4",
+          "map": "monster-forest",
+          "bytes": 562954,
+          "width": 1672,
+          "height": 941
+        },
+        {
+          "character": "warrior-v5",
+          "map": "witch-cave",
+          "bytes": 211252,
+          "width": 1672,
+          "height": 941
+        }
+      ]
+    },
+    {
+      "case": "real-loading-view-generations",
+      "mapAttempts": 8,
+      "legacyFallback": true,
+      "decorativeArtFailureNonfatal": true
+    },
+    {
+      "case": "actual-main-prepare-and-transition-destination-art-retry",
+      "destinationMaps": 4,
+      "attempts": 8
+    },
+    {
+      "case": "actual-SDK-readiness-counts-to-loading-DOM",
+      "samples": [
+        {
+          "completed": 2,
+          "total": 4,
+          "text": "화면 준비하는 중 (2/4)",
+          "width": "84.5%"
+        },
+        {
+          "completed": 3,
+          "total": 4,
+          "text": "화면 준비하는 중 (3/4)",
+          "width": "91.75%"
+        },
+        {
+          "completed": 4,
+          "total": 4,
+          "text": "화면 준비하는 중 (4/4)",
+          "width": "99%"
+        }
+      ],
+      "hiddenPoolQueries": 0
+    },
+    {
+      "case": "cache-and-unknown-progress",
+      "cachedBytesNotReportedAsFreshDownload": true,
+      "noNonfiniteValues": true
+    },
+    {
+      "case": "art-and-failure-diagnostics",
+      "contextCaptureFailurePreservesOriginal": true,
+      "clipboardFallback": true,
+      "lateClipboardIgnored": true
+    },
+    {
+      "case": "actual-CSS-declarations",
+      "viewports": [
+        [
+          844,
+          294
+        ],
+        [
+          800,
+          360
+        ],
+        [
+          852,
+          393
+        ],
+        [
+          393,
+          852
+        ],
+        [
+          360,
+          640
+        ]
+      ],
+      "normalAndFailure": true,
+      "fullWidthBottomLinePixels": 3,
+      "scope": "CSSOM declarations/cascade; no browser layout or physical display measurement"
+    }
+  ],
+  "limitations": [
+    "Actual source modules, DOM, content-addressed WebP headers/hashes, transition and Babylon NullEngine readiness were checked offline.",
+    "No browser automation, GPU/device timing, physical mobile layout or final artwork composition/quality claim.",
+    "Artwork begins at loadCharacter/map-transition loading; the pre-main bundle import interval is outside this feature scope."
+  ]
+}

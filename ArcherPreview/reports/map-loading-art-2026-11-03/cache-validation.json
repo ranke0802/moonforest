@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "completedCases": 5,
+  "cases": [
+    {
+      "case": "real-managed-cold-and-warm",
+      "artworkFiles": 4,
+      "coldIndividualFetches": 4,
+      "coldBytes": 1926640,
+      "warmIndividualFetches": 0,
+      "persistedBodyHashesMatch": true
+    },
+    {
+      "case": "single-artwork-eviction",
+      "refetchedFiles": 1,
+      "otherArtworkBodiesPreserved": 3
+    },
+    {
+      "case": "single-artwork-hash-update",
+      "newHashFetchedFiles": 1,
+      "unchangedArtworkBodiesReused": 3,
+      "oldEntryNotGloballyDeleted": true
+    },
+    {
+      "case": "actual-startup-and-map-plans",
+      "startupArtworkFiles": 4,
+      "coldContentRequests": [
+        "bundles/44c9f5ca023419695928c2503c40ee8277b8e074fa569667bdd81280ef70a604.mfp.gz"
+      ],
+      "coldNetworkBytes": 1927248,
+      "warmContentRequests": 0,
+      "mapPlanArtworkFiles": 0,
+      "actualBundleExtractionUsed": true
+    },
+    {
+      "case": "actual-worker-native-image-cache-read",
+      "warmImageGets": 16,
+      "warmNetworkFetches": 0,
+      "evictionFetches": 1,
+      "newHashFetches": 1,
+      "concurrentEvictionGetsCoalesced": true
+    }
+  ],
+  "limitations": [
+    "Production ResourceDownloads/startup/map plans and the actual public service-worker script run with real artwork/bundle bytes against an in-memory CacheStorage API surrogate.",
+    "This checks persistent-cache key/body/request logic across fresh managers and controlled-worker image requests; it is not a browser disk persistence, actual native image decoder/network trace, mobile GPU or performance measurement.",
+    "Without usable CacheStorage or a controlling service worker, network/HTTP-cache fallback remains possible. No claim of unconditional offline reuse on unsupported or denied-storage devices."
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "source": "Four user-supplied PNG artworks, content verified against assigned region",
+  "generationCalls": 0,
+  "resized": false,
+  "cropped": false,
+  "totalSourceBytes": 12421849,
+  "totalWebPBytes": 1926640,
+  "artworks": [
+    {
+      "region": "village",
+      "character": "warrior-v3",
+      "sourceFile": "C:\\Users\\ryank\\.codex\\generated_images\\01a18370-6ece-7e72-a7f7-743e78a90aaa\\exec-020585e1-23d7-487c-8007-0cb40ebdb524.png",
+      "sourceSha256": "ae4133dfbf84fa7f97ad55e7fc7e702803912bcc068ea5ec60fdd4dd2073215a",
+      "sourceBytes": 3429614,
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "url": "./content/70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350.webp",
+      "sha256": "70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350",
+      "format": "WebP",
+      "width": 1672,
+      "height": 941,
+      "bytes": 588204,
+      "quality": 90,
+      "method": 6,
+      "retainedByteRatio": 0.171507,
+      "rgbPSNRdB": 35.79,
+      "position": "55% 50%"
+    },
+    {
+      "region": "great-plains",
+      "character": "warrior-plains",
+      "sourceFile": "C:\\Users\\ryank\\.codex\\generated_images\\01a18370-6ece-7e72-a7f7-743e78a90aaa\\exec-d37b659a-c395-414a-bd75-3bc9b5be1aa9.png",
+      "sourceSha256": "1b47cfe03af72db177b78ad4dde2ee01bb30128fd915b7c8a5a9d262e6d5b206",
+      "sourceBytes": 3321813,
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "url": "./content/5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9.webp",
+      "sha256": "5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9",
+      "format": "WebP",
+      "width": 1672,
+      "height": 941,
+      "bytes": 564230,
+      "quality": 90,
+      "method": 6,
+      "retainedByteRatio": 0.169856,
+      "rgbPSNRdB": 35.863,
+      "position": "50% 50%"
+    },
+    {
+      "region": "monster-forest",
+      "character": "warrior-v4",
+      "sourceFile": "C:\\Users\\ryank\\.codex\\generated_images\\01a18370-6ece-7e72-a7f7-743e78a90aaa\\exec-23d473e0-edd5-4eb6-9f91-32ebb3de4ed2.png",
+      "sourceSha256": "7010ee5b5ae7bffbb6277798f78d5060a079cb279797405948fd777397b5eaaf",
+      "sourceBytes": 3412115,
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "url": "./content/1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b.webp",
+      "sha256": "1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b",
+      "format": "WebP",
+      "width": 1672,
+      "height": 941,
+      "bytes": 562954,
+      "quality": 90,
+      "method": 6,
+      "retainedByteRatio": 0.164987,
+      "rgbPSNRdB": 37.932,
+      "position": "50% 50%"
+    },
+    {
+      "region": "witch-cave",
+      "character": "warrior-v5",
+      "sourceFile": "C:\\Users\\ryank\\.codex\\generated_images\\01a18370-6ece-7e72-a7f7-743e78a90aaa\\exec-ddc00fac-296d-4c87-894d-74dfe3c873d3.png",
+      "sourceSha256": "d4c3c86fbcace42ec2457fdc1dc941ae87294c8a632b4bc611045f688b5140b8",
+      "sourceBytes": 2258307,
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "url": "./content/388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30.webp",
+      "sha256": "388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30",
+      "format": "WebP",
+      "width": 1672,
+      "height": 941,
+      "bytes": 211252,
+      "quality": 90,
+      "method": 6,
+      "retainedByteRatio": 0.093544,
+      "rgbPSNRdB": 40.092,
+      "position": "42% 50%"
+    }
+  ],
+  "limitations": [
+    "PSNR is a pixel-compression metric. Final visual inspection is recorded separately."
+  ],
+  "visualInspection": {
+    "sourceAndDecodedWebPReviewed": true,
+    "images": 4,
+    "result": "Region contents match the provided mapping; original framing and fine detail remain intact, including dark cave gradients.",
+    "reviewedAt": "2026-11-03T06:00:54.267Z"
+  },
+  "validation": {
+    "pureNodeLookup": true,
+    "nestedAppURL": "https://example.test/nested/game/assets/content/",
+    "unsupportedCharactersReturnNull": true,
+    "readOnlyPublishReferenceGraph": {
+      "manifestIncluded": true,
+      "resourceCount": 4,
+      "bytes": 1926640
+    },
+    "isolatedViteCompile": {
+      "inMemoryOnly": true,
+      "chunkBytes": 1560,
+      "asyncImports": 0,
+      "jsonManifestBundled": true
+    }
+  }
+}

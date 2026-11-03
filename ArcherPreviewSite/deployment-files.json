@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "resourceRevision": "6d94fb4f87460aa1406acf9ff7be8186bd465e337728b930e068bb85c06b0a21",
-  "bytes": 624613497,
+  "resourceRevision": "8b96336470c1d4e53c7f55c07bcd40f56f4eac78697814d00ff407e9d4525519",
+  "bytes": 628474230,
   "files": [
     {
       "path": "app.webmanifest",
@@ -1639,6 +1639,11 @@
       "sha256": "43404d2aedc05fdf964fa45cefcbde416cfe99aa43429dd907a25a200bd48d87"
     },
     {
+      "path": "assets/bundles/44c9f5ca023419695928c2503c40ee8277b8e074fa569667bdd81280ef70a604.mfp.gz",
+      "bytes": 1927248,
+      "sha256": "44c9f5ca023419695928c2503c40ee8277b8e074fa569667bdd81280ef70a604"
+    },
+    {
       "path": "assets/bundles/45013ebb61fd79750cb59964aa9dbb9dc3048ac52bec3259f7b9bdeafb84c931.mfp.gz",
       "bytes": 87214,
       "sha256": "45013ebb61fd79750cb59964aa9dbb9dc3048ac52bec3259f7b9bdeafb84c931"
@@ -3049,6 +3054,11 @@
       "sha256": "1af187ce95063eb29067eb932890a3c43c2c7d34fc3a04148f74e646e8f66618"
     },
     {
+      "path": "assets/content/1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b.webp",
+      "bytes": 562954,
+      "sha256": "1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b"
+    },
+    {
       "path": "assets/content/1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png",
       "bytes": 5871045,
       "sha256": "1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e"
@@ -3687,6 +3697,11 @@
       "path": "assets/content/38465d25addaf66d8e851d2c72e8fe85e262f20d049112a9d4e825e5ccaf6e1a.gltf",
       "bytes": 2997,
       "sha256": "38465d25addaf66d8e851d2c72e8fe85e262f20d049112a9d4e825e5ccaf6e1a"
+    },
+    {
+      "path": "assets/content/388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30.webp",
+      "bytes": 211252,
+      "sha256": "388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30"
     },
     {
       "path": "assets/content/38e853ee2755ed12566bb6b94d8e0f41d5ab4a358424980245f305e4d95c888a.bin",
@@ -4374,6 +4389,11 @@
       "sha256": "573defc19ac7e4816e4acbea85c59cfb5a28ffbf8c0e293b041018457b442dc0"
     },
     {
+      "path": "assets/content/5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9.webp",
+      "bytes": 564230,
+      "sha256": "5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9"
+    },
+    {
       "path": "assets/content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
       "bytes": 60026,
       "sha256": "580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786"
@@ -4897,6 +4917,11 @@
       "path": "assets/content/6fa1878c08381ab89df96aed278548ceb4f65d04681d9a3aec082892ddb674a8.bin",
       "bytes": 26276,
       "sha256": "6fa1878c08381ab89df96aed278548ceb4f65d04681d9a3aec082892ddb674a8"
+    },
+    {
+      "path": "assets/content/70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350.webp",
+      "bytes": 588204,
+      "sha256": "70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350"
     },
     {
       "path": "assets/content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
@@ -8014,9 +8039,9 @@
       "sha256": "6eae8b449a5e23f487d2fe5e7cb99d8067e95d337b97d6e97dd79f7ccd583cbc"
     },
     {
-      "path": "assets/index-Bm_Rt0YQ.js",
-      "bytes": 2680908,
-      "sha256": "3367acb3b4138819b1a65f0975952dda03664c6a330320b2e005d285e78ea540"
+      "path": "assets/index-BpOXe7-9.js",
+      "bytes": 2684021,
+      "sha256": "9bf8a1a092c836453c1824ebd9d7c638b6ae73d77393a9c98f82f4f7e383babe"
     },
     {
       "path": "assets/index-CyQXSVRE.css",
@@ -8042,6 +8067,11 @@
       "path": "assets/LICENSE-CKvGJ7Cc.txt",
       "bytes": 4262,
       "sha256": "8ac09ade112a51244539a58e78463c8ae4327ba3240f42c8a61bfad3a1e197b0"
+    },
+    {
+      "path": "assets/map-loading-art.json",
+      "bytes": 1572,
+      "sha256": "c93cd08bea5d551f86e994e34213ea62d6fd0420f72a91de63eaca04a218d097"
     },
     {
       "path": "assets/meshopt-decoder.json",
@@ -8085,13 +8115,13 @@
     },
     {
       "path": "assets/resource-index.json",
-      "bytes": 177326,
-      "sha256": "b5f6c8d927c58a7207e05bbfa22e9be19e192813e8c868784902c44238c6dc5e"
+      "bytes": 178070,
+      "sha256": "f29408120fc0051ab56f08cb7e6fd0905a2d1fc20b92f3bcd213e159a9e89c0a"
     },
     {
       "path": "assets/resource-sizes.json",
-      "bytes": 85779,
-      "sha256": "5d6ca7293b86ad110257a95d86a2e7712c037d98f965de69ab855caeb7cae008"
+      "bytes": 86095,
+      "sha256": "c3ac06c7a5ab8ea74a7b712a86b0cf16eaacc17946e5d00910282d53f416b06d"
     },
     {
       "path": "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -8160,8 +8190,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 59027,
-      "sha256": "c82e2295c8301c03207eb829bb29af7b674f1c23b6dd70e7ec997a8cd1422655"
+      "bytes": 60127,
+      "sha256": "5b42444b227733386f486a4d085778d23ff0fb70d5f9a146e7fb4b101e7cc7fb"
     },
     {
       "path": "KTX2_NOTICES.txt",
