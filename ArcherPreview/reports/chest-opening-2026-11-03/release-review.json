@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "f18c2b8003db3f9eee35c3017bcaa0fe38c1a14f",
+  "scope": "Chest opening animation and a separate standalone commercial UI proposal",
+  "game": {
+    "openSeconds": 0.85,
+    "openDegrees": 105,
+    "ease": "cubic ease-out",
+    "openedChestRemainsVisible": true,
+    "openedStateRestoredFromExistingSave": true,
+    "rewardCountPerChest": 1,
+    "originalTextureResourcesUnchanged": true,
+    "originalTriangles": 4479,
+    "runtimeTriangles": 4487,
+    "sharedSourceMeshes": 2,
+    "newTextureDownloads": 0,
+    "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "tradeoff": "Separate instanced body and lid submissions replace one source; completed transforms are frozen and only active openings update each frame."
+  },
+  "validation": {
+    "fullSuite": {"tests": 1457, "passed": 1457, "failed": 0, "skipped": 0},
+    "independentFocused": {"tests": 19, "passed": 19},
+    "maps": ["village", "great-plains", "monster-forest", "witch-cave"],
+    "unchangedProtectedFiles": 53,
+    "visualReview": "Nine offline Blender views of the actual runtime geometry and hinge matrices with the existing texture; not gameplay screenshots.",
+    "browserAutomation": false,
+    "limitations": "Node DOM and Babylon NullEngine cover logic, lifetime and render submission contracts. They do not measure hardware GPU time or device FPS. Mobile gameplay is not visually certified."
+  },
+  "uiProposal": {
+    "path": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/commercial-ui-proposal/2026-11-03/MOONFOREST_상용_UI_시안.html",
+    "bytes": 30075486,
+    "sha256": "501cbb818835f56bea1c3f66d577e68bb3312d686338193042a4e5fa08df03b1",
+    "selfContained": true,
+    "scenes": 12,
+    "interactive": ["bag", "item use", "journal", "settings", "scene gallery"],
+    "appliedToGame": false,
+    "limitations": "Some historical scene compositions show earlier controls. Latest values are identified in the interactive proposal. Dedicated final toolbar art is still required."
+  }
+}

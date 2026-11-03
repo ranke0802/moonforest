@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {NullEngine,Scene,FreeCamera,Vector3,MeshBuilder,PBRMaterial,TransformNode,HemisphericLight} from '@babylonjs/core';
 import {MeshoptCompression} from '@babylonjs/core/Meshes/Compression/meshoptCompression.js';
 import {MeshoptDecoder} from 'meshoptimizer';
@@ -40,7 +41,7 @@ function scenery(f,x,z){
 }
 function capture(sources,owner){
   const calls=[];
-  for(const source of sources){const original=source._processRendering;source._processRendering=function(mesh,sub,effect,fill,batch,...rest){const ink=owner(source);calls.push({source,ink:ink?.drawing===true,effect,instances:[...(batch.visibleInstances[sub._id]??[])]});return original.call(this,mesh,sub,effect,fill,batch,...rest);};}
+  for(const source of sources){const original=source._processRendering;source._processRendering=function(mesh,sub,effect,fill,batch,...rest){const ink=owner(source),drawing=ink?.drawing===true,selectedMaterial=drawing?(ink.tintedSources.has(source)?ink.tintedMaterial:ink.material):null;calls.push({source,ink:drawing,effect,expectedInkEffect:selectedMaterial?.getEffect(),instances:[...(batch.visibleInstances[sub._id]??[])]});return original.call(this,mesh,sub,effect,fill,batch,...rest);};}
   return calls;
 }
 function coupled(calls){
@@ -54,6 +55,12 @@ test('four actual map point sets render shipped chest geometry with graded ink a
   MeshoptCompression._Default={decodeGltfBufferAsync:async(bytes,count,stride,mode,filter)=>{const output=new Uint8Array(count*stride);MeshoptDecoder.decodeGltfBuffer(output,count,stride,bytes,mode,filter);return output;}};
   t.after(()=>{MeshoptCompression._Default=previous;});
   const json=JSON.parse(readFileSync(modelUrl));
+  assert.equal(profile.triangles,4479,'the downloaded source keeps its original triangle count');
+  assert.equal(json.meshes.flatMap(mesh=>mesh.primitives).reduce((n,p)=>n+json.accessors[p.indices].count/3,0),4479);
+  // Opening adds no image/download. Every original texture still has the same
+  // bytes named by its immutable content hash; only8 in-memory inner-wall
+  // triangles are added to the split body/lid geometry before shader warmup.
+  for(const url of new Set([...chest.lods.flatMap(lod=>lod.resources),...chest.highTextures.resources].filter(url=>url.endsWith('.ktx2'))))assert.equal(createHash('sha256').update(readFileSync(new URL(url,assetBase))).digest('hex'),url.match(/([a-f0-9]{64})\.ktx2$/)[1]);
   for(const buffer of json.buffers)if(buffer.uri)buffer.uri='data:application/octet-stream;base64,'+readFileSync(new URL(buffer.uri,modelUrl)).toString('base64');
   // Preserve shipped mesh/accessor/node bytes. Omit image decoding only; GPU
   // texture upload and raster output are outside this CPU/SDK integration test.
@@ -74,14 +81,17 @@ test('four actual map point sets render shipped chest geometry with graded ink a
     noTint(ordinary.source);assert.equal(ordinary.ink.tintedMaterial,null);assert.ok(!ordinary.ink.material.options.attributes.includes('villageInkTint'));
     await props.load(points);props.update(points,target,point=>point.id===target.id);await props.whenIdle();assert.equal(props.inspect().modelFailures,0);assert.equal(props.inspect().markerInstances,points.length);
     const ink=f.scene._afterRenderingMeshStage.map(step=>step.component).find(component=>component instanceof VillageOutlines&&component.stats===props.stats);assert.ok(ink?.tintedMaterial);
-    const sources=[...ink.sources],geometryTriangles=[...new Set(sources.map(source=>source.geometry))].reduce((total,geometry)=>total+geometry.getTotalIndices()/3,0);assert.equal(geometryTriangles,profile.triangles);
+    const sources=[...ink.sources],geometryTriangles=[...new Set(sources.map(source=>source.geometry))].reduce((total,geometry)=>total+geometry.getTotalIndices()/3,0);assert.equal(sources.length,2,'body and hinged lid retain two shared native sources');assert.equal(new Set(sources.map(source=>source.material)).size,1,'body and lid share their original material');assert.equal(geometryTriangles,profile.triangles+8);assert.equal(geometryTriangles,4487,'original4479 plus8 interior wall triangles');
     const meshes=target.visual.getChildMeshes().filter(mesh=>mesh.getTotalVertices()>0);assert.ok(meshes.length);
     for(const mesh of meshes){assert.equal(mesh.geometry,mesh.sourceMesh.geometry);assert.equal(mesh.instancedBuffers.villageInkTint.toHexString().toLowerCase(),lootRarity(target.tier).color);assert.equal(ink.entries.find(entry=>entry.mesh===mesh).inkWidth,.028);}
     assert.equal(props.inspect().visible,1);const calls=capture([...sources,ordinary.source],source=>sources.includes(source)?ink:ordinary.ink);
     for(const scale of [1,1.5,2,1]){
       applyPlainsViewDistance(f.world,scale);ink.next=ordinary.ink.next=0;calls.length=0;f.scene.render();coupled(calls);
       assert.ok(calls.some(call=>call.ink&&sources.includes(call.source)),'real chest ink submission must occur');assert.ok(calls.some(call=>call.ink&&call.source===ordinary.source),'real monochrome scenery ink submission must occur');
-      for(const call of calls.filter(call=>call.ink&&sources.includes(call.source)))assert.equal(call.effect,ink.tintedMaterial.getEffect());
+      // Body vertex colours and the uncoloured lid use separate cached variants
+      // of the same tinted material. Compare at submission, before the next
+      // source selects its own effect; the final getEffect() is only the last one.
+      for(const call of calls.filter(call=>call.ink&&sources.includes(call.source))){assert.equal(call.effect,call.expectedInkEffect);assert.equal(/#define VERTEXCOLOR\b/.test(call.effect.defines),call.source.isVerticesDataPresent('color'));}
       if(map==='great-plains'){fogUniform(ink,65*scale,80*scale);fogUniform(ordinary.ink,65*scale,80*scale);}else{fogUniform(ink,65,80);fogUniform(ordinary.ink,65,80);}
       assert.equal(f.engine.getDepthWrite(),true);noTint(ordinary.source);if(target.tier===5)tier5Draws++;
     }
@@ -96,7 +106,7 @@ test('four actual map point sets render shipped chest geometry with graded ink a
     // every later map must return to exactly that same complete snapshot.
     if(circuit>0)assert.deepEqual(after,warmedBaseline,`complete warmed resource/observer plateau after ${map} visit ${circuit}`);visits++;
   }
-  assert.equal(visits,8);assert.equal(tier5Draws,8);results.push({case:'actual-four-map-chest-and-monochrome-render',visits,shippedChestTriangles:profile.triangles,pointsByMap:Object.fromEntries(maps.map(map=>[map,CHAPTER_POINTS.filter(point=>point.map===map).length])),tier5Draws,coldBaseline:baseline,warmedBaseline,warmedSceneTextureNames:f.scene.textures.map(texture=>texture.name),plateau:true});
+  assert.equal(visits,8);assert.equal(tier5Draws,8);results.push({case:'actual-four-map-chest-and-monochrome-render',visits,shippedChestTriangles:profile.triangles,runtimeChestTriangles:4487,additionalInteriorTriangles:8,sharedSourceMeshes:2,sharedSourceMaterials:1,originalTextureContentHashesMatch:true,pointsByMap:Object.fromEntries(maps.map(map=>[map,CHAPTER_POINTS.filter(point=>point.map===map).length])),tier5Draws,coldBaseline:baseline,warmedBaseline,warmedSceneTextureNames:f.scene.textures.map(texture=>texture.name),plateau:true});
 });
 
 test('real fog gating and cold native LOD batches retain coupled monochrome and tinted outline submissions',async t=>{

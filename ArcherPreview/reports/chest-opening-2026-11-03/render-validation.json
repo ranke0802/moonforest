@@ -1,0 +1,15 @@
+{
+  "blender": "4.5.14 LTS",
+  "renders": [
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\closed-front.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\closed-side.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\closed-quarter.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\opening-front.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\opening-side.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\opening-quarter.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\open-front.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\open-side.png",
+    "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\chest-opening\\2026-11-03\\open-quarter.png"
+  ],
+  "scope": "Actual runtime chest geometry and hinge matrices, existing texture. Offline approximate PBR lights, not live village toon shader."
+}

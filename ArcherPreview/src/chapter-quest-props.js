@@ -7,6 +7,7 @@ import {MapLoadLifetime} from './map-load-lifetime.js';
 import {loadMapContainer} from './map-container.js';
 import {instantiateStaticMap} from './static-map-instances.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
+import {prepareChestOpening,createChestOpening} from './chest-opening.js';
 
 // An opaque 24-segment annulus replaces the separate 1,250-triangle torus.
 // The points share one 48-triangle geometry and use native instances.
@@ -23,17 +24,18 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
  const scene=world.scene;
  let version=0,disposed=false,scope=null,manifest=null,mapPoints=[],owned=[],containers=[],records=[],outlines=null,marker=null,markerMaterial=null,worker=null;
  let models=new Map(),demand=new Set();
+ let animationTime=null;const opening=new Set();
  const stats={modelLoads:0,modelFailures:0,instances:0,markerTriangles:48,markerInstances:0,outlineDraws:0,lastError:null};
  const current=revision=>!disposed&&revision===version&&!scene.isDisposed;
  const release=()=>{
-  version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;
+  version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;opening.clear();animationTime=null;
   outlines?.dispose();outlines=null;for(const root of owned)root.dispose();for(const c of containers)c.dispose();
   for(const p of mapPoints){delete p.marker;delete p.visual;}
   marker?.dispose();markerMaterial?.dispose();marker=null;markerMaterial=null;
   owned=[];containers=[];records=[];mapPoints=[];
   Object.assign(stats,{instances:0,markerInstances:0,outlineInstances:0,outlineTriangles:0,lastError:null});
  };
- const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p));p.visual?.setEnabled(demand.has(p));}};
+ const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p)&&!p.opened);p.visual?.setEnabled(demand.has(p));}for(const record of records)if(record.point.opened&&record.opening&&!record.opening.state.opened)record.opening.open({immediate:true});};
  async function install(id,revision,signal){
   const config=manifest?.assets[id],profile=config?.lods?.[1]??config?.lods?.[0];if(!profile){models.set(id,'unavailable');return;}
   const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href),url=new URL(profile.model,base);
@@ -42,6 +44,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
   try{
    await lifetime.run(()=>world.prefetchResources?.(profile.resources??[]));lifetime.check();stats.modelLoads++;
    container=await lifetime.run(()=>loadContainer(url,scene,{signal:lifetime.signal,lifetime}),{onLate:value=>value?.dispose()});lifetime.check();
+   if(id==='chest-common')Object.assign(stats,{chestGeometry:prepareChestOpening(container)});
    const sources=container.meshes.filter(m=>m.getTotalVertices?.()>0);
    prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);world.lighting?.registerMeshes?.(sources);
    for(const mesh of sources){mesh.isPickable=false;world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
@@ -51,10 +54,10 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
     root.position.set(point.x,world.terrain.heightAt(point.x,point.z),point.z);root.rotation.y=point.yaw??0;
     root.scaling.setAll((height/config.bounds[1])*(point.scale??1));root.setEnabled(false);localRoots.push(root);
     const instance=instantiateStaticMap(container,name=>'quest-'+point.id+'-'+name);for(const node of instance.rootNodes)node.parent=root;
-    root.computeWorldMatrix(true);const meshes=root.getChildMeshes().filter(m=>m.getTotalVertices?.()>0);
+    root.computeWorldMatrix(true);const meshes=root.getChildMeshes().filter(m=>m.getTotalVertices?.()>0),chest=id==='chest-common'?createChestOpening(root,{opened:point.opened===true}):null;
     for(const mesh of meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     for(const node of root.getChildTransformNodes())node.freezeWorldMatrix();root.freezeWorldMatrix();
-    localRecords.push({point,root,meshes,placement:{...point,kind:'ground-detail',scale:point.scale??1},config,center:new Vector3(point.x,root.position.y+height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
+    localRecords.push({point,root,meshes,opening:chest,placement:{...point,kind:'ground-detail',scale:point.scale??1},config,center:new Vector3(point.x,root.position.y+height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
    }
    const tinted=mapPoints.some(point=>point.model===id&&(point.lootTier??point.tier));
    for(const source of sources)prepareVillageInkSource(source,{tinted});
@@ -94,9 +97,19 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    demand.clear();for(const p of points)if(position&&Math.hypot(position.x-p.x,position.z-p.z)<30&&visible(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z})))demand.add(p);
    sync();pump();
   },
+  openChest(point,{immediate=false}={}){
+   if(disposed||point.model!=='chest-common')return false;point.opened=true;
+   const controller=records.find(record=>record.point===point)?.opening;
+   if(controller?.open({immediate})&&controller.state.active)opening.add(controller);
+   sync();return !!controller;
+  },
+  animate(time){
+   if(!Number.isFinite(time)||disposed)return;const dt=animationTime===null?0:Math.max(0,time-animationTime);animationTime=time;
+   for(const controller of opening)if(!controller.advance(dt))opening.delete(controller);
+  },
   async whenIdle(){while(worker){const pending=worker;await pending;if(worker===pending)await Promise.resolve();}},
   isReady(point){return !point.model||point.visual?.isEnabled()===true;},
-  inspect(){return {...stats,loading:!!worker,models:Object.fromEntries(models),visible:mapPoints.filter(p=>p.visual?.isEnabled()).length};},
+  inspect(){return {...stats,loading:!!worker,models:Object.fromEntries(models),visible:mapPoints.filter(p=>p.visual?.isEnabled()).length,openingChests:opening.size,openedChests:mapPoints.filter(p=>p.model==='chest-common'&&p.opened).length};},
   dispose(){if(disposed)return;disposed=true;release();scene.onDisposeObservable.remove(observer);}
  };
  const observer=scene.onDisposeObservable.addOnce(()=>api.dispose());return api;

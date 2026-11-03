@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "expectedCases": 5,
+  "scope": "Actual chapter DOM event/ChapterJourney storage plus shipped chest Meshopt geometry, native Babylon instances, moving world matrices, typed ink and lifetime cancellation.",
+  "cases": [
+    {
+      "case": "reward-storage",
+      "authoredChests": 29,
+      "synchronousSingleWrite": true,
+      "duplicateRewards": 0,
+      "unavailableStorageSessionSafe": true
+    },
+    {
+      "case": "four-map-actual-ui-sdk",
+      "maps": [
+        {
+          "map": "village",
+          "id": "village-treasure-north-wall",
+          "tier": 3,
+          "openingVisible": true,
+          "bodyStable": true,
+          "reentryImmediateOpen": true
+        },
+        {
+          "map": "great-plains",
+          "id": "great-plains-treasure-forest-cache",
+          "tier": 4,
+          "openingVisible": true,
+          "bodyStable": true,
+          "reentryImmediateOpen": true
+        },
+        {
+          "map": "monster-forest",
+          "id": "monster-forest-treasure-cave-approach",
+          "tier": 4,
+          "openingVisible": true,
+          "bodyStable": true,
+          "reentryImmediateOpen": true
+        },
+        {
+          "map": "witch-cave",
+          "id": "witch-cave-treasure-reliquary",
+          "tier": 5,
+          "openingVisible": true,
+          "bodyStable": true,
+          "reentryImmediateOpen": true
+        }
+      ],
+      "visits": 8,
+      "sourceTriangles": 4479,
+      "runtimeTriangles": 4487,
+      "additionalInteriorTriangles": 8,
+      "exactResourcePlateau": {
+        "meshes": 0,
+        "materials": 1,
+        "geometries": 0,
+        "before": 0,
+        "after": 0,
+        "dispose": 4,
+        "stages": 0
+      },
+      "imagesDecoded": false
+    },
+    {
+      "case": "five-rarity-shared-geometry",
+      "rarities": 5,
+      "parts": 10,
+      "sharedSourceGeometries": 2,
+      "inkThickness": 0.028,
+      "allColoursPreserved": true,
+      "actualBaseAndInkSubmissionsCoupled": true,
+      "finalMatricesFrozen": true,
+      "verticesInsideActualFrustumBounds": 5125
+    },
+    {
+      "case": "visible-ready-reward-gate",
+      "failedAttempts": 1,
+      "explicitReentryRetry": 1,
+      "failedAttemptRewards": 0,
+      "successfulRewards": 1
+    },
+    {
+      "case": "abandoned-decode-and-mid-opening-release",
+      "lateMeshesDisposed": 2,
+      "releases": 7,
+      "oldVisualResurrections": 0
+    }
+  ],
+  "limitations": [
+    "Node/Babylon NullEngine has no GPU rasterization, deviceFPS or hardware upload timing.",
+    "Original4479 chest geometry is partitioned once in memory and8 interior wall triangles are added; images/texture upload and unrelated map scenery are omitted. Terrain and navigation use authored map sources.",
+    "This is independent lifecycle/integration QA, not visual certification of the opening sculpture."
+  ],
+  "browserAutomation": false
+}

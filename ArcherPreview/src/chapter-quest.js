@@ -38,11 +38,14 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
   if(['elena','vivian'].includes(id)&&map==='witch-cave'&&v.done.includes('M07')){notify(id==='elena'?'엘레나: 그 방에 가까이 가지 마.':'비비앙: 이 인과율에 엮이다니. 너도 참 안됐구나.');return journey.record('talk:'+id,1,'talk:'+id);}return false;
  }
  function allowed(p){if(!p.requires)return true;if(p.requires.includes(':'))return journey.value.facts[p.requires]>0;return ['active','ready','done'].includes(journey.status(p.requires));}
- function visible(p){if(!allowed(p)||world.caveFog&&!world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z}))return false;if(p.id==='apple-tree')return appleDrops===0&&journey.status('Q01')==='active';if(p.id==='apple-drop')return appleDrops>0;return !journey.seen.has('point:'+p.id);}
+ function inView(p){return allowed(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z}));}
+ function visible(p){if(!inView(p))return false;if(p.id==='apple-tree')return appleDrops===0&&journey.status('Q01')==='active';if(p.id==='apple-drop')return appleDrops>0;return !journey.seen.has('point:'+p.id);}
+ // Loot ownership controls interaction; an opened chest remains part of the scenery.
+ function displayable(p){return p.tier&&p.model==='chest-common'&&p.opened?inView(p):visible(p);}
  function interact(){if(!safe()||!nearest||Math.hypot(getState().position.x-nearest.x,getState().position.z-nearest.z)>3)return;const p=nearest;if(!visible(p)||props.isReady?.(p)===false||!world.navigation.segmentClear(getState().position,p,.05))return;
   if(p.id==='apple-tree'){notify('나무 가까이에서 J 또는 공격 버튼을 짧게 누르세요. 떨어진 사과는 G로 줍습니다.');}
   else if(p.id==='apple-drop'){const count=Math.min(2,Math.max(0,6-(journey.value.bag.apple??0)));if(count){journey.collect('apple',count);appleDrops--;notify(`사과 ${count}개를 주웠습니다.`);}else notify('사과는 충분합니다. 수첩에서 의뢰를 확인하세요.');}
-  else if(p.tier){const rewards=journey.openChest(p);if(rewards){const grade=lootRarity(p.tier);notify(`${grade.name} · ${grade.itemName} +1 · ${grade.gold} G`,p.tier);}}
+  else if(p.tier){const rewards=journey.openChest(p);if(rewards){p.opened=true;props.openChest?.(p);nearest=null;const grade=lootRarity(p.tier);notify(`${grade.name} · ${grade.itemName} +1 · ${grade.gold} G`,p.tier);}}
   else if(p.item){journey.collect(p.item,p.count,'point:'+p.id);notify((names[p.item]??p.label)+' 수집');}
   else{journey.record(p.key,1,'point:'+p.id);notify(p.text||p.label);}
   refresh(true);
@@ -72,13 +75,13 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
   action(kind){if(getState().map==='village')journey.record('action:'+kind);},
   event(key,count=1,token){return journey.record(key,count,token);},
   strike(result,position){if(getState().map!=='village'||!['active','ready'].includes(journey.status('Q01'))||!['slash','attack','moveAttack'].includes(result.state)||result.actionId===lastStrike||Math.hypot(position.x-QUEST_APPLE_TREE.x,position.z-QUEST_APPLE_TREE.z)>3.4)return;lastStrike=result.actionId;appleHits++;if((journey.value.bag.apple??0)<6)appleDrops=Math.min(3,appleDrops+1);journey.record('apple:strike');notify('사과가 떨어졌습니다. 가까이에서 G로 줍기');},
-  update(time){if(time-lastTime<.15)return;lastTime=time;const s=getState();if(!s.ready)return;
-   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);return {...p,x:position.x,z:position.z};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
+  update(time){const s=getState();if(!s.ready)return;props.animate?.(time);if(time-lastTime<.15)return;lastTime=time;
+   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);return {...p,x:position.x,z:position.z,opened:!!p.tier&&journey.seen.has('point:'+p.id)};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
    if(s.map==='village')journey.record('visit:village',1,'visit:village');
    if(s.map==='great-plains'&&Math.hypot(s.position.x+5,s.position.z-25)<8)journey.record('visit:junction',1,'visit:junction');
    if(s.map==='monster-forest'&&Math.hypot(s.position.x-27,s.position.z+36)<6)journey.record('visit:cave-camp',1,'visit:cave-camp');
    nearest=safe()&&!dialog.open?points.filter(p=>visible(p)&&props.isReady?.(p)!==false).map(p=>({p,d:Math.hypot(p.x-s.position.x,p.z-s.position.z)})).filter(v=>v.d<3&&world.navigation.segmentClear(s.position,v.p,.05)).sort((a,b)=>a.d-b.d)[0]?.p??null:null;
-   props.update(points,s.position,visible);const failure=props.stats?.lastError;if(failure&&failure!==lastPropError){lastPropError=failure;notify('소품 준비가 중단됐습니다. 의뢰 기록은 유지되며, 지역에 다시 들어오면 다시 준비합니다.');}refresh();
+   props.update(points,s.position,displayable);const failure=props.stats?.lastError;if(failure&&failure!==lastPropError){lastPropError=failure;notify('소품 준비가 중단됐습니다. 의뢰 기록은 유지되며, 지역에 다시 들어오면 다시 준비합니다.');}refresh();
   },propDiagnostics:()=>props.inspect?.()??null,inspect:()=>({screen:dialog.open?screen:'explore',...journey.value,props:props.inspect?.()??null}),dispose(){if(disposed)return;disposed=true;close();abort.abort();props.dispose();clearTimeout(timer);hud.remove();dialog.remove();notice.remove();topButtons.forEach(b=>b.remove());}};
  world.scene.onDisposeObservable.addOnce(()=>api.dispose());refresh(true);return api;
 }

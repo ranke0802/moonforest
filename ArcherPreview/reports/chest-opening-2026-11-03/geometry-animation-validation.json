@@ -1,0 +1,41 @@
+{
+  "scope": "Actual Babylon packed asset geometry/instancing and hinge transform, no phone/GPU timing claim.",
+  "facts": [
+    {
+      "case": "actual-partition",
+      "bodyTriangles": 1808,
+      "lidTriangles": 2679,
+      "totalTriangles": 4487,
+      "originalTriangles": 4479,
+      "recessedFloorTriangles": 20,
+      "addedTriangles": 8,
+      "vertices": 5125,
+      "hinge": [
+        0,
+        0.09512657284736631,
+        -0.3012495893239975
+      ],
+      "partitionMs": 35.54619999999886,
+      "originalDegenerate": 1,
+      "derivedDegenerate": 1,
+      "externalTrianglesNormalsUVPreserved": 4459,
+      "maximumExteriorVertexError": 5.495276721270229e-9,
+      "additionalMaterials": 0,
+      "additionalTextures": 0
+    },
+    {
+      "case": "native-animation",
+      "degrees": 105,
+      "duration": 0.85,
+      "instances": 5,
+      "bodyWorldUnchanged": true,
+      "openingOnlyLid": true,
+      "sharedGeometries": 2,
+      "easeIncrements": [
+        0.1056998425368755,
+        0.026953390771068175,
+        0.000096706168835059
+      ]
+    }
+  ]
+}
