@@ -72,7 +72,8 @@ export class CavePaintLightRuntime{
 }
 
 export class CavePaintLightShade extends MaterialPluginBase{
- constructor(material,{ground=false}={}){super(material,'CavePaintLight',400,{},true,false);this.ground=ground;this.active=true;this.registerForExtraEvents=true;this._enable(true);}
+ constructor(material,{ground=false}={}){super(material,'CavePaintLight',400,{MOONFOREST_CAVE_PAINT_LIGHT:true,MOONFOREST_CAVE_PAINT_GROUND:ground},true,false);this.doNotSerialize=true;this.ground=ground;this.active=true;this.registerForExtraEvents=true;this._enable(true);}
+ getClassName(){return 'MoonforestCavePaintLightShade';}
  getSamplers(samplers){samplers.push('cavePaintLightMap');}
  getUniforms(){return {ubo:[{name:'cavePaintRect',size:4,type:'vec4'},{name:'cavePaintActive',size:1,type:'float'},{name:'cavePaintPlayer',size:4,type:'vec4'},{name:'cavePaintForward',size:4,type:'vec4'}],fragment:'uniform vec4 cavePaintRect;uniform float cavePaintActive;uniform vec4 cavePaintPlayer;uniform vec4 cavePaintForward;'};}
  hardBindForSubMesh(buffer){

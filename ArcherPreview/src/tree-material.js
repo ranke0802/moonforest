@@ -4,9 +4,11 @@ import { MaterialPluginBase, PBRMaterial } from '@babylonjs/core';
 // that image but replace per-pixel PBR/shadow work with interpolated vertex light.
 class FarTreeLight extends MaterialPluginBase {
   constructor(material, lighting) {
-    super(material, 'MoonforestFarTreeLight', 300, {}, true, true);
+    super(material, 'MoonforestFarTreeLight', 300, {MOONFOREST_FAR_TREE_LIGHT:true}, true, true);
+    this.doNotSerialize=true;
     this.lighting = lighting;
   }
+  getClassName(){return 'MoonforestFarTreeLight';}
   prepareDefines(defines) { defines.NORMAL = true; }
   getUniforms() {
     return {

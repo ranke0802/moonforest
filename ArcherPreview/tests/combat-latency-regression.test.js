@@ -16,7 +16,7 @@ test('production attack button buffers a full hold during dodge/push at 15/30/60
   button.setPointerCapture=()=>{};
   const held=(id,value)=>{if(value){if(c.setAttackHeld(true)!==false)sources.add(id);}else if(sources.delete(id))c.setAttackHeld(sources.size>0);};
   const cancelSource=source.slice(source.indexOf('function cancelAttackInput('),source.indexOf('function faceHeading('));
-  const cancel=new Function('attackSources','controller',cancelSource+';return cancelAttackInput;')(sources,c);
+  const cancel=new Function('attackSources','attackPointerTypes','controller',cancelSource+';return cancelAttackInput;')(sources,new Map(),c);
   new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},held,cancel,{attack:()=>c.attack()});
   const send=type=>{const e=new Event(type);Object.assign(e,{pointerId:7,button:0});button.dispatchEvent(e);};
   c[kind]();send('pointerdown');for(let i=0;i<Math.ceil(.46*fps);i++)c.update(1/fps);
@@ -31,7 +31,7 @@ test('production attack button buffers a full hold during dodge/push at 15/30/60
 test('early lost HUD capture cannot turn a partial charge into a tap, and global focus loss clears a retained heavy',()=>{
  const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),body=source.slice(source.indexOf('function cancelAttackInput('),source.indexOf('function faceHeading('));
  for(const time of [.2,.5]){
-  const c=new WarriorV2Controller({durations}),sources=new Set(['button:7']),cancel=new Function('attackSources','controller',body+';return cancelAttackInput;')(sources,c);
+  const c=new WarriorV2Controller({durations}),sources=new Set(['button:7']),cancel=new Function('attackSources','attackPointerTypes','controller',body+';return cancelAttackInput;')(sources,new Map(),c);
   c.shieldPush();c.setAttackHeld(true);c.update(time);cancel('button:7',{preserveCompletedCharge:true});
   assert.equal(c.held,false);assert.equal(c.queuedAttack,time===.5?'judgment':null);
   cancel();assert.equal(c.queuedAttack,null);c.update(3);assert.equal(c.action,null);

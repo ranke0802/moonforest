@@ -215,6 +215,11 @@ export class PlaygroundInput {
   contextMenu(e) {
     const root = this.canvas.closest?.('#app') ?? this.canvas;
     if (e.target === root || root.contains?.(e.target)) e.preventDefault();
+    // A touch long-press on the captured sword can request a native menu even
+    // though the menu was successfully suppressed. It is still the same held
+    // attack, not a loss of focus or a cancellation of the gesture.
+    const target=e.target?.nodeType===3?e.target.parentElement:e.target;
+    if(e.defaultPrevented&&e.pointerType!=='mouse'&&target?.closest?.('#attack-button')&&this.callbacks.isHudAttackHeld?.(e.pointerType))return;
     // Chrome may send contextmenu on right-button DOWN. A successfully blocked
     // canvas menu is the normal orbit gesture: W + right drag must still work.
     // UI/keyboard menus, or a native event that could not be cancelled, reset.

@@ -16,6 +16,7 @@ import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {isWorldCharacter,worldSpawn} from '../src/map-route.js';
 import {VILLAGE_SPAWN} from '../src/village-layout.js';
 import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
+import {setupMinimapTravel} from '../src/minimap-travel.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 function between(start,end){const a=source.indexOf(start),b=source.indexOf(end,a);assert.ok(a>=0&&b>a,`main callback not found: ${start}`);return source.slice(a,b);}
@@ -63,7 +64,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const input={panOffset:{x:0,y:0,z:0},reset(){counters.inputResets++;}},audio={stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop};
  const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
- const boundary={saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
+ const boundary={setupMinimapTravel,attackPointerTypes:new Map(),saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
   assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
   audio,actionAudio:{reset:noop},updateButtons:noop,toast:noop,canvas:{focus:noop},config:{forwardYaw:0},container:{meshes:[]},applyHitFlash:noop,
@@ -74,7 +75,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   motionSpeedControls:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),document:doc,location,history,innerWidth:852,console,
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
+  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition,minimapTravel;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
   let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null,frameFailure=null;const attackSources=new Set(),mapDeparture=null;
   const villageOverview=false,villageHorizon=false;
   const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';

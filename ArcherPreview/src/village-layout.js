@@ -1,6 +1,7 @@
 // Authored placements are shared by rendering, terrain pads and navigation.
 // Reusing these 25 source assets never submits another generation request.
 import { obstacleClearance } from './village-collision.js';
+import {isSoftVegetation} from './scenery-collision-policy.js';
 export const VILLAGE_ASSET_IDS = [
   'house-01-cottage','house-02-tall-home','house-03-workshop','house-04-forest-hut',
   'wall-01-straight','wall-02-corner','wall-03-breached','wood-01-palisade',
@@ -236,7 +237,7 @@ export const VILLAGE_PADS=VILLAGE_PLACEMENTS.filter(p=>p.pad).map(p=>({...p,radi
 export function villageObstacles(placements=VILLAGE_PLACEMENTS,{refinedTrees=true}={}){
   const obstacles=[];
   for(const p of placements){
-    if(p.decorative)continue;
+    if(p.decorative||isSoftVegetation(p))continue;
     const scale=p.scale??1,cos=Math.cos(p.yaw),sin=Math.sin(p.yaw),offset=p.colliderOffset??[0,0];
     const center=(x,z)=>({x:p.x+(x*cos+z*sin)*scale,z:p.z+(-x*sin+z*cos)*scale});
     if(p.kind==='tree'||p.colliderRadius){

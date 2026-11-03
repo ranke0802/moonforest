@@ -3,7 +3,8 @@ import {canInlineHitFlash} from './hit-feedback.js';
 import {characterStyleFor} from './character-style.js';
 export const ELENA_STYLE=Object.freeze({outlinePixels:.5,internalLineStrength:.2,brightness:1.35,contactGround:true,pbr:false});
 export class ElenaPaint extends MaterialPluginBase{
-  constructor(material){super(material,'ElenaPaint',330,{},true,false);this.registerForExtraEvents=true;this._enable(true);}
+  constructor(material){super(material,'ElenaPaint',330,{MOONFOREST_ELENA_PAINT:true},true,false);this.doNotSerialize=true;this.registerForExtraEvents=true;this._enable(true);}
+  getClassName(){return 'MoonforestElenaPaint';}
   getUniforms(){return {ubo:[{name:'elenaHitFlash',size:1,type:'float'},{name:'elenaPaintStyle',size:2,type:'vec2'}],fragment:'uniform float elenaHitFlash;\nuniform vec2 elenaPaintStyle;'};}
   hardBindForSubMesh(buffer,_scene,_engine,subMesh){
     const mesh=subMesh.getRenderingMesh();buffer.updateFloat('elenaHitFlash',canInlineHitFlash(mesh)?mesh.overlayAlpha??0:0);

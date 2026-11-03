@@ -77,6 +77,6 @@ test('late minimap work cannot appear in another map or after disposal',async()=
  const f=fixture(),navigation={free:()=>true};const old=f.map.setWorld({mapId:'witch-cave',navigation});const next=f.map.setWorld({mapId:'monster-forest',navigation});await Promise.all([old,next]);assert.equal(f.map.mapId,'monster-forest');assert.equal(f.label.textContent,'마물의 숲');assert.equal(f.map.cache.has('witch-cave'),false);
  const pending=f.map.setWorld({mapId:'village',navigation});f.map.dispose();await pending;assert.equal(f.element.hidden,true);assert.equal(f.map.cache.size,0);
 });
-test('small portrait HUD reserves the health-bar band and map never intercepts gestures',()=>{
+test('small portrait HUD reserves the health-bar band while the passive map leaves its local travel button interactive',()=>{
  const css=readFileSync(new URL('../src/dot-minimap.css',import.meta.url),'utf8'),html=readFileSync(new URL('../index.html',import.meta.url),'utf8');assert.match(css,/pointer-events:none/);assert.match(css,/image-rendering:pixelated/);assert.match(css,/orientation:portrait[\s\S]+136px/);assert.match(html,/id="dot-minimap"[\s\S]+width="96" height="96"/);
 });

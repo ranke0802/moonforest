@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {parseHTML} from 'linkedom';
-import {Vector3} from '@babylonjs/core';
+import {Observable,Vector3} from '@babylonjs/core';
 import {FrameLoop} from '../src/frame-loop.js';
 import {createLoadingView} from '../src/loading-view.js';
 import {LoadDiagnostics} from '../src/load-diagnostics.js';
@@ -11,6 +11,7 @@ import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {configurePlayerSize,WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {MapLoadLifetime} from '../src/map-load-lifetime.js';
 import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
+import {setupMinimapTravel} from '../src/minimap-travel.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const noop=()=>{},results=[];
@@ -66,11 +67,11 @@ function fixture(){
  class Animator{constructor(){this.durations={};owned.animators.add(this);}dispose(){owned.animators.delete(this);}transition(){}update(){}}
  class Controller{constructor(){}cancelAttack(){}}
  class Equipment{constructor(_container,choices){this.choices={...choices};owned.equipment.add(this);}dispose(){owned.equipment.delete(this);}}
- const world={cave:true,mapId:'cave',environment:{},scene:{render(){owned.sceneRenders++;}},camera:{alpha:0,beta:1.18,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:()=>gate.at('sky')},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release'),cancelResourceDownloads(){gate.cancelledDownloads=(gate.cancelledDownloads??0)+1;}};
+ const world={cave:true,mapId:'cave',environment:{},scene:{onDisposeObservable:new Observable(),render(){owned.sceneRenders++;}},camera:{alpha:0,beta:1.18,radius:10,setTarget:noop,getViewMatrix:noop,getProjectionMatrix:noop},terrain:{place:noop,heightAt:()=>0},sky:{load:()=>gate.at('sky')},shadows:{addShadowCaster:noop,removeShadowCaster:noop},lighting:{registerMeshes:noop,follow:noop},caveFog:{update:noop},caveCamera:{endFrame:noop},villageStreaming:{active:false},releaseEnvironment:()=>gate.at('release'),cancelResourceDownloads(){gate.cancelledDownloads=(gate.cancelledDownloads??0)+1;}};
  const input={pressed:new Set(),reset(){owned.inputResets++;this.pressed.clear();},panOffset:{x:0,y:0,z:0}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
- const dependencies={FrameLoop,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
+ const dependencies={FrameLoop,setupMinimapTravel,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>{const value={meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose(){owned.containers.delete(this);}};owned.containers.add(value);return value;}},
@@ -84,7 +85,7 @@ function fixture(){
   replaceWorldMap:(w,destination)=>{w.mapId=destination==='warrior-v5'?'cave':destination==='warrior-v4'?'forest':destination==='warrior-plains'?'great-plains':'village';w.cave=w.mapId==='cave';w.environment={};},
  };
  const runtime=Function(...Object.keys(dependencies),`
-  const uiTest=null,uiTestEnabled=false,chapterQuests=null,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,resumePose=null;
+  const uiTest=null,uiTestEnabled=false,chapterQuests=null,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,minimapTravel,resumePose=null;
   let config=null,container=null,actor=null,animator=null,controller=null,equipment=null,maxInfluences=0;
   let arrowNode,arrowMesh,reviewFocus,playerHead,shieldNode,swordNode,combatResult=null,shotTarget=null,shotActionId=null,hiddenArrowForAction=null,mapPortal=null;
   const villageReview=null,villageReviewEnabled=false,villageOverview=false,mapDeparture=null,attackSources=new Set(),elapsed=0,qualityMode='high',VertexBuffer={MatricesWeightsExtraKind:'unused'};

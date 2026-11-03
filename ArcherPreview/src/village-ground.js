@@ -8,7 +8,8 @@ import {repairCachedResource} from './resource-repair.js';
 // One small packed texture, two differently rotated scales, zero new draw calls.
 // Macro colors and the road mask are unique across the entire terrain.
 export class VillageGroundDetail extends MaterialPluginBase {
-  constructor(material,texture){super(material,'MoonforestGroundDetail',305,{},true,true);this.texture=texture;}
+  constructor(material,texture){super(material,'MoonforestGroundDetail',305,{MOONFOREST_GROUND_DETAIL:true},true,true);this.doNotSerialize=true;this.texture=texture;}
+  getClassName(){return 'MoonforestVillageGroundDetail';}
   getSamplers(samplers){samplers.push('villageSurfaceSampler');}
   getActiveTextures(textures){textures.push(this.texture);}
   hasTexture(texture){return texture===this.texture;}

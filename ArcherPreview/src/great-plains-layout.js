@@ -1,4 +1,5 @@
 import {sampleGroundCurve} from './village-ground-layout.js';
+import {isSoftVegetation} from './scenery-collision-policy.js';
 
 // Authored against plains-exterior.png; all landmarks have deliberate locations.
 export const PLAINS_RADIUS=106;
@@ -188,7 +189,7 @@ function makePlacements(){
 }
 export const PLAINS_PLACEMENTS=makePlacements();
 export function plainsObstacles(){
- const out=PLAINS_PLACEMENTS.filter(p=>p.colliderRadius||p.colliderFootprint).map(p=>p.colliderFootprint?{id:p.id,x:p.x,z:p.z,shape:'box',halfWidth:p.colliderFootprint[0]/2,halfDepth:p.colliderFootprint[1]/2,yaw:p.yaw,radius:Math.hypot(...p.colliderFootprint)/2,height:1.1}:{id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.kind==='tree'?8:p.kind==='rock'?2:1.5});
+ const out=PLAINS_PLACEMENTS.filter(p=>!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint)).map(p=>p.colliderFootprint?{id:p.id,x:p.x,z:p.z,shape:'box',halfWidth:p.colliderFootprint[0]/2,halfDepth:p.colliderFootprint[1]/2,yaw:p.yaw,radius:Math.hypot(...p.colliderFootprint)/2,height:1.1}:{id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.kind==='tree'?8:p.kind==='rock'?2:1.5});
  for(const [i,[x,z]]of PLAINS_STREAM.entries())out.push({id:'river-'+i,x,z,radius:2,height:.1});
  return out;
 }

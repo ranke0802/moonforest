@@ -4,7 +4,8 @@ const smooth=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3
 // or force 8K sampling in the distance. No extra draw or texture sample is added.
 export const playerDetailBias=distance=>-.45*smooth(2.5,5,distance)*(1-smooth(28,45,distance))||0;
 export class PlayerDetail extends MaterialPluginBase{
-  constructor(material,camera){super(material,'MoonforestPlayerDetail',320,{},true,true);this.camera=camera;}
+  constructor(material,camera){super(material,'MoonforestPlayerDetail',320,{MOONFOREST_PLAYER_DETAIL:true},true,true);this.doNotSerialize=true;this.camera=camera;}
+  getClassName(){return 'MoonforestPlayerDetail';}
   getUniforms(){return {ubo:[{name:'playerDetailBias',size:1,type:'float'}],fragment:'uniform float playerDetailBias;'};}
   bindForSubMesh(buffer){buffer.updateFloat('playerDetailBias',playerDetailBias(this.camera.radius));}
   getCustomCode(type){if(type!=='fragment')return null;return {

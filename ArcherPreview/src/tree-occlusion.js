@@ -23,7 +23,8 @@ export function blocksView(camera, target, min, max, padding = .18) {
 // Screen-door transparency keeps opaque depth testing and native GPU instances.
 // Unlike alpha blending it adds no transparent pass or per-tree material copies.
 class TreeCoverage extends MaterialPluginBase {
-  constructor(material) { super(material, 'MoonforestTreeCoverage', 400, {}, true, true); }
+  constructor(material) { super(material, 'MoonforestTreeCoverage', 400, {MOONFOREST_TREE_COVERAGE:true}, true, true);this.doNotSerialize=true; }
+  getClassName(){return 'MoonforestTreeCoverage';}
   getAttributes(attributes) { attributes.push('treeCoverage'); }
   getCustomCode(type) {
     if (type === 'vertex') return {

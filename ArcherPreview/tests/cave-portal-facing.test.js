@@ -9,6 +9,7 @@ import {CameraPitch} from '../src/camera-pitch.js';
 import {CameraFollow} from '../src/camera-follow.js';
 import {LoadDiagnostics} from '../src/load-diagnostics.js';
 import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
+import {setupMinimapTravel} from '../src/minimap-travel.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n'),noop=()=>{};
 const near=(a,b,epsilon=1e-10)=>assert.ok(Math.abs(a-b)<epsilon,`${a} != ${b}`);
@@ -84,7 +85,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}},modelFaults=[];
  const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},hide:noop,activateResident:async()=>{boss.activations++;},activations:0};
  const equipment=Object.freeze({sword:'existing-sword',shield:'existing-shield'}),orientation={type:'landscape-primary'},calls=[];
- const boundary={chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
+ const boundary={setupMinimapTravel,chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},
   frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:new LoadDiagnostics(),loadingView:{begin:noop,download:noop,stream:noop,preparing:noop,reveal:noop,fail:noop},
@@ -94,7 +95,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
   motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),canvas:{focus:noop},console,
  };
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
+  let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,minimapTravel,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
   const uiTest=null,uiTestEnabled=false;const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
   const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
   ${leaveSource}\n${reviewSource}\n${mapSource}

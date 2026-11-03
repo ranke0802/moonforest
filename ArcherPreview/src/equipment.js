@@ -18,10 +18,12 @@ export function saveEquipmentChoices(storage, choices) {
 // equipment's sampled surface color changes; no geometry, mount or animation is edited.
 class EquipmentPalette extends MaterialPluginBase {
   constructor(material, slot) {
-    super(material, 'EquipmentPalette', 200, {}, true, true);
+    super(material, 'EquipmentPalette', 200, {MOONFOREST_EQUIPMENT_PALETTE:true}, true, true);
+    this.doNotSerialize=true;
     this.slot = slot === 'sword' ? 0 : 1;
     this.variant = 0;
   }
+  getClassName(){return 'MoonforestEquipmentPalette';}
   getUniforms() {
     return { ubo: [{ name: 'equipmentPalette', size: 2, type: 'vec2' }], fragment: 'uniform vec2 equipmentPalette;' };
   }

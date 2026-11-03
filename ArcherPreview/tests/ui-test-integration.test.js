@@ -76,7 +76,7 @@ test('dialogs reset held input, preserve J attack binding, guard loading/other m
 test('UI art is used only by the isolated interface; no new async entry invalidates the engine split',()=>{
  const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),css=readFileSync(new URL('../src/ui-test.css',import.meta.url),'utf8');
  assert.match(main,/if\(uiTestEnabled\)\{\s*uiTest=setupUiTest/);assert.doesNotMatch(main,/import\('\.\/ui-test/);
- assert.match(main,/otherSettings=uiTest\?\.isOpen\(\)/);assert.match(main,/readMapResume\(journeyStorage/);
+ assert.match(main,/otherSettings=[^;\n]*uiTest\?\.isOpen\(\)/);assert.match(main,/readMapResume\(journeyStorage/);
  assert.match(css,/@media\(orientation:portrait\)/);assert.match(css,/safe-area-inset/);assert.match(css,/prefers-reduced-motion/);assert.doesNotMatch(css,/backdrop-filter/);
  const dir=new URL('../src/ui-test-art/',import.meta.url),names=readdirSync(dir),bytes=names.reduce((n,p)=>n+statSync(new URL(p,dir)).size,0);assert.ok(bytes<1_600_000);assert.ok(names.includes('LICENSE.txt'));assert.ok(!names.includes('world.webp'));
  assert.doesNotMatch(readFileSync(new URL('../src/ui-test.js',import.meta.url),'utf8'),/requestAnimationFrame|setInterval|new AudioContext|SceneLoader|new Engine/);

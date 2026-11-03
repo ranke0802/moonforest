@@ -75,7 +75,7 @@ test('main modal pause/resume, map finish and paused preview include style dialo
   const start=source.indexOf('const syncPlayback='),end=source.indexOf('const dialogObserver',start);
   assert.ok(start>=0&&end>start,'playback callback is present');
   const sync=source.slice(start,end).trim(),events=[],dialogs=new Map();
-  const run=new Function('mapDeparture','mapTransition','motionSpeedControls','$','document','deathScreen','input','cancelAttackInput','frameLoop','text','frameDiagnostics','audio','const uiTest=null;'+sync+'return syncPlayback;');
+  const run=new Function('mapDeparture','mapTransition','motionSpeedControls','$','document','deathScreen','input','cancelAttackInput','frameLoop','text','frameDiagnostics','audio','const minimapTravel=null,uiTest=null;'+sync+'return syncPlayback;');
   const call=run(null,null,{isOpen:()=>false},s=>dialogs.get(s)??{open:false},{hidden:false},{isOpen:()=>false},{reset:()=>events.push('reset')},()=>events.push('cancel'),{setPaused:v=>events.push(['pause',v])},()=>{},{suspend(){}},{setSuspended:v=>events.push(['audio',v])});
   dialogs.set('#character-style-dialog',{open:true});call();assert.ok(events.includes('reset'));assert.deepEqual(events.filter(Array.isArray),[['pause',true],['audio',true]]);
   events.length=0;dialogs.get('#character-style-dialog').open=false;call();assert.deepEqual(events,[['pause',false],['audio',false]]);

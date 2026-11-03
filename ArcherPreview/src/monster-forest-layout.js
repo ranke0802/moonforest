@@ -1,4 +1,5 @@
 import {sampleGroundCurve} from './village-ground-layout.js';
+import {isSoftVegetation} from './scenery-collision-policy.js';
 export {FOREST_SPAWN,FOREST_RADIUS} from './map-route.js';
 
 export const FOREST_CLEARINGS=[{x:0,z:42,r:7},{x:0,z:0,r:11},{x:-29,z:16,r:8},{x:29,z:12,r:8},{x:-20,z:-27,r:7},{x:27,z:-34,r:8}];
@@ -49,7 +50,7 @@ function makePlacements(){
 }
 export const FOREST_PLACEMENTS=makePlacements();
 export function forestObstacles(){
-  const obstacles=FOREST_PLACEMENTS.filter(p=>p.colliderRadius&&p.kind!=='garden').map(p=>({id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.kind==='tree'?6:p.kind==='rock'?2.2:1.2}));
+  const obstacles=FOREST_PLACEMENTS.filter(p=>p.colliderRadius&&p.kind!=='garden'&&!isSoftVegetation(p)).map(p=>({id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.kind==='tree'?6:p.kind==='rock'?2.2:1.2}));
   // The arch is open. Solid shoulders and a rear wall form an entrance alcove.
   for(const [dx,dz,w,d]of [[-3,0,2.3,5.5],[3,0,2.3,5.5],[0,-2.7,6,.5]])obstacles.push({id:'cave-rock-'+dx+':'+dz,x:FOREST_CAVE.x+dx,z:FOREST_CAVE.z+dz,shape:'box',halfWidth:w/2,halfDepth:d/2,yaw:0,radius:Math.hypot(w,d)/2,height:5.5});
   return obstacles;

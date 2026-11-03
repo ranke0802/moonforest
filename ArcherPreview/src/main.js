@@ -1,6 +1,7 @@
 import './styles.css';
 import './dot-minimap.css';
 import {DotMinimap} from './dot-minimap.js';
+import {setupMinimapTravel} from './minimap-travel.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
 import {setupUiTest} from './ui-test.js';
@@ -158,6 +159,7 @@ if(uiTestEnabled)travelStorage=uiTestStorage(travelStorage);
 const goldLoot=new GoldLoot({storage:journeyStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 let goldLootView;
 const minimap=new DotMinimap($('#dot-minimap'));
+let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);
 function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
 function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
@@ -179,6 +181,7 @@ for (const slot of ['sword', 'shield']) {
 }
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
 const attackSources = new Set();
+const attackPointerTypes = new Map();
 let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
@@ -302,7 +305,8 @@ const actions = {
   attack() { if (ready && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
-  hit() { if (ready && !isWarrior()) { attackSources.clear(); controller.hit(); } },
+  isHudAttackHeld(pointerType) { return isHudAttackHeld(pointerType); },
+  hit() { if (ready && !isWarrior()) { attackSources.clear();attackPointerTypes.clear(); controller.hit(); } },
   death() { if (!ready || isWarrior() || controller.dead) return; attackSources.clear(); controller.die(); input.reset(); updateButtons(); },
   revive() { if (!ready || !controller.dead) return; controller.revive();audio.setEnvironment(character);audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   // Accept direction intent during locks; the controller still prevents displacement.
@@ -314,7 +318,7 @@ function startDefense(kind){
   if(kind==='dodge'&&controller.captured){if(!boss.escapeGrab())return;audio.play('grab_escape');}
   if(!controller[kind]())return;
   chapterQuests?.action(kind);
-  if(!controller.held)attackSources.clear();strikeSampler.reset();boss?.playerReaction.cancelRecoil();
+  if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
     rollDirection=dodgeDirection(directionInput,world.camera.alpha,actor.rotation.y);
     actor.rotation.y=Math.atan2(rollDirection.x,rollDirection.z);
@@ -334,17 +338,26 @@ function resetBeforeBoss(){
   if(isCave())boss.activateResident(actor,{reset:true}).then(()=>prepareElenaReview()).catch(error=>{console.error('[Elena resident]',error);toast('엘레나를 불러오지 못했습니다.');});
 }
 
-function setAttackHeld(source, held) {
+function setAttackHeld(source, held, pointerType) {
   if(elenaReview){if(held&&ready)elenaReview.requestReviewCast();return;}
   if (held) {
     if (!ready || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
     attackSources.add(source);
-  } else if (attackSources.delete(source)) controller?.setAttackHeld(attackSources.size > 0);
+    if(source.startsWith('button:'))attackPointerTypes.set(source,pointerType??'unknown');
+  } else {attackPointerTypes.delete(source);if(attackSources.delete(source))controller?.setAttackHeld(attackSources.size > 0);}
+}
+
+function isHudAttackHeld(pointerType) {
+  let touch=false,mouse=false;
+  for(const source of attackSources)if(source.startsWith('button:')){
+    if(attackPointerTypes.get(source)==='mouse')mouse=true;else touch=true;
+  }
+  return touch&&(!!pointerType||!mouse);
 }
 
 function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
-  if(source){if(!attackSources.delete(source)||attackSources.size)return;}
-  else attackSources.clear();
+  if(source){attackPointerTypes.delete(source);if(!attackSources.delete(source)||attackSources.size)return;}
+  else {attackSources.clear();attackPointerTypes.clear();}
   // A captured HUD pointer can be released by the browser before pointerup.
   // Stop holding, but retain an already accepted heavy attack for recovery.
   // Global blur/pause/cancel still clears everything, including this buffer.
@@ -466,7 +479,7 @@ async function loadCharacter() {
     shieldNode = container.transformNodes.find(node=>node.name==='Bunnyguard_Shield') || container.meshes.find(node=>node.name==='Bunnyguard_Shield');
     swordNode = container.transformNodes.find(node => node.name === 'Golden_Oathblade') || container.meshes.find(node => node.name === 'Golden_Oathblade');
     boss.playerNodes=Object.fromEntries(container.transformNodes.map(node=>[node.name,node]));
-    attackSources.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
+    attackSources.clear();attackPointerTypes.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
     // Loading can finish while iOS has paused RAF. Sample the actual idle now,
@@ -718,10 +731,10 @@ try {
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
       if(options.captured){controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
-      attackSources.clear();strikeSampler.reset();return true;
+      attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
-    if(reacted!==false){if(!controller.held)attackSources.clear();strikeSampler.reset();}
+    if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyHitFlash(container.meshes,boss.playerReaction.flashRemaining,boss.playerReaction.flashDuration);
     return reacted;
   },{onDefeat:event=>{goldLoot.drop(event.kind,event.position);chapterQuests?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
@@ -758,7 +771,7 @@ try {
   });
   mapTransition=createMapTransition({
     prepare:()=>{
-      saveMapPosition(true);resumePose=null;minimap.hide();chapterQuests?.releaseMap();
+      saveMapPosition(true);resumePose=null;minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;loadingView.begin();updateButtons();input.reset();cancelAttackInput();
@@ -801,13 +814,17 @@ try {
       assertFrameHealthy();
       applyRenderQuality();loadingView.reveal();showMinimap();world.villageStreaming.active=true;
       loadDiagnostics.finish();
-      const modalOpen=uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
+      const modalOpen=minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
       audio.setSuspended(document.hidden||modalOpen);
       if(!document.hidden)canvas.focus({preventScroll:true});
     },
     onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
+  minimapTravel=setupMinimapTravel({element:$('#dot-minimap'),root:$('#app'),
+    getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount}),
+    onTravel:url=>mapTransition.travel(url),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback()});
+  world.scene.onDisposeObservable.addOnce(()=>minimapTravel?.dispose());
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
@@ -820,7 +837,7 @@ try {
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
-    const summonOpen=$('#summon-dialog').open,otherSettings=uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
+    const summonOpen=$('#summon-dialog').open,otherSettings=minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
     if(paused){input.reset();cancelAttackInput();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true);
@@ -838,7 +855,7 @@ try {
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
   window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
-  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
+  const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
   engine.onContextRestoredObservable.add(restorePlayback);
@@ -909,7 +926,7 @@ try {
   attackButton.addEventListener('pointerdown', event => {
     if (event.button !== 0 || !ready) return;
     event.preventDefault(); lastPointerAttack = performance.now();
-    attackButton.setPointerCapture(event.pointerId); setAttackHeld(`button:${event.pointerId}`, true);
+    attackButton.setPointerCapture(event.pointerId); setAttackHeld(`button:${event.pointerId}`, true,event.pointerType);
   });
   attackButton.addEventListener('pointerup', event => setAttackHeld(`button:${event.pointerId}`, false));
   attackButton.addEventListener('pointercancel', event => cancelAttackInput(`button:${event.pointerId}`));

@@ -16,7 +16,7 @@ function fixture(){
  for(const id of ['boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
  let time=0,copied,drawCalls=80;const paused=[],world={hidden:false},state={dead:false};
  const diagnostic=createFrameDiagnostics({doc,storage:{getItem:()=> '1'},now:()=>time,memory:()=>({jsUsedBytes:35100000}),renderMetrics:()=>({drawCalls,sceneMs:3,animationMs:1}),context:()=>({camera:[0,1,8],position:[0,0],targetFps:30}),clipboard:{writeText:async text=>copied=JSON.parse(text)}});
- const env={uiTest:null,document:world,mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>state.dead},$:selector=>doc.querySelector(selector),input:{reset(){}},cancelAttackInput(){},text(){},frameLoop:{failed:false,setPaused:v=>paused.push(v),restart(){}},frameDiagnostics:diagnostic,audio:{setSuspended(){}}};
+ const env={minimapTravel:null,uiTest:null,document:world,mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>state.dead},$:selector=>doc.querySelector(selector),input:{reset(){}},cancelAttackInput(){},text(){},frameLoop:{failed:false,setPaused:v=>paused.push(v),restart(){}},frameDiagnostics:diagnostic,audio:{setSuspended(){}}};
  const evaluate=text=>Function('env','with(env){return ('+text+');}')(env);
  const sync=evaluate(syncSource);env.syncPlayback=sync;const restore=evaluate(restoreSource);
  const frame=at=>{time=at;diagnostic.beginFrame(true,30);time+=4;diagnostic.endFrame();};

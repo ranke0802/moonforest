@@ -25,7 +25,8 @@ export function registerCharacterInk(mesh,group){
 }
 
 export class CharacterSurfaceStyle extends MaterialPluginBase{
-  constructor(material){super(material,'MoonforestCharacterStyle',335,{},true,false);this.registerForExtraEvents=true;this._enable(true);}
+  constructor(material){super(material,'MoonforestCharacterStyle',335,{MOONFOREST_CHARACTER_STYLE:true},true,false);this.doNotSerialize=true;this.registerForExtraEvents=true;this._enable(true);}
+  getClassName(){return 'MoonforestCharacterSurfaceStyle';}
   getUniforms(){return {ubo:[{name:'characterPaint',size:2,type:'vec2'}],fragment:'uniform vec2 characterPaint;'};}
   hardBindForSubMesh(buffer,_scene,_engine,subMesh){
     const mesh=subMesh.getRenderingMesh(),style=mesh.metadata?.elenaInlineFlash?neutral:characterStyleFor(mesh);
@@ -49,7 +50,8 @@ export class CharacterSurfaceStyle extends MaterialPluginBase{
 // The approved warrior already contains inverted-hull geometry. Keep it and
 // add a signed pixel correction after skinning; zero exactly preserves its pose.
 export class AuthoredCharacterInk extends MaterialPluginBase{
-  constructor(material){super(material,'MoonforestAuthoredInk',340,{},true,false);this.registerForExtraEvents=true;this._enable(true);}
+  constructor(material){super(material,'MoonforestAuthoredInk',340,{MOONFOREST_AUTHORED_INK:true},true,false);this.doNotSerialize=true;this.registerForExtraEvents=true;this._enable(true);}
+  getClassName(){return 'MoonforestAuthoredCharacterInk';}
   getUniforms(){return {ubo:[{name:'characterInk',size:4,type:'vec4'}],vertex:'uniform vec4 characterInk;',fragment:'uniform vec4 characterInk;'};}
   hardBindForSubMesh(buffer,_scene,engine,subMesh){
     const mesh=subMesh.getRenderingMesh(),style=characterStyleFor(mesh),canvas=engine.getRenderingCanvas();

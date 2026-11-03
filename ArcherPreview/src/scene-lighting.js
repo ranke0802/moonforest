@@ -5,9 +5,11 @@ import {installVillageShadowFade,prepareShadowFade} from './village-shadow-fade.
 // existing PBR normals and shadow result instead of adding another render pass.
 class PaintedModelShade extends MaterialPluginBase {
   constructor(material, lighting) {
-    super(material, 'MoonforestPaintedShade', 300, {}, true, true);
+    super(material, 'MoonforestPaintedShade', 300, {MOONFOREST_PAINTED_SHADE:true}, true, true);
+    this.doNotSerialize=true;
     this.lighting = lighting;
   }
+  getClassName(){return 'MoonforestPaintedModelShade';}
   getUniforms() {
     return { ubo: [{ name: 'moonforestShade', size: 4, type: 'vec4' }], fragment: 'uniform vec4 moonforestShade;' };
   }

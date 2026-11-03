@@ -403,7 +403,7 @@ test('separate joystick and camera touch cancellation preserves the charged HUD 
  const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
  for(const cancelled of ['stick','camera'])for(const type of ['pointercancel','lostpointercapture'])for(const release of [true,false]){
   const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
-  const actions=new Function('attackSources','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,controller,true,null,null);
+  const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null);
   const {input,canvas,pointer,elements}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
   const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
   controller.shieldPush();pointer('pointerdown',31,120,650);pointer('pointermove',31,174,596);
@@ -430,7 +430,7 @@ test('HUD pointer cancellation and global blur discard the charged attack safely
  const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
  for(const cancellation of ['pointercancel','blur','visibilitychange']){
   const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
-  const actions=new Function('attackSources','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,controller,true,null,null);
+  const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null);
   const {input}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
   const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
   controller.shieldPush();button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);assert.equal(controller.queuedAttack,'judgment');
