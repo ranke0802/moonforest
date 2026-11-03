@@ -1,0 +1,344 @@
+{
+  "baseline": "1879954",
+  "passed": true,
+  "cases": [
+    {
+      "case": "actual4K-real-mesh-promotion",
+      "hardwareSrgb": false,
+      "asset": "house-03-workshop",
+      "sourceKtxSha256": "9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54",
+      "sourceKtxBytes": 2377621,
+      "transcodedFormat": 37492,
+      "mips": 13,
+      "transcodedBytes": 11184824,
+      "uploadMips": [
+        {
+          "width": 4096,
+          "height": 4096,
+          "bytes": 8388608,
+          "level": 0,
+          "sha256": "05a01a2164b7cdac9f1c6b65e0c2e69910e9962a38b6e21b70bc49c7a48a0b9a"
+        },
+        {
+          "width": 2048,
+          "height": 2048,
+          "bytes": 2097152,
+          "level": 1,
+          "sha256": "322ab955ad78e9974e7c5e3b089d04cba015671f595ccf78d2bacf6caca2f861"
+        },
+        {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 524288,
+          "level": 2,
+          "sha256": "ee820b9988208c0b3b59150d6aa2122695f769ca1d15294d34dda432f18e4e90"
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "bytes": 131072,
+          "level": 3,
+          "sha256": "2dee0215a59c34a0dcc73d79557fd7337693b3e2a88e76283cd865aca00ffd6f"
+        },
+        {
+          "width": 256,
+          "height": 256,
+          "bytes": 32768,
+          "level": 4,
+          "sha256": "dee4b9cab07faa2cea54dec53943f29e47ff7ea9f3526b3d30a6c4e8d133de3f"
+        },
+        {
+          "width": 128,
+          "height": 128,
+          "bytes": 8192,
+          "level": 5,
+          "sha256": "4d9035c2e1ce35a1c7efaf3cb71e8d4c1cf56632266ba0c9763c9c84e2a0cef3"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "bytes": 2048,
+          "level": 6,
+          "sha256": "01e368582dbcdbc1f28f66adae9a784d567a812b1e985c077c9756ec5ead1587"
+        },
+        {
+          "width": 32,
+          "height": 32,
+          "bytes": 512,
+          "level": 7,
+          "sha256": "a23235f680a269a884fcf8877569547b1b8626f5a0e881a306219f2bd14dc6a1"
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "bytes": 128,
+          "level": 8,
+          "sha256": "914b1b37b7b192291bb944db5485fe6acd26f5cf7fdccf1f22498932679fc1ad"
+        },
+        {
+          "width": 8,
+          "height": 8,
+          "bytes": 32,
+          "level": 9,
+          "sha256": "fac0e9f32a8ca2e6ef70c3365a262580c9b26ce80f74294e55e3def668719c45"
+        },
+        {
+          "width": 4,
+          "height": 4,
+          "bytes": 8,
+          "level": 10,
+          "sha256": "84e51216868332e9ef1df8b6edc30fdc502b56b1d24924b7f79d34886430538b"
+        },
+        {
+          "width": 2,
+          "height": 2,
+          "bytes": 8,
+          "level": 11,
+          "sha256": "2c78c087fd7b6b5d2540b30883b917830bf8ab9d128cad2e2fa17213fea37c12"
+        },
+        {
+          "width": 1,
+          "height": 1,
+          "bytes": 8,
+          "level": 12,
+          "sha256": "d4661abaabb2cbab56d6ec8d2d8d4c02fcef9c1789e0d11518192ba571b79811"
+        }
+      ],
+      "roundtrips": [
+        {
+          "cycle": 0,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        },
+        {
+          "cycle": 1,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        },
+        {
+          "cycle": 2,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        }
+      ],
+      "textureOptions": {
+        "noMipmap": false,
+        "invertY": false,
+        "samplingMode": 3,
+        "useSRGBBuffer": true,
+        "gammaSpace": true
+      },
+      "geometryShared": true,
+      "resourcesStable": true,
+      "firstDrawSamplerCorrect": true
+    },
+    {
+      "case": "actual4K-real-mesh-promotion",
+      "hardwareSrgb": true,
+      "asset": "house-03-workshop",
+      "sourceKtxSha256": "9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54",
+      "sourceKtxBytes": 2377621,
+      "transcodedFormat": 37492,
+      "mips": 13,
+      "transcodedBytes": 11184824,
+      "uploadMips": [
+        {
+          "width": 4096,
+          "height": 4096,
+          "bytes": 8388608,
+          "level": 0,
+          "sha256": "05a01a2164b7cdac9f1c6b65e0c2e69910e9962a38b6e21b70bc49c7a48a0b9a"
+        },
+        {
+          "width": 2048,
+          "height": 2048,
+          "bytes": 2097152,
+          "level": 1,
+          "sha256": "322ab955ad78e9974e7c5e3b089d04cba015671f595ccf78d2bacf6caca2f861"
+        },
+        {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 524288,
+          "level": 2,
+          "sha256": "ee820b9988208c0b3b59150d6aa2122695f769ca1d15294d34dda432f18e4e90"
+        },
+        {
+          "width": 512,
+          "height": 512,
+          "bytes": 131072,
+          "level": 3,
+          "sha256": "2dee0215a59c34a0dcc73d79557fd7337693b3e2a88e76283cd865aca00ffd6f"
+        },
+        {
+          "width": 256,
+          "height": 256,
+          "bytes": 32768,
+          "level": 4,
+          "sha256": "dee4b9cab07faa2cea54dec53943f29e47ff7ea9f3526b3d30a6c4e8d133de3f"
+        },
+        {
+          "width": 128,
+          "height": 128,
+          "bytes": 8192,
+          "level": 5,
+          "sha256": "4d9035c2e1ce35a1c7efaf3cb71e8d4c1cf56632266ba0c9763c9c84e2a0cef3"
+        },
+        {
+          "width": 64,
+          "height": 64,
+          "bytes": 2048,
+          "level": 6,
+          "sha256": "01e368582dbcdbc1f28f66adae9a784d567a812b1e985c077c9756ec5ead1587"
+        },
+        {
+          "width": 32,
+          "height": 32,
+          "bytes": 512,
+          "level": 7,
+          "sha256": "a23235f680a269a884fcf8877569547b1b8626f5a0e881a306219f2bd14dc6a1"
+        },
+        {
+          "width": 16,
+          "height": 16,
+          "bytes": 128,
+          "level": 8,
+          "sha256": "914b1b37b7b192291bb944db5485fe6acd26f5cf7fdccf1f22498932679fc1ad"
+        },
+        {
+          "width": 8,
+          "height": 8,
+          "bytes": 32,
+          "level": 9,
+          "sha256": "fac0e9f32a8ca2e6ef70c3365a262580c9b26ce80f74294e55e3def668719c45"
+        },
+        {
+          "width": 4,
+          "height": 4,
+          "bytes": 8,
+          "level": 10,
+          "sha256": "84e51216868332e9ef1df8b6edc30fdc502b56b1d24924b7f79d34886430538b"
+        },
+        {
+          "width": 2,
+          "height": 2,
+          "bytes": 8,
+          "level": 11,
+          "sha256": "2c78c087fd7b6b5d2540b30883b917830bf8ab9d128cad2e2fa17213fea37c12"
+        },
+        {
+          "width": 1,
+          "height": 1,
+          "bytes": 8,
+          "level": 12,
+          "sha256": "d4661abaabb2cbab56d6ec8d2d8d4c02fcef9c1789e0d11518192ba571b79811"
+        }
+      ],
+      "roundtrips": [
+        {
+          "cycle": 0,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        },
+        {
+          "cycle": 1,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        },
+        {
+          "cycle": 2,
+          "promotionMarkDirty": 0,
+          "restoreMarkDirty": 0,
+          "promotionUnrelatedGetMaterialReads": 256,
+          "restoreUnrelatedGetMaterialReads": 256,
+          "uploadCalls": 13,
+          "newEffects": 0,
+          "promotionEffectRequests": 1,
+          "steadyEffectRequests": 0,
+          "restoreEffectRequests": 1
+        }
+      ],
+      "textureOptions": {
+        "noMipmap": false,
+        "invertY": false,
+        "samplingMode": 3,
+        "useSRGBBuffer": true,
+        "gammaSpace": true
+      },
+      "geometryShared": true,
+      "resourcesStable": true,
+      "firstDrawSamplerCorrect": true
+    },
+    {
+      "case": "frozen-fallback",
+      "readinessRetained": true,
+      "frozenPolicyRetained": true
+    },
+    {
+      "case": "diagnostic-stage-lifecycle",
+      "stages": [
+        "idle",
+        "resources",
+        "texture:albedo",
+        "promote",
+        "idle"
+      ],
+      "controlledPromoteMs": 2,
+      "perFrameInstrumentation": false
+    },
+    {
+      "case": "diagnostic-owner-isolation",
+      "disposedResourceWait": true,
+      "lateTextureCallbacksIgnored": true,
+      "newStreamStagePreserved": true
+    },
+    {
+      "case": "diagnostic-error",
+      "pendingStageCleared": true,
+      "noPromotion": true,
+      "noAutomaticRetry": true,
+      "originalSamplerRetained": true
+    }
+  ],
+  "limitations": [
+    "Actual packed geometry and the shipped ETC1S decoder/WASM13mip bytes are used, with real Babylon material readiness and lifecycle.",
+    "KTX upload calls are intercepted at the SDK engine boundary; no WebGL driver, actual GPU upload duration, device thermal condition or mobile FPS is measured.",
+    "The complete map is not rendered; unrelated shared-geometry meshes expose the additional scene traversal, not a measured264.8ms causal contribution.",
+    "highTextureLastPromoteMs times synchronous JS material assignment/invalidation. It is not worker decode duration, texture wait duration, GPU upload elapsed time or GPU frame time."
+  ]
+}

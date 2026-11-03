@@ -1,0 +1,55 @@
+// Independent actual SDK draw/LOD/shadow comparison; no browser/GPU claim.
+import {writeFileSync} from 'node:fs';
+import assert from 'node:assert/strict';
+import {NullEngine,Scene,MeshBuilder,StandardMaterial,FreeCamera,Vector3,TransformNode,DirectionalLight,ShadowGenerator} from '@babylonjs/core';
+import {VillageActiveCandidates} from '../../src/village-active-candidates.js';
+import {prepareMapMaterials} from '../../src/map-shader-cache.js';
+
+function make(optimized){
+ const engine=new NullEngine();engine.getCaps().instancedArrays=true;
+ const scene=new Scene(engine);scene.useRightHandedSystem=true;
+ const camera=new FreeCamera('camera',new Vector3(0,3,-6),scene);camera.setTarget(Vector3.Zero());
+ const light=new DirectionalLight('key',new Vector3(-.2,-1,.3),scene),shadow=new ShadowGenerator(256,light);
+ const material=new StandardMaterial('paint',scene),source=MeshBuilder.CreateBox('near',{},scene),mid=MeshBuilder.CreateSphere('mid',{segments:6},scene),far=MeshBuilder.CreateBox('far',{size:.7},scene);
+ for(const mesh of [source,mid,far])mesh.material=material;
+ source.addLODLevel(10,mid);source.addLODLevel(20,far);
+ const roots=[],instances=[],draws=[];
+ for(let i=0;i<24;i++){
+  const root=new TransformNode('root-'+i,scene),mesh=source.createInstance('instance-'+i);mesh.parent=root;root.position.set((i%6-2.5)*1.3,0,Math.floor(i/6)*1.4);
+  root.computeWorldMatrix(true);mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();roots.push(root);instances.push(mesh);shadow.addShadowCaster(mesh,false);
+ }
+ source.isVisible=false;mid.isVisible=false;far.isVisible=false;
+ const dynamic=MeshBuilder.CreateBox('dynamic',{size:.4},scene);dynamic.position.y=2;dynamic.material=material;
+ for(const mesh of [source,mid,far,dynamic]){
+  const original=mesh._processRendering;
+  mesh._processRendering=function(renderMesh,sub,effect,mode,batch,...args){
+   draws.push({source:mesh.name,intermediate:scene._isInIntermediateRendering(),instances:(batch.visibleInstances?.[sub._id]??[]).map(m=>m.name),self:!!batch.renderSelf[sub._id]});
+   return original.call(this,renderMesh,sub,effect,mode,batch,...args);
+  };
+ }
+ const previous=scene.getActiveMeshCandidates,provider=optimized?new VillageActiveCandidates(scene):null;for(const mesh of instances)provider?.add(mesh);
+ return {engine,scene,camera,shadow,roots,instances,draws,provider,previous,sources:[source,mid,far,dynamic]};
+}
+const fixtures=[make(false),make(true)],snapshots=[];
+try{
+ for(const f of fixtures){await prepareMapMaterials(f.sources);await f.shadow.forceCompilationAsync({useInstances:true});}
+ const patterns=[{radius:6,mask:i=>true},{radius:16,mask:i=>i%2===0},{radius:28,mask:i=>true},{radius:7,mask:i=>false},{radius:7,mask:i=>true},{radius:16,mask:i=>i%3===0},{radius:6,mask:i=>true}];
+ for(const [index,pattern]of patterns.entries()){
+  const results=[];
+  for(const f of fixtures){
+   for(const [i,root]of f.roots.entries())root.setEnabled(pattern.mask(i));f.camera.position.set(0,3,-pattern.radius);f.camera.setTarget(new Vector3(0,0,2));f.draws.length=0;
+   f.engine.beginFrame();f.scene.render();f.engine.endFrame();
+   results.push({draws:structuredClone(f.draws),active:f.scene.getActiveMeshes().data.slice(0,f.scene.getActiveMeshes().length).map(m=>m.name),
+    lod:f.instances.filter(m=>m.isEnabled()).map(m=>[m.name,m._currentLOD?.name]),shadowList:f.shadow.getShadowMap().renderList.map(m=>m.name)});
+  }
+  assert.deepEqual(results[1],results[0],'native draw batches, active ordering, selected LOD and shadow renderList at step '+index);
+  snapshots.push({step:index,radius:pattern.radius,enabled:fixtures[1].instances.filter(m=>m.isEnabled()).length,draws:results[0].draws,stats:{...fixtures[1].provider.stats}});
+ }
+ assert.ok(snapshots.some(s=>s.draws.length>0),'comparison includes actual native draw submissions');
+ const f=fixtures[1],helper=f.provider,own=helper.provider,external=()=>own();f.scene.getActiveMeshCandidates=external;helper.dispose();
+ assert.equal(f.scene.getActiveMeshCandidates,external);assert.equal(external().data,f.scene.meshes);assert.equal(external().length,f.scene.meshes.length);assert.equal(helper.result.length,0);
+ f.scene.getActiveMeshCandidates=f.previous;const plain=new VillageActiveCandidates(f.scene);plain.dispose();assert.equal(f.scene.getActiveMeshCandidates,f.previous);
+ const report={generatedAt:new Date().toISOString(),steps:snapshots.length,nativeDrawBatchAndLodAndShadowEquality:true,sourceMeshesPreserved:true,externalWrapperAfterDisposePassesThrough:true,ownProviderRestored:true,
+  snapshots,limitation:'NullEngine validates native CPU selection/batch/LOD/shadow-list logic; no actual GPU shader compilation, pixels, device FPS or browser test.'};
+ writeFileSync(new URL('audit-candidate-review.json',import.meta.url),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({steps:report.steps,equal:true,drawCounts:snapshots.map(s=>s.draws.length),candidateCounts:snapshots.map(s=>s.stats)}));
+}finally{for(const f of fixtures){f.provider?.dispose();f.engine.dispose();}}

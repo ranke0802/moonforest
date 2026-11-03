@@ -1,0 +1,831 @@
+{
+  "baseline": "1879954",
+  "attachment": {
+    "sha256": "18a39909acb5a5fd3b801cf104fcbee08b50b5006f9a796c94ede74c6c5a929a",
+    "createdAt": "2026-11-03T17:15:09.658Z",
+    "bundle": "./assets/index-BmLa5VqP.js",
+    "gpuTimeAvailable": false
+  },
+  "observed": {
+    "timeline": [
+      {
+        "atSeconds": 124.2,
+        "frameIntervalMs": 53.1,
+        "cpuSubmitMs": 85.3,
+        "activity": "이동 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 134,
+        "sceneMs": 34.5,
+        "animationMs": 0.699999988079071,
+        "activeMeshesMs": 13.199999988079071,
+        "renderTargetsMs": 6.900000035762787,
+        "drawSubmissionMs": 13.300000011920929,
+        "worldUpdateMs": 5.599999964237213,
+        "hudUpdateMs": 0
+      },
+      {
+        "atSeconds": 124.3,
+        "frameIntervalMs": 86.4,
+        "cpuSubmitMs": 51.5,
+        "activity": "이동 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 137,
+        "sceneMs": 44.30000001192093,
+        "animationMs": 5.400000035762787,
+        "activeMeshesMs": 12.399999976158142,
+        "renderTargetsMs": 10.899999976158142,
+        "drawSubmissionMs": 14.800000011920929,
+        "worldUpdateMs": 0.30000001192092896,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 124.3,
+        "frameIntervalMs": 55.6,
+        "cpuSubmitMs": 72.1,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 135,
+        "sceneMs": 52.80000001192093,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 16.100000023841858,
+        "renderTargetsMs": 12.199999988079071,
+        "drawSubmissionMs": 24,
+        "worldUpdateMs": 0.19999998807907104,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 124.4,
+        "frameIntervalMs": 86.5,
+        "cpuSubmitMs": 61.8,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 145,
+        "sceneMs": 45.60000002384186,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 14.399999976158142,
+        "renderTargetsMs": 13.699999988079071,
+        "drawSubmissionMs": 16.700000047683716,
+        "worldUpdateMs": 7,
+        "hudUpdateMs": 0.19999992847442627
+      },
+      {
+        "atSeconds": 124.5,
+        "frameIntervalMs": 132.5,
+        "cpuSubmitMs": 79.8,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 144,
+        "sceneMs": 64,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 19,
+        "renderTargetsMs": 12,
+        "drawSubmissionMs": 25,
+        "worldUpdateMs": 0.6000000238418579,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 124.6,
+        "frameIntervalMs": 88.2,
+        "cpuSubmitMs": 66.7,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 145,
+        "sceneMs": 51.10000002384186,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 21.100000023841858,
+        "renderTargetsMs": 14.5,
+        "drawSubmissionMs": 14.699999988079071,
+        "worldUpdateMs": 7.600000023841858,
+        "hudUpdateMs": 0.10000002384185791
+      },
+      {
+        "atSeconds": 124.7,
+        "frameIntervalMs": 76.6,
+        "cpuSubmitMs": 67.7,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 143,
+        "sceneMs": 52.40000003576279,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 22.30000001192093,
+        "renderTargetsMs": 8.399999976158142,
+        "drawSubmissionMs": 15.600000023841858,
+        "worldUpdateMs": 0.30000001192092896,
+        "hudUpdateMs": 0.2999999523162842
+      },
+      {
+        "atSeconds": 124.8,
+        "frameIntervalMs": 75.3,
+        "cpuSubmitMs": 57.9,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 143,
+        "sceneMs": 45.69999998807907,
+        "animationMs": 0.19999998807907104,
+        "activeMeshesMs": 19.30000001192093,
+        "renderTargetsMs": 9.100000023841858,
+        "drawSubmissionMs": 16.80000001192093,
+        "worldUpdateMs": 0.30000001192092896,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 124.9,
+        "frameIntervalMs": 79.4,
+        "cpuSubmitMs": 85.8,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 140,
+        "sceneMs": 60.39999997615814,
+        "animationMs": 0.5,
+        "activeMeshesMs": 25.299999952316284,
+        "renderTargetsMs": 11,
+        "drawSubmissionMs": 16.600000023841858,
+        "worldUpdateMs": 0.30000001192092896,
+        "hudUpdateMs": 0.2999999523162842
+      },
+      {
+        "atSeconds": 125,
+        "frameIntervalMs": 92.5,
+        "cpuSubmitMs": 67.5,
+        "activity": "이동 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 140,
+        "sceneMs": 51.30000001192093,
+        "animationMs": 0.5,
+        "activeMeshesMs": 25.900000035762787,
+        "renderTargetsMs": 2.099999964237213,
+        "drawSubmissionMs": 22.600000023841858,
+        "worldUpdateMs": 0.7999999523162842,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 125.1,
+        "frameIntervalMs": 117.5,
+        "cpuSubmitMs": 73.7,
+        "activity": "이동 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 139,
+        "sceneMs": 59.10000002384186,
+        "animationMs": 0.5,
+        "activeMeshesMs": 21.399999976158142,
+        "renderTargetsMs": 19,
+        "drawSubmissionMs": 10.699999988079071,
+        "worldUpdateMs": 7.699999988079071,
+        "hudUpdateMs": 0.19999998807907104
+      },
+      {
+        "atSeconds": 125.2,
+        "frameIntervalMs": 95.3,
+        "cpuSubmitMs": 309.7,
+        "activity": "이동 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 139,
+        "sceneMs": 301.19999998807907,
+        "animationMs": 6.800000011920929,
+        "activeMeshesMs": 15.100000023841858,
+        "renderTargetsMs": 14.299999952316284,
+        "drawSubmissionMs": 264.80000001192093,
+        "worldUpdateMs": 0.19999998807907104,
+        "hudUpdateMs": 0.09999996423721313
+      },
+      {
+        "atSeconds": 125.5,
+        "frameIntervalMs": 312.7,
+        "cpuSubmitMs": 27.4,
+        "activity": "이동 · 회전/시점 조작 · 텍스처 준비",
+        "geometryPending": 0,
+        "texturePending": 1,
+        "drawCalls": 138,
+        "sceneMs": 25.30000001192093,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 10.899999976158142,
+        "renderTargetsMs": 2.699999988079071,
+        "drawSubmissionMs": 10.100000023841858,
+        "worldUpdateMs": 0.800000011920929,
+        "hudUpdateMs": 0.3999999761581421
+      },
+      {
+        "atSeconds": 126.1,
+        "frameIntervalMs": 126.7,
+        "cpuSubmitMs": 22.5,
+        "activity": "이동 · 모델 준비",
+        "geometryPending": 1,
+        "texturePending": 0,
+        "drawCalls": 137,
+        "sceneMs": 19,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 7.400000035762787,
+        "renderTargetsMs": 1.7999999523162842,
+        "drawSubmissionMs": 8,
+        "worldUpdateMs": 0.699999988079071,
+        "hudUpdateMs": 0.19999998807907104
+      }
+    ],
+    "textureStreamingSnapshot": {
+      "highTextureAssets": 5,
+      "highTexturePending": 0,
+      "highTextureMax": 4096,
+      "highTextureLoads": 11,
+      "highTextureReleases": 6,
+      "highTextureError": null,
+      "highTextureBudget": 100663296,
+      "highTextureBytes": 95071024,
+      "highTextureReserved": 0,
+      "highTexturePeak": 95071024,
+      "highTextureQueued": 0,
+      "highTextureMoving": true,
+      "highTextureMovingLoads": 9,
+      "highTextureCooldownMs": 0,
+      "highTextureLastPrepareMs": 294.69999998807907,
+      "highTextureFormat": 37492
+    },
+    "lastKtxWorkerCompletion": {
+      "id": 152,
+      "stage": "decode",
+      "bytes": 2377621,
+      "queuedMs": 0,
+      "initMs": 24.899999976158142,
+      "activeDecodeMs": 219.69999998807907,
+      "totalMs": 244.5999999642372
+    },
+    "lastCompletionBytesMatchingVillageProfiles": [
+      {
+        "id": "house-03-workshop",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2377621,
+        "url": "./content/9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54.ktx2",
+        "codec": "etc1s"
+      }
+    ],
+    "correlationLimit": "The old log records only pending1, not pending asset/stage. The final worker completion has no timestamp tying it to125.2s; a matching byte size must not be treated as identification of that spike."
+  },
+  "confirmedCost": {
+    "source": "src/village-texture-streaming.js",
+    "before": "Every promote/restore called Material.unfreeze(), even when the toon material was already unfrozen.",
+    "sdkBehavior": "Babylon9.31 unfreeze calls markDirty(false), scanning every scene mesh/submesh/render-pass wrapper to invalidate readiness bindings. It does not force AllDirty shader flags. The PBR texture setter separately performs its required texture-dirty scan.",
+    "change": "Call unfreeze only when material.isFrozen. Keep native texture setters, !villageToon freeze policy, all readiness checks, texture color space and dimensions unchanged.",
+    "baselineCycles": [
+      {
+        "cycle": 0,
+        "promotionMarkDirty": 1,
+        "restoreMarkDirty": 1,
+        "promotionUnrelatedGetMaterialReads": 512,
+        "restoreUnrelatedGetMaterialReads": 512,
+        "uploadCalls": 13,
+        "newEffects": 0
+      },
+      {
+        "cycle": 1,
+        "promotionMarkDirty": 1,
+        "restoreMarkDirty": 1,
+        "promotionUnrelatedGetMaterialReads": 512,
+        "restoreUnrelatedGetMaterialReads": 512,
+        "uploadCalls": 13,
+        "newEffects": 0
+      },
+      {
+        "cycle": 2,
+        "promotionMarkDirty": 1,
+        "restoreMarkDirty": 1,
+        "promotionUnrelatedGetMaterialReads": 512,
+        "restoreUnrelatedGetMaterialReads": 512,
+        "uploadCalls": 13,
+        "newEffects": 0
+      }
+    ],
+    "afterCycles": [
+      {
+        "hardwareSrgb": false,
+        "roundtrips": [
+          {
+            "cycle": 0,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          },
+          {
+            "cycle": 1,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          },
+          {
+            "cycle": 2,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          }
+        ]
+      },
+      {
+        "hardwareSrgb": true,
+        "roundtrips": [
+          {
+            "cycle": 0,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          },
+          {
+            "cycle": 1,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          },
+          {
+            "cycle": 2,
+            "promotionMarkDirty": 0,
+            "restoreMarkDirty": 0,
+            "promotionUnrelatedGetMaterialReads": 256,
+            "restoreUnrelatedGetMaterialReads": 256,
+            "uploadCalls": 13,
+            "newEffects": 0,
+            "promotionEffectRequests": 1,
+            "steadyEffectRequests": 0,
+            "restoreEffectRequests": 1
+          }
+        ]
+      }
+    ],
+    "measured": "For256 unrelated submeshes, redundant markDirty1→0 and total unrelated getMaterial lookups512→256 per promotion and per restoration. The required texture-dirty traversal remains.",
+    "millisecondsAttributionToPhoneSpike": null
+  },
+  "sdkUploadAndMaterialFindings": [
+    {
+      "certainty": "confirmed-SDK-boundary",
+      "finding": "The shipped4096x4096 ETC1S texture is decoded with the shipped JavaScript/WASM. Native KTX _createTexture submits every authored mip before marking InternalTexture ready and before the Texture callback. The first later draw submits no additional KTX mip upload call.",
+      "asset": "house-03-workshop",
+      "sourceSha256": "9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54",
+      "compressedFileBytes": 2377621,
+      "transcodedFormat": 37492,
+      "mips": 13,
+      "transcodedInputBytes": 11184824
+    },
+    {
+      "certainty": "confirmed-in-tested-CPU-SDK-scope",
+      "finding": "Both hardware-sRGB flag paths, three promote/restore cycles each, use the original shader Effect objects and bind the actual new4K sampler on the first draw, then the original sampler on restore. Steady-frame cached Effect requests0, geometry identity and resource inventory stable."
+    },
+    {
+      "certainty": "confirmed-lifecycle",
+      "finding": "Frozen non-toon fallback keeps the existing unfreeze/assign/freeze sequence and first-draw readiness. Actual Texture errors, resource-wait disposal, late old Texture callbacks and replacement-stream ownership preserve diagnostic stages and existing texture cleanup/no-retry behavior."
+    },
+    {
+      "certainty": "unresolved-on-device",
+      "finding": "The301.2ms scene call includes264.8ms CPU draw-submission measurement. Pending1 spans resources/worker/Texture readiness; it is not direct evidence that GPU upload or a new shader compilation consumed those264.8ms. The JavaScript engine may also wait in a later driver call after earlier uploads; NullEngine cannot settle that."
+    },
+    {
+      "certainty": "scope-separated",
+      "finding": "The recurring44–64ms samples also include substantial active-mesh evaluation and shadow/render-target time. Those shared world/active-candidate paths are owned and measured separately by the parent/team."
+    }
+  ],
+  "diagnosticContract": {
+    "highTexturePendingAsset": "Current admitted asset id or null; cleared on completion, error and disposal.",
+    "highTextureStage": [
+      "idle",
+      "resources",
+      "texture:albedo",
+      "texture:normal (PBR fallback)",
+      "texture:orm (PBR fallback)",
+      "promote",
+      "disposed"
+    ],
+    "highTextureLastPromoteMs": "Last successful synchronous JS material-assignment/invalidation duration only. Excludes resource/worker/Texture wait and prior KTX upload; never GPU elapsed time.",
+    "samplingCost": "Writes only at admitted job stages; no new per-frame observer, mesh traversal, polling or ring buffer.",
+    "cancellation": "Disposed owner stays disposed even when its resource await or old Texture callback completes. New stream uses a separate stats owner."
+  },
+  "validation": {
+    "passed": true,
+    "focusedTests": 36,
+    "failures": 0,
+    "log": "texture-focused.log",
+    "test": "tests/village-texture-promotion.test.js",
+    "newCases": [
+      "actual4K-real-mesh-promotion",
+      "actual4K-real-mesh-promotion",
+      "frozen-fallback",
+      "diagnostic-stage-lifecycle",
+      "diagnostic-owner-isolation",
+      "diagnostic-error"
+    ],
+    "command": "node --test tests/village-texture-promotion.test.js tests/village-texture-streaming.test.js tests/village-texture-pacing.test.js tests/village-texture-cancel.test.js tests/village-toon.test.js"
+  },
+  "preservation": [
+    {
+      "path": "src/player-texture-profile.js",
+      "baselineSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "currentSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-lod.js",
+      "baselineSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "currentSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-texture-budget.js",
+      "baselineSha256": "181517a758bf96731b703c80c20bc088ee8b992d122edfc5eeafd2cc77c9f985",
+      "currentSha256": "181517a758bf96731b703c80c20bc088ee8b992d122edfc5eeafd2cc77c9f985",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-shadow-policy.js",
+      "baselineSha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362",
+      "currentSha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-shadow-fade.js",
+      "baselineSha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27",
+      "currentSha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-outlines.js",
+      "baselineSha256": "eb4fe820f1852cc42b8f0e5132a3cceb55037fd1e7ac26beb34f45bb31462246",
+      "currentSha256": "eb4fe820f1852cc42b8f0e5132a3cceb55037fd1e7ac26beb34f45bb31462246",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/character-outlines.js",
+      "baselineSha256": "14eb7e9aea21aa5a1f30841dfa383fa233492f3bf969b553c76a1852d6c3aa5e",
+      "currentSha256": "14eb7e9aea21aa5a1f30841dfa383fa233492f3bf969b553c76a1852d6c3aa5e",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/enemy-death.js",
+      "baselineSha256": "18eb6e692f53bc72396a46ddaa1aece176e80171333b73fa951f597a2321e20b",
+      "currentSha256": "18eb6e692f53bc72396a46ddaa1aece176e80171333b73fa951f597a2321e20b",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-knee-data.js",
+      "baselineSha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d",
+      "currentSha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "src/mourning-death-depth-data.js",
+      "baselineSha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93",
+      "currentSha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/warrior-v3.json",
+      "baselineSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "currentSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/warrior-v3-ios.json",
+      "baselineSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "currentSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/village.json",
+      "baselineSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "currentSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/great-plains.json",
+      "baselineSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "currentSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/monster-forest.json",
+      "baselineSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "currentSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/witch-cave.json",
+      "baselineSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "currentSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "unchanged": true,
+      "hashScope": "UTF8 with CRLF normalized to LF"
+    }
+  ],
+  "allProtectedPathsUnchanged": true,
+  "highResolutionProfiles": {
+    "count": 25,
+    "maximumWidth": 4096,
+    "allDimensionsUnchanged": true,
+    "profiles": [
+      {
+        "id": "house-01-cottage",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 11541902,
+        "url": "./content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2",
+        "codec": "uastc"
+      },
+      {
+        "id": "house-02-tall-home",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2702936,
+        "url": "./content/24c0c198d5aa691745482580e6062af240d3541fc3bfb10bfb2433bc57ef125b.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "house-03-workshop",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2377621,
+        "url": "./content/9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "house-04-forest-hut",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2403566,
+        "url": "./content/6bae6248a2eb5c81a7d3ada30c2933a74c336d5c22818a3f6d39aedc269d756e.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "wall-01-straight",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 826228,
+        "url": "./content/5cdfe28be6527e93d46146b1f946b9ea78d32b68a046a16bf4dd4256a5b89586.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "wall-02-corner",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 799588,
+        "url": "./content/d1079d311eb300e7c47f075ea032aa9e9004e43be115c84733397dfa3228af94.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "wall-03-breached",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 3240533,
+        "url": "./content/ec26192b97277ee2a7730ebfd7ed7a87cc6763d39e5b6d70c805673809c57520.ktx2",
+        "codec": "uastc"
+      },
+      {
+        "id": "wood-01-palisade",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 836124,
+        "url": "./content/60c6542768fe3d8cb227d90e022b2c0b1a614d9849eb3ac1683635dfbc5a14bb.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "wood-02-cross-barricade",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 651457,
+        "url": "./content/ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "wood-03-plank-gate",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 819040,
+        "url": "./content/605e105b399ebdeeebc89131a509cb1a7f43240f4c60ca50ed35bd56d3908e94.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "tree-01-round-oak",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2050216,
+        "url": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "tree-02-slender-pine",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 1720066,
+        "url": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "rock-01-mossy-boulder",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 751327,
+        "url": "./content/ab1458b82a2ae9d820688456de8804c03e3ea6bfd3354afe0e34ef82d8653036.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "rock-02-jagged-outcrop",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 795702,
+        "url": "./content/500569dfb0fbf8e665c42e561090b943c48b0dad00851ab1ce22dbecf3d96765.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "chapel",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2738921,
+        "url": "./content/d660d14f095a88e75c75eb9ed3ad435aaa886ba869b2d5e067598ac5e3097e6c.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "well",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 848388,
+        "url": "./content/614446e6799b805d356912d04c5917c2ecc240b19a685714709263bdf112c5ce.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "watchtower",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2615441,
+        "url": "./content/bf37277c2e55866681996d1437243733b488f071800f159c364e2329c830f84b.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "rail-fence",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 803694,
+        "url": "./content/3c70b67a661d772ff670ff6e20677294cd48580dc2444556fc1db6b1f81dba12.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "bush",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 363685,
+        "url": "./content/f4ba6f16cf6779f1c2a4e79b581ba2ec3841f4900ea5a95ab14d4018f94df699.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "market-stall",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 2327274,
+        "url": "./content/46f48a10a3ebbf7bc30d3a8eb7fbc22d4a7cc74c1a1306181fdfc15662aca916.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "covered-wagon",
+        "width": 4096,
+        "height": 4096,
+        "bytes": 10750836,
+        "url": "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
+        "codec": "uastc"
+      },
+      {
+        "id": "handcart",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 800904,
+        "url": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "garden-bed",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 581942,
+        "url": "./content/9cd057d3ceaad4cde23285331fb0ab04a579c21bcdd986c3aa9c7b034d2319fd.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "firewood",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 731878,
+        "url": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+        "codec": "etc1s"
+      },
+      {
+        "id": "crate-barrel-cluster",
+        "width": 2048,
+        "height": 2048,
+        "bytes": 735658,
+        "url": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+        "codec": "etc1s"
+      }
+    ]
+  },
+  "sourceReferences": [
+    {
+      "path": "src/village-texture-streaming.js",
+      "line": 173
+    },
+    {
+      "path": "src/village-texture-streaming.js",
+      "line": 171
+    },
+    {
+      "path": "src/village-texture-streaming.js",
+      "line": 176
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/material.pure.js",
+      "line": 825
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/material.pure.js",
+      "line": 978
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/material.pure.js",
+      "line": 1376
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Misc/khronosTextureContainer2.js",
+      "line": 307
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Misc/khronosTextureContainer2.js",
+      "line": 361
+    },
+    {
+      "path": "node_modules/@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader.js",
+      "line": 129
+    }
+  ],
+  "limitations": [
+    "Actual packed geometry and the shipped ETC1S decoder/WASM13mip bytes are used, with real Babylon material readiness and lifecycle.",
+    "KTX upload calls are intercepted at the SDK engine boundary; no WebGL driver, actual GPU upload duration, device thermal condition or mobile FPS is measured.",
+    "The complete map is not rendered; unrelated shared-geometry meshes expose the additional scene traversal, not a measured264.8ms causal contribution.",
+    "highTextureLastPromoteMs times synchronous JS material assignment/invalidation. It is not worker decode duration, texture wait duration, GPU upload elapsed time or GPU frame time."
+  ],
+  "implementationFiles": [
+    "src/village-texture-streaming.js",
+    "tests/village-texture-promotion.test.js",
+    "reports/thermal-active-2026-11-04/texture-assessment.mjs",
+    "reports/thermal-active-2026-11-04/texture-assessment.json",
+    "reports/thermal-active-2026-11-04/texture-promotion-validation.json",
+    "reports/thermal-active-2026-11-04/texture-promotion-baseline.json",
+    "reports/thermal-active-2026-11-04/texture-promotion-baseline.log",
+    "reports/thermal-active-2026-11-04/texture-focused.log"
+  ]
+}

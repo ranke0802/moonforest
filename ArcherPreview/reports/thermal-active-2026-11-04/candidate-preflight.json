@@ -1,0 +1,16 @@
+{
+  "sceneMeshes": 102,
+  "frames": 5,
+  "original": {
+    "meanSceneMs": 0.2180800000000545,
+    "meanReadyCalls": 100,
+    "meanCandidates": 102
+  },
+  "filtered": {
+    "meanSceneMs": 0.13412000000007537,
+    "meanReadyCalls": 24,
+    "meanCandidates": 26
+  },
+  "activeAndDrawsMatch": true,
+  "scope": "Synthetic static instances in real Babylon NullEngine; no GPU/phone result."
+}

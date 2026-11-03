@@ -1,0 +1,522 @@
+{
+  "generatedAt": "2026-11-03T17:25:01.826Z",
+  "steps": 7,
+  "nativeDrawBatchAndLodAndShadowEquality": true,
+  "sourceMeshesPreserved": true,
+  "externalWrapperAfterDisposePassesThrough": true,
+  "ownProviderRestored": true,
+  "snapshots": [
+    {
+      "step": 0,
+      "radius": 6,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 28,
+        "skipped": 0,
+        "owned": 24
+      }
+    },
+    {
+      "step": 1,
+      "radius": 16,
+      "enabled": 12,
+      "draws": [
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-2",
+            "instance-4",
+            "instance-6",
+            "instance-8",
+            "instance-10",
+            "instance-12",
+            "instance-14",
+            "instance-16"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-20",
+            "instance-22"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-2",
+            "instance-4",
+            "instance-6",
+            "instance-8",
+            "instance-10",
+            "instance-12",
+            "instance-14",
+            "instance-16"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-20",
+            "instance-22"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 16,
+        "skipped": 12,
+        "owned": 24
+      }
+    },
+    {
+      "step": 2,
+      "radius": 28,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 28,
+        "skipped": 0,
+        "owned": 24
+      }
+    },
+    {
+      "step": 3,
+      "radius": 7,
+      "enabled": 0,
+      "draws": [
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 4,
+        "skipped": 24,
+        "owned": 24
+      }
+    },
+    {
+      "step": 4,
+      "radius": 7,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 28,
+        "skipped": 0,
+        "owned": 24
+      }
+    },
+    {
+      "step": 5,
+      "radius": 16,
+      "enabled": 8,
+      "draws": [
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-3",
+            "instance-6",
+            "instance-9",
+            "instance-12",
+            "instance-15"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-21"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-3",
+            "instance-6",
+            "instance-9",
+            "instance-12",
+            "instance-15"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-21"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 12,
+        "skipped": 16,
+        "owned": 24
+      }
+    },
+    {
+      "step": 6,
+      "radius": 6,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "stats": {
+        "scanned": 28,
+        "submitted": 28,
+        "skipped": 0,
+        "owned": 24
+      }
+    }
+  ],
+  "limitation": "NullEngine validates native CPU selection/batch/LOD/shadow-list logic; no actual GPU shader compilation, pixels, device FPS or browser test."
+}

@@ -1,0 +1,300 @@
+{
+  "generatedAt": "2026-11-03T17:23:26.317Z",
+  "baselineCommit": "1879954",
+  "sourceSampleSha256": "18a39909acb5a5fd3b801cf104fcbee08b50b5006f9a796c94ede74c6c5a929a",
+  "summary": {
+    "fps": 45.36489151873767,
+    "frameMs": 17.399999976158142,
+    "maxMs": 75.19999998807907,
+    "p95Ms": 36,
+    "slowFrames": 2,
+    "thresholdMs": 50,
+    "targetFps": 60,
+    "samples": 459,
+    "maxWorkMs": 26.599999964237213,
+    "meanFrameMs": 21.79847494553377,
+    "meanWorkMs": 14.203050110594639,
+    "p95WorkMs": 21.5,
+    "missedTargetFrames": 237,
+    "missedTargetThresholdMs": 20.833333333333332
+  },
+  "renderMetrics": {
+    "drawCalls": 126,
+    "sceneMs": 17.100000023841858,
+    "animationMs": 0.30000001192092896,
+    "activeMeshesMs": 6.600000023841858,
+    "renderTargetsMs": 2,
+    "drawSubmissionMs": 7.900000035762787,
+    "gpu": {
+      "status": "unsupported",
+      "asynchronous": true,
+      "scope": "engine-frame",
+      "intervalMs": 250,
+      "pending": false,
+      "ageMs": null,
+      "samples": 0,
+      "meanMs": null,
+      "p95Ms": null,
+      "latest": null,
+      "retained": null,
+      "disjointEvents": 0,
+      "invalidSamples": 0,
+      "timeouts": 0
+    }
+  },
+  "eventGroups": {
+    "resident": {
+      "events": 16,
+      "maps": [
+        "warrior-plains",
+        "warrior-v3"
+      ],
+      "currentWorkMs": {
+        "samples": 16,
+        "mean": 23.174999999999997,
+        "p95": 35.7,
+        "max": 35.7
+      },
+      "activeMeshesMs": {
+        "samples": 16,
+        "mean": 10.306250005960464,
+        "p95": 15.600000023841858,
+        "max": 15.600000023841858
+      },
+      "drawSubmissionMs": {
+        "samples": 16,
+        "mean": 7.612500000745058,
+        "p95": 21.899999976158142,
+        "max": 21.899999976158142
+      },
+      "note": "Only the bounded last 32 delay events, not an unbiased frame population; interval describes preceding frame, context describes current work."
+    },
+    "texture-pending": {
+      "events": 14,
+      "maps": [
+        "warrior-v3"
+      ],
+      "currentWorkMs": {
+        "samples": 14,
+        "mean": 80.72857142857143,
+        "p95": 309.7,
+        "max": 309.7
+      },
+      "activeMeshesMs": {
+        "samples": 14,
+        "mean": 17.492857141154154,
+        "p95": 25.900000035762787,
+        "max": 25.900000035762787
+      },
+      "drawSubmissionMs": {
+        "samples": 14,
+        "mean": 34.014285726206644,
+        "p95": 264.80000001192093,
+        "max": 264.80000001192093
+      },
+      "note": "Only the bounded last 32 delay events, not an unbiased frame population; interval describes preceding frame, context describes current work."
+    },
+    "geometry-pending": {
+      "events": 2,
+      "maps": [
+        "warrior-v3"
+      ],
+      "currentWorkMs": {
+        "samples": 2,
+        "mean": 20.15,
+        "p95": 22.5,
+        "max": 22.5
+      },
+      "activeMeshesMs": {
+        "samples": 2,
+        "mean": 6.800000011920929,
+        "p95": 7.400000035762787,
+        "max": 7.400000035762787
+      },
+      "drawSubmissionMs": {
+        "samples": 2,
+        "mean": 7.5,
+        "p95": 8,
+        "max": 8
+      },
+      "note": "Only the bounded last 32 delay events, not an unbiased frame population; interval describes preceding frame, context describes current work."
+    }
+  },
+  "sdkObserverCounts": {
+    "initial": {
+      "beforeAnimations": 0,
+      "afterAnimations": 0,
+      "beforeActive": 0,
+      "afterActive": 0,
+      "beforeDraw": 0,
+      "afterDraw": 0,
+      "afterRender": 0,
+      "engineBegin": 0,
+      "engineEnd": 0
+    },
+    "enabled": {
+      "beforeAnimations": 1,
+      "afterAnimations": 1,
+      "beforeActive": 1,
+      "afterActive": 1,
+      "beforeDraw": 1,
+      "afterDraw": 1,
+      "afterRender": 1,
+      "engineBegin": 1,
+      "engineEnd": 1
+    },
+    "after100SameSceneReentries": {
+      "beforeAnimations": 1,
+      "afterAnimations": 1,
+      "beforeActive": 1,
+      "afterActive": 1,
+      "beforeDraw": 1,
+      "afterDraw": 1,
+      "afterRender": 1,
+      "engineBegin": 1,
+      "engineEnd": 1
+    },
+    "afterDisable": {
+      "beforeAnimations": 0,
+      "afterAnimations": 0,
+      "beforeActive": 0,
+      "afterActive": 0,
+      "beforeDraw": 0,
+      "afterDraw": 0,
+      "afterRender": 0,
+      "engineBegin": 0,
+      "engineEnd": 0
+    },
+    "callbacksAdded": {
+      "beforeAnimations": 1,
+      "afterAnimations": 1,
+      "beforeActive": 1,
+      "afterActive": 1,
+      "beforeDraw": 1,
+      "afterDraw": 1,
+      "afterRender": 1,
+      "engineBegin": 1,
+      "engineEnd": 1
+    },
+    "gpuDriver": "unsupported; no GL query methods called"
+  },
+  "actualSdkCapReplay": {
+    "60": {
+      "rafCallbacks": 600,
+      "accepted": 600,
+      "durationSeconds": 10
+    },
+    "90": {
+      "rafCallbacks": 900,
+      "accepted": 601,
+      "durationSeconds": 10
+    },
+    "120": {
+      "rafCallbacks": 1200,
+      "accepted": 601,
+      "durationSeconds": 10
+    }
+  },
+  "frameLoop": {
+    "roundTrips": 50,
+    "maxRegisteredRenderLoops": 1,
+    "pausedRenderLoops": 0,
+    "invalidatedOnceRemovesItself": true
+  },
+  "summaryCosts": {
+    "previous": {
+      "samples": 25,
+      "mean": 0.025196039999999805,
+      "p95": 0.03573100000000068,
+      "max": 0.05108799999999974,
+      "unit": "local Node milliseconds per summary (paint is at most 2Hz)"
+    },
+    "current": {
+      "samples": 25,
+      "mean": 0.0300475999999997,
+      "p95": 0.037095999999999095,
+      "max": 0.04293800000000147,
+      "unit": "local Node milliseconds per summary (paint is at most 2Hz)"
+    }
+  },
+  "collector": {
+    "disabled": {
+      "costMs": {
+        "samples": 4000,
+        "mean": 0.0002732250000000249,
+        "p95": 0.0004999999996471161,
+        "max": 0.07690000000002328
+      },
+      "clockCalls": 1,
+      "writes": 0,
+      "memoryCalls": 1,
+      "contextCalls": 0,
+      "samples": 0,
+      "bossStatus": null,
+      "note": "Synthetic DOM with no style/layout. Measures fixture JavaScript only, not phone or browser rendering."
+    },
+    "enabled": {
+      "costMs": {
+        "samples": 4000,
+        "mean": 0.0035132750000047962,
+        "p95": 0.006400000000212458,
+        "max": 0.8447000000001026
+      },
+      "clockCalls": 52176,
+      "writes": 25,
+      "memoryCalls": 87,
+      "contextCalls": 0,
+      "samples": 459,
+      "bossStatus": null,
+      "note": "Synthetic DOM with no style/layout. Measures fixture JavaScript only, not phone or browser rendering."
+    },
+    "enabledWithCompletedBoss": {
+      "costMs": {
+        "samples": 4000,
+        "mean": 0.005657449999999471,
+        "p95": 0.003400000000056025,
+        "max": 0.6497999999996864
+      },
+      "clockCalls": 52183,
+      "writes": 56,
+      "memoryCalls": 88,
+      "contextCalls": 3,
+      "samples": 459,
+      "bossStatus": "complete",
+      "note": "Synthetic DOM with no style/layout. Measures fixture JavaScript only, not phone or browser rendering."
+    }
+  },
+  "findings": [
+    {
+      "severity": "evidence",
+      "claim": "Persistent slow frames also occur with no texture/geometry preparation, no bosses and low HUD/world update cost. The 125.2s texture event is a separate transient submission spike, not a complete explanation of sustained 40–45FPS."
+    },
+    {
+      "severity": "not-reproduced",
+      "claim": "Recent three patches do not alter FrameLoop or the SDK RAF/maxFPS cap. At a 60 target, ideal 60/90/120Hz monotonic RAF feeds accept about 600 renders in 10s; no intrinsic 40/45 cap or duplicate loop was found."
+    },
+    {
+      "severity": "scope",
+      "claim": "activeMeshesMs brackets native _evaluateActiveMeshes candidate scan/readiness/world matrix/LOD/frustum/activation/submesh classification. It is CPU work, not a GPU time. There are no application before/after-active-evaluation observable subscribers in baseline source."
+    },
+    {
+      "severity": "scope",
+      "claim": "drawSubmissionMs is the pinned SDK renderTimeCounter, refreshed again on onAfterRender; draw/shadow/after-draw callback work can overlap. It cannot isolate upload, shader compilation, driver wait or GPU execution."
+    },
+    {
+      "severity": "not-reproduced",
+      "claim": "New diagnostic PerfCounter callbacks are bounded scalar observers; enabling same scene does not stack them and disable removes them. Unsupported GPU path does not issue query/GL polling. Local Node timing is not a phone speed bound."
+    },
+    {
+      "severity": "limitation",
+      "claim": "Diagnostic endFrame itself runs after the recorded work timestamp, so its summary/DOM cost can affect the next interval but is not in jsSubmitMs. Browser layout/compositing/GPU/temperature cannot be excluded by this CPU-only audit."
+    }
+  ],
+  "scenarios": [
+    "Each of village, plains, forest, cave: identical saved camera/position, quality high, 60FPS target, resolution1664x768, same LOD and plains240%; wait geometry/texture pending0 and observe 15s idle + 15s orbit + 15s movement, diagnostics off/on separately. Do not compare phone thermal state across unmatched runs.",
+    "Cold texture promotion separately: approach village at z37.9→30.1, record current-work spike and next interval independently; compare first promotion and fully resident replay with unchanged texture URL/dimensions.",
+    "Traverse village→plains→forest→cave→forest→plains→village twice; native LOD near/mid/far/frustum, tier outlines, open chest state, cave fog/material isolation and health/equipment remain unchanged; diagnostic observers/render loops plateau.",
+    "Pause using settings/HUD editor/minimap, background/pagehide, foreground/pageshow/context restore: active render callbacks0 while paused/hidden, one after resume; timer queries cancelled and stale GPU samples not reported as live.",
+    "Any active-candidate optimization must compare actual production visible mesh/instance/submesh IDs plus LOD and shadow eligibility at boundary cameras and all four maps; counters alone do not prove equal imagery."
+  ]
+}

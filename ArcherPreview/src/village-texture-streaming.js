@@ -25,7 +25,7 @@ export class VillageTextureStreaming {
     if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>p.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=new Float32Array(16);this.hasView=false;this.lastFov=null;this.motionUntil=0;this.lastFinished=-Infinity;
     this.seenSince=new Map();this.replacementSince=new Map();this.clock=()=>performance.now();
-    Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
+    Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
   update(now){
@@ -144,12 +144,12 @@ export class VillageTextureStreaming {
     this.syncStats();
     if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
     const started=this.clock?.()??performance.now();
-    this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.syncStats();
+    this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.stats.highTexturePendingAsset=id;this.stats.highTextureStage='resources';this.syncStats();
     return this.pendingTask=this.load(id).catch(error=>{
       if(this.disposed||error.name==='AbortError')return;
       this.failed.add(id);this.stats.highTextureError=`${id}: ${error.message??error}`;
       console.warn('Village high texture stopped; no automatic retry.',id,error);
-    }).finally(()=>{this.lastFinished=this.clock?.()??performance.now();this.stats.highTextureLastPrepareMs=Math.max(0,this.lastFinished-started);this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.syncStats();});
+    }).finally(()=>{this.lastFinished=this.clock?.()??performance.now();this.stats.highTextureLastPrepareMs=Math.max(0,this.lastFinished-started);this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.stats.highTexturePendingAsset=null;this.stats.highTextureStage=this.disposed?'disposed':'idle';this.syncStats();});
   }
   async load(id){
     const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
@@ -159,24 +159,34 @@ export class VillageTextureStreaming {
       if(this.world?.prefetchResources)await this.world.prefetchResources(config.resources);
       if(this.disposed)return;
       for(const [role,slot]of Object.entries(slots)){
+        if(this.pending===id)this.stats.highTextureStage='texture:'+role;
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));return;}
         const size=textures[slot].getSize(),expected=config.textures[role];
         if(size.width!==expected.width||size.height!==expected.height)throw new Error('Texture dimensions differ from the budgeted profile');
       }
-      for(const {material}of originals){material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
+      // unfreeze() scans every scene submesh even when already unfrozen. The
+      // texture setters retain their normal readiness invalidation on live toon
+      // materials; only a genuinely frozen material needs the extra unlock.
+      if(this.pending===id)this.stats.highTextureStage='promote';
+      const promoteStarted=this.clock?.()??performance.now();
+      for(const {material}of originals){if(material.isFrozen)material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
+      // Synchronous material assignment/invalidation only: fetching, decoding,
+      // prior KTX upload calls and later driver draw costs are not GPU time here.
+      this.stats.highTextureLastPromoteMs=Math.max(0,(this.clock?.()??performance.now())-promoteStarted);
       this.resident.set(id,{textures,originals,bytes:highTextureBytes(config,this.compressedSupported),resolution:config.textures.albedo.width,readyAt:this.clock?.()??performance.now()});this.stats.highTextureLoads++;this.syncStats();
       this.stats.highTextureFormat=textures.albedoTexture.getInternalTexture?.()?.format??null;
     }catch(error){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));throw error;}
   }
   release(id){
     const entry=this.resident.get(id);if(!entry)return;
-    for(const {material,values}of entry.originals){material.unfreeze();Object.assign(material,values);if(!material.metadata?.villageToon)material.freeze();}
+    for(const {material,values}of entry.originals){if(material.isFrozen)material.unfreeze();Object.assign(material,values);if(!material.metadata?.villageToon)material.freeze();}
     for(const t of Object.values(entry.textures))releaseMapTexture(t,this.world?.scene);
     this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }
   dispose(){
     if(this.disposed)return;this.disposed=true;for(const cancel of [...this.textureWaiters])cancel();
+    this.stats.highTexturePendingAsset=null;this.stats.highTextureStage='disposed';
     this.world.scene.onAfterRenderObservable.remove(this.observer);
     for(const id of [...this.resident.keys()])this.release(id);
   }

@@ -16,6 +16,7 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
+import {VillageActiveCandidates} from './village-active-candidates.js';
 import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
@@ -162,7 +163,7 @@ export function loadStreamedVillage(world,{
     }catch(error){setup.abort(error);error.stage??=setup.stage;throw error;}finally{setup.close();snapshot.scene.onDisposeObservable.remove(setupObserver);}
     const {url,manifest,assets,records,plan}=prepared,containers=[];
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
-    const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats);
+    const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene);stats.activeMeshCandidates=candidates.stats;
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
@@ -189,7 +190,7 @@ export function loadStreamedVillage(world,{
         const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
         for(const node of instance.rootNodes)node.parent=record.facing;
         record.meshes=record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0);
-        for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
+        for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();candidates.add(mesh);}
         record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
       }
       world.caveFog?.updateRecords(instances);
@@ -229,7 +230,7 @@ export function loadStreamedVillage(world,{
         for(const material of [outlines.material,outlines.tintedMaterial,outlines.vertexColorMaterial,outlines.tintedVertexColorMaterial])if(material)retainMapEffect(material.getEffect());
         for(const c of containers)for(const mesh of c.meshes)for(const sub of mesh.subMeshes??[])retainMapEffect(sub.effect);
       }
-      outlines.dispose();visibility.dispose();
+      candidates.dispose();outlines.dispose();visibility.dispose();
       for(const r of records)r.root.dispose();
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();

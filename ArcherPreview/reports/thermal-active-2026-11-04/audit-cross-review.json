@@ -1,0 +1,325 @@
+{
+  "generatedAt": "2026-11-03T17:26:46.481624+00:00",
+  "reviewedBaseline": "1879954",
+  "reviewerRuntimeEdits": false,
+  "reviewedSourceSha256Lf": {
+    "src/village-active-candidates.js": "7b2046795c69575c2ac921aba833858fca2bbb420b920c6390ed13ad1aabfb6d",
+    "src/village-streamed-environment.js": "63fbbdf2e42e95ac0deebe4168182f2bb4ad6552a033e740509f01adb8fa300a",
+    "src/village-texture-streaming.js": "f0d9e7907e4f3366473cac64b04695c645cc9406aa812e36bcaa5eecfc4c3ae5"
+  },
+  "qualityBaselineFilesCompared": 48,
+  "qualityBaselineAllEqual": true,
+  "qualityComparison": [
+    {
+      "path": "src/world.js",
+      "expected": "8930725ff07272f6cc801265b5713e6be015b8471a05489007f376f19d732a59",
+      "actual": "8930725ff07272f6cc801265b5713e6be015b8471a05489007f376f19d732a59",
+      "equal": true
+    },
+    {
+      "path": "src/world-limits.js",
+      "expected": "1c0e5b652cb9c0e69d588872008dbcd9991c050a2754e3985294e96c3c8fee77",
+      "actual": "1c0e5b652cb9c0e69d588872008dbcd9991c050a2754e3985294e96c3c8fee77",
+      "equal": true
+    },
+    {
+      "path": "src/render-policy.js",
+      "expected": "370f1b1c2ff11489406a333f684e4842294ecb5636e6f6a651541024b96c7c01",
+      "actual": "370f1b1c2ff11489406a333f684e4842294ecb5636e6f6a651541024b96c7c01",
+      "equal": true
+    },
+    {
+      "path": "src/frame-loop.js",
+      "expected": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+      "actual": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+      "equal": true
+    },
+    {
+      "path": "src/village-layout.js",
+      "expected": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "actual": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "equal": true
+    },
+    {
+      "path": "src/village-terrain.js",
+      "expected": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "actual": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "equal": true
+    },
+    {
+      "path": "src/village-ground-layout.js",
+      "expected": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "actual": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "equal": true
+    },
+    {
+      "path": "src/great-plains-layout.js",
+      "expected": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "actual": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "equal": true
+    },
+    {
+      "path": "src/great-plains-terrain.js",
+      "expected": "f742031d73dbf24b73fe977c06d975173ffc4e08e38b750b29867f1125659d7e",
+      "actual": "f742031d73dbf24b73fe977c06d975173ffc4e08e38b750b29867f1125659d7e",
+      "equal": true
+    },
+    {
+      "path": "src/plains-view-distance.js",
+      "expected": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "actual": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "equal": true
+    },
+    {
+      "path": "src/monster-forest-layout.js",
+      "expected": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "actual": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "equal": true
+    },
+    {
+      "path": "src/monster-forest-terrain.js",
+      "expected": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "actual": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "equal": true
+    },
+    {
+      "path": "src/witch-cave-layout.js",
+      "expected": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4",
+      "actual": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4",
+      "equal": true
+    },
+    {
+      "path": "src/witch-cave-terrain.js",
+      "expected": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d",
+      "actual": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d",
+      "equal": true
+    },
+    {
+      "path": "src/village-lod.js",
+      "expected": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "actual": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "equal": true
+    },
+    {
+      "path": "src/village-policy.js",
+      "expected": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "actual": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "equal": true
+    },
+    {
+      "path": "src/camera-pitch.js",
+      "expected": "2cf2089d26c500d5a46e480f6a3c4f0f792019cba7364b714e06463fc53d3eac",
+      "actual": "2cf2089d26c500d5a46e480f6a3c4f0f792019cba7364b714e06463fc53d3eac",
+      "equal": true
+    },
+    {
+      "path": "src/player-dimensions.js",
+      "expected": "5c83e0fa93fd543dd51feb693c221983f7883127906027adba57b62454147e26",
+      "actual": "5c83e0fa93fd543dd51feb693c221983f7883127906027adba57b62454147e26",
+      "equal": true
+    },
+    {
+      "path": "src/chest-opening.js",
+      "expected": "972bcb4dc55631433ab38e67457fa037168f24efb1f14e26cbf2ea26471c0004",
+      "actual": "972bcb4dc55631433ab38e67457fa037168f24efb1f14e26cbf2ea26471c0004",
+      "equal": true
+    },
+    {
+      "path": "src/loot-rarity.js",
+      "expected": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+      "actual": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+      "equal": true
+    },
+    {
+      "path": "public/assets/audio.json",
+      "expected": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc",
+      "actual": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc",
+      "equal": true
+    },
+    {
+      "path": "public/assets/character.json",
+      "expected": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c",
+      "actual": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c",
+      "equal": true
+    },
+    {
+      "path": "public/assets/elena.json",
+      "expected": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "actual": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "equal": true
+    },
+    {
+      "path": "public/assets/environment.json",
+      "expected": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "actual": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "equal": true
+    },
+    {
+      "path": "public/assets/great-plains-ground.json",
+      "expected": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38",
+      "actual": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38",
+      "equal": true
+    },
+    {
+      "path": "public/assets/great-plains.json",
+      "expected": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "actual": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "equal": true
+    },
+    {
+      "path": "public/assets/guardian-bear.json",
+      "expected": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "actual": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "equal": true
+    },
+    {
+      "path": "public/assets/hooded-goblin.json",
+      "expected": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343",
+      "actual": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343",
+      "equal": true
+    },
+    {
+      "path": "public/assets/ktx2-decoder.json",
+      "expected": "a65af7b08810376acf1baff937e7c3b9b52168235d3948c274155937748431fd",
+      "actual": "a65af7b08810376acf1baff937e7c3b9b52168235d3948c274155937748431fd",
+      "equal": true
+    },
+    {
+      "path": "public/assets/legacy-e0c98ab-character.json",
+      "expected": "4dfec5cbae8378b94afd86b28b7fae5e341f17132cd8833a476a4910e5b0bfbf",
+      "actual": "4dfec5cbae8378b94afd86b28b7fae5e341f17132cd8833a476a4910e5b0bfbf",
+      "equal": true
+    },
+    {
+      "path": "public/assets/legacy-e0c98ab-warrior.json",
+      "expected": "85835dd9e2b6a120f9a011e72761832a1dd14df9b99bfdf3d21df7f3fd435326",
+      "actual": "85835dd9e2b6a120f9a011e72761832a1dd14df9b99bfdf3d21df7f3fd435326",
+      "equal": true
+    },
+    {
+      "path": "public/assets/map-loading-art.json",
+      "expected": "c93cd08bea5d551f86e994e34213ea62d6fd0420f72a91de63eaca04a218d097",
+      "actual": "c93cd08bea5d551f86e994e34213ea62d6fd0420f72a91de63eaca04a218d097",
+      "equal": true
+    },
+    {
+      "path": "public/assets/meshopt-decoder.json",
+      "expected": "20144c48ea468481d8e5c4d5c2455401efb4251b9c1b0275bb30f8a7221e6125",
+      "actual": "20144c48ea468481d8e5c4d5c2455401efb4251b9c1b0275bb30f8a7221e6125",
+      "equal": true
+    },
+    {
+      "path": "public/assets/monster-forest-ground.json",
+      "expected": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "actual": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "equal": true
+    },
+    {
+      "path": "public/assets/monster-forest.json",
+      "expected": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "actual": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "equal": true
+    },
+    {
+      "path": "public/assets/mourning-elena.json",
+      "expected": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "actual": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "equal": true
+    },
+    {
+      "path": "public/assets/quest-props.json",
+      "expected": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "actual": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "equal": true
+    },
+    {
+      "path": "public/assets/resource-sizes.json",
+      "expected": "39055c38e594cfcbbd28480e186d1ea957c6a6978f7bc55647e7bc58931f6b60",
+      "actual": "39055c38e594cfcbbd28480e186d1ea957c6a6978f7bc55647e7bc58931f6b60",
+      "equal": true
+    },
+    {
+      "path": "public/assets/sky.json",
+      "expected": "2b8d926b9f512c41c4722c7d557f7bdfcf9c0e19e9932c55cb0384dad78ff405",
+      "actual": "2b8d926b9f512c41c4722c7d557f7bdfcf9c0e19e9932c55cb0384dad78ff405",
+      "equal": true
+    },
+    {
+      "path": "public/assets/village-ground.json",
+      "expected": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "actual": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "equal": true
+    },
+    {
+      "path": "public/assets/village-plains-outskirts.json",
+      "expected": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "actual": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "equal": true
+    },
+    {
+      "path": "public/assets/village.json",
+      "expected": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "actual": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "equal": true
+    },
+    {
+      "path": "public/assets/warrior-v2.json",
+      "expected": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+      "actual": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+      "equal": true
+    },
+    {
+      "path": "public/assets/warrior-v3-ios.json",
+      "expected": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "actual": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "equal": true
+    },
+    {
+      "path": "public/assets/warrior-v3.json",
+      "expected": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "actual": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "equal": true
+    },
+    {
+      "path": "public/assets/warrior.json",
+      "expected": "6e6b756dc3e776740e8be2f8c3d48dbc319ff34f0b9eedb4d420f647611969aa",
+      "actual": "6e6b756dc3e776740e8be2f8c3d48dbc319ff34f0b9eedb4d420f647611969aa",
+      "equal": true
+    },
+    {
+      "path": "public/assets/witch-cave-ground.json",
+      "expected": "89246ca82c6b30db7dba4bae56820c6acaac4b90449ba22b1747542181b3cf8c",
+      "actual": "89246ca82c6b30db7dba4bae56820c6acaac4b90449ba22b1747542181b3cf8c",
+      "equal": true
+    },
+    {
+      "path": "public/assets/witch-cave.json",
+      "expected": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "actual": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "equal": true
+    }
+  ],
+  "crossFocused": {
+    "passed": 14,
+    "failed": 0,
+    "log": "reports/thermal-active-2026-11-04/audit-cross-focused.log"
+  },
+  "candidateProbe": "reports/thermal-active-2026-11-04/audit-candidate-review.json",
+  "candidateConclusions": [
+    "Original provider order, source meshes, custom methods, dynamic/quest objects and non-default candidate providers retained.",
+    "Actual native near/mid/far, main/shadow instance batches and shadow renderList equal in seven changing visibility/distance steps, including all disabled then enabled.",
+    "Dispose restores own provider; later external wrapper retains passthrough behavior with cleared scratch data.",
+    "Original SDK still selects LOD, frustum, readiness and activation; no freezeActiveMeshes or quality-budget reduction."
+  ],
+  "textureConclusions": [
+    "Unfreeze guard changes only redundant calls on already-unfrozen material; genuine frozen material still follows original unlock/assign/freeze policy.",
+    "SDK markDirty(false) scans scene submeshes and resets readiness cache. It does not force AllDirty shader flags. Texture setter still performs its needed scene scan.",
+    "Actual shipped4K ETC1S13mips, both hardware-sRGB modes over six cycles: native first promoted/restored material bind uses correct sampler, newEffect objects0, geometry/resources stable.",
+    "Actual resource-wait disposal, late callbacks and separate new stream stats preserve disposed state; no new async boundary or retry policy.",
+    "highTextureLastPromoteMs measures synchronous JS assignment only; it does not identify upload or driver/GPU elapsed time."
+  ],
+  "limits": [
+    "NullEngine/SDK CPU logic and engine upload interception only; no browser pixel, GPU driver, phone temperature or FPS claim.",
+    "No proof these changes eliminate the recorded264.8ms drawSubmission spike or restore60FPS; device rerun is needed."
+  ]
+}

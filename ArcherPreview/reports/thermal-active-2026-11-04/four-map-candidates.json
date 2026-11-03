@@ -1,0 +1,77 @@
+{
+  "scope": "Babylon NullEngine, real map layouts and decoded packed geometry, placeholder materials; render CPU includes candidate scan. Not GPU, phone, or FPS measurements.",
+  "rows": [
+    {
+      "map": "village",
+      "stats": {
+        "scanned": 1548,
+        "submitted": 1169,
+        "skipped": 379,
+        "owned": 744
+      },
+      "baseline": {
+        "readyCalls": 771,
+        "sceneMs": 3.157460000000083
+      },
+      "filtered": {
+        "readyCalls": 392,
+        "sceneMs": 2.6334200000000236
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "great-plains",
+      "stats": {
+        "scanned": 2697,
+        "submitted": 1492,
+        "skipped": 1205,
+        "owned": 1332
+      },
+      "baseline": {
+        "readyCalls": 1359,
+        "sceneMs": 2.0825999999999114
+      },
+      "filtered": {
+        "readyCalls": 154,
+        "sceneMs": 1.8235199999998257
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "monster-forest",
+      "stats": {
+        "scanned": 1828,
+        "submitted": 1347,
+        "skipped": 481,
+        "owned": 890
+      },
+      "baseline": {
+        "readyCalls": 917,
+        "sceneMs": 2.9912399999998343
+      },
+      "filtered": {
+        "readyCalls": 436,
+        "sceneMs": 2.946859999999833
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "witch-cave",
+      "stats": {
+        "scanned": 424,
+        "submitted": 276,
+        "skipped": 148,
+        "owned": 176
+      },
+      "baseline": {
+        "readyCalls": 225,
+        "sceneMs": 1.3321000000001733
+      },
+      "filtered": {
+        "readyCalls": 77,
+        "sceneMs": 1.2763600000000224
+      },
+      "activeMatch": true
+    }
+  ]
+}
