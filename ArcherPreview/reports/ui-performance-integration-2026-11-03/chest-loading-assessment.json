@@ -1,0 +1,340 @@
+{
+  "baselineRevision": "e62979f",
+  "status": "PASS",
+  "findings": [
+    {
+      "certainty": "confirmed-SDK",
+      "topic": "heterogeneous body/lid colour layouts",
+      "mechanism": "Babylon9.31 ShaderMaterial.isReady owns one shared draw wrapper; body VERTEXCOLOR versus lid noColor changed defines on every alternating source. engine.createEffect finds the existing cached program and increments its refCount each time.",
+      "before": {
+        "frames": 240,
+        "cachedEffectRequests": 480,
+        "effectRefGrowth": 480
+      },
+      "after": {
+        "frames": 240,
+        "cachedEffectRequests": 0,
+        "effectRefGrowth": 0
+      },
+      "fix": "One immutable white RGBA lid attribute keeps the same layout as the body while preserving every authored lid colour/opacity and the dark interior.",
+      "additionalSharedLidAttributeBytes": 49056,
+      "notClaimed": "480 new GPU compilations, unbounded GPU-memory allocation, or proof of the reported whole-game phone FPS drop."
+    },
+    {
+      "certainty": "confirmed-kept-feature-cost",
+      "topic": "two moving parts and persistent opened chests",
+      "beforeAndAfterOptimization": {
+        "baseDrawsPerFrame": 2,
+        "inkDrawsPerFrame": 2,
+        "triangles": 4487,
+        "materials": 1
+      },
+      "explanation": "Opening still needs two native instanced sources, instead of the older closed-only single source. Opened chests continue to render under the same30m/fog rules. These required costs are retained, not described as removed."
+    },
+    {
+      "certainty": "confirmed-source-and-DOM",
+      "topic": "loading artwork lifetime",
+      "sourceChangeRequired": false,
+      "compressedArtworkFiles": 4,
+      "compressedBytes": 1926640,
+      "imagesCreatedByMetadataHelper": 0,
+      "liveImageElements": 1,
+      "afterRevealSourceAttributes": 0,
+      "cycles": 100,
+      "explanation": "reveal already hid the artwork and removed src in the baseline. Four compressed startup cache bodies do not create four decoded image elements. Existing native-image/service-worker cache regression tests also pass.",
+      "notClaimed": "Physical decoded-image/GPU cache eviction is controlled by the browser and was not measured."
+    },
+    {
+      "certainty": "small-source-cleanup",
+      "topic": "idle prop work",
+      "changes": [
+        "pump selects the next missing model directly from demand without copying the Set into an array.",
+        "animate skips the empty opening Set while still updating its clock, preserving resume timing."
+      ],
+      "notClaimed": "A measured whole-game FPS increase from these two small edits. SDK setEnabled already has a same-value fast path."
+    }
+  ],
+  "cpuReference": {
+    "before": {
+      "elapsedMs": 30.53780000000006,
+      "msPerFrame": 0.12724083333333358,
+      "meaning": "Node NullEngine CPU calls; not GPU/device FPS"
+    },
+    "after": {
+      "elapsedMs": 22.58719999999994,
+      "msPerFrame": 0.09411333333333308,
+      "meaning": "Node NullEngine CPU calls; not GPU/device FPS"
+    },
+    "warning": "Controlled desktop Node/NullEngine CPU scene. Scheduling/JIT variance applies; not GPU time, phone FPS, S23 thermal data or a four-map full-world benchmark."
+  },
+  "preserved": {
+    "triangles": 4487,
+    "sourceTriangles": 4479,
+    "extraInteriorTriangles": 8,
+    "vertices": 5125,
+    "lidDegrees": 105,
+    "openingSeconds": 0.85,
+    "rarityThickness": 0.028,
+    "textureLodAndQualityPoliciesUnchanged": true,
+    "player8KAndBackgroundMax4KSourceContractUnchanged": true,
+    "plains240PercentPolicyUnchanged": true
+  },
+  "protectedFiles": [
+    {
+      "file": "src/loading-art.js",
+      "beforeSha256": "fbb7d939844168785c3f5a079d8b7fb4f607cf0344b5d20007e0aa46a9627f24",
+      "afterSha256": "fbb7d939844168785c3f5a079d8b7fb4f607cf0344b5d20007e0aa46a9627f24",
+      "unchanged": true
+    },
+    {
+      "file": "src/loading-view.js",
+      "beforeSha256": "3354c40b2b89210df815609f5c3147c648b9a86bac82d285092cc51121dc6bcc",
+      "afterSha256": "3354c40b2b89210df815609f5c3147c648b9a86bac82d285092cc51121dc6bcc",
+      "unchanged": true
+    },
+    {
+      "file": "src/player-texture-profile.js",
+      "beforeSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "afterSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-lod.js",
+      "beforeSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "afterSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-texture-streaming.js",
+      "beforeSha256": "66494f590398826ad12aa91a4e333c4343806727a2e4d46f2311013c0e358efb",
+      "afterSha256": "66494f590398826ad12aa91a4e333c4343806727a2e4d46f2311013c0e358efb",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-texture-budget.js",
+      "beforeSha256": "181517a758bf96731b703c80c20bc088ee8b992d122edfc5eeafd2cc77c9f985",
+      "afterSha256": "181517a758bf96731b703c80c20bc088ee8b992d122edfc5eeafd2cc77c9f985",
+      "unchanged": true
+    },
+    {
+      "file": "src/plains-view-distance.js",
+      "beforeSha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "afterSha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-outlines.js",
+      "beforeSha256": "7179c74038137a3e2472d6e7d40d3838c3cf72c9696f9fdb9452d0e372ab57c0",
+      "afterSha256": "7179c74038137a3e2472d6e7d40d3838c3cf72c9696f9fdb9452d0e372ab57c0",
+      "unchanged": true
+    },
+    {
+      "file": "src/chapter-quest-points.js",
+      "beforeSha256": "26b73c7a5e245a049e6dc37f274e274e211658b843716874d4d6b0fb421b711e",
+      "afterSha256": "26b73c7a5e245a049e6dc37f274e274e211658b843716874d4d6b0fb421b711e",
+      "unchanged": true
+    },
+    {
+      "file": "src/chapter-quest-state.js",
+      "beforeSha256": "1ad49133b7b4bdc738486d065582d070d2b99cb3104cdb7614a0c40d5093b573",
+      "afterSha256": "1ad49133b7b4bdc738486d065582d070d2b99cb3104cdb7614a0c40d5093b573",
+      "unchanged": true
+    },
+    {
+      "file": "src/loot-rarity.js",
+      "beforeSha256": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+      "afterSha256": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-layout.js",
+      "beforeSha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "afterSha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "unchanged": true
+    },
+    {
+      "file": "src/great-plains-layout.js",
+      "beforeSha256": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "afterSha256": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "unchanged": true
+    },
+    {
+      "file": "src/monster-forest-layout.js",
+      "beforeSha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "afterSha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "unchanged": true
+    },
+    {
+      "file": "src/witch-cave-layout.js",
+      "beforeSha256": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4",
+      "afterSha256": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4",
+      "unchanged": true
+    },
+    {
+      "file": "src/player-combat.js",
+      "beforeSha256": "d35acf7464a2e8cfa994014b49fafbcbce4fd10afb385bbe412182a2d0d9ce5e",
+      "afterSha256": "d35acf7464a2e8cfa994014b49fafbcbce4fd10afb385bbe412182a2d0d9ce5e",
+      "unchanged": true
+    },
+    {
+      "file": "src/warrior-v2.js",
+      "beforeSha256": "fde326d2c00da03b50438d374b9030d774d5519e65c4ab97347ccfda0eaa276c",
+      "afterSha256": "fde326d2c00da03b50438d374b9030d774d5519e65c4ab97347ccfda0eaa276c",
+      "unchanged": true
+    },
+    {
+      "file": "src/input.js",
+      "beforeSha256": "68a0b7eeae01b6696284ce3121c942bdce9645868d0cf05422f97d0110ced52e",
+      "afterSha256": "68a0b7eeae01b6696284ce3121c942bdce9645868d0cf05422f97d0110ced52e",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/quest-props.json",
+      "beforeSha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "afterSha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/map-loading-art.json",
+      "beforeSha256": "c93cd08bea5d551f86e994e34213ea62d6fd0420f72a91de63eaca04a218d097",
+      "afterSha256": "c93cd08bea5d551f86e994e34213ea62d6fd0420f72a91de63eaca04a218d097",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3.json",
+      "beforeSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "afterSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3-ios.json",
+      "beforeSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "afterSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/village.json",
+      "beforeSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "afterSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/great-plains.json",
+      "beforeSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "afterSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/monster-forest.json",
+      "beforeSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "afterSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/witch-cave.json",
+      "beforeSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "afterSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "unchanged": true
+    }
+  ],
+  "resources": [
+    {
+      "url": "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+      "bytes": 154395,
+      "sha256": "e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
+      "bytes": 182352,
+      "sha256": "ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+      "bytes": 2577,
+      "sha256": "172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/ffacbdb4c99059606491ba5b1920841d258649079ec719b34c4db581d04d4485.ktx2",
+      "bytes": 68694,
+      "sha256": "ffacbdb4c99059606491ba5b1920841d258649079ec719b34c4db581d04d4485",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10.gltf",
+      "bytes": 2577,
+      "sha256": "095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/5e60d1c0aaa77ead806d13d4435c5432b8a795f595ac2a0a708e6b8ad32a765e.ktx2",
+      "bytes": 21227,
+      "sha256": "5e60d1c0aaa77ead806d13d4435c5432b8a795f595ac2a0a708e6b8ad32a765e",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336.gltf",
+      "bytes": 2577,
+      "sha256": "49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2",
+      "bytes": 599920,
+      "sha256": "dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350.webp",
+      "bytes": 588204,
+      "sha256": "70482cbebec1b38921303efaf4efa8e906f792d465c358aa4d96ba083c7aa350",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9.webp",
+      "bytes": 564230,
+      "sha256": "5793d1f5660fd8703ffe2d0a1260d7c738cb501896cd23f57abf9bf348966ce9",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b.webp",
+      "bytes": 562954,
+      "sha256": "1afe6c7faf7c33a4ccc92c1f1109ede9c28021c436ce7242804be58c6245539b",
+      "matchesContentAddress": true
+    },
+    {
+      "url": "./content/388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30.webp",
+      "bytes": 211252,
+      "sha256": "388ce461bb4c99203d2b502bf189a0a6121002af82c5c6097a5918f7180cdb30",
+      "matchesContentAddress": true
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "file": "src/chest-opening.js",
+      "sha256": "972bcb4dc55631433ab38e67457fa037168f24efb1f14e26cbf2ea26471c0004"
+    },
+    {
+      "file": "src/chapter-quest-props.js",
+      "sha256": "54470ceb71c7fda4b446ab6064191576d7bb075c8e51204219600a90bcb869b0"
+    }
+  ],
+  "validation": {
+    "focusedTests": 35,
+    "passed": 35,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 3687.146,
+    "log": "chest-loading-focused.log",
+    "newTest": "tests/chest-loading-performance.test.js",
+    "sdkAndDomReport": "chest-loading-regression.json",
+    "before": "chest-loading-variant-baseline.json",
+    "after": "chest-loading-variant-after.json"
+  },
+  "limitations": [
+    "No browser automation, GPU rasterization, actual deviceFPS or physical memory measurement.",
+    "The confirmed recurring shader-cache work is a valid narrow fix; the full reported all-map regression needs the parent investigation of world/HUD/occlusion/render scheduling."
+  ]
+}

@@ -129,7 +129,12 @@ export class TreeOcclusion {
       this.checkIn = .1;
       this.head.copyFrom(player); this.head.y += dimensions.headHeight;
       this.chest.copyFrom(player); this.chest.y += dimensions.chestHeight;
+      // Both eye rays end at the same XZ point. A disjoint XZ bounding box
+      // cannot intersect either segment, even for rotated/scaled geometry.
+      // Keep exact 3D and surface/LOD tests for every overlapping box.
+      const minX=Math.min(camera.x,player.x),maxX=Math.max(camera.x,player.x),minZ=Math.min(camera.z,player.z),maxZ=Math.max(camera.z,player.z);
       for (const tree of this.trees) {
+        if(maxX<tree.min.x||minX>tree.max.x||maxZ<tree.min.z||minZ>tree.max.z){tree.target=1;continue;}
         tree.target = this.obstructs(tree,camera,this.head) ||
           this.obstructs(tree,camera,this.chest) ? .45 : 1;
       }

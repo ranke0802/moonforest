@@ -51,6 +51,11 @@ export function prepareChestOpening(container){
     }
     for(let i=0;i<rim.length;i++)bodyData.indices.push(center,rim[i],rim[(i+1)%rim.length]);
   }
+  // Keep the body/lid attribute layout identical. Babylon's shared ink
+  // ShaderMaterial owns one draw wrapper: alternating VERTEXCOLOR on/off
+  // otherwise re-requests cached effects and increments their refs every draw.
+  // White leaves every authored lid texel and its opacity unchanged.
+  if(bodyData.colors)lidData.colors=new Float32Array(lidData.positions.length/3*4).fill(1);
   const frame=new TransformNode('chest-lid-frame',scene);container.transformNodes.push(frame);scene.removeTransformNode(frame);frame.parent=source.parent;frame.position.copyFrom(source.position);frame.scaling.copyFrom(source.scaling);if(source.rotationQuaternion)frame.rotationQuaternion=source.rotationQuaternion.clone();else frame.rotation.copyFrom(source.rotation);
   const hinge=new TransformNode('chest-lid-hinge',scene);container.transformNodes.push(hinge);scene.removeTransformNode(hinge);hinge.parent=frame;hinge.position.copyFrom(pivot);hinge.metadata={chestLidHinge:true};
   const lid=new Mesh('chest-lid',scene);container.meshes.push(lid);scene.removeMesh(lid);lid.parent=hinge;lid.material=source.material;lid.isPickable=false;lid.metadata={chestLid:true};lidData.applyToMesh(lid);

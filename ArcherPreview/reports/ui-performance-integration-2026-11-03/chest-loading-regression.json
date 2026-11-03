@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "four-map-actual-sdk-effects",
+      "rows": [
+        {
+          "map": "village",
+          "frames": 120,
+          "baseDraws": 240,
+          "inkDraws": 240,
+          "cachedEffectRequests": 0,
+          "refGrowth": 0,
+          "lidColourBytes": 49056,
+          "triangles": 4487
+        },
+        {
+          "map": "great-plains",
+          "frames": 120,
+          "baseDraws": 240,
+          "inkDraws": 240,
+          "cachedEffectRequests": 0,
+          "refGrowth": 0,
+          "lidColourBytes": 49056,
+          "triangles": 4487
+        },
+        {
+          "map": "monster-forest",
+          "frames": 120,
+          "baseDraws": 240,
+          "inkDraws": 240,
+          "cachedEffectRequests": 0,
+          "refGrowth": 0,
+          "lidColourBytes": 49056,
+          "triangles": 4487
+        },
+        {
+          "map": "witch-cave",
+          "frames": 120,
+          "baseDraws": 240,
+          "inkDraws": 240,
+          "cachedEffectRequests": 0,
+          "refGrowth": 0,
+          "lidColourBytes": 49056,
+          "triangles": 4487
+        }
+      ]
+    },
+    {
+      "case": "loading-DOM-source-lifetime",
+      "visits": 100,
+      "decorativeImageElements": 1,
+      "liveArtSourcesAfterReveal": 0,
+      "limits": "DOM source ownership only. A browser may retain a decoded image in its internal cache; no physical memory release or GPU residency is inferred."
+    }
+  ],
+  "limitations": [
+    "Actual Babylon9.31/NullEngine event counts and DOM state; no mobile FPS or GPU timing.",
+    "Chest mesh data are actual shipped geometry; texture decode/upload and full scenery are omitted.",
+    "The extra49,056-byte shared white lid colour attribute trades a small immutable buffer for stable shared shader variants; the two base and two ink batches remain."
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "real-quest-data",
+      "quests": 19,
+      "designOnlyRewardClaimsRemoved": true,
+      "claimXpAndItemsMatch": true
+    },
+    {
+      "case": "actual-inventory-use",
+      "rejectedUseWrites": 0,
+      "successfulUses": 1,
+      "persistedPie": 0,
+      "questItemsNotConsumable": true
+    },
+    {
+      "case": "decoration-lifecycle",
+      "refreshes": 50,
+      "duplicateArt": 0,
+      "originalPointerListenersPreserved": true,
+      "disposedDiagnosticsDetached": true
+    },
+    {
+      "case": "modal-focus-and-equipment",
+      "equipmentCalls": 1,
+      "chapterClosedBeforeHandoff": true,
+      "openerRestored": true
+    },
+    {
+      "case": "steady-ui-work",
+      "frames": 600,
+      "modalRebuilds": 0,
+      "unchangedQuestTextWrites": 0
+    },
+    {
+      "case": "static-CSS-cascade",
+      "viewports": [
+        {
+          "width": 360,
+          "height": 740,
+          "contentOverflow": "auto",
+          "bagLayout": "flex",
+          "dialogHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)"
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "contentOverflow": "auto",
+          "bagLayout": "flex",
+          "dialogHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)"
+        },
+        {
+          "width": 568,
+          "height": 320,
+          "contentOverflow": "auto",
+          "bagLayout": "flex",
+          "dialogHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)"
+        },
+        {
+          "width": 640,
+          "height": 360,
+          "contentOverflow": "hidden",
+          "bagLayout": "grid",
+          "dialogHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)"
+        },
+        {
+          "width": 740,
+          "height": 360,
+          "contentOverflow": "hidden",
+          "bagLayout": "grid",
+          "dialogHeight": "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)"
+        },
+        {
+          "width": 1024,
+          "height": 600,
+          "contentOverflow": "hidden",
+          "bagLayout": "grid",
+          "dialogHeight": "min(650px,90dvh)"
+        },
+        {
+          "width": 1365,
+          "height": 768,
+          "contentOverflow": "hidden",
+          "bagLayout": "grid",
+          "dialogHeight": "min(650px,90dvh)"
+        }
+      ],
+      "limits": "Computed selector cascade and scroll contracts only; no browser pixel layout, native dialog focus trap, visual typography or actual touch testing."
+    }
+  ],
+  "limitations": [
+    "Linkedom DOM events with explicit AbortSignal/focus adapters, not a native browser or actual mobile screen.",
+    "Props are omitted in these UI tests; actual chest/scene lifecycles are covered by their independent SDK tests.",
+    "CSS inspection proves selector/overflow contracts, not that every pixel or translated text fits on a physical device."
+  ],
+  "browserAutomation": false
+}

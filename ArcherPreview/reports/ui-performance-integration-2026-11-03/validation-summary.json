@@ -1,0 +1,20 @@
+{
+  "baseline": "e62979f",
+  "tests": {
+    "tests": 1489,
+    "pass": 1489,
+    "fail": 0,
+    "skipped": 0,
+    "duration_ms": 115906.4639
+  },
+  "resourceRevisionUnchanged": true,
+  "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "publishedFiles": 1647,
+  "publishedBytes": 628967204,
+  "publishedBytesDelta": 40769,
+  "browserAutomation": false,
+  "deviceFPSMeasured": false,
+  "combatAnchorsUnchanged": true,
+  "player8KBackgroundMax4KAndLODUnchanged": true,
+  "sharedChestLidAttributeBytesAdded": 49056
+}

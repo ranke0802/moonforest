@@ -1,0 +1,35 @@
+{
+  "scope": "Actual DOM/state/CSS declarations. No browser/GPU visual or mobile performance claim.",
+  "facts": [
+    {
+      "case": "existing-control-identity",
+      "refreshes": 20,
+      "combatNodes": 4,
+      "combatInlineStylesChanged": 0,
+      "artNodesAfterDispose": 0,
+      "actualFPSValuePreserved": true
+    },
+    {
+      "case": "actual-inventory-data",
+      "actualItemKinds": 4,
+      "healed": 120,
+      "fullHealthItemNotConsumed": true,
+      "itemFilter": true,
+      "realEquipmentNavigation": true
+    },
+    {
+      "case": "authored-journal",
+      "quest": "M00",
+      "objectives": 2,
+      "actualRewardCounts": true,
+      "fullscreenRootParent": true
+    },
+    {
+      "case": "cost-and-input-boundary",
+      "combatBoxRules": 0,
+      "newFrameObservers": 0,
+      "newFrameTimers": 0,
+      "localArtOnly": true
+    }
+  ]
+}

@@ -73,7 +73,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
  }
  function pump(){
   if(worker||!manifest||!scope||disposed)return;
-  const revision=version,signal=scope.signal,next=[...demand].find(p=>p.model&&!models.has(p.model));if(!next)return;
+  const revision=version,signal=scope.signal;let next;for(const point of demand)if(point.model&&!models.has(point.model)){next=point;break;}if(!next)return;
   models.set(next.model,'loading');const operation=install(next.model,revision,signal);worker=operation;
   void operation.finally(()=>{if(current(revision)&&worker===operation){worker=null;pump();}});
  }
@@ -105,6 +105,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
   },
   animate(time){
    if(!Number.isFinite(time)||disposed)return;const dt=animationTime===null?0:Math.max(0,time-animationTime);animationTime=time;
+   if(!opening.size)return;
    for(const controller of opening)if(!controller.advance(dt))opening.delete(controller);
   },
   async whenIdle(){while(worker){const pending=worker;await pending;if(worker===pending)await Promise.resolve();}},

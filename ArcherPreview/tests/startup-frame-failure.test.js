@@ -72,7 +72,8 @@ function fixture(){
  const input={pressed:new Set(),reset(){owned.inputResets++;this.pressed.clear();},panOffset:{x:0,y:0,z:0}};
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
- const dependencies={FrameLoop,setupMinimapTravel,travelWaypoint,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
+ const hudLayout={visible:false,closes:0,isOpen(){return this.visible;},close(){this.closes++;this.visible=false;}};
+ const dependencies={FrameLoop,setupMinimapTravel,travelWaypoint,hudLayout,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>{const value={meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose(){owned.containers.delete(this);}};owned.containers.add(value);return value;}},
@@ -100,7 +101,7 @@ function fixture(){
    playerState(){return {character,actor,equipment,controller,hp:boss.combat.hp,potions:boss.potions.remaining};},
    snapshot(){return {ready,loading:loadingAsset,failed:frameLoop.failed,running:frameLoop.running,frameError:frameFailure?.message??null};}};
  `)(...Object.values(dependencies));
- return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates,world,input,boss,owned,timerClock,listenerCount};
+ return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates,world,input,boss,hudLayout,owned,timerClock,listenerCount};
 }
 
 async function flushFrame(f){await until(()=>f.raf.length>0,'expected a pending presentation RAF');f.raf.shift()();await Promise.resolve();}
@@ -243,6 +244,12 @@ test('actual main repeated45s stage timeouts and double-click manual retries can
   trace.push({attempt:i+1,stage,timeoutMs:45000,manualRetryCount:f.runtime.transition.inspect().retryCount,lateResultsDisposed:f.owned.lateDisposed,pendingTimers:f.timerClock.size,lifetimeListeners:f.owned.lifetimeListeners.size});
  }
  results.push({kind:'main-timeout-retry-late-owner-repeat',attempts:12,trace,lateIsolationBoundary:'Actual MapLoadLifetime wraps a controlled old asset producer. GLTF/worker-specific late ownership is covered separately; this test verifies actual main callbacks/UI/RAF cannot be resumed by the abandoned Promise.'});
+});
+
+test('actual playback pauses for the HUD editor and map preparation closes it before resuming',async()=>{
+ const f=fixture();await success(f);f.hudLayout.visible=true;f.runtime.reconcile();assert.equal(f.runtime.snapshot().running,false);assert.equal(f.engineCallbacks.size,0);assert.equal(f.audioStates.at(-1),true);
+ f.gate.hold('scene');const job=f.runtime.transition.travel('https://example.test/?character=warrior-v4&arrival=portal');assert.equal(f.hudLayout.visible,false);assert.equal(f.hudLayout.closes,1);await until(()=>f.gate.reached==='scene','map screen wait not reached');assert.equal(f.runtime.snapshot().running,false);
+ f.gate.release();await flushFrame(f);await flushFrame(f);assert.equal(await job,true);assert.equal(f.runtime.snapshot().running,true);assert.equal(f.engineCallbacks.size,1);assert.equal(f.audioStates.at(-1),false);
 });
 
 test('actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop',async()=>{

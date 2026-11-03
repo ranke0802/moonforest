@@ -26,7 +26,7 @@ const renderSource=main.slice(main.indexOf('function render(dt)'),main.indexOf('
 function evaluate(source,env){return Function('env','with(env){return ('+source+');}')(env);}
 function playback(){
  let wall=0;const queued=new Set(),engine={runRenderLoop:fn=>queued.add(fn),stopRenderLoop:fn=>queued.delete(fn),getFps:()=>30,getRenderWidth:()=>780,getRenderHeight:()=>1688},nodes=Object.fromEntries(['help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog'].map(id=>[id,{open:false}]));
- const state={boss:{combat:new PlayerCombat()},loadingAsset:false,minimapTravel:null,uiTest:null,document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
+ const state={boss:{combat:new PlayerCombat()},loadingAsset:false,hudLayout:null,minimapTravel:null,uiTest:null,document:{hidden:false},mapDeparture:{departing:false},mapTransition:{busy:false},motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},$:s=>nodes[s.slice(1)],input:{reset(){}},cancelAttackInput(){},text(){},frameDiagnostics:{suspend(){}},audio:{setSuspended(v){this.suspended=v;}},engine,renderActivity:new RenderActivity(true,()=>wall),qualityMode:'high'};
  const loop=state.frameLoop=new FrameLoop(engine,()=>{},()=>wall);state.syncPlayback=evaluate(syncSource,state);state.reconcilePlayback=state.syncPlayback;
  return {state,loop,queued,nodes,wake:evaluate(wakeSource,state),restore:evaluate(restoreSource,state),time:t=>wall=t,tick:t=>{wall=t;for(const fn of [...queued])fn();}};
 }
@@ -39,9 +39,10 @@ test('iOS suspended startup, pageshow and touch recover one simulation loop with
  // Model WebKit dropping its RAF registration while our flag still says running.
  f.queued.clear();f.time(7000);f.wake();assert.equal(f.queued.size,1);const before=simulation;f.tick(7010);assert.equal(simulation,before);f.tick(7043);assert.ok(simulation>before);
  for(let n=0;n<12;n++)f.restore();assert.equal(f.queued.size,1,'focus/pageshow never duplicate callbacks');
- for(const paused of ['modal','diagnostics','death','hidden','failure']){
+ for(const paused of ['modal','diagnostics','hud-layout','death','hidden','failure']){
   f.nodes['help-dialog'].open=paused==='modal';f.state.deathScreen.isOpen=()=>paused==='death';f.state.document.hidden=paused==='hidden';f.loop.failed=paused==='failure';
   f.nodes['diagnostic-detail-dialog'].open=paused==='diagnostics';
+  f.state.hudLayout={isOpen:()=>paused==='hud-layout'};
   f.restore();f.time(20000);f.wake();assert.equal(f.queued.size,0,paused);const at=simulation;f.tick(20033);assert.equal(simulation,at,paused);
  }
 });

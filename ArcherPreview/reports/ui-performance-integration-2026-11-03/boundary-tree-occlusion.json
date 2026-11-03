@@ -1,0 +1,73 @@
+{
+  "cases": [
+    {
+      "case": "reciprocal-village-cell-gating",
+      "records": 55,
+      "enabledAtDistance": 0,
+      "enabledInForwardFrustum": 55,
+      "enabledAfterTurn": 15
+    },
+    {
+      "case": "plains-forest-edge-cell-gating",
+      "records": 158,
+      "viewDistance": 2.4,
+      "enabledAtDistance": 0,
+      "enabledInForwardFrustum": 158,
+      "enabledAfterTurn": 15
+    },
+    {
+      "map": "village",
+      "allPlacements": 753,
+      "sampledPlacements": 150,
+      "coveredRoots": 30,
+      "oldObstructionQueries": 3294,
+      "newObstructionQueries": 34,
+      "reduction": 0.9896782027929569,
+      "oldUpdateMs": 3.678100000000086,
+      "newUpdateMs": 1.020500000001448,
+      "frameSamples": 64
+    },
+    {
+      "map": "plains",
+      "allPlacements": 1424,
+      "sampledPlacements": 150,
+      "coveredRoots": 58,
+      "oldObstructionQueries": 6376,
+      "newObstructionQueries": 48,
+      "reduction": 0.9924717691342535,
+      "oldUpdateMs": 5.809800000002724,
+      "newUpdateMs": 0.8743000000049506,
+      "frameSamples": 64
+    },
+    {
+      "map": "forest",
+      "allPlacements": 891,
+      "sampledPlacements": 150,
+      "coveredRoots": 88,
+      "oldObstructionQueries": 9658,
+      "newObstructionQueries": 96,
+      "reduction": 0.9900600538413751,
+      "oldUpdateMs": 3.57249999999749,
+      "newUpdateMs": 0.8269999999974971,
+      "frameSamples": 64
+    },
+    {
+      "map": "cave",
+      "allPlacements": 212,
+      "sampledPlacements": 150,
+      "coveredRoots": 0,
+      "oldObstructionQueries": 0,
+      "newObstructionQueries": 0,
+      "reduction": 0,
+      "oldUpdateMs": 0.09780000000228029,
+      "newUpdateMs": 0.08349999999973079,
+      "frameSamples": 64
+    }
+  ],
+  "scope": "Deterministically sampled actual placement transforms and asset bounds with synthetic box geometry, Babylon NullEngine and original update oracle. 64 moving camera samples per map.",
+  "limitations": [
+    "CPU totals are short synthetic desktop samples, sensitive to instrumentation and scheduling; they do not measure actual GPU time, phone performance or FPS.",
+    "Synthetic boxes do not represent the visual mesh; precise real-surface and LOD tests remain in tree-occlusion.test.js.",
+    "Sampled scenery roots are included regardless of streaming state."
+  ]
+}

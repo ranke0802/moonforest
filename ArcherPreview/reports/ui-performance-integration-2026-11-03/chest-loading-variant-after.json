@@ -1,0 +1,66 @@
+{
+  "scope": "One nearby tier5 chest with actual4479 source/4487 derived geometry. Same camera/material/toon/ink and240 actual SDK renders for each layout. Image decode/upload omitted.",
+  "results": [
+    {
+      "mode": "current-runtime",
+      "frames": 240,
+      "profile": {
+        "bodyTriangles": 1808,
+        "lidTriangles": 2679,
+        "totalTriangles": 4487,
+        "originalTriangles": 4479,
+        "recessedFloorTriangles": 20,
+        "addedTriangles": 8,
+        "vertices": 5125,
+        "hinge": [
+          0,
+          0.09512657284736631,
+          -0.3012495893239975
+        ]
+      },
+      "sourceColourLayouts": [
+        {
+          "name": "node0",
+          "color": true,
+          "vertices": 2059
+        },
+        {
+          "name": "chest-lid",
+          "color": true,
+          "vertices": 3066
+        }
+      ],
+      "manualProbeAddedVertexColourBytes": 0,
+      "lidColourAttributeBytes": 49056,
+      "createEffectCalls": 0,
+      "inkCreateEffectCalls": 0,
+      "isReadyCalls": 480,
+      "baseDraws": 480,
+      "inkDraws": 480,
+      "effectRefsBefore": [
+        {
+          "id": 1,
+          "defines": "#define VERTEXCOLOR\n#define INSTANCES\n#define NUM_BONE_INFLUENCERS 0\n#define NUM_MORPH_INFLUENCERS 0",
+          "refs": 2
+        }
+      ],
+      "effectRefsAfter": [
+        {
+          "id": 1,
+          "defines": "#define VERTEXCOLOR\n#define INSTANCES\n#define NUM_BONE_INFLUENCERS 0\n#define NUM_MORPH_INFLUENCERS 0",
+          "refs": 2
+        }
+      ],
+      "cpuReference": {
+        "elapsedMs": 22.58719999999994,
+        "msPerFrame": 0.09411333333333308,
+        "meaning": "Node NullEngine CPU calls; not GPU/device FPS"
+      }
+    }
+  ],
+  "limitations": [
+    "NullEngine does not rasterize or measure GPU time.",
+    "This controlled chest scene is not a four-map whole-game FPS benchmark.",
+    "White lid colour consumes an extra immutable vertex attribute buffer; the bytes are reported rather than described as free."
+  ]
+}

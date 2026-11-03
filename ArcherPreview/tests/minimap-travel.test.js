@@ -130,5 +130,6 @@ test('the minimap control has a local tap target and chooser bounds/touch target
  const css=readFileSync(new URL('../src/dot-minimap.css',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  assert.match(css,/\.minimap-travel-launch\{[^}]*pointer-events:auto/);assert.match(css,/minimap-travel-dialog[^}]*safe-area-inset-left/);assert.match(css,/minimap-travel-dialog button\{[^}]*min-height:44px/);assert.match(css,/orientation:landscape/);
  assert.match(css,/minimap-region-grid\{[^}]*grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);assert.match(css,/button\[data-waypoint\]\{grid-column:1\/-1\}/);assert.match(css,/minimap-travel-dialog\{[^}]*overflow:auto/);assert.match(css,/landscape[\s\S]*minimap-region-grid button\{min-height:48px/);
- assert.match(main,/otherSettings=minimapTravel\?\.isOpen\(\)/);assert.match(main,/minimapTravel\?\.close\(\);minimap\.hide\(\)/);
+ const otherSettings=main.match(/\botherSettings\s*=\s*([^;]+?),\s*settingsOpen\s*=/)?.[1];assert.ok(otherSettings,'read the actual playback pause expression');
+ assert.match(otherSettings,/\bminimapTravel\?\.isOpen\(\)/);assert.match(otherSettings,/\bhudLayout\?\.isOpen\(\)/);assert.match(main,/minimapTravel\?\.close\(\);minimap\.hide\(\)/);
 });
