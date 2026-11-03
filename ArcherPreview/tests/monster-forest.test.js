@@ -6,6 +6,7 @@ import {FOREST_PLACEMENTS,FOREST_ROUTES,FOREST_CLEARINGS,forestObstacles} from '
 import {monsterForestHeight} from '../src/monster-forest-terrain.js';
 import {mapForCharacter,FOREST_RADIUS,FOREST_SPAWN,MAP_PORTALS,portalAvailable,travelUrl} from '../src/map-route.js';
 import {clampVillageExit,villageTravelLimit,exitRoadX,consumeTravel} from '../src/map-travel.js';
+import {VILLAGE_PLAINS_BOUNDARY} from '../src/village-plains-boundary.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {villageObstacles} from '../src/village-layout.js';
 import {playerTextureManifest} from '../src/player-texture-profile.js';
@@ -82,7 +83,7 @@ test('village open entrance reaches the portal at the end of the existing painte
   assert.ok(portalAvailable(p,MAP_PORTALS.village));
   for(const q of [{x:65,z:0},{x:30,z:65},{x:0,z:-60}])assert.ok(Math.hypot(...Object.values(clampVillageExit(q)))<=48.001);
   assert.ok(clampVillageExit({x:0,z:90}).z<=78);
-  const dodge=clampVillageExit({x:8,z:65},{x:exitRoadX(65),z:65});assert.equal(dodge.z,65);assert.ok(Math.abs(dodge.x-exitRoadX(65))<=1.61);
+  const dodge=clampVillageExit({x:8,z:65},{x:exitRoadX(65),z:65});assert.equal(dodge.z,65);assert.ok(Math.abs(dodge.x-exitRoadX(65))+.35<=VILLAGE_PLAINS_BOUNDARY.roadWidth/2+.01);
 });
 test('teleport is deliberate, bidirectional, range checked and blocked during combat',()=>{
   for(const p of Object.values(MAP_PORTALS)){

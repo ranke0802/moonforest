@@ -168,8 +168,10 @@ function makePlacements(){
     }
   }
   // Massive rock islands give the cave its silhouette and hide the next turn.
-  add(3,-10,7,1.9,.2,{elevation:-3,colliderRadius:6});
-  add(5,-4,8,1.6,1.7,{elevation:-2.8});
+  // Near-LOD attachment audit: the old island stopped above the basin floor.
+  // Sink its existing base into the bed; keep its footprint and shared LODs.
+  add(3,-10,7,1.9,.2,{elevation:-3.85,colliderRadius:6});
+  add(5,-4,8,1.6,1.7,{elevation:-3.85});
   add(2,-15,9,1.1,.6,{topElevation:1.2});
   add(3,-49,-14,1.1,2,{elevation:-2,colliderRadius:3.6});
   add(3,52,-22,1.3,4,{elevation:-2,colliderRadius:4.2});
@@ -238,6 +240,11 @@ function makePlacements(){
   const cap=out.find(p=>p.id==='cavern-70');
   add('rock-02-jagged-outcrop',cap.x,cap.z,1.85,cap.yaw,{kind:'rock',elevation:-3.85,naturalSupport:true,attachedTo:cap.id});
   out.push(...CAVE_NATURAL_DRESSING);
+  // Three bank decorations inherited route height despite sitting outside the
+  // route. These authored bed elevations close their actual near-mesh gaps.
+  // No per-frame ground rays, extra supports or additional draw submissions.
+  const groundedBanks={'cavern-79':-1.05,'cavern-81':-1.65,'cavern-141':-3.85};
+  for(const p of out)if(Object.hasOwn(groundedBanks,p.id))p.elevation=groundedBanks[p.id];
   // Stable IDs/asset tiers remain shared. Elevated wall fittings are no longer
   // ground obstacles; actual rock still owns the wall collision and visibility.
   return out.map(p=>{const mount=CAVE_LANTERN_MOUNTS[p.id];if(!mount)return p;const {colliderRadius,...rest}=p;return {...rest,...mount};});

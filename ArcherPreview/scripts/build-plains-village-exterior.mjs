@@ -1,14 +1,17 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
-import {Matrix,Quaternion,Vector3} from '@babylonjs/core';
+import {Matrix,Quaternion,Vector3,NullEngine,Scene} from '@babylonjs/core';
 import {decodeMeshoptBuffers,compressMeshopt} from './meshopt-lossless.js';
 import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
-import {villageHeight} from '../src/village-terrain.js';
+import {villageHeight,createVillageTerrain} from '../src/village-terrain.js';
+import {createVillageTransform} from '../src/village-environment.js';
 import {PLAINS_SPAN,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_STREAM,PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
-const root=resolve(import.meta.dirname,'..'),assets=resolve(root,'public/assets'),content=resolve(assets,'content'),report=resolve(root,'reports/plains-rebuild-2026-11-02');
+import {VILLAGE_PLAINS_BOUNDARY} from '../src/village-plains-boundary.js';
+const root=resolve(import.meta.dirname,'..'),assets=resolve(root,'public/assets'),content=resolve(assets,'content'),report=resolve(root,'reports/boundary-continuity-2026-11-03');
 await mkdir(report,{recursive:true});
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
 const village=await read(resolve(assets,'village.json')),plains=await read(resolve(assets,'great-plains.json'));
+const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;const world={scene,terrain:createVillageTerrain()};
 const selected=VILLAGE_PLACEMENTS.filter(p=>Math.hypot(p.x,p.z)<58&&(['building','wall'].includes(p.kind)||['watchtower','wood-03-plank-gate','market-stall','well'].includes(p.asset)||(p.kind==='tree'&&Math.hypot(p.x,p.z)<37)));
 const dst={asset:{version:'2.0',generator:'Moonforest existing village exterior batch'},scene:0,scenes:[{nodes:[0]}],nodes:[{mesh:0}],meshes:[{primitives:[]}],buffers:[],bufferViews:[],accessors:[],materials:[],textures:[],images:[],samplers:[],extensionsUsed:['KHR_texture_basisu'],extensionsRequired:['KHR_texture_basisu']};
 const files=new Map(),chunks=[];let offset=0,totalTriangles=0;
@@ -46,9 +49,9 @@ for(const id of new Set(selected.map(p=>p.asset))){
   for(const child of node.children??[])visit(child,transform,pMatrix);
  }
  for(const p of selected.filter(p=>p.asset===id)){
-  const scale=config.height/config.bounds[1]*p.scale;
-  const height=p.elevation??(p.topElevation!==undefined?p.topElevation-config.height*p.scale:villageHeight(p.x,p.z));
-  const mat=Matrix.RotationY(config.frontYawOffset??0).multiply(Matrix.Compose(new Vector3(p.length?p.length/config.bounds[0]:scale,scale,scale),Quaternion.RotationYawPitchRoll(p.yaw,0,0),new Vector3(p.x,height-.025+(p.yOffset??0),p.z))).multiply(Matrix.Scaling(.75,.75,.75));
+  // Use the exact live transform, including sampled terrain, wall endpoint
+  // minimum, source facing and optional authored axis lengths.
+  const {root:placedRoot,facing}=createVillageTransform(world,p,config),mat=facing.computeWorldMatrix(true).clone();placedRoot.dispose();
   for(const n of g.scenes[g.scene??0].nodes)visit(n,Matrix.Identity(),mat);
  }
  for(const [m,b]of batches){totalTriangles+=b.indices.length/3;dst.meshes[0].primitives.push({attributes:{POSITION:accessor(b.positions,'VEC3'),NORMAL:accessor(b.normals,'VEC3'),TEXCOORD_0:accessor(b.uv,'VEC2')},indices:accessor(b.indices,'SCALAR',5125),material:materialOffset+m});}
@@ -63,7 +66,7 @@ const rings=22,segments=160;
 for(let ring=0;ring<=rings;ring++)for(let i=0;i<segments;i++){
  const a=i/segments*Math.PI*2,r=ring/rings,s=Math.sin(a),c=Math.cos(a),x=Math.sign(s)*Math.sqrt(Math.abs(s))*37.7*r,z=Math.sign(c)*Math.sqrt(Math.abs(c))*41.7*r;
  const blend=Math.max(0,(r-.88)/.12),y=villageHeight(x,z)*(1-blend)+.12*blend;
- gp.push(x*.75,y*.75+.06,z*.75);gn.push(0,1,0);gu.push(.5+x/ground.span,.5-z/ground.span);
+ gp.push(x,y+.008,z);gn.push(0,1,0);gu.push(.5+x/ground.span,.5-z/ground.span);
  if(ring<rings){const n=ring*segments+i,next=ring*segments+(i+1)%segments;if(ring>0)gi.push(n,n+segments,next);gi.push(next,n+segments,next+segments);}
 }
 dst.meshes[0].primitives.push({attributes:{POSITION:accessor(gp,'VEC3'),NORMAL:accessor(gn,'VEC3'),TEXCOORD_0:accessor(gu,'VEC2')},indices:accessor(gi,'SCALAR',5125),material});totalTriangles+=gi.length/3;
@@ -74,7 +77,9 @@ const resources=[...packed.files.keys()].map(n=>'./content/'+n),bytes=[...packed
 const bounds=totalMax.map((v,i)=>v-totalMin[i]);
 const cfg={name:'마을 외경 · 기존 건물과 성벽',category:'background',height:bounds[1],bounds,origin:'bottom-center',frontYawOffset:0,surfaceStyle:'distant-village',geometryLod:true,sharedLowPolyGeometry:true,lods:[0,1,2].map(level=>({level,model:'./content/'+packed.model,resources,triangles:totalTriangles,textureSize:Math.max(512,ground.color.width,ground.color.height),normalMap:false,bytes}))};
 cfg.mobileNear=cfg.lods[0];plains.assets['village-approach']=cfg;plains.assets['rock-02-jagged-outcrop']=village.assets['rock-02-jagged-outcrop'];plains.availableAssetCount=Object.keys(plains.assets).length;
+plains.placementCount=PLAINS_PLACEMENTS.length;
 await writeFile(resolve(assets,'great-plains.json'),JSON.stringify(plains,null,2)+'\n');
-await writeFile(resolve(report,'layout.json'),JSON.stringify({span:PLAINS_SPAN,routes:PLAINS_ROUTES,clearings:PLAINS_CLEARINGS,stream:PLAINS_STREAM,placements:PLAINS_PLACEMENTS}));
+await writeFile(resolve(report,'layout.json'),JSON.stringify({span:PLAINS_SPAN,routes:PLAINS_ROUTES,clearings:PLAINS_CLEARINGS,stream:PLAINS_STREAM,placements:PLAINS_PLACEMENTS,boundary:VILLAGE_PLAINS_BOUNDARY}));
 await writeFile(resolve(report,'village-exterior.json'),JSON.stringify({selected:selected.map(p=>p.id),triangles:totalTriangles,bytes,bounds,min:totalMin,max:totalMax,model:cfg.lods[0].model,primitives:dst.meshes[0].primitives.length},null,2));
 console.log({placements:selected.length,triangles:totalTriangles,bytes,bounds,primitives:dst.meshes[0].primitives.length,model:packed.model});
+scene.dispose();engine.dispose();

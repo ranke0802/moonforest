@@ -1,0 +1,20 @@
+{
+  "triangles": 2944,
+  "maxRayError": 6.059714998747745e-8,
+  "minAboveFloorRadius": 345.5180582856402,
+  "maxVertexRadius": 602.243332315069,
+  "legalCameraAndPlayerMargin": 188,
+  "cameraFar": 1024,
+  "roundTrips": 24,
+  "stableResources": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "extraLights": 0,
+  "extraShadowPasses": 0,
+  "extraTextures": 0,
+  "cachedPositionBytes": 211968,
+  "scope": "Actual SDK geometry/scene lifetime and gateway vertex-ray equivalence; not a mobile GPU or gameplay screenshot measurement."
+}

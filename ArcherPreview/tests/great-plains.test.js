@@ -9,6 +9,8 @@ import {NullEngine,VertexBuffer} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {createTerrainGround} from '../src/terrain-mesh.js';
 import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
+import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
+import {isVillageBoundaryTree} from '../src/village-plains-boundary.js';
 
 test('treasure anchors preserve quest identities without duplicate static chests',()=>{
  assert.deepEqual(PLAINS_TREASURE_ANCHORS.map(({id,x,z,lootTier})=>({id,x,z,lootTier})),[
@@ -39,7 +41,7 @@ test('arrival and crossroads keep their framing within the bounded landscape bud
  const nearby=(x,z,r,kind)=>PLAINS_PLACEMENTS.filter(p=>p.kind===kind&&Math.hypot(p.x-x,p.z-z)<r);
  assert.ok(nearby(-87,-32,22,'tree').length>=9,'village arrival needs framing trees');
  assert.ok(nearby(-5,25,22,'tree').length>=2,'crossroads needs a middle-distance grove');
- assert.ok(PLAINS_PLACEMENTS.filter(p=>p.composition==='village-arrival').length===2);
+ assert.equal(PLAINS_PLACEMENTS.filter(p=>p.composition==='village-arrival').length,VILLAGE_PLACEMENTS.filter(isVillageBoundaryTree).length);
  assert.ok(PLAINS_PLACEMENTS.filter(p=>p.grove==='forest-gate'&&p.kind==='tree').length>=3,'forest approach should not be an empty grove');
  assert.ok(PLAINS_PLACEMENTS.length<=1450,'landscape additions stay bounded');
 });

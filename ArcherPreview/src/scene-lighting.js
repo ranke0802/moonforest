@@ -39,6 +39,8 @@ export class SceneLighting {
     this.shadowsActive=true;this.lightDistance=village?45:25;
     this.baseDirection=key.direction.clone();
     this.highDirection=new Vector3(.65,-1,-.45);
+    this.canonicalDirections={base:this.baseDirection.clone(),high:this.highDirection.clone(),ambient:ambient.direction.clone(),rim:rim.direction.clone()};
+    this.worldYaw=0;
     this.direction = key.direction.negate().normalize();
     this.focus = Vector3.Zero();
     this.requestedFocus=Vector3.Zero();this.shadowForward=Vector3.Zero();this.shadowRight=Vector3.Zero();this.shadowUp=Vector3.Zero();this.worldUp=Vector3.Up();
@@ -58,6 +60,14 @@ export class SceneLighting {
     // Keep one bounded map synchronized with the pose and light every frame.
     shadows.getShadowMap().refreshRate = 1;
     if(village)installVillageShadowFade(shadows);
+  }
+  setWorldYaw(yaw){
+    if(this.worldYaw===yaw)return;this.worldYaw=yaw;
+    const c=Math.cos(yaw),s=Math.sin(yaw),rotate=(source,target)=>target.set(c*source.x+s*source.z,source.y,-s*source.x+c*source.z);
+    rotate(this.canonicalDirections.base,this.baseDirection);rotate(this.canonicalDirections.high,this.highDirection);
+    rotate(this.canonicalDirections.ambient,this.ambient.direction);rotate(this.canonicalDirections.rim,this.rim.direction);
+    this.key.direction.copyFrom(this.quality==='high'?this.highDirection:this.baseDirection);
+    this.direction.copyFrom(this.key.direction).negateInPlace().normalize();this.follow(this.requestedFocus,true);
   }
   registerMeshes(meshes) {
     const dirty=new Set();

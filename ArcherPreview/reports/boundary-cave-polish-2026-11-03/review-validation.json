@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "html": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/boundary-continuity/2026-11-03/index.html",
+  "bytes": 7860212,
+  "sections": [
+    "boundary",
+    "travel",
+    "sanctuary",
+    "vista",
+    "cave",
+    "verification"
+  ],
+  "inlineOriginalPngs": 7,
+  "imageHashesMatch": true,
+  "modalRows": [
+    [
+      "마을",
+      "대평원"
+    ],
+    [
+      "마물의 숲",
+      "마녀의 동굴"
+    ],
+    [
+      "비탄의 성소"
+    ]
+  ],
+  "externalAssetRequests": 0,
+  "localEvidenceLinks": 8,
+  "placeholders": [
+    "__DEPLOY_STATUS__",
+    "__REV__",
+    "__TEST_RESULT__"
+  ],
+  "browserAutomation": false,
+  "visualBrowserRendered": false
+}

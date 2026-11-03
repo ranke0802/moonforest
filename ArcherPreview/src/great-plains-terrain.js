@@ -1,5 +1,7 @@
 import {TerrainHeightField} from './terrain.js';
 import {PLAINS_SPAN,PLAINS_CLEARINGS,PLAINS_LOOKOUT,plainsStreamDistance} from './great-plains-layout.js';
+import {plainsToVillage,VILLAGE_PLAINS_BOUNDARY as boundary} from './village-plains-boundary.js';
+import {villageHeight} from './village-terrain.js';
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 export function greatPlainsHeight(x,z){
  let h=.25+.34*Math.sin(x*.059+.8*Math.sin(z*.031))*Math.cos(z*.053)+.12*Math.sin((x+z)*.14);
@@ -10,8 +12,8 @@ export function greatPlainsHeight(x,z){
  const ramp=x<hill.rampTopX+2?hill.height*smooth((x-hill.rampStartX)/(hill.rampTopX-hill.rampStartX))*(1-smooth((Math.abs(z-hill.z)-hill.rampHalfWidth)/hill.rampShoulder)):0;
  h+=Math.max(shelf,ramp);
  for(const c of PLAINS_CLEARINGS){const w=1-smooth((Math.hypot(x-c.x,z-c.z)-c.r)/4);h=h*(1-w)+c.y*w;}
- const gate=1-smooth((Math.hypot(x+94,z+35)-8)/13);h=h*(1-gate)+.2*gate;
- const village=1-smooth((Math.hypot(x+127,z+43)-37)/7);h=h*(1-village)+.12*village;
+ const gate=1-smooth((Math.hypot(x-boundary.plainsPortal.x,z-boundary.plainsPortal.z)-8)/13);h=h*(1-gate)+boundary.height*gate;
+ const local=plainsToVillage({x,z}),village=(1-smooth((Math.abs(local.x)-38)/8))*(1-smooth((30-local.z)/8))*(1-smooth((local.z-88)/10));if(village>0)h=h*(1-village)+villageHeight(local.x,local.z)*village;
  const river=1-smooth((plainsStreamDistance(x,z)-1.2)/3.2);h=h*(1-river)-.64*river;
  return h;
 }

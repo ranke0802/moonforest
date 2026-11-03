@@ -825,11 +825,11 @@
     "village-approach": {
       "name": "마을 외경 · 기존 건물과 성벽",
       "category": "background",
-      "height": 7.450099468231201,
+      "height": 9.933465957641602,
       "bounds": [
-        58.38877053279499,
-        7.450099468231201,
-        65.22542586893391
+        77.85169399749986,
+        9.933465957641602,
+        86.96723450263676
       ],
       "origin": "bottom-center",
       "frontYawOffset": 0,
@@ -839,9 +839,9 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+          "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
           "resources": [
-            "./content/5d0dbd9d5b6dc37dd46754f5398ddb6e1f8defc468c5acc1d1d9875230526cbe.bin",
+            "./content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
             "./content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
             "./content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
             "./content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
@@ -858,18 +858,18 @@
             "./content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
             "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
             "./content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
-            "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf"
+            "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf"
           ],
           "triangles": 187522,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 10741179
+          "bytes": 10742322
         },
         {
           "level": 1,
-          "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+          "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
           "resources": [
-            "./content/5d0dbd9d5b6dc37dd46754f5398ddb6e1f8defc468c5acc1d1d9875230526cbe.bin",
+            "./content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
             "./content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
             "./content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
             "./content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
@@ -886,18 +886,18 @@
             "./content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
             "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
             "./content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
-            "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf"
+            "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf"
           ],
           "triangles": 187522,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 10741179
+          "bytes": 10742322
         },
         {
           "level": 2,
-          "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+          "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
           "resources": [
-            "./content/5d0dbd9d5b6dc37dd46754f5398ddb6e1f8defc468c5acc1d1d9875230526cbe.bin",
+            "./content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
             "./content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
             "./content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
             "./content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
@@ -914,19 +914,19 @@
             "./content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
             "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
             "./content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
-            "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf"
+            "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf"
           ],
           "triangles": 187522,
           "textureSize": 2048,
           "normalMap": false,
-          "bytes": 10741179
+          "bytes": 10742322
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf",
+        "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
         "resources": [
-          "./content/5d0dbd9d5b6dc37dd46754f5398ddb6e1f8defc468c5acc1d1d9875230526cbe.bin",
+          "./content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
           "./content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
           "./content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
           "./content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
@@ -943,12 +943,12 @@
           "./content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
           "./content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
           "./content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
-          "./content/6c1ff7ab8dca10ae3fe6dc138bf7061dfb55ea7286393f40c0c4170b85491351.gltf"
+          "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf"
         ],
         "triangles": 187522,
         "textureSize": 2048,
         "normalMap": false,
-        "bytes": 10741179
+        "bytes": 10742322
       }
     },
     "rock-02-jagged-outcrop": {
@@ -1903,7 +1903,7 @@
       "visualReview": "APPROVED"
     }
   },
-  "placementCount": 1418,
+  "placementCount": 1448,
   "newSourceModels": 3,
   "reusedSourceModels": 6,
   "groundManifest": "great-plains-ground"

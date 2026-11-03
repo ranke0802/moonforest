@@ -1,0 +1,187 @@
+{
+  "generatedAt": "2026-11-03T04:52:10.973Z",
+  "scope": "Actual shipped facade mesh/accessor bytes and production transform/instance/visibility path in Babylon NullEngine. Materials/images omitted; no GPU rasterization, visual or FPS measurement.",
+  "comparison": "current integrated model, manifest and authored placement",
+  "cameraFocus": {
+    "x": -163.9928940358751,
+    "z": -64.61616593151042
+  },
+  "terrainNote": "Both probes use current terrain for identical camera height; isolates exterior scale/placement and mesh submissions, not baseline terrain appearance.",
+  "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+  "modelHash": "441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a",
+  "placement": {
+    "id": "village-exterior",
+    "asset": "village-approach",
+    "x": -163.9928940358751,
+    "z": -64.61616593151042,
+    "kind": "landmark",
+    "scale": 1,
+    "yaw": 1.1659045405098132,
+    "colliderRadius": 0,
+    "elevation": 0.025,
+    "background": true
+  },
+  "modelSourceCount": 16,
+  "modelSubMeshes": 16,
+  "sourceTriangles": 187522,
+  "sameModelForAllLods": true,
+  "productionRecordBounds": {
+    "radius": 84.87476051466115,
+    "min": [
+      -225.17442636898988,
+      -0.7466732978820803,
+      -123.16445422852595
+    ],
+    "max": [
+      -102.81136170276034,
+      10.680139255523681,
+      -6.067877634494884
+    ]
+  },
+  "cases": [
+    {
+      "name": "village-gateway",
+      "towardTown": true,
+      "player": {
+        "x": -87,
+        "z": -32
+      },
+      "camera": [
+        -75.97779083251953,
+        8.436478614807129,
+        -27.330707550048828
+      ],
+      "rootEnabled": true,
+      "cellActive": true,
+      "baseDraws": 14,
+      "submittedTriangles": 184446,
+      "submittedMeshes": 14
+    },
+    {
+      "name": "village-gateway",
+      "towardTown": false,
+      "player": {
+        "x": -87,
+        "z": -32
+      },
+      "camera": [
+        -98.02220916748047,
+        8.436480522155762,
+        -36.669288635253906
+      ],
+      "rootEnabled": true,
+      "cellActive": true,
+      "baseDraws": 7,
+      "submittedTriangles": 108568,
+      "submittedMeshes": 7
+    },
+    {
+      "name": "crossroads",
+      "towardTown": true,
+      "player": {
+        "x": -5,
+        "z": 25
+      },
+      "camera": [
+        5.428020000457764,
+        8.616479873657227,
+        30.87774085998535
+      ],
+      "rootEnabled": true,
+      "cellActive": true,
+      "baseDraws": 11,
+      "submittedTriangles": 174694,
+      "submittedMeshes": 11
+    },
+    {
+      "name": "crossroads",
+      "towardTown": false,
+      "player": {
+        "x": -5,
+        "z": 25
+      },
+      "camera": [
+        -15.428019523620605,
+        8.616480827331543,
+        19.122257232666016
+      ],
+      "rootEnabled": false,
+      "cellActive": false,
+      "baseDraws": 0,
+      "submittedTriangles": 0,
+      "submittedMeshes": 0
+    },
+    {
+      "name": "east-bank",
+      "towardTown": true,
+      "player": {
+        "x": 90,
+        "z": 80
+      },
+      "camera": [
+        100.40245819091797,
+        8.521985054016113,
+        85.92285919189453
+      ],
+      "rootEnabled": false,
+      "cellActive": false,
+      "baseDraws": 0,
+      "submittedTriangles": 0,
+      "submittedMeshes": 0
+    },
+    {
+      "name": "east-bank",
+      "towardTown": false,
+      "player": {
+        "x": 90,
+        "z": 80
+      },
+      "camera": [
+        79.59754180908203,
+        8.521987915039062,
+        74.07714080810547
+      ],
+      "rootEnabled": false,
+      "cellActive": false,
+      "baseDraws": 0,
+      "submittedTriangles": 0,
+      "submittedMeshes": 0
+    },
+    {
+      "name": "far-north",
+      "towardTown": true,
+      "player": {
+        "x": 70,
+        "z": -90
+      },
+      "camera": [
+        81.90061950683594,
+        8.51301097869873,
+        -91.2909927368164
+      ],
+      "rootEnabled": true,
+      "cellActive": true,
+      "baseDraws": 11,
+      "submittedTriangles": 174694,
+      "submittedMeshes": 11
+    },
+    {
+      "name": "far-north",
+      "towardTown": false,
+      "player": {
+        "x": 70,
+        "z": -90
+      },
+      "camera": [
+        58.09938049316406,
+        8.513005256652832,
+        -88.7090072631836
+      ],
+      "rootEnabled": false,
+      "cellActive": false,
+      "baseDraws": 0,
+      "submittedTriangles": 0,
+      "submittedMeshes": 0
+    }
+  ]
+}

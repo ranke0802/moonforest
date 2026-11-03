@@ -1,0 +1,277 @@
+{
+  "generatedAt": "2026-11-03T04:27:23.541Z",
+  "baseline": "70c88cf",
+  "scope": "Independent source/CPU-SDK regression and optimization review; browser automation and new art generation not used.",
+  "boundary": {
+    "confirmed": [
+      "Original town layout, terrain, curved3.9m road and ground manifest are pinned to normalized70c88cf source hashes; original colour/detail texture bytes match their content-addressed hashes.",
+      "Plains copies the original town north road samples directly through the1:1 rigid seam, without re-sampling a changed spline tail.183 centre/shoulder samples retain free navigation and matching floor heights.",
+      "72 actual Babylon camera configurations across two viewport aspects and both directions retain equivalent rigid-coordinate projection; maximum0.0038401pixel error across276 visible landmark comparisons. This does not prove post-spawn frame continuity.",
+      "32 outer trees match source scale/yaw/elevation/model-texture LOD graphs;3 accessible trunks retain the real refined source collision policy. Plains total1448.",
+      "Actual main movement constraint preserves the original curved centre and±1.6m usable shoulders through405steps; actual automatic portal makes one request per traversal.",
+      "Actual DotMinimap bake retains one original curved exit, with no extra straight gateway."
+    ],
+    "sources": [
+      {
+        "file": "src/village-plains-boundary.js",
+        "line": 1
+      },
+      {
+        "file": "src/map-route.js",
+        "line": 17
+      },
+      {
+        "file": "src/map-transition.js",
+        "line": 5
+      },
+      {
+        "file": "src/great-plains-layout.js",
+        "line": 117
+      },
+      {
+        "file": "src/village-visibility.js",
+        "line": 21
+      },
+      {
+        "file": "src/village-demand.js",
+        "line": 48
+      }
+    ],
+    "limitation": "The rigid projection proof is not pixel-identical before/after travel: arrival advances several metres along the road under the curtain, and actual colour/fog/raster output was not measured.",
+    "terrainHeightGapMetres": 0,
+    "latestValidationReport": "reports/boundary-cave-polish-2026-11-03/boundary-continuity-validation.json",
+    "supersededContract": "Earlier4.8m straight village road was reverted at the user request; earlier descriptions of changing town paint/minimap/clamp no longer apply."
+  },
+  "facade": {
+    "sourceTrianglesBefore": 187522,
+    "sourceTrianglesAfter": 187522,
+    "sourceMeshesBefore": 16,
+    "sourceMeshesAfter": 16,
+    "geometrySharedForAllLODs": true,
+    "boundsRadiusBefore": 61.45321400738622,
+    "boundsRadiusAfter": 84.87476051466115,
+    "fixedCameraCases": [
+      {
+        "name": "village-gateway",
+        "towardTown": true,
+        "drawsBefore": 15,
+        "drawsAfter": 14,
+        "trianglesBefore": 186002,
+        "trianglesAfter": 184446
+      },
+      {
+        "name": "village-gateway",
+        "towardTown": false,
+        "drawsBefore": 10,
+        "drawsAfter": 7,
+        "trianglesBefore": 170022,
+        "trianglesAfter": 108568
+      },
+      {
+        "name": "crossroads",
+        "towardTown": true,
+        "drawsBefore": 11,
+        "drawsAfter": 11,
+        "trianglesBefore": 174694,
+        "trianglesAfter": 174694
+      },
+      {
+        "name": "crossroads",
+        "towardTown": false,
+        "drawsBefore": 0,
+        "drawsAfter": 0,
+        "trianglesBefore": 0,
+        "trianglesAfter": 0
+      },
+      {
+        "name": "east-bank",
+        "towardTown": true,
+        "drawsBefore": 0,
+        "drawsAfter": 0,
+        "trianglesBefore": 0,
+        "trianglesAfter": 0
+      },
+      {
+        "name": "east-bank",
+        "towardTown": false,
+        "drawsBefore": 0,
+        "drawsAfter": 0,
+        "trianglesBefore": 0,
+        "trianglesAfter": 0
+      },
+      {
+        "name": "far-north",
+        "towardTown": true,
+        "drawsBefore": 11,
+        "drawsAfter": 11,
+        "trianglesBefore": 174694,
+        "trianglesAfter": 174694
+      },
+      {
+        "name": "far-north",
+        "towardTown": false,
+        "drawsBefore": 0,
+        "drawsAfter": 0,
+        "trianglesBefore": 0,
+        "trianglesAfter": 0
+      }
+    ],
+    "interpretation": "No submitted-geometry increase in these eight paired views; larger bounds remain conservative. Existing material-wide batches still submit about 175k triangles from some distant town-facing views. This is a remaining budget risk, not a measured GPU/FPS regression. Both probes use current terrain for identical camera height and omit materials/images.",
+    "latestModel": "./content/33095e5ac3b1cae21318bf3c8c8d221c5202c2e6c2849dbae8e0d7df0ec0cb62.gltf",
+    "productionPlacementValidation": {
+      "placements": 121,
+      "sourceAssets": 15,
+      "positionsChecked": 316943,
+      "maxPositionErrorMetres": 0.0000026518666011993723,
+      "maxNormalError": 5.083696460345864e-8,
+      "uvComponentsChecked": 633886,
+      "materialAndImageBytesPreserved": true
+    },
+    "latestMeasuredModel": "./content/33095e5ac3b1cae21318bf3c8c8d221c5202c2e6c2849dbae8e0d7df0ec0cb62.gltf"
+  },
+  "actionable": [
+    {
+      "id": "boundary-tree-collision",
+      "status": "fixed-by-owner-and-independent-regression-passed",
+      "files": [
+        "src/great-plains-layout.js:121"
+      ],
+      "evidence": "Three new matching oak trees lie inside radius105 of the actual plains navigation area but have colliderRadius0. Actual nav.free at trunk centre returned true for source ids tree-01-round-oak-304/380/381.",
+      "recommendation": "Preserve a solid trunk collider for accessible matching trees while keeping the 4.8m approach clear; add an actual-obstacle regression.",
+      "resolution": "Actual plainsObstacles now matches the real refined village trunk radius and rigidly transformed centre for all three reachable matching trees. Boundary test suite passes4/4; full4.8m road centre/shoulders remain open."
+    },
+    {
+      "id": "facade-wall-foundations",
+      "status": "fixed-by-owner-and-independent-derived-vertex-regression-passed",
+      "evidence": "Original facade builder differed from production sampled-terrain/end-min foundations by up to0.802885m;43 of121 placements exceeded5cm.",
+      "resolution": "Current derived model is checked against actual SDK source hierarchy and production createVillageTransform for every baked scenery vertex, with unchanged material scalar/UV/image bytes.",
+      "report": "reports/boundary-cave-polish-2026-11-03/facade-production-geometry.json"
+    },
+    {
+      "id": "raw-route-consumers",
+      "status": "superseded-by-original-town-restoration-and-covered-by-regression",
+      "evidence": "Initial straight-road work left map-travel and minimap raw consumers behind. Original town road/clamp/minimap are restored; current tests execute the actual main constraint and minimap bake against that original curve."
+    },
+    {
+      "id": "physical-handoff-distance",
+      "status": "implementation-owned-by-ground_load_audit",
+      "evidence": "Fixed spawn arrivals create6-9m position jumps relative to radius3 automatic triggers; rigid shape/camera-coordinate tests alone do not prove actual transition continuity.",
+      "recommendation": "Carry actual trigger position only for the adjacent physical road portal. Disarm destination return portal until the player exits a hysteresis radius, and capture the first source pose once so retry cannot rotate/transform it twice. UI teleport and other maps retain their existing routing."
+    }
+  ],
+  "cave": {
+    "currentStatus": "Material isolation verified. Native closed laboratory remodel is owned by another agent and awaits final candidate integration/rebakes; this audit does not approve final cave visual quality.",
+    "safeIsolation": [
+      "Keep brightness treatment in cave-owned plugins/uniforms; do not mutate shared albedo texture pixels/InternalTexture or outdoor source materials.",
+      "Non-rock props receive CavePaint but deliberately do not receive the rock palette; blanket rock palette assignment would remove authored prop colour.",
+      "Cave owner disposal deactivates surface and paint plugins and restores fogEnabled; incoming LODs attach grading before actual shader preparation."
+    ],
+    "sources": [
+      {
+        "file": "src/village-streamed-environment.js",
+        "line": 173
+      },
+      {
+        "file": "src/village-streamed-environment.js",
+        "line": 175
+      },
+      {
+        "file": "src/witch-cave-surfaces.js",
+        "line": 103
+      },
+      {
+        "file": "src/witch-cave-surfaces.js",
+        "line": 117
+      },
+      {
+        "file": "src/village-streamed-environment.js",
+        "line": 107
+      },
+      {
+        "file": "src/village-streamed-environment.js",
+        "line": 122
+      }
+    ],
+    "requiredChecksBeforeIntegration": [
+      "All three LODs preserve primitive/node counts, UV/material references and topology where claimed; accurate accessor extrema and manifest bounds prevent cell/LOD/frustum loss after promotion.",
+      "Compare lower floor/body-band/door vertices byte-for-byte when the remodel claims no low-body change; regenerate and verify matching camera/LOS/pose inputs for changed upper triangles.",
+      "For visible floating placements, test multiple actual support vertices or downward rays to existing terrain/native triangles; AABB minY or one touching vertex alone does not prove the object is supported.",
+      "Check closed connected topology, finite normals, zero-area triangles and self-intersections after upper vertex displacement; flat-plane appearance remains a separate visual review.",
+      "Sample actual roof height against floor along every traversable route and all boss poses. Low passage roofs and high arena roofs need different clearance evidence.",
+      "Map roundtrip SDK tests must preserve texture references/source hashes, effect identity, LOD draw pairing and observer/mesh/material/geometry release plateau."
+    ],
+    "visualLimitations": "No browser/game screenshot or GPU raster inspection performed; code/geometry checks cannot certify bright assets, floating appearance, broad planar shading or final natural/commercial visual quality.",
+    "materialIsolation": {
+      "report": "reports/boundary-cave-polish-2026-11-03/cave-material-isolation.json",
+      "assets": 29,
+      "logicalLods": 87,
+      "actualDistinctModelLoads": 87,
+      "actualPbrMaterials": 87,
+      "successfulSdkReadinessCalls": 87,
+      "rockMaterials": 39,
+      "nonRockMaterials": 48,
+      "passed": true
+    },
+    "attachmentAuditOwner": "Parent separately audited161 actual near rock instances and lowered five existing placements; independent source diff confirms elevation-only edits in witch-cave-layout.js, while the parent owns attachment graph and rebake evidence."
+  },
+  "finalizedAt": "2026-11-03T04:32:25.296Z",
+  "focusedTests": {
+    "passed": 9,
+    "total": 9,
+    "files": [
+      "tests/boundary-cave-continuity.test.js (7; latest original-town contract)",
+      "tests/boundary-cave-material-isolation.test.js (1)",
+      "tests/boundary-cave-facade-geometry.test.js (1; owner confirmed latest441f facade)"
+    ],
+    "fullSuite": "Parent runs final full suite after handoff/horizon/sanctuary integration; not claimed by this report."
+  },
+  "updatedAt": "2026-11-03T04:43:31.635Z",
+  "latestRequirement": "Town remains exactly as70c88cf; only plains road/palette/facade matching changes. Sanctuary minimap destination is a separate new requested feature.",
+  "sanctuaryUi": {
+    "status": "UI/helper frozen;17 focused minimap tests passed; main integration owned by ground_load_audit",
+    "focusedPassed": 10,
+    "files": [
+      "src/minimap-travel.js",
+      "src/dot-minimap.css",
+      "src/map-waypoints.js",
+      "tests/minimap-travel.test.js"
+    ],
+    "destinations": [
+      "마을",
+      "대평원",
+      "마물의 숲",
+      "마녀의 동굴",
+      "비탄의 성소"
+    ],
+    "grid": "3rows,2columns; final sanctuary button spans both columns",
+    "waypoint": "elena-sanctuary",
+    "character": "warrior-v5",
+    "position": {
+      "x": 39,
+      "z": -19
+    },
+    "existingRouteCentre": true,
+    "actualNavigationClearanceMetres": 3.5115714073181152,
+    "distanceFromFirstPhaseHomeMetres": 11.926860441876563,
+    "normalButtonHeightPx": 62,
+    "landscapeButtonHeightPx": 48,
+    "minimumOtherTouchTargetPx": 44,
+    "safeAreaAndOverflowPreserved": true,
+    "notes": [
+      "Sanctuary remains selectable inside the current cave while the ordinary current-region button stays selected.",
+      "Same-cave request must reposition without hiding/resetting/summoning the boss; a defeated resident must not resurrect. Main integration tests belong to its owner.",
+      "All standard destinations clear stale waypoint markers; safety is rechecked at click time.",
+      "No browser rendering, physical device fit or GPU performance claim."
+    ],
+    "focusedValidation": {
+      "passed": 17,
+      "total": 17,
+      "files": [
+        "tests/minimap-travel.test.js (10)",
+        "tests/dot-minimap.test.js (7)"
+      ],
+      "mainIntegration": "Pending owner actual-main checks; not represented as complete by this UI-only result."
+    },
+    "approachConnectsToResidentHome": true
+  }
+}

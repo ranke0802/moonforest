@@ -1,0 +1,125 @@
+{
+  "passed": true,
+  "model": "./content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+  "placements": 121,
+  "sourceAssets": 15,
+  "sourceMaterialBatches": 15,
+  "totalPrimitives": 16,
+  "totalTriangles": 187522,
+  "positionsChecked": 316943,
+  "uvComponentsChecked": 633886,
+  "maxPositionError": 0.0000026518666011993723,
+  "maxNormalError": 5.083696460345864e-8,
+  "details": [
+    {
+      "id": "house-01-cottage",
+      "placements": 10,
+      "vertices": 23550,
+      "maxPositionError": 0.000002057799408279536,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "house-02-tall-home",
+      "placements": 2,
+      "vertices": 8832,
+      "maxPositionError": 0.0000010584415171863708,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "house-03-workshop",
+      "placements": 4,
+      "vertices": 14272,
+      "maxPositionError": 0.0000020549850653654623,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "house-04-forest-hut",
+      "placements": 4,
+      "vertices": 20616,
+      "maxPositionError": 0.0000019151437144541474,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "chapel",
+      "placements": 1,
+      "vertices": 2283,
+      "maxPositionError": 0.00000108645714125384,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "well",
+      "placements": 1,
+      "vertices": 2730,
+      "maxPositionError": 1.341893056747408e-7,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "market-stall",
+      "placements": 2,
+      "vertices": 6948,
+      "maxPositionError": 4.877146340533183e-7,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "watchtower",
+      "placements": 2,
+      "vertices": 9390,
+      "maxPositionError": 0.0000023039208171215904,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wood-03-plank-gate",
+      "placements": 1,
+      "vertices": 2722,
+      "maxPositionError": 0.000001907496105157183,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wood-01-palisade",
+      "placements": 8,
+      "vertices": 22256,
+      "maxPositionError": 0.000002132103658954777,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wall-01-straight",
+      "placements": 54,
+      "vertices": 88884,
+      "maxPositionError": 0.0000026518666011993723,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wall-03-breached",
+      "placements": 6,
+      "vertices": 8616,
+      "maxPositionError": 0.0000021123644142470945,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wall-02-corner",
+      "placements": 4,
+      "vertices": 6456,
+      "maxPositionError": 0.0000020662210124302354,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "wood-02-cross-barricade",
+      "placements": 4,
+      "vertices": 7984,
+      "maxPositionError": 0.0000021126046459367377,
+      "materialAndImageBytesPreserved": true
+    },
+    {
+      "id": "tree-01-round-oak",
+      "placements": 18,
+      "vertices": 91404,
+      "maxPositionError": 0.0000019655981125148404,
+      "materialAndImageBytesPreserved": true
+    }
+  ],
+  "limitations": [
+    "Actual Babylon source hierarchy/production transforms and derived Float32 geometry/UV/material image bytes checked in Node; images are not decoded and no GPU/raster/FPS measurement is made.",
+    "Far source geometry preserves its existing differences from near LOD. This proves exact placement transforms, not identical near/far silhouettes or commercial visual quality.",
+    "The sixteenth ground primitive is validated by separate shared-road/height tests; this source-model comparison covers the 121 baked scenery placements."
+  ]
+}

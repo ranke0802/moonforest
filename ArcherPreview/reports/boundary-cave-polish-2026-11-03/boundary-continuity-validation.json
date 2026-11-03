@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "original-town-preserved",
+      "baseline": "70c88cf",
+      "normalizedSourceHashes": {
+        "src/village-layout.js": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+        "src/village-terrain.js": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+        "src/village-ground-layout.js": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+        "public/assets/village-ground.json": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+      },
+      "originalGroundImageHashesVerified": true
+    },
+    {
+      "case": "actual-road-portal-clearance",
+      "shoulderSamples": 183,
+      "maxPaintOffset": 0.02231387062445662,
+      "maxTerrainHeightGap": 0,
+      "roadWidth": 3.9
+    },
+    {
+      "case": "actual-sdk-camera-projection",
+      "cases": 72,
+      "visibleLandmarkComparisons": 276,
+      "maxPixelError": 0.0038400426152914923,
+      "note": "Rigid coordinate equivalence; actual travel advances to its existing arrival point under the curtain, so it does not promise pixel-identical before/after gameplay frames."
+    },
+    {
+      "case": "shared-native-outer-trees",
+      "villageTrees": 32,
+      "plainsCopies": 32,
+      "totalPlainsPlacements": 1448,
+      "newAssetKinds": 0
+    },
+    {
+      "case": "actual-refined-tree-collision",
+      "physicalTrees": 3
+    },
+    {
+      "case": "actual-main-movement-and-automatic-portal",
+      "centreAndShoulderSteps": 408,
+      "usableHalfWidth": 1.6,
+      "automaticTrips": 3
+    },
+    {
+      "case": "actual-minimap-original-curved-gateway",
+      "northernStrokes": 1,
+      "northernPoints": 36,
+      "minX": -1.7999999999999972,
+      "maxX": 0.8576999999999941
+    }
+  ],
+  "limitations": [
+    "Node math, actual Babylon camera matrices and authored navigation/asset contracts; no browser automation or physical device/GPU/FPS measurement.",
+    "Projection equivalence tests rigid coordinate conversion, not a screenshot, full post-teleport visual match, colour or fog quality.",
+    "Actual exterior mesh draw counts are tracked independently by facade-audit.mjs; these tests do not certify its final visual quality."
+  ]
+}

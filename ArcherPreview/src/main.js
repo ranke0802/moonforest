@@ -20,6 +20,8 @@ import './serial-player-textures.js';
 import {playerTextureManifest} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
+import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
+import {travelWaypoint} from './map-waypoints.js';
 import {applyPlayerDetail} from './player-detail.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
@@ -706,11 +708,23 @@ function render(dt) {
   world.caveCamera?.endFrame();
 }
 
-function bindMapPortal(){
+function bindMapPortal(disarmRoadDestination=null){
   mapPortal?.dispose();
-  mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,
+  mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount,hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:url=>mapTransition.travel(url)});
+    onTravel:(url,portal)=>{const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,boundary?{boundary}:undefined);}});
+}
+
+function travelFromMinimap(href){
+  const waypoint=travelWaypoint(href);
+  if(waypoint&&character===waypoint.character&&world.mapId===waypoint.map){
+    if(!ready||loadingAsset||mapTransition?.busy||mapTransition?.failed||controller.dead||controller.captured||controller.groggy||boss.playerHp<=0||boss.loading||boss.potions.active||boss.combatCount>0){toast('현재는 이동할 수 없습니다.');return false;}
+    if(!world.navigation.free(waypoint.position,playerDimensions(actor).moveRadius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
+    input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
+    actor.position.set(waypoint.position.x,0,waypoint.position.z);world.terrain.place(actor.position);
+    syncCameraFocus(0,{snap:true});syncCaveFog(true);world.lighting.follow(actor.position,true);saveMapPosition(true);return true;
+  }
+  return mapTransition.travel(href);
 }
 
 try {
@@ -806,13 +820,16 @@ try {
       world.cancelResourceDownloads?.();
     },
     release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
-    load:async href=>{
-      const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character;
+    load:async (href,context)=>{
+      const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url);
       url.searchParams.delete('elenaReview');
+      url.searchParams.delete('waypoint');
       replaceWorldMap(world,destination);applyPlainsViewDistance(world,plainsViewDistanceControl.value);character=destination;history.replaceState(null,'',url);
-      actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);
+      const handoff=context?.boundary?.to===destination?context.boundary:null;
+      const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);
-      carryPortalPose(actor,world.camera,input.panOffset,{from:sourceCharacter,to:destination});
+      if(handoff){actor.rotation.y=handoff.yaw;world.camera.alpha=handoff.alpha;if(handoff.pan&&input.panOffset)Object.assign(input.panOffset,handoff.pan);}
+      carryPortalPose(actor,world.camera,input.panOffset,{from:handoff?.from??sourceCharacter,to:destination});
       controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
       cameraPitch.follow(cameraFollow.focus(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
@@ -825,7 +842,7 @@ try {
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
-      $('#character-select').value=uiTestEnabled?'ui-test':character;bindMapPortal();
+      $('#character-select').value=uiTestEnabled?'ui-test':character;bindMapPortal(handoff?.from??null);
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
       await skyReady;
@@ -847,7 +864,7 @@ try {
   });
   minimapTravel=setupMinimapTravel({element:$('#dot-minimap'),root:$('#app'),
     getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount}),
-    onTravel:url=>mapTransition.travel(url),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback()});
+    onTravel:url=>travelFromMinimap(url),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback()});
   world.scene.onDisposeObservable.addOnce(()=>minimapTravel?.dispose());
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{

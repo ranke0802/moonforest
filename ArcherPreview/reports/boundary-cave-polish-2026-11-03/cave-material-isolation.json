@@ -1,0 +1,981 @@
+{
+  "passed": true,
+  "assets": 29,
+  "logicalLodProfiles": 87,
+  "actualDistinctModelLoads": 87,
+  "actualPbrMaterials": 87,
+  "successfulSdkReadinessCalls": 87,
+  "rockMaterials": 39,
+  "nonRockMaterials": 48,
+  "outdoorMapVisits": [
+    "monster-forest",
+    "great-plains",
+    "village"
+  ],
+  "caveReentryBindsNewLightMap": true,
+  "sharedTextureAndScalarColourPreserved": true,
+  "loads": [
+    {
+      "model": "4de4b912ff903f96f9e7ec969404e6b43437b3affeae6b952f65109ad6d5f0e3.gltf",
+      "profiles": [
+        {
+          "id": "cave-01-eroded-wall",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+      "profiles": [
+        {
+          "id": "cave-01-eroded-wall",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+      "profiles": [
+        {
+          "id": "cave-01-eroded-wall",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "378133fe9dfa194d627daf1f4243a1657ddfc2f4c0d5af671adc462caedb15f8.gltf",
+      "profiles": [
+        {
+          "id": "cave-02-rock-ledge",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "345e989f96e6bc749e4f74afa5ea332d3bc633686bbf98fd35e740a187fda4b1.gltf",
+      "profiles": [
+        {
+          "id": "cave-02-rock-ledge",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
+      "profiles": [
+        {
+          "id": "cave-02-rock-ledge",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a4dc2a747027023ce20274fd3a4adb3ab9e9488a1640fd741dce70fae5b7e314.gltf",
+      "profiles": [
+        {
+          "id": "cave-03-great-column",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a6c845ffa1cb1440700c6c156f7c33f37c7619e0d19a194e66280d599eecfd78.gltf",
+      "profiles": [
+        {
+          "id": "cave-03-great-column",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
+      "profiles": [
+        {
+          "id": "cave-03-great-column",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "06b73a551c7ce259d0892206a7dae0e660b7e9909e7b819babdce2e170db2206.gltf",
+      "profiles": [
+        {
+          "id": "cave-04-natural-arch",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a71ace0b8039e7942260563dd95b37a17238ad3307f3f42e797322da06eeb6bf.gltf",
+      "profiles": [
+        {
+          "id": "cave-04-natural-arch",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
+      "profiles": [
+        {
+          "id": "cave-04-natural-arch",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "00660a83eb5621b75f1aa681cce6ba1d7cd1e47970b2fd356b098f725b6785a5.gltf",
+      "profiles": [
+        {
+          "id": "cave-05-stalagmites",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "98c5e9c87eb52d0fd63a24a7c57777ce53d48590f6f4535492b21918e9e59153.gltf",
+      "profiles": [
+        {
+          "id": "cave-05-stalagmites",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
+      "profiles": [
+        {
+          "id": "cave-05-stalagmites",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "38465d25addaf66d8e851d2c72e8fe85e262f20d049112a9d4e825e5ccaf6e1a.gltf",
+      "profiles": [
+        {
+          "id": "cave-06-stalactite-canopy",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "26becafb8bdd9bfc36a5822f5d65852b393ecc6f1ebfaf5329f315675b961f9a.gltf",
+      "profiles": [
+        {
+          "id": "cave-06-stalactite-canopy",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf",
+      "profiles": [
+        {
+          "id": "cave-06-stalactite-canopy",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "bab9d1fe2844d050af8acec0ea110286c409642543a9d4b039dd8546a40b34fb.gltf",
+      "profiles": [
+        {
+          "id": "cave-07-scree-ramp",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "2734bdfdf476248a1f16cfb197bc6fd81b7f721d84dc27e6c76428c428b7d3ca.gltf",
+      "profiles": [
+        {
+          "id": "cave-07-scree-ramp",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf",
+      "profiles": [
+        {
+          "id": "cave-07-scree-ramp",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "3fb94874b7717c5a62e400adfa6270902d9834431ee183eb1249c27e5baf69ae.gltf",
+      "profiles": [
+        {
+          "id": "cave-08-timber-brace",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "d8a36aca2d6fdc8b4899880f7442f2fd2d6a427bd97436416aed5a29aa3372db.gltf",
+      "profiles": [
+        {
+          "id": "cave-08-timber-brace",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78.gltf",
+      "profiles": [
+        {
+          "id": "cave-08-timber-brace",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "1569e9c5a1150fa06ec19d7944aa5a269309d36625e66b3947a292648825659b.gltf",
+      "profiles": [
+        {
+          "id": "cave-09-iron-gate-leaf",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "dc00e5ad0c51585cb53944b26e66140a66d6d583cb8fdf2d09348a48833a0acf.gltf",
+      "profiles": [
+        {
+          "id": "cave-09-iron-gate-leaf",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e.gltf",
+      "profiles": [
+        {
+          "id": "cave-09-iron-gate-leaf",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "10e8aa46823ac6e2058ec1ab6f050e66c40e79a882c7adbe6affe80b02eecf0f.gltf",
+      "profiles": [
+        {
+          "id": "cave-10-hand-winch",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "d11acf10be9c60327a5cc0fbdf7f2a7c8b106cb6186d724d60234d304812e83c.gltf",
+      "profiles": [
+        {
+          "id": "cave-10-hand-winch",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "d98e61a184f21a16fa21a4797083da1dffe014f11137b9a5066d4033075f6e7e.gltf",
+      "profiles": [
+        {
+          "id": "cave-10-hand-winch",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "b9b3359d1fdfb1269680cab4e51b01b5852236b3e9b2213264c92e789103444d.gltf",
+      "profiles": [
+        {
+          "id": "cave-11-sluice-shutter",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "813c9d3b96c78fc76b2dda11196112e0da9e51398e1ccce39d6876f0ffc997f3.gltf",
+      "profiles": [
+        {
+          "id": "cave-11-sluice-shutter",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89.gltf",
+      "profiles": [
+        {
+          "id": "cave-11-sluice-shutter",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "78146875d9f61220b89dd3dae7f594552d2ffeb7904f4fa335165569af14365c.gltf",
+      "profiles": [
+        {
+          "id": "cave-12-lift-platform",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "bc0ba599e2d78f690ada0ef454f139596fb82fc6939c324d8ee33bd3b52ca032.gltf",
+      "profiles": [
+        {
+          "id": "cave-12-lift-platform",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3.gltf",
+      "profiles": [
+        {
+          "id": "cave-12-lift-platform",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "f13c578c671ed93f02d449d7eced8024f75b41195d4413b9718bde3d6f1d7430.gltf",
+      "profiles": [
+        {
+          "id": "cave-13-votive-lantern",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "2838905f704912f39de6192c9df4c0c1e98f213e9d8a948b7b1c47dc1e6f657c.gltf",
+      "profiles": [
+        {
+          "id": "cave-13-votive-lantern",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf",
+      "profiles": [
+        {
+          "id": "cave-13-votive-lantern",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "5d8e12b70ded116298c56ac32beee449c508ca6ab421dfe6b8f56e3f5232dee0.gltf",
+      "profiles": [
+        {
+          "id": "cave-14-hidden-pressure-stone",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a9345a6d33b81acf34ce74fdfd43df333814484ea49e9b522379930f12cb63a3.gltf",
+      "profiles": [
+        {
+          "id": "cave-14-hidden-pressure-stone",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30.gltf",
+      "profiles": [
+        {
+          "id": "cave-14-hidden-pressure-stone",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "ae44f9eb9d83926652934c492cde6a6b2d250f53f11d541c4ab5b629adf23221.gltf",
+      "profiles": [
+        {
+          "id": "cave-15-resurrection-altar",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "fb9ffc3d4725a0b36a6cbdc178720500824e126c733197962ce443fff5d2ae95.gltf",
+      "profiles": [
+        {
+          "id": "cave-15-resurrection-altar",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f.gltf",
+      "profiles": [
+        {
+          "id": "cave-15-resurrection-altar",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "4f6f23beadae94c325a5d2fd53b84677b6d0bf66105527dc5ab3bd37d41fea9e.gltf",
+      "profiles": [
+        {
+          "id": "cave-16-soul-collector-arm",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "f3f4a95448c197117abc1df245d30bcfc143f66b5f7f1ce7277e48dc154a2dec.gltf",
+      "profiles": [
+        {
+          "id": "cave-16-soul-collector-arm",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12.gltf",
+      "profiles": [
+        {
+          "id": "cave-16-soul-collector-arm",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "9bd05d855fb4f24339490803d53d3fe73f78d5b816a78291e84ac7879b9afce4.gltf",
+      "profiles": [
+        {
+          "id": "cave-17-faded-sacred-emblem",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "3fee1f8f1643c9c66f8ede85bd2ff900c15c295477b7ec23dd9b2ab1bbd4cf19.gltf",
+      "profiles": [
+        {
+          "id": "cave-17-faded-sacred-emblem",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b.gltf",
+      "profiles": [
+        {
+          "id": "cave-17-faded-sacred-emblem",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "006ed20afad295cc749f526897161e6b8d6f641b89585489310243391f80bc38.gltf",
+      "profiles": [
+        {
+          "id": "cave-18-alchemy-workbench",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "33bc4c1cfd42d21e0d2c8995c964ec7c22f12557e4140df43cdbc5d9b203f7cd.gltf",
+      "profiles": [
+        {
+          "id": "cave-18-alchemy-workbench",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "536391e0b85329c18b9d53db71f6182174c5bda760d31c22d6062eb20eea7237.gltf",
+      "profiles": [
+        {
+          "id": "cave-18-alchemy-workbench",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "edb643e2cc29f63e9d34ca6a3ed7212a2336b04e7942296e5f408c13806c6d9e.gltf",
+      "profiles": [
+        {
+          "id": "cave-19-apothecary-shelf",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "ad990e8f8ca5dccc6224795468ef58fa455191584652b2514fa17be0cdde6a3e.gltf",
+      "profiles": [
+        {
+          "id": "cave-19-apothecary-shelf",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9.gltf",
+      "profiles": [
+        {
+          "id": "cave-19-apothecary-shelf",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "983ddc923fd69122635a772e310b61763f71d2f79cc6e36b22689ec346232ee1.gltf",
+      "profiles": [
+        {
+          "id": "cave-20-modest-cot",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "b58f11146915589636d2053d06d59344eb6d4103a00d8796d857f3096f7d2a41.gltf",
+      "profiles": [
+        {
+          "id": "cave-20-modest-cot",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "ffe2ab4928e14b6ed8e8c1699a95ccb4956d85926fa413676345b8df84c500ba.gltf",
+      "profiles": [
+        {
+          "id": "cave-20-modest-cot",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "dfb12edec414bc68226fa1662bf517f6d22e81a3e9f22525a3c45b0a703f2468.gltf",
+      "profiles": [
+        {
+          "id": "cave-s01-solid-cliff-base",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf",
+      "profiles": [
+        {
+          "id": "cave-s01-solid-cliff-base",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+      "profiles": [
+        {
+          "id": "cave-s01-solid-cliff-base",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "18b172aa5a679ae5fcefd494815d9038ba1bfaef8fe6f80f92ecb5e30d5e78ad.gltf",
+      "profiles": [
+        {
+          "id": "cave-s03-dry-spillway-rock",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "ec146cf16a1199c285f0d983aa08d18f34a5fbb117c9832b594e452e6b93e02b.gltf",
+      "profiles": [
+        {
+          "id": "cave-s03-dry-spillway-rock",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+      "profiles": [
+        {
+          "id": "cave-s03-dry-spillway-rock",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "65e9dc8899c7c096f936ba43fc233cb64887ff36ec8cf7be71c011ba644e8fb6.gltf",
+      "profiles": [
+        {
+          "id": "forest-06-witch-cave-mouth",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf",
+      "profiles": [
+        {
+          "id": "forest-06-witch-cave-mouth",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+      "profiles": [
+        {
+          "id": "forest-06-witch-cave-mouth",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+      "profiles": [
+        {
+          "id": "crate-barrel-cluster",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+      "profiles": [
+        {
+          "id": "crate-barrel-cluster",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+      "profiles": [
+        {
+          "id": "crate-barrel-cluster",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+      "profiles": [
+        {
+          "id": "firewood",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9.gltf",
+      "profiles": [
+        {
+          "id": "firewood",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf",
+      "profiles": [
+        {
+          "id": "firewood",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+      "profiles": [
+        {
+          "id": "handcart",
+          "level": 2,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512.gltf",
+      "profiles": [
+        {
+          "id": "handcart",
+          "level": 1,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+      "profiles": [
+        {
+          "id": "handcart",
+          "level": 0,
+          "category": "prop"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+      "profiles": [
+        {
+          "id": "rock-02-jagged-outcrop",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+      "profiles": [
+        {
+          "id": "rock-02-jagged-outcrop",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+      "profiles": [
+        {
+          "id": "rock-02-jagged-outcrop",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+      "profiles": [
+        {
+          "id": "rock-01-mossy-boulder",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+      "profiles": [
+        {
+          "id": "rock-01-mossy-boulder",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+      "profiles": [
+        {
+          "id": "rock-01-mossy-boulder",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1.gltf",
+      "profiles": [
+        {
+          "id": "cave-derived-laboratory-rock",
+          "level": 2,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "14e68dcac35fa5e99ca6d83444a0112cacbc389ecab0dfe833182fa0077ec021.gltf",
+      "profiles": [
+        {
+          "id": "cave-derived-laboratory-rock",
+          "level": 1,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    },
+    {
+      "model": "86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+      "profiles": [
+        {
+          "id": "cave-derived-laboratory-rock",
+          "level": 0,
+          "category": "rock"
+        }
+      ],
+      "geometryMeshes": 1
+    }
+  ],
+  "limitations": [
+    "Actual shipped glTF geometry, transforms and PBR scalar properties traverse the production streamed installation and shader-readiness path. Image decoding is omitted and one controlled 1x1 SDK texture verifies reference ownership.",
+    "NullEngine does not rasterize or measure GPU uploads, visual brightness, mobile FPS, thermals or final commercial art quality.",
+    "Retained materials deliberately survive map replacements in this test to exercise deactivation/rebinding; normal map release disposes map-owned material containers."
+  ]
+}

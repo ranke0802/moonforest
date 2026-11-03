@@ -13,6 +13,9 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {createVillageTerrain} from '../src/village-terrain.js';
 import {PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
+import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
+import {CameraPitch} from '../src/camera-pitch.js';
+import {PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
 const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('village.json',base)));
 function fixture(t,touch=false){
  const engine=new NullEngine({renderWidth:touch?900:1280,renderHeight:touch?450:720}),scene=new Scene(engine);scene.useRightHandedSystem=true;
@@ -79,8 +82,9 @@ test('identical prefab LOD files prepare one container across tier changes; dist
  }
 });
 
-test('real plains village exterior stays inside streaming bounds and is deferred at the forest end',async t=>{
+test('real plains village exterior stays inside streaming bounds and follows the actual camera and plains distance policy',async t=>{
  const {world}=fixture(t,true),config=JSON.parse(readFileSync(new URL('great-plains.json',base))).assets['village-approach'];
+ Object.assign(world,{plains:true,mapId:'great-plains',plainsViewDistance:2.4,terrain:createGreatPlainsTerrain()});world.camera.maxZ=PLAINS_VISTA_FAR;
  const placement=PLAINS_PLACEMENTS.find(p=>p.id==='village-exterior'),record=createVillageTransform(world,placement,config),bounds=placementBounds(world,placement,config);
  const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));
  for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(b.uri).data).toString('base64');
@@ -94,9 +98,18 @@ test('real plains village exterior stays inside streaming bounds and is deferred
   for(const axis of ['x','y','z'])assert.ok(box.minimumWorld[axis]>=bounds.min[axis]&&box.maximumWorld[axis]<=bounds.max[axis],'prefab '+axis+' bounds');
  }
  assert.equal(triangles,187522);
- const records=[{placement,bounds}];
- world.camera.setTarget(new Vector3(-87,1,-32));assert.ok(villageDemand(world,records).length>0);
- world.camera.setTarget(new Vector3(65,1,-72));assert.equal(villageDemand(world,records).length,0);
+ const records=[{placement,bounds}],pitch=new CameraPitch(world.camera,{warrior:true});
+ const moveCamera=(x,z,towardTown,beta=.88)=>{
+  world.camera.alpha=Math.atan2(placement.z-z,placement.x-x)+(towardTown?Math.PI:0);world.camera.beta=beta;
+  // Production follow carries the orbit to the new actor. setTarget(target)
+  // alone keeps the old eye position and changes alpha/beta/radius instead.
+  pitch.follow(new Vector3(x,world.terrain.heightAt(x,z)+1.28,z),0,{snap:true});world.camera.getViewMatrix(true);world.camera.getProjectionMatrix(true);
+  assert.ok(Vector3.Distance(world.camera.globalPosition,world.camera.target)<=13.001,'camera must be beside the tested actor');
+ };
+ moveCamera(-87,-32,true);assert.ok(villageDemand(world,records).some(r=>r.id===placement.asset),'arrival view must prepare the real exterior');
+ moveCamera(65,-72,true,1.35);world.plainsViewDistance=1;assert.equal(villageDemand(world,records).length,0,'forest-side facade stays deferred at the original 100% range');
+ world.plainsViewDistance=2.4;assert.ok(villageDemand(world,records).some(r=>r.id===placement.asset),'240% prepares the distant facade when looking toward town');
+ moveCamera(65,-72,false,1.35);assert.equal(villageDemand(world,records).length,0,'off-camera forest-side facade stays deferred even at 240%');
 });
 
 test('S23-size rotation and movement demand matches the uncached plan, including near trees and LOD boundaries',t=>{

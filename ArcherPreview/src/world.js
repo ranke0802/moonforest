@@ -7,6 +7,7 @@ import { createTerrainGround } from './terrain-mesh.js';
 import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END,setWorldCharacter } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
+import {configureOutdoorVista} from './outdoor-vista.js';
 import { createVillageTerrain } from './village-terrain.js';
 import { villageObstacles } from './village-layout.js';
 import { VillageNavigation } from './village-navigation.js';
@@ -64,7 +65,6 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   camera.inputs.clear();
   const sky = new MovingSky(scene);
   const mountains = createMountainBackdrop(scene);
-  if(village){mountains.unfreezeWorldMatrix();mountains.scaling.set(plains?4.5:1.9,plains ? .72 : 1.3,plains?4.5:1.9);mountains.freezeWorldMatrix();}
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);
@@ -80,6 +80,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   shadows.bias = .0008; shadows.normalBias = .02;
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
+  configureOutdoorVista({mountains,sky,lighting,camera},{village,plains});
 
   const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE});
@@ -148,7 +149,7 @@ export function replaceWorldMap(world,character){
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
-  world.mountains.unfreezeWorldMatrix();world.mountains.scaling.set(plains?4.5:1.9,plains ? .72 : 1.3,plains?4.5:1.9);world.mountains.freezeWorldMatrix();
+  configureOutdoorVista(world,{village:true,plains});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);

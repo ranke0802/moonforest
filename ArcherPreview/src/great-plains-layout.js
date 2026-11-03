@@ -1,5 +1,8 @@
 import {sampleGroundCurve} from './village-ground-layout.js';
 import {isSoftVegetation} from './scenery-collision-policy.js';
+import {VILLAGE_PLACEMENTS} from './village-layout.js';
+import {villageHeight} from './village-terrain.js';
+import {VILLAGE_PLAINS_BOUNDARY as boundary,villageToPlains,boundaryExteriorPlacement,isVillageBoundaryTree} from './village-plains-boundary.js';
 
 // Authored against plains-exterior.png; all landmarks have deliberate locations.
 export const PLAINS_RADIUS=106;
@@ -7,8 +10,9 @@ export const PLAINS_SPAN=288;
 export const PLAINS_SPAWN=Object.freeze({x:-87,z:-32});
 export const PLAINS_LOOKOUT=Object.freeze({x:-28,z:-20,height:8,capRadius:9,cliffWidth:3,stretchX:1.1,rampStartX:-61,rampTopX:-37,rampHalfWidth:3,rampShoulder:6});
 export const PLAINS_CLEARINGS=[{x:-5,z:25,r:7,y:.3},{x:-26,z:-19,r:6,y:8.1},{x:16,z:72,r:8,y:.25},{x:51,z:-51,r:7,y:.35},{x:-55,z:37,r:9,y:.4}];
+const villageGatewaySamples=boundary.villageSamples.map(([x,z])=>{const p=villageToPlains({x,z});return [p.x,p.z];}),villageRoadExtension=[villageGatewaySamples.at(-1),[-79,-30],[-61,-20],[-41,-8],[-23,6],[-5,25]];
 export const PLAINS_ROUTES=[
- {id:'village-road',width:4.8,points:[[-106,-39],[-94,-35],[-79,-30],[-61,-20],[-41,-8],[-23,6],[-5,25]]},
+ {id:'village-road',width:boundary.roadWidth,gateway:true,points:[...boundary.villageRoad.filter(p=>p[1]>=40).map(([x,z])=>{const p=villageToPlains({x,z});return [p.x,p.z];}),...villageRoadExtension.slice(1)],samples:[...villageGatewaySamples,...sampleGroundCurve(villageRoadExtension,{step:.8}).slice(1)]},
  {id:'forest-road',width:4.8,points:[[-5,25],[10,13],[28,-4],[43,-22],[55,-41],[61,-58],[65,-72],[74,-90]]},
  {id:'royal-road',width:5.1,points:[[-5,25],[1,40],[2,57],[1,77],[-3,107]]},
  {id:'lookout-loop',width:2.8,points:[[-61,-20],[-57,-37],[-41,-43],[-24,-42],[-9,-34],[2,-20],[-1,-7],[-5,25]]},
@@ -16,7 +20,7 @@ export const PLAINS_ROUTES=[
  {id:'meadow-loop',width:2.8,points:[[-61,-20],[-64,-2],[-64,18],[-55,37],[-35,42],[-18,35],[-5,25]]},
  {id:'caravan-spur',width:3.5,points:[[2,57],[13,62],[16,72],[8,82],[1,84]]},
  {id:'forest-rest',width:2.5,points:[[49,-32],[48,-44],[51,-51],[59,-50]]},
-].map(r=>({...r,samples:sampleGroundCurve(r.points,{step:.8})}));
+].map(r=>({...r,samples:r.samples??sampleGroundCurve(r.points,{step:.8})}));
 export const PLAINS_STREAM=sampleGroundCurve([[95,-97],[89,-82],[85,-67],[79,-51],[85,-33],[78,-15],[83,3],[75,22],[84,39],[77,57],[66,79],[62,106]],{step:1.4});
 // The common quest-prop system owns chest rendering and opening. Keep these
 // stable anchors out of scenery instances to avoid drawing each chest twice.
@@ -111,11 +115,14 @@ function addGroveScenery(out,add){
   if([...out,...PLAINS_TREASURE_ANCHORS].some(other=>other!==p&&!other.background&&other.kind!=='ground-detail'&&Math.hypot(x-other.x,z-other.z)<p.colliderRadius+(other.colliderRadius??0)+1.2))continue;
   p.x=x;p.z=z;
  }
- // Reuse two far-off boundary trees to frame the village arrival. Their shared
- // source remains the existing oak; no extra geometry or instances are added.
+ // Reuse the two old arrival trees, then instance the exact village tree edge.
+ // Outer trees are never baked into the exterior batch or given new sources.
  const frame=out.filter(p=>p.id.startsWith('forest-east-')&&Math.hypot(p.x,p.z)>125).slice(0,2);
- for(const [i,[x,z]]of [[-92,-44],[-96,-24]].entries())if(frame[i]){
-  Object.assign(frame[i],{x,z,asset:'tree-01-round-oak',scale:.85+i*.1,colliderRadius:.8,composition:'village-arrival'});
+ for(const [i,source]of VILLAGE_PLACEMENTS.filter(isVillageBoundaryTree).entries()){
+  const position=villageToPlains(source),physicalScale=source.scale*(source.asset==='tree-01-round-oak'?.55:.8),radius=(source.colliderRadius??.4)*physicalScale,interactive=Math.hypot(position.x,position.z)<PLAINS_RADIUS+radius;
+  const p={...position,asset:source.asset,scale:source.scale,yaw:source.yaw+boundary.yaw,kind:'tree',colliderRadius:interactive?radius:0,colliderOffset:(source.colliderOffset??[0,0]).map(v=>v*physicalScale),elevation:villageHeight(source.x,source.z),background:!interactive,composition:'village-arrival',villageBoundary:true,sourcePlacement:source.id};
+  if(frame[i])Object.assign(frame[i],p);
+  else add('village-boundary-'+source.id,p.asset,p.x,p.z,p.kind,p.scale,0,p.yaw,p);
  }
  // Shape the broad open space between the hill and crossroads as two loose,
  // asymmetric groups, reusing trees from beyond the playable forest boundary.
@@ -179,7 +186,7 @@ function makePlacements(){
  const random=seedRandom(26110202),out=[];
  const add=(id,asset,x,z,kind,scale=1,radius=0,yaw=0,extra={})=>out.push({id,asset,x,z,kind,scale,yaw,colliderRadius:radius,...extra});
  const safe=(x,z,r=1)=>plainsRoadDistance(x,z)>r+.7&&plainsStreamDistance(x,z)>3.6+r;
- add('village-exterior','village-approach',-127,-43,'landmark',1,0,1.25,{elevation:.2,background:true});
+ const exterior=boundaryExteriorPlacement();add('village-exterior','village-approach',exterior.x,exterior.z,'landmark',1,0,exterior.yaw,{elevation:exterior.elevation,background:true});
  add('junction-waypost','waypost',-1,18,'prop',1,.35,Math.PI*.2);
  add('village-waypost','waypost',-85,-36,'prop',1,.35,Math.PI*.5);
  add('caravan','covered-wagon',19,73,'prop',1,1.8,Math.PI*.12);
@@ -230,7 +237,12 @@ function makePlacements(){
 }
 export const PLAINS_PLACEMENTS=makePlacements();
 export function plainsObstacles(){
- const out=PLAINS_PLACEMENTS.filter(p=>!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint)).map(p=>p.colliderFootprint?{id:p.id,x:p.x,z:p.z,shape:'box',halfWidth:p.colliderFootprint[0]/2,halfDepth:p.colliderFootprint[1]/2,yaw:p.yaw,radius:Math.hypot(...p.colliderFootprint)/2,height:1.1}:{id:p.id,x:p.x,z:p.z,radius:p.colliderRadius,height:p.kind==='tree'?8:p.kind==='rock'?2:1.5});
+ const out=PLAINS_PLACEMENTS.filter(p=>!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint)).map(p=>{
+  // Boundary offsets are physical metres after the original source's refined
+  // trunk normalization. Rotate them with the same rigid scene transform.
+  const [dx,dz]=p.villageBoundary?p.colliderOffset??[0,0]:[0,0],c=Math.cos(p.yaw),s=Math.sin(p.yaw),x=p.x+c*dx+s*dz,z=p.z-s*dx+c*dz;
+  return p.colliderFootprint?{id:p.id,x,z,shape:'box',halfWidth:p.colliderFootprint[0]/2,halfDepth:p.colliderFootprint[1]/2,yaw:p.yaw,radius:Math.hypot(...p.colliderFootprint)/2,height:1.1}:{id:p.id,x,z,radius:p.colliderRadius,height:p.kind==='tree'?8:p.kind==='rock'?2:1.5};
+ });
  for(const [i,[x,z]]of PLAINS_STREAM.entries())out.push({id:'river-'+i,x,z,radius:2,height:.1});
  return out;
 }
