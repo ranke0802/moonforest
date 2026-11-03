@@ -1,0 +1,125 @@
+{
+  "scope": "Babylon 9.31 NullEngine actual five packed models; source images skipped, no GPU/device FPS measurement. Skip bone-proof and camera-culling stages to isolate shell construction; separate tests exercise them.",
+  "results": [
+    {
+      "id": "warrior-v3",
+      "name": "Bunnyguard_Shield",
+      "vertices": 6914,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 0.5470000000000255,
+        "optimized": 0.41790000000014516
+      }
+    },
+    {
+      "id": "warrior-v3",
+      "name": "Golden_Oathblade",
+      "vertices": 6855,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 0.4933000000000902,
+        "optimized": 0.38609999999994216
+      }
+    },
+    {
+      "id": "guardian-bear",
+      "name": "output_unwrapped",
+      "vertices": 41898,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 11.840099999999893,
+        "optimized": 8.655899999999974
+      }
+    },
+    {
+      "id": "hooded-goblin",
+      "name": "output_unwrapped",
+      "vertices": 18403,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 4.0931000000000495,
+        "optimized": 5.298900000000003
+      }
+    },
+    {
+      "id": "elena",
+      "name": "Elena_Meshy_Static",
+      "vertices": 96734,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 16.903299999999945,
+        "optimized": 14.808500000000095
+      }
+    },
+    {
+      "id": "mourning-elena",
+      "name": "Halo_Attached_Streamers",
+      "vertices": 287,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 0.3670000000001892,
+        "optimized": 0.33870000000024447
+      }
+    },
+    {
+      "id": "mourning-elena",
+      "name": "Halo_Rigid_Emblem",
+      "vertices": 4014,
+      "morphTargets": 0,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 0.6983000000000175,
+        "optimized": 0.6460999999999331
+      }
+    },
+    {
+      "id": "mourning-elena",
+      "name": "Elina_Chimera_Skin",
+      "vertices": 36196,
+      "morphTargets": 11,
+      "boundsAndPropertiesEqual": true,
+      "sharedGeometry": true,
+      "sharedSkeleton": true,
+      "sharedMorphManager": true,
+      "independentShellDisposed": true,
+      "warmMedianMs": {
+        "native": 8.247699999999895,
+        "optimized": 7.6723000000001775
+      }
+    }
+  ]
+}

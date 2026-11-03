@@ -1,0 +1,39 @@
+{
+  "baseline": "c020469",
+  "tests": {
+    "tests": 1300,
+    "pass": 1300,
+    "fail": 0,
+    "cancelled": 0
+  },
+  "resourceGraphUnchanged": true,
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "unchangedRuntimeContracts": [
+    "src/input.js",
+    "src/warrior-v2.js",
+    "src/player-strikes.js",
+    "src/melee-collision.js",
+    "src/enemy-death.js",
+    "src/elena-spec.js",
+    "src/mourning-elena-animation.js",
+    "src/village-lod.js",
+    "src/village-shadow-policy.js"
+  ],
+  "browserAutomation": false,
+  "physicalDeviceTested": false,
+  "deployment": {
+    "status": "pending"
+  },
+  "scope": [
+    "Native outline clone with unchanged posed bounds; omit unused per-vertex point cache only during construction",
+    "Resident adopt/reuse versus independent bear/goblin clone confirmed with synchronous CPU timing records",
+    "Identical morph texture payloads are prepared once through a scoped loader option",
+    "Four-map load/revisit/cancel/retry and full gameplay regressions"
+  ],
+  "limits": [
+    "NullEngine measures SDK calls and CPU work, not actual GPU driver upload time or mobile FPS.",
+    "Ordinary model clones still perform required posed bounds and preserve independent rigs.",
+    "Outline cache omission applies only to current non-pickable, non-collision silhouettes. A future direct intersection workflow needs the normal posed refresh.",
+    "No guarantee that every physical-device 100-250ms stall is eliminated."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "resourceRevision": "1e5462011f46bb6c2d1b2d564ace32a3356f8d152ce519b2e9037342183b0afc",
+  "verifiedFiles": 1637,
+  "bytes": 623722811,
+  "changedPaths": [
+    "ArcherPreviewSite/assets/babylon~basisTextureLoader-C-EspKpf.js",
+    "ArcherPreviewSite/assets/babylon~ddsTextureLoader-Bappgs62.js",
+    "ArcherPreviewSite/assets/babylon~envTextureLoader-CguVn3KO.js",
+    "ArcherPreviewSite/assets/babylon~flowGraphGLTFDataProvider-BkKuSKD0.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplatting.fragment-CZogB7T3.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplatting.fragment-Q_RaCOe7.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplatting.vertex-Cfx019jg.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplatting.vertex-DVi36ua2.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplattingVoxel.vertex-DEB_NBPr.js",
+    "ArcherPreviewSite/assets/babylon~gaussianSplattingVoxel.vertex-lZlUfadH.js",
+    "ArcherPreviewSite/assets/babylon~hdrTextureLoader-CR982F7A.js",
+    "ArcherPreviewSite/assets/babylon~index-CGOaz6Zs.js",
+    "ArcherPreviewSite/assets/babylon~index~envTextureLoader~dumpTools.pure-D3y0jcSd.js",
+    "ArcherPreviewSite/assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure-BXvkfm9g.js",
+    "ArcherPreviewSite/assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure~dumpTools.pure-LT7IFK5B.js",
+    "ArcherPreviewSite/assets/babylon~index~openpbrMaterialLoadingAdapter~pbrMaterial.pure~openpbrMaterial.pure-CQ2RRvE9.js",
+    "ArcherPreviewSite/assets/babylon~index~pbrMaterial.pure~openpbrMaterial.pure-B7DR5Hlw.js",
+    "ArcherPreviewSite/assets/babylon~tgaTextureLoader-CAa-i29y.js",
+    "ArcherPreviewSite/assets/index-C2IzR3i7.js",
+    "ArcherPreviewSite/index.html",
+    "ArcherPreviewSite/deployment-files.json"
+  ]
+}

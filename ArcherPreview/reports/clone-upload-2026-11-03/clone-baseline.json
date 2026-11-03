@@ -1,0 +1,211 @@
+{
+  "scope": "Babylon 9.31 NullEngine, actual packed mesh/skin/morph geometry; material images skipped. Four source.clone calls per eligible mesh; does not measure GPU or phone FPS.",
+  "results": [
+    {
+      "id": "warrior-v3",
+      "kind": "warrior",
+      "meshes": 34,
+      "eligible": 2,
+      "observed": {
+        "refreshes": 8,
+        "skinAndMorphRefreshes": 8,
+        "skeletonClones": 0,
+        "morphClones": 0
+      },
+      "samples": [
+        {
+          "name": "Bunnyguard_Shield",
+          "vertices": 6914,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 1.9133999999999105,
+          "warmMedianMs": 0.48349999999982174,
+          "countsAfterDispose": {
+            "meshes": 34,
+            "geometries": 33,
+            "skeletons": 2,
+            "morphManagers": 0
+          }
+        },
+        {
+          "name": "Golden_Oathblade",
+          "vertices": 6855,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 0.45830000000000837,
+          "warmMedianMs": 0.37429999999994834,
+          "countsAfterDispose": {
+            "meshes": 34,
+            "geometries": 33,
+            "skeletons": 2,
+            "morphManagers": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "guardian-bear",
+      "kind": "bear",
+      "meshes": 2,
+      "eligible": 1,
+      "observed": {
+        "refreshes": 4,
+        "skinAndMorphRefreshes": 4,
+        "skeletonClones": 0,
+        "morphClones": 0
+      },
+      "samples": [
+        {
+          "name": "output_unwrapped",
+          "vertices": 41898,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 9.769900000000007,
+          "warmMedianMs": 19.57400000000007,
+          "countsAfterDispose": {
+            "meshes": 2,
+            "geometries": 1,
+            "skeletons": 1,
+            "morphManagers": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "hooded-goblin",
+      "kind": "goblin",
+      "meshes": 2,
+      "eligible": 1,
+      "observed": {
+        "refreshes": 4,
+        "skinAndMorphRefreshes": 4,
+        "skeletonClones": 0,
+        "morphClones": 0
+      },
+      "samples": [
+        {
+          "name": "output_unwrapped",
+          "vertices": 18403,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 4.261199999999917,
+          "warmMedianMs": 3.8631000000000313,
+          "countsAfterDispose": {
+            "meshes": 2,
+            "geometries": 1,
+            "skeletons": 1,
+            "morphManagers": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "elena",
+      "kind": "elena",
+      "meshes": 2,
+      "eligible": 1,
+      "observed": {
+        "refreshes": 4,
+        "skinAndMorphRefreshes": 4,
+        "skeletonClones": 0,
+        "morphClones": 0
+      },
+      "samples": [
+        {
+          "name": "Elena_Meshy_Static",
+          "vertices": 96734,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 17.837999999999965,
+          "warmMedianMs": 24.400700000000143,
+          "countsAfterDispose": {
+            "meshes": 2,
+            "geometries": 1,
+            "skeletons": 1,
+            "morphManagers": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "mourning-elena",
+      "kind": "elena",
+      "meshes": 5,
+      "eligible": 3,
+      "observed": {
+        "refreshes": 12,
+        "skinAndMorphRefreshes": 12,
+        "skeletonClones": 0,
+        "morphClones": 0
+      },
+      "samples": [
+        {
+          "name": "Halo_Attached_Streamers",
+          "vertices": 287,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 0.6538999999997941,
+          "warmMedianMs": 0.35829999999987194,
+          "countsAfterDispose": {
+            "meshes": 5,
+            "geometries": 4,
+            "skeletons": 2,
+            "morphManagers": 2
+          }
+        },
+        {
+          "name": "Halo_Rigid_Emblem",
+          "vertices": 4014,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 0,
+          "firstMs": 0.8789000000001579,
+          "warmMedianMs": 0.9474999999997635,
+          "countsAfterDispose": {
+            "meshes": 5,
+            "geometries": 4,
+            "skeletons": 2,
+            "morphManagers": 2
+          }
+        },
+        {
+          "name": "Elina_Chimera_Skin",
+          "vertices": 36196,
+          "geometry": true,
+          "skeleton": true,
+          "morph": true,
+          "submeshes": 1,
+          "morphTargets": 11,
+          "firstMs": 10.011299999999665,
+          "warmMedianMs": 8.08680000000004,
+          "countsAfterDispose": {
+            "meshes": 5,
+            "geometries": 4,
+            "skeletons": 2,
+            "morphManagers": 2
+          }
+        }
+      ]
+    }
+  ]
+}

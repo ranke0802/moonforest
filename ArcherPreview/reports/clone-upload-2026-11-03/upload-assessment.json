@@ -1,0 +1,71 @@
+{
+  "baseline": "c020469",
+  "runtimeChanges": ["src/boss-gpu-preparation.js", "src/boss-models.js load import/call only; independently added modelTimings preserved"],
+  "verifiedCauseAndFix": {
+    "cause": "Babylon glTF default useMaxMorphTargetInfluencers unfreezes a manager, creating its packed morph texture, then changes numMaxInfluencers, which synchronizes and creates the identical texture again.",
+    "sdkEvidence": ["node_modules/@babylonjs/loaders/glTF/2.0/glTFLoader.pure.js:1032", "node_modules/@babylonjs/loaders/glTF/2.0/glTFLoader.pure.js:1043", "node_modules/@babylonjs/core/Morph/morphTargetManager.js:126", "node_modules/@babylonjs/core/Morph/morphTargetManager.js:393", "node_modules/@babylonjs/core/Morph/morphTargetManager.js:538"],
+    "fix": "For this boss load only, public module LoadAssetContainerAsync receives gltf.onMeshLoaded. At this synchronous callback targets exist and the manager is still frozen. Set the exact same default final optimizeInfluencers/max slots before the first unfreeze. Use public fields only, with the same attribute and texture-array-layer eligibility as the loader.",
+    "baselineMorphArrayCalls": 4,
+    "optimizedMorphArrayCalls": 2,
+    "bodyDuplicateInputBytesRemoved": 12976128,
+    "mouthDuplicateInputBytesRemoved": 8960,
+    "totalDuplicateInputBytesRemoved": 12985088,
+    "totalDuplicateInputMiBRemoved": 12.383544921875,
+    "baselineInputBytes": 25970176,
+    "optimizedInputBytes": 12985088,
+    "texturePayloadHashesEqual": true,
+    "geometryTargetsInitialInfluencesAndFinalLoaderPolicyEqual": true,
+    "interpretation": "Removed duplicate CPU packing and texture-array input payload. This is not a measured GPU-time reduction or a measured VRAM saving."
+  },
+  "lifecycleFindings": [
+    {
+      "stage": "model load",
+      "classification": "verified SDK CPU events on actual packed assets",
+      "finding": "All large geometry vertex/index creation and the witch morph texture-array creation occur before the loader resolves. Hidden material isReady is not what triggers those already-created uploads.",
+      "vertexAndIndexInputBytes": {"guardian-bear": 3376656, "hooded-goblin": 1019428, "elena": 5713184, "mourning-elena": 2678572},
+      "source": ["node_modules/@babylonjs/core/Buffers/buffer.pure.js:112", "node_modules/@babylonjs/core/Meshes/geometry.js:627", "node_modules/@babylonjs/core/Engines/thinEngine.pure.js:1075", "node_modules/@babylonjs/core/Engines/thinEngine.pure.js:1128"]
+    },
+    {
+      "stage": "model instance / adoption",
+      "classification": "verified SDK CPU events on actual production library paths",
+      "finding": "Independent bear/goblin skeleton clones create their small own matrix texture at instantiate; Elena and Mourning adopt the resident container and have no SDK model clone or geometry/morph reupload. These independent skeleton resources are required for independent poses.",
+      "boneMatrixInputBytesPerTexture": {"guardian-bear": 3776, "hooded-goblin": 2432, "elena": 5888, "mourning-elena-total-two-skeletons": 16448},
+      "source": ["src/boss-models.js", "node_modules/@babylonjs/core/Bones/skeleton.js:602"]
+    },
+    {
+      "stage": "hidden preparation and isReady",
+      "classification": "verified SDK CPU events on actual encounters",
+      "finding": "Large geometry/morph allocations are already complete. Existing small warning/contact geometry is prepared, shader effects are checked, and outline bounds may update the existing bone matrix texture. No large geometry or morph texture reupload occurs here."
+    },
+    {
+      "stage": "first displayed frame, repeated frames and fade",
+      "classification": "verified SDK CPU events plus explicit GPU limitation",
+      "finding": "No new large geometry or morph creation was observed. Bone matrices update on the first draw and on subsequent frames with the same normal policy: 2,432 to 16,448 input bytes per actor per frame in these fixtures. First non-Elena warning visibility updates its 1,560-byte position buffer. Removing these updates would change animation/ground conformity, so they were preserved."
+    },
+    {
+      "stage": "GPU-specific first use",
+      "classification": "source-inferred path; unmeasured on a real GPU",
+      "finding": "First real draw can still establish a VAO and submit bindings/uniforms. Image/KTX upload paths, driver validation, deferred queue execution and actual GPU completion are not measured by NullEngine. Existing material readiness does not prove that first draw has zero GPU cost.",
+      "source": ["node_modules/@babylonjs/core/Meshes/geometry.js:322", "node_modules/@babylonjs/core/Engines/thinEngine.pure.js:1312", "node_modules/@babylonjs/core/Engines/thinEngine.pure.js:2597", "node_modules/@babylonjs/core/Engines/Extensions/engine.rawTexture.pure.js:130"]
+    }
+  ],
+  "verification": {
+    "focusedTests": 39,
+    "passed": 39,
+    "durationSeconds": 5.372,
+    "newRegressionCases": 8,
+    "regressionReport": "reports/clone-upload-2026-11-03/upload-validation.json",
+    "checks": ["Actual public glTF plugin options and root URL", "Actual BossModelLibrary source config fetch cache:no-cache, failure reset/retry, one cached successful model load and modelTimings", "Same geometry/targets/final initial influence state", "No-texture and four-layer fallback", "Overlapping boss and generic pin=false public loaders", "Container disposal/reload", "Already-ready and disposed mesh guards", "Cancelled I/O and truncated JSON reject/retry with no pending scene data", "No additional geometry/morph creation on first actual draw and fade"]
+  },
+  "optionalS23DiagnosticProposalForRoot": {
+    "status": "proposal only; existing diagnostics UI was not changed by this agent",
+    "trigger": "Only while the existing boss diagnostic records loading/preparation and the first few visible frames; restore wrappers when recording ends or the scene disposes.",
+    "measure": ["Per-engine CPU submission-call count, exact typed-array inputBytes, CPU elapsed call time, stage and maximum call time", "Separate regular per-frame bone matrix updateRawTexture calls from new geometry/morph/image creation", "For non-typed image sources record unknown payload bytes and dimensions instead of inventing compressed or VRAM bytes"],
+    "candidateEndpoints": ["createIndexBuffer and _createVertexBuffer", "updateRawTexture2DArray", "updateRawTexture for bones", "_uploadCompressedDataToTextureDirectly / _uploadDataToTextureDirectly for image/KTX payloads", "recordVertexArrayObject as a separate first-bind event"],
+    "avoidDoubleCounting": "Count leaf upload endpoints or suppress nested create-to-update calls. Do not add both createRawTexture2DArray and its internal update as two uploads.",
+    "overheadBound": "Keep scalar counters and a short bounded stage histogram. No payload copies, hashes, stack traces, per-event unbounded arrays, readbacks, hidden draws, GPU fences or forced finish.",
+    "labels": "CPU upload API call ms and submitted input bytes, never GPU elapsed ms. A long CPU call can include synchronous driver overhead but does not measure GPU execution. Correlate with the existing frame spike timeline without declaring causal GPU time."
+  },
+  "preserved": ["Existing 8K/4K image content and LOD", "All model vertex/index/skin/morph target bytes", "Existing animations, combat and damage", "No hidden draw, readPixels, fence, finish or new render target", "No global loader observer, engine prototype patch or dependency edit"],
+  "limitations": ["Actual Node execution uses Babylon NullEngine. Texture arrays use an inert raw texture shim; actual model images/KTX are omitted.", "Node native call times in the baseline probe are not device GPU measurements or a useful mobile FPS estimate.", "The optimized hook belongs to the repository's existing default max-influencer=true boss loading contract. Independently configured pin=false loaders remain unchanged. A new external global observer mutating the boss loader policy after activation is outside this contract and is absent from the repository."]
+}

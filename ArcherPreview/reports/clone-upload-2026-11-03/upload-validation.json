@@ -1,0 +1,149 @@
+{
+  "baseline": "c020469",
+  "passed": true,
+  "cases": [
+    {
+      "case": "actual-byte-identical-morph-upload-dedup",
+      "baselineCalls": 4,
+      "optimizedCalls": 2,
+      "baselineInputBytes": 25970176,
+      "optimizedInputBytes": 12985088,
+      "duplicateInputBytesRemoved": 12985088,
+      "baselineUploads": [
+        {
+          "bytes": 12976128,
+          "width": 4096,
+          "height": 18,
+          "depth": 11,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16"
+        },
+        {
+          "bytes": 12976128,
+          "width": 4096,
+          "height": 18,
+          "depth": 11,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16"
+        },
+        {
+          "bytes": 8960,
+          "width": 560,
+          "height": 1,
+          "depth": 1,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee"
+        },
+        {
+          "bytes": 8960,
+          "width": 560,
+          "height": 1,
+          "depth": 1,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee"
+        }
+      ],
+      "optimizedUploads": [
+        {
+          "bytes": 12976128,
+          "width": 4096,
+          "height": 18,
+          "depth": 11,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16"
+        },
+        {
+          "bytes": 8960,
+          "width": 560,
+          "height": 1,
+          "depth": 1,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee"
+        }
+      ],
+      "allGeometryTargetsAndLoaderInfluencesIdentical": true,
+      "noAdditionalUploadDuringPrepareAsset": true
+    },
+    {
+      "case": "unchanged-fallback",
+      "options": {
+        "texture": false,
+        "layers": 256
+      },
+      "actualBodyTargets": 11,
+      "bodyMaxAfterPreparation": 11,
+      "snapshotsIdentical": true,
+      "baselineTextureCalls": 0,
+      "optimizedTextureCalls": 0
+    },
+    {
+      "case": "unchanged-fallback",
+      "options": {
+        "texture": true,
+        "layers": 4
+      },
+      "actualBodyTargets": 11,
+      "bodyMaxAfterPreparation": 11,
+      "snapshotsIdentical": true,
+      "baselineTextureCalls": 2,
+      "optimizedTextureCalls": 1
+    },
+    {
+      "case": "actual-public-wrapper-and-first-draw",
+      "requested": [
+        {
+          "url": "https://assets.example.test/preview/assets/content/witch.gltf",
+          "useArrayBuffer": false
+        }
+      ],
+      "textureArrayCalls": 2,
+      "newGeometryOrMorphCreatesOnFirstDrawAndDeath": 0,
+      "perFrameBoneUpdatesPreserved": true,
+      "pendingSceneItems": 0
+    },
+    {
+      "case": "scoped-loader-disposal-and-abort",
+      "unrelatedDefaultTextureCalls": 4,
+      "disposedOrReadyManagerChanged": false,
+      "failedUploadCalls": 0,
+      "pendingSceneItems": 0,
+      "requests": 1
+    },
+    {
+      "case": "concurrent-public-loads-and-dispose-reload",
+      "genericPinning": false,
+      "genericFinalMaxInfluencers": 0,
+      "bossFinalMaxInfluencers": "numTargets",
+      "initialTextureCalls": 4,
+      "reloadTextureCalls": 2,
+      "requests": 3,
+      "pendingSceneItems": 0
+    },
+    {
+      "case": "truncated-public-load-then-retry",
+      "failedUploadCalls": 0,
+      "retryTextureCalls": 2,
+      "pendingSceneItems": 0
+    },
+    {
+      "case": "actual-library-network-cache-retry",
+      "fetches": [
+        {
+          "url": "https://assets.example.test/preview/assets/mourning-elena.json",
+          "cache": "no-cache"
+        },
+        {
+          "url": "https://assets.example.test/preview/assets/mourning-elena.json",
+          "cache": "no-cache"
+        }
+      ],
+      "modelRequestsBeforeFailure": 1,
+      "modelRequestsAfterRetry": 1,
+      "successfulLibraryLoads": 1,
+      "morphTextureCalls": 2,
+      "modelTimingsPreserved": true
+    }
+  ],
+  "scope": "Actual Babylon 9.31 loader, packed geometry/skin/morph CPU payload events, actual public module loader wrapper and BossModelLibrary source with Vite environment bound for Node.",
+  "limitations": [
+    "NullEngine cannot measure GPU upload, allocation, driver queue completion, elapsed GPU time or mobile FPS.",
+    "Model images/KTX omitted; first geometry/morph data are real. Texture-array calls use an inert NullEngine raw texture shim.",
+    "Removed bytes are duplicate CPU packing and texture-array input payload; they are not measured GPU memory savings or a GPU-time improvement.",
+    "Only the existing boss default max-influencer=true loader is optimized. Independently configured pin=false loaders are verified unchanged; an external global observer mutating the boss loader policy after activation is outside this contract and does not exist in the repository."
+  ],
+  "browserAutomation": false
+}

@@ -1,0 +1,365 @@
+{
+  "scope": "Real packed glTF geometry/animation data, Babylon NullEngine, materials skipped. Desktop CPU, instrumented timings inclusive/overlapping; forced SDK clones for residents are investigative only. No GPU upload/device FPS.",
+  "results": [
+    {
+      "id": "guardian-bear",
+      "counts": {
+        "meshes": 2,
+        "transforms": 60,
+        "skeletons": 1,
+        "bones": 58,
+        "groups": 20,
+        "tracks": 3480,
+        "morphManagers": 0
+      },
+      "runtimeCalls": [
+        {
+          "ms": 27.745799999999917,
+          "meshes": 2,
+          "nodes": 60,
+          "skeletons": 1,
+          "groups": 20
+        },
+        {
+          "ms": 12.47180000000003,
+          "meshes": 2,
+          "nodes": 60,
+          "skeletons": 1,
+          "groups": 20
+        },
+        {
+          "ms": 11.458899999999858,
+          "meshes": 2,
+          "nodes": 60,
+          "skeletons": 1,
+          "groups": 20
+        },
+        {
+          "ms": 11.204400000000078,
+          "meshes": 2,
+          "nodes": 60,
+          "skeletons": 1,
+          "groups": 20
+        },
+        {
+          "ms": 20.321500000000015,
+          "meshes": 2,
+          "nodes": 60,
+          "skeletons": 1,
+          "groups": 20
+        }
+      ],
+      "actualRuntimeInstantiateModelsCalls": 5,
+      "instrumentedForcedSdkClone": {
+        "ms": 12.34030000000007,
+        "descendantScanMs": 0.08600000000001273,
+        "meshes": 2,
+        "transforms": 60,
+        "skeletons": 1,
+        "groups": 20,
+        "inclusiveTimings": {
+          "topologicalSort": {
+            "calls": 1,
+            "ms": 0.201799999999821
+          },
+          "meshVertexData": {
+            "calls": 2,
+            "ms": 8.62279999999987
+          },
+          "meshRefreshBounds": {
+            "calls": 2,
+            "ms": 8.78469999999993
+          },
+          "meshClone": {
+            "calls": 2,
+            "ms": 9.77780000000007
+          },
+          "transformClone": {
+            "calls": 60,
+            "ms": 0.2582000000006701
+          },
+          "applyGeometry": {
+            "calls": 1,
+            "ms": 0.04970000000002983
+          },
+          "applySkeleton": {
+            "calls": 1,
+            "ms": 5.664300000000139
+          },
+          "skeletonClone": {
+            "calls": 1,
+            "ms": 0.7897000000000389
+          },
+          "animationGroupClone": {
+            "calls": 20,
+            "ms": 0.989699999999857
+          }
+        }
+      }
+    },
+    {
+      "id": "hooded-goblin",
+      "counts": {
+        "meshes": 2,
+        "transforms": 39,
+        "skeletons": 1,
+        "bones": 37,
+        "groups": 12,
+        "tracks": 1332,
+        "morphManagers": 0
+      },
+      "runtimeCalls": [
+        {
+          "ms": 5.5914000000000215,
+          "meshes": 2,
+          "nodes": 39,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 4.583499999999958,
+          "meshes": 2,
+          "nodes": 39,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 4.4871999999998025,
+          "meshes": 2,
+          "nodes": 39,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 4.355199999999968,
+          "meshes": 2,
+          "nodes": 39,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 4.309099999999944,
+          "meshes": 2,
+          "nodes": 39,
+          "skeletons": 1,
+          "groups": 12
+        }
+      ],
+      "actualRuntimeInstantiateModelsCalls": 5,
+      "instrumentedForcedSdkClone": {
+        "ms": 12.498199999999997,
+        "descendantScanMs": 0.039800000000013824,
+        "meshes": 2,
+        "transforms": 39,
+        "skeletons": 1,
+        "groups": 12,
+        "inclusiveTimings": {
+          "topologicalSort": {
+            "calls": 1,
+            "ms": 0.08140000000003056
+          },
+          "meshVertexData": {
+            "calls": 2,
+            "ms": 11.001500000000078
+          },
+          "meshRefreshBounds": {
+            "calls": 2,
+            "ms": 11.083300000000008
+          },
+          "meshClone": {
+            "calls": 2,
+            "ms": 11.600300000000061
+          },
+          "transformClone": {
+            "calls": 39,
+            "ms": 0.1625000000003638
+          },
+          "applyGeometry": {
+            "calls": 1,
+            "ms": 0.019800000000032014
+          },
+          "applySkeleton": {
+            "calls": 1,
+            "ms": 2.0170000000000528
+          },
+          "skeletonClone": {
+            "calls": 1,
+            "ms": 0.2635999999999967
+          },
+          "animationGroupClone": {
+            "calls": 12,
+            "ms": 0.2692999999997028
+          }
+        }
+      }
+    },
+    {
+      "id": "elena",
+      "counts": {
+        "meshes": 2,
+        "transforms": 93,
+        "skeletons": 1,
+        "bones": 91,
+        "groups": 12,
+        "tracks": 3309,
+        "morphManagers": 0
+      },
+      "runtimeCalls": [
+        {
+          "ms": 0.3863000000001193,
+          "meshes": 2,
+          "nodes": 93,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 0.004899999999906868,
+          "meshes": 2,
+          "nodes": 93,
+          "skeletons": 1,
+          "groups": 12
+        },
+        {
+          "ms": 0.0017000000000280124,
+          "meshes": 2,
+          "nodes": 93,
+          "skeletons": 1,
+          "groups": 12
+        }
+      ],
+      "actualRuntimeInstantiateModelsCalls": 0,
+      "instrumentedForcedSdkClone": {
+        "ms": 27.62130000000002,
+        "descendantScanMs": 0.05600000000004002,
+        "meshes": 2,
+        "transforms": 93,
+        "skeletons": 1,
+        "groups": 12,
+        "inclusiveTimings": {
+          "topologicalSort": {
+            "calls": 1,
+            "ms": 0.2241999999998825
+          },
+          "meshVertexData": {
+            "calls": 2,
+            "ms": 16.832599999999957
+          },
+          "meshRefreshBounds": {
+            "calls": 2,
+            "ms": 17.25779999999986
+          },
+          "meshClone": {
+            "calls": 2,
+            "ms": 17.929200000000037
+          },
+          "transformClone": {
+            "calls": 93,
+            "ms": 0.3123000000002776
+          },
+          "applyGeometry": {
+            "calls": 1,
+            "ms": 0.03170000000000073
+          },
+          "applySkeleton": {
+            "calls": 1,
+            "ms": 11.487900000000081
+          },
+          "skeletonClone": {
+            "calls": 1,
+            "ms": 8.085000000000036
+          },
+          "animationGroupClone": {
+            "calls": 12,
+            "ms": 0.8171000000004369
+          }
+        }
+      }
+    },
+    {
+      "id": "mourning-elena",
+      "counts": {
+        "meshes": 5,
+        "transforms": 261,
+        "skeletons": 2,
+        "bones": 255,
+        "groups": 10,
+        "tracks": 5307,
+        "morphManagers": 2
+      },
+      "runtimeCalls": [
+        {
+          "ms": 0.2320999999999458,
+          "meshes": 5,
+          "nodes": 261,
+          "skeletons": 2,
+          "groups": 10
+        },
+        {
+          "ms": 0.005000000000109139,
+          "meshes": 5,
+          "nodes": 261,
+          "skeletons": 2,
+          "groups": 10
+        },
+        {
+          "ms": 0.008199999999987995,
+          "meshes": 5,
+          "nodes": 261,
+          "skeletons": 2,
+          "groups": 10
+        }
+      ],
+      "actualRuntimeInstantiateModelsCalls": 0,
+      "instrumentedForcedSdkClone": {
+        "ms": 65.89850000000001,
+        "descendantScanMs": 0.22720000000003893,
+        "meshes": 5,
+        "transforms": 261,
+        "skeletons": 2,
+        "groups": 10,
+        "inclusiveTimings": {
+          "topologicalSort": {
+            "calls": 1,
+            "ms": 0.5231000000001131
+          },
+          "meshVertexData": {
+            "calls": 5,
+            "ms": 9.404300000000148
+          },
+          "meshRefreshBounds": {
+            "calls": 5,
+            "ms": 9.710399999999936
+          },
+          "meshClone": {
+            "calls": 5,
+            "ms": 11.56710000000021
+          },
+          "transformClone": {
+            "calls": 261,
+            "ms": 0.6994999999990341
+          },
+          "applyGeometry": {
+            "calls": 4,
+            "ms": 0.14580000000000837
+          },
+          "applySkeleton": {
+            "calls": 3,
+            "ms": 3.803500000000213
+          },
+          "morphManagerClone": {
+            "calls": 2,
+            "ms": 49.011000000000195
+          },
+          "skeletonClone": {
+            "calls": 2,
+            "ms": 1.4632999999998901
+          },
+          "animationGroupClone": {
+            "calls": 10,
+            "ms": 1.8885999999993146
+          }
+        }
+      }
+    }
+  ]
+}

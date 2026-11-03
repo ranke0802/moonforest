@@ -1,0 +1,12 @@
+{
+  "baseline": "c020469",
+  "scope": "Read-only source review of boss-gpu-preparation.js and boss-models.js against installed Babylon 9.31; no browser, real GPU or device measurement.",
+  "findings": [
+    {"area":"callback timing", "result":"supported", "evidence":"glTFLoader.pure.js creates frozen MorphTargetManager and all target objects before notifying onMeshLoaded; geometry and target data finish asynchronously before areUpdatesFrozen=false. The public callback therefore sets the final default-loader pin policy before the first synchronization."},
+    {"area":"hardware fallback", "result":"supported", "evidence":"The helper checks texture capability through isUsingTextureForTargets and avoids texture pin assumptions when target count exceeds texture2DArrayMaxLayerCount, matching synchronize's attribute fallback and loader's MaxActiveMorphTargetsInVertexAttributeMode condition."},
+    {"area":"isolation", "result":"supported by SDK source", "evidence":"LoadAssetContainerAsync creates a new glTF plugin using options scoped to that load; no global onPluginActivated observer is installed by this change. Other loads retain their own plugin configuration."},
+    {"area":"loader configuration", "result":"conditional limitation", "evidence":"If another party changes this loader instance's useMaxMorphTargetInfluencers to false through SceneLoader.OnPluginActivatedObservable, the helper still pins targets while the original loader would not. No such observer was found in src. This is not proven equivalent for arbitrary external plugin customization."},
+    {"area":"failure and scene lifecycle", "result":"no new asynchronous work identified", "evidence":"Helper is synchronous, checks disposed scene/mesh, does not retain resources or install an observer globally. Existing BossModelLibrary rejects a failed load and resets pending for retry. End-to-end failure and disposal behavior awaits the owner’s focused integration tests."}
+  ],
+  "limitations": ["Read-only review of implementation; no independent GPU upload or visual measurements.", "The SDK allocates and uploads the actual morph texture on unfreeze; runtime hardware behavior must be measured on target devices.", "Custom activation observers changing loader options are outside the checked shipped src configuration unless handled by owner."]
+}

@@ -1,0 +1,1593 @@
+{
+  "baseline": "c020469",
+  "fileHashes": {
+    "src/boss-models.js": "fcc41f143ede2298e5b386ae7f4c92519ef147470c93c84ed28d6b38818322ba",
+    "src/boss-shader-warmup.js": "7ee9c55eb3560803c55f14f5f2f5685463facd67e1e1afbbe0a8a0ced54ee133",
+    "src/character-outlines.js": "287f9f7cdae2e2f0ea52787fd3a2d47cf3487e8455a8a366c7298ed7f70b68a9",
+    "src/mourning-elena-encounter.js": "32dba6c847012b8d4cd34e34b916e2fc6614bf33f4929f2734ed4f1f45f166c1"
+  },
+  "results": [
+    {
+      "manifest": "guardian-bear",
+      "vertices": 41898,
+      "summary": {
+        "load / createVertexBuffer": {
+          "calls": 7,
+          "inputBytes": 3016656,
+          "cpuCallMs": 0.027900000000272485
+        },
+        "load / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 360000,
+          "cpuCallMs": 0.00980000000004111
+        },
+        "load / createRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.01470000000017535
+        },
+        "load / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.015100000000074942
+        },
+        "instantiate / createRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.01410000000009859
+        },
+        "instantiate / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.0010000000002037268
+        },
+        "prepare:outline:output_unwrapped / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.0018999999999778083
+        },
+        "prepare:pose-and-warning-resources / createDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.01209999999991851
+        },
+        "prepare:pose-and-warning-resources / createVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0027999999999792635
+        },
+        "prepare:pose-and-warning-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 1536,
+          "cpuCallMs": 0.0004999999998744897
+        },
+        "first-auxiliary-show / updateDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.007499999999936335
+        },
+        "first-draw / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.003200000000106229
+        },
+        "repeat-draw / updateRawTexture": {
+          "calls": 3,
+          "inputBytes": 11328,
+          "cpuCallMs": 0.0039999999999054126
+        },
+        "death-fade / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 3776,
+          "cpuCallMs": 0.001199999999926149
+        }
+      },
+      "textureMorphUploads": [],
+      "duplicateIdenticalMorphUploadCount": 0,
+      "duplicateIdenticalMorphUploadBytes": 0,
+      "events": [
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 502776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.023500000000012733,
+          "hash": "7a1f049cd7b19251ad4bee9e3b4e8c9220cd36aa0a8c68bb35ebc8b0c6f04ad3"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 502776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0009000000000014552,
+          "hash": "7c390537a5d0335fb79e04957ba0db8bdc1e8e3e2926ce0976c0e2c3ba37bd76"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 335184,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00040000000012696546,
+          "hash": "a00c5e54c0dbef1148dd1fca0ec20e1ac6a39c8a28ea3e0551fa66458d9e1458"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 167592,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003000000001520675,
+          "hash": "761cdbf59420beed2eefd7e153855230a05cb9af8e45eb0d85864fcc0e24fd2f"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 670368,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001299999999901047,
+          "hash": "1afc842a906a7d392dcc2d8fde1cbaa5cdf462085c0d5369eb99040a2e6ab1f1"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 167592,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0007000000000516593,
+          "hash": "d5cece5e9498cb617cc3beb694861ed056c4150a5d5f533ac700fce7213c2aa1"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 670368,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0008000000000265572,
+          "hash": "080488472c588b744d641cb50b063a1e2977c6c8bffb82251ab30aada0520c04"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 360000,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00980000000004111,
+          "hash": "38bd785adf6c6a4b4ddb1e6e9d1d9ccd598688e16db5b8fcffbea56c844efdb1"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.01470000000017535,
+          "hash": "0762a4678ac1a3275480f3a6a8e523bdb8b4dab9e7138add7adb03ed1f4edd06",
+          "width": 236,
+          "height": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.015100000000074942,
+          "hash": "301b9e7ec9a8a2dd2adc9ba510be7cd1c53e821220ece6a872ff0973a23c3de9"
+        },
+        {
+          "stage": "instantiate",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.01410000000009859,
+          "hash": "0762a4678ac1a3275480f3a6a8e523bdb8b4dab9e7138add7adb03ed1f4edd06",
+          "width": 236,
+          "height": 1
+        },
+        {
+          "stage": "instantiate",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0010000000002037268,
+          "hash": "301b9e7ec9a8a2dd2adc9ba510be7cd1c53e821220ece6a872ff0973a23c3de9"
+        },
+        {
+          "stage": "prepare:outline:output_unwrapped",
+          "slice": 23,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0018999999999778083,
+          "hash": "301b9e7ec9a8a2dd2adc9ba510be7cd1c53e821220ece6a872ff0973a23c3de9"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 24,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.01209999999991851,
+          "hash": "0ae208d8333b8d56b0871129f974ea63ad90303e5087fd1092d7cc7a66e85ed6"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 24,
+          "method": "createVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0027999999999792635,
+          "hash": "de58c3199f08b7c5c45e91777fb12e565ced0db2cb3dc6dd9d89d7e51d8d5d47"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 24,
+          "method": "createIndexBuffer",
+          "inputBytes": 1536,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0004999999998744897,
+          "hash": "a0e99f99c08393939312247e9e29ae33a87db83cd8b5e8df7e433867212c0264"
+        },
+        {
+          "stage": "first-auxiliary-show",
+          "slice": 32,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.007499999999936335,
+          "hash": "1a5e02887f0dda12d7d0d8d4a467d1dc79e785f2fcdcfcb5c930ccb97d4ebca4"
+        },
+        {
+          "stage": "first-draw",
+          "slice": 32,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.003200000000106229,
+          "hash": "fbb61100da742e04d0319cb2366eed1f087912ef5523cdef5431e70abd8e90be"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 32,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0016000000000531145,
+          "hash": "fbb61100da742e04d0319cb2366eed1f087912ef5523cdef5431e70abd8e90be"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 32,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001199999999926149,
+          "hash": "fbb61100da742e04d0319cb2366eed1f087912ef5523cdef5431e70abd8e90be"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 32,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001199999999926149,
+          "hash": "fbb61100da742e04d0319cb2366eed1f087912ef5523cdef5431e70abd8e90be"
+        },
+        {
+          "stage": "death-fade",
+          "slice": 32,
+          "method": "updateRawTexture",
+          "inputBytes": 3776,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001199999999926149,
+          "hash": "fbb61100da742e04d0319cb2366eed1f087912ef5523cdef5431e70abd8e90be"
+        }
+      ]
+    },
+    {
+      "manifest": "hooded-goblin",
+      "vertices": 18403,
+      "summary": {
+        "load / createVertexBuffer": {
+          "calls": 5,
+          "inputBytes": 956956,
+          "cpuCallMs": 0.005599999999731153
+        },
+        "load / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 62472,
+          "cpuCallMs": 0.00430000000005748
+        },
+        "load / createRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.015300000000024738
+        },
+        "load / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.0014000000001033186
+        },
+        "instantiate / createRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.03149999999982356
+        },
+        "instantiate / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.0018000000000029104
+        },
+        "prepare:outline:output_unwrapped / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.0009999999999763531
+        },
+        "prepare:pose-and-warning-resources / createDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0019999999999527063
+        },
+        "prepare:pose-and-warning-resources / createVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0009999999999763531
+        },
+        "prepare:pose-and-warning-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 1536,
+          "cpuCallMs": 0.00040000000012696546
+        },
+        "first-auxiliary-show / updateDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.00680000000011205
+        },
+        "first-draw / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.0008000000000265572
+        },
+        "repeat-draw / updateRawTexture": {
+          "calls": 3,
+          "inputBytes": 7296,
+          "cpuCallMs": 0.0017000000000280124
+        },
+        "death-fade / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 2432,
+          "cpuCallMs": 0.0005000000001018634
+        }
+      },
+      "textureMorphUploads": [],
+      "duplicateIdenticalMorphUploadCount": 0,
+      "duplicateIdenticalMorphUploadBytes": 0,
+      "events": [
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 220836,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0039999999999054126,
+          "hash": "0b86a5094984112e506fe7d708f642416a354acb6a14d236626661adfd8d3e91"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 220836,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0009000000000014552,
+          "hash": "e45d35458ef200d6f94e41e92589403c5e128cd10ecff441295f8d65324cc7ae"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 147224,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00029999999992469384,
+          "hash": "7a20f6853f9c4a13beb93561375cfbd1f8df902602385f1a8ccb6cc1c74ba509"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 73612,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "d46ae9cb9b1c7827c681613223becbc3f721bdd90bbe26764e5ae64af38536b4"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 294448,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "f7709b93a45e9fe0a0a0f51c12879d64d1a98b29b3c7607a2fe8c7b842e4bdc8"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 62472,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00430000000005748,
+          "hash": "4b277632ccab050dadefe653f6c8e435101d53a9453d36d9c01003ea0fb87b78"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.015300000000024738,
+          "hash": "0d941f3db0103709b44380ee8852d477b59c983d24272dfecbd6750fd42251d0",
+          "width": 152,
+          "height": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0014000000001033186,
+          "hash": "dd5379755ead6e02a6a585bff34d6d0363cbf660aed5fca94db89974b8fe0114"
+        },
+        {
+          "stage": "instantiate",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.03149999999982356,
+          "hash": "0d941f3db0103709b44380ee8852d477b59c983d24272dfecbd6750fd42251d0",
+          "width": 152,
+          "height": 1
+        },
+        {
+          "stage": "instantiate",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0018000000000029104,
+          "hash": "dd5379755ead6e02a6a585bff34d6d0363cbf660aed5fca94db89974b8fe0114"
+        },
+        {
+          "stage": "prepare:outline:output_unwrapped",
+          "slice": 3,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0009999999999763531,
+          "hash": "dd5379755ead6e02a6a585bff34d6d0363cbf660aed5fca94db89974b8fe0114"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0019999999999527063,
+          "hash": "0ae208d8333b8d56b0871129f974ea63ad90303e5087fd1092d7cc7a66e85ed6"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0009999999999763531,
+          "hash": "de58c3199f08b7c5c45e91777fb12e565ced0db2cb3dc6dd9d89d7e51d8d5d47"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createIndexBuffer",
+          "inputBytes": 1536,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00040000000012696546,
+          "hash": "a0e99f99c08393939312247e9e29ae33a87db83cd8b5e8df7e433867212c0264"
+        },
+        {
+          "stage": "first-auxiliary-show",
+          "slice": 12,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00680000000011205,
+          "hash": "74f12c12162e314757709baf55cc9f28744112106e35ee3f823f2626459e9030"
+        },
+        {
+          "stage": "first-draw",
+          "slice": 12,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0008000000000265572,
+          "hash": "cdbf6407305d66937bf7710e66adc0bb21ba21b219417c35d2b6d42df1b9c8ae"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 12,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0007000000000516593,
+          "hash": "cdbf6407305d66937bf7710e66adc0bb21ba21b219417c35d2b6d42df1b9c8ae"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 12,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0004999999998744897,
+          "hash": "cdbf6407305d66937bf7710e66adc0bb21ba21b219417c35d2b6d42df1b9c8ae"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 12,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005000000001018634,
+          "hash": "cdbf6407305d66937bf7710e66adc0bb21ba21b219417c35d2b6d42df1b9c8ae"
+        },
+        {
+          "stage": "death-fade",
+          "slice": 12,
+          "method": "updateRawTexture",
+          "inputBytes": 2432,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005000000001018634,
+          "hash": "cdbf6407305d66937bf7710e66adc0bb21ba21b219417c35d2b6d42df1b9c8ae"
+        }
+      ]
+    },
+    {
+      "manifest": "elena",
+      "vertices": 96734,
+      "summary": {
+        "load / createVertexBuffer": {
+          "calls": 5,
+          "inputBytes": 5030168,
+          "cpuCallMs": 0.009499999999889042
+        },
+        "load / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 683016,
+          "cpuCallMs": 0.0029999999999290594
+        },
+        "load / createRawTexture": {
+          "calls": 1,
+          "inputBytes": 5888,
+          "cpuCallMs": 0.009600000000091313
+        },
+        "load / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 5888,
+          "cpuCallMs": 0.0005000000001018634
+        },
+        "prepare:outline:Elena_Meshy_Static / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 5888,
+          "cpuCallMs": 0.0015999999998257408
+        },
+        "prepare:pose-and-warning-resources / createDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.002100000000154978
+        },
+        "prepare:pose-and-warning-resources / createVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0006000000000767614
+        },
+        "prepare:pose-and-warning-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 1536,
+          "cpuCallMs": 0.0006000000000767614
+        },
+        "prepare-hidden / createDynamicVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.002199999999902502
+        },
+        "prepare-hidden / createVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.0010999999997238774
+        },
+        "prepare-hidden / createIndexBuffer": {
+          "calls": 2,
+          "inputBytes": 24,
+          "cpuCallMs": 0.0009000000000014552
+        },
+        "prepare-hidden / updateDynamicVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.0006000000000767614
+        },
+        "prepare:contact-resources / createVertexBuffer": {
+          "calls": 3,
+          "inputBytes": 128,
+          "cpuCallMs": 0.0017000000002553861
+        },
+        "prepare:contact-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 24,
+          "cpuCallMs": 0.0009999999999763531
+        },
+        "first-draw / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 5888,
+          "cpuCallMs": 0.0009000000000014552
+        },
+        "repeat-draw / updateRawTexture": {
+          "calls": 3,
+          "inputBytes": 17664,
+          "cpuCallMs": 0.00200000000018008
+        },
+        "death-fade / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 5888,
+          "cpuCallMs": 0.0004999999998744897
+        }
+      },
+      "textureMorphUploads": [],
+      "duplicateIdenticalMorphUploadCount": 0,
+      "duplicateIdenticalMorphUploadBytes": 0,
+      "events": [
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 1160808,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.007799999999861029,
+          "hash": "5e6e4b2107b8291f7de536dad6e92a7f7be4086d8d41c63598254cf06e23de92"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 1160808,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0008000000000265572,
+          "hash": "47061d413abd8d18f2d7f8fa953555eb33617ee9ce733627dc0399d85ed3d13e"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 773872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00040000000012696546,
+          "hash": "cf88fec643fb11d23c6b7835e0ca5f9aedb877bb315123ffaf1b12a46b9c102d"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 386936,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "8b2f41feb25f17846d77b69031096b1d69c50d755996fa2ca9cd822c5f6cea6c"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 1547744,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00029999999992469384,
+          "hash": "d237ff53596677df3d14683a1a6036b6f7a4509f5133bfe16227d2c12a9ab67b"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 683016,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0029999999999290594,
+          "hash": "48fdabfd26df1facc608107b3f067335bcda58aa973c90074659cfa37c2cab93"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.009600000000091313,
+          "hash": "2cc2784c0ddcd0769b915ab468a65b378a10302cf058230ac75c9735750559d8",
+          "width": 368,
+          "height": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005000000001018634,
+          "hash": "2718677f34cbe7beb4795be7fc24cebe1c243e51f17c641089e37d590c035fbe"
+        },
+        {
+          "stage": "prepare:outline:Elena_Meshy_Static",
+          "slice": 3,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0015999999998257408,
+          "hash": "2718677f34cbe7beb4795be7fc24cebe1c243e51f17c641089e37d590c035fbe"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.002100000000154978,
+          "hash": "0ae208d8333b8d56b0871129f974ea63ad90303e5087fd1092d7cc7a66e85ed6"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0006000000000767614,
+          "hash": "de58c3199f08b7c5c45e91777fb12e565ced0db2cb3dc6dd9d89d7e51d8d5d47"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 4,
+          "method": "createIndexBuffer",
+          "inputBytes": 1536,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0006000000000767614,
+          "hash": "a0e99f99c08393939312247e9e29ae33a87db83cd8b5e8df7e433867212c0264"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0016000000000531145,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0006999999998242856,
+          "hash": "4e9f1cf63b19853749924b2a375e24a50a592abda0f4737bbc04ff0ae2cba3f7"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createIndexBuffer",
+          "inputBytes": 12,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "75664b4da1c08de9e8fad52303cc458b3e420edde6591e58761e138cc5e3f163"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00040000000012696546,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "4e9f1cf63b19853749924b2a375e24a50a592abda0f4737bbc04ff0ae2cba3f7"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "createIndexBuffer",
+          "inputBytes": 12,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003000000001520675,
+          "hash": "75664b4da1c08de9e8fad52303cc458b3e420edde6591e58761e138cc5e3f163"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 10,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 13,
+          "method": "createVertexBuffer",
+          "inputBytes": 48,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0010000000002037268,
+          "hash": "51f43ceca46997e5bd71315c9dd510f026d8907bf98035e662663c4e7ba2b4a4"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 13,
+          "method": "createVertexBuffer",
+          "inputBytes": 48,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00040000000012696546,
+          "hash": "e1812a32d71ab746aa25aee896a1790138ef313625fb873f2be3ec50e9191e2d"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 13,
+          "method": "createVertexBuffer",
+          "inputBytes": 32,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00029999999992469384,
+          "hash": "f3a0a46301c6859e5b64beadee234c4eeec1dec8c4735dc7bf40ea09e762e189"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 13,
+          "method": "createIndexBuffer",
+          "inputBytes": 24,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0009999999999763531,
+          "hash": "ef0eac65192c9a1399b0c4ec1d74a524418f37ea3352e8f2a0cf8f8262b525de"
+        },
+        {
+          "stage": "first-draw",
+          "slice": 14,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0009000000000014552,
+          "hash": "38fbc5d6fddc3388701d8b2fb9372a9974b74eedcff6925983f0c3087acb7057"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 14,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0008000000000265572,
+          "hash": "38fbc5d6fddc3388701d8b2fb9372a9974b74eedcff6925983f0c3087acb7057"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 14,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0006000000000767614,
+          "hash": "38fbc5d6fddc3388701d8b2fb9372a9974b74eedcff6925983f0c3087acb7057"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 14,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0006000000000767614,
+          "hash": "38fbc5d6fddc3388701d8b2fb9372a9974b74eedcff6925983f0c3087acb7057"
+        },
+        {
+          "stage": "death-fade",
+          "slice": 14,
+          "method": "updateRawTexture",
+          "inputBytes": 5888,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0004999999998744897,
+          "hash": "38fbc5d6fddc3388701d8b2fb9372a9974b74eedcff6925983f0c3087acb7057"
+        }
+      ]
+    },
+    {
+      "manifest": "mourning-elena",
+      "vertices": 40777,
+      "summary": {
+        "load / createVertexBuffer": {
+          "calls": 18,
+          "inputBytes": 2113684,
+          "cpuCallMs": 0.011299999999664578
+        },
+        "load / createIndexBuffer": {
+          "calls": 4,
+          "inputBytes": 564888,
+          "cpuCallMs": 0.006799999999657302
+        },
+        "load / createRawTexture2DArray": {
+          "calls": 4,
+          "inputBytes": 25970176,
+          "cpuCallMs": 0.05209999999988213
+        },
+        "load / createRawTexture": {
+          "calls": 2,
+          "inputBytes": 16448,
+          "cpuCallMs": 0.01669999999967331
+        },
+        "load / updateRawTexture": {
+          "calls": 2,
+          "inputBytes": 16448,
+          "cpuCallMs": 0.001099999999951251
+        },
+        "prepare:outline:Halo_Attached_Streamers / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 576,
+          "cpuCallMs": 0.001299999999901047
+        },
+        "prepare:outline:Elina_Chimera_Skin / updateRawTexture": {
+          "calls": 1,
+          "inputBytes": 15872,
+          "cpuCallMs": 0.0018000000000029104
+        },
+        "prepare:pose-and-warning-resources / createDynamicVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0025000000000545697
+        },
+        "prepare:pose-and-warning-resources / createVertexBuffer": {
+          "calls": 1,
+          "inputBytes": 1560,
+          "cpuCallMs": 0.0008000000002539309
+        },
+        "prepare:pose-and-warning-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 1536,
+          "cpuCallMs": 0.0003999999998995918
+        },
+        "prepare-hidden / createDynamicVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.002199999999902502
+        },
+        "prepare-hidden / createVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.0010000000002037268
+        },
+        "prepare-hidden / createIndexBuffer": {
+          "calls": 2,
+          "inputBytes": 24,
+          "cpuCallMs": 0.0005999999998493877
+        },
+        "prepare-hidden / updateDynamicVertexBuffer": {
+          "calls": 2,
+          "inputBytes": 72,
+          "cpuCallMs": 0.0005000000001018634
+        },
+        "prepare:contact-resources / createVertexBuffer": {
+          "calls": 3,
+          "inputBytes": 128,
+          "cpuCallMs": 0.0018000000000029104
+        },
+        "prepare:contact-resources / createIndexBuffer": {
+          "calls": 1,
+          "inputBytes": 24,
+          "cpuCallMs": 0.00029999999969732016
+        },
+        "first-draw / updateRawTexture": {
+          "calls": 2,
+          "inputBytes": 16448,
+          "cpuCallMs": 0.0018999999997504347
+        },
+        "repeat-draw / updateRawTexture": {
+          "calls": 6,
+          "inputBytes": 49344,
+          "cpuCallMs": 0.0029999999992469384
+        },
+        "death-fade / updateRawTexture": {
+          "calls": 2,
+          "inputBytes": 16448,
+          "cpuCallMs": 0.0009999999997489795
+        }
+      },
+      "textureMorphUploads": [
+        {
+          "stage": "load",
+          "inputBytes": 12976128,
+          "width": 4096,
+          "height": 18,
+          "depth": 11,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16"
+        },
+        {
+          "stage": "load",
+          "inputBytes": 12976128,
+          "width": 4096,
+          "height": 18,
+          "depth": 11,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16"
+        },
+        {
+          "stage": "load",
+          "inputBytes": 8960,
+          "width": 560,
+          "height": 1,
+          "depth": 1,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee"
+        },
+        {
+          "stage": "load",
+          "inputBytes": 8960,
+          "width": 560,
+          "height": 1,
+          "depth": 1,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee"
+        }
+      ],
+      "duplicateIdenticalMorphUploadCount": 2,
+      "duplicateIdenticalMorphUploadBytes": 12985088,
+      "events": [
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 434352,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.008400000000165164,
+          "hash": "daffd8a25f4aaf3f966e41d2ee8fb3be9b02bf407d53c8cba5e9d8a99c3da578"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 434352,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003000000001520675,
+          "hash": "cf82b7f2dba6609a784556a031c7ec39871c784c9aa74207ea4ae94f3785ec50"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 289568,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "52cd560d7cc454871fdc7f851ee7d4dfff1edcc95ca8a3584f948023d2267c9c"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 144784,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "bfade71086117bf834839bb3f61ee4be4bfa6b63e2e053a2a12d05e9c8ccb28e"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 579136,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "d55a8a491a4a514f49532a0ef0f56beb58fa4b819ab35f69aece2bc304328b15"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 3360,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00010000000020227162,
+          "hash": "f54fd6daa7740327cf0836ce903bf0dea6edd0d297edc36fe2b9b5caafe54727"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 3360,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "b08881d35019b21e03a47a8816534300eebbedfbb179bd824e408250eec2c09b"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 1120,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00009999999974752427,
+          "hash": "19ffd0c6e4723c5e3a55d6cb4babbda5c61c94f696620a2b9ff6002d84b00dea"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 3444,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "331e0ddc8ccfcbdd1aec8065adac0c91ec64609b669236242217db74b15a6016"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 3444,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "c19cab9f8e9d6c06fb20e58f1e462c53f5d41957a1b0df48a1cbc3cbf7b3a603"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 2296,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "79bd936e4d3d9b42c18933eda696e929ed03f5731a9536ea9d4794af39787b91"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 1148,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00010000000020227162,
+          "hash": "16ae4f44719952d23c1762ffcac94d22e763a22cf0628487e90004d062fe0667"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 4592,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00009999999974752427,
+          "hash": "c93aa119d593ffb0f984bb0615b66342270342e66fc2e2581efb90d919e94ae9"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 48168,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00009999999974752427,
+          "hash": "dabec77fb3bb5c7ce8b9f9ca106255b9fc5131e522b8996a6bb2c2139dfce698"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 48168,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "331c72371cc347a262cdaa9fc0b605b6baae5ba06517ae0da26c8273caf7a6df"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 32112,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "5f70ab25090d31eedddd962d3ea7fb1dc375fe22997aac5f9e0e6cdd86ad07c6"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 16056,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "0026e954f143cd04f37799addea6dfe911a08dd3cb2b06f62205493717722305"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createVertexBuffer",
+          "inputBytes": 64224,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00010000000020227162,
+          "hash": "b97097a585770ea58e4f3ef635cda6d6bf99c8b5e0aa31b584fc2c4ebd937f2e"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 2256,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0041999999998552084,
+          "hash": "22508baff6701ef0d915c64a7533ba03b4be05f63526ef091f6ed6c2a09b7104"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 32064,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "aa38e5f8d43ba0bec4fdbb59d8b1f5647a1d61e94798086448e5e00d0e7a74ce"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture2DArray",
+          "inputBytes": 12976128,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.030900000000201544,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16",
+          "width": 4096,
+          "height": 18,
+          "depth": 11
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture2DArray",
+          "inputBytes": 12976128,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.010199999999713327,
+          "hash": "a5abef9090bf4f997db0507566f7d8ff656d30821455c76c5238b84647a20c16",
+          "width": 4096,
+          "height": 18,
+          "depth": 11
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture2DArray",
+          "inputBytes": 8960,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.009399999999914144,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee",
+          "width": 560,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture2DArray",
+          "inputBytes": 8960,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0016000000000531145,
+          "hash": "ef8caf5ced3a074d9e0ac1c65abf0414bc1fdc17afb27b1f877378aa866c16ee",
+          "width": 560,
+          "height": 1,
+          "depth": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 529992,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0016000000000531145,
+          "hash": "e6640b2ed03cc38ffcb5039fc4263c0ca904fad374d17ac7f1806f01be3dd721"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createIndexBuffer",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "fc04256d50c0478dced0b7a75b3ca4d4db45f2d6603ef2fc0b3a4b9cce16c072"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.003899999999703141,
+          "hash": "1a0295f4bf5986c5f74eca9153a6a4cb10b073a01a76ba4a457fd862c78966a4",
+          "width": 36,
+          "height": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005000000001018634,
+          "hash": "b94ce245435ecb6a894b282192b3b0206f17e34b773358954828cca468788db1"
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "createRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.012799999999970169,
+          "hash": "4cab2551b407bf533455a5e64771f1895f13ca23db7539d94ec34716efaf9e77",
+          "width": 992,
+          "height": 1
+        },
+        {
+          "stage": "load",
+          "slice": 0,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "714cd8b90a7e01c21e6d52f46e7855bb6b4a40fa5ee3566171806d6685fcaef9"
+        },
+        {
+          "stage": "prepare:outline:Halo_Attached_Streamers",
+          "slice": 3,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001299999999901047,
+          "hash": "b94ce245435ecb6a894b282192b3b0206f17e34b773358954828cca468788db1"
+        },
+        {
+          "stage": "prepare:outline:Elina_Chimera_Skin",
+          "slice": 6,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0018000000000029104,
+          "hash": "714cd8b90a7e01c21e6d52f46e7855bb6b4a40fa5ee3566171806d6685fcaef9"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 28,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0025000000000545697,
+          "hash": "0ae208d8333b8d56b0871129f974ea63ad90303e5087fd1092d7cc7a66e85ed6"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 28,
+          "method": "createVertexBuffer",
+          "inputBytes": 1560,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0008000000002539309,
+          "hash": "de58c3199f08b7c5c45e91777fb12e565ced0db2cb3dc6dd9d89d7e51d8d5d47"
+        },
+        {
+          "stage": "prepare:pose-and-warning-resources",
+          "slice": 28,
+          "method": "createIndexBuffer",
+          "inputBytes": 1536,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "a0e99f99c08393939312247e9e29ae33a87db83cd8b5e8df7e433867212c0264"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0018000000000029104,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0008000000002539309,
+          "hash": "4e9f1cf63b19853749924b2a375e24a50a592abda0f4737bbc04ff0ae2cba3f7"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createIndexBuffer",
+          "inputBytes": 12,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "75664b4da1c08de9e8fad52303cc458b3e420edde6591e58761e138cc5e3f163"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "4e9f1cf63b19853749924b2a375e24a50a592abda0f4737bbc04ff0ae2cba3f7"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "createIndexBuffer",
+          "inputBytes": 12,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "75664b4da1c08de9e8fad52303cc458b3e420edde6591e58761e138cc5e3f163"
+        },
+        {
+          "stage": "prepare-hidden",
+          "slice": 48,
+          "method": "updateDynamicVertexBuffer",
+          "inputBytes": 36,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00010000000020227162,
+          "hash": "3ccf37291d900cdd95b0cb981f2489f33f412c968db31e26df2103df099d3db5"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 51,
+          "method": "createVertexBuffer",
+          "inputBytes": 48,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0012000000001535227,
+          "hash": "51f43ceca46997e5bd71315c9dd510f026d8907bf98035e662663c4e7ba2b4a4"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 51,
+          "method": "createVertexBuffer",
+          "inputBytes": 48,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "e1812a32d71ab746aa25aee896a1790138ef313625fb873f2be3ec50e9191e2d"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 51,
+          "method": "createVertexBuffer",
+          "inputBytes": 32,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.0001999999999497959,
+          "hash": "f3a0a46301c6859e5b64beadee234c4eeec1dec8c4735dc7bf40ea09e762e189"
+        },
+        {
+          "stage": "prepare:contact-resources",
+          "slice": 51,
+          "method": "createIndexBuffer",
+          "inputBytes": 24,
+          "byteCountIsTypedArray": false,
+          "cpuCallMs": 0.00029999999969732016,
+          "hash": "ef0eac65192c9a1399b0c4ec1d74a524418f37ea3352e8f2a0cf8f8262b525de"
+        },
+        {
+          "stage": "first-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.001299999999901047,
+          "hash": "4b313a6dcfecbddf158243f27f577cb4c68f63ec190df1f2f41d2e69ccba39b7"
+        },
+        {
+          "stage": "first-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "2cbef364c64ef99ebd3bd4f3374127eddeee86b6ccbc13123dbbf5786c1ac4ba"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.000699999999596912,
+          "hash": "4b313a6dcfecbddf158243f27f577cb4c68f63ec190df1f2f41d2e69ccba39b7"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "2cbef364c64ef99ebd3bd4f3374127eddeee86b6ccbc13123dbbf5786c1ac4ba"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "4b313a6dcfecbddf158243f27f577cb4c68f63ec190df1f2f41d2e69ccba39b7"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003000000001520675,
+          "hash": "2cbef364c64ef99ebd3bd4f3374127eddeee86b6ccbc13123dbbf5786c1ac4ba"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0007000000000516593,
+          "hash": "4b313a6dcfecbddf158243f27f577cb4c68f63ec190df1f2f41d2e69ccba39b7"
+        },
+        {
+          "stage": "repeat-draw",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.00029999999969732016,
+          "hash": "2cbef364c64ef99ebd3bd4f3374127eddeee86b6ccbc13123dbbf5786c1ac4ba"
+        },
+        {
+          "stage": "death-fade",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 576,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0005999999998493877,
+          "hash": "4b313a6dcfecbddf158243f27f577cb4c68f63ec190df1f2f41d2e69ccba39b7"
+        },
+        {
+          "stage": "death-fade",
+          "slice": 52,
+          "method": "updateRawTexture",
+          "inputBytes": 15872,
+          "byteCountIsTypedArray": true,
+          "cpuCallMs": 0.0003999999998995918,
+          "hash": "2cbef364c64ef99ebd3bd4f3374127eddeee86b6ccbc13123dbbf5786c1ac4ba"
+        }
+      ]
+    }
+  ],
+  "methodology": [
+    "Actual packed geometry/skin/morph decoded through Babylon GLTFFileLoader and actual BossModelLibrary/Encounter preparation. Images/KTX omitted.",
+    "NullEngine native buffer/raw methods instrumented; texture-array API uses an inert raw texture shim. One logical texture-array call is recorded once, not again through the shim.",
+    "inputBytes counts CPU input payload, not measured VRAM. Number arrays use a four-byte-per-value proxy; typed-array byte counts are exact.",
+    "CPU call durations exclude audit SHA hashing but are not representative frame times. No GPU upload or driver completion measurement is possible."
+  ],
+  "browserAutomation": false
+}

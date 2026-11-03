@@ -1,4 +1,4 @@
-import { Color3, Matrix, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
+import { Color3, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
 import { BindBonesParameters, BindMorphTargetParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
@@ -63,6 +63,25 @@ const materials = new WeakMap();
 const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
+// Keep Babylon's complete Mesh clone pipeline, including posed bounds. Its
+// initial refresh also builds a Vector3 for every vertex, but silhouettes are
+// never pickable or collision meshes. Avoid just that unused point cache.
+class CharacterOutlineMesh extends Mesh {
+  constructor(name,scene,parent,source){super(name,scene,parent,source,true);this._outlineCloneComplete=true;}
+  refreshBoundingInfo(applySkeletonOrOptions=false,applyMorph=false){
+    if(!this._outlineCloneComplete&&applySkeletonOrOptions===true&&applyMorph===true)
+      return super.refreshBoundingInfo({applySkeleton:true,applyMorph:true,updatePositionsArray:false});
+    return super.refreshBoundingInfo(applySkeletonOrOptions,applyMorph);
+  }
+}
+function cloneOutlineMesh(source,name){
+  // Custom mesh classes or hooks retain their own cloning behavior untouched.
+  if(source.constructor!==Mesh||source.onClonedObservable?.hasObservers()||source.clone!==Mesh.prototype.clone||source._copySource!==Mesh.prototype._copySource||
+     source.refreshBoundingInfo!==Mesh.prototype.refreshBoundingInfo||source._getData!==Mesh.prototype._getData)
+    return source.clone(name,source,true);
+  return new CharacterOutlineMesh(name,source.getScene(),source,source);
+}
+
 function outlineMaterial(scene) {
   if (materials.has(scene)) return materials.get(scene);
   const material = new ShaderMaterial('moonforest-character-outline', scene,
@@ -118,7 +137,7 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     if (source.getChildMeshes(true).some(isRuntimeOutline)) continue;
     if(kind!=='warrior'&&!skipBoneProof)trimEmptyBoneSlots(source);
     orderCharacterInkAfterSurfaces(source.getScene(),source.renderingGroupId);
-    const shell = source.clone(`${source.name} / silhouette`, source, true);
+    const shell = cloneOutlineMesh(source,`${source.name} / silhouette`);
     // The parent supplies the source's entire animated transform. Copy only its skin bind pose.
     shell.position.setAll(0); shell.rotation.setAll(0);
     shell.rotationQuaternion = Quaternion.Identity(); shell.scaling.setAll(1);

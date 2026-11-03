@@ -73,7 +73,13 @@ export class BossEncounter {
       if(!this.assetAcquisition){
       const scene=this.world.scene;
       const acquiring=(async()=>{
-      if(this.loadAsset){const loaded=await this.loadAsset();this.config=loaded.config;this.asset=loaded.asset;}
+      if(this.loadAsset){
+        const loaded=await this.loadAsset();this.config=loaded.config;this.asset=loaded.asset;
+        // These are synchronous library CPU intervals, not the surrounding
+        // model/network wait or GPU completion time. Retain values only.
+        for(const step of loaded.modelTimings?.steps?.slice(0,8)??[])
+          if(Number.isFinite(step.ms)&&step.ms>=0)preparation.stats.steps.push({name:String(step.name).slice(0,100),ms:step.ms});
+      }
       else{
         const url=new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`,location.href),response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('보스 설정을 불러오지 못했습니다.');
         this.config=await response.json();const model=new URL(this.config.model,url);

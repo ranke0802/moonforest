@@ -1,0 +1,29 @@
+{
+  "scope": "NullEngine actual map layouts, streamed load, decoded shipped geometry and scene ownership; image decoding, GPU upload and browser/device timing excluded.",
+  "maps": [
+    {
+      "map": "village",
+      "revisits": 2,
+      "cancelRetry": 1,
+      "lateDisposed": 1
+    },
+    {
+      "map": "great-plains",
+      "revisits": 2,
+      "cancelRetry": 1,
+      "lateDisposed": 1
+    },
+    {
+      "map": "monster-forest",
+      "revisits": 2,
+      "cancelRetry": 1,
+      "lateDisposed": 1
+    },
+    {
+      "map": "witch-cave",
+      "revisits": 2,
+      "cancelRetry": 1,
+      "lateDisposed": 1
+    }
+  ]
+}

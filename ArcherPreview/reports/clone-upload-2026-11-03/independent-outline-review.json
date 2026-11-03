@@ -1,0 +1,33 @@
+{
+  "scope": "Read-only source review of the outline Mesh subclass against pinned Babylon 9.31 and one independent NullEngine synthetic skinned-box probe. No browser, physical GPU, visual, or device FPS validation.",
+  "reviewed": [
+    "src/character-outlines.js: initial clone subclass, native fallback, later refresh dispatch and non-pickable/non-colliding silhouette setup",
+    "tests/character-outline-clone.test.js: actual packed rigs, exact bounds/pose/shader/source ownership, independent dispose, custom clone and onCloned observer fallback, later refresh",
+    "node_modules/@babylonjs/core/Meshes/mesh.pure.js: Mesh clone constructor, _copySource and posed bounds refresh",
+    "node_modules/@babylonjs/core/Meshes/abstractMesh.pure.js: _getData, collision and ray intersection",
+    "node_modules/@babylonjs/core/Meshes/mesh.pure.js: _positions and _generatePointsArray",
+    "src/player-strikes.js:17-24,47-50: source sword and shield world matrices and shield OBB",
+    "src/melee-collision.js: body/contact sweep calculations"
+  ],
+  "findings": [
+    {
+      "severity": "conditional",
+      "finding": "Skipping updatePositionsArray changes the initial private CPU point cache, although posed bounding calculations use the same vertex data and remain unchanged. The current production outline setup makes silhouettes non-pickable and non-colliding; no standard game path requiring those points was identified.",
+      "sdkProbe": {
+        "setup": "24-vertex skinned box; one bone translated +2 on x; native Mesh clone compared with outline subclass in the same Babylon NullEngine scene",
+        "nativeFirstVertexX": 2.5,
+        "optimizedFirstVertexX": 0.5,
+        "optimizedAfterExplicitRefreshBoundingInfoTrueTrueX": 2.5,
+        "shellPickable": false,
+        "shellCheckCollisions": false
+      },
+      "implication": "Current combat uses the original sword and shield nodes, shield OBB and body sweeps, not silhouette intersections; the existing non-pickable/non-colliding silhouette contract is consistent with unchanged combat. Calling intersects/collision directly on the silhouette, or enabling picking or collision, requires an explicit posed refresh first to reproduce the native clone's initial posed points. Restrict equivalence claims to the present contract. Existing source-clone observer fallback is important because observers could inspect the cache before silhouette setup."
+    },
+    {
+      "severity": "limitation",
+      "finding": "The subclass retains Babylon's original full clone and its skin/morph bounds evaluation; it only changes the optional creation of per-vertex Vector3 cache during the initial true/true refresh. Later explicit refresh uses the unmodified SDK signature. Native source Mesh cloning, custom clone/copy/bounds methods and source clone observers are guarded by fallback.",
+      "implication": "No visual, LOD, animation or skeleton simplification is implied, but a downstream integration relying on exact constructor identity or custom scene-level mesh creation observers was not exhaustively verified."
+    }
+  ],
+  "disposition": "Reported the conditional CPU-picking difference and recommended limiting claims to the actual outline contract; no production source modified in this review."
+}

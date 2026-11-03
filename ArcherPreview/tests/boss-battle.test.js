@@ -56,6 +56,18 @@ test('group preparation keeps all requested actors hidden while the other kind c
  assert.equal(await battle.summon(player,5,'bear'),true);assert.ok(frames>0);assert.equal(battle.encounters.length,6);assert.strictEqual(battle.pool[0],old[0]);assert.ok(battle.pool.every(b=>b.active&&b.actor.isEnabled()));assert.equal(goblin.active,true);
 });
 
+test('model CPU timings are copied into the owning hidden job without retaining library records',async t=>{
+ const {battle,player}=fixture(t),instantiate=battle.models.instantiate.bind(battle.models);
+ const steps=[{name:'model-clone',ms:12.5},{name:'node-collection',ms:.2},{name:'invalid',ms:NaN}];
+ battle.models.instantiate=async()=>({...await instantiate(),modelTimings:{mode:'clone',steps}});
+ battle.preparationOptions={frame:async()=>{}};await battle.summon(player,1);
+ const recorded=battle.pool[0].preparationStats.steps;
+ assert.deepEqual(recorded.filter(s=>s.name==='model-clone'||s.name==='node-collection'),steps.slice(0,2));
+ assert.ok(!recorded.some(s=>s.name==='invalid'));
+ steps[0].ms=999;steps.length=0;
+ assert.equal(recorded.find(s=>s.name==='model-clone').ms,12.5);
+});
+
 test('far enemy draw suppression is reversible and leaves combat/model state intact',async t=>{
  const {battle,player}=fixture(t);await battle.summon(player,1);const enemy=battle.encounters[0],hp=enemy.brain.hp;
  enemy.actor.position.set(-20,0,0);enemy.updateRenderRange(new Vector3(20,1,0));

@@ -91,5 +91,7 @@ test('five actual bears each yield their own cold preparation while retaining in
  assert.equal(await f.battle.summon(f.player,5),true);const actors=f.battle.encounters;
  assert.equal(actors.length,5);assert.equal(f.cloneTimes.length,5);assert.equal(new Set(actors.map(e=>e.asset.skeletons[0])).size,5);assert.strictEqual(actors[0],previous[0]);
  assert.ok(actors.every(e=>e.actor.isEnabled()&&e.assetPrepared&&e.brain.hp===actors[0].brain.hp));assert.ok(frames>5);
- reports.push({case:'five-actual-bears',frames,clones:f.cloneTimes.length,independentSkeletons:5});
+ const counts=()=>({meshes:f.world.scene.meshes.length,geometries:f.world.scene.geometries.length,materials:f.world.scene.materials.length,skeletons:f.world.scene.skeletons.length,groups:f.world.scene.animationGroups.length,nodes:f.world.scene.transformNodes.length});
+ const before=counts();assert.equal(await f.battle.summon(f.player,2),true);assert.equal(await f.battle.summon(f.player,5),true);assert.equal(f.cloneTimes.length,5);assert.deepEqual(counts(),before);
+ reports.push({case:'five-actual-bears',frames,clones:f.cloneTimes.length,independentSkeletons:5,warmTwoFiveReusesAll:true,resources:before});
 });

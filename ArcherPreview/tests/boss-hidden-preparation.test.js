@@ -170,7 +170,10 @@ test('real resident cold and warm activation reports animator work and preserves
  const pose=e=>({hp:e.brain.hp,state:e.brain.state,actor:e.actor.position.asArray(),nodes:e.asset.transformNodes.map(n=>[n.name,...n.position.asArray(),...(n.rotationQuaternion?.asArray()??[0,0,0,1])]),morph:e.asset.meshes.filter(m=>m.morphTargetManager&&!m.metadata?.moonforestOutline).map(m=>Array.from({length:m.morphTargetManager.numTargets},(_,i)=>m.morphTargetManager.getTarget(i).influence))});
  async function activation(label,fn){const before=f.events.length,start=performance.now();assert.equal(await fn(),true);const elapsed=performance.now()-start,event=f.events.slice(before).find(e=>e.type==='ready');assert.ok(event?.preparationStats);cases.push({label,elapsedDesktopMs:elapsed,preparationStats:structuredClone(event.preparationStats)});return f.battle.encounters.find(e=>e.kind==='elena');}
  let e=await activation('saint-cold',()=>f.battle.activateResident(f.player,{reset:true}));const saint=pose(e);
+ assert.ok(cases.at(-1).preparationStats.steps.some(s=>s.name==='model-adopt'&&Number.isFinite(s.ms)));
+ assert.ok(!cases.at(-1).preparationStats.steps.some(s=>s.name==='model-clone'));
  e=await activation('saint-reset',()=>f.battle.activateResident(f.player,{reset:true}));nearPose(pose(e),saint);
+ assert.ok(!cases.at(-1).preparationStats.steps.some(s=>s.name==='model-adopt'||s.name==='model-clone'));
  assert.equal(await f.battle.preloadMourning(),true);const prefetch=structuredClone(f.battle.mourningWarmJob.preparation.stats);
  e=await activation('witch-warm-transform',()=>f.battle.transformResident(f.player));const witch=pose(e);
  e=await activation('witch-reset',()=>f.battle.activateResident(f.player,{reset:true,phase:2}));nearPose(pose(e),witch);
