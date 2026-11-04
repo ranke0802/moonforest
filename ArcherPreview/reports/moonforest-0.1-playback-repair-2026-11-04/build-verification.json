@@ -1,0 +1,13 @@
+{
+  "generatedAt": "2026-11-04T07:17:05.537Z",
+  "passed": true,
+  "files": 1451,
+  "bytes": 629390911,
+  "changedSiteFiles": 11,
+  "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "resourceRevisionUnchanged": true,
+  "sourceFilesUnchanged": 5,
+  "preservedDirtyReports": 43,
+  "dirtyBaselineIntersections": 0,
+  "browserAutomation": false
+}

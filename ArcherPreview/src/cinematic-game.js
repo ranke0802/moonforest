@@ -55,7 +55,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   const mapId=typeof input==='string'?JSON.parse(input).mapId:input?.mapId,references=cinematicReferences(world,mapId),document=checked(input,references);
   if(document.mapId!==world.mapId)throw new Error('먼저 컷씬의 맵으로 이동하세요: '+document.mapId);
   const request=++epoch;cancelReady();await player.stop('replace');if(disposed||request!==epoch)throw cancelled();await waitReady(request);if(disposed||request!==epoch)throw cancelled();
-  player.references=references;const result=await player.load(document);if(!result||disposed||request!==epoch)throw cancelled();loaded=document;interaction?.setDocument(document);return true;
+  player.references=references;const result=await player.load(document);if(!result||disposed||request!==epoch)throw cancelled();loaded=document;interaction?.setDocument(document);world.wakeToolPlayback?.();return true;
  }
  async function open(input){const value=typeof input==='string'?JSON.parse(input):input;
   validateStored(value);if(value.mapId!==world.mapId){status('컷씬의 지역을 여는 중…');if(!travel||await travel(value.mapId)===false)throw new Error('지역을 열지 못했습니다. 다시 시도해 주세요.');}
@@ -67,17 +67,17 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   if(command.command==='load')await load(command.document);
   else if(command.command==='patch-document'){
    const document=checked(command.document,player.references),previous=player.document;if(!previous||document.mapId!==previous.mapId||document.actors.length!==previous.actors.length||document.actors.some((actor,index)=>{const old=previous.actors[index];return ['actorId','assetId','assetVersion','actorDefinitionId','instanceId'].some(key=>actor[key]!==old[key]);}))throw new Error('대상이 바뀌었습니다. 장면을 다시 열어 주세요.');
-   const camera=host.captureCamera(),previousTime=player.time;try{player.document=document;player.time=Math.min(player.time,document.duration);if(!player.sample(true))throw new Error('장면을 먼저 열어 주세요.');loaded=document;interaction?.setDocument(document);}catch(error){player.document=previous;player.time=previousTime;player.sample(true);throw error;}finally{world.camera.setTarget?.(Vector3.FromArray(camera.target));world.camera.setPosition?.(Vector3.FromArray(camera.position));world.camera.fov=camera.fov;world.camera.getViewMatrix(true);}
+   const camera=host.captureCamera(),previousTime=player.time;try{player.document=document;player.time=Math.min(player.time,document.duration);if(!player.sample(true))throw new Error('장면을 먼저 열어 주세요.');loaded=document;interaction?.setDocument(document);world.wakeToolPlayback?.();}catch(error){player.document=previous;player.time=previousTime;player.sample(true);throw error;}finally{world.camera.setTarget?.(Vector3.FromArray(camera.target));world.camera.setPosition?.(Vector3.FromArray(camera.position));world.camera.fov=camera.fov;world.camera.getViewMatrix(true);}
   }
   else if(command.command==='select-actor'){player.pause();if(!interaction?.select(command.actorId))throw new Error('대상을 찾지 못했습니다.');}
   else if(command.command==='focus-actor'){player.pause();if(!interaction?.focus(command.actorId))throw new Error('대상을 찾지 못했습니다.');}
   else if(command.command==='camera-mode'){player.pause();host.getLiveLease?.()?.setCameraMode?.(command.mode);}
   else if(command.command==='path-visibility'){interaction?.setPathVisible(command.visible);}
   else if(command.command==='save-scene')return saveScene(command.document);
-  else if(command.command==='play'){externalResume=false;if(player.state==='completed'&&!player.inspect().retained||player.state==='cancelled'){if(!loaded)throw new Error('먼저 파일을 불러오세요.');await load(loaded);}if(!player.play())throw new Error('준비된 컷씬이 없습니다.');}
+  else if(command.command==='play'){externalResume=false;if(player.state==='completed'&&!player.inspect().retained||player.state==='cancelled'){if(!loaded)throw new Error('먼저 파일을 불러오세요.');await load(loaded);}world.wakeToolPlayback?.();if(world.toolLease?.paused)throw new Error('화면이 숨겨져 있거나 다른 창이 열려 일시정지 상태입니다.');if(player.state!=='playing'&&!player.play())throw new Error('준비된 컷씬이 없습니다.');}
   else if(command.command==='pause'){externalResume=false;player.pause();}
-  else if(command.command==='resume'){externalResume=false;player.resume();}
-  else if(command.command==='seek'){if(!player.seek(command.time))throw new Error('준비 후 유효한 시간으로 탐색하세요.');}
+  else if(command.command==='resume'){externalResume=false;world.wakeToolPlayback?.();if(world.toolLease?.paused)throw new Error('화면이 숨겨져 있거나 다른 창이 열려 일시정지 상태입니다.');if(player.state!=='playing'&&!player.resume())throw new Error('먼저 장면을 열어 주세요.');}
+  else if(command.command==='seek'){if(!player.seek(command.time))throw new Error('준비 후 유효한 시간으로 탐색하세요.');world.wakeToolPlayback?.();}
   else if(command.command==='stop'){externalResume=false;++epoch;cancelReady();await player.stop('skip');subtitles.textContent='';centerText.textContent='';}
   else if(command.command==='loop')player.setLoop(command.loop);
   else if(command.command==='capture-camera'){const camera=host.captureCamera(),target=camera.target;return {...player.inspect(),camera,playerPosition:getPlayer?.()?.position?.asArray?.()??null,focusPosition:[target[0],world.terrain?.heightAt?.(target[0],target[2])??getPlayer?.()?.position?.y??0,target[2]]};}

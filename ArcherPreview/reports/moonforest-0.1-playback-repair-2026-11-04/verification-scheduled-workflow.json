@@ -1,0 +1,214 @@
+{
+  "scope": "Actual default forest/bear model/host/Studio transport through real Babylon native focus handlers and engine scheduler, actual current main FrameLoop registration/render/syncPlayback/restore/wake and lease reconcile",
+  "limitations": [
+    "NullEngine does not prove WebGL visuals, GPU performance or actual browser UX",
+    "RAF host queue and DOM viewport/audio/inline model resources are Node boundaries; actual Babylon scheduling and frame gates are unchanged",
+    "Actual existing geometry, skin, bones and clips; images/materials omitted by shared resource fixture",
+    "No direct mainRender/frame/player.update calls; native scheduled engine draw is the only playback time source"
+  ],
+  "sourceHashes": {
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/frame-loop.js": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/cinematic-game.js": "c4e6af3884010491ab90bbbe22779b6bd59a61a495e76352233afb0f6d028501",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-studio.js": "d837e16bc85a52ffd4e9f9afb3d2904046601b6c9be2b5e9b3ac2c86487051e9",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da"
+  },
+  "cases": [
+    {
+      "name": "Cold real forest bear enters actual engine-scheduled preview with exact production callbacks",
+      "passed": true,
+      "modelProof": [
+        {
+          "id": "guardian-bear",
+          "sourceSha256": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29",
+          "triangles": 30000,
+          "clips": [
+            "Axe_Spin_Attack",
+            "Backflip",
+            "baseball_pitching",
+            "Block6",
+            "Flying_Fist_Kick",
+            "Knock_Down_1",
+            "Left_Hook_from_Guard",
+            "Left_Uppercut_from_Guard",
+            "Lunge_Spin_Kick",
+            "mage_soell_cast_6",
+            "Right_Jab_from_Guard",
+            "Rising_Flying_Kick",
+            "Running",
+            "Shield_Push_Left",
+            "Skill_01",
+            "Skill_02",
+            "Skill_03",
+            "Stand_Up3",
+            "Walking",
+            "Weapon_Combo"
+          ]
+        }
+      ],
+      "scheduler": {
+        "main": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+        "render": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+        "syncPlayback": "35798cd4402b12f5638161ce144ef442a3f3893225d84f37409b11e8c6f9cbff",
+        "frameLoopRegistration": "5068d657b23e8bebd99de0f120a89976f037e2423a8442fe01c870af052b4480",
+        "policy": "engine.renderEvenInBackground=cinematicAuthoringPreview;",
+        "toolWake": "world.wakeToolPlayback=()=>{syncPlayback();wakeRendering();};",
+        "nativeFrameGate": "af375b4201a818642b0b165456fe067de2b1d05e27e4d8234483e71109091649",
+        "nativeFocusHandlers": "e47ce87d658eb91bb5f13e589beadc935d8790e2834d56b34558ca97b5974e2c"
+      },
+      "stats": {
+        "draws": 4,
+        "attempts": 4,
+        "requests": 5,
+        "pending": 1,
+        "frameLoopFrames": 4,
+        "running": true,
+        "background": false,
+        "hidden": false,
+        "renderEvenInBackground": true,
+        "maxFPS": 30
+      },
+      "actualSceneRenders": 4
+    },
+    {
+      "name": "Real canvas DOM drag builds bear path and native Walking plus follow-camera scene before playback",
+      "passed": true,
+      "path": {
+        "actorId": "actor-1",
+        "keys": [
+          {
+            "time": 0,
+            "position": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "scale": 1,
+            "interpolation": "linear"
+          },
+          {
+            "time": 2,
+            "position": [
+              -0.478789069414681,
+              0,
+              -0.9605698105770681
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "scale": 1,
+            "interpolation": "linear"
+          }
+        ]
+      },
+      "duration": 2,
+      "motion": {
+        "actorId": "actor-1",
+        "start": 0,
+        "end": 2,
+        "clipId": "Walking",
+        "clipStart": 0,
+        "clipEnd": 1.0333333333333334,
+        "loop": true,
+        "blendIn": 0,
+        "blendOut": 0
+      },
+      "manualDraws": 0
+    },
+    {
+      "name": "Parent Play after child blur and a stopped loop wakes actual scheduler; time native pose camera draw and displayed clock advance",
+      "passed": true,
+      "firstTime": 0.28174849999999974,
+      "secondTime": 0.5385418,
+      "poseChanged": true,
+      "boundsHidden": true,
+      "displayedTime": "0.28 / 2.00초",
+      "status": "재생 중입니다. 구도를 바꾸려면 일시정지를 누르세요.",
+      "stats": {
+        "draws": 24,
+        "attempts": 24,
+        "requests": 26,
+        "pending": 1,
+        "frameLoopFrames": 24,
+        "running": true,
+        "background": true,
+        "hidden": false,
+        "renderEvenInBackground": true,
+        "maxFPS": 30
+      },
+      "actualSceneRenders": 24
+    },
+    {
+      "name": "Actual main visibility handler pauses/resumes engine and parent status reflects real paused state",
+      "passed": true,
+      "hiddenTime": 0.5385418,
+      "resumedTime": 0.6027502999999997,
+      "stats": {
+        "draws": 27,
+        "attempts": 27,
+        "requests": 31,
+        "pending": 1,
+        "frameLoopFrames": 27,
+        "running": true,
+        "background": true,
+        "hidden": false,
+        "renderEvenInBackground": true,
+        "maxFPS": 30
+      }
+    },
+    {
+      "name": "Native scheduled completion retains scene and parent reports end; replay advances with identical warm model operation",
+      "passed": true,
+      "sameOperation": true,
+      "models": 1,
+      "additionalNativeClonesBindingsMaterials": 0,
+      "replayTime": 0.2243353999999999,
+      "stats": {
+        "draws": 74,
+        "attempts": 77,
+        "requests": 81,
+        "pending": 1,
+        "frameLoopFrames": 74,
+        "running": true,
+        "background": true,
+        "hidden": false,
+        "renderEvenInBackground": true,
+        "maxFPS": 30
+      }
+    },
+    {
+      "name": "Actual repaired scene exports and saves exact data; explicit session/controller stop releases ownership",
+      "passed": true,
+      "exportConnected": true,
+      "storedSameDocument": true,
+      "controllerHeroRestored": true,
+      "stats": {
+        "draws": 76,
+        "attempts": 79,
+        "requests": 83,
+        "pending": 1,
+        "frameLoopFrames": 76,
+        "running": true,
+        "background": true,
+        "hidden": false,
+        "renderEvenInBackground": true,
+        "maxFPS": 30
+      }
+    }
+  ],
+  "sourceUnchanged": true,
+  "passed": true,
+  "recordedAt": "2026-11-04T07:10:06.848Z"
+}

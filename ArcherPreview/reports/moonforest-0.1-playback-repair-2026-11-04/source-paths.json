@@ -1,0 +1,7 @@
+[
+  "ArcherPreview/src/main.js",
+  "ArcherPreview/src/cinematic-game.js",
+  "ArcherPreview/src/cinematic-studio.js",
+  "ArcherPreview/tests/cinematic-studio.test.js",
+  "ArcherPreview/tests/cinematic-playback-scheduling.test.js"
+]

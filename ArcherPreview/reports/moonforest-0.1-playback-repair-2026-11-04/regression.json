@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-11-04T07:14:22.863Z",
+  "passed": true,
+  "tests": 1726,
+  "passedTests": 1726,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 157431.4649,
+  "sourceFiles": 5,
+  "sourceUnchanged": true,
+  "preservedDirtyReports": 43,
+  "restoredReportWrites": 14,
+  "browserAutomation": false
+}

@@ -1,0 +1,169 @@
+{
+  "revision": "e649384",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-studio.js": "bed1e0831349d65682a343e44ecfff100021b6a4ebc7f5f8f81d2e2058d19639",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/frame-loop.js": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4"
+  },
+  "cases": [
+    {
+      "name": "actual engine callbacks and FrameLoop advance player through production main render",
+      "passed": true,
+      "nativeFrames": 4,
+      "time": 0.30000000000000004
+    },
+    {
+      "name": "queued seek can pause a successfully acknowledged Play; poll leaves false playing label",
+      "passed": true,
+      "heldRequestId": "studio-12",
+      "actualState": "paused",
+      "actualTime": 0,
+      "uiStatus": "재생 중입니다. 구도를 바꾸려면 일시정지를 누르세요.",
+      "uiClock": "0.00 / 6.00초",
+      "selectedBoundingBoxes": 2,
+      "positiveDtFramesAfterRace": 8,
+      "traffic": [
+        {
+          "direction": "request",
+          "requestId": "studio-12",
+          "command": "seek",
+          "time": 0
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-13",
+          "command": "status"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-13",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-14",
+          "command": "status"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-14",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-15",
+          "command": "seek",
+          "time": 0
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-15",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-16",
+          "command": "loop"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-16",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-17",
+          "command": "play"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-12",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-17",
+          "state": "playing",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-18",
+          "command": "pause"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-18",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-19",
+          "command": "seek",
+          "time": 0
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-19",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        },
+        {
+          "direction": "request",
+          "requestId": "studio-20",
+          "command": "status"
+        },
+        {
+          "direction": "reply",
+          "requestId": "studio-20",
+          "state": "paused",
+          "time": 0,
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "scope": {
+    "real": [
+      "paired authenticated postMessage transport",
+      "Studio DOM controls",
+      "createWorld/NullEngine",
+      "default scoped model loading of shipped goblin",
+      "CinematicPlayer/SceneHost/GameToolLease",
+      "Babylon native _renderLoop callback gate",
+      "FrameLoop dt",
+      "source-extracted production main render"
+    ],
+    "controlled": [
+      "hold one real seek ACK to represent asynchronous delivery",
+      "RAF requester and monotonic frame timestamps",
+      "Node DOM canvas bounds",
+      "decoded local GLTF buffer boundary, no texture pixels",
+      "audio output"
+    ],
+    "limits": [
+      "proves an independent UI race, not which branch caused the user screenshot",
+      "does not instantiate full main startup/reconcile; native background-focus gate is checked separately",
+      "no browser, WebGL pixel or wall-clock FPS claim"
+    ]
+  }
+}

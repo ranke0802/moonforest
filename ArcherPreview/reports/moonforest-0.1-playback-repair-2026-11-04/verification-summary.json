@@ -1,0 +1,58 @@
+{
+  "recordedAt": "2026-11-04T07:11:13.662Z",
+  "passed": true,
+  "baseline": "e649384",
+  "independentBaseline": {
+    "report": "verification-native-engine.json",
+    "cases": 4,
+    "proved": "Native iframe window blur while document.hidden=false leaves FrameLoop.running=true and Player playing0; RAF requests continue but the unchanged Babylon engine background gate prevents all draw callbacks. Native focus opens the gate."
+  },
+  "independentFinal": {
+    "report": "verification-scheduled-workflow.json",
+    "cases": 6,
+    "sourceUnchanged": true,
+    "actualModel": {
+      "id": "guardian-bear",
+      "triangles": 30000,
+      "sourceSha256": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29"
+    },
+    "proved": [
+      "Actual current monster-forest terrain/navigation, cold default Bear loader/preparation/host, native canvas path drag, Walking and follow-camera",
+      "Parent Play after native child blur and an intentionally stopped FrameLoop wakes the real engine callback chain; time, native skeleton, actor, camera, scene draws and UI clock advance",
+      "Real main visibility event pauses/resumes and parent status follows paused state",
+      "Scheduled completion/replay retains ownership with no extra model parse, native clones, bindings or material clones",
+      "Exact file/browser save and explicit controller release"
+    ]
+  },
+  "relatedAgentEvidence": [
+    {
+      "report": "ui-pending-seek-fixed.json",
+      "passed": true,
+      "proved": "Deferred/coalesced seeks finish before Play; parent follows acknowledged player state and continued polling reports pause/error"
+    },
+    {
+      "report": "scheduling-regression.json",
+      "passed": true,
+      "cases": 6,
+      "proved": "Normal game background policy unchanged; hidden/settings/failed reject play/resume; lost RAF/stopped loop and focus/pageshow bursts recover one loop"
+    }
+  ],
+  "previousVerificationGap": "Earlier fixture called mainRender(dt) directly, used FrameLoop flag stubs and an empty lease reconcile; it did not test Babylon native iframe focus gating or real scheduling. Those omitted boundaries are exercised here.",
+  "sourceHashes": {
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/frame-loop.js": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/cinematic-game.js": "c4e6af3884010491ab90bbbe22779b6bd59a61a495e76352233afb0f6d028501",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-studio.js": "d837e16bc85a52ffd4e9f9afb3d2904046601b6c9be2b5e9b3ac2c86487051e9",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da"
+  },
+  "currentSourceHashMismatches": [],
+  "limits": [
+    "Native DOM events and a bounded RAF host queue execute in Node/NullEngine; browser trusted input, WebGL pixels and device performance remain unverified",
+    "Actor geometry, skin, skeleton and clips are real shipped sources; image/material upload is omitted by resource fixture",
+    "Actual forest terrain/navigation run; full streamed environment props are not preloaded",
+    "No production sources, assets, quality policy or registry entries were edited by independent verification"
+  ]
+}

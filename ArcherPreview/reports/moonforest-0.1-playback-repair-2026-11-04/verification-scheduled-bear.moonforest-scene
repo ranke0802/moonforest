@@ -1,0 +1,146 @@
+{
+  "format": "moonforest-cinematic",
+  "version": 1,
+  "cutsceneId": "scene-20261104071002-1",
+  "mapId": "monster-forest",
+  "catalogRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "duration": 2,
+  "anchor": {
+    "position": [
+      0,
+      0.18000000715255737,
+      6
+    ],
+    "rotation": [
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  "actors": [
+    {
+      "actorId": "actor-1",
+      "assetId": "guardian-bear",
+      "assetVersion": "Guardian Bear · 20 original motions",
+      "contentHash": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29",
+      "actorDefinitionId": "guardian-bear.standard",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "scale": 1
+    }
+  ],
+  "shots": [
+    {
+      "shotId": "shot-1",
+      "start": 0,
+      "end": 2,
+      "interpolation": "smooth",
+      "from": {
+        "position": [
+          4.340256233804372,
+          4.9916779804327,
+          -4.930841826096107
+        ],
+        "target": [
+          0.012109356759808065,
+          1.341190927910013,
+          0.03250604048340122
+        ],
+        "fov": 0.65
+      },
+      "to": {
+        "position": [
+          4.340256233804372,
+          4.9916779804327,
+          -4.930841826096107
+        ],
+        "target": [
+          0.012109356759808065,
+          1.341190927910013,
+          0.03250604048340122
+        ],
+        "fov": 0.65
+      },
+      "lookAtActorId": "actor-1",
+      "lookAtOffset": [
+        0,
+        1,
+        0
+      ]
+    }
+  ],
+  "tracks": {
+    "transforms": [
+      {
+        "actorId": "actor-1",
+        "keys": [
+          {
+            "time": 0,
+            "position": [
+              0,
+              0,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "scale": 1,
+            "interpolation": "linear"
+          },
+          {
+            "time": 2,
+            "position": [
+              -0.478789069414681,
+              0,
+              -0.9605698105770681
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "scale": 1,
+            "interpolation": "linear"
+          }
+        ]
+      }
+    ],
+    "animations": [
+      {
+        "actorId": "actor-1",
+        "start": 0,
+        "end": 2,
+        "clipId": "Walking",
+        "clipStart": 0,
+        "clipEnd": 1.0333333333333334,
+        "loop": true,
+        "blendIn": 0,
+        "blendOut": 0
+      }
+    ],
+    "subtitles": [
+      {
+        "start": 1.9,
+        "end": 2,
+        "text": "괴물의 숲 · 곰 이동",
+        "placement": "center"
+      }
+    ],
+    "audio": [],
+    "events": []
+  }
+}

@@ -782,7 +782,10 @@ try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance',loseContextOnDispose:true });
   engine.maxFPS=renderActivity.limit();
-  engine.renderEvenInBackground=false;
+  // The Studio controls live outside the preview iframe. Moving focus to
+  // those controls blurs its window even while the document stays visible.
+  // Actual hidden/modal suspension is still owned by syncPlayback below.
+  engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   if(releaseEnabled){
@@ -957,6 +960,7 @@ try {
   };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
+  world.wakeToolPlayback=()=>{syncPlayback();wakeRendering();};
   for(const selector of ['#motion-speed-dialog','#help-dialog','#death-dialog','#summon-dialog','#boss-pattern-dialog','#character-style-dialog','#diagnostic-detail-dialog']){
     dialogObserver.observe($(selector),{attributes:true,attributeFilter:['open']});
     // Closing button handlers run before this bubble handler, keeping iOS

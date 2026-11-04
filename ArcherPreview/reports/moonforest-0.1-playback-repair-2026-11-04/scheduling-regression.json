@@ -1,0 +1,190 @@
+{
+  "generatedAt": "2026-11-04T07:11:50.941Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/frame-loop.js": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+    "src/cinematic-game.js": "c4e6af3884010491ab90bbbe22779b6bd59a61a495e76352233afb0f6d028501",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "visible authoring iframe blur plus parent play advances through native engine callbacks",
+      "passed": true,
+      "before": {
+        "time": 0,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": true,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 0,
+        "rafAttempts": 0
+      },
+      "after": {
+        "time": 1.0003000000000009,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": true,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 31,
+        "rafAttempts": 31
+      },
+      "frameDeltas": [
+        0,
+        0.033343333333333336,
+        0.033343333333333336,
+        0.033343333333333336
+      ]
+    },
+    {
+      "name": "normal game focus loss keeps its background rendering policy",
+      "passed": true,
+      "backgroundPaused": {
+        "time": 0.033343333333333336,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": true,
+        "renderEvenInBackground": false,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 2,
+        "rafAttempts": 2
+      },
+      "afterFocus": {
+        "time": 0.10003000000000006,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": false,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 5,
+        "rafAttempts": 25
+      }
+    },
+    {
+      "name": "hidden authoring preview stops and resumes with no elapsed-time catch-up",
+      "passed": true,
+      "hidden": {
+        "time": 0.10003000000000001,
+        "state": "paused",
+        "leasePaused": true,
+        "hidden": true,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 0,
+        "pendingRAF": 0,
+        "loopRunning": false,
+        "frames": 4,
+        "rafAttempts": 4
+      },
+      "after": {
+        "time": 0.20005999999999152,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 8,
+        "rafAttempts": 8
+      }
+    },
+    {
+      "name": "a parent playback request recovers lost RAF once without waking hidden settings or failed scenes",
+      "passed": true,
+      "lost": {
+        "time": 0,
+        "state": "paused",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 0,
+        "loopRunning": true,
+        "frames": 3,
+        "rafAttempts": 3
+      },
+      "recovered": {
+        "time": 0.10002999999999973,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 7,
+        "rafAttempts": 7
+      }
+    },
+    {
+      "name": "explicit parent play wakes a pagehide-stopped loop with one registration and no catch-up",
+      "passed": true,
+      "stopped": {
+        "time": 0,
+        "state": "paused",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 0,
+        "pendingRAF": 0,
+        "loopRunning": false,
+        "frames": 3,
+        "rafAttempts": 3
+      },
+      "recovered": {
+        "time": 0.10003000000000246,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 7,
+        "rafAttempts": 7
+      }
+    },
+    {
+      "name": "focus/pageshow bursts deduplicate engine callbacks and the next ordinary frames advance",
+      "passed": true,
+      "focusEvents": 20,
+      "pageShowEvents": 20,
+      "after": {
+        "time": 0.10003000000000001,
+        "state": "playing",
+        "leasePaused": false,
+        "hidden": false,
+        "background": false,
+        "renderEvenInBackground": true,
+        "registered": 1,
+        "pendingRAF": 1,
+        "loopRunning": true,
+        "frames": 4,
+        "rafAttempts": 4
+      }
+    }
+  ],
+  "scope": "Real Babylon _CommonInit, native engine render-loop and focus/background gate; deterministic custom RAF clock, actual FrameLoop and exact main frame guard/syncPlayback/reconcile/lifecycle callbacks. Real game cinematic bridge/host/player with a tiny native rig adapter; shipped-model reproduction is independently verified by C. No direct render(dt) calls, browser automation, trusted UI/GPU/device performance claim."
+}

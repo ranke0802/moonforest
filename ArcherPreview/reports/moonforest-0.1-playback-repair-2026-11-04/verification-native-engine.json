@@ -1,0 +1,96 @@
+{
+  "scope": "Independent real Babylon native blur/focus and engine frame gate; exact main render, FrameLoop registration, syncPlayback and real lease reconcile; actual default actor load/host and Studio transport",
+  "limitations": [
+    "NullEngine: no WebGL/pixel/device performance evidence",
+    "DOM blur/focus events are dispatched, not trusted browser events",
+    "requestAnimationFrame is a bounded host queue; Babylon runRenderLoop/_renderLoop/_processFrame and maxFPS gates execute unchanged",
+    "Existing resource fixture uses actual local model geometry/skin/clips but omits materials/images"
+  ],
+  "sourceHashes": {
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "src/frame-loop.js": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-studio.js": "bed1e0831349d65682a343e44ecfff100021b6a4ebc7f5f8f81d2e2058d19639"
+  },
+  "cases": [
+    {
+      "name": "Visible iframe native window blur freezes actual scheduled engine callbacks while parent says playing0",
+      "passed": true,
+      "before": {
+        "draws": 2,
+        "frames": 2,
+        "time": 0,
+        "requests": 3,
+        "attempts": 2
+      },
+      "after": {
+        "draws": 2,
+        "frames": 2,
+        "time": 0,
+        "state": "playing",
+        "parentStatus": "재생 중입니다. 구도를 바꾸려면 일시정지를 누르세요.",
+        "parentTime": "0.00 / 6.00초",
+        "requests": 11,
+        "attempts": 10,
+        "running": true,
+        "pending": 1,
+        "documentHidden": false,
+        "windowIsBackground": true,
+        "renderEvenInBackground": false
+      },
+      "actualModelProof": [
+        {
+          "id": "hooded-goblin",
+          "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "clips": [
+            "Dodge_Roll",
+            "Fall_Dead_from_Abdominal_Injury",
+            "Gangnam_Groove",
+            "Knock_Down",
+            "Parkour_Vault_with_Roll",
+            "Right_Jab_from_Guard",
+            "Running",
+            "Sneaky_Walk_inplace",
+            "Sword_Judgment",
+            "Sword_Parry_Backward_2",
+            "Walk_Turn_Right",
+            "Walking"
+          ]
+        }
+      ],
+      "mainPolicy": "engine.renderEvenInBackground=false;",
+      "exactSourceHashes": {
+        "render": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+        "syncPlayback": "35798cd4402b12f5638161ce144ef442a3f3893225d84f37409b11e8c6f9cbff",
+        "frameLoopRegistration": "5068d657b23e8bebd99de0f120a89976f037e2423a8442fe01c870af052b4480"
+      }
+    },
+    {
+      "name": "Native window focus reopens unchanged Babylon frame gate and clock advances",
+      "passed": true,
+      "time": 0.2408005000000003,
+      "draws": 7,
+      "frames": 7
+    },
+    {
+      "name": "Preview-only background-render candidate keeps visible unfocused iframe advancing",
+      "passed": true,
+      "time": 0.2517820000000002,
+      "draws": 15,
+      "frames": 15,
+      "windowIsBackground": true
+    },
+    {
+      "name": "Exact main document-hidden reconcile still pauses scheduler/lease and resumes without hidden-time jump",
+      "passed": true,
+      "hiddenTime": 0.2517820000000002,
+      "resumedTime": 0.3770473999999995,
+      "running": true
+    }
+  ],
+  "passed": true,
+  "recordedAt": "2026-11-04T07:05:10.233Z"
+}

@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-11-04T07:11:09.497Z",
+  "files": {
+    "ArcherPreview/src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "ArcherPreview/src/cinematic-game.js": "c4e6af3884010491ab90bbbe22779b6bd59a61a495e76352233afb0f6d028501",
+    "ArcherPreview/src/cinematic-studio.js": "d837e16bc85a52ffd4e9f9afb3d2904046601b6c9be2b5e9b3ac2c86487051e9",
+    "ArcherPreview/tests/cinematic-studio.test.js": "8869c145545accd52afe64495f43a56fff03a64ea43e4cca09e540fb8884e804",
+    "ArcherPreview/tests/cinematic-playback-scheduling.test.js": "736255ee8309421995def2ca3d95e3d01b78e0206e246e6b582d368e6e21238d"
+  }
+}

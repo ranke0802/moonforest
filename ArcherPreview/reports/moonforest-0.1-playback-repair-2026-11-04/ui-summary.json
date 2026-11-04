@@ -1,0 +1,42 @@
+{
+  "baseline": "e649384",
+  "status": "fixed-and-source-frozen",
+  "ownedSource": {
+    "src/cinematic-studio.js": "d837e16bc85a52ffd4e9f9afb3d2904046601b6c9be2b5e9b3ac2c86487051e9",
+    "tests/cinematic-studio.test.js": "8869c145545accd52afe64495f43a56fff03a64ea43e4cca09e540fb8884e804"
+  },
+  "findings": [
+    {
+      "name": "Play overtakes a coalesced seek",
+      "proof": "ui-pending-seek.json",
+      "cause": "A second seek set seekAgain and resolved immediately. Play proceeded before the active seek settled. A valid delivery order of real seek and Play replies let the old follow-up seek see playing, then issue pause and seek0 after Play.",
+      "observed": {"actualState": "paused", "actualTime": 0, "uiClock": "0.00 / 6.00초", "uiSaysPlaying": true, "selectedBoundingBoxes": 2, "nativeCallbacksAfterRace": 8}
+    },
+    {
+      "name": "Paused/error replies leave false playback text",
+      "cause": "Play wrote a success label without inspecting its acknowledgement. Polling updated only playing/completed replies, leaving paused/ready/cancelled/error state and time invisible."
+    }
+  ],
+  "changes": [
+    "Coalesced seek callers share the entire active seek promise, including follow-up requests.",
+    "Playback, pause, focus, camera mode, camera capture and actor selection toolbar operations are ordered after earlier operations and pending seeks; work-epoch guards reject stale queued work.",
+    "Play and Pause labels and clocks derive from the returned state/time. Polling also reflects paused, ready, cancelled and error states, and guards stale work, active seeks and loading.",
+    "The motion section explains that body clips and timing are separate from the position path."
+  ],
+  "validation": {
+    "focusedCommand": "node --test tests/cinematic-studio.test.js",
+    "focusedPassed": 38,
+    "focusedFailed": 0,
+    "actualConnectedCommand": "node reports/moonforest-0.1-playback-repair-2026-11-04/ui-pending-seek.mjs --fixed",
+    "actualConnectedReport": "ui-pending-seek-fixed.json",
+    "actualConnectedResult": {"actualState": "playing", "actualTime": 0.7999999999999999, "uiClock": "0.80 / 6.00초", "selectedBoundingBoxes": 0, "nativeCallbacks": 8, "pauseOrSeekAfterPlay": false},
+    "focusedCoverage": ["coalesced-seek drain before Play", "earlier actor selection before Play", "acknowledged paused Play result", "paused/ready/cancelled/error time and labels for both state/status response fields", "existing cold actor add, selection/edit/save/reopen and authoring regressions"]
+  },
+  "boundaries": [
+    "The connected test uses real Studio DOM, authenticated messages, default scoped model/host/player loading, actual Babylon native engine callbacks, actual FrameLoop dt and source-extracted production main render.",
+    "Only genuine message delivery timing, Node RAF requester/timestamps, DOM canvas dimensions, decoded local model buffer/texture boundary and audio output are controlled.",
+    "This proves an independent UI race. It does not identify the exclusive cause of the user screenshot.",
+    "The separate native engine background-focus gate and full main reconcile path are owned by root and independently verified by C.",
+    "No browser automation, new playback clock, independent RAF, paid assets, full suite, build, commit or deployment was run by this agent."
+  ]
+}

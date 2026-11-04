@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-11-04T07:15:58.948Z",
+  "passed": true,
+  "inputs": {
+    "moduleOrigins": {
+      "path": "reports/moonforest-0.1-playback-repair-2026-11-04/runtime-module-origins.json",
+      "sha256": "60d0fdd587857feaf9a95a958a59e1fd1d90f25ef423d57d62770a9584c38300"
+    },
+    "deploymentManifest": {
+      "path": "dist-village/deployment-files.json",
+      "sha256": "a96b648b81dff3ffcb3d476fbde5a81295f78589f12475c1cacf1a365d2544a0"
+    }
+  },
+  "graph": {
+    "totalChunks": 55,
+    "mainEntry": "assets/game-DOnJrhHA.js",
+    "initialStaticChunks": 30,
+    "initialRawJavaScriptBytes": 10278836,
+    "initialDistinctModuleOrigins": 3066,
+    "allBuiltChunkAstImportsAgree": true,
+    "allBuiltChunkHashesMatchDeployment": true,
+    "initialDevelopmentModules": [],
+    "initialGizmoImplementations": [],
+    "nativeKtxLoaderInitiallyPresent": true,
+    "lazyLocations": {
+      "developer-editor": [
+        "assets/developer-editor-D39L65fL.js"
+      ],
+      "editor-workspace": [
+        "assets/developer-editor-D39L65fL.js"
+      ],
+      "asset-catalog": [
+        "assets/asset-catalog-DaYTbf3s.js"
+      ],
+      "cinematic-studio": [
+        "assets/cinematicStudio-C18bDQOp.js"
+      ],
+      "cinematic-authoring": [
+        "assets/cinematicStudio-C18bDQOp.js"
+      ],
+      "cinematic-path-view": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-interaction": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-game": [
+        "assets/cinematic-game-D-J7MfVI.js"
+      ],
+      "cinematic-scene-host": [
+        "assets/cinematic-game-D-J7MfVI.js"
+      ]
+    },
+    "byteAccounting": "Uses final deployment bytes, including Vite mapDeps preloads inserted after origin capture."
+  },
+  "resources": {
+    "expectedRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "manifestRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "sourceIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexExactlyMatchesSource": true,
+    "resourceIndexSha256": "9e3fb9f5539bef9cdb766c48cb1a222bd519bcbc080d2c0684718aaa65491565",
+    "deploymentFiles": 1451,
+    "deploymentRawBytes": 629390911
+  },
+  "scope": "Independent read-only build-graph/origin and built-JavaScript integrity audit. Initial graph means static imports from the main game entry; explicit dynamic editor/cinematic routes may load tools. The resource index matches the existing approved resource revision exactly. This is not a browser download, startup, visual-quality, GPU or device-performance measurement."
+}
