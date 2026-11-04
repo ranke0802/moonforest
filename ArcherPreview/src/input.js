@@ -27,6 +27,7 @@ export class PlaygroundInput {
     for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(event, e => this.pointerUp(e), opts);
     canvas.addEventListener('contextmenu', e => e.preventDefault(), opts);
     canvas.addEventListener('wheel', e => {
+      if(this.suspended)return;
       e.preventDefault();
       const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? canvas.getBoundingClientRect().height : 1;
       this.zoom(Math.exp(Math.max(-.5, Math.min(.5, e.deltaY * unit * .0025))));
@@ -64,6 +65,7 @@ export class PlaygroundInput {
     document.addEventListener('visibilitychange', () => { if (document.hidden) this.reset(); }, opts);
   }
   keyDown(e) {
+    if(this.suspended)return;
     if (document.querySelector('dialog[open]') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
     const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF', 'KeyE', 'Space'];
     if (!controls.includes(e.code)) return;
@@ -82,6 +84,7 @@ export class PlaygroundInput {
     } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyF: this.callbacks.guard, KeyE: this.callbacks.potion }[e.code])?.();
   }
   pointerDown(e) {
+    if(this.suspended)return;
     if (document.querySelector('dialog[open]')) return;
     e.preventDefault();
     this.canvas.focus({ preventScroll: true });
@@ -103,6 +106,7 @@ export class PlaygroundInput {
     }
   }
   pointerMove(e) {
+    if(this.suspended)return;
     if (e.pointerType === 'mouse') {
       if (this.mousePointer === e.pointerId && this.canvas.hasPointerCapture(e.pointerId)) this.updateMouseButtons(e);
       return;
@@ -191,6 +195,7 @@ export class PlaygroundInput {
     }
   }
   drag(dx, dy, pan) {
+    if(this.suspended)return;
     if (!pan) {
       this.camera.alpha += dx * .005;
       this.camera.beta = Math.max(this.camera.lowerBetaLimit??.25, Math.min(this.camera.upperBetaLimit??Math.PI-.035, this.camera.beta - dy * .005));
@@ -205,8 +210,9 @@ export class PlaygroundInput {
       if (radius > 4) { this.panOffset.x *= 4 / radius; this.panOffset.z *= 4 / radius; }
     }
   }
-  zoom(factor) { zoomCamera(this.camera, factor); }
+  zoom(factor) { if(!this.suspended)zoomCamera(this.camera, factor); }
   value() {
+    if(this.suspended)return {x:0,y:0,run:false};
     const down = (...codes) => codes.some(c => this.keys.has(c));
     let x = this.stick.x + Number(down('KeyD', 'ArrowRight')) - Number(down('KeyA', 'ArrowLeft'));
     let y = this.stick.y + Number(down('KeyW', 'ArrowUp')) - Number(down('KeyS', 'ArrowDown'));
@@ -242,5 +248,6 @@ export class PlaygroundInput {
       try { this.canvas.releasePointerCapture(id); } catch { /* Native cancellation may release first. */ }
     }
   }
+  setSuspended(value){this.suspended=Boolean(value);this.reset();}
   dispose() { this.reset(); this.abort.abort(); }
 }

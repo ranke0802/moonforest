@@ -26,4 +26,8 @@ test('development actors and editors remain lazy while the normal game keeps its
  assert.deepEqual(verifyRuntimeModuleGraph(graph),{chunks:3,entriesChecked:1});
  graph[0].imports.push('assets/other.js');
  assert.throws(()=>verifyRuntimeModuleGraph(graph),/Development module entered the initial game graph/);
+ for(const file of ['gizmoManager','positionGizmo','rotationGizmo','scaleGizmo','boundingBoxGizmo']){
+  const widget=good();widget[0].modules['/project/src/main.js']={};widget[1].modules[`/project/node_modules/@babylonjs/core/Gizmos/${file}.js`]={};
+  assert.throws(()=>verifyRuntimeModuleGraph(widget),/Development module entered the initial game graph/);
+ }
 });

@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-11-04T03:51:09.599Z",
+  "passed": true,
+  "sourceSha256": "5f310ca543ac7b0fe9b29e112a48e4292530d9ef0503640b571fafc9fad27eb7",
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "exact main ownership branch advances actual ArcRotate inertia once before culling matrices and scene render",
+      "passed": true,
+      "actualCameraUpdates": 1,
+      "sceneRenderUpdatesCamera": false,
+      "cullingUsesCurrentCamera": true,
+      "cancelledLeaseCameraUpdates": 0,
+      "observedOrder": [
+        "reset-recovery",
+        "lease-update",
+        "camera-update",
+        "camera-view",
+        "camera-projection",
+        "camera-view",
+        "camera-projection",
+        "visibility",
+        "tree",
+        "lighting",
+        "scene-render",
+        "camera-view",
+        "camera-projection",
+        "camera-view",
+        "camera-projection",
+        "camera-view",
+        "camera-projection",
+        "camera-view",
+        "camera-projection",
+        "reset-recovery"
+      ]
+    },
+    {
+      "name": "focus and pageshow callbacks do not consume context-loss recovery; actual GPU-restored callback restores once",
+      "passed": true,
+      "focusRecoveryCalls": 0,
+      "pageshowRecoveryCalls": 0,
+      "gpuRestoredRecoveryCallsPerToken": 1,
+      "staleGenerationRestores": 0
+    }
+  ],
+  "scope": "Read-only AST extraction and execution of the exact current main ownership branch and focus/context-restored callbacks with injected surrounding game globals, real Babylon ArcRotateCamera/Scene/NullEngine and real acquireGameToolLease. Verifies ordering/state restoration, not full browser main startup or device/GPU recovery performance."
+}

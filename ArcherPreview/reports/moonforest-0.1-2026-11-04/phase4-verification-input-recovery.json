@@ -1,0 +1,39 @@
+{
+  "generatedAt": "2026-11-04T03:51:09.420Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/input.js": "6e1cb40add61e81e03bf644e30ef36ea3f46f50f30ec3eb2318c3a050e4fde73",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "real PlaygroundInput cancels context-loss movement/attack holds before gameplay restoration and allows fresh input",
+      "passed": true,
+      "lostState": {
+        "suspended": false,
+        "keys": [
+          "KeyW",
+          "KeyJ"
+        ],
+        "value": {
+          "x": 0,
+          "y": 1,
+          "run": false
+        },
+        "ready": false
+      },
+      "restoredState": {
+        "suspended": false,
+        "keys": [],
+        "value": {
+          "x": 0,
+          "y": 0,
+          "run": false
+        },
+        "ready": true
+      }
+    }
+  ],
+  "scope": "Actual production PlaygroundInput keyboard path plus real game-tool lease and NullEngine context-loss observable, with controlled game readiness and Linkedom surfaces. Reproduces input ownership across GPU-loss lifecycle, not browser GPU recovery itself."
+}

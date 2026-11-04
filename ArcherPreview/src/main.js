@@ -5,6 +5,7 @@ import {setupMinimapTravel} from './minimap-travel.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
 import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL} from './release-route.js';
+import {loadAuthoredMap} from './authored-map-loader.js';
 import {setupUiTest} from './ui-test.js';
 import {setupChapterQuests} from './chapter-quest.js';
 import './ui-test.css';
@@ -430,6 +431,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
   world.developmentActors?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
@@ -462,6 +464,7 @@ async function loadCharacter() {
     const skyReady=world.cave?Promise.resolve():world.sky.load(new URL(`${import.meta.env.BASE_URL}assets/sky.json`, location.href));
     if(isVillage()){
       await loadVillage(world);
+      await world.loadAuthoredMap?.();
       await loadVillageTrainingTarget(world,training);
     }
     else await loadTrainingGround(world,training);
@@ -552,7 +555,7 @@ async function loadCharacter() {
     resetCamera();restoreMapCamera(); updateButtons();
     await skyReady;
     if(isCave())await boss.activateResident(actor);
-    await prepareElenaReview();
+    await prepareElenaReview();world.authoredPlacements?.update(0,actor);
     loadDiagnostics.phase('screen');
     // Keep the loading artwork through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
@@ -574,7 +577,7 @@ async function loadCharacter() {
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
-  } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready){mapTransition?.recover();reconcilePlayback();} }
+  } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready){mapTransition?.recover();reconcilePlayback();world.developmentCinema?.notifyReady();} }
 }
 
 async function retryLoading(){
@@ -620,6 +623,13 @@ function syncCameraFocus(dt,{snap=false}={}){
 
 function render(dt) {
   if(mapDeparture?.departing)return;
+  if(world.toolLease?.active){
+    simulateFrame=false;boss?.combat?.passiveRecovery?.reset();world.toolLease.update(dt);
+    if(!world.toolLease?.active)return;
+    world.camera.update();world.camera.getViewMatrix();world.camera.getProjectionMatrix();
+    world.villageVisibility?.update(world.camera.globalPosition,actor.position,dt);world.treeOcclusion?.update(world.camera.globalPosition,actor.position,dt,playerDimensions(actor));
+    world.lighting.follow(actor.position);world.scene.render(false);return;
+  }
   simulateFrame=dt>0;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
@@ -765,6 +775,19 @@ try {
   engine.renderEvenInBackground=false;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
+  if(releaseEnabled){
+    world.loadAuthoredMap=async()=>{
+      const mapId=world.mapId;
+      try{const result=await loadAuthoredMap(world,{storage:journeyStorage,onCommit:()=>minimap.invalidate(world)});world.authoredMapError=null;return result;}
+      catch(error){if(error.name!=='AbortError'&&mapId===world.mapId){world.authoredMapError=error.message;console.error('[Authored map]',error);toast('배치를 적용하지 못했습니다: '+error.message);}return null;}
+    };
+    world.acquireToolLease=async options=>{
+      const {acquireGameToolLease}=await import('./game-tool-lease.js');
+      return acquireGameToolLease({world,root:$('#app'),canvas,input,audio,
+        getState:()=>({ready,loading:loadingAsset||!!mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true}),
+        setReady:value=>{ready=value;updateButtons();},resetInput:()=>{input?.reset();cancelAttackInput();},reconcile:()=>reconcilePlayback()},options);
+    };
+  }
   applyPlainsViewDistance(world,plainsViewDistanceControl.value);
   setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
@@ -832,7 +855,7 @@ try {
   for(const name of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(name,syncDiagnosticFullscreen);
   syncDiagnosticFullscreen();
   mapDeparture=createMapDeparture({
-    prepare:href=>{ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    prepare:href=>{world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>location.replace(url),
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
@@ -840,6 +863,7 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:href=>{
+      world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.developmentActors?.leaveMap();
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
@@ -871,13 +895,14 @@ try {
       loadDiagnostics.phase('download');
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s,loadingGeneration);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing(undefined,loadingGeneration);await loadVillage(world);
+      await world.loadAuthoredMap?.();
       world.environment.legacyTrainingModel='scarecrow';updatePlainsBoundaryAtmosphere(world,actor.position,true);world.lighting.follow(actor.position,true);
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
       $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled);bindMapPortal(handoff?.from??null);
       if(isCave())await boss.activateResident(actor);
-      await prepareElenaReview();
+      await prepareElenaReview();world.authoredPlacements?.update(0,actor);
       await skyReady;
       assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});assertFrameHealthy();world.scene.render();
     },
@@ -891,7 +916,7 @@ try {
       const modalOpen=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
       audio.setSuspended(document.hidden||modalOpen);
-      if(!document.hidden)canvas.focus({preventScroll:true});
+      if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();
     },
     onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
@@ -901,8 +926,9 @@ try {
   world.scene.onDisposeObservable.addOnce(()=>minimapTravel?.dispose());
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
-    frameDiagnostics.beginFrame(ready&&!loadingAsset&&frameLoop.running,engine.maxFPS);
+    frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     try{render(dt);}catch(error){
+      world.toolLease?.cancel('error',{restore:false});
       frameFailure={name:error.name??'Error',message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;
       loadDiagnostics.finish(frameFailure.message);
       frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
@@ -912,9 +938,10 @@ try {
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
     const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
+    world.toolLease?.setPaused(paused);
     if(paused){input.reset();cancelAttackInput();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
-    audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true);
+    audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
   };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
@@ -932,7 +959,7 @@ try {
   const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
-  engine.onContextRestoredObservable.add(restorePlayback);
+  engine.onContextRestoredObservable.add(()=>{if(world.toolRecovery){world.toolRecovery.recover();world.toolRecovery=null;}restorePlayback();});
   syncPlayback();
   observeViewportSize(canvas, () => {
     if(mapDeparture?.departing||mapTransition?.busy)return;
@@ -1082,6 +1109,26 @@ try {
           return chapterQuests?.talk(id)??false;
         },resetInput:()=>{input.reset();cancelAttackInput();},notify:toast});
     }).catch(error=>{console.error('[Actor lab]',error);toast('배우 실험 도구를 불러오지 못했습니다.');});
+  }
+  if(releaseEnabled&&new URLSearchParams(location.search).get('developer')==='1'){
+    import('./developer-editor.js').then(({setupDeveloperEditor})=>{
+      if(world.scene.isDisposed)return;
+      world.developmentEditor=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius)});
+    }).catch(error=>{console.error('[Placement editor]',error);toast('배치 편집기를 불러오지 못했습니다.');});
+  }
+  if(releaseEnabled&&['cinematic','cinematicPreview'].some(key=>new URLSearchParams(location.search).get(key)==='1')){
+    import('./cinematic-game.js').then(({setupGameCinematics})=>{
+      if(world.scene.isDisposed)return;
+      world.developmentCinema=setupGameCinematics({root:$('#app'),world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,preview:new URLSearchParams(location.search).get('cinematicPreview')==='1',travel:id=>mapTransition.travel(travelUrl(location.href,id)),
+        getState:()=>({ready,loading:loadingAsset,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true||frameLoop?.loadingFailed===true})});
+    }).catch(error=>{console.error('[Cinematic player]',error);toast('컷씬 도구를 불러오지 못했습니다.');});
+  }
+  if(releaseEnabled){
+    const section=document.createElement('section');section.className='settings-section';const title=document.createElement('h3');title.textContent='MoonForest 0.1 · 개발 도구';section.append(title);
+    for(const [flag,label]of [['developer','배치 편집'],['actorLab','배우 실험'],['cinematic','컷씬 파일 재생']]){
+      const link=document.createElement('a'),url=new URL(location.href);for(const key of ['developer','actorLab','cinematic','cinematicPreview'])url.searchParams.delete(key);url.searchParams.set(flag,'1');link.href=url.href;link.textContent=label;link.style.cssText='display:inline-block;padding:8px;margin:4px;color:inherit';section.append(link);
+    }
+    const studio=document.createElement('a');studio.href=new URL('./cinematic-studio.html',location.href).href;studio.textContent='컷씬 제작 페이지';studio.style.cssText='display:inline-block;padding:8px;margin:4px;color:inherit';section.append(studio);$('#motion-speed-dialog .settings-sections').append(section);
   }
   loadCharacter();
 } catch (error) {

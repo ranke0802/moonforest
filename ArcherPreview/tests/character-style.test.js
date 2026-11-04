@@ -77,7 +77,7 @@ test('main modal pause/resume, map finish and paused preview include style dialo
   assert.ok(start>=0&&end>start,'playback callback is present');
   const sync=source.slice(start,end).trim(),events=[],dialogs=new Map();
   const combat=new PlayerCombat();combat.hp=317;combat.passiveRecovery.elapsed=1.9;
-  const run=new Function('boss','mapDeparture','mapTransition','motionSpeedControls','$','document','deathScreen','input','cancelAttackInput','frameLoop','text','frameDiagnostics','audio','const hudLayout=null,minimapTravel=null,uiTest=null;'+sync+'return syncPlayback;');
+  const run=new Function('boss','mapDeparture','mapTransition','motionSpeedControls','$','document','deathScreen','input','cancelAttackInput','frameLoop','text','frameDiagnostics','audio','const world={},hudLayout=null,minimapTravel=null,uiTest=null;'+sync+'return syncPlayback;');
   const call=run({combat},null,null,{isOpen:()=>false},s=>dialogs.get(s)??{open:false},{hidden:false},{isOpen:()=>false},{reset:()=>events.push('reset')},()=>events.push('cancel'),{setPaused:v=>events.push(['pause',v])},()=>{},{suspend(){}},{setSuspended:v=>events.push(['audio',v])});
   dialogs.set('#character-style-dialog',{open:true});call();assert.ok(events.includes('reset'));assert.deepEqual(events.filter(Array.isArray),[['pause',true],['audio',true]]);assert.equal(combat.passiveRecovery.elapsed,0);assert.equal(combat.hp,317);
   events.length=0;dialogs.get('#character-style-dialog').open=false;call();assert.deepEqual(events,[['pause',false],['audio',false]]);

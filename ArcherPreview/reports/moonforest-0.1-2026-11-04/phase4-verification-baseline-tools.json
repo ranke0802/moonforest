@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-11-04T03:51:56.773Z",
+  "passed": true,
+  "baselineCommit": "2c4ed67",
+  "initialDistinctModules": 201,
+  "presence": {
+    "gizmoManager": {
+      "allMarkersPresent": false,
+      "markers": [
+        "usePointerToAttachGizmos",
+        "clearGizmoOnEmptyPointerEvent",
+        "enableAutoPicking"
+      ],
+      "matchingFiles": []
+    },
+    "utilityLayerRenderer": {
+      "allMarkersPresent": true,
+      "markers": [
+        "utilityLayerScene",
+        "_DefaultKeepDepthUtilityLayer",
+        "_CreateDefaultUtilityLayerFromScene"
+      ],
+      "matchingFiles": [
+        "assets/babylon~index-CGOaz6Zs.js"
+      ]
+    },
+    "planeRotationRegistration": {
+      "allMarkersPresent": false,
+      "markers": [
+        "BABYLON.PlaneRotationGizmo"
+      ],
+      "matchingFiles": []
+    }
+  },
+  "rows": [
+    {
+      "path": "assets/babylon~index-CGOaz6Zs.js",
+      "bytes": 5991865,
+      "sha256": "20861471a0877eb10dedddda23a41bd0a119a936cd3181c2536523dc6a4af3c6",
+      "found": {
+        "gizmoManager": [],
+        "utilityLayerRenderer": [
+          "utilityLayerScene",
+          "_DefaultKeepDepthUtilityLayer",
+          "_CreateDefaultUtilityLayerFromScene"
+        ],
+        "planeRotationRegistration": []
+      }
+    }
+  ],
+  "scope": "Read-only implementation/property and registration-marker search across every baseline initial-module body fetched directly from git. This proves retained baseline code markers, not exact source-module origins (unavailable for the historical build), execution, allocation, pixels or GPU/device cost."
+}

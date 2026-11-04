@@ -1,0 +1,35 @@
+{
+  "release": "MoonForest 0.1 ver",
+  "generatedAt": "2026-11-04T03:55:07.062Z",
+  "status": "validated-awaiting-final-release",
+  "tests": {
+    "total": 1632,
+    "passed": 1632,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 153918.3314
+  },
+  "independent": {
+    "phase3Groups": 25,
+    "phase4Groups": 35,
+    "sourceHashesMatch": true
+  },
+  "build": {
+    "files": 1461,
+    "bytes": 629288750,
+    "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "initialJsFiles": 45,
+    "initialRawJsBytes": 10284220,
+    "developmentInitialModules": 0,
+    "gizmoInitialImplementations": 0
+  },
+  "testLogSha256": "ba39e173531c2ea3a5795840888d957738be318c246e5cfb85891ab39d927516",
+  "limits": {
+    "browserAutomation": false,
+    "pixels": "unverified",
+    "devicePerformance": "unverified",
+    "physicalDeviceFps": "unverified",
+    "bearCinematicImported": false
+  },
+  "rollback": "2c4ed67a8912f52cf33f46346c0f73330a89acdf"
+}

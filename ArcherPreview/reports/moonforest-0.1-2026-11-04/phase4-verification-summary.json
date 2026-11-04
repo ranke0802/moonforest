@@ -1,0 +1,387 @@
+{
+  "generatedAt": "2026-11-04T03:54:15.392Z",
+  "passed": true,
+  "independentCaseGroups": 35,
+  "builtInventoryChecks": 1,
+  "sourceHashes": {
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-protocol.js": "b30667783358c2b5efda7a7287d0fc794f64bb25b5c09c3062777ec22f28d49e",
+    "src/cinematic-studio.js": "0ac89fd98f74fe93371b5ac3057f1d6fdcf00c72caa47911f5e6218218c565d9",
+    "cinematic-studio.html": "e1d2ad8286a9d898e6010eb5519daa5b032658f991f7baed29201fa17f2e1656",
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "src/animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "src/boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/cinematic-registry.js": "335bcadc899e3f0889a0440fd72823e077316417adada5eba482c4d3b0b280e4",
+    "src/cinematic-registry.json": "7c1051f6e2bc3943b7c1dbe4da229694455681b8875a346c99279e555edb733f",
+    "scripts/register-cinematic.mjs": "722ff79301b0db30ae9de5087a018d3e24d4640a007e4722496baa69cf21f51c",
+    "src/cinematic-game.js": "7b9496cb4a9c6762ce6969e21ebd08443d1b3bb7dad7fb7056bd07e3e7e42c24",
+    "src/main.js": "5f310ca543ac7b0fe9b29e112a48e4292530d9ef0503640b571fafc9fad27eb7",
+    "src/input.js": "6e1cb40add61e81e03bf644e30ef36ea3f46f50f30ec3eb2318c3a050e4fde73"
+  },
+  "reports": [
+    {
+      "filename": "phase4-verification-pure.json",
+      "sha256": "cc007264b0e73337c68e3230199f1d9d9284a90c238829b44750749aee6cba0a",
+      "passed": true,
+      "cases": 10
+    },
+    {
+      "filename": "phase4-verification-studio.json",
+      "sha256": "bd1ef855fa2792814b164e789ce7012278f212e50622950eeebf7cd021a27b91",
+      "passed": true,
+      "cases": 6
+    },
+    {
+      "filename": "phase4-verification-host.json",
+      "sha256": "30e68ba967e6355717f344785c4b89755f4725cb186cc7b1522eacf2e5ee639d",
+      "passed": true,
+      "cases": 4
+    },
+    {
+      "filename": "phase4-verification-static-host.json",
+      "sha256": "d16421c04f83edee94a1782bb527b8aea6d2eb8ba16e77048aab9e308e207a5a",
+      "passed": true,
+      "cases": 4
+    },
+    {
+      "filename": "phase4-verification-project-game.json",
+      "sha256": "1fdb971f843718aee71a88d13e329d3370d7d687f91ebde855db787a27c4da38",
+      "passed": true,
+      "cases": 8
+    },
+    {
+      "filename": "phase4-verification-main-ownership.json",
+      "sha256": "baa665cef1d37feea31c8e2d285a0a28446a1b8f15f25372f810d45c0923bdc5",
+      "passed": true,
+      "cases": 2
+    },
+    {
+      "filename": "phase4-verification-input-recovery.json",
+      "sha256": "36528ad4f301274b62258d9f090983ca4bae02f56713a3e522c7d1deaa359b02",
+      "passed": true,
+      "cases": 1
+    }
+  ],
+  "actualRigScenario": {
+    "actors": 4,
+    "definitions": [
+      "hooded-goblin.standard",
+      "hooded-goblin.standard",
+      "elena.mourning",
+      "elena.mourning"
+    ],
+    "mourningTrianglesEach": 49982,
+    "resources": {
+      "meshes": 32,
+      "geometries": 11,
+      "materials": 17,
+      "textures": 20,
+      "skeletons": 6,
+      "animationGroups": 44,
+      "morphManagers": 4,
+      "transformNodes": 609,
+      "sceneObservers": 9,
+      "sceneObserverKinds": {
+        "onDisposeObservable": 5,
+        "onNewGeometryAddedObservable": 1,
+        "onNewMaterialAddedObservable": 1,
+        "onPointerObservable": 2
+      },
+      "nodeObservers": 10,
+      "pendingSceneItems": 0,
+      "battleEncounters": 0,
+      "estimatedMemory": {
+        "cpuUniqueGeometryBytes": 4427088,
+        "cpuUniqueMorphArrayBytes": 11299872,
+        "skeletonMatrixBytes": 56640,
+        "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+      }
+    },
+    "drawSubmissionEvidence": {
+      "draws": 24,
+      "mainDraws": 16,
+      "shadowDraws": 8,
+      "submittedTrianglesByPass": {
+        "main": 241192,
+        "shadow": 120596
+      },
+      "submittedTrianglesByRole": {
+        "outline": 120596,
+        "internal-lines": 0,
+        "surface-or-effect": 241192
+      },
+      "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+      "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+    },
+    "estimatedCpuDataMeaning": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency.",
+    "warmReplays": 20,
+    "nativeCreationAndBindingDelta": {
+      "skeletonClones": 0,
+      "boneLinks": 0,
+      "animationGroupClones": 0,
+      "animationGroupStarts": 0,
+      "materialClones": 0,
+      "meshClones": 0
+    },
+    "runtimeParseMaterialMorphDelta": {
+      "modelParses": 0,
+      "libraryInstantiateMethodCalls": 0,
+      "newGeometry": 0,
+      "newMaterial": 0,
+      "morphTextureArrayCreates": 0
+    }
+  },
+  "evidence": {
+    "absoluteQuaternionCameraFovAndClipRanges": true,
+    "sameSeekAndPlaybackNativeSkeletonMorphPoses": true,
+    "silentSeekAndLoopCueEpochs": true,
+    "readinessHandshakeBothEventOrders": true,
+    "exactOriginSourceCommandReplyChecks": true,
+    "allExitReasonsIdempotentPureHost": true,
+    "actualMapChangeAndContextRestoreOwnership": true,
+    "actualCameraInertiaUpdatedOnceBeforeCulling": true,
+    "focusAndPageshowNeverConsumeGpuRecovery": true,
+    "latePreparationAndDisposedQueuedLoadRaces": true,
+    "actualStaticFreeTransformsDoNotPublishWorldData": true,
+    "actualBoundOverlayIdentityScaleTransformVerified": true,
+    "actualStaticRepeatedCycles": 10,
+    "actualStudioExportCliShaGameConsumption": true,
+    "transactionRollbackAndDeadlineLateCleanup": true,
+    "storedOverlayReferenceDeferredUntilReady": true,
+    "invalidCancelledLoadNeverReportsSuccess": true,
+    "finalTimerCounts": {
+      "timeouts": 0,
+      "intervals": 0
+    },
+    "defaultCinematicRegistryEmpty": true,
+    "noAutomaticNormalPlayTrigger": true
+  },
+  "builtInitialInventory": {
+    "baselineCommit": "2c4ed67",
+    "baselineMeaning": "Committed deployed Phase1 site; no retained Phase2 artifact was available. This is an asset inventory comparison, not a Phase2-specific regression benchmark.",
+    "gameModules": 45,
+    "gameJavascriptBytes": 10284220,
+    "gameJavascriptGzipBytes": 2292468,
+    "gameCssBytes": 102334,
+    "studioModules": 6,
+    "studioJavascriptBytes": 297821,
+    "studioJavascriptGzipBytes": 58782,
+    "studioCssBytes": 5031,
+    "developmentNamedGameInitialChunks": 0,
+    "comparison": {
+      "baselineCommit": "2c4ed67",
+      "baselineMeaning": "Committed deployed Phase1 site; no retained Phase2 artifact was available. This is an asset inventory comparison, not a Phase2-specific regression benchmark.",
+      "javascriptByteDelta": -145510,
+      "javascriptPercentDelta": -1.395146374834244,
+      "javascriptGzipByteDelta": -71216,
+      "javascriptBrotliByteDelta": -93146,
+      "initialJsCssByteDelta": -145510,
+      "distinctModuleDelta": -156,
+      "studioGameSharedInitialModules": 2,
+      "studioGameSharedInitialBytes": 24273
+    },
+    "compression": {
+      "gzip": "Node zlib default level6, perfile",
+      "brotli": "Node zlib quality4, perfile",
+      "meaning": "Comparable local recompression only; actual host encoding/headers/cache behavior unmeasured."
+    }
+  },
+  "resolvedFindings": [
+    "Dispose/load and queued replacement races preserve ownership and expose cleanup failure",
+    "Exact contiguous shots reject tiny accepted gaps",
+    "Native skin palettes forced current for repeated absolute seeks inside one render ID",
+    "Bound authored prop scale respects root multiplier and normalized child units",
+    "Studio waits for validated host-ready handshake before one queued load",
+    "Malformed stored registrations isolated while overlay-dependent references revalidate on load",
+    "Cancelled game load returns failure instead of a successful protocol reply"
+  ],
+  "limits": [
+    "No browser automation, screenshot/physical pixels, real audio device playback, GPU timing/residency, device FPS or proven active cap20/60FPS. NullEngine verifies logic, native CPU draw submissions and resource ownership only.",
+    "Actual shipped skin/morph/clip/geometry sources are retained; source images use opaque1x1fixtures. Whole rendered visual equivalence remains unmeasured.",
+    "Real main camera/context callbacks are AST-extracted with injected surrounding globals; this is targeted production-branch execution, not full browser startup.",
+    "Built inventory is read-only against root-produced artifacts; compressed sizes are local perfile recompression, not measured host transfer or browser startup performance.",
+    "Verifier did not run full suite/build/deploy/commit, generate assets, call paid providers or modify actual default map/cinematic aesthetics. Root owns release validation."
+  ],
+  "cases": [
+    {
+      "report": "pure",
+      "name": "strict same-file document/history and neutral default without actor preload or triggers",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "independent Babylon quaternion/anchor camera FOV and actual clip-range interpolation",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "invalid references geometry URLs event scripts numbers clip ranges and tiny shot gaps rejected",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "seek and playback sample identical absolute frames; pause hidden and dt clamp preserve order",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "loop cue epochs boundary cues and completion restore exactly once",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "every interruption reason restores prior input camera HUD mute pause and is idempotent",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "late preparation releases resources without restoring a stale map twice",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "dispose blocks immediate and queued loads while deferred release is pending",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "prepare plus cleanup failures are visible and cannot overlap subsequent acquisition",
+      "passed": true
+    },
+    {
+      "report": "pure",
+      "name": "protocol binds commands and replies to exact origin source version IDs and payload fields",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "real studio DOM edits history and temporary JSON without opening preview or model network",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "actual same-origin iframe transport loads exact edited file once and seeks/captures without reload",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "AI import displays validation/change preview before committing and clipboard prompt performs no call",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "transport rejects cross-origin/source replies and disposal rejects jobs and clears timers/listeners",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "host readiness before or after iframe load sends the exact queued document once",
+      "passed": true
+    },
+    {
+      "report": "studio",
+      "name": "map handshake reset rejects prior jobs and stale maps; expired queued load is never sent later",
+      "passed": true
+    },
+    {
+      "report": "host",
+      "name": "same existing scene engine lease prepares two independent goblins and two full49982triangle Mourning rigs",
+      "passed": true
+    },
+    {
+      "report": "host",
+      "name": "absolute seek and stepped playback produce identical real skeleton morph transform and camera poses",
+      "passed": true
+    },
+    {
+      "report": "host",
+      "name": "twenty warm clip reloads perform zero model parses skeleton rebinds material outline or resource growth",
+      "passed": true
+    },
+    {
+      "report": "host",
+      "name": "paused/hidden clocks and real lease cancellation never revive prior map state; idle eviction removes ownership",
+      "passed": true
+    },
+    {
+      "report": "static-host",
+      "name": "actual normalized authored prop can be bound read-only without cloning moving or changing map metadata",
+      "passed": true
+    },
+    {
+      "report": "static-host",
+      "name": "mismatched existing-instance asset identity and transform reject without touching authored map",
+      "passed": true
+    },
+    {
+      "report": "static-host",
+      "name": "two actual free props share selected geometry and sample transforms without publishing collision minimap or document",
+      "passed": true
+    },
+    {
+      "report": "static-host",
+      "name": "ten free-prop load seek stop cycles release all temporary geometry materials textures observers and instances",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "actual studio JSON export registers exact bytes into only a temporary project and reopens through SHA loader",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "invalid registry metadata hashes streamed size limits deadline and late-fetch cleanup are bounded",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "failed local registration rolls back its staged content index and lock while original export remains unchanged",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "registered project file loads through actual game DOM shared host and renders exact player evaluator poses without auto-play",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "browser registration preserves file references across controller reopen and malformed stored document fails safely",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "actual game bridge readiness queues one load and source origin protocol blocks spoofed control",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "stored overlay reference stays visible before map readiness but can load only after actual authored record exists",
+      "passed": true
+    },
+    {
+      "report": "project-game",
+      "name": "actual canceled preparation replies with failure and late container cleanup leaves no published actor or lease",
+      "passed": true
+    },
+    {
+      "report": "main-ownership",
+      "name": "exact main ownership branch advances actual ArcRotate inertia once before culling matrices and scene render",
+      "passed": true
+    },
+    {
+      "report": "main-ownership",
+      "name": "focus and pageshow callbacks do not consume context-loss recovery; actual GPU-restored callback restores once",
+      "passed": true
+    },
+    {
+      "report": "input-recovery",
+      "name": "real PlaygroundInput cancels context-loss movement/attack holds before gameplay restoration and allows fresh input",
+      "passed": true
+    }
+  ]
+}

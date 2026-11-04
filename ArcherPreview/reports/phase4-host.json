@@ -1,0 +1,64 @@
+{
+  "phase": "PHASE-04-CINEMATIC",
+  "owner": "A / shared scene host",
+  "status": "shared host frozen; twelve focused tests and eight independent actual-model/static host groups pass; root owns UI/registry/build integration",
+  "agentConfiguration": {"requestedSpawn": {"fork_turns": "none", "model": "gpt-6.1-sol", "reasoning_effort": "xhigh"}, "successfulCreation": true, "backendResolutionIndependentlySurfaced": false, "mainModelSwitchClaimed": false},
+  "files": ["src/cinematic-scene-host.js", "tests/cinematic-scene-host.test.js", "reports/phase4-host.json"],
+  "verifiedSourceHashes": {
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "src/animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "src/boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+    "src/game-tool-lease.js": "4136415da5910be81db3b5453597b20493f3134e0e4271b406e470d32194eb89",
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b"
+  },
+  "hashEvidence": "Raw-file SHA256 values from C's passing host/static reports. Later root integration changes require final integration checks; no main-model or device-resolution claim is implied.",
+  "adjacentOwnedExtension": "AuthoredPlacementRuntime publish:false and sampleFreeTransforms allow multiple cinematic free props to reuse its selected-source renderer without modifying game placement metadata/navigation. Default editor publication remains unchanged and its eleven focused tests pass.",
+  "hypothesis": "Use the existing world/scene/FrameLoop/tool lease and prepared actor/static resource paths, with one absolute pose adapter shared by editor scrubbing and game playback. Keep new actors visual-only and independently posed, retain bounded warm resources, and release input/camera/audio ownership through the existing lease.",
+  "api": {
+    "factory": "createCinematicSceneHost({world,getPlayer,battle,catalog,actorDefinitions,actorFactory?,createActorFactory?,libraryFactory?,createPlacementRuntime?,placementOptions?,acquireToolLease?,getState?,onSubtitles?,onMarker?,audioIds?,audioEnabled?,preparationOptions?,limits?,now?})",
+    "playerHostMethods": ["acquire(document,{token,signal,isCurrent}) -> lease", "prepare(document,{token,signal,isCurrent,lease}) -> prepared", "sample(frame,{token,lease,prepared,seeking})", "emit(cue,{token,lease,prepared})", "stopAudio({token,lease})", "release({token,lease,prepared,reason,restore})"],
+    "rootBridge": ["setCallbacks({onFrame,onPause,onCancel})", "setPlaybackState(state)", "captureCamera() returns WORLD position/target/FOV radians", "inspect()", "evictIdle()", "dispose()"],
+    "poseAdapter": "createCinematicPoseSampler(encounter) evaluates authored registered clip channels absolutely, preserving scalar/vector/quaternion interpolation and at most two weighted clips from the shared evaluator."
+  },
+  "implementation": {
+    "sceneOwnership": "No new Engine, Scene, RAF, AudioContext or permanent scene observer. Root's acquireToolLease owns input/held-action cancellation, HUD, free camera controls, pause and tracked audio; the existing FrameLoop invokes the player's update callback.",
+    "camera": "Apply evaluated map-space position/look-at target/FOV radians to the existing camera; zero inertia, temporarily remove shot-clamping limits, and restore only with the same scene/map/ground/tool-generation ownership. Studio converts captured WORLD coordinates into anchor-local coordinates exactly once.",
+    "actors": "Reuse createActorEncounterFactory and warm/prepareHidden only. No summon, brain, collision, reward or BossBattle update runs for cinematic actors. Current toon, outline/internal-line, shadow and shader preparation paths remain intact; independent skeleton/pose/morph instances share eligible base resources.",
+    "sampling": "Babylon Animation.evaluate samples registered native channel interpolation without an AnimationGroup clock or pending weighted goToFrame queue. Empty animation lists restore prepared idle at0. Existing root/ground correction is applied absolutely. Mourning reuses its approved knee tracks and morph/halo/cloth methods with explicit absolute clocks and fresh cloth target initialization, making seek independent of prior playback.",
+    "skinPaletteFix": "Independent actual-rig verification found that Skeleton.prepare() reused palettes within one render ID even though local channels matched. Use the public prepare(true) flag after a newly sampled pose; a linked Bone/Skeleton regression proves distinct and restored palettes between seeks without incrementing render ID. The scene draw reuses the resulting palette.",
+    "statics": "Only selected approved static props load through the existing placement runtime in nonpublishing mode. sampleFreeTransforms applies multiple owned free non-colliding props synchronously, without per-frame commit or shader preparation.",
+    "boundInstances": "Existing loaded static instances are read-only: enforce asset/version identity, exact immutable transform and no transform/animation tracks. Base normalized-root scale and authored overlay multiplier-on-root scale use their respective existing conventions; their collision/navigation never changes.",
+    "events": "sample/seek emits no SFX or gameplay events. emit accepts configured audio IDs and marker diagnostics only; player cue deduplication and audio lease tracking remain authoritative.",
+    "cleanup": "One idempotent release path hides/retires only owned actors/static visuals, stops owned audio, cancels existing preparation lifetimes, and releases the same lease. Late acquisition/preparation is reclaimed. Map/death/context/error cancellation retires affected owned resources and never restores an old-map actor or camera."
+  },
+  "bounds": {
+    "maximumActorSlots": 20,
+    "estimatedMemoryBytes": 536870912,
+    "perDefinition": "existing definition population.maxPooled",
+    "idleSeconds": 30,
+    "idlePolicy": "Sweep on the next explicit acquire/prepare or evictIdle call, with immediate pressure eviction; no background interval. Active/retiring resources stay charged. Host disposal releases all owned cache entries.",
+    "capBehavior": "Reject explicit overflow; do not silently reduce actor counts. Definition estimates reserve bytes before warm, then adapter estimates are checked after preparation. These are conservative reservations/CPU estimates, not measured GPU residency."
+  },
+  "focusedEvidence": {
+    "command": "C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe --test tests/cinematic-scene-host.test.js",
+    "passed": 12,
+    "failed": 0,
+    "cases": ["absolute interpolation/blending and default idle0", "linked real skeleton palettes across same-render-ID seeks", "anchored editor seek versus game tick and raw camera capture", "sixteen warm replay resource plateaus and exactly-once lease release", "no seek cues, allowed playback cues and paused audio", "late warm cancellation", "late lease acquisition cancellation", "map-safe restoration suppression", "injected sampling failure cleanup", "bounded pressure eviction and count/memory rejection", "twenty independent lab poses and twenty-first document rejection", "read-only existing instance identity/transform enforcement"]
+  },
+  "independentEvidence": {
+    "reports": ["reports/moonforest-0.1-2026-11-04/phase4-verification-host.json", "reports/moonforest-0.1-2026-11-04/phase4-verification-static-host.json"],
+    "hostGroupsPassed": 4,
+    "staticGroupsPassed": 4,
+    "actualActors": "Two existing 10,412-triangle goblin rigs and two existing 49,982-triangle Mourning rigs; independent skeletons/morph managers, existing surface/outline/shadow paths.",
+    "poseResult": "Six repeated seeks with intervening different pose/render produced matching native palettes, morphs and local transforms to1e-9; stepped playback versus seek matched. Twenty warm reloads added zero parses, clones, bindings, outline/material/resource growth.",
+    "staticResult": "Normalized authored overlay binding worked without a clone; identity/transform/track conflicts rejected. Two free props shared geometry over41 samples with zero world placement publishes; ten load/seek/stop cycles had an exact resource plateau.",
+    "lifecycleResult": "Actual lease pause, map cancellation and idle cleanup passed with zero remaining timers and matching current source hashes.",
+    "scope": "NullEngine actual packed geometry, rigs, clips, morphs, native CPU draw and ownership paths with opaque1x1 material fixtures. No browser, pixels, actual image decoding, GPU, physical-device FPS or thermal result."
+  },
+  "integrationAsks": ["Root passes the existing battle/getPlayer and shared scene lease, with subtitle text callback, current catalog/definitions and allowlisted audio IDs.", "Root's existing FrameLoop drives onFrame; studio and game use the same CinematicPlayer/evaluateCinematic/host.", "Load the selected existing map before acquire; registration does not create an automatic normal-play trigger.", "Keep studio/catalog/host imports lazy behind the explicit authoring/development loader. Do not register or ship the bear experiment as content.", "Root owns final shared UI/registry/export/apply/build/deploy verification."],
+  "limitations": ["No bear sample content, new/paid assets or copied generated HTML/base64.", "No existing bound-instance movement/collision edits.", "Twenty slots are a bounded lab ceiling, not a device capability or60FPS guarantee.", "No GPU visual-equivalence or performance claim is made; actual display verification remains unavailable."]
+}

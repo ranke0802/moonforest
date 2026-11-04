@@ -1,0 +1,262 @@
+{
+  "generatedAt": "2026-11-04T03:51:11.555Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "src/animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "src/boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176",
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "same existing scene engine lease prepares two independent goblins and two full49982triangle Mourning rigs",
+      "passed": true,
+      "actors": 4,
+      "actualAssets": [
+        {
+          "id": "hooded-goblin",
+          "version": "Hooded Goblin - 12 source motions",
+          "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+          "modelSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "vertices": 18403
+        },
+        {
+          "id": "mourning-elena",
+          "version": "Mourning Elena · r10 motion · approved 49,982 triangles",
+          "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+          "modelSha256": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff",
+          "triangles": 49982,
+          "vertices": 40777
+        }
+      ],
+      "independentSkeletons": true,
+      "independentMorphManagers": true,
+      "sharedBaseGeometry": true,
+      "resources": {
+        "meshes": 32,
+        "geometries": 11,
+        "materials": 17,
+        "textures": 20,
+        "skeletons": 6,
+        "animationGroups": 44,
+        "morphManagers": 4,
+        "transformNodes": 609,
+        "sceneObservers": 9,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1,
+          "onPointerObservable": 2
+        },
+        "nodeObservers": 10,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 4427088,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 56640,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "draws": {
+        "draws": 24,
+        "mainDraws": 16,
+        "shadowDraws": 8,
+        "submittedTrianglesByPass": {
+          "main": 241192,
+          "shadow": 120596
+        },
+        "submittedTrianglesByRole": {
+          "outline": 120596,
+          "internal-lines": 0,
+          "surface-or-effect": 241192
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      },
+      "host": {
+        "scene": true,
+        "engineOwned": false,
+        "rafOwned": false,
+        "state": "ready",
+        "active": true,
+        "actors": 4,
+        "estimatedBytes": 226492416,
+        "pendingRetirements": 0,
+        "limits": {
+          "actors": 20,
+          "estimatedBytes": 536870912,
+          "idleSeconds": 30
+        },
+        "stats": {
+          "acquired": 1,
+          "prepared": 1,
+          "samples": 1,
+          "released": 0,
+          "actorsCreated": 4,
+          "actorsReused": 0,
+          "actorsRetired": 0,
+          "audioCues": 0,
+          "markers": 0,
+          "cleanupErrors": 0
+        },
+        "pool": [
+          {
+            "key": "hooded-goblin.standard#1",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 12582912
+          },
+          {
+            "key": "hooded-goblin.standard#2",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 12582912
+          },
+          {
+            "key": "elena.mourning#1",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 100663296
+          },
+          {
+            "key": "elena.mourning#2",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 100663296
+          }
+        ],
+        "memoryMeaning": "Definition reservations and adapter estimates; no device/GPU residency claim."
+      },
+      "combatActors": 0
+    },
+    {
+      "name": "absolute seek and stepped playback produce identical real skeleton morph transform and camera poses",
+      "passed": true,
+      "absoluteTimes": 6,
+      "seekVsPlayNativePoseExact": true,
+      "historyIndependent": true,
+      "actualMourningProceduralMorphs": true
+    },
+    {
+      "name": "twenty warm clip reloads perform zero model parses skeleton rebinds material outline or resource growth",
+      "passed": true,
+      "cycles": 20,
+      "nativeDelta": {
+        "skeletonClones": 0,
+        "boneLinks": 0,
+        "animationGroupClones": 0,
+        "animationGroupStarts": 0,
+        "materialClones": 0,
+        "meshClones": 0
+      },
+      "runtimeDelta": {
+        "modelParses": 0,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 0,
+        "newMaterial": 0,
+        "morphTextureArrayCreates": 0
+      },
+      "resourcesBefore": {
+        "meshes": 32,
+        "geometries": 11,
+        "materials": 17,
+        "textures": 20,
+        "skeletons": 6,
+        "animationGroups": 44,
+        "morphManagers": 4,
+        "transformNodes": 609,
+        "sceneObservers": 6,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 4,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 10,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 4427088,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 56640,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "resourcesAfter": {
+        "meshes": 32,
+        "geometries": 11,
+        "materials": 17,
+        "textures": 20,
+        "skeletons": 6,
+        "animationGroups": 44,
+        "morphManagers": 4,
+        "transformNodes": 609,
+        "sceneObservers": 6,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 4,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 10,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 4427088,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 56640,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "cameraHudInputMuteRestored": true
+    },
+    {
+      "name": "paused/hidden clocks and real lease cancellation never revive prior map state; idle eviction removes ownership",
+      "passed": true,
+      "pauseFrozen": true,
+      "hiddenFrozen": true,
+      "staleCameraRestores": 0,
+      "idlePoolActors": 0,
+      "idleEstimatedBytes": 0,
+      "resources": {
+        "meshes": 0,
+        "geometries": 5,
+        "materials": 7,
+        "textures": 10,
+        "skeletons": 0,
+        "animationGroups": 0,
+        "morphManagers": 0,
+        "transformNodes": 1,
+        "sceneObservers": 6,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 4,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 0,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 4408160,
+          "cpuUniqueMorphArrayBytes": 9562464,
+          "skeletonMatrixBytes": 18880,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      }
+    }
+  ],
+  "timersRemaining": {
+    "timeouts": 0,
+    "intervals": 0
+  },
+  "scope": "Actual existing shipped goblin and49982triangle Mourning geometry/rig/morph/clip sources via existing production scoped loader with decoded inline buffers and opaque1x1material fixtures. Actual native scene/camera/game-tool lease/adapter/pose/shadow/outline paths; no parent engine/RAF/combat registration. NullEngine CPU draw submissions, ownership and poses only; no browser/pixels/GPU/device60FPS claim."
+}

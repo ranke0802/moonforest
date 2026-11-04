@@ -1,0 +1,18 @@
+{
+  "status":"focused checks passed; source frozen",
+  "command":"node --test tests/asset-catalog.test.js",
+  "pass":6,
+  "fail":0,
+  "generatedFreshnessCommand":"node scripts/build-asset-catalog.mjs --check",
+  "entries":82,
+  "runtimeManifests":16,
+  "actualGltfModels":247,
+  "editableIds":["crate-barrel-cluster","firewood","handcart"],
+  "policies":"Explicit manifest approval only; static version is actual primary glTF SHA256, actor version is exact current config.version; content hash and resource/catalog-content revisions guard changes. All public references are deployable-relative. Solid collision only for ground; wall/ceiling/free decorative placement uses collision:none.",
+  "metadata":"Raw glTF accessor counts and scene-node instances, materials/textures, unique joints, skins, morph/clip counts and input-accessor clip durations. No external geometry/texture buffers decoded or GPU resources loaded.",
+  "localInventory":{"filesEnumerated":10421,"fileBytesEnumerated":27341248761,"modelFiles":884,"metadataFilesRead":364,"smallModelBytesActuallyHashed":19122417,"deployedOrDeclaredSource":244,"unusedExplicitlyReviewed":100,"unreviewedCandidateOrUnlinked":343,"intermediateWorking":197,"errors":0,"artifact":"phase3-local-inventory.json","privacy":"Absolute local paths appear only in the local inventory artifact, never the generated public module."},
+  "reduction":{"adopted":false,"reason":"No safe non-protected candidate with equivalent pixel/motion evidence. Original assets unchanged; houses/trees/rocks/woodwalls and skinned actors locked."},
+  "independentEvidence":"C independently checked82entries/247rawglTFmetadata and hashes, policy/privacy/no-preload behavior and actual4683triangle crate Meshopt loading. Later additive clipDurations/free-surface metadata refresh is independently rechecked in C's final artifacts.",
+  "sha256":{"src/asset-catalog.js":"e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b","scripts/build-asset-catalog.mjs":"074b0f7be7382e32fbbe3f1b7cac7450625deb1b7c6f67805e04fe726364641e","scripts/asset-catalog-metadata.mjs":"3502cbf7813c13ab0509eb6c31ab65c9effc7ddb9d70eca6e62a635a538d03bc"},
+  "limits":["Metadata and Node/DOM/resource checks do not measure device FPS or GPU time.","Local large binaries are stat'ed and retain declared-hash evidence or a not-hashed marker; no multi-GB binary hashing/dump occurred.","Unlinked source status is conservative; deployment and visual approval are never inferred solely from a filename containing review.","Only master-authorized Phase3/4 cards were read; acceptance/future card remains unopened by this owner."]
+}

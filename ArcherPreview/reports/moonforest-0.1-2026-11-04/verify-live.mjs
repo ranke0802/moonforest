@@ -10,14 +10,19 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const paths=(await readFile(resolve(app,'reports/publish-village-paths.txt'),'utf8')).trim().split(/\r?\n/);
 const result={commit,browserAutomation:false,scope:'HTTP SHA-256 equality; no pixels or physical-device measurement',verified:[],expectedFiles:paths.length,passed:false};
 try{
- for(const path of paths){
+ let cursor=0;
+ async function worker(){for(;;){
+  const index=cursor++;if(index>=paths.length)return;const path=paths[index];
   if(!path.startsWith('ArcherPreviewSite/')||path.includes('..'))throw Error('Unexpected release path');
   const response=await fetch('https://ranke0802.github.io/moonforest/'+path+'?rev='+commit.slice(0,7),{headers:{'Cache-Control':'no-cache','User-Agent':'Moonforest-release-hash-verification'},signal:AbortSignal.timeout(45000)});
   if(!response.ok)throw Error(`HTTP ${response.status}: ${path}`);
   const actual=Buffer.from(await response.arrayBuffer()),expected=await readFile(resolve(repo,path));
   if(hash(actual)!==hash(expected))throw Error('Published bytes differ: '+path);
   result.verified.push({path,bytes:actual.length,sha256:hash(actual)});
- }
+ }}
+ const workers=await Promise.allSettled(Array.from({length:Math.min(4,paths.length)},worker));
+ const failed=workers.find(value=>value.status==='rejected');if(failed)throw failed.reason;
+ result.verified.sort((a,b)=>a.path.localeCompare(b.path));
  result.passed=result.verified.length===paths.length;
 }catch(error){result.error=String(error.message);}
 await writeFile(resolve(import.meta.dirname,'live-verification.json'),JSON.stringify(result,null,2)+'\n');

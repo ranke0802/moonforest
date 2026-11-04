@@ -23,9 +23,10 @@ export function verifyRuntimeModuleGraph(output){
     if(!chunk.isEntry)continue;
     const staticChunks=closure(name);
     if(staticChunks.some(item=>contains(item,'/src/main.js'))){
-      const developmentOnly=/(?:^|\/)src\/(?:developer-[^/]+|actor-population|actor-definitions|actor-encounter-adapter|asset-catalog|placement-editor|cinematic-editor)\.js$/;
+      const developmentOnly=/(?:^|\/)src\/(?:developer-[^/]+|actor-population|actor-definitions|actor-encounter-adapter|asset-catalog|placement-document|authored-placement-runtime|game-tool-lease|cinematic-(?:document|player|scene-host|studio|protocol|game|registry))\.js$/;
       for(const item of staticChunks)for(const id of Object.keys(item.modules??{})){
-        if(developmentOnly.test(id.replaceAll('\\','/')))throw new Error(`Development module entered the initial game graph: ${id}`);
+        const normalized=id.replaceAll('\\','/');
+        if(developmentOnly.test(normalized)||/\/@babylonjs\/core\/Gizmos\/(?:gizmoManager|positionGizmo|rotationGizmo|scaleGizmo|boundingBoxGizmo)\.js$/.test(normalized))throw new Error(`Development module entered the initial game graph: ${id}`);
       }
     }
     if(!staticChunks.some(item=>contains(item,'/src/village-ktx2.js')))continue;

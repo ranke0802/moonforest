@@ -7,6 +7,10 @@ import { VILLAGE_ASSET_IDS } from '../src/village-layout.js';
 import { validVillageTextureProfile } from '../src/village-texture-budget.js';
 import {buildResourceBundles,verifyResourceBundles} from './resource-bundles.mjs';
 import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
+import {ASSET_CATALOG} from '../src/asset-catalog.js';
+import {createBasePlacementManifest,validatePlacementDocument} from '../src/placement-document.js';
+import {listRegisteredCinematics,DEFAULT_CINEMATIC_REFERENCES} from '../src/cinematic-registry.js';
+import {validateCinematicDocument} from '../src/cinematic-document.js';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
@@ -56,6 +60,30 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
     const absolute=resolve(publicRoot,entry.name);files.set(entry.name,{absolute,bytes:(await readFile(absolute)).length});
   }
   if(!files.has('resource-cache.js'))throw new Error('Persistent resource-cache worker is missing.');
+  let authoredIndex;
+  try{authoredIndex=JSON.parse(await readFile(resolve(publicRoot,'../src/authored-map-index.json'),'utf8'));}catch(error){if(error.code!=='ENOENT')throw error;}
+  if(authoredIndex){
+    if(authoredIndex.version!==1||!authoredIndex.maps||Array.isArray(authoredIndex.maps))throw new Error('Unsupported authored map registry');
+    for(const [mapId,entry]of Object.entries(authoredIndex.maps)){
+      if(!['village','great-plains','monster-forest','witch-cave'].includes(mapId)||entry.path!==`authored/maps/${mapId}.json`)throw new Error('Unsafe authored map path');
+      const absolute=resolve(publicRoot,entry.path),bytes=await readFile(absolute);if(bytes.length>512*1024||hash(bytes)!==entry.sha256)throw new Error('Authored map size/hash mismatch');
+      const document=validatePlacementDocument(JSON.parse(bytes),{catalog:ASSET_CATALOG,baseManifest:createBasePlacementManifest(mapId,{catalog:ASSET_CATALOG})});
+      if(document.mapId!==mapId||document.revision!==entry.revision||document.baseRevision!==entry.baseRevision)throw new Error('Authored map registry metadata mismatch');
+      files.set(entry.path,{absolute,bytes:bytes.length});
+    }
+  }
+  let cinematicIndex;
+  try{cinematicIndex=JSON.parse(await readFile(resolve(publicRoot,'../src/cinematic-registry.json'),'utf8'));}catch(error){if(error.code!=='ENOENT')throw error;}
+  if(cinematicIndex)for(const entry of listRegisteredCinematics(cinematicIndex)){
+    const absolute=resolve(publicRoot,entry.url),bytes=await readFile(absolute);
+    if(bytes.length!==entry.bytes||hash(bytes)!==entry.sha256)throw new Error('Registered cinematic size/hash mismatch');
+    const instanceIds=createBasePlacementManifest(entry.mapId,{catalog:ASSET_CATALOG}).instances.map(row=>row.instanceId);
+    if(authoredIndex?.maps[entry.mapId]){const overlay=JSON.parse(await readFile(resolve(publicRoot,authoredIndex.maps[entry.mapId].path),'utf8'));instanceIds.push(...overlay.instances.map(row=>row.instanceId));}
+    const result=validateCinematicDocument(bytes.toString('utf8'),{...DEFAULT_CINEMATIC_REFERENCES,instanceIds}),document=result.document;
+    if(!result.valid)throw new Error('Registered cinematic document validation failed: '+JSON.stringify(result.errors));
+    if(document.cutsceneId!==entry.cutsceneId||document.mapId!==entry.mapId||document.duration!==entry.duration||document.catalogRevision!==entry.catalogRevision)throw new Error('Registered cinematic metadata mismatch');
+    files.set(entry.url,{absolute,bytes:bytes.length});
+  }
   return {files,manifestCount:manifests.length};
 }
 
@@ -82,7 +110,11 @@ export async function buildVillageSite(){
   // Resolve public URLs in HTML (including the installed-app manifest) while
   // copying only the verified graph below, not public's raw model sources.
   let runtimeGraph;
-  await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-runtime-module-graph',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false}});
+  await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-runtime-module-graph',async generateBundle(_options,bundle){
+    runtimeGraph=verifyRuntimeModuleGraph(bundle);
+    const chunks=Object.values(bundle).filter(item=>item.type==='chunk').map(item=>({fileName:item.fileName,isEntry:item.isEntry,imports:item.imports,dynamicImports:item.dynamicImports,bytes:Buffer.byteLength(item.code),moduleIds:Object.keys(item.modules)}));
+    await mkdir(resolve(project,'reports'),{recursive:true});await writeFile(resolve(project,'reports/runtime-module-origins.json'),JSON.stringify({version:1,chunks},null,2)+'\n');
+  }}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{game:resolve(project,'index.html'),cinematicStudio:resolve(project,'cinematic-studio.html')}}}});
   const directories=new Set();
   for(const [local,info]of files){
     const target=resolve(outDir,local),folder=dirname(target);

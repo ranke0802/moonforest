@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "catalogContentRevision": "838643081a991722c4151aa2118a30ae486ddbcbf4f8d947edef3582487e0337",
+  "entries": 82,
+  "modelsRead": 247,
+  "manifests": [
+    {
+      "manifest": "assets/village.json",
+      "sha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "assets": 25
+    },
+    {
+      "manifest": "assets/village-plains-outskirts.json",
+      "sha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "assets": 8
+    },
+    {
+      "manifest": "assets/great-plains.json",
+      "sha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "assets": 20
+    },
+    {
+      "manifest": "assets/monster-forest.json",
+      "sha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "assets": 10
+    },
+    {
+      "manifest": "assets/witch-cave.json",
+      "sha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "assets": 29
+    },
+    {
+      "manifest": "assets/quest-props.json",
+      "sha256": "fc15eda93d5c6d13d4d7fd017a162fe5121a78dce9173a002657a07c7ce11094",
+      "assets": 12
+    },
+    {
+      "manifest": "assets/environment.json",
+      "sha256": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "assets": 5
+    },
+    {
+      "manifest": "assets/guardian-bear.json",
+      "sha256": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/hooded-goblin.json",
+      "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/elena.json",
+      "sha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/mourning-elena.json",
+      "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/character.json",
+      "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/warrior.json",
+      "sha256": "6e6b756dc3e776740e8be2f8c3d48dbc319ff34f0b9eedb4d420f647611969aa",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/warrior-v2.json",
+      "sha256": "495af0e03f0101543b4011f05b32e7a21edb6b074ce97c11c868f53986fdcbdf",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/warrior-v3.json",
+      "sha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "assets": 1
+    },
+    {
+      "manifest": "assets/warrior-v3-ios.json",
+      "sha256": "8fd4bceb04d02117fe6cfbac0d9e5ab128b419a56cb05cde3a17d0fa76de6253",
+      "assets": 1
+    }
+  ],
+  "editable": [
+    {
+      "assetId": "crate-barrel-cluster",
+      "version": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+      "contentHash": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+      "usedMaps": [
+        "great-plains",
+        "village",
+        "witch-cave"
+      ]
+    },
+    {
+      "assetId": "firewood",
+      "version": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+      "contentHash": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+      "usedMaps": [
+        "great-plains",
+        "village",
+        "witch-cave"
+      ]
+    },
+    {
+      "assetId": "handcart",
+      "version": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+      "contentHash": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+      "usedMaps": [
+        "great-plains",
+        "village",
+        "witch-cave"
+      ]
+    }
+  ],
+  "reviewCounts": {
+    "deployed-review-unspecified": 26,
+    "approved": 56
+  },
+  "sameIdsWithMultipleVersions": [],
+  "publicPaths": "deployable-relative-only; local provenance exists only in phase3-local-inventory.json",
+  "metadata": "Actual glTF accessor index counts, node-instance triangle submissions, material/texture definitions, skins/joint union, animation names and accessor/node-transform bounds; no external geometry buffers decoded.",
+  "reduction": {
+    "adopted": false,
+    "reason": "No evidence-backed non-protected reduction with equivalent GPU/pixel views is available. Protected houses/trees/rocks/woodwalls and all animated actor profiles stay locked. Separate candidate IDs/versions are required for any future review; approved sources were not modified."
+  },
+  "preview": "Existing thumbnail reference only when present; otherwise load-on-explicit-selection. Search/catalog module imports no renderer, model, textures or preload jobs.",
+  "limitations": [
+    "Metadata is not GPU allocation/time, physical-device FPS or polygon-source count.",
+    "glTF bounds are static accessor/node-transform bounds; posed actors retain their existing runtime skinned bounds and are not static-placement candidates.",
+    "Local source approval/hash evidence is inventoried separately and does not auto-approve deployed manifests without explicit review status.",
+    "Only the three certified independent props are editable; solid collision is ground-only, wall/ceiling attachments require collision:none.",
+    "Normal startup lazy separation, placement/navigation/minimap integration and final build are owned by root/A/verifier."
+  ]
+}

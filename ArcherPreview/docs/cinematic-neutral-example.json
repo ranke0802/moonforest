@@ -1,0 +1,69 @@
+{
+  "format": "moonforest-cinematic",
+  "version": 1,
+  "cutsceneId": "moonforest-neutral-development",
+  "mapId": "village",
+  "catalogRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+  "duration": 6,
+  "anchor": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "rotation": [
+      0,
+      0,
+      0,
+      1
+    ]
+  },
+  "actors": [],
+  "shots": [
+    {
+      "shotId": "shot-1",
+      "start": 0,
+      "end": 6,
+      "interpolation": "smooth",
+      "from": {
+        "position": [
+          6,
+          4,
+          -6
+        ],
+        "target": [
+          0,
+          1,
+          0
+        ],
+        "fov": 0.65
+      },
+      "to": {
+        "position": [
+          -6,
+          3,
+          -4
+        ],
+        "target": [
+          0,
+          1,
+          0
+        ],
+        "fov": 0.65
+      }
+    }
+  ],
+  "tracks": {
+    "transforms": [],
+    "animations": [],
+    "subtitles": [
+      {
+        "start": 0,
+        "end": 3,
+        "text": "중립 개발 샷 · 일반 플레이 자동 실행 없음"
+      }
+    ],
+    "audio": [],
+    "events": []
+  }
+}

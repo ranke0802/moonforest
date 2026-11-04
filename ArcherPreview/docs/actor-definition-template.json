@@ -1,0 +1,99 @@
+{
+  "definitionVersion": 1,
+  "style": {
+    "toon": "existing-monster-toon",
+    "outline": "existing-character-outline",
+    "internalLine": "existing-character-surface-style",
+    "group": "boss",
+    "defaults": {
+      "outline": true,
+      "outlineWidth": 0.3,
+      "internal": true,
+      "internalStrength": 0.3,
+      "brightness": 1
+    }
+  },
+  "bounds": {
+    "mode": "prepared-independent-skinned-bounds",
+    "renderRangePadding": 3
+  },
+  "spawn": {
+    "group": "development-actor-lab",
+    "count": 1,
+    "intervalSeconds": 0,
+    "maps": [
+      "village",
+      "great-plains",
+      "monster-forest",
+      "witch-cave"
+    ],
+    "area": "current-map-navigation",
+    "pausePolicy": "game-paused-or-map-inactive",
+    "safeDistance": 1.14
+  },
+  "respawn": {
+    "enabled": true,
+    "delaySeconds": 8,
+    "pausePolicy": "game-paused-or-map-inactive"
+  },
+  "lod": {
+    "mode": "existing-full-quality",
+    "levels": [],
+    "futurePolicy": "per-definition-screen-coverage",
+    "reduceExisting": false
+  },
+  "scheduling": {
+    "nearDistance": 20,
+    "farDecisionSeconds": 1
+  },
+  "actorDefinitionId": "hooded-goblin.standard",
+  "label": "후드 고블린",
+  "assetId": "hooded-goblin",
+  "assetVersion": "Hooded Goblin - 12 source motions",
+  "category": "monster",
+  "encounterType": "goblin",
+  "animation": {
+    "Running": "Running",
+    "Walking": "Walking",
+    "Sneaky_Walk_inplace": "Sneaky_Walk_inplace",
+    "Walk_Turn_Right": "Walk_Turn_Right",
+    "Right_Jab_from_Guard": "Right_Jab_from_Guard",
+    "Sword_Judgment": "Sword_Judgment",
+    "Dodge_Roll": "Dodge_Roll",
+    "Parkour_Vault_with_Roll": "Parkour_Vault_with_Roll",
+    "Sword_Parry_Backward_2": "Sword_Parry_Backward_2",
+    "Gangnam_Groove": "Gangnam_Groove",
+    "Knock_Down": "Knock_Down",
+    "Fall_Dead_from_Abdominal_Injury": "Fall_Dead_from_Abdominal_Injury"
+  },
+  "collider": {
+    "radius": 0.34,
+    "stopDistance": 1.05,
+    "separationRadius": 0.42,
+    "source": "GoblinEncounter"
+  },
+  "behavior": {
+    "type": "existing-goblin-brain",
+    "source": "GoblinBrain"
+  },
+  "movement": {
+    "walkSpeed": 1.8,
+    "sneakSpeed": 2.5,
+    "runSpeed": 5.2,
+    "source": "GoblinBrain"
+  },
+  "hp": 180,
+  "population": {
+    "maxPooled": 20,
+    "idleSeconds": 30,
+    "estimatedBytes": 12582912
+  },
+  "drop": {
+    "handler": "GoldLoot.drop",
+    "kind": "goblin"
+  },
+  "quest": {
+    "handler": "ChapterQuests.defeat",
+    "kind": "goblin"
+  }
+}

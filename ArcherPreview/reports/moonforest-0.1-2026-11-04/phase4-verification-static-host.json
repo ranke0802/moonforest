@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-11-04T03:51:10.503Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176",
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "actual normalized authored prop can be bound read-only without cloning moving or changing map metadata",
+      "passed": true,
+      "unitOnChild": 1.777777824872807,
+      "actorRootScale": 1.5,
+      "sourceLoads": 0,
+      "newStaticRuntime": 0,
+      "immutableTransform": true
+    },
+    {
+      "name": "mismatched existing-instance asset identity and transform reject without touching authored map",
+      "passed": true,
+      "invalidBoundReferences": 3,
+      "mapPreserved": true
+    },
+    {
+      "name": "two actual free props share selected geometry and sample transforms without publishing collision minimap or document",
+      "passed": true,
+      "actors": 2,
+      "sourceLoads": 1,
+      "samples": 41,
+      "transformOnlyCommits": 0,
+      "sharedGeometry": true,
+      "worldRevisionChanges": 0,
+      "mapMetadataPreserved": true
+    },
+    {
+      "name": "ten free-prop load seek stop cycles release all temporary geometry materials textures observers and instances",
+      "passed": true,
+      "cycles": 10,
+      "resourcesBefore": {
+        "meshes": 33,
+        "geometries": 4,
+        "materials": 8,
+        "textures": 5,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 8,
+        "nodeObservers": 1,
+        "scenePending": 0
+      },
+      "resourcesAfter": {
+        "meshes": 33,
+        "geometries": 4,
+        "materials": 8,
+        "textures": 5,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 8,
+        "nodeObservers": 1,
+        "scenePending": 0
+      },
+      "liveStaticRuntimes": 0
+    }
+  ],
+  "scope": "Actual shipped Meshopt static prop through production placement runtime/cinematic host/game tool lease, real map collision and metadata ownership. Images opaque1x1fixtures; no browser pixels/GPU/device performance claim."
+}

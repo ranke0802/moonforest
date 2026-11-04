@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-11-04T03:51:14.165Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/developer-editor.js": "65d2700eef6ea8090fcfd46a70c659c90c2720aabfd89ba88cd24a16b719231b",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176",
+    "src/dot-minimap.js": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "actual editor metadata UI is lazy and owns native gizmos only while entered",
+      "passed": true,
+      "catalogLoads": 0,
+      "runtimesOnEnter": 1,
+      "nativeGizmoManagers": 1,
+      "newEngines": 0,
+      "leaseBlocksGameInput": true
+    },
+    {
+      "name": "real DOM numeric editing undo redo duplicate delete and native gizmo drag commit actual collision once",
+      "passed": true,
+      "stableInstanceId": "authored-2c022896-76b0-464b-b17a-7e3e7a89272a",
+      "fullQuaternionNumeric": true,
+      "historyExact": true,
+      "duplicateDelete": true,
+      "nativeGizmoDrag": true,
+      "previewCommits": 0,
+      "dragEndCommits": 1,
+      "models": 1
+    },
+    {
+      "name": "invalid native scale drag has no unhandled rejection and restores frozen committed transform",
+      "passed": true,
+      "nonuniformAxisHandlesDisabled": true,
+      "invalidScaleRejected": true,
+      "unhandledRejections": 0,
+      "committedTransformRestored": true
+    },
+    {
+      "name": "apply guard storage reopen and exit restore actual applied document IDs camera input and native observers",
+      "passed": true,
+      "applyCollisionGuard": true,
+      "appliedStorageExact": true,
+      "stableInstanceId": "authored-2c022896-76b0-464b-b17a-7e3e7a89272a",
+      "exitRestoresApplied": true,
+      "gizmoDisposals": 2,
+      "resources": {
+        "meshes": 33,
+        "geometries": 4,
+        "materials": 8,
+        "textures": 5,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 9,
+        "nodeObservers": 1,
+        "scenePending": 0
+      }
+    }
+  ],
+  "unhandled": [],
+  "scope": "Actual developer-editor DOM actions using actual game world/navigation, authored runtime and shipped selected Meshopt prop, native Babylon gizmo drag observables and real game tool lease. Only image pixels/2D canvas are fixtures; no browser gesture/pixel/GPU/device performance claim."
+}

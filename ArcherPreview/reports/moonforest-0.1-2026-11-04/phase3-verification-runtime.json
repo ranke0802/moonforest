@@ -1,0 +1,1404 @@
+{
+  "generatedAt": "2026-11-04T03:19:28.028Z",
+  "passed": true,
+  "sourceHashes": {
+    "authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "placement-document.js": "82bf22705aca95df0197740003096b21f76a05e550adca02e25fe9bb894006d0",
+    "asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "dot-minimap.js": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af"
+  },
+  "cases": [
+    {
+      "name": "actual place/transform/history/navigation/minimap/reopen village",
+      "passed": true,
+      "mapId": "village",
+      "instanceId": "verification-village",
+      "stableCoordinates": true,
+      "collisionPathMinimapSameCommit": true
+    },
+    {
+      "name": "actual place/transform/history/navigation/minimap/reopen great-plains",
+      "passed": true,
+      "mapId": "great-plains",
+      "instanceId": "verification-great-plains",
+      "stableCoordinates": true,
+      "collisionPathMinimapSameCommit": true
+    },
+    {
+      "name": "actual place/transform/history/navigation/minimap/reopen monster-forest",
+      "passed": true,
+      "mapId": "monster-forest",
+      "instanceId": "verification-monster-forest",
+      "stableCoordinates": true,
+      "collisionPathMinimapSameCommit": true
+    },
+    {
+      "name": "actual place/transform/history/navigation/minimap/reopen witch-cave",
+      "passed": true,
+      "mapId": "witch-cave",
+      "instanceId": "verification-witch-cave",
+      "stableCoordinates": true,
+      "collisionPathMinimapSameCommit": true
+    },
+    {
+      "name": "four map revisit consumes the exact exported documents with preserved IDs transforms and collision",
+      "passed": true,
+      "maps": 4,
+      "stableIdsAndFullQuaternions": true,
+      "maxMinimapImages": 4
+    },
+    {
+      "name": "failed rendering preparation leaves prior document transform collision revision and outline ownership intact",
+      "passed": true,
+      "failureRejected": true,
+      "previousTransactionUnchanged": true
+    },
+    {
+      "name": "committed target previews cross visibility cells without a duplicate ghost or published collision change",
+      "passed": true,
+      "previewCommittedInstance": true,
+      "duplicateGhostMeshes": 0,
+      "baseAndPublishedCollisionUnchanged": true,
+      "cancelRestoresExactFrozenMatrix": true
+    },
+    {
+      "name": "nonpublishing scene visuals sample multiple absolute free transforms without altering authored world metadata",
+      "passed": true,
+      "visuals": 2,
+      "absoluteSamples": 40,
+      "newInstancesOrSourceLoadsDuringSampling": 0,
+      "publishedCommitsDuringSampling": 0,
+      "worldPlacementMetadataUnchanged": true
+    },
+    {
+      "name": "true rotated support geometry validates wall ceiling signed normals and actual vertex contact offsets",
+      "passed": true,
+      "geometry": "real rotated Box triangle support fixture, not an authored map visual-equivalence claim",
+      "results": [
+        {
+          "surface": "wall",
+          "point": [
+            1.539275549352169,
+            3.119999885559082,
+            33.76515682041645
+          ],
+          "normal": [
+            -0.3428978013958897,
+            0,
+            -0.9393727150592915
+          ],
+          "actualVertexContactOffset": 0.12
+        },
+        {
+          "surface": "ceiling",
+          "point": [
+            2.0461343079805374,
+            0.15368664264678955,
+            33.846273973584175
+          ],
+          "normal": [
+            0.140378102257507,
+            -0.9887710781344916,
+            -0.05124200865828815
+          ],
+          "actualVertexContactOffset": 0.12
+        }
+      ]
+    },
+    {
+      "name": "repeated previews commits and selection deletion bound native resources and release final resident ownership",
+      "passed": true,
+      "edits": 20,
+      "selectedSourceReloads": 0,
+      "stableCommittedInstance": true,
+      "previewAtMost": 1,
+      "createdBeforeEdits": 1,
+      "finalHighTextureResidentOwners": 0
+    },
+    {
+      "name": "late selected source completion after map generation cancellation never publishes geometry collision or cache ownership",
+      "passed": true,
+      "latePublishedInstances": 0,
+      "lateSourceDisposed": true,
+      "remainingAssetOwners": 0,
+      "remainingLifetimes": 0
+    }
+  ],
+  "maps": [
+    {
+      "mapId": "village",
+      "baseCount": 753,
+      "instanceId": "verification-village",
+      "old": {
+        "x": 1.625,
+        "z": 34,
+        "y": 0.11999999731779099,
+        "pixel": [
+          46,
+          37
+        ]
+      },
+      "new": {
+        "x": 18.958333333333343,
+        "z": 27.333333333333343,
+        "y": 0.7363154888153076,
+        "pixel": [
+          30,
+          42
+        ]
+      },
+      "roundTrip": {
+        "instanceId": "verification-village",
+        "assetId": "crate-barrel-cluster",
+        "assetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "transform": {
+          "position": [
+            18.958333333333343,
+            0.7363154888153076,
+            27.333333333333343
+          ],
+          "rotation": [
+            0.08141767857399715,
+            0.32528624392663635,
+            -0.11642928382112026,
+            0.934881940673058
+          ],
+          "scale": 1.35
+        },
+        "attachment": {
+          "surface": "ground",
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "offset": 0,
+          "supportId": "terrain"
+        },
+        "collision": "solid"
+      },
+      "commits": [
+        {
+          "revision": 1,
+          "documentRevision": 1
+        },
+        {
+          "revision": 2,
+          "documentRevision": 2
+        },
+        {
+          "revision": 3,
+          "documentRevision": 3
+        },
+        {
+          "revision": 4,
+          "documentRevision": 4
+        }
+      ],
+      "detourWaypoints": 11,
+      "sourceLoads": 3,
+      "lods": [
+        0,
+        1,
+        2
+      ],
+      "nativeLod": [
+        {
+          "distance": 2.8,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 55,
+              "geometry": 56,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 55,
+              "geometry": 56,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 55,
+              "geometry": 56,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ]
+        },
+        {
+          "distance": 20,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 73,
+              "geometry": 74,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 73,
+              "geometry": 74,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 73,
+              "geometry": 74,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ]
+        },
+        {
+          "distance": 45,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 78,
+              "geometry": 79,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 78,
+              "geometry": 79,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 78,
+              "geometry": 79,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                67
+              ],
+              "matrixHash": "550d53a831b52b4cf3dfb0aac310edbd0cc2504b10d5b1e722b0aeeb814ab093"
+            }
+          ]
+        }
+      ],
+      "resourcesActive": {
+        "meshes": 35,
+        "geometries": 4,
+        "materials": 10,
+        "textures": 7,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 10,
+        "nodeObservers": 3,
+        "scenePending": 0
+      },
+      "minimapCacheImages": 1
+    },
+    {
+      "mapId": "great-plains",
+      "baseCount": 1424,
+      "instanceId": "verification-great-plains",
+      "old": {
+        "x": 5.729166666666686,
+        "z": 33.229166666666686,
+        "y": 0.10691619757562888,
+        "pixel": [
+          45,
+          33
+        ]
+      },
+      "new": {
+        "x": -8.020833333333343,
+        "z": 33.229166666666686,
+        "y": 0.2741276035085317,
+        "pixel": [
+          51,
+          33
+        ]
+      },
+      "roundTrip": {
+        "instanceId": "verification-great-plains",
+        "assetId": "crate-barrel-cluster",
+        "assetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "transform": {
+          "position": [
+            -8.020833333333343,
+            0.2741276035085317,
+            33.229166666666686
+          ],
+          "rotation": [
+            0.08141767857399715,
+            0.32528624392663635,
+            -0.11642928382112026,
+            0.934881940673058
+          ],
+          "scale": 1.35
+        },
+        "attachment": {
+          "surface": "ground",
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "offset": 0,
+          "supportId": "terrain"
+        },
+        "collision": "solid"
+      },
+      "commits": [
+        {
+          "revision": 6,
+          "documentRevision": 1
+        },
+        {
+          "revision": 7,
+          "documentRevision": 2
+        },
+        {
+          "revision": 8,
+          "documentRevision": 3
+        },
+        {
+          "revision": 9,
+          "documentRevision": 4
+        }
+      ],
+      "detourWaypoints": 10,
+      "sourceLoads": 3,
+      "lods": [
+        0,
+        1,
+        2
+      ],
+      "nativeLod": [
+        {
+          "distance": 2.8,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 106,
+              "geometry": 107,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 106,
+              "geometry": 107,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 106,
+              "geometry": 107,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ]
+        },
+        {
+          "distance": 20,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 124,
+              "geometry": 125,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 124,
+              "geometry": 125,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 124,
+              "geometry": 125,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ]
+        },
+        {
+          "distance": 45,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 129,
+              "geometry": 130,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 129,
+              "geometry": 130,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 129,
+              "geometry": 130,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                118
+              ],
+              "matrixHash": "249522e89d0bad04894a6f0b9b1c2265f7bf9b91113c944996a0eca7ad150a52"
+            }
+          ]
+        }
+      ],
+      "resourcesActive": {
+        "meshes": 40,
+        "geometries": 9,
+        "materials": 15,
+        "textures": 11,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 11,
+        "nodeObservers": 3,
+        "scenePending": 0
+      },
+      "minimapCacheImages": 2
+    },
+    {
+      "mapId": "monster-forest",
+      "baseCount": 891,
+      "instanceId": "verification-monster-forest",
+      "old": {
+        "x": -8.9375,
+        "z": -33.6875,
+        "y": 0.1388799026608467,
+        "pixel": [
+          41,
+          23
+        ]
+      },
+      "new": {
+        "x": 3.4375,
+        "z": -33.6875,
+        "y": 0.07380667747929692,
+        "pixel": [
+          50,
+          23
+        ]
+      },
+      "roundTrip": {
+        "instanceId": "verification-monster-forest",
+        "assetId": "crate-barrel-cluster",
+        "assetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "transform": {
+          "position": [
+            3.4375,
+            0.07380667747929692,
+            -33.6875
+          ],
+          "rotation": [
+            0.08141767857399715,
+            0.32528624392663635,
+            -0.11642928382112026,
+            0.934881940673058
+          ],
+          "scale": 1.35
+        },
+        "attachment": {
+          "surface": "ground",
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "offset": 0,
+          "supportId": "terrain"
+        },
+        "collision": "solid"
+      },
+      "commits": [
+        {
+          "revision": 11,
+          "documentRevision": 1
+        },
+        {
+          "revision": 12,
+          "documentRevision": 2
+        },
+        {
+          "revision": 13,
+          "documentRevision": 3
+        },
+        {
+          "revision": 14,
+          "documentRevision": 4
+        }
+      ],
+      "detourWaypoints": 11,
+      "sourceLoads": 3,
+      "lods": [
+        0,
+        1,
+        2
+      ],
+      "nativeLod": [
+        {
+          "distance": 2.8,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 138,
+              "geometry": 139,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 138,
+              "geometry": 139,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 138,
+              "geometry": 139,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ]
+        },
+        {
+          "distance": 20,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 156,
+              "geometry": 157,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 156,
+              "geometry": 157,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 156,
+              "geometry": 157,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ]
+        },
+        {
+          "distance": 45,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 161,
+              "geometry": 162,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 161,
+              "geometry": 162,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 161,
+              "geometry": 162,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                150
+              ],
+              "matrixHash": "681080f1ae1012ab82159c01faea401139234599c14a50e71c1afed33d6404f9"
+            }
+          ]
+        }
+      ],
+      "resourcesActive": {
+        "meshes": 35,
+        "geometries": 4,
+        "materials": 10,
+        "textures": 7,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 10,
+        "nodeObservers": 3,
+        "scenePending": 0
+      },
+      "minimapCacheImages": 3
+    },
+    {
+      "mapId": "witch-cave",
+      "baseCount": 212,
+      "instanceId": "verification-witch-cave",
+      "old": {
+        "x": 8.666666666666671,
+        "z": -29.125,
+        "y": 5.382550287246705,
+        "pixel": [
+          54,
+          21
+        ]
+      },
+      "new": {
+        "x": 20.66666666666667,
+        "z": -27.875,
+        "y": 5.956975078582763,
+        "pixel": [
+          63,
+          22
+        ]
+      },
+      "roundTrip": {
+        "instanceId": "verification-witch-cave",
+        "assetId": "crate-barrel-cluster",
+        "assetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "transform": {
+          "position": [
+            20.66666666666667,
+            5.956975078582763,
+            -27.875
+          ],
+          "rotation": [
+            0.08141767857399715,
+            0.32528624392663635,
+            -0.11642928382112026,
+            0.934881940673058
+          ],
+          "scale": 1.35
+        },
+        "attachment": {
+          "surface": "ground",
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "offset": 0,
+          "supportId": "terrain"
+        },
+        "collision": "solid"
+      },
+      "commits": [
+        {
+          "revision": 16,
+          "documentRevision": 1
+        },
+        {
+          "revision": 17,
+          "documentRevision": 2
+        },
+        {
+          "revision": 18,
+          "documentRevision": 3
+        },
+        {
+          "revision": 19,
+          "documentRevision": 4
+        }
+      ],
+      "detourWaypoints": 10,
+      "sourceLoads": 3,
+      "lods": [
+        0,
+        1,
+        2
+      ],
+      "nativeLod": [
+        {
+          "distance": 2.8,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 223,
+              "geometry": 224,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 223,
+              "geometry": 224,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 223,
+              "geometry": 224,
+              "indexStart": 0,
+              "indexCount": 14049,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ]
+        },
+        {
+          "distance": 20,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 241,
+              "geometry": 242,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 241,
+              "geometry": 242,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 241,
+              "geometry": 242,
+              "indexStart": 0,
+              "indexCount": 9273,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ]
+        },
+        {
+          "distance": 45,
+          "base": [
+            {
+              "pass": "main",
+              "ink": false,
+              "source": 246,
+              "geometry": 247,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "ink": [
+            {
+              "pass": "main",
+              "ink": true,
+              "source": 246,
+              "geometry": 247,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ],
+          "shadow": [
+            {
+              "pass": "shadow",
+              "ink": false,
+              "source": 246,
+              "geometry": 247,
+              "indexStart": 0,
+              "indexCount": 5907,
+              "instances": [
+                235
+              ],
+              "matrixHash": "2dc28dc449b0a4047e1f460565939c4bb5cbea218f552bfb4d5926133ee96aa7"
+            }
+          ]
+        }
+      ],
+      "resourcesActive": {
+        "meshes": 68,
+        "geometries": 15,
+        "materials": 17,
+        "textures": 9,
+        "skeletons": 0,
+        "morphManagers": 0,
+        "transformNodes": 2,
+        "sceneObservers": 22,
+        "nodeObservers": 3,
+        "scenePending": 0
+      },
+      "minimapCacheImages": 4
+    }
+  ],
+  "io": {
+    "manifests": 14,
+    "models": [
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 3091,
+            "indices": "488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08",
+            "attributes": {
+              "position": "4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d",
+              "normal": "2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4",
+              "uv": "48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371"
+            }
+          }
+        ],
+        "sourceSha256": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5"
+      },
+      {
+        "url": "https://phase3.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 1969,
+            "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+            "attributes": {
+              "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+              "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+              "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+            }
+          }
+        ],
+        "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 3091,
+            "indices": "488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08",
+            "attributes": {
+              "position": "4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d",
+              "normal": "2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4",
+              "uv": "48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371"
+            }
+          }
+        ],
+        "sourceSha256": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5"
+      },
+      {
+        "url": "https://phase3.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 1969,
+            "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+            "attributes": {
+              "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+              "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+              "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+            }
+          }
+        ],
+        "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 3091,
+            "indices": "488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08",
+            "attributes": {
+              "position": "4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d",
+              "normal": "2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4",
+              "uv": "48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371"
+            }
+          }
+        ],
+        "sourceSha256": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5"
+      },
+      {
+        "url": "https://phase3.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 1969,
+            "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+            "attributes": {
+              "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+              "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+              "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+            }
+          }
+        ],
+        "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 3091,
+            "indices": "488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08",
+            "attributes": {
+              "position": "4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d",
+              "normal": "2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4",
+              "uv": "48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371"
+            }
+          }
+        ],
+        "sourceSha256": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5"
+      },
+      {
+        "url": "https://phase3.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 1969,
+            "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+            "attributes": {
+              "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+              "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+              "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+            }
+          }
+        ],
+        "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      },
+      {
+        "url": "https://phase3.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "proof": [
+          {
+            "name": "crate-barrel-cluster_mesh0",
+            "triangles": 4683,
+            "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+            "attributes": {
+              "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+              "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+              "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+            }
+          }
+        ],
+        "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+      }
+    ]
+  },
+  "limits": [
+    "Actual four-map navigation/terrain plus shipped primary/mobile/LOD Meshopt geometry through production placement/instancing/toon/outline/shadow paths. Images replaced with opaque1x1fixtures; high-resolution image admission disabled only in this NullEngine fixture.",
+    "Minimap validation is the actual CPU raster/cache logic with a test2D canvas, not browser pixels. Wall/ceiling normals use real picked rotated test geometry; no claim of authored cave visual equivalence.",
+    "Collision is conservative transformed mesh XZ bounds for ground solids. Wall/ceiling/free decorations must remain collision:none; baked base structures remain read-only.",
+    "No GPU/device performance, actual screenshot, full suite, build or deployment claim."
+  ]
+}

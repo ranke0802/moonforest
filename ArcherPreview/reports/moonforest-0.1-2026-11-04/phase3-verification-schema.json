@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-11-04T03:33:47.665Z",
+  "passed": true,
+  "sourceSha256": "82bf22705aca95df0197740003096b21f76a05e550adca02e25fe9bb894006d0",
+  "cases": [
+    {
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen village",
+      "passed": true,
+      "mapId": "village",
+      "baseCount": 753,
+      "baseRevision": "base-v1-df702ffd5fbba4a6",
+      "questIdsProtected": 10,
+      "stableEditedId": "verification-village-copy",
+      "roundTripTransform": {
+        "position": [
+          7.5,
+          2,
+          -3.25
+        ],
+        "rotation": [
+          0.04174171890245697,
+          0.35136803548816004,
+          -0.17352506191028613,
+          0.9190686510970171
+        ],
+        "scale": 1.8
+      },
+      "finalRevision": 6
+    },
+    {
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen great-plains",
+      "passed": true,
+      "mapId": "great-plains",
+      "baseCount": 1424,
+      "baseRevision": "base-v1-15f4805945d0a75d",
+      "questIdsProtected": 12,
+      "stableEditedId": "verification-great-plains-copy",
+      "roundTripTransform": {
+        "position": [
+          7.5,
+          2,
+          -3.25
+        ],
+        "rotation": [
+          0.04174171890245697,
+          0.35136803548816004,
+          -0.17352506191028613,
+          0.9190686510970171
+        ],
+        "scale": 1.8
+      },
+      "finalRevision": 6
+    },
+    {
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen monster-forest",
+      "passed": true,
+      "mapId": "monster-forest",
+      "baseCount": 891,
+      "baseRevision": "base-v1-00b8ad6c8679e30d",
+      "questIdsProtected": 29,
+      "stableEditedId": "verification-monster-forest-copy",
+      "roundTripTransform": {
+        "position": [
+          7.5,
+          2,
+          -3.25
+        ],
+        "rotation": [
+          0.04174171890245697,
+          0.35136803548816004,
+          -0.17352506191028613,
+          0.9190686510970171
+        ],
+        "scale": 1.8
+      },
+      "finalRevision": 6
+    },
+    {
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen witch-cave",
+      "passed": true,
+      "mapId": "witch-cave",
+      "baseCount": 212,
+      "baseRevision": "base-v1-ec3bab9e672e6ec3",
+      "questIdsProtected": 15,
+      "stableEditedId": "verification-witch-cave-copy",
+      "roundTripTransform": {
+        "position": [
+          7.5,
+          2,
+          -3.25
+        ],
+        "rotation": [
+          0.04174171890245697,
+          0.35136803548816004,
+          -0.17352506191028613,
+          0.9190686510970171
+        ],
+        "scale": 1.8
+      },
+      "finalRevision": 6
+    },
+    {
+      "name": "strict document/ID/number/version/asset/surface validation",
+      "passed": true,
+      "rejectedCases": 35,
+      "rejected": [
+        "unknown-root-field",
+        "wrong-version",
+        "wrong-map",
+        "wrong-coordinate-system",
+        "base-conflict",
+        "negative-revision",
+        "unsafe-revision",
+        "invalid-instance-id",
+        "protected-base-id",
+        "protected-quest-id",
+        "duplicate-id",
+        "unknown-asset-id",
+        "asset-version-conflict",
+        "unknown-instance-field",
+        "position-NaN",
+        "position-Infinity",
+        "position-string",
+        "position-out-of-range",
+        "negative-scale",
+        "zero-scale",
+        "nonuniform-scale",
+        "scale-above-approved",
+        "zero-quaternion",
+        "unnormalized-quaternion",
+        "transform-extra-field",
+        "zero-normal",
+        "wrong-ground-normal",
+        "unknown-support-id",
+        "wall-solid-unsupported",
+        "ceiling-solid-unsupported",
+        "free-external-support-id",
+        "free-object-support-payload",
+        "instance-limit",
+        "read-only-structural-or-actor",
+        "unreviewed-candidate"
+      ]
+    }
+  ],
+  "scope": "Pure placement manifest/history/schema roundtrip against all four current layout exports and actual public catalog. No browser/pixels/GPU performance claim."
+}

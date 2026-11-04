@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-11-04T03:32:21.567Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-studio.js": "0ac89fd98f74fe93371b5ac3057f1d6fdcf00c72caa47911f5e6218218c565d9",
+    "src/cinematic-protocol.js": "b30667783358c2b5efda7a7287d0fc794f64bb25b5c09c3062777ec22f28d49e",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "cinematic-studio.html": "e1d2ad8286a9d898e6010eb5519daa5b032658f991f7baed29201fa17f2e1656"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "real studio DOM edits history and temporary JSON without opening preview or model network",
+      "passed": true,
+      "nativeDomActions": 10,
+      "previewNavigations": 0,
+      "commands": 0,
+      "fetches": 0,
+      "temporaryReopenExact": true
+    },
+    {
+      "name": "actual same-origin iframe transport loads exact edited file once and seeks/captures without reload",
+      "passed": true,
+      "iframeNavigations": 1,
+      "fileLoads": 1,
+      "exactSharedJson": true,
+      "seekTime": 1.75,
+      "cameraCaptureExact": true,
+      "standaloneParentEngine": false
+    },
+    {
+      "name": "AI import displays validation/change preview before committing and clipboard prompt performs no call",
+      "passed": true,
+      "invalidDocumentBlocked": true,
+      "changePreviewBeforeApply": true,
+      "undoRedoExact": true,
+      "clipboardWrites": 1,
+      "providerCalls": 0
+    },
+    {
+      "name": "transport rejects cross-origin/source replies and disposal rejects jobs and clears timers/listeners",
+      "passed": true,
+      "spoofsIgnored": 6,
+      "disposedJobsRejected": 1,
+      "remainingTimers": 0,
+      "remainingMessageListeners": 0
+    },
+    {
+      "name": "host readiness before or after iframe load sends the exact queued document once",
+      "passed": true,
+      "eventOrders": 2,
+      "loadRetransmits": 0
+    },
+    {
+      "name": "map handshake reset rejects prior jobs and stale maps; expired queued load is never sent later",
+      "passed": true,
+      "staleMapReadyIgnored": true,
+      "priorJobRejected": true,
+      "deadlineMilliseconds": 15,
+      "expiredRetransmits": 0
+    }
+  ],
+  "scope": "Independent linkedom DOM and real studio transport logic, exact JSON exchange, lazy iframe navigation, import preview/history, metadata-only network gate and timer/listener cleanup. Iframe game reply is controlled; no browser/pixels/actual game rendering or GPU/device claim."
+}

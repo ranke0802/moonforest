@@ -1,0 +1,45 @@
+{
+  "phase": "PHASE-03-EDITOR",
+  "owner": "A / placement schema and runtime",
+  "status": "core frozen; eleven focused tests and twenty-five independent case groups pass; root owns final integration/build/deployment checks",
+  "agentConfiguration": {"requestedSpawn": {"fork_turns": "none", "model": "gpt-6.1-sol", "reasoning_effort": "xhigh"}, "successfulCreation": true, "backendResolutionIndependentlySurfaced": false, "mainModelSwitchClaimed": false},
+  "files": ["src/placement-document.js", "src/authored-placement-runtime.js", "tests/placement-document.test.js", "tests/authored-placement-runtime.test.js", "reports/phase3-placement.json"],
+  "hypothesis": "Preserve the immutable authored map and its stable IDs, and consume a strictly validated independent-prop overlay using existing static instancing, LOD, texture, toon, outline, visibility and shadow systems. Update navigation only at a committed revision; preview changes one owned instance.",
+  "document": {
+    "version": 1,
+    "coordinateSystem": "RH_Y_UP_METRES",
+    "identity": "instanceId is independent from catalog assetId + exact assetVersion. Base and quest IDs cannot be shadowed or renumbered.",
+    "baseCounts": {"village": 753, "great-plains": 1424, "monster-forest": 891, "witch-cave": 212},
+    "baseRevision": "Deterministic FNV-1a 64-bit revision of canonical base metadata and used asset versions, for conflict detection rather than authentication.",
+    "basePolicy": "All base rows are read-only in this MVP, with specific baked/terrain-pad reasons. Original authored source fields, IDs, x/z/yaw/scale and optional elevation are retained; their existing terrain placement loader remains authoritative.",
+    "validation": "Reject unknown fields, invalid map/schema/base revisions, protected/duplicate/invalid IDs, nonfinite/out-of-range values, nonunit quaternions/normals, unapproved/unknown asset versions, unsupported scales and collision/surface combinations. Geometry/base64/URLs/private paths are not valid overlay fields.",
+    "history": "PlacementHistory preserves IDs and cloned document snapshots; commit, undo and redo produce monotonically increasing revisions. Save/reopen roundtrip is validated."
+  },
+  "runtime": {
+    "resources": "Only explicitly selected approved static assets load. Existing loadMapContainer/readMapContainer, decode/resource caches, prepareVillageInstancing, installVillageGeometry, VillageGeometryStreaming/VillageDemandCache, VillageTextureStreaming, VillageVisibility and VillageOutlines are reused.",
+    "quality": "Initial selected near source uses villageLodSources including the existing mobile-near texture path; other geometry tiers remain lazy under existing screen-coverage demand. No existing quality/distance/LOD policy is reduced.",
+    "bounds": "Full normalized quaternion and positive uniform scale apply above catalog source-unit normalization/front yaw/pivot. Actual transformed static vertices determine support contact, avoiding empty AABB-corner floating. Conservative affine mesh bounds determine culling and ground collision.",
+    "surfaces": "Ground anchors verify terrain height/normal, or loaded immutable-base mesh supports. Wall/ceiling anchors require immutable base instanceId and a true local-space triangle ray intersection with signed outward normal. Overlay-on-overlay parenting is explicitly rejected. Free attachments retain no support payload.",
+    "collision": "Solid is certified only for ground-attached independent props. Wall/ceiling/free decorations explicitly require collision:none, preventing phantom ground blockers below elevated props. Ground solids use a transformed-mesh conservative XZ box, including tilt/scale and full translated bounds.",
+    "navigation": "A committed navigator inherits the original class/methods and cave baked clearance, merges overlay obstacle/index fields, and starts fresh path/route caches. Preview does not rebuild navigation. Map exit removes overlay obstacles/nodes and restores the exact original navigator object.",
+    "publication": "Prepare a staged inactive outline owner before mutating the live document/transforms/navigation. A preparation failure retains the old document, root positions, navigation, revision and outline owner. Successful publication changes world.placementRevision, world.authoredPlacementRecords and world.placementOverlay together; onCommit receives document/records/obstacles/revision for minimap invalidation.",
+    "boundsAndCleanup": "At most 128 committed instances, one preview and eight selected asset/version entries. Source references share native geometry/materials; last-owner release cancels owned waits, releases admitted high textures, then disposes source containers. Map/scene generation guards reclaim exact late results."
+  },
+  "focusedEvidence": {
+    "command": "C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe --test tests/placement-document.test.js tests/authored-placement-runtime.test.js",
+    "passed": 11,
+    "failed": 0,
+    "cases": ["all four base manifests and protected IDs", "strict unsafe schema/version/transform rejection", "immutable typed surface references", "stable-ID history/save/reopen with monotonic revision", "twenty single-instance preview transforms with one selected source and no nav/revision work", "committed old/new collision/free/segment/move behavior and original navigator restoration", "true box wall/ceiling support hits, outward normals and offsets", "map exit during selected-source load with exact late disposal", "injected outline preparation failure rollback", "last-owner admitted high-texture release"],
+    "fixtureScope": "Babylon NullEngine plus actual world setup and controlled static-box sources; C owns actual packed-asset/four-map scenarios. No GPU pixels/device timing claim."
+  },
+  "independentEvidence": {
+    "report": "reports/moonforest-0.1-2026-11-04/phase3-verification-summary.json",
+    "passed": true,
+    "caseGroups": 25,
+    "verifiedCoreSourceHashes": {"src/placement-document.js": "82bf22705aca95df0197740003096b21f76a05e550adca02e25fe9bb894006d0", "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30"},
+    "coverage": "Four actual maps: place/transform/history/collision/path/minimap/export/reopen/revisit, exact near/mid/far base+ink/shadow submissions, true rotated support/vertex contact, cross-cell existing preview/cancel, nonpublishing multiple visuals, preparation rollback, resource/final-owner plateau and late cancellation. Exported files applied into temporary projects and consumed by the actual game loader. Metadata-only catalog and real DOM/native Gizmo ownership/error scenarios passed.",
+    "limit": "NullEngine/DOM ownership and actual native CPU submissions, not browser pixels or physical-device GPU/FPS. Root camera/context bridge fixes remain subject to its final integration checks."
+  },
+  "integrationAsks": ["Root owns editor/Gizmo/input/UI, minimap invalidation, local apply CLI and deployment.", "Use catalog-approved handcart/firewood/crate-barrel-cluster only for this MVP; structural/baked edits stay visibly read-only.", "Keep catalog/editor/runtime imports behind the explicit development entry. Normal project overlay loading must consume only the validated selected catalog subset.", "Use runtime onCommit for minimap invalidation; leaveMap before replacing world/ground ownership.", "Independent actual four-map save/reopen/undo/collision/resource verification remains the phase completion gate."],
+  "limitations": ["No browser automation or GPU visual validation.", "No new geometry, paid assets, automatic reduction, combat changes or base-map edits.", "No wall/ceiling solid collision, overlay support parenting, baked-wall/terrain editing, collaboration or multi-select claim.", "Navigation path grids invalidate on commit and rebuild lazily under the existing navigator; there is no full-map rebuild per drag.", "Preparation/model and high-texture callbacks retain the existing bounded deadlines; CPU/metadata counts are not measured GPU residency."]
+}

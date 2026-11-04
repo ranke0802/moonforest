@@ -73,6 +73,18 @@ test('maps build once, update at most 10Hz only when marker changes, and allocat
  for(let i=0;i<300;i++){actor.position.x=Math.sin(i)*10;f.map.update(actor,10+i/30);}assert.ok(f.target.calls.draws-count<=100);
  await f.map.setWorld({mapId:'village',navigation:{free:()=>assert.fail('cached map must not resample navigation')}});assert.equal(f.map.cache.size,Object.keys(MINIMAP_MAPS).length);f.map.dispose();assert.equal(f.map.cache.size,0);assert.equal(f.element.hidden,true);
 });
+
+test('committed placement revisions replace the collision raster while retaining only one cached image per map',async()=>{
+ const f=fixture();let queries=0;
+ const world={mapId:'village',placementRevision:1,navigation:{free:point=>{queries++;return point.x<0;}}};
+ await f.map.setWorld(world);const first=f.map.cache.get('village'),initialQueries=queries;
+ await f.map.setWorld(world);assert.equal(queries,initialQueries);assert.equal(f.map.cache.get('village'),first);
+ world.navigation={free:point=>{queries++;return point.x>0;}};world.placementRevision=2;
+ await f.map.setWorld(world);assert.ok(queries>initialQueries);assert.notEqual(f.map.cache.get('village'),first);assert.equal(f.map.cache.size,1);
+ for(let i=3;i<6;i++){world.placementRevision=i;await f.map.setWorld(world);assert.equal(f.map.cache.size,1);}
+ const revision=f.map.cache.get('village');await f.map.invalidate(world);assert.notEqual(f.map.cache.get('village'),revision);assert.equal(f.map.cache.size,1);
+ f.map.dispose();assert.equal(f.map.cacheRevisions.size,0);
+});
 test('late minimap work cannot appear in another map or after disposal',async()=>{
  const f=fixture(),navigation={free:()=>true};const old=f.map.setWorld({mapId:'witch-cave',navigation});const next=f.map.setWorld({mapId:'monster-forest',navigation});await Promise.all([old,next]);assert.equal(f.map.mapId,'monster-forest');assert.equal(f.label.textContent,'마물의 숲');assert.equal(f.map.cache.has('witch-cave'),false);
  const pending=f.map.setWorld({mapId:'village',navigation});f.map.dispose();await pending;assert.equal(f.element.hidden,true);assert.equal(f.map.cache.size,0);

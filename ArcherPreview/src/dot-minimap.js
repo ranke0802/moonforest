@@ -48,9 +48,11 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
  return true;
 }
 export class DotMinimap{
- constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.next=0;this.last='';this.generation=0;}
+ constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;}
  async setWorld(world){
   const id=world.mapId,generation=++this.generation;this.mapId=id;if(!this.element)return;this.element.hidden=true;if(!this.ctx||!MINIMAP_MAPS[id])return;
+  const revision=world.placementRevision??0;
+  if(this.cacheRevisions.get(id)!==revision){this.cache.delete(id);this.cacheRevisions.set(id,revision);}
   this.element.querySelector('strong').textContent=MINIMAP_MAPS[id].label;
   if(!this.cache.has(id)){
    // Yield to reveal the actual game first; a map switch invalidates stale work.
@@ -68,5 +70,6 @@ export class DotMinimap{
   const dx=Math.cos(direction*Math.PI/8),dy=Math.sin(direction*Math.PI/8);ctx.fillStyle='#effffa';ctx.fillRect(Math.round(x+dx*4)-1,Math.round(y+dy*4)-1,2,2);
  }
  hide(){this.generation++;if(this.element)this.element.hidden=true;this.static=null;}
- dispose(){this.hide();this.cache.clear();this.ctx=null;}
+ invalidate(world){this.cache.delete(world.mapId);this.cacheRevisions.delete(world.mapId);return this.setWorld(world);}
+ dispose(){this.hide();this.cache.clear();this.cacheRevisions.clear();this.ctx=null;}
 }

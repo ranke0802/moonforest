@@ -25,6 +25,16 @@ function setup(callbacks = {}) {
   return { input, camera, canvas, elements, pointer };
 }
 
+test('explicit editor/cinematic input ownership cancels holds and blocks gameplay until a fresh press after release',()=>{
+ const held=[],f=setup({setAttackHeld:value=>held.push(value)});
+ window.emit('keydown',{code:'KeyJ',target:{tagName:'CANVAS'}});assert.equal(held.at(-1),true);
+ f.input.setSuspended(true);assert.equal(held.at(-1),false);const count=held.length,alpha=f.camera.alpha,radius=f.camera.radius;
+ window.emit('keydown',{code:'KeyJ',target:{tagName:'CANVAS'}});window.emit('keydown',{code:'KeyW',target:{tagName:'INPUT'}});
+ f.pointer('pointerdown',12,600,300);f.input.drag(100,100,false);f.input.zoom(.5);
+ assert.equal(held.length,count);assert.equal(f.canvas.captured.size,0);assert.equal(f.camera.alpha,alpha);assert.equal(f.camera.radius,radius);assert.deepEqual(f.input.value(),{x:0,y:0,run:false});
+ f.input.setSuspended(false);window.emit('keydown',{code:'KeyJ',target:{tagName:'CANVAS'}});assert.equal(held.at(-1),true);f.input.dispose();
+});
+
 test('UI context menu cancels movement without blur and stale repeats cannot resume it',()=>{
  const {input,canvas}=setup(),root=new Surface(),button=new Surface();root.contains=t=>t===button||t===canvas;canvas.closest=()=>root;
  window.emit('keydown',{code:'KeyW',target:{tagName:'BODY'}});window.emit('keydown',{code:'ShiftLeft',target:{tagName:'BODY'}});

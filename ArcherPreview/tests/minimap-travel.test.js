@@ -51,7 +51,7 @@ test('actual chooser and warm minimap header show region names separately from d
  const current=f.root.querySelector('[data-region="warrior-plains"]');assert.equal(current.querySelector('strong').textContent,'대평원');assert.equal(current.querySelector('small').textContent,'현재 지역');assert.equal(current.disabled,true);
  f.element.querySelector('canvas').getContext=()=>({});const map=new DotMinimap(f.element,{document:f.document});
  // The normal cached-raster path updates the real header without new rendering.
- map.cache.set('great-plains',{});await map.setWorld({mapId:'great-plains'});assert.equal(f.element.querySelector('strong').textContent,'대평원');assert.equal(f.element.hidden,false);map.dispose();
+ map.cache.set('great-plains',{});map.cacheRevisions.set('great-plains',0);await map.setWorld({mapId:'great-plains'});assert.equal(f.element.querySelector('strong').textContent,'대평원');assert.equal(f.element.hidden,false);map.dispose();
 });
 
 test('travel safety is checked again at selection, while other dialogs and loading never open another modal',async t=>{

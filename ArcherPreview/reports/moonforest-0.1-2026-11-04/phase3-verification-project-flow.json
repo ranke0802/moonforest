@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-11-04T03:25:04.001Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/authored-map-loader.js": "2a15e300eb7d146d2478805381595e23cbc536d121d5f62c42cb97bf7cb7be11",
+    "scripts/apply-authored-map.mjs": "db1926a81a2a52493aa06063cea2bd733f3eae44467a258c074b4e2e6a7fc741",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/placement-document.js": "82bf22705aca95df0197740003096b21f76a05e550adca02e25fe9bb894006d0",
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "src/dot-minimap.js": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af"
+  },
+  "actualDefaultIndexSha256": "0d2a069a3f8ccdb21435d4f46bed0726264af47b037f6c7d2d28c549c427ab5c",
+  "cases": [
+    {
+      "name": "four exact editor exports validate/apply into a temporary project and load through actual game runtime",
+      "passed": true,
+      "maps": 4,
+      "rows": [
+        {
+          "mapId": "village",
+          "instanceId": "project-flow-village",
+          "revision": 4,
+          "exportBytes": 857,
+          "normalizedProjectSha256": "fe520330bd6e6aa6a54a598f7084ea2722e0e0560c9fa3a1f1d0d87cb75475e3",
+          "exactDocumentConsumed": true,
+          "sourceExportUnmodified": true,
+          "runtimeModels": [
+            "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+          ],
+          "oldPositionFree": true,
+          "newPositionBlocked": true,
+          "minimapMatchesCommit": true,
+          "invalidHashAndPhysicalSupportPreservePriorRuntime": true,
+          "invalidCliPreservesFiles": true
+        },
+        {
+          "mapId": "great-plains",
+          "instanceId": "project-flow-great-plains",
+          "revision": 4,
+          "exportBytes": 866,
+          "normalizedProjectSha256": "7ab6856f3cce7095265b0b3af30dd0fb9e024833380b75968ac03f9fdf766381",
+          "exactDocumentConsumed": true,
+          "sourceExportUnmodified": true,
+          "runtimeModels": [
+            "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+          ],
+          "oldPositionFree": true,
+          "newPositionBlocked": true,
+          "minimapMatchesCommit": true,
+          "invalidHashAndPhysicalSupportPreservePriorRuntime": true,
+          "invalidCliPreservesFiles": true
+        },
+        {
+          "mapId": "monster-forest",
+          "instanceId": "project-flow-monster-forest",
+          "revision": 4,
+          "exportBytes": 850,
+          "normalizedProjectSha256": "3c23bfd99f4e09e086bab0c10aea979a070d83cf2298767c05cafb1308fda79b",
+          "exactDocumentConsumed": true,
+          "sourceExportUnmodified": true,
+          "runtimeModels": [
+            "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+          ],
+          "oldPositionFree": true,
+          "newPositionBlocked": true,
+          "minimapMatchesCommit": true,
+          "invalidHashAndPhysicalSupportPreservePriorRuntime": true,
+          "invalidCliPreservesFiles": true
+        },
+        {
+          "mapId": "witch-cave",
+          "instanceId": "project-flow-witch-cave",
+          "revision": 4,
+          "exportBytes": 850,
+          "normalizedProjectSha256": "6c146c68add138f5aff415a453c2ac111b46888f0964876baa7bf254bcdf3756",
+          "exactDocumentConsumed": true,
+          "sourceExportUnmodified": true,
+          "runtimeModels": [
+            "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def"
+          ],
+          "oldPositionFree": true,
+          "newPositionBlocked": true,
+          "minimapMatchesCommit": true,
+          "invalidHashAndPhysicalSupportPreservePriorRuntime": true,
+          "invalidCliPreservesFiles": true
+        }
+      ]
+    },
+    {
+      "name": "invalid files preserve prior document resources collision revision and local registry outputs",
+      "passed": true,
+      "hashFailures": 4,
+      "registryMetadataFailures": 12,
+      "physicalSupportFailures": 4,
+      "cliSchemaFailures": 4,
+      "actualDefaultRegistryUnchanged": true
+    }
+  ],
+  "tempProjectCleaned": true,
+  "scope": "Actual PlacementHistory export -> applyAuthoredMap dry-run/apply -> SHA registered file -> loadAuthoredMap -> actual four-map runtime/geometry/navigation/minimap. Temporary project only; approved asset I/O uses existing local packed models and opaque1x1material fixtures. No default map aesthetic writes, browser/pixels/GPU/build/deployment claim."
+}

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
-  "bytes": 628979940,
+  "bytes": 629288750,
   "files": [
     {
       "path": "app.webmanifest",
@@ -9,9 +9,24 @@
       "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
     },
     {
+      "path": "assets/actor-definitions-DQrcBVjU.js",
+      "bytes": 5328,
+      "sha256": "c9fe18fca79ec08aa0a13d7cb5123bc51fed35ad7ae4cf8b557acd4d9ca0adff"
+    },
+    {
+      "path": "assets/actor-encounter-adapter-DyFlqzUl.js",
+      "bytes": 9824,
+      "sha256": "84f8c37d0563c419144f10721309f67ea57de0cd1a7a1de3abe3ee107d640630"
+    },
+    {
       "path": "assets/apple-CP-uTjm2.webp",
       "bytes": 11980,
       "sha256": "4209ffebdce68312ee16cd13de4f5ec29a6f2c9e1321dbf5ef9788346ecf271c"
+    },
+    {
+      "path": "assets/asset-catalog-BZQ8cpPs.js",
+      "bytes": 218235,
+      "sha256": "098990ada94bdf263a20300bcb16ac437784bcdf50d0b25c7f6db5c81da01b31"
     },
     {
       "path": "assets/audio.json",
@@ -19,1264 +34,264 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/babylon~basisTextureLoader-C-EspKpf.js",
-      "bytes": 1378,
-      "sha256": "dbcb3366649209e5beb602e1c783a07a820b3a6343b9f832904fa14e094785d2"
+      "path": "assets/authored-placement-runtime-C1WmNDev.js",
+      "bytes": 21536,
+      "sha256": "aa185ccf7f287f531c47279769b7dd64cda55552f3119d4f9354e5459a810e2f"
     },
     {
-      "path": "assets/babylon~ddsTextureLoader-Bappgs62.js",
-      "bytes": 1372,
-      "sha256": "4f9c2adcc0fa7c0df9113bc75c8cbce9c4fb7b837b5c4ed2cc86b5666f195650"
+      "path": "assets/babylon-game-dzYjm6Bm.js",
+      "bytes": 6339799,
+      "sha256": "ff38452accb1e50c865a115fd42bf53939ad311e658713578e0b40386783f4b7"
     },
     {
-      "path": "assets/babylon~envTextureLoader-CguVn3KO.js",
-      "bytes": 640,
-      "sha256": "879e163929989ebfd1432f36ba4e046c1edebc986bd5805f0ee185e9241cedc0"
+      "path": "assets/babylon-lazy~flowGraphEventReferenceBlock~flowGraphObjectReferenceBlock~subSurfaceScatterin~dn1ivkq4-BBHg28RF.js",
+      "bytes": 15366,
+      "sha256": "5d4807777258e7fa5856f5465a8eba2914d47c3d68cce094fa4cdde089f95d92"
     },
     {
-      "path": "assets/babylon~flowGraphDebugBlock.pure-WLoiS5iS.js",
-      "bytes": 1852,
-      "sha256": "303497b0b49226a05584b9d82c3dc348fea4fbbf01b26e299790f45c1b755002"
+      "path": "assets/babylon-lazy~flowGraphGLTFDataProvider~volumetricLightingRenderVolume.vertex~selectionOutli~mz0jw9e2-CXkDJoNl.js",
+      "bytes": 9031,
+      "sha256": "d8e22125e89504370587df5432bb45f08d1ef44e53fe4a604b97ae957f7ca05c"
     },
     {
-      "path": "assets/babylon~flowGraphEventReferenceBlock-CaR4NFNM.js",
-      "bytes": 2664,
-      "sha256": "d7acb2d40c74bba39c31e391248e5f54cd9b9e64bf52dc929e506c2790bd0560"
+      "path": "assets/babylon-lazy~flowGraphUnsupportedInteractivityBlock~developer-editor~subSurfaceScattering.f~g5cctduq-Cc1d-Y1b.js",
+      "bytes": 10724,
+      "sha256": "fb22181ff642fb7f1f287248343f8277c49e5541f4bdb7e5c05070436136a49c"
     },
     {
-      "path": "assets/babylon~flowGraphEventReferenceBlock~flowGraphObjectReferenceBlock-COan9TxL.js",
-      "bytes": 820,
-      "sha256": "084aefa756625b6ff70ef8dc5aadb28c61d0eadb65bb47b153d43281083f71c6"
+      "path": "assets/babylon-lazy~game~noise.fragment~selection.fragment~selection.vertex~flowGraphDebugBlock.pu~jp8gkg0a-C5irpB24.js",
+      "bytes": 15451,
+      "sha256": "5cfbc70de37663db0ecd6bdb4324d7d1e5bd99c6e20302f84de1d272844303e2"
     },
     {
-      "path": "assets/babylon~flowGraphGLTFDataProvider-BkKuSKD0.js",
-      "bytes": 736,
-      "sha256": "a6aa427c164ab6439e0cda35933918aa18f5ccdb9b283d59bef739e8465de66f"
+      "path": "assets/babylon-lazy~gpuRenderParticles.fragment~iblCopyVoxelBufferToGrid.compute~volumetricLightin~g5dirs3s-O_2U1IYv.js",
+      "bytes": 12065,
+      "sha256": "cb7cfc54b9b962e29ba5196ca1fc145cb0acae6429524abad6ff0420f546e983"
     },
     {
-      "path": "assets/babylon~flowGraphPointerDownEventBlock.pure-DXPTIpt7.js",
-      "bytes": 1480,
-      "sha256": "833c1bbce6a5d269a7b7ee40986c552ed470f66a4e2a47a1e5101f404641abb8"
+      "path": "assets/babylon-lazy~gpuRenderParticles.vertex~noise.fragment~selection.fragment~textureProcessor.fragment-DSCCkX8W.js",
+      "bytes": 15961,
+      "sha256": "6e9a250ef72e9c30d325d46089bdd039d881577a6c2074f42096c86d021d8db2"
     },
     {
-      "path": "assets/babylon~flowGraphPointerMoveEventBlock.pure-B8Uy_zMr.js",
-      "bytes": 1498,
-      "sha256": "091044dbf3245adda0fed437dfe4139a168fa8dfa43cd0622053e4bedbf77542"
+      "path": "assets/babylon-lazy~meshBlending.fragment~selection.vertex~gaussianSplattingVoxel.fragment~gaussia~okxnmmuf-4lA1NEaW.js",
+      "bytes": 48296,
+      "sha256": "3e610e60ba65d84ab735cab899964253aed2b6f01728d0ecd1e32722594082dd"
     },
     {
-      "path": "assets/babylon~flowGraphPointerUpEventBlock.pure-T0tE8QF0.js",
-      "bytes": 1470,
-      "sha256": "3c73b080db16c1a50f81039db954bb76fc2b2835a5e949f6e15f35018077865b"
+      "path": "assets/babylon-lazy~screenSpaceCurvature.fragment~meshBlending.fragment~ddsTextureLoader~lod3D.fra~h64nf1sf-h5dUIe4_.js",
+      "bytes": 43701,
+      "sha256": "9e25ae212172cfeba4263d25c6b01bf28570ed8231d830d8c19d29c082b039d2"
     },
     {
-      "path": "assets/babylon~flowGraphUnsupportedInteractivityBlock-D6-Yzl_7.js",
-      "bytes": 1801,
-      "sha256": "3db23f65e9b54bdd980b84923882afd25d518fd872ef35e75675ab6c550810f9"
+      "path": "assets/babylon-lazy~volumetricLightingBlendVolume.fragment~selectionOutline.fragment~oitFinalSimpl~d3785n1e-BfFrKVxI.js",
+      "bytes": 20122,
+      "sha256": "1c86a5205baca49f5e61a932b2b54510950b2e6d311ec35f94d49fef3f1268fe"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.fragment-CZogB7T3.js",
-      "bytes": 4363,
-      "sha256": "a627731c39174ae4cc46d29e76b92b5d3e0eac335d5dbe9a252eaf6a1adc87fa"
+      "path": "assets/babylon-tools~developer-editor-DXnj-yry.js",
+      "bytes": 108699,
+      "sha256": "663744c8728eb77a3d5e31506a1ecfba57ed8145829c681561b5c1723e20d223"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.fragment-Q_RaCOe7.js",
-      "bytes": 4517,
-      "sha256": "d0601d231f2f0da3cfeab17cac04172a832919694572644dc5f88d4ebb6b05de"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js",
+      "bytes": 360935,
+      "sha256": "e6e5820f23bf2cdd4473d2a1246be83f3d8201853062a156f752fde81c835b73"
     },
     {
-      "path": "assets/babylon~gaussianSplatting.vertex-Cfx019jg.js",
-      "bytes": 8176,
-      "sha256": "6466c80b8149feaf6958e1aa47962c4b1244e54e600a4c99ebe5ee0c3c01b165"
-    },
-    {
-      "path": "assets/babylon~gaussianSplatting.vertex-DVi36ua2.js",
-      "bytes": 9515,
-      "sha256": "d8404762f80fa5469eb768c667efaca1fcb94c0abbf81123d622375fdb336e89"
-    },
-    {
-      "path": "assets/babylon~gaussianSplattingVoxel.fragment-CtfthKeJ.js",
-      "bytes": 1673,
-      "sha256": "aedb73151370e673724241091fb37635c1a762f1fcbc3d6ec4d7705811444939"
-    },
-    {
-      "path": "assets/babylon~gaussianSplattingVoxel.fragment-FDL4CEY6.js",
-      "bytes": 1908,
-      "sha256": "e5471a335c66740b37c29975bdf33c3338e7e603d401ddeee40ca5ab9c53c5fe"
-    },
-    {
-      "path": "assets/babylon~gaussianSplattingVoxel.vertex-DEB_NBPr.js",
-      "bytes": 2206,
-      "sha256": "b25457a263334503c04e19a578b35319466cf99c9dcd8ca1c3e7df2ad94a6ee2"
-    },
-    {
-      "path": "assets/babylon~gaussianSplattingVoxel.vertex-lZlUfadH.js",
-      "bytes": 2922,
-      "sha256": "82e563e72b1f99324c2737c1ba0f3578524a41a862a29e07166f4da72b14d913"
-    },
-    {
-      "path": "assets/babylon~gpuRenderParticles.fragment-D2dSVo_t.js",
-      "bytes": 4273,
-      "sha256": "d53f268873b68926b0882ee8741bff0d1590e43f3e62c2df41207a2df0a67c9f"
-    },
-    {
-      "path": "assets/babylon~gpuRenderParticles.vertex--L2V8QGG.js",
-      "bytes": 10672,
-      "sha256": "c9c35aba77baffc1e74195b278355d8e86d6f5bb785e393d4f53cd6faecdfe65"
-    },
-    {
-      "path": "assets/babylon~hdrTextureLoader-CR982F7A.js",
-      "bytes": 608,
-      "sha256": "3cef6936c14eff71a6812597c0f95726a2bf687605e197a85e282150d0501feb"
-    },
-    {
-      "path": "assets/babylon~iblCopyVoxelBufferToGrid.compute-CD9VPqTW.js",
-      "bytes": 988,
-      "sha256": "09eff092ad45489f380d8fbd4e38de493df19307441476f49631e5254420bbc6"
-    },
-    {
-      "path": "assets/babylon~iesTextureLoader-DOUwa8Lh.js",
-      "bytes": 2622,
-      "sha256": "e6ead06af924b7dbb5401d209039f32ccdfa2093c4f570bdc33078d13fc494a2"
-    },
-    {
-      "path": "assets/babylon~index-CGOaz6Zs.js",
-      "bytes": 5991865,
-      "sha256": "20861471a0877eb10dedddda23a41bd0a119a936cd3181c2536523dc6a4af3c6"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlaying~klf38vi4-KGbvCOp2.js",
-      "bytes": 12760,
-      "sha256": "d2bcc92e6c2a1b2bf5384b9f8925c865412e7fa71d909f5abdf3e8f44190e3f4"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphInterpolationBlock.pure~flowGraphPlayAnimationBl~bd55heab-CKfDcnFJ.js",
-      "bytes": 29861,
-      "sha256": "84f7ca5261a2aff2ea3b1a0e6c17f8d1b9252667685cf4bbc5a06264ee4f0f79"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphInterpolationBlock.pure~flowGraphPlayAnimationBl~f1bzqun5-D63ojHag.js",
-      "bytes": 6023,
-      "sha256": "d4871ad062add425310b4f328a9393f48223f34cd89a17b77d1b363c6422c4c6"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphMeshPickEventBlock.pure~flowGraphReceiveCustomEv~is7f4w3e-CHiGkgT2.js",
-      "bytes": 844,
-      "sha256": "1c39deb9e2d0e0a29dca5b28541f74967c924de57a4b1759140af24bbaffb2cf"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBlock.pure-mS51BQHk.js",
-      "bytes": 54559,
-      "sha256": "3bf0ebcad5a32c66f8ca919305d914f4d7b3b408ed26fe5a4e38584d0de47524"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~d70tdzc9-Nb8-rPAt.js",
-      "bytes": 162425,
-      "sha256": "e0d8eec3fe41dd0438e33e7d69dc9f934d6436ff64cea21bd030f4cad3c419f0"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~dsm77q35-Dc5QbZaK.js",
-      "bytes": 18590,
-      "sha256": "9f070e15d9e0c172486a3484034dcf5a84d917d7869fb081cae37255fc295c50"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~ebqm9w6f-BRfcgNbX.js",
-      "bytes": 1186,
-      "sha256": "8dc20e14af937dfe98d73e0190bd449c7724164eee863b08caa8dd5a4cfc019f"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~ekp0e15v-BnwK-X-j.js",
-      "bytes": 68647,
-      "sha256": "3cee1bd303cf536376a5b757240b321ec8212a3f95cf1ba30e5961beee3857a5"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~hyaao0t2-DPagqiNp.js",
-      "bytes": 1895,
-      "sha256": "8fd7f19cd3a9377ae7c91e75e5b0f376c5f4192674fe350ca6b5bac754bc5df4"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~i2gcvtsa-DOziJTeH.js",
-      "bytes": 18426,
-      "sha256": "fc5d5f6d5bd86b1e8a5b0b20e7df5908130fafc107d570b2427b27e7c7325d19"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBl~oqrshgh1-c3TstnWU.js",
-      "bytes": 7829,
-      "sha256": "177266fcca3a3fdbb0bf4ccd69e863a890b9b6684ce5f894f9f20fd5a2c31336"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphInterpolat~iyse99xc-D3kDnvNy.js",
-      "bytes": 3885,
-      "sha256": "c169e42a47e2dcf0d743239a7d3dc7bc0ec303fcf1c01b2bd18c41673d2de332"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphPlayAnimat~ew3ox293-D-XQlhUT.js",
-      "bytes": 469,
-      "sha256": "db600316439f2fedb7bfd3bcbc61b24d30c2b2646828dcea1c7c778cd07d5e3e"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphPlayAnimat~fy5d5ww7-CGYiptFb.js",
-      "bytes": 357,
-      "sha256": "a5244b1dfb47cf04792753301eddc97667f963bf62d0f622aa67df043a568380"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphPlayAnimat~gpaxm745-q-DZ9D7N.js",
-      "bytes": 7975,
-      "sha256": "7d97c4d814bfd596efde45667eb7493ab0d9e244d58348554cd8754129d27b45"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~flowGraphReceiveCustomEventBlock.pure~flowGraphPlayAnimat~iuvsgd9s-cIQTCeVo.js",
-      "bytes": 60750,
-      "sha256": "7bbd13bc7de2064b73b73499f0fd02924876056d372396bf0a2d0d3f2ec0a33f"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioS~fmpzmgmm-dqz0dHXK.js",
-      "bytes": 2941,
-      "sha256": "d4a0d83706cc2f7681ca2895f9b827fbadfe11ed77025bc19fbf9ef40dd9d01d"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioS~ljbbullm-H-M_hi7F.js",
-      "bytes": 3207,
-      "sha256": "08c0e04c1857138331e86c1b0c907ad4425ece8fa34628c2eca4c6666c798cee"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioS~o5x0q7e0-CuBYPcDK.js",
-      "bytes": 1881,
-      "sha256": "30a999582eace71f2e78a479182e71e943508bbda9574b17e5b29575c49a3b9e"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~bebkrwia-Cg1dZYE1.js",
-      "bytes": 449,
-      "sha256": "8dc3df631a95e9e4b3c4df0c824399275bcf20ca1c36f297fc694dc5334583ee"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~f6m3ilip--PEJiy99.js",
-      "bytes": 64963,
-      "sha256": "60c6e01c06965e2a35afbe5bc4cca3c5db08b06df090f752f35f56d729e50f5e"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~hx461j2m-yQbpPXI8.js",
-      "bytes": 267,
-      "sha256": "ddb5ca57fd494d0f203029d0813c153f96b4598a6a6182c9a24ba8b1f862ab67"
-    },
-    {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~kvbepls3-BqltO0ki.js",
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~3uj71poc-BqltO0ki.js",
       "bytes": 256,
       "sha256": "772614714ad7dbd504ea642f4f6decd8bfeb86eb64aea221cfd1d54cd7ebed8a"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~lwd0f4wm-Cu_sj2zM.js",
-      "bytes": 80,
-      "sha256": "ac5c1cd88e21454d0753d41e04c62cf8a19b88778746954785b5d32d0f1b66d8"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cd5o6cah-DiLjA2YY.js",
+      "bytes": 1895,
+      "sha256": "2846cc78d97ac42230f447b4ad02da959c935ad4815b6c4023e04fa99e72ce5e"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~m6rpo85s-BMwEppRb.js",
-      "bytes": 2097,
-      "sha256": "284450253a083179f8dc0990f6535e3d9d3d0f547bb9cb3a8fbd50f9d2540e0f"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cjtl9nw9-4vM9tZF_.js",
+      "bytes": 15734,
+      "sha256": "ee46286c79f7a3c0cc5d34227562dc174f10b6b567ebe2781d8bcbe7a9d2db75"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAu~nsgtqo7t-UtxC_Odd.js",
-      "bytes": 500,
-      "sha256": "18ac183db602e06e8f22bb36ef5a1b0127170dfa0401d3e6aff4f81dc5d76b26"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~dnvdm5pu-lRpealg5.js",
+      "bytes": 844,
+      "sha256": "defed67fa040fb5b34ff5e111815a2fe9b6c00718ea02ab582fff0a88a74b89e"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioStreamingSound~flowGraphGetSoundVolumeBlock.pure~~kfzsas4x-BXdVC_j_.js",
-      "bytes": 157,
-      "sha256": "4d0dc9fdce128a6a8c1a144605ccc92ea9fd87deb82baee4477fe956acc98e5f"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~e4n3a102-BRfcgNbX.js",
+      "bytes": 1186,
+      "sha256": "8dc20e14af937dfe98d73e0190bd449c7724164eee863b08caa8dd5a4cfc019f"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioStreamingSound~flowGraphReceiveCustomEventBlock.p~fzsk61ll-Oonme34Z.js",
-      "bytes": 14082,
-      "sha256": "2a91b2930aea0ef8c1d0538a5037ae70405f9cb4a7148d3bdb11f7f108261c91"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~eniaem58-1CfyBCSS.js",
+      "bytes": 7975,
+      "sha256": "64b6fead97e2b50a0d5d5c041ae09dca4e84ce1858104b5e89a334ff23a4a0a3"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioStreamingSound~flowGraphReceiveCustomEventBlock.p~kni18qnn-Bh3wKyVb.js",
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~epy9wh9j-Bh3wKyVb.js",
       "bytes": 629,
       "sha256": "e9919f6ef1e757205dbbf0da4f6f44741265263d642b5eaa02a3318529c53263"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioStreamingSound~flowGraphReceiveCustomEventBlock.p~ny9oeyry-BHYSs8bz.js",
-      "bytes": 32631,
-      "sha256": "b46a60ed6e79361afd77eab594c2562acff224912efdebd47e1201c95f806090"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~g3fc4djz-DbE27l5S.js",
+      "bytes": 7829,
+      "sha256": "46022d6a9b2c886a0915169efbbdb752f868080e0f33fab35e48796b1400e3ad"
     },
     {
-      "path": "assets/babylon~index~animationGroup.pure~webAudioStreamingSound~flowGraphReceiveCustomEventBlock.p~o85svgr9-Ce77JD5z.js",
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BOHNWade.js",
+      "bytes": 13222,
+      "sha256": "b033a2f7b9763fb6c302ead7d02d6a51e9005d9bf90237572c81e8bf8ef4d63e"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~h8czwtks-C6Xfc4yO.js",
+      "bytes": 14082,
+      "sha256": "c2409256b9bc04c81a23ccf905485622ecb2a2579de5dbfd66cd520a9210bebc"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ine84vmd-CGYiptFb.js",
+      "bytes": 357,
+      "sha256": "a5244b1dfb47cf04792753301eddc97667f963bf62d0f622aa67df043a568380"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jdky65i5-DKkz0thF.js",
+      "bytes": 267,
+      "sha256": "a82fbff5084d78185a4088a20081b5e7fefb6e157beac373ca77bcc3e4d39eb6"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jibqjdyw-Cp0w6PSE.js",
+      "bytes": 332,
+      "sha256": "36bf01c6f479c199593e5c15eb13b0c48785065723f603f542e90d07d52cc79a"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-oD446DGi.js",
+      "bytes": 19296,
+      "sha256": "18e80032d6719957391244eeb2b5754b5e4958e9d4388483e7e02d128753f98d"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jl77mod1-DBIWZ4hn.js",
+      "bytes": 12059,
+      "sha256": "0485cf15f4745c44eaeb0aa9d97757b59868cdd98f9a227c9040c24dfd565bf5"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~js1b7g51-Dl6DHpQL.js",
+      "bytes": 20465,
+      "sha256": "018ef046f251ef32ff56a13c70d91a74e4358054d6316f80e7a8d65dd08a5d54"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~juytrnsx-DIRP6lJi.js",
+      "bytes": 162425,
+      "sha256": "7a527a2373b85e69b9670cb8fe59d1e8e0b5a499ffa1c810ede1e5bc305fbbe8"
+    },
+    {
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kbid4c99-Ce77JD5z.js",
       "bytes": 1290,
       "sha256": "e364d38c88e676a0e9ced31660c08e156b244af07b1729fb8ea38e1ad6cffbb7"
     },
     {
-      "path": "assets/babylon~index~background.fragment~background.vertex-DZgaLMEx.js",
-      "bytes": 868,
-      "sha256": "3efafa68a3fdea5c9fcf86c1f6520b7e7d14cfc967c1d685f8d75eef596a1af5"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kf3g2tcp-CggIQgL7.js",
+      "bytes": 6023,
+      "sha256": "482ce7c83ae0dc3a19e2562f1e6af73627148714ebc2b5ba99982152df137b6f"
     },
     {
-      "path": "assets/babylon~index~background.fragment~background.vertex-ISlDo8Mk.js",
-      "bytes": 891,
-      "sha256": "35e9ac2625d070c3ee499290ab8183e78a6d1f96e0672e9fabda557ca26cd4fe"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ku703bnn-DjnIUn53.js",
+      "bytes": 18426,
+      "sha256": "1ed8e4401247b58ea37bd49a6342766f9c3f3112d4e3578b784e0170635d5b2a"
     },
     {
-      "path": "assets/babylon~index~background.fragment~background.vertex~default.fragment~default.vertex~gaussia~jdt4ovvn-D67E8IeP.js",
-      "bytes": 525,
-      "sha256": "26c665877cded57e0d069f78d5f799074880501898a50ae2e36b550bda1daba4"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m34i4hxx-D3kDnvNy.js",
+      "bytes": 3885,
+      "sha256": "c169e42a47e2dcf0d743239a7d3dc7bc0ec303fcf1c01b2bd18c41673d2de332"
     },
     {
-      "path": "assets/babylon~index~background.fragment~background.vertex~default.fragment~default.vertex~gaussia~k9zvq6gu-p_AOE0Rx.js",
-      "bytes": 453,
-      "sha256": "7471c9e86179d5f44153d25bda25fcbc1eab7f07690b82a210b456af65e4158f"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m9j0ur7b-DxRCJ9xV.js",
+      "bytes": 18590,
+      "sha256": "40c2740f0550142fccde8b0647749cd7e52c7938436be4aeccaa45a7179438bd"
     },
     {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~cdmzk945-C5Ejogwi.js",
-      "bytes": 1266,
-      "sha256": "c9fdd6c50f13b3fae9ba0d82c99ffba9c0ba9656ac754a94255a11b26bae9421"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mmebaicm-BQAM2XS_.js",
+      "bytes": 68647,
+      "sha256": "feab6d01213ca534b6b67ccc732eedec8e6d224476bd423aac3e095e5f262f43"
     },
     {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~ez56tyw5-C0VM98qm.js",
-      "bytes": 1129,
-      "sha256": "dc573708b9d3ee9efc8f753f60e072267601b99bbe217d51a1d1eff36907fbc8"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mn6jjy26-DpDCMtQw.js",
+      "bytes": 32631,
+      "sha256": "24bc5715411cfb23b0b2cb11b716680dd7ddddef0c610491aee7a6762ab450fd"
     },
     {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~hc1c9n5w-CSSXCxU2.js",
-      "bytes": 3514,
-      "sha256": "4e5568a17229c5ed8d8ed0997c1438b843e9ee56ab8b35a9138c93d86d548324"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~my5yezvh-UAaWFXU0.js",
+      "bytes": 60750,
+      "sha256": "2bce316e328ada6a5188300cdf5f141a93df4e5f9a26da60be13885070b3320f"
     },
     {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~hc1c9n5w-DDO6QzrS.js",
-      "bytes": 2913,
-      "sha256": "fcef680247e73dddc4d8ebd823a39baac9d6594ebbcd4389198fdaef1828b277"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mzpfqcw1-D-XQlhUT.js",
+      "bytes": 469,
+      "sha256": "db600316439f2fedb7bfd3bcbc61b24d30c2b2646828dcea1c7c778cd07d5e3e"
     },
     {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~j4tts58z-D2bzSRXp.js",
-      "bytes": 972,
-      "sha256": "6a4c649c2e17e48907e33e30a84a4ac786ac656ede05e3822740b0194ac38f43"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~l04s8zz6-DVej4Tov.js",
-      "bytes": 1022,
-      "sha256": "eaef467c6a23e6c25755a3ca9743590b548879f1c29cf4eeb89d6e1d0e785c7f"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~depth.vertex~glowMapGeneration.~ncf7ztgc-B2lNuIcz.js",
-      "bytes": 940,
-      "sha256": "ece8a039af684f033d3eb91163ed5e7052cda8187ba42a10ed1ca9127d495bae"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~gaussianSplatting.vertex~gpuRen~e2dwicbc-iu9uwjFO.js",
-      "bytes": 320,
-      "sha256": "9cc39f4ab143a06671e0a70ccb304837ad71f114e4ccfa7fc5edbad7f3aadf36"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~gaussianSplatting.vertex~gpuRen~if4z4cn1-DREEiHJ2.js",
-      "bytes": 421,
-      "sha256": "abe95385f28cafc39928a86d436ebbe9e2656e57db8ef2079668e3a305392799"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~gaussianSplatting.vertex~partic~k6if34rw-C5DYSdrQ.js",
-      "bytes": 306,
-      "sha256": "b238dff20d13307ac316cea70b841151d9749ba52fe944fa3b5525284dd0d7aa"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~color.vertex~default.vertex~gaussianSplatting.vertex~partic~l4m8uwtr-DXjMA_0o.js",
-      "bytes": 310,
-      "sha256": "9d7530b0b891eb5d5ce4827f7ee16a5640e02abc1861976c8e46a11f1d3159d0"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~default.vertex~gaussianSplatting.vertex~gpuRenderParticles.~kc5xkvno-DeYbnte3.js",
-      "bytes": 465,
-      "sha256": "d443194f1dcb8efc1733ef5e665c48671680d93d97a7d4f7e1a708f94d3dce45"
-    },
-    {
-      "path": "assets/babylon~index~background.vertex~default.vertex~gaussianSplatting.vertex~line.vertex~outline~ho0k1yab-CvMmHngy.js",
-      "bytes": 398,
-      "sha256": "9ae7317742c4a09780d7269d169ffbc4a0dda7e4fddbdc4e016d6a4b5a74c49c"
-    },
-    {
-      "path": "assets/babylon~index~basisTextureLoader~glTFLoaderAnimation.pure~openpbrMaterialLoadingAdapter~env~gooowcjy-pWjYuCQc.js",
-      "bytes": 15734,
-      "sha256": "927819044485be769f1c331f57afdb8bae89bdfe082376fb670ad639931fc15b"
-    },
-    {
-      "path": "assets/babylon~index~basisTextureLoader~glTFLoaderAnimation.pure~openpbrMaterialLoadingAdapter~pbr~d7tki5ow-DPVqBtbS.js",
-      "bytes": 20465,
-      "sha256": "ef097f0d1ccdd13fe63f9c4c6f67f66d458264bbc2b807a87ae7880671f8eef2"
-    },
-    {
-      "path": "assets/babylon~index~bonesDeclaration~background.vertex~color.vertex~default.vertex~depth.vertex~g~cx5n95qo-DY0oao1e.js",
-      "bytes": 1313,
-      "sha256": "afa2e0caa7a3538720f2454b50ed3b71fce944fe32747e64840b9d2470fe99ad"
-    },
-    {
-      "path": "assets/babylon~index~bonesDeclaration~background.vertex~color.vertex~default.vertex~depth.vertex~g~oxg6jep0-DEnRcima.js",
-      "bytes": 1660,
-      "sha256": "6b1e91d03a7e057bfe863949879fecc8cf777b4f235017c390afbbb88df6c6d0"
-    },
-    {
-      "path": "assets/babylon~index~bonesVertex~background.vertex~color.vertex~default.vertex~depth.vertex~glowMa~m30qb955-Bb1Q-u7p.js",
-      "bytes": 2906,
-      "sha256": "257cb1abe0910877207487a0100fd46838541c0670eb4862de3ae71745993bf1"
-    },
-    {
-      "path": "assets/babylon~index~bonesVertex~background.vertex~color.vertex~default.vertex~depth.vertex~glowMa~m30qb955-CV6USHis.js",
-      "bytes": 2252,
-      "sha256": "6ebe80cbede0487f576b0afbd0acbbcabb8b21121a57a5b7c8d3d83565f96966"
-    },
-    {
-      "path": "assets/babylon~index~boundingBoxRenderer.fragment~boundingBoxRenderer.vertex-CJNubAdW.js",
-      "bytes": 557,
-      "sha256": "45344b39d241209348ac5af83ba77e2cd91b296283504ab8a083b3283dd07b45"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentFunctions~default.fragment~pbr.fragment~geometry.fragment-CiEJDa08.js",
-      "bytes": 2195,
-      "sha256": "75e87edb55a63fd142d7295c20c7971b8c8050aff48d5a69f727bca93e802b1d"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentFunctions~default.fragment~pbr.fragment~geometry.fragment-Cx1WGAjl.js",
-      "bytes": 2357,
-      "sha256": "4e13907ed71d44edb5aee84d351a185c78a68efecb4af0651972b2c20412d1ba"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentFunctions~default.fragment~pbr.fragment~openpbr.fragment~geometry.fragment-BkCCvnoU.js",
-      "bytes": 764,
-      "sha256": "bbdd936b34e453daa6f9aa15d02c71e79012ba69e7d2bf105dc65b76c8b38042"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentFunctions~default.fragment~pbr.fragment~openpbr.fragment~geometry.fragment-o6gaWmg6.js",
-      "bytes": 818,
-      "sha256": "b0c841b5a58ab9cbd611e5c8bf827142286635c086d5819df5cbec0eb734d0f6"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentMainFunctions~default.fragment~pbr.fragment~geometry.fragment-BTUCtI40.js",
-      "bytes": 2844,
-      "sha256": "b403e49167afb02e7d0dc35590919ec7b21a767a2be1c81be7a7b5f68bfc9670"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragmentMainFunctions~default.fragment~pbr.fragment~geometry.fragment-DVlSvt6S.js",
-      "bytes": 3080,
-      "sha256": "88a907b1a8d1be82c851a2e9dc57be82b754121dc8c7427f4de296d98c44cb2a"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragment~default.fragment~pbr.fragment~geometry.fragment-CXCGC1Cq.js",
-      "bytes": 3356,
-      "sha256": "f5fdebc3df128e2fa26e4e382c989fddda8866d89d4aea559d0614acb0d6f037"
-    },
-    {
-      "path": "assets/babylon~index~bumpFragment~default.fragment~pbr.fragment~geometry.fragment-DUbtpqbg.js",
-      "bytes": 2537,
-      "sha256": "ddec7860728fcc031ef24410c754cf8b6e94190ca7e54ab95ae99af861eaae9f"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneFragmentDeclaration~background.fragment~color.fragment~default.fragm~k9n9e66f-DmgNSSos.js",
-      "bytes": 691,
-      "sha256": "973f37c4b3bb97fb79feeb695473215f6ed3d7788ba210014a5bf3daa0642829"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneFragmentDeclaration~background.fragment~color.fragment~default.fragm~lv6ffjie-BgKCG_Qz.js",
-      "bytes": 697,
-      "sha256": "de0a1d1e81bb8f8eabc86d10844e21a330fc7ff4665326d84977b49398569230"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneFragment~background.fragment~color.fragment~default.fragment~depth.f~c1co0n9g-BXOhbpTi.js",
-      "bytes": 888,
-      "sha256": "2ac0b258eb8e4033ae120873c529bc5fc779534cf5f7ec86831557edfe97bce6"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneFragment~background.fragment~color.fragment~default.fragment~depth.f~jdcemrqc-HvOw10c3.js",
-      "bytes": 990,
-      "sha256": "b7fe308e5be463837403901edd842924033b486512e303d97e724f26fbe57228"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneVertexDeclaration~background.vertex~color.vertex~default.vertex~dept~dv4k3l68-CmmPZCAH.js",
-      "bytes": 836,
-      "sha256": "5480e29697cef37925f8698af53d71da07a8e6a2fd78035a042c88d483f6d070"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneVertexDeclaration~background.vertex~color.vertex~default.vertex~dept~erp0l4zv-DmZu0mF7.js",
-      "bytes": 878,
-      "sha256": "cbdd409e7d0442b044e3cb329b5fe404e8b76367219d7d1ed8db61003e9c596f"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneVertex~background.vertex~color.vertex~default.vertex~depth.vertex~ga~brv1to9s-l8Hfvzkx.js",
-      "bytes": 886,
-      "sha256": "3a21f15ba62ee802c8fb7b242d4fd27556c00d3cc56ebd900ccf90cf33faa2ad"
-    },
-    {
-      "path": "assets/babylon~index~clipPlaneVertex~background.vertex~color.vertex~default.vertex~depth.vertex~ga~kqsvnyfs-6VoYBmV_.js",
-      "bytes": 736,
-      "sha256": "0a1380040dc0a91fb14cb3d53aa4a453340faa11ddbac61683c9592298c7332e"
-    },
-    {
-      "path": "assets/babylon~index~color.vertex~default.vertex~pbr.vertex~openpbr.vertex-BXRdP5mv.js",
-      "bytes": 651,
-      "sha256": "87220323218b6a93534b17083485c0cf4714858f9ad935a1694f7f902fe3f539"
-    },
-    {
-      "path": "assets/babylon~index~color.vertex~default.vertex~pbr.vertex~openpbr.vertex-r6KlnMCu.js",
-      "bytes": 523,
-      "sha256": "840cf06dc4802dfa661da64afe2f71c20be9c19e657d7793f6801e36bb254d9a"
-    },
-    {
-      "path": "assets/babylon~index~dds.pure~envTextureLoader~ddsTextureLoader-Ca25Cyuu.js",
-      "bytes": 9579,
-      "sha256": "52f9ef485d3f41df9f33b1096a8bbaa8ca2738618eacda910f7e060e7a48bb0e"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex-Ba329tmR.js",
-      "bytes": 1514,
-      "sha256": "4fee0f164f101cf45b93248abac1f0deed5a2faf5f47da6f41613f652d41a3df"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex-Vo39WohK.js",
-      "bytes": 1877,
-      "sha256": "72811c315a2e42fb3e4408e43de434acfba24bfd1e5756f98a86af4f6618deec"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex~gaussianSplatting.vertex~gaussianSplattingVox~bxnwx7tr-Bi1LMbjR.js",
-      "bytes": 434,
-      "sha256": "1c5e30c64b53b9e127109212491d9225b7638fd4f2621c2a2ae1e3b965908331"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex~gaussianSplatting.vertex~gaussianSplattingVox~i135rexd-Dp96BatL.js",
-      "bytes": 368,
-      "sha256": "052b0157cea1b9d999f091139158f07edb76259ea7ac787647794984e8cbb18c"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex~pbr.fragment~pbr.vertex~openpbr.fragment~open~kbzclwko-BJ4M9-ET.js",
-      "bytes": 318,
-      "sha256": "c1cd84a9adffbebce775ddd4b4f9f2fa1bdd588973886e65ea1cd8edeeb8c822"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~default.vertex~pbr.fragment~pbr.vertex~openpbr.fragment~open~kbzclwko-DgdnGxPk.js",
-      "bytes": 328,
-      "sha256": "1eba36b9f4e2545876811a3e8d285beca312833ef0496ac2603a6108a9f153d9"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~gaussianSplatting.fragment~gpuRenderParticles.fragment~parti~mza1pylg-BsAtiiM4.js",
-      "bytes": 1308,
-      "sha256": "9f8a7aeca4f49d7bdac3ded1684d514c750eb8013c6310799bc2a0a545f8aa10"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~gaussianSplatting.fragment~particles.fragment~sprites.fragme~mor22a6k-BrhF27h9.js",
-      "bytes": 3467,
-      "sha256": "70091316023ecff79987aac24d9a022ee15e604e0361b82daf7bafd62eb9f03c"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~pbr.fragment-mABJVVLO.js",
-      "bytes": 479,
-      "sha256": "df6a0df4acac333caea8dddc939d24b1fc46eb5c42f596173912507ad116d9a5"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~pbr.fragment-tZk_iXuZ.js",
-      "bytes": 570,
-      "sha256": "0a131788af036ae4122f50f3df522f564bc6c21dc9b5a9e21de19650785b2df0"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~pbr.fragment~openpbr.fragment-Do08_nhv.js",
-      "bytes": 8226,
-      "sha256": "fc64d921540ba9671393c747bc00fe32fd20c9f3cd0bdfe3b8040d3fdcf3489c"
-    },
-    {
-      "path": "assets/babylon~index~default.fragment~pbr.fragment~openpbr.fragment-j_WyOdZu.js",
-      "bytes": 7176,
-      "sha256": "dabde0655482ff8db207d509b429e881bba475d1053a4525f51afc32e362dd2f"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~depth.vertex-BuIea_gf.js",
-      "bytes": 335,
-      "sha256": "21a153ea79bef1885ea45d8d75eda59adc4b77f6ad893225788e3dadaf8b00cc"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~iblVoxelGrid.vertex~pbr.vertex~openpbr.vertex-DbDl52a4.js",
-      "bytes": 11659,
-      "sha256": "ef69995b488f6a0ab0dd1cbdf8d1d1aa012b6fc9d64ac259a6c4df18cda9a29a"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex-BOpRcqcB.js",
-      "bytes": 430,
-      "sha256": "696d47d0763ee86b2353cd06bbc83bc20a117b78eb553a54396b4549cf827bda"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex-DzzBnxWF.js",
-      "bytes": 483,
-      "sha256": "ed232356dc5e831f9758691e1fb5273a281c88b83dcf1c83d1d28dc7eafb1382"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex~geometry.vertex-BIskK6Um.js",
-      "bytes": 611,
-      "sha256": "a91625aa639943d34f935e8c54295ecc5d360dcf9c6013ecdae51a6d232293e8"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex~geometry.vertex-yuDayxGW.js",
-      "bytes": 788,
-      "sha256": "8e35655da146035fadd5593446fac87e1a474df7af5c16a844038a3d3a7d67b5"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex~openpbr.vertex-Bb_AAr5p.js",
-      "bytes": 6586,
-      "sha256": "ef4279245e84fcbddea1ea4d491011a3626657d0e2fc1dd9243ee1a84019fd2a"
-    },
-    {
-      "path": "assets/babylon~index~default.vertex~pbr.vertex~openpbr.vertex-WeED9DI_.js",
-      "bytes": 3939,
-      "sha256": "14e16acc33f7af0ba73773d09f0732b52dc4dd35263a0afcc63fa24bee1868f2"
-    },
-    {
-      "path": "assets/babylon~index~envTextureLoader~dumpTools.pure-D3y0jcSd.js",
-      "bytes": 25776,
-      "sha256": "19eb6173acb3288309e51dbb871206e5566104f457c67bba2600e4fc18f5df81"
-    },
-    {
-      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure-BXvkfm9g.js",
-      "bytes": 41219,
-      "sha256": "44bd11f2d54a38ca1b83274ddae32156dae33eaaab682d600ce08a2628a78447"
-    },
-    {
-      "path": "assets/babylon~index~envTextureLoader~pbrMaterial.pure~openpbrMaterial.pure~dumpTools.pure-LT7IFK5B.js",
-      "bytes": 30691,
-      "sha256": "0be9bcc88eff254d0a95886e69b8167847a0933de97a83930f3f3b0b216bb100"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphBezierCurveEasingBlock.pure~flowGraphEasingBlock.pure-DujSrSQu.js",
-      "bytes": 13889,
-      "sha256": "7ef15ed0927bd117543a9343b7a54e4353b3a3b2904cc1a245b668b96c6b87dc"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphCancelDelayBlock.pure~flowGraphSetDelayBlock.pure-Dd3murvx.js",
-      "bytes": 321,
-      "sha256": "ddda33f43dca623be4cdf73311f03b593d3e7278d968883e66ecd95b8cb6eb16"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphGetAssetBlock.pure~flowGraphReceiveCustomEventBlock.pure-WtUyuDAI.js",
-      "bytes": 736,
-      "sha256": "ebc4a971a3ebe12167f7ca93dea406cf209fec65cdbfd1cd48cb574a5cc52731"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlayingBlock.pure~flowGraph~elz6gq91-CqrVletS.js",
-      "bytes": 11777,
-      "sha256": "2c1ab5eb62db30301adc1c4bcb05ec13ae147155db704099cd9fc6ae7545ab89"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlayingBlock.pure~flowGraph~iwu4z1t8-CWo92ANl.js",
-      "bytes": 1131,
-      "sha256": "40bbf3494e2ddaaaff50f67f6132b8cfab94f3f5138d14cabe14ad6db4106eae"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlayingBlock.pure~flowGraph~mdsqj07f-iSYNlGBH.js",
-      "bytes": 649,
-      "sha256": "610d753873981354c759400c0c5e4651456c8c7c8fcc88bbc49d052aa436a28e"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphGetSoundVolumeBlock.pure~flowGraphIsSoundPlayingBlock.pure~flowGraph~n34it2dq-Bf7C-S5t.js",
-      "bytes": 2997,
-      "sha256": "4596c3d126d0ee4cdda6fe9ac30ed8c13481c6aa823d0e7d93274c5a4ff0261f"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphKeyDownEventBlock.pure~flowGraphKeyUpEventBlock.pure-FY-z3Qt0.js",
-      "bytes": 1310,
-      "sha256": "31926eb63c8932bf4095ae4f537db2fc10cf858e65be974d1fbd2e11d435471e"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphKeyDownEventBlock.pure~flowGraphKeyUpEventBlock.pure~flowGraphMeshPi~bi5vj07q-DU6kMKJO.js",
-      "bytes": 236,
-      "sha256": "89cf658994040df4e0e80693517a4a9e458b454471f8bdb2470f692fc01324b0"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphKeyDownEventBlock.pure~flowGraphKeyUpEventBlock.pure~flowGraphMeshPi~e24dsb5b-BAC7TsRb.js",
-      "bytes": 2824,
-      "sha256": "1d4820b75b134b4729431182f9c2fee6b3212aa1debf322026c095bb4c64f8aa"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphKeyDownEventBlock.pure~flowGraphKeyUpEventBlock.pure~flowGraphMeshPi~if95cdbr-BA9_n5ys.js",
-      "bytes": 761,
-      "sha256": "2fef4e5e8adb13a0f501351383dfd159faafffcda21625283eca798e4c2da022"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphKeyDownEventBlock.pure~flowGraphKeyUpEventBlock.pure~flowGraphMeshPi~l1sigix5-Bhm32z8J.js",
-      "bytes": 733,
-      "sha256": "ce08168e5c494f2d87ad052754c5c505da08f425f3830166df8f5018800cfb57"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphMathBlocks.pure~flowGraphMatrixMathBlocks.pure~flowGraphVectorMathBlocks.pure-IOvxMJsf.js",
-      "bytes": 443,
-      "sha256": "1a7cb6d8960134e0ecfe62cb2ad409f3bef7c7d55fe1dcf84ae6cc2539fb8bef"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphMathBlocks.pure~flowGraphMatrixMathBlocks.pure~flowGraphVectorMathBl~pfhbzqo3-CUhkOkRd.js",
-      "bytes": 373,
-      "sha256": "235986f166ae1eeb104598ebb2e71f50d6bd937237152699b77c26e0a3e71b70"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphMathBlocks.pure~flowGraphVectorMathBlocks.pure~flowGraphArrayIndexBl~5lx71p9c-BEx3EoJ4.js",
-      "bytes": 769,
-      "sha256": "da58ad43113d124c7c17315fb7bb0fc4f1e38e0f8ce8b0d64e13838538f1ffb6"
-    },
-    {
-      "path": "assets/babylon~index~flowGraphPlayAnimationBlock.pure~flowGraphStopAnimationBlock.pure-COhXp9-o.js",
-      "bytes": 6284,
-      "sha256": "43549aa56b81b9039335f21aea196880f99e6c2afe47baec898307f41da42d89"
-    },
-    {
-      "path": "assets/babylon~index~fogFragmentDeclaration~background.fragment~color.fragment~default.fragment~ga~f97tbju4-DyZXulcb.js",
-      "bytes": 1123,
-      "sha256": "1d6cdce756fbfca9954d8dae1aa79853e4f888af463d40eb7bb97eaba04b5d69"
-    },
-    {
-      "path": "assets/babylon~index~fogFragmentDeclaration~background.fragment~color.fragment~default.fragment~ga~jzu2wva7-CHEC_CHg.js",
-      "bytes": 1021,
-      "sha256": "758bb7a7bea06ac9233889a6d99986207d2b035e207a017a4a414809f2d9a906"
-    },
-    {
-      "path": "assets/babylon~index~fresnelFunction~default.fragment-C25Fluri.js",
-      "bytes": 568,
-      "sha256": "da239f553565d2951254ea99bb449054e7fa8e3843fa76de453c3260dca3d2b3"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplatting.fragment~gpuRenderParticles.fragment~particles.fragment~spr~d6iypw60-CkB9SVS0.js",
-      "bytes": 2913,
-      "sha256": "101fa88cb2d01ddde5e2311fb74c4c6e93a17917afffd39f0f501cb9de842d9f"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplatting.fragment~particles.fragment~sprites.fragment-Bbw3o5KQ.js",
-      "bytes": 2966,
-      "sha256": "7b33f2f15d89ebeecc2089b5e0586841ec71506c6c168c02c813d31777447a24"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplattingFragmentDeclaration~background.fragment~color.fragment~defau~d6ftptll-5IoySmht.js",
-      "bytes": 383,
-      "sha256": "0c31fa49fb96546344ca5181773fc6808c3e19dc1ef7517a52574954d5a86620"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplattingFragmentDeclaration~background.fragment~color.fragment~defau~evjb4g6k-BEfbBYRh.js",
-      "bytes": 415,
-      "sha256": "5705784a36f5aceda56a7cd9a8a750c8ce34ec15da2b86e36786f37e502f5632"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplattingFragmentDeclaration~background.fragment~default.fragment~gau~j5fezca6-BlwmFbwC.js",
-      "bytes": 359,
-      "sha256": "a1c36adf049264fa115b350c26d07baed3b10f0489b2cc58ddb79a5f7dbbd88d"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplattingFragmentDeclaration~background.fragment~default.fragment~gau~jrd8c5p7-DgvbrGen.js",
-      "bytes": 401,
-      "sha256": "28f9b82a2329f62d28049fd20d2062bc294c8fba2c7229d02dfb17448d925188"
-    },
-    {
-      "path": "assets/babylon~index~gaussianSplattingVoxel.fragment~iblVoxelGrid.fragment-DrQZ58oK.js",
-      "bytes": 703,
-      "sha256": "503a967ac843b654a2d1ef86e77df15cb68f9a0f4d3e20eee56e5b553c3234b4"
-    },
-    {
-      "path": "assets/babylon~index~glTFLoaderAnimation.pure~pbrMaterialLoadingAdapter-_wyaM_ID.js",
-      "bytes": 11770,
-      "sha256": "da9f73edef0195ab6c2761b2900f2589234bd25d93d050deecb36e7afa87f45e"
-    },
-    {
-      "path": "assets/babylon~index~harmonicsFunctions~pbr.fragment~pbr.vertex~openpbr.fragment~openpbr.vertex~ge~kskc8z7j-D91weImo.js",
-      "bytes": 1594,
-      "sha256": "f1219dc765628cf3e5df0c5d46b13f9bbb7bdb54b5b698324ec71a4d04a320f1"
-    },
-    {
-      "path": "assets/babylon~index~harmonicsFunctions~pbr.fragment~pbr.vertex~openpbr.fragment~openpbr.vertex~ge~kskc8z7j-Gmg2SRRA.js",
-      "bytes": 1295,
-      "sha256": "7f5d7911a9a46ee4629d4128165b6ba4e0a936f2f66dd4beb0013e9a862f8a19"
-    },
-    {
-      "path": "assets/babylon~index~hdrFiltering.fragment~hdrIrradianceFiltering.fragment~iblDominantDirection.fr~kwnidads-3p8KBtWa.js",
-      "bytes": 12020,
-      "sha256": "f81ee6de20e480ba0970a900aa6c85bd3606d2935c7b7685a810fd85c9295da7"
-    },
-    {
-      "path": "assets/babylon~index~hdrFiltering.fragment~hdrIrradianceFiltering.fragment~iblDominantDirection.fr~kwnidads-Cjl9Vhfs.js",
-      "bytes": 12850,
-      "sha256": "7ba71274575eb237758df9fec037e726abba5f1d83fa368a4ac839f3c2c6b957"
-    },
-    {
-      "path": "assets/babylon~index~hdrFiltering.fragment~hdrIrradianceFiltering.fragment~iblDominantDirection.fr~omeps7vf-B8lw9R_q.js",
-      "bytes": 8777,
-      "sha256": "b7cb5daa95159a3383ffe97b447cf437da15d8ef5fbcc0f92794365411522977"
-    },
-    {
-      "path": "assets/babylon~index~hdrFiltering.fragment~hdrIrradianceFiltering.fragment~iblDominantDirection.fr~omeps7vf-C-bMiwm1.js",
-      "bytes": 8724,
-      "sha256": "e77f5b6eb91c74e91f73f3ea9497a1d9d34b73ae4a39cc8bb5f4ae1f3770f75e"
-    },
-    {
-      "path": "assets/babylon~index~helperFunctions~background.fragment~background.vertex~copyTextureToTexture.fr~ba1nomlt-jmamdwPt.js",
-      "bytes": 6659,
-      "sha256": "1c7b4334dc04167bf665ebce16e6f76bc07e4c49b5082f5c3e30b9139f01657a"
-    },
-    {
-      "path": "assets/babylon~index~helperFunctions~background.fragment~background.vertex~copyTextureToTexture.fr~f978koj4-a0yx6D3M.js",
-      "bytes": 6981,
-      "sha256": "bb8ffe34bb195683795a2d6689aadd07315820668cc0f034dfc05e2260aec824"
-    },
-    {
-      "path": "assets/babylon~index~iblVoxelGrid.fragment~geometry.fragment-Btnx0pty.js",
-      "bytes": 2680,
-      "sha256": "73f5ecb640740c8802b373d9a9536adc2f2a5e1895749897db16ad0b7c12498c"
-    },
-    {
-      "path": "assets/babylon~index~imageProcessingDeclaration~background.fragment~default.fragment~gpuRenderPart~ii4u11o8-fjGP8RPD.js",
-      "bytes": 1159,
-      "sha256": "bc125521782e59f27a2f6cbab9632c14f2be9e8d849d34871d989fd3495e207b"
-    },
-    {
-      "path": "assets/babylon~index~imageProcessingDeclaration~background.fragment~default.fragment~imageProcessi~m59ukevn-Lt8K0eIb.js",
-      "bytes": 1058,
-      "sha256": "e348ae0297bdbdc6a729ec51d3ee658efe41c59d07bf49056dbb3a58194d7e0c"
-    },
-    {
-      "path": "assets/babylon~index~imageProcessingFunctions~background.fragment~default.fragment~gpuRenderPartic~fq6faq6c-CaQSDpmw.js",
-      "bytes": 4198,
-      "sha256": "83b0a73f119a1cc633362544dd3b7dfe35ed3460aa928fc324abb94b15f2b06b"
-    },
-    {
-      "path": "assets/babylon~index~imageProcessingFunctions~background.fragment~default.fragment~imageProcessing~hi5e56c9-ykyt9r-G.js",
-      "bytes": 5014,
-      "sha256": "f6196c5d30ef91028c373201923090f20f69832bd7edfb4038425c381c49dcde"
-    },
-    {
-      "path": "assets/babylon~index~kernelBlur.fragment~kernelBlur.vertex-CwPNZBgm.js",
-      "bytes": 311,
-      "sha256": "629721f95370586ba1fc8f84378752d2cc4496956054310e37bbb317c19a1c6f"
-    },
-    {
-      "path": "assets/babylon~index~kernelBlur.fragment~kernelBlur.vertex-D-ADPFlj.js",
-      "bytes": 301,
-      "sha256": "409b52d5f76127f57a7845bd17e88114c7194d25544daf311b2205a62b5bce9d"
-    },
-    {
-      "path": "assets/babylon~index~lightFragmentDeclaration~background.fragment~default.fragment~pbr.fragment~op~glvdtf59-C9WEV9bL.js",
-      "bytes": 3006,
-      "sha256": "d7c5c2a4e87068e38236defda2001a93dc008795495c1dbfc6a2d622d534940f"
-    },
-    {
-      "path": "assets/babylon~index~lightFragment~background.fragment~default.fragment~pbr.fragment-BYZ6R0D4.js",
-      "bytes": 19698,
-      "sha256": "24824533c05b50494dc6ce839db4b1eb445890c38ae9a0d48e774dd957a01f4c"
-    },
-    {
-      "path": "assets/babylon~index~lightFragment~background.fragment~default.fragment~pbr.fragment-DUMQWH6k.js",
-      "bytes": 22332,
-      "sha256": "e8563281c6185034bc6aecc2df8be016d89e3d32a1e34258f4d0cfb6d3106853"
-    },
-    {
-      "path": "assets/babylon~index~lightProxy.vertex~shadowMap.vertex~volumetricLightingRenderVolume.vertex~open~gkyjf0v7-Du6avKjE.js",
-      "bytes": 419,
-      "sha256": "d2eb31546e6c53dfc77409626cd4dfa4cedf1453cf4e8673e97edebbaf4e3bf7"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment-eWfiAMBP.js",
-      "bytes": 8249,
-      "sha256": "57a0176f268483dbb00d970aeb29b7d1f76130f65d9da8229262d5f75e410031"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment-qi_rw38G.js",
-      "bytes": 9324,
-      "sha256": "aa65c687cd8a426bafd09b6a4157a69bf641db488b447de9ab6633d92ae30741"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment~lightProxy.verte~fllmiw25-BCtUvLQH.js",
-      "bytes": 881,
-      "sha256": "5aaa70b8044726d0a7c2c14043f82bc6472e1065099a429aba9d573c497de93c"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment~lightProxy.verte~n8tvllge-g-_k7pyy.js",
-      "bytes": 853,
-      "sha256": "00139e901d771b124fe523857ce28639f062933494bf89d30de2f82ecc76b3bb"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment~pbr.fragment~ope~kn25rfoz-DHkTbg4t.js",
-      "bytes": 6720,
-      "sha256": "9f5d1ee0052e6047110647da5bb20f090fe8ac6354cd369044a613c682e4b4f1"
-    },
-    {
-      "path": "assets/babylon~index~lightsFragmentFunctions~background.fragment~default.fragment~pbr.fragment~ope~kn25rfoz-rKaIioIo.js",
-      "bytes": 6129,
-      "sha256": "a2ec33f343e4fe581f3b29839f11828caad0f74e516b71467194725f8eae05bb"
-    },
-    {
-      "path": "assets/babylon~index~lightUboDeclaration~background.fragment~default.fragment~pbr.fragment~openpbr.fragment-BaS7ZHNB.js",
-      "bytes": 2909,
-      "sha256": "2d00e357996a89f5a37d9156304bf27294100210a65e7b7197119815fd77573e"
-    },
-    {
-      "path": "assets/babylon~index~lightUboDeclaration~background.fragment~default.fragment~pbr.fragment~openpbr.fragment-IPKpap1a.js",
-      "bytes": 3671,
-      "sha256": "9476f14d2056a998b557fd3b438c55c0707b99ddeda972610ca48e67a8914017"
-    },
-    {
-      "path": "assets/babylon~index~lightVxFragmentDeclaration~background.vertex~default.vertex~pbr.vertex~openpbr.vertex-ClIV5FvC.js",
-      "bytes": 1339,
-      "sha256": "47daecfd5041d8d070123edb82c508b01a8f5caa680c806c05a61ebb78666c6a"
-    },
-    {
-      "path": "assets/babylon~index~lightVxUboDeclaration~background.vertex~default.vertex~pbr.vertex~openpbr.vertex-BJugut78.js",
-      "bytes": 1506,
-      "sha256": "3ece602adff32ffe1bb088b12fbc26acb95578762d0168e475031f482fb89409"
-    },
-    {
-      "path": "assets/babylon~index~lightVxUboDeclaration~background.vertex~default.vertex~pbr.vertex~openpbr.vertex-DdFE7gI4.js",
-      "bytes": 1253,
-      "sha256": "6858fe9610e08fb7ba14996466a7a7fb4be764339e3331e7fac6797afae9160a"
-    },
-    {
-      "path": "assets/babylon~index~logDepthDeclaration~background.fragment~background.vertex~default.fragment~de~h7hiicaf-PtIH_nCu.js",
-      "bytes": 455,
-      "sha256": "0ff7f086921ba0f1dabf31274d6c72f3e87b4b829d63d0fb1bdc2ee8e3a94492"
-    },
-    {
-      "path": "assets/babylon~index~logDepthDeclaration~background.fragment~background.vertex~default.fragment~de~lntfmh4r-BiCafb5W.js",
-      "bytes": 445,
-      "sha256": "6d14898f3dfaa87b92fdb88f9d11a40712ea9f422b76265a23a3720573af8a19"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexDeclaration~default.vertex~depth.vertex~glowMapGeneration.v~iba0548h-DaWRtG2e.js",
-      "bytes": 878,
-      "sha256": "c75f543049faac53bfe57e76d9a96aeffbd4cdd6693be9ec26b46eb3ac3559b2"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexDeclaration~default.vertex~depth.vertex~glowMapGeneration.v~iba0548h-DPLEorS1.js",
-      "bytes": 825,
-      "sha256": "5f61069920e2f8574f148b3bbbe111d5d053534514ae58a17d2fdc9626caa9d8"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexGlobalDeclaration~default.vertex~depth.vertex~glowMapGenera~m9dilj39-CFjrwGMD.js",
-      "bytes": 1847,
-      "sha256": "81d1dd2c85d944f014d0ebcce9b2aa5c90f0821d7a6e728bb2455939fa4d57cb"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexGlobalDeclaration~default.vertex~depth.vertex~glowMapGenera~m9dilj39-Dc0gSVbD.js",
-      "bytes": 1329,
-      "sha256": "ace35decaa19838d34320c0b85e2e2aa91cde40e1cb252caa7c0259d7c5ce6ad"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexGlobal~default.vertex~depth.vertex~glowMapGeneration.vertex~gtreb56f-Cpn2RX8h.js",
-      "bytes": 433,
-      "sha256": "af2904a8770e65c8a538b89d357a52fca3bfc5029f103c5f853c45be794cff88"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertexGlobal~default.vertex~depth.vertex~glowMapGeneration.vertex~nfff1d1v-7nyzCcw5.js",
-      "bytes": 449,
-      "sha256": "1ae7a917ce2dbd0fac0e8b6d0ecce5215de333ff54d8f22ccc696fccaa1125bb"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertex~default.vertex~depth.vertex~glowMapGeneration.vertex~iblVo~iczlwbew-BStGTK70.js",
-      "bytes": 2158,
-      "sha256": "9acd13109993561e3c6f03e7a42ed83d898982f1167e63c25e5d35021eaaea8c"
-    },
-    {
-      "path": "assets/babylon~index~morphTargetsVertex~default.vertex~depth.vertex~glowMapGeneration.vertex~outli~hv62zvmz-ZlFvefvk.js",
-      "bytes": 4649,
-      "sha256": "589f7bac71c0f380751eb42494bb5bfcbe01ee45ff06ba8b4993fa0740881e42"
-    },
-    {
-      "path": "assets/babylon~index~objectIdFunctions~default.fragment~gaussianSplatting.fragment~gpuRenderPartic~mawb8fa9-Bx-H0pkw.js",
-      "bytes": 634,
-      "sha256": "cc7e7c623c277bc467ddb14bb77b06ecf10cb0ed457939bb589f700071db9320"
-    },
-    {
-      "path": "assets/babylon~index~objectIdFunctions~default.fragment~gaussianSplatting.fragment~particles.fragm~ifhbyknu-CbhlSg8M.js",
-      "bytes": 657,
-      "sha256": "2ed7538fcd158d58f8e8d00700340a51b728eec491a16fbd9ff2938c48778f44"
-    },
-    {
-      "path": "assets/babylon~index~openpbr.fragment~geometry.fragment-BQ3ZnUCs.js",
-      "bytes": 18550,
-      "sha256": "a53b19850e40680ef8611d952ca7ac05814059cb6ecb66a30d22ed7b9a53ef79"
-    },
-    {
-      "path": "assets/babylon~index~openpbr.fragment~geometry.fragment-BWBand54.js",
-      "bytes": 17139,
-      "sha256": "84f13ca3577190af9b08ffad7a9123f61488df60dd3429dd15635e1114218bf6"
-    },
-    {
-      "path": "assets/babylon~index~openpbr.fragment~openpbr.vertex-PQFwToh1.js",
-      "bytes": 5474,
-      "sha256": "8bc16dfe9abf7184098afe817c538a6f55b59f6dda331469851599641d68442c"
-    },
-    {
-      "path": "assets/babylon~index~openpbr.fragment~openpbr.vertex-SxUgTaBv.js",
-      "bytes": 4127,
-      "sha256": "7361acfea7ccb36f2d872404d6e177246579440e74353b220f90766528eac48c"
-    },
-    {
-      "path": "assets/babylon~index~openpbrMaterialLoadingAdapter~envTextureLoader~pbrMaterial.pure~openpbrMateri~leryqqaa-obBWOAz8.js",
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ngyzvn7x-BVZwlmgT.js",
       "bytes": 2355,
-      "sha256": "55f43a993a54927ae7a32dbe9c4a95712fbd35dd284e2721f6dfa8c137e825ca"
+      "sha256": "a69988c474cffb93f6c6c1f4b089ee9ffec03ecdd485c431a66d5e3a098c0115"
     },
     {
-      "path": "assets/babylon~index~openpbrMaterialLoadingAdapter~pbrMaterial.pure~openpbrMaterial.pure-CQ2RRvE9.js",
-      "bytes": 115264,
-      "sha256": "69b5029bff48f44067153c3f390906bb4e3fe42164086d9187d54e2df79fc456"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~o4j8awu5-CZJPdoMF.js",
+      "bytes": 80861,
+      "sha256": "3b0fde2c8292fd17d98d63792bbf5381376b4401f6f61e4dedd8829f38d0503e"
     },
     {
-      "path": "assets/babylon~index~packingFunctions~depth.fragment~gaussianSplatting.fragment~kernelBlur.fragmen~gehngc96-BaOlvuOs.js",
-      "bytes": 734,
-      "sha256": "d9088a6e0a7ed281ed2d85dab0ca621b732976c2f7aa4f41b305287075952bd3"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~oixdi23l-dqz0dHXK.js",
+      "bytes": 2941,
+      "sha256": "d4a0d83706cc2f7681ca2895f9b827fbadfe11ed77025bc19fbf9ef40dd9d01d"
     },
     {
-      "path": "assets/babylon~index~packingFunctions~depth.fragment~gaussianSplatting.fragment~kernelBlur.fragmen~gehngc96-VZAULzAC.js",
-      "bytes": 696,
-      "sha256": "46e2ed4b4cc9fe90014ac553051ef0e8ef43382c047e4fe14be486ef599427d4"
+      "path": "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-CIfi7n6e.js",
+      "bytes": 15541,
+      "sha256": "bc7845dadddc9df4acf2ba34343d3661d4db0f4e1dc1d04e0012941ecf48f5f6"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~openpbr.fragment-Bo8DSvmg.js",
-      "bytes": 29539,
-      "sha256": "3cb9f97f87eb76ece8cce6824d684145cac0b047eb598e7fa488042e4f603d5f"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~b7etymd1-BMwEppRb.js",
+      "bytes": 2097,
+      "sha256": "284450253a083179f8dc0990f6535e3d9d3d0f547bb9cb3a8fbd50f9d2540e0f"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~openpbr.fragment-R8P8BdTD.js",
-      "bytes": 36884,
-      "sha256": "b14ed543fa8006195d39c08b7badd9159ff4e7f6d9376e02f7791686958bcdc7"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~d0penb06-Cu_sj2zM.js",
+      "bytes": 80,
+      "sha256": "ac5c1cd88e21454d0753d41e04c62cf8a19b88778746954785b5d32d0f1b66d8"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~openpbr.fragment~geometry.fragment-B8VnEMjp.js",
-      "bytes": 2611,
-      "sha256": "a7d3b1890a20a74ff7ac18045bb3f62f453d37293bcbf2de9cf6b2ed27323bc0"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~e134msp5-UtxC_Odd.js",
+      "bytes": 500,
+      "sha256": "18ac183db602e06e8f22bb36ef5a1b0127170dfa0401d3e6aff4f81dc5d76b26"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~openpbr.fragment~geometry.fragment-CMCzeqaI.js",
-      "bytes": 2808,
-      "sha256": "44cb5c963271c94369ff0d6d407a0602e3e9b6a2c207ceb3ba6ef06f17e8ef7d"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~f8vsmlll-BXdVC_j_.js",
+      "bytes": 157,
+      "sha256": "4d0dc9fdce128a6a8c1a144605ccc92ea9fd87deb82baee4477fe956acc98e5f"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~pbr.vertex-C-WvDBSg.js",
-      "bytes": 2651,
-      "sha256": "7808e3799702f5d6d65f813d5949803a4a7368c9ea200568204164dbd0e59a0f"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~kfitgn03-CuHSR8Sn.js",
+      "bytes": 449,
+      "sha256": "09e2aa636b855a3e7bf9d267942a298834ddb7ad2e4dc5f4f13d92d9186efcac"
     },
     {
-      "path": "assets/babylon~index~pbr.fragment~pbr.vertex-KYaoBwKT.js",
-      "bytes": 2053,
-      "sha256": "c17f23373bf44c68752853121f8ffc1ce8fe2b3587d980c2d5f80f8eece943eb"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~ksbantkz-H-M_hi7F.js",
+      "bytes": 3207,
+      "sha256": "08c0e04c1857138331e86c1b0c907ad4425ece8fa34628c2eca4c6666c798cee"
     },
     {
-      "path": "assets/babylon~index~pbrMaterial.pure~openpbrMaterial.pure-B7DR5Hlw.js",
-      "bytes": 118375,
-      "sha256": "3ff1282bf9d7493f0173e127d364fe622a157eb0ed7ecdfb0a3121b35db9660f"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~nj79vu5f-BGa_LdB1.js",
+      "bytes": 12760,
+      "sha256": "0fe3390feb550c5d40f732b69bfab91316a598a23a033003689f3e0242136d68"
     },
     {
-      "path": "assets/babylon~index~reflectionFunction~background.fragment~default.fragment~pbr.fragment~openpbr.~buawjkjh-CkX_c0mh.js",
-      "bytes": 4219,
-      "sha256": "7ec0059a2c54805cde45ccafb5803c4f3beb46df0cbdb7e34c23691967d0fa96"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~nljntg36-CuBYPcDK.js",
+      "bytes": 1881,
+      "sha256": "30a999582eace71f2e78a479182e71e943508bbda9574b17e5b29575c49a3b9e"
     },
     {
-      "path": "assets/babylon~index~reflectionFunction~background.fragment~default.fragment~pbr.fragment~openpbr.~buawjkjh-Ct85AbkO.js",
-      "bytes": 4732,
-      "sha256": "8b43fe1d9913769b8c44f5b7a9ff5bc689f02ffda038cde36d3696887e67f65d"
-    },
-    {
-      "path": "assets/babylon~index~screenSpaceReflection2.fragment~screenSpaceReflection2BlurCombiner.fragment-BR0kneqP.js",
-      "bytes": 8559,
-      "sha256": "6a9a3cb02b61758940d63086ce7a4916a0ebc62b1d303109d2c5f05212f08843"
-    },
-    {
-      "path": "assets/babylon~index~screenSpaceReflection2.fragment~screenSpaceReflection2BlurCombiner.fragment-Ds8vOZX7.js",
-      "bytes": 7965,
-      "sha256": "d4f148e51c1f7d84b895609d6e7b96f24033c5f6f1541f29c941ac40a50bc928"
-    },
-    {
-      "path": "assets/babylon~index~shadowMap.vertex~volumetricLightingRenderVolume.vertex-Chll1KxQ.js",
-      "bytes": 311,
-      "sha256": "74520a1ba5d91c6ccbc592ec1fd3fbd69108cef97b61e325ba95fbda915e2073"
-    },
-    {
-      "path": "assets/babylon~index~shadowsFragmentFunctions~background.fragment~default.fragment~pbr.fragment~op~cwz28lwl-CSD_qobj.js",
-      "bytes": 26070,
-      "sha256": "ea60c10b6c561db689c22dd99d096062cc97a52ab3e77f739dc11501f39756a0"
-    },
-    {
-      "path": "assets/babylon~index~shadowsFragmentFunctions~background.fragment~default.fragment~pbr.fragment~op~cwz28lwl-Dpm2gMPC.js",
-      "bytes": 28604,
-      "sha256": "ed508e68708d6ebf332a74edf831e3e63b2c42cb92456201d6fd3b937953b1de"
-    },
-    {
-      "path": "assets/babylon~index~shadowsVertex~background.vertex~default.vertex~pbr.vertex~openpbr.vertex-BpQqfvqp.js",
-      "bytes": 1085,
-      "sha256": "457bcb51e9863590c91a3ec6060f4f6f6dee1c878cb6f2b04273a1e9aae54f91"
-    },
-    {
-      "path": "assets/babylon~index~shadowsVertex~background.vertex~default.vertex~pbr.vertex~openpbr.vertex-DAiYXOjN.js",
-      "bytes": 2557,
-      "sha256": "6795883254f4fe71ee28773ba387a0b0139e64ea719a706aa7f7564f5cd9b2cd"
-    },
-    {
-      "path": "assets/babylon~index~subSurfaceScattering.fragment~pbr.fragment~openpbr.fragment-BGKXO5Gt.js",
-      "bytes": 362,
-      "sha256": "2995b607e6dcb8254d0df094997eed9bab133d8a15ce1dbcfdca2f632401a6fc"
-    },
-    {
-      "path": "assets/babylon~index~subSurfaceScattering.fragment~pbr.fragment~openpbr.fragment-HDzxKz6a.js",
-      "bytes": 351,
-      "sha256": "5f13af2ccb60f1eab619ef74be7ab229ad33bce18069f37699eb4dbbd6d11a0e"
-    },
-    {
-      "path": "assets/babylon~index~volumetricLightingRenderVolume.fragment~openpbr.fragment~geometry.fragment-CkGcgCjz.js",
-      "bytes": 452,
-      "sha256": "7689b900dfa24b4020ca6b400dbd0536e1dce4c779d232b0987b9feae23e3399"
-    },
-    {
-      "path": "assets/babylon~index~webAudioBus~webAudioMainBus~webAudioSoundSource~webAudioStaticSound~webAudioS~bwx0lg66-DVNAS3Gk.js",
-      "bytes": 12624,
-      "sha256": "591af735ebb9716a8f30b0637be1d1717472fa29c8dae426241ba898b3ae9360"
-    },
-    {
-      "path": "assets/babylon~index~webAudioBus~webAudioSoundSource~webAudioStaticSound~webAudioStreamingSound-xJA4W-69.js",
-      "bytes": 16132,
-      "sha256": "b9e18b4236abd870a4fe6840afab1951c33bbd957e562126b7b03400d54a5510"
-    },
-    {
-      "path": "assets/babylon~index~webAudioSoundSource~webAudioStaticSound~webAudioStreamingSound-Y2Lv18h9.js",
-      "bytes": 1564,
-      "sha256": "e17c0b55ae7465ff98357c799f1e8d89f55afac4452008e85a76385ea3e45e86"
-    },
-    {
-      "path": "assets/babylon~index~webAudioStaticSound~webAudioStreamingSound-CJxky3RZ.js",
-      "bytes": 3305,
-      "sha256": "32a0f012754a2d57ba6dca48a7a176df922af54719be7c730434481171ff21e5"
-    },
-    {
-      "path": "assets/babylon~lod3D.fragment-C0yxRa09.js",
-      "bytes": 775,
-      "sha256": "b672f385ef457dc800d8c8964dd515a203b05dcd14835876c222472458495be4"
-    },
-    {
-      "path": "assets/babylon~lod3D.fragment-DqetZqU-.js",
-      "bytes": 917,
-      "sha256": "50764fc6ca53bf6287648214f70c0da36ab7d491b682c61bd70ad8ea439aa26a"
-    },
-    {
-      "path": "assets/babylon~meshBlending.fragment-B3-BWcZB.js",
-      "bytes": 39610,
-      "sha256": "7ead2cbef8199807334dd059363b7fdeccd9c34d90690fa2fd1c8aeefa8da0b6"
-    },
-    {
-      "path": "assets/babylon~meshBlending.fragment-oRn3B2BN.js",
-      "bytes": 42736,
-      "sha256": "e14732f6a32d814ab9499bc172f535a92471811fda0f0fc17fa46255f2c0d858"
-    },
-    {
-      "path": "assets/babylon~noise.fragment-CPMzrW5B.js",
-      "bytes": 1557,
-      "sha256": "b05c9aeb5b14c416847469223c523ad2c4c36abee3987d9ad4c9845bdbf441ab"
-    },
-    {
-      "path": "assets/babylon~noise.fragment-dcJTzinJ.js",
-      "bytes": 1399,
-      "sha256": "baf0428b18b6857f967ceea0048e02e9fb017b0efff5d731e6d0173023e8107d"
-    },
-    {
-      "path": "assets/babylon~oitFinalSimpleBlend.fragment-Ccyc0M-F.js",
-      "bytes": 530,
-      "sha256": "3ca0e75ae4cd93f29e93368c3bb7aa5053c82826c79857bfd2816e04838893b7"
-    },
-    {
-      "path": "assets/babylon~oitFinalSimpleBlend.fragment-c_eQgE3N.js",
-      "bytes": 602,
-      "sha256": "d009b1adec3bbccb668ad18c71f9f035712dc4cabd1eb61b9f3828c770001905"
-    },
-    {
-      "path": "assets/babylon~screenSpaceCurvature.fragment-BXIf2jPY.js",
-      "bytes": 1748,
-      "sha256": "6dc2c1b1ba25b0968a3736e249821b4176d2c2bdc99f9ae6d725638c618f253e"
-    },
-    {
-      "path": "assets/babylon~selection.fragment-Bj0foqKh.js",
-      "bytes": 1642,
-      "sha256": "7b0841f6027119560b9c6c4018f52852e1e9aff94ccd582b84e83eee0beeebfd"
-    },
-    {
-      "path": "assets/babylon~selection.fragment-CQHAxWaL.js",
-      "bytes": 1423,
-      "sha256": "2f050d2ae8989ef10219870afcbde71ab876ab3871d69ed56ddde8c9700dbe65"
-    },
-    {
-      "path": "assets/babylon~selection.vertex-BSbOzqMi.js",
-      "bytes": 4132,
-      "sha256": "43895fb82031e579b955a0a3773c30f213a1489c6c65baace1de134ed49da0c4"
-    },
-    {
-      "path": "assets/babylon~selection.vertex-Dxa_x8_G.js",
-      "bytes": 3662,
-      "sha256": "b0dc9809148995211b77e1d2eeb68e6ddb46f4882e805b130c2b11fbfd90ea42"
-    },
-    {
-      "path": "assets/babylon~selectionOutline.fragment-DgiDJC3M.js",
-      "bytes": 6418,
-      "sha256": "e9e347d2212ed6b4767b726c05a6d0945dc64b8e2e3337029a8dcce2f477010e"
-    },
-    {
-      "path": "assets/babylon~selectionOutline.fragment-xeq25a5i.js",
-      "bytes": 5145,
-      "sha256": "8b351f0a2ceca5cb3a71517c237f77099460fe309def837caab83545a5d7ee95"
-    },
-    {
-      "path": "assets/babylon~subSurfaceScattering.fragment-BD0XO-ai.js",
-      "bytes": 5764,
-      "sha256": "589e78236711db7fc3995db9ffa07bd01c35a6ffe6d7ab19b2dc725846d7c10c"
-    },
-    {
-      "path": "assets/babylon~subSurfaceScattering.fragment-DRxTb0tX.js",
-      "bytes": 6385,
-      "sha256": "c0092180effab0a9ae3eb72c77e6c58efd794d34c11ed875ae33fcb3e5eb83f6"
-    },
-    {
-      "path": "assets/babylon~textureProcessor.fragment-DBElp97U.js",
-      "bytes": 3641,
-      "sha256": "54ec35c68b2466be553b9fb638ff008b1681dabdf14479989927dd3dd38a0b2b"
-    },
-    {
-      "path": "assets/babylon~textureProcessor.fragment-DJ2vqEmt.js",
-      "bytes": 4528,
-      "sha256": "a2b5ae13b1c6fe5c4bfc51ff63e4b761a521cc62a8531927d561c552a75facbe"
-    },
-    {
-      "path": "assets/babylon~tgaTextureLoader-CAa-i29y.js",
-      "bytes": 388,
-      "sha256": "42b1d2409b31e912f571537db6480482eaa07ae7dfe151b61644efae1d7b2872"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingBlendVolume.fragment-CrKAOySb.js",
-      "bytes": 965,
-      "sha256": "3083686e62baa558b9191349b91e634f37aad6164b323b579cd063e2c49341c5"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingBlendVolume.fragment-Sqs-PFEk.js",
-      "bytes": 1164,
-      "sha256": "96e7c7f1fae0551f9b40fcc88f2947bc4bc828c1cd9de86f1180926d02d28cf0"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingRenderVolume.fragment-DOr01utb.js",
-      "bytes": 2273,
-      "sha256": "86e427582956b0989377d347995351aea754ae60c28d75f899e9dc9276d3b6ee"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingRenderVolume.fragment-vn0OGYMx.js",
-      "bytes": 2022,
-      "sha256": "c825d602185181c72d5edee267fa9d1adfe1d10a8c0174ab3077af26b6196533"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingRenderVolume.vertex-32n1rK3s.js",
-      "bytes": 1075,
-      "sha256": "245a222fbe0aa8ef03f84aed32ee892438322e0a4607032f0e3d391a88dc6c8d"
-    },
-    {
-      "path": "assets/babylon~volumetricLightingRenderVolume.vertex-CTPCUee9.js",
-      "bytes": 1205,
-      "sha256": "007d255af7f64efcd85190fdfeb21c95e8b4f5afa73584962425828e2176d2a6"
-    },
-    {
-      "path": "assets/babylon~webAudioBus-Be6H1WRu.js",
-      "bytes": 2434,
-      "sha256": "537d8dfeae83afb7d2e27dfac6e1c549f1447f18802330b0fbe2dda9e2881110"
-    },
-    {
-      "path": "assets/babylon~webAudioBus~webAudioMainBus-CIsmodjn.js",
-      "bytes": 199,
-      "sha256": "8072b670005a7a6f106b2c7bf781f70f9724825c9a79fc3390c2b516d52a2e7b"
-    },
-    {
-      "path": "assets/babylon~webAudioMainBus-Bhis0_te.js",
-      "bytes": 1082,
-      "sha256": "f979d6124499c86a563353d1204f483a107ad9dba4dc8217ce77a2aae3192a50"
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js",
+      "bytes": 64963,
+      "sha256": "d30026c7b494ba268be9ffa69c1ce2237bf88014a6cf15114895ac80536398a0"
     },
     {
       "path": "assets/bandage-DI6G-E0G.webp",
@@ -2442,6 +1457,26 @@
       "path": "assets/character.json",
       "bytes": 2163,
       "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c"
+    },
+    {
+      "path": "assets/cinematic-game-DUE6UT1z.js",
+      "bytes": 33356,
+      "sha256": "d701415e88ff62a1c81bc5585bc650064434837613e2a473fe49a3ad8a3c16dd"
+    },
+    {
+      "path": "assets/cinematic-protocol-CuJ49ki-.js",
+      "bytes": 26815,
+      "sha256": "4fbb86cc346bb14e129101e739b35cc79a3efbb24f2fbf11b360ceeea29dff1a"
+    },
+    {
+      "path": "assets/cinematicStudio-8JOa3mNe.css",
+      "bytes": 5031,
+      "sha256": "54faf2d3c8d6e22fe159e5480d6bd55328e0b879e4a0098609f0184de8e7f351"
+    },
+    {
+      "path": "assets/cinematicStudio-D2WvlIOu.js",
+      "bytes": 23170,
+      "sha256": "c4116a37909b1b301e118cd58743ae96432a459b7813b20dff077da644a5cf31"
     },
     {
       "path": "assets/content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
@@ -8004,6 +7039,16 @@
       "sha256": "c56d791e858321919256b45373e6ee2ee791031fd2b779eac7081c59c0daa89d"
     },
     {
+      "path": "assets/developer-actors-DJUuOKyz.js",
+      "bytes": 19913,
+      "sha256": "8fa068ecbb535a4f99f0c25ffec991231dce05139c4e7bbeef11feee370ac994"
+    },
+    {
+      "path": "assets/developer-editor-Bh9w9-Jy.js",
+      "bytes": 19209,
+      "sha256": "fd7fb7fa8ac0270aacc30f22b5d494958edb21583a30d0f91a4a0981d1afe625"
+    },
+    {
       "path": "assets/dialogue-C18xk6mI.webp",
       "bytes": 139420,
       "sha256": "0f5a0a03febb7ca203ac2c8cd51de0a79bb61cec4fee9d9e33ec73288a196a51"
@@ -8029,6 +7074,26 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
+      "path": "assets/game-CTPmmHJX.css",
+      "bytes": 102334,
+      "sha256": "c3d789437296ab2b681655ee6c32d22bc3e1bf6b40e2ea850a75c5f464189522"
+    },
+    {
+      "path": "assets/game-DMzcR2a4.js",
+      "bytes": 2809877,
+      "sha256": "750ae4254aad57bb1193921f011fec280c408a70d2aa1f687874ad6c00b66f78"
+    },
+    {
+      "path": "assets/game-tool-lease-DVeWxHzv.js",
+      "bytes": 3869,
+      "sha256": "55bb932fd3c46bce82c4751a2712d71e47e0da90b85f1e7d1e1502bd9a3709aa"
+    },
+    {
+      "path": "assets/goblin-spec-BkFsagN0.js",
+      "bytes": 24115,
+      "sha256": "c2d0c3c30470fb3b7af803be8e2359ed6c2380163558d4bc1821816570400189"
+    },
+    {
       "path": "assets/great-plains-ground.json",
       "bytes": 897,
       "sha256": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38"
@@ -8052,16 +7117,6 @@
       "path": "assets/icons-DDN_1YTf.webp",
       "bytes": 123312,
       "sha256": "6eae8b449a5e23f487d2fe5e7cb99d8067e95d337b97d6e97dd79f7ccd583cbc"
-    },
-    {
-      "path": "assets/index-CGGkO1b4.js",
-      "bytes": 2887632,
-      "sha256": "f147e2bf68333ae41022e78a5bc686d00824004ecf34248600dd0eb199e1102b"
-    },
-    {
-      "path": "assets/index-CTPmmHJX.css",
-      "bytes": 102334,
-      "sha256": "c3d789437296ab2b681655ee6c32d22bc3e1bf6b40e2ea850a75c5f464189522"
     },
     {
       "path": "assets/ktx2-decoder.json",
@@ -8122,6 +7177,11 @@
       "path": "assets/pie-C3Mqs8wy.webp",
       "bytes": 19868,
       "sha256": "8f6a5e95b6ac9cecfede6cdaa6fe0d535e8629b7d5c8f2ab00bd7870a62d9011"
+    },
+    {
+      "path": "assets/placement-document-tuc32km8.js",
+      "bytes": 7874,
+      "sha256": "78279f36d0ba13832f6e37584ded607cc03dffdf1725b2225ed9461469fb6138"
     },
     {
       "path": "assets/quest-props.json",
@@ -8194,6 +7254,11 @@
       "sha256": "89246ca82c6b30db7dba4bae56820c6acaac4b90449ba22b1747542181b3cf8c"
     },
     {
+      "path": "assets/witch-cave-layout-EZMYIgVS.js",
+      "bytes": 71980,
+      "sha256": "41148c71e7003f444547ec2923505c37dee760b25ff856b52b74b76133bd4b7e"
+    },
+    {
       "path": "assets/witch-cave.json",
       "bytes": 138553,
       "sha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978"
@@ -8209,9 +7274,14 @@
       "sha256": "588e8abac1b838cc76d9a68a56e3b1c6279179e4ddd902c8559bcbb71da19cf9"
     },
     {
+      "path": "cinematic-studio.html",
+      "bytes": 833,
+      "sha256": "249ca264ae4a9f9108100c4fea062ca4864891a1f0796110cda01845551abc19"
+    },
+    {
       "path": "index.html",
-      "bytes": 60185,
-      "sha256": "0b7ce0a323a474774801ff26da297b6249d8342363e15e8f9bd4a6e3dd36cf62"
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
     },
     {
       "path": "KTX2_NOTICES.txt",

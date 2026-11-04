@@ -1,0 +1,217 @@
+{
+  "generatedAt": "2026-11-04T03:54:15.363Z",
+  "passed": true,
+  "independentCaseGroups": 25,
+  "sourceHashes": {
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "src/placement-document.js": "82bf22705aca95df0197740003096b21f76a05e550adca02e25fe9bb894006d0",
+    "src/authored-placement-runtime.js": "0123d60bc3e2e360dce85c1e18f496e40b8cc2917e48f055fb0896b9c7f4bb30",
+    "src/dot-minimap.js": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af",
+    "src/authored-map-loader.js": "2a15e300eb7d146d2478805381595e23cbc536d121d5f62c42cb97bf7cb7be11",
+    "scripts/apply-authored-map.mjs": "db1926a81a2a52493aa06063cea2bd733f3eae44467a258c074b4e2e6a7fc741",
+    "src/developer-editor.js": "65d2700eef6ea8090fcfd46a70c659c90c2720aabfd89ba88cd24a16b719231b",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176"
+  },
+  "reports": [
+    {
+      "filename": "phase3-verification-catalog.json",
+      "sha256": "92f534361547d7146e610be099960480e386e368d2592b4f5407e772b0a82b48",
+      "passed": true,
+      "cases": 3
+    },
+    {
+      "filename": "phase3-verification-schema.json",
+      "sha256": "57d43ebfc59e25160f4bcc27013a47a60bd6baeb6428297337175fd2299e5f9d",
+      "passed": true,
+      "cases": 5
+    },
+    {
+      "filename": "phase3-verification-runtime.json",
+      "sha256": "36a3590e44bf5d37dcdfe2c16ca0bc6f1370adf270a988e58d6df4adc1ed1720",
+      "passed": true,
+      "cases": 11
+    },
+    {
+      "filename": "phase3-verification-project-flow.json",
+      "sha256": "4617dffeef60c08d4908200898327826a849fee2145c285123b873b661bd09c5",
+      "passed": true,
+      "cases": 2
+    },
+    {
+      "filename": "phase3-verification-editor.json",
+      "sha256": "090936ff3a7078c9a597d82d541811ee22b372c19db52932f1e97bf6f20c16a5",
+      "passed": true,
+      "cases": 4
+    }
+  ],
+  "evidence": {
+    "maps": [
+      "village",
+      "great-plains",
+      "monster-forest",
+      "witch-cave"
+    ],
+    "catalogEntries": 82,
+    "actualDistinctModels": 247,
+    "editableApprovedProps": [
+      "crate-barrel-cluster",
+      "firewood",
+      "handcart"
+    ],
+    "allPrimaryAndLodTrianglesHashesAndClipDurationsChecked": true,
+    "fourMapStableIdsAndHistoryRoundTrip": true,
+    "actualNativeMainOutlineShadowLodViews": 12,
+    "collisionNavigationAndMinimapSameCommitRevision": true,
+    "geometrySurfaceNormalsAndVertexContact": true,
+    "worldFreezeVisibilityRelocationPreviewCancel": true,
+    "outlinePreparationFailureAtomicity": true,
+    "selectedAssetRefcountsHighTextureLastOwnerAndLateCancel": true,
+    "repeatedEditResourcePlateau": true,
+    "temporaryCliProjectApplyMaps": 4,
+    "invalidRegistryMetadataCases": 12,
+    "actualDefaultProjectIndexUnchanged": true,
+    "nativeGizmoInvalidScaleUnhandledRejections": 0,
+    "actualEditorExitAndApplyGuard": true
+  },
+  "resolvedIssues": [
+    "Free-support payload strictness",
+    "First-preview request initialization",
+    "Pre-publication outline failure transaction",
+    "Preview identity refresh and high-texture last-owner release",
+    "Signed picked normals and actual vertex support anchoring",
+    "Rejected async native gizmo drag caught; committed transform frozen/restored without commit"
+  ],
+  "limits": [
+    "NullEngine verifies production logic, native draw submission batches, actual shipped decoded geometry/rig metadata and resource ownership. It does not rasterize pixels or measure GPU/device performance.",
+    "Surface probes use actual picked controlled rotated geometry for wall/ceiling semantics; no screenshot or authored cave visual-equivalence claim.",
+    "Opaque1x1image fixtures preserve material/geometry pipeline but do not validate full texture imagery/upload/performance.",
+    "Original baked structural placements remain read-only; only three explicitly approved independent props are editable. No default map aesthetic changes, browser automation, full suite, build, deployment or paid/new generated assets in this verification scope."
+  ],
+  "cases": [
+    {
+      "report": "catalog",
+      "name": "all public catalog entries and LOD triads match actual glTF metadata/content hashes",
+      "passed": true
+    },
+    {
+      "report": "catalog",
+      "name": "catalog import/search remains metadata-only with zero fetch/model preload",
+      "passed": true
+    },
+    {
+      "report": "catalog",
+      "name": "selected editable prop packed geometry agrees with catalog without geometry reduction",
+      "passed": true
+    },
+    {
+      "report": "schema",
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen village",
+      "passed": true
+    },
+    {
+      "report": "schema",
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen great-plains",
+      "passed": true
+    },
+    {
+      "report": "schema",
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen monster-forest",
+      "passed": true
+    },
+    {
+      "report": "schema",
+      "name": "base IDs/read-only and edit/duplicate/delete/undo/redo/export/reopen witch-cave",
+      "passed": true
+    },
+    {
+      "report": "schema",
+      "name": "strict document/ID/number/version/asset/surface validation",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "actual place/transform/history/navigation/minimap/reopen village",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "actual place/transform/history/navigation/minimap/reopen great-plains",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "actual place/transform/history/navigation/minimap/reopen monster-forest",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "actual place/transform/history/navigation/minimap/reopen witch-cave",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "four map revisit consumes the exact exported documents with preserved IDs transforms and collision",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "failed rendering preparation leaves prior document transform collision revision and outline ownership intact",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "committed target previews cross visibility cells without a duplicate ghost or published collision change",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "nonpublishing scene visuals sample multiple absolute free transforms without altering authored world metadata",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "true rotated support geometry validates wall ceiling signed normals and actual vertex contact offsets",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "repeated previews commits and selection deletion bound native resources and release final resident ownership",
+      "passed": true
+    },
+    {
+      "report": "runtime",
+      "name": "late selected source completion after map generation cancellation never publishes geometry collision or cache ownership",
+      "passed": true
+    },
+    {
+      "report": "project-flow",
+      "name": "four exact editor exports validate/apply into a temporary project and load through actual game runtime",
+      "passed": true
+    },
+    {
+      "report": "project-flow",
+      "name": "invalid files preserve prior document resources collision revision and local registry outputs",
+      "passed": true
+    },
+    {
+      "report": "editor",
+      "name": "actual editor metadata UI is lazy and owns native gizmos only while entered",
+      "passed": true
+    },
+    {
+      "report": "editor",
+      "name": "real DOM numeric editing undo redo duplicate delete and native gizmo drag commit actual collision once",
+      "passed": true
+    },
+    {
+      "report": "editor",
+      "name": "invalid native scale drag has no unhandled rejection and restores frozen committed transform",
+      "passed": true
+    },
+    {
+      "report": "editor",
+      "name": "apply guard storage reopen and exit restore actual applied document IDs camera input and native observers",
+      "passed": true
+    }
+  ]
+}

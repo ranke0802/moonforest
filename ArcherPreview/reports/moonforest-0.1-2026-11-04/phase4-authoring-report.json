@@ -1,0 +1,101 @@
+{
+  "phase": 4,
+  "owner": "cinematic-document-player-studio",
+  "status": "source implemented; focused pure/DOM checks passed; shared-world integration owned by root/A/verifier",
+  "authorization": "Root opened PHASE-04 under the master plan's explicit parallel phase3/4 allowance after catalog source froze. No acceptance/future card was opened.",
+  "source": {
+    "document": "src/cinematic-document.js",
+    "player": "src/cinematic-player.js",
+    "protocol": "src/cinematic-protocol.js",
+    "studio": ["cinematic-studio.html", "src/cinematic-studio.js", "src/cinematic-studio.css"],
+    "tests": ["tests/cinematic-document-player.test.js", "tests/cinematic-studio.test.js"],
+    "existingFilesEdited": [],
+    "browserAutomation": false,
+    "fullSuiteBuildOrDeploymentByThisOwner": false,
+    "paidApiOrNewAssets": false,
+    "bearSampleReadImportedModifiedOrRegistered": false
+  },
+  "schema": {
+    "format": "moonforest-cinematic",
+    "version": 1,
+    "topLevel": ["format", "version", "cutsceneId", "mapId", "catalogRevision", "duration", "anchor", "actors", "shots", "tracks"],
+    "time": "Absolute seconds; duration0.1–600; shot times cover[0,duration] contiguously without overlaps/gaps. Playback advances only by supplied active game delta, capped at0.25s per update.",
+    "coordinates": "Metres in map coordinates after applying anchor position/unit quaternion. Source camera/actor keys are anchor-local. Uniform actor scale0.1–10 multiplies the existing prepared source scale.",
+    "camera": "Shots contain shotId,start,end,interpolation,from/to. Camera endpoints contain position[3],target[3],FOV radians0.1–2.8. Position and target must differ. Interpolation is step/linear/smooth (smoothstep); quaternion interpolation uses the shortest path.",
+    "actors": "actorId + canonical assetId/assetVersion, optional current contentHash, registered actorDefinitionId for skinned assets, optional known existing instanceId, position/quaternion/scale. Unknown or mismatched references reject before host preparation.",
+    "transforms": "One track per actor; strictly increasing absolute key times; complete position/quaternion/scale and explicit interpolation. Base actor transform applies before the first key, last key holds afterward.",
+    "animations": "actorId,start/end, actual configured clipId,clipStart/clipEnd,loop,blendIn/blendOut. Ranges are validated against actual glTF time-accessor durations in the lazy catalog, restricted to the registered actor's supported mapping. At most two simultaneous clip segments per actor; returned weights normalize when positive. Gaps request the prepared default idle rather than retaining an old pose.",
+    "subtitles": "start/end/text, bounded and data-only; rendered through textContent in the authoring interface.",
+    "audio": "time + existing audio.json sound ID + volume0–1. No arbitrary URL/music/model generation or embedded media.",
+    "events": "Allowlisted marker(time,type,label) only; no rewards, quest mutation, scripts, eval or arbitrary gameplay commands.",
+    "limits": {"bytes":524288,"actors":20,"shots":128,"transformTracks":40,"totalTransformKeys":2048,"animationSegments":256,"subtitles":128,"audioCues":128,"events":128},
+    "validation": "Strict unknown-field/version/reference/numeric/time/size checks return valid/errors[{path,message}]/document. Editor, AI import and game player share the same validator and evaluator."
+  },
+  "api": {
+    "documentExports": ["validateCinematicDocument(input,references)", "evaluateCinematic(document,time)", "cinematicEventsBetween(document,from,to)", "createCinematicDraft(options)", "CinematicHistory", "buildCinematicAiPrompt(options)"],
+    "references": "{catalog,actorDefinitions,audioIds,instanceIds?}; catalog geometry.clipDurations is derived from existing glTF animation input-accessor min/max, without decoding model buffers or loading GPU assets.",
+    "player": "new CinematicPlayer({host,references,onState?}); load,play,pause,resume,seek,setLoop,update(dt,{hidden,paused}),stop(reason),dispose,inspect",
+    "states": ["idle", "preparing", "ready", "playing", "paused", "completed", "cancelled", "error"],
+    "host": ["acquire(document,{token,signal,isCurrent}) -> lease", "prepare(document,{token,signal,isCurrent,lease}) -> prepared", "sample(frame,{token,lease,prepared,seeking})", "emit(cue,{token,lease,prepared})", "stopAudio({token,lease})", "release({token,lease,prepared,reason,restore})"],
+    "frame": "{time,shotId,camera:{position,target,fov},actors:[{actorId,position,rotation,scale,animations:[{clipId,time,weight}]}],subtitles}",
+    "lateCleanup": "The lease restores once with restore:true. A preparation result that arrives after cancellation may issue release with restore:false solely for its exact late resource; it must not restore old map/camera/input/HUD again. Repeated pending cleanup joins the same release promise.",
+    "hostResponsibility": "Existing world/scene/engine, tokened input/camera/HUD/audio/pause handoff, map-safe restoration, actor preparation/default idle/absolute native or Mourning procedural sampling and precise owned-resource cleanup are implemented in A/root's shared scene host, not a second engine in this page."
+  },
+  "playbackSemantics": {
+    "seek": "Pure absolute evaluation and host sample; stops tracked audio; never emits audio or events. Seeking backward does not reissue cues already fired in the same playback cycle.",
+    "loop": "Explicit user option; completion resets the cue cycle, samples0 and permits cues in the next intentional cycle.",
+    "pauseHidden": "Paused/hidden updates do not advance time. The next active delta is capped; no wall-clock catch-up queue is generated.",
+    "termination": "Completion, skip, cancel, replacement, error, death, map change, context loss and disposal converge on abort + audio stop + idempotent tokened release.",
+    "ownership": "Player adds no render loop, native observer, engine, model parser or permanent timer. Root's existing frame loop supplies update; the dedicated studio owns one status interval and one message listener, both removed on destruction.",
+    "replay": "Completion releases game ownership. A replay reloads the validated same document before playing; the studio handles this explicitly."
+  },
+  "studio": {
+    "preview": "Dedicated HTML page contains one iframe pointing to the same game index with release=moonforest-0.1, appropriate existing map character and cinematicPreview=1. Parent creates no Engine. iframe src remains unset until explicit Load, so opening/searching the catalog does not preload all models.",
+    "authoring": ["Map/asset/actor/clip/SFX selection from current catalog/definitions/audio IDs", "Shot add/copy/delete/reorder, numeric length and interpolation", "Camera from/to position/target/FOV and live camera capture", "Actor base position/quaternion/uniform scale and transform keys at the cursor", "Animation ranges/loop/blend, subtitles, existing SFX and marker editing", "Timeline play/pause/stop/seek/loop, undo/redo", "Browser temporary save/reopen, validated JSON import change preview and exact-schema JSON export"],
+    "cameraCapture": "Capturing an end key after editing a start key preserves the user-adjusted live preview camera instead of reloading the edited draft before capture.",
+    "seekCoalescing": "Concurrent slider updates retain the latest cursor while one seek/prepare is pending, avoiding a backlog of scene loads.",
+    "ai": "Copy a structured request containing allowed current IDs/schema/durations to the user's conversational AI. AI JSON import validates and previews shot/actor/duration differences before the user applies it. No provider call or automatic-generation success is claimed.",
+    "storageStates": "Browser temporary draft, JSON export, project-readiness validation, local registration and deployment are distinct labels. The page cannot directly write GitHub Pages/server files and contains no Git token/API secret.",
+    "projectFlow": "Same exported JSON goes to root's local validation/registration tool and game registry without format rewriting. A neutral no-actor development draft is available from createCinematicDraft; no bear sample or normal-play auto-trigger is created."
+  },
+  "protocol": {
+    "channel": "moonforest-cinematic-studio",
+    "version": 1,
+    "commands": ["load", "play", "pause", "resume", "seek", "stop", "loop", "capture-camera", "status"],
+    "checks": "Expected event.source object, exact origin, channel/version, bounded request ID, command allowlist and command-specific payload fields/types. Commands carry structured JSON only. Spoofed origins/sources and unknown command fields are ignored before routing.",
+    "bridgeReadiness": "Commands queue until a source/origin-validated cinematicReply('host-ready',{ok:true,ready:true,mapId}) arrives. ready:false does not flush. An early ready signal survives iframe load; a late signal flushes each unsent command once. Each request has one deadline starting when queued; no non-idempotent load is retransmitted. send.reset(expectedMapId?) runs before iframe navigation, cancels old requests and rejects stale-map ready signals.",
+    "cleanup": "Transport clears request timeout handles and rejects outstanding work on studio disposal; no per-play message listener is accumulated."
+  },
+  "verification": {
+    "pureCommand": "node --test tests/cinematic-document-player.test.js",
+    "pureCasesPassed": 11,
+    "studioCommand": "node --test tests/cinematic-studio.test.js",
+    "studioCasesPassed": 8,
+    "finalStudioRerunDurationMs": 241.3826,
+    "finalStudioHandshakeCoverage": ["Early host-ready before iframe load", "Late host-ready after iframe load", "Duplicate/spoofed/not-ready/stale-map signals never duplicate or prematurely post a load", "Map reset rejects prior requests and gates the next map", "Queued-command deadline expires once and never replays the timed-out load", "Disposal removes listener/queued timers; asynchronous status callbacks skip a destroyed studio"],
+    "latestCombinedPass": 15,
+    "latestCombinedFail": 0,
+    "latestCombinedDurationMs": 204.4319,
+    "finalPureRerunDurationMs": 77.1208,
+    "independentReviewFixes": ["Dispose marks the player closed synchronously and queued loads recheck lifetime after previous cleanup, preventing concurrent/queued new acquisitions.", "Load errors publish before cleanup; a rejecting release produces an explicit error and blocks acquiring an overlapping new lease.", "Shot boundaries require exact continuity, including tiny1e-9offsets; defensive evaluation chooses the previous/first shot rather than jumping to the final shot."],
+    "coverage": ["Neutral same-file JSON roundtrip; no sample assets/auto triggers", "26 malformed version/ref/number/time/size/field mutations rejected with paths", "Actual clip-duration bounds and canonical actor/asset relationships", "Absolute anchor/quaternion/camera/clip sampling independent of seek order", "Validated history snapshots and copy-only AI prompt", "Silent seek, no paused/hidden time, cue deduplication", "Every interrupt, late preparation and release-promise/error race", "Origin/source and payload protocol rejection", "DOM shot mutations, undo/redo, temporary save/reopen, invalid AI preview, direct unchanged-document host load, repeated seek without reload and live camera capture"],
+    "independentIntegration": "Verifier owns actual shared-world host/pose/registry/CLI scenarios and updates its separate phase4 artifacts. This pure/DOM report does not claim actual GPU or browser image verification.",
+    "sourceFrozen": true,
+    "sha256": {
+      "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+      "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+      "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+      "src/cinematic-protocol.js": "b30667783358c2b5efda7a7287d0fc794f64bb25b5c09c3062777ec22f28d49e",
+      "src/cinematic-studio.js": "0ac89fd98f74fe93371b5ac3057f1d6fdcf00c72caa47911f5e6218218c565d9",
+      "src/cinematic-studio.css": "b04dd321ae5b7206c819adcbddd8415a0b79b68b36eb0c113dd06fc366ad15b8",
+      "cinematic-studio.html": "e1d2ad8286a9d898e6010eb5519daa5b032658f991f7baed29201fa17f2e1656"
+    }
+  },
+  "limitations": [
+    "No browser automation, screenshots/pixel comparison or physical-device GPU/FPS/thermal test was performed.",
+    "The page uses plain CSS/DOM with responsive breakpoints; visual layout in real browsers remains unmeasured under the explicit no-browser constraint.",
+    "Real scene ownership, animation pose equivalence, resource plateau and project registration require A/root/verifier integration checks; mocked host checks alone do not certify them.",
+    "Only registered deployable IDs and existing sounds are supported. Unregistered local models or new provider assets are rejected rather than labeled project-ready.",
+    "Default neutral example remains a development file; registry presence does not create a normal gameplay trigger."
+  ]
+}

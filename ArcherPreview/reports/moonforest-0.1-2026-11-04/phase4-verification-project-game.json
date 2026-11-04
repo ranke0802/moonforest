@@ -1,0 +1,94 @@
+{
+  "generatedAt": "2026-11-04T03:51:10.911Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-registry.js": "335bcadc899e3f0889a0440fd72823e077316417adada5eba482c4d3b0b280e4",
+    "src/cinematic-registry.json": "7c1051f6e2bc3943b7c1dbe4da229694455681b8875a346c99279e555edb733f",
+    "scripts/register-cinematic.mjs": "722ff79301b0db30ae9de5087a018d3e24d4640a007e4722496baa69cf21f51c",
+    "src/cinematic-game.js": "7b9496cb4a9c6762ce6969e21ebd08443d1b3bb7dad7fb7056bd07e3e7e42c24",
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/cinematic-studio.js": "0ac89fd98f74fe93371b5ac3057f1d6fdcf00c72caa47911f5e6218218c565d9",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/game-tool-lease.js": "f822b5ed8e45dff27f1d63eecbd72ae98ff6c5f6b22b12f9745d2e090374f176"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "actual studio JSON export registers exact bytes into only a temporary project and reopens through SHA loader",
+      "passed": true,
+      "sameExportBytes": true,
+      "sourceUnmodified": true,
+      "sha256": "8f42879cb865ab6defdc540036c3a475f60414796ec48d7ec6c5f26a0f8e9338",
+      "bytes": 2312,
+      "defaultRegistryEntries": 0,
+      "tempProjectOnly": true
+    },
+    {
+      "name": "invalid registry metadata hashes streamed size limits deadline and late-fetch cleanup are bounded",
+      "passed": true,
+      "negativeRegistryCases": 5,
+      "hashFailures": 1,
+      "streamOverflowCancelled": true,
+      "hungFetchDeadlineMilliseconds": 20,
+      "lateFetchBodyCancelled": 1,
+      "remainingDeadlineTimers": 0
+    },
+    {
+      "name": "failed local registration rolls back its staged content index and lock while original export remains unchanged",
+      "passed": true,
+      "schemaFailureAtomic": true,
+      "injectedIndexCommitRollback": true,
+      "orphanContent": 0,
+      "stageFiles": 0,
+      "lockFiles": 0
+    },
+    {
+      "name": "registered project file loads through actual game DOM shared host and renders exact player evaluator poses without auto-play",
+      "passed": true,
+      "exactRegisteredDocument": true,
+      "initialAutoPlay": false,
+      "actualStaticSources": 1,
+      "sharedCameraPoseExact": true,
+      "realLeasePauseResume": true,
+      "afterStopVoices": 0,
+      "afterStopInputSuspended": false
+    },
+    {
+      "name": "browser registration preserves file references across controller reopen and malformed stored document fails safely",
+      "passed": true,
+      "browserReopenReferences": true,
+      "registrationAutoLoads": 0,
+      "malformedStoredDocumentCrash": false
+    },
+    {
+      "name": "actual game bridge readiness queues one load and source origin protocol blocks spoofed control",
+      "passed": true,
+      "queuedLoads": 1,
+      "spoofedCommandsIgnored": 2,
+      "seekTime": 1.25,
+      "messageListenersAfterDispose": 0
+    },
+    {
+      "name": "stored overlay reference stays visible before map readiness but can load only after actual authored record exists",
+      "passed": true,
+      "storedReferenceVisible": true,
+      "unknownLoadRejectedBeforeLease": true,
+      "actualOverlayReadyLoad": true,
+      "boundCloneRequests": 0
+    },
+    {
+      "name": "actual canceled preparation replies with failure and late container cleanup leaves no published actor or lease",
+      "passed": true,
+      "cancelledLoadOkReplies": 0,
+      "latePublishedActors": 0,
+      "afterCancellationLease": null
+    }
+  ],
+  "remainingTimers": {
+    "timeouts": 0,
+    "intervals": 0
+  },
+  "tempProjectCleaned": true,
+  "scope": "Actual Cinematic Studio exported bytes -> local validated transactional registration in temp project -> bounded SHA registry loader -> actual game DOM controller -> shared cinematic player/scene/approved static Meshopt source/camera/tool lease. Controlled origin/source messaging and native NullEngine logic/batches only; images opaque1x1fixtures, no browser/pixels/GPU/device claim. Default empty cinematic registry and source exported file unchanged."
+}

@@ -1,0 +1,95 @@
+{
+  "generatedAt": "2026-11-04T03:23:34.105Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/asset-catalog.js": "e4a85b20180a0e574f2f58e70e6da11d9c53d6fa2e1dc9ecb448f08f853fc32b",
+    "src/cinematic-document.js": "6aaecae1b23478e3885b6dc6026ff9912274cdf1b8ffc0c5821dfaf92b79c190",
+    "src/cinematic-player.js": "283b6ea8ee9485d21e283fc65a86eee4020c20d2224ce3777e1780cdcdbcc900",
+    "src/cinematic-protocol.js": "b30667783358c2b5efda7a7287d0fc794f64bb25b5c09c3062777ec22f28d49e"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "strict same-file document/history and neutral default without actor preload or triggers",
+      "passed": true,
+      "roundtripExact": true,
+      "historyDeepCopies": true,
+      "neutralActors": 0,
+      "neutralTriggers": 0
+    },
+    {
+      "name": "independent Babylon quaternion/anchor camera FOV and actual clip-range interpolation",
+      "passed": true,
+      "absoluteSampleTimes": 11,
+      "actualClips": [
+        "Walking",
+        "Sneaky_Walk_inplace"
+      ],
+      "signedQuaternionAndFov": true
+    },
+    {
+      "name": "invalid references geometry URLs event scripts numbers clip ranges and tiny shot gaps rejected",
+      "passed": true,
+      "negativeCases": 34,
+      "exactShotContinuity": true
+    },
+    {
+      "name": "seek and playback sample identical absolute frames; pause hidden and dt clamp preserve order",
+      "passed": true,
+      "sameAbsoluteFrame": true,
+      "seekEvents": 0,
+      "dtClamp": 0.25,
+      "restored": true
+    },
+    {
+      "name": "loop cue epochs boundary cues and completion restore exactly once",
+      "passed": true,
+      "completeRestorations": 1,
+      "loopBoundaryMarkers": 2,
+      "orderedCueEpochs": true
+    },
+    {
+      "name": "every interruption reason restores prior input camera HUD mute pause and is idempotent",
+      "passed": true,
+      "reasons": [
+        "skip",
+        "cancel",
+        "player-death",
+        "map-change",
+        "context-loss",
+        "error",
+        "dispose"
+      ],
+      "restorations": 7,
+      "duplicateRestorations": 0
+    },
+    {
+      "name": "late preparation releases resources without restoring a stale map twice",
+      "passed": true,
+      "lateResourceCleanup": 1,
+      "mainRestorations": 1,
+      "lateRestorations": 0,
+      "staleSamples": 0
+    },
+    {
+      "name": "dispose blocks immediate and queued loads while deferred release is pending",
+      "passed": true,
+      "raceOrders": 2,
+      "additionalAcquisitions": 0
+    },
+    {
+      "name": "prepare plus cleanup failures are visible and cannot overlap subsequent acquisition",
+      "passed": true,
+      "state": "error",
+      "cleanupErrorPreserved": true,
+      "additionalAcquisitions": 0
+    },
+    {
+      "name": "protocol binds commands and replies to exact origin source version IDs and payload fields",
+      "passed": true,
+      "rejectedSpoofs": 9,
+      "sameSourceAndOriginRequired": true
+    }
+  ],
+  "scope": "Independent pure timeline and orchestration verification using real catalog/definition/clip metadata, Babylon math as separate interpolation oracle, injected deterministic host ownership and races. No asset/GLB rendering, browser pixels, GPU/device FPS or deployment claim."
+}
