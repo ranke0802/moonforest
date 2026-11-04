@@ -80,12 +80,18 @@ export class GpuFrameSampler {
 
 // CPU scene counters and asynchronous GPU samples remain separate. All
 // observers/queries exist only while the diagnostic HUD is enabled.
+const disabledDrawCpu=Object.freeze({status:'disabled',scope:'sampled-scene-engine-method-cpu',intervalMs:1000,ageMs:null,pending:false,latest:null});
 export class SceneDiagnostics {
-  constructor(options={}){this.options=options;this.scene=null;this.instrumentation=null;this.gpu=null;this.active=false;this.result={};}
+  constructor(options={}){this.options=options;this.scene=null;this.instrumentation=null;this.gpu=null;this.cpu=null;this.drawCpuEnabled=false;this.active=false;this.result={};}
+  setDrawCpuEnabled(enabled){
+    this.drawCpuEnabled=enabled===true;
+    if(!this.drawCpuEnabled){this.cpu?.dispose();this.cpu=null;}
+    else if(this.scene&&!this.cpu){this.cpu=new RenderCpuSampler(this.scene,{now:this.options.now});this.cpu.setActive(this.active);}
+  }
   setEnabled(enabled,scene){
     if(!enabled)this.setActive(false);
-    if(this.instrumentation&&(!enabled||scene!==this.scene)){this.gpu.dispose();this.gpu=null;this.cpu.dispose();this.cpu=null;this.scene.onDisposeObservable.remove(this.sceneDispose);this.instrumentation.dispose();this.instrumentation=null;this.scene=null;this.result={};}
-    if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;i.captureActiveMeshesEvaluationTime=true;i.captureRenderTargetsRenderTime=true;i.captureRenderTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.cpu=new RenderCpuSampler(scene,{now:this.options.now});this.cpu.setActive(this.active);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
+    if(this.instrumentation&&(!enabled||scene!==this.scene)){this.gpu.dispose();this.gpu=null;this.cpu?.dispose();this.cpu=null;this.scene.onDisposeObservable.remove(this.sceneDispose);this.instrumentation.dispose();this.instrumentation=null;this.scene=null;this.result={};}
+    if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;i.captureActiveMeshesEvaluationTime=true;i.captureRenderTargetsRenderTime=true;i.captureRenderTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.setDrawCpuEnabled(this.drawCpuEnabled);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
   }
   setActive(active){this.active=Boolean(active);this.gpu?.setActive(this.active);this.cpu?.setActive(this.active);}
   resetGpu(){this.gpu?.reset(this.active?'pending':'paused');this.cpu?.reset();}
@@ -94,6 +100,6 @@ export class SceneDiagnostics {
     // CPU submission counters can overlap (draw submission also occurs inside
     // shadow/render targets). They are never a substitute for GPU elapsed time.
     this.result.activeMeshesMs=i.activeMeshesEvaluationTimeCounter.current;this.result.renderTargetsMs=i.renderTargetsRenderTimeCounter.current;this.result.drawSubmissionMs=i.renderTimeCounter.current;
-    this.result.gpu=this.gpu.sample();this.result.drawCpu=this.cpu.sample();return this.result;}
+    this.result.gpu=this.gpu.sample();this.result.drawCpu=this.cpu?.sample()??disabledDrawCpu;return this.result;}
   dispose(){this.active=false;this.setEnabled(false);}
 }

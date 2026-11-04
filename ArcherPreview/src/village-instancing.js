@@ -5,6 +5,7 @@
 // Only small transform/attribute buffers are separated; geometry and textures
 // remain shared. Call before registering custom instance attributes or drawing.
 import {prepareShadowFade} from './village-shadow-fade.js';
+import {prepareVillageInstanceAttributes} from './village-instance-attributes.js';
 export function prepareVillageInstancing(meshes){
-  for(const mesh of meshes)if(mesh.getTotalVertices?.()>0){mesh._instanceDataStorage.useMonoDataStorageRenderPass=false;prepareShadowFade(mesh);}
+  for(const mesh of meshes)if(mesh.getTotalVertices?.()>0){mesh._instanceDataStorage.useMonoDataStorageRenderPass=false;prepareShadowFade(mesh);prepareVillageInstanceAttributes(mesh);}
 }

@@ -1,0 +1,192 @@
+{
+  "baseCommit": "3db5bd8fea206ef90bcee44a53428b45e243a875",
+  "scope": "KTX worker idle lease only. No streaming cadence, decode options, upload loops, textures, geometry, resolution, combat or UI policy changes.",
+  "change": {
+    "oldIdleMs": 1000,
+    "newIdleMs": 8000,
+    "maxWorkers": 1,
+    "perJobTimeoutMs": 45000,
+    "idleEngineDisposal": "Immediate retirement and removal of idle timer/observer.",
+    "staleIdleCallback": "Requires both original lease and currently owned idle timer before retirement."
+  },
+  "evidence": {
+    "mobileMovingTextureGapMs": 2000,
+    "observedCreatedWorkers": 23,
+    "observedTerminatedWorkers": 23,
+    "observedLastInitMs": 30.1,
+    "source": "C:/Users/ryank/.codex/attachments/586bcbc6-4172-46dc-8919-b9196b553f90/붙여넣은 텍스트.txt",
+    "note": "Observed init/decode/prepare values are different aggregate snapshots and cannot be assigned to a particular recorded frame without job-specific attribution."
+  },
+  "validation": {
+    "baselineSupervisorTests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "after": {
+      "passed": 21,
+      "failed": 0,
+      "supervisorCases": 16,
+      "mapCancellationCases": 5
+    },
+    "command": "node --test tests/ktx-worker-supervisor.test.js tests/village-texture-cancel.test.js",
+    "nodeExecutable": "C:\\Users\\ryank\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion": "v24.22.1",
+    "fakeClockCadence": {
+      "case": "eight-second-idle-two-second-cadence",
+      "passed": true,
+      "counts": [
+        {
+          "idleMs": 1000,
+          "created": 6,
+          "completed": 6
+        },
+        {
+          "idleMs": 8000,
+          "created": 1,
+          "completed": 6
+        }
+      ],
+      "exactFinalIdleExpiry": true
+    },
+    "lifecycleCases": [
+      {
+        "case": "stale-idle-callback-new-deadline-isolation",
+        "passed": true
+      },
+      {
+        "case": "idle-engine-dispose-immediate-release",
+        "passed": true,
+        "waitedForIdleDeadline": false
+      },
+      {
+        "case": "idle-map-owner-reuse-and-cross-engine-disposal-isolation",
+        "passed": true,
+        "workers": 1,
+        "currentCapsAndDefaults": true
+      },
+      {
+        "case": "initialization-failure-manual-recovery",
+        "passed": true,
+        "automaticRetries": 0
+      },
+      {
+        "case": "owner-specific-queued-active-shared-cancel",
+        "passed": true,
+        "lateWorkerPublication": false
+      },
+      {
+        "case": "real-ETC1S-WASM-native-adapter-byte-equivalence",
+        "passed": true,
+        "transcodedFormat": 37492,
+        "mips": 9,
+        "mipSha256": [
+          "27d6e63a5ee344c99aabcf290caab40c547db0dc812be275d2e8df6b559102f6",
+          "de7b29e548a2101298beffd10d09ff7f68ecf3da53804d2986287ea84922edfb",
+          "1bdad55122cf99fe6484e069c65a578572064f91e505782558474e43af43b511",
+          "8c0f06726bfef35899451ed42dc05ae2bd66691e1c9b79c36a80257a196ec652",
+          "0dec56e511cf65435281b8e54b3568ea1b37862c4eb7395be98534fc8ee247d5",
+          "bbd3afe77d0f1ac04dbcb9d24cac98ff83773841d421656528dca8a7e0edcd20",
+          "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+          "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8",
+          "0453248741545f2c44158541b42b14635ac5368aa00a57e7f9d4f9bfbd7bf9c8"
+        ],
+        "cacheHit": true,
+        "actualCodec": true,
+        "workerSimulation": "official SDK worker script in isolated VM, not a browser/physical worker/GPU"
+      }
+    ],
+    "diffCheckPassed": true,
+    "additionalRuntimeTimerTests": {
+      "passed": 4,
+      "failed": 0,
+      "command": "node --test tests/runtime-timers.test.js",
+      "preserved": [
+        "browser host receivers",
+        "default timer timeout/recovery",
+        "injected timer receivers",
+        "no pending timers after cleanup"
+      ]
+    },
+    "totalDistinctTargetedTestsPassed": 27,
+    "additionalMixedRepeatTests": {
+      "passed": 2,
+      "failed": 0,
+      "cyclesPerCodec": 20,
+      "command": "node --test tests/map-decoder-repeat.test.js",
+      "drainPolicy": "pool.inspect().idleReleaseMs",
+      "retainedAssertions": [
+        "zero worker/listener/timer/queue/active",
+        "zero engine observer/pending scene token/input reference",
+        "one worker maximum",
+        "balanced listener adds/removes",
+        "no runtime source changes during tests"
+      ]
+    }
+  },
+  "mapTransition": {
+    "sameEngine": "An idle worker contains decoder modules/WASM, not map meshes/materials/texture owners. Keep the ready lease; every new job sends current caps/defaults/options.",
+    "pendingOldOwners": "Existing final-owner release cancels old jobs; active cancellation retires the old worker immediately. Lease identity and detached listeners reject late old completions.",
+    "engineDeparture": "main.js map departure disposes the engine; the new idle engine observer retires an already idle lease immediately. In-place map travel retains the engine and may reuse a ready idle worker.",
+    "additionalMainOrStreamingHookRequired": false
+  },
+  "memoryTradeoff": {
+    "retention": "One existing worker can keep its decoder/WASM high-water memory for up to seven additional seconds after the last job, rather than destroying/recreating it between two-second jobs.",
+    "decoderResourceCount": 10,
+    "encodedDecoderResourceBytes": 685473,
+    "encodedBytesAreNotLiveRam": true,
+    "pinnedSourceFacts": {
+      "mscInitialMemoryBytes": 16777216,
+      "mscCompiledGrowLimitBytes": 2147483648,
+      "liteInitialPages": 16,
+      "wasmPageBytes": 65536,
+      "liteInitialMemoryBytes": 1048576
+    },
+    "fixedWorkerRamUpperBoundMeasured": false,
+    "addedWorkers": 0,
+    "addedDecodedTextureCacheBytes": 0,
+    "limitations": [
+      "The grace is a time bound, not a numeric WASM heap budget. Existing growable heaps can retain their workload high-water mark.",
+      "Browser timers may run later if the event loop is suspended; OS memory reclamation timing after terminate is outside this test.",
+      "No claim that 8 seconds is an empirically optimal value or that recorded real-device spikes disappear."
+    ]
+  },
+  "browserAutomation": false,
+  "actualBrowserWorkerSchedulingMeasured": false,
+  "actualGpuUploadMeasured": false,
+  "deviceFpsOrThermalMeasured": false,
+  "staged": false,
+  "committed": false,
+  "deployed": false,
+  "ownedFiles": [
+    {
+      "path": "src/ktx-worker-supervisor.js",
+      "sha256": "e13b54c07c4de18bd52cafeafc4fe6deaa13744215336213d8a43de3f1e92b9b",
+      "bytes": 13661
+    },
+    {
+      "path": "tests/ktx-worker-supervisor.test.js",
+      "sha256": "c36ecfb9c540366c3db762b7a3b8693d3129ff60098a1b1152bcba74f655d567",
+      "bytes": 24200
+    },
+    {
+      "path": "reports/map-transfer-root-cause-2026-11-02/ktx-supervisor-validation.json",
+      "sha256": "0054ed92faca2ac18c4d27ed7545251478597f85a57495b6ea5a1693982835a2",
+      "bytes": 4110
+    },
+    {
+      "path": "tests/runtime-timers.test.js",
+      "sha256": "2448b7b67abe1e3324fb720b339406ae878005614bbc19efef27b6fc6d816663",
+      "bytes": 4739
+    },
+    {
+      "path": "tests/map-decoder-repeat.test.js",
+      "sha256": "93472c83b313551bc6c03e197b3fd6e338bad99b85eb9690b920faf4c762ffe6",
+      "bytes": 10040
+    },
+    {
+      "path": "reports/map-warm-repeat-2026-11-02/decoder-repeat-validation.json",
+      "sha256": "da0fee2ee1024345e8eb2b5d8c657f7845530a3f38d602d2bc759e8cea684198",
+      "bytes": 28853
+    }
+  ]
+}

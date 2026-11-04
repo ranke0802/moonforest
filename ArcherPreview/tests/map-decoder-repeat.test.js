@@ -36,7 +36,7 @@ for(const kind of ['ktx','meshopt'])test(`${kind}:20mixed failure/manual-recover
  const value={kind,cycles:rows,passed:false};report.cases[kind]=value;t.after(()=>{pool.dispose();engine?.dispose();});
  const release=owner=>{if(owner&&!owner.released){owner.released=true;releaseMapTexture(owner.texture,scene);}};
  const submit=(owned=true)=>{const owner=kind==='ktx'&&owned?textureOwner(scene):null;const raw=kind==='ktx'?pool.decode(bytes,{astc:true},{forceRGBA:false},{forceRGBA:false},{owner:owner?.internal,engine}):pool.decodeGltfBufferAsync(bytes,1,4,'ATTRIBUTES','NONE');const id=pool.sequence,job=pool.active?.id===id?pool.active:pool.queue.find(j=>j.id===id);if(job)jobRefs.push(job);return {id,owner,raw,outcome:raw.then(result=>({result}),error=>({error}))};};
- const drain=async()=>{await tick();timers.advance(1000);await tick();};
+ const drain=async()=>{await tick();timers.advance(pool.inspect().idleReleaseMs);await tick();};
  const cleanSnapshot=()=>({liveWorkers:workers.filter(w=>!w.terminated).length,listeners:workers.reduce((n,w)=>n+w.listenerCount,0),timers:timers.size,queued:pool.queue.length,active:pool.active?1:0,engineObservers:liveObservers()-observerBaseline,pendingSceneTokens:scene?.getWaitingItemsCount()??0,retainedInputRefs:jobRefs.filter(j=>(j.data??j.source)!=null).length});
  for(let cycle=0;cycle<20;cycle++){
   const scenario=['normal-queue','init-timeout','fatal-active','decode-timeout','abandon-drain'][cycle%5],startCreated=workers.length,startCompleted=pool.counts.completed;mode=scenario==='init-timeout'?'init-timeout':'normal';

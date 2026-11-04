@@ -8,12 +8,12 @@ import {InternalTexture} from '@babylonjs/core/Materials/Textures/internalTextur
 import {KhronosTextureContainer2 as Ktx} from '@babylonjs/core/Misc/khronosTextureContainer2.js';
 import {AutoReleaseWorkerPool} from '@babylonjs/core/Misc/workerPool.js';
 import {applyConfig,workerFunction,initializeWebWorker} from '@babylonjs/core/Misc/khronosTextureContainer2Worker.js';
-import {KtxWorkerSupervisor,installKtxWorkerSupervisor,inspectKtxWorkerPool,recoverKtxWorkerPool} from '../src/ktx-worker-supervisor.js';
+import {KtxWorkerSupervisor,KTX_WORKER_IDLE_MS,installKtxWorkerSupervisor,inspectKtxWorkerPool,recoverKtxWorkerPool} from '../src/ktx-worker-supervisor.js';
 import {releaseMapTexture,installMapTextureLifetimeGuard} from '../src/map-texture-lifetime.js';
 import {installKtxDecodeCache,inspectMapDecodeCache} from '../src/map-decode-cache.js';
 
 const tick=()=>new Promise(resolve=>setTimeout(resolve,0)),results=[];
-function clock(){let time=0,id=0;const jobs=new Map();return {now:()=>time,setTimeout:(fn,ms)=>{jobs.set(++id,{at:time+ms,fn});return id;},clearTimeout:key=>jobs.delete(key),advance(ms){time+=ms;for(const [key,job]of [...jobs])if(job.at<=time){jobs.delete(key);job.fn();}},get size(){return jobs.size;}};}
+function clock(){let time=0,id=0;const jobs=new Map();return {now:()=>time,setTimeout:(fn,ms)=>{jobs.set(++id,{at:time+ms,fn});return id;},clearTimeout:key=>jobs.delete(key),advance(ms){time+=ms;for(const [key,job]of [...jobs])if(job.at<=time){jobs.delete(key);job.fn();}},get size(){return jobs.size;},get pending(){return [...jobs.values()];}};}
 const image={transcodedFormat:0x9278,isInGammaSpace:true,hasAlpha:false,mipmaps:[{width:4,height:4,data:new Uint8Array([1,2,3,4])}]};
 class BoundaryWorker {
  constructor({init='ok'}={}){this.init=init;this.listeners=new Map();this.posts=[];this.terminated=0;}
@@ -25,11 +25,57 @@ class BoundaryWorker {
  terminate(){this.terminated++;}
  get listenerCount(){return [...this.listeners.values()].reduce((sum,set)=>sum+set.size,0);}
 }
-function fixture(t,{plans=[],timeoutMs=45000}={}){const timers=clock(),workers=[],pool=new KtxWorkerSupervisor({timers,timeoutMs,urls:{jsDecoderModule:'https://local.test/decoder.js'},createWorker:()=>{const worker=new BoundaryWorker(plans.shift());workers.push(worker);return worker;}});t.after(()=>pool.dispose());return {timers,workers,pool};}
+function fixture(t,{plans=[],timeoutMs=45000,idleMs}={}){const timers=clock(),workers=[],pool=new KtxWorkerSupervisor({timers,timeoutMs,idleMs,urls:{jsDecoderModule:'https://local.test/decoder.js'},createWorker:()=>{const worker=new BoundaryWorker(plans.shift());workers.push(worker);return worker;}});t.after(()=>pool.dispose());return {timers,workers,pool};}
 function owner(scene){const texture=new Texture(null,scene),internal=new InternalTexture(scene.getEngine(),1);texture._texture=internal;scene.addPendingData(internal);scene.getEngine().getLoadedTexturesCache().push(internal);return {texture,internal};}
 
 test('normal jobs use one initialized worker, preserve exact caps/defaults/format/mips and serialize copies',async t=>{
- const {pool,workers,timers}=fixture(t),data=new Uint8Array([7,8,9]),caps={astc:true},options={forceR8:true},defaults={forceRGBA:false},a=pool.decode(data,caps,options,defaults),b=pool.decode(data,caps,options,defaults);await tick();assert.equal(workers.length,1);assert.equal(workers[0].posts.filter(p=>p.action==='decode').length,1);assert.equal(pool.inspect().queued,1);const sent=workers[0].posts.find(p=>p.action==='decode');assert.notEqual(sent.data,data);assert.deepEqual(sent.data,data);assert.equal(sent.caps,caps);assert.equal(sent.options,options);assert.equal(workers[0].posts[1].options,defaults);workers[0].decoded();assert.equal(await a,image);workers[0].decoded();assert.equal(await b,image);assert.equal(pool.inspect().counts.completed,2);timers.advance(1000);assert.equal(workers[0].terminated,1);assert.equal(workers[0].listenerCount,0);assert.equal(timers.size,0);results.push({case:'normal-serialization-byte-equivalence',passed:true});
+ const {pool,workers,timers}=fixture(t),data=new Uint8Array([7,8,9]),caps={astc:true},options={forceR8:true},defaults={forceRGBA:false},a=pool.decode(data,caps,options,defaults),b=pool.decode(data,caps,options,defaults);await tick();assert.equal(workers.length,1);assert.equal(workers[0].posts.filter(p=>p.action==='decode').length,1);assert.equal(pool.inspect().queued,1);const sent=workers[0].posts.find(p=>p.action==='decode');assert.notEqual(sent.data,data);assert.deepEqual(sent.data,data);assert.equal(sent.caps,caps);assert.equal(sent.options,options);assert.equal(workers[0].posts[1].options,defaults);workers[0].decoded();assert.equal(await a,image);workers[0].decoded();assert.equal(await b,image);assert.equal(pool.inspect().counts.completed,2);timers.advance(KTX_WORKER_IDLE_MS);assert.equal(workers[0].terminated,1);assert.equal(workers[0].listenerCount,0);assert.equal(timers.size,0);results.push({case:'normal-serialization-byte-equivalence',passed:true});
+});
+
+test('eight-second idle grace reuses one worker at the two-second moving-texture cadence then expires exactly once',async t=>{
+ const counts=[];
+ for(const idleMs of [1000,KTX_WORKER_IDLE_MS]){
+  const {pool,workers,timers}=fixture(t,{idleMs});
+  for(let i=0;i<6;i++){
+   if(i)timers.advance(2000);
+   const pending=pool.decode(new Uint8Array([i]),{etc2:true},{forceRGBA:false},{forceRGBA:false});await tick();
+   assert.equal(workers.filter(worker=>!worker.terminated).length,1,'one live worker');workers.at(-1).decoded();assert.equal(await pending,image);
+  }
+  counts.push({idleMs,created:pool.inspect().counts.created,completed:pool.inspect().counts.completed});
+  timers.advance(idleMs-1);assert.equal(workers.at(-1).terminated,0);timers.advance(1);
+  assert.equal(workers.at(-1).terminated,1);assert.equal(pool.lease,null);assert.equal(timers.size,0);assert.ok(workers.every(worker=>worker.listenerCount===0));
+ }
+ assert.deepEqual(counts,[{idleMs:1000,created:6,completed:6},{idleMs:8000,created:1,completed:6}]);
+ results.push({case:'eight-second-idle-two-second-cadence',passed:true,counts,exactFinalIdleExpiry:true});
+});
+
+test('a cancelled stale idle callback cannot retire the worker before the newest idle deadline',async t=>{
+ const {pool,workers,timers}=fixture(t),first=pool.decode(new Uint8Array(4),{},{});await tick();workers[0].decoded();await first;
+ const stale=timers.pending[0].fn;timers.advance(2000);
+ const second=pool.decode(new Uint8Array(4),{},{});await tick();workers[0].decoded();await second;
+ stale();assert.equal(workers[0].terminated,0);assert.equal(timers.size,1);
+ timers.advance(7999);assert.equal(workers[0].terminated,0);timers.advance(1);assert.equal(workers[0].terminated,1);assert.equal(timers.size,0);
+ results.push({case:'stale-idle-callback-new-deadline-isolation',passed:true});
+});
+
+test('engine disposal immediately releases an idle retained worker and its observer and timer',async t=>{
+ const engine=new NullEngine(),{pool,workers,timers}=fixture(t);t.after(()=>engine.dispose());
+ const observerCount=()=>engine.onDisposeObservable.observers.filter(o=>!o._willBeUnregistered).length,before=observerCount();
+ const pending=pool.decode(new Uint8Array(4),{},{},{},{engine});await tick();workers[0].decoded();await pending;
+ assert.equal(observerCount(),before+1,'one idle lease observer replaces the completed job observer');assert.equal(timers.size,1);
+ engine.dispose();assert.equal(workers[0].terminated,1);assert.equal(workers[0].listenerCount,0);assert.equal(pool.lease,null);assert.equal(timers.size,0);assert.equal(pool.inspect().counts.cancelled,0);
+ results.push({case:'idle-engine-dispose-immediate-release',passed:true,waitedForIdleDeadline:false});
+});
+
+test('idle reuse across map owners sends current defaults and disposing an old engine cannot cancel a different engine job',async t=>{
+ const firstEngine=new NullEngine(),secondEngine=new NullEngine(),scene=new Scene(firstEngine),{pool,workers,timers}=fixture(t);t.after(()=>{firstEngine.dispose();secondEngine.dispose();});
+ const previous=owner(scene),first=pool.decode(new Uint8Array(4),{etc2:true},{forceRGBA:false},{forceRGBA:false},{owner:previous.internal,engine:firstEngine});await tick();workers[0].decoded();await first;
+ releaseMapTexture(previous.texture,scene);timers.advance(2000);assert.equal(workers[0].terminated,0,'completed old-map owner does not own the idle worker');
+ const caps={astc:true},defaults={forceRGBA:true},second=pool.decode(new Uint8Array([9]),caps,{forceRGBA:true},defaults,{engine:secondEngine});await tick();
+ assert.equal(workers.length,1);assert.equal(workers[0].posts.at(-1).caps,caps);assert.equal(workers[0].posts.at(-2).options,defaults);
+ firstEngine.dispose();assert.equal(workers[0].terminated,0);assert.ok(pool.active,'new engine job remains active');workers[0].decoded();assert.equal(await second,image);
+ secondEngine.dispose();assert.equal(workers[0].terminated,1);assert.equal(timers.size,0);assert.equal(workers[0].listenerCount,0);
+ results.push({case:'idle-map-owner-reuse-and-cross-engine-disposal-isolation',passed:true,workers:1,currentCapsAndDefaults:true});
 });
 
 test('init failure rejects original and queued jobs, latches without retry, then explicit recovery creates a new worker',async t=>{
@@ -94,4 +140,4 @@ test('pre-existing pools and workerless runtimes are preserved without installin
  class Existing {static WorkerPool={disposed:false,dispose(){this.disposed=true;}};}const pool=Existing.WorkerPool;assert.equal(installKtxWorkerSupervisor(Existing,{createWorker:()=>new BoundaryWorker()}).status,'external-pool');assert.equal(Existing.WorkerPool,pool);assert.equal(pool.disposed,false);class Workerless {}assert.equal(installKtxWorkerSupervisor(Workerless,{WorkerClass:undefined}).status,'workerless');results.push({case:'external-pool-and-workerless-preservation',passed:true});
 });
 
-test.after(()=>{const path=new URL('../reports/map-transfer-root-cause-2026-11-02/',import.meta.url);mkdirSync(path,{recursive:true});writeFileSync(new URL('ktx-supervisor-validation.json',path),JSON.stringify({expectedCases:12,completedCases:results.length,passed:results.length===12,cases:results,limitations:['No browser automation, actual browser worker scheduling, GPU or phone temperature measurement.','Faults use controlled IPC boundaries with the installed SDK init protocol. The normal ETC1S comparison runs the shipped decoder JavaScript and actual WebAssembly against an existing texture.','Total per-decode await is 45s including queue/init; a legitimately slower 8K decode can also hit this ceiling. Timers cannot preempt synchronous execution.'],sourceHashes:Object.fromEntries(['ktx-worker-supervisor.js','village-ktx2.js','map-texture-lifetime.js'].map(name=>[name,createHash('sha256').update(readFileSync(new URL('../src/'+name,import.meta.url))).digest('hex')])),browserAutomation:false},null,2)+'\n');});
+test.after(()=>{const path=new URL('../reports/map-transfer-root-cause-2026-11-02/',import.meta.url);mkdirSync(path,{recursive:true});writeFileSync(new URL('ktx-supervisor-validation.json',path),JSON.stringify({expectedCases:16,completedCases:results.length,passed:results.length===16,cases:results,limitations:['No browser automation, actual browser worker scheduling, GPU or phone temperature measurement.','Faults use controlled IPC boundaries with the installed SDK init protocol. The normal ETC1S comparison runs the shipped decoder JavaScript and actual WebAssembly against an existing texture.','Total per-decode await is 45s including queue/init; a legitimately slower 8K decode can also hit this ceiling. Timers cannot preempt synchronous execution.','The eight-second idle timer bounds warm retention time, not exact WASM heap size or OS memory reclamation time.'],sourceHashes:Object.fromEntries(['ktx-worker-supervisor.js','village-ktx2.js','map-texture-lifetime.js'].map(name=>[name,createHash('sha256').update(readFileSync(new URL('../src/'+name,import.meta.url))).digest('hex')])),browserAutomation:false},null,2)+'\n');});

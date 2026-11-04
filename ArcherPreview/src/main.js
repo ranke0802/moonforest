@@ -226,6 +226,7 @@ const mapWorkDiagnostics=()=>({
 });
 const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
+  onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
   onCollecting:active=>sceneDiagnostics.setActive(active),
   onMapChanged:()=>sceneDiagnostics.resetGpu('map'),
   onReset:()=>sceneDiagnostics.resetGpu('reset'),
@@ -976,7 +977,7 @@ try {
     if(paused){input.reset();cancelAttackInput();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
-    world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();developerTools?.refresh();
+    world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();world.developmentToolSettings?.refresh();
   };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
@@ -1167,7 +1168,7 @@ try {
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
     const settingsDialog=$('#motion-speed-dialog');
-    developerTools=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,mounts:{
+    developerTools=world.developmentToolSettings=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,mounts:{
       nearby:async({host,isCurrent})=>{
         const {setupNearbyEditor}=await import('./nearby-editor.js');if(!isCurrent()||world.scene.isDisposed)return;
         const control=setupNearbyEditor({root:$('#app'),host,settingsDialog,world,getPlayer:()=>actor,

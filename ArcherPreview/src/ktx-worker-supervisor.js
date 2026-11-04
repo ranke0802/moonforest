@@ -7,11 +7,14 @@ const ownerKey=Symbol('map KTX owner'),installations=new WeakMap();let diagnosti
 const resultKeys=['transcodedFormat','isInGammaSpace','hasAlpha','transcoderName'];
 const errorFor=(message,code,stage,extra={})=>Object.assign(new Error(message),{code,ktxStage:stage,...extra});
 const copyError=error=>Object.assign(new Error(error.message),{name:error.name,code:error.code,ktxStage:error.ktxStage,timeoutMs:error.timeoutMs});
+// Moving scenery jobs are paced two seconds apart. Keep one initialized decoder
+// across that cadence, then release its WASM high-water memory after idle time.
+export const KTX_WORKER_IDLE_MS=8000;
 
 // One worker, with explicit job ownership. SDK worker code, transcoders,
 // messages, caps, options and decoded blocks are used without conversion.
 export class KtxWorkerSupervisor {
-  constructor({createWorker,initialize=initializeWebWorker,urls,timeoutMs=45000,idleMs=1000,timers={}}){
+  constructor({createWorker,initialize=initializeWebWorker,urls,timeoutMs=45000,idleMs=KTX_WORKER_IDLE_MS,timers={}}){
     Object.assign(this,{createWorker,initialize,urls,timeoutMs,idleMs});const clock=runtimeTimers(timers);this.now=clock.now;this.schedule=clock.setTimeout;this.unschedule=clock.clearTimeout;
     this.queue=[];this.active=null;this.lease=null;this.sequence=0;this.epoch=0;this.failed=null;this.disposed=false;
     this.counts={created:0,terminated:0,completed:0,failed:0,cancelled:0,recoveries:0,workerFaults:0};this.lastFailure=null;this.lastCompleted=null;
@@ -41,7 +44,8 @@ export class KtxWorkerSupervisor {
     else{this.counts.completed++;this.lastCompleted=record;job.resolve(value);}
   }
   detach(lease){if(!lease)return;for(const [type,fn]of lease.listeners??[])lease.worker.removeEventListener(type,fn);lease.listeners=[];}
-  retire(){const lease=this.lease;this.lease=null;if(this.idleTimer!==undefined){this.unschedule(this.idleTimer);this.idleTimer=undefined;}if(lease){this.detach(lease);for(const [type,fn]of [...lease.health??[],...lease.initListeners??[]])lease.worker.removeEventListener(type,fn);lease.initListeners=[];try{lease.worker.terminate();}catch(error){this.lastTerminationError=String(error?.message??error).slice(0,160);}this.counts.terminated++;}}
+  clearIdleEngineWatch(lease){if(lease?.idleEngineObserver){lease.engine?.onDisposeObservable.remove(lease.idleEngineObserver);lease.idleEngineObserver=null;}}
+  retire(){const lease=this.lease;this.lease=null;if(this.idleTimer!==undefined){this.unschedule(this.idleTimer);this.idleTimer=undefined;}if(lease){this.clearIdleEngineWatch(lease);lease.engine=null;this.detach(lease);for(const [type,fn]of [...lease.health??[],...lease.initListeners??[]])lease.worker.removeEventListener(type,fn);lease.initListeners=[];try{lease.worker.terminate();}catch(error){this.lastTerminationError=String(error?.message??error).slice(0,160);}this.counts.terminated++;}}
   schedulePump(){if(this.pumpQueued)return;this.pumpQueued=true;queueMicrotask(()=>{this.pumpQueued=false;this.pump();});}
   cancel(job){if(job.done)return;if(this.active===job)this.retire();this.finish(job,mapLoadAbortError());this.schedulePump();}
   fail(error){
@@ -51,8 +55,20 @@ export class KtxWorkerSupervisor {
   }
   pump(){
     if(this.pumpQueued||this.active||this.failed||this.disposed)return;
-    const job=this.queue.shift();if(!job){if(this.lease&&this.idleTimer===undefined)this.idleTimer=this.schedule(()=>{this.idleTimer=undefined;if(!this.active&&!this.queue.length)this.retire();},this.idleMs);return;}
+    const job=this.queue.shift();if(!job){
+      const lease=this.lease;
+      if(lease&&this.idleTimer===undefined){
+        if(lease.engine?.isDisposed){this.retire();return;}
+        // Completed jobs release their owner/engine observers. The idle lease
+        // watches only its most recent engine, so engine teardown need not wait
+        // eight seconds and cannot retire another engine's active decoder job.
+        if(lease.engine?.onDisposeObservable)lease.idleEngineObserver=lease.engine.onDisposeObservable.addOnce(()=>{if(this.lease===lease&&!this.active&&!this.queue.length)this.retire();});
+        let timer;timer=this.schedule(()=>{if(this.lease!==lease||this.idleTimer!==timer)return;this.idleTimer=undefined;if(!this.active&&!this.queue.length)this.retire();},this.idleMs);this.idleTimer=timer;
+      }
+      return;
+    }
     this.active=job;job.startedAt=this.now();if(this.idleTimer!==undefined){this.unschedule(this.idleTimer);this.idleTimer=undefined;}
+    this.clearIdleEngineWatch(this.lease);
     if(this.lease?.ready){this.send(job,this.lease);return;}
     job.stage='worker-init';job.initAt=this.now();let lease;
     try{lease={worker:this.createWorker(),epoch:++this.epoch,ready:false,listeners:[],initListeners:[]};this.lease=lease;this.counts.created++;
@@ -69,6 +85,7 @@ export class KtxWorkerSupervisor {
     },error=>{if(this.lease===lease&&!job.done)this.fail(errorFor('텍스처 디코더 초기화에 실패했습니다.','KTX_WORKER_INIT','worker-init',{detail:String(error?.message??error).slice(0,160)}));});
   }
   send(job,lease){
+    lease.engine=job.engine??null;
     job.stage='decode';job.decodeAt=this.now();
     const finish=(error,value)=>{if(this.lease!==lease||this.active!==job||job.done)return;this.detach(lease);this.finish(job,error,value);this.pump();};
     const message=event=>{if(event.data?.action!=='decoded')return;if(event.data.success)finish(null,event.data.decodedData);else finish(errorFor(String(event.data.msg??'텍스처 변환에 실패했습니다.'),'KTX_TRANSCODE_ERROR','decode'));};

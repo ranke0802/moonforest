@@ -32,7 +32,10 @@ test('actual summon-modal pause preserves the preceding play window even after a
  f.setTime(21000);f.sync();f.restore();f.diagnostic.beginFrame(false,30);f.diagnostic.endFrame();const report=await f.summon(),s=report.bossComparison;
  assert.equal(s.baselineReady,true);assert.equal(s.comparisonAvailable,true);assert.equal(s.baselineSource,'before-summon-menu');assert.equal(s.baselineAgeMs,16900);
  assert.equal(s.before.drawCalls.mean,80);assert.equal(s.after.drawCalls.mean,140);assert.equal(s.delta.drawCalls,60);assert.equal(s.delta.jsUsedBytes,0,'zero is a heap delta, not the heap usage');assert.equal(s.memoryBefore.jsUsedBytes,35100000);
- assert.equal(s.status,'complete');assert.ok(s.after.frameMs.max<41,'modal time never enters measured frame intervals');assert.match(report.measurement,/delta.jsUsedBytes is the before\/after difference/);assert.match(f.doc.querySelector('#diagnostic-boss-note').textContent,/소환창 전 표본/);
+ assert.equal(s.status,'complete');assert.ok(s.after.frameMs.max<41,'modal time never enters measured frame intervals');assert.match(report.measurement,/delta.jsUsedBytes is the before\/after difference/);
+ // Detail text is now painted only when visible; the recorded baseline above
+ // remains complete even while its dialog is closed.
+ f.doc.querySelector('#diagnostic-detail-dialog').open=true;f.diagnostic.refresh();assert.match(f.doc.querySelector('#diagnostic-boss-note').textContent,/소환창 전 표본/);
 });
 
 for(const reason of ['hidden','settings','death','map'])test(`a ${reason} change discards frozen summon baseline`,async()=>{

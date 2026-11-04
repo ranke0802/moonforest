@@ -64,6 +64,9 @@ export function setupSettingsPanel() {
   const oldInstructions=diagnosticHelp.querySelector('small');if(oldInstructions)oldInstructions.textContent='진단을 켜고 3초 이상 플레이한 뒤 보스를 소환하면 전후를 비교합니다. 자세히를 누르면 전투를 잠시 멈추고 기록을 봅니다. 등장 후 5초 뒤 복사하면 비교 결과가 포함됩니다.';
   const diagnosticQuick=document.createElement('p');diagnosticQuick.className='diagnostic-quick';diagnosticQuick.textContent='탐색 중에는 FPS와 프레임만 표시합니다. 상세 기록은 자세히에서 확인하세요.';
   diagnosticOptions.querySelector('label').after(diagnosticQuick);diagnosticOptions.append(diagnosticHelp);
+  const drawCpuLabel=document.createElement('label'),drawCpuToggle=document.createElement('input');drawCpuToggle.id='draw-cpu-diagnostics-toggle';drawCpuToggle.type='checkbox';drawCpuToggle.setAttribute('aria-describedby','draw-cpu-diagnostics-help');drawCpuLabel.append(drawCpuToggle,' 상세 CPU 호출 계측');
+  const drawCpuHelp=document.createElement('small');drawCpuHelp.id='draw-cpu-diagnostics-help';drawCpuHelp.textContent='기본 꺼짐. 성능 진단을 켠 동안 상세 호출을 수집합니다. 측정 자체가 프레임에 부담을 줄 수 있습니다.';
+  diagnosticQuick.after(drawCpuLabel,drawCpuHelp);
   section('성능 진단', [diagnosticOptions]);
   section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
   const bossPatterns=document.createElement('button');bossPatterns.id='open-boss-patterns';bossPatterns.type='button';bossPatterns.className='motion-speed-toggle';bossPatterns.textContent='보스 패턴 · 속도';bossPatterns.setAttribute('aria-haspopup','dialog');

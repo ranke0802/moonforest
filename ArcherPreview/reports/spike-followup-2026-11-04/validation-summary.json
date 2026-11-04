@@ -1,0 +1,53 @@
+{
+  "baseline": "3db5bd8fea206ef90bcee44a53428b45e243a875",
+  "tests": {
+    "tests": 1841,
+    "pass": 1841,
+    "fail": 0
+  },
+  "deployment": {
+    "status": "validated-ready-for-deployment",
+    "baseline": "3db5bd8fea206ef90bcee44a53428b45e243a875",
+    "commit": null,
+    "url": null,
+    "testsPassed": 1841,
+    "testsFailed": 0,
+    "fullTestLogSha256": "1badba3f41e82d297f5647ca979ec2d24ec8bd7e3fac6e548b4dd03b1f286bb3",
+    "browserAutomation": false,
+    "physicalDeviceMeasuredAfterPatch": false,
+    "textureGeometryLodSourceChanges": false,
+    "nativeUploadCalls": {
+      "before": 1428,
+      "after": 942,
+      "scope": "90models /12viewpoints native calls, not device time"
+    },
+    "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175"
+  },
+  "observed": {
+    "oneSecondFps": 59.92808629715781,
+    "tenSecondEquivalentFps": 52.48740302339952,
+    "p95Ms": 31.899999976158142,
+    "maxMs": 115.30000001192093,
+    "maxWorkMs": 105.10000002384186,
+    "delays": 32,
+    "textureIdleDelays": 23
+  },
+  "nativeUploadCalls": {
+    "before": 1428,
+    "after": 942,
+    "reductionPercent": 34.03361344537815,
+    "scope": "Native NullEngine calls across90actual packed map models/12viewpoints. Not device GPU or FPS gain."
+  },
+  "ktxIdleMs": 8000,
+  "detailedCpuDefaultOff": true,
+  "unchanged": [
+    "textures",
+    "geometry",
+    "LOD",
+    "combat",
+    "HUD placement",
+    "render scale options"
+  ],
+  "browserAutomation": false,
+  "physicalDeviceMeasuredAfterPatch": false
+}

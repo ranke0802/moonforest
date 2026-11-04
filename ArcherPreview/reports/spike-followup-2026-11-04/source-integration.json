@@ -1,0 +1,31 @@
+{
+  "baseline": "3db5bd8fea206ef90bcee44a53428b45e243a875",
+  "runtimePaths": [
+    "src/frame-diagnostics.js",
+    "src/ktx-worker-supervisor.js",
+    "src/main.js",
+    "src/scene-diagnostics.js",
+    "src/screen-projection.js",
+    "src/settings-panel.js",
+    "src/village-instancing.js",
+    "src/village-instance-attributes.js"
+  ],
+  "sourceSha256": {
+    "src/frame-diagnostics.js": "1fca440f982239cbc99e1c2479a0df2b0e266793e601f772bca616986336320a",
+    "src/ktx-worker-supervisor.js": "e13b54c07c4de18bd52cafeafc4fe6deaa13744215336213d8a43de3f1e92b9b",
+    "src/main.js": "7a370119bc636df6cd25b85510de6c4646183ecee289e4b3d8826274a0754a5c",
+    "src/scene-diagnostics.js": "75dc1f9fc0eaf28c571707318eee96b419818d378d84c4f2d0de9c0eb1402df0",
+    "src/screen-projection.js": "81ecfffb2cd20dfd2e10696f89c92fbbe5050a2c8392fe06a7c44d2379f70fc5",
+    "src/settings-panel.js": "880fe347a75544433040c0ef3b369cff421939031360b2399d8c8529f2e3c798",
+    "src/village-instancing.js": "3ef1c8e894c4cd71d6fc04dd0b66929463e2c13aaaca1837b660994a29352835",
+    "src/village-instance-attributes.js": "35de6fc1abaaf1d4445ae1c38cf45be3a49349826c125c8dfd531cc5ab5d978e"
+  },
+  "textureGeometryLodSourceChanges": [],
+  "integrationNotes": [
+    "Playback refresh now uses the world-owned optional developer-tool component, avoiding unrelated global coupling while preserving its existing initialization.",
+    "Hidden boss comparison text is tested after opening details; recorded baseline values are still asserted while the detail view is closed.",
+    "Worker drain tests use each codec actual default idle lease and still assert all jobs/timers/worker listeners/engine observers/input refs clear after20cycles.",
+    "Projection reuses the pinned native viewport toGlobalToRef; existing screen/scale/orientation/combat HUD tests passed."
+  ],
+  "browserAutomation": false
+}
