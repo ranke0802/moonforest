@@ -76,6 +76,7 @@ import {setupCharacterStylePanel} from './character-style-settings.js';
 import {applyCharacterSurfaceStyle,setSceneCharacterStyles} from './character-style.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import {StaminaFailureFeedback,applyPlayerFlash} from './stamina-feedback.js';
+import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
@@ -201,6 +202,18 @@ for (const slot of ['sword', 'shield']) {
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;
 const attackSources = new Set();
 const attackPointerTypes = new Map();
+const shieldInput=new ShieldHoldSources({
+  onBegin:()=>{
+    if(controller?.setShieldHeld?.(true)===false)return false;
+    if(controller?.shieldPending||controller?.guarding){strikeSampler.reset();boss?.playerReaction.cancelRecoil();}
+    return true;
+  },
+  onEnd:()=>{
+    const pending=controller?.shieldPending;
+    if(controller?.setShieldHeld?.(false)&&pending&&controller.action?.state==='shieldPush'&&!controller.guarding)chapterQuests?.action('shieldPush');
+  },
+  onCancel:()=>controller?.cancelShieldInput?.(),
+});
 let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
@@ -322,13 +335,13 @@ function updateButtons() {
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0;
   if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.');audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}
-  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft,rejected].join('|');
+  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,controller?.shieldHeld,controller?.guarding,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft,rejected].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
   $('#death-button').classList.toggle('dead', dead);
-  if(isV2())$('#guard-button').removeAttribute('aria-pressed');
+  if(isV2())$('#guard-button').setAttribute('aria-pressed',String(!!controller?.guarding));
   else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   if(ready&&isV2()&&!dead&&boss?.canEscapeGrab)$('#dodge-button').disabled=false;
@@ -345,6 +358,13 @@ function updateButtons() {
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
+  setShieldHeld(held,source='keyboard',pointerType){
+    if(!isV2()){if(held)actions.guard();return false;}
+    if(held&&(!ready||controller.dead||controller.captured||controller.groggy||boss?.playerHp<=0))return false;
+    return shieldInput.setHeld(source,held,pointerType);
+  },
+  cancelShieldInput(source){return shieldInput.cancel(source);},
+  isHudShieldHeld(pointerType){return shieldInput.hasTouchHud(pointerType);},
   dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
   setDodgeHeld(held,source='keyboard',pointerType){
     if(!held)return input?.dodgeSprintGesture?.end(source);
@@ -563,7 +583,7 @@ async function loadCharacter() {
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
     $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
-    $('.keyboard-hint small').textContent = isV2() ? 'J 공격 · 길게 심판 · F 밀치기 · Space 짧게 회피 / 길게 질주' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
+    $('.keyboard-hint small').textContent = isV2() ? 'J 공격 · 길게 심판 · F 짧게 밀치기 / 길게 방어 · Space 짧게 회피 / 길게 질주' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isV2() ? '짧게 일반 · 길게 심판 · J' : isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
     $('#attack-button').title = isV2() ? '짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검' : '길게 누르면 연속 공격';
@@ -573,6 +593,8 @@ async function loadCharacter() {
     $('#dodge-button').title='짧게 누르고 떼면 회피 · 0.2초 이상 누르는 동안 질주 · Space';
     $('#dodge-button').setAttribute('aria-label','회피, 길게 누르면 질주');
     $('#guard-button span').textContent = '방패 밀치기';
+    $('#guard-button').title='짧게 누르고 떼면 방패 밀치기 · 0.2초 이상 누르는 동안 방어 · 스태미나 초당 5 · F';
+    $('#guard-button').setAttribute('aria-label','방패 밀치기, 길게 누르면 방어 태세');
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     if(isVillage()&&arrival){boss.combat.hp=arrival.hp;boss.potions.remaining=arrival.potions;}
     resetCamera();restoreMapCamera(); updateButtons();
@@ -762,7 +784,7 @@ function render(dt) {
     world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);
     frameDiagnostics.measure('worldUpdateMs',worldUpdateStart);
     const hudUpdateStart=frameDiagnostics.mark();
-    text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
+    text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.guarding?'방어 태세':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
     updateButtons();mapPortal?.update(dt);minimap.update(actor,elapsed);saveMapPosition();uiTest?.update(elapsed);
@@ -854,7 +876,7 @@ try {
     if(encounter.playerHp<=0)deathScreen.show();
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
-      if(options.captured){actions.cancelDodgeInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
+      if(options.captured){actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
       attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
@@ -1010,7 +1032,9 @@ try {
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
-  for(const [selector,action] of [['#guard-button',actions.guard],['#potion-button',actions.potion]]){
+  const shieldButtonBinding=bindShieldHoldButton($('#guard-button'),{setHeld:actions.setShieldHeld,cancel:actions.cancelShieldInput,tap:actions.guard});
+  world.scene.onDisposeObservable.addOnce(()=>shieldButtonBinding.dispose());
+  for(const [selector,action] of [['#potion-button',actions.potion]]){
     const button=$(selector);let lastPress=-Infinity;
     button.addEventListener('pointerdown',event=>{
       if(event.button!==0||button.disabled)return;

@@ -28,7 +28,7 @@ export class CharacterAnimator {
     }
     return this;
   }
-  transition(state, { phase = 0, clipTime, timeScale = 1, actionId = null, loop = false, blendDuration = .14 } = {}) {
+  transition(state, { phase = 0, clipTime, timeScale = 1, actionId = null, loop = false, blendDuration = .14, freezeOnExit = false } = {}) {
     if (!this.clips[state]) throw new Error(`필수 동작을 찾지 못했습니다: ${state}`);
     const previous = this.current;
     const changed = previous !== state || this.actionId !== actionId;
@@ -53,6 +53,7 @@ export class CharacterAnimator {
     entry.loop = loop;
     entry.actionId = actionId;
     entry.timeScale = timeScale;
+    entry.freezeOnExit = freezeOnExit;
     if (changed) entry.blendDuration = blendDuration;
     entry.controlled = Number.isFinite(clipTime);
     if (entry.controlled) entry.clipTime = clipTime;
@@ -82,7 +83,7 @@ export class CharacterAnimator {
       const sharedAttack = state !== this.current && ['attack', 'moveAttack'].includes(state) && ['attack', 'moveAttack'].includes(this.current) && entry.actionId === this.actionId && current.controlled;
       if (sharedAttack) entry.clipTime = current.clipTime / this.durations[this.current] * duration;
       // Only the current finite action gets an authoritative sampled time each update.
-      else if (!entry.controlled || state !== this.current) entry.clipTime += dt * entry.timeScale;
+      else if ((!entry.controlled || state !== this.current) && !(entry.freezeOnExit && state !== this.current)) entry.clipTime += dt * entry.timeScale;
       entry.clipTime = entry.loop && duration > 0 ? entry.clipTime % duration : Math.min(duration, Math.max(0, entry.clipTime));
       const phase = duration > 0 ? entry.clipTime / duration : 0;
       // useWeight=true is essential: otherwise goToFrame bypasses the cross-fade.

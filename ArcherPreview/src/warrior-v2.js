@@ -3,6 +3,10 @@ export const V2_ATTACKS = ['slash', 'attack', 'judgment'];
 export const V2_COMBO = ['slash', 'attack'];
 export const V2_ATTACK_BASE_RATE = 1.8;
 export const V2_HOLD_SECONDS = .45;
+export const V2_SHIELD_HOLD_SECONDS = .2;
+// The authored raised, forward-facing shield pose before the pullback and push.
+export const V2_SHIELD_GUARD_CLIP_TIME = .5;
+export const V2_SHIELD_GUARD_COST = 5;
 export const V2_COMBO_GRACE = .8;
 export const V2_STAMINA_MAX=100;
 export const V2_STAMINA_REGEN=15;
@@ -18,6 +22,7 @@ export class WarriorV2Controller {
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
     this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdNow=holdNow;this.holdStartedAt=null;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
     this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.queuedAttack=null;
+    this.shieldHeld=false;this.shieldHoldTime=0;this.shieldStartedAt=null;this.shieldExhausted=false;
     this.staminaEnabled=staminaEnabled;this.maxStamina=V2_STAMINA_MAX;this.stamina=this.maxStamina;this.staminaRejectSerial=0;
     this.sprintHeld=false;this.sprinting=false;this.sprintExhausted=false;this.sprintInitialSeconds=null;this.pendingSprint=null;this.staminaSpent=false;
     this.sprintRecord={sprintSeconds:0,idleSeconds:0,allowRestore:false};
@@ -34,7 +39,7 @@ export class WarriorV2Controller {
     return true;
   }
   restoreStamina(seconds){if(this.staminaEnabled&&seconds>0)this.stamina=Math.min(this.maxStamina,this.stamina+V2_STAMINA_REGEN*seconds);}
-  resetStamina(){this.stamina=this.maxStamina;this.staminaSpent=false;this.setSprintHeld(false);}
+  resetStamina(){this.cancelShieldInput();this.stamina=this.maxStamina;this.staminaSpent=false;this.setSprintHeld(false);}
   setSprintHeld(held,initialFrameSeconds){
     if(held){if(!this.sprintHeld){this.sprintHeld=true;this.sprintInitialSeconds=Number.isFinite(initialFrameSeconds)?Math.max(0,initialFrameSeconds):null;}}
     else{this.sprintHeld=false;this.sprinting=false;this.sprintExhausted=false;this.sprintInitialSeconds=null;this.pendingSprint=null;}
@@ -50,7 +55,7 @@ export class WarriorV2Controller {
     }
   }
   startAttack(kind) {
-    if(this.captured||this.knockedDown||this.groggy)return false;
+    if(this.captured||this.knockedDown||this.groggy||this.shieldPending||this.guarding)return false;
     const normal=kind==null;kind??=V2_COMBO[this.attackIndex%V2_COMBO.length];
     if(!this.spendStamina(kind))return false;
     if(normal)this.attackIndex++;
@@ -69,7 +74,7 @@ export class WarriorV2Controller {
     if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
   }
   cancelAttackInput(){this.releaseHold();this.queuedAttack=null;}
-  cancelAttack(){this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
+  cancelAttack(){this.cancelShieldInput();this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
   requestMovement(){
     // Movement is sampled when combat finishes. It never interrupts an attack or charge.
     if(!this.action&&!this.held&&!this.queuedAttack){this.attackIndex=0;this.comboRemaining=0;}
@@ -92,7 +97,7 @@ export class WarriorV2Controller {
   }
   attack(){
     if(this.dead||this.captured||this.knockedDown||this.groggy||this.held)return false;
-    if(this.action||this.staggerRemaining>0){if(this.queuedAttack!=='judgment')this.queuedAttack='normal';}
+    if(this.action||this.staggerRemaining>0||this.shieldHeld){if(this.queuedAttack!=='judgment')this.queuedAttack='normal';}
     else return this.startAttack();
     return true;
   }
@@ -118,7 +123,48 @@ export class WarriorV2Controller {
     const intent=this.heavyIntent();
     this.cancelAttack();Object.assign(this,intent);this.staggerRemaining=0;this.hitPose=null;this.startAttack(kind);return true;
   }
-  shieldPush(){return this.interruptWith('shieldPush');}
+  shieldPush(){return this.shieldHeld?false:this.interruptWith('shieldPush');}
+  get shieldPending(){return this.action?.shieldMode==='pending';}
+  get guarding(){return this.action?.shieldMode==='guard';}
+  shieldHeldSeconds(){
+    if(!this.holdNow||!Number.isFinite(this.shieldStartedAt))return 0;
+    const now=this.holdNow();return Number.isFinite(now)?Math.max(0,(now-this.shieldStartedAt)/1000):0;
+  }
+  syncShieldHold(dt=0){
+    if(!this.shieldHeld||(!this.shieldPending&&!this.guarding))return;
+    const before=this.shieldHoldTime;
+    this.shieldHoldTime=Math.max(before+dt,this.shieldHeldSeconds());
+    if(this.shieldHoldTime>=V2_SHIELD_HOLD_SECONDS-1e-8)this.action.shieldMode='guard';
+    const seconds=Math.max(0,this.shieldHoldTime-V2_SHIELD_HOLD_SECONDS)-Math.max(0,before-V2_SHIELD_HOLD_SECONDS);
+    if(this.staminaEnabled&&seconds>0){
+      this.staminaSpent=true;this.stamina=Math.max(0,this.stamina-V2_SHIELD_GUARD_COST*seconds);
+      if(this.stamina<=1e-8){this.stamina=0;this.shieldExhausted=true;this.staminaRejectSerial++;this.action=null;}
+    }
+  }
+  cancelShieldInput(){
+    if(this.shieldPending||this.guarding)this.action=null;
+    this.shieldHeld=false;this.shieldHoldTime=0;this.shieldStartedAt=null;this.shieldExhausted=false;
+  }
+  setShieldHeld(held){
+    if(held){
+      if(this.shieldHeld)return !this.shieldExhausted;
+      if(this.dead||this.captured||this.knockedDown||this.groggy||this.action?.state==='shieldPush')return false;
+      // Own the physical press even when empty, so the input owner delivers its release.
+      if(this.staminaEnabled&&this.stamina<=1e-8){this.shieldHeld=true;this.shieldExhausted=true;this.staminaRejectSerial++;return true;}
+      const intent=this.heavyIntent();this.cancelAttack();Object.assign(this,intent);
+      this.shieldHeld=true;this.shieldStartedAt=this.holdNow?.()??null;this.staggerRemaining=0;this.hitPose=null;
+      this.action={id:++this.serial,state:'shieldPush',time:0,elapsed:0,hitStop:0,shieldMode:'pending'};
+    }else{
+      if(!this.shieldHeld)return true;
+      // Classify using physical time even when release arrives before another frame.
+      this.syncShieldHold();
+      const tap=this.shieldPending&&!this.dead&&!this.captured&&!this.knockedDown&&!this.groggy;
+      if(tap&&this.spendStamina('shieldPush'))delete this.action.shieldMode;
+      else if(this.shieldPending||this.guarding)this.action=null;
+      this.shieldHeld=false;this.shieldHoldTime=0;this.shieldStartedAt=null;this.shieldExhausted=false;
+    }
+    return true;
+  }
   dodge(){return this.interruptWith('dodge');}
   capture(){
     this.capturePose={state:this.action?.state??this.state,clipTime:this.action?.time??this.time};
@@ -138,7 +184,7 @@ export class WarriorV2Controller {
     if(this.captured)return {...this.capturePose,captured:true,moving:false,speed:0,loop:false,actionId:null,chargeProgress:0,events:[]};
     dt=Number.isFinite(dt)?Math.max(0,dt):0;const magnitude=Math.min(1,Math.hypot(input.x||0,input.y||0));const previous=this.state;
     const alive=!this.dead&&input.alive!==false,spentAtStart=this.staminaSpent,sprintInitial=this.sprintInitialSeconds;this.staminaSpent=false;this.sprintInitialSeconds=null;
-    if(!alive)this.setSprintHeld(false);
+    if(!alive){this.cancelShieldInput();this.setSprintHeld(false);}
     if(this.knockedDown){
       let remaining=dt;
       while(this.knockedDown){
@@ -160,6 +206,19 @@ export class WarriorV2Controller {
       this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime+dt,physicalTime));
       if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
     }
+    const shieldActive=this.shieldPending||this.guarding;
+    this.syncShieldHold(dt);
+    // Guard drain belongs to this frame; release-time spending still enters via spentAtStart.
+    if(shieldActive)this.staminaSpent=false;
+    if(this.shieldPending||this.guarding){
+      const action=this.action,rate=this.playbackRate('shieldPush');
+      action.elapsed+=dt;action.time=Math.min(V2_SHIELD_GUARD_CLIP_TIME,action.time+dt*rate);
+      this.state='shieldPush';
+      return {state:this.state,clipTime:action.time,timeScale:rate,moving:false,speed:0,loop:false,actionId:action.id,actionElapsed:action.elapsed,
+        guarding:this.guarding,shieldPending:this.shieldPending,freezeOnExit:true,chargeProgress:this.chargeProgress,movementDt:0,blendDuration:.16,events:[]};
+    }
+    // An exhausted guard ends immediately, without recovering stamina in its final frame.
+    if(shieldActive)dt=0;
     if(this.staggerRemaining>0){
       const consumed=Math.min(dt,this.staggerRemaining);this.staggerRemaining-=consumed;dt-=consumed;
       if(alive&&!spentAtStart)this.restoreStamina(consumed);
@@ -180,7 +239,7 @@ export class WarriorV2Controller {
       if(dt<left){this.action.time+=dt*rate;idleDt=0;}
       else {idleDt=dt-left;this.comboRemaining=V2_COMBO.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
     }
-    if(!this.action&&this.queuedAttack){
+    if(!this.action&&this.queuedAttack&&!this.shieldHeld){
       const kind=this.queuedAttack;this.queuedAttack=null;
       const available=Math.max(0,idleDt-Math.max(0,readyAt-(frameDt-idleDt)));
       // If a held attack becomes ready partway through an otherwise free
@@ -209,6 +268,7 @@ export class WarriorV2Controller {
     if(!this.action)this.time=(this.time+idleDt*playbackRate*(this.state==='run'?magnitude:1))%this.durations[this.state];
     return {state:this.state,clipTime:this.action?.time??this.time,timeScale:playbackRate,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude*playbackRate:0,
       loop:!this.action,actionId:this.action?.id??null,actionElapsed:this.action?.elapsed??0,hitStopped,chargeProgress:this.chargeProgress,
+      guarding:this.guarding,shieldPending:this.shieldPending,
       rollFrom,rollTo,movementDt:idleDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
   }
   get chargeProgress(){return this.queuedAttack==='judgment'?1:this.held&&!this.holdTriggered?this.holdTime/V2_HOLD_SECONDS:0;}

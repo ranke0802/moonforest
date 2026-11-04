@@ -14,7 +14,8 @@ export class ActionAudio {
         if(archer){if(changed&&['attack','moveAttack'].includes(result.state))this.audio.play('bow_draw',{position});if(changed&&result.state==='hit')this.audio.play('player_hit',{position});}
         else {
           if(changed&&result.state==='judgment'&&!this.charged)this.audio.play('charge_ready');
-          for(const [at,name] of attacks[result.state]??[])cue(at,name);
+          const holdingShield=result.state==='shieldPush'&&(result.shieldPending||result.guarding);
+          for(const [at,name] of attacks[result.state]??[])if(!holdingShield||name==='shield_up')cue(at,name);
         }
         if(result.state==='dodge'){cue(0,'roll');cue(duration*.75,'land',{volume:.4});}
       }

@@ -36,6 +36,7 @@ export class PlaygroundInput {
     window.addEventListener('keyup', e => {
       this.keys.delete(e.code);
       if (e.code === 'KeyJ') this.callbacks.setAttackHeld?.(false);
+      if (e.code === 'KeyF') this.callbacks.setShieldHeld?.(false,'keyboard');
       if (e.code === 'Space') this.callbacks.setDodgeHeld?.(false,'keyboard');
     }, opts);
     // Captured pointers can keep reporting outside the canvas; keyup may never
@@ -79,9 +80,11 @@ export class PlaygroundInput {
         if (this.callbacks.setAttackHeld) this.callbacks.setAttackHeld(true);
         else this.callbacks.attack?.();
       }
+    } else if(e.code==='KeyF'){
+      if(!wasDown&&!e.repeat){if(this.callbacks.setShieldHeld)this.callbacks.setShieldHeld(true,'keyboard');else this.callbacks.guard?.();}
     } else if(e.code==='Space'){
       if(!wasDown&&!e.repeat){if(this.callbacks.setDodgeHeld)this.callbacks.setDodgeHeld(true,'keyboard');else this.callbacks.dodge?.();}
-    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyF: this.callbacks.guard, KeyE: this.callbacks.potion }[e.code])?.();
+    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyE: this.callbacks.potion }[e.code])?.();
   }
   pointerDown(e) {
     if(this.suspended)return;
@@ -224,11 +227,11 @@ export class PlaygroundInput {
   contextMenu(e) {
     const root = this.canvas.closest?.('#app') ?? this.canvas;
     if (e.target === root || root.contains?.(e.target)) e.preventDefault();
-    // A touch long-press on the captured sword can request a native menu even
+    // A touch long-press on a captured combat button can request a native menu even
     // though the menu was successfully suppressed. It is still the same held
-    // attack, not a loss of focus or a cancellation of the gesture.
+    // input, not a loss of focus or a cancellation of the gesture.
     const target=e.target?.nodeType===3?e.target.parentElement:e.target;
-    if(e.defaultPrevented&&e.pointerType!=='mouse'&&((target?.closest?.('#attack-button')&&this.callbacks.isHudAttackHeld?.(e.pointerType))||(target?.closest?.('#dodge-button')&&this.callbacks.isHudDodgeHeld?.(e.pointerType))))return;
+    if(e.defaultPrevented&&e.pointerType!=='mouse'&&((target?.closest?.('#attack-button')&&this.callbacks.isHudAttackHeld?.(e.pointerType))||(target?.closest?.('#guard-button')&&this.callbacks.isHudShieldHeld?.(e.pointerType))||(target?.closest?.('#dodge-button')&&this.callbacks.isHudDodgeHeld?.(e.pointerType))))return;
     // Chrome may send contextmenu on right-button DOWN. A successfully blocked
     // canvas menu is the normal orbit gesture: W + right drag must still work.
     // UI/keyboard menus, or a native event that could not be cancelled, reset.
@@ -243,6 +246,8 @@ export class PlaygroundInput {
     this.stickIntent={x:0,y:0};
     if(this.callbacks.cancelAttackInput)this.callbacks.cancelAttackInput();
     else this.callbacks.setAttackHeld?.(false);
+    if(this.callbacks.cancelShieldInput)this.callbacks.cancelShieldInput();
+    else this.callbacks.setShieldHeld?.(false,'keyboard');
     this.callbacks.cancelDodgeInput?.();
     for (const id of pointers) if (id !== null && this.canvas.hasPointerCapture(id)) {
       try { this.canvas.releasePointerCapture(id); } catch { /* Native cancellation may release first. */ }

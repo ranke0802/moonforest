@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
-  "bytes": 682400667,
+  "bytes": 682407050,
   "files": [
     {
       "path": "app.webmanifest",
@@ -14,9 +14,9 @@
       "sha256": "6d7a7e72ea90d403d0b7d0a157bde9c7107378455ba9a4dbe0d3955a8b26bfb1"
     },
     {
-      "path": "assets/actor-encounter-adapter-BJvqdY2z.js",
+      "path": "assets/actor-encounter-adapter-PWQnU_VZ.js",
       "bytes": 9834,
-      "sha256": "063323047db9de656103cf11eb48f9bd15599d126521e8e59dd5445f61804b13"
+      "sha256": "c8cae0c58940f163318f4c81f4e8046cef986a25cbc882a6c3ffaab874c58c14"
     },
     {
       "path": "assets/apple-CP-uTjm2.webp",
@@ -34,9 +34,9 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/authored-placement-runtime-OHrhdl5l.js",
+      "path": "assets/authored-placement-runtime-xz1SoeoV.js",
       "bytes": 27188,
-      "sha256": "07b8ebd8b9bddfd2c0caba718530a26c6c39168f28a9c43e92ea93c379e745e1"
+      "sha256": "f30d60cecda5b33a4c834bf753038ee58ecd21126f849a0be9335c50617bc904"
     },
     {
       "path": "assets/babylon-game-CRNdG57U.js",
@@ -1389,9 +1389,9 @@
       "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c"
     },
     {
-      "path": "assets/cinematic-game-B_fFGNFk.js",
+      "path": "assets/cinematic-game-CCD0M8Lw.js",
       "bytes": 72231,
-      "sha256": "52f6040accd90ef6b7314b8fe3258d310f70e596e6e7173e89f29055fc77af55"
+      "sha256": "01ba7785ae7e315504767eedc184a88d973c60c2e140c72b22f44ced16320890"
     },
     {
       "path": "assets/cinematic-interaction-BHsna0by.js",
@@ -7224,14 +7224,14 @@
       "sha256": "c56d791e858321919256b45373e6ee2ee791031fd2b779eac7081c59c0daa89d"
     },
     {
-      "path": "assets/developer-actors-vBspGnfU.js",
+      "path": "assets/developer-actors-D2e4ik5M.js",
       "bytes": 19913,
-      "sha256": "cf2c9cd219a92345bc00bb430d46d92146e46ede2b16e32b6700086350ffea02"
+      "sha256": "7d296b6deded0d3c3a1f2886883a6c792b2382645591080f3ede6d1917dcca15"
     },
     {
-      "path": "assets/developer-editor-BL8yOnA2.js",
+      "path": "assets/developer-editor-KI-e4_Of.js",
       "bytes": 36428,
-      "sha256": "2d8e16cb2f1723087c7a2ccbedbad3a7ea3d7dd777070875b19e4b1aef27a5ad"
+      "sha256": "3656579aabfeb34eeefe85a5e58fd7751a6f748b68f57aa10cc551098ea00d60"
     },
     {
       "path": "assets/dialogue-C18xk6mI.webp",
@@ -7264,14 +7264,14 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-C2cfVYo_.js",
-      "bytes": 2771878,
-      "sha256": "34dc57a5291ae5edb01149e47bbbeaef56f1448dae14670259b60609b462507d"
-    },
-    {
       "path": "assets/game-CTPmmHJX.css",
       "bytes": 102334,
       "sha256": "c3d789437296ab2b681655ee6c32d22bc3e1bf6b40e2ea850a75c5f464189522"
+    },
+    {
+      "path": "assets/game-Tf7UYdq9.js",
+      "bytes": 2777782,
+      "sha256": "bbbdabedde5cbc0dfb87623abbb536115a13a778ca8f6ae487900de10ac15826"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
@@ -7485,8 +7485,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 32876,
-      "sha256": "40d7ed60313622e8126f00bf78794040fc42ed7973043780179ddd1bd4d40fab"
+      "bytes": 33355,
+      "sha256": "be895baa04ff570278655939b5256afa9df86cc926753e574c11f9367449f90b"
     },
     {
       "path": "KTX2_NOTICES.txt",

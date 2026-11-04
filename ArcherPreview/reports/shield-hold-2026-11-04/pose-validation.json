@@ -1,0 +1,414 @@
+{
+  "scope": "Actual shipped V2 and V3 runtime glTF/buffers; source channel and hierarchy evaluation plus Babylon NullEngine animation/controller integration. No browser, GPU, textures, or new media.",
+  "guardClipSeconds": 0.5,
+  "pushCueSeconds": 1,
+  "strikeWindow": {
+    "id": "shield-push",
+    "from": 1.1,
+    "to": 1.15,
+    "damage": 10,
+    "stun": 1.5
+  },
+  "versions": [
+    {
+      "version": "v2",
+      "manifest": "/C:/dev/moonforest-shield-guard/ArcherPreview/public/assets/warrior-v2.json",
+      "model": "./content/867a628605740bc662fc1bb7b1c35e5f7ac594c5405737d62d47cae3872c5aab.gltf",
+      "clip": "Shield_Push_Left",
+      "clipChannels": 408,
+      "nodeCount": 165,
+      "poseScan": [
+        {
+          "time": 0.3,
+          "center": [
+            -0.0488224,
+            0.8573115,
+            0.576225
+          ],
+          "frontNormal": [
+            0.6020934,
+            -0.1279531,
+            0.7881063
+          ]
+        },
+        {
+          "time": 0.4,
+          "center": [
+            -0.0882363,
+            0.9103003,
+            0.5484428
+          ],
+          "frontNormal": [
+            0.5971267,
+            -0.0733085,
+            0.79879
+          ]
+        },
+        {
+          "time": 0.5,
+          "center": [
+            -0.1787205,
+            0.9183115,
+            0.5495203
+          ],
+          "frontNormal": [
+            0.4780914,
+            -0.057331,
+            0.876437
+          ]
+        },
+        {
+          "time": 0.6,
+          "center": [
+            -0.2950594,
+            0.8408259,
+            0.5499563
+          ],
+          "frontNormal": [
+            0.2630194,
+            -0.0324464,
+            0.9642448
+          ]
+        },
+        {
+          "time": 0.7,
+          "center": [
+            -0.3831266,
+            0.6981037,
+            0.551599
+          ],
+          "frontNormal": [
+            0.1247029,
+            -0.0198834,
+            0.9919949
+          ]
+        },
+        {
+          "time": 0.8,
+          "center": [
+            -0.4041019,
+            0.6247489,
+            0.5773154
+          ],
+          "frontNormal": [
+            0.1165139,
+            -0.0193948,
+            0.9929997
+          ]
+        },
+        {
+          "time": 0.9,
+          "center": [
+            -0.3917495,
+            0.6461745,
+            0.6479884
+          ],
+          "frontNormal": [
+            0.1058839,
+            -0.0187694,
+            0.9942013
+          ]
+        },
+        {
+          "time": 1,
+          "center": [
+            -0.3139511,
+            0.7920572,
+            0.7384337
+          ],
+          "frontNormal": [
+            0.1012954,
+            -0.018431,
+            0.9946856
+          ]
+        },
+        {
+          "time": 1.05,
+          "center": [
+            -0.2247637,
+            0.9759973,
+            0.7706798
+          ],
+          "frontNormal": [
+            0.1012955,
+            -0.018431,
+            0.9946856
+          ]
+        },
+        {
+          "time": 1.1,
+          "center": [
+            -0.1728898,
+            1.1629949,
+            0.7576804
+          ],
+          "frontNormal": [
+            0.1012959,
+            -0.0184311,
+            0.9946856
+          ]
+        }
+      ],
+      "heldShieldMatrix": {
+        "0": 0.29927781224250793,
+        "1": -0.08076690137386322,
+        "2": -0.16853779554367065,
+        "3": 0,
+        "4": 0.08044970035552979,
+        "5": 0.34287458658218384,
+        "6": -0.021456100046634674,
+        "7": 0,
+        "8": 0.16868939995765686,
+        "9": -0.02022860012948513,
+        "10": 0.3092414140701294,
+        "11": 0,
+        "12": -0.17872050404548645,
+        "13": 0.9183114767074585,
+        "14": 0.5495203137397766,
+        "15": 1
+      },
+      "rates": [
+        {
+          "motionRate": 0.5,
+          "stableFrames": 121,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 8.975621312856674e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        },
+        {
+          "motionRate": 1,
+          "stableFrames": 150,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 8.521601557731628e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        },
+        {
+          "motionRate": 2,
+          "stableFrames": 165,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 7.182825356721878e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        }
+      ]
+    },
+    {
+      "version": "v3",
+      "manifest": "/C:/dev/moonforest-shield-guard/ArcherPreview/public/assets/warrior-v3.json",
+      "model": "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf",
+      "clip": "Shield_Push_Left",
+      "clipChannels": 408,
+      "nodeCount": 165,
+      "poseScan": [
+        {
+          "time": 0.3,
+          "center": [
+            -0.0488224,
+            0.8573115,
+            0.576225
+          ],
+          "frontNormal": [
+            0.6020934,
+            -0.1279531,
+            0.7881063
+          ]
+        },
+        {
+          "time": 0.4,
+          "center": [
+            -0.0882363,
+            0.9103003,
+            0.5484428
+          ],
+          "frontNormal": [
+            0.5971267,
+            -0.0733085,
+            0.79879
+          ]
+        },
+        {
+          "time": 0.5,
+          "center": [
+            -0.1787205,
+            0.9183115,
+            0.5495203
+          ],
+          "frontNormal": [
+            0.4780914,
+            -0.057331,
+            0.876437
+          ]
+        },
+        {
+          "time": 0.6,
+          "center": [
+            -0.2950594,
+            0.8408259,
+            0.5499563
+          ],
+          "frontNormal": [
+            0.2630194,
+            -0.0324464,
+            0.9642448
+          ]
+        },
+        {
+          "time": 0.7,
+          "center": [
+            -0.3831266,
+            0.6981037,
+            0.551599
+          ],
+          "frontNormal": [
+            0.1247029,
+            -0.0198834,
+            0.9919949
+          ]
+        },
+        {
+          "time": 0.8,
+          "center": [
+            -0.4041019,
+            0.6247489,
+            0.5773154
+          ],
+          "frontNormal": [
+            0.1165139,
+            -0.0193948,
+            0.9929997
+          ]
+        },
+        {
+          "time": 0.9,
+          "center": [
+            -0.3917495,
+            0.6461745,
+            0.6479884
+          ],
+          "frontNormal": [
+            0.1058839,
+            -0.0187694,
+            0.9942013
+          ]
+        },
+        {
+          "time": 1,
+          "center": [
+            -0.3139511,
+            0.7920572,
+            0.7384337
+          ],
+          "frontNormal": [
+            0.1012954,
+            -0.018431,
+            0.9946856
+          ]
+        },
+        {
+          "time": 1.05,
+          "center": [
+            -0.2247637,
+            0.9759973,
+            0.7706798
+          ],
+          "frontNormal": [
+            0.1012955,
+            -0.018431,
+            0.9946856
+          ]
+        },
+        {
+          "time": 1.1,
+          "center": [
+            -0.1728898,
+            1.1629949,
+            0.7576804
+          ],
+          "frontNormal": [
+            0.1012959,
+            -0.0184311,
+            0.9946856
+          ]
+        }
+      ],
+      "heldShieldMatrix": {
+        "0": 0.29927781224250793,
+        "1": -0.08076690137386322,
+        "2": -0.16853779554367065,
+        "3": 0,
+        "4": 0.08044970035552979,
+        "5": 0.34287458658218384,
+        "6": -0.021456100046634674,
+        "7": 0,
+        "8": 0.16868939995765686,
+        "9": -0.02022860012948513,
+        "10": 0.3092414140701294,
+        "11": 0,
+        "12": -0.17872050404548645,
+        "13": 0.9183114767074585,
+        "14": 0.5495203137397766,
+        "15": 1
+      },
+      "rates": [
+        {
+          "motionRate": 0.5,
+          "stableFrames": 121,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 8.975621312856674e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        },
+        {
+          "motionRate": 1,
+          "stableFrames": 150,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 8.521601557731628e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        },
+        {
+          "motionRate": 2,
+          "stableFrames": 165,
+          "maxWorldMatrixError": 0,
+          "maxShieldMountError": 7.182825356721878e-8,
+          "outgoingStrikes": 0,
+          "audioCalls": [
+            "shield_up"
+          ],
+          "releaseFadeSamples": 14,
+          "maxExitClipTime": 0.5
+        }
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "src/animation.js": "abe3c0b4e2d89cdecff744ee50c470af789887a112f6800cca7cf8e84550a61c",
+    "src/warrior-v2.js": "34d7a8e8e4b0978146cdbc302c2a82c57558ef80799f1100fb8879f14075af17",
+    "src/player-strikes.js": "0c273a47979ba8207578006739b4a3c3121bc47b3280f7e6f1cbb0345c227e32",
+    "src/action-audio.js": "43e8371cd50081edb33b816c9436dd02efa502bdae5ec3c053dd9b19e254a7ee"
+  },
+  "maximumV2V3ShieldMatrixDifference": 0,
+  "passed": true
+}

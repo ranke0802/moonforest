@@ -15,7 +15,9 @@ export const PLAYER_STRIKES={
 export class PlayerStrikeSampler{
   reset(){this.last=null;}
   sample(result,sword,shield,multiHit=true,heading=0,attackBonus=0,dimensions=LEGACY_PLAYER_DIMENSIONS){
-    if(result.actionId==null||result.staggered||result.state==='dodge'){this.reset();return null;}
+    // A pressed/held shield only blocks. The outgoing push belongs to a
+    // released short tap, even if a slow frame crosses its strike window.
+    if(result.actionId==null||result.staggered||result.state==='dodge'||result.shieldPending||result.guarding){this.reset();return null;}
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
     node.computeWorldMatrix(true);

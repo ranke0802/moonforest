@@ -1,0 +1,48 @@
+{
+  "baseline": "2739d6f585f09bc6265a411978c7d8099c3623ca",
+  "shortPress": {
+    "holdThresholdSeconds": 0.2,
+    "staminaCost": 20,
+    "behavior": "existing block and shield push; damage/stun/knockback preserved"
+  },
+  "longPress": {
+    "guardPoseClipSeconds": 0.5,
+    "staminaPerSecond": 5,
+    "staminaRegenWhileGuarding": false,
+    "pushDamage": false,
+    "knockback": false,
+    "onContact": "existing one-second attacker stagger",
+    "release": "cancel stance; frozen outgoing pose while blending to idle"
+  },
+  "sourceSha256": {
+    "index.html": "5bb482b3a2ff9b86a54e785bb8fb1ca6d6f4fd9ff84dab97b95af985417804e9",
+    "src/action-audio.js": "224d201638a63fc2f66897e2d632eb5cd57580f85247160ec85de5008b2ffa8b",
+    "src/animation.js": "0a3628bf3e68f7b97d4f2ecd7e89330b918bee8a8f6d6c7766cd93c96156bdb6",
+    "src/boss-encounter.js": "06090828efba25196579211705669f3e4287ae2d9508a8db04412631a7ec7546",
+    "src/input.js": "17ff8399c751104be2882b3c8e22fe1c344f5395cbe7df0a536676bdf3134edc",
+    "src/main.js": "2d1507cf1c7e9ddeff1ab410bf5c81639722582537a3c251075f6dfbb775d78e",
+    "src/player-strikes.js": "83a6219671d6ed5119edc2db219862b05765b8b4c08669aff226d516e24bf345",
+    "src/warrior-v2.js": "fae2edbc771da1a9a8a8fd6bb8b583f58b4383c14415a815dfbc8475aca0d624",
+    "src/shield-hold-input.js": "6b6c783f0940e942966db7c96e379900e3271b3eeeeb72c47a4d3047aafd159e"
+  },
+  "browserAutomation": false,
+  "newMediaOrModelAssets": false,
+  "physicalDeviceTest": false,
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "protectedResourcesAndLodChanges": [],
+  "tests": {
+    "tests": 1885,
+    "pass": 1885,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "testLogSha256": "7916c3e5fb74105ff019d2b24efe5f5796c4edba593df67cc6cb9213ed05d82e",
+  "build": {
+    "passed": true,
+    "verifiedFiles": 1503,
+    "bytes": 682407050,
+    "changedFiles": 8
+  },
+  "deployment": "validated-ready-for-deployment"
+}
