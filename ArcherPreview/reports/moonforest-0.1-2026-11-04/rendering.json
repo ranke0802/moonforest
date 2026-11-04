@@ -1,0 +1,66 @@
+{
+  "phase": "PHASE-01-RENDER",
+  "owner": "A / rendering",
+  "baseline": "14c972c",
+  "status": "adopted by root as a narrow CPU candidate-query optimization; no overall frame/tail/device improvement claim",
+  "agentConfiguration": {
+    "requestedSpawn": {"fork_turns": "none", "model": "gpt-6.1-sol", "reasoning_effort": "xhigh"},
+    "successfulCreation": true,
+    "evidence": "Root supplied its successful spawn arguments. Child creation returned /root/rendering without backend model-resolution metadata.",
+    "backendResolutionIndependentlySurfaced": false,
+    "mainModelSwitchClaimed": false
+  },
+  "hypothesis": "Retain the exact existing disabled-instance/empty-root filter, but cache its scene-ordered output. Effective-enabled, creation/removal and registration events invalidate membership; only disabled owned nodes need per-query mutation guards. This should remove full-scene filtering work from stable frames without changing draw eligibility, LOD, quality or distance.",
+  "beforeEvidence": {
+    "source": "14c972c:ArcherPreview/src/village-active-candidates.js",
+    "behavior": "Every eligible provider query iterates scene.meshes, including unregistered source/LOD/dynamic nodes, and reassembles the result.",
+    "reusedEvidence": ["reports/render-candidates-2026-11-04/audit-safety-review.json", "reports/thermal-active-2026-11-04/four-map-candidates.json"],
+    "sdkEvidence": "Installed Babylon 9.31.0 Node.onEffectiveEnabledStateChangedObservable covers ancestor and reparent changes; Scene mesh add/remove APIs notify their observables after membership/order changes."
+  },
+  "implementation": {
+    "unchangedSelection": "Only registered disabled native frozen instances and registered disabled empty native Mesh roots with the existing behavior/data guards may be omitted. Every source/LOD, enabled node, dynamic actor and quest prop remains in scene order.",
+    "invalidation": ["effective enabled state", "Babylon mesh add/remove", "registration", "disposal", "mutable guard changes", "provider input identity/length changes", "explicit invalidate() for foreign direct scene.meshes edits"],
+    "fallback": ["custom candidate subset", "FrameGraph", "multiple active cameras", "retained wrapper after disposal"],
+    "stats": {"scanned": "legacy provider input length", "registryChecks": "disabled owned nodes inspected on this query", "sceneScans": "scene mesh entries visited on this query; zero for a cache hit", "cacheHits": "cumulative unchanged-result queries"},
+    "revision2": "Use a compact disabled-record array with event-driven constant-time swap removal, inline native guards/direct isEnabled calls, and one registryChecks assignment per query. Removed per-record Set iteration/function dispatch/Function.call and stats writes."
+  },
+  "afterEvidence": {
+    "focusedCommand": "C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe --test tests/village-active-candidates.test.js tests/village-active-candidates-registry.test.js",
+    "focusedPassed": 10,
+    "focusedFailed": 0,
+    "structuralResult": "Twenty stationary queries retained exact order while visiting zero scene.meshes entries and guarding only two disabled registered nodes; enable, reparent, membership and mutable attachment cases rebuilt immediately.",
+    "nativeResult": "Seven changing near/mid/far LOD and visibility steps preserved active order, source preActivate traces and actual native main/shadow instance batch lists against the native provider. Existing native rendering test also passed.",
+    "diffCheckPassed": true,
+    "revision1IndependentResult": "Exact baseline 14c972c equality passed for four maps/eight fixed views/90 actual models, but candidate-query medians improved in only three/eight views and p99 worsened in seven/eight. Revision 1 was rejected for default adoption.",
+    "revision2IndependentResult": {
+      "reports": ["verification-four-map-ab-final.json", "verification-candidate-edges-final.json", "verification-native-lod-final.json"],
+      "equivalence": "Four maps, eight fixed camera views and 90 actual packed models preserved candidate counts/types/order, active order, geometry streams, actual main/shadow draw batches, Effect identities, instance matrix hashes and source/LOD getLOD/preActivate call counts against 14c972c.",
+      "additionalChecks": "All eight independent provider/lifecycle/mutation cases and seven changing native near/mid/far LOD/shadow cases passed. Includes 50 owner disposal cycles and live-observer cleanup.",
+      "queryTiming": "32 alternating-order samples per view; each provider-query sample averages 25 queries. Median decreased in 8/8 views by 27.5-70.1%, saving 0.004932-0.051096 ms. p95 decreased in 4/8 and p99 in 2/8; with 32 samples p99 is the maximum. Active-evaluation median improved in 4/8 views and scene-render median in 6/8, so no overall frame or tail recovery is established.",
+      "unit": "milliseconds; each timing array is [median,p95,p99]",
+      "views": [
+        {"map": "village", "view": "front", "baseline": [0.024344,0.033812,0.105564], "candidate": [0.009356,0.021960,0.094132], "sceneInput": 1570, "registryChecks": 534, "sceneScans": 0},
+        {"map": "village", "view": "reverse", "baseline": [0.026504,0.054052,0.090048], "candidate": [0.019216,0.081188,0.137836], "sceneInput": 1570, "registryChecks": 982, "sceneScans": 0},
+        {"map": "great-plains", "view": "front", "baseline": [0.088412,0.174440,0.184976], "candidate": [0.064848,0.118124,0.242452], "sceneInput": 2699, "registryChecks": 2144, "sceneScans": 0},
+        {"map": "great-plains", "view": "reverse", "baseline": [0.085752,0.163288,0.171832], "candidate": [0.034656,0.058108,0.196312], "sceneInput": 2699, "registryChecks": 1439, "sceneScans": 0},
+        {"map": "monster-forest", "view": "front", "baseline": [0.049632,0.072128,0.090296], "candidate": [0.014840,0.088768,0.129652], "sceneInput": 1829, "registryChecks": 744, "sceneScans": 0},
+        {"map": "monster-forest", "view": "reverse", "baseline": [0.072584,0.144368,0.194640], "candidate": [0.045032,0.146708,0.326972], "sceneInput": 1829, "registryChecks": 1330, "sceneScans": 0},
+        {"map": "witch-cave", "view": "front", "baseline": [0.010840,0.018096,0.057952], "candidate": [0.005908,0.052136,0.081676], "sceneInput": 449, "registryChecks": 302, "sceneScans": 0},
+        {"map": "witch-cave", "view": "reverse", "baseline": [0.011760,0.069976,0.089384], "candidate": [0.006392,0.050868,0.068400], "sceneInput": 449, "registryChecks": 304, "sceneScans": 0}
+      ]
+    },
+    "revision2SyntheticCpu": {
+      "node": "v24.22.1",
+      "fixture": "1024 placement roots, each owning a native frozen instance and empty Mesh root; 256 untracked Mesh entries; 2305 scene entries; 1228 disabled guards at final sample.",
+      "method": "30 warm blocks and 128 alternating-order samples per case. Stationary samples average 100 provider queries. Change cases toggle 32 placement roots before either one query or 16 queries. Values are milliseconds per query including toggles in change blocks.",
+      "stationary": {"baseline": {"median": 0.032558, "p95": 0.040312, "mean": 0.033434375}, "candidate": {"median": 0.02021, "p95": 0.028198, "mean": 0.0211132421875}},
+      "change32SingleQuery": {"baseline": {"median": 0.0619, "p95": 0.0828, "mean": 0.06352421875}, "candidate": {"median": 0.093, "p95": 0.1316, "mean": 0.09652734375}},
+      "change32Amortized16Queries": {"baseline": {"median": 0.035575, "p95": 0.04388125, "mean": 0.036579345703125}, "candidate": {"median": 0.02636875, "p95": 0.03383125, "mean": 0.027433154296875}},
+      "interpretation": "Stable median query cost decreased about 38%; amortized 16-query block cost decreased about 26%. The actual change/rebuild query increased about 0.0311 ms median and 0.0488 ms p95. This synthetic CPU fixture does not establish actual-map moving-camera latency or device FPS."
+    }
+  },
+  "files": ["src/village-active-candidates.js", "tests/village-active-candidates.test.js", "tests/village-active-candidates-registry.test.js", "reports/moonforest-0.1-2026-11-04/rendering.json"],
+  "integrationAsks": ["No other source integration is required; existing streamed-environment registration calls use the new implementation.", "Root handles final suite/build/deploy and preserves the user settings listed below.", "Describe the result as reduced stationary candidate-query CPU work; report the mixed tails and synthetic transition overhead without a general FPS/recovery claim."],
+  "limitations": ["No browser automation, GPU rasterization, visual-quality, device FPS or thermal measurement.", "Arbitrary same-length direct reordering of scene.meshes without Babylon events requires explicit invalidate(); focused production search by verifier C found no such mutations.", "Effective-enabled observers and rebuilding add work on actual visibility changes; synthetic transition-frame overhead is measured above, while actual-map moving-camera latency is not established.", "No assets, render quality/distance, combat, chest, shader or GPU pass changes."],
+  "preservedUserSettings": ["player 8K", "background 4K", "current geometry LOD policy", "great plains 240%", "30/60 FPS selection"]
+}

@@ -4,6 +4,7 @@ import {DotMinimap} from './dot-minimap.js';
 import {setupMinimapTravel} from './minimap-travel.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
+import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL} from './release-route.js';
 import {setupUiTest} from './ui-test.js';
 import {setupChapterQuests} from './chapter-quest.js';
 import './ui-test.css';
@@ -110,8 +111,10 @@ const loading = $('#loading');
 const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
-const uiRoute=uiTestRoute(location.href),uiTestEnabled=uiRoute.enabled;
+const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
+const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
+if(releaseEnabled){document.title=MOONFOREST_RELEASE_LABEL;document.documentElement.dataset.release=MOONFOREST_RELEASE;}
 let character = uiRoute.character;
 let uiTest=null;
 let commercialUi, hudLayout;
@@ -522,7 +525,7 @@ async function loadCharacter() {
     animator.update(0);
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
-    $('#character-select').value = uiTestEnabled?'ui-test':character;
+    $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled);
     $('#character-name').textContent = isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
@@ -868,7 +871,7 @@ try {
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
-      $('#character-select').value=uiTestEnabled?'ui-test':character;bindMapPortal(handoff?.from??null);
+      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled);bindMapPortal(handoff?.from??null);
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();
       await skyReady;
@@ -977,9 +980,15 @@ try {
   });
   for(const motion of BOSS_ACTIVE_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
   for(const motion of GOBLIN_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#goblin-motion-list').append(li);}
-  $('#character-select').value = uiTestEnabled?'ui-test':character;
+  $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled);
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
+    if(event.target.value===MOONFOREST_RELEASE||releaseEnabled){
+      if(event.target.value===MOONFOREST_RELEASE&&releaseEnabled)return;
+      let url=releaseSelectionUrl(location.href,event.target.value);
+      if(event.target.value==='ui-test')url=uiTestSelectionUrl(url,event.target.value);
+      mapDeparture.leave(url.href);return;
+    }
     if(event.target.value==='ui-test'||uiTestEnabled){
       if(event.target.value==='ui-test'&&uiTestEnabled)return;
       mapDeparture.leave(uiTestSelectionUrl(location.href,event.target.value).href);return;

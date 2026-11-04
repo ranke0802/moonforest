@@ -2,6 +2,7 @@ import {Frustum,Texture} from '@babylonjs/core';
 import {releaseMapTexture} from './map-texture-lifetime.js';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
+import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS} from './map-load-lifetime.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?12000:20000);
 export const VILLAGE_TEXTURE_PACING=Object.freeze({checkMs:250,motionHoldMs:600,visibleGapMs:750,fillDwellMs:250,replacementDwellMs:3000,minResidenceMs:6000,mobileMovingMs:2000,mobileIdleMs:750,desktopMovingMs:750,desktopIdleMs:350,visibleReplacementRatio:1.5});
@@ -13,8 +14,9 @@ export const highTextureOptions=(role,old)=>({noMipmap:false,invertY:old?.invert
 // One asset at a time. The persistent content cache retains downloaded files;
 // only temporary high-resolution GPU allocations are released on distance exit.
 export class VillageTextureStreaming {
-  constructor(world,assets,records,manifestUrl,stats){
+  constructor(world,assets,records,manifestUrl,stats,{textureTimeoutMs=MAP_MODEL_TIMEOUT_MS,textureTimers}={}){
     this.world=world;this.assets=assets;this.records=records;this.url=manifestUrl;this.stats=stats;
+    this.textureTimeoutMs=textureTimeoutMs;this.textureTimers=textureTimers;
     this.resident=new Map();this.failed=new Set();this.wanted=new Map();this.lastWanted=new Map();
     this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;this.textureWaiters=new Set();
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
@@ -114,8 +116,15 @@ export class VillageTextureStreaming {
     const url=new URL(config.url,this.url).href,scene=this.world.scene;
     const texture=await new Promise((resolve,reject)=>{
       let item,settled=false;
+      // Download/cache waits already have their own progress deadline. Bound
+      // the subsequent Babylon decode/upload callback too: a lost callback must
+      // not retain the one upload reservation and block geometry indefinitely.
+      const lifetime=new MapLoadLifetime({timeoutMs:this.textureTimeoutMs??MAP_MODEL_TIMEOUT_MS,timers:this.textureTimers,stage:'high-texture:'+role});
       const finish=error=>{
-        if(settled)return;settled=true;this.textureWaiters.delete(cancel);
+        if(settled)return;
+        if(!error)try{lifetime.check();}catch(reason){error=reason;}
+        if(settled)return; // check() can synchronously dispatch the expiry.
+        settled=true;this.textureWaiters.delete(cancel);lifetime.signal.removeEventListener('abort',expired);lifetime.close();
         if(error){
           // Babylon9.31 queues the InternalTexture, while BaseTexture.dispose
           // removes only its wrapper. Remove this exact abandoned token only
@@ -124,6 +133,8 @@ export class VillageTextureStreaming {
         }else resolve(item);
       };
       const cancel=()=>finish(Object.assign(new Error('Map texture released'),{name:'AbortError'}));
+      const expired=()=>finish(lifetime.signal.reason);
+      lifetime.signal.addEventListener('abort',expired,{once:true});
       this.textureWaiters.add(cancel);
       // Defer callbacks one microtask: even an already-cached/synchronous
       // loader must finish assigning the owned Texture before settlement.

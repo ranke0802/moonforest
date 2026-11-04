@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-04T02:06:36.087Z",
+  "baseline": "14c972c",
+  "baselineSourceSha256": "e47c070bbd905b1526e7fbb9e77e5e9f0f0bc6ebef72f320edf6e56e9bc6ce26",
+  "candidateSourceSha256": "de1311a64ef00dd48aa63c31dee91da9caf8b9f4b64d51eb6146c0bed163a033",
+  "passed": true,
+  "cases": [
+    {
+      "name": "registration, ancestor enable propagation, reparenting and unfreeze retain baseline semantics",
+      "passed": true
+    },
+    {
+      "name": "late root attachments and native-method overrides fail open and restore immediately",
+      "passed": true
+    },
+    {
+      "name": "Babylon mesh add/remove/dispose preserve exact order after same-length replacements and source LOD additions",
+      "passed": true
+    },
+    {
+      "name": "camera replacement, multi-camera and FrameGraph preserve native fallback identity",
+      "passed": true
+    },
+    {
+      "name": "custom provider subset, changing list identity, receiver, and retained wrapper disposal",
+      "passed": true
+    },
+    {
+      "name": "scene.meshes array replacement is detected without mesh events",
+      "passed": true
+    },
+    {
+      "name": "50 registry lifetimes release scene and tracked enabled-state observers",
+      "passed": true
+    },
+    {
+      "name": "direct same-length public array reorder audit",
+      "passed": true
+    }
+  ],
+  "observations": [
+    {
+      "name": "direct scene.meshes.reverse without Babylon event",
+      "equal": false,
+      "explicitInvalidateRestoresExactOrder": true,
+      "expected": [
+        "b",
+        "b-empty",
+        "source"
+      ],
+      "actual": [
+        "source",
+        "b-empty",
+        "b"
+      ],
+      "productionDirectMutationSearchMatches": 0
+    }
+  ],
+  "scope": "Actual Babylon9.31 provider-selection and lifecycle CPU logic against immutable14c972c; no pixels, browser, GPU/device/FPS claim."
+}

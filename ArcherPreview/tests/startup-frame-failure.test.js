@@ -13,6 +13,7 @@ import {MapLoadLifetime} from '../src/map-load-lifetime.js';
 import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
 import {setupMinimapTravel} from '../src/minimap-travel.js';
 import {travelWaypoint} from '../src/map-waypoints.js';
+import {releaseSelectionValue} from '../src/release-route.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const noop=()=>{},results=[];
@@ -73,7 +74,7 @@ function fixture(){
  const config={model:'player.glb',animations:{},speeds:{},scale:1},location={href:'https://example.test/?character=warrior-v5'},history={replaceState(_state,_title,url){location.href=String(url);}};
  const boss={hide:noop,allPooled:[],combat:{hp:500},potions:{remaining:3},activateResident:async()=>{},playerNodes:{}};
  const hudLayout={visible:false,closes:0,isOpen(){return this.visible;},close(){this.closes++;this.visible=false;}};
- const dependencies={FrameLoop,setupMinimapTravel,travelWaypoint,hudLayout,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
+ const dependencies={releaseSelectionValue,releaseEnabled:false,FrameLoop,setupMinimapTravel,travelWaypoint,hudLayout,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
   initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>{const value={meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose(){owned.containers.delete(this);}};owned.containers.add(value);return value;}},

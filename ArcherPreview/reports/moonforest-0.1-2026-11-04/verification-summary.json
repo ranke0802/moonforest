@@ -1,0 +1,874 @@
+{
+  "generatedAt": "2026-11-04T02:07:38.081Z",
+  "baseline": "14c972c",
+  "passed": true,
+  "sourceHashes": {
+    "src/village-active-candidates.js": "de1311a64ef00dd48aa63c31dee91da9caf8b9f4b64d51eb6146c0bed163a033",
+    "src/village-streamed-environment.js": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+    "src/village-demand.js": "2b17041b6eb880b0ca0a867191d00405b4f472acfddecf45db148500c3681e2b",
+    "src/village-texture-streaming.js": "790e2f6c149d5bbb2907e231b9d52fb5437fbb07473dabcf118925f38e5f3f95",
+    "src/village-visibility.js": "06a2822162967120e0ed3f0319dc73c9ab188e4130841a18fc15c1615cec86f9",
+    "src/village-outlines.js": "c87225eb3a7848e19b9cb7a9da5400435681aa5f2856628f61fe2fda6a5e3b25"
+  },
+  "sourceHashesVerifiedBeforeAndAfterRuns": true,
+  "verdict": "Final cached-registry revision preserves inspected baseline selection/batch semantics and has consistent stationary provider-query median reduction. The missing texture callback deadline is independently verified to roll back multi-slot preparation safely. This is a narrow CPU/lifecycle result, not completed phase1 device-performance recovery.",
+  "evidence": {
+    "logic": {
+      "providerEdges": 8,
+      "passed": true,
+      "includes": "ancestor enable/reparent, late attachments/method restore, add/remove/reorder through Babylon APIs, custom providers, camera/FrameGraph passthrough,50lifetime observer drain, retained-wrapper disposal",
+      "directForeignArrayMutation": [
+        {
+          "name": "direct scene.meshes.reverse without Babylon event",
+          "equal": false,
+          "explicitInvalidateRestoresExactOrder": true,
+          "expected": [
+            "b",
+            "b-empty",
+            "source"
+          ],
+          "actual": [
+            "source",
+            "b-empty",
+            "b"
+          ],
+          "productionDirectMutationSearchMatches": 0
+        }
+      ]
+    },
+    "renderBatch": {
+      "maps": 4,
+      "views": 8,
+      "packedModelFiles": 90,
+      "dynamicLodShadowSteps": 7,
+      "activeOrderAndEveryMainShadowBatchExact": true,
+      "geometryStreamsExact": true,
+      "candidateCountsTypesExact": true,
+      "getLodPreActivateCallsExact": true
+    },
+    "resources": {
+      "independentMultiSlotCases": 2,
+      "passed": true,
+      "hangStages": [
+        "normal",
+        "orm"
+      ],
+      "pendingBytesDataTimersAfter": 0,
+      "stagedTexturesReleased": true,
+      "originalMaterialSlotsAndFrozenStateExact": true,
+      "lateCallbackPromotions": 0
+    },
+    "pixels": "Not measured: NullEngine and opaque1x1 material fixtures, no GPU rasterization/image decode.",
+    "devicePerformance": "Not measured: no phone/browser automation, driver/GPU timing, thermal or input-latency measurement."
+  },
+  "performance": {
+    "sampling": "32alternating-order samples per provider per view; each query sample averages25calls. Precise coverage and draw capture disabled during timings. Four-map timed run ran after A movement benchmark and before root fullsuite resumed. p99 equals the maximum at32samples.",
+    "winsOf8": {
+      "query": {
+        "median": 8,
+        "p95": 4,
+        "p99": 2
+      },
+      "activeEvaluation": {
+        "median": 4,
+        "p95": 5,
+        "p99": 8
+      },
+      "sceneRender": {
+        "median": 6,
+        "p95": 7,
+        "p99": 7
+      }
+    },
+    "queryMedianReductionPercentRange": [
+      26.652490612134105,
+      70.09993552546744
+    ],
+    "queryMedianSavedMsRange": [
+      0.004932000000000001,
+      0.05109600000000001
+    ],
+    "stationarySceneScansAllZero": true,
+    "sceneRenderStopCountsAcross256Samples": {
+      "over16_67ms": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "over33_34ms": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "over50ms": {
+        "baseline": 0,
+        "candidate": 0
+      },
+      "over100ms": {
+        "baseline": 0,
+        "candidate": 0
+      }
+    },
+    "interpretation": "Only narrow candidate-query median savings are consistent across eight views. Query and active-evaluation tail statistics are mixed; no general frame-time, p95/p99-stall or FPS improvement is established. Enabled-state rebuild/preparation fanout is outside this fixed-scene timing and is reported separately by rendering agent.",
+    "views": [
+      {
+        "map": "village",
+        "view": "fixed-front",
+        "candidateCount": 1036,
+        "sceneInput": 1570,
+        "registryChecks": 534,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.020404,
+            "median": 0.024344,
+            "p95": 0.033812,
+            "p99": 0.105564,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.026905124999999995,
+            "max": 0.105564
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.008124,
+            "median": 0.009356,
+            "p95": 0.02196,
+            "p99": 0.094132,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.013542999999999998,
+            "max": 0.094132
+          },
+          "medianSavedMs": 0.014988000000000001,
+          "medianReductionPercent": 61.56753204074926
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.0413,
+            "median": 1.4073,
+            "p95": 2.4597,
+            "p99": 6.1352,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.6105562499999997,
+            "max": 6.1352
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.9376,
+            "median": 1.3872,
+            "p95": 2.7474,
+            "p99": 2.8256,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.50863125,
+            "max": 2.8256
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.6578,
+            "median": 2.2566,
+            "p95": 4.057,
+            "p99": 10.7653,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.6132125,
+            "max": 10.7653
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.4792,
+            "median": 2.2379,
+            "p95": 5.266,
+            "p99": 5.6205,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.4959968750000003,
+            "max": 5.6205
+          }
+        }
+      },
+      {
+        "map": "village",
+        "view": "fixed-reverse",
+        "candidateCount": 588,
+        "sceneInput": 1570,
+        "registryChecks": 982,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.023799999999999998,
+            "median": 0.026504,
+            "p95": 0.054051999999999996,
+            "p99": 0.09004799999999999,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.030139874999999997,
+            "max": 0.09004799999999999
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.016808,
+            "median": 0.019216,
+            "p95": 0.081188,
+            "p99": 0.137836,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.027988250000000003,
+            "max": 0.137836
+          },
+          "medianSavedMs": 0.007287999999999999,
+          "medianReductionPercent": 27.497736190763653
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.6364,
+            "median": 0.9611,
+            "p95": 2.09,
+            "p99": 5.2952,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.16315,
+            "max": 5.2952
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.6812,
+            "median": 0.9594,
+            "p95": 2.124,
+            "p99": 2.5337,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.049028125,
+            "max": 2.5337
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.6694,
+            "median": 2.2359,
+            "p95": 4.795,
+            "p99": 7.8692,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.559221875,
+            "max": 7.8692
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.6157,
+            "median": 2.2011,
+            "p95": 4.3096,
+            "p99": 5.4463,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.434096875,
+            "max": 5.4463
+          }
+        }
+      },
+      {
+        "map": "great-plains",
+        "view": "fixed-front",
+        "candidateCount": 555,
+        "sceneInput": 2699,
+        "registryChecks": 2144,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.076736,
+            "median": 0.088412,
+            "p95": 0.17443999999999998,
+            "p99": 0.18497599999999997,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.09833162499999999,
+            "max": 0.18497599999999997
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.05682,
+            "median": 0.064848,
+            "p95": 0.118124,
+            "p99": 0.242452,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.0772195,
+            "max": 0.242452
+          },
+          "medianSavedMs": 0.023564,
+          "medianReductionPercent": 26.652490612134105
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.8562,
+            "median": 1.1545,
+            "p95": 3.0234,
+            "p99": 3.9662,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.386865625,
+            "max": 3.9662
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.891,
+            "median": 1.1808,
+            "p95": 2.5146,
+            "p99": 2.6071,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.2764875000000002,
+            "max": 2.6071
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.9984,
+            "median": 2.5456,
+            "p95": 6.4263,
+            "p99": 7.0894,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.035684375,
+            "max": 7.0894
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.9717,
+            "median": 2.4952,
+            "p95": 4.7533,
+            "p99": 5.2054,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.687034375,
+            "max": 5.2054
+          }
+        }
+      },
+      {
+        "map": "great-plains",
+        "view": "fixed-reverse",
+        "candidateCount": 1260,
+        "sceneInput": 2699,
+        "registryChecks": 1439,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.073516,
+            "median": 0.08575200000000001,
+            "p95": 0.16328800000000002,
+            "p99": 0.17183199999999998,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.091460125,
+            "max": 0.17183199999999998
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.029820000000000003,
+            "median": 0.034656,
+            "p95": 0.05810800000000001,
+            "p99": 0.196312,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.04162175,
+            "max": 0.196312
+          },
+          "medianSavedMs": 0.05109600000000001,
+          "medianReductionPercent": 59.58578225580745
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.7503,
+            "median": 2.2803,
+            "p95": 3.0313,
+            "p99": 8.4215,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.4662781249999997,
+            "max": 8.4215
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.3831,
+            "median": 2.1594,
+            "p95": 2.9483,
+            "p99": 3.886,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.250796875,
+            "max": 3.886
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 2.9936,
+            "median": 3.5924,
+            "p95": 5.6535,
+            "p99": 11.159,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.9271281249999994,
+            "max": 11.159
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 2.8137,
+            "median": 3.5395,
+            "p95": 4.3929,
+            "p99": 6.1124,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.622346875,
+            "max": 6.1124
+          }
+        }
+      },
+      {
+        "map": "monster-forest",
+        "view": "fixed-front",
+        "candidateCount": 1085,
+        "sceneInput": 1829,
+        "registryChecks": 744,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.0431,
+            "median": 0.049631999999999996,
+            "p95": 0.072128,
+            "p99": 0.090296,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.05161575,
+            "max": 0.090296
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.013380000000000001,
+            "median": 0.014839999999999999,
+            "p95": 0.088768,
+            "p99": 0.129652,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.025354624999999995,
+            "max": 0.129652
+          },
+          "medianSavedMs": 0.034792,
+          "medianReductionPercent": 70.09993552546744
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.3105,
+            "median": 1.7995,
+            "p95": 4.4778,
+            "p99": 6.6155,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.092940625,
+            "max": 6.6155
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.1854,
+            "median": 1.6245,
+            "p95": 4.0584,
+            "p99": 4.4683,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.846775,
+            "max": 4.4683
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 2.5228,
+            "median": 3.1484,
+            "p95": 6.0808,
+            "p99": 10.2202,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.6337781249999996,
+            "max": 10.2202
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 2.2439,
+            "median": 2.9277,
+            "p95": 5.5484,
+            "p99": 7.3899,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.2712249999999994,
+            "max": 7.3899
+          }
+        }
+      },
+      {
+        "map": "monster-forest",
+        "view": "fixed-reverse",
+        "candidateCount": 499,
+        "sceneInput": 1829,
+        "registryChecks": 1330,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.062568,
+            "median": 0.072584,
+            "p95": 0.144368,
+            "p99": 0.19463999999999998,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.08536850000000001,
+            "max": 0.19463999999999998
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.033592,
+            "median": 0.045031999999999996,
+            "p95": 0.146708,
+            "p99": 0.32697200000000004,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.06858775,
+            "max": 0.32697200000000004
+          },
+          "medianSavedMs": 0.027552,
+          "medianReductionPercent": 37.95877879422462
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.883,
+            "median": 1.6408,
+            "p95": 5.2841,
+            "p99": 5.4413,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.962871875,
+            "max": 5.4413
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.7863,
+            "median": 1.9008,
+            "p95": 4.2194,
+            "p99": 4.6249,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 2.0899968749999993,
+            "max": 4.6249
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.9569,
+            "median": 3.317,
+            "p95": 7.473,
+            "p99": 8.1633,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 3.8948343749999994,
+            "max": 8.1633
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.9263,
+            "median": 4.1411,
+            "p95": 6.8618,
+            "p99": 8.9956,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 4.200240625,
+            "max": 8.9956
+          }
+        }
+      },
+      {
+        "map": "witch-cave",
+        "view": "fixed-front",
+        "candidateCount": 147,
+        "sceneInput": 449,
+        "registryChecks": 302,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.010343999999999999,
+            "median": 0.01084,
+            "p95": 0.018096,
+            "p99": 0.057952000000000004,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.012735624999999995,
+            "max": 0.057952000000000004
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.005416,
+            "median": 0.005908,
+            "p95": 0.052135999999999995,
+            "p99": 0.081676,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.013244125000000002,
+            "max": 0.081676
+          },
+          "medianSavedMs": 0.004932000000000001,
+          "medianReductionPercent": 45.498154981549824
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.221,
+            "median": 0.2795,
+            "p95": 0.5586,
+            "p99": 1.2108,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.34385000000000004,
+            "max": 1.2108
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.2147,
+            "median": 0.2934,
+            "p95": 0.6363,
+            "p99": 0.959,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.341225,
+            "max": 0.959
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.3944,
+            "median": 1.7935,
+            "p95": 4.3792,
+            "p99": 4.4442,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.94263125,
+            "max": 4.4442
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.4231,
+            "median": 1.7501,
+            "p95": 3.1783,
+            "p99": 3.1943,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.8887499999999997,
+            "max": 3.1943
+          }
+        }
+      },
+      {
+        "map": "witch-cave",
+        "view": "fixed-reverse",
+        "candidateCount": 145,
+        "sceneInput": 449,
+        "registryChecks": 304,
+        "stationarySceneScans": 0,
+        "query": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.010971999999999999,
+            "median": 0.01176,
+            "p95": 0.069976,
+            "p99": 0.08938399999999999,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.017243375,
+            "max": 0.08938399999999999
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.005656,
+            "median": 0.006392,
+            "p95": 0.050868000000000003,
+            "p99": 0.0684,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.01335,
+            "max": 0.0684
+          },
+          "medianSavedMs": 0.0053679999999999995,
+          "medianReductionPercent": 45.64625850340136
+        },
+        "activeEvaluation": {
+          "baseline": {
+            "samples": 32,
+            "min": 0.3398,
+            "median": 0.4027,
+            "p95": 0.9434,
+            "p99": 1.2372,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.46503124999999995,
+            "max": 1.2372
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 0.3351,
+            "median": 0.4438,
+            "p95": 0.8698,
+            "p99": 0.9457,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 0.484303125,
+            "max": 0.9457
+          }
+        },
+        "sceneRender": {
+          "baseline": {
+            "samples": 32,
+            "min": 1.5349,
+            "median": 1.7908,
+            "p95": 3.8017,
+            "p99": 4.9787,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.9970999999999997,
+            "max": 4.9787
+          },
+          "candidate": {
+            "samples": 32,
+            "min": 1.4785,
+            "median": 1.8232,
+            "p95": 3.6373,
+            "p99": 3.6387,
+            "over16_67ms": 0,
+            "over33_34ms": 0,
+            "over50ms": 0,
+            "over100ms": 0,
+            "mean": 1.9941812500000002,
+            "max": 3.6387
+          }
+        }
+      }
+    ]
+  },
+  "initialCandidate": "verification-four-map-ab.json preserves initial slower cached-registry evidence; the runtime was revised before final validation. Intermediate edge/native source hashes are in*-v2.json. Final validation is in*-final.json.",
+  "unaddressedPhase1Inventory": "verification-static-review.json",
+  "limits": [
+    "The baseline provider is captured from immutable git14c972c; both paired sides use the same current demand/texture/visibility code. This is not a complete historical-build A/B.",
+    "No risky pass reorder, toon GPU rewrite, thin-instance migration or shadow reuse is visually certified by this verifier.",
+    "Foreign code that mutates scene.meshes directly must call registry.invalidate(); no such production mutation was found.",
+    "The verifier did not run the full suite/build/deploy; root owns release validation."
+  ]
+}

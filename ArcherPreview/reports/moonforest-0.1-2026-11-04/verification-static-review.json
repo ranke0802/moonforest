@@ -1,0 +1,61 @@
+{
+  "scope": "Independent phase1 static review; current PHASE-01-RENDER.txt only, focused source/history/reports. No runtime edits, browser automation, build, full suite, deployment or paid/new assets.",
+  "baseline": "14c972ccb58fc704adc9956b4563faacab0804ca",
+  "reviewStatus": "Independent final provider/batch/resource validation completed; see verification-summary.json. Unaddressed phase1/device items remain explicit.",
+  "historicalSeparation": [
+    {
+      "commit": "9a8f4d6",
+      "change": "First chapter-quest-props.js and chest-common points; chapter quests/plains travel added together.",
+      "date": "2026-11-02T20:57:12+09:00"
+    },
+    {
+      "commit": "ef797a0",
+      "change": "Loot rarity and unconditional villageInkTint source attribute added; the same commit changes common scenery toon fog/distance shading and discard coverage.",
+      "date": "2026-11-03T01:00:19+09:00"
+    },
+    {
+      "commit": "cf1a618",
+      "change": "Tinted outline variant restricted to graded sources and repeated outline work reduced."
+    },
+    {
+      "commit": "e62979f",
+      "change": "Chest body/lid shared preparation and0.85s opening, then frozen transforms."
+    },
+    {
+      "commit": "5a6abaa",
+      "change": "Chest body/lid vertex-color layout aligned to stop shared outline variant churn."
+    }
+  ],
+  "historicalLimit": "No historical full build/device/pixel reconstruction performed. A chest-hidden diagnostic on the current baseline would isolate current chest submissions but could not attribute historical global-style cost. The independent four-map candidate test isolates only14c972c provider versus candidate provider in the same current scene.",
+  "safetyContract": [
+    "The baseline only omits disabled registered frozen native instances and disabled native empty clone roots. It retains source meshes even when source.isVisible=false, so source readiness/LOD/preActivate and native instancing batches remain SDK-owned.",
+    "Production registry integration is restricted to instantiated environment descendants; quest props, dynamic actors, chest bodies/lids and projectile paths remain outside this registration.",
+    "Visibility shadow candidates intentionally ignore camera frustum. Main-camera rejection must not be shared with shadow/render-target/secondary-camera candidate selection.",
+    "Custom provider subsets, FrameGraph and multiple active cameras require native passthrough. Provider disposal must restore only its own installed function and preserve retained external wrappers.",
+    "Late geometry/material/submesh/skeleton/morph/action/method attachment to an empty root must immediately fail open. Mesh API add/remove and ancestor effective-enabled events must invalidate exact ordered candidates.",
+    "A focused production-source search found zero direct scene.meshes sort/reverse/splice/push/pop/shift/unshift calls, assignments or indexed assignments. Arbitrary foreign direct array mutation is audited separately rather than represented as a supported event contract."
+  ],
+  "currentReusableEvidence": [
+    "reports/render-candidates-2026-11-04/audit-safety-review.json: prior native batch/LOD/shadow safety and sampler lifecycle; scope remains CPU/NullEngine.",
+    "reports/render-candidates-2026-11-04/release-review.json: baseline14c972c prior1515tests/build/release evidence; provider query median benefit was small and tails mixed, no device60FPS claim.",
+    "reports/outline-cost-2026-11-03/validation-summary.json: ordinary scenery untinted, five chest grade colors retained, four-map chest lifecycle plateau; no GPU pixels.",
+    "reports/thermal-active-2026-11-04/audit-cross-review.json: texture promote timing measures synchronous assignment only; recorded264.8ms draw-submission spike/device recovery remains unproved."
+  ],
+  "unaddressedOrUnprovedPhase1Items": [
+    "No controlled historical chest-only and shared-style-only device comparison.",
+    "No new shared revisioned visibility/demand/texture/outline result. Existing separate policy/caches retained; mutation producers do not yet expose all required revisions.",
+    "No thin-instance pilot admitted; current native instances retained.",
+    "No scenery ink pass regrouping admitted. Current immediate base-then-ink with source exact batch/depth/stencil remains; no new pixel-equivalence evidence.",
+    "No new toon shader simplification admitted. PBR plugin replaces final diffuse color while existing lighting remains for shadow visibility; disabling material options alone is not proof of generated GPU-code reduction.",
+    "No leaf-overdraw/device-GPU investigation or static-shadow reuse admitted.",
+    "Existing VillageWorkBudget slices runtime placement/BVH setup and texture admission is one asset at a time, but there is no demonstrated shared clone/outline/upload budget or proof first GPU-use stalls are resolved.",
+    "Loading WebP cache/repaint, four-map repeated resource plateau, context-loss and boss summon/transform/death are not independently re-executed by this verifier.",
+    "NullEngine CPU p95/p99 and stall counts are reference samples with desktop/inspector limitations; no physical-device FPS, GPU latency, thermal or input-latency claim."
+  ],
+  "evidenceLevels": {
+    "logic": "Provider selection, invalidation, ownership and timeout lifecycle can be verified with actual Babylon SDK CPU tests.",
+    "renderBatch": "Native actual draw batches, geometry streams, LOD calls, instance order/matrices, Effect ids and shadow submissions can be verified with NullEngine interception.",
+    "pixels": "Not measured. Opaque1x1 material fixtures replace downloaded textures and image decoding in four-map harness.",
+    "devicePerformance": "Not measured. No phone/browser automation or GPU driver work performed."
+  }
+}

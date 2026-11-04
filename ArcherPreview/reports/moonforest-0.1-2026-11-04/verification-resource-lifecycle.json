@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-11-04T02:04:56.576Z",
+  "passed": true,
+  "sourceSha256": "790e2f6c149d5bbb2907e231b9d52fb5437fbb07473dabcf118925f38e5f3f95",
+  "rows": [
+    {
+      "hangRole": "normal",
+      "passed": true,
+      "startedRoles": [
+        "albedo.png",
+        "normal.png"
+      ],
+      "temporaryTextureReferences": [
+        0,
+        0
+      ],
+      "originalMaterialSlotsExact": true,
+      "originalMaterialsRemainFrozen": true,
+      "pendingBytesAfter": 0,
+      "scenePendingAfter": 0,
+      "lateCallbackPromotions": 0,
+      "callbackDeadlinesAfter": 0
+    },
+    {
+      "hangRole": "orm",
+      "passed": true,
+      "startedRoles": [
+        "albedo.png",
+        "normal.png",
+        "orm.png"
+      ],
+      "temporaryTextureReferences": [
+        0,
+        0,
+        0
+      ],
+      "originalMaterialSlotsExact": true,
+      "originalMaterialsRemainFrozen": true,
+      "pendingBytesAfter": 0,
+      "scenePendingAfter": 0,
+      "lateCallbackPromotions": 0,
+      "callbackDeadlinesAfter": 0
+    }
+  ],
+  "warnings": [
+    "Village high texture stopped; no automatic retry. asset TimeoutError: 리소스 준비 시간이 초과되었습니다 (45초). 다시 시도해 주세요.",
+    "Village high texture stopped; no automatic retry. asset TimeoutError: 리소스 준비 시간이 초과되었습니다 (45초). 다시 시도해 주세요."
+  ],
+  "scope": "Actual Babylon texture wrapper/internal ownership, pending-data and material-slot rollback under injected logical deadlines; no downloads, actual image decoding, GPU upload, pixels or device performance measured."
+}

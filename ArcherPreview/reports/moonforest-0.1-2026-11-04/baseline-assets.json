@@ -1,0 +1,122 @@
+{
+  "capturedAt": "2026-11-04T02:02:14.5974826Z",
+  "manifests": [
+    {
+      "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc",
+      "path": "ArcherPreview/public/assets/audio.json"
+    },
+    {
+      "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c",
+      "path": "ArcherPreview/public/assets/character.json"
+    },
+    {
+      "sha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "path": "ArcherPreview/public/assets/elena.json"
+    },
+    {
+      "sha256": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "path": "ArcherPreview/public/assets/environment.json"
+    },
+    {
+      "sha256": "fae2d5c32dc7efe9c1994c168809d59d9c1453e2351ff22b722feac376d7a66f",
+      "path": "ArcherPreview/public/assets/great-plains-ground.json"
+    },
+    {
+      "sha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "path": "ArcherPreview/public/assets/great-plains.json"
+    },
+    {
+      "sha256": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "path": "ArcherPreview/public/assets/guardian-bear.json"
+    },
+    {
+      "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343",
+      "path": "ArcherPreview/public/assets/hooded-goblin.json"
+    },
+    {
+      "sha256": "ebe44dcb7d4ec07352243c5d74ef71a467191b489f2ce2d7a0bbea526e913011",
+      "path": "ArcherPreview/public/assets/ktx2-decoder.json"
+    },
+    {
+      "sha256": "4dfec5cbae8378b94afd86b28b7fae5e341f17132cd8833a476a4910e5b0bfbf",
+      "path": "ArcherPreview/public/assets/legacy-e0c98ab-character.json"
+    },
+    {
+      "sha256": "85835dd9e2b6a120f9a011e72761832a1dd14df9b99bfdf3d21df7f3fd435326",
+      "path": "ArcherPreview/public/assets/legacy-e0c98ab-warrior.json"
+    },
+    {
+      "sha256": "9812dd69730683099d75b97806ec6a4282144a43e88b566d24dbc52bd713d005",
+      "path": "ArcherPreview/public/assets/map-loading-art.json"
+    },
+    {
+      "sha256": "20144c48ea468481d8e5c4d5c2455401efb4251b9c1b0275bb30f8a7221e6125",
+      "path": "ArcherPreview/public/assets/meshopt-decoder.json"
+    },
+    {
+      "sha256": "cbd93b63f78036fd0d9413b95520a1b06e23dcf22a54b7ff37ae19994f054599",
+      "path": "ArcherPreview/public/assets/monster-forest-ground.json"
+    },
+    {
+      "sha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "path": "ArcherPreview/public/assets/monster-forest.json"
+    },
+    {
+      "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "path": "ArcherPreview/public/assets/mourning-elena.json"
+    },
+    {
+      "sha256": "fc15eda93d5c6d13d4d7fd017a162fe5121a78dce9173a002657a07c7ce11094",
+      "path": "ArcherPreview/public/assets/quest-props.json"
+    },
+    {
+      "sha256": "9e3fb9f5539bef9cdb766c48cb1a222bd519bcbc080d2c0684718aaa65491565",
+      "path": "ArcherPreview/public/assets/resource-index.json"
+    },
+    {
+      "sha256": "39055c38e594cfcbbd28480e186d1ea957c6a6978f7bc55647e7bc58931f6b60",
+      "path": "ArcherPreview/public/assets/resource-sizes.json"
+    },
+    {
+      "sha256": "2b8d926b9f512c41c4722c7d557f7bdfcf9c0e19e9932c55cb0384dad78ff405",
+      "path": "ArcherPreview/public/assets/sky.json"
+    },
+    {
+      "sha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "path": "ArcherPreview/public/assets/village-ground.json"
+    },
+    {
+      "sha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "path": "ArcherPreview/public/assets/village-plains-outskirts.json"
+    },
+    {
+      "sha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "path": "ArcherPreview/public/assets/village.json"
+    },
+    {
+      "sha256": "495af0e03f0101543b4011f05b32e7a21edb6b074ce97c11c868f53986fdcbdf",
+      "path": "ArcherPreview/public/assets/warrior-v2.json"
+    },
+    {
+      "sha256": "8fd4bceb04d02117fe6cfbac0d9e5ab128b419a56cb05cde3a17d0fa76de6253",
+      "path": "ArcherPreview/public/assets/warrior-v3-ios.json"
+    },
+    {
+      "sha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "path": "ArcherPreview/public/assets/warrior-v3.json"
+    },
+    {
+      "sha256": "6e6b756dc3e776740e8be2f8c3d48dbc319ff34f0b9eedb4d420f647611969aa",
+      "path": "ArcherPreview/public/assets/warrior.json"
+    },
+    {
+      "sha256": "0581c2fd9665837af9a55a0859d09a5fbb08dc0a7ba1b4d631be60021bd61aa0",
+      "path": "ArcherPreview/public/assets/witch-cave-ground.json"
+    },
+    {
+      "sha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "path": "ArcherPreview/public/assets/witch-cave.json"
+    }
+  ],
+  "sourceAssetGeneration": false
+}

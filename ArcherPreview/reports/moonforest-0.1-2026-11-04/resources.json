@@ -1,0 +1,186 @@
+{
+  "phase": 1,
+  "owner": "resources",
+  "baseline": "14c972ccb58fc704adc9956b4563faacab0804ca",
+  "status": "adopt-logical-high-texture-callback-deadline; other-resource-policies-preserved",
+  "scope": {
+    "sourceChanged": ["src/village-texture-streaming.js"],
+    "newFocusedTests": ["tests/moonforest-resource-timeout.test.js"],
+    "ownedSourceUnchanged": ["src/village-demand.js"],
+    "browserAutomation": false,
+    "fullSuiteOrBuildRunByThisOwner": false,
+    "commits": false,
+    "futurePhaseCardsRead": false
+  },
+  "adopted": {
+    "hypothesis": "A Babylon high-texture decode/upload callback can remain unresolved after the separately bounded resource/cache download. Its permanent highTexturePending=1 then prevents VillageGeometryStreaming.update from admitting any missing geometry tier.",
+    "sourceEvidence": [
+      "VillageTextureStreaming.loadTexture originally had success/error/dispose settlement but no timer or deadline.",
+      "VillageTextureStreaming.start reserves bytes and sets highTexturePending until its load promise finally settles.",
+      "VillageGeometryStreaming.update returns early while stats.highTexturePending is set.",
+      "ResourceDownloads.run already bounds fetch/cache waits with the existing MapLoadLifetime; that lifetime does not bound the later Babylon Texture callback."
+    ],
+    "change": "Reuse MapLoadLifetime with the existing MAP_MODEL_TIMEOUT_MS=45000 for each admitted high Texture callback. Check the logical deadline again before accepting completion; close and detach it on success, error, map disposal or timeout. Timeout follows the existing failure/no-auto-retry policy and releases only the owned wrapper through releaseMapTexture.",
+    "qualityAndScheduling": [
+      "No texture dimensions, codecs, sampling, gamma/sRGB settings, byte budgets, admission dwell, motion pacing or selected geometry tiers changed.",
+      "The resource download progress deadline remains independent; a healthy large startup/player download is not capped by this new callback deadline.",
+      "No parallel upload, replacement scheduler, automatic retry, material reassignment or visibility change is added.",
+      "One existing serial upload is the upper bound on simultaneous added deadline timers."
+    ],
+    "ownership": {
+      "finalOwner": "releaseMapTexture marks only the exact final-owner InternalTexture abandoned, removes its cache/pending token, and disposes its Texture wrapper.",
+      "sharedOwner": "With another live Texture reference, only this wrapper is disposed. The shared InternalTexture remains cached/pending until its real completion, and the other caller can finish normally.",
+      "lateResults": "A timed-out callback cannot settle twice, install a resident, modify an old material, or overwrite a fresh stream's diagnostics/material.",
+      "limitation": "A logical deadline does not interrupt synchronous WASM/driver execution. The existing KTX abandonment guard can suppress a later upload of an abandoned final-owner allocation; this change makes no claim that already-running GPU/driver work is interrupted."
+    },
+    "baselineReproduction": {
+      "method": "Import git show 14c972c:ArcherPreview/src/village-texture-streaming.js as an in-memory module with file-URL imports, then run the same new focused tests against it. No historical checkout/build or current source mutation.",
+      "pass": 1,
+      "fail": 4,
+      "expectedFailures": [
+        "missing callback never settles or releases reservation",
+        "shared-owner callback wait has no timeout settlement",
+        "cannot proceed to fresh material after waiting for missing old callback",
+        "overdue queued completion is accepted instead of timing out"
+      ],
+      "ordinaryCompletionErrorDisposeCasePassed": true
+    }
+  },
+  "chestHistoryBoundaries": [
+    {
+      "commit": "9a8f4d64fd60d6008d1f663a62b96ba5218d5c28",
+      "meaning": "First checked-in live chapter quest/treasure chest props and rewards, not e62979f.",
+      "evidence": "Adds chapter-quest-points.js, chapter-quest-props.js, chapter-quest.js/state/data and quest-props manifest. Initial points include village-relief and goblin-relic using chest-common; three plains treasure rewards initially use model:null. Props share one container per model and instantiate native instances. The chapter quest files are absent in its parent.",
+      "commonBoundary": "No changes to village-demand.js, village-texture-streaming.js, village-visibility.js or village-outlines.js in this commit. It does add a separate VillageOutlines manager for quest props. The same commit also changes plains/travel/UI/other game behavior, so parent-vs-commit FPS is not a chest-only comparison. player-texture-profile merely aliases warrior-plains into the existing warrior-v3 profile."
+    },
+    {
+      "commit": "ef797a04d49e73f9a72df3799e1e8b8c2d328d20",
+      "meaning": "Later expansion of chest/exploration density, grades and bounded demand-driven prop lifecycle; also a common scenery processing/style change.",
+      "commonBoundary": "village-outlines adds villageInkTint attributes and varying/grade selection for all sources, including ordinary scenery. village-toon adds distance tone/far-coverage uniforms and hardBindForSubMesh, and replaces ordinary scenery fog with authored-hue attenuation. These are common rendering/style changes and must not be attributed to the first chest object's cost alone."
+    },
+    {
+      "commit": "cf1a6182fe189de68927a94c1a0162d348d59e38",
+      "meaning": "Already removes ordinary scenery tint attributes and separates graded/ordinary ink variants; reuses selection work and limits readiness checks to the applicable variant.",
+      "evidenceReuse": "reports/outline-cost-2026-11-03/validation-summary.json and four-map-validation.json. Do not repeat this optimization."
+    },
+    {
+      "commit": "e62979f",
+      "meaning": "Opening animation and persisted opened state, not first chest introduction.",
+      "preserved": "Shared body/lid split geometry, about0.85s opening,105-degree lid, frozen transforms after completion and kept opened chest rendering."
+    },
+    {
+      "commit": "5a6abaafd652e3bf0592ac43b0196e0a25c47565",
+      "meaning": "Already fixes alternating chest body/lid color-layout outline Effect churn with an immutable white lid color attribute.",
+      "evidenceReuse": "reports/ui-performance-integration-2026-11-03/chest-loading-assessment.json:240 controlled frames formerly480 cached Effect requests/refcount increments, after0; not480 new GPU compilations. Kept feature cost remains2base+2ink native instanced source draws and4487 triangles including interior. Loading art already hides/removes src."
+    },
+    {
+      "commit": "1879954e8689a3a8f6e7ca31d694840945c29904",
+      "meaning": "Already separates colored/uncolored ordinary and tinted outline material variants, including cold streamed sources, preventing shared ShaderMaterial defines churn across existing scenery."
+    },
+    {
+      "commit": "c65e731df940e03e1a6d69a988b30f6425d1a016",
+      "meaning": "Already skips redundant unfreeze during high texture promotion/restoration and instruments the synchronous material promotion stage. No duplication."
+    }
+  ],
+  "investigationMatrix": [
+    {
+      "area": "stationary geometry demand and spatial candidates",
+      "decision": "already optimized; unchanged",
+      "evidence": "VillageDemandCache keys exact camera/projection/policy values and fog revision; existing index threshold1000 keeps smaller/overview maps on the measured direct path. Relevant commits65a1662 and71f9165.",
+      "rejected": "Another stationary cache, longer update cadence, changing index threshold without new paired evidence."
+    },
+    {
+      "area": "sharing visibility/demand/texture/outline results",
+      "decision": "defer shared revision contract; no unsafe candidate reuse",
+      "evidence": "Visibility uses cell bounds and a5-unit frustum margin; demand uses placement spheres with10-unit margin,12-unit prefetch range and18-unit target-close override; texture uses actual mesh frusta and near-coverage threshold; outlines have separate ranked selection/triangle budgets and fog/enable checks. Mesh bounds can change on geometry promotion while frozen transforms remain unchanged.",
+      "needed": "Reliable revisions covering camera/projection, per-record enable/fog state, geometry/bounds promotion, insertion/removal and consumer-specific policy; using only camera or visibility revision would return stale or narrower candidates.",
+      "rejected": "Blindly sharing one candidate list, freezing all active meshes, or caching texture frusta based only on a stationary camera."
+    },
+    {
+      "area": "texture candidate micro-edits",
+      "decision": "reject weak standalone perf claims",
+      "evidence": "Texture update still scans records every250ms, but moving failed.has before frustum tests only affects failed assets; reusing six frustum Planes only removes small periodic allocation. No material same-scene benefit was measured for either.",
+      "rejected": "Shipping these as a fix for measured long render-submit stalls."
+    },
+    {
+      "area": "texture memory/download/load pacing",
+      "decision": "preserved existing mechanisms; only callback deadline adopted",
+      "evidence": "Single reserved upload, mobile/desktop motion pacing, stable replacement dwell, minimum residency and grace release already exist in385e459 and related integrated changes. Content-cache bytes and resident GPU texture bytes are separate budgets. releaseMapTexture already protects shared allocations; timeout reuses it.",
+      "limits": "Physical decoded/GPU cache residency and actual first GPU-use cost were not measured. PrefetchResources ownership remains the existing ResourceDownloads lifetime; no second prefetch cancellation mechanism was added."
+    },
+    {
+      "area": "loading art",
+      "decision": "already cached and hidden; unchanged",
+      "evidence": "Existing chest-loading assessment shows4compressed cache bodies,1live image element and no source attribute after reveal across100cycles.",
+      "rejected": "Assuming four cached WebP files cause four continuously repainted decoded images, or clearing the cache to claim GPU memory relief."
+    },
+    {
+      "area": "thin-instance/whole-map batching",
+      "decision": "not enabled; unsupported visual/semantic equivalence",
+      "evidence": "Native instance identity, source LOD promotion, exact per-submesh draw ranges, cell culling, alpha/outline/fog and shadow ownership must remain. A thin-instance pilot needs cell×asset×material×LOD ownership and actual GPU/pixel evidence; a whole-map merge would defeat culling."
+    },
+    {
+      "area": "grouped scenery ink passes",
+      "decision": "dev-only candidate at most; default unchanged",
+      "evidence": "Current afterBase consumes the exact successfully drawn source LOD and native instance batch, owns private draw wrapper, stencil/depth state, culling orientation and cave fog/clip bindings. Pass reordering risks stencil lifetime, shared instance-buffer reuse, transparent order and cave occlusion. No GPU screen equivalence is available. Existing character surface-before-ink optimization is not reimplemented."
+    },
+    {
+      "area": "toon/PBR shader simplification",
+      "decision": "default unchanged; no unsupported GPU-cost claim",
+      "evidence": "Existing toon material still uses the PBR lighting path to obtain shadow visibility, and disables unused material maps/options already. Turning another option off is not evidence of a smaller compiled GPU shader. Need actual variant/compiled-code comparison and unchanged colors, normals, brightness, fog and shadow pixels before enabling a replacement."
+    },
+    {
+      "area": "foliage alpha overdraw and duplicate ink",
+      "decision": "unmeasured; no appearance reduction",
+      "evidence": "No GPU capture/pixel validation was available. Disabling leaves, their authored two-sided behavior, silhouettes, alpha or outlines would violate this phase's preserved scenery requirement."
+    },
+    {
+      "area": "static shadow reuse/cave emissive passes",
+      "decision": "defer; existing caster/LOD/camera/fog semantics retained",
+      "evidence": "A shadow cache needs exact caster/light/camera/LOD invalidation, including offscreen casters; cave rock cutaway/fog/structural surfaces require matching depth/clip behavior. No unsupported freeze or pass removal adopted."
+    },
+    {
+      "area": "travel, teardown and context loss",
+      "decision": "existing ownership retained; focused timeout boundary verified",
+      "evidence": "Existing tests exercise real environment release draining Texture waiters, exact shared ownership and late old callbacks. New tests extend that same boundary to timeout. This owner did not change world/map/decoder ownership, boss lifetime or context restoration.",
+      "limits": "No new full four-map roundtrip or real context-loss/GPU restore validation was performed by this owner; verifier owns the bounded four-map integration checks."
+    }
+  ],
+  "verification": {
+    "runtime": "C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+    "focusedCommand": "node --test tests/moonforest-resource-timeout.test.js tests/village-texture-streaming.test.js tests/village-texture-pacing.test.js tests/village-texture-cancel.test.js tests/village-texture-promotion.test.js",
+    "pass": 35,
+    "fail": 0,
+    "durationMs": 6731.8872,
+    "newRegressionCases": 5,
+    "cases": [
+      "At44999ms the reservation remains live; at45000ms missing callback clears pending/reserved/waiters/pending-scene token, retains base texture and allows the exact same deferred level2 geometry request.",
+      "A second live Texture retains the same shared InternalTexture, one reference, cache entry and pending token after timeout; real completion makes it ready.",
+      "Late old success/error callbacks after timeout cannot replace a fresh completed4K material or alter its diagnostics.",
+      "A completion queued beyond the logical deadline is rejected before timer dispatch and disposes its wrapper exactly once.",
+      "Success, error and map disposal remove callback timers/listeners; existing no-auto-retry and quiet cancellation semantics remain."
+    ],
+    "existingCoverage": "Serial byte budget, moving/idle pacing, pan-return residency, replacement dwell, source material/geometry/sRGB equivalence, real shipped4K ETC1S decoder bytes with intercepted upload calls, and environment-release cancellation all pass.",
+    "diffCheck": "git diff --check passed for changed source/new test",
+    "sourceFrozenForVerifier": true,
+    "sha256": {
+      "src/village-demand.js": "2b17041b6eb880b0ca0a867191d00405b4f472acfddecf45db148500c3681e2b",
+      "src/village-texture-streaming.js": "790e2f6c149d5bbb2907e231b9d52fb5437fbb07473dabcf118925f38e5f3f95",
+      "tests/moonforest-resource-timeout.test.js": "82c003b53d335147b0d5c0a3d47b36acec66dc87c04019ce0ec30cbafa20d4dd"
+    }
+  },
+  "preserved": [
+    "Player8K and scenery maximum4K profiles",
+    "Current LOD thresholds and all existing distances including plains240%",
+    "NPC count, actors, combat, input, HUD, chest colors/opening/rewards/visuals",
+    "Native instances, source geometry, material layouts, shadows and outline default pass order"
+  ],
+  "limitations": [
+    "No full historical chest-vs-no-chest build was recreated. Historical commit source boundaries are evidence of scope, not a controlled device performance comparison.",
+    "The first chest commit and later grade/style commits include other changes; parent-vs-commit timing cannot isolate chest causal cost.",
+    "No actual GPU rasterization/pixels, device FPS/thermal/input latency or new p95/p99 frame-time improvement is claimed.",
+    "The adopted change fixes an indefinitely stalled failure path. It is not claimed to reduce normal steady-state render CPU/GPU cost or explain the prior264.8ms stall.",
+    "A rightful other owner can keep a shared InternalTexture pending after this owner's timeout; disposing that other owner's resource to force scene readiness would violate ownership.",
+    "Production build/release and version-route integration are handled by root after phase1 review."
+  ]
+}

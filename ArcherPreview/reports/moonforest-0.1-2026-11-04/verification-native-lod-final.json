@@ -1,0 +1,810 @@
+{
+  "baseline": "14c972c",
+  "baselineCandidateSourceSha256": "e47c070bbd905b1526e7fbb9e77e5e9f0f0bc6ebef72f320edf6e56e9bc6ce26",
+  "candidateSourceSha256": "de1311a64ef00dd48aa63c31dee91da9caf8b9f4b64d51eb6146c0bed163a033",
+  "generatedAt": "2026-11-04T02:06:37.263Z",
+  "steps": 7,
+  "nativeDrawBatchAndLodAndShadowEquality": true,
+  "sourceMeshesPreserved": true,
+  "sourcePreActivateTraceIdentical": true,
+  "mutationChecks": [
+    "material",
+    "subMeshes",
+    "skeleton",
+    "morphTargetManager",
+    "actionManager",
+    "isReady",
+    "isEnabled",
+    "getTotalVertices",
+    "nativeGeometry"
+  ],
+  "externalWrapperAfterDisposePassesThrough": true,
+  "ownProviderRestored": true,
+  "snapshots": [
+    {
+      "step": 0,
+      "radius": 6,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 52,
+        "skipped": 0,
+        "owned": 48,
+        "registryChecks": 0,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 1,
+      "radius": 16,
+      "enabled": 12,
+      "draws": [
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-2",
+            "instance-4",
+            "instance-6",
+            "instance-8",
+            "instance-10",
+            "instance-12",
+            "instance-14",
+            "instance-16"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-20",
+            "instance-22"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-2",
+            "instance-4",
+            "instance-6",
+            "instance-8",
+            "instance-10",
+            "instance-12",
+            "instance-14",
+            "instance-16"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-20",
+            "instance-22"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "mid",
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "far",
+        "far",
+        "far"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 28,
+        "skipped": 24,
+        "owned": 48,
+        "registryChecks": 24,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 2,
+      "radius": 28,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "far",
+        "near",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far",
+        "far"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 52,
+        "skipped": 0,
+        "owned": 48,
+        "registryChecks": 0,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 3,
+      "radius": 7,
+      "enabled": 0,
+      "draws": [
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 4,
+        "skipped": 48,
+        "owned": 48,
+        "registryChecks": 48,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 4,
+      "radius": 7,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17",
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 52,
+        "skipped": 0,
+        "owned": 48,
+        "registryChecks": 0,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 5,
+      "radius": 16,
+      "enabled": 8,
+      "draws": [
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-3",
+            "instance-6",
+            "instance-9",
+            "instance-12",
+            "instance-15"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": true,
+          "instances": [
+            "instance-21"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-3",
+            "instance-6",
+            "instance-9",
+            "instance-12",
+            "instance-15"
+          ],
+          "self": false
+        },
+        {
+          "source": "far",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-21"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "mid",
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "far",
+        "far",
+        "far",
+        "far",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "far",
+        "far",
+        "far",
+        "far"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 20,
+        "skipped": 32,
+        "owned": 48,
+        "registryChecks": 32,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    },
+    {
+      "step": 6,
+      "radius": 6,
+      "enabled": 24,
+      "draws": [
+        {
+          "source": "near",
+          "intermediate": true,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": true,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "near",
+          "intermediate": false,
+          "instances": [
+            "instance-0",
+            "instance-1",
+            "instance-2",
+            "instance-3",
+            "instance-4",
+            "instance-5",
+            "instance-6",
+            "instance-7",
+            "instance-8",
+            "instance-9",
+            "instance-10",
+            "instance-11",
+            "instance-12",
+            "instance-13",
+            "instance-14",
+            "instance-15",
+            "instance-16",
+            "instance-17"
+          ],
+          "self": false
+        },
+        {
+          "source": "mid",
+          "intermediate": false,
+          "instances": [
+            "instance-18",
+            "instance-19",
+            "instance-20",
+            "instance-21",
+            "instance-22",
+            "instance-23"
+          ],
+          "self": false
+        },
+        {
+          "source": "dynamic",
+          "intermediate": false,
+          "instances": [],
+          "self": true
+        }
+      ],
+      "sourcePreActivate": [
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "near",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid",
+        "mid"
+      ],
+      "stats": {
+        "scanned": 52,
+        "submitted": 52,
+        "skipped": 0,
+        "owned": 48,
+        "registryChecks": 0,
+        "sceneScans": 52,
+        "cacheHits": 0
+      }
+    }
+  ],
+  "limitation": "NullEngine validates native CPU selection/batch/LOD/shadow-list logic; no actual GPU shader compilation, pixels, device FPS or browser test."
+}

@@ -27,7 +27,7 @@ test('only registered frozen native disabled instances are omitted and reappear 
  for (const mesh of [a.mesh, b.mesh, c.mesh, dynamic, a.mesh, source]) candidates.add(mesh);
  assert.equal(candidates.stats.owned, 3);
  assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'b', 'dynamic']);
- assert.deepEqual(candidates.stats, {scanned: 5, submitted: 3, skipped: 2, owned: 3});
+ assert.deepEqual(candidates.stats, {scanned: 5, submitted: 3, skipped: 2, owned: 3, registryChecks: 2, sceneScans: 5, cacheHits: 0});
  a.root.setEnabled(true); b.root.setEnabled(false);
  assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'a', 'dynamic']);
  c.mesh.isReady = () => true;
