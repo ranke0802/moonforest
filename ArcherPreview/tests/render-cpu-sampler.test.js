@@ -47,3 +47,23 @@ test('real SDK scene draws and effect/texture bindings match before, during and 
  for(const enabled of [false,true,false]){sampler.setActive(enabled);batches.length=0;engine.beginFrame();scene.render();engine.endFrame();snapshots.push({batches:structuredClone(batches),active:scene.getActiveMeshes().length});assert.equal(engine.drawElementsType,baseline);}
  assert.ok(snapshots[0].batches.length>0);assert.deepEqual(snapshots[1],snapshots[0]);assert.deepEqual(snapshots[2],snapshots[0]);assert.ok(sampler.sample().retained.groups.drawCommands.calls>0);sampler.dispose();engine.dispose();
 });
+
+test('opt-in event capture catches the first subsequent draw, coalesces requests and bounds repeated event probes',()=>{
+ const f=fixture();assert.equal(f.sampler.requestCapture('enemy-defeat'),false);
+ f.sampler.setActive(true);f.begin();f.end();assert.equal(f.sampler.sample().latest.reason,'periodic');
+ f.setTime(100);assert.equal(f.sampler.requestCapture('enemy-defeat'),true);f.begin();f.engine.drawElementsType(1);f.end();
+ assert.equal(f.sampler.sample().latest.reason,'enemy-defeat');assert.equal(f.sampler.sample().latest.sampleId,2);
+ f.setTime(110);f.sampler.requestCapture('viewport-commit');f.sampler.requestCapture('texture-promote');f.begin();f.end();assert.equal(f.sampler.sample().latest.sampleId,2);
+ f.setTime(349);f.begin();f.end();assert.equal(f.sampler.sample().latest.sampleId,2);
+ f.setTime(350);f.begin();f.end();assert.equal(f.sampler.sample().latest.sampleId,3);assert.equal(f.sampler.sample().latest.reason,'texture-promote');
+ assert.equal(f.engine.drawElementsType,f.prototype.drawElementsType);assert.equal(f.sampler.hooks.length,0);
+ f.sampler.dispose();
+});
+
+test('event requests never survive pause, reset, context loss or disposal',()=>{
+ const f=fixture();f.sampler.setActive(true);f.sampler.requestCapture('enemy-defeat');f.sampler.setActive(false);f.sampler.setActive(true);f.begin();f.end();assert.equal(f.sampler.sample().latest.reason,'periodic');
+ f.sampler.requestCapture('viewport-commit');f.sampler.reset();f.begin();f.end();assert.equal(f.sampler.sample().latest.reason,'periodic');
+ f.sampler.requestCapture('texture-promote');f.engine.onContextLostObservable.notifyObservers();assert.equal(f.sampler.requestCapture('enemy-defeat'),false);
+ f.engine.onContextRestoredObservable.notifyObservers();f.begin();f.end();assert.equal(f.sampler.sample().latest.reason,'periodic');
+ f.sampler.requestCapture('enemy-defeat');f.sampler.dispose();assert.equal(f.sampler.requestCapture('viewport-commit'),false);assert.equal(f.sampler.requested,null);assert.equal(f.sampler.hooks.length,0);
+});

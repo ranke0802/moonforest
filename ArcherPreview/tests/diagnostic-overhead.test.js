@@ -9,6 +9,28 @@ import {setupSettingsPanel} from '../src/settings-panel.js';
 
 const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
 const nativeNames=['drawElementsType','drawArraysType','enableEffect','bindBuffers','bindVertexArrayObject','setTexture','updateDynamicVertexBuffer','updateDynamicIndexBuffer'];
+
+test('event-triggered draw capture never enables detailed instrumentation implicitly',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine),probe=new SceneDiagnostics({driverFactory:()=>null});t.after(()=>{probe.dispose();scene.dispose();engine.dispose();});
+ const native=engine.drawElementsType;probe.setEnabled(true,scene);probe.setActive(true);
+ assert.equal(probe.requestDrawCpuCapture('enemy-defeat'),false);assert.equal(probe.cpu,null);assert.equal(engine.drawElementsType,native);
+ probe.setDrawCpuEnabled(true);assert.equal(probe.requestDrawCpuCapture('enemy-defeat'),true);
+ scene.onBeforeRenderObservable.notifyObservers(scene);scene.onAfterRenderObservable.notifyObservers(scene);
+ assert.equal(probe.sample().drawCpu.latest.reason,'enemy-defeat');assert.equal(engine.drawElementsType,native);
+ probe.setDrawCpuEnabled(false);assert.equal(probe.requestDrawCpuCapture('viewport-commit'),false);assert.equal(probe.cpu,null);assert.equal(engine.drawElementsType,native);
+});
+
+test('complete scene-call and gameplay-prelude timings remain separate from the SDK scene counter',t=>{
+ const f=fixture(t,{renderMetrics:()=>({drawCalls:88,sceneMs:23,activeMeshesMs:15.4})});
+ f.frame(0);
+ f.setTime(100);f.diagnostics.beginFrame(true,60);
+ const before=f.diagnostics.mark();f.setTime(300);f.diagnostics.measure('framePreludeMs',before);
+ const scene=f.diagnostics.mark();f.setTime(345);f.diagnostics.measure('sceneCallMs',scene);f.setTime(348);f.diagnostics.endFrame();
+ const event=f.diagnostics.snapshot().recentDelays.at(-1);
+ assert.equal(event.jsSubmitMs,248);assert.equal(event.framePreludeMs,200);assert.equal(event.sceneCallMs,45);assert.equal(event.render.sceneMs,23);
+ assert.match(f.diagnostics.snapshot().measurement,/including all its after-render observers/);
+ f.diagnostics.suspend();const ignored=f.diagnostics.mark();assert.equal(ignored,null);f.diagnostics.measure('sceneCallMs',ignored);
+});
 function fixture(t,{stored=new Map([['moonforest-frame-diagnostics-v1','1']]),storage,renderMetrics=()=>({drawCalls:123,sceneMs:7,animationMs:1}),memory=()=>({jsUsedBytes:64*1048576}),onEnabled,onDrawCpuEnabled,onCollecting}={}){
  const {document:doc,window}=parseHTML(html),previous=globalThis.document;globalThis.document=doc;setupSettingsPanel();globalThis.document=previous;
  let time=0,copied,memoryCalls=0,zoomCalls=0;

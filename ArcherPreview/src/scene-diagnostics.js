@@ -94,6 +94,7 @@ export class SceneDiagnostics {
     if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;i.captureActiveMeshesEvaluationTime=true;i.captureRenderTargetsRenderTime=true;i.captureRenderTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.setDrawCpuEnabled(this.drawCpuEnabled);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
   }
   setActive(active){this.active=Boolean(active);this.gpu?.setActive(this.active);this.cpu?.setActive(this.active);}
+  requestDrawCpuCapture(reason){return this.cpu?.requestCapture(reason)??false;}
   resetGpu(){this.gpu?.reset(this.active?'pending':'paused');this.cpu?.reset();}
   sample(){const i=this.instrumentation;if(!i)return {};
     this.result.drawCalls=i.drawCallsCounter.current;this.result.sceneMs=i.frameTimeCounter.current;this.result.animationMs=i.animationsTimeCounter.current;

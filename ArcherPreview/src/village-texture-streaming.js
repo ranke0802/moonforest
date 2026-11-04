@@ -2,8 +2,9 @@ import {Frustum,Texture} from '@babylonjs/core';
 import {releaseMapTexture} from './map-texture-lifetime.js';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
-import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS} from './map-load-lifetime.js';
+import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS,mapLoadAbortError,mapLoadTimeoutError} from './map-load-lifetime.js';
 import {sceneryHighTextureProfile} from './mobile-texture-policy.js';
+import {runtimeTimers} from './runtime-timers.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?12000:20000);
 export const VILLAGE_TEXTURE_PACING=Object.freeze({checkMs:250,motionHoldMs:600,visibleGapMs:750,fillDwellMs:250,replacementDwellMs:3000,minResidenceMs:6000,mobileMovingMs:2000,mobileIdleMs:750,desktopMovingMs:750,desktopIdleMs:350,visibleReplacementRatio:1.5});
@@ -15,27 +16,79 @@ export const highTextureOptions=(role,old)=>({noMipmap:false,invertY:old?.invert
 // One asset at a time. The persistent content cache retains downloaded files;
 // only temporary high-resolution GPU allocations are released on distance exit.
 export class VillageTextureStreaming {
-  constructor(world,assets,records,manifestUrl,stats,{textureTimeoutMs=MAP_MODEL_TIMEOUT_MS,textureTimers}={}){
+  constructor(world,assets,records,manifestUrl,stats,{textureTimeoutMs=MAP_MODEL_TIMEOUT_MS,textureTimers,viewportWaitTimeoutMs=MAP_MODEL_TIMEOUT_MS}={}){
     this.world=world;this.assets=assets;this.records=records;this.url=manifestUrl;this.stats=stats;
-    this.textureTimeoutMs=textureTimeoutMs;this.textureTimers=textureTimers;
+    this.textureTimeoutMs=textureTimeoutMs;this.textureTimers=textureTimers;this.viewportWaitTimeoutMs=viewportWaitTimeoutMs;this.viewportWait=null;this.viewportWaitDeadline=null;this.viewportClock=runtimeTimers(textureTimers).now;
     this.resident=new Map();this.failed=new Set();this.wanted=new Map();this.lastWanted=new Map();
     this.nextCheck=0;this.pending=null;this.pendingBytes=0;this.disposed=false;this.textureWaiters=new Set();
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
-    this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
-    const caps=world.scene.getEngine().getCaps();
+    const engine=world.scene.getEngine();this.contextLost=!!engine._contextWasLost;
+    this.maxTextureSize=engine.getCaps().maxTextureSize;
+    const caps=engine.getCaps();
     this.textureCapabilities=Object.fromEntries(['astc','etc2','s3tc','bptc','etc1','pvrtc'].map(key=>[key,!!caps[key]]));
     this.compressedSupported=!!(caps.astc||caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
     const profiles=[...assets].map(([id])=>this.profile(id)).filter(Boolean);
     if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>this.profileBytes(p)<highTextureBytes(p,false)))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=new Float32Array(16);this.hasView=false;this.lastFov=null;this.motionUntil=0;this.lastFinished=-Infinity;
     this.seenSince=new Map();this.replacementSince=new Map();this.clock=()=>performance.now();
-    Object.assign(stats,{highTextureProfile:world.touchDevice?'mobile-bounded-color/houses-original':'original',highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
+    Object.assign(stats,{highTextureProfile:world.touchDevice?'mobile-bounded-color/houses-original':'original',highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureViewportWaiting:false,highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
+    this.contextLostObserver=engine.onContextLostObservable?.add(()=>{
+      if(this.disposed)return;this.contextLost=true;this.viewportWait?.cancel(mapLoadAbortError());
+      for(const cancel of [...this.textureWaiters])cancel();
+    });
+    this.contextRestoredObserver=engine.onContextRestoredObservable?.add(()=>{if(!this.disposed){this.contextLost=false;this.nextCheck=0;}});
+    this.disposeObserver=world.scene.onDisposeObservable.addOnce(()=>this.dispose());
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
   profile(id){return sceneryHighTextureProfile(id,this.assets.get(id)?.config,!!this.world?.touchDevice);}
   profileBytes(config){return highTextureBytes(config,this.textureCapabilities??this.compressedSupported);}
+  viewportSettling(){return this.world?.viewportResize?.isSettling?.()===true;}
+  waitForViewport(stage){
+    if(this.disposed||this.contextLost)throw mapLoadAbortError();
+    const gate=this.world?.viewportResize;
+    if(!gate?.isSettling?.())return null;
+    if(this.viewportWait)return this.viewportWait.promise;
+    this.stats.highTextureStage='viewport-wait:'+stage;this.stats.highTextureViewportWaiting=true;
+    const now=(this.viewportClock??runtimeTimers(this.textureTimers).now)(),timeout=this.viewportWaitTimeoutMs??MAP_MODEL_TIMEOUT_MS;
+    // A new rotation between notifications must not renew this job indefinitely.
+    this.viewportWaitDeadline??=now+timeout;
+    const remaining=this.viewportWaitDeadline-now;
+    if(remaining<=0)throw mapLoadTimeoutError(timeout,'high-texture:viewport-wait');
+    const lifetime=new MapLoadLifetime({timeoutMs:remaining,timers:this.textureTimers,stage:'high-texture:viewport-wait'});
+    const record={};
+    const promise=new Promise((resolve,reject)=>{
+      let settled=false,unsubscribe;
+      const finish=error=>{
+        if(settled)return;settled=true;unsubscribe?.();lifetime.signal.removeEventListener('abort',expired);lifetime.close();
+        if(this.viewportWait===record){this.viewportWait=null;this.stats.highTextureViewportWaiting=false;}
+        if(error)reject(error);else resolve();
+      };
+      const expired=()=>finish(lifetime.signal.reason);
+      const check=()=>{
+        if(settled)return;
+        try{
+          lifetime.check();
+          if(this.disposed||this.contextLost||this.world?.viewportResize!==gate||gate.snapshot?.()?.disposed)throw mapLoadAbortError();
+          if(!gate.isSettling())finish();
+        }catch(error){finish(error);}
+      };
+      record.cancel=finish;this.viewportWait=record;
+      lifetime.signal.addEventListener('abort',expired,{once:true});
+      if(typeof gate.subscribe==='function'){
+        try{unsubscribe=gate.subscribe(check);if(settled)unsubscribe?.();}catch(error){finish(error);}
+      }else record.frameCheck=check; // Reuse the existing render observer; no polling timer.
+      check();
+    });
+    record.promise=promise;return promise;
+  }
   update(now){
-    if(this.disposed||this.world.villageStreaming?.active===false||now<this.nextCheck)return;
+    this.viewportWait?.frameCheck?.();
+    if(this.disposed||this.contextLost||this.world.villageStreaming?.active===false||now<this.nextCheck)return;
+    if(this.viewportSettling()){
+      if(!this.pending){this.stats.highTextureStage='viewport-wait:admission';this.stats.highTextureViewportWaiting=true;}
+      return;
+    }
+    if(!this.pending&&this.stats.highTextureStage==='viewport-wait:admission'){this.stats.highTextureStage='idle';this.stats.highTextureViewportWaiting=false;}
     const policy=VILLAGE_TEXTURE_PACING;
     this.nextCheck=now+policy.checkMs;const candidates=new Map();
     const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
@@ -116,7 +169,7 @@ export class VillageTextureStreaming {
     this.stats.highTexturePeak=Math.max(this.stats.highTexturePeak??0,this.stats.highTextureBytes+this.stats.highTextureReserved);
   }
   async loadTexture(config,old,role){
-    if(this.disposed)throw Object.assign(new Error('Map texture released'),{name:'AbortError'});
+    if(this.disposed||this.contextLost)throw Object.assign(new Error('Map texture released'),{name:'AbortError'});
     const url=new URL(config.url,this.url).href,scene=this.world.scene;
     const texture=await new Promise((resolve,reject)=>{
       let item,settled=false;
@@ -157,14 +210,16 @@ export class VillageTextureStreaming {
   start(id){
     const config=this.profile(id),bytes=this.profileBytes(config);
     this.syncStats();
-    if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
+    if(this.disposed||this.contextLost||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
+    if(this.viewportSettling()){this.stats.highTextureStage='viewport-wait:admission';this.stats.highTextureViewportWaiting=true;return;}
     const started=this.clock?.()??performance.now();
-    this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.stats.highTexturePendingAsset=id;this.stats.highTextureStage='resources';this.syncStats();
+    this.viewportWaitDeadline=null;
+    this.pending=id;this.pendingBytes=bytes;this.stats.highTexturePending=1;this.stats.highTexturePendingAsset=id;this.stats.highTextureStage='resources';this.stats.highTextureViewportWaiting=false;this.syncStats();
     return this.pendingTask=this.load(id).catch(error=>{
       if(this.disposed||error.name==='AbortError')return;
       this.failed.add(id);this.stats.highTextureError=`${id}: ${error.message??error}`;
       console.warn('Village high texture stopped; no automatic retry.',id,error);
-    }).finally(()=>{this.lastFinished=this.clock?.()??performance.now();this.stats.highTextureLastPrepareMs=Math.max(0,this.lastFinished-started);this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.stats.highTexturePendingAsset=null;this.stats.highTextureStage=this.disposed?'disposed':'idle';this.syncStats();});
+    }).finally(()=>{this.lastFinished=this.clock?.()??performance.now();this.stats.highTextureLastPrepareMs=Math.max(0,this.lastFinished-started);this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.viewportWaitDeadline=null;this.stats.highTexturePending=0;this.stats.highTexturePendingAsset=null;this.stats.highTextureViewportWaiting=false;this.stats.highTextureStage=this.disposed?'disposed':'idle';this.syncStats();});
   }
   async load(id){
     const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=this.profile(id);
@@ -172,8 +227,11 @@ export class VillageTextureStreaming {
     const slots=config.shading==='toon-color'?{albedo:'albedoTexture'}:{albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
     try{
       if(this.world?.prefetchResources)await this.world.prefetchResources(config.resources);
-      if(this.disposed)return;
+      if(this.disposed||this.contextLost)return;
       for(const [role,slot]of Object.entries(slots)){
+        // Recheck after waking: another orientation can begin before this continuation.
+        let wait;while((wait=this.waitForViewport('texture:'+role)))await wait;
+        if(this.disposed||this.contextLost||!this.wanted.has(id))throw mapLoadAbortError();
         if(this.pending===id)this.stats.highTextureStage='texture:'+role;
         textures[slot]=await this.loadTexture(config.textures[role],materials[0][slot],role);
         if(this.disposed||!this.wanted.has(id)){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));return;}
@@ -183,6 +241,8 @@ export class VillageTextureStreaming {
       // unfreeze() scans every scene submesh even when already unfrozen. The
       // texture setters retain their normal readiness invalidation on live toon
       // materials; only a genuinely frozen material needs the extra unlock.
+      let wait;while((wait=this.waitForViewport('promote')))await wait;
+      if(this.disposed||this.contextLost||!this.wanted.has(id))throw mapLoadAbortError();
       if(this.pending===id)this.stats.highTextureStage='promote';
       const promoteStarted=this.clock?.()??performance.now();
       for(const {material}of originals){if(material.isFrozen)material.unfreeze();Object.assign(material,textures);if(!material.metadata?.villageToon)material.freeze();}
@@ -191,6 +251,7 @@ export class VillageTextureStreaming {
       this.stats.highTextureLastPromoteMs=Math.max(0,(this.clock?.()??performance.now())-promoteStarted);
       this.resident.set(id,{textures,originals,bytes:this.profileBytes(config),resolution:config.textures.albedo.width,readyAt:this.clock?.()??performance.now()});this.stats.highTextureLoads++;this.syncStats();
       this.stats.highTextureFormat=textures.albedoTexture.getInternalTexture?.()?.format??null;
+      try{this.world?.requestDrawCpuCapture?.('texture-promote');}catch{/* Optional diagnostics cannot invalidate a successful promotion. */}
     }catch(error){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));throw error;}
   }
   release(id){
@@ -200,9 +261,11 @@ export class VillageTextureStreaming {
     this.resident.delete(id);this.stats.highTextureReleases++;this.syncStats();
   }
   dispose(){
-    if(this.disposed)return;this.disposed=true;for(const cancel of [...this.textureWaiters])cancel();
-    this.stats.highTexturePendingAsset=null;this.stats.highTextureStage='disposed';
+    if(this.disposed)return;this.disposed=true;this.viewportWait?.cancel(mapLoadAbortError());for(const cancel of [...this.textureWaiters])cancel();
+    this.stats.highTexturePendingAsset=null;this.stats.highTextureStage='disposed';this.stats.highTextureViewportWaiting=false;
     this.world.scene.onAfterRenderObservable.remove(this.observer);
+    this.world.scene.onDisposeObservable.remove(this.disposeObserver);
+    const engine=this.world.scene.getEngine();engine.onContextLostObservable?.remove(this.contextLostObserver);engine.onContextRestoredObservable?.remove(this.contextRestoredObserver);
     for(const id of [...this.resident.keys()])this.release(id);
   }
 }

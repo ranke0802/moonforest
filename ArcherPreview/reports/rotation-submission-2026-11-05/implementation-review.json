@@ -1,0 +1,97 @@
+{
+  "baseline": "40ab932be74221bfd3e40a43937b770681e13c29",
+  "status": "validated-ready-for-deployment",
+  "inputSha256": "588299145206aac70b4885b4cc65356791b82149991da4138eb68a32c448680b",
+  "inputCreatedAt": "2026-11-04T21:03:35.692Z",
+  "inputBundle": "./assets/game-Tf7UYdq9.js",
+  "inputSummary": {
+    "fps": 59.9161174334504,
+    "frameMs": 14.5,
+    "maxMs": 34.40000003576279,
+    "p95Ms": 17.5,
+    "slowFrames": 0,
+    "thresholdMs": 50,
+    "targetFps": 60,
+    "samples": 600,
+    "maxWorkMs": 19.69999998807907,
+    "meanFrameMs": 16.687833333412808,
+    "meanWorkMs": 12.381166666150094,
+    "p95WorkMs": 14.599999964237213,
+    "missedTargetFrames": 1,
+    "missedTargetThresholdMs": 20.833333333333332
+  },
+  "sourceSha256": {
+    "src/frame-diagnostics.js": "3e3d6903ca1568da460ca9d9585c03053b8a5a871a1a7c7b11265e4748f0390d",
+    "src/gold-loot-view.js": "8d7f42daf72a66e7b2efb0ffb96d387c1d8bd0e546e7588ee3677c95fd725a70",
+    "src/main.js": "e39ec930342c6acebb8a6616d65c8d658575d780a198e7d31ce00c9a0638c54b",
+    "src/render-cpu-sampler.js": "aa6b8c5aca28ebdd6a302f046951c2e205384684f690f5cd3cc79f578ce12c07",
+    "src/scene-diagnostics.js": "ccb5941dd4315716e648accf8e9ae9ea2b29f045ab6a3148f2db6c79f99742e1",
+    "src/viewport-resize.js": "76b610d40700190b7550a3daf2d636985c83f8d5569e41dc8ee0a32956c61ec4",
+    "src/village-texture-streaming.js": "d12a3c538b61930fd3b1852c5e5398721e24392a51245122a3d03319d938e6fa"
+  },
+  "protectedResourcesChanged": false,
+  "combatInputAndHitPolicyChanged": false,
+  "browserAutomation": false,
+  "physicalDeviceMeasuredAfterPatch": false,
+  "policies": {
+    "firstViewportMeasurement": "immediate",
+    "mobileQuietMs": 125,
+    "mobileMaxWaitMs": 500,
+    "delayedLayoutTextureGateMs": 500,
+    "textureWaitDeadlineMs": 45000,
+    "defaultDrawCpuEnabled": false,
+    "eventProbeMinGapMs": 250,
+    "goldPreparationDeadlineMs": 45000
+  },
+  "claims": {
+    "proven": [
+      "bounded final-size allocation in controlled recorded rotation",
+      "kept exact selected render scaling and existing FPS policy",
+      "same admitted texture retained through rotation and promotion resumes once",
+      "first visible coin clones reuse prepared SDK effect and shared geometry in NullEngine",
+      "diagnostic sceneCallMs includes complete scene.render invocation and observers"
+    ],
+    "notProven": [
+      "physical Galaxy S23 stutter elimination",
+      "GPU driver wait versus execution cost",
+      "phone temperature improvement",
+      "memory leak based on dissimilar heap snapshots",
+      "gold first draw caused the observed201.5ms submission stall"
+    ]
+  },
+  "tests": {
+    "tests": 1925,
+    "pass": 1925,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "testLogSha256": "cd905c3fbd7056c8b940a8275602bf3500352634a9e3cb572418624c0de55404",
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "build": {
+    "passed": true,
+    "verifiedFiles": 1503,
+    "bytes": 682414639,
+    "changedFiles": 8
+  },
+  "viewportFixture": {
+    "selectedPercent": 85,
+    "committedBuffers": [
+      [
+        1414,
+        652
+      ],
+      [
+        652,
+        1414
+      ],
+      [
+        1414,
+        652
+      ]
+    ],
+    "maxPendingFrames": 1,
+    "maxPendingTimers": 1,
+    "scope": "Controlled clock, extracted real main and native scaling contract; not device GPU allocation measurement"
+  }
+}
