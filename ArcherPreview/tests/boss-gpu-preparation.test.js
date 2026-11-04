@@ -103,6 +103,7 @@ test('actual BossModelLibrary load preserves config no-cache, URL resolution, er
  // Bind only Vite's import.meta.env and package-relative imports; execute the
  // actual library source and actual modern SDK loader rather than a fake loader.
  let source=readFileSync(new URL('../src/boss-models.js',import.meta.url),'utf8').replace('import.meta.env.BASE_URL',JSON.stringify('/preview/')).replace("'@babylonjs/core'",JSON.stringify(new URL('../node_modules/@babylonjs/core/index.js',import.meta.url).href)).replace("'./boss-gpu-preparation.js'",JSON.stringify(new URL('../src/boss-gpu-preparation.js',import.meta.url).href));
+ for(const name of ['map-manifests.js','map-load-lifetime.js'])source=source.replace(`'./${name}'`,JSON.stringify(new URL('../src/'+name,import.meta.url).href));
  const {BossModelLibrary}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64')),f=fixture(t),{gltf,config}=await model(),priorFetch=globalThis.fetch,priorLocation=globalThis.location,fetches=[];
  delete gltf.images;delete gltf.textures;delete gltf.materials;for(const mesh of gltf.meshes)for(const primitive of mesh.primitives)delete primitive.material;
  globalThis.location={href:'https://assets.example.test/game/'};globalThis.fetch=async(url,options)=>{fetches.push({url:String(url),cache:options.cache});return {ok:true,json:async()=>config};};t.after(()=>{globalThis.fetch=priorFetch;if(priorLocation===undefined)delete globalThis.location;else globalThis.location=priorLocation;});

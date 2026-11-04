@@ -92,7 +92,7 @@ export class BossBattle {
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
   get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
-  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool];}
+  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool,...(this.developmentPool??[])];}
   setAttackSettings(value){this.attackSettings=value;for(const enemy of this.allPooled)this.applyAttackSettings(enemy);}
   applyAttackSettings(enemy){const kind=enemy.kind==='elena'?(enemy.phase===2?'mourning-elena':'elena'):enemy.kind;enemy.brain?.configureAttacks?.(this.attackSettings?.[kind]??{});}
   residentForPhase(phase){
@@ -259,6 +259,7 @@ export class BossBattle {
     finally { if(this.summonPreparation===preparation)this.summonPreparation=null;this.loading = false; this.onChange(this); }
   }
   hide() {
+    this.developmentLifecycle?.();
     this.residentRevision++;
     this.residentPendingPreparation?.cancel();this.mourningWarmJob?.preparation.cancel();
     this.summonPreparation?.cancel();

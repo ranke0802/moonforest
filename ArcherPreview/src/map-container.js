@@ -7,7 +7,7 @@ import {releaseMapTexture} from './map-texture-lifetime.js';
 // Babylon 9.31's AssetContainer.dispose leaves its scene-disposal closure
 // registered. Its constructor runs synchronously between _getLoader and the
 // importMeshAsync call; capture precisely that hook and release it with the map.
-export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers}={}){
+export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers,onMeshLoaded}={}){
   const minimum=json?.asset?.minVersion;
   if(json?.asset?.version!=='2.0'||(minimum!==undefined&&(!/^\d+\.\d+$/.test(minimum)||Number(minimum)>2)))throw new Error('지원하지 않는 맵 모델 버전입니다.');
   const ownLifetime=!lifetime; lifetime??=new MapLoadLifetime({signal,timeoutMs,timers});
@@ -19,6 +19,7 @@ export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,f
   const attempt=fn=>{try{return fn();}catch(error){lifetime.noteCleanupError(error);}};
   const loaded={meshes:new Set(),materials:new Set(),textures:new Set(),cameras:new Set()};
   for(const [key,observable]of [['meshes','onMeshLoadedObservable'],['materials','onMaterialLoadedObservable'],['textures','onTextureLoadedObservable'],['cameras','onCameraLoadedObservable']])loader[observable].add(value=>loaded[key].add(value));
+  if(typeof onMeshLoaded==='function')loader.onMeshLoadedObservable.add(onMeshLoaded);
   const detach=()=>{if(observer){scene.onDisposeObservable.remove(observer);observer=null;}};
   const bindContainer=container=>{
     partial=container;const dispose=container.dispose.bind(container);

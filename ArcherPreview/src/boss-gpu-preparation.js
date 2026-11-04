@@ -1,6 +1,13 @@
 import {LoadAssetContainerAsync,MorphTargetManager} from '@babylonjs/core';
+import {readMapContainer} from './map-container.js';
 
-export function loadBossModelContainer(scene,model){
+export function loadBossModelContainer(scene,model,{lifetime}={}){
+  if(lifetime)return lifetime.run(async()=>{
+    const response=await lifetime.run(()=>fetch(model,{cache:'force-cache',signal:lifetime.signal}));
+    if(!response.ok)throw new Error(`배우 모델을 불러오지 못했습니다 (${response.status}).`);
+    const json=await lifetime.run(()=>response.json());
+    return readMapContainer(scene,json,new URL('.',model).href,{lifetime,fileName:model.pathname.split('/').pop(),onMeshLoaded:prepareBossMorphUpload});
+  },{onLate:container=>container?.dispose()});
   return LoadAssetContainerAsync(model.pathname.split('/').pop(),scene,{
     rootUrl:new URL('.',model).href,pluginExtension:'.gltf',
     pluginOptions:{gltf:{onMeshLoaded:prepareBossMorphUpload}},

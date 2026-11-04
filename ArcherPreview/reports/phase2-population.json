@@ -1,0 +1,53 @@
+{
+  "phase": "PHASE-02-ACTORS",
+  "baseline": "2c4ed67 (deployed phase 1)",
+  "owner": "A / bounded actor population",
+  "status": "manager implementation frozen; focused tests pass; independent real-model verification pending",
+  "agentConfiguration": {
+    "requestedSpawn": {"fork_turns": "none", "model": "gpt-6.1-sol", "reasoning_effort": "xhigh"},
+    "successfulCreation": true,
+    "backendResolutionIndependentlySurfaced": false,
+    "mainModelSwitchClaimed": false,
+    "evidence": "Root reported the successful child spawn arguments. The same child continued into phase 2; no backend model-resolution metadata was exposed."
+  },
+  "hypothesis": "A small bounded owner can reuse existing prepared encounter adapters across independent lives, preserve BossBattle as the sole combat/contact update owner, and retire stale map work without introducing a second combat system or repeatedly cloning warm actor resources.",
+  "scope": {
+    "files": ["src/actor-population.js", "tests/actor-population.test.js", "reports/phase2-population.json"],
+    "existingFilesEdited": false,
+    "productionIntegrationOwner": "root: conditional lazy development actor lab only",
+    "adapterOwner": "B: actor definitions, existing encounter factory, resource reset and sharing",
+    "independentVerifier": "C: shipped-model population scenarios"
+  },
+  "contract": {
+    "constructor": "new ActorPopulation({definitions,createAdapter,validateSpawn,preparationFactory,limits,onDeath,onReward,onRespawn,onError})",
+    "factory": "createAdapter(definition,{generation,isCurrent,preparation}) returns warm/reset/activate/update/hide/dispose/estimate/snapshot adapter plus existing encounter. Factory isCurrent lasts through the record's map ownership; warm/activate receive separate operation-scoped checks.",
+    "methods": ["spawn(id,context) -> Promise<record>", "prewarm(id,count,context) -> Promise<record[]>", "update(dt,context) before BossBattle.update", "observe(context) after BossBattle.update", "setPaused(value)", "clear({dispose:false})", "recycle(record,{respawn:false})", "setGeneration(token)", "leaveMap()", "evictIdle()", "diagnostics()", "dispose()"],
+    "spawnContext": "{player,position,rotationY,mapId,spawnGroup,...adapterContext}; passed to reset and activate. Injected actual definition validator rejects player safety distance, map, navigation and occupancy before resource creation.",
+    "combat": "Combat adapter update is a no-op. Existing BossBattle owns encounter update/contact/input order; manager calls no combat method directly.",
+    "rewards": "Manager emits at most one acknowledgment per life only when adapter snapshot.rewardGranted is true; it grants no drops or quest credit. Existing adapter/battle callbacks remain the gameplay owner. Clear/recycle/map exit grant nothing."
+  },
+  "boundsAndLifetime": {
+    "hardDevelopmentMaximum": 20,
+    "defaults": {"total": 20, "active": 20, "perDefinition": 20, "perType": 20, "estimatedMemoryBytes": 536870912, "concurrentPreparations": 1, "idleSeconds": 120},
+    "definitionOverrides": "population.maxPooled/estimatedBytes/idleSeconds; respawn.enabled/delaySeconds/retrySeconds; scheduling.nearDistance/farDecisionSeconds",
+    "capBehavior": "Explicit ActorPopulationLimitError(reason); counts are never silently lowered. Reservations are synchronous before queued creation. Oversized prewarm batches roll back newly reserved records and cannot evict their own selected warm handles.",
+    "states": "preparing -> active -> dying/corpse -> recycle -> dormant -> preparing; hidden prewarm -> dormant; cancellation -> cancelled -> disposing/disposed. Recycle is an immediate transition, not a delayed visual phase.",
+    "generationCancellation": "Reject callers and cancel existing preparation promptly; retain the outstanding record/memory charge until its underlying creation/warm/activation settles. Release the current scheduling slot so fresh generation work can proceed within total/memory caps; eventually dispose that exact late adapter.",
+    "pause": "update dt drives respawn and idle clocks; paused updates advance neither. No manager respawn setTimeout/interval exists.",
+    "respawn": "One ticket per life after corpse removal. Temporary unsafe spawn retries the same ticket at a bounded cadence without moving its position or issuing another reward. Active-cap pressure retains the waiting ticket.",
+    "idle": "Only unleased dormant records without pending respawn are eligible. Pressure evicts oldest eligible records; idle expiration uses the unpaused logical clock. Asynchronous disposal remains charged until its resource release completes.",
+    "memoryMeaning": "Definition reservations followed by conservative adapter estimates, including declared fallback bytes; these are not measured process/GPU residency. B confirmed last-adapter refcount release for owned shared libraries and derived materials; externally injected owned:false libraries stay with their external owner. Promise-returning adapter disposal remains charged until cleanup settles."
+  },
+  "scheduling": {
+    "fullFrequency": "Every active/dying/corpse adapter receives update each unpaused tick; near NPC decisions and combat/incoming/projectile/quest-relevant NPC decisions run each tick.",
+    "farNpc": "Only optional decide() calls for explicitly peaceful far NPCs are staggered. Animation/update/interact and existing combat/projectile/quest semantics are retained. Missing position information uses the full-frequency path."
+  },
+  "focusedEvidence": {
+    "command": "C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe --test tests/actor-population.test.js",
+    "passed": 13,
+    "failed": 0,
+    "cases": ["50 warm reuse lives: one create/warm/resource set with per-life reset", "overlapping total/type/definition/memory reservations and hard maximum", "atomic prewarm, protected selected handles, actual warmed memory rejection", "death/reward acknowledgment/respawn once per life with paused countdown", "map cancellation plus concurrent fresh generation and exact late cleanup", "late activation and queued disposal", "full update/threat semantics with far NPC decision staggering", "external hide/clear versus reward and idle eviction", "actual B definition validator injected without a wrapper", "temporarily occupied respawn retries one ticket", "preparation timeout with late resource cleanup", "asynchronous disposal retains its charge", "clear at the respawn-completion microtask boundary"]
+  },
+  "integrationAsks": ["Use update before the existing BossBattle update and observe afterward; never update the same combat encounter twice.", "Pause with the existing game/loading/settings policy and call leaveMap before map/player ownership changes.", "Invoke clear without rewards from explicit UI clear and global battle reset; dispose factory-owned shared libraries after manager teardown.", "Retain the normal-play lazy import gate and do not create development mass actors during ordinary play.", "Complete independent actual-model 1/5/10/20, mixed, NPC, death/respawn and map-cancel scenarios before claiming phase completion."],
+  "limits": ["No browser automation, visual GPU validation, physical-device FPS, thermal or supported production concurrent-count claim.", "The hard count 20 is a development experiment ceiling, not a promise of 20 actors at 60 FPS.", "Focused manager tests use deterministic adapters; independent shipped-model verification is recorded separately.", "No assets, quality/distance policy or combat-number changes were made by this owner."]
+}

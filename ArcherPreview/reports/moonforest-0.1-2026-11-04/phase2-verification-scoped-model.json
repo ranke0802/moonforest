@@ -1,0 +1,205 @@
+{
+  "generatedAt": "2026-11-04T02:39:57.237Z",
+  "passed": true,
+  "sourceHashes": {
+    "boss-models.js": "e56a3a5e45e6223d18fdb43fb6668e1e9d22f56976034e0e238aad22a3c00df4",
+    "boss-gpu-preparation.js": "faaeac9875fee36328dda32a29da23f8c72c08f58358b22aacb3f02a5b544ae7",
+    "map-container.js": "54a227dacf6fd9302d059f870e96a52b6d55b68df3d8d7879895603df18bac7d",
+    "actor-population.js": "6ad79185db1895c26dcd659deae0924b196469cb7a33435ad191dc9ff8624618",
+    "actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0"
+  },
+  "cases": [
+    {
+      "name": "actual scoped BossModelLibrary loads49982triangle model through bounded manifest/model path and morph hook",
+      "passed": true,
+      "requests": [
+        {
+          "url": "https://phase2-scoped.test/assets/mourning-elena.json",
+          "cache": "no-cache",
+          "signal": true
+        },
+        {
+          "url": "https://phase2-scoped.test/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+          "cache": "force-cache",
+          "signal": true
+        }
+      ],
+      "loads": 1,
+      "baseTriangles": 49982,
+      "sourceGeometryAndSkinHashes": [
+        {
+          "name": "Lament_Mouth_Interior",
+          "triangles": 96,
+          "indexHash": "044d2e5301bfb37f8a44bc97432b8525f71ae3ea97490e8ae367a045b3eeb0eb",
+          "attributes": {
+            "position": "f54fd6daa7740327cf0836ce903bf0dea6edd0d297edc36fe2b9b5caafe54727",
+            "normal": "b08881d35019b21e03a47a8816534300eebbedfbb179bd824e408250eec2c09b",
+            "color": "1f669669f2a98c1603e210a85b95769f3bf6dc48cceb249195070f6cd65b852d"
+          }
+        },
+        {
+          "name": "Halo_Attached_Streamers",
+          "triangles": 376,
+          "indexHash": "ecb05a9bc29ec07595fee8fb31e8d0dedc0d4170e748075518984afed7dc4365",
+          "attributes": {
+            "position": "331e0ddc8ccfcbdd1aec8065adac0c91ec64609b669236242217db74b15a6016",
+            "normal": "c19cab9f8e9d6c06fb20e58f1e462c53f5d41957a1b0df48a1cbc3cbf7b3a603",
+            "uv": "79bd936e4d3d9b42c18933eda696e929ed03f5731a9536ea9d4794af39787b91",
+            "matricesIndices": "5720cd5109e266d6f754e61361807037e76392f514f51ed3eecd28c0299f86a8",
+            "matricesWeights": "c93aa119d593ffb0f984bb0615b66342270342e66fc2e2581efb90d919e94ae9"
+          }
+        },
+        {
+          "name": "Halo_Rigid_Emblem",
+          "triangles": 5344,
+          "indexHash": "e620a92c05501671deaccc90281d7ad103b3e0f6971b08711c8c635f861c1efa",
+          "attributes": {
+            "position": "dabec77fb3bb5c7ce8b9f9ca106255b9fc5131e522b8996a6bb2c2139dfce698",
+            "normal": "331c72371cc347a262cdaa9fc0b605b6baae5ba06517ae0da26c8273caf7a6df",
+            "uv": "5f70ab25090d31eedddd962d3ea7fb1dc375fe22997aac5f9e0e6cdd86ad07c6",
+            "matricesIndices": "0e5394f9c972f6277fe070fef2dab75ec98e27cf5c612cd09f948ce024ce3b17",
+            "matricesWeights": "b97097a585770ea58e4f3ef635cda6d6bf99c8b5e0aa31b584fc2c4ebd937f2e"
+          }
+        },
+        {
+          "name": "Elina_Chimera_Skin",
+          "triangles": 44166,
+          "indexHash": "e6640b2ed03cc38ffcb5039fc4263c0ca904fad374d17ac7f1806f01be3dd721",
+          "attributes": {
+            "position": "daffd8a25f4aaf3f966e41d2ee8fb3be9b02bf407d53c8cba5e9d8a99c3da578",
+            "normal": "cf82b7f2dba6609a784556a031c7ec39871c784c9aa74207ea4ae94f3785ec50",
+            "uv": "52cd560d7cc454871fdc7f851ee7d4dfff1edcc95ca8a3584f948023d2267c9c",
+            "matricesIndices": "6c26d901f941884e7affee488f2daddc665c9fc5f4cba2d3c6643cd3c1f4db73",
+            "matricesWeights": "d55a8a491a4a514f49532a0ef0f56beb58fa4b819ab35f69aece2bc304328b15"
+          }
+        }
+      ],
+      "independentSkeleton": true,
+      "independentMorphManager": true,
+      "sourceGeometryShared": true,
+      "draw": {
+        "draws": 9,
+        "mainDraws": 6,
+        "shadowDraws": 3,
+        "submittedTrianglesByPass": {
+          "main": 99772,
+          "shadow": 49886
+        },
+        "submittedTrianglesByRole": {
+          "outline": 49886,
+          "internal-lines": 0,
+          "surface-or-effect": 99772
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      }
+    },
+    {
+      "name": "five scoped50k warm lives perform zero parses/native clones/bindings/outline/material/morph resource creation",
+      "passed": true,
+      "lives": 5,
+      "nativeCreationAndBindingDelta": {
+        "skeletonClones": 0,
+        "boneLinks": 0,
+        "animationGroupClones": 0,
+        "animationGroupStarts": 0,
+        "materialClones": 0,
+        "meshClones": 0
+      },
+      "modelRequestsAfterWarm": 2,
+      "newMorphTextureArrays": 0,
+      "resourcesBefore": {
+        "meshes": 12,
+        "geometries": 6,
+        "materials": 9,
+        "textures": 12,
+        "skeletons": 2,
+        "animationGroups": 10,
+        "morphManagers": 2,
+        "transformNodes": 264,
+        "sceneObservers": 5,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 3,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 4,
+        "pendingSceneItems": 0,
+        "battleEncounters": 1,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 3172704,
+          "cpuUniqueMorphArrayBytes": 9562464,
+          "skeletonMatrixBytes": 16448,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "resourcesAfter": {
+        "meshes": 12,
+        "geometries": 6,
+        "materials": 9,
+        "textures": 12,
+        "skeletons": 2,
+        "animationGroups": 10,
+        "morphManagers": 2,
+        "transformNodes": 264,
+        "sceneObservers": 5,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 3,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 4,
+        "pendingSceneItems": 0,
+        "battleEncounters": 1,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 3172704,
+          "cpuUniqueMorphArrayBytes": 9562464,
+          "skeletonMatrixBytes": 16448,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      }
+    },
+    {
+      "name": "final owned actor idle eviction releases its scoped source library and source ownership",
+      "passed": true,
+      "remainingPoolEntries": 0,
+      "remainingPoolEstimateBytes": 0,
+      "remainingFactoryLibraries": 0,
+      "sourceMeshesDisposed": true,
+      "sourceSkeletonManagersReleased": true,
+      "sourceTextureReleased": true,
+      "resourcesAfter": {
+        "meshes": 0,
+        "geometries": 0,
+        "materials": 1,
+        "textures": 3,
+        "skeletons": 0,
+        "animationGroups": 0,
+        "morphManagers": 0,
+        "transformNodes": 1,
+        "sceneObservers": 4,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 2,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 0,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 0,
+          "cpuUniqueMorphArrayBytes": 0,
+          "skeletonMatrixBytes": 0,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      }
+    }
+  ],
+  "remainingTimers": {
+    "timeouts": 0,
+    "intervals": 0
+  },
+  "scope": "Actual49,982triangle shipped glTF/skin/morph/clips through production scoped BossModelLibrary/MapLoadLifetime/readMapContainer and adapter. Existing offline Meshopt decode and virtual fetch payload; opaque1x1colorfixtures and inert morph texture-array shim. No pixels/driver/GPU/device/FPS claim."
+}

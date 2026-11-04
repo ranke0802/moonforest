@@ -1,5 +1,7 @@
 import { AbstractMesh, TransformNode } from '@babylonjs/core';
 import {loadBossModelContainer} from './boss-gpu-preparation.js';
+import {readMapManifest} from './map-manifests.js';
+import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
 
 export function instantiateBossModel(container, timings) {
   // Independent skeletons and animation targets; geometry/materials/textures stay shared.
@@ -18,8 +20,9 @@ export function instantiateBossModel(container, timings) {
 }
 
 export class BossModelLibrary {
-  constructor(scene,manifest='guardian-bear') { this.scene = scene; this.loads = 0; this.manifest=manifest; }
+  constructor(scene,manifest='guardian-bear',options={}) { this.scene = scene; this.loads = 0; this.manifest=manifest;this.options=options; }
   async load() {
+    if(this.options.scoped)return this.loadScoped();
     if (!this.pending) {
       this.pending = (async () => {
         const url = new URL(`${import.meta.env.BASE_URL}assets/${this.manifest}.json`, location.href);
@@ -33,6 +36,31 @@ export class BossModelLibrary {
       })().catch(error => { this.pending = null; throw error; });
     }
     await this.pending;
+  }
+  async loadScoped(){
+    if(this.disposed)throw mapLoadAbortError();
+    if(!this.pending){
+      const {timeoutMs,timers}=this.options,lifetime=new MapLoadLifetime({timeoutMs,timers,stage:'actor-asset'});
+      this.lifetime=lifetime;
+      const observer=this.scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
+      const pending=(async()=>{
+        lifetime.check();
+        if(this.scene.isDisposed)throw mapLoadAbortError();
+        const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${this.manifest}.json`,location.href);
+        this.config=await lifetime.wait(readMapManifest(url,{timeoutMs,timers}));
+        const container=await loadBossModelContainer(this.scene,new URL(this.config.model,url),{lifetime});
+        lifetime.check();this.container=container;
+        for(const group of container.animationGroups)group.stop();this.loads++;
+      })().catch(error=>{if(this.pending===pending)this.pending=null;throw error;}).finally(()=>{
+        lifetime.close();this.scene.onDisposeObservable.remove(observer);if(this.lifetime===lifetime)this.lifetime=null;
+      });
+      this.pending=pending;
+    }
+    await this.pending;
+  }
+  dispose(){
+    if(this.disposed)return;this.disposed=true;this.lifetime?.abort(mapLoadAbortError());
+    this.container?.dispose();this.container=null;
   }
   async instantiate() {
     await this.load();

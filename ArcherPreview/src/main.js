@@ -430,6 +430,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  world.developmentActors?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;staminaFeedback.reset(controller);audio.stopAll();actionAudio.reset();updateButtons();
@@ -703,7 +704,9 @@ function render(dt) {
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime,strideScale:playerDimensions(actor).ratio});
+    world.developmentActors?.beforeBattle(dt,actor);
     const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);audio.setBossContext(boss?.encounters);actionAudio.boss(boss,dt);
+    world.developmentActors?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,playerDimensions(actor).goldHeight,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
@@ -837,6 +840,7 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:href=>{
+      world.developmentActors?.leaveMap();
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
@@ -1066,6 +1070,18 @@ try {
     commercialUi=setupCommercialUi({root:$('#app'),onDiagnostics:()=>$('#diagnostic-expand')?.click()});
     hudLayout=setupHudLayout({root:$('#app'),storage:equipmentStorage,getReady:()=>ready&&!loadingAsset&&!mapTransition?.busy&&!frameLoop?.failed&&!controller?.dead,resetInput:()=>{input?.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onClose:message=>toast(message)});
     if(import.meta.hot)import.meta.hot.dispose(()=>{hudLayout?.dispose();commercialUi?.dispose();});
+  }
+  if(releaseEnabled&&new URLSearchParams(location.search).get('actorLab')==='1'){
+    import('./developer-actors.js').then(({setupDeveloperActors})=>{
+      if(world.scene.isDisposed)return;
+      world.developmentActors=setupDeveloperActors({root:$('#app'),world,battle:boss,getPlayer:()=>actor,travel:id=>mapTransition.travel(travelUrl(location.href,id)),
+        getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')}),
+        interactNpc:(id,position,range=3)=>{
+          const limit=Number.isFinite(range)?Math.max(0,Math.min(3,range)):3;
+          if(!actor||!ready||loadingAsset||mapTransition?.busy||document.hidden||document.querySelector('dialog[open]')||Math.hypot(actor.position.x-position.x,actor.position.z-position.z)>limit||!world.navigation.segmentClear(actor.position,position,.05))return false;
+          return chapterQuests?.talk(id)??false;
+        },resetInput:()=>{input.reset();cancelAttackInput();},notify:toast});
+    }).catch(error=>{console.error('[Actor lab]',error);toast('배우 실험 도구를 불러오지 못했습니다.');});
   }
   loadCharacter();
 } catch (error) {

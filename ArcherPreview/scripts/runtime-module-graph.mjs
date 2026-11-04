@@ -22,6 +22,12 @@ export function verifyRuntimeModuleGraph(output){
   for(const [name,chunk]of chunks){
     if(!chunk.isEntry)continue;
     const staticChunks=closure(name);
+    if(staticChunks.some(item=>contains(item,'/src/main.js'))){
+      const developmentOnly=/(?:^|\/)src\/(?:developer-[^/]+|actor-population|actor-definitions|actor-encounter-adapter|asset-catalog|placement-editor|cinematic-editor)\.js$/;
+      for(const item of staticChunks)for(const id of Object.keys(item.modules??{})){
+        if(developmentOnly.test(id.replaceAll('\\','/')))throw new Error(`Development module entered the initial game graph: ${id}`);
+      }
+    }
     if(!staticChunks.some(item=>contains(item,'/src/village-ktx2.js')))continue;
     checked++;
     if(!staticChunks.some(item=>contains(item,'/@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader.js')))throw new Error(`KTX loader is not in the initial module graph for ${name}`);

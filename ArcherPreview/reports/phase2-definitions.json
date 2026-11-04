@@ -1,0 +1,118 @@
+{
+  "phase": 2,
+  "owner": "definitions-and-encounter-adapter",
+  "phase1Prerequisite": "2c4ed67 deployed; workflow41759105703 succeeded with3HTTP hashes before PHASE-02-ACTORS was opened",
+  "status": "implemented; focused checks passed; independent actual-model scenarios owned by verifier",
+  "source": {
+    "new": ["src/actor-definitions.js", "src/actor-encounter-adapter.js"],
+    "approvedExistingExtensions": ["src/animation.js", "src/boss-encounter.js"],
+    "newFocusedTests": ["tests/actor-encounter-adapter.test.js"],
+    "report": "reports/phase2-definitions.json",
+    "unchangedByThisOwner": ["src/boss-models.js", "src/boss-gpu-preparation.js", "src/boss-battle.js", "src/main.js", "src/chapter-quest.js"],
+    "browserAutomation": false,
+    "paidAssets": false,
+    "fullSuiteOrBuild": false,
+    "commits": false,
+    "futurePhaseCardsRead": false
+  },
+  "definitions": [
+    {"actorDefinitionId":"guardian-bear.standard","assetId":"guardian-bear","assetVersion":"Guardian Bear · 20 original motions","category":"boss","encounter":"BossEncounter","hp":900,"radius":0.7,"stopDistance":1.65,"separationRadius":0.8,"maxPooled":20,"estimatedBytesPerActor":16777216,"motionMapping":"all20existing authored clips; disabled attacks remain disabled by the existing BossBrain","dropReference":"GoldLoot.drop:bear","questReference":"ChapterQuests.defeat:bear"},
+    {"actorDefinitionId":"hooded-goblin.standard","assetId":"hooded-goblin","assetVersion":"Hooded Goblin - 12 source motions","category":"monster","encounter":"GoblinEncounter","hp":180,"radius":0.34,"stopDistance":1.05,"separationRadius":0.42,"maxPooled":20,"estimatedBytesPerActor":12582912,"motionMapping":"all12existing authored clips","dropReference":"GoldLoot.drop:goblin","questReference":"ChapterQuests.defeat:goblin"},
+    {"actorDefinitionId":"elena.fallen","assetId":"elena","assetVersion":"Fallen Saint Elena · approved 56,918 triangles","category":"boss","encounter":"ElenaEncounter","hp":1200,"radius":0.36125,"stopDistance":1.1475,"separationRadius":0.44625,"maxPooled":4,"estimatedBytesPerActor":67108864,"motionMapping":"existing ELENA_ACTIVE_CLIPS","questReference":"ChapterQuests.defeat:elena:phase1","triangles":56918,"triangleQualification":"above50K; never presented as an exact50K model"},
+    {"actorDefinitionId":"elena.mourning","assetId":"mourning-elena","assetVersion":"Mourning Elena · r10 motion · approved 49,982 triangles","category":"boss","encounter":"MourningElenaEncounter","hp":1800,"radius":1.5,"stopDistance":5,"separationRadius":1.8333333333333335,"maxPooled":4,"estimatedBytesPerActor":100663296,"motionMapping":"existing seven configured action mappings; existing independent sampled tracks, gait, cloth, corrective morphs and authored death","questReference":"ChapterQuests.defeat:elena:phase2","triangles":49982},
+    {"actorDefinitionId":"village.guard","assetId":"hooded-goblin","assetVersion":"Hooded Goblin - 12 source motions","category":"npc","encounter":"peaceful GoblinEncounter visual only","hp":null,"maxPooled":4,"estimatedBytesPerActor":12582912,"npcReference":"guard","questReference":"talk:guard","interactionRange":3,"representativeOnly":true,"qualification":"Existing goblin visual is a development-only resource/interaction representative, not new narrative NPC art or a production village replacement."}
+  ],
+  "schema": {
+    "identity": "actorDefinitionId + definitionVersion; canonical assetId + exact shipped assetVersion; no model URL/base64 inside definitions",
+    "animation": "Definition overrides merge into an actor-local copy of the existing manifest mapping; every required mapped clip must exist before cloning. Shared source config is never changed. The fixed authored Mourning sampler rejects conflicting remaps explicitly.",
+    "style": "Existing monster-toon, character-outline and character-surface/internal-line paths and scene settings; no new visual variant or quality reduction",
+    "bounds": "Independent posed mesh bounds; existing render-range padding; collider comes from current encounter constants",
+    "behaviorMovementHp": "Registered HP is applied to each fresh brain's hp/maxHp; collider radius/stopDistance/separationRadius are applied at construction and activation. Built-in values remain unchanged. Movement selects the exact existing encounter profile; conflicting overrides reject explicitly rather than altering root travel/attack timing or being ignored. Optional maxHp must equal hp for the supported full-health spawn profile.",
+    "spawn": "Development-only group, count/interval data, allowed maps, current navigation free-space test, player safety distance and explicit overlap rejection",
+    "respawn": "Development scenario data uses8game-time seconds; pause while game paused/map inactive. NPC representative disables respawn. This does not add automatic enemies/rewards to normal maps.",
+    "population": "Per-definition maxPooled, conservative estimatedBytes reservation and30s idleSeconds; total/type/memory/preparation caps are owned by ActorPopulation",
+    "lod": "Current full-quality path with no reduced existing LOD; data includes a future per-definition screen-coverage policy slot",
+    "references": "Existing drop/quest/NPC handler identifiers only; no new story, reward amounts or raw assets"
+  },
+  "api": {
+    "exports": ["ACTOR_DEFINITIONS", "getActorDefinition(id)", "validateActorSpawn(definition,world,{position,player,occupied})", "createActorEncounterFactory(options)"],
+    "factoryOptions": "{world,battle,getPlayer?,libraryFactory?,onDefeat?,rewardsEnabled=false,interactNpc?,interaction?,onActorHide?,getActivity?}",
+    "factoryReturn": "create(definitionOrId,{generation,isCurrent,preparation}) -> adapter; await-compatible synchronous construction. create.inspect() reports actor/library keys/model load count; create.dispose() returns pending owned cleanup.",
+    "libraryOverride": "libraryFactory(scene,assetId,assetVersion) returns library or {library,owned:false}; owned:false explicitly keeps caller-owned source containers/materials alive",
+    "adapter": ["warm({preparation,isCurrent})", "reset(spawnContext)", "activate(spawnContext,{preparation,isCurrent})", "update(dt,context)", "decide(elapsed,context)", "snapshot()", "estimate()", "interact()", "defeat()", "hide()", "dispose()"],
+    "spawnContext": "{player?,position,rotationY?,occupied?,questRelevant?}; getPlayer defaults to battle.currentPlayer",
+    "validationResult": "{valid:true,position} or {valid:false,reason}; no silent relocation or count reduction",
+    "lifetimeToken": "create context.isCurrent must describe the record/map generation lifetime; per-operation options.isCurrent and preparation describe only the current prepare/activate operation. ActorPopulation owns the separate tokens.",
+    "snapshot": "{active,dead,dying,corpseGone,combat,incoming,projectile,questRelevant,rewardGranted,position,life,decisionCount}; dying follows authored death pose completion, leaving observable held/fading corpse state",
+    "activity": "NPC dialogue references do not imply always-urgent decisions. spawnContext.questRelevant or live getActivity result can elevate actual tracked/active quest, incoming or projectile semantics; interaction remains callable independently."
+  },
+  "combatIntegration": {
+    "pipelineOwner": "Existing BossBattle alone updates combat actors, separates bodies, reconciles navigation, prepares poses and processes strike/contact order. Combat adapter.update is intentionally a no-op.",
+    "publication": "Activation adds its exact encounter once to battle.encounters. Hide removes only that encounter. Combat construction/disposal registers/unregisters battle.developmentPool; root extends existing allPooled to retain global gate/reset/style behavior without changing production indexed pools.",
+    "playerState": "All actors share the existing battle.combat. Adapter reset/hide never resets player HP, potions, invulnerability, another enemy's grab or the global combat clock.",
+    "npc": "Representative stays outside battle.encounters/developmentPool and never calls the hostile encounter update. It keeps prepared visual updates; its harmless decision method can be distance-scheduled. interact delegates existing guard ID/actor position/range to root's readiness/combat/distance/LOS guard, then existing ChapterQuests.talk.",
+    "manualDeath": "defeat() asks the existing brain.hit for a lethal heavy hit and respects its defense acceptance. Normal death/fade/corpse and callback paths perform the rest; no UI writes HP directly.",
+    "rewards": "onDefeat is acknowledged at most once per life. Gameplay callback requires explicit rewardsEnabled=true; the development UI leaves it false, so load/death/respawn demonstrations cannot farm real gold or quest progress. No alternate reward engine exists."
+  },
+  "warmReuse": {
+    "assetCreation": "BossModelLibrary.load is reused per assetId@version, but every pooled actor invokes existing instantiateBossModel(container) directly. This shares geometry/material/texture sources and clones independent skeletons, animation targets and morph managers. It never uses the special single-resident Elena/Mourning adoption branch.",
+    "firstPreparation": "Existing prepareHidden, createBossPreparation step budget, toon/internal-line/outline, bounds proof and shader preparation paths remain authoritative. Clone expansion is one existing preparation.step; no second scheduler was added.",
+    "optInSummon": "BossEncounter.summon({reuseAnimator:true}) resets the already prepared animator via CharacterAnimator.resetForReuse or MourningElenaAnimator's existing reset, then uses the unchanged brain/summon/death reset path.",
+    "optInHideDeath": "Only encounters tagged retainAnimatorForPool skip animator disposal on hide/corpse completion. Default production summon/hide/death disposal remains unchanged.",
+    "bindingReuse": "CharacterAnimator.retainBindings keeps previously used paused native clip animatables at weight0 instead of stop/delete. resetForReuse clears playback/action/blend/weight state; switching back to a known clip reuses its exact native binding. Clip states are bounded by the actor's existing manifest, not every future model.",
+    "zeroWeightFix": "Retained fade completion explicitly sets the native group's weight to0 before skipping it, preventing the previous action from contributing residual pose. A native-animation regression compares the result with the default stop/delete path.",
+    "poolReset": "Hide/reset clear hit flash, mesh visibility, targets/player refs, pending events, grab/gate, knockback/reaction, route/contact/reposition caches, telegraph/contact/slam resources, counters, HP/death/playback and per-life reward acknowledgement before the next activation. The adapter owns no sound objects, timers or per-frame observers; onActorHide permits root-owned audio cleanup."
+  },
+  "ownership": {
+    "libraryCaps": "Entry reference count tracks adapters. Final adapter eviction removes only the exact assetId@version entry and releases its owned source container/derived toon materials; a later spawn is deliberately cold after idle eviction. Warm respawn before eviction keeps the entry. Sources cannot accumulate uncharged across arbitrary definition/version visits.",
+    "scopedLoader": "Default dev library opts into new BossModelLibrary(scene,id,{scoped:true}); root owns the bounded/cancellable loader extension. Final owned entry calls library.dispose immediately before awaiting pending completion. Existing production library default and borrowed owned:false libraries remain untouched.",
+    "retirementAccounting": "adapter.dispose returns completion of its existing acquisition/warm/source cleanup promises. ActorPopulation keeps retiring slots/estimated memory charged until actual cleanup settles, preventing repeated cancelled map jobs from escaping caps.",
+    "perActorDisposal": "Only owned cloned animation groups, actor/child nodes, skeletons and independent morph managers, warning/contact/spell auxiliaries are disposed. Shared source geometry/material/textures remain while another clone/library owns them.",
+    "sceneOwned": "Existing scene-shared outline material, scene render ordering and inactive fog sampler remain owned by the original scene modules; the adapter does not dispose another actor's scene-wide resources.",
+    "lateResults": "Generation and scene/map identity are checked before clone/activation. Late cancelled acquisitions are cleaned through exact owned asset sets and never published as current-map actors."
+  },
+  "verification": {
+    "newFocusedCommand": "node --test tests/actor-encounter-adapter.test.js",
+    "newFocusedPass": 10,
+    "newFocusedFail": 0,
+    "latestFocusedDurationMs": 2760.5042,
+    "combinedCommand": "node --test tests/actor-encounter-adapter.test.js tests/animation.test.js tests/boss-battle.test.js tests/goblin.test.js tests/goblin-contacts.test.js tests/boss-incremental-summon.test.js",
+    "combinedPass": 58,
+    "combinedFail": 0,
+    "combinedDurationMs": 6829.8505,
+    "combinedQualification": "Run before final scoped-loader-factory/disposal-promise and registered-data contract adjustment; the final10adapter cases were rerun after all of those changes. Root/verifier own final combined integration.",
+    "coverage": [
+      "Every definition's exact version and animation mapping matches the current canonical manifest; current HP/collider constants are retained.",
+      "A newly registered275HP goblin variant consumes its custom collider and idle clip mapping, preserves those values on warm respawn, and shares one source library with an unchanged180HP standard actor. Missing clips, conflicting movement and unsupported fixed-sampler Mourning remaps reject explicitly.",
+      "Map/navigation/occupancy/player safety failures are rejected explicitly without relocating the input position.",
+      "Two real Babylon cloned skeleton/animation-target instances are independent while sharing geometry/material; one source load serves them.",
+      "Five warm lives preserve exact animator/skeleton/geometry/material identities and issue zero new AnimationGroup.start calls for the prepared idle clip; scene resource counts remain fixed.",
+      "Retained crossfade writes native weight0; after native frame flush its sampled pose matches the ordinary stop/delete path.",
+      "Corpse completion retains the opted-in animator; defeat callback occurs once per life and next life resets acknowledgement.",
+      "NPC remains outside battle, delegates guard interaction and does not manufacture rewards.",
+      "Last-clone disposal releases owned source only once, preserves another clone and all borrowed sources, and removes library accounting.",
+      "Map-generation change during a delayed source load prevents clone creation/publication and releases retirement cleanup.",
+      "An unflagged BossEncounter still disposes/recreates on summon and disposes on hide in the existing order."
+    ],
+    "independentActualModelScenarios": "Verifier owns separate phase2-verification artifacts: requested1/5/10/20 mixed types, independent49,982-triangle Mourning motion, real battle order, pool lifecycle/resource/pose evidence. This report does not substitute toy fixture timing for that actual-model evidence.",
+    "diffCheck": "git diff --check passed; only normal repository CRLF conversion advisory on animation.js",
+    "sourceFrozenForVerifier": true,
+    "sha256": {
+      "src/actor-definitions.js": "ef8866e1ee78fbfdd90c8bc77fcc3deb3f3e1711e2fb0ad3ded42ec5cf93101e",
+      "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+      "src/animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+      "src/boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+      "tests/actor-encounter-adapter.test.js": "c2fca3a9f8083734919e9752953e74d0456cab8ba83ff2b75191d03631c54f60"
+    }
+  },
+  "limitations": [
+    "No browser automation, real GPU pixels, mobile FPS/temperature/input-latency or20actors-at60FPS guarantee.",
+    "Triangle totals distinguish indexed triangulated geometry and base/outline/shadow submission estimates; an estimate is not measured GPU frame cost.",
+    "Estimated memory reservations are conservative development accounting, not a driver memory measurement. Independent verifier reports actual resource counts separately.",
+    "New clip activation may establish that clip's binding once when first needed; warm lives retain previously used clips. Pool caps bound retained native clip state.",
+    "New movement profiles and remapping the fixed-channel Mourning sampler require an explicit future encounter implementation. Registration currently rejects those unsupported conflicts; it never silently ignores them or changes approved motion timing.",
+    "NPC is an explicit development visual representative reusing existing guard interaction; this phase does not author new village dialogue/content.",
+    "No normal-play bulk spawn, reward, existing actor LOD or current combat/input order was changed by these definitions/adapters.",
+    "Root owns lazy actorLab integration, existing battle loader/allPooled hooks, final release routing and deployment."
+  ]
+}

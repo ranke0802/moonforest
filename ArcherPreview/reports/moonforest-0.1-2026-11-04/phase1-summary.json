@@ -13,7 +13,7 @@
     "verification-four-map-ab-final.json",
     "verification-resource-lifecycle.json"
   ],
-  "status": "validated-awaiting-release",
+  "status": "released",
   "release": "MoonForest 0.1 ver",
   "verification": {
     "renderBatch": "4maps8views90models exact equivalence,8edge7LOD2multi-slot cases",
@@ -22,13 +22,7 @@
     "devicePerformance": "unverified"
   },
   "baseline": "14c972ccb58fc704adc9956b4563faacab0804ca",
-  "pending": [
-    "build",
-    "stage",
-    "commit",
-    "archer Pages deploy",
-    "public HTTP hashes"
-  ],
+  "pending": [],
   "phase": 1,
   "changes": [
     "Separate release entry without changing canonical map IDs",
@@ -53,5 +47,12 @@
       "No claim of recovered overall frame time, S23 sustained60FPS, GPU time or temperature"
     ],
     "supported": "Candidate query medians26.65-70.10% lower,absolute0.004932-0.051096ms saved,stationary sceneScans0"
+  },
+  "deployment": {
+    "publicChangedFilesVerified": 3,
+    "workflowRun": 41759105703,
+    "commit": "2c4ed67a8912f52cf33f46346c0f73330a89acdf",
+    "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=moonforest-0.1&rev=2c4ed67",
+    "status": "success"
   }
 }

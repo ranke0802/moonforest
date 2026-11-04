@@ -132,14 +132,18 @@ export class BossEncounter {
     await this.prepareAuxiliary(preparation);preparation.check();
     this.assetPrepared=true;this.preparationStats=preparation.stats;this.preparationPhase('model');return this.asset;
   }
-  async summon(player,{position,rotationY,preparation}={}){
+  async summon(player,{position,rotationY,preparation,reuseAnimator=false}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
     try{
       await this.prepareHidden({preparation,onStage:this.assetPrepared?undefined:this.onPreparationStage});
       preparation?.check();
       const animatorStart=performance.now();
-      this.animator?.dispose();this.animator=this.createAnimator();
+      if(reuseAnimator&&this.animator){
+        const reset=this.animator.resetForReuse??this.animator.reset;
+        if(typeof reset!=='function')throw new Error('Prepared actor animator cannot reset for reuse');
+        reset.call(this.animator);
+      }else{this.animator?.dispose();this.animator=this.createAnimator();}
       preparation?.stats.steps.push({name:'summon-animator',ms:Math.max(0,performance.now()-animatorStart)});
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
@@ -157,7 +161,7 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
     enabled=enabled&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
@@ -199,7 +203,7 @@ export class BossEncounter {
       this.deathShadowsRemoved=true;
     }
     if(this.corpseGone){
-      this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];this.animator.dispose();this.onChange(this);
+      this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];if(!this.retainAnimatorForPool)this.animator.dispose();this.onChange(this);
     }
   }
   createBrain(durations){return new BossBrain(durations);}

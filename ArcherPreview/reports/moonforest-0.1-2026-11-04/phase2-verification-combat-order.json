@@ -1,0 +1,121 @@
+{
+  "generatedAt": "2026-11-04T02:35:30.897Z",
+  "baseline": "2c4ed67",
+  "baselineBattleSourceSha256": "de4cf8c869520f1a6ecde06528725d10c8f7f3a1726b84f4e4386da208bade00",
+  "candidateBattleSourceSha256": "48f06b48cfc216dd14cca7cd965bacd3ce44ed30ef5ec4c5af0391c4cd4e30b9",
+  "passed": true,
+  "cases": [
+    {
+      "name": "actual boss1+regularenemy retain production input/update/animation/contact order against phase1",
+      "passed": true,
+      "frames": 180,
+      "bosses": 1,
+      "regularEnemies": 1,
+      "allFramesEqual": true,
+      "order": [
+        "controller.update",
+        "bear.update",
+        "goblin.update",
+        "bear.poseAndContacts",
+        "goblin.poseAndContacts"
+      ],
+      "firstFrame": {
+        "frame": 0,
+        "order": [
+          "controller.update",
+          "bear.update",
+          "goblin.update",
+          "bear.poseAndContacts",
+          "goblin.poseAndContacts"
+        ],
+        "controller": {
+          "state": "dodge",
+          "actionId": 1,
+          "serial": 1,
+          "queuedAttack": null,
+          "charge": 0,
+          "events": []
+        },
+        "actors": [
+          {
+            "kind": "bear",
+            "state": "Running",
+            "mode": "move",
+            "time": 0.016666666666666666,
+            "hp": 900,
+            "position": [
+              -4.994018292337612,
+              0,
+              4.946164631038513
+            ]
+          },
+          {
+            "kind": "goblin",
+            "state": "Running",
+            "mode": "move",
+            "time": 0.022500000000000003,
+            "hp": 180,
+            "position": [
+              4.99042926774018,
+              0,
+              4.913863409661619
+            ]
+          }
+        ]
+      },
+      "firstQueuedJudgmentFrame": {
+        "frame": 87,
+        "order": [
+          "controller.update",
+          "bear.update",
+          "goblin.update",
+          "bear.poseAndContacts",
+          "goblin.poseAndContacts"
+        ],
+        "controller": {
+          "state": "judgment",
+          "actionId": 2,
+          "serial": 2,
+          "queuedAttack": null,
+          "charge": 0,
+          "events": []
+        },
+        "actors": [
+          {
+            "kind": "bear",
+            "state": "Running",
+            "mode": "move",
+            "time": 0.20000001589457264,
+            "hp": 900,
+            "position": [
+              -4.473609725709892,
+              0,
+              0.26248753138908143
+            ]
+          },
+          {
+            "kind": "goblin",
+            "state": "Running",
+            "mode": "move",
+            "time": 0.1799999284744264,
+            "hp": 180,
+            "position": [
+              4.157775561135843,
+              0,
+              -2.5800199497774683
+            ]
+          }
+        ]
+      },
+      "traceSha256": "51d34e5f144cb0dbe916798dd8b2173dc29ced58441ec4813311b6004aae41ef",
+      "inputAndContactSourceUnchanged": {
+        "warrior-v2.js": true,
+        "warrior-controller.js": true,
+        "player-combat.js": true,
+        "melee-collision.js": true,
+        "player-strikes.js": true
+      },
+      "scope": "Production WarriorV2Controller input queue + actual imported bear/goblin encounter updates/poses/contacts. Player strike sample is null and enemies start far away; this verifies queue/order preservation rather than sword hit accuracy or input latency."
+    }
+  ]
+}

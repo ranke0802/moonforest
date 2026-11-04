@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-11-04T02:28:32.819Z",
+  "baseline": "2c4ed67",
+  "baselineSourceSha256": "39c7aec348f5c6ca5517c2f35187c7e22bdc9c2a9314b718ac5176a131ee3a03",
+  "candidateSourceSha256": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+  "passed": true,
+  "cases": [
+    {
+      "name": "retained paused clips preserve exact native crossfade and interrupted-blend pose",
+      "passed": true,
+      "values": [
+        {
+          "step": 0,
+          "state": "idle",
+          "baseline": 0.1,
+          "candidate": 0.1
+        },
+        {
+          "step": 1,
+          "state": "walk",
+          "baseline": 10.2,
+          "candidate": 10.2
+        },
+        {
+          "step": 2,
+          "state": "attack",
+          "baseline": 20.3,
+          "candidate": 20.3
+        },
+        {
+          "step": 3,
+          "state": "walk",
+          "baseline": 16.939285714285717,
+          "candidate": 16.939285714285717
+        },
+        {
+          "step": 4,
+          "state": "idle",
+          "baseline": 9.288888888888886,
+          "candidate": 9.288888888888886
+        },
+        {
+          "step": 5,
+          "state": "attack",
+          "baseline": 20.5,
+          "candidate": 20.5
+        },
+        {
+          "step": 6,
+          "state": "idle",
+          "baseline": 0.1,
+          "candidate": 0.1
+        }
+      ]
+    },
+    {
+      "name": "six warm lives retain prepared native bindings and exact baseline pose",
+      "passed": true,
+      "baselineNewGroupStarts": 24,
+      "candidateNewGroupStarts": 0,
+      "candidateStartsByLife": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "scope": "Actual Babylon native animation groups/animatables and transform pose against immutable phase1 source. No pixels/GPU/device claim."
+}

@@ -1,0 +1,1740 @@
+{
+  "generatedAt": "2026-11-04T02:39:55.044Z",
+  "passed": true,
+  "sourceHashes": {
+    "actor-population.js": "6ad79185db1895c26dcd659deae0924b196469cb7a33435ad191dc9ff8624618",
+    "actor-definitions.js": "ef8866e1ee78fbfdd90c8bc77fcc3deb3f3e1711e2fb0ad3ded42ec5cf93101e",
+    "actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+    "boss-battle.js": "48f06b48cfc216dd14cca7cd965bacd3ce44ed30ef5ec4c5af0391c4cd4e30b9",
+    "chapter-quest.js": "63d37594e9754cc43310f5d3a3d1371b50ae6805bfaab6fd4c44814c1056a008"
+  },
+  "cases": [
+    {
+      "name": "actual shipped-model mixed population1/5/10/20 preserves count and native battle ownership",
+      "passed": true,
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "actualCounts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "logicCap": 20,
+      "deviceCap": "unverified",
+      "models": [
+        {
+          "id": "guardian-bear",
+          "version": "Guardian Bear · 20 original motions",
+          "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+          "modelSha256": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29",
+          "triangles": 30000,
+          "vertices": 41898
+        },
+        {
+          "id": "mourning-elena",
+          "version": "Mourning Elena · r10 motion · approved 49,982 triangles",
+          "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+          "modelSha256": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff",
+          "triangles": 49982,
+          "vertices": 40777
+        },
+        {
+          "id": "hooded-goblin",
+          "version": "Hooded Goblin - 12 source motions",
+          "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+          "modelSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "vertices": 18403
+        }
+      ]
+    },
+    {
+      "name": "two49982-triangle actors keep independent skeletons, morphs, animation targets and poses",
+      "passed": true,
+      "baseTrianglesPerActor": 49982,
+      "independentSkeletons": true,
+      "independentMorphManagers": true,
+      "sharedBaseGeometry": true,
+      "overlappingAnimationTargets": 0,
+      "poseHashes": [
+        "e648dd9396c9448a58699103c87c8264bebf832c5146ce1e33cb187f8d37c314",
+        "888cc9a3e96df48eee06ec2d17434fcef9e72887e8cdddf43a20bcde2ad24ea4"
+      ]
+    },
+    {
+      "name": "actual death, single reward, paused countdown and warm respawn create no new native bindings or resources",
+      "passed": true,
+      "states": [
+        "dying",
+        "corpse",
+        "dormant"
+      ],
+      "lifeBefore": 3,
+      "lifeAfter": 4,
+      "warmRespawnNodeElapsedMs": 6.73909999999978,
+      "elapsedScope": "Node async preparation interval including scheduling/drain; not isolated synchronous CPU or GPU time.",
+      "nativeCreationAndBindingDelta": {
+        "skeletonClones": 0,
+        "boneLinks": 0,
+        "animationGroupClones": 0,
+        "animationGroupStarts": 0,
+        "materialClones": 0,
+        "meshClones": 0
+      },
+      "runtimeDelta": {
+        "modelParses": 0,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 0,
+        "newMaterial": 0,
+        "morphTextureArrayCreates": 0
+      },
+      "resourcesBefore": {
+        "meshes": 96,
+        "geometries": 28,
+        "materials": 35,
+        "textures": 38,
+        "skeletons": 22,
+        "animationGroups": 284,
+        "morphManagers": 4,
+        "transformNodes": 1391,
+        "sceneObservers": 7,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 26,
+        "pendingSceneItems": 0,
+        "battleEncounters": 19,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8883792,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 107392,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "resourcesAfter": {
+        "meshes": 96,
+        "geometries": 28,
+        "materials": 35,
+        "textures": 38,
+        "skeletons": 22,
+        "animationGroups": 284,
+        "morphManagers": 4,
+        "transformNodes": 1391,
+        "sceneObservers": 7,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 26,
+        "pendingSceneItems": 0,
+        "battleEncounters": 20,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8883792,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 107392,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      "rewardAndRespawnEachOnce": true
+    },
+    {
+      "name": "actual twenty actors repeat clear and warm reuse with resource and memory plateau",
+      "passed": true,
+      "cycles": 5,
+      "nativeDelta": {
+        "skeletonClones": 0,
+        "boneLinks": 0,
+        "animationGroupClones": 0,
+        "animationGroupStarts": 0,
+        "materialClones": 0,
+        "meshClones": 0
+      },
+      "runtimeDelta": {
+        "modelParses": 0,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 0,
+        "newMaterial": 0,
+        "morphTextureArrayCreates": 0
+      },
+      "snapshots": [
+        {
+          "life": 0,
+          "entries": 20,
+          "resources": {
+            "meshes": 96,
+            "geometries": 28,
+            "materials": 35,
+            "textures": 38,
+            "skeletons": 22,
+            "animationGroups": 284,
+            "morphManagers": 4,
+            "transformNodes": 1391,
+            "sceneObservers": 7,
+            "sceneObserverKinds": {
+              "onDisposeObservable": 5,
+              "onNewGeometryAddedObservable": 1,
+              "onNewMaterialAddedObservable": 1
+            },
+            "nodeObservers": 26,
+            "pendingSceneItems": 0,
+            "battleEncounters": 20,
+            "estimatedMemory": {
+              "cpuUniqueGeometryBytes": 8883792,
+              "cpuUniqueMorphArrayBytes": 11299872,
+              "skeletonMatrixBytes": 107392,
+              "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+            }
+          },
+          "timers": {
+            "timeouts": 0,
+            "intervals": 0
+          }
+        },
+        {
+          "life": 1,
+          "entries": 20,
+          "resources": {
+            "meshes": 96,
+            "geometries": 28,
+            "materials": 35,
+            "textures": 38,
+            "skeletons": 22,
+            "animationGroups": 284,
+            "morphManagers": 4,
+            "transformNodes": 1391,
+            "sceneObservers": 7,
+            "sceneObserverKinds": {
+              "onDisposeObservable": 5,
+              "onNewGeometryAddedObservable": 1,
+              "onNewMaterialAddedObservable": 1
+            },
+            "nodeObservers": 26,
+            "pendingSceneItems": 0,
+            "battleEncounters": 20,
+            "estimatedMemory": {
+              "cpuUniqueGeometryBytes": 8883792,
+              "cpuUniqueMorphArrayBytes": 11299872,
+              "skeletonMatrixBytes": 107392,
+              "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+            }
+          },
+          "timers": {
+            "timeouts": 0,
+            "intervals": 0
+          }
+        },
+        {
+          "life": 2,
+          "entries": 20,
+          "resources": {
+            "meshes": 96,
+            "geometries": 28,
+            "materials": 35,
+            "textures": 38,
+            "skeletons": 22,
+            "animationGroups": 284,
+            "morphManagers": 4,
+            "transformNodes": 1391,
+            "sceneObservers": 7,
+            "sceneObserverKinds": {
+              "onDisposeObservable": 5,
+              "onNewGeometryAddedObservable": 1,
+              "onNewMaterialAddedObservable": 1
+            },
+            "nodeObservers": 26,
+            "pendingSceneItems": 0,
+            "battleEncounters": 20,
+            "estimatedMemory": {
+              "cpuUniqueGeometryBytes": 8883792,
+              "cpuUniqueMorphArrayBytes": 11299872,
+              "skeletonMatrixBytes": 107392,
+              "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+            }
+          },
+          "timers": {
+            "timeouts": 0,
+            "intervals": 0
+          }
+        },
+        {
+          "life": 3,
+          "entries": 20,
+          "resources": {
+            "meshes": 96,
+            "geometries": 28,
+            "materials": 35,
+            "textures": 38,
+            "skeletons": 22,
+            "animationGroups": 284,
+            "morphManagers": 4,
+            "transformNodes": 1391,
+            "sceneObservers": 7,
+            "sceneObserverKinds": {
+              "onDisposeObservable": 5,
+              "onNewGeometryAddedObservable": 1,
+              "onNewMaterialAddedObservable": 1
+            },
+            "nodeObservers": 26,
+            "pendingSceneItems": 0,
+            "battleEncounters": 20,
+            "estimatedMemory": {
+              "cpuUniqueGeometryBytes": 8883792,
+              "cpuUniqueMorphArrayBytes": 11299872,
+              "skeletonMatrixBytes": 107392,
+              "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+            }
+          },
+          "timers": {
+            "timeouts": 0,
+            "intervals": 0
+          }
+        },
+        {
+          "life": 4,
+          "entries": 20,
+          "resources": {
+            "meshes": 96,
+            "geometries": 28,
+            "materials": 35,
+            "textures": 38,
+            "skeletons": 22,
+            "animationGroups": 284,
+            "morphManagers": 4,
+            "transformNodes": 1391,
+            "sceneObservers": 7,
+            "sceneObserverKinds": {
+              "onDisposeObservable": 5,
+              "onNewGeometryAddedObservable": 1,
+              "onNewMaterialAddedObservable": 1
+            },
+            "nodeObservers": 26,
+            "pendingSceneItems": 0,
+            "battleEncounters": 20,
+            "estimatedMemory": {
+              "cpuUniqueGeometryBytes": 8883792,
+              "cpuUniqueMorphArrayBytes": 11299872,
+              "skeletonMatrixBytes": 107392,
+              "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+            }
+          },
+          "timers": {
+            "timeouts": 0,
+            "intervals": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "NPC uses actual ChapterQuests.talk, preserves combat isolation, range, line of sight and busy guards",
+      "passed": true,
+      "actualQuestFact": "talk:guard",
+      "factCount": 1,
+      "hostileBattleRegistrations": 0,
+      "blockedCases": [
+        "far",
+        "line-of-sight",
+        "busy",
+        "combat",
+        "wrong-map"
+      ],
+      "nearDecisions": 60,
+      "farDecisions": 1,
+      "animationUpdates": 123,
+      "farThreatAndQuestOverrides": [
+        "incoming",
+        "projectile",
+        "questRelevant"
+      ],
+      "scheduling": {
+        "generation": 0,
+        "paused": false,
+        "clockSeconds": 2.0029999999999974,
+        "entries": 1,
+        "states": {
+          "active": 1
+        },
+        "estimatedBytes": 12582912,
+        "memoryMeaning": "Conservative definition reservations followed by adapter estimates; not measured GPU/process residency.",
+        "pending": 0,
+        "queued": 0,
+        "currentPreparations": 0,
+        "limits": {
+          "total": 20,
+          "active": 20,
+          "perDefinition": 20,
+          "perType": {
+            "monster": 20,
+            "boss": 20,
+            "npc": 20
+          },
+          "estimatedMemoryBytes": 536870912,
+          "concurrentPreparations": 1,
+          "idleSeconds": 120
+        },
+        "stats": {
+          "created": 1,
+          "reused": 0,
+          "activated": 1,
+          "disposed": 0,
+          "cancelled": 0,
+          "deaths": 0,
+          "rewardsObserved": 0,
+          "respawns": 0,
+          "decisionUpdates": 64,
+          "farDecisionSkips": 59,
+          "errors": 0,
+          "peakEntries": 1,
+          "peakEstimatedBytes": 12582912
+        },
+        "actors": [
+          {
+            "id": "actor-1",
+            "actorDefinitionId": "village.guard",
+            "category": "npc",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          }
+        ]
+      }
+    },
+    {
+      "name": "partial actual actor preparation is cancelled on map leave and cannot publish a late actor",
+      "passed": true,
+      "latePublishedActors": 0,
+      "freshMapActorSucceeded": true,
+      "resourcesBefore": {
+        "meshes": 0,
+        "geometries": 6,
+        "materials": 9,
+        "textures": 12,
+        "skeletons": 0,
+        "animationGroups": 0,
+        "morphManagers": 0,
+        "transformNodes": 1,
+        "sceneObservers": 8,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 6,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 0,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8790368,
+          "cpuUniqueMorphArrayBytes": 9562464,
+          "skeletonMatrixBytes": 22656,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "resourcesAfter": {
+        "meshes": 0,
+        "geometries": 6,
+        "materials": 9,
+        "textures": 12,
+        "skeletons": 0,
+        "animationGroups": 0,
+        "morphManagers": 0,
+        "transformNodes": 1,
+        "sceneObservers": 8,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 6,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 0,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8790368,
+          "cpuUniqueMorphArrayBytes": 9562464,
+          "skeletonMatrixBytes": 22656,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      }
+    },
+    {
+      "name": "real spawn validation rejects blocked, unsafe and wrong-map positions before model creation",
+      "passed": true,
+      "rejected": [
+        "player-safety-distance",
+        "blocked-navigation",
+        "wrong-map"
+      ],
+      "newModelParses": 0,
+      "newPopulationEntries": 0
+    },
+    {
+      "name": "idle eviction disposes actual actor pose ownership while caller-owned templates remain bounded",
+      "passed": true,
+      "cycles": 3,
+      "snapshots": [
+        {
+          "meshes": 0,
+          "geometries": 6,
+          "materials": 9,
+          "textures": 12,
+          "skeletons": 0,
+          "animationGroups": 0,
+          "morphManagers": 0,
+          "transformNodes": 1,
+          "sceneObservers": 8,
+          "sceneObserverKinds": {
+            "onDisposeObservable": 6,
+            "onNewGeometryAddedObservable": 1,
+            "onNewMaterialAddedObservable": 1
+          },
+          "nodeObservers": 0,
+          "pendingSceneItems": 0,
+          "battleEncounters": 0,
+          "estimatedMemory": {
+            "cpuUniqueGeometryBytes": 8790368,
+            "cpuUniqueMorphArrayBytes": 9562464,
+            "skeletonMatrixBytes": 22656,
+            "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+          }
+        },
+        {
+          "meshes": 0,
+          "geometries": 6,
+          "materials": 9,
+          "textures": 12,
+          "skeletons": 0,
+          "animationGroups": 0,
+          "morphManagers": 0,
+          "transformNodes": 1,
+          "sceneObservers": 8,
+          "sceneObserverKinds": {
+            "onDisposeObservable": 6,
+            "onNewGeometryAddedObservable": 1,
+            "onNewMaterialAddedObservable": 1
+          },
+          "nodeObservers": 0,
+          "pendingSceneItems": 0,
+          "battleEncounters": 0,
+          "estimatedMemory": {
+            "cpuUniqueGeometryBytes": 8790368,
+            "cpuUniqueMorphArrayBytes": 9562464,
+            "skeletonMatrixBytes": 22656,
+            "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+          }
+        },
+        {
+          "meshes": 0,
+          "geometries": 6,
+          "materials": 9,
+          "textures": 12,
+          "skeletons": 0,
+          "animationGroups": 0,
+          "morphManagers": 0,
+          "transformNodes": 1,
+          "sceneObservers": 8,
+          "sceneObserverKinds": {
+            "onDisposeObservable": 6,
+            "onNewGeometryAddedObservable": 1,
+            "onNewMaterialAddedObservable": 1
+          },
+          "nodeObservers": 0,
+          "pendingSceneItems": 0,
+          "battleEncounters": 0,
+          "estimatedMemory": {
+            "cpuUniqueGeometryBytes": 8790368,
+            "cpuUniqueMorphArrayBytes": 9562464,
+            "skeletonMatrixBytes": 22656,
+            "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+          }
+        }
+      ],
+      "templatesCallerOwned": true,
+      "templateCpuBuffersRetainedByFixture": true,
+      "poolEstimatedBytesAfter": 0,
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      }
+    },
+    {
+      "name": "one registered data variant applies HP collider and clip map without mutating the shared source or default actor",
+      "passed": true,
+      "registeredDefinitionId": "verification.goblin.variant",
+      "hp": 275,
+      "collider": {
+        "radius": 0.44,
+        "stopDistance": 1.3,
+        "separationRadius": 0.52
+      },
+      "idleClip": "Sneaky_Walk_inplace",
+      "defaultActorHp": 180,
+      "defaultIdleClip": "Walking",
+      "sourceConfigUnchanged": true,
+      "warmNativeIncrements": 0,
+      "unsupportedMovementAndAuthoredMourningRemapRejected": true
+    }
+  ],
+  "matrix": [
+    {
+      "requested": 1,
+      "actual": 1,
+      "definitions": [
+        "guardian-bear.standard"
+      ],
+      "coldOrExpansionNodeElapsedMs": 246.12969999999996,
+      "counters": {
+        "modelParses": 1,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 3,
+        "newMaterial": 4,
+        "morphTextureArrayCreates": 0
+      },
+      "native": {
+        "skeletonClones": 1,
+        "boneLinks": 116,
+        "animationGroupClones": 20,
+        "animationGroupStarts": 3,
+        "materialClones": 0,
+        "meshClones": 2
+      },
+      "resources": {
+        "meshes": 4,
+        "geometries": 2,
+        "materials": 4,
+        "textures": 6,
+        "skeletons": 1,
+        "animationGroups": 20,
+        "morphManagers": 0,
+        "transformNodes": 63,
+        "sceneObservers": 5,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 3,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 1,
+        "pendingSceneItems": 0,
+        "battleEncounters": 1,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 4386864,
+          "cpuUniqueMorphArrayBytes": 0,
+          "skeletonMatrixBytes": 7552,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      "manager": {
+        "generation": "first-map",
+        "paused": false,
+        "clockSeconds": 1.0666666666666678,
+        "entries": 1,
+        "states": {
+          "active": 1
+        },
+        "estimatedBytes": 16777216,
+        "memoryMeaning": "Conservative definition reservations followed by adapter estimates; not measured GPU/process residency.",
+        "pending": 0,
+        "queued": 0,
+        "currentPreparations": 0,
+        "limits": {
+          "total": 20,
+          "active": 20,
+          "perDefinition": 20,
+          "perType": {
+            "monster": 20,
+            "boss": 20,
+            "npc": 20
+          },
+          "estimatedMemoryBytes": 536870912,
+          "concurrentPreparations": 1,
+          "idleSeconds": 120
+        },
+        "stats": {
+          "created": 1,
+          "reused": 0,
+          "activated": 1,
+          "disposed": 0,
+          "cancelled": 0,
+          "deaths": 0,
+          "rewardsObserved": 0,
+          "respawns": 0,
+          "decisionUpdates": 0,
+          "farDecisionSkips": 0,
+          "errors": 0,
+          "peakEntries": 1,
+          "peakEstimatedBytes": 16777216
+        },
+        "actors": [
+          {
+            "id": "actor-1",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          }
+        ]
+      },
+      "fullCpuSimulationMs": {
+        "samples": 64,
+        "median": 0.14689999999995962,
+        "p95": 0.6782000000000608,
+        "p99": 4.3577999999999975,
+        "max": 4.3577999999999975,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerCpuMs": {
+        "samples": 64,
+        "median": 0.001199999999926149,
+        "p95": 0.009199999999964348,
+        "p99": 0.19190000000003238,
+        "max": 0.19190000000003238,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "drawCost": {
+        "draws": 3,
+        "mainDraws": 2,
+        "shadowDraws": 1,
+        "submittedTrianglesByPass": {
+          "main": 60000,
+          "shadow": 30000
+        },
+        "submittedTrianglesByRole": {
+          "outline": 30000,
+          "internal-lines": 0,
+          "surface-or-effect": 60000
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      }
+    },
+    {
+      "requested": 5,
+      "actual": 5,
+      "definitions": [
+        "elena.mourning",
+        "guardian-bear.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard"
+      ],
+      "coldOrExpansionNodeElapsedMs": 489.12189999999987,
+      "counters": {
+        "modelParses": 3,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 20,
+        "newMaterial": 17,
+        "morphTextureArrayCreates": 6
+      },
+      "native": {
+        "skeletonClones": 6,
+        "boneLinks": 774,
+        "animationGroupClones": 66,
+        "animationGroupStarts": 11,
+        "materialClones": 0,
+        "meshClones": 13
+      },
+      "resources": {
+        "meshes": 28,
+        "geometries": 12,
+        "materials": 17,
+        "textures": 20,
+        "skeletons": 6,
+        "animationGroups": 66,
+        "morphManagers": 2,
+        "transformNodes": 449,
+        "sceneObservers": 7,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 8,
+        "pendingSceneItems": 0,
+        "battleEncounters": 5,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8813800,
+          "cpuUniqueMorphArrayBytes": 10431168,
+          "skeletonMatrixBytes": 50176,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      "manager": {
+        "generation": "first-map",
+        "paused": false,
+        "clockSeconds": 2.1333333333333306,
+        "entries": 5,
+        "states": {
+          "active": 5
+        },
+        "estimatedBytes": 155189248,
+        "memoryMeaning": "Conservative definition reservations followed by adapter estimates; not measured GPU/process residency.",
+        "pending": 0,
+        "queued": 0,
+        "currentPreparations": 0,
+        "limits": {
+          "total": 20,
+          "active": 20,
+          "perDefinition": 20,
+          "perType": {
+            "monster": 20,
+            "boss": 20,
+            "npc": 20
+          },
+          "estimatedMemoryBytes": 536870912,
+          "concurrentPreparations": 1,
+          "idleSeconds": 120
+        },
+        "stats": {
+          "created": 5,
+          "reused": 1,
+          "activated": 6,
+          "disposed": 0,
+          "cancelled": 0,
+          "deaths": 0,
+          "rewardsObserved": 0,
+          "respawns": 0,
+          "decisionUpdates": 0,
+          "farDecisionSkips": 0,
+          "errors": 0,
+          "peakEntries": 5,
+          "peakEstimatedBytes": 155189248
+        },
+        "actors": [
+          {
+            "id": "actor-1",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-2",
+            "actorDefinitionId": "elena.mourning",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 100663296,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-3",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-4",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-5",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          }
+        ]
+      },
+      "fullCpuSimulationMs": {
+        "samples": 64,
+        "median": 0.5973000000003594,
+        "p95": 1.1412999999997737,
+        "p99": 4.930999999999585,
+        "max": 4.930999999999585,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerCpuMs": {
+        "samples": 64,
+        "median": 0.0015000000003055902,
+        "p95": 0.0027000000000043656,
+        "p99": 0.022399999999834108,
+        "max": 0.022399999999834108,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "drawCost": {
+        "draws": 21,
+        "mainDraws": 14,
+        "shadowDraws": 7,
+        "submittedTrianglesByPass": {
+          "main": 222244,
+          "shadow": 111122
+        },
+        "submittedTrianglesByRole": {
+          "outline": 111122,
+          "internal-lines": 0,
+          "surface-or-effect": 222244
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      }
+    },
+    {
+      "requested": 10,
+      "actual": 10,
+      "definitions": [
+        "elena.mourning",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard"
+      ],
+      "coldOrExpansionNodeElapsedMs": 112.70659999999998,
+      "counters": {
+        "modelParses": 3,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 25,
+        "newMaterial": 22,
+        "morphTextureArrayCreates": 6
+      },
+      "native": {
+        "skeletonClones": 11,
+        "boneLinks": 1022,
+        "animationGroupClones": 150,
+        "animationGroupStarts": 21,
+        "materialClones": 0,
+        "meshClones": 23
+      },
+      "resources": {
+        "meshes": 48,
+        "geometries": 17,
+        "materials": 22,
+        "textures": 25,
+        "skeletons": 11,
+        "animationGroups": 150,
+        "morphManagers": 2,
+        "transformNodes": 717,
+        "sceneObservers": 7,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 13,
+        "pendingSceneItems": 0,
+        "battleEncounters": 10,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8837080,
+          "cpuUniqueMorphArrayBytes": 10431168,
+          "skeletonMatrixBytes": 66368,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      "manager": {
+        "generation": "first-map",
+        "paused": false,
+        "clockSeconds": 3.1999999999999935,
+        "entries": 10,
+        "states": {
+          "active": 10
+        },
+        "estimatedBytes": 230686720,
+        "memoryMeaning": "Conservative definition reservations followed by adapter estimates; not measured GPU/process residency.",
+        "pending": 0,
+        "queued": 0,
+        "currentPreparations": 0,
+        "limits": {
+          "total": 20,
+          "active": 20,
+          "perDefinition": 20,
+          "perType": {
+            "monster": 20,
+            "boss": 20,
+            "npc": 20
+          },
+          "estimatedMemoryBytes": 536870912,
+          "concurrentPreparations": 1,
+          "idleSeconds": 120
+        },
+        "stats": {
+          "created": 10,
+          "reused": 6,
+          "activated": 16,
+          "disposed": 0,
+          "cancelled": 0,
+          "deaths": 0,
+          "rewardsObserved": 0,
+          "respawns": 0,
+          "decisionUpdates": 0,
+          "farDecisionSkips": 0,
+          "errors": 0,
+          "peakEntries": 10,
+          "peakEstimatedBytes": 230686720
+        },
+        "actors": [
+          {
+            "id": "actor-1",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 3,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-2",
+            "actorDefinitionId": "elena.mourning",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 100663296,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-3",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-4",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-5",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-6",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-7",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-8",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-9",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-10",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          }
+        ]
+      },
+      "fullCpuSimulationMs": {
+        "samples": 64,
+        "median": 1.110700000000179,
+        "p95": 1.9917999999997846,
+        "p99": 6.067500000000109,
+        "max": 6.067500000000109,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerCpuMs": {
+        "samples": 64,
+        "median": 0.0013999999996485712,
+        "p95": 0.01139999999986685,
+        "p99": 0.016600000000380533,
+        "max": 0.016600000000380533,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "drawCost": {
+        "draws": 36,
+        "mainDraws": 24,
+        "shadowDraws": 12,
+        "submittedTrianglesByPass": {
+          "main": 443892,
+          "shadow": 221946
+        },
+        "submittedTrianglesByRole": {
+          "outline": 221946,
+          "internal-lines": 0,
+          "surface-or-effect": 443892
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      }
+    },
+    {
+      "requested": 20,
+      "actual": 20,
+      "definitions": [
+        "elena.mourning",
+        "elena.mourning",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard",
+        "hooded-goblin.standard"
+      ],
+      "coldOrExpansionNodeElapsedMs": 189.55679999999984,
+      "counters": {
+        "modelParses": 3,
+        "libraryInstantiateMethodCalls": 0,
+        "newGeometry": 38,
+        "newMaterial": 35,
+        "morphTextureArrayCreates": 10
+      },
+      "native": {
+        "skeletonClones": 22,
+        "boneLinks": 1652,
+        "animationGroupClones": 284,
+        "animationGroupStarts": 39,
+        "materialClones": 0,
+        "meshClones": 46
+      },
+      "resources": {
+        "meshes": 96,
+        "geometries": 28,
+        "materials": 35,
+        "textures": 38,
+        "skeletons": 22,
+        "animationGroups": 284,
+        "morphManagers": 4,
+        "transformNodes": 1391,
+        "sceneObservers": 7,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1
+        },
+        "nodeObservers": 26,
+        "pendingSceneItems": 0,
+        "battleEncounters": 20,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 8883792,
+          "cpuUniqueMorphArrayBytes": 11299872,
+          "skeletonMatrixBytes": 107392,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      },
+      "timers": {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      "manager": {
+        "generation": "first-map",
+        "paused": false,
+        "clockSeconds": 4.266666666666657,
+        "entries": 20,
+        "states": {
+          "active": 20
+        },
+        "estimatedBytes": 452984832,
+        "memoryMeaning": "Conservative definition reservations followed by adapter estimates; not measured GPU/process residency.",
+        "pending": 0,
+        "queued": 0,
+        "currentPreparations": 0,
+        "limits": {
+          "total": 20,
+          "active": 20,
+          "perDefinition": 20,
+          "perType": {
+            "monster": 20,
+            "boss": 20,
+            "npc": 20
+          },
+          "estimatedMemoryBytes": 536870912,
+          "concurrentPreparations": 1,
+          "idleSeconds": 120
+        },
+        "stats": {
+          "created": 20,
+          "reused": 16,
+          "activated": 36,
+          "disposed": 0,
+          "cancelled": 0,
+          "deaths": 0,
+          "rewardsObserved": 0,
+          "respawns": 0,
+          "decisionUpdates": 0,
+          "farDecisionSkips": 0,
+          "errors": 0,
+          "peakEntries": 20,
+          "peakEstimatedBytes": 452984832
+        },
+        "actors": [
+          {
+            "id": "actor-1",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 4,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-2",
+            "actorDefinitionId": "elena.mourning",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 3,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 100663296,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-3",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 3,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-4",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 3,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-5",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 3,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-6",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-7",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-8",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-9",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-10",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 2,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-11",
+            "actorDefinitionId": "elena.mourning",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 100663296,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-12",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-13",
+            "actorDefinitionId": "guardian-bear.standard",
+            "category": "boss",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 16777216,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-14",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-15",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-16",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-17",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-18",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-19",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          },
+          {
+            "id": "actor-20",
+            "actorDefinitionId": "hooded-goblin.standard",
+            "category": "monster",
+            "state": "active",
+            "lifeId": 1,
+            "flags": {
+              "death": false,
+              "reward": false,
+              "respawn": false
+            },
+            "respawnRemaining": null,
+            "estimatedBytes": 12582912,
+            "estimateKind": "adapter-estimate"
+          }
+        ]
+      },
+      "fullCpuSimulationMs": {
+        "samples": 64,
+        "median": 1.7451999999998407,
+        "p95": 3.151800000000094,
+        "p99": 8.79469999999992,
+        "max": 8.79469999999992,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerCpuMs": {
+        "samples": 64,
+        "median": 0.001299999999901047,
+        "p95": 0.002300000000104774,
+        "p99": 0.006899999999859574,
+        "max": 0.006899999999859574,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "drawCost": {
+        "draws": 72,
+        "mainDraws": 48,
+        "shadowDraws": 24,
+        "submittedTrianglesByPass": {
+          "main": 809432,
+          "shadow": 404716
+        },
+        "submittedTrianglesByRole": {
+          "outline": 404716,
+          "internal-lines": 0,
+          "surface-or-effect": 809432
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      }
+    }
+  ],
+  "events": {
+    "death": [
+      [
+        "actor-3",
+        3
+      ]
+    ],
+    "reward": [
+      [
+        "actor-3",
+        3
+      ]
+    ],
+    "respawn": [
+      [
+        "actor-3",
+        4
+      ]
+    ],
+    "grants": [
+      {
+        "kind": "goblin",
+        "position": {
+          "_isDirty": true,
+          "_x": 4.215582877403733,
+          "_y": 0,
+          "_z": -0.490919858173931
+        },
+        "actorDefinitionId": "hooded-goblin.standard",
+        "actorId": "development-actor-3",
+        "life": 3
+      }
+    ]
+  },
+  "errors": [],
+  "remainingTimers": {
+    "timeouts": 0,
+    "intervals": 0
+  },
+  "limits": [
+    "Actual shipped geometry/indices/skin/morph/animation data, real scoped public glTF loader and production encounter/battle/ChapterQuests paths. EXT_meshopt bytes decoded offline with existing helper and loaded through virtual I/O.",
+    "Opaque1x1 material fixtures replace model image/KTX decoding. Morph texture-array calls use existing inert NullEngine shim. No pixels, driver/GPU or complete texture-memory result.",
+    "Resource memory is conservative manager estimates plus a deduplicated lower bound of actual CPU geometry/morph/skeleton buffers. Source templates are explicitly caller-owned in these scenarios and are disposed with the fixture.",
+    "The demonstrated20active logic limit is a configured test cap. Actual simultaneous-device-cap/60FPS, thermals and input latency are unverified.",
+    "CPU preparation/simulation timings are Node reference samples and cannot predict device FPS."
+  ]
+}

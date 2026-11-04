@@ -1,0 +1,24 @@
+{
+  "commit": "2c4ed67a8912f52cf33f46346c0f73330a89acdf",
+  "browserAutomation": false,
+  "scope": "HTTP SHA-256 equality; no pixels or physical-device measurement",
+  "verified": [
+    {
+      "path": "ArcherPreviewSite/assets/index-CGGkO1b4.js",
+      "bytes": 2887632,
+      "sha256": "f147e2bf68333ae41022e78a5bc686d00824004ecf34248600dd0eb199e1102b"
+    },
+    {
+      "path": "ArcherPreviewSite/index.html",
+      "bytes": 60185,
+      "sha256": "0b7ce0a323a474774801ff26da297b6249d8342363e15e8f9bd4a6e3dd36cf62"
+    },
+    {
+      "path": "ArcherPreviewSite/deployment-files.json",
+      "bytes": 361883,
+      "sha256": "5a295b5b09d86a1429250123714dc8c74c3e779ae4e386e5d3eed31cacffcc34"
+    }
+  ],
+  "expectedFiles": 3,
+  "passed": true
+}

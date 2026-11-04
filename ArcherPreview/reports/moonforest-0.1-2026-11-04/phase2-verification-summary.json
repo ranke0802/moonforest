@@ -1,0 +1,333 @@
+{
+  "generatedAt": "2026-11-04T02:41:07.623Z",
+  "passed": true,
+  "independentScenarios": 15,
+  "sourceHashes": {
+    "actor-population.js": "6ad79185db1895c26dcd659deae0924b196469cb7a33435ad191dc9ff8624618",
+    "actor-definitions.js": "ef8866e1ee78fbfdd90c8bc77fcc3deb3f3e1711e2fb0ad3ded42ec5cf93101e",
+    "actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "animation.js": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+    "boss-encounter.js": "826d6b8154ecdecbb2b3a155a6f59fdcb6145e0f467f5ea9e6e33456908622e0",
+    "boss-battle.js": "48f06b48cfc216dd14cca7cd965bacd3ce44ed30ef5ec4c5af0391c4cd4e30b9",
+    "chapter-quest.js": "63d37594e9754cc43310f5d3a3d1371b50ae6805bfaab6fd4c44814c1056a008",
+    "boss-models.js": "e56a3a5e45e6223d18fdb43fb6668e1e9d22f56976034e0e238aad22a3c00df4",
+    "boss-gpu-preparation.js": "faaeac9875fee36328dda32a29da23f8c72c08f58358b22aacb3f02a5b544ae7",
+    "map-container.js": "54a227dacf6fd9302d059f870e96a52b6d55b68df3d8d7879895603df18bac7d",
+    "main.js": "55d62f650ecf874caf0359040cb103c0f533a88576ec00e6d4b7322be5111e46"
+  },
+  "currentSourceHashesMatchReports": true,
+  "result": "Actual shipped actor geometry/skin/morph/clips exercise data-driven pooling, battle-owned update/contact order, warm binding reuse, lifecycle resets, map cancellation, NPC delegation/scheduling and owned source eviction. No device active-count or60FPS claim.",
+  "modelAssets": [
+    {
+      "id": "guardian-bear",
+      "version": "Guardian Bear · 20 original motions",
+      "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+      "modelSha256": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29",
+      "triangles": 30000,
+      "vertices": 41898
+    },
+    {
+      "id": "mourning-elena",
+      "version": "Mourning Elena · r10 motion · approved 49,982 triangles",
+      "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+      "modelSha256": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff",
+      "triangles": 49982,
+      "vertices": 40777
+    },
+    {
+      "id": "hooded-goblin",
+      "version": "Hooded Goblin - 12 source motions",
+      "model": "file:///C:/dev/moonforest-archer/ArcherPreview/public/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+      "modelSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+      "triangles": 10412,
+      "vertices": 18403
+    }
+  ],
+  "counts": [
+    {
+      "actors": 1,
+      "meshes": 4,
+      "geometries": 2,
+      "materials": 4,
+      "textures": 6,
+      "skeletons": 1,
+      "animationGroups": 20,
+      "morphManagers": 0,
+      "sceneObservers": 5,
+      "nodeObservers": 1,
+      "managerEstimatedBytes": 16777216,
+      "lowerBoundCpuBufferBytes": 4394416,
+      "actualMainDraws": 2,
+      "actualShadowDraws": 1,
+      "actualMainTriangles": 60000,
+      "actualShadowTriangles": 30000,
+      "cpuSimulationNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.14689999999995962,
+        "p95": 0.6782000000000608,
+        "p99": 4.3577999999999975,
+        "max": 4.3577999999999975,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.001199999999926149,
+        "p95": 0.009199999999964348,
+        "p99": 0.19190000000003238,
+        "max": 0.19190000000003238,
+        "over16_67ms": 0,
+        "over50ms": 0
+      }
+    },
+    {
+      "actors": 5,
+      "meshes": 28,
+      "geometries": 12,
+      "materials": 17,
+      "textures": 20,
+      "skeletons": 6,
+      "animationGroups": 66,
+      "morphManagers": 2,
+      "sceneObservers": 7,
+      "nodeObservers": 8,
+      "managerEstimatedBytes": 155189248,
+      "lowerBoundCpuBufferBytes": 19295144,
+      "actualMainDraws": 14,
+      "actualShadowDraws": 7,
+      "actualMainTriangles": 222244,
+      "actualShadowTriangles": 111122,
+      "cpuSimulationNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.5973000000003594,
+        "p95": 1.1412999999997737,
+        "p99": 4.930999999999585,
+        "max": 4.930999999999585,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.0015000000003055902,
+        "p95": 0.0027000000000043656,
+        "p99": 0.022399999999834108,
+        "max": 0.022399999999834108,
+        "over16_67ms": 0,
+        "over50ms": 0
+      }
+    },
+    {
+      "actors": 10,
+      "meshes": 48,
+      "geometries": 17,
+      "materials": 22,
+      "textures": 25,
+      "skeletons": 11,
+      "animationGroups": 150,
+      "morphManagers": 2,
+      "sceneObservers": 7,
+      "nodeObservers": 13,
+      "managerEstimatedBytes": 230686720,
+      "lowerBoundCpuBufferBytes": 19334616,
+      "actualMainDraws": 24,
+      "actualShadowDraws": 12,
+      "actualMainTriangles": 443892,
+      "actualShadowTriangles": 221946,
+      "cpuSimulationNodeReferenceMs": {
+        "samples": 64,
+        "median": 1.110700000000179,
+        "p95": 1.9917999999997846,
+        "p99": 6.067500000000109,
+        "max": 6.067500000000109,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.0013999999996485712,
+        "p95": 0.01139999999986685,
+        "p99": 0.016600000000380533,
+        "max": 0.016600000000380533,
+        "over16_67ms": 0,
+        "over50ms": 0
+      }
+    },
+    {
+      "actors": 20,
+      "meshes": 96,
+      "geometries": 28,
+      "materials": 35,
+      "textures": 38,
+      "skeletons": 22,
+      "animationGroups": 284,
+      "morphManagers": 4,
+      "sceneObservers": 7,
+      "nodeObservers": 26,
+      "managerEstimatedBytes": 452984832,
+      "lowerBoundCpuBufferBytes": 20291056,
+      "actualMainDraws": 48,
+      "actualShadowDraws": 24,
+      "actualMainTriangles": 809432,
+      "actualShadowTriangles": 404716,
+      "cpuSimulationNodeReferenceMs": {
+        "samples": 64,
+        "median": 1.7451999999998407,
+        "p95": 3.151800000000094,
+        "p99": 8.79469999999992,
+        "max": 8.79469999999992,
+        "over16_67ms": 0,
+        "over50ms": 0
+      },
+      "managerNodeReferenceMs": {
+        "samples": 64,
+        "median": 0.001299999999901047,
+        "p95": 0.002300000000104774,
+        "p99": 0.006899999999859574,
+        "max": 0.006899999999859574,
+        "over16_67ms": 0,
+        "over50ms": 0
+      }
+    }
+  ],
+  "warmReuse": {
+    "actualNormalEnemyDeathAndRespawn": [
+      "dying",
+      "corpse",
+      "dormant"
+    ],
+    "normalEnemyNativeCreationAndBindingDelta": {
+      "skeletonClones": 0,
+      "boneLinks": 0,
+      "animationGroupClones": 0,
+      "animationGroupStarts": 0,
+      "materialClones": 0,
+      "meshClones": 0
+    },
+    "normalEnemyRuntimeDelta": {
+      "modelParses": 0,
+      "libraryInstantiateMethodCalls": 0,
+      "newGeometry": 0,
+      "newMaterial": 0,
+      "morphTextureArrayCreates": 0
+    },
+    "twentyActorReuseCycles": 5,
+    "twentyActorResourcesAndBufferEstimatePlateau": true,
+    "scoped49982TriangleWarmLives": 5,
+    "scopedNewModelRequestsOnWarm": 0,
+    "scopedNativeCloneAndBindingIncrements": 0,
+    "retainedVsImmutablePhase1WarmAnimationLives": 6,
+    "retainedNativeGroupStarts": 0,
+    "baselineNativeGroupStarts": 24,
+    "originalMaterialGeometryAndOutlineReuse": true
+  },
+  "correctness": {
+    "requestedAndActualCounts": [
+      1,
+      5,
+      10,
+      20
+    ],
+    "twentyOneRejectedExplicitly": true,
+    "configuredLogicCap": 20,
+    "physicalDeviceCap": "unverified",
+    "independent49982TriangleActors": 2,
+    "sharedBaseGeometry": true,
+    "independentSkeletonMorphAnimationTargets": true,
+    "battleUpdateAndContactsExactlyOncePerActorPerFrame": true,
+    "immutablePhase1CombatOrderFrames": 180,
+    "inputQueueRetainedThroughDodge": true,
+    "sourceUnchanged": {
+      "warrior-v2.js": true,
+      "warrior-controller.js": true,
+      "player-combat.js": true,
+      "melee-collision.js": true,
+      "player-strikes.js": true
+    },
+    "deathRewardRespawnOnce": true,
+    "pauseFreezesRespawnClock": true,
+    "statesObserved": [
+      "dying",
+      "corpse",
+      "dormant"
+    ],
+    "partialPreparedMapCancellationNoLateActor": true,
+    "invalidSpawnRejectedBeforeCreation": [
+      "player-safety-distance",
+      "blocked-navigation",
+      "wrong-map"
+    ],
+    "npcActualQuestDelegation": "talk:guard",
+    "npcInteractionGuards": [
+      "far",
+      "line-of-sight",
+      "busy",
+      "combat",
+      "wrong-map"
+    ],
+    "npcNearDecisions": 60,
+    "npcFarDecisions": 1,
+    "npcVisualUpdates": 123,
+    "farActivityOverrides": [
+      "incoming",
+      "projectile",
+      "questRelevant"
+    ],
+    "idleActorEvictionPlateauCycles": 3,
+    "ownedScopedLibraryEvictionReleasesSource": true,
+    "remainingTimers": [
+      {
+        "timeouts": 0,
+        "intervals": 0
+      },
+      {
+        "timeouts": 0,
+        "intervals": 0
+      }
+    ]
+  },
+  "dataRegistration": {
+    "name": "one registered data variant applies HP collider and clip map without mutating the shared source or default actor",
+    "passed": true,
+    "registeredDefinitionId": "verification.goblin.variant",
+    "hp": 275,
+    "collider": {
+      "radius": 0.44,
+      "stopDistance": 1.3,
+      "separationRadius": 0.52
+    },
+    "idleClip": "Sneaky_Walk_inplace",
+    "defaultActorHp": 180,
+    "defaultIdleClip": "Walking",
+    "sourceConfigUnchanged": true,
+    "warmNativeIncrements": 0,
+    "unsupportedMovementAndAuthoredMourningRemapRejected": true
+  },
+  "developmentScenarioIsolation": {
+    "mainGuard": "releaseEnabled && actorLab=1",
+    "dynamicImport": "developer-actors.js",
+    "staticDevelopmentModuleImports": 0,
+    "scope": "Source import/guard inspection; no browser network capture was performed."
+  },
+  "independentIssuesFoundAndResolved": [
+    "Population validator now understands definition validator valid=false.",
+    "Adapter lifetime lease survives completed preparation tasks while per-operation cancellation remains strict.",
+    "Retained zero-weight clips now set native animatable weight0, independently matching immutable baseline crossfade pose.",
+    "Owned source cache refcounts and last-actor eviction release libraries; cleanup promises keep retiring ownership charged.",
+    "Actual dying and corpse periods are distinguishable."
+  ],
+  "limits": [
+    "NullEngine does not rasterize; image/KTX material decode is replaced with opaque1x1fixtures, while actual positions/indices/UV/weights/morphs/clips and production toon/outline/internal-line/shadow paths remain.",
+    "Draw triangle counts include actual main/silhouette/shadow submissions. Internal crease lines are integrated in the surface shader; zero standalone internal-line batches do not mean zero shader cost.",
+    "Manager estimated memory is conservative policy accounting; the independently deduplicated CPU buffer estimate excludes JS object overhead, real image caches and driver/GPU residency. Neither is measured physical-device memory.",
+    "Only synchronous Node simulation/manager intervals are CPU reference timings. Async expansion/warm intervals include scheduling and are labeled Node elapsed, not isolated CPU/GPU time. No device performance or input-latency improvement is established.",
+    "Combat-order probe uses actual bear/goblin encounters and production input controller against immutable phase1 BossBattle; player strike sample is null, so it does not revalidate sword contact accuracy. Existing production contact modules remain source-identical.",
+    "Observer plateau is checked after Babylon next-render active-container cleanup and deferred observer-removal bookkeeping drain.",
+    "No browser automation, full suite, build, deploy, commit or new/paid asset generation was performed by the verifier; root owns release validation."
+  ],
+  "reports": [
+    "phase2-verification-actors.json",
+    "phase2-verification-animation.json",
+    "phase2-verification-scoped-model.json",
+    "phase2-verification-combat-order.json"
+  ]
+}

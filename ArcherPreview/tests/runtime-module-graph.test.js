@@ -19,3 +19,11 @@ test('a loader reached only lazily does not satisfy the initial graph',()=>{
   const graph=good();graph[0].imports=[];graph[0].dynamicImports.push('assets/shared.js');
   assert.throws(()=>verifyRuntimeModuleGraph(graph),/KTX loader is not in the initial module graph/);
 });
+
+test('development actors and editors remain lazy while the normal game keeps its initial loader',()=>{
+ const graph=good();graph[0].modules['/project/src/main.js']={};
+ graph[2].modules['/project/src/actor-population.js']={};
+ assert.deepEqual(verifyRuntimeModuleGraph(graph),{chunks:3,entriesChecked:1});
+ graph[0].imports.push('assets/other.js');
+ assert.throws(()=>verifyRuntimeModuleGraph(graph),/Development module entered the initial game graph/);
+});

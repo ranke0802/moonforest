@@ -16,6 +16,18 @@ export class CharacterAnimator {
       return [state, (group.to - group.from) / fps];
     }));
   }
+  // Explicit development actor pools retain the paused native animatables for
+  // clips already used by this actor. A warm life resets playback state without
+  // rebuilding animation targets/bindings; ordinary characters keep stop/delete.
+  resetForReuse() {
+    this.current=null;this.actionId=null;
+    for(const entry of this.active.values()){
+      entry.weight=0;entry.target=0;entry.clipTime=0;entry.actionId=null;
+      entry.controlled=false;entry.timeScale=1;entry.loop=false;entry.blendDuration=.14;
+      entry.group.setWeightForAllAnimatables(0);entry.appliedWeight=0;
+    }
+    return this;
+  }
   transition(state, { phase = 0, clipTime, timeScale = 1, actionId = null, loop = false, blendDuration = .14 } = {}) {
     if (!this.clips[state]) throw new Error(`필수 동작을 찾지 못했습니다: ${state}`);
     const previous = this.current;
@@ -36,6 +48,7 @@ export class CharacterAnimator {
       entry = { group, weight: previous === null ? 1 : 0, target: 1, clipTime: 0, blendDuration };
       this.active.set(state, entry);
     }
+    if(this.retainBindings&&previous===null)entry.weight=1;
     entry.target = 1;
     entry.loop = loop;
     entry.actionId = actionId;
@@ -53,11 +66,15 @@ export class CharacterAnimator {
     for (const [state, entry] of this.active) {
       const step = dt / Math.max(.001, entry.blendDuration);
       entry.weight = entry.target > entry.weight ? Math.min(entry.target, entry.weight + step) : Math.max(entry.target, entry.weight - step);
-      if (entry.weight <= 0 && entry.target === 0) { entry.group.stop(); this.active.delete(state); continue; }
+      if (entry.weight <= 0 && entry.target === 0) {
+        if(this.retainBindings){if(entry.appliedWeight!==0){entry.group.setWeightForAllAnimatables(0);entry.appliedWeight=0;}}
+        else{entry.group.stop();this.active.delete(state);}continue;
+      }
       totalWeight += entry.weight;
     }
     const current = this.active.get(this.current);
     for (const [state, entry] of this.active) {
+      if(this.retainBindings&&entry.weight<=0&&entry.target===0)continue;
       // Interrupted fades can leave three groups active. Never mix the rest pose into that gap.
       if (totalWeight > 0) entry.weight /= totalWeight;
       if(entry.appliedWeight!==entry.weight){entry.group.setWeightForAllAnimatables(entry.weight);entry.appliedWeight=entry.weight;}
