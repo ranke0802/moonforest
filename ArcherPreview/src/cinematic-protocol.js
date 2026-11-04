@@ -1,5 +1,5 @@
 export const CINEMATIC_CHANNEL='moonforest-cinematic-studio';
-const commands=['load','patch-document','save-scene','select-actor','focus-actor','camera-mode','path-visibility','play','pause','resume','seek','stop','loop','capture-camera','status'];
+const commands=['load','patch-document','save-scene','select-actor','focus-actor','camera-mode','path-visibility','list-existing','play','pause','resume','seek','stop','loop','capture-camera','status'];
 export function parseCinematicCommand(event,{source,origin}){
   if(event.source!==source||event.origin!==origin)return null;
   const value=event.data;

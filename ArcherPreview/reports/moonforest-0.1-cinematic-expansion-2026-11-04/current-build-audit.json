@@ -1,0 +1,254 @@
+{
+  "generatedAt": "2026-11-04T10:10:44.780Z",
+  "passed": true,
+  "inputs": {
+    "origins": {
+      "path": "reports/moonforest-0.1-cinematic-expansion-2026-11-04/runtime-module-origins.json",
+      "sha256": "30c62dee9f647f1dc165880b5e323dcba7920716669ff927caf7fea281d051e1"
+    },
+    "manifest": {
+      "path": "dist-village/deployment-files.json",
+      "sha256": "e55696f3a3c324dc3448944cf9e23e9ac2d5d404d463c3142585d94f31fa6850"
+    }
+  },
+  "graph": {
+    "totalChunks": 55,
+    "mainEntry": "assets/game-vPcMhXjg.js",
+    "initialStaticChunks": 29,
+    "initialRawJavaScriptBytes": 10286746,
+    "initialHeavyModules": [],
+    "initialGizmoImplementations": [],
+    "nativeKtxLoaderRetained": true,
+    "staticAndDynamicAstImportsAgree": true,
+    "allChunkHashesMatchDistAndSyncedSite": true,
+    "lazyModules": {
+      "cinematic-document": [
+        "assets/cinematic-protocol-uvT_IctR.js"
+      ],
+      "cinematic-editing": [
+        "assets/cinematicStudio-CXQbkDny.js"
+      ],
+      "cinematic-player": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-studio": [
+        "assets/cinematicStudio-CXQbkDny.js"
+      ],
+      "cinematic-game": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-scene-host": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-interaction": [
+        "assets/cinematic-interaction-D7az4WIz.js"
+      ],
+      "cinematic-subtitles": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-media": [
+        "assets/cinematic-protocol-uvT_IctR.js"
+      ],
+      "cinematic-audio": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-assets": [
+        "assets/cinematic-protocol-uvT_IctR.js"
+      ],
+      "cinematic-visual-adapter": [
+        "assets/cinematic-game-CW1v6bVn.js"
+      ],
+      "cinematic-path-view": [
+        "assets/cinematic-interaction-D7az4WIz.js"
+      ],
+      "asset-catalog": [
+        "assets/asset-catalog-DaUPuc9d.js"
+      ],
+      "developer-editor": [
+        "assets/developer-editor-jegXfcue.js"
+      ],
+      "editor-workspace": [
+        "assets/developer-editor-jegXfcue.js"
+      ],
+      "tool-fine-zoom": [
+        "assets/tool-fine-zoom-qIveTlal.js"
+      ]
+    }
+  },
+  "resources": {
+    "baselineRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "sourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "builtRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "computedIndexRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "sourceBuiltSiteIndexIdentical": true,
+    "resourceEntries": 1161,
+    "deploymentFiles": 1503,
+    "deploymentBytes": 682392863,
+    "unchangedQualityMeaning": "Exact initial working-tree resource index identity; this working baseline includes preexisting user asset changes relative to last published a33 release."
+  },
+  "features": {
+    "allBuiltExpansionControls": true,
+    "historyLimits": [
+      5,
+      5,
+      5
+    ],
+    "sourceCssSha256": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+    "builtCssSha256": "b0b6cf45212c8ccc84f317d0fee5dfc0a2a64351265b2b64d350c8e2aeca2a1f",
+    "canonicalCssRulesMatch": true,
+    "guideMatchesSourceAndSite": true,
+    "catalogEntries": 84,
+    "normalBuildAutomaticCatalogReflection": true
+  },
+  "protectedHashes": {
+    "src/main.js": {
+      "expected": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+      "actual": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+      "unchanged": true
+    },
+    "src/map-route.js": {
+      "expected": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "actual": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "unchanged": true
+    },
+    "src/player-texture-profile.js": {
+      "expected": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+      "actual": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+      "unchanged": true
+    },
+    "src/render-policy.js": {
+      "expected": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "actual": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "unchanged": true
+    },
+    "src/village-outlines.js": {
+      "expected": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+      "actual": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+      "unchanged": true
+    },
+    "src/village-texture-budget.js": {
+      "expected": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "actual": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "unchanged": true
+    },
+    "src/village-texture-streaming.js": {
+      "expected": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+      "actual": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+      "unchanged": true
+    },
+    "src/village-streamed-environment.js": {
+      "expected": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+      "actual": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+      "unchanged": true
+    },
+    "src/village-visibility.js": {
+      "expected": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "actual": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "unchanged": true
+    }
+  },
+  "sourceHashMatches": {
+    "src/cinematic-document.js": {
+      "sha256": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-editing.js": {
+      "sha256": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-player.js": {
+      "sha256": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-game.js": {
+      "sha256": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-studio.js": {
+      "sha256": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-studio.css": {
+      "sha256": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-scene-host.js": {
+      "sha256": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-interaction.js": {
+      "sha256": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-path-view.js": {
+      "sha256": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-subtitles.js": {
+      "sha256": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-media.js": {
+      "sha256": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-audio.js": {
+      "sha256": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-assets.js": {
+      "sha256": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-visual-adapter.js": {
+      "sha256": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-registry.js": {
+      "sha256": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+      "unchangedSinceIntegration": true
+    },
+    "src/asset-catalog.js": {
+      "sha256": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+      "unchangedSinceIntegration": true
+    },
+    "src/editable-asset-index.js": {
+      "sha256": "0d664131d3c5bf6a6471ecc258513c74a2a68fa0e8f0677638c2659b53527be2",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-village-site.mjs": {
+      "sha256": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-asset-catalog.mjs": {
+      "sha256": "a65e48e1b27f41e7b8ba739cf23fbd59e9b93957252e6ee03c480ad1dfd58898",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/refresh-cinematic-catalog.mjs": {
+      "sha256": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567",
+      "unchangedSinceIntegration": true
+    }
+  },
+  "wholeRegression": {
+    "reportedByRoot": {
+      "passed": 1818,
+      "total": 1819,
+      "failed": 1,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "knownFailure": {
+      "path": "tests/cave-laboratory-geometry.test.js",
+      "label": "a textureless native structure cannot increase the compressed mobile high-texture budget",
+      "classification": "Preexisting test fixture incompatible with protected user texture-policy edits; no cinematic source dependency in reproduced constructor failure",
+      "independentProof": "verification-inherited-texture-fixture.json",
+      "validTexturelessInvariance": true
+    },
+    "allGreen": false
+  },
+  "stage": {
+    "checked": true,
+    "files": 1503
+  },
+  "scope": "Independent current emitted AST/origins, synced bytes, resource identity, source protections and feature-marker audit. Not a browser download/layout/pixels/GPU/device-performance or audible-sound test."
+}

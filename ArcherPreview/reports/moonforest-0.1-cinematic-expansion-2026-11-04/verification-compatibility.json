@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "old catalog revision migration is opt-in identity checked and registered bytes stay authenticated",
+      "pass": true,
+      "evidence": {
+        "old": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+        "current": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+        "strictReject": true,
+        "unknownAssetReject": true,
+        "indexMismatchReject": true
+      }
+    },
+    {
+      "name": "ordinary build automatically refreshes future catalog after verified index before Vite",
+      "pass": true,
+      "evidence": {
+        "sourceSha256": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+        "ordering": [
+          "verifyResourceBundles",
+          "refreshCinematicCatalog",
+          "collectVillageSiteFiles",
+          "Vite build"
+        ],
+        "firstChanges": [
+          "asset-catalog.js",
+          "editable-asset-index.js"
+        ],
+        "repeatChanges": []
+      }
+    },
+    {
+      "name": "actual Studio file import normalizes only legacy global catalog revision",
+      "pass": true,
+      "evidence": {
+        "before": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+        "after": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175"
+      }
+    },
+    {
+      "name": "normal game GUI consumes same portable project and releases at natural end",
+      "pass": true,
+      "evidence": {
+        "sceneId": "scene-20261104100029-1",
+        "worldMap": "great-plains",
+        "contexts": 1,
+        "ready": true,
+        "heroEnabled": true,
+        "inputSuspended": false,
+        "history": {
+          "state": "completed",
+          "time": 8,
+          "duration": 8,
+          "cutsceneId": "scene-20261104100029-1",
+          "loop": false,
+          "retained": false,
+          "error": null,
+          "backgroundMapId": "great-plains",
+          "transitioning": false
+        },
+        "resources": [
+          {
+            "mapId": "village",
+            "records": 753
+          },
+          {
+            "mapId": "great-plains",
+            "records": 1424
+          }
+        ]
+      }
+    }
+  ],
+  "sourceBefore": {
+    "src/cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+    "src/cinematic-studio.js": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+    "src/cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+    "src/cinematic-registry.js": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+    "scripts/build-village-site.mjs": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+    "scripts/refresh-cinematic-catalog.mjs": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567"
+  },
+  "sourceAfter": {
+    "src/cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+    "src/cinematic-studio.js": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+    "src/cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+    "src/cinematic-registry.js": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+    "scripts/build-village-site.mjs": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+    "scripts/refresh-cinematic-catalog.mjs": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567"
+  },
+  "sourceUnchanged": true,
+  "limits": [
+    "Build wiring inspected and refresh invoked only in isolated temporary project; no production build by verifier",
+    "Actual Studio/game/native CPU and resource fixture; no pixels/browser/GPU/audibility claim"
+  ]
+}

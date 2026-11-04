@@ -1,0 +1,88 @@
+{
+  "task": "Cinematic assets, visual ownership, timed visibility and text presentation expansion",
+  "baseline": "5c65642",
+  "owner": "/root/rendering",
+  "requestedSpawn": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "note": "Reused successful existing agent; backend model resolution was not independently surfaced."
+  },
+  "files": {
+    "src/cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+    "src/cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "src/cinematic-authoring.js": "d326579b02da0f39d87fc6514b5aa6bf461c1bf5b8b407ceaaba674dabd4d390",
+    "src/cinematic-subtitles.js": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d",
+    "scripts/build-asset-catalog.mjs": "a65e48e1b27f41e7b8ba739cf23fbd59e9b93957252e6ee03c480ad1dfd58898",
+    "src/asset-catalog.js": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+    "src/cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "src/cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+    "tests/cinematic-expansion-runtime.test.js": "e3ca552e2e8b4f7b8e6ebff0ddff1fb58a209789364a4be5304b7f77aea462d3",
+    "tests/cinematic-scene-host.test.js": "ad7485e049a90e83afc17dba79bfe1259302bb88aca20f6eb515ad05ae384d25"
+  },
+  "catalog": {
+    "entries": 84,
+    "modelManifests": 18,
+    "metadataModelsRead": 249,
+    "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "contentRevision": "c3b5dafc40c2a23023ea7c992ba95dd311741df9db2649ab0ae16c2712add064",
+    "discovery": "Top-level deployed public/assets model-bearing manifests; original known ordering retained, future registrations appended; local cache/sample/development/legacy sources excluded."
+  },
+  "implementation": [
+    "Metadata-only getCinematicDefinitions/listCinematicAssets covers every catalog asset/version and preserves existing specialized definitions.",
+    "Independent generic skinned/deformed visual adapter shares source geometry/material/texture resources while cloning skeletons and animation targets; no combat brain, collision, reward or battle-list entry.",
+    "Static generated choices reuse existing unpublished placement runtime, native LOD/outline and near texture streaming. Free/non-colliding capability is local to this runtime view; canonical review/publish eligibility remains unchanged.",
+    "Actor visibility gates body/shadows and pick handles; hidden foreign bound references do not require an unavailable loaded original.",
+    "Borrowed original static roots support preview/timeline pose changes with scoped enable ownership; exact original matrix object/value, freeze flags, transforms/quaternion object, render/enabled/instance buffers/method descriptor and shadow-list membership restored on exit while original scene/root is live.",
+    "Existing-record list is serializable; explicit native pick plus bounding fallback selects original candidate without adding or mutating it.",
+    "Bound authoring pose/path helpers are editable, duplication drops instanceId; local pose/interaction inverse use active background anchor and all8 shared easing IDs.",
+    "Subtitle presentation styles opacity/offset/scale/typewriter text without changing original cue identity or recreating a visible cue node; absent presentation resets default styles.",
+    "Subtitle helper editing follows actual active background map. Root-owned game post preserves project mapId plus backgroundMapId envelope.",
+    "Interaction passes an active-background-anchored display-only path document and filters invisible handles on state/document refresh; authored keys and onChange identity retain the original document.",
+    "Generic default pose preserves a valid manifest animations.idle instead of blindly using the first glTF group (the shipped character lists an attack group first).",
+    "Cross-generation actor reuse waits for the exact in-flight retirement under the new session lifetime, checks cancellation/current-world validity, rereads the pool and then creates a fresh actor. Capacity checks also wait already-retiring slots."
+  ],
+  "verification": {
+    "final": {
+      "command": "node --test tests/cinematic-expansion-runtime.test.js tests/cinematic-scene-host.test.js",
+      "passed": 25,
+      "failed": 0
+    },
+    "earlierCombined": {
+      "command": "node --test tests/cinematic-expansion-runtime.test.js tests/cinematic-scene-host.test.js tests/cinematic-authoring.test.js tests/cinematic-subtitles.test.js",
+      "passed": 36,
+      "failed": 0,
+      "note": "Before adding the9th generic-late-cancel test and final normalizer/active-background helper refinements; those are covered by the final18. Existing host readonly case was updated under root's explicit ownership grant, retaining identity rejection checks."
+    },
+    "nativeCoverage": [
+      "Native independent skeleton/animation clone ownership with shared source geometry and warm preparation reuse",
+      "Sixteen timed-visibility warm replays with one source acquisition and no foreign bound allocation",
+      "Exact borrowed-root matrix identity/values and state restoration for complete/skip/replace/map-change/death/error/context-loss/dispose",
+      "Exact late native container cleanup after generic-source cancellation",
+      "Native original-prop pick/serializable selection without clone or transform mutation",
+      "Rotated second-background authoring local/world math and independent bound duplication",
+      "Concurrent presentation identity/styles/drag and legacy text reset",
+      "Native one-owner path overlay switches to a rotated second-background anchor, releases invisible selected path and leaves authored keys unchanged.",
+      "Release/mapId/ground/toolGeneration handoff waits without failure for the prior same-definition native actor; cancellation during that wait cannot create or resurrect a late actor."
+    ],
+    "independent": "Verifier C owns shipped-model HTTP/default-loader, real-world map handoff, actual geometry/shadow/LOD resource checks.",
+    "companion": {
+      "command": "node --test tests/cinematic-expansion-runtime.test.js tests/cinematic-subtitles.test.js",
+      "passed": 19,
+      "failed": 0,
+      "note": "Before the final manifest-idle preservation correction; expansion10 rerun passed afterward and explicitly covers first-group Attack versus declared Idle."
+    }
+  },
+  "integrationAsks": [
+    "Root references.actorDefinitions must use getCinematicDefinitions(catalog), with Studio using listCinematicAssets.",
+    "Root background handoff passes absolute time to host.acquire/prepare after releasing the previous lease and loading the target world.",
+    "Root generic existing selection bridge uses onExistingSelect and serializable host.getExistingHandles().",
+    "Root must regenerate editable-asset-index.js from editableIndexModule(ASSET_CATALOG) after catalog generation; it is outside this agent's write ownership."
+  ],
+  "limits": [
+    "Static runtime retains explicit8 distinct-source cache cap; total document actor cap20 remains, no silent count reduction.",
+    "Memory reservations and source cache counts are estimates/bounds, not device/GPU residency or frame-time claims.",
+    "Own generic loader tests inject manifest/container/shader preparation boundaries using real native AssetContainer/meshes/skeletons; independent actual shipped-model gate remains necessary.",
+    "No browser automation, paid/new assets, render-quality cuts, normal-play spawn changes, commits, full suite or build.",
+    "No named pre-existing user-dirty runtime/main/visibility/texture files were edited."
+  ]
+}

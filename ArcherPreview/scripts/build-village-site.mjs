@@ -11,6 +11,8 @@ import {ASSET_CATALOG} from '../src/asset-catalog.js';
 import {createBasePlacementManifest,validatePlacementDocument} from '../src/placement-document.js';
 import {listRegisteredCinematics,DEFAULT_CINEMATIC_REFERENCES} from '../src/cinematic-registry.js';
 import {validateCinematicDocument} from '../src/cinematic-document.js';
+import {getCinematicDefinitions} from '../src/cinematic-assets.js';
+import {refreshCinematicCatalog} from './refresh-cinematic-catalog.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
@@ -24,7 +26,7 @@ function contentReferences(value,result=[]){
 
 // Traverse live manifests and glTF dependencies, not public's raw source files.
 // Both './content/' and sky.json's 'content/' spelling resolve identically.
-export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVillage=true}={}){
+export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVillage=true,catalog=ASSET_CATALOG}={}){
   const publicRoot=resolve(publicDirectory),assetsRoot=resolve(publicRoot,'assets'),files=new Map(),pending=[];
   const manifests=(await readdir(assetsRoot,{withFileTypes:true})).filter(e=>e.isFile()&&e.name.endsWith('.json')&&!['village-fixture.json','resource-index.json'].includes(e.name));
   if(requireCompleteVillage){
@@ -67,7 +69,7 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
     for(const [mapId,entry]of Object.entries(authoredIndex.maps)){
       if(!['village','great-plains','monster-forest','witch-cave'].includes(mapId)||entry.path!==`authored/maps/${mapId}.json`)throw new Error('Unsafe authored map path');
       const absolute=resolve(publicRoot,entry.path),bytes=await readFile(absolute);if(bytes.length>512*1024||hash(bytes)!==entry.sha256)throw new Error('Authored map size/hash mismatch');
-      const document=validatePlacementDocument(JSON.parse(bytes),{catalog:ASSET_CATALOG,baseManifest:createBasePlacementManifest(mapId,{catalog:ASSET_CATALOG})});
+      const document=validatePlacementDocument(JSON.parse(bytes),{catalog,baseManifest:createBasePlacementManifest(mapId,{catalog})});
       if(document.mapId!==mapId||document.revision!==entry.revision||document.baseRevision!==entry.baseRevision)throw new Error('Authored map registry metadata mismatch');
       files.set(entry.path,{absolute,bytes:bytes.length});
     }
@@ -77,11 +79,11 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
   if(cinematicIndex)for(const entry of listRegisteredCinematics(cinematicIndex)){
     const absolute=resolve(publicRoot,entry.url),bytes=await readFile(absolute);
     if(bytes.length!==entry.bytes||hash(bytes)!==entry.sha256)throw new Error('Registered cinematic size/hash mismatch');
-    const instanceIds=createBasePlacementManifest(entry.mapId,{catalog:ASSET_CATALOG}).instances.map(row=>row.instanceId);
+    const instanceIds=createBasePlacementManifest(entry.mapId,{catalog}).instances.map(row=>row.instanceId);
     if(authoredIndex?.maps[entry.mapId]){const overlay=JSON.parse(await readFile(resolve(publicRoot,authoredIndex.maps[entry.mapId].path),'utf8'));instanceIds.push(...overlay.instances.map(row=>row.instanceId));}
-    const result=validateCinematicDocument(bytes.toString('utf8'),{...DEFAULT_CINEMATIC_REFERENCES,instanceIds}),document=result.document;
+    const result=validateCinematicDocument(bytes.toString('utf8'),{...DEFAULT_CINEMATIC_REFERENCES,catalog,actorDefinitions:getCinematicDefinitions(catalog),migrateCatalogRevision:true,instanceIds}),document=result.document;
     if(!result.valid)throw new Error('Registered cinematic document validation failed: '+JSON.stringify(result.errors));
-    if(document.cutsceneId!==entry.cutsceneId||document.mapId!==entry.mapId||document.duration!==entry.duration||document.catalogRevision!==entry.catalogRevision)throw new Error('Registered cinematic metadata mismatch');
+    if(document.cutsceneId!==entry.cutsceneId||document.mapId!==entry.mapId||document.duration!==entry.duration||(result.sourceCatalogRevision??document.catalogRevision)!==entry.catalogRevision)throw new Error('Registered cinematic metadata mismatch');
     files.set(entry.url,{absolute,bytes:bytes.length});
   }
   return {files,manifestCount:manifests.length};
@@ -104,6 +106,8 @@ export async function buildVillageSite(){
   // content copies in the workspace cannot enter the published inventory.
   const resourceIndex=await buildResourceBundles(publicRoot,files);
   const bundleAudit=await verifyResourceBundles(publicRoot,resourceIndex);
+  const catalogUpdate=await refreshCinematicCatalog({projectRoot:project});
+  await collectVillageSiteFiles(publicRoot,{catalog:catalogUpdate.catalog});
   for(const path of ['resource-index.json',...resourceIndex.bundles.map(p=>p.url)]){
     const absolute=resolve(publicRoot,'assets',path);files.set('assets/'+path,{absolute,bytes:(await readFile(absolute)).length});
   }

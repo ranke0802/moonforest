@@ -1,0 +1,19 @@
+{
+  "baseline": "5c65642",
+  "recordedAt": "2026-11-04T09:20:04.961Z",
+  "head": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "scope": "Read-only actual working-tree hashes of protected preexisting user-edited modules; no files restored/staged or treated as agent-owned.",
+  "protectedWorkingTreeHashes": {
+    "src/main.js": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+    "src/map-route.js": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+    "src/player-texture-profile.js": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+    "src/render-policy.js": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+    "src/village-outlines.js": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+    "src/village-texture-budget.js": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+    "src/village-texture-streaming.js": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+    "src/village-streamed-environment.js": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+    "src/village-visibility.js": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092"
+  },
+  "initialCatalogRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "featureContract": "verification-checkpoints.json"
+}

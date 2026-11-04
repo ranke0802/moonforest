@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "all deployed catalog versions have lazy cinematic definitions without review mutation",
+      "pass": true,
+      "evidence": {
+        "entries": 84,
+        "choices": 85,
+        "definitions": 85,
+        "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175"
+      }
+    },
+    {
+      "name": "synthetic future deployed manifest auto discovery without source registration edits",
+      "pass": true,
+      "evidence": {
+        "discovered": [
+          "newfuture"
+        ],
+        "assetId": "unannounced-crystal",
+        "definition": "cinematic.unannounced-crystal.556bb9f2ce47c382",
+        "modelsRead": 1
+      }
+    },
+    {
+      "name": "actual generic skinned source independent poses plus structural static unpublished runtime",
+      "pass": true,
+      "evidence": {
+        "asset": "character",
+        "sourceTriangles": 362494,
+        "bones": 101,
+        "clip": "Attack_Bow_Walking",
+        "staticAsset": "watchtower",
+        "modelLoads": 2,
+        "sharedGeometry": true,
+        "independentSkeletons": true,
+        "warmSeekLoads": 0,
+        "worldMetadataUnchanged": true
+      }
+    },
+    {
+      "name": "generic/static ownership releases actor skeletons/materials/observers",
+      "pass": true,
+      "evidence": {
+        "baseline": {
+          "meshes": 31,
+          "geometries": 4,
+          "materials": 6,
+          "textures": 4,
+          "skeletons": 0,
+          "morphManagers": 0,
+          "transformNodes": 1,
+          "sceneObservers": 4,
+          "nodeObservers": 1,
+          "scenePending": 0
+        },
+        "after": {
+          "meshes": 31,
+          "geometries": 4,
+          "materials": 7,
+          "textures": 4,
+          "skeletons": 0,
+          "morphManagers": 0,
+          "transformNodes": 1,
+          "sceneObservers": 4,
+          "nodeObservers": 1,
+          "scenePending": 0
+        },
+        "factory": {
+          "scene": true,
+          "engineOwned": false,
+          "rafOwned": false,
+          "state": "cancelled",
+          "active": false,
+          "actors": 0,
+          "estimatedBytes": 0,
+          "pendingRetirements": 0,
+          "limits": {
+            "actors": 20,
+            "estimatedBytes": 536870912,
+            "idleSeconds": 30
+          },
+          "stats": {
+            "acquired": 1,
+            "prepared": 1,
+            "samples": 4,
+            "released": 1,
+            "actorsCreated": 2,
+            "actorsReused": 0,
+            "actorsRetired": 2,
+            "audioCues": 0,
+            "markers": 0,
+            "cleanupErrors": 0
+          },
+          "pool": [],
+          "memoryMeaning": "Definition reservations and adapter estimates; no device/GPU residency claim."
+        },
+        "sourceModels": [
+          {
+            "url": "https://authoring-verification.test/assets/content/533cf50e621eb67829ca2ac3fa1c366e5b5fa0a651fc0b5a3893d3f9d517dd4e.gltf",
+            "sourceSha256": "533cf50e621eb67829ca2ac3fa1c366e5b5fa0a651fc0b5a3893d3f9d517dd4e",
+            "triangles": 362494
+          },
+          {
+            "url": "https://authoring-verification.test/assets/content/07ad1efe62f99573ebbc6ec93d3e5113fee0b617b9cbc0af728c866cdd300fc3.gltf",
+            "sourceSha256": "07ad1efe62f99573ebbc6ec93d3e5113fee0b617b9cbc0af728c866cdd300fc3",
+            "triangles": 4590
+          }
+        ]
+      }
+    }
+  ],
+  "sourceBefore": {
+    "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+    "cinematic-scene-host.js": "7b00d33e19cc95b98f8fb4ffcf4493e94a2b52294478911466ab54b0cbccec47",
+    "asset-catalog.js": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+    "authored-placement-runtime.js": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c"
+  },
+  "sourceAfter": {
+    "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+    "cinematic-scene-host.js": "7b00d33e19cc95b98f8fb4ffcf4493e94a2b52294478911466ab54b0cbccec47",
+    "asset-catalog.js": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+    "authored-placement-runtime.js": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c"
+  },
+  "sourceUnchanged": true,
+  "limits": [
+    "Native NullEngine CPU resource/pose/ownership verification; no pixels/GPU/device claim",
+    "Actual source vertex/index/animation data; fixture1px images/materials",
+    "Future manifest metadata fixture is temporary, never published or committed"
+  ]
+}

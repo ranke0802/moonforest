@@ -139,11 +139,12 @@ test('twenty independent actor poses are supported by the bounded lab and a twen
  const oversized=structuredClone(doc);oversized.actors.push(actor('over-cap'));await assert.rejects(f.player.load(oversized),{name:'CinematicValidationError'});assert.equal(f.counts.created,20);
 });
 
-test('existing map-instance references remain read-only and enforce asset identity without collision edits',async t=>{
+test('existing map-instance references sample transforms and restore exact frozen placement while enforcing asset identity',async t=>{
  const staticEntry={assetId:'static-prop',version:'static-test',geometry:{skinned:false,clipNames:[],clipDurations:{}},units:{metersPerSourceUnit:1},placement:{supported:false}},projectCatalog={revision:catalog.revision,entries:[entry,staticEntry]};
  const f=fixture(t,{projectCatalog,instanceIds:['base-prop']}),root=new TransformNode('immutable-base',f.scene);root.position.set(1,0,0);f.world.villageRenderRecords=[{root,placement:{id:'base-prop',asset:'static-prop'}}];
  const doc=document();doc.actors=[{actorId:'bound-prop',instanceId:'base-prop',assetId:'static-prop',assetVersion:'static-test',position:[1,0,0],rotation:[0,0,0,1],scale:1}];doc.tracks.animations=[];
- await f.player.load(doc);f.player.seek(1);near(root.position.asArray(),[1,0,0]);assert.equal(f.counts.created,0);
+ root.computeWorldMatrix(true);root.freezeWorldMatrix();const matrix=root.getWorldMatrix(),values=matrix.asArray().slice();await f.player.load(doc);f.player.seek(1);near(root.position.asArray(),[1,0,0]);assert.equal(f.counts.created,0);await f.player.stop();assert.equal(root.getWorldMatrix(),matrix);assert.deepEqual(root.getWorldMatrix().asArray(),values);assert.equal(root.isWorldMatrixFrozen,true);
  doc.tracks.transforms=[{actorId:'bound-prop',keys:[{time:0,position:[1,0,0],rotation:[0,0,0,1],scale:1,interpolation:'linear'},{time:2,position:[2,0,0],rotation:[0,0,0,1],scale:1,interpolation:'linear'}]}];
- await assert.rejects(f.player.load(doc),/read-only/);near(root.position.asArray(),[1,0,0]);assert.equal(f.counts.released,2);
+ await f.player.load(doc);f.player.seek(1);near(root.position.asArray(),[1.5,0,0]);assert.equal(f.host.getActorHandles()[0].readOnly,false);f.host.previewActorTransform('bound-prop',{position:[4,1,2],rotation:[0,0,0,1],scale:1.5});near(root.getAbsolutePosition().asArray(),[4,1,2]);await f.player.stop();near(root.position.asArray(),[1,0,0]);assert.equal(root.getWorldMatrix(),matrix);assert.deepEqual(root.getWorldMatrix().asArray(),values);assert.equal(root.isWorldMatrixFrozen,true);
+ const unknown=structuredClone(doc);unknown.actors[0].assetVersion='unknown';await assert.rejects(f.player.load(unknown),{name:'CinematicValidationError'});f.world.villageRenderRecords[0].placement.asset='different-prop';await assert.rejects(f.player.load(doc),/asset identity/);near(root.position.asArray(),[1,0,0]);
 });

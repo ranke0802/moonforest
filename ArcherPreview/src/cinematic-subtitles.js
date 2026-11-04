@@ -1,3 +1,4 @@
+import {cinematicBackgroundAt} from './cinematic-document.js';
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,value)),copy=value=>value?{x:value.x,y:value.y}:null;
 const placement=cue=>cue?.placement==='center'?'center':'bottom';
 const identity=cue=>({start:cue.start,end:cue.end,text:cue.text,placement:placement(cue)});
@@ -14,13 +15,17 @@ export function createCinematicSubtitles({root,canvas,preview=false,getContext=(
  // positioned cues must remain in the canvas viewport coordinate system.
  Object.assign(center.style,{top:'0',bottom:'0',transform:'none',display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'});
  function viewport(){const rect=canvas?.getBoundingClientRect?.();return rect&&Number.isFinite(rect.width)&&rect.width>0&&Number.isFinite(rect.height)&&rect.height>0?{left:Number.isFinite(rect.left)?rect.left:0,top:Number.isFinite(rect.top)?rect.top:0,width:rect.width,height:rect.height}:null;}
- function editable(context=getContext()){return !!(preview&&!disposed&&context.enabled!==false&&!context.detached&&context.document&&context.document.mapId===context.mapId&&context.lease?.active&&!context.lease.paused&&context.lease.isCurrent?.()!==false&&(['ready','paused'].includes(context.state)||context.state==='completed'&&context.retained===true));}
+ function editable(context=getContext()){return !!(preview&&!disposed&&context.enabled!==false&&!context.detached&&context.document&&cinematicBackgroundAt(context.document,context.time).mapId===context.mapId&&context.lease?.active&&!context.lease.paused&&context.lease.isCurrent?.()!==false&&(['ready','paused'].includes(context.state)||context.state==='completed'&&context.retained===true));}
  function current(held){const context=getContext();return editable(context)&&context.document===held.document&&context.mapId===held.mapId&&context.generation===held.generation&&context.lease===held.lease&&context.time===held.time&&sameCue(context.document.tracks.subtitles[held.record.index],held.cue);}
  function bounded(point,rect,size={}){const halfWidth=Math.min(Math.max(0,Number.isFinite(size.width)?size.width/2:0),rect.width/2),halfHeight=Math.min(Math.max(0,Number.isFinite(size.height)?size.height/2:0),rect.height/2),x=clamp(point.x,rect.left+halfWidth,rect.left+rect.width-halfWidth),y=clamp(point.y,rect.top+halfHeight,rect.top+rect.height-halfHeight);return {x:Math.round((x-rect.left)/rect.width*1e8)/1e6,y:Math.round((y-rect.top)/rect.height*1e8)/1e6};}
  function style(record){
   const node=record.node,position=record.override??record.cue?.position??record.row.position,rect=viewport();node.style.pointerEvents=editable()&&record.index>=0?'auto':'none';node.style.cursor=node.style.pointerEvents==='auto'?'grab':'default';node.style.touchAction='none';node.style.userSelect='none';node.style.overflowWrap='anywhere';
   if(position){node.style.position='fixed';node.style.transform='translate(-50%, -50%)';node.style.right='auto';node.style.bottom='auto';node.style.maxWidth=rect?rect.width+'px':'100vw';node.style.maxHeight=rect?rect.height+'px':'100vh';node.style.overflow='hidden';const point=rect?bounded({x:rect.left+position.x*rect.width/100,y:rect.top+position.y*rect.height/100},rect,node.getBoundingClientRect?.()):position;node.style.left=rect?rect.left+point.x*rect.width/100+'px':point.x+'%';node.style.top=rect?rect.top+point.y*rect.height/100+'px':point.y+'%';}
   else {for(const key of ['position','transform','right','bottom','left','top','maxWidth','maxHeight','overflow'])node.style[key]='';if(placement(record.cue)==='center')node.style.maxWidth='100%';}
+  const presentation=record.row.presentation;
+  node.style.opacity=presentation?String(presentation.opacity??1):'';
+  if(presentation){const offsetX=Number.isFinite(presentation.offsetX)?presentation.offsetX:0,offsetY=Number.isFinite(presentation.offsetY)?presentation.offsetY:0,scale=Number.isFinite(presentation.scale)?presentation.scale:1;node.style.display='inline-block';node.style.transform=(position?'translate(-50%, -50%) ':'')+`translate(${offsetX}px, ${offsetY}px) scale(${scale})`;}
+  else node.style.display='';
  }
  function consume(event){event.preventDefault?.();event.stopImmediatePropagation?.();}
  function finish(cancel=false){
@@ -30,7 +35,7 @@ export function createCinematicSubtitles({root,canvas,preview=false,getContext=(
  }
  function down(event){
   const node=event.target.closest?.('[data-subtitle-index]'),record=[...records.values()].find(row=>row.node===node);if(!record||!editable()||record.index<0||(event.button!=null&&event.button!==0))return;if(drag){consume(event);return;}refresh();const rect=viewport(),context=getContext();if(!sameCue(context.document.tracks.subtitles[record.index],record.row)||!rect||!Number.isFinite(event.clientX)||!Number.isFinite(event.clientY))return;
-  const box=node.getBoundingClientRect?.()??{},position=record.override??record.cue.position,measured=box.width>0&&box.height>0,point=measured?{x:box.left+box.width/2,y:box.top+box.height/2}:{x:rect.left+(position?.x??50)*rect.width/100,y:rect.top+(position?.y??(placement(record.cue)==='center'?50:88))*rect.height/100};
+  const box=node.getBoundingClientRect?.()??{},position=record.override??record.cue.position,measured=box.width>0&&box.height>0,point=measured?{x:box.left+box.width/2-(record.row.presentation?.offsetX??0),y:box.top+box.height/2-(record.row.presentation?.offsetY??0)}:{x:rect.left+(position?.x??50)*rect.width/100,y:rect.top+(position?.y??(placement(record.cue)==='center'?50:88))*rect.height/100};
   drag={record,document:context.document,mapId:context.mapId,generation:context.generation,lease:context.lease,time:context.time,cue:record.cue,original:copy(record.override),pointerId:event.pointerId,offset:{x:event.clientX-point.x,y:event.clientY-point.y},start:{x:event.clientX,y:event.clientY},size:{width:box.width??0,height:box.height??0},moved:false};consume(event);try{node.setPointerCapture?.(event.pointerId);}catch{}node.style.cursor='grabbing';
   // Selection opens the parent inspector without changing this timeline or
   // interrupting the same pointer gesture's existing drag ownership.
@@ -43,7 +48,7 @@ export function createCinematicSubtitles({root,canvas,preview=false,getContext=(
   if(disposed)return;if(drag&&!current(drag))finish(true);const context=getContext(),used=new Set(),next=new Set(),groups={bottom:[],center:[]};
   for(const [order,row]of rows.entries()){
    const normalized=typeof row==='string'?{text:row}:row,index=context.document?.tracks.subtitles.findIndex((cue,index)=>!used.has(index)&&sameCue(cue,normalized))??-1;if(index>=0)used.add(index);const key=index+':'+JSON.stringify(identity(normalized))+(index<0?':'+order:'');next.add(key);let record=records.get(key);
-   if(!record){const node=doc.createElement('span');node.className='cinematic-subtitle-cue';node.dataset.subtitleIndex=String(index);record={node,separator:doc.createTextNode('\n'),index,override:null,document:context.document};records.set(key,record);}if(record.document!==context.document){record.override=null;record.document=context.document;}record.row=normalized;record.cue=index>=0?context.document.tracks.subtitles[index]:normalized;if(record.node.textContent!==normalized.text)record.node.textContent=normalized.text;groups[placement(normalized)].push(record);
+   if(!record){const node=doc.createElement('span');node.className='cinematic-subtitle-cue';node.dataset.subtitleIndex=String(index);record={node,separator:doc.createTextNode('\n'),index,override:null,document:context.document};records.set(key,record);}if(record.document!==context.document){record.override=null;record.document=context.document;}record.row=normalized;record.cue=index>=0?context.document.tracks.subtitles[index]:normalized;const text=typeof normalized.presentation?.text==='string'?normalized.presentation.text:normalized.text;if(record.node.textContent!==text)record.node.textContent=text;groups[placement(normalized)].push(record);
   }
   for(const [key,record]of records)if(!next.has(key)){if(drag?.record===record)finish(true);record.node.remove();record.separator.remove();records.delete(key);}reconcile(bottom,groups.bottom);reconcile(center,groups.center);refresh();
  }

@@ -58,9 +58,11 @@ test('generated catalog is deterministic and fresh, with exact source model meta
   assert.equal(getCatalogAsset('mourning-elena').geometry.triangles,49982);assert.equal(getCatalogAsset('mourning-elena').geometry.bones,255);assert.equal(getCatalogAsset('elena').geometry.triangles,56918);
 });
 
-test('exact shipped entries retain their legacy saved-scene identity; changed definitions use their canonical entry hash',()=>{
- assert.equal(entriesHash(ASSET_CATALOG.entries),'f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5');
- assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),'a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853');
+test('exact legacy82 retain saved-scene identity; expanded84 and changed definitions use their canonical entry hash',()=>{
+ const legacy=ASSET_CATALOG.entries.filter(entry=>!['warrior-v3-mobile2k-rgba','warrior-v3-mobile4k'].includes(entry.assetId));
+ assert.equal(legacy.length,82);assert.equal(entriesHash(legacy),'f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5');
+ assert.equal(catalogRevisionForEntries(legacy),'a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853');
+ assert.equal(ASSET_CATALOG.entries.length,84);assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),entriesHash(ASSET_CATALOG.entries));assert.notEqual(ASSET_CATALOG.revision,catalogRevisionForEntries(legacy));
  const reorderedKeys=ASSET_CATALOG.entries.map(entry=>Object.fromEntries(Object.entries(entry).reverse()));assert.equal(catalogRevisionForEntries(reorderedKeys),ASSET_CATALOG.revision);
  for(const change of [entry=>entry.runtime.model='assets/content/'+('a'.repeat(64))+'.gltf',entry=>entry.geometry.lods[0].contentHash='b'.repeat(64),entry=>entry.version+='-changed']){
   const entries=structuredClone(ASSET_CATALOG.entries);change(entries[0]);assert.equal(catalogRevisionForEntries(entries),entriesHash(entries));assert.notEqual(catalogRevisionForEntries(entries),ASSET_CATALOG.revision);

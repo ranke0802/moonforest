@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "classification": "Preexisting test fixture incompatible with protected user texture-policy edits; no cinematic source dependency in reproduced constructor failure",
+  "baseline": "5c65642",
+  "test": {
+    "path": "tests/cave-laboratory-geometry.test.js",
+    "label": "a textureless native structure cannot increase the compressed mobile high-texture budget",
+    "sourceSha256": "8633e08885082c711e89668686e0173f6a612c5525ea872c2bb5f90f9cd48ca2",
+    "unchangedVsCommittedBaseline": true,
+    "exactCallbackSha256": "c5266009a378d4bb81bd6c51f1d27cbf9bd4d8ec35f186e50e887dd3ff7a026a",
+    "exactCommittedBaseline": {
+      "passed": true
+    },
+    "exactCurrent": {
+      "passed": false,
+      "error": "Expected values to be strictly equal:\n+ actual - expected\n\n+ 134217728\n- 100663296\n",
+      "actual": 134217728,
+      "expected": 100663296
+    }
+  },
+  "sourceHashes": {
+    "src/village-texture-streaming.js": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+    "src/village-texture-budget.js": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+    "src/mobile-texture-policy.js": "93581b9581d203e98880726c009da66f792139afff0539e0317ebfca7faed998"
+  },
+  "protectedHashesStillMatchTaskStart": true,
+  "reason": {
+    "fixtureMissing": [
+      "albedo.width",
+      "albedo.height",
+      "shading/valid texture profile"
+    ],
+    "compressedBytes": "Infinity",
+    "uncompressedBytes": "Infinity",
+    "newAdmissionPredicate": "profileBytes(p) < highTextureBytes(p,false)",
+    "invalidPredicate": "Infinity < Infinity is false",
+    "priorAdmissionPredicate": "presence of albedo.codec only"
+  },
+  "positiveControls": {
+    "validProfileBeforeAddingTextureless": 100663296,
+    "validProfileWithTextureless": 100663296,
+    "unsupportedCompressionBudget": 134217728,
+    "invalidFixtureBudget": 134217728,
+    "validTexturelessInvariance": true
+  },
+  "noFilesEditedOutsideReports": true,
+  "limitation": "Independent constructor/test-body A/B with actual native NullEngine. Does not change production user policy or test assertion, and does not justify claiming the full suite passed."
+}

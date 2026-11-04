@@ -34,7 +34,7 @@ test('superseded and timed-out readiness requests cannot later acquire a scene',
 });
 test('corrupted browser registry is isolated; explicit registration survives reopen with the same IDs',async t=>{
  const f=fixture(t,{preview:false,raw:JSON.stringify({version:1,documents:{bad:null}})});assert.match(f.root.querySelector('[data-status]').textContent,/등록본을 읽지/);assert.equal(f.root.querySelector('[data-registered]').children.length,0);
- const input=f.root.querySelector('[data-import]');Object.defineProperty(input,'files',{value:[{size:100,text:async()=>JSON.stringify(f.draft)}],configurable:true});await input.onchange({target:input});
+ const input=f.root.querySelector('[data-import]');Object.defineProperty(input,'files',{value:[new Blob([JSON.stringify(f.draft)],{type:'application/json'})],configurable:true});await input.onchange({target:input});
  f.root.querySelector('[data-action="register"]').dispatchEvent(new f.window.Event('click',{bubbles:true}));await settle();const saved=JSON.parse(f.storage.getItem('moonforest-0.1:cinematics:registered:v1'));assert.equal(saved.documents['neutral:test'].cutsceneId,'neutral:test');assert.equal(saved.documents['neutral:test'].actors.length,0);
  await f.api.dispose();const again=setupGameCinematics({root:f.root,world:f.world,getState:()=>f.state,getPlayer:()=>null,storage:f.storage,window:f.win});assert.equal(f.root.querySelector('[data-registered]').children.length,1);await again.dispose();
 });

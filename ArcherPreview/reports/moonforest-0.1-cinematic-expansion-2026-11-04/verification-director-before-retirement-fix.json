@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-11-04T09:51:05.519Z",
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: Error: Previous cinematic actor retirement is still pending\n    at slotFor (file:///C:/dev/moonforest-archer/ArcherPreview/src/cinematic-scene-host.js:142:50)\n    at Object.prepare (file:///C:/dev/moonforest-archer/ArcherPreview/src/cinematic-scene-host.js:221:23)\n    at host.prepare (file:///C:/dev/moonforest-archer/ArcherPreview/src/cinematic-game.js:46:75)\n    at file:///C:/dev/moonforest-archer/ArcherPreview/src/cinematic-player.js:64:142\n\n'error' !== 'playing'\n\n    at file:///C:/dev/moonforest-archer/ArcherPreview/reports/moonforest-0.1-cinematic-expansion-2026-11-04/verification-director.mjs:26:453",
+  "cases": [
+    {
+      "name": "default scoped shipped actor / real host / timed entrance / warm seek",
+      "pass": true,
+      "evidence": {
+        "modelLoads": 1,
+        "source": [
+          {
+            "id": "hooded-goblin",
+            "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+            "triangles": 10412,
+            "clips": [
+              "Dodge_Roll",
+              "Fall_Dead_from_Abdominal_Injury",
+              "Gangnam_Groove",
+              "Knock_Down",
+              "Parkour_Vault_with_Roll",
+              "Right_Jab_from_Guard",
+              "Running",
+              "Sneaky_Walk_inplace",
+              "Sword_Judgment",
+              "Sword_Parry_Backward_2",
+              "Walk_Turn_Right",
+              "Walking"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "actual immutable map object transform and exact native restoration",
+      "pass": true,
+      "evidence": {
+        "instanceId": "handcart-25",
+        "asset": "handcart",
+        "nodes": 4,
+        "worldMatrices": true,
+        "flags": true,
+        "navigationIdentity": true
+      }
+    }
+  ],
+  "sourceBefore": {
+    "main.js": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+    "cinematic-player.js": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+    "cinematic-game.js": "dde1432755ffe0369404c52381402da07cd1bc989e5aee7c0163315f839d1a53",
+    "cinematic-scene-host.js": "7b00d33e19cc95b98f8fb4ffcf4493e94a2b52294478911466ab54b0cbccec47",
+    "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "cinematic-document.js": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+    "cinematic-audio.js": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+    "cinematic-media.js": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+    "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d"
+  },
+  "sourceAfter": {
+    "main.js": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+    "cinematic-player.js": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+    "cinematic-game.js": "dde1432755ffe0369404c52381402da07cd1bc989e5aee7c0163315f839d1a53",
+    "cinematic-scene-host.js": "7b00d33e19cc95b98f8fb4ffcf4493e94a2b52294478911466ab54b0cbccec47",
+    "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "cinematic-document.js": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+    "cinematic-audio.js": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+    "cinematic-media.js": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+    "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d"
+  },
+  "sourceUnchanged": true,
+  "proof": {},
+  "limits": [
+    "NullEngine real native CPU/DOM/lifecycle only; no pixels, GPU, device FPS or audibility claim",
+    "Exact shipped model geometry/rigs with fixture images/materials; cache transport assumes existing catalog bodies cached",
+    "Exact production main MapTransition callbacks with explicit cosmetic/combat decorations skipped; native engine gameplay frame delivery executes"
+  ]
+}

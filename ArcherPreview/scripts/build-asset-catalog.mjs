@@ -27,6 +27,18 @@ export function catalogRevisionForEntries(entries){
   return fingerprint===legacyEntriesSha256?legacyCatalogRevision:fingerprint;
 }
 
+export async function discoverCatalogManifests(publicRoot){
+  const directory=resolve(publicRoot,'assets'),names=[];
+  for(const file of (await readdir(directory,{withFileTypes:true})).sort((a,b)=>a.name.localeCompare(b.name))){
+    if(!file.isFile()||!file.name.endsWith('.json')||/(?:^|[-_.])(legacy|sample|fixture|cache|backup|test|development)(?:[-_.]|$)/i.test(file.name))continue;
+    const path=resolve(directory,file.name);if((await stat(path)).size>2*1024*1024)continue;
+    const manifest=await json(path);if(manifest.developmentFixture||manifest.developmentOnly||manifest.sample)continue;
+    const configs=manifest.assets??{single:manifest};
+    if(Object.values(configs).some(config=>config&&typeof config==='object'&&(typeof config.model==='string'||config.lods?.some(level=>typeof level.model==='string'))))names.push(file.name.slice(0,-5));
+  }
+  return names;
+}
+
 export function catalogRuntimePath(manifest,reference){
   if(typeof reference!=='string'||!reference||reference.includes('\\')||isAbsolute(reference))throw new Error('Catalog paths must be deployable relative references');
   const base=new URL(manifest,'https://catalog.invalid/'),url=new URL(reference,base);
@@ -53,13 +65,14 @@ export async function buildAssetCatalog({projectRoot=root}={}){
     const gltf=extname(path)==='.glb'?JSON.parse(bytes.toString('utf8',20,20+bytes.readUInt32LE(12)).trim()):JSON.parse(bytes.toString('utf8'));
     const result={contentHash:hash,bytes:bytes.length,...gltfCatalogMetadata(gltf)};cache.set(path,result);runtimeHashes.add(hash);return result;
   }
-  for(const name of CATALOG_MANIFESTS){
+  const discovered=await discoverCatalogManifests(publicRoot),manifestNames=[...CATALOG_MANIFESTS.filter(name=>discovered.includes(name)),...discovered.filter(name=>!CATALOG_MANIFESTS.includes(name))];
+  for(const name of manifestNames){
     const manifestPath='assets/'+name+'.json',manifest=await json(resolve(publicRoot,manifestPath));resourceHashes(manifest,runtimeHashes);
-    const isActor=actors.has(name)||players.has(name),configs=manifest.assets??{[name]:manifest};
+    const isActor=actors.has(name)||players.has(name)||!manifest.assets&&!!manifest.animations,configs=manifest.assets??{[name]:manifest};
     manifestEvidence.push({manifest:manifestPath,sha256:sha(await readFile(resolve(publicRoot,manifestPath))),assets:Object.keys(configs).length});
     for(const [assetId,config]of Object.entries(configs)){
       const primary=config.model??config.lods?.find(l=>l.level===0)?.model??config.lods?.[0]?.model;if(!primary)continue;
-      const model=catalogRuntimePath(manifestPath,primary),info=await modelInfo(model),version=isActor?String(config.version):info.contentHash,key=assetId+'@'+version;
+      const model=catalogRuntimePath(manifestPath,primary),info=await modelInfo(model),version=(isActor||info.skinned||info.clips>0)&&config.version?String(config.version):info.contentHash,key=assetId+'@'+version;
       const availableMaps=name==='village-plains-outskirts'?['village']:maps.includes(name)?[name]:[];
       let usedMaps=availableMaps.filter(map=>layouts[map].some(p=>p.asset===assetId));
       if(name==='village-plains-outskirts'&&(manifest.placements??[]).some(p=>p.asset===assetId))usedMaps=['village'];
@@ -71,7 +84,7 @@ export async function buildAssetCatalog({projectRoot=root}={}){
         const entry=entries.get(key);if(entry.contentHash!==info.contentHash)throw new Error('Ambiguous catalog asset version: '+key);
         entry.usedMaps=[...new Set([...entry.usedMaps,...usedMaps])].sort();entry.runtime.sources.push({manifest:manifestPath,assetKey:assetId});continue;
       }
-      const category=isActor?(players.has(name)?'player':name==='hooded-goblin'?'monster':'boss'):config.category??(/tree/.test(assetId)?'tree':/grass/.test(assetId)?'plant':'prop');
+      const category=isActor?(players.has(name)||/^warrior-/.test(name)?'player':name==='hooded-goblin'?'monster':actors.has(name)?'boss':config.category??'actor'):config.category??(/tree/.test(assetId)?'tree':/grass/.test(assetId)?'plant':'prop');
       const explicitApproved=config.visualReview==='APPROVED'||config.reviewStatus==='APPROVED'||String(config.geometry?.optimization?.revision??'').includes('approved');
       const reviewStatus=explicitApproved?'approved':'deployed-review-unspecified';
       const independentRock=['rock-01-mossy-boulder','rock-02-jagged-outcrop'].includes(assetId);

@@ -3,7 +3,8 @@ export const CINEMATIC_LIMITS=Object.freeze({bytes:512*1024,duration:600,actors:
 export const CINEMATIC_EVENTS=Object.freeze(['marker']);
 const maps=['village','great-plains','monster-forest','witch-cave'];
 const copy=value=>structuredClone(value),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const interpolations=['step','linear','smooth'];
+export const CINEMATIC_INTERPOLATIONS=Object.freeze(['step','linear','smooth','ease-in','ease-out','ease-in-out','sine','smoother']);
+const interpolations=CINEMATIC_INTERPOLATIONS;
 const encode=value=>new TextEncoder().encode(typeof value==='string'?value:JSON.stringify(value)).length;
 const plain=value=>!!value&&typeof value==='object'&&!Array.isArray(value);
 
@@ -19,15 +20,25 @@ export function validateCinematicDocument(input,references={}){
   const rotation=(value,path)=>{if(!Array.isArray(value)||value.length!==4){add(path,'Expected quaternion[x,y,z,w]');return;}value.forEach((n,i)=>number(n,path+'['+i+']',-1,1));if(Math.abs(Math.hypot(...value)-1)>.001)add(path,'Quaternion must have unit length');};
   const time=(value,path)=>number(value,path,0,Number.isFinite(doc?.duration)?doc.duration:CINEMATIC_LIMITS.duration);
   const interval=(value,path)=>{time(value.start,path+'.start');time(value.end,path+'.end');if(!(value.end>value.start))add(path+'.end','End must be after start');};
-  const interpolation=(value,path)=>{if(!interpolations.includes(value))add(path,'Expected step, linear or smooth');};
-  if(!object(doc,['format','version','cutsceneId','mapId','catalogRevision','duration','anchor','actors','shots','tracks'],'$'))return {valid:false,errors};
+  const interpolation=(value,path)=>{if(!interpolations.includes(value))add(path,'Unknown cinematic interpolation');};
+  if(!object(doc,['format','version','cutsceneId','mapId','catalogRevision','duration','anchor','actors','shots','tracks','presentation','media'],'$'))return {valid:false,errors};
   if(doc.format!==CINEMATIC_FORMAT)add('$.format','Unsupported cinematic format');if(doc.version!==1)add('$.version','Unsupported schema version');
   id(doc.cutsceneId,'$.cutsceneId');if(!maps.includes(doc.mapId))add('$.mapId','Unknown map');number(doc.duration,'$.duration',.1,CINEMATIC_LIMITS.duration);
+  const sourceCatalogRevision=doc.catalogRevision;
+  if(references.migrateCatalogRevision===true&&typeof doc.catalogRevision==='string'&&/^[a-f0-9]{64}$/.test(doc.catalogRevision)&&references.catalog?.revision)doc.catalogRevision=references.catalog.revision;
   if(!references.catalog?.revision||doc.catalogRevision!==references.catalog.revision)add('$.catalogRevision','Catalog revision differs from the current project');
   if(object(doc.anchor,['position','rotation'],'$.anchor')){vector(doc.anchor.position,'$.anchor.position');rotation(doc.anchor.rotation,'$.anchor.rotation');}
+  if(doc.presentation!==undefined&&object(doc.presentation,['fadeIn','fadeOut'],'$.presentation'))for(const key of ['fadeIn','fadeOut'])if(doc.presentation[key]!==undefined)number(doc.presentation[key],'$.presentation.'+key,0,Math.min(10,doc.duration));
+  const localAudioIds=new Set();let mediaBytes=0;
+  if(doc.media!==undefined&&object(doc.media,['audio'],'$.media'))for(const [i,item]of array(doc.media.audio,'$.media.audio',8).entries()){
+    const p='$.media.audio['+i+']';if(!object(item,['assetId','name','mime','bytes','sha256','duration'],p))continue;
+    if(typeof item.sha256!=='string'||!/^[a-f0-9]{64}$/.test(item.sha256)||item.assetId!=='local:'+item.sha256)add(p+'.assetId','Imported audio must use its SHA-256 identity');
+    if(localAudioIds.has(item.assetId))add(p+'.assetId','Duplicate imported audio');localAudioIds.add(item.assetId);string(item.name,p+'.name',160);if(!['audio/mpeg','audio/wav','audio/x-wav','audio/ogg','audio/mp4','audio/flac','audio/webm','audio/aac'].includes(item.mime))add(p+'.mime','Unsupported audio MIME type');number(item.bytes,p+'.bytes',1,16*1024*1024);if(!Number.isInteger(item.bytes))add(p+'.bytes','Expected whole bytes');mediaBytes+=item.bytes;number(item.duration,p+'.duration',.001,600);
+  }
+  if(mediaBytes>64*1024*1024)add('$.media.audio','Imported audio exceeds64MiB');
   const actors=array(doc.actors,'$.actors',CINEMATIC_LIMITS.actors),actorById=new Map(),catalogEntries=references.catalog?.entries??[],definitions=references.actorDefinitions??{};
   for(const [i,actor]of actors.entries()){
-    const p='$.actors['+i+']';if(!object(actor,['actorId','assetId','assetVersion','contentHash','actorDefinitionId','instanceId','position','rotation','scale'],p))continue;
+    const p='$.actors['+i+']';if(!object(actor,['actorId','assetId','assetVersion','contentHash','actorDefinitionId','instanceId','position','rotation','scale','start','end','mapId'],p))continue;
     id(actor.actorId,p+'.actorId');if(actorById.has(actor.actorId))add(p+'.actorId','Duplicate actor ID');actorById.set(actor.actorId,actor);
     id(actor.assetId,p+'.assetId');string(actor.assetVersion,p+'.assetVersion',200);vector(actor.position,p+'.position');rotation(actor.rotation,p+'.rotation');number(actor.scale,p+'.scale',.1,10);
     const entry=catalogEntries.find(e=>e.assetId===actor.assetId&&e.version===actor.assetVersion);if(!entry)add(p+'.assetVersion','Unknown asset/version reference');
@@ -35,8 +46,9 @@ export function validateCinematicDocument(input,references={}){
     const definition=definitions instanceof Map?definitions.get(actor.actorDefinitionId):definitions[actor.actorDefinitionId];
     if(actor.actorDefinitionId!==undefined&&(!definition||definition.assetId!==actor.assetId||definition.assetVersion!==actor.assetVersion))add(p+'.actorDefinitionId','Unknown or mismatched actor definition');
     if(entry?.geometry.skinned&&!definition)add(p+'.actorDefinitionId','Animated actors require a registered actor definition');
-    if(!entry?.geometry.skinned&&!entry?.placement.supported&&actor.instanceId===undefined)add(p+'.assetId','Static visual must be a certified prop or an existing map instance');
-    if(actor.instanceId!==undefined){id(actor.instanceId,p+'.instanceId');if(!new Set(references.instanceIds??[]).has(actor.instanceId))add(p+'.instanceId','Unknown existing instance reference');}
+    if(!entry?.geometry.skinned&&!entry?.placement.supported&&actor.instanceId===undefined&&definition?.encounterType!=='cinematic-visual')add(p+'.assetId','Static visual requires a cinematic visual definition or certified prop');
+    if(actor.start!==undefined)time(actor.start,p+'.start');if(actor.end!==undefined)time(actor.end,p+'.end');if((actor.end??doc.duration)<=(actor.start??0))add(p+'.end','Actor exit must follow entrance');if(actor.mapId!==undefined&&!maps.includes(actor.mapId))add(p+'.mapId','Unknown actor background');
+    if(actor.instanceId!==undefined){id(actor.instanceId,p+'.instanceId');if(!new Set(references.instanceIds??[]).has(actor.instanceId)&&references.deferInstanceResolution!==true&&!new Set(references.deferredInstanceIds??[]).has(actor.instanceId))add(p+'.instanceId','Unknown existing instance reference');}
   }
   const shotIds=new Set(),shots=array(doc.shots,'$.shots',CINEMATIC_LIMITS.shots);
   const camera=(value,path)=>{
@@ -45,14 +57,17 @@ export function validateCinematicDocument(input,references={}){
   };
   if(!shots.length)add('$.shots','At least one camera shot is required');
   for(const [i,shot]of shots.entries()){
-    const p='$.shots['+i+']';if(!object(shot,['shotId','start','end','interpolation','from','to','lookAtActorId','lookAtOffset'],p))continue;
+    const p='$.shots['+i+']';if(!object(shot,['shotId','start','end','interpolation','from','to','lookAtActorId','lookAtOffset','movement','orbitTurns','interpolationEnd'],p))continue;
     id(shot.shotId,p+'.shotId');if(shotIds.has(shot.shotId))add(p+'.shotId','Duplicate shot ID');shotIds.add(shot.shotId);interval(shot,p);interpolation(shot.interpolation,p+'.interpolation');camera(shot.from,p+'.from');camera(shot.to,p+'.to');
     if(shot.lookAtActorId!==undefined){id(shot.lookAtActorId,p+'.lookAtActorId');if(!actorById.has(shot.lookAtActorId))add(p+'.lookAtActorId','Unknown camera-follow actor');}
     if(shot.lookAtOffset!==undefined){vector(shot.lookAtOffset,p+'.lookAtOffset');if(shot.lookAtActorId===undefined)add(p+'.lookAtOffset','Camera-follow offset requires an actor');}
+    if(shot.movement!==undefined&&!['linear','orbit'].includes(shot.movement))add(p+'.movement','Unknown camera movement');if(shot.orbitTurns!==undefined){number(shot.orbitTurns,p+'.orbitTurns',-2,2);if(shot.movement!=='orbit')add(p+'.orbitTurns','Orbit turns require orbit movement');}
+    if(shot.interpolationEnd!==undefined)number(shot.interpolationEnd,p+'.interpolationEnd',1e-12,1);
     if(shot.start!==(i?shots[i-1]?.end:0))add(p+'.start','Camera shots must be ordered, contiguous and start at0');
   }
   if(shots.length&&shots.at(-1)?.end!==doc.duration)add('$.shots','Last shot must end at document duration');
-  if(!object(doc.tracks,['transforms','animations','subtitles','audio','events'],'$.tracks'))return {valid:false,errors};
+  if(!object(doc.tracks,['transforms','animations','subtitles','audio','events','backgrounds'],'$.tracks'))return {valid:false,errors};
+  if(doc.tracks.backgrounds!==undefined){const rows=array(doc.tracks.backgrounds,'$.tracks.backgrounds',32);for(const [i,row]of rows.entries()){const p='$.tracks.backgrounds['+i+']';if(!object(row,['time','mapId','transition','fadeDuration','anchor'],p))continue;time(row.time,p+'.time');if(!maps.includes(row.mapId))add(p+'.mapId','Unknown background map');if(!['cut','fade'].includes(row.transition))add(p+'.transition','Expected cut or fade');number(row.fadeDuration,p+'.fadeDuration',0,5);if(i===0&&(row.time!==0||row.mapId!==doc.mapId))add(p+'.time','First background must be the initial map at0');if(i&&row.time<=rows[i-1]?.time)add(p+'.time','Background times must increase');if(row.time===doc.duration)add(p+'.time','Background must begin before the end');if(row.anchor!==undefined&&object(row.anchor,['position','rotation'],p+'.anchor')){vector(row.anchor.position,p+'.anchor.position');rotation(row.anchor.rotation,p+'.anchor.rotation');}}}
   const knownActor=(value,path)=>{if(!actorById.has(value))add(path,'Unknown actor ID');};
   const transformActors=new Set();let keyCount=0;
   for(const [i,track]of array(doc.tracks.transforms,'$.tracks.transforms',CINEMATIC_LIMITS.transforms).entries()){
@@ -60,7 +75,7 @@ export function validateCinematicDocument(input,references={}){
     if(track.orientToPath!==undefined&&typeof track.orientToPath!=='boolean')add(p+'.orientToPath','Expected boolean');
     if(transformActors.has(track.actorId))add(p+'.actorId','One transform track per actor');transformActors.add(track.actorId);
     const keys=array(track.keys,p+'.keys',CINEMATIC_LIMITS.keys);keyCount+=keys.length;
-    keys.forEach((key,j)=>{const k=p+'.keys['+j+']';if(!object(key,['time','position','rotation','scale','interpolation'],k))return;time(key.time,k+'.time');vector(key.position,k+'.position');rotation(key.rotation,k+'.rotation');number(key.scale,k+'.scale',.1,10);interpolation(key.interpolation,k+'.interpolation');if(j&&key.time<=keys[j-1]?.time)add(k+'.time','Key times must increase strictly');});
+    keys.forEach((key,j)=>{const k=p+'.keys['+j+']';if(!object(key,['time','position','rotation','scale','interpolation','interpolationEnd'],k))return;time(key.time,k+'.time');vector(key.position,k+'.position');rotation(key.rotation,k+'.rotation');number(key.scale,k+'.scale',.1,10);interpolation(key.interpolation,k+'.interpolation');if(key.interpolationEnd!==undefined)number(key.interpolationEnd,k+'.interpolationEnd',1e-12,1);if(j&&key.time<=keys[j-1]?.time)add(k+'.time','Key times must increase strictly');});
   }
   if(keyCount>CINEMATIC_LIMITS.keys)add('$.tracks.transforms','Too many total transform keys');
   const animations=array(doc.tracks.animations,'$.tracks.animations',CINEMATIC_LIMITS.animations);
@@ -74,14 +89,15 @@ export function validateCinematicDocument(input,references={}){
     number(track.blendIn,p+'.blendIn',0,Math.max(0,track.end-track.start));number(track.blendOut,p+'.blendOut',0,Math.max(0,track.end-track.start));
   }
   for(const actor of actors){if(!plain(actor))continue;const segments=animations.filter(a=>plain(a)&&a.actorId===actor.actorId);for(const point of segments.flatMap(a=>[a.start,a.end]))if(segments.filter(a=>a.start<=point&&a.end>point).length>2){add('$.tracks.animations','At most two clip segments may blend per actor');break;}}
-  for(const [i,track]of array(doc.tracks.subtitles,'$.tracks.subtitles',CINEMATIC_LIMITS.subtitles).entries()){const p='$.tracks.subtitles['+i+']';if(object(track,['start','end','text','placement','position'],p)){interval(track,p);string(track.text,p+'.text',1000);if(track.placement!==undefined&&!['bottom','center'].includes(track.placement))add(p+'.placement','Expected bottom or center');if(track.position!==undefined&&object(track.position,['x','y'],p+'.position')){number(track.position.x,p+'.position.x',0,100);number(track.position.y,p+'.position.y',0,100);}}}
-  const audioIds=new Set(references.audioIds??[]);
-  for(const [i,track]of array(doc.tracks.audio,'$.tracks.audio',CINEMATIC_LIMITS.audio).entries()){const p='$.tracks.audio['+i+']';if(object(track,['time','audioId','volume'],p)){time(track.time,p+'.time');if(!audioIds.has(track.audioId))add(p+'.audioId','Unknown audio ID');number(track.volume,p+'.volume',0,1);}}
+  for(const [i,track]of array(doc.tracks.subtitles,'$.tracks.subtitles',CINEMATIC_LIMITS.subtitles).entries()){const p='$.tracks.subtitles['+i+']';if(object(track,['start','end','text','placement','position','effect'],p)){interval(track,p);string(track.text,p+'.text',1000);if(track.placement!==undefined&&!['bottom','center'].includes(track.placement))add(p+'.placement','Expected bottom or center');if(track.position!==undefined&&object(track.position,['x','y'],p+'.position')){number(track.position.x,p+'.position.x',0,100);number(track.position.y,p+'.position.y',0,100);}if(track.effect!==undefined&&object(track.effect,['enter','exit','inDuration','outDuration','charsPerSecond'],p+'.effect')){const effect=track.effect;if(!['none','fade','slide-up','slide-left','zoom','typewriter'].includes(effect.enter))add(p+'.effect.enter','Unknown entrance effect');if(!['none','fade','slide-down','zoom'].includes(effect.exit))add(p+'.effect.exit','Unknown exit effect');number(effect.inDuration,p+'.effect.inDuration',0,Math.max(0,track.end-track.start));number(effect.outDuration,p+'.effect.outDuration',0,Math.max(0,track.end-track.start));if(effect.charsPerSecond!==undefined)number(effect.charsPerSecond,p+'.effect.charsPerSecond',1,120);}}}
+  const audioIds=new Set([...(references.audioIds??[]),...localAudioIds]);
+  for(const [i,track]of array(doc.tracks.audio,'$.tracks.audio',CINEMATIC_LIMITS.audio).entries()){const p='$.tracks.audio['+i+']';if(object(track,['time','audioId','volume','end','loop','clipStart','fadeIn','fadeOut','kind'],p)){time(track.time,p+'.time');if(!audioIds.has(track.audioId))add(p+'.audioId','Unknown audio ID');number(track.volume,p+'.volume',0,1);if(track.end!==undefined){time(track.end,p+'.end');if(track.end<=track.time)add(p+'.end','Audio end must follow start');}if(track.loop!==undefined&&typeof track.loop!=='boolean')add(p+'.loop','Expected boolean');if(track.clipStart!==undefined)number(track.clipStart,p+'.clipStart',0,600);for(const key of ['fadeIn','fadeOut'])if(track[key]!==undefined)number(track[key],p+'.'+key,0,Math.min(10,(track.end??doc.duration)-track.time));if(track.kind!==undefined&&!['music','effect','ambience'].includes(track.kind))add(p+'.kind','Unknown audio track kind');}}
   for(const [i,track]of array(doc.tracks.events,'$.tracks.events',CINEMATIC_LIMITS.events).entries()){const p='$.tracks.events['+i+']';if(object(track,['time','type','label'],p)){time(track.time,p+'.time');if(!CINEMATIC_EVENTS.includes(track.type))add(p+'.type','Event is not allowlisted');string(track.label,p+'.label',160);}}
-  return errors.length?{valid:false,errors}:{valid:true,errors:[],document:doc};
+  return errors.length?{valid:false,errors}:{valid:true,errors:[],document:doc,...(sourceCatalogRevision!==doc.catalogRevision?{sourceCatalogRevision}:{})};
 }
 
-const factor=(t,kind)=>kind==='step'?(t>=1?1:0):kind==='smooth'?t*t*(3-2*t):t;
+const factor=(t,kind)=>kind==='step'?(t>=1?1:0):kind==='smooth'?t*t*(3-2*t):kind==='ease-in'?t*t*t:kind==='ease-out'?1-(1-t)**3:kind==='ease-in-out'?(t<.5?4*t*t*t:1-(-2*t+2)**3/2):kind==='sine'?(1-Math.cos(Math.PI*t))/2:kind==='smoother'?t*t*t*(t*(t*6-15)+10):t;
+export function cinematicInterpolationFactor(t,kind,end=1){const final=factor(end,kind);return final?factor(clamp(t,0,1)*end,kind)/final:0;}
 const lerp=(a,b,t)=>a+(b-a)*t;
 const vec=(a,b,t)=>a.map((n,i)=>lerp(n,b[i],t));
 function quaternion(a,b,t){
@@ -105,13 +121,31 @@ function pathRotation(keys,time,fallback){
   return yaw===null?fallback:[0,Math.sin(yaw/2),0,Math.cos(yaw/2)];
 }
 
+export function cinematicBackgroundAt(document,time){
+  const t=clamp(Number.isFinite(time)?time:0,0,document.duration),row=document.tracks.backgrounds?.findLast(row=>row.time<=t);
+  return {time:row?.time??0,mapId:row?.mapId??document.mapId,anchor:row?.anchor??document.anchor,transition:row?.transition??'cut',fadeDuration:row?.fadeDuration??0};
+}
+export function cinematicSubtitlePresentation(cue,time){
+  const e=cue.effect,elapsed=Math.max(0,time-cue.start),remaining=Math.max(0,cue.end-time),a=e.inDuration?clamp(elapsed/e.inDuration,0,1):1,b=e.outDuration?clamp(remaining/e.outDuration,0,1):1;
+  const result={opacity:1,offsetX:0,offsetY:0,scale:1,text:cue.text};
+  if(e.enter!=='none'&&e.enter!=='typewriter')result.opacity*=a;if(e.exit!=='none')result.opacity*=b;
+  if(e.enter==='slide-up')result.offsetY+=40*(1-a);if(e.enter==='slide-left')result.offsetX-=60*(1-a);if(e.enter==='zoom')result.scale*=.6+.4*a;
+  if(e.exit==='slide-down')result.offsetY+=40*(1-b);if(e.exit==='zoom')result.scale*=.6+.4*b;
+  if(e.enter==='typewriter')result.text=[...cue.text].slice(0,Math.floor(elapsed*(e.charsPerSecond??30))).join('');return result;
+}
+export function cinematicPresentationAt(document,time){
+  const t=clamp(time,0,document.duration),p=document.presentation??{};let blackOpacity=0;
+  if(p.fadeIn&&t<p.fadeIn)blackOpacity=Math.max(blackOpacity,1-t/p.fadeIn);if(p.fadeOut&&t>document.duration-p.fadeOut)blackOpacity=Math.max(blackOpacity,(t-document.duration+p.fadeOut)/p.fadeOut);
+  for(const row of document.tracks.backgrounds??[]){if(row.time===0||row.transition!=='fade'||!row.fadeDuration)continue;const half=row.fadeDuration/2,distance=Math.abs(t-row.time);if(distance<half)blackOpacity=Math.max(blackOpacity,1-distance/half);}
+  return {blackOpacity:clamp(blackOpacity,0,1)};
+}
 // Pure, absolute seconds: editor seek and game playback call this same sampler.
 export function evaluateCinematic(document,time){
-  const t=clamp(Number.isFinite(time)?time:0,0,document.duration),shot=document.shots.find(s=>t>=s.start&&t<s.end)??document.shots.findLast(s=>s.end<=t)??document.shots[0],u=factor(clamp((t-shot.start)/(shot.end-shot.start),0,1),shot.interpolation),anchor=document.anchor;
+  const t=clamp(Number.isFinite(time)?time:0,0,document.duration),shot=document.shots.find(s=>t>=s.start&&t<s.end)??document.shots.findLast(s=>s.end<=t)??document.shots[0],u=cinematicInterpolationFactor((t-shot.start)/(shot.end-shot.start),shot.interpolation,shot.interpolationEnd),background=cinematicBackgroundAt(document,t),anchor=background.anchor;
   const actors=document.actors.map(actor=>{
     let transform=actor;const track=document.tracks.transforms.find(track=>track.actorId===actor.actorId),keys=track?.keys??[];
     if(keys.length&&t>=keys[0].time){
-      const next=keys.findIndex(key=>key.time>t);if(next<0)transform=keys.at(-1);else{const a=keys[next-1],b=keys[next],f=factor((t-a.time)/(b.time-a.time),a.interpolation);transform={position:vec(a.position,b.position,f),rotation:quaternion(a.rotation,b.rotation,f),scale:lerp(a.scale,b.scale,f)};}
+      const next=keys.findIndex(key=>key.time>t);if(next<0)transform=keys.at(-1);else{const a=keys[next-1],b=keys[next],f=cinematicInterpolationFactor((t-a.time)/(b.time-a.time),a.interpolation,a.interpolationEnd);transform={position:vec(a.position,b.position,f),rotation:quaternion(a.rotation,b.rotation,f),scale:lerp(a.scale,b.scale,f)};}
     }
     const animations=document.tracks.animations.filter(segment=>segment.actorId===actor.actorId&&t>=segment.start&&(t<segment.end||t===document.duration&&segment.end===document.duration)).map(segment=>{
       const elapsed=t-segment.start,range=segment.clipEnd-segment.clipStart,clipTime=segment.clipStart+(segment.loop?elapsed%range:Math.min(elapsed,range));
@@ -119,12 +153,15 @@ export function evaluateCinematic(document,time){
       return {clipId:segment.clipId,time:clipTime,weight:Math.max(0,weight)};
     });
     const total=animations.reduce((sum,a)=>sum+a.weight,0);if(total)for(const a of animations)a.weight/=total;
-    return {actorId:actor.actorId,position:anchored(transform.position,anchor),rotation:multiplyQuaternion(anchor.rotation,track?.orientToPath?pathRotation(keys,t,transform.rotation):transform.rotation),scale:transform.scale,animations};
+    const scopedMap=actor.mapId??(actor.instanceId?document.mapId:null),visible=t>=(actor.start??0)&&(t<(actor.end??document.duration)||t===document.duration&&(actor.end??document.duration)===document.duration)&&(!scopedMap||scopedMap===background.mapId);
+    return {actorId:actor.actorId,position:anchored(transform.position,anchor),rotation:multiplyQuaternion(anchor.rotation,track?.orientToPath?pathRotation(keys,t,transform.rotation):transform.rotation),scale:transform.scale,animations,...(actor.start!==undefined||actor.end!==undefined||actor.mapId!==undefined||document.tracks.backgrounds?.length?{visible}:{})};
   });
-  const position=anchored(vec(shot.from.position,shot.to.position,u),anchor),target=anchored(vec(shot.from.target,shot.to.target,u),anchor),follow=actors.find(actor=>actor.actorId===shot.lookAtActorId);
-  if(follow){const offset=rotate(anchor.rotation,shot.lookAtOffset??[0,1,0]),next=follow.position.map((value,i)=>value+offset[i]);if(Math.hypot(...position.map((value,i)=>value-next[i]))>=.001)target.splice(0,3,...next);}
+  let localPosition=vec(shot.from.position,shot.to.position,u);const localTarget=vec(shot.from.target,shot.to.target,u);
+  if(shot.movement==='orbit'){const a=shot.from.position.map((v,i)=>v-shot.from.target[i]),b=shot.to.position.map((v,i)=>v-shot.to.target[i]),start=Math.atan2(a[0],a[2]),end=Math.atan2(b[0],b[2]),delta=((end-start+Math.PI*3)%(Math.PI*2)-Math.PI)+(shot.orbitTurns??0)*Math.PI*2,angle=start+delta*u,radius=lerp(Math.hypot(a[0],a[2]),Math.hypot(b[0],b[2]),u);localPosition=[localTarget[0]+Math.sin(angle)*radius,localTarget[1]+lerp(a[1],b[1],u),localTarget[2]+Math.cos(angle)*radius];}
+  const position=anchored(localPosition,anchor),target=anchored(localTarget,anchor),follow=actors.find(actor=>actor.actorId===shot.lookAtActorId&&actor.visible!==false);
+  if(follow){const offset=rotate(anchor.rotation,shot.lookAtOffset??[0,1,0]),next=follow.position.map((value,i)=>value+offset[i]);if(Math.hypot(...position.map((value,i)=>value-next[i]))>=.001){if(shot.movement==='orbit')for(let i=0;i<3;i++)position[i]+=next[i]-target[i];target.splice(0,3,...next);}}
   if(Math.hypot(...position.map((value,i)=>value-target[i]))<.001)target[2]+=.01;
-  return {time:t,shotId:shot.shotId,camera:{position,target,fov:lerp(shot.from.fov,shot.to.fov,u)},actors,subtitles:document.tracks.subtitles.filter(s=>t>=s.start&&(t<s.end||t===document.duration&&s.end===document.duration)).map(s=>({text:s.text,start:s.start,end:s.end,...(s.placement?{placement:s.placement}:{}),...(s.position?{position:{x:s.position.x,y:s.position.y}}:{})}))};
+  return {time:t,shotId:shot.shotId,camera:{position,target,fov:lerp(shot.from.fov,shot.to.fov,u)},actors,subtitles:document.tracks.subtitles.filter(s=>t>=s.start&&(t<s.end||t===document.duration&&s.end===document.duration)).map(s=>({text:s.text,start:s.start,end:s.end,...(s.placement?{placement:s.placement}:{}),...(s.position?{position:{x:s.position.x,y:s.position.y}}:{}),...(s.effect?{presentation:cinematicSubtitlePresentation(s,t)}:{})})),...(document.tracks.backgrounds?.length?{background}:{}),...(document.presentation||document.tracks.backgrounds?.some(row=>row.transition==='fade')?{presentation:cinematicPresentationAt(document,t)}:{})};
 }
 
 export function cinematicEventsBetween(document,from,to){

@@ -1,0 +1,47 @@
+{
+  "baseline": "5c65642",
+  "status": "Prepared; independent subsystem gates run only after the relevant source freeze",
+  "ownership": "Independent MJS/JSON reports only. No production/test edits, browser automation, source staging/restoration, builds, commits, new agents or assets.",
+  "preserve": "Root reports140 preexisting dirty paths including46 reports. User changes in main.js, map-route.js, player-texture-profile.js, render-policy.js and village runtime/style policies remain untouched.",
+  "features": [
+    {"id":"duration","promise":"User chooses total scene duration","proof":"Actual duration mode/apply controls, existing/future point trimming policy, duration roundtrip and exact completion/replay"},
+    {"id":"entrances","promise":"Actors enter and leave at authored times","proof":"Default and explicit start/end/map boundaries; inactive visuals/interaction/caster state; independent actor poses and source reuse"},
+    {"id":"backgrounds","promise":"Midscene transitions among all4existing maps","proof":"Actual createMapTransition prepare/release/load/finish callbacks, prepareMapResources and streamed map loader with real manifests/models; asynchronous clock freeze, readiness, seek backwards, replay, late completion/error/external cancel"},
+    {"id":"subtitle_effects","promise":"Caption fade/slide/zoom/typewriter and whole-scene fade","proof":"Shared evaluator exact times, concurrent independent cue presentation, actual DOM styles/text and final frame, seeking/drag/editor visibility ownership"},
+    {"id":"existing_audio","promise":"Existing music and SFX timeline","proof":"Real lease-owned audio service with fake WebAudio boundary; clip offsets/envelopes/loop, play/pause/seek/stop, late decode/readiness and cleanup. No audibility claim."},
+    {"id":"local_audio","promise":"Imported local sound survives portable project save/reopen","proof":"Real media store/package APIs; SHA/length/type/duplicate/missing/corrupt/oversize checks; bounded reads, atomic import, storage error, objectURL/decoded-buffer/pending lifecycle; exact DOM file import/export/reopen"},
+    {"id":"existing_objects","promise":"Original map objects editable and restored","proof":"Actual original root full matrices/pivots/scales/enabled/visibility/LOD/outline/shadow/culling ownership; edit/save/replay then stop/error/dispose/map exit exact restoration; selected-object UI adoption"},
+    {"id":"all_assets","promise":"All registered assets and generic animation, future registration reflected automatically","proof":"Every real runtime manifest model accounted for or explicitly explained; static/skinned/morph/multi-mesh fixtures; synthetic future manifest+source registration appears in generated catalog/palette without hardcoded list changes; lazy selected-source loads only"},
+    {"id":"camera","promise":"Camera easing and presets/orbit controls","proof":"Shared evaluator endpoint/interior/easing monotonicity, actual preset controls/current captures, roundtrip and no new per-frame loop"},
+    {"id":"continuity","promise":"Existing authoring features remain usable","proof":"Baseline actions, target inspector/lanes, native pointers/cancel, Ctrl fine zoom hook unchanged, undo5/redo5, pending operation ordering, save/reopen/game consumption"}
+  ],
+  "stages": [
+    "Immutable baseline/API/feature inventory and resource-boundary fixture preparation",
+    "Pure schema/evaluator/project-package/media bounds after root freeze",
+    "Actual native host/catalog/generic/source-object resource/lifecycle gate after A freeze",
+    "Actual four-map director and audio scheduling through production callbacks after root integration freeze",
+    "Actual Studio↔game/default host DOM primary workflow with files and all feature controls after B freeze",
+    "Aggregate current source hashes, exact limits and remaining unverified browser/device areas",
+    "Final immutable build graph/resource audit only after root build-ready notification"
+  ],
+  "accepted_boundary_semantics": {
+    "actorTime": "Omitted start/end are0/duration; exit exclusive except end==global duration is inclusive at the final frame",
+    "actorMap": "Omitted free-actor mapId means all active maps; omitted bound-instance mapId means initial document map only",
+    "background": "Last row with time<=t is active; exact row time switches and is the fade-black midpoint; director clock freezes while old operation releases, real map travels/readiness resolves and fresh operation reacquires",
+    "anchor": "Background anchor overrides whole document anchor; otherwise whole anchor. UI helper seeds different maps with zero anchor unless explicitly provided.",
+    "localMedia": "MFCP1 newline binary package, uint32LE header length; sceneJSON<=512KiB, header<=1MiB,8audio maximum,16MiB per audio,64MiB total; local:sha256 IDs and exact binary SHA mandatory; no URLs/base64 in scene",
+    "mediaAPIs": "createCinematicMediaStore({indexedDB,memory:false}); explicit memory:true fixture only. addAudio/get/put/remove; exportCinematicProject(document,{store}); importCinematicProject(file,{store})",
+    "audioAPIs": "createCinematicAudioTimeline({audio,manifest,store,baseUrl}); prepare(document,{signal}), sample(document,time,{playing,seeking}), emit, stop,dispose,inspect; existing lease audio/context only"
+  },
+  "known_integration_seams": [
+    "Actual main map prepare directly increments generation and cancels the live lease before Game.leaveMap. Root plans release old operation before travel, retain director only under internal flag, and reacquire after actual ready.",
+    "Old verification fixtures manually swapped terrain/mapId; that is insufficient evidence for background transitions. New map gate must exercise production resource/streaming loader.",
+    "Audio/media cannot own a second AudioContext or RAF; late decode or map/lease completion must not resurrect stopped voices.",
+    "Borrowed scene objects require full matrix/resource/render-policy restoration, not position-only snapshots.",
+    "Future catalog registration must be tested with an unrecognized synthetic manifest rather than another entry in a hardcoded list."
+  ],
+  "limits": [
+    "Node/NullEngine and declared DOM/WebAudio/cache/image boundaries do not prove browser pixels, actual audio output, GPU resource use or device FPS.",
+    "Actual shipped geometry and runtime map policy must remain intact; fixture image substitution must be disclosed separately from rendered visual quality."
+  ]
+}

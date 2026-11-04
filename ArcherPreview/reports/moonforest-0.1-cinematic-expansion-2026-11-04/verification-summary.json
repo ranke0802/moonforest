@@ -1,0 +1,274 @@
+{
+  "generatedAt": "2026-11-04T10:06:41.243Z",
+  "status": "PASS independent cumulative integration gate",
+  "baseline": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "independentCases": 37,
+  "reports": [
+    {
+      "name": "core",
+      "file": "verification-core.json",
+      "sha256": "70f8be8f18c51e80054b6b56a3b305a4cc9f65219dad4935789b3ac82811513f",
+      "passedCases": 10,
+      "historicalSourceHashes": {
+        "cinematic-document": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+        "cinematic-editing": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+        "cinematic-media": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+        "cinematic-audio": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866"
+      },
+      "limits": [
+        "Independent schema/media/fake-WebAudio control verification; no audibility, codecs, browser or device claims"
+      ]
+    },
+    {
+      "name": "assets",
+      "file": "verification-assets.json",
+      "sha256": "571b7cd25b132139f9417914627414aae0b7f7867b83738d1a742af3efd75691",
+      "passedCases": 4,
+      "historicalSourceHashes": {
+        "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+        "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+        "cinematic-scene-host.js": "7b00d33e19cc95b98f8fb4ffcf4493e94a2b52294478911466ab54b0cbccec47",
+        "asset-catalog.js": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+        "authored-placement-runtime.js": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c"
+      },
+      "limits": [
+        "Native NullEngine CPU resource/pose/ownership verification; no pixels/GPU/device claim",
+        "Actual source vertex/index/animation data; fixture1px images/materials",
+        "Future manifest metadata fixture is temporary, never published or committed"
+      ]
+    },
+    {
+      "name": "director",
+      "file": "verification-director.json",
+      "sha256": "56a1d32bd05bca36b91befc2bc5e943af8b2e4fe946b98cf3372817de5987e12",
+      "passedCases": 9,
+      "historicalSourceHashes": {
+        "main.js": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+        "cinematic-player.js": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+        "cinematic-game.js": "dde1432755ffe0369404c52381402da07cd1bc989e5aee7c0163315f839d1a53",
+        "cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+        "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+        "cinematic-document.js": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+        "cinematic-audio.js": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+        "cinematic-media.js": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+        "cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+        "cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d"
+      },
+      "limits": [
+        "NullEngine real native CPU/DOM/lifecycle only; no pixels, GPU, device FPS or audibility claim",
+        "Exact shipped model geometry/rigs with fixture images/materials; cache transport assumes existing catalog bodies cached",
+        "Exact production main MapTransition callbacks with explicit cosmetic/combat decorations skipped; native engine gameplay frame delivery executes"
+      ]
+    },
+    {
+      "name": "workflow",
+      "file": "verification-workflow.json",
+      "sha256": "a3e4b69c71419b9d561dde27259f49b78cc5a33298485573fb42760121bf1d37",
+      "passedCases": 10,
+      "historicalSourceHashes": {
+        "cinematic-studio.js": "336a5bc998445a5630368d237275397aca0e7f7ba0d4eb6efbe744fd80f1b7c9",
+        "cinematic-studio.css": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+        "cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+        "cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+        "cinematic-editing.js": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+        "cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+        "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+        "cinematic-subtitles.js": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d"
+      },
+      "limits": [
+        "Actual Studio/game transport and native Babylon DOM/CPU lifecycle; no browser layout/pixels/device/audibility claim",
+        "Real4map/model data, fixtureimage uploads/materials/cache transport",
+        "No new asset is deployed; example package is report-only with generated PCM test audio"
+      ]
+    },
+    {
+      "name": "compatibility",
+      "file": "verification-compatibility.json",
+      "sha256": "553e256c254141c0f39fb9827e2f428bdf30b4270dac2e49e202e83911e3214c",
+      "passedCases": 4,
+      "historicalSourceHashes": {
+        "src/cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+        "src/cinematic-studio.js": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+        "src/cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+        "src/cinematic-registry.js": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+        "scripts/build-village-site.mjs": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+        "scripts/refresh-cinematic-catalog.mjs": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567"
+      },
+      "limits": [
+        "Build wiring inspected and refresh invoked only in isolated temporary project; no production build by verifier",
+        "Actual Studio/game/native CPU and resource fixture; no pixels/browser/GPU/audibility claim"
+      ]
+    }
+  ],
+  "currentSourceHashes": {
+    "src/cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+    "src/cinematic-editing.js": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+    "src/cinematic-player.js": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+    "src/cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+    "src/cinematic-studio.js": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+    "src/cinematic-studio.css": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+    "src/cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+    "src/cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "src/cinematic-path-view.js": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+    "src/cinematic-subtitles.js": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d",
+    "src/cinematic-media.js": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+    "src/cinematic-audio.js": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+    "src/cinematic-assets.js": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+    "src/cinematic-visual-adapter.js": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+    "src/cinematic-registry.js": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+    "src/asset-catalog.js": "6568eae0f690c14af23417ffed18ffe7377a48b0db80c4804b4f85defa53baac",
+    "src/editable-asset-index.js": "0d664131d3c5bf6a6471ecc258513c74a2a68fa0e8f0677638c2659b53527be2",
+    "scripts/build-village-site.mjs": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+    "scripts/build-asset-catalog.mjs": "a65e48e1b27f41e7b8ba739cf23fbd59e9b93957252e6ee03c480ad1dfd58898",
+    "scripts/refresh-cinematic-catalog.mjs": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567"
+  },
+  "protectedSources": {
+    "src/main.js": {
+      "expected": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+      "actual": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+      "unchanged": true
+    },
+    "src/map-route.js": {
+      "expected": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "actual": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "unchanged": true
+    },
+    "src/player-texture-profile.js": {
+      "expected": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+      "actual": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+      "unchanged": true
+    },
+    "src/render-policy.js": {
+      "expected": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "actual": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "unchanged": true
+    },
+    "src/village-outlines.js": {
+      "expected": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+      "actual": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+      "unchanged": true
+    },
+    "src/village-texture-budget.js": {
+      "expected": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "actual": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "unchanged": true
+    },
+    "src/village-texture-streaming.js": {
+      "expected": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+      "actual": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+      "unchanged": true
+    },
+    "src/village-streamed-environment.js": {
+      "expected": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+      "actual": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2",
+      "unchanged": true
+    },
+    "src/village-visibility.js": {
+      "expected": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "actual": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "unchanged": true
+    }
+  },
+  "allProtectedSourcesUnchanged": true,
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "resourceBaseline": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "example": {
+    "file": "authoring-expansion-example.moonforest-project",
+    "bytes": 36513,
+    "sha256": "232b7b53ed08e564e89163bf8184f3522f70a306873f3bb1f17aa0ddd855ed03",
+    "purpose": "Report-only neutral goblin expansion project; generated PCM test audio, not a published game asset or auto trigger"
+  },
+  "fixesIndependentlyFoundAndRetested": [
+    {
+      "issue": "Duration trim accelerated camera to original endpoint instead of preserving original prefix",
+      "before": "verification-core-before-camera-trim.json",
+      "after": "verification-core.json",
+      "result": "PASS original cut pose preserved"
+    },
+    {
+      "issue": "Cross-map same-definition actor prepare rejected while old generation retirement was pending",
+      "before": "verification-director-before-retirement-fix.json",
+      "after": "verification-director.json",
+      "result": "PASS real4map native scheduling and main resource callbacks"
+    },
+    {
+      "issue": "Studio legacy global catalog revision migration not enabled in merged references",
+      "after": "verification-compatibility.json",
+      "result": "PASS native Studio old-file import and authenticated registry migration"
+    }
+  ],
+  "coverage": [
+    {
+      "feature": "duration / timed entrances /4map backgrounds",
+      "evidence": [
+        "core",
+        "director",
+        "workflow"
+      ],
+      "result": "actual4map production resource replacement/readiness under exact main callbacks and native engine scheduling; clock freezes during travel; actors/camera use active anchor"
+    },
+    {
+      "feature": "subtitles and whole fade",
+      "evidence": [
+        "core",
+        "workflow"
+      ],
+      "result": "24effect combinations incl Unicode typewriter, concurrent cues, native text drag/history and presentation data"
+    },
+    {
+      "feature": "existing and imported audio",
+      "evidence": [
+        "core",
+        "director",
+        "workflow",
+        "compatibility"
+      ],
+      "result": "real PCM package hashes/bounds/corruption rejection, cross-store portability, actual timeline against fake WebAudio using existing GameAudioContext; native bridge seek/pause/end/stop"
+    },
+    {
+      "feature": "original scene objects",
+      "evidence": [
+        "director",
+        "workflow"
+      ],
+      "result": "actual map existing handles/adoption/native transforms; world matrices, transforms, flags and navigation identity restore"
+    },
+    {
+      "feature": "all assets/generic animation/future registration",
+      "evidence": [
+        "assets",
+        "compatibility"
+      ],
+      "result": "84catalog refs, actual362494triangle character clones with101bones and independent palette/shared geometry, full static watchtower runtime; syntheticfuture manifest reflected by normal-build refresh call without source arrays"
+    },
+    {
+      "feature": "camera easing/orbit/follow/cuts and authoring GUI",
+      "evidence": [
+        "core",
+        "workflow"
+      ],
+      "result": "8easings/9presets and actual native GUI path/capture/retained-end workflow"
+    },
+    {
+      "feature": "normal game / persistence / ownership",
+      "evidence": [
+        "workflow",
+        "compatibility"
+      ],
+      "result": "same binary project reopened exactly; browser registration metadata preserved; normal game file callback consumes it and natural completion restores hero/input/HUD/ready/audio; preview completion retains editor lease"
+    }
+  ],
+  "scopeNotes": [
+    "Historical gates retain the exact source hashes used during their run. Final optional catalog migration/build wiring was covered by bounded compatibility4 instead of repeating the unchanged full4map run.",
+    "Main travel callbacks execute original source with Vite BASE_URL literal normalization. Cosmetic diagnostics/player combat/cave resident work is explicitly skipped; all4map geometry/streaming/ground/readiness/lease lifecycle executes.",
+    "NullEngine image/material boundaries mark decoded fixture textures ready, including newly created cave fog samplers. Cave readiness stall in the initial fixture was corrected in reports only; no production shader policy was changed.",
+    "Normal-game input file callback is invoked with a stable event.target because LinkeDOM clears its property-handler event target after asynchronous dispatch; actual production callback/importer/controller/host/player execute. Studio button/event transport and actor/text native DOM pointer delivery are exercised.",
+    "Generic disposal resource counts return mesh/geometry/texture/skeleton/transform/observer counts to baseline; one shared material cache remains recorded. This is a bounded observed scenario, not a claim of exhaustive device residency measurement."
+  ],
+  "limits": [
+    "No browser automation or pixel/layout appearance verification",
+    "No device FPS/GPU throughput/memory residency or60FPS claim",
+    "No codec compatibility or audible sound quality claim; WebAudio nodes/offsets/gains/lifetime are control fixtures",
+    "This report predates final root full regression/build/deployment; final built graph/resource manifest audit is separate"
+  ]
+}

@@ -27,7 +27,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   resetInput();input.setSuspended?.(saved.suspended);
   setReady(saved.ready);const state=getState();audio.setSuspended(saved.audioSuspended||state.hidden||state.settings||state.failed);reconcile();return true;
  };
- const token={owner:options.owner??'development',audioEnabled:options.audioEnabled===true,get active(){return active;},get paused(){return paused;},
+ const token={owner:options.owner??'development',audioEnabled:options.audioEnabled===true,get audio(){return audio;},get active(){return active;},get paused(){return paused;},
   isCurrent(){return active&&world.toolLease===token&&sameWorld();},
   attachCamera(){if(!token.isCurrent()||!options.freeCamera)return;const mapper=camera.movement?.input;
    if(mapper){savedInputMap??=mapper.inputMap;mapper.inputMap=savedInputMap.map(copyInputEntry);}

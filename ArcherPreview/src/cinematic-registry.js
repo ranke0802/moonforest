@@ -1,13 +1,15 @@
 import registryDocument from './cinematic-registry.json' with {type:'json'};
 import {ASSET_CATALOG} from './asset-catalog.js';
 import {ACTOR_DEFINITIONS} from './actor-definitions.js';
+import {getCinematicDefinitions} from './cinematic-assets.js';
+import {CINEMATIC_AUDIO_IDS} from './cinematic-audio.js';
 import audioManifest from '../public/assets/audio.json' with {type:'json'};
 import {CINEMATIC_LIMITS,validateCinematicDocument} from './cinematic-document.js';
 import {MapLoadLifetime} from './map-load-lifetime.js';
 import {createBasePlacementManifest} from './placement-document.js';
 
 export const CINEMATIC_REGISTRY=registryDocument;
-export const DEFAULT_CINEMATIC_REFERENCES={catalog:ASSET_CATALOG,actorDefinitions:ACTOR_DEFINITIONS,audioIds:Object.keys(audioManifest.sounds)};
+export const DEFAULT_CINEMATIC_REFERENCES={catalog:ASSET_CATALOG,actorDefinitions:getCinematicDefinitions(ASSET_CATALOG),audioIds:CINEMATIC_AUDIO_IDS};
 const idPattern=/^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/,hashPattern=/^[a-f0-9]{64}$/;
 const maps=['village','great-plains','monster-forest','witch-cave'];
 
@@ -40,7 +42,7 @@ async function boundedBody(response,entry,lifetime){
 
 export async function loadRegisteredCinematic(id,{registry=CINEMATIC_REGISTRY,fetch:fetcher=globalThis.fetch,baseUrl,signal,references=DEFAULT_CINEMATIC_REFERENCES,timeoutMs=45000,timers}={}){
   const entry=listRegisteredCinematics(registry).find(value=>value.cutsceneId===id);if(!entry)throw new Error('Unknown registered cinematic: '+id);
-  if(entry.catalogRevision!==references.catalog?.revision)throw new Error('Registered cinematic catalog revision is stale');
+  if(entry.catalogRevision!==references.catalog?.revision&&references.migrateCatalogRevision!==true)throw new Error('Registered cinematic catalog revision is stale');
   if(typeof fetcher!=='function')throw new Error('Cinematic fetch is unavailable');
   const base=new URL(baseUrl??import.meta.env?.BASE_URL??'./',globalThis.location?.href??'http://localhost/'),url=new URL(entry.url,base);
   if(!['http:','https:'].includes(base.protocol)||url.origin!==base.origin||!url.pathname.startsWith(base.pathname.endsWith('/')?base.pathname:base.pathname.slice(0,base.pathname.lastIndexOf('/')+1)))throw new Error('Cinematic registry URL escapes the game base');
@@ -57,7 +59,7 @@ export async function loadRegisteredCinematic(id,{registry=CINEMATIC_REGISTRY,fe
     const text=new TextDecoder('utf-8',{fatal:true}).decode(bytes),result=validateCinematicDocument(text,validationReferences);
     if(!result.valid)throw Object.assign(new Error('Registered cinematic document validation failed'),{errors:result.errors});
     const document=result.document;
-    if(document.cutsceneId!==entry.cutsceneId||document.mapId!==entry.mapId||document.version!==entry.version||document.catalogRevision!==entry.catalogRevision||document.duration!==entry.duration)throw new Error('Registered cinematic metadata differs from the index');
+    if(document.cutsceneId!==entry.cutsceneId||document.mapId!==entry.mapId||document.version!==entry.version||(result.sourceCatalogRevision??document.catalogRevision)!==entry.catalogRevision||document.duration!==entry.duration)throw new Error('Registered cinematic metadata differs from the index');
     lifetime.check();return document;
   }catch(error){lifetime.abort(error);response?.body?.cancel?.().catch(()=>{});throw error;}
   finally{lifetime.close();}

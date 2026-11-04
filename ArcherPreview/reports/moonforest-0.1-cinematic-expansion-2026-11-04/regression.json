@@ -1,0 +1,15 @@
+{
+  "total": 1819,
+  "passed": 1818,
+  "failed": 1,
+  "skipped": 0,
+  "cancelled": 0,
+  "passedAll": false,
+  "knownInheritedFailure": {
+    "test": "a textureless native structure cannot increase the compressed mobile high-texture budget",
+    "evidence": "verification-inherited-texture-fixture.json",
+    "classification": "Preexisting test fixture incompatible with protected user texture-policy edits; no cinematic source dependency in reproduced constructor failure"
+  },
+  "sourceFiles": 31,
+  "sourceUnchanged": true
+}

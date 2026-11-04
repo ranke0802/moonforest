@@ -1,0 +1,3804 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "real Studio transport/host/native canvas drag and path quarter samples",
+      "pass": true,
+      "evidence": {
+        "actorId": "actor-1",
+        "path": {
+          "actorId": "actor-1",
+          "keys": [
+            {
+              "time": 0,
+              "position": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": 1,
+              "interpolation": "linear"
+            },
+            {
+              "time": 2,
+              "position": [
+                -0.19454645920222324,
+                0,
+                -0.44383951899396124
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": 1,
+              "interpolation": "linear"
+            }
+          ]
+        },
+        "modelLoads": 1,
+        "warmDragLoads": 0
+      }
+    },
+    {
+      "name": "camera orbit/easing/follow/multishot and total duration scale through actual controls",
+      "pass": true,
+      "evidence": {
+        "shots": [
+          {
+            "shotId": "shot-1",
+            "start": 0,
+            "end": 1.333333,
+            "interpolation": "ease-in-out",
+            "from": {
+              "position": [
+                1.6337768386908775,
+                2.7284391596432416,
+                -1.8735507405701863
+              ],
+              "target": [
+                0,
+                1.3504634657072228,
+                0
+              ],
+              "fov": 0.65
+            },
+            "to": {
+              "position": [
+                0.8944559465110182,
+                2.7284391596432416,
+                -2.3193463941129897
+              ],
+              "target": [
+                0,
+                1.3504634657072228,
+                0
+              ],
+              "fov": 0.65
+            },
+            "movement": "orbit",
+            "orbitTurns": 1
+          },
+          {
+            "shotId": "shot-2",
+            "start": 1.333333,
+            "end": 8,
+            "interpolation": "ease-in-out",
+            "from": {
+              "position": [
+                0.8944559465110182,
+                2.7284391596432416,
+                -2.3193463941129897
+              ],
+              "target": [
+                0,
+                1.3504634657072228,
+                0
+              ],
+              "fov": 0.65
+            },
+            "to": {
+              "position": [
+                1.8735507405701857,
+                2.7284391596432416,
+                1.6337768386908782
+              ],
+              "target": [
+                0,
+                1.3504634657072228,
+                0
+              ],
+              "fov": 0.65
+            },
+            "movement": "orbit",
+            "orbitTurns": 1,
+            "lookAtActorId": "actor-1",
+            "lookAtOffset": [
+              0,
+              1,
+              0
+            ]
+          }
+        ],
+        "duration": 8
+      }
+    },
+    {
+      "name": "concurrent subtitle effect/native percentage drag/history with whole-scene fade",
+      "pass": true,
+      "evidence": {
+        "cues": [
+          {
+            "start": 0,
+            "end": 2,
+            "text": "몬스터 이름\n설명을 입력하세요",
+            "placement": "center",
+            "effect": {
+              "enter": "typewriter",
+              "exit": "fade",
+              "inDuration": 0.35,
+              "outDuration": 0.35,
+              "charsPerSecond": 5
+            },
+            "position": {
+              "x": 60,
+              "y": 55
+            }
+          },
+          {
+            "start": 0.5,
+            "end": 2.5,
+            "text": "자막을 입력하세요"
+          }
+        ],
+        "presentation": {
+          "fadeIn": 0.5,
+          "fadeOut": 0.5
+        }
+      }
+    },
+    {
+      "name": "music controls/imported audio immediate portable binary save",
+      "pass": true,
+      "evidence": {
+        "bytes": 35060,
+        "local": {
+          "assetId": "local:78f82cd49af869013e8ec414a15d71f5f4f2ec8d006b6a0c50527c91eaa7a85f",
+          "name": "독립 검증 음악.wav",
+          "mime": "audio/wav",
+          "bytes": 32044,
+          "sha256": "78f82cd49af869013e8ec414a15d71f5f4f2ec8d006b6a0c50527c91eaa7a85f",
+          "duration": 2
+        },
+        "audioTracks": [
+          {
+            "time": 0.75,
+            "end": 8,
+            "audioId": "music:forest",
+            "kind": "music",
+            "volume": 0.4,
+            "loop": true,
+            "clipStart": 0,
+            "fadeIn": 0.3,
+            "fadeOut": 0.3
+          },
+          {
+            "time": 0.75,
+            "end": 8,
+            "audioId": "local:78f82cd49af869013e8ec414a15d71f5f4f2ec8d006b6a0c50527c91eaa7a85f",
+            "kind": "music",
+            "volume": 0.5,
+            "loop": false,
+            "clipStart": 0,
+            "fadeIn": 0,
+            "fadeOut": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "GUI background add uses real main loader monster-forest",
+      "pass": true,
+      "evidence": {
+        "time": 2,
+        "mapId": "monster-forest",
+        "placementRecords": 891
+      }
+    },
+    {
+      "name": "GUI background add uses real main loader witch-cave",
+      "pass": true,
+      "evidence": {
+        "time": 4,
+        "mapId": "witch-cave",
+        "placementRecords": 212
+      }
+    },
+    {
+      "name": "GUI background add uses real main loader great-plains",
+      "pass": true,
+      "evidence": {
+        "time": 6,
+        "mapId": "great-plains",
+        "placementRecords": 1424
+      }
+    },
+    {
+      "name": "current background existing source adoption and path edit through UI",
+      "pass": true,
+      "evidence": {
+        "actor": {
+          "actorId": "actor-2",
+          "instanceId": "forest-forest-01-sickly-oak-0",
+          "assetId": "forest-01-sickly-oak",
+          "assetVersion": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+          "contentHash": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+          "actorDefinitionId": "cinematic.forest-01-sickly-oak.01f7c782b9568206",
+          "position": [
+            -42.62327194213867,
+            2.257436990737915,
+            -6.68442440032959
+          ],
+          "rotation": [
+            0,
+            0.21315870451918947,
+            0,
+            0.9770175877064348
+          ],
+          "scale": 0.9817536922544241,
+          "start": 2,
+          "end": 8,
+          "mapId": "monster-forest"
+        },
+        "worldMap": "monster-forest"
+      }
+    },
+    {
+      "name": "full expansion file reopen and real game registration preserve exact schema/media",
+      "pass": true,
+      "evidence": {
+        "packageBytes": 36513,
+        "sha256": "232b7b53ed08e564e89163bf8184f3522f70a306873f3bb1f17aa0ddd855ed03",
+        "gameUrl": "https://authoring-verification.test/moonforest/ArcherPreviewSite/index.html?release=moonforest-0.1&character=warrior-v3&rev=authoring-verification&cinematic=1&scene=scene-20261104100029-1",
+        "mediaCopied": true
+      }
+    },
+    {
+      "name": "native scheduled full scene retained end / explicit release",
+      "pass": true,
+      "evidence": {
+        "end": 8,
+        "state": {
+          "state": "cancelled",
+          "time": 8,
+          "duration": 8,
+          "cutsceneId": "scene-20261104100029-1",
+          "loop": false,
+          "retained": false,
+          "error": null,
+          "backgroundMapId": "great-plains",
+          "transitioning": false
+        },
+        "native": {
+          "draws": 4,
+          "attempts": 4,
+          "requests": 13,
+          "pending": 1,
+          "frameLoopFrames": 4,
+          "running": true,
+          "background": false,
+          "hidden": false,
+          "renderEvenInBackground": true,
+          "maxFPS": 30
+        }
+      }
+    }
+  ],
+  "sourceBefore": {
+    "cinematic-studio.js": "336a5bc998445a5630368d237275397aca0e7f7ba0d4eb6efbe744fd80f1b7c9",
+    "cinematic-studio.css": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+    "cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+    "cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+    "cinematic-editing.js": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+    "cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+    "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "cinematic-subtitles.js": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d"
+  },
+  "sourceAfter": {
+    "cinematic-studio.js": "336a5bc998445a5630368d237275397aca0e7f7ba0d4eb6efbe744fd80f1b7c9",
+    "cinematic-studio.css": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+    "cinematic-game.js": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+    "cinematic-document.js": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+    "cinematic-editing.js": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+    "cinematic-scene-host.js": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+    "cinematic-interaction.js": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+    "cinematic-subtitles.js": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d"
+  },
+  "sourceUnchanged": true,
+  "proof": {
+    "travel": [
+      {
+        "kind": "prepare",
+        "from": "village",
+        "time": 2,
+        "leaseActive": false,
+        "documentRetained": true
+      },
+      {
+        "kind": "loadBegin",
+        "mapId": "monster-forest",
+        "time": 2
+      },
+      {
+        "kind": "loadReady",
+        "mapId": "monster-forest",
+        "time": 2
+      },
+      {
+        "kind": "finish",
+        "mapId": "monster-forest",
+        "time": 2,
+        "ready": true,
+        "loading": false
+      },
+      {
+        "kind": "prepare",
+        "from": "monster-forest",
+        "time": 4,
+        "leaseActive": false,
+        "documentRetained": true
+      },
+      {
+        "kind": "loadBegin",
+        "mapId": "witch-cave",
+        "time": 4
+      },
+      {
+        "kind": "loadReady",
+        "mapId": "witch-cave",
+        "time": 4
+      },
+      {
+        "kind": "unrelatedCaveResidentCombatSkipped"
+      },
+      {
+        "kind": "finish",
+        "mapId": "witch-cave",
+        "time": 4,
+        "ready": true,
+        "loading": false
+      },
+      {
+        "kind": "prepare",
+        "from": "witch-cave",
+        "time": 6,
+        "leaseActive": false,
+        "documentRetained": true
+      },
+      {
+        "kind": "loadBegin",
+        "mapId": "great-plains",
+        "time": 6
+      },
+      {
+        "kind": "loadReady",
+        "mapId": "great-plains",
+        "time": 6
+      },
+      {
+        "kind": "finish",
+        "mapId": "great-plains",
+        "time": 6,
+        "ready": true,
+        "loading": false
+      },
+      {
+        "kind": "prepare",
+        "from": "great-plains",
+        "time": 2,
+        "leaseActive": false,
+        "documentRetained": true
+      },
+      {
+        "kind": "loadBegin",
+        "mapId": "monster-forest",
+        "time": 2
+      },
+      {
+        "kind": "loadReady",
+        "mapId": "monster-forest",
+        "time": 2
+      },
+      {
+        "kind": "finish",
+        "mapId": "monster-forest",
+        "time": 2,
+        "ready": true,
+        "loading": false
+      },
+      {
+        "kind": "prepare",
+        "from": "monster-forest",
+        "time": 7.9,
+        "leaseActive": false,
+        "documentRetained": true
+      },
+      {
+        "kind": "loadBegin",
+        "mapId": "great-plains",
+        "time": 7.9
+      },
+      {
+        "kind": "loadReady",
+        "mapId": "great-plains",
+        "time": 7.9
+      },
+      {
+        "kind": "finish",
+        "mapId": "great-plains",
+        "time": 7.9,
+        "ready": true,
+        "loading": false
+      }
+    ],
+    "mapResources": {
+      "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+      "resourceIndexSha256": "10e9623418a4964e048a5e291a1d1e0d83656823474b6f24b492a8585f737607",
+      "manifestReads": [
+        {
+          "url": "https://authoring-verification.test/assets/resource-index.json",
+          "sha256": "10e9623418a4964e048a5e291a1d1e0d83656823474b6f24b492a8585f737607"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/village-ground.json",
+          "sha256": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/village.json",
+          "sha256": "7caac3ed245e9397651f76afaa2e56c800e128aaca8d1c0e91dbd6826426e01e"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/ktx2-decoder.json",
+          "sha256": "ebe44dcb7d4ec07352243c5d74ef71a467191b489f2ce2d7a0bbea526e913011"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/meshopt-decoder.json",
+          "sha256": "20144c48ea468481d8e5c4d5c2455401efb4251b9c1b0275bb30f8a7221e6125"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/sky.json",
+          "sha256": "2b8d926b9f512c41c4722c7d557f7bdfcf9c0e19e9932c55cb0384dad78ff405"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/monster-forest-ground.json",
+          "sha256": "cbd93b63f78036fd0d9413b95520a1b06e23dcf22a54b7ff37ae19994f054599"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/monster-forest.json",
+          "sha256": "19cbed420633ae8d327d6f525b868374612dd1dd3420fe4dd82f5852419ad6bd"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/witch-cave-ground.json",
+          "sha256": "0581c2fd9665837af9a55a0859d09a5fbb08dc0a7ba1b4d631be60021bd61aa0"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/elena.json",
+          "sha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/witch-cave.json",
+          "sha256": "74fbcba05fb95b0c1591d2ea2738af18364a625ae386a6e4bcfbd9188ee3e2af"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/great-plains-ground.json",
+          "sha256": "fae2d5c32dc7efe9c1994c168809d59d9c1453e2351ff22b722feac376d7a66f"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/great-plains.json",
+          "sha256": "2e9fd0b20bb8980b702c73b9be349da729ebb84b2e5e7d1fe12bd642e28b3870"
+        }
+      ],
+      "binaryReads": [],
+      "models": [
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf",
+          "sourceSha256": "2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 4494,
+              "indices": "71da0e214e361f0940f0baae42f07ac79fb34c6e65a3c56ac0466dd8525399c8",
+              "attributes": {
+                "position": "9a5431f5b23d9120c050b80bb65db0daeaac65f47634def49b6f89024eb2496e",
+                "normal": "2fab792fb23329fe629102159f4b8710b0e0574f2e3e0a42420f41c426e5edac",
+                "uv": "2fb1c0d4c6866be5e797fc2a0d12635f8d4878e686faad976b9c9ecbe404574f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/625f63ecafe9c7f58f278c7a1579782ef2770189b315a8885cc133b1d1774321.gltf",
+          "sourceSha256": "625f63ecafe9c7f58f278c7a1579782ef2770189b315a8885cc133b1d1774321",
+          "parts": [
+            {
+              "name": "well_mesh0",
+              "triangles": 4822,
+              "indices": "010cb178f1d63290a561f40956aff07250ca4c3422e19de2295bef4d55ec1a0f",
+              "attributes": {
+                "position": "812a9c5fdf298481817e947392b3833d023937d495d37a6bcb182fdf0464d02c",
+                "normal": "179385ff79dded1e0657595b6b724e2a45f4ee7f1c496de2e34aa8d5baa4fadb",
+                "uv": "74e67ff6cd01b89c458a9a6902229cbf5e55f243553836f953ad95db4a7a30ff"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/5f30a053d3fa3f6f6fc381614ba9d31887da26195b3cebe1b44b7088b07bc106.gltf",
+          "sourceSha256": "5f30a053d3fa3f6f6fc381614ba9d31887da26195b3cebe1b44b7088b07bc106",
+          "parts": [
+            {
+              "name": "chapel_mesh0",
+              "triangles": 4547,
+              "indices": "bd379d0b12b1ce7de4f2d3593bdb885c8a3cdb39ea412d67458a1a9864bb4d36",
+              "attributes": {
+                "position": "91271d9211e80610279041262da9ed1e5ead7df6cb9ac6ea7d8407266cd4aa90",
+                "normal": "9fac86c36846ba7c054be0cdf61d0c8b6962b167aef7b716bccf476e5edb1374",
+                "uv": "9d991dcd33eae844e3c2f6e5c69b656c0dd9ea25a2fc9c0ab429768d3caf5a02"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/b7baf458f12fe691f744ce1552c4f39b73f4ca3039d26f83a8c057ac8cca2691.gltf",
+          "sourceSha256": "b7baf458f12fe691f744ce1552c4f39b73f4ca3039d26f83a8c057ac8cca2691",
+          "parts": [
+            {
+              "name": "market-stall_mesh0",
+              "triangles": 4895,
+              "indices": "da5abe630e77abb66e2e4f471b1a444e8b1103367c54104cbc69d4d4ebd1891e",
+              "attributes": {
+                "position": "e7f5628a3b94a36017c5d1098c7c059453fd5bb8c15802fec57cf00e632913c4",
+                "normal": "7282af117db391bd86a8c00b5380ba30132f657aec6a3ea1898e5cdd65d7c626",
+                "uv": "1d97d1c458daa014e414f04281032667893d162d9142845783f7fbe00a02b31a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/d6e3620e05b4f5094f4c9b5c9d0b8d650a1cb0014a692283445cda04a7efb20f.gltf",
+          "sourceSha256": "d6e3620e05b4f5094f4c9b5c9d0b8d650a1cb0014a692283445cda04a7efb20f",
+          "parts": [
+            {
+              "name": "house-02-tall-home_mesh0",
+              "triangles": 4738,
+              "indices": "df7e6a2b5594d56b28db00d138c34c220a2c62ddfc1cce0f7ae48b86af688051",
+              "attributes": {
+                "position": "77a68c2eeac54b7fcd0da6ec74ea4041ae3696de828f37949d1ac6c82bb96177",
+                "normal": "7adf5fee15954673e4657ad81227f9570fbc4608ed18889d434b6280d5563458",
+                "uv": "9782d040c837ffd4700f205b78bada18a2f48513870e6a9e8bed04b272b81502"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/8761ab113044763f21c1a03ed3fc07f5a45600d28d4081a873654841cf9fd9dd.gltf",
+          "sourceSha256": "8761ab113044763f21c1a03ed3fc07f5a45600d28d4081a873654841cf9fd9dd",
+          "parts": [
+            {
+              "name": "house-03-workshop_mesh0",
+              "triangles": 4915,
+              "indices": "9b10af544d7f2d502fb470660ef0ea04ade03879909b95225550bf572bd3730a",
+              "attributes": {
+                "position": "41a4fbd683b9aafbd1be645d29e04ef1aa8a45ec07395fd8912ecc37a03eed49",
+                "normal": "7820edac2f7cc1e359167af48a4876a34930bae9db2bc92cb9110ce923760c26",
+                "uv": "ae31307e09139a907db69b1eb9b27589bb478be0f3af447ca3571cc66995cc04"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+          "sourceSha256": "c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 4737,
+              "indices": "3b2738b37c81e13666ab0efaeb9794c07c5a7c4e2c408aeb2fcd8b9be930157d",
+              "attributes": {
+                "position": "bff15341485cfaae787f38e0151626c6351b17f74a16897ae65574a8e4d6899d",
+                "normal": "b93640ea70136216bea594215b85b2ace4eb40358dca145d0f5a9961e88d4718",
+                "uv": "041f482ff4bd1121d4a8f333183c56f4c09cf9d6d1e4c6ccbad54250f134060b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/7e12637435ea79e25acc502c2ef8a0edebf6f060f789de617c865f64e1d58424.gltf",
+          "sourceSha256": "7e12637435ea79e25acc502c2ef8a0edebf6f060f789de617c865f64e1d58424",
+          "parts": [
+            {
+              "name": "house-01-cottage_LOD1",
+              "triangles": 4106,
+              "indices": "4440fc8a80cb43ad3318dea011f18e78722898767e628e665834f1fa63875479",
+              "attributes": {
+                "position": "851629b7bb578a09c331f372c829eb2df2def4f4671e24a18c462c06db48e097",
+                "normal": "b37d56d565c204874b6f4156769fd11a0c049fcdb43766e1e6e72c2c7ea5e6b3",
+                "uv": "b47d2a698978d15833c25133a387c99538a7bb442adb5a84acb566e871563316"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+          "sourceSha256": "689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def",
+          "parts": [
+            {
+              "name": "crate-barrel-cluster_mesh0",
+              "triangles": 4683,
+              "indices": "b61f633a04eea3a54576cec7d03e9736b4e5556c3ce321fe385a924a01085e35",
+              "attributes": {
+                "position": "231924ed9dc82e54d30a9b3a4bfc93b03a0812fba5baf022f00a6b40dc7d5857",
+                "normal": "7d7fa3b823a12b67bf20f6b8b6ab7475ede6e2bfa98a556302125bec1b19d1fd",
+                "uv": "8774064f22579a65bcdc28464aa806285ac4ca11be4c4a196e97ee93889666c0"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5.gltf",
+          "sourceSha256": "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5",
+          "parts": [
+            {
+              "name": "crate-barrel-cluster_mesh0",
+              "triangles": 3091,
+              "indices": "488c75064e764828f03df64136f685dd722428917fd7ca077552b4d248be4a08",
+              "attributes": {
+                "position": "4b9f2ba3ca1c35d044fbaa88919ce1bd66c04b2c5c3d1e6ac118af96d979b51d",
+                "normal": "2024494fd1f2ffafa9e74ea70438ba36702cabf58995e6c2d8e88fcbfce815e4",
+                "uv": "48856b479bfe837cd925708432344a21a1e0f85c46ca5cf241025e9ba4535371"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/ad560f4b18fa364201a4e0bb87ee4aae587fe22f111c4a0dc950209f0729a608.gltf",
+          "sourceSha256": "ad560f4b18fa364201a4e0bb87ee4aae587fe22f111c4a0dc950209f0729a608",
+          "parts": [
+            {
+              "name": "house-04-forest-hut_mesh0",
+              "triangles": 4652,
+              "indices": "160d0731ae85c80f321f5701756f3452d7bba164d534a950c03ba8714f2aab57",
+              "attributes": {
+                "position": "c2a54739cce4749887384363146378351eb8661c44b8325a4fde29ffcfcfbb6b",
+                "normal": "149143f1b3d097757db43976feeb1c5833e2dc16444541eeb370cdeca62093bc",
+                "uv": "2a2bb253c75aae06fe9e93139964d22f759618ad4fb321ea27d274b96272d4a8"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf",
+          "sourceSha256": "fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 4359,
+              "indices": "defab7e507fec90a8ea25bff019d20f440e8c63288f4b3b7f5e1287dc5948de1",
+              "attributes": {
+                "position": "ab2a005d70f40f347f95a5ecc58e33668b83aa6199e40e3f5d3c3e2753fc0835",
+                "normal": "2951587e32dff2434951691161781c2ade52085f5dc2e83e0d61f0ef84ae9ba1",
+                "uv": "b8dc2a693891da6707236e00135411a1840eacff45be9c2253478798d5372f17"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "sourceSha256": "acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 3314,
+              "indices": "dc4e9d2f69b520bad5f7179838010b6ec2ac9a537a62ff8952386a103e9bcb32",
+              "attributes": {
+                "position": "3a6585f507d10148a5ec81044ca978b1a6018ae202aff5b176e8fd9eaf43379e",
+                "normal": "5f8ceda3272c964c0a1c0775add424646d023d46e5c1b26573185cc975fa6f76",
+                "uv": "3de178eb1e3f03f0023a140d1c0824f4032439b8faff2e7701b9786a03b59438"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79.gltf",
+          "sourceSha256": "ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79",
+          "parts": [
+            {
+              "name": "rail-fence_mesh0",
+              "triangles": 5184,
+              "indices": "ff880cd8abb5e4f6c4df31a5c7d35e39acde9b20e0be2ce499ed723f79730447",
+              "attributes": {
+                "position": "6587e815c07741722fc1cf2da420f7283928aa2c9063d19cd36e170d81eebf08",
+                "normal": "ff9a702e5bb77e4785476a6dca434d9282694b6747353bf488a3e5db8aca5c14",
+                "uv": "5031a7cab0eac90334d8498a22902d16cabe97fae2c607896e44dfeda0153097"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5.gltf",
+          "sourceSha256": "8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5",
+          "parts": [
+            {
+              "name": "rail-fence_mesh0",
+              "triangles": 2592,
+              "indices": "14ed22bad6725d33ddbcddc895f67532372cdf0f9806c6de449cf7cd9e46ccf8",
+              "attributes": {
+                "position": "fc962376765a1d7ffb18b1c3a81e34bd621aa7d4de3ec9a88c82f1af8c3da042",
+                "normal": "8c74d3b44741690a67f2c5a92c7ffa3286ab003266c81b33a6ab6584bb040caa",
+                "uv": "7fd54aacd6b1f076c9973333522a9e89defad9e7e5c9dc237fe7a3c304f3669d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512.gltf",
+          "sourceSha256": "85dd9015f1a81d0d7d45817ffe5c4b2a87bf41bf5fa76ce233ee28c3e01a1512",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 2367,
+              "indices": "c274b8e5c985d6a907828f9f9552c01cffaecaecf016859b8a3be0764eb87e45",
+              "attributes": {
+                "position": "4209bdf4b33ea3b7d618f65e3fc159e31df805de702e09d9fd7750f00c501965",
+                "normal": "e5158ca108d0e8683b7d936075960467bb51b4433bb5aecfa59fb0556a3a85b7",
+                "uv": "ea80f0275bb5cb4a6eb7114b0b69ee6285dc84a01ccfe3b321fb2d4fd6e4ed36"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/7b9897d09fb69e11c50d43403b9d316437eb19d45fc7828094a6c273ce5e8dff.gltf",
+          "sourceSha256": "7b9897d09fb69e11c50d43403b9d316437eb19d45fc7828094a6c273ce5e8dff",
+          "parts": [
+            {
+              "name": "garden-bed_mesh0",
+              "triangles": 1769,
+              "indices": "5cb13a43318394be0fb6aeda9991b1b7d29e67f102ac921ddb3362a197ce2982",
+              "attributes": {
+                "position": "e8fc06cf274455e237728cd54b94dcf5446ba7b17c7874ac4e6d8390659c1380",
+                "normal": "12dfdc99a1cdf6509b51128ebf6d0df4a2297e7427484f644980efae5ef30915",
+                "uv": "76985c78f36d81f5d30b28c93b1442e0f5bd9dc67ef6e2f1500868ccf5d7c40d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9.gltf",
+          "sourceSha256": "2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9",
+          "parts": [
+            {
+              "name": "firewood_mesh0",
+              "triangles": 2407,
+              "indices": "64dfc2fd2e4d00c644d52d9f9b9091bd50d493411775cfffaa165946a2b5deff",
+              "attributes": {
+                "position": "ba49a7755b6fd15a26a02614fcda9cb726e6ed44ea657a1a4e5acd7c9c2a84cc",
+                "normal": "dcb8338b0664e45bec79cd5ef8b8cbabaf4b3a5b15302595cba2ba35370dadc2",
+                "uv": "de0676f6b9eeadb3ae71a0e3dc33e0e656fd09c13d50e47b8496fba169000193"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "sourceSha256": "7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 2238,
+              "indices": "f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092",
+              "attributes": {
+                "position": "1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa",
+                "normal": "48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3",
+                "uv": "399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+          "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7",
+          "parts": [
+            {
+              "name": "crate-barrel-cluster_mesh0",
+              "triangles": 1969,
+              "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+              "attributes": {
+                "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+                "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+                "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0.gltf",
+          "sourceSha256": "6ee4f5103dce45d72dc72063fa3eb412f1c48d01c84c8a9859e0e16678668cc0",
+          "parts": [
+            {
+              "name": "node0",
+              "triangles": 9434,
+              "indices": "ae8992a7ec9be78c83ef3189a17e625ce93c6651c35d49cd90309ecbdb64b5c0",
+              "attributes": {
+                "position": "6e27422b44264ba09506ceeb48c1afda186841473578ee11842665e9be2e9783",
+                "normal": "a4a022c15bd0a47a3d58f9ef5f020642da3fa6ae1e76672a555fe6e58b064bb5",
+                "uv": "c20e90dd38a785d4e5313238e3d9ee5bb20bcc5afccea6efb37f7cec80169e0c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+          "sourceSha256": "7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 3085,
+              "indices": "2deb1128fa6c572a39a91c6fe240ba2e93562ed2cae92057c7d95713d2d9984e",
+              "attributes": {
+                "position": "d157d6595702cd1de64c9fffba701285dc4a29179465a98c453af884ce340bd6",
+                "normal": "aa66ba90acaf6a5f4548c3c96477fc8feacfb5a8eb2822b546e56bb3d60f76e1",
+                "uv": "e846b565e0b8ff49e6da8bb7714193f3c364c4ea8276f90ea8684119d872927d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/8a4013458e6aabb65327bf0731c3e621679f2a46e0fa1990f605636ea3fbd2b0.gltf",
+          "sourceSha256": "8a4013458e6aabb65327bf0731c3e621679f2a46e0fa1990f605636ea3fbd2b0",
+          "parts": [
+            {
+              "name": "house-01-cottage_LOD1",
+              "triangles": 2050,
+              "indices": "4e9a12e4d9f9057d49bea84f3b937bdd475ef535b24b8127bfd46f9103474381",
+              "attributes": {
+                "position": "602cd299cf287c9ac45d75a293b0bff8ea5c3badd211b86d59d58cfb005b119c",
+                "normal": "99047198ad351a9aca175121bf11d2fae889683fb8a0bbb2d406ba32de4a2481",
+                "uv": "1275926ae62c8a8c89bae4c9f5ae5b759f51e4079eafc297787985ae6425f483"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/afd1cade2c6865f58eca8eb2dd36f93328c77d7ed932fe15b080bafb90078c52.gltf",
+          "sourceSha256": "afd1cade2c6865f58eca8eb2dd36f93328c77d7ed932fe15b080bafb90078c52",
+          "parts": [
+            {
+              "name": "house-04-forest-hut_mesh0",
+              "triangles": 3209,
+              "indices": "aae2b6ecf4f95cf2a04e35efcf89b5176f42d9cc6eb35e7fc14c06b999f7b061",
+              "attributes": {
+                "position": "c975e93cf17c469212a1e5122b1855ccde756bcf28cf033459c4260617d22bce",
+                "normal": "38246aa1d166c5a394eb27405907f093446579a9c7517a133b0c012681df38b3",
+                "uv": "f940801323ddf810b03f2261370630a2db1c682b58e76824a93dc9c58ec67451"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "sourceSha256": "c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3649,
+              "indices": "9c1309d92c956ad5bd41b678cbaa9935d7f6f839e238f58a4fa22ad591c13e40",
+              "attributes": {
+                "position": "798b0877484754e3c49ece3781cc1876d87c45b6aca261e967fdb84bac6e8f7c",
+                "normal": "0eda112355cac200c18f1b2105b810833f9f4eefe5e4fc297ed5b1a74c2fe965",
+                "uv": "382fbf20586a390005998c9e3d862a3cb5af0b4254b6dbfec8f8cb5d6789558f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4.gltf",
+          "sourceSha256": "80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4",
+          "parts": [
+            {
+              "name": "rail-fence_mesh0",
+              "triangles": 1140,
+              "indices": "484c7bab6de2dfa5274cb7c12cc071b08c364e4f17e0b9229c691ff26a6085f4",
+              "attributes": {
+                "position": "e1188d645b81ba939e7f8e92863002b948e933549652cf48dfe2f5cc0d60fd6d",
+                "normal": "95dca29198c3a93c22e84914e193f1e12130ba00936868b2c8fcbef7504bd693",
+                "uv": "4072e049416e877413ad512c10475ca26a1d2d28001ad752c954ebdee4c5b97a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/9333d9bcb47e7121bd44a6614d7478e89d8cf36a5086905c65da1d7b25aacce2.gltf",
+          "sourceSha256": "9333d9bcb47e7121bd44a6614d7478e89d8cf36a5086905c65da1d7b25aacce2",
+          "parts": [
+            {
+              "name": "garden-bed_mesh0",
+              "triangles": 1219,
+              "indices": "b59112a0d4ea34f080a1665bb7e59b38bb7925da61e33b6251793400724c28ed",
+              "attributes": {
+                "position": "368109fc454719ac35ff0235a03e69af6e0a96f5af1631a5785c4d41a51720aa",
+                "normal": "3ea720abee24b0f5583e40ede6639c155a4f891a9dfa5469fefe74d7e9a9b3a8",
+                "uv": "d2ac4cbf68c86854b2f11045821b2cbcbd0a8698f0bd72d574f6ef471e750710"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+          "sourceSha256": "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2",
+          "parts": [
+            {
+              "name": "firewood_mesh0",
+              "triangles": 1719,
+              "indices": "1de4f0765a612d29b903c6e62995516cc77f3acf5e94ccbf5ae1e64e1ec99d7d",
+              "attributes": {
+                "position": "4533a838dda64c42efef0799e1b815bf1d840a45b522c4db25296da7e5adc00b",
+                "normal": "59f8113b395ad4281c85d3430080bfe3d47c03fbf3f953d72b114814a6e0f8be",
+                "uv": "2fc979abcbfc83c5e6af4cb2cd182fb2f28c226f38381b623acdf5fc7142468d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+          "sourceSha256": "02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 1387,
+              "indices": "28313af2a269eece84d3c846305cab0fa2b0940bc00c6ed32ca0d4fd414ceafc",
+              "attributes": {
+                "position": "87dafd659042ec11a8c8b5b817d6ae53224b02f6cc30a7ea6c1e70a9c9a0b2e6",
+                "normal": "6fb9e8dc8c0c940dbed18bbd7a1faa6592dec512d9fa15438eb71de623e555ab",
+                "uv": "8f44f64fc3eb57223beab20f62cc37b397116ccedf5a62889bc2e9964dbcf556"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/3ea27415a2931968c87163a76bb910c544f9bbdeeddb247685d10db32a285abf.gltf",
+          "sourceSha256": "3ea27415a2931968c87163a76bb910c544f9bbdeeddb247685d10db32a285abf",
+          "parts": [
+            {
+              "name": "wall-02-corner_mesh0",
+              "triangles": 2638,
+              "indices": "786e3e5f3dfbf09ad6b9e860fc9bfbe85b40c11933cb72b146c28559aa8c9861",
+              "attributes": {
+                "position": "f67475d9e9abf9c7ff209dc01550bd233d32a74505f65fd32a0236563cfbc311",
+                "normal": "4fd0c2da19661927822eec4408e9387c84785fbfae3900d4a7fe47ef8d2faecb",
+                "uv": "4faf55de4ade764857c16adbae681a30ebe98c6a63fee852ad0be9f65f65ff2e"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+          "sourceSha256": "13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 5003,
+              "indices": "5b2f4d5767d727fa3ac9e0c7059361564ec362a1f94ea98d24746aec6075f6f3",
+              "attributes": {
+                "position": "35ba0584280d7fa1640d5cd71ce6f22be5caf66bc59c3c19c32b94c19eb12a7e",
+                "normal": "ed143ffdf6f71ce1da7c63e2a99f630ed73365a45dbfb8bbd541b7055560f3fc",
+                "uv": "1f8085a19fa7ebac4348f723672cbc418aa41db25d2763ae2ec90f00cdf134de"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/9342c3c284591600fa181b312c73793e4da7d4d626e49dc01b9d002cc1357d1f.gltf",
+          "sourceSha256": "9342c3c284591600fa181b312c73793e4da7d4d626e49dc01b9d002cc1357d1f",
+          "parts": [
+            {
+              "name": "wall-03-breached_mesh0",
+              "triangles": 1158,
+              "indices": "9bbb6ad016addf497dd2a59f55a76938fc8851485b8e97b9aeefed66142798b9",
+              "attributes": {
+                "position": "da472e879e4a37bdfbab70ba2661daedd1b7da5dd714a93c05623efd3c5c396e",
+                "normal": "4a799052f66658ce1dade73c7c30e3a5fb0271eff42387ebad9d72d4bab7c91f",
+                "uv": "0287c802e31c884ee761e4851e5c582e4bd405b2346c8bc0d3df27fb32ea903e"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/267e3b48cfd9b461ed9d21b568a872c5bbb5893988b8a744dac50e1e2c680c48.gltf",
+          "sourceSha256": "267e3b48cfd9b461ed9d21b568a872c5bbb5893988b8a744dac50e1e2c680c48",
+          "parts": [
+            {
+              "name": "wood-01-palisade_mesh0",
+              "triangles": 1647,
+              "indices": "364ccfb6b5a90ef211dc96fcf1546209e90b6100fdd99d0b7366412b3eeeef5c",
+              "attributes": {
+                "position": "adf29d389ccdf289f42629c09ccd683d7ac6c79f3ec626ee33347d8bcc7bce1b",
+                "normal": "9d4c086029c35762b39dd923adc560b16ecc8feacec0c56fefd4f8e85bb3b638",
+                "uv": "0b58c949ebdcbc4458efabfa5ad9f90704161cea3cc64712e17efb240a5dc8a3"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/c5d9fcab8e3b9d8af5f4291f04fbef907c8741d314779604a36fc303f188943d.gltf",
+          "sourceSha256": "c5d9fcab8e3b9d8af5f4291f04fbef907c8741d314779604a36fc303f188943d",
+          "parts": [
+            {
+              "name": "wall-01-straight_mesh0",
+              "triangles": 1130,
+              "indices": "a7d8b6bf8e3444d4658c8fb0b5b6ae59ded8ba7b65a42516c876de0815ae7dfd",
+              "attributes": {
+                "position": "9e44a481ebd719d20f9aeae0f7f4d84d2797f4fbc9846aac17b2637c4195f1e6",
+                "normal": "a29a0b9524a779393e0631ddf82009a1dfc07caca66f352eee0c26956eb329a7",
+                "uv": "2db9c313ed97333942f6c3c9ff82e2bab0f6c8974922722fedeb861d3e536bf9"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/316899c6b861b0c2a5f2509346ccb38337a1dfe9ef3847c3968b87df3ae8a7bc.gltf",
+          "sourceSha256": "316899c6b861b0c2a5f2509346ccb38337a1dfe9ef3847c3968b87df3ae8a7bc",
+          "parts": [
+            {
+              "name": "wood-02-cross-barricade_mesh0",
+              "triangles": 1137,
+              "indices": "5cc9f8e64ab3e5c58c2346c96738322602a211d16baeb0db4b4161ddc2101d61",
+              "attributes": {
+                "position": "447818853a425922eb5ea98b95041c0255cf8c8baa49a0efabcb4472bea93fed",
+                "normal": "012a7f73fca9784c53b9f8a0169245c0cd9508dcadb22d98e0346784e8893f92",
+                "uv": "0044795e496bc64a762c1f5ba3a599b3a9accc492cc913fbb47486da287be578"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "sourceSha256": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 2634,
+              "indices": "5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6",
+              "attributes": {
+                "position": "5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a",
+                "normal": "fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad",
+                "uv": "0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+          "sourceSha256": "5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 2383,
+              "indices": "111771794f5128aaa5f35ea57b606fd0fe8fea62eed9dd907cc53c1edca50355",
+              "attributes": {
+                "position": "d39e451a3a38f9ffa04e22a0bf70f6dad6dcaa9177a27c8c7684095718fedce4",
+                "normal": "171be4043d6f8c97838eceb8f099a60cbd6aec3d09a5d122e5fa44e1bfeeeb2c",
+                "uv": "64de8f1f570ef3a0e52832e608a6074d1a865411ef3c66e4b9ba22e9a2fb0c9c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "village",
+          "url": "https://authoring-verification.test/assets/content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf",
+          "sourceSha256": "4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3000,
+              "indices": "f65f921439d0768f32635ca0e8f918d6c8a8c13ce0758084c64217947985efcd",
+              "attributes": {
+                "position": "081d32d7783b99ab8284a00eb7e1b65d6d85c403ec1d16933aeac175d69d09e1",
+                "normal": "004cb6f179ae43cbf7dbf827e9d470b694d112a92c2f4ee60f7d4d2ad72c20c1",
+                "uv": "a32f89996cb38248fbca009520a33fc27d99197bbeec0b63cc34c3ba8859a268"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+          "sourceSha256": "13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 5003,
+              "indices": "5b2f4d5767d727fa3ac9e0c7059361564ec362a1f94ea98d24746aec6075f6f3",
+              "attributes": {
+                "position": "35ba0584280d7fa1640d5cd71ce6f22be5caf66bc59c3c19c32b94c19eb12a7e",
+                "normal": "ed143ffdf6f71ce1da7c63e2a99f630ed73365a45dbfb8bbd541b7055560f3fc",
+                "uv": "1f8085a19fa7ebac4348f723672cbc418aa41db25d2763ae2ec90f00cdf134de"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+          "sourceSha256": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod0",
+              "triangles": 5000,
+              "indices": "70fcffd4c9c98587dc3df627a76aa3cbd7857c6d8eb711335216d37238c72f66",
+              "attributes": {
+                "position": "46643dc4ad3aae699b6d8cbe2ef338e7febc40251d7e7e5d9e69fa3d903162a7",
+                "normal": "a7361f7f65a5dbfb05c27312d8f237ab77c0f8f9c703a049e28e6632839f7dc1",
+                "uv": "6e0fc9d3dfa7fed8577c1abb32a9dc01d36f4744de92fbc60c580c71eabd2021",
+                "color": "2ca79f5a72ed0a92ba310657d4d73877dedb81daa2746dcaeec76e7a331320c3"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+          "sourceSha256": "c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 5255,
+              "indices": "1a6ab5988f13be07d0b66ae6ce4033a87738c18b224902b7a603093635d7057e",
+              "attributes": {
+                "position": "c8185caa87cc8f6ace9eabdf8c7d0dbd52eb1ac89763cb9fc0e9f6f13650f17b",
+                "normal": "f814fb0d53e1b474adef6fbde74697bccf37b4d9d8f4381ff374263f858c1a5d",
+                "uv": "ea071a6b1448987dd9c0a049132cb5936f2cb4130ad2282632253d90150ca7b9"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "sourceSha256": "c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3649,
+              "indices": "9c1309d92c956ad5bd41b678cbaa9935d7f6f839e238f58a4fa22ad591c13e40",
+              "attributes": {
+                "position": "798b0877484754e3c49ece3781cc1876d87c45b6aca261e967fdb84bac6e8f7c",
+                "normal": "0eda112355cac200c18f1b2105b810833f9f4eefe5e4fc297ed5b1a74c2fe965",
+                "uv": "382fbf20586a390005998c9e3d862a3cb5af0b4254b6dbfec8f8cb5d6789558f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d.gltf",
+          "sourceSha256": "f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod1",
+              "triangles": 2499,
+              "indices": "65c5095d28e8e674c98e6e3e17ea08f2a70363c4e1c96d4e24eeb19287ca84b6",
+              "attributes": {
+                "position": "fb80d2e955db8f5175ec05679a4e1459184a759f0ba96f2ade109fe2a4046628",
+                "normal": "fb241ff0979e8370d3209deb080371d55baf6822dd3afe6259d2dfe2f7b9e216",
+                "uv": "6e59d2180aeb647ba15b2b8076acd49b9837f826b48213ab4ee5680afd58034f",
+                "color": "1bc51d11bed933381d1cee9ef57d48aee4f9957997bc07ff396c17439688b1d0"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "sourceSha256": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 2634,
+              "indices": "5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6",
+              "attributes": {
+                "position": "5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a",
+                "normal": "fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad",
+                "uv": "0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5.gltf",
+          "sourceSha256": "6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5",
+          "parts": [
+            {
+              "name": "forest-03-fallen-log-lod1",
+              "triangles": 2749,
+              "indices": "76007565fde8b907743d571da47e082135f36d6d3d3e893843f5431410fb745d",
+              "attributes": {
+                "position": "5c89a4d8601d5a917f41862f37a235a74682faaeaec28fe58dd1e8057468f346",
+                "normal": "8e6ac59dced97e50412cac9e8cd70156356c866f0424206fc3b8c5e00c360156",
+                "uv": "f108ee3c5407b458de9820f467ad139bc2a6d824730546e7a1473d36e659567b",
+                "color": "f59cb15aa12f49bbaa4ee825b9c922f89eb338b14870477ebf599c3db9508879"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "sourceSha256": "7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 2238,
+              "indices": "f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092",
+              "attributes": {
+                "position": "1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa",
+                "normal": "48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3",
+                "uv": "399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04.gltf",
+          "sourceSha256": "f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04",
+          "parts": [
+            {
+              "name": "forest-02-dead-tree-lod1",
+              "triangles": 2734,
+              "indices": "8a7fefc9c49dee1a80acf7790570fbd0921aaeb36b6e228052ea0b5597995f32",
+              "attributes": {
+                "position": "f89d5f19a77f3b881a5c2b7e979785af5f1c086684c52f3402e74765a1bd379e",
+                "normal": "90479306388d55bcc21f98e66e3f74aaa1f04263cf1bd479a9e3603617f78876",
+                "uv": "23a594d5113ab09ebe50661400907dc48a9b40b358f21ff8eb2eef78e0134279",
+                "color": "3bb27212a3f93da8b17bc13bf661b46262d665056a7f13a88e46e38e63d90686"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf",
+          "sourceSha256": "1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba",
+          "parts": [
+            {
+              "name": "forest-05-thorn-bramble-lod2",
+              "triangles": 3066,
+              "indices": "473946158787031b9c24b012ed62e444fa4e011d2d532007ff4d75dba590de8d",
+              "attributes": {
+                "position": "618004dc0e73015edf3334c4cf0e0cdf9c6da37a6f3c5ede6cfa1be98066481b",
+                "normal": "c8401c74707082b5bee0a052e6b4d2536ae1c9c76b2d4c76ce0cf79a5d3f9684",
+                "uv": "bdf27c17737fd783cea4b455b52b4e735c4b32c793a0727f535340766632910d",
+                "color": "a5108519642681ce11c9769e9d0957223c6aa4cf20dc53d80baf2c2e3f3d263a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf",
+          "sourceSha256": "071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895",
+          "parts": [
+            {
+              "name": "forest-04-poison-fungi-lod2",
+              "triangles": 2000,
+              "indices": "864973100ea18842614d8824ae443ba217e428ef49b0363a663cf31450e7906a",
+              "attributes": {
+                "position": "914cf92fa224a61f9f5b799c4a19dfe6f97c3981e7afd7eb4973452dcaad4f4a",
+                "normal": "81465b05d017e72c9ebeec2037fd6a3a5777a91009504415019aba5b35d4340f",
+                "uv": "0714ffa7e968c6bea86aa893480a210e67a1e4aea8807942b93464fe402d5154",
+                "color": "e41c191d7ab97a97e23c670aa7cf36290f687baf7cf2e1aff2f1c2fb2a3a7ad1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1.gltf",
+          "sourceSha256": "73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1",
+          "parts": [
+            {
+              "name": "forest-03-fallen-log-lod2",
+              "triangles": 1399,
+              "indices": "5ae248792240e57105dc3efa4474c9b3edb58580b02261c8c9e74058a23d6402",
+              "attributes": {
+                "position": "e339ea0119f27c32e9623e5d8f24ae79b5995aa5456ebbe9d95f39a23ffbba40",
+                "normal": "efc8fd49bf3268a0e18c1cec0f1ec08c8029ddd37b3c4b7b5ca554c054e93e12",
+                "uv": "7a7cfe0e0571303b4f3a04f02b73fe6e97861cc09bb68a7d950e8c73856c1775",
+                "color": "aaaefbab91381327dd128627cc8ba21031344f577d3c0c53e8a01d345ff403a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a.gltf",
+          "sourceSha256": "3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod2",
+              "triangles": 1799,
+              "indices": "9ca3926caf5f77223612545930eedd173f76ab89cc1b5de9d27fb5ba9c2a7f04",
+              "attributes": {
+                "position": "6cdb5a588a724659ef93efc97b5ea3a26745820de85fd720e345dc7850c83d22",
+                "normal": "eaffa4dc8a646f6631d79112bc3562ed2902423e8bc491b45be562bd3331517b",
+                "uv": "ac82f21b12806d681a538eb932f5216a9756fe42f2d38c39f7dfaa926f67e8d0",
+                "color": "3f5546e64431d9355f99b0f0d4c30fc23e488a3c2e757cb7083a2a81af8636cc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690.gltf",
+          "sourceSha256": "30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690",
+          "parts": [
+            {
+              "name": "forest-02-dead-tree-lod2",
+              "triangles": 1383,
+              "indices": "ade98cf75ffb5faeadc6a4a9e8560f1defc1e7f3339c03d0c781844ba92c1d16",
+              "attributes": {
+                "position": "31d218bd005c1d5ee6a62e23c632db24955b1b4f4e316b6e0f18c91a8fe75032",
+                "normal": "679c94d69bcaaccc0d0d29f5c2055bf20f5725880b114f54c9309f11c0bcbadc",
+                "uv": "1b749deeffccbe0d9d29dcc43667aa75e1adaf7deb7f093288544907b98623bb",
+                "color": "11604649c82dcc505fb34c728bde938544bbeee4ac2b5fd9d7b622f43f386cd7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+          "sourceSha256": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 5268,
+              "indices": "2d5550c2ad5cdd84cb06563630304bd4b10b95ad3f824b2aa63bd12f4352ebee",
+              "attributes": {
+                "position": "f9c123b6329343d7966f14503824c7787f2a8fe4ba4c010805477429eb176f70",
+                "normal": "06e8e8de5e63d776dc3d5696e82454269ba806c0c2dfd3684bf876b9634d0200",
+                "uv": "573eb8bd026a05908401544f36fcfefdbb2335377cc37054d9e6d1d8b815b5b1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf",
+          "sourceSha256": "fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 4359,
+              "indices": "defab7e507fec90a8ea25bff019d20f440e8c63288f4b3b7f5e1287dc5948de1",
+              "attributes": {
+                "position": "ab2a005d70f40f347f95a5ecc58e33668b83aa6199e40e3f5d3c3e2753fc0835",
+                "normal": "2951587e32dff2434951691161781c2ade52085f5dc2e83e0d61f0ef84ae9ba1",
+                "uv": "b8dc2a693891da6707236e00135411a1840eacff45be9c2253478798d5372f17"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "sourceSha256": "acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 3314,
+              "indices": "dc4e9d2f69b520bad5f7179838010b6ec2ac9a537a62ff8952386a103e9bcb32",
+              "attributes": {
+                "position": "3a6585f507d10148a5ec81044ca978b1a6018ae202aff5b176e8fd9eaf43379e",
+                "normal": "5f8ceda3272c964c0a1c0775add424646d023d46e5c1b26573185cc975fa6f76",
+                "uv": "3de178eb1e3f03f0023a140d1c0824f4032439b8faff2e7701b9786a03b59438"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "sourceSha256": "61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72",
+          "parts": [
+            {
+              "name": "forest-05-thorn-bramble-lod0",
+              "triangles": 3981,
+              "indices": "c6a4456913e04fdce6ab881dabde1c5e95023cf374976337031f5f15dec0aac7",
+              "attributes": {
+                "position": "36ee2e1b6e95b2ab82513ed268a155927287d41ed1ac4d1f5cb818bfebe48211",
+                "normal": "69b099ed5fe24f9e352161f4c118716b1d2774f5897dbd05e7bbb77de3f83481",
+                "uv": "2c4225d849645bc00da4a59909bc5a6cc8fd456f1009a4d4c3c4879fded475bb",
+                "color": "9a47a1f0bb0d9f087cc72e5ad98cdb757e66ece47575fd4c4df22e496393a97d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf",
+          "sourceSha256": "5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228",
+          "parts": [
+            {
+              "name": "forest-05-thorn-bramble-lod1",
+              "triangles": 3405,
+              "indices": "252d23e9803b8c5041eb4571b8c341df3ce54455a09ee9625f5f165ac771ce87",
+              "attributes": {
+                "position": "5bff3d76bce8b1dbc9395e4843249ad7408806b9b7e5c14b06a2774c1cf711e6",
+                "normal": "6e295c7ddea68593d514f4fe85a98f07e37d306563b38c8552746877d1718a03",
+                "uv": "83f5528326e1e3df674f6a4365c350122944d9c1625ffd69574e37acc54d5481",
+                "color": "d6200d30775304f7068ad9f56b9bdb5983cb13ad3222bc7e0979dfc2fca45f9f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf",
+          "sourceSha256": "39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538",
+          "parts": [
+            {
+              "name": "forest-04-poison-fungi-lod1",
+              "triangles": 2750,
+              "indices": "3bcb1d16501977fb197731b99ae225677c4f55a40c8bafebe1d22ba87706ea69",
+              "attributes": {
+                "position": "6e2629907c4908caa24cb039b28b3d9219ef8c5f916e989d8c8dd38017b7bba2",
+                "normal": "c8de80166d424f8b9a2a53a773db8039140b432c0394155f016fd9b1b1642153",
+                "uv": "5893fae4c073c30d8e83202a83bf4c2b7d84e03ba2d8f3c7df0a4c4310480c1e",
+                "color": "4dfe39b270205248ba42b7a435347a561883786d49f351c39f81166b3759277c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1.gltf",
+          "sourceSha256": "7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1",
+          "parts": [
+            {
+              "name": "cave-lab-large-joints",
+              "triangles": 2374,
+              "indices": "33729631cbb5fee191f48b262bab95d3f380ec548df4e59e8a64864675f5eb3d",
+              "attributes": {
+                "position": "c0df4e8b3ee72ca953d88d9a87f11668df11bb6324d28348e034f31516626df5",
+                "normal": "769e85df55d12877203e0bcbfe7bccf983fa182fb02a23ef88a1ccaf42fc7252"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
+          "sourceSha256": "fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f",
+          "parts": [
+            {
+              "name": "cave-03-great-column-lod0",
+              "triangles": 4999,
+              "indices": "21d327c07cb72b8b396b0e2a96410ed13086707ca0ced6e6335ea0641f0e3a59",
+              "attributes": {
+                "position": "6a8e735f6fd31dd1a9f2cc32f92a1a0d9f03f7d86b6c9f3479300185e86b3841",
+                "normal": "31ac3309380de1a671f21b6776f6bc9fe09372760af5bd39656e0011f92d5d37",
+                "uv": "26bb3df51c8e73f7e8f56dfdab966f4d8ced05b59ea98d5ab6fd480bff1cac0e",
+                "color": "f760d7dc829d1a8bd47fb5cfb1287ca006902253538fcd7535dfc9c34180d0b8"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+          "sourceSha256": "1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5",
+          "parts": [
+            {
+              "name": "cave-01-eroded-wall-lod0",
+              "triangles": 5000,
+              "indices": "13cb916cb4bb39c78e768aeb5fb7e832b7f34e3c7f2c21c14dcb52d1efcdd51e",
+              "attributes": {
+                "position": "ef9f5de8364bd3263874ede4949e7f90283274ef63741930fb36656367648acc",
+                "normal": "663888a25fffe1c2c531e112cedfd31479b78009b0561b24b88cc47cc2b43739",
+                "uv": "106c380e959ce48487637b28cf19cc6ec0533f9bc4d0d9dfeebb3d91c11a78db",
+                "color": "78d4ee475d5e2b5fb65524947ed3e1e43f64d3c2888db982e7a2fdac40135334"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+          "sourceSha256": "fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc",
+          "parts": [
+            {
+              "name": "cave-s01-solid-cliff-base-lod0",
+              "triangles": 4999,
+              "indices": "f2f030504ba8154a32ac7319922067de889548252948e04735cc5598c8bd5134",
+              "attributes": {
+                "position": "a85df5f5ecef8e780751faf0f669266eb223bc5494bf6ca605a34e212e4af52f",
+                "normal": "f8e917aae0df8107b72dcee79a3f76e3098ad2bca08acc116df338f7f7e27b0a",
+                "uv": "a97da01096a666497d77b02c92fde11b0efce9c5199e8608191ddd85ee2913bd",
+                "color": "2609b5309afee0a16d9bb5f8e684c6ce1a0b822ab431d2982a920994d997ba01"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/a71ace0b8039e7942260563dd95b37a17238ad3307f3f42e797322da06eeb6bf.gltf",
+          "sourceSha256": "a71ace0b8039e7942260563dd95b37a17238ad3307f3f42e797322da06eeb6bf",
+          "parts": [
+            {
+              "name": "cave-04-natural-arch-lod1",
+              "triangles": 2747,
+              "indices": "58d59aedb8001fec186221548ef62058110ecaef8459aacad2aa44117da867e4",
+              "attributes": {
+                "position": "1d2cb0d83ab45e31db65e2eb1db8dd5a1e38c2d9f5ce1f8eac198b69401b6707",
+                "normal": "235f1fe56da4f482f70c109364c3465891fb450c78db511b1afeb9069efc8786",
+                "uv": "37422b2522ede3a077bf03825feaf4744cfba7988222d198e48b169700f081f9",
+                "color": "68fbaed2174395d16ab47e10ac2b49b31d2d662704b4e6f7825d8b8ea6d75c4d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf",
+          "sourceSha256": "60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e",
+          "parts": [
+            {
+              "name": "cave-s01-solid-cliff-base-lod1",
+              "triangles": 2749,
+              "indices": "733ab7ca4262eca6088da15edcddde66f4ba4f378fc11fe6ff591cf34f198ed8",
+              "attributes": {
+                "position": "56a2bb40cf9072c8bdea76f9a6097e374faf753e93063e74975bb9fcd8747fcc",
+                "normal": "1c3ad4cf7029b7b2f2535ac3fb6c227faa8e2801381b3007b0419c74b3f76161",
+                "uv": "af8475e06264fb53e02aae5274489c69d0e5de4b59344f0fce542b4daa6b4da4",
+                "color": "4802bb777be249c3759245a3286df062cbb411c8729a9066ced461fbacbd2157"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+          "sourceSha256": "a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e",
+          "parts": [
+            {
+              "name": "cave-01-eroded-wall-lod1",
+              "triangles": 2750,
+              "indices": "a1aa96e5266ab825c3af0ad369000c13258e948dd4d75f743e6da48036128897",
+              "attributes": {
+                "position": "41ba5aab2a80b0f2e9f879bd571acc1e76432666e87f3018b4b1b49176488ff8",
+                "normal": "a42dd834020ab5a7d2c6dcc9c78e328ddd1f0cf1141be0a8d7c9f095ef4ab9c5",
+                "uv": "e14afe8543f2c2587630ff94ad74462fedb5d99c3afd5c793fd1e26c95c29a7b",
+                "color": "00f85546c2cf29f3947f9b4b6b914b59db5ddbe12c41bfb5494e54fd5d6ec329"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/2734bdfdf476248a1f16cfb197bc6fd81b7f721d84dc27e6c76428c428b7d3ca.gltf",
+          "sourceSha256": "2734bdfdf476248a1f16cfb197bc6fd81b7f721d84dc27e6c76428c428b7d3ca",
+          "parts": [
+            {
+              "name": "cave-07-scree-ramp-lod1",
+              "triangles": 2750,
+              "indices": "d696a17ea4fd06f5cccb57014f93c73e26e38d75c13489875f39745ae6bf1c83",
+              "attributes": {
+                "position": "f1d90799ef486e0a71b89ada8c4c7b58cf2bbd6333add9f5dc1943691a2753b1",
+                "normal": "91d9bbafb07556aa17f14b67a303e90b3253b9775f1f2a8ac02ad6ebd4a8b8f5",
+                "uv": "a81c37539ef2101ebeaa6d9d70893765681cfc66cdba88dac864093a61299b33",
+                "color": "77713d9c03d0c3673d62a727d18fbd21e4450975453fe8008e1e62be75ee5b4a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/f13c578c671ed93f02d449d7eced8024f75b41195d4413b9718bde3d6f1d7430.gltf",
+          "sourceSha256": "f13c578c671ed93f02d449d7eced8024f75b41195d4413b9718bde3d6f1d7430",
+          "parts": [
+            {
+              "name": "cave-13-votive-lantern-lod2",
+              "triangles": 2059,
+              "indices": "6f38179b93dee6d222522a118cf8cb244a8c9f9db4a31029049c049f7cdb2872",
+              "attributes": {
+                "position": "0da37b0f0a0735b603216553ea9a9aa5db3d7890fbeec7b5a45be8685f4cbe23",
+                "normal": "88e9525705b01a5323d55f341721a807031f648f5cf1df2afa0f4700538ccab8",
+                "uv": "af7fad18273095bf1fec2c0e7cf925038f793f413aa3415a1a4dbab13b626931",
+                "color": "610d19a81e9fc690e2449a95ccffce02848149d61754833eb66ce4b472a11e86"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf",
+          "sourceSha256": "523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9",
+          "parts": [
+            {
+              "name": "forest-06-witch-cave-mouth-lod1",
+              "triangles": 2605,
+              "indices": "314e9e601692811404dfc6afcd50f9c5bf41e144543119b05fee3bf340fcc5c2",
+              "attributes": {
+                "position": "6d2335fbeb2655d5ddbb428975fad7bbd7a9e37636c351dd3dcb427e50ce14b6",
+                "normal": "7fe872fb58b1a7e7b99047b1e7ae29b3c6d75009f78791fe5465ab520cc4c638",
+                "uv": "60b05d155b315a309e0157956f100694712b8ac487add44a0127550ab43afcc6",
+                "color": "c41378f138190ab1011db939e69e1ce14edad4fba7849abe8f25cd270d35a30c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/00660a83eb5621b75f1aa681cce6ba1d7cd1e47970b2fd356b098f725b6785a5.gltf",
+          "sourceSha256": "00660a83eb5621b75f1aa681cce6ba1d7cd1e47970b2fd356b098f725b6785a5",
+          "parts": [
+            {
+              "name": "cave-05-stalagmites-lod2",
+              "triangles": 1400,
+              "indices": "b683311b591c09d254562992d4247e9d3ac9177bd68103d2bfe078342b061aa0",
+              "attributes": {
+                "position": "f3c0f08ead206dfa225a8b3cb378751937c3dad184c6356bbf3ef93f730b7838",
+                "normal": "f4c52f142385a7b3da9f042549c37c784759cee16e48ac85ff08c9dda4daaf4d",
+                "uv": "105cb951ff51d7dac5507ab23495d57b80bcbf6000025e0a15a4eeb744c49dcb",
+                "color": "063b881fc49bbfb8764710f2f6c5feff144021d884b20ef783790903c4e46a1c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+          "sourceSha256": "02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 1387,
+              "indices": "28313af2a269eece84d3c846305cab0fa2b0940bc00c6ed32ca0d4fd414ceafc",
+              "attributes": {
+                "position": "87dafd659042ec11a8c8b5b817d6ae53224b02f6cc30a7ea6c1e70a9c9a0b2e6",
+                "normal": "6fb9e8dc8c0c940dbed18bbd7a1faa6592dec512d9fa15438eb71de623e555ab",
+                "uv": "8f44f64fc3eb57223beab20f62cc37b397116ccedf5a62889bc2e9964dbcf556"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+          "sourceSha256": "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7",
+          "parts": [
+            {
+              "name": "crate-barrel-cluster_mesh0",
+              "triangles": 1969,
+              "indices": "f95434cc45e9cf45120a6c6052d035b40c9cf536faae9ac0fe936d11b10b3090",
+              "attributes": {
+                "position": "2160c46a60bffbc41ddadd6e18356fadac0d4e1291adef3748d61cdd76d668a7",
+                "normal": "390ad4a2cb7c45e4adfbef2ad69332ad5bcce3841f5ec8c9069b29b209cdadd3",
+                "uv": "90399632609b3b6f2ae91002e839f79ab8ae31f1394375bd786ef7cae0f086f5"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/26becafb8bdd9bfc36a5822f5d65852b393ecc6f1ebfaf5329f315675b961f9a.gltf",
+          "sourceSha256": "26becafb8bdd9bfc36a5822f5d65852b393ecc6f1ebfaf5329f315675b961f9a",
+          "parts": [
+            {
+              "name": "cave-06-stalactite-canopy-lod1",
+              "triangles": 2750,
+              "indices": "290326a65813ddafa2b846b9547a0b2d4cb7b0bd417bce6a6aac6b2730e38fa7",
+              "attributes": {
+                "position": "844efbcebb854d29cca166392ac9bbe8352b0c04a16b9ae6cb08263c92e14477",
+                "normal": "cbfdbe00fcf07be8ea7d6771b63fd6787992c418826a373aa68a1a26bab48728",
+                "uv": "89689dd624485fea0a93eaeb8edc3c8598f262e99540b369159a18b627d19406",
+                "color": "9a3ba48b70f87bae8b79d12942d98da9748b0862f16dbfdb3f1f6cd3ea50211b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+          "sourceSha256": "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2",
+          "parts": [
+            {
+              "name": "firewood_mesh0",
+              "triangles": 1719,
+              "indices": "1de4f0765a612d29b903c6e62995516cc77f3acf5e94ccbf5ae1e64e1ec99d7d",
+              "attributes": {
+                "position": "4533a838dda64c42efef0799e1b815bf1d840a45b522c4db25296da7e5adc00b",
+                "normal": "59f8113b395ad4281c85d3430080bfe3d47c03fbf3f953d72b114814a6e0f8be",
+                "uv": "2fc979abcbfc83c5e6af4cb2cd182fb2f28c226f38381b623acdf5fc7142468d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
+          "sourceSha256": "62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8",
+          "parts": [
+            {
+              "name": "cave-05-stalagmites-lod0",
+              "triangles": 5000,
+              "indices": "de920abb95ed0c2da6e0f6a27874a447f2c505f79c477dd7ecbe9e5e9b1c3955",
+              "attributes": {
+                "position": "b137d91b871c4be498f905b579584e450ce5094e82c16db11160bef97ba3190b",
+                "normal": "5cef5f2e4d8573d3ce229f2ac5e267e9c67e94e21e8743fc215a4f3afeefde57",
+                "uv": "7719e473d9889ce56b7ce8512203e9ad077ac26e43b3dec065eba06d13f4d95c",
+                "color": "3c042f5aaf373383e29f6c93d8cb6e4a2e9c8c9dfdb866200c8cecb2b07eeb03"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+          "sourceSha256": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 5268,
+              "indices": "2d5550c2ad5cdd84cb06563630304bd4b10b95ad3f824b2aa63bd12f4352ebee",
+              "attributes": {
+                "position": "f9c123b6329343d7966f14503824c7787f2a8fe4ba4c010805477429eb176f70",
+                "normal": "06e8e8de5e63d776dc3d5696e82454269ba806c0c2dfd3684bf876b9634d0200",
+                "uv": "573eb8bd026a05908401544f36fcfefdbb2335377cc37054d9e6d1d8b815b5b1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
+          "sourceSha256": "84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628",
+          "parts": [
+            {
+              "name": "cave-02-rock-ledge-lod0",
+              "triangles": 4999,
+              "indices": "9e1e86f608d24822acd0323d481be0a01b64184c3bb8e538aa55bbc7d45eab93",
+              "attributes": {
+                "position": "ea0a0b226003a18ce76d76546f10f5bd7f89ad72f30eb9931998fdd692f28af0",
+                "normal": "a9da259430b246376663f9c86db9606b84955f2d9911718b6beb71ad723fde89",
+                "uv": "9423866a844af92d186ab87542705beb5a41ee1c82fd7a65c64d9342ae27fa54",
+                "color": "5399a496d5cadcf41ecab53dfb0911dd5774a1e49efbeb6d26822be199160133"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+          "sourceSha256": "86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e",
+          "parts": [
+            {
+              "name": "cave-lab-large-joints",
+              "triangles": 4512,
+              "indices": "8ea7f14ec76c3afa8df91fb47f0b57349d8e9684da9ddaf10088ef818f6aab97",
+              "attributes": {
+                "position": "c0df4e8b3ee72ca953d88d9a87f11668df11bb6324d28348e034f31516626df5",
+                "normal": "769e85df55d12877203e0bcbfe7bccf983fa182fb02a23ef88a1ccaf42fc7252"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+          "sourceSha256": "d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee",
+          "parts": [
+            {
+              "name": "cave-s03-dry-spillway-rock-lod0",
+              "triangles": 4995,
+              "indices": "5968089050e1d4e5894088660ba5bf5ccf5cddd4d3d7a153213a6c9ec42a7179",
+              "attributes": {
+                "position": "5d9eea2b26de3cc14403ad01048c38392271135980c9ccc562a95681badda454",
+                "normal": "aa98853fd22ee1f95eb6a20190fa6e2951d5c9704253c92a49da8d599855c1ca",
+                "uv": "5a9c3f5249b2bb276070c443b265b431ad9452098b95d050836cd6da36ace9db",
+                "color": "4adcca4aef099efbe9544e851922234b7e873c4b4908524df69057c66a6028fb"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+          "sourceSha256": "c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 5255,
+              "indices": "1a6ab5988f13be07d0b66ae6ce4033a87738c18b224902b7a603093635d7057e",
+              "attributes": {
+                "position": "c8185caa87cc8f6ace9eabdf8c7d0dbd52eb1ac89763cb9fc0e9f6f13650f17b",
+                "normal": "f814fb0d53e1b474adef6fbde74697bccf37b4d9d8f4381ff374263f858c1a5d",
+                "uv": "ea071a6b1448987dd9c0a049132cb5936f2cb4130ad2282632253d90150ca7b9"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "sourceSha256": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 2634,
+              "indices": "5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6",
+              "attributes": {
+                "position": "5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a",
+                "normal": "fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad",
+                "uv": "0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/813c9d3b96c78fc76b2dda11196112e0da9e51398e1ccce39d6876f0ffc997f3.gltf",
+          "sourceSha256": "813c9d3b96c78fc76b2dda11196112e0da9e51398e1ccce39d6876f0ffc997f3",
+          "parts": [
+            {
+              "name": "cave-11-sluice-shutter-lod1",
+              "triangles": 3500,
+              "indices": "a7dbeaac57b3dd19801d7f202723092db0a6b693c48ad1b0204b111a16e9ea57",
+              "attributes": {
+                "position": "ae10e5fe1f07fb1a2a08223a661b4692c56db282db622bc565db07ecdf7daa79",
+                "normal": "45fb8a458f17e3c8c7e6e380bdef547ae979b1769cf36b88fde6ff82168554fa",
+                "uv": "621b73925ac3eb26b6754b1366282cca639737eaba215be13405d3830bf4f446",
+                "color": "926db674853a1c5b7322dafcd32997ef67c27654cf5b9e7ce7acc1705bbd0c44"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/10e8aa46823ac6e2058ec1ab6f050e66c40e79a882c7adbe6affe80b02eecf0f.gltf",
+          "sourceSha256": "10e8aa46823ac6e2058ec1ab6f050e66c40e79a882c7adbe6affe80b02eecf0f",
+          "parts": [
+            {
+              "name": "cave-10-hand-winch-lod2",
+              "triangles": 2162,
+              "indices": "3f1747252bc17fbba6d11dcd2626e33d2198486ba6debe750c0df8aae8e70192",
+              "attributes": {
+                "position": "a5cd9884a646eb268f54efeb5f3cb759e8bca3800b3cea61c30e5546cb77b318",
+                "normal": "879ac27dabd29b2803258ef3542b3d2b0670cc3f7cde9d3cf64bf551bf3fb351",
+                "uv": "8e9843b91f58facf11022a6398f489394a81e43704b72123162ca0824ce5629f",
+                "color": "48a9bee0f1fa9f0fc21ce01bc8d524e6543a098729cf2efc4fa11d012323984f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/5d8e12b70ded116298c56ac32beee449c508ca6ab421dfe6b8f56e3f5232dee0.gltf",
+          "sourceSha256": "5d8e12b70ded116298c56ac32beee449c508ca6ab421dfe6b8f56e3f5232dee0",
+          "parts": [
+            {
+              "name": "cave-14-hidden-pressure-stone-lod2",
+              "triangles": 2250,
+              "indices": "463675c66322b1025973c7d871617657b180726bd5bb0666e031072a9fd774c3",
+              "attributes": {
+                "position": "da1cfb7c5524306708264c6ac7222476dbda79a624b68cca94e46b8181772a4f",
+                "normal": "03a3e7254ca7f0950637e0d2cb29532ff0360654132769076f27c2b19d236be1",
+                "uv": "c261cdaecf5517515a42a86b4cedd4666a87b2bf171607fdbc46ffe204481c35",
+                "color": "fb77c61bfea6e3348688027216e2928ac7b32c2425a68ac67ef19f341cc7da0e"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/3fb94874b7717c5a62e400adfa6270902d9834431ee183eb1249c27e5baf69ae.gltf",
+          "sourceSha256": "3fb94874b7717c5a62e400adfa6270902d9834431ee183eb1249c27e5baf69ae",
+          "parts": [
+            {
+              "name": "cave-08-timber-brace-lod2",
+              "triangles": 2250,
+              "indices": "ddc0dfa28a3dc9cdb4d819cec0b648e64378866a0f971e855e0849e4d9410605",
+              "attributes": {
+                "position": "00d3624053088b90fb49258a0df06c998a84248eb2e32526eb4907a1c9886db4",
+                "normal": "3e33db18a9b2a513455438d5b8e6d0399b091cdb306604a1b291e2ea8fa9f903",
+                "uv": "a248935ad9123b27106307c89a4959db61179b5e8c1f866520e372f9a3ba14a9",
+                "color": "d41937cece6f0e9e19021ae94548587008d34d932bc3aa58bced363b380afef8"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/1569e9c5a1150fa06ec19d7944aa5a269309d36625e66b3947a292648825659b.gltf",
+          "sourceSha256": "1569e9c5a1150fa06ec19d7944aa5a269309d36625e66b3947a292648825659b",
+          "parts": [
+            {
+              "name": "cave-09-iron-gate-leaf-lod2",
+              "triangles": 2189,
+              "indices": "03458e8e3b9e77534a96e7230f36797fb6b6d892a3ed47225c3373f16b1ff3d4",
+              "attributes": {
+                "position": "d4d4a6e3fbbf0d14072a70cf5c79e2fde0fc4733832ca251d8c88702c4c4821e",
+                "normal": "3fbae5629ad29114b71d76b986253b80fb9fee6e56dfe95816a90dbd41e64217",
+                "uv": "1acba66a928a7c7a31301dee3d5810d445f738764ffa3aecdfa328f3e7deaea5",
+                "color": "e43859201c9f6a2ecc3dfcc80b736e7636d02235ed1498e9aeb75f164f23bad8"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/983ddc923fd69122635a772e310b61763f71d2f79cc6e36b22689ec346232ee1.gltf",
+          "sourceSha256": "983ddc923fd69122635a772e310b61763f71d2f79cc6e36b22689ec346232ee1",
+          "parts": [
+            {
+              "name": "cave-20-modest-cot-lod2",
+              "triangles": 3499,
+              "indices": "69992f1d4506d38148f28c974311faca75ca02706fadc8039323284f321530b4",
+              "attributes": {
+                "position": "6798f7ed3b3c4177cfa8145da1c3b01b218821db0c31df39eb59a8aeb9965909",
+                "normal": "91e85641eaa9e5a20149072b8964a22086da0b905c5594f64acc53846c141365",
+                "uv": "9c594df42ca47b9f5a803496a69b21cb74cf18ea0d97ce58e40799588263fc23",
+                "color": "5d1222599a552c6e851728d5d26bd29d013a479769b70f6ac5d54bb25ea21cbe"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "witch-cave",
+          "url": "https://authoring-verification.test/assets/content/9bd05d855fb4f24339490803d53d3fe73f78d5b816a78291e84ac7879b9afce4.gltf",
+          "sourceSha256": "9bd05d855fb4f24339490803d53d3fe73f78d5b816a78291e84ac7879b9afce4",
+          "parts": [
+            {
+              "name": "cave-17-faded-sacred-emblem-lod2",
+              "triangles": 2121,
+              "indices": "ac99642cf552172ec2d6f0308f262a4c278ffdb32aa6902654188ee610590365",
+              "attributes": {
+                "position": "dab29831559e86a3ed4a57d0f61d1610b3f0948f7a142a11d4d7592165e3f08a",
+                "normal": "d620c38b6f00b449b1c82d96df25e8a5dc46b81b9f5e94d67120b70a85f6f2d4",
+                "uv": "30126f14d762df2916173d24910479b12d912145cc3a075567796b3437508989",
+                "color": "a541f918fc19534a59f6233d77ed793eb7becbef67ef08cfc203a79fab18b7a1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+          "sourceSha256": "441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a",
+          "parts": [
+            {
+              "name": "node0_primitive0",
+              "triangles": 11360,
+              "indices": "bb0b36f265d1f52a98819c26c1784c6ace178e1309cd9da26223464d1d41134f",
+              "attributes": {
+                "position": "fb6e50819de6460cade1cd11cc8c35031a17628ba3fbd6dfa43623e7f4138144",
+                "normal": "f34db18a5105c594d29d8e03a1ccf29e01ec89fd36c929cfc293d9bbc17a623d",
+                "uv": "9c4b7d89e95d99fdd87835431a6638b8e6164aa2604b4e8fae80e769361fc54f"
+              }
+            },
+            {
+              "name": "node0_primitive1",
+              "triangles": 4672,
+              "indices": "61aabadaef0448b8fa998c9d17ff38ff88bd1e1b44b1e9d327cec55f51f68a97",
+              "attributes": {
+                "position": "bc4ae4ef8b7eead5f6d4f1bdc39f2bd76a9453511836d14f7dc59d8bd24395f4",
+                "normal": "885f41dc4bec428d8c61b57ccc19c1288368b189efefebc7b05a57f9d8debcba",
+                "uv": "59d248667e982d1cbaf29ba47810481621bbf5fc62c7321d768d0d850baf2d45"
+              }
+            },
+            {
+              "name": "node0_primitive2",
+              "triangles": 8100,
+              "indices": "f8689e76549c6e240218ff961b0e84c493ff6ccda39345ab186cdc36eb74075d",
+              "attributes": {
+                "position": "74fb0174aa4a3d06813a5613e51142869992363f118ee81430062d3e2a671387",
+                "normal": "d06fdaae87c0dd75709e868f3a33527366c8fb399050445ec3a615c39cf7f040",
+                "uv": "505424a1c1e8dcfbe8a7feab67b4f1f1c60fa9119559286b93faf095d3d57a6f"
+              }
+            },
+            {
+              "name": "node0_primitive3",
+              "triangles": 10460,
+              "indices": "672b495736b09224f6ac54c03437d4e7f7de33e69db94e135b49a69576095709",
+              "attributes": {
+                "position": "02f82203b2aaf878e42bca326901082025544b8b5aa1320560cd6b74b6fe24e9",
+                "normal": "e9b8d5f4187aecf4d784c9f8401523fe771b81f4013911353112c4715e354c3f",
+                "uv": "0875ec74b15712a43181f993455939561a8be180757b25c02127c756532277d8"
+              }
+            },
+            {
+              "name": "node0_primitive4",
+              "triangles": 1180,
+              "indices": "66ad469f79a5359e6ccf980d536bfe65de7f68add97b828e5b8ad3694747d652",
+              "attributes": {
+                "position": "d081e2d4cf65eddd7af5b0066d14f3d5c75bd64ac273be988e35390820fac254",
+                "normal": "d5f1741290cb7624891641c0aa38a2ad830722977a5e524b9c8d858838dc8cfc",
+                "uv": "d615f93c2f29af2a893a00ac62f0bfc6fa1c9b7e487b6af5957543548ae65096"
+              }
+            },
+            {
+              "name": "node0_primitive5",
+              "triangles": 1556,
+              "indices": "4d772d497869e945be8e3e4a0d60c5bf8d40fdcfa798309bf324a159a972d1f9",
+              "attributes": {
+                "position": "8483b92cf487bed6cb523398e57b4bf896fa89c1cd7a8377fb2fe4e940b90ba7",
+                "normal": "68404b93614fb3f744b41081d43e40797769d11ca555fa4c7d5278f0d62f06ad",
+                "uv": "ee700e1f6000f86c0e3ddcaba6745087df5eac20073d68b1c97c73e136dbcbdc"
+              }
+            },
+            {
+              "name": "node0_primitive6",
+              "triangles": 3786,
+              "indices": "97bbba5b7ebf56ba781711a6f21ef2eaef8f2a2f73cdcfd1bad50d913b6b7579",
+              "attributes": {
+                "position": "8aa6c5c1d908b311847ac6ed8e63d3bc618d686353f94e7c065ae85640bf9d4e",
+                "normal": "04590cc5d64fa3448693d94197e170c17dd9d5f46e8adff24176c8032dba105e",
+                "uv": "54938924b3ef0d30a44c2866b9423d603279e2a3c1eed396dae2758993029ce9"
+              }
+            },
+            {
+              "name": "node0_primitive7",
+              "triangles": 4786,
+              "indices": "cfceff300cd75600d96e0c38d1edc332d662f6b32babafcbd71c89acf160f85c",
+              "attributes": {
+                "position": "2bdbab450f47dab26515486c41b49591569638af372317503b4ff95d1b0f6b2b",
+                "normal": "1c45c42b7f7d466f6560eff0bdef42b3722769ef1b19c01210a51324c76f4c8c",
+                "uv": "e02d146ab8432b595a7d8764f9982cc0091a7165e16db285679a6b7c86cfe849"
+              }
+            },
+            {
+              "name": "node0_primitive8",
+              "triangles": 1520,
+              "indices": "24741f8c22cec662c79f8f7128e76f115bd04e4256bbc366cff50c346b5f89da",
+              "attributes": {
+                "position": "392259ac76a60ea3ba283b6d4edd523d8bb50987571fc7b33b9de17537b00b04",
+                "normal": "27d1ee061ff173044e20ee536abe9ecaebc950edcebc80d1bf050e325dce0e8f",
+                "uv": "c73109d52cbd4f6f873e0077c6daf4d207c955f035e6f7efc9b7f4db7d822ca7"
+              }
+            },
+            {
+              "name": "node0_primitive9",
+              "triangles": 13176,
+              "indices": "833719d1745e74506cef215005a9fd138c8eecff42fc160c061af314c43ead65",
+              "attributes": {
+                "position": "3cc9b3c7fa4e5a8f88371c1b094a2dbe9280408e962cd1309fd1bbb1eb1bdea4",
+                "normal": "582f73197a03e742e37e47fde51b70fa99f8958773d691543052527d18393945",
+                "uv": "c6536047a885657ef01438ef6fc076681debf25b0b7ae45f7827637699ce8e4b"
+              }
+            },
+            {
+              "name": "node0_primitive10",
+              "triangles": 61020,
+              "indices": "e26d478b7809d00cc5848644625578c7686045d36df7516ba61f15c704fbd7f6",
+              "attributes": {
+                "position": "a0ee20b79270adc4c77360ba9c9802909190eb0e6ed1297d11c70134d33c1d0d",
+                "normal": "b741431f417a436054fcc85c6788d5f2e588e20594335f40b6385513ab193a46",
+                "uv": "e804891a1ee0fd38da22d022d793ddad625b050ecf5d7580612fca54c0239332"
+              }
+            },
+            {
+              "name": "node0_primitive11",
+              "triangles": 6948,
+              "indices": "95603079d987c1bdec83d9b27de325177206b7723f71dbf8f1e11e0bab8da825",
+              "attributes": {
+                "position": "f83af7ef0212db63bb63d173faac7de5c3350cdfd75be6d29a4ca8ea29bad7de",
+                "normal": "05a99a91d51240f2030c1c36064670b4402d19842464f4c75e2758c008eac583",
+                "uv": "ee4e581001992632d7218dee3ef06b400f8d8b0d00a744e7be68d1fb555a2102"
+              }
+            },
+            {
+              "name": "node0_primitive12",
+              "triangles": 4636,
+              "indices": "8abaeb75d5aa78fce2888c2891af443485c66cc1e3a429b74e709f10d2fd9fb6",
+              "attributes": {
+                "position": "f18744ecbcc9491b38aaf60bf55e1b7cfbd1af4c2d83a6554327c06070271a50",
+                "normal": "148b08766541e047d0c066aa59e784c7f4fe8a054ede5fe0dd0947e61c18bce3",
+                "uv": "19d671a1db29e250b3530f4733ff235b6d62900543f17418183b66bdfc97a0c7"
+              }
+            },
+            {
+              "name": "node0_primitive13",
+              "triangles": 4548,
+              "indices": "e71fec11e7864e38787572b2d5c464723b84914f91b0cf55a1c8d9fd26386a6c",
+              "attributes": {
+                "position": "25aaae765a099a61271f0404a2a792de727006021f3066cb462c161e5378fd59",
+                "normal": "9bc7a154314fd32cdc08a295856ad3deea712cf7c95f9ddf11ef8a422da392d8",
+                "uv": "8d24a0abd3fbc8623e564209ca56311c5374861a8f19b015308aeef12b3147a1"
+              }
+            },
+            {
+              "name": "node0_primitive14",
+              "triangles": 42894,
+              "indices": "201c3f297154d9f278286c8588d4f663a60b4d745b1b5b608857411661c44cc9",
+              "attributes": {
+                "position": "895f4c93348b5be86be8bbb8935603fbdebc6069a96885ed222243d951b9792b",
+                "normal": "df96c6648d9cf25b603a56105145450e085a2c4c84996c07bed877ba66b2e0c7",
+                "uv": "3aeddc272dfa88560bac2027a58934d302b49b8f3bebf2cbdad54dba658090b4"
+              }
+            },
+            {
+              "name": "node0_primitive15",
+              "triangles": 6880,
+              "indices": "0cb3c1e5224743b0d1196d87dd0565dbb480050f8aa1926cc45461e8d4ef478d",
+              "attributes": {
+                "position": "0056214e8955e90a41ff163dc5c49f22033b6f19a15efd60e3bddd24e238f1b9",
+                "normal": "83dc3fa972ca7faa9135d4ae43bc033c61c5c13b7328a64f202a0dd5c86e24d1",
+                "uv": "37009fbf9cbfb5db0e6d9b7654d99c99dcd81342383e527f8632d28566629e1b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+          "sourceSha256": "7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 3085,
+              "indices": "2deb1128fa6c572a39a91c6fe240ba2e93562ed2cae92057c7d95713d2d9984e",
+              "attributes": {
+                "position": "d157d6595702cd1de64c9fffba701285dc4a29179465a98c453af884ce340bd6",
+                "normal": "aa66ba90acaf6a5f4548c3c96477fc8feacfb5a8eb2822b546e56bb3d60f76e1",
+                "uv": "e846b565e0b8ff49e6da8bb7714193f3c364c4ea8276f90ea8684119d872927d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "sourceSha256": "c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3649,
+              "indices": "9c1309d92c956ad5bd41b678cbaa9935d7f6f839e238f58a4fa22ad591c13e40",
+              "attributes": {
+                "position": "798b0877484754e3c49ece3781cc1876d87c45b6aca261e967fdb84bac6e8f7c",
+                "normal": "0eda112355cac200c18f1b2105b810833f9f4eefe5e4fc297ed5b1a74c2fe965",
+                "uv": "382fbf20586a390005998c9e3d862a3cb5af0b4254b6dbfec8f8cb5d6789558f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4.gltf",
+          "sourceSha256": "80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4",
+          "parts": [
+            {
+              "name": "rail-fence_mesh0",
+              "triangles": 1140,
+              "indices": "484c7bab6de2dfa5274cb7c12cc071b08c364e4f17e0b9229c691ff26a6085f4",
+              "attributes": {
+                "position": "e1188d645b81ba939e7f8e92863002b948e933549652cf48dfe2f5cc0d60fd6d",
+                "normal": "95dca29198c3a93c22e84914e193f1e12130ba00936868b2c8fcbef7504bd693",
+                "uv": "4072e049416e877413ad512c10475ca26a1d2d28001ad752c954ebdee4c5b97a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+          "sourceSha256": "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2",
+          "parts": [
+            {
+              "name": "firewood_mesh0",
+              "triangles": 1719,
+              "indices": "1de4f0765a612d29b903c6e62995516cc77f3acf5e94ccbf5ae1e64e1ec99d7d",
+              "attributes": {
+                "position": "4533a838dda64c42efef0799e1b815bf1d840a45b522c4db25296da7e5adc00b",
+                "normal": "59f8113b395ad4281c85d3430080bfe3d47c03fbf3f953d72b114814a6e0f8be",
+                "uv": "2fc979abcbfc83c5e6af4cb2cd182fb2f28c226f38381b623acdf5fc7142468d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+          "sourceSha256": "02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 1387,
+              "indices": "28313af2a269eece84d3c846305cab0fa2b0940bc00c6ed32ca0d4fd414ceafc",
+              "attributes": {
+                "position": "87dafd659042ec11a8c8b5b817d6ae53224b02f6cc30a7ea6c1e70a9c9a0b2e6",
+                "normal": "6fb9e8dc8c0c940dbed18bbd7a1faa6592dec512d9fa15438eb71de623e555ab",
+                "uv": "8f44f64fc3eb57223beab20f62cc37b397116ccedf5a62889bc2e9964dbcf556"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "sourceSha256": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+          "parts": [
+            {
+              "name": "grass-tuft",
+              "triangles": 2323,
+              "indices": "99572fd4fb74d636e2167d3204e4a156f6a4b7eda01bfcf7bd926a1ada0b400a",
+              "attributes": {
+                "position": "e429b002982e798c42fb618721387e2744481516fff1ec310f9744f42c3c8e11",
+                "normal": "78f0632c2675d6d25d24861cfafe5994be593504135bd1a612f170d4ac2a0608",
+                "uv": "c2f9fbf0ca3d685205e7302f4a31b58b582dd969501c95911e1582ba18996f64"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "sourceSha256": "7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 2238,
+              "indices": "f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092",
+              "attributes": {
+                "position": "1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa",
+                "normal": "48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3",
+                "uv": "399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+          "sourceSha256": "b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1",
+          "parts": [
+            {
+              "name": "node0",
+              "triangles": 1918,
+              "indices": "853242b21400db4e20e94df07d5579a3934f33598ceb431eb138cdfd7c04bee2",
+              "attributes": {
+                "position": "4f1964b12ebee688ce6453303aa20386255f6295a38d4053820ceccc7e70b56f",
+                "normal": "e68eea35b505e9ec59b2ee7df900d2ef7072de032a96e4414d02e0eaa41a09a2",
+                "uv": "15133a692d3bbef328bd1a057530e9d3f2ae0a46c0fabf0bb2a9f9b9b9528efe"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+          "sourceSha256": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 5268,
+              "indices": "2d5550c2ad5cdd84cb06563630304bd4b10b95ad3f824b2aa63bd12f4352ebee",
+              "attributes": {
+                "position": "f9c123b6329343d7966f14503824c7787f2a8fe4ba4c010805477429eb176f70",
+                "normal": "06e8e8de5e63d776dc3d5696e82454269ba806c0c2dfd3684bf876b9634d0200",
+                "uv": "573eb8bd026a05908401544f36fcfefdbb2335377cc37054d9e6d1d8b815b5b1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf",
+          "sourceSha256": "2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 4494,
+              "indices": "71da0e214e361f0940f0baae42f07ac79fb34c6e65a3c56ac0466dd8525399c8",
+              "attributes": {
+                "position": "9a5431f5b23d9120c050b80bb65db0daeaac65f47634def49b6f89024eb2496e",
+                "normal": "2fab792fb23329fe629102159f4b8710b0e0574f2e3e0a42420f41c426e5edac",
+                "uv": "2fb1c0d4c6866be5e797fc2a0d12635f8d4878e686faad976b9c9ecbe404574f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+          "sourceSha256": "13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 5003,
+              "indices": "5b2f4d5767d727fa3ac9e0c7059361564ec362a1f94ea98d24746aec6075f6f3",
+              "attributes": {
+                "position": "35ba0584280d7fa1640d5cd71ce6f22be5caf66bc59c3c19c32b94c19eb12a7e",
+                "normal": "ed143ffdf6f71ce1da7c63e2a99f630ed73365a45dbfb8bbd541b7055560f3fc",
+                "uv": "1f8085a19fa7ebac4348f723672cbc418aa41db25d2763ae2ec90f00cdf134de"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "sourceSha256": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 2634,
+              "indices": "5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6",
+              "attributes": {
+                "position": "5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a",
+                "normal": "fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad",
+                "uv": "0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+          "sourceSha256": "5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 2383,
+              "indices": "111771794f5128aaa5f35ea57b606fd0fe8fea62eed9dd907cc53c1edca50355",
+              "attributes": {
+                "position": "d39e451a3a38f9ffa04e22a0bf70f6dad6dcaa9177a27c8c7684095718fedce4",
+                "normal": "171be4043d6f8c97838eceb8f099a60cbd6aec3d09a5d122e5fa44e1bfeeeb2c",
+                "uv": "64de8f1f570ef3a0e52832e608a6074d1a865411ef3c66e4b9ba22e9a2fb0c9c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45.gltf",
+          "sourceSha256": "4777fc4d14a805e43a39b82074c8ca7461c53d6e65aacce6760395c4e7d5dd45",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3000,
+              "indices": "f65f921439d0768f32635ca0e8f918d6c8a8c13ce0758084c64217947985efcd",
+              "attributes": {
+                "position": "081d32d7783b99ab8284a00eb7e1b65d6d85c403ec1d16933aeac175d69d09e1",
+                "normal": "004cb6f179ae43cbf7dbf827e9d470b694d112a92c2f4ee60f7d4d2ad72c20c1",
+                "uv": "a32f89996cb38248fbca009520a33fc27d99197bbeec0b63cc34c3ba8859a268"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+          "sourceSha256": "13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 5003,
+              "indices": "5b2f4d5767d727fa3ac9e0c7059361564ec362a1f94ea98d24746aec6075f6f3",
+              "attributes": {
+                "position": "35ba0584280d7fa1640d5cd71ce6f22be5caf66bc59c3c19c32b94c19eb12a7e",
+                "normal": "ed143ffdf6f71ce1da7c63e2a99f630ed73365a45dbfb8bbd541b7055560f3fc",
+                "uv": "1f8085a19fa7ebac4348f723672cbc418aa41db25d2763ae2ec90f00cdf134de"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445.gltf",
+          "sourceSha256": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod0",
+              "triangles": 5000,
+              "indices": "70fcffd4c9c98587dc3df627a76aa3cbd7857c6d8eb711335216d37238c72f66",
+              "attributes": {
+                "position": "46643dc4ad3aae699b6d8cbe2ef338e7febc40251d7e7e5d9e69fa3d903162a7",
+                "normal": "a7361f7f65a5dbfb05c27312d8f237ab77c0f8f9c703a049e28e6632839f7dc1",
+                "uv": "6e0fc9d3dfa7fed8577c1abb32a9dc01d36f4744de92fbc60c580c71eabd2021",
+                "color": "2ca79f5a72ed0a92ba310657d4d73877dedb81daa2746dcaeec76e7a331320c3"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+          "sourceSha256": "c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 5255,
+              "indices": "1a6ab5988f13be07d0b66ae6ce4033a87738c18b224902b7a603093635d7057e",
+              "attributes": {
+                "position": "c8185caa87cc8f6ace9eabdf8c7d0dbd52eb1ac89763cb9fc0e9f6f13650f17b",
+                "normal": "f814fb0d53e1b474adef6fbde74697bccf37b4d9d8f4381ff374263f858c1a5d",
+                "uv": "ea071a6b1448987dd9c0a049132cb5936f2cb4130ad2282632253d90150ca7b9"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "sourceSha256": "c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3649,
+              "indices": "9c1309d92c956ad5bd41b678cbaa9935d7f6f839e238f58a4fa22ad591c13e40",
+              "attributes": {
+                "position": "798b0877484754e3c49ece3781cc1876d87c45b6aca261e967fdb84bac6e8f7c",
+                "normal": "0eda112355cac200c18f1b2105b810833f9f4eefe5e4fc297ed5b1a74c2fe965",
+                "uv": "382fbf20586a390005998c9e3d862a3cb5af0b4254b6dbfec8f8cb5d6789558f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d.gltf",
+          "sourceSha256": "f458d18ab153bcd80a17c0fd5f4205e18d28ed50748de570a9c00c42a84d307d",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod1",
+              "triangles": 2499,
+              "indices": "65c5095d28e8e674c98e6e3e17ea08f2a70363c4e1c96d4e24eeb19287ca84b6",
+              "attributes": {
+                "position": "fb80d2e955db8f5175ec05679a4e1459184a759f0ba96f2ade109fe2a4046628",
+                "normal": "fb241ff0979e8370d3209deb080371d55baf6822dd3afe6259d2dfe2f7b9e216",
+                "uv": "6e59d2180aeb647ba15b2b8076acd49b9837f826b48213ab4ee5680afd58034f",
+                "color": "1bc51d11bed933381d1cee9ef57d48aee4f9957997bc07ff396c17439688b1d0"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "sourceSha256": "00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 2634,
+              "indices": "5d6d8e8c657da462a8b71c6e0592efd3b3606cf34e51008daf5eb626af2622f6",
+              "attributes": {
+                "position": "5289d2402b0029d0235e886d2ec7332d35d3a5be2ee845b4876ffcf5c061cd6a",
+                "normal": "fb831f5c6ef568fd2e8ea14bb453d78c457d2d0ec55f97cea81f4a0677beb6ad",
+                "uv": "0746deafe124583946718c55a243dc2642da8eeed5580bc12f560fe9b5906cbc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5.gltf",
+          "sourceSha256": "6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5",
+          "parts": [
+            {
+              "name": "forest-03-fallen-log-lod1",
+              "triangles": 2749,
+              "indices": "76007565fde8b907743d571da47e082135f36d6d3d3e893843f5431410fb745d",
+              "attributes": {
+                "position": "5c89a4d8601d5a917f41862f37a235a74682faaeaec28fe58dd1e8057468f346",
+                "normal": "8e6ac59dced97e50412cac9e8cd70156356c866f0424206fc3b8c5e00c360156",
+                "uv": "f108ee3c5407b458de9820f467ad139bc2a6d824730546e7a1473d36e659567b",
+                "color": "f59cb15aa12f49bbaa4ee825b9c922f89eb338b14870477ebf599c3db9508879"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "sourceSha256": "7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 2238,
+              "indices": "f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092",
+              "attributes": {
+                "position": "1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa",
+                "normal": "48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3",
+                "uv": "399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf",
+          "sourceSha256": "1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba",
+          "parts": [
+            {
+              "name": "forest-05-thorn-bramble-lod2",
+              "triangles": 3066,
+              "indices": "473946158787031b9c24b012ed62e444fa4e011d2d532007ff4d75dba590de8d",
+              "attributes": {
+                "position": "618004dc0e73015edf3334c4cf0e0cdf9c6da37a6f3c5ede6cfa1be98066481b",
+                "normal": "c8401c74707082b5bee0a052e6b4d2536ae1c9c76b2d4c76ce0cf79a5d3f9684",
+                "uv": "bdf27c17737fd783cea4b455b52b4e735c4b32c793a0727f535340766632910d",
+                "color": "a5108519642681ce11c9769e9d0957223c6aa4cf20dc53d80baf2c2e3f3d263a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04.gltf",
+          "sourceSha256": "f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04",
+          "parts": [
+            {
+              "name": "forest-02-dead-tree-lod1",
+              "triangles": 2734,
+              "indices": "8a7fefc9c49dee1a80acf7790570fbd0921aaeb36b6e228052ea0b5597995f32",
+              "attributes": {
+                "position": "f89d5f19a77f3b881a5c2b7e979785af5f1c086684c52f3402e74765a1bd379e",
+                "normal": "90479306388d55bcc21f98e66e3f74aaa1f04263cf1bd479a9e3603617f78876",
+                "uv": "23a594d5113ab09ebe50661400907dc48a9b40b358f21ff8eb2eef78e0134279",
+                "color": "3bb27212a3f93da8b17bc13bf661b46262d665056a7f13a88e46e38e63d90686"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895.gltf",
+          "sourceSha256": "071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895",
+          "parts": [
+            {
+              "name": "forest-04-poison-fungi-lod2",
+              "triangles": 2000,
+              "indices": "864973100ea18842614d8824ae443ba217e428ef49b0363a663cf31450e7906a",
+              "attributes": {
+                "position": "914cf92fa224a61f9f5b799c4a19dfe6f97c3981e7afd7eb4973452dcaad4f4a",
+                "normal": "81465b05d017e72c9ebeec2037fd6a3a5777a91009504415019aba5b35d4340f",
+                "uv": "0714ffa7e968c6bea86aa893480a210e67a1e4aea8807942b93464fe402d5154",
+                "color": "e41c191d7ab97a97e23c670aa7cf36290f687baf7cf2e1aff2f1c2fb2a3a7ad1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1.gltf",
+          "sourceSha256": "73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1",
+          "parts": [
+            {
+              "name": "forest-03-fallen-log-lod2",
+              "triangles": 1399,
+              "indices": "5ae248792240e57105dc3efa4474c9b3edb58580b02261c8c9e74058a23d6402",
+              "attributes": {
+                "position": "e339ea0119f27c32e9623e5d8f24ae79b5995aa5456ebbe9d95f39a23ffbba40",
+                "normal": "efc8fd49bf3268a0e18c1cec0f1ec08c8029ddd37b3c4b7b5ca554c054e93e12",
+                "uv": "7a7cfe0e0571303b4f3a04f02b73fe6e97861cc09bb68a7d950e8c73856c1775",
+                "color": "aaaefbab91381327dd128627cc8ba21031344f577d3c0c53e8a01d345ff403a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a.gltf",
+          "sourceSha256": "3d30005968482da3e9a89d64d5cda4541cc4112de286c9e1c46a8bff6846228a",
+          "parts": [
+            {
+              "name": "forest-01-sickly-oak-lod2",
+              "triangles": 1799,
+              "indices": "9ca3926caf5f77223612545930eedd173f76ab89cc1b5de9d27fb5ba9c2a7f04",
+              "attributes": {
+                "position": "6cdb5a588a724659ef93efc97b5ea3a26745820de85fd720e345dc7850c83d22",
+                "normal": "eaffa4dc8a646f6631d79112bc3562ed2902423e8bc491b45be562bd3331517b",
+                "uv": "ac82f21b12806d681a538eb932f5216a9756fe42f2d38c39f7dfaa926f67e8d0",
+                "color": "3f5546e64431d9355f99b0f0d4c30fc23e488a3c2e757cb7083a2a81af8636cc"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690.gltf",
+          "sourceSha256": "30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690",
+          "parts": [
+            {
+              "name": "forest-02-dead-tree-lod2",
+              "triangles": 1383,
+              "indices": "ade98cf75ffb5faeadc6a4a9e8560f1defc1e7f3339c03d0c781844ba92c1d16",
+              "attributes": {
+                "position": "31d218bd005c1d5ee6a62e23c632db24955b1b4f4e316b6e0f18c91a8fe75032",
+                "normal": "679c94d69bcaaccc0d0d29f5c2055bf20f5725880b114f54c9309f11c0bcbadc",
+                "uv": "1b749deeffccbe0d9d29dcc43667aa75e1adaf7deb7f093288544907b98623bb",
+                "color": "11604649c82dcc505fb34c728bde938544bbeee4ac2b5fd9d7b622f43f386cd7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+          "sourceSha256": "beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39",
+          "parts": [
+            {
+              "name": "forest-02-dead-tree-lod0",
+              "triangles": 4994,
+              "indices": "3d3bb999d70e6acb727b7a5816e3803ade960c19a346813bb53aa3aa48f7e23b",
+              "attributes": {
+                "position": "ee81de4f797ea3c69ce39bd182ba5a0e25a11baa27108df55e9d53f2c7424b9a",
+                "normal": "fc18ad68a403cdd7ea01ad25d5930fe11b54040fa0d6f7bdb0ddee0509a6548a",
+                "uv": "fc8800921b580663452132ccd59b6daf0ca38f3fa2ab1fe8452413b2973422af",
+                "color": "3be6b317acb489ede750431f8f76162dfa685e5a6443c0d4f3f8c21b216d4188"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+          "sourceSha256": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 5268,
+              "indices": "2d5550c2ad5cdd84cb06563630304bd4b10b95ad3f824b2aa63bd12f4352ebee",
+              "attributes": {
+                "position": "f9c123b6329343d7966f14503824c7787f2a8fe4ba4c010805477429eb176f70",
+                "normal": "06e8e8de5e63d776dc3d5696e82454269ba806c0c2dfd3684bf876b9634d0200",
+                "uv": "573eb8bd026a05908401544f36fcfefdbb2335377cc37054d9e6d1d8b815b5b1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf",
+          "sourceSha256": "fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 4359,
+              "indices": "defab7e507fec90a8ea25bff019d20f440e8c63288f4b3b7f5e1287dc5948de1",
+              "attributes": {
+                "position": "ab2a005d70f40f347f95a5ecc58e33668b83aa6199e40e3f5d3c3e2753fc0835",
+                "normal": "2951587e32dff2434951691161781c2ade52085f5dc2e83e0d61f0ef84ae9ba1",
+                "uv": "b8dc2a693891da6707236e00135411a1840eacff45be9c2253478798d5372f17"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "sourceSha256": "acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 3314,
+              "indices": "dc4e9d2f69b520bad5f7179838010b6ec2ac9a537a62ff8952386a103e9bcb32",
+              "attributes": {
+                "position": "3a6585f507d10148a5ec81044ca978b1a6018ae202aff5b176e8fd9eaf43379e",
+                "normal": "5f8ceda3272c964c0a1c0775add424646d023d46e5c1b26573185cc975fa6f76",
+                "uv": "3de178eb1e3f03f0023a140d1c0824f4032439b8faff2e7701b9786a03b59438"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf",
+          "sourceSha256": "5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228",
+          "parts": [
+            {
+              "name": "forest-05-thorn-bramble-lod1",
+              "triangles": 3405,
+              "indices": "252d23e9803b8c5041eb4571b8c341df3ce54455a09ee9625f5f165ac771ce87",
+              "attributes": {
+                "position": "5bff3d76bce8b1dbc9395e4843249ad7408806b9b7e5c14b06a2774c1cf711e6",
+                "normal": "6e295c7ddea68593d514f4fe85a98f07e37d306563b38c8552746877d1718a03",
+                "uv": "83f5528326e1e3df674f6a4365c350122944d9c1625ffd69574e37acc54d5481",
+                "color": "d6200d30775304f7068ad9f56b9bdb5983cb13ad3222bc7e0979dfc2fca45f9f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "monster-forest",
+          "url": "https://authoring-verification.test/assets/content/39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538.gltf",
+          "sourceSha256": "39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538",
+          "parts": [
+            {
+              "name": "forest-04-poison-fungi-lod1",
+              "triangles": 2750,
+              "indices": "3bcb1d16501977fb197731b99ae225677c4f55a40c8bafebe1d22ba87706ea69",
+              "attributes": {
+                "position": "6e2629907c4908caa24cb039b28b3d9219ef8c5f916e989d8c8dd38017b7bba2",
+                "normal": "c8de80166d424f8b9a2a53a773db8039140b432c0394155f016fd9b1b1642153",
+                "uv": "5893fae4c073c30d8e83202a83bf4c2b7d84e03ba2d8f3c7df0a4c4310480c1e",
+                "color": "4dfe39b270205248ba42b7a435347a561883786d49f351c39f81166b3759277c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+          "sourceSha256": "441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a",
+          "parts": [
+            {
+              "name": "node0_primitive0",
+              "triangles": 11360,
+              "indices": "bb0b36f265d1f52a98819c26c1784c6ace178e1309cd9da26223464d1d41134f",
+              "attributes": {
+                "position": "fb6e50819de6460cade1cd11cc8c35031a17628ba3fbd6dfa43623e7f4138144",
+                "normal": "f34db18a5105c594d29d8e03a1ccf29e01ec89fd36c929cfc293d9bbc17a623d",
+                "uv": "9c4b7d89e95d99fdd87835431a6638b8e6164aa2604b4e8fae80e769361fc54f"
+              }
+            },
+            {
+              "name": "node0_primitive1",
+              "triangles": 4672,
+              "indices": "61aabadaef0448b8fa998c9d17ff38ff88bd1e1b44b1e9d327cec55f51f68a97",
+              "attributes": {
+                "position": "bc4ae4ef8b7eead5f6d4f1bdc39f2bd76a9453511836d14f7dc59d8bd24395f4",
+                "normal": "885f41dc4bec428d8c61b57ccc19c1288368b189efefebc7b05a57f9d8debcba",
+                "uv": "59d248667e982d1cbaf29ba47810481621bbf5fc62c7321d768d0d850baf2d45"
+              }
+            },
+            {
+              "name": "node0_primitive2",
+              "triangles": 8100,
+              "indices": "f8689e76549c6e240218ff961b0e84c493ff6ccda39345ab186cdc36eb74075d",
+              "attributes": {
+                "position": "74fb0174aa4a3d06813a5613e51142869992363f118ee81430062d3e2a671387",
+                "normal": "d06fdaae87c0dd75709e868f3a33527366c8fb399050445ec3a615c39cf7f040",
+                "uv": "505424a1c1e8dcfbe8a7feab67b4f1f1c60fa9119559286b93faf095d3d57a6f"
+              }
+            },
+            {
+              "name": "node0_primitive3",
+              "triangles": 10460,
+              "indices": "672b495736b09224f6ac54c03437d4e7f7de33e69db94e135b49a69576095709",
+              "attributes": {
+                "position": "02f82203b2aaf878e42bca326901082025544b8b5aa1320560cd6b74b6fe24e9",
+                "normal": "e9b8d5f4187aecf4d784c9f8401523fe771b81f4013911353112c4715e354c3f",
+                "uv": "0875ec74b15712a43181f993455939561a8be180757b25c02127c756532277d8"
+              }
+            },
+            {
+              "name": "node0_primitive4",
+              "triangles": 1180,
+              "indices": "66ad469f79a5359e6ccf980d536bfe65de7f68add97b828e5b8ad3694747d652",
+              "attributes": {
+                "position": "d081e2d4cf65eddd7af5b0066d14f3d5c75bd64ac273be988e35390820fac254",
+                "normal": "d5f1741290cb7624891641c0aa38a2ad830722977a5e524b9c8d858838dc8cfc",
+                "uv": "d615f93c2f29af2a893a00ac62f0bfc6fa1c9b7e487b6af5957543548ae65096"
+              }
+            },
+            {
+              "name": "node0_primitive5",
+              "triangles": 1556,
+              "indices": "4d772d497869e945be8e3e4a0d60c5bf8d40fdcfa798309bf324a159a972d1f9",
+              "attributes": {
+                "position": "8483b92cf487bed6cb523398e57b4bf896fa89c1cd7a8377fb2fe4e940b90ba7",
+                "normal": "68404b93614fb3f744b41081d43e40797769d11ca555fa4c7d5278f0d62f06ad",
+                "uv": "ee700e1f6000f86c0e3ddcaba6745087df5eac20073d68b1c97c73e136dbcbdc"
+              }
+            },
+            {
+              "name": "node0_primitive6",
+              "triangles": 3786,
+              "indices": "97bbba5b7ebf56ba781711a6f21ef2eaef8f2a2f73cdcfd1bad50d913b6b7579",
+              "attributes": {
+                "position": "8aa6c5c1d908b311847ac6ed8e63d3bc618d686353f94e7c065ae85640bf9d4e",
+                "normal": "04590cc5d64fa3448693d94197e170c17dd9d5f46e8adff24176c8032dba105e",
+                "uv": "54938924b3ef0d30a44c2866b9423d603279e2a3c1eed396dae2758993029ce9"
+              }
+            },
+            {
+              "name": "node0_primitive7",
+              "triangles": 4786,
+              "indices": "cfceff300cd75600d96e0c38d1edc332d662f6b32babafcbd71c89acf160f85c",
+              "attributes": {
+                "position": "2bdbab450f47dab26515486c41b49591569638af372317503b4ff95d1b0f6b2b",
+                "normal": "1c45c42b7f7d466f6560eff0bdef42b3722769ef1b19c01210a51324c76f4c8c",
+                "uv": "e02d146ab8432b595a7d8764f9982cc0091a7165e16db285679a6b7c86cfe849"
+              }
+            },
+            {
+              "name": "node0_primitive8",
+              "triangles": 1520,
+              "indices": "24741f8c22cec662c79f8f7128e76f115bd04e4256bbc366cff50c346b5f89da",
+              "attributes": {
+                "position": "392259ac76a60ea3ba283b6d4edd523d8bb50987571fc7b33b9de17537b00b04",
+                "normal": "27d1ee061ff173044e20ee536abe9ecaebc950edcebc80d1bf050e325dce0e8f",
+                "uv": "c73109d52cbd4f6f873e0077c6daf4d207c955f035e6f7efc9b7f4db7d822ca7"
+              }
+            },
+            {
+              "name": "node0_primitive9",
+              "triangles": 13176,
+              "indices": "833719d1745e74506cef215005a9fd138c8eecff42fc160c061af314c43ead65",
+              "attributes": {
+                "position": "3cc9b3c7fa4e5a8f88371c1b094a2dbe9280408e962cd1309fd1bbb1eb1bdea4",
+                "normal": "582f73197a03e742e37e47fde51b70fa99f8958773d691543052527d18393945",
+                "uv": "c6536047a885657ef01438ef6fc076681debf25b0b7ae45f7827637699ce8e4b"
+              }
+            },
+            {
+              "name": "node0_primitive10",
+              "triangles": 61020,
+              "indices": "e26d478b7809d00cc5848644625578c7686045d36df7516ba61f15c704fbd7f6",
+              "attributes": {
+                "position": "a0ee20b79270adc4c77360ba9c9802909190eb0e6ed1297d11c70134d33c1d0d",
+                "normal": "b741431f417a436054fcc85c6788d5f2e588e20594335f40b6385513ab193a46",
+                "uv": "e804891a1ee0fd38da22d022d793ddad625b050ecf5d7580612fca54c0239332"
+              }
+            },
+            {
+              "name": "node0_primitive11",
+              "triangles": 6948,
+              "indices": "95603079d987c1bdec83d9b27de325177206b7723f71dbf8f1e11e0bab8da825",
+              "attributes": {
+                "position": "f83af7ef0212db63bb63d173faac7de5c3350cdfd75be6d29a4ca8ea29bad7de",
+                "normal": "05a99a91d51240f2030c1c36064670b4402d19842464f4c75e2758c008eac583",
+                "uv": "ee4e581001992632d7218dee3ef06b400f8d8b0d00a744e7be68d1fb555a2102"
+              }
+            },
+            {
+              "name": "node0_primitive12",
+              "triangles": 4636,
+              "indices": "8abaeb75d5aa78fce2888c2891af443485c66cc1e3a429b74e709f10d2fd9fb6",
+              "attributes": {
+                "position": "f18744ecbcc9491b38aaf60bf55e1b7cfbd1af4c2d83a6554327c06070271a50",
+                "normal": "148b08766541e047d0c066aa59e784c7f4fe8a054ede5fe0dd0947e61c18bce3",
+                "uv": "19d671a1db29e250b3530f4733ff235b6d62900543f17418183b66bdfc97a0c7"
+              }
+            },
+            {
+              "name": "node0_primitive13",
+              "triangles": 4548,
+              "indices": "e71fec11e7864e38787572b2d5c464723b84914f91b0cf55a1c8d9fd26386a6c",
+              "attributes": {
+                "position": "25aaae765a099a61271f0404a2a792de727006021f3066cb462c161e5378fd59",
+                "normal": "9bc7a154314fd32cdc08a295856ad3deea712cf7c95f9ddf11ef8a422da392d8",
+                "uv": "8d24a0abd3fbc8623e564209ca56311c5374861a8f19b015308aeef12b3147a1"
+              }
+            },
+            {
+              "name": "node0_primitive14",
+              "triangles": 42894,
+              "indices": "201c3f297154d9f278286c8588d4f663a60b4d745b1b5b608857411661c44cc9",
+              "attributes": {
+                "position": "895f4c93348b5be86be8bbb8935603fbdebc6069a96885ed222243d951b9792b",
+                "normal": "df96c6648d9cf25b603a56105145450e085a2c4c84996c07bed877ba66b2e0c7",
+                "uv": "3aeddc272dfa88560bac2027a58934d302b49b8f3bebf2cbdad54dba658090b4"
+              }
+            },
+            {
+              "name": "node0_primitive15",
+              "triangles": 6880,
+              "indices": "0cb3c1e5224743b0d1196d87dd0565dbb480050f8aa1926cc45461e8d4ef478d",
+              "attributes": {
+                "position": "0056214e8955e90a41ff163dc5c49f22033b6f19a15efd60e3bddd24e238f1b9",
+                "normal": "83dc3fa972ca7faa9135d4ae43bc033c61c5c13b7328a64f202a0dd5c86e24d1",
+                "uv": "37009fbf9cbfb5db0e6d9b7654d99c99dcd81342383e527f8632d28566629e1b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53.gltf",
+          "sourceSha256": "7401c4db3f23ec6f4436c91909c3f28269b38f9a0bfaaf55c129363a8737ad53",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 3085,
+              "indices": "2deb1128fa6c572a39a91c6fe240ba2e93562ed2cae92057c7d95713d2d9984e",
+              "attributes": {
+                "position": "d157d6595702cd1de64c9fffba701285dc4a29179465a98c453af884ce340bd6",
+                "normal": "aa66ba90acaf6a5f4548c3c96477fc8feacfb5a8eb2822b546e56bb3d60f76e1",
+                "uv": "e846b565e0b8ff49e6da8bb7714193f3c364c4ea8276f90ea8684119d872927d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c.gltf",
+          "sourceSha256": "c1e822a4fbc08570c579487b9029d9c758f71d6412f2eee88109f1a87a96fd3c",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 3649,
+              "indices": "9c1309d92c956ad5bd41b678cbaa9935d7f6f839e238f58a4fa22ad591c13e40",
+              "attributes": {
+                "position": "798b0877484754e3c49ece3781cc1876d87c45b6aca261e967fdb84bac6e8f7c",
+                "normal": "0eda112355cac200c18f1b2105b810833f9f4eefe5e4fc297ed5b1a74c2fe965",
+                "uv": "382fbf20586a390005998c9e3d862a3cb5af0b4254b6dbfec8f8cb5d6789558f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4.gltf",
+          "sourceSha256": "80d93c955f524bf6485eac1e5d39786221094cf6e164e418ca09f9782c04afe4",
+          "parts": [
+            {
+              "name": "rail-fence_mesh0",
+              "triangles": 1140,
+              "indices": "484c7bab6de2dfa5274cb7c12cc071b08c364e4f17e0b9229c691ff26a6085f4",
+              "attributes": {
+                "position": "e1188d645b81ba939e7f8e92863002b948e933549652cf48dfe2f5cc0d60fd6d",
+                "normal": "95dca29198c3a93c22e84914e193f1e12130ba00936868b2c8fcbef7504bd693",
+                "uv": "4072e049416e877413ad512c10475ca26a1d2d28001ad752c954ebdee4c5b97a"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "sourceSha256": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+          "parts": [
+            {
+              "name": "grass-tuft",
+              "triangles": 2323,
+              "indices": "99572fd4fb74d636e2167d3204e4a156f6a4b7eda01bfcf7bd926a1ada0b400a",
+              "attributes": {
+                "position": "e429b002982e798c42fb618721387e2744481516fff1ec310f9744f42c3c8e11",
+                "normal": "78f0632c2675d6d25d24861cfafe5994be593504135bd1a612f170d4ac2a0608",
+                "uv": "c2f9fbf0ca3d685205e7302f4a31b58b582dd969501c95911e1582ba18996f64"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8.gltf",
+          "sourceSha256": "02bf571f84504e7b6c245cee508c7ea46aa16e1e33ddeaac1e9c2d13bdb3e2c8",
+          "parts": [
+            {
+              "name": "handcart_mesh0",
+              "triangles": 1387,
+              "indices": "28313af2a269eece84d3c846305cab0fa2b0940bc00c6ed32ca0d4fd414ceafc",
+              "attributes": {
+                "position": "87dafd659042ec11a8c8b5b817d6ae53224b02f6cc30a7ea6c1e70a9c9a0b2e6",
+                "normal": "6fb9e8dc8c0c940dbed18bbd7a1faa6592dec512d9fa15438eb71de623e555ab",
+                "uv": "8f44f64fc3eb57223beab20f62cc37b397116ccedf5a62889bc2e9964dbcf556"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2.gltf",
+          "sourceSha256": "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2",
+          "parts": [
+            {
+              "name": "firewood_mesh0",
+              "triangles": 1719,
+              "indices": "1de4f0765a612d29b903c6e62995516cc77f3acf5e94ccbf5ae1e64e1ec99d7d",
+              "attributes": {
+                "position": "4533a838dda64c42efef0799e1b815bf1d840a45b522c4db25296da7e5adc00b",
+                "normal": "59f8113b395ad4281c85d3430080bfe3d47c03fbf3f953d72b114814a6e0f8be",
+                "uv": "2fc979abcbfc83c5e6af4cb2cd182fb2f28c226f38381b623acdf5fc7142468d"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "sourceSha256": "b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 1156,
+              "indices": "60fa4e2171f6f0a3bd9ade3fa8dc44d4e3818553c1ceeaef24ae9ffada0b5652",
+              "attributes": {
+                "position": "b6788426e01aa91cb57d9c555f46b7075c71b83aec3ccc2137466cc85723ac91",
+                "normal": "a9f968fec1b93dfb5f0233fe0478ff9c7f2808b470fbdc70a148c8671d88615d",
+                "uv": "b25c91b08ce610a627824949014e4db00cfb6f783ad64ea8702843f8d87f32a7"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a.gltf",
+          "sourceSha256": "7bc62a5e77cbf8fa2ef1e6479a967f72899f0f2618fc712399db91843282c40a",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 2238,
+              "indices": "f54645812a0399e31e7295837771132948f44b534c21f14d55e111888fd50092",
+              "attributes": {
+                "position": "1768d57f307d0ebe6f7c0cbf384d1c24787d45c2f9db63c03a33af10722f05aa",
+                "normal": "48b42282bdcf5befe8aa0d59d68401e17f3a56247ccb9aa1d9ffac046b59a8e3",
+                "uv": "399f4ac155cc4252956cb0c94a328372a451a3b90985a83c1c35e5f4faed40d2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1.gltf",
+          "sourceSha256": "b9e64864af61beb28114dfb271bbff9b7eb5fa573288e0ae300b5c3ea46020c1",
+          "parts": [
+            {
+              "name": "node0",
+              "triangles": 1918,
+              "indices": "853242b21400db4e20e94df07d5579a3934f33598ceb431eb138cdfd7c04bee2",
+              "attributes": {
+                "position": "4f1964b12ebee688ce6453303aa20386255f6295a38d4053820ceccc7e70b56f",
+                "normal": "e68eea35b505e9ec59b2ee7df900d2ef7072de032a96e4414d02e0eaa41a09a2",
+                "uv": "15133a692d3bbef328bd1a057530e9d3f2ae0a46c0fabf0bb2a9f9b9b9528efe"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb.gltf",
+          "sourceSha256": "2fccaf2cc041b637e125919dfd33a367ec87720ab005204218ec1ea11b008fcb",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 4494,
+              "indices": "71da0e214e361f0940f0baae42f07ac79fb34c6e65a3c56ac0466dd8525399c8",
+              "attributes": {
+                "position": "9a5431f5b23d9120c050b80bb65db0daeaac65f47634def49b6f89024eb2496e",
+                "normal": "2fab792fb23329fe629102159f4b8710b0e0574f2e3e0a42420f41c426e5edac",
+                "uv": "2fb1c0d4c6866be5e797fc2a0d12635f8d4878e686faad976b9c9ecbe404574f"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+          "sourceSha256": "50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 5268,
+              "indices": "2d5550c2ad5cdd84cb06563630304bd4b10b95ad3f824b2aa63bd12f4352ebee",
+              "attributes": {
+                "position": "f9c123b6329343d7966f14503824c7787f2a8fe4ba4c010805477429eb176f70",
+                "normal": "06e8e8de5e63d776dc3d5696e82454269ba806c0c2dfd3684bf876b9634d0200",
+                "uv": "573eb8bd026a05908401544f36fcfefdbb2335377cc37054d9e6d1d8b815b5b1"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268.gltf",
+          "sourceSha256": "13c4560a94255a9e929025463e2c392d57c681b1b415c472d21fe1d9b26bb268",
+          "parts": [
+            {
+              "name": "tree-02-slender-pine",
+              "triangles": 5003,
+              "indices": "5b2f4d5767d727fa3ac9e0c7059361564ec362a1f94ea98d24746aec6075f6f3",
+              "attributes": {
+                "position": "35ba0584280d7fa1640d5cd71ce6f22be5caf66bc59c3c19c32b94c19eb12a7e",
+                "normal": "ed143ffdf6f71ce1da7c63e2a99f630ed73365a45dbfb8bbd541b7055560f3fc",
+                "uv": "1f8085a19fa7ebac4348f723672cbc418aa41db25d2763ae2ec90f00cdf134de"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "sourceSha256": "13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa",
+          "parts": [
+            {
+              "name": "rock-01-mossy-boulder_mesh0",
+              "triangles": 2626,
+              "indices": "3926f2a5eecc731810ab8bc8a8663a7eb2a1729f70f9f307e76e2df39c4b7827",
+              "attributes": {
+                "position": "7e781c3c7f9ac5ce0a12809011485daeb293f31fbb60a27f414fb4ebfc0ddcb7",
+                "normal": "d98498cd1b75caedca89e71e7eae1c07811341faca6f39909c23a2b07b52fe8b",
+                "uv": "966a6da0d76bc17f2c23289c03017fb4707921d165c2c16c05982731657abd4b"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "sourceSha256": "53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b",
+          "parts": [
+            {
+              "name": "rock-02-jagged-outcrop_mesh0",
+              "triangles": 1158,
+              "indices": "f46468df6be2a054a9b973f2ef6dd7ffadc88d84528a93d4b5f05d4de1780a76",
+              "attributes": {
+                "position": "d8d95f31afd4cd3277b12db6970123b570c83916837fdf3108199db98e826bdf",
+                "normal": "fd7b2d6cc0e47e7d0b7827f9cc592dfb0f1dd4203c92fe6a3ba85693639a5579",
+                "uv": "7603ccd6a97f9746c3949991aa6d39d44fa65fb41d9294b878a29032dbe83af2"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44.gltf",
+          "sourceSha256": "5559844fd1bc9790d5d6e7169c75a642c21d173648e5ca02877272390e11aa44",
+          "parts": [
+            {
+              "name": "tree-01-round-oak",
+              "triangles": 2383,
+              "indices": "111771794f5128aaa5f35ea57b606fd0fe8fea62eed9dd907cc53c1edca50355",
+              "attributes": {
+                "position": "d39e451a3a38f9ffa04e22a0bf70f6dad6dcaa9177a27c8c7684095718fedce4",
+                "normal": "171be4043d6f8c97838eceb8f099a60cbd6aec3d09a5d122e5fa44e1bfeeeb2c",
+                "uv": "64de8f1f570ef3a0e52832e608a6074d1a865411ef3c66e4b9ba22e9a2fb0c9c"
+              }
+            }
+          ]
+        },
+        {
+          "mapId": "great-plains",
+          "url": "https://authoring-verification.test/assets/content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "sourceSha256": "acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c",
+          "parts": [
+            {
+              "name": "bush_mesh0",
+              "triangles": 3314,
+              "indices": "dc4e9d2f69b520bad5f7179838010b6ec2ac9a537a62ff8952386a103e9bcb32",
+              "attributes": {
+                "position": "3a6585f507d10148a5ec81044ca978b1a6018ae202aff5b176e8fd9eaf43379e",
+                "normal": "5f8ceda3272c964c0a1c0775add424646d023d46e5c1b26573185cc975fa6f76",
+                "uv": "3de178eb1e3f03f0023a140d1c0824f4032439b8faff2e7701b9786a03b59438"
+              }
+            }
+          ]
+        }
+      ],
+      "images": [
+        {
+          "url": "https://authoring-verification.test/assets/content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
+          "sourceBytes": 754948,
+          "sha256": "902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sourceBytes": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/ff8208efc88a4dc6b5cf391d84028bdddf3c7cd50f8d77946688cdbb2856e8ed.webp",
+          "sourceBytes": 24834,
+          "sha256": "ff8208efc88a4dc6b5cf391d84028bdddf3c7cd50f8d77946688cdbb2856e8ed",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+          "sourceBytes": 588850,
+          "sha256": "6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sourceBytes": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/4135383e18859c032048fff265983d55366f9a1aace0a52cb69c42f55345f52d.ktx2",
+          "sourceBytes": 312284,
+          "sha256": "4135383e18859c032048fff265983d55366f9a1aace0a52cb69c42f55345f52d",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56.ktx2",
+          "sourceBytes": 27269,
+          "sha256": "e39c977471cdb1d915dd36a911db65e1d45c777ce187be359b4bcbeaf7fc9e56",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+          "sourceBytes": 1197481,
+          "sha256": "675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sourceBytes": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64.ktx2",
+          "sourceBytes": 588850,
+          "sha256": "6a990bfdad4d5d626df2934e7a4cb25d222deed09d810a5238ff8500b23d3e64",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sourceBytes": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38.ktx2",
+          "sourceBytes": 1197481,
+          "sha256": "675677ee5aae0cf07c044757facd3652b4e6eb71558e0ca628a91f85ef955a38",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        },
+        {
+          "url": "https://authoring-verification.test/assets/content/b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e.png",
+          "sourceBytes": 119227,
+          "sha256": "b0e685dfeec9bbd05a6e7af9fca4a2ae5d62ce09fcf689b4895cc099ddfc6f9e",
+          "fixtureUpload": "1x1RGBA, no rendered-quality claim"
+        }
+      ],
+      "loads": [
+        {
+          "mapId": "village",
+          "environment": {
+            "mode": "village",
+            "sourceAssets": 27,
+            "loadedAssets": 23,
+            "instances": 748,
+            "initialLodModels": 41,
+            "loadedLods": {
+              "0": 14,
+              "1": 13,
+              "2": 14
+            }
+          },
+          "placementRecords": 753,
+          "navigationKind": "VillageNavigation",
+          "screen": {
+            "meshes": 36,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 1554,
+            "geometries": 17,
+            "materials": 49,
+            "textures": 47,
+            "skeletons": 0,
+            "morphManagers": 0,
+            "transformNodes": 1507,
+            "sceneObservers": 51,
+            "nodeObservers": 3020,
+            "scenePending": 0
+          }
+        },
+        {
+          "mapId": "monster-forest",
+          "environment": {
+            "mode": "monster-forest",
+            "sourceAssets": 10,
+            "loadedAssets": 9,
+            "instances": 890,
+            "initialLodModels": 23,
+            "loadedLods": {
+              "0": 6,
+              "1": 9,
+              "2": 8
+            }
+          },
+          "placementRecords": 891,
+          "navigationKind": "VillageNavigation",
+          "screen": {
+            "meshes": 189,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 1832,
+            "geometries": 16,
+            "materials": 37,
+            "textures": 31,
+            "skeletons": 1,
+            "morphManagers": 0,
+            "transformNodes": 1824,
+            "sceneObservers": 36,
+            "nodeObservers": 3580,
+            "scenePending": 0
+          }
+        },
+        {
+          "mapId": "witch-cave",
+          "environment": {
+            "mode": "witch-cave",
+            "sourceAssets": 29,
+            "loadedAssets": 24,
+            "instances": 205,
+            "initialLodModels": 32,
+            "loadedLods": {
+              "0": 9,
+              "1": 9,
+              "2": 14
+            }
+          },
+          "placementRecords": 212,
+          "navigationKind": "CaveNavigation",
+          "screen": {
+            "meshes": 63,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 501,
+            "geometries": 40,
+            "materials": 53,
+            "textures": 42,
+            "skeletons": 1,
+            "morphManagers": 0,
+            "transformNodes": 466,
+            "sceneObservers": 57,
+            "nodeObservers": 846,
+            "scenePending": 0
+          }
+        },
+        {
+          "mapId": "great-plains",
+          "environment": {
+            "mode": "great-plains",
+            "sourceAssets": 20,
+            "loadedAssets": 11,
+            "instances": 1317,
+            "initialLodModels": 19,
+            "loadedLods": {
+              "0": 4,
+              "1": 4,
+              "2": 10
+            }
+          },
+          "placementRecords": 1424,
+          "navigationKind": "VillageNavigation",
+          "screen": {
+            "meshes": 162,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 2703,
+            "geometries": 23,
+            "materials": 36,
+            "textures": 30,
+            "skeletons": 1,
+            "morphManagers": 0,
+            "transformNodes": 2891,
+            "sceneObservers": 32,
+            "nodeObservers": 5315,
+            "scenePending": 0
+          }
+        },
+        {
+          "mapId": "monster-forest",
+          "environment": {
+            "mode": "monster-forest",
+            "sourceAssets": 10,
+            "loadedAssets": 9,
+            "instances": 890,
+            "initialLodModels": 23,
+            "loadedLods": {
+              "0": 6,
+              "1": 9,
+              "2": 8
+            }
+          },
+          "placementRecords": 891,
+          "navigationKind": "VillageNavigation",
+          "screen": {
+            "meshes": 194,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 1832,
+            "geometries": 17,
+            "materials": 37,
+            "textures": 31,
+            "skeletons": 1,
+            "morphManagers": 0,
+            "transformNodes": 1824,
+            "sceneObservers": 36,
+            "nodeObservers": 3580,
+            "scenePending": 0
+          }
+        },
+        {
+          "mapId": "great-plains",
+          "environment": {
+            "mode": "great-plains",
+            "sourceAssets": 20,
+            "loadedAssets": 11,
+            "instances": 1317,
+            "initialLodModels": 17,
+            "loadedLods": {
+              "0": 4,
+              "1": 3,
+              "2": 9
+            }
+          },
+          "placementRecords": 1424,
+          "navigationKind": "VillageNavigation",
+          "screen": {
+            "meshes": 150,
+            "shadows": 0
+          },
+          "counts": {
+            "meshes": 2701,
+            "geometries": 23,
+            "materials": 34,
+            "textures": 28,
+            "skeletons": 1,
+            "morphManagers": 0,
+            "transformNodes": 2891,
+            "sceneObservers": 30,
+            "nodeObservers": 5313,
+            "scenePending": 0
+          }
+        }
+      ]
+    },
+    "sourceGeometry": [
+      {
+        "id": "hooded-goblin",
+        "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+        "triangles": 10412,
+        "clips": [
+          "Dodge_Roll",
+          "Fall_Dead_from_Abdominal_Injury",
+          "Gangnam_Groove",
+          "Knock_Down",
+          "Parkour_Vault_with_Roll",
+          "Right_Jab_from_Guard",
+          "Running",
+          "Sneaky_Walk_inplace",
+          "Sword_Judgment",
+          "Sword_Parry_Backward_2",
+          "Walk_Turn_Right",
+          "Walking"
+        ]
+      }
+    ],
+    "native": {
+      "main": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+      "render": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+      "syncPlayback": "35798cd4402b12f5638161ce144ef442a3f3893225d84f37409b11e8c6f9cbff",
+      "frameLoopRegistration": "5068d657b23e8bebd99de0f120a89976f037e2423a8442fe01c870af052b4480",
+      "policy": "engine.renderEvenInBackground=cinematicAuthoringPreview;",
+      "toolWake": "world.wakeToolPlayback=()=>{syncPlayback();wakeRendering();};",
+      "nativeFrameGate": "af375b4201a818642b0b165456fe067de2b1d05e27e4d8234483e71109091649",
+      "nativeFocusHandlers": "e47ce87d658eb91bb5f13e589beadc935d8790e2834d56b34558ca97b5974e2c"
+    },
+    "traffic": {
+      "requests": 74,
+      "replies": 87,
+      "errors": []
+    },
+    "audio": {
+      "createdSources": 2,
+      "startedSources": 2,
+      "liveSources": 1,
+      "connectedNodes": 2,
+      "decodes": 15,
+      "closed": 0,
+      "stateListeners": 1
+    }
+  },
+  "limits": [
+    "Actual Studio/game transport and native Babylon DOM/CPU lifecycle; no browser layout/pixels/device/audibility claim",
+    "Real4map/model data, fixtureimage uploads/materials/cache transport",
+    "No new asset is deployed; example package is report-only with generated PCM test audio"
+  ]
+}

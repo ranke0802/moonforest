@@ -1,0 +1,196 @@
+{
+  "scope": "Independent schema/media/fake-WebAudio control verification; no audibility, codecs, browser or device claims",
+  "baseline": {
+    "cinematic-document": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+    "cinematic-editing": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+    "cinematic-media": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+    "cinematic-audio": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866"
+  },
+  "final": {
+    "cinematic-document": "31a07561730f36a60abfe630624236565bf04dbeafeef127a1cb3a561a09a48f",
+    "cinematic-editing": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+    "cinematic-media": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+    "cinematic-audio": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "legacy shape and four background actor/exact endpoint semantics",
+      "pass": true,
+      "evidence": [
+        {
+          "time": 0,
+          "map": "village",
+          "visible": [
+            true,
+            true,
+            false,
+            false
+          ]
+        },
+        {
+          "time": 2,
+          "map": "monster-forest",
+          "visible": [
+            true,
+            false,
+            true,
+            false
+          ]
+        },
+        {
+          "time": 4,
+          "map": "witch-cave",
+          "visible": [
+            true,
+            false,
+            false,
+            false
+          ]
+        },
+        {
+          "time": 6,
+          "map": "great-plains",
+          "visible": [
+            true,
+            false,
+            false,
+            true
+          ]
+        },
+        {
+          "time": 8,
+          "map": "great-plains",
+          "visible": [
+            true,
+            false,
+            false,
+            true
+          ]
+        }
+      ]
+    },
+    {
+      "name": "subtitle effects Unicode typewriter and fade endpoints",
+      "pass": true,
+      "evidence": {
+        "combinations": 24
+      }
+    },
+    {
+      "name": "camera easing endpoints monotonicity and nine movement presets",
+      "pass": true,
+      "evidence": {
+        "easings": 8,
+        "presetAngles": 27
+      }
+    },
+    {
+      "name": "scale and trim preserve absolute original camera/path cut pose",
+      "pass": true,
+      "evidence": {
+        "original": {
+          "position": [
+            3,
+            4,
+            8
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "fov": 1
+        },
+        "trimmed": {
+          "position": [
+            3,
+            4,
+            8
+          ],
+          "target": [
+            0,
+            0,
+            0
+          ],
+          "fov": 1
+        }
+      }
+    },
+    {
+      "name": "real PCM WAV hash and portable two-file binary package cross-store",
+      "pass": true,
+      "evidence": {
+        "bytes": 81957,
+        "files": [
+          {
+            "sha256": "78f82cd49af869013e8ec414a15d71f5f4f2ec8d006b6a0c50527c91eaa7a85f",
+            "bytes": 32044,
+            "duration": 2
+          },
+          {
+            "sha256": "59db6dfb709393b7aab8efcc2b395df4def43f1c976d8b157bb9009dbacdc0ec",
+            "bytes": 48044,
+            "duration": 3
+          }
+        ],
+        "base64": false
+      }
+    },
+    {
+      "name": "malformed portable packages reject before inserting any media",
+      "pass": true,
+      "evidence": {
+        "rejectedBeforeInsertion": 8
+      }
+    },
+    {
+      "name": "file size and unavailable production storage fail explicitly",
+      "pass": true,
+      "evidence": {
+        "oversizeRead": false,
+        "silentMemoryFallback": false
+      }
+    },
+    {
+      "name": "actual timeline absolute offsets loop fades pause and legacy seek suppression",
+      "pass": true,
+      "evidence": {
+        "offsets": [
+          2,
+          8,
+          0
+        ],
+        "decoded": 0,
+        "liveAfterDispose": 0
+      }
+    },
+    {
+      "name": "late imported decode cannot republish after abort/dispose",
+      "pass": true,
+      "evidence": {
+        "starts": 0,
+        "stops": 0,
+        "decoded": 0,
+        "decodedBytes": 0,
+        "failed": 1,
+        "active": 0,
+        "buffers": 0,
+        "prepared": false,
+        "disposed": true,
+        "playing": false,
+        "time": 0
+      }
+    },
+    {
+      "name": "bounded voices and decoded memory",
+      "pass": true,
+      "evidence": {
+        "activeCap": 16,
+        "largeBufferRejected": true
+      }
+    }
+  ],
+  "passed": 10,
+  "failed": 0
+}
