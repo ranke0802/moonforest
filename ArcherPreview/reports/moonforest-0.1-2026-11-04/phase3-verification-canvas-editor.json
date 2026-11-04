@@ -1,0 +1,663 @@
+{
+  "generatedAt": "2026-11-04T05:20:30.690Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/developer-editor.js": "81186949ab6db4ee6372845abd296eec055315e4ca3f4f205b25f6d4de61514a",
+    "src/editor-workspace.js": "d3db2784dbf3c662f9cddd1af596f2c8a60b490ff1fb07724dd94934c7299bfd",
+    "src/authored-placement-runtime.js": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c",
+    "src/placement-document.js": "8046fc89838c74863e40670b2b4ad8adc79b2ae2505279258e5756656185f756",
+    "src/asset-catalog.js": "ef75be57fbaa105dfa06c1147831ac292654d5a56389209103d72a2ef7adb1c0",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/input.js": "6e1cb40add61e81e03bf644e30ef36ea3f46f50f30ec3eb2318c3a050e4fde73",
+    "src/village-visibility.js": "8e8accd87754b2ca4a3a8d61787983f9372623d48d974d7db336fb441c25dda3",
+    "src/cave-fog-of-war.js": "5fbb3d29f094c90d33f3a497c8cccd02c1865fc7888e75c621dd7d82353002c4",
+    "src/nearby-editor.js": "5170bfea0222d3412fece62c2027a9411bdad89f4305c50295546791ea98dc7d",
+    "src/editable-asset-index.js": "35f9311850afc1d0a0a721a500e4257da1385a8e8b5cc4355c26ad613f64f29e",
+    "src/main.js": "0aa0c5061eb4f03ba9f39cbd005fcb7d26feb6984f66cd921148806a201df69b"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "category and native variant selection place actual shipped crate in actual world",
+      "passed": true,
+      "loads": 1,
+      "categories": 4,
+      "canvasRect": {
+        "left": 387,
+        "top": 131,
+        "width": 860,
+        "height": 620,
+        "right": 1247,
+        "bottom": 751
+      },
+      "renderSize": [
+        1720,
+        1240
+      ],
+      "instanceId": "authored-356c16d9-c222-4415-a007-0a506c019d7d"
+    },
+    {
+      "name": "reserved workspace at360/600/780/1200 keeps actual prop selectable with native orbit and pan after resize",
+      "passed": true,
+      "rows": [
+        {
+          "width": 360,
+          "view": {
+            "left": 47,
+            "top": 131,
+            "width": 360,
+            "height": 345,
+            "right": 407,
+            "bottom": 476
+          },
+          "panel": {
+            "left": 55,
+            "top": 484,
+            "width": 344,
+            "height": 259,
+            "right": 399,
+            "bottom": 743
+          },
+          "bodyCss": {
+            "x": 179.99999986373263,
+            "y": 172.5000374126542
+          },
+          "bodyClient": {
+            "x": 226.99999986373263,
+            "y": 303.5000374126542
+          },
+          "disjoint": true,
+          "nativePan": true,
+          "nativeOrbit": true,
+          "renderSize": [
+            720,
+            690
+          ]
+        },
+        {
+          "width": 600,
+          "view": {
+            "left": 47,
+            "top": 131,
+            "width": 600,
+            "height": 345,
+            "right": 647,
+            "bottom": 476
+          },
+          "panel": {
+            "left": 55,
+            "top": 484,
+            "width": 584,
+            "height": 259,
+            "right": 639,
+            "bottom": 743
+          },
+          "bodyCss": {
+            "x": 300.0000101062386,
+            "y": 172.50003828074477
+          },
+          "bodyClient": {
+            "x": 347.0000101062386,
+            "y": 303.5000382807448
+          },
+          "disjoint": true,
+          "nativePan": true,
+          "nativeOrbit": true,
+          "renderSize": [
+            1200,
+            690
+          ]
+        },
+        {
+          "width": 780,
+          "view": {
+            "left": 323,
+            "top": 131,
+            "width": 504,
+            "height": 620,
+            "right": 827,
+            "bottom": 751
+          },
+          "panel": {
+            "left": 55,
+            "top": 89,
+            "width": 260,
+            "height": 654,
+            "right": 315,
+            "bottom": 743
+          },
+          "bodyCss": {
+            "x": 252.00002058876836,
+            "y": 309.999960380311
+          },
+          "bodyClient": {
+            "x": 575.0000205887684,
+            "y": 440.999960380311
+          },
+          "disjoint": true,
+          "nativePan": true,
+          "nativeOrbit": true,
+          "renderSize": [
+            1008,
+            1240
+          ]
+        },
+        {
+          "width": 1200,
+          "view": {
+            "left": 387,
+            "top": 131,
+            "width": 860,
+            "height": 620,
+            "right": 1247,
+            "bottom": 751
+          },
+          "panel": {
+            "left": 55,
+            "top": 89,
+            "width": 324,
+            "height": 654,
+            "right": 379,
+            "bottom": 743
+          },
+          "bodyCss": {
+            "x": 430.0000040468948,
+            "y": 310.000021756591
+          },
+          "bodyClient": {
+            "x": 817.0000040468948,
+            "y": 441.000021756591
+          },
+          "disjoint": true,
+          "nativePan": true,
+          "nativeOrbit": true,
+          "renderSize": [
+            1720,
+            1240
+          ]
+        }
+      ],
+      "layoutMeaning": "Declared rects follow assigned inline px styles; no browser computed-layout engine."
+    },
+    {
+      "name": "canvas DOM to native InputManager and UtilityLayer body drag commits exact endpoint once",
+      "passed": true,
+      "commitsDuringDrag": 1,
+      "position": [
+        20.22285083400069,
+        0.7107285105444532,
+        24.95891906502086
+      ],
+      "preEvents": 35,
+      "utilityLayerRetained": true,
+      "noDirectObservableNotification": true
+    },
+    {
+      "name": "native pointercancel restores original pose instead of committing DeviceEventFactory UP",
+      "passed": true,
+      "commits": 0,
+      "nativeFactoryReleaseObserved": true
+    },
+    {
+      "name": "native blur restores original pose instead of committing DeviceEventFactory UP",
+      "passed": true,
+      "commits": 0,
+      "nativeFactoryReleaseObserved": true
+    },
+    {
+      "name": "tree category and exact listbox variant load actual tree with collision",
+      "passed": true,
+      "assetId": "forest-01-sickly-oak",
+      "obstacle": {
+        "id": "authored-authored-f7c8a52f-4728-49d9-a2ac-7f44d814822b",
+        "instanceId": "authored-f7c8a52f-4728-49d9-a2ac-7f44d814822b",
+        "x": 6.6991658210754395,
+        "z": 24.818843841552734,
+        "radius": 0.62,
+        "height": 6,
+        "source": "existing-certified-tree-trunk"
+      },
+      "loads": 3
+    },
+    {
+      "name": "native base-body click adopts actual handcart with same stable ID and exact3 original collider parts",
+      "passed": true,
+      "instanceId": "handcart-25",
+      "sourceInstanceId": "handcart-25",
+      "originalVisualMatricesExact": true,
+      "originalColliderParts": 3,
+      "suppressedThroughVisibilityAndShadows": true
+    },
+    {
+      "name": "native move plus undo and redo migrate all original handcart collision parts with same ID",
+      "passed": true,
+      "stableId": "handcart-25",
+      "sourceCollisionRemoved": true,
+      "newCollisionBlocked": true,
+      "undoRedoExact": true,
+      "originalNavigationUnchanged": true
+    },
+    {
+      "name": "browser apply and work file plus game runtime reopen preserve new and base IDs collision and suppression",
+      "passed": true,
+      "instances": 3,
+      "stableIds": [
+        "authored-356c16d9-c222-4415-a007-0a506c019d7d",
+        "authored-f7c8a52f-4728-49d9-a2ac-7f44d814822b",
+        "handcart-25"
+      ],
+      "sourceLoads": 7,
+      "actualGameRuntimeLoaderReopen": true
+    },
+    {
+      "name": "nearby base and added-object DOM buttons execute exact main callback into actual editor without copies",
+      "passed": true,
+      "baseId": "handcart-25",
+      "addedId": "authored-356c16d9-c222-4415-a007-0a506c019d7d",
+      "stableCount": 3,
+      "additionalModelLoads": 0
+    },
+    {
+      "name": "production PlaygroundInput coexists with native tool stream and resumes on fresh gameplay press",
+      "passed": true,
+      "unintendedToolAttacks": 0,
+      "freshGameplayAttacks": 1,
+      "deferredLostCaptureEventsIncluded": true
+    }
+  ],
+  "traffic": [
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 352,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 325,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 325,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 352,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 352,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 325,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 325,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 592,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 592,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 565,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 565,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 592,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 592,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 565,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 565,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 496,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 496,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 469,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 469,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 496,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 496,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 469,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 469,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 852,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 852,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 825,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 825,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 852,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 852,
+      "y": 8
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 825,
+      "y": 27
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 825,
+      "y": 27
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 742.6809240768468,
+      "y": 455.7027742527616
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 742.6809240768468,
+      "y": 455.7027742527616
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 197.38808607306908,
+      "y": 187.53978411495825
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 197.38808607306908,
+      "y": 187.53978411495825
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 163.5128039318064,
+      "y": 178.43463856842084
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 208.5128039318064,
+      "y": 158.43463856842084
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": true,
+      "skip": false,
+      "x": 208.5128039318064,
+      "y": 158.43463856842084
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 163.5128039318064,
+      "y": 178.43463856842084
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 163.5128039318064,
+      "y": 178.43463856842084
+    },
+    {
+      "type": 4,
+      "event": "pointermove",
+      "synthetic": false,
+      "skip": false,
+      "x": 208.5128039318064,
+      "y": 158.43463856842084
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": true,
+      "skip": false,
+      "x": 208.5128039318064,
+      "y": 158.43463856842084
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 450.00000975959915,
+      "y": 310.00034135731516
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 450.00000975959915,
+      "y": 310.00034135731516
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 450.00000975959915,
+      "y": 310.00034135731516
+    },
+    {
+      "type": 32,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 450.00000975959915,
+      "y": 310.00034135731516
+    },
+    {
+      "type": 1,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 336.00545802793613,
+      "y": 294.2768115256164
+    },
+    {
+      "type": 4,
+      "event": "pointerdown",
+      "synthetic": false,
+      "skip": false,
+      "x": 336.00545802793613,
+      "y": 294.2768115256164
+    },
+    {
+      "type": 2,
+      "event": "pointerup",
+      "synthetic": false,
+      "skip": false,
+      "x": 336.00545802793613,
+      "y": 294.2768115256164
+    }
+  ],
+  "scope": "Actual createWorld, production PlaygroundInput/editor/workspace/runtime/native GizmoManager/UtilityLayer and canvas.dispatchEvent through Babylon WebDeviceInputSystem/SceneInputManager. No direct observable notifications, Scene simulation methods or pick replacements. Local shipped decoded crate/oak/handcart geometry with opaque1x1materials and decoder initialization injection. One existing handcart is materialized with production transform/geometry/native-instance functions while retaining the full original map navigator; other map models are not preloaded. Client rect follows workspace-assigned px styles and framebuffer emulates DPR2; capture loss is dispatched after the initiating DOM event. This proves the tested Node/native event seam, not trusted browser events, actual browser pointer-capture scheduling, computed browser layout, GPU readiness, pixels, downloads or user usability."
+}

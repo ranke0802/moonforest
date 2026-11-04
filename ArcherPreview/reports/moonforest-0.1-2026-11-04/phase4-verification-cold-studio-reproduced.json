@@ -1,0 +1,413 @@
+{
+  "generatedAt": "2026-11-04T05:00:27.152Z",
+  "passed": false,
+  "findings": [
+    {
+      "issue": "Newly added actor center is outside current camera viewport",
+      "projections": [
+        {
+          "root": "guardian-bear-world",
+          "position": [
+            3,
+            0.11999999731779099,
+            0
+          ],
+          "meshCount": 1,
+          "center": [
+            3.0121093362707114,
+            1.4611909177772233,
+            0.032506107538626594
+          ],
+          "screen": [
+            1472.8916883962754,
+            392.69166341807716,
+            0.9861633930648697
+          ],
+          "centerInsideViewport": false
+        }
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "src/cinematic-studio.js": "cdc98907c815b64a11b934788f5cdcc293645a49856c2c8daa22351b9d469a51",
+    "src/cinematic-game.js": "acd650f91f885554ee52d2e037ad4798e984a0fac5a53b21af666089d2e4d55a",
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/boss-models.js": "e56a3a5e45e6223d18fdb43fb6668e1e9d22f56976034e0e238aad22a3c00df4",
+    "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+    "src/game-tool-lease.js": "2a0a76ed40cefd0ed0f751dc084ee05193d76ef0c64866e1458c1eac865663ed",
+    "src/main.js": "8da36631c118a25f2f1c1dc9f2f3c9da2c587a639c798ff7aa0c5aac518c9f97",
+    "src/world.js": "5aa4fbc557839be03f6c234e6ed767d1168ff9af4e64a968fb72c862c3e8efc5"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "actor-add before map-open waits for production main readiness",
+      "passed": true,
+      "playerState": "idle",
+      "sourceLoads": 0,
+      "readyState": {
+        "ready": false,
+        "loading": true,
+        "dead": false,
+        "settings": false,
+        "failed": false
+      }
+    },
+    {
+      "name": "cold actual model path settles with no fake host or preparation",
+      "passed": true,
+      "actors": [
+        "hooded-goblin.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard"
+      ],
+      "coldRequests": 2,
+      "io": [
+        {
+          "url": "https://cold-studio.test/assets/hooded-goblin.json",
+          "signal": true,
+          "kind": "manifest",
+          "id": "hooded-goblin"
+        },
+        {
+          "url": "https://cold-studio.test/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+          "signal": true,
+          "kind": "model",
+          "id": "hooded-goblin"
+        },
+        {
+          "url": "https://cold-studio.test/assets/guardian-bear.json",
+          "signal": true,
+          "kind": "manifest",
+          "id": "guardian-bear"
+        },
+        {
+          "url": "https://cold-studio.test/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+          "signal": true,
+          "kind": "model",
+          "id": "guardian-bear"
+        }
+      ],
+      "host": {
+        "scene": true,
+        "engineOwned": false,
+        "rafOwned": false,
+        "state": "ready",
+        "active": true,
+        "actors": 3,
+        "estimatedBytes": 46137344,
+        "pendingRetirements": 0,
+        "limits": {
+          "actors": 20,
+          "estimatedBytes": 536870912,
+          "idleSeconds": 30
+        },
+        "stats": {
+          "acquired": 4,
+          "prepared": 4,
+          "samples": 4,
+          "released": 3,
+          "actorsCreated": 3,
+          "actorsReused": 3,
+          "actorsRetired": 0,
+          "audioCues": 0,
+          "markers": 0,
+          "cleanupErrors": 0
+        },
+        "pool": [
+          {
+            "key": "hooded-goblin.standard#1",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 12582912
+          },
+          {
+            "key": "guardian-bear.standard#1",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 16777216
+          },
+          {
+            "key": "guardian-bear.standard#2",
+            "warmed": true,
+            "busy": true,
+            "retiring": false,
+            "estimatedBytes": 16777216
+          }
+        ],
+        "memoryMeaning": "Definition reservations and adapter estimates; no device/GPU residency claim."
+      },
+      "mainState": {
+        "ready": false,
+        "loading": false,
+        "dead": false,
+        "settings": false,
+        "failed": false
+      },
+      "studioStatus": "배우를 추가했습니다. 위치 버튼으로 옮기거나 동작을 고르세요.",
+      "documentActorCount": 3
+    },
+    {
+      "name": "actual enabled actor bounds are projected without simulated poses",
+      "passed": true,
+      "projections": [
+        {
+          "root": "guardian-bear-world",
+          "position": [
+            0,
+            0.11999999731779099,
+            0
+          ],
+          "meshCount": 1,
+          "center": [
+            -0.0131594735384013,
+            0.7970397839039064,
+            0.16753212986944008
+          ],
+          "screen": [
+            623.3335852441809,
+            444.40166604332387,
+            0.989588262219384
+          ],
+          "centerInsideViewport": true
+        },
+        {
+          "root": "guardian-bear-world",
+          "position": [
+            1.5,
+            0.11999999731779099,
+            0
+          ],
+          "meshCount": 1,
+          "center": [
+            1.5121093362707114,
+            1.4611909177772233,
+            0.032506107538626594
+          ],
+          "screen": [
+            1003.9151126334314,
+            336.7867805869968,
+            0.9879236737488395
+          ],
+          "centerInsideViewport": true
+        },
+        {
+          "root": "guardian-bear-world",
+          "position": [
+            3,
+            0.11999999731779099,
+            0
+          ],
+          "meshCount": 1,
+          "center": [
+            3.0121093362707114,
+            1.4611909177772233,
+            0.032506107538626594
+          ],
+          "screen": [
+            1472.8916883962754,
+            392.69166341807716,
+            0.9861633930648697
+          ],
+          "centerInsideViewport": false
+        }
+      ],
+      "resources": {
+        "meshes": 43,
+        "geometries": 9,
+        "materials": 14,
+        "textures": 9,
+        "skeletons": 3,
+        "morphManagers": 0,
+        "transformNodes": 166,
+        "sceneObservers": 8,
+        "nodeObservers": 7,
+        "scenePending": 0
+      },
+      "initialCameraCapture": {
+        "position": [
+          1.6337768386908786,
+          2.8484391569610326,
+          4.1264492594298146
+        ],
+        "target": [
+          0,
+          1.139999997317791,
+          0
+        ],
+        "fov": 0.65
+      },
+      "definitionOrdering": [
+        "hooded-goblin.standard",
+        "guardian-bear.standard",
+        "guardian-bear.standard"
+      ]
+    }
+  ],
+  "traffic": [
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "host-ready",
+      "reply": true,
+      "ok": true,
+      "ready": false,
+      "mapId": "village"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "host-ready",
+      "reply": true,
+      "ok": true,
+      "ready": true,
+      "mapId": "village"
+    },
+    {
+      "direction": "request",
+      "command": "capture-camera",
+      "id": "studio-1"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "studio-1",
+      "reply": true,
+      "ok": true,
+      "state": "idle",
+      "time": 0,
+      "duration": 0,
+      "cutsceneId": null,
+      "loop": false,
+      "error": null,
+      "camera": {
+        "position": [
+          1.6337768386908786,
+          2.8484391569610326,
+          4.1264492594298146
+        ],
+        "target": [
+          0,
+          1.139999997317791,
+          0
+        ],
+        "fov": 0.65
+      },
+      "playerPosition": [
+        0,
+        0.11999999731779099,
+        0
+      ]
+    },
+    {
+      "direction": "request",
+      "command": "load",
+      "id": "studio-2"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "studio-2",
+      "reply": true,
+      "ok": true,
+      "state": "ready",
+      "time": 0,
+      "duration": 6,
+      "cutsceneId": "scene-20261104050026-1",
+      "loop": false,
+      "error": null
+    },
+    {
+      "direction": "request",
+      "command": "load",
+      "id": "studio-3"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "studio-3",
+      "reply": true,
+      "ok": true,
+      "state": "ready",
+      "time": 0,
+      "duration": 6,
+      "cutsceneId": "scene-20261104050026-1",
+      "loop": false,
+      "error": null
+    },
+    {
+      "direction": "request",
+      "command": "load",
+      "id": "studio-4"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "studio-4",
+      "reply": true,
+      "ok": true,
+      "state": "ready",
+      "time": 0,
+      "duration": 6,
+      "cutsceneId": "scene-20261104050026-1",
+      "loop": false,
+      "error": null
+    },
+    {
+      "direction": "request",
+      "command": "load",
+      "id": "studio-5"
+    },
+    {
+      "direction": "reply",
+      "channel": "moonforest-cinematic-studio",
+      "version": 1,
+      "requestId": "studio-5",
+      "reply": true,
+      "ok": true,
+      "state": "ready",
+      "time": 0,
+      "duration": 6,
+      "cutsceneId": "scene-20261104050026-1",
+      "loop": false,
+      "error": null
+    }
+  ],
+  "io": [
+    {
+      "url": "https://cold-studio.test/assets/hooded-goblin.json",
+      "signal": true,
+      "kind": "manifest",
+      "id": "hooded-goblin"
+    },
+    {
+      "url": "https://cold-studio.test/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+      "signal": true,
+      "kind": "model",
+      "id": "hooded-goblin"
+    },
+    {
+      "url": "https://cold-studio.test/assets/guardian-bear.json",
+      "signal": true,
+      "kind": "manifest",
+      "id": "guardian-bear"
+    },
+    {
+      "url": "https://cold-studio.test/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+      "signal": true,
+      "kind": "model",
+      "id": "guardian-bear"
+    }
+  ],
+  "defaultFactories": true,
+  "defaultPreparation": true,
+  "scope": "Actual Studio DOM + production transport + exact current main getState callback + createWorld + BossBattle + default GameCinematics/SceneHost/ActorEncounterFactory/scoped BossModelLibrary. Fetch boundary serves actual local manifest and decoded inline shipped geometry/rig/clips without images/materials. Default shader/preparation logic is executed in NullEngine; real WebGL shader compilation, network latency, texture decode, full main startup and browser usability are unverified."
+}

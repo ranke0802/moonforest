@@ -1,0 +1,273 @@
+{
+  "generatedAt": "2026-11-04T04:54:08.567Z",
+  "baselineCommit": "da44cea24a513134499d54c3239b27db2ce3b62e",
+  "baselineEditorSha256": "ce3532abd4dc43ffddfb33bbeb57ec5534ece457c25b0d261044ed2b66641c26",
+  "reproducedCondition": "Expanded fixed editor panel overlaps the view-center prop at360/600CSSpx;390px center at780width clears panel by13px only.",
+  "rows": [
+    {
+      "width": 360,
+      "height": 720,
+      "dpr": 1,
+      "projectedBodyCenterCss": {
+        "x": 180.00000002284898,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -142.99999997715102,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 360,
+      "height": 720,
+      "dpr": 2,
+      "projectedBodyCenterCss": {
+        "x": 180.00000002284898,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -142.99999997715102,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 360,
+      "height": 720,
+      "dpr": 3,
+      "projectedBodyCenterCss": {
+        "x": 180.00000002284898,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -142.99999997715102,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 600,
+      "height": 720,
+      "dpr": 1,
+      "projectedBodyCenterCss": {
+        "x": 300.0000001599429,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -22.999999840057114,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 600,
+      "height": 720,
+      "dpr": 2,
+      "projectedBodyCenterCss": {
+        "x": 300.0000001599429,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -22.999999840057114,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 600,
+      "height": 720,
+      "dpr": 3,
+      "projectedBodyCenterCss": {
+        "x": 300.0000000380816,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 8,
+        "right": 323,
+        "top": 62,
+        "maxHeight": 575,
+        "bottom": 637,
+        "width": 315
+      },
+      "horizontalCenterOccluded": true,
+      "minimumPanelHeightToCoverBody": 250.66379053180498,
+      "bodyInsideMaxHeightPanel": true,
+      "clearanceRightOfPanel": -22.999999961918377,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 780,
+      "height": 720,
+      "dpr": 1,
+      "projectedBodyCenterCss": {
+        "x": 389.9999998057836,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 12.999999805783602,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 780,
+      "height": 720,
+      "dpr": 2,
+      "projectedBodyCenterCss": {
+        "x": 389.9999998057836,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 12.999999805783602,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 780,
+      "height": 720,
+      "dpr": 3,
+      "projectedBodyCenterCss": {
+        "x": 390.00000004950607,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 13.00000004950607,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 1200,
+      "height": 720,
+      "dpr": 1,
+      "projectedBodyCenterCss": {
+        "x": 600.0000003198858,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 223.00000031988577,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 1200,
+      "height": 720,
+      "dpr": 2,
+      "projectedBodyCenterCss": {
+        "x": 600.0000003198858,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 223.00000031988577,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    },
+    {
+      "width": 1200,
+      "height": 720,
+      "dpr": 3,
+      "projectedBodyCenterCss": {
+        "x": 600.0000000761632,
+        "y": 312.663790531805
+      },
+      "expandedPanelCss": {
+        "left": 12,
+        "right": 377,
+        "top": 75,
+        "maxHeight": 560,
+        "bottom": 635,
+        "width": 365
+      },
+      "horizontalCenterOccluded": false,
+      "minimumPanelHeightToCoverBody": 237.66379053180498,
+      "bodyInsideMaxHeightPanel": false,
+      "clearanceRightOfPanel": 223.00000007616325,
+      "meaning": "Panel geometry computed from committed CSS, not measured browser layout. Central-y overlap applies when expanded controls reach this modest required height."
+    }
+  ],
+  "scope": "Exact committed CSS bounds plus native Babylon camera projection atDPR1/2/3. No browsercomputed layout, elementFromPoint, pixels or device claims. This identifies a deterministic overlay hazard and required dimensions; it does not substitute for actual UI observation."
+}

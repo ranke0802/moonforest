@@ -49,7 +49,9 @@ export const ASSET_CATALOG = {
             "triangles": 628,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -60,7 +62,9 @@ export const ASSET_CATALOG = {
             "triangles": 628,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -71,7 +75,9 @@ export const ASSET_CATALOG = {
             "triangles": 628,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -82,7 +88,9 @@ export const ASSET_CATALOG = {
             "triangles": 628,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -136,7 +144,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.1,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -196,7 +206,9 @@ export const ASSET_CATALOG = {
             "triangles": 1512,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -207,7 +219,9 @@ export const ASSET_CATALOG = {
             "triangles": 1512,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -218,7 +232,9 @@ export const ASSET_CATALOG = {
             "triangles": 1512,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -229,7 +245,9 @@ export const ASSET_CATALOG = {
             "triangles": 1512,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -283,7 +301,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.05403682071266449,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -355,7 +375,9 @@ export const ASSET_CATALOG = {
             "triangles": 4359,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -366,7 +388,9 @@ export const ASSET_CATALOG = {
             "triangles": 3314,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -377,7 +401,9 @@ export const ASSET_CATALOG = {
             "triangles": 2238,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -388,7 +414,9 @@ export const ASSET_CATALOG = {
             "triangles": 4359,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -441,14 +469,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.3,
       "placement": {
-        "supported": false,
+        "supported": true,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -504,7 +539,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -515,7 +552,9 @@ export const ASSET_CATALOG = {
             "triangles": 2750,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -526,7 +565,9 @@ export const ASSET_CATALOG = {
             "triangles": 1400,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -537,7 +578,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -591,7 +634,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 5.085721015930176,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -653,7 +698,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -664,7 +711,9 @@ export const ASSET_CATALOG = {
             "triangles": 2749,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -675,7 +724,9 @@ export const ASSET_CATALOG = {
             "triangles": 1399,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -686,7 +737,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -740,7 +793,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.9993390042800456,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -802,7 +857,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -813,7 +870,9 @@ export const ASSET_CATALOG = {
             "triangles": 2749,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -824,7 +883,9 @@ export const ASSET_CATALOG = {
             "triangles": 1399,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -835,7 +896,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -889,7 +952,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 12,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -951,7 +1016,9 @@ export const ASSET_CATALOG = {
             "triangles": 4998,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -962,7 +1029,9 @@ export const ASSET_CATALOG = {
             "triangles": 2747,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -973,7 +1042,9 @@ export const ASSET_CATALOG = {
             "triangles": 1397,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -984,7 +1055,9 @@ export const ASSET_CATALOG = {
             "triangles": 4998,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1038,7 +1111,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 4.603260517120361,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1100,7 +1175,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1111,7 +1188,9 @@ export const ASSET_CATALOG = {
             "triangles": 2750,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1122,7 +1201,9 @@ export const ASSET_CATALOG = {
             "triangles": 1400,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1133,7 +1214,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1187,7 +1270,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.4000000953674316,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1249,7 +1334,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1260,7 +1347,9 @@ export const ASSET_CATALOG = {
             "triangles": 2750,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1271,7 +1360,9 @@ export const ASSET_CATALOG = {
             "triangles": 1400,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1282,7 +1373,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1336,7 +1429,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.7916697343462147,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1398,7 +1493,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1409,7 +1506,9 @@ export const ASSET_CATALOG = {
             "triangles": 2750,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1420,7 +1519,9 @@ export const ASSET_CATALOG = {
             "triangles": 1398,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1431,7 +1532,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1485,7 +1588,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.3929312229156494,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1547,7 +1652,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1558,7 +1665,9 @@ export const ASSET_CATALOG = {
             "triangles": 3500,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1569,7 +1678,9 @@ export const ASSET_CATALOG = {
             "triangles": 2250,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1580,7 +1691,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1634,7 +1747,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.4579057693481445,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1696,7 +1811,9 @@ export const ASSET_CATALOG = {
             "triangles": 4866,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1707,7 +1824,9 @@ export const ASSET_CATALOG = {
             "triangles": 3405,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1718,7 +1837,9 @@ export const ASSET_CATALOG = {
             "triangles": 2189,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1729,7 +1850,9 @@ export const ASSET_CATALOG = {
             "triangles": 4866,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1783,7 +1906,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.3534045219421387,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1845,7 +1970,9 @@ export const ASSET_CATALOG = {
             "triangles": 4822,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -1856,7 +1983,9 @@ export const ASSET_CATALOG = {
             "triangles": 3372,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -1867,7 +1996,9 @@ export const ASSET_CATALOG = {
             "triangles": 2162,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -1878,7 +2009,9 @@ export const ASSET_CATALOG = {
             "triangles": 4822,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -1932,7 +2065,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.3000000715255737,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -1994,7 +2129,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2005,7 +2142,9 @@ export const ASSET_CATALOG = {
             "triangles": 3500,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2016,7 +2155,9 @@ export const ASSET_CATALOG = {
             "triangles": 2250,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2027,7 +2168,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2081,7 +2224,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.4737372398376465,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2143,7 +2288,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2154,7 +2301,9 @@ export const ASSET_CATALOG = {
             "triangles": 3500,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2165,7 +2314,9 @@ export const ASSET_CATALOG = {
             "triangles": 2250,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2176,7 +2327,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2230,7 +2383,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.4281153678894043,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2292,7 +2447,9 @@ export const ASSET_CATALOG = {
             "triangles": 4587,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2303,7 +2460,9 @@ export const ASSET_CATALOG = {
             "triangles": 3209,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2314,7 +2473,9 @@ export const ASSET_CATALOG = {
             "triangles": 2059,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2325,7 +2486,9 @@ export const ASSET_CATALOG = {
             "triangles": 4587,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2379,7 +2542,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.2000000476837158,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2441,7 +2606,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2452,7 +2619,9 @@ export const ASSET_CATALOG = {
             "triangles": 3499,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2463,7 +2632,9 @@ export const ASSET_CATALOG = {
             "triangles": 2250,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2474,7 +2645,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2528,7 +2701,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.2997235059738159,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2590,7 +2765,9 @@ export const ASSET_CATALOG = {
             "triangles": 3986,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2601,7 +2778,9 @@ export const ASSET_CATALOG = {
             "triangles": 2741,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2612,7 +2791,9 @@ export const ASSET_CATALOG = {
             "triangles": 1702,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2623,7 +2804,9 @@ export const ASSET_CATALOG = {
             "triangles": 3986,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2677,7 +2860,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.7321051359176636,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2739,7 +2924,9 @@ export const ASSET_CATALOG = {
             "triangles": 4723,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2750,7 +2937,9 @@ export const ASSET_CATALOG = {
             "triangles": 3282,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2761,7 +2950,9 @@ export const ASSET_CATALOG = {
             "triangles": 2095,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2772,7 +2963,9 @@ export const ASSET_CATALOG = {
             "triangles": 4723,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2826,7 +3019,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 4.5,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -2888,7 +3083,9 @@ export const ASSET_CATALOG = {
             "triangles": 4717,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -2899,7 +3096,9 @@ export const ASSET_CATALOG = {
             "triangles": 3300,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -2910,7 +3109,9 @@ export const ASSET_CATALOG = {
             "triangles": 2121,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -2921,7 +3122,9 @@ export const ASSET_CATALOG = {
             "triangles": 4717,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -2975,7 +3178,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 4,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3037,7 +3242,9 @@ export const ASSET_CATALOG = {
             "triangles": 4736,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3048,7 +3255,9 @@ export const ASSET_CATALOG = {
             "triangles": 3312,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3059,7 +3268,9 @@ export const ASSET_CATALOG = {
             "triangles": 2120,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3070,7 +3281,9 @@ export const ASSET_CATALOG = {
             "triangles": 4736,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3124,7 +3337,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.005134344100952,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3186,7 +3401,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3197,7 +3414,9 @@ export const ASSET_CATALOG = {
             "triangles": 3492,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3208,7 +3427,9 @@ export const ASSET_CATALOG = {
             "triangles": 2238,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3219,7 +3440,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3273,7 +3496,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.2000000474310006,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3335,7 +3560,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3346,7 +3573,9 @@ export const ASSET_CATALOG = {
             "triangles": 4248,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3357,7 +3586,9 @@ export const ASSET_CATALOG = {
             "triangles": 3499,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3368,7 +3599,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3422,7 +3655,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.3525594472885132,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3484,7 +3719,9 @@ export const ASSET_CATALOG = {
             "triangles": 4512,
             "materials": 1,
             "textures": 0,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3495,7 +3732,9 @@ export const ASSET_CATALOG = {
             "triangles": 3158,
             "materials": 1,
             "textures": 0,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3506,7 +3745,9 @@ export const ASSET_CATALOG = {
             "triangles": 2374,
             "materials": 1,
             "textures": 0,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3517,7 +3758,9 @@ export const ASSET_CATALOG = {
             "triangles": 4512,
             "materials": 1,
             "textures": 0,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3571,7 +3814,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 27.20000081062317,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3633,7 +3878,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3644,7 +3891,9 @@ export const ASSET_CATALOG = {
             "triangles": 2749,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3655,7 +3904,9 @@ export const ASSET_CATALOG = {
             "triangles": 1399,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3666,7 +3917,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3720,7 +3973,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.7728869915008545,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3782,7 +4037,9 @@ export const ASSET_CATALOG = {
             "triangles": 4995,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3793,7 +4050,9 @@ export const ASSET_CATALOG = {
             "triangles": 2747,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3804,7 +4063,9 @@ export const ASSET_CATALOG = {
             "triangles": 1398,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3815,7 +4076,9 @@ export const ASSET_CATALOG = {
             "triangles": 4995,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -3869,7 +4132,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.84709095954895,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -3931,7 +4196,9 @@ export const ASSET_CATALOG = {
             "triangles": 4547,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -3942,7 +4209,9 @@ export const ASSET_CATALOG = {
             "triangles": 2273,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -3953,7 +4222,9 @@ export const ASSET_CATALOG = {
             "triangles": 1180,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -3964,7 +4235,9 @@ export const ASSET_CATALOG = {
             "triangles": 4547,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4018,7 +4291,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 10,
       "placement": {
         "supported": false,
+        "sourceKind": "building",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4084,7 +4359,9 @@ export const ASSET_CATALOG = {
             "triangles": 362494,
             "materials": 7,
             "textures": 7,
-            "skinned": true
+            "skinned": true,
+            "clips": 7,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -4154,13 +4431,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.076555288491363,
       "placement": {
         "supported": false,
+        "sourceKind": "player",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -4223,7 +4502,9 @@ export const ASSET_CATALOG = {
             "triangles": 4479,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4234,7 +4515,9 @@ export const ASSET_CATALOG = {
             "triangles": 4479,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -4245,7 +4528,9 @@ export const ASSET_CATALOG = {
             "triangles": 4479,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -4256,7 +4541,9 @@ export const ASSET_CATALOG = {
             "triangles": 4479,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4310,7 +4597,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.47179975498801086,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4377,7 +4666,9 @@ export const ASSET_CATALOG = {
             "triangles": 1894,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4388,7 +4679,9 @@ export const ASSET_CATALOG = {
             "triangles": 1894,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -4399,7 +4692,9 @@ export const ASSET_CATALOG = {
             "triangles": 1894,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -4410,7 +4705,9 @@ export const ASSET_CATALOG = {
             "triangles": 1894,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4464,7 +4761,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.15917692934916317,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4528,7 +4827,9 @@ export const ASSET_CATALOG = {
             "triangles": 1662,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4539,7 +4840,9 @@ export const ASSET_CATALOG = {
             "triangles": 1662,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -4550,7 +4853,9 @@ export const ASSET_CATALOG = {
             "triangles": 1662,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -4561,7 +4866,9 @@ export const ASSET_CATALOG = {
             "triangles": 1662,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4615,7 +4922,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.25,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4677,7 +4986,9 @@ export const ASSET_CATALOG = {
             "triangles": 3071,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4688,7 +4999,9 @@ export const ASSET_CATALOG = {
             "triangles": 3071,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -4699,7 +5012,9 @@ export const ASSET_CATALOG = {
             "triangles": 3071,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -4710,7 +5025,9 @@ export const ASSET_CATALOG = {
             "triangles": 3071,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4764,7 +5081,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.36,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4827,7 +5146,9 @@ export const ASSET_CATALOG = {
             "triangles": 1362,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4838,7 +5159,9 @@ export const ASSET_CATALOG = {
             "triangles": 1362,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -4849,7 +5172,9 @@ export const ASSET_CATALOG = {
             "triangles": 1362,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -4860,7 +5185,9 @@ export const ASSET_CATALOG = {
             "triangles": 1362,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -4914,7 +5241,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.18,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -4981,7 +5310,9 @@ export const ASSET_CATALOG = {
             "triangles": 4611,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -4992,7 +5323,9 @@ export const ASSET_CATALOG = {
             "triangles": 2305,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5003,7 +5336,9 @@ export const ASSET_CATALOG = {
             "triangles": 1371,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5014,7 +5349,9 @@ export const ASSET_CATALOG = {
             "triangles": 4611,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -5068,7 +5405,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.1,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -5140,7 +5479,9 @@ export const ASSET_CATALOG = {
             "triangles": 4683,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -5151,7 +5492,9 @@ export const ASSET_CATALOG = {
             "triangles": 3091,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5162,7 +5505,9 @@ export const ASSET_CATALOG = {
             "triangles": 1969,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5173,7 +5518,9 @@ export const ASSET_CATALOG = {
             "triangles": 4683,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -5227,7 +5574,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.6,
       "placement": {
         "supported": true,
+        "sourceKind": "prop",
         "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -5297,7 +5646,9 @@ export const ASSET_CATALOG = {
             "triangles": 56918,
             "materials": 1,
             "textures": 1,
-            "skinned": true
+            "skinned": true,
+            "clips": 12,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -5377,13 +5728,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.7,
       "placement": {
         "supported": false,
+        "sourceKind": "boss",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -5453,7 +5806,9 @@ export const ASSET_CATALOG = {
             "triangles": 4815,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -5464,7 +5819,9 @@ export const ASSET_CATALOG = {
             "triangles": 2407,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5475,7 +5832,9 @@ export const ASSET_CATALOG = {
             "triangles": 1719,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5486,7 +5845,9 @@ export const ASSET_CATALOG = {
             "triangles": 4815,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -5540,7 +5901,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.2,
       "placement": {
         "supported": true,
+        "sourceKind": "prop",
         "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -5614,7 +5977,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -5625,7 +5990,9 @@ export const ASSET_CATALOG = {
             "triangles": 2499,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5636,7 +6003,9 @@ export const ASSET_CATALOG = {
             "triangles": 1799,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5647,7 +6016,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -5700,14 +6071,34 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5.999999963468905,
       "placement": {
-        "supported": false,
-        "collision": "none",
+        "supported": true,
+        "sourceKind": "tree",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "body": {
+          "shape": "trunk-capsule",
+          "radius": 0.62,
+          "height": 6,
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "source": "forestObstacles sickly oak"
+        },
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -5768,7 +6159,9 @@ export const ASSET_CATALOG = {
             "triangles": 4994,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -5779,7 +6172,9 @@ export const ASSET_CATALOG = {
             "triangles": 2734,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5790,7 +6185,9 @@ export const ASSET_CATALOG = {
             "triangles": 1383,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5801,7 +6198,9 @@ export const ASSET_CATALOG = {
             "triangles": 4994,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -5854,14 +6253,34 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 6.000222004135139,
       "placement": {
-        "supported": false,
-        "collision": "none",
+        "supported": true,
+        "sourceKind": "tree",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "body": {
+          "shape": "trunk-capsule",
+          "radius": 0.48,
+          "height": 6,
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "source": "forestObstacles dead tree"
+        },
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -5922,7 +6341,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -5933,7 +6354,9 @@ export const ASSET_CATALOG = {
             "triangles": 2749,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -5944,7 +6367,9 @@ export const ASSET_CATALOG = {
             "triangles": 1399,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -5955,7 +6380,9 @@ export const ASSET_CATALOG = {
             "triangles": 4999,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6009,7 +6436,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.150843617092017,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -6076,7 +6505,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6087,7 +6518,9 @@ export const ASSET_CATALOG = {
             "triangles": 2750,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6098,7 +6531,9 @@ export const ASSET_CATALOG = {
             "triangles": 2000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6109,7 +6544,9 @@ export const ASSET_CATALOG = {
             "triangles": 5000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6162,14 +6599,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.5500000220174517,
       "placement": {
-        "supported": false,
+        "supported": true,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -6230,7 +6674,9 @@ export const ASSET_CATALOG = {
             "triangles": 3981,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6241,7 +6687,9 @@ export const ASSET_CATALOG = {
             "triangles": 3405,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6252,7 +6700,9 @@ export const ASSET_CATALOG = {
             "triangles": 3066,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6263,7 +6713,9 @@ export const ASSET_CATALOG = {
             "triangles": 3981,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6316,14 +6768,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.299999966575708,
       "placement": {
-        "supported": false,
+        "supported": true,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -6384,7 +6843,9 @@ export const ASSET_CATALOG = {
             "triangles": 4809,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6395,7 +6856,9 @@ export const ASSET_CATALOG = {
             "triangles": 2605,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6406,7 +6869,9 @@ export const ASSET_CATALOG = {
             "triangles": 1305,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6417,7 +6882,9 @@ export const ASSET_CATALOG = {
             "triangles": 4809,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6471,7 +6938,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 5.500000135872796,
       "placement": {
         "supported": false,
+        "sourceKind": "rock",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -6533,7 +7002,9 @@ export const ASSET_CATALOG = {
             "triangles": 3308,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6544,7 +7015,9 @@ export const ASSET_CATALOG = {
             "triangles": 1769,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6555,7 +7028,9 @@ export const ASSET_CATALOG = {
             "triangles": 1219,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6566,7 +7041,9 @@ export const ASSET_CATALOG = {
             "triangles": 3308,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6619,14 +7096,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.65,
       "placement": {
-        "supported": false,
+        "supported": true,
+        "sourceKind": "garden",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -6680,7 +7164,9 @@ export const ASSET_CATALOG = {
             "triangles": 1478,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6691,7 +7177,9 @@ export const ASSET_CATALOG = {
             "triangles": 1478,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6702,7 +7190,9 @@ export const ASSET_CATALOG = {
             "triangles": 1478,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6713,7 +7203,9 @@ export const ASSET_CATALOG = {
             "triangles": 1478,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6767,7 +7259,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.20258415436877045,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -6829,7 +7323,9 @@ export const ASSET_CATALOG = {
             "triangles": 5953,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -6883,7 +7379,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.2861021179705858,
       "placement": {
         "supported": false,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -6950,7 +7448,9 @@ export const ASSET_CATALOG = {
             "triangles": 2323,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -6961,7 +7461,9 @@ export const ASSET_CATALOG = {
             "triangles": 2323,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -6972,7 +7474,9 @@ export const ASSET_CATALOG = {
             "triangles": 2323,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -6983,7 +7487,9 @@ export const ASSET_CATALOG = {
             "triangles": 2323,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -7037,7 +7543,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.42,
       "placement": {
         "supported": false,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -7103,7 +7611,9 @@ export const ASSET_CATALOG = {
             "triangles": 30000,
             "materials": 1,
             "textures": 3,
-            "skinned": true
+            "skinned": true,
+            "clips": 20,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -7199,13 +7709,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.4639485416439126,
       "placement": {
         "supported": false,
+        "sourceKind": "boss",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -7275,7 +7787,9 @@ export const ASSET_CATALOG = {
             "triangles": 4737,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -7286,7 +7800,9 @@ export const ASSET_CATALOG = {
             "triangles": 2367,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -7297,7 +7813,9 @@ export const ASSET_CATALOG = {
             "triangles": 1387,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -7308,7 +7826,9 @@ export const ASSET_CATALOG = {
             "triangles": 4737,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -7362,7 +7882,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.5,
       "placement": {
         "supported": true,
+        "sourceKind": "prop",
         "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -7435,7 +7957,9 @@ export const ASSET_CATALOG = {
             "triangles": 10412,
             "materials": 1,
             "textures": 2,
-            "skinned": true
+            "skinned": true,
+            "clips": 12,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -7515,13 +8039,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.8050998066177711,
       "placement": {
         "supported": false,
+        "sourceKind": "monster",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -7577,7 +8103,9 @@ export const ASSET_CATALOG = {
             "triangles": 4106,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -7588,7 +8116,9 @@ export const ASSET_CATALOG = {
             "triangles": 2050,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -7599,7 +8129,9 @@ export const ASSET_CATALOG = {
             "triangles": 1136,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -7610,7 +8142,9 @@ export const ASSET_CATALOG = {
             "triangles": 4106,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -7664,7 +8198,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 6,
       "placement": {
         "supported": false,
+        "sourceKind": "building",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -7726,7 +8262,9 @@ export const ASSET_CATALOG = {
             "triangles": 4738,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -7737,7 +8275,9 @@ export const ASSET_CATALOG = {
             "triangles": 2818,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -7748,7 +8288,9 @@ export const ASSET_CATALOG = {
             "triangles": 2336,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -7759,7 +8301,9 @@ export const ASSET_CATALOG = {
             "triangles": 4738,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -7813,7 +8357,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 8,
       "placement": {
         "supported": false,
+        "sourceKind": "building",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -7875,7 +8421,9 @@ export const ASSET_CATALOG = {
             "triangles": 4915,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -7886,7 +8434,9 @@ export const ASSET_CATALOG = {
             "triangles": 2757,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -7897,7 +8447,9 @@ export const ASSET_CATALOG = {
             "triangles": 2025,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -7908,7 +8460,9 @@ export const ASSET_CATALOG = {
             "triangles": 4915,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -7962,7 +8516,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 5,
       "placement": {
         "supported": false,
+        "sourceKind": "building",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8024,7 +8580,9 @@ export const ASSET_CATALOG = {
             "triangles": 4652,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8035,7 +8593,9 @@ export const ASSET_CATALOG = {
             "triangles": 3209,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8046,7 +8606,9 @@ export const ASSET_CATALOG = {
             "triangles": 2615,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -8057,7 +8619,9 @@ export const ASSET_CATALOG = {
             "triangles": 4652,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -8111,7 +8675,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 5,
       "placement": {
         "supported": false,
+        "sourceKind": "building",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8173,7 +8739,9 @@ export const ASSET_CATALOG = {
             "triangles": 4895,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8184,7 +8752,9 @@ export const ASSET_CATALOG = {
             "triangles": 2670,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8195,7 +8765,9 @@ export const ASSET_CATALOG = {
             "triangles": 1893,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -8206,7 +8778,9 @@ export const ASSET_CATALOG = {
             "triangles": 4895,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -8260,7 +8834,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.2,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8322,7 +8898,9 @@ export const ASSET_CATALOG = {
             "triangles": 2226,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8333,7 +8911,9 @@ export const ASSET_CATALOG = {
             "triangles": 2226,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8344,7 +8924,9 @@ export const ASSET_CATALOG = {
             "triangles": 2226,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -8355,7 +8937,9 @@ export const ASSET_CATALOG = {
             "triangles": 2226,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -8409,7 +8993,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.046805474861627075,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8471,7 +9057,9 @@ export const ASSET_CATALOG = {
             "triangles": 1402,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8482,7 +9070,9 @@ export const ASSET_CATALOG = {
             "triangles": 1402,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8493,7 +9083,9 @@ export const ASSET_CATALOG = {
             "triangles": 1402,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -8504,7 +9096,9 @@ export const ASSET_CATALOG = {
             "triangles": 1402,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -8558,7 +9152,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.32,
       "placement": {
         "supported": false,
+        "sourceKind": "shrub",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8621,7 +9217,9 @@ export const ASSET_CATALOG = {
             "triangles": 49982,
             "materials": 2,
             "textures": 1,
-            "skinned": true
+            "skinned": true,
+            "clips": 10,
+            "morphTargets": 11
           }
         ],
         "skinned": true,
@@ -8697,13 +9295,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.2,
       "placement": {
         "supported": false,
+        "sourceKind": "boss",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -8759,7 +9359,9 @@ export const ASSET_CATALOG = {
             "triangles": 173685,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8770,7 +9372,9 @@ export const ASSET_CATALOG = {
             "triangles": 73733,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8781,7 +9385,9 @@ export const ASSET_CATALOG = {
             "triangles": 22043,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 3,
@@ -8792,7 +9398,9 @@ export const ASSET_CATALOG = {
             "triangles": 3827,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 4,
@@ -8803,7 +9411,9 @@ export const ASSET_CATALOG = {
             "triangles": 1397,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -8857,7 +9467,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 6.15119344740998,
       "placement": {
         "supported": false,
+        "sourceKind": "tree",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -8917,7 +9529,9 @@ export const ASSET_CATALOG = {
             "triangles": 1543,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -8928,7 +9542,9 @@ export const ASSET_CATALOG = {
             "triangles": 1543,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -8939,7 +9555,9 @@ export const ASSET_CATALOG = {
             "triangles": 1543,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -8950,7 +9568,9 @@ export const ASSET_CATALOG = {
             "triangles": 1543,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9004,7 +9624,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 0.05182432228023701,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -9071,7 +9693,9 @@ export const ASSET_CATALOG = {
             "triangles": 5184,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -9082,7 +9706,9 @@ export const ASSET_CATALOG = {
             "triangles": 2592,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -9093,7 +9719,9 @@ export const ASSET_CATALOG = {
             "triangles": 1140,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -9104,7 +9732,9 @@ export const ASSET_CATALOG = {
             "triangles": 5184,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9158,7 +9788,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.1,
       "placement": {
         "supported": false,
+        "sourceKind": "fence",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -9239,7 +9871,9 @@ export const ASSET_CATALOG = {
             "triangles": 5255,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -9250,7 +9884,9 @@ export const ASSET_CATALOG = {
             "triangles": 2626,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -9261,7 +9897,9 @@ export const ASSET_CATALOG = {
             "triangles": 1156,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -9272,7 +9910,9 @@ export const ASSET_CATALOG = {
             "triangles": 5255,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9325,14 +9965,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.2,
       "placement": {
-        "supported": false,
-        "collision": "structural-baked",
-        "baked": true,
+        "supported": true,
+        "sourceKind": "rock",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -9407,7 +10056,9 @@ export const ASSET_CATALOG = {
             "triangles": 5268,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -9418,7 +10069,9 @@ export const ASSET_CATALOG = {
             "triangles": 2634,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -9429,7 +10082,9 @@ export const ASSET_CATALOG = {
             "triangles": 1158,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -9440,7 +10095,9 @@ export const ASSET_CATALOG = {
             "triangles": 5268,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9493,14 +10150,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 4.5,
       "placement": {
-        "supported": false,
-        "collision": "structural-baked",
-        "baked": true,
+        "supported": true,
+        "sourceKind": "rock",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -9560,7 +10226,9 @@ export const ASSET_CATALOG = {
             "triangles": 18000,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9614,7 +10282,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.850113508902723,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -9685,7 +10355,9 @@ export const ASSET_CATALOG = {
             "triangles": 4494,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -9696,7 +10368,9 @@ export const ASSET_CATALOG = {
             "triangles": 3085,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -9707,7 +10381,9 @@ export const ASSET_CATALOG = {
             "triangles": 2383,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -9718,7 +10394,9 @@ export const ASSET_CATALOG = {
             "triangles": 4494,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9771,14 +10449,34 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 9,
       "placement": {
-        "supported": false,
-        "collision": "none",
+        "supported": true,
+        "sourceKind": "tree",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "body": {
+          "shape": "trunk-capsule",
+          "radius": 0.66,
+          "height": 8,
+          "offset": [
+            0.198,
+            0,
+            -0.066
+          ],
+          "source": "villageObstacles refined oak"
+        },
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -9848,7 +10546,9 @@ export const ASSET_CATALOG = {
             "triangles": 5003,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -9859,7 +10559,9 @@ export const ASSET_CATALOG = {
             "triangles": 3649,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -9870,7 +10572,9 @@ export const ASSET_CATALOG = {
             "triangles": 3000,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -9881,7 +10585,9 @@ export const ASSET_CATALOG = {
             "triangles": 5003,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -9934,14 +10640,34 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 12,
       "placement": {
-        "supported": false,
-        "collision": "none",
+        "supported": true,
+        "sourceKind": "tree",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "body": {
+          "shape": "trunk-capsule",
+          "radius": 0.32,
+          "height": 8,
+          "offset": [
+            0,
+            0,
+            0
+          ],
+          "source": "villageObstacles refined pine"
+        },
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "This asset is outside the three independently certified MVP prop types."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -9997,7 +10723,9 @@ export const ASSET_CATALOG = {
             "triangles": 151714,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10008,7 +10736,9 @@ export const ASSET_CATALOG = {
             "triangles": 71101,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10019,7 +10749,9 @@ export const ASSET_CATALOG = {
             "triangles": 31760,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 3,
@@ -10030,7 +10762,9 @@ export const ASSET_CATALOG = {
             "triangles": 6142,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 4,
@@ -10041,7 +10775,9 @@ export const ASSET_CATALOG = {
             "triangles": 2475,
             "materials": 1,
             "textures": 2,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10095,7 +10831,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 5.4040300799533725,
       "placement": {
         "supported": false,
+        "sourceKind": "tree",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10157,7 +10895,9 @@ export const ASSET_CATALOG = {
             "triangles": 187522,
             "materials": 16,
             "textures": 16,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10168,7 +10908,9 @@ export const ASSET_CATALOG = {
             "triangles": 187522,
             "materials": 16,
             "textures": 16,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10179,7 +10921,9 @@ export const ASSET_CATALOG = {
             "triangles": 187522,
             "materials": 16,
             "textures": 16,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -10190,7 +10934,9 @@ export const ASSET_CATALOG = {
             "triangles": 187522,
             "materials": 16,
             "textures": 16,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10244,7 +10990,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 9.933465957641602,
       "placement": {
         "supported": false,
+        "sourceKind": "background",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10306,7 +11054,9 @@ export const ASSET_CATALOG = {
             "triangles": 9434,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10317,7 +11067,9 @@ export const ASSET_CATALOG = {
             "triangles": 9434,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10328,7 +11080,9 @@ export const ASSET_CATALOG = {
             "triangles": 9434,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -10339,7 +11093,9 @@ export const ASSET_CATALOG = {
             "triangles": 9434,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10393,7 +11149,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 8.289731845259666,
       "placement": {
         "supported": false,
+        "sourceKind": "background",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10455,7 +11213,9 @@ export const ASSET_CATALOG = {
             "triangles": 5142,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10466,7 +11226,9 @@ export const ASSET_CATALOG = {
             "triangles": 2570,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10477,7 +11239,9 @@ export const ASSET_CATALOG = {
             "triangles": 1130,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -10488,7 +11252,9 @@ export const ASSET_CATALOG = {
             "triangles": 5142,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10542,7 +11308,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.8,
       "placement": {
         "supported": false,
+        "sourceKind": "wall",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10604,7 +11372,9 @@ export const ASSET_CATALOG = {
             "triangles": 5276,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10615,7 +11385,9 @@ export const ASSET_CATALOG = {
             "triangles": 2638,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10626,7 +11398,9 @@ export const ASSET_CATALOG = {
             "triangles": 1159,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -10637,7 +11411,9 @@ export const ASSET_CATALOG = {
             "triangles": 5276,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10691,7 +11467,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.8,
       "placement": {
         "supported": false,
+        "sourceKind": "wall",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10753,7 +11531,9 @@ export const ASSET_CATALOG = {
             "triangles": 5264,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -10764,7 +11544,9 @@ export const ASSET_CATALOG = {
             "triangles": 2632,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -10775,7 +11557,9 @@ export const ASSET_CATALOG = {
             "triangles": 1158,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -10786,7 +11570,9 @@ export const ASSET_CATALOG = {
             "triangles": 5264,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -10840,7 +11626,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.8,
       "placement": {
         "supported": false,
+        "sourceKind": "wall",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -10906,7 +11694,9 @@ export const ASSET_CATALOG = {
             "triangles": 419960,
             "materials": 4,
             "textures": 3,
-            "skinned": true
+            "skinned": true,
+            "clips": 3,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -10968,13 +11758,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.6999262937315507,
       "placement": {
         "supported": false,
+        "sourceKind": "player",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -11034,7 +11826,9 @@ export const ASSET_CATALOG = {
             "triangles": 110296,
             "materials": 13,
             "textures": 9,
-            "skinned": true
+            "skinned": true,
+            "clips": 9,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -11108,13 +11902,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.187304813034092,
       "placement": {
         "supported": false,
+        "sourceKind": "player",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -11174,7 +11970,9 @@ export const ASSET_CATALOG = {
             "triangles": 110296,
             "materials": 13,
             "textures": 9,
-            "skinned": true
+            "skinned": true,
+            "clips": 9,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -11248,13 +12046,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.187304813034092,
       "placement": {
         "supported": false,
+        "sourceKind": "player",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -11314,7 +12114,9 @@ export const ASSET_CATALOG = {
             "triangles": 110296,
             "materials": 13,
             "textures": 9,
-            "skinned": true
+            "skinned": true,
+            "clips": 9,
+            "morphTargets": 0
           }
         ],
         "skinned": true,
@@ -11388,13 +12190,15 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.187304813034092,
       "placement": {
         "supported": false,
+        "sourceKind": "player",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Animated actors use the actor definition/battle lifecycle, not static placement."
+        "reason": "Animated or deformed assets use their dedicated actor lifecycle, not static placement."
       },
       "reduction": {
         "locked": true,
@@ -11450,7 +12254,9 @@ export const ASSET_CATALOG = {
             "triangles": 4590,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -11461,7 +12267,9 @@ export const ASSET_CATALOG = {
             "triangles": 2767,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -11472,7 +12280,9 @@ export const ASSET_CATALOG = {
             "triangles": 2393,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -11483,7 +12293,9 @@ export const ASSET_CATALOG = {
             "triangles": 4590,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -11537,7 +12349,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 8,
       "placement": {
         "supported": false,
+        "sourceKind": "defense",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -11608,7 +12422,9 @@ export const ASSET_CATALOG = {
             "triangles": 1918,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -11619,7 +12435,9 @@ export const ASSET_CATALOG = {
             "triangles": 1918,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -11630,7 +12448,9 @@ export const ASSET_CATALOG = {
             "triangles": 1918,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -11641,7 +12461,9 @@ export const ASSET_CATALOG = {
             "triangles": 1918,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -11695,7 +12517,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.2,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "none",
+        "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -11757,7 +12581,9 @@ export const ASSET_CATALOG = {
             "triangles": 4822,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -11768,7 +12594,9 @@ export const ASSET_CATALOG = {
             "triangles": 2466,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -11779,7 +12607,9 @@ export const ASSET_CATALOG = {
             "triangles": 1556,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -11790,7 +12620,9 @@ export const ASSET_CATALOG = {
             "triangles": 4822,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -11844,7 +12676,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.6,
       "placement": {
         "supported": false,
+        "sourceKind": "prop",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -11906,7 +12740,9 @@ export const ASSET_CATALOG = {
             "triangles": 5265,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -11917,7 +12753,9 @@ export const ASSET_CATALOG = {
             "triangles": 2631,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -11928,7 +12766,9 @@ export const ASSET_CATALOG = {
             "triangles": 1647,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -11939,7 +12779,9 @@ export const ASSET_CATALOG = {
             "triangles": 5265,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -11993,7 +12835,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 2.6,
       "placement": {
         "supported": false,
+        "sourceKind": "defense",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -12055,7 +12899,9 @@ export const ASSET_CATALOG = {
             "triangles": 5173,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -12066,7 +12912,9 @@ export const ASSET_CATALOG = {
             "triangles": 2586,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -12077,7 +12925,9 @@ export const ASSET_CATALOG = {
             "triangles": 1137,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -12088,7 +12938,9 @@ export const ASSET_CATALOG = {
             "triangles": 5173,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -12142,7 +12994,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 1.4,
       "placement": {
         "supported": false,
+        "sourceKind": "defense",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -12204,7 +13058,9 @@ export const ASSET_CATALOG = {
             "triangles": 4933,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 1,
@@ -12215,7 +13071,9 @@ export const ASSET_CATALOG = {
             "triangles": 2465,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 2,
@@ -12226,7 +13084,9 @@ export const ASSET_CATALOG = {
             "triangles": 1520,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           },
           {
             "level": 0,
@@ -12237,7 +13097,9 @@ export const ASSET_CATALOG = {
             "triangles": 4933,
             "materials": 1,
             "textures": 1,
-            "skinned": false
+            "skinned": false,
+            "clips": 0,
+            "morphTargets": 0
           }
         ],
         "skinned": false,
@@ -12291,7 +13153,9 @@ export const ASSET_CATALOG = {
       "referenceHeight": 3.4,
       "placement": {
         "supported": false,
+        "sourceKind": "defense",
         "collision": "structural-baked",
+        "defaultCollision": "none",
         "baked": true,
         "scaleMin": 0.1,
         "scaleMax": 10,
@@ -12308,7 +13172,7 @@ export const ASSET_CATALOG = {
       }
     }
   ],
-  "contentRevision": "838643081a991722c4151aa2118a30ae486ddbcbf4f8d947edef3582487e0337"
+  "contentRevision": "6633c3b3ce37ed7ab8ea8b43212ba11a068c9d4f51f99a702a0d4bd949cb37eb"
 };
 export function getCatalogAsset(assetId,version){const entries=ASSET_CATALOG.entries.filter(entry=>entry.assetId===assetId&&(version===undefined||entry.version===version));if(entries.length!==1)throw new RangeError(entries.length?"Asset version is ambiguous: "+assetId:"Unknown catalog asset/version: "+assetId);return entries[0];}
 export function searchCatalog(query="",category=""){const terms=String(query).toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);return ASSET_CATALOG.entries.filter(entry=>(!category||entry.category===category)&&terms.every(term=>[entry.assetId,entry.name,...entry.tags].join(" ").toLocaleLowerCase().includes(term)));}

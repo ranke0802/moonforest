@@ -1,0 +1,62 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {parseHTML} from 'linkedom';
+import {NullEngine,Scene,ArcRotateCamera,MeshBuilder,Vector3,Matrix,PBRMaterial,RawTexture} from '@babylonjs/core';
+import '@babylonjs/loaders/glTF/index.js';
+import {setupDeveloperEditor} from '../src/developer-editor.js';
+import {AuthoredPlacementRuntime} from '../src/authored-placement-runtime.js';
+import {acquireGameToolLease} from '../src/game-tool-lease.js';
+import {ArenaNavigation} from '../src/navigation.js';
+import {readMapContainer} from '../src/map-container.js';
+import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+
+const assets=new URL('../public/assets/',import.meta.url),settle=async()=>{for(let i=0;i<10;i++)await new Promise(resolve=>setImmediate(resolve));};
+function domEnvironment(t){
+ const {document,window}=parseHTML('<html><body><main id="app"><canvas tabindex="0"></canvas></main></body></html>'),root=document.querySelector('#app'),canvas=root.querySelector('canvas'),saved=new Map();
+ class Pointer extends window.Event{constructor(type,options={}){super(type,{bubbles:true,cancelable:true});Object.assign(this,{button:type==='pointermove'?-1:0,buttons:type==='pointerup'?0:1,pointerId:1,pointerType:'mouse',clientX:0,clientY:0,altKey:false,shiftKey:false,ctrlKey:false,metaKey:false,...options});}}
+ for(const [name,value]of Object.entries({window,document,navigator:{userAgent:'Chrome DOM input fixture',platform:'Win32',maxTouchPoints:4},PointerEvent:Pointer,MouseEvent:Pointer,matchMedia:()=>({matches:false})})){saved.set(name,Object.getOwnPropertyDescriptor(globalThis,name));Object.defineProperty(globalThis,name,{configurable:true,writable:true,value});}
+ window.PointerEvent=Pointer;window.MouseEvent=Pointer;window.matchMedia=globalThis.matchMedia;
+ let focused=null;canvas.focus=()=>{focused=canvas;};Object.defineProperty(document,'activeElement',{configurable:true,get:()=>focused});
+ const captures=new Set();canvas.setPointerCapture=id=>captures.add(id);canvas.hasPointerCapture=id=>captures.has(id);canvas.releasePointerCapture=id=>captures.delete(id);
+ const rect={left:47,top:31,width:640,height:420,right:687,bottom:451};canvas.getBoundingClientRect=()=>rect;
+ Object.defineProperty(window.HTMLSelectElement.prototype,'value',{configurable:true,get(){return this.querySelector('option[selected]')?.getAttribute('value')??this.querySelector('option')?.getAttribute('value')??'';},set(value){for(const option of this.querySelectorAll('option'))option.toggleAttribute('selected',option.getAttribute('value')===String(value));}});
+ const restoreGlobals=()=>{for(const [name,descriptor]of saved){if(descriptor)Object.defineProperty(globalThis,name,descriptor);else delete globalThis[name];}};
+ return {window,document,root,canvas,rect,Pointer,restoreGlobals};
+}
+async function fixture(t){
+ const dom=domEnvironment(t),{root,canvas,rect,window}=dom,engine=new NullEngine({renderWidth:1280,renderHeight:840});engine.getCaps().instancedArrays=true;engine._renderingCanvas=canvas;engine.getInputElement=()=>canvas;engine.getInputElementClientRect=()=>rect;engine.getRenderingCanvasClientRect=()=>rect;engine.getHostWindow=()=>window;engine.getHardwareScalingLevel=()=>.5;
+ const scene=new Scene(engine);scene.skipPointerMovePicking=scene.skipPointerDownPicking=scene.skipPointerUpPicking=true;scene.detachControl();scene.useRightHandedSystem=true;
+ const camera=new ArcRotateCamera('camera',-Math.PI/2,.72,18,new Vector3(4,0,3),scene);camera.inputs.clear();scene.activeCamera=camera;const ground=MeshBuilder.CreateGround('terrain',{width:100,height:100},scene);ground.isPickable=false;ground.computeWorldMatrix(true);
+ const world={scene,camera,ground,mapId:'village',sceneInputMode:'manual-game',toolGeneration:0,terrain:{heightAt:()=>0},navigation:new ArenaNavigation([]),touchDevice:false,lighting:{shadowsActive:false,direction:new Vector3(.3,.8,.2),registerMeshes(){}},environment:{}},state={ready:true,loading:false,dead:false,hidden:false,settings:false},input={suspended:false,setSuspended(value){this.suspended=value;}},audio={suspended:false,voices:new Set(),beds:{desired:{},request(){}},stopAll(){},setSuspended(value){this.suspended=value;}},player={position:new Vector3(4,0,3)},counts={loads:0,pre:0,commits:0};
+ scene.onPrePointerObservable.add(()=>counts.pre++);
+ world.acquireToolLease=async options=>acquireGameToolLease({world,root,canvas,input,audio,getState:()=>state,setReady:value=>state.ready=value,resetInput(){},reconcile(){}},options);
+ class ActualRuntime extends AuthoredPlacementRuntime{
+  constructor(world,options){super(world,{...options,baseUrl:'https://editor.test/',initialize:async()=>{},readManifest:async url=>JSON.parse(readFileSync(new URL(url.pathname.replace(/^\/assets\//,''),assets),'utf8')),loadContainer:async(model,scene)=>{
+   counts.loads++;const source=new URL(new URL(model).pathname.replace(/^\/assets\//,''),assets),decoded=await readRuntimeGltf(source),gltf=structuredClone(decoded.gltf);for(const key of ['extensionsUsed','extensionsRequired'])gltf[key]=(gltf[key]??[]).filter(value=>value!=='EXT_meshopt_compression');for(const buffer of gltf.buffers)if(buffer.uri)buffer.uri='data:application/octet-stream;base64,'+decoded.files.get(buffer.uri).data.toString('base64');
+   const container=await readMapContainer(scene,gltf,'',{skipMaterials:true}),paint=new PBRMaterial('actual-prop-paint',scene),texture=RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]),1,1,scene);texture.getInternalTexture().isReady=true;paint.albedoTexture=texture;paint.transparencyMode=0;container.materials.push(paint);container.textures.push(texture);for(const mesh of container.meshes)if(mesh.getTotalVertices())mesh.material=paint;return container;
+  }});this.textureStreaming.maxTextureSize=1;}
+ }
+ const api=setupDeveloperEditor({root,world,getPlayer:()=>player,getState:()=>state,Runtime:ActualRuntime,setupLayout:null,onCommit:()=>counts.commits++});
+ const render=()=>{camera.update();camera.getViewMatrix();camera.getProjectionMatrix();scene.render(false);},click=async name=>{root.querySelector(`[data-cmd="${name}"]`).dispatchEvent(new window.Event('click',{bubbles:true}));await settle();},wait=async predicate=>{const until=performance.now()+15000;while(!predicate()){for(const texture of scene.textures)if(texture.getInternalTexture())texture.getInternalTexture().isReady=true;assert.notEqual(root.querySelector('[data-status]').dataset.error,'true',root.querySelector('[data-error-detail]').textContent);assert.ok(performance.now()<until,root.querySelector('[data-status]').textContent);await new Promise(resolve=>setTimeout(resolve,5));}await settle();},project=point=>{const p=Vector3.Project(point,Matrix.Identity(),scene.getTransformMatrix(),camera.viewport.toGlobal(engine.getRenderWidth(),engine.getRenderHeight()));return {x:p.x*.5,y:p.y*.5};},dispatch=(type,p,extra={})=>canvas.dispatchEvent(new dom.Pointer(type,{clientX:p.x+rect.left,clientY:p.y+rect.top,...extra}));
+ t.after(async()=>{try{api.dispose();await world.authoredPlacements?.dispose();scene.dispose();engine.dispose();}finally{dom.restoreGlobals();}});await wait(()=>api.isEditing());await click('place');await wait(()=>world.authoredPlacements?.records.size===1&&!root.querySelector('[data-cmd="apply"]').disabled);render();
+ return {...dom,engine,scene,camera,world,api,counts,render,click,wait,project,dispatch};
+}
+
+test('real canvas events reach native SceneInputManager for shipped-prop drag at CSS coordinates and DPR 2',async t=>{
+ const f=await fixture(t),runtime=f.world.authoredPlacements,record=[...runtime.records.values()][0],body=f.project(record.bounds.center),before=runtime.document,revision=f.world.placementRevision;
+ assert.equal(f.scene._inputManager._alreadyAttached,true,'an explicit tool must attach the otherwise-detached gameplay scene input stream');
+ assert.equal(f.scene.pick(body.x,body.y,mesh=>mesh.isPickable&&mesh.isVisible&&mesh.isEnabled()).pickedMesh.metadata.placementInstanceId,record.instance.instanceId);
+ f.dispatch('pointerdown',body);await settle();assert.equal(f.root.querySelector('[data-cmd="apply"]').disabled,true);assert.equal(f.camera.inputs.attachedToElement,false);assert.ok(f.counts.pre>0);const endpoint={x:body.x+70,y:body.y+35};f.dispatch('pointermove',endpoint);await settle();assert.deepEqual(runtime.document,before,'native move previews only');assert.equal(f.world.placementRevision,revision);f.dispatch('pointerup',endpoint);await f.wait(()=>!f.root.querySelector('[data-cmd="apply"]').disabled);assert.equal(f.world.placementRevision,revision+1);assert.equal(f.camera.inputs.attachedToElement,true);assert.notDeepEqual(runtime.document.instances[0].transform.position,before.instances[0].transform.position);
+ const second=f.project(record.bounds.center);f.dispatch('pointerdown',second);await settle();f.dispatch('pointerup',{x:second.x-35,y:second.y-25});await f.wait(()=>!f.root.querySelector('[data-cmd="apply"]').disabled);assert.equal(f.world.placementRevision,revision+2,'a second native drag is not swallowed as an ignored click');await f.click('apply');assert.equal(f.scene._inputManager._alreadyAttached,false,'returning to gameplay restores its manual input policy');const delivered=f.counts.pre;f.dispatch('pointerdown',second);assert.equal(f.counts.pre,delivered,'no tool pointer listener remains in normal play');
+});
+
+test('real touch pointercancel after a preview does not become a translated pointer-up commit',async t=>{
+ const f=await fixture(t),runtime=f.world.authoredPlacements,record=[...runtime.records.values()][0],body=f.project(record.bounds.center),before=runtime.document,revision=f.world.placementRevision;
+ f.dispatch('pointerdown',body,{pointerId:8,pointerType:'touch'});await settle();assert.equal(f.root.querySelector('[data-cmd="apply"]').disabled,true,'native touch actually starts an owned drag');f.dispatch('pointermove',{x:body.x+60,y:body.y-30},{pointerId:8,pointerType:'touch'});await settle();assert.ok(runtime.stats.previews>0,'native input must preview before cancellation');f.dispatch('pointercancel',{x:body.x+60,y:body.y-30},{pointerId:8,pointerType:'touch',buttons:0});await f.wait(()=>!f.root.querySelector('[data-cmd="apply"]').disabled);assert.equal(f.world.placementRevision,revision);assert.deepEqual(runtime.document,before);assert.equal(f.camera.inputs.attachedToElement,true);
+});
+
+test('native pan inertia stops before a prop drag renders its next frame',async t=>{
+ const f=await fixture(t),record=[...f.world.authoredPlacements.records.values()][0],initial=f.camera.getTarget().clone();f.world.toolLease.setCameraMode('pan');f.dispatch('pointerdown',{x:540,y:80});f.dispatch('pointermove',{x:495,y:110});f.render();f.dispatch('pointerup',{x:495,y:110});f.render();assert.ok(!f.camera.getTarget().equalsWithEpsilon(initial,1e-7),'actual canvas pan changes the native camera target');assert.ok(f.camera.movement._panVelocity.lengthSquared()>0,'the native gesture leaves a real inertia tail');
+ const body=f.project(record.bounds.center);f.dispatch('pointerdown',body);await settle();assert.equal(f.camera.inputs.attachedToElement,false,'the prop owns this native pointer gesture');const frozen=f.camera.getTarget().clone(),alpha=f.camera.alpha,beta=f.camera.beta,radius=f.camera.radius;f.render();assert.ok(f.camera.getTarget().equalsWithEpsilon(frozen,1e-9),'rendering during a drag must not move the target from pending pan velocity');assert.equal(f.camera.alpha,alpha);assert.equal(f.camera.beta,beta);assert.equal(f.camera.radius,radius);f.dispatch('pointercancel',body,{buttons:0});await settle();
+});

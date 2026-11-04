@@ -39,7 +39,7 @@ export class VillageVisibility {
       if(!Number.isFinite(distance)||distance<=range+1e-6){for(const i of cell.indices)flags[i]=1;checked+=cell.indices.length;}
     }
     this.stats.shadowRecordsTotal=this.records.length;this.stats.shadowRecordsChecked=checked;
-    return this.records.filter((r,i)=>flags[i]&&r.meshes.length&&r.fogVisible!==false);
+    return this.records.filter((r,i)=>flags[i]&&r.meshes.length&&r.fogVisible!==false&&r.authoredSuppressed!==true);
   }
   update(camera,player,dt){
     const runtime=this.world.caveFog;
@@ -72,7 +72,7 @@ export class VillageVisibility {
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<range&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(caveFogRootEnabled(r));}cell.active=active;}
-      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false)activeInstances++;}
+      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false&&r.authoredSuppressed!==true)activeInstances++;}
     }
     Object.assign(this.stats,{activeCells,activeInstances});
   }

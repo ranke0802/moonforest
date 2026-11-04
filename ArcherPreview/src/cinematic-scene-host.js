@@ -135,8 +135,24 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
   setPlaybackState(state){
    playbackState=state;const session=active;if(!session||!current(session))return;
    const canvas=world.scene.getEngine().getRenderingCanvas?.();
-   if(state==='playing')world.camera.detachControl?.();else if(canvas)world.camera.attachControl?.(canvas,true);
+   if(state==='playing'){world.camera.movement?.resetPanVelocity?.();world.camera.movement?.resetRotationVelocity?.();world.camera.movement?.resetZoomVelocity?.();world.camera.detachControl?.();}else if(canvas){if(session.lease.attachCamera)session.lease.attachCamera();else world.camera.attachControl?.(canvas,true);}
   },
+  getActorHandles(){
+   const session=active;if(!session||!current(session)||!session.prepared)return [];
+   return [...session.prepared.actors].map(([actorId,target])=>{
+    const record=target.kind==='static'?session.prepared.staticRuntime.records.get(target.instanceId):target.kind==='bound'?target.record:null,root=target.kind==='animated'?target.slot.adapter.encounter.actor:record?.root;
+    if(!root)return null;root.computeWorldMatrix(true);const meshes=root.getChildMeshes?.().filter(mesh=>mesh.getTotalVertices()>0)??[],bounds=root.getHierarchyBoundingVectors(),scale=target.kind==='animated'?root.scaling.x/target.slot.baseScale.x:record?.instance?.transform.scale??target.scale??1;
+    return {actorId,root,meshes,min:bounds.min,max:bounds.max,readOnly:target.kind==='bound',position:root.position.asArray(),rotation:(root.rotationQuaternion??Quaternion.FromEulerVector(root.rotation)).asArray(),scale};
+   }).filter(Boolean);
+  },
+  previewActorTransform(actorId,{position,rotation,scale}){
+   if(!Array.isArray(position)||position.length!==3||!position.every(value=>Number.isFinite(value)&&Math.abs(value)<=10000)||!Array.isArray(rotation)||rotation.length!==4||!rotation.every(Number.isFinite)||Math.abs(Math.hypot(...rotation)-1)>.01||!Number.isFinite(scale)||scale<.05||scale>20)throw new Error('유효한 위치·회전·크기를 사용하세요.');
+   const session=active;if(!session||!current(session))throw bossPreparationCancelled();const target=session.prepared?.actors.get(actorId);if(!target||target.kind==='bound')throw new Error('이 대상은 위치를 바꿀 수 없습니다.');
+   if(target.kind==='static')session.prepared.staticRuntime.sampleFreeTransforms([{instanceId:target.instanceId,position,rotation,scale}]);
+   else{const root=target.slot.adapter.encounter.actor;root.position.copyFromFloats(...position);root.rotationQuaternion??=Quaternion.Identity();root.rotationQuaternion.copyFromFloats(...rotation);root.scaling.copyFrom(target.slot.baseScale).scaleInPlace(scale);root.computeWorldMatrix(true);for(const node of root.getDescendants())node.computeWorldMatrix?.(true);for(const skeleton of target.slot.adapter.encounter.asset.skeletons??[])skeleton.prepare(true);}
+   return true;
+  },
+  getLiveLease(){return active&&!active.released?active.lease:null;},
   captureCamera(){world.camera.getViewMatrix();return {position:world.camera.position.asArray(),target:world.camera.getTarget().asArray(),fov:world.camera.fov};},
   async acquire(document,{token,signal,isCurrent=()=>true}={}){
    if(disposed)throw bossPreparationCancelled();if(active&&!active.released)throw new Error('Cinematic host already owns a scene lease');
@@ -166,7 +182,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
      check(session);const initial=frame.actors.find(item=>item.actorId===actor.actorId);
      if(actor.instanceId){
       if(definition||document.tracks.transforms.some(track=>track.actorId===actor.actorId)||document.tracks.animations.some(track=>track.actorId===actor.actorId))throw new Error('Bound existing instances are read-only in cinematic playback');
-      const record=[...(world.villageRenderRecords??[]),...(world.authoredPlacementRecords??[])].find(item=>(item.placement?.id??item.instanceId)===actor.instanceId);
+      const record=[...(world.authoredPlacementRecords??[]),...(world.villageRenderRecords??[])].find(item=>!item.authoredSuppressed&&(item.placement?.id??item.instanceId)===actor.instanceId);
       if(!record)throw new Error('Bound existing instance is not loaded');
       if((record.instance?.assetId??record.placement?.asset)!==actor.assetId||record.instance&&record.instance.assetVersion!==actor.assetVersion)throw new Error('Bound instance asset identity differs from the cinematic reference');
       const position=record.root.position.asArray(),rotation=(record.root.rotationQuaternion??Quaternion.FromEulerVector(record.root.rotation)).asArray(),entry=placementCatalogAsset(catalog,actor.assetId,actor.assetVersion),unit=record.instance?1:entry.units.metersPerSourceUnit;

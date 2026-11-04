@@ -4,6 +4,7 @@ import {NullEngine,Scene,ArcRotateCamera,TransformNode,MeshBuilder,StandardMater
 import {createCinematicSceneHost,createCinematicPoseSampler} from '../src/cinematic-scene-host.js';
 import {createCinematicDraft,evaluateCinematic} from '../src/cinematic-document.js';
 import {CinematicPlayer} from '../src/cinematic-player.js';
+import {cinematicLocalTransform} from '../src/cinematic-interaction.js';
 
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),get resolve(){return resolve;}};};
@@ -71,6 +72,16 @@ test('editor seek and game frame driver share exact anchored camera and actor tr
  near(f.adapters[0].encounter.hip.position.asArray(),pose);near(f.world.camera.position.asArray(),expected.camera.position);
  const capture=f.host.captureCamera();near(capture.position,expected.camera.position);near(capture.target,expected.camera.target);
  assert.equal(f.host.inspect().engineOwned,false);assert.equal(f.host.inspect().rafOwned,false);assert.equal(f.counts.shadowSets,1);
+});
+
+test('dragged actor world transforms round-trip a rotated anchor and persist through timeline resampling',async t=>{
+ const f=fixture(t),doc=document();doc.anchor={position:[5,1,-3],rotation:Quaternion.RotationYawPitchRoll(.7,.2,-.1).asArray()};await f.player.load(doc);
+ const handle=f.host.getActorHandles()[0];assert.equal(handle.actorId,'neutral-1');assert.equal(handle.readOnly,false);assert.ok(handle.meshes.length);assert.equal(f.host.getLiveLease(),f.world.toolLease);
+ const transform={position:[7,2,-5],rotation:Quaternion.RotationYawPitchRoll(.2,-.1,.3).asArray(),scale:1.4};f.host.previewActorTransform(handle.actorId,transform);
+ near(f.host.getActorHandles()[0].position,transform.position);near(f.host.getActorHandles()[0].rotation,transform.rotation);assert.equal(f.host.getActorHandles()[0].scale,transform.scale);
+ const next=structuredClone(doc);Object.assign(next.actors[0],cinematicLocalTransform(doc,transform));f.player.document=next;f.player.seek(.8);
+ near(f.host.getActorHandles()[0].position,transform.position);near(f.host.getActorHandles()[0].rotation,transform.rotation);assert.equal(f.host.getActorHandles()[0].scale,transform.scale);
+ const before=f.host.getActorHandles()[0].position;assert.throws(()=>f.host.previewActorTransform(handle.actorId,{...transform,position:[NaN,0,0]}),/유효한/);near(f.host.getActorHandles()[0].position,before);
 });
 
 test('sixteen warm replays plateau model/pose resources and release the lease exactly once each time',async t=>{

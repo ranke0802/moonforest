@@ -4,6 +4,7 @@ import {PLAINS_PLACEMENTS} from './great-plains-layout.js';
 import {FOREST_PLACEMENTS} from './monster-forest-layout.js';
 import {CAVE_PLACEMENTS} from './witch-cave-layout.js';
 import {CHAPTER_POINTS} from './chapter-quest-points.js';
+import {editableBasePlacement} from './editable-asset-index.js';
 
 export const PLACEMENT_COORDINATE_SYSTEM='RH_Y_UP_METRES';
 export const PLACEMENT_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
@@ -30,6 +31,10 @@ export function placementCatalogAsset(catalog,assetId,version){
 function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';return JSON.stringify(value);}
 function revision(value){let hash=0xcbf29ce484222325n;for(const char of canonical(value)){hash^=BigInt(char.codePointAt(0));hash=BigInt.asUintN(64,hash*0x100000001b3n);}return 'base-v1-'+hash.toString(16).padStart(16,'0');}
 
+export function basePlacementEditability(mapId,source,asset){
+ return editableBasePlacement(mapId,source,asset);
+}
+
 export function createBasePlacementManifest(mapId,{catalog,placements=layouts[mapId]}={}){
  if(!PLACEMENT_MAPS.includes(mapId)||!Array.isArray(placements))fail('mapId','unsupported map');
  const seen=new Set(),instances=placements.map(source=>{
@@ -38,8 +43,12 @@ export function createBasePlacementManifest(mapId,{catalog,placements=layouts[ma
   const yaw=source.yaw??0;
   return {instanceId:source.id,assetId:source.asset,assetVersion:entry?.version??entry?.assetVersion??'base-layout',readOnly:true,reason:source.pad||source.essentialStructural||['wall','building','fence'].includes(source.kind)?'Base terrain pads, structures or baked collision require regenerated derived data.':'The immutable base map is preserved; create an independent overlay copy to edit.',transform:{position:[source.x,source.elevation??0,source.z],rotation:[0,Math.sin(yaw/2),0,Math.cos(yaw/2)],scale:source.scale??1},source:copy(source)};
  });
+ // Editor capabilities do not change the immutable-layout revision. Old saved
+ // overlays still refer to the exact same source transforms and stable IDs.
+ const baseRevision=revision({mapId,instances});
+ for(const instance of instances){const asset=catalogEntries(catalog).find(entry=>entry.assetId===instance.assetId&&(entry.version??entry.assetVersion)===instance.assetVersion),policy=basePlacementEditability(mapId,instance.source,asset);Object.assign(instance,policy,{readOnly:!policy.editable});}
  const protectedIds=[...seen,...CHAPTER_POINTS.filter(point=>point.map===mapId).map(point=>point.id)];
- return {version:1,mapId,coordinateSystem:PLACEMENT_COORDINATE_SYSTEM,baseRevision:revision({mapId,instances}),instances,protectedIds:[...new Set(protectedIds)]};
+ return {version:1,mapId,coordinateSystem:PLACEMENT_COORDINATE_SYSTEM,baseRevision,instances,protectedIds:[...new Set(protectedIds)]};
 }
 export function createEmptyPlacementDocument(baseManifest){return {version:1,mapId:baseManifest.mapId,baseRevision:baseManifest.baseRevision,revision:0,coordinateSystem:PLACEMENT_COORDINATE_SYSTEM,instances:[]};}
 
@@ -54,11 +63,13 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
  baseManifest??=createBasePlacementManifest(document.mapId,{catalog});
  if(baseManifest.mapId!==document.mapId||baseManifest.baseRevision!==document.baseRevision)fail('baseRevision','base map revision conflict','BASE_REVISION_CONFLICT');
  if(!Array.isArray(document.instances)||document.instances.length>maxInstances)fail('instances',`expected at most ${maxInstances} instances`);
- const protectedIds=new Set(baseManifest.protectedIds??baseManifest.instances.map(row=>row.instanceId)),baseIds=new Set(baseManifest.instances.map(row=>row.instanceId)),seen=new Set();
+ const protectedIds=new Set(baseManifest.protectedIds??baseManifest.instances.map(row=>row.instanceId)),baseRows=new Map(baseManifest.instances.map(row=>[row.instanceId,row])),baseIds=new Set(baseRows.keys()),seen=new Set();
  const instances=document.instances.map((instance,index)=>{
-  const path=`instances[${index}]`;object(instance,path,['instanceId','assetId','assetVersion','transform','attachment','collision']);
+  const path=`instances[${index}]`;object(instance,path,['instanceId','assetId','assetVersion','transform','attachment','collision','sourceInstanceId']);
   const instanceId=identifier(instance.instanceId,path+'.instanceId');
-  if(seen.has(instanceId)||protectedIds.has(instanceId))fail(path+'.instanceId','duplicate or protected base/quest ID');seen.add(instanceId);
+  const sourceInstanceId=instance.sourceInstanceId===undefined?undefined:identifier(instance.sourceInstanceId,path+'.sourceInstanceId'),source=sourceInstanceId===undefined?null:baseRows.get(sourceInstanceId);
+  if(sourceInstanceId!==undefined){if(sourceInstanceId!==instanceId)fail(path+'.sourceInstanceId','base replacement must keep its original stable ID');if(!source?.editable)fail(path+'.sourceInstanceId',source?.reason??'unknown or locked base placement','READ_ONLY_BASE');if(instance.assetId!==source.assetId||instance.assetVersion!==source.assetVersion)fail(path+'.assetId','base replacement must retain its source asset and version');}
+  if(seen.has(instanceId)||(protectedIds.has(instanceId)&&!source))fail(path+'.instanceId','duplicate or protected base/quest ID');seen.add(instanceId);
   const assetId=identifier(instance.assetId,path+'.assetId');
   if(typeof instance.assetVersion!=='string'||instance.assetVersion.length>200)fail(path+'.assetVersion','invalid asset version');
   const asset=placementCatalogAsset(catalog,assetId,instance.assetVersion),placement=asset.placement;
@@ -80,8 +91,9 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
   if((surface==='wall'||surface==='ceiling')&&supportId==='terrain')fail(path+'.attachment.supportId','wall/ceiling requires an immutable base mesh support');
   if(!['solid','none'].includes(instance.collision))fail(path+'.collision','expected solid or none');
   if(instance.collision==='solid'&&(surface!=='ground'||placement.collision!=='independent-static'||placement.solidSurfaces&&!placement.solidSurfaces.includes(surface)))fail(path+'.collision','solid collision is certified only for ground-attached independent props');
-  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision};
+  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{})};
  });
+ const overridden=new Set(instances.map(instance=>instance.sourceInstanceId).filter(Boolean));for(const instance of instances)if(overridden.has(instance.attachment.supportId))fail('attachment.supportId','이 소품에 붙인 장식을 먼저 옮겨 주세요. 편집 중인 기존 소품은 고정 지지면으로 사용할 수 없어요.');
  return {...copy(document),instances};
 }
 

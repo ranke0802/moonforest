@@ -1,0 +1,206 @@
+{
+  "generatedAt": "2026-11-04T05:12:44.925Z",
+  "passed": true,
+  "baselineCommit": "da44cea24a513134499d54c3239b27db2ce3b62e",
+  "baselineLeaseSha256": "07b16f8452fdec4c62d3daeca493b187fca3ad1097920d582f78d3993515067a",
+  "sourceHashes": {
+    "src/world.js": "5aa4fbc557839be03f6c234e6ed767d1168ff9af4e64a968fb72c862c3e8efc5",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/tool-camera-input.js": "844ab8f69ce89ee48cbb93cf5adbdaec54cdfef1470f43781dd8531d93d1f504"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "passed": true,
+      "label": "deployed-baseline",
+      "domEvents": 9,
+      "attachedDuring": false,
+      "preEventsDuringLease": 0,
+      "preEventsAfterRelease": 0,
+      "traffic": [],
+      "initial": {
+        "alpha": 1.1938052083641213,
+        "beta": 1.18,
+        "radius": 4.8,
+        "target": [
+          0,
+          1.02,
+          0
+        ]
+      },
+      "afterOrbit": {
+        "alpha": 1.1938052083641213,
+        "beta": 1.18
+      },
+      "beforePan": [
+        0,
+        1.02,
+        0
+      ],
+      "afterPan": [
+        0,
+        1.02,
+        0
+      ],
+      "leftPanMode": null,
+      "orbitMoved": false,
+      "panMoved": false,
+      "detachedAfter": true,
+      "cameraRestored": true,
+      "nativeSceneInputOwnerReleased": true,
+      "cssRect": {
+        "left": 47,
+        "top": 31,
+        "width": 640,
+        "height": 360,
+        "right": 687,
+        "bottom": 391
+      },
+      "renderSize": [
+        1280,
+        720
+      ],
+      "hardwareScalingLevel": 0.5
+    },
+    {
+      "passed": true,
+      "label": "current-source",
+      "domEvents": 12,
+      "attachedDuring": true,
+      "preEventsDuringLease": 11,
+      "preEventsAfterRelease": 0,
+      "traffic": [
+        {
+          "type": 1,
+          "event": "pointerdown",
+          "x": 350,
+          "y": 180
+        },
+        {
+          "type": 4,
+          "event": "pointermove",
+          "x": 425,
+          "y": 210
+        },
+        {
+          "type": 2,
+          "event": "pointerup",
+          "x": 425,
+          "y": 210
+        },
+        {
+          "type": 1,
+          "event": "pointerdown",
+          "x": 350,
+          "y": 180
+        },
+        {
+          "type": 4,
+          "event": "pointerdown",
+          "x": 350,
+          "y": 180
+        },
+        {
+          "type": 4,
+          "event": "pointermove",
+          "x": 395,
+          "y": 205
+        },
+        {
+          "type": 2,
+          "event": "pointerup",
+          "x": 395,
+          "y": 205
+        },
+        {
+          "type": 1,
+          "event": "pointerdown",
+          "x": 350,
+          "y": 180
+        },
+        {
+          "type": 4,
+          "event": "pointerdown",
+          "x": 350,
+          "y": 180
+        },
+        {
+          "type": 4,
+          "event": "pointermove",
+          "x": 395,
+          "y": 205
+        },
+        {
+          "type": 2,
+          "event": "pointerup",
+          "x": 395,
+          "y": 205
+        }
+      ],
+      "initial": {
+        "alpha": 1.1938052083641213,
+        "beta": 1.18,
+        "radius": 4.8,
+        "target": [
+          0,
+          1.02,
+          0
+        ]
+      },
+      "afterOrbit": {
+        "alpha": 1.2688052083641213,
+        "beta": 1.15
+      },
+      "beforePan": [
+        0,
+        1.02,
+        0
+      ],
+      "afterPan": [
+        -0.04600090518593788,
+        1.0428190992509228,
+        0.00363393649458885
+      ],
+      "leftPanMode": {
+        "before": [
+          -0.04600090518593788,
+          1.0428190992509228,
+          0.00363393649458885
+        ],
+        "after": [
+          -0.13340262503921985,
+          1.086175387827676,
+          0.01053841583430766
+        ],
+        "anglesBefore": [
+          1.2688052083641213,
+          1.15
+        ],
+        "anglesAfter": [
+          1.2688052083641213,
+          1.15
+        ],
+        "mode": "pan"
+      },
+      "orbitMoved": true,
+      "panMoved": true,
+      "detachedAfter": true,
+      "cameraRestored": true,
+      "nativeSceneInputOwnerReleased": true,
+      "cssRect": {
+        "left": 47,
+        "top": 31,
+        "width": 640,
+        "height": 360,
+        "right": 687,
+        "bottom": 391
+      },
+      "renderSize": [
+        1280,
+        720
+      ],
+      "hardwareScalingLevel": 0.5
+    }
+  ],
+  "scope": "Independent actual createWorld + canvas DOM event dispatch + Babylon WebDeviceInputSystem/SceneInputManager/native ArcRotateCamera. No direct Observable notifications, Scene.simulatePointer calls or picking replacements. Linkedom supplies DOM events and a declared offset client rect/DPR2; NullEngine does not prove browser layout, trusted event behavior, GPU rendering or end-user usability."
+}

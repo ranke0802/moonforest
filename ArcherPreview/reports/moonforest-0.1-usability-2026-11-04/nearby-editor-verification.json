@@ -1,0 +1,97 @@
+{
+  "generatedAt": "2026-11-04T05:25:50.762Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/nearby-editor.js": "5170bfea0222d3412fece62c2027a9411bdad89f4305c50295546791ea98dc7d",
+    "src/main.js": "0aa0c5061eb4f03ba9f39cbd005fcb7d26feb6984f66cd921148806a201df69b",
+    "src/editable-asset-index.js": "35f9311850afc1d0a0a721a500e4257da1385a8e8b5cc4355c26ad613f64f29e"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "all thirteen approved base definitions are discoverable, named and editable without loading model resources",
+      "passed": true,
+      "definitions": 13,
+      "categories": [
+        "plant",
+        "prop",
+        "tree",
+        "rock"
+      ]
+    },
+    {
+      "name": "actual shipped village objects use original stable IDs in the proximity list",
+      "passed": true,
+      "actualBaseId": "handcart-25"
+    },
+    {
+      "name": "distance sorting, tie-breaking, radius boundary and limit are deterministic",
+      "passed": true,
+      "inclusiveRadius": 12,
+      "tieOrder": "instanceId"
+    },
+    {
+      "name": "same-ID moved base overlays replace the old position and deduplicate against original placements",
+      "passed": true,
+      "sameId": "base-cart",
+      "oldPositionRemoved": true,
+      "newPositionListedOnce": true
+    },
+    {
+      "name": "protected cave/base reasons stay visible while independently authored props remain editable",
+      "passed": true,
+      "protectedReason": "동굴의 기존 고정 충돌",
+      "independentOverlayEditable": true
+    },
+    {
+      "name": "native DOM clicks dispatch the exact selected ID once while work is pending",
+      "passed": true,
+      "exactId": "base-cart",
+      "pendingDispatches": 1
+    },
+    {
+      "name": "a rejected edit remains readable and allows retry without retaining busy state",
+      "passed": true,
+      "failedAttempt": 1,
+      "successfulRetry": 1
+    },
+    {
+      "name": "tool ownership and nonplayable states hide the nearby menu without stale dispatch",
+      "passed": true,
+      "states": [
+        "toolLease",
+        "ready=false",
+        "dead",
+        "hidden",
+        "loading",
+        "settings"
+      ]
+    },
+    {
+      "name": "click then disposal/map-generation change cannot dispatch queued stale selection",
+      "passed": true,
+      "postDisposeDispatches": 0,
+      "postTravelDispatches": 0,
+      "liveObserversAfterDispose": 0
+    },
+    {
+      "name": "actual main lazy-loader callback forwards selection and rejects old-map results before acquiring editor",
+      "passed": true,
+      "realMainBodyExecuted": true,
+      "oldMapEditorEntries": 0,
+      "currentSelection": "my-crate"
+    },
+    {
+      "name": "actual main deferred callback rechecks readiness, modal, death and scene disposal",
+      "passed": true,
+      "deferredGuards": [
+        "ready",
+        "loading",
+        "modal",
+        "dead",
+        "scene-disposed"
+      ]
+    }
+  ],
+  "scope": "Pure proximity/index cases and connected LinkeDOM click events; real production main onEdit callback body executed with deferred loader and live state mocks. No browser automation, pixel, OS input or device-performance claim."
+}

@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-11-04T05:27:31.559Z",
+  "passed": true,
+  "tests": 1685,
+  "failed": 0,
+  "skipped": 0,
+  "durationMs": 156119.0558,
+  "sourceFiles": 32,
+  "sourceUnchanged": true,
+  "preexistingDirtyReportsPreserved": 39,
+  "preexistingReportWritesRestored": 13,
+  "browserAutomation": false,
+  "scope": "Node regression and independent native DOM/input chains; no pixels or device performance"
+}

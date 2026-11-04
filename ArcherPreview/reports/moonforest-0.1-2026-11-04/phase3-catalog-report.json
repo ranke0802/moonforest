@@ -1,7 +1,7 @@
 {
   "version": 1,
   "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
-  "catalogContentRevision": "838643081a991722c4151aa2118a30ae486ddbcbf4f8d947edef3582487e0337",
+  "catalogContentRevision": "6633c3b3ce37ed7ab8ea8b43212ba11a068c9d4f51f99a702a0d4bd949cb37eb",
   "entries": 82,
   "modelsRead": 247,
   "manifests": [
@@ -88,6 +88,16 @@
   ],
   "editable": [
     {
+      "assetId": "bush",
+      "version": "6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7",
+      "contentHash": "6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest",
+        "village"
+      ]
+    },
+    {
       "assetId": "crate-barrel-cluster",
       "version": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
       "contentHash": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
@@ -108,6 +118,50 @@
       ]
     },
     {
+      "assetId": "forest-01-sickly-oak",
+      "version": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+      "contentHash": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest"
+      ]
+    },
+    {
+      "assetId": "forest-02-dead-tree",
+      "version": "beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39",
+      "contentHash": "beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest"
+      ]
+    },
+    {
+      "assetId": "forest-04-poison-fungi",
+      "version": "4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f",
+      "contentHash": "4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest"
+      ]
+    },
+    {
+      "assetId": "forest-05-thorn-bramble",
+      "version": "61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72",
+      "contentHash": "61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest"
+      ]
+    },
+    {
+      "assetId": "garden-bed",
+      "version": "2c584a5e3153f65be86d173fea4b9d24daed1fa0d40dd739079913592ab0340f",
+      "contentHash": "2c584a5e3153f65be86d173fea4b9d24daed1fa0d40dd739079913592ab0340f",
+      "usedMaps": [
+        "village"
+      ]
+    },
+    {
       "assetId": "handcart",
       "version": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
       "contentHash": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
@@ -115,6 +169,47 @@
         "great-plains",
         "village",
         "witch-cave"
+      ]
+    },
+    {
+      "assetId": "rock-01-mossy-boulder",
+      "version": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+      "contentHash": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest",
+        "village",
+        "witch-cave"
+      ]
+    },
+    {
+      "assetId": "rock-02-jagged-outcrop",
+      "version": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+      "contentHash": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest",
+        "village",
+        "witch-cave"
+      ]
+    },
+    {
+      "assetId": "tree-01-round-oak",
+      "version": "5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559",
+      "contentHash": "5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559",
+      "usedMaps": [
+        "great-plains",
+        "village"
+      ]
+    },
+    {
+      "assetId": "tree-02-slender-pine",
+      "version": "cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249",
+      "contentHash": "cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249",
+      "usedMaps": [
+        "great-plains",
+        "monster-forest",
+        "village"
       ]
     }
   ],
@@ -134,7 +229,7 @@
     "Metadata is not GPU allocation/time, physical-device FPS or polygon-source count.",
     "glTF bounds are static accessor/node-transform bounds; posed actors retain their existing runtime skinned bounds and are not static-placement candidates.",
     "Local source approval/hash evidence is inventoried separately and does not auto-approve deployed manifests without explicit review status.",
-    "Only the three certified independent props are editable; solid collision is ground-only, wall/ceiling attachments require collision:none.",
+    "Thirteen approved static prop/tree/rock/plant types are editable independent copies. Soft plants are decorative; solid collision is ground-only and tree bodies use existing certified trunk profiles. Existing base instances require a separate per-map eligibility check.",
     "Normal startup lazy separation, placement/navigation/minimap integration and final build are owned by root/A/verifier."
   ]
 }

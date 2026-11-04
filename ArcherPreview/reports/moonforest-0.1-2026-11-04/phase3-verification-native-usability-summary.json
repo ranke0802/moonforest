@@ -1,0 +1,161 @@
+{
+  "generatedAt": "2026-11-04T05:25:41.094Z",
+  "passed": true,
+  "scope": "New da44 usability integration audit only. Historical phase1/2/3/4 test-group counts are not carried forward as UX proof.",
+  "sourceHashes": {
+    "src/world.js": "5aa4fbc557839be03f6c234e6ed767d1168ff9af4e64a968fb72c862c3e8efc5",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/tool-camera-input.js": "844ab8f69ce89ee48cbb93cf5adbdaec54cdfef1470f43781dd8531d93d1f504",
+    "src/developer-editor.js": "81186949ab6db4ee6372845abd296eec055315e4ca3f4f205b25f6d4de61514a",
+    "src/editor-workspace.js": "d3db2784dbf3c662f9cddd1af596f2c8a60b490ff1fb07724dd94934c7299bfd",
+    "src/authored-placement-runtime.js": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c",
+    "src/placement-document.js": "8046fc89838c74863e40670b2b4ad8adc79b2ae2505279258e5756656185f756",
+    "src/asset-catalog.js": "ef75be57fbaa105dfa06c1147831ac292654d5a56389209103d72a2ef7adb1c0",
+    "src/input.js": "6e1cb40add61e81e03bf644e30ef36ea3f46f50f30ec3eb2318c3a050e4fde73",
+    "src/village-visibility.js": "8e8accd87754b2ca4a3a8d61787983f9372623d48d974d7db336fb441c25dda3",
+    "src/cave-fog-of-war.js": "5fbb3d29f094c90d33f3a497c8cccd02c1865fc7888e75c621dd7d82353002c4",
+    "src/nearby-editor.js": "5170bfea0222d3412fece62c2027a9411bdad89f4305c50295546791ea98dc7d",
+    "src/editable-asset-index.js": "35f9311850afc1d0a0a721a500e4257da1385a8e8b5cc4355c26ad613f64f29e",
+    "src/main.js": "0aa0c5061eb4f03ba9f39cbd005fcb7d26feb6984f66cd921148806a201df69b",
+    "src/cinematic-studio.js": "260d23d7133d5fba4bc7c5143c6b0b407e3422da9652baedf6131015b9edf0bd",
+    "src/cinematic-game.js": "ec7c3f95beb739804622bd5618d4808429c2434827ddff75107a21eac0112a4e",
+    "src/cinematic-interaction.js": "1e7cdd491023144c23225b6eff244b135b93099ecdb76a93e4440fbebb2185b6",
+    "src/cinematic-protocol.js": "0ce5f01544dc86adb417fe67782e10daeece64b3f744e270e53b4493ddd9aef8",
+    "src/cinematic-scene-host.js": "2f51ad82fe0b442215215083698c69d6a7fe4818175906628cb204efca33e527",
+    "src/boss-models.js": "e56a3a5e45e6223d18fdb43fb6668e1e9d22f56976034e0e238aad22a3c00df4",
+    "src/actor-encounter-adapter.js": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f"
+  },
+  "staleSources": [],
+  "failedEvidence": [],
+  "evidence": [
+    {
+      "file": "phase3-verification-canvas-delivery.json",
+      "passed": true,
+      "cases": [
+        {
+          "name": "deployed-baseline",
+          "passed": true
+        },
+        {
+          "name": "current-source",
+          "passed": true
+        }
+      ],
+      "findings": []
+    },
+    {
+      "file": "phase3-verification-canvas-editor.json",
+      "passed": true,
+      "cases": [
+        {
+          "name": "category and native variant selection place actual shipped crate in actual world",
+          "passed": true
+        },
+        {
+          "name": "reserved workspace at360/600/780/1200 keeps actual prop selectable with native orbit and pan after resize",
+          "passed": true
+        },
+        {
+          "name": "canvas DOM to native InputManager and UtilityLayer body drag commits exact endpoint once",
+          "passed": true
+        },
+        {
+          "name": "native pointercancel restores original pose instead of committing DeviceEventFactory UP",
+          "passed": true
+        },
+        {
+          "name": "native blur restores original pose instead of committing DeviceEventFactory UP",
+          "passed": true
+        },
+        {
+          "name": "tree category and exact listbox variant load actual tree with collision",
+          "passed": true
+        },
+        {
+          "name": "native base-body click adopts actual handcart with same stable ID and exact3 original collider parts",
+          "passed": true
+        },
+        {
+          "name": "native move plus undo and redo migrate all original handcart collision parts with same ID",
+          "passed": true
+        },
+        {
+          "name": "browser apply and work file plus game runtime reopen preserve new and base IDs collision and suppression",
+          "passed": true
+        },
+        {
+          "name": "nearby base and added-object DOM buttons execute exact main callback into actual editor without copies",
+          "passed": true
+        },
+        {
+          "name": "production PlaygroundInput coexists with native tool stream and resumes on fresh gameplay press",
+          "passed": true
+        }
+      ],
+      "findings": []
+    },
+    {
+      "file": "phase4-verification-cold-studio.json",
+      "passed": true,
+      "cases": [
+        {
+          "name": "actor-add before map-open waits for production main readiness",
+          "passed": true
+        },
+        {
+          "name": "cold actual model path settles with no fake host or preparation",
+          "passed": true
+        },
+        {
+          "name": "actual enabled actor bounds are projected without simulated poses",
+          "passed": true
+        },
+        {
+          "name": "full native canvas actor drag reaches Studio patch seek play cancel and game-save",
+          "passed": true
+        }
+      ],
+      "findings": []
+    },
+    {
+      "file": "phase4-verification-cold-studio-selection.json",
+      "passed": true,
+      "cases": [
+        {
+          "name": "actor-add before map-open waits for production main readiness",
+          "passed": true
+        },
+        {
+          "name": "cold actual model path settles with no fake host or preparation",
+          "passed": true
+        },
+        {
+          "name": "actual enabled actor bounds are projected without simulated poses",
+          "passed": true
+        }
+      ],
+      "findings": []
+    }
+  ],
+  "reproducedBeforeRepair": {
+    "deployedCommit": "da44cea24a513134499d54c3239b27db2ce3b62e",
+    "domEventsReceivedByCanvas": 9,
+    "domEventsReachedBabylonScene": 0,
+    "cameraOrbitWorked": false,
+    "cameraPanWorked": false,
+    "layoutEvidence": "phase3-verification-canvas-layout.json",
+    "coldActorVisibilityEvidence": "phase4-verification-cold-studio-reproduced.json",
+    "coldActorSelectionEvidence": "phase4-verification-cold-studio-selection-reproduced.json"
+  },
+  "verifiedPaths": [
+    "Canvas DOM → production PlaygroundInput + Babylon WebDeviceInputSystem/SceneInputManager → native UtilityLayer → editor selection/preview/drop/cancel/blur, including source camera inertia and DPR2/offset/resize handling.",
+    "Category → native variant listbox → actual crate/tree placement; actual handcart base source selection preserves ID/native world matrices/all3 collider parts; move/undo/redo/save/file/game-runtime reopen and nearby menu for both base and added objects.",
+    "Studio DOM/native transport → exact main readiness callback → actual createWorld/BossBattle/default scoped actor loader/default preparation; cold Add, click-time actor definition, busy click handling, newest actor focus, native actor drag/event/patch, seek/play/cancel/save."
+  ],
+  "unverified": [
+    "Trusted browser event delivery and capture scheduling, computed layout, browser download dialogs, full main startup/network and real texture/shader readiness.",
+    "Rasterized pixels/visual usability, GPU timing, physical-device frame rate, thermal behavior and device-specific performance."
+  ],
+  "browserAutomationUsed": false,
+  "devicePerformanceClaim": false
+}

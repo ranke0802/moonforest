@@ -1,30 +1,34 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NullEngine,AssetContainer,MeshBuilder,StandardMaterial,Vector3} from '@babylonjs/core';
+import {NullEngine,AssetContainer,MeshBuilder,StandardMaterial,Vector3,TransformNode} from '@babylonjs/core';
 import {createWorld} from '../src/world.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {AuthoredPlacementRuntime} from '../src/authored-placement-runtime.js';
 import {createEmptyPlacementDocument} from '../src/placement-document.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
 import {VillageOutlines} from '../src/village-outlines.js';
+import {VillageVisibility} from '../src/village-visibility.js';
+import {villageObstacles} from '../src/village-layout.js';
+import {caveFogRootEnabled} from '../src/cave-fog-of-war.js';
 
 const asset={assetId:'test-prop',version:'approved-test-version',reviewStatus:'approved',runtime:{manifest:'assets/test.json',assetKey:'test-prop',model:'assets/content/test-0.gltf'},units:{metersPerSourceUnit:1},pivot:{offset:[0,0,0]},forwardYaw:0,placement:{supported:true,baked:false,collision:'independent-static',scaleMin:.1,scaleMax:10,surfaces:['ground','wall','ceiling']}};
 const levels=[0,1,2].map(level=>({level,model:`content/test-${level}.gltf`,resources:[],textureSize:1}));
 const manifest={assets:{'test-prop':{geometryLod:true,category:'prop',height:1,bounds:[2,1,1],lods:levels,mobileNear:levels[0]}}};
 const row=(x=3,z=0)=>({instanceId:'overlay-1',assetId:asset.assetId,assetVersion:asset.version,transform:{position:[x,0,z],rotation:[0,0,0,1],scale:1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid'});
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),get resolve(){return resolve;}};};
-async function fixture(t,{loadContainer,publish=true}={}){
+async function fixture(t,{loadContainer,publish=true,editableBase,placement=asset.placement}={}){
  const engine=new NullEngine();engine.getCaps().instancedArrays=true;const world=createWorld(engine,{village:true,touchDevice:true});world.navigation=new VillageNavigation([]);world.terrain.heightAt=()=>0;
  caveFogFallback(world.scene).getInternalTexture().isReady=true;
  world.placements=[{id:'base-support',asset:'test-prop',x:0,z:6,yaw:0,scale:1,kind:'wall'}];
  const support=MeshBuilder.CreateBox('base-support',{width:4,height:4,depth:1},world.scene);support.position.set(0,4,6);support.computeWorldMatrix(true);world.villageRenderRecords=[{placement:world.placements[0],meshes:[support]}];
+ let baseRecord;if(editableBase){const root=new TransformNode('native-'+editableBase.id,world.scene),facing=new TransformNode(root.name+'-front',world.scene),mesh=MeshBuilder.CreateBox('native-body',{width:2,height:1,depth:1},world.scene);facing.parent=root;mesh.parent=facing;mesh.position.y=.5;root.position.set(editableBase.x,-.025,editableBase.z);root.rotation.y=editableBase.yaw;root.scaling.setAll(editableBase.scale);facing.rotation.y=.4;mesh.computeWorldMatrix(true);const box=mesh.getBoundingInfo().boundingBox;baseRecord={root,facing,meshes:[mesh],placement:editableBase,min:box.minimumWorld.clone(),max:box.maximumWorld.clone()};world.placements.push(editableBase);world.villageRenderRecords.push(baseRecord);world.navigation=new VillageNavigation([...villageObstacles([editableBase]),{id:'retained-unrelated',x:-30,z:0,radius:1,height:2}]);world.camera.setTarget(new Vector3(editableBase.x,.5,editableBase.z));world.camera.radius=8;}
  let loads=0;
  const load=async()=>{
   loads++;const container=new AssetContainer(world.scene),source=MeshBuilder.CreateBox('source',{width:2,height:1,depth:1},world.scene);source.position.y=.5;source.material=new StandardMaterial('prop-paint',world.scene);
   container.meshes.push(source);container.materials.push(source.material);container.rootNodes.push(source);container.removeAllFromScene();return container;
  };
- const runtime=new AuthoredPlacementRuntime(world,{catalog:{entries:[asset]},publish,baseUrl:'https://placement.test/',initialize:async()=>{},readManifest:async()=>manifest,loadContainer:loadContainer?((...args)=>loadContainer(load,...args)):load});
- t.after(()=>{runtime.dispose();world.scene.dispose();engine.dispose();});return {runtime,world,engine,loads:()=>loads};
+ const options={catalog:{entries:[{...asset,placement}]},publish,baseUrl:'https://placement.test/',initialize:async()=>{},readManifest:async()=>manifest,loadContainer:loadContainer?((...args)=>loadContainer(load,...args)):load},createRuntime=()=>new AuthoredPlacementRuntime(world,options),runtime=createRuntime();
+ t.after(()=>{runtime.dispose();world.scene.dispose();engine.dispose();});return {runtime,world,engine,loads:()=>loads,baseRecord,createRuntime};
 }
 
 test('preview changes one instance without navigation/revision work; commits move exact solid bounds and restore base navigation',async t=>{
@@ -100,4 +104,25 @@ test('nonpublishing cinematic visuals sample multiple free transforms without ov
  f.runtime.sampleFreeTransforms([{instanceId:'overlay-1',position:[1,5,2],rotation:[0,0,0,1],scale:2},{instanceId:'overlay-2',position:[3,6,4],rotation:[0,0,0,1],scale:1}]);
  assert.equal(f.runtime.records.get('overlay-1').root.position.y,5);assert.equal(f.runtime.records.get('overlay-2').root.position.y,6);assert.equal(f.world.navigation,navigation);assert.equal(f.world.placementRevision,7);assert.equal(f.world.placementOverlay,overlay);
  f.runtime.dispose();assert.equal(f.world.placementRevision,7);assert.equal(f.world.placementOverlay,overlay);
+});
+
+const baseProp={id:'existing-handcart',asset:'test-prop',x:3,z:0,yaw:.35,scale:1.2,kind:'prop',colliderFootprint:[2,2],colliderParts:[{x:0,z:0,footprint:[2,1]},{x:-.6,z:1,footprint:[.2,1]},{x:.6,z:1,footprint:[.2,1]}]};
+test('same-ID base edits preserve native visual/collision on adoption, move every collider part, suppress visibility and restore on undo/reopen/dispose',async t=>{
+ const f=await fixture(t,{editableBase:baseProp}),original=f.world.navigation,source=f.baseRecord,oldFrame=source.facing.getWorldMatrix().clone(),oldParts=structuredClone(original.obstacles),visibility=new VillageVisibility(f.world,[source],{touch:true});f.world.villageVisibility=visibility;t.after(()=>visibility.dispose());
+ const instance=f.runtime.createBaseOverride(baseProp.id);assert.equal(instance.instanceId,baseProp.id);assert.equal(instance.sourceInstanceId,baseProp.id);assert.ok(Math.abs(instance.attachment.offset+.025)<1e-6);assert.equal(instance.collision,'solid');assert.equal(f.runtime.records.size,0,'selecting a source produces data without allocating a replacement');
+ let document={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[instance]};await f.runtime.apply(document);const replacement=f.runtime.records.get(baseProp.id),actual=replacement.facing.getWorldMatrix();for(let i=0;i<16;i++)assert.ok(Math.abs(actual.m[i]-oldFrame.m[i])<1e-5,'first adoption retains native source pivot, facing, normalization and pose');assert.equal(replacement.obstacles.length,3);assert.deepEqual(f.world.navigation.obstacles.filter(o=>o.id!=='retained-unrelated').map(({instanceId,...part})=>part),oldParts.filter(o=>o.id!=='retained-unrelated'));assert.equal(source.authoredSuppressed,true);assert.equal(source.root.isEnabled(),false);visibility.update(f.world.camera.globalPosition,new Vector3(3,0,0),.3);assert.equal(source.root.isEnabled(),false);assert.equal(caveFogRootEnabled(source),false);assert.equal(visibility.shadowCandidates({x:3,z:0}).includes(source),false);
+ document=structuredClone(document);document.revision=2;document.instances[0].transform.position=[20,0,0];await f.runtime.apply(document);assert.equal(f.world.navigation.free({x:3,z:0},.1),true);assert.equal(f.world.navigation.free({x:20,z:0},.1),false);assert.equal(original.free({x:3,z:0},.1),false);assert.equal(f.world.navigation.obstacles.filter(o=>o.id.startsWith(baseProp.id+'-')).length,3);assert.equal(f.world.navigation.obstacles.some(o=>o.id==='retained-unrelated'),true);
+ const saved=JSON.parse(JSON.stringify(document));await f.runtime.apply({...document,revision:3,instances:[]});assert.equal(f.world.navigation,original);assert.equal(source.authoredSuppressed,undefined);assert.equal(caveFogRootEnabled(source),true);assert.equal(source.root.isEnabled(),true);assert.equal(source.root.isDisposed(),false);
+ f.runtime.dispose();const reopened=f.createRuntime();await reopened.apply(saved);assert.equal(reopened.records.get(baseProp.id).instance.sourceInstanceId,baseProp.id);assert.equal(source.authoredSuppressed,true);reopened.dispose();assert.equal(source.authoredSuppressed,undefined);assert.equal(source.root.isDisposed(),false);assert.equal(f.world.navigation,original);
+});
+
+test('failed base adoption leaves original visibility, all collider parts and native source resources untouched',async t=>{
+ const f=await fixture(t,{editableBase:baseProp}),original=f.world.navigation,frame=f.baseRecord.facing.getWorldMatrix().clone(),instance=f.runtime.createBaseOverride(baseProp.id),prepare=VillageOutlines.prototype.prepare;VillageOutlines.prototype.prepare=async()=>{throw new Error('base prepare failure');};
+ try{await assert.rejects(f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[instance]}),/base prepare failure/);}finally{VillageOutlines.prototype.prepare=prepare;}
+ assert.equal(f.world.navigation,original);assert.equal(f.baseRecord.authoredSuppressed,undefined);assert.equal(f.baseRecord.root.isEnabled(),true);assert.equal(f.baseRecord.root.isDisposed(),false);assert.deepEqual(f.baseRecord.facing.getWorldMatrix().asArray(),frame.asArray());assert.equal(f.runtime.records.size,0);assert.equal(f.runtime.assets.size,0);
+});
+
+test('new trees collide by certified trunk rather than crown and tilted trunks conservatively cover their changed body',async t=>{
+ const f=await fixture(t,{placement:{...asset.placement,sourceKind:'tree',body:{shape:'trunk-capsule',radius:.32,height:8,offset:[0,0,0]}}}),instance=row(),document={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[instance]};await f.runtime.apply(document);const record=f.runtime.records.get(instance.instanceId);assert.equal(record.placement.kind,'tree');assert.equal(record.obstacle.radius,.32);assert.equal(record.obstacle.source,'existing-certified-tree-trunk');assert.equal(f.world.navigation.free({x:3.7,z:0},.1),true,'the crown/model box is not a ground obstacle');assert.equal(f.world.navigation.free({x:3.2,z:0},.1),false);
+ const tilted=structuredClone(document);tilted.revision=2;tilted.instances[0].transform.rotation=[0,0,Math.sin(Math.PI/8),Math.cos(Math.PI/8)];await f.runtime.apply(tilted);assert.equal(record.obstacle.shape,'box');assert.equal(record.obstacle.source,'conservative-tilted-tree-trunk');assert.ok(record.obstacle.halfWidth>2);assert.equal(f.world.navigation.free({x:0,z:0},.1),false);
 });

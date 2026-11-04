@@ -1116,11 +1116,21 @@ try {
         },resetInput:()=>{input.reset();cancelAttackInput();},notify:toast});
     }).catch(error=>{console.error('[Actor lab]',error);toast('배우 실험 도구를 불러오지 못했습니다.');});
   }
+  let placementEditorTask=null;
+  const getPlacementEditor=async()=>{
+    if(world.developmentEditor)return world.developmentEditor;
+    placementEditorTask??=import('./developer-editor.js').then(({setupDeveloperEditor})=>{
+      if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
+      return world.developmentEditor=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter:new URLSearchParams(location.search).get('developer')==='1'});
+    }).catch(error=>{placementEditorTask=null;throw error;});return placementEditorTask;
+  };
   if(releaseEnabled&&new URLSearchParams(location.search).get('developer')==='1'){
-    import('./developer-editor.js').then(({setupDeveloperEditor})=>{
-      if(world.scene.isDisposed)return;
-      world.developmentEditor=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius)});world.developmentEditor.notifyReady?.();
-    }).catch(error=>{console.error('[Placement editor]',error);toast('배치 편집기를 불러오지 못했습니다.');});
+    getPlacementEditor().then(editor=>editor.notifyReady?.()).catch(error=>{console.error('[Placement editor]',error);toast('배치 편집기를 불러오지 못했습니다.');});
+  }
+  if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
+    import('./nearby-editor.js').then(({setupNearbyEditor})=>{
+      if(world.scene.isDisposed)return;world.nearbyEditor=setupNearbyEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]')}),onEdit:async id=>{const mapId=world.mapId,generation=world.toolGeneration,editor=await getPlacementEditor();if(world.scene.isDisposed||world.mapId!==mapId||world.toolGeneration!==generation||!ready||loadingAsset||mapTransition?.busy||document.hidden||document.querySelector('dialog[open]')||controller?.dead||boss.playerHp<=0)throw new Error('지역이 준비된 뒤 가까운 대상을 다시 골라 주세요.');await editor.enter({selection:id});}});world.scene.onDisposeObservable.addOnce(()=>world.nearbyEditor?.dispose());
+    }).catch(error=>console.error('[Nearby editor]',error));
   }
   if(releaseEnabled&&['cinematic','cinematicPreview'].some(key=>new URLSearchParams(location.search).get(key)==='1')){
     import('./cinematic-game.js').then(({setupGameCinematics})=>{

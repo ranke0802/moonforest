@@ -17,7 +17,7 @@ test('catalog-only UI allocates no runtime; place/transform/undo/redo/apply/reop
   clearPreview(){}clearExistingPreview(){}diagnostics(){return {instances:this.records.size};}
   async apply(value){this.document=validatePlacementDocument(value,{catalog:ASSET_CATALOG,baseManifest:this.baseManifest});this.records=new Map(this.document.instances.map(instance=>[instance.instanceId,{instance,root:{}}]));world.placementOverlay=structuredClone(this.document);return this.document;}
  }
- const api=setupDeveloperEditor({root,world,storage,getPlayer:()=>({position:Vector3.Zero()}),getState:()=>state,Runtime,createGizmos:()=>({manager:{gizmos:{},attachToNode(){}},dispose(){disposedGizmos++;}})});t.after(()=>api.dispose());
+ const api=setupDeveloperEditor({root,world,storage,getPlayer:()=>({position:Vector3.Zero()}),getState:()=>state,Runtime,setupLayout:null,createGizmos:()=>({manager:{gizmos:{},attachToNode(){}},dispose(){disposedGizmos++;}})});t.after(()=>api.dispose());
  const selectDefaults={'data-category':'','data-mode':'position','data-axis':'world','data-surface':'ground'};for(const [attribute,value]of Object.entries(selectDefaults))Object.defineProperty(root.querySelector(`[${attribute}]`),'value',{value,writable:true});
  const click=async command=>{root.querySelector(`[data-cmd="${command}"]`).dispatchEvent(new window.Event('click',{bubbles:true}));await settle();};
  assert.equal(runtimes,0);root.querySelector('[data-query]').value='handcart';root.querySelector('[data-query]').dispatchEvent(new window.Event('input'));assert.equal(runtimes,0);

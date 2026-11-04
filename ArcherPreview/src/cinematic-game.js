@@ -8,6 +8,8 @@ import {createCinematicSceneHost} from './cinematic-scene-host.js';
 import {parseCinematicCommand,cinematicReply} from './cinematic-protocol.js';
 import {listRegisteredCinematics,loadRegisteredCinematic} from './cinematic-registry.js';
 import {authoringUrl,AUTHORING_MAPS} from './authoring-navigation.js';
+import {createCinematicInteraction} from './cinematic-interaction.js';
+import {Vector3} from '@babylonjs/core/Maths/math.vector.js';
 
 const storageKey='moonforest-0.1:cinematics:registered:v1';
 const cancelled=()=>Object.assign(new Error('컷씬 요청이 취소되었습니다.'),{name:'AbortError'});
@@ -22,7 +24,7 @@ function checked(input,references){const result=validateCinematicDocument(input,
 // The authoring page sends data to this controller; it owns no second engine.
 export function setupGameCinematics({root,world,battle,getPlayer,getState,storage,travel,preview=false,window:win=globalThis.window,createHost=createCinematicSceneHost,Player=CinematicPlayer,projectList=listRegisteredCinematics,projectLoad=loadRegisteredCinematic,readyTimeoutMs=60000}){
  const doc=root.ownerDocument,subtitles=doc.createElement('div');subtitles.dataset.toolUi='';subtitles.className='cinematic-subtitles';subtitles.style.cssText='position:fixed;z-index:860;left:10%;right:10%;bottom:12%;text-align:center;white-space:pre-wrap;color:#fff;font:600 clamp(16px,2vw,24px)/1.6 system-ui;text-shadow:0 2px 5px #000;pointer-events:none';root.append(subtitles);
- let disposed=false,epoch=0,pendingReady=null,loaded=null,externalResume=false,local={},panel=null,style=null,imported=null,uiBusy=false,readySignature=null,autoOpenStarted=false;
+ let disposed=false,epoch=0,pendingReady=null,loaded=null,externalResume=false,local={},panel=null,style=null,imported=null,uiBusy=false,readySignature=null,autoOpenStarted=false,interaction=null;
  const host=createHost({world,battle,getPlayer,getState,audioIds:Object.keys(audioManifest.sounds),audioEnabled:true,acquireToolLease:async options=>{
   const node=getPlayer?.(),hide=player.document?.actors.length>0&&node?.setEnabled,owner=hide?{enabled:playerVisualOwners.get(node)?.enabled??node.isEnabled()}:null;
   const lease=await world.acquireToolLease({...options,onRelease:(...args)=>{if(owner&&playerVisualOwners.get(node)===owner){playerVisualOwners.delete(node);if(!node.isDisposed?.())node.setEnabled(owner.enabled);}options.onRelease?.(...args);}});
@@ -32,7 +34,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
  const ownLease=()=>world.toolLease?.active&&/^cinematic-/.test(world.toolLease.owner??'');
  const ready=()=>{const state=getState();return !!(!disposed&&(state.ready||ownLease())&&!state.loading&&!state.dead&&!state.failed&&!state.hidden&&!state.settings);};
  function status(message){const node=panel?.querySelector('[data-status]');if(node)node.textContent=message;}
- function renderState(state){if(disposed)return;const labels={idle:'컷씬을 선택해 주세요.',preparing:'장면을 여는 중…',ready:'준비 완료 · 재생을 누르세요.',playing:'재생 중',paused:'일시정지',completed:'재생이 끝났습니다.',cancelled:'재생을 종료했습니다.',error:'장면을 열지 못했습니다.'};status(`${labels[state.state]??'준비 중'}${state.duration?' · '+state.time.toFixed(1)+' / '+state.duration.toFixed(1)+'초':''}${state.error?'\n'+state.error:''}`);const seek=panel?.querySelector('[data-seek]');if(seek){seek.max=state.duration;seek.value=state.time;seek.disabled=!['ready','playing','paused'].includes(state.state);}if(!['ready','playing','paused','preparing'].includes(state.state))subtitles.textContent='';updateButtons();}
+ function renderState(state){if(disposed)return;interaction?.setPlaybackState(state.state);const labels={idle:'컷씬을 선택해 주세요.',preparing:'장면을 여는 중…',ready:'준비 완료 · 재생을 누르세요.',playing:'재생 중',paused:'일시정지',completed:'재생이 끝났습니다.',cancelled:'재생을 종료했습니다.',error:'장면을 열지 못했습니다.'};status(`${labels[state.state]??'준비 중'}${state.duration?' · '+state.time.toFixed(1)+' / '+state.duration.toFixed(1)+'초':''}${state.error?'\n'+state.error:''}`);const seek=panel?.querySelector('[data-seek]');if(seek){seek.max=state.duration;seek.value=state.time;seek.disabled=!['ready','playing','paused'].includes(state.state);}if(!['ready','playing','paused','preparing'].includes(state.state)){subtitles.textContent='';interaction?.clear();}updateButtons();}
  function post(id,payload){if(preview&&win?.parent&&win.parent!==win)win.parent.postMessage(cinematicReply(id,payload),win.location.origin);}
  function cancelReady(){if(!pendingReady)return;const job=pendingReady;pendingReady=null;clearTimeout(job.timer);job.reject(cancelled());}
  function waitReady(request){
@@ -59,6 +61,13 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
  async function execute(command){
   if(disposed)throw cancelled();
   if(command.command==='load')await load(command.document);
+  else if(command.command==='patch-document'){
+   const document=checked(command.document,player.references),previous=player.document;if(!previous||document.mapId!==previous.mapId||document.actors.length!==previous.actors.length||document.actors.some((actor,index)=>{const old=previous.actors[index];return ['actorId','assetId','assetVersion','actorDefinitionId','instanceId'].some(key=>actor[key]!==old[key]);}))throw new Error('대상이 바뀌었습니다. 장면을 다시 열어 주세요.');
+   const camera=host.captureCamera();try{player.document=document;if(!player.sample(true))throw new Error('장면을 먼저 열어 주세요.');loaded=document;}catch(error){player.document=previous;player.sample(true);throw error;}finally{world.camera.setTarget?.(Vector3.FromArray(camera.target));world.camera.setPosition?.(Vector3.FromArray(camera.position));world.camera.fov=camera.fov;world.camera.getViewMatrix(true);}
+  }
+  else if(command.command==='select-actor'){player.pause();if(!interaction?.select(command.actorId))throw new Error('대상을 찾지 못했습니다.');}
+  else if(command.command==='focus-actor'){player.pause();if(!interaction?.focus(command.actorId))throw new Error('대상을 찾지 못했습니다.');}
+  else if(command.command==='camera-mode'){player.pause();host.getLiveLease?.()?.setCameraMode?.(command.mode);}
   else if(command.command==='save-scene')return saveScene(command.document);
   else if(command.command==='play'){externalResume=false;if(player.state==='completed'||player.state==='cancelled'){if(!loaded)throw new Error('먼저 파일을 불러오세요.');await load(loaded);}if(!player.play())throw new Error('준비된 컷씬이 없습니다.');}
   else if(command.command==='pause'){externalResume=false;player.pause();}
@@ -66,7 +75,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   else if(command.command==='seek'){if(!player.seek(command.time))throw new Error('준비 후 유효한 시간으로 탐색하세요.');}
   else if(command.command==='stop'){externalResume=false;++epoch;cancelReady();await player.stop('skip');subtitles.textContent='';}
   else if(command.command==='loop')player.setLoop(command.loop);
-  else if(command.command==='capture-camera')return {...player.inspect(),camera:host.captureCamera(),playerPosition:getPlayer?.()?.position?.asArray?.()??null};
+  else if(command.command==='capture-camera'){const camera=host.captureCamera(),target=camera.target;return {...player.inspect(),camera,playerPosition:getPlayer?.()?.position?.asArray?.()??null,focusPosition:[target[0],world.terrain?.heightAt?.(target[0],target[2])??getPlayer?.()?.position?.y??0,target[2]]};}
   return player.inspect();
  }
  const receive=event=>{
@@ -74,6 +83,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   execute(command).then(result=>post(command.requestId,{ok:true,...result}),error=>post(command.requestId,{ok:false,error:error.message,errors:error.errors}));
  };
  if(preview)win.addEventListener('message',receive);
+ if(preview)interaction=createCinematicInteraction({world,host,player,onSelect:value=>post('actor-selection',{ok:true,mapId:world.mapId,cutsceneId:player.document?.cutsceneId,time:player.time,...value}),onChange:value=>post('actor-edited',{ok:true,mapId:world.mapId,cutsceneId:player.document?.cutsceneId,time:player.time,...value})});
  function validateStored(item){const result=validateCinematicDocument(item,cinematicReferences(world,item?.mapId));
     // Authored overlay IDs are available only after their map has loaded. Keep
     // stored documents visible, then require the complete reference check in
@@ -105,6 +115,6 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   panel.querySelector('[data-loop]').onchange=event=>{player.setLoop(event.target.checked);};panel.querySelector('[data-seek]').oninput=event=>{player.seek(Number(event.target.value));};
  }
  const observer=world.scene.onDisposeObservable.addOnce(()=>{void api.dispose();});
- const api={player,host,load,open,saveScene,execute,notifyReady,inspect:()=>({...player.inspect(),host:host.inspect(),pendingReady:!!pendingReady}),leaveMap(){++epoch;cancelReady();externalResume=false;loaded=null;subtitles.textContent='';void player.stop('map-change');void host.evictIdle?.();readySignature=null;post('host-ready',{ok:true,ready:false,mapId:world.mapId});},async dispose(){if(disposed)return;disposed=true;++epoch;cancelReady();if(preview)win.removeEventListener('message',receive);world.scene.onDisposeObservable.remove(observer);panel?.remove();style?.remove();subtitles.remove();await player.dispose();await host.dispose();}};
+ const api={player,host,load,open,saveScene,execute,notifyReady,inspect:()=>({...player.inspect(),host:host.inspect(),pendingReady:!!pendingReady}),leaveMap(){++epoch;cancelReady();interaction?.clear();externalResume=false;loaded=null;subtitles.textContent='';void player.stop('map-change');void host.evictIdle?.();readySignature=null;post('host-ready',{ok:true,ready:false,mapId:world.mapId});},async dispose(){if(disposed)return;disposed=true;++epoch;cancelReady();interaction?.dispose();if(preview)win.removeEventListener('message',receive);world.scene.onDisposeObservable.remove(observer);panel?.remove();style?.remove();subtitles.remove();await player.dispose();await host.dispose();}};
  notifyReady();return api;
 }

@@ -12,51 +12,36 @@
     <meta name="description" content="Moonforest 궁수와 전사의 이동 및 공격을 직접 조작하는 3D 플레이그라운드." />
     <title>Moonforest · Character Playground</title>
     <style>html,body{background:#000;margin:0}html[data-loading] #app>:not(#loading){visibility:hidden!important;pointer-events:none!important}#app>#loading{z-index:10000;box-sizing:border-box;width:100%;height:100%;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;overscroll-behavior:contain;isolation:isolate;color:#fff;text-align:left;background:#000;border:0;border-radius:0;margin:0;padding:0;display:block;position:fixed;inset:0;overflow:auto;transform:scale(1)}#app>#loading[hidden]{display:none!important}#loading-art{object-fit:cover;object-position:center;pointer-events:none;z-index:0;width:100%;height:100%;position:fixed;inset:0}#loading:before{content:"";pointer-events:none;z-index:1;background:linear-gradient(#0000 68%,#000000a6);position:fixed;inset:0}#loading-info{z-index:2;left:max(20px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));text-shadow:0 1px 4px #000;max-width:min(560px,100vw - 40px);position:fixed}#loading h2{margin:0 0 5px;font-size:13px;font-weight:600}#loading-text,#loading-bytes{color:#f1edf3;margin:2px 0;font-size:12px;line-height:1.4}#loading-text{font-variant-numeric:tabular-nums}#loading-title,#loading-bytes{display:none}#loading .loading-track{z-index:3;background:#ffffff35;border-radius:0;width:100%;height:3px;margin:0;position:fixed;bottom:0;left:0;right:0;overflow:hidden}#loading-progress{background:#e9d8af;width:0;height:100%;transition:width .12s linear;display:block}#loading>[hidden],#loading-error[hidden],#loading-diagnostics-export[hidden]{display:none!important}#loading-actions{z-index:2;flex-wrap:wrap;flex-shrink:0;justify-content:center;gap:10px;display:flex;position:relative}#loading-actions button[hidden]{display:none!important}#loading-error{z-index:2;text-align:left;box-sizing:border-box;background:#171720;border:1px solid #454052;border-radius:8px;flex-shrink:1;width:min(560px,90vw);max-height:34vh;margin:14px 0 0;padding:12px;position:relative;overflow:auto}#loading-error pre{white-space:pre-wrap;overflow-wrap:anywhere;margin:0;font:12px/1.5 monospace}#loading-error-message{color:#f2d6d2}#loading-error details{color:#bdb5cf;margin-top:8px;font-size:12px}#loading-error summary{cursor:pointer}#loading-error-stack{margin-top:8px!important}#loading-copy-status{z-index:2;max-width:560px;margin:6px 0;font-size:12px;position:relative}#loading-diagnostics-export{z-index:2;box-sizing:border-box;-webkit-user-select:text;user-select:text;touch-action:auto;color:#eee;background:#171720;border:1px solid #665e76;flex-shrink:1;width:min(560px,90vw);height:100px;min-height:65px;font:11px/1.4 monospace;position:relative}#loading-actions .text-button{margin:12px 0 0}#app>#loading.error{text-align:center;padding:max(24px,env(safe-area-inset-top)) max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));flex-direction:column;justify-content:center;align-items:center;display:flex}#loading.error:before{background:#000000d6}#loading.error #loading-info{max-width:560px;position:relative;bottom:auto;left:auto}#loading.error h2{margin:0 0 8px;font-size:17px;display:block}#loading.error #loading-text{font-size:13px}#loading.error #loading-bytes{display:none}@media (max-height:450px){#app>#loading.error{justify-content:flex-start;padding:12px}#loading-error{max-height:28vh}}</style>
-    <script type="module" crossorigin src="./assets/game--ZRGzXGI.js"></script>
+    <script type="module" crossorigin src="./assets/game-Cbk1js9G.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/rolldown-runtime-DK3Fl9T5.js">
     <link rel="modulepreload" crossorigin href="./assets/goblin-spec-BkFsagN0.js">
     <link rel="modulepreload" crossorigin href="./assets/witch-cave-layout-EZMYIgVS.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~ksbantkz-H-M_hi7F.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~e134msp5-UtxC_Odd.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~kfitgn03-CuHSR8Sn.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~b7etymd1-BMwEppRb.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~d0penb06-Cu_sj2zM.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~nj79vu5f-BGa_LdB1.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~nljntg36-CuBYPcDK.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~epy9wh9j-Bh3wKyVb.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~oixdi23l-dqz0dHXK.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~3uj71poc-BqltO0ki.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jdky65i5-DKkz0thF.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~h8czwtks-C6Xfc4yO.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kbid4c99-Ce77JD5z.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~f8vsmlll-BXdVC_j_.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mn6jjy26-DpDCMtQw.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m34i4hxx-D3kDnvNy.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kf3g2tcp-CggIQgL7.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~e4n3a102-BRfcgNbX.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ku703bnn-DjnIUn53.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mzpfqcw1-D-XQlhUT.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~eniaem58-1CfyBCSS.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~my5yezvh-UAaWFXU0.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mmebaicm-BQAM2XS_.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~g3fc4djz-DbE27l5S.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m9j0ur7b-DxRCJ9xV.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~dnvdm5pu-lRpealg5.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ine84vmd-CGYiptFb.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cd5o6cah-DiLjA2YY.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~juytrnsx-DIRP6lJi.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jl77mod1-DBIWZ4hn.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ngyzvn7x-BVZwlmgT.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~o4j8awu5-CZJPdoMF.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BOHNWade.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jibqjdyw-Cp0w6PSE.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cjtl9nw9-4vM9tZF_.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~js1b7g51-Dl6DHpQL.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-oD446DGi.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-CIfi7n6e.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js">
-    <link rel="modulepreload" crossorigin href="./assets/babylon-game-dzYjm6Bm.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fil187nt-Bh3wKyVb.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~muckwa6k-BqltO0ki.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~cinematic-interaction-Bk4IdV0B.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~zg6kltdv-BljkKZco.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~dyof8ah7--9ReBtMI.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~mlv4olpj-DyT7xMkv.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~j7ha8cbk-g7ADsaxD.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~kh6xjt3u-C-dYyr9r.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~gg1sn0f8-DnJqXwQB.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~c3a4cq1l-CGRJfUqB.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~j5yqk5s4-oNUmK_Nx.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~ls3dg3uy-PB5wIfsI.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fgu227k1-s7mPgyzS.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~gftpphwu-Rm85ZZve.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~mkovgbzx-eNZvXkAJ.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~kca0fus9-Cl7r4P7a.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~cinematicStudio-CRzLMJPS.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~oy3cnr3c-Dtl-88fc.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~ibcdt74i-CkNUykTp.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~jmh4848c-CpsmENlg.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fdq8jh0h-C5yCj-Cs.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BE14NjZL.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-D92cBIs4.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-DhpZz0bU.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-BjOV_k8_.js">
+    <link rel="modulepreload" crossorigin href="./assets/babylon-game-BceOPjJS.js">
     <link rel="stylesheet" crossorigin href="./assets/game-CTPmmHJX.css">
   </head>
   <body>

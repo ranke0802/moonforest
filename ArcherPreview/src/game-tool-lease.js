@@ -11,12 +11,14 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   environment:audio.environment,combatMode:audio.combatMode,bossTheme:audio.bossTheme,musicWanted:audio.musicWanted,beds:{...audio.beds?.desired}};
  const doc=root.ownerDocument,style=doc.createElement('style');
  style.textContent='#app[data-tool-hud-owner] > :not(canvas):not([data-tool-ui]):not(style){visibility:hidden!important;pointer-events:none!important}';
- let active=true,paused=false,keyboard=null,disposeObserver,contextObserver;const ownedCameraInputs=[];
+ let active=true,paused=false,keyboard=null,disposeObserver,contextObserver,borrowedSceneInput=false,cameraMode='orbit',savedInputMap=null;const ownedCameraInputs=[];
+ const copyInputEntry=entry=>({...entry,...(entry.modifiers?{modifiers:{...entry.modifiers}}:{}),...(Array.isArray(entry.key)?{key:[...entry.key]}:{})});
  const ownedVoices=new Set();
  const sameWorld=()=>world.scene===scene&&world.mapId===mapId&&(world.toolGeneration??0)===generation&&!scene.isDisposed;
  const restoreState=()=>{
   if(!sameWorld()||world.toolLease?.active||getState().loading||getState().failed)return false;
   if(target)camera.setTarget(target);Object.assign(camera,savedCamera);
+  camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();
   Object.assign(audio,{environment:saved.environment,combatMode:saved.combatMode,bossTheme:saved.bossTheme,musicWanted:saved.musicWanted});
   for(const channel of ['music','ambience'])audio.beds?.request(channel,saved.beds[channel]??null,0);
   // Input can arrive after cancellation while the GPU context is unavailable.
@@ -26,6 +28,15 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
  };
  const token={owner:options.owner??'development',audioEnabled:options.audioEnabled===true,get active(){return active;},get paused(){return paused;},
   isCurrent(){return active&&world.toolLease===token&&sameWorld();},
+  attachCamera(){if(!token.isCurrent()||!options.freeCamera)return;const mapper=camera.movement?.input;
+   if(mapper){savedInputMap??=mapper.inputMap;mapper.inputMap=savedInputMap.map(copyInputEntry);}
+   camera.attachControl(canvas,true,false,2);
+   // Babylon 9.31 resolves the first matching rule: merely assigning pan to
+   // button0 leaves its earlier rotate rule winning. Own an unambiguous map.
+   if(mapper)mapper.inputMap=[{source:'pointer',button:0,interaction:cameraMode==='pan'?'pan':'rotate'},{source:'pointer',button:2,interaction:'pan'},...savedInputMap.filter(entry=>entry.source!=='pointer').map(copyInputEntry)];
+  },
+  setCameraMode(mode){if(!['orbit','pan'].includes(mode))return;cameraMode=mode;token.attachCamera();},
+  get cameraMode(){return cameraMode;},
   update(dt){
    const state=getState();
    if(!token.isCurrent()){token.cancel('map-change',{restore:false});return;}
@@ -53,6 +64,8 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    if(saved.hud===undefined)delete root.dataset.toolHudOwner;else root.dataset.toolHudOwner=saved.hud;
    if(owns){
     if(options.freeCamera){camera.detachControl();for(const item of ownedCameraInputs)camera.inputs.remove(item);if(keyboard&&world.camera===camera&&!scene.isDisposed)camera.inputs.add(keyboard);}
+    if(savedInputMap&&camera.movement?.input)camera.movement.input.inputMap=savedInputMap;
+    if(borrowedSceneInput&&world.nativeSceneInputOwner===token){delete world.nativeSceneInputOwner;if(!scene.isDisposed)scene.detachControl();}
     resetInput();input.setSuspended?.(saved.suspended);
     if(restore&&same)restoreState();
    }
@@ -65,12 +78,20 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   resetInput();input.setSuspended?.(true);setReady(false);audio.stopAll();audio.setSuspended(!token.audioEnabled);
   if(options.hideHud){root.dataset.toolHudOwner=token.owner;root.append(style);}
   if(options.freeCamera){
+   // Gameplay deliberately disconnects Babylon's DOM pointer stream. Camera
+   // inputs merely subscribe to that stream; attaching only the camera leaves
+   // both orbit gestures and editor pre-pointer callbacks inert in the browser.
+   if(world.sceneInputMode==='manual-game'){
+    borrowedSceneInput=true;world.nativeSceneInputOwner=token;scene.attachControl(true,true,true);
+   }
    keyboard=camera.inputs?.attached?.keyboard??null;if(keyboard)camera.inputs.remove(keyboard);
    if(!camera.inputs?.attached?.pointers&&camera.inputs?.addPointers){camera.inputs.addPointers();ownedCameraInputs.push(camera.inputs.attached.pointers);}
    if(!camera.inputs?.attached?.mousewheel&&camera.inputs?.addMouseWheel){camera.inputs.addMouseWheel();ownedCameraInputs.push(camera.inputs.attached.mousewheel);}
    if(canvas?.ownerDocument&&camera.inputs?.add){const movement=createToolCameraInput(canvas);camera.inputs.add(movement);ownedCameraInputs.push(movement);}
    for(const key of ['inertialAlphaOffset','inertialBetaOffset','inertialRadiusOffset','inertialPanningX','inertialPanningY'])if(key in camera)camera[key]=0;
-   camera.attachControl(canvas,true);
+   camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();
+   camera.lowerAlphaLimit=camera.upperAlphaLimit=null;camera.lowerBetaLimit=.03;camera.upperBetaLimit=Math.PI-.03;camera.lowerRadiusLimit=.25;camera.upperRadiusLimit=Math.max(200,savedCamera.upperRadiusLimit??0);
+   token.attachCamera();
   }
   disposeObserver=scene.onDisposeObservable.addOnce(()=>token.cancel('scene-dispose',{restore:false}));
   contextObserver=scene.getEngine?.().onContextLostObservable?.add(()=>{
