@@ -21,6 +21,7 @@ import {setupCommercialUi} from './commercial-ui.js';
 import {setupHudLayout} from './hud-layout.js';
 import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
+import {setupDeveloperToolSettings} from './tool-visibility-settings.js';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
@@ -121,7 +122,7 @@ if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=MOONFOREST_RELEASE_LABEL;document.documentElement.dataset.release=MOONFOREST_RELEASE;}
 let character = uiRoute.character;
 let uiTest=null;
-let commercialUi, hudLayout;
+let commercialUi, hudLayout, developerTools;
 // Explicit review URLs use the same map, camera, rig and input system as play.
 let elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
 let elenaReview=null;
@@ -975,7 +976,7 @@ try {
     if(paused){input.reset();cancelAttackInput();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
-    world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
+    world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();developerTools?.refresh();
   };
   const dialogObserver=new MutationObserver(syncPlayback);
   reconcilePlayback=syncPlayback;
@@ -1146,20 +1147,16 @@ try {
     }).catch(error=>{console.error('[Actor lab]',error);toast('배우 실험 도구를 불러오지 못했습니다.');});
   }
   let placementEditorTask=null;
-  const getPlacementEditor=async()=>{
+  const getPlacementEditor=async(canOpen=()=>true)=>{
     if(world.developmentEditor)return world.developmentEditor;
     placementEditorTask??=import('./developer-editor.js').then(({setupDeveloperEditor})=>{
       if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
+      if(!canOpen())throw new Error('오브젝트 편집 설정이 꺼졌습니다.');
       return world.developmentEditor=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter:new URLSearchParams(location.search).get('developer')==='1'});
     }).catch(error=>{placementEditorTask=null;throw error;});return placementEditorTask;
   };
   if(releaseEnabled&&new URLSearchParams(location.search).get('developer')==='1'){
     getPlacementEditor().then(editor=>editor.notifyReady?.()).catch(error=>{console.error('[Placement editor]',error);toast('배치 편집기를 불러오지 못했습니다.');});
-  }
-  if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
-    import('./nearby-editor.js').then(({setupNearbyEditor})=>{
-      if(world.scene.isDisposed)return;world.nearbyEditor=setupNearbyEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]')}),onEdit:async id=>{const mapId=world.mapId,generation=world.toolGeneration,editor=await getPlacementEditor();if(world.scene.isDisposed||world.mapId!==mapId||world.toolGeneration!==generation||!ready||loadingAsset||mapTransition?.busy||document.hidden||document.querySelector('dialog[open]')||controller?.dead||boss.playerHp<=0)throw new Error('지역이 준비된 뒤 가까운 대상을 다시 골라 주세요.');await editor.enter({selection:id});}});world.scene.onDisposeObservable.addOnce(()=>world.nearbyEditor?.dispose());
-    }).catch(error=>console.error('[Nearby editor]',error));
   }
   if(releaseEnabled&&['cinematic','cinematicPreview'].some(key=>new URLSearchParams(location.search).get(key)==='1')){
     import('./cinematic-game.js').then(({setupGameCinematics})=>{
@@ -1169,15 +1166,30 @@ try {
     }).catch(error=>{console.error('[Cinematic player]',error);toast('컷씬 도구를 불러오지 못했습니다.');});
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
-    world.authoringNavigation=setupAuthoringNavigation({root:$('#app'),href:location.href,mapId:world.mapId,getState:()=>({ready:(ready||!!world.toolLease?.active)&&!loadingAsset,mapId:world.mapId}),onMapChange:async id=>{if(id===world.mapId)return;await mapTransition.travel(travelUrl(location.href,authoringCharacter(id)));world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();}});
-    world.scene.onDisposeObservable.addOnce(()=>world.authoringNavigation?.dispose());
-  }
-  if(releaseEnabled){
-    const section=document.createElement('section');section.className='settings-section';const title=document.createElement('h3');title.textContent='MoonForest 0.1 · 개발 도구';section.append(title);
-    for(const [flag,label]of [['developer','배치 편집'],['actorLab','배우 실험'],['cinematic','컷씬 파일 재생']]){
-      const link=document.createElement('a'),url=new URL(location.href);for(const key of ['developer','actorLab','cinematic','cinematicPreview'])url.searchParams.delete(key);url.searchParams.set(flag,'1');link.href=url.href;link.textContent=label;link.style.cssText='display:inline-block;padding:8px;margin:4px;color:inherit';section.append(link);
-    }
-    const studio=document.createElement('a');studio.href=new URL('./cinematic-studio.html',location.href).href;studio.textContent='컷씬 제작 페이지';studio.style.cssText='display:inline-block;padding:8px;margin:4px;color:inherit';section.append(studio);$('#motion-speed-dialog .settings-sections').append(section);
+    const settingsDialog=$('#motion-speed-dialog');
+    developerTools=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,mounts:{
+      nearby:async({host,isCurrent})=>{
+        const {setupNearbyEditor}=await import('./nearby-editor.js');if(!isCurrent()||world.scene.isDisposed)return;
+        const control=setupNearbyEditor({root:$('#app'),host,settingsDialog,world,getPlayer:()=>actor,
+          getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]:not(#motion-speed-dialog)')}),
+          onEdit:async id=>{
+            const mapId=world.mapId,generation=world.toolGeneration,canOpen=()=>isCurrent()&&developerTools?.enabled('nearby')===true&&document.querySelector('#motion-speed-dialog')?.open===true&&!world.scene.isDisposed&&world.mapId===mapId&&world.toolGeneration===generation&&ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]:not(#motion-speed-dialog)')&&!controller?.dead&&boss.playerHp>0;
+            const editor=await getPlacementEditor(canOpen);
+            if(!canOpen())throw new Error('지역이 준비된 뒤 가까운 대상을 다시 골라 주세요.');
+            document.querySelector('#motion-speed-dialog')?.close?.();
+            try{await editor.enter({selection:id});}catch(error){toast(error.message);throw error;}
+          }});
+        world.nearbyEditor=control;return {update:control.update,dispose(){control.dispose();if(world.nearbyEditor===control)world.nearbyEditor=null;}};
+      },
+      authoring:({host,isCurrent})=>{
+        if(!isCurrent()||world.scene.isDisposed)return;
+        const control=setupAuthoringNavigation({root:$('#app'),host,href:location.href,mapId:world.mapId,getState:()=>({ready:(ready||!!world.toolLease?.active)&&!loadingAsset,mapId:world.mapId}),onMapChange:async id=>{if(!isCurrent()||id===world.mapId)return;await mapTransition.travel(travelUrl(location.href,authoringCharacter(id)));world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();}});
+        const lab=document.createElement('a'),url=new URL(location.href);for(const key of ['developer','actorLab','cinematic','cinematicPreview'])url.searchParams.delete(key);url.searchParams.set('actorLab','1');lab.href=url.href;lab.textContent='배우 실험';host.append(lab);
+        world.authoringNavigation=control;return {notifyReady:control.notifyReady,dispose(){control.dispose();lab.remove();if(world.authoringNavigation===control)world.authoringNavigation=null;}};
+      },
+    }});
+    world.scene.onDisposeObservable.addOnce(()=>developerTools?.dispose());
+    if(import.meta.hot)import.meta.hot.dispose(()=>developerTools?.dispose());
   }
   loadCharacter();
 } catch (error) {

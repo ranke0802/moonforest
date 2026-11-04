@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
-  "bytes": 682323030,
+  "bytes": 682325965,
   "files": [
     {
       "path": "app.webmanifest",
@@ -14,9 +14,9 @@
       "sha256": "c9fe18fca79ec08aa0a13d7cb5123bc51fed35ad7ae4cf8b557acd4d9ca0adff"
     },
     {
-      "path": "assets/actor-encounter-adapter-DUmCB8uK.js",
+      "path": "assets/actor-encounter-adapter-fYUG1YSC.js",
       "bytes": 9824,
-      "sha256": "f347e32940562a9ac584c1149b74f696d7971da2fc3a0c5ba577999df7cc7bf0"
+      "sha256": "b20b60b0ab4e9a4014b3c99508884ee0fb47f3302328ac1de21b49b7773ea9dd"
     },
     {
       "path": "assets/apple-CP-uTjm2.webp",
@@ -34,9 +34,9 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/authored-placement-runtime-CBxAg_E1.js",
+      "path": "assets/authored-placement-runtime-BI8pNMNB.js",
       "bytes": 27313,
-      "sha256": "dbbb0ec6a3d9f4096856f499f26a01c5ab14ac2aebd010bfe81bc7233122735e"
+      "sha256": "c3bf4250ddc46301de4d3b1b91f1ee99a36d5715cae7fa886923ad8d6f7826e8"
     },
     {
       "path": "assets/babylon-game-CRNdG57U.js",
@@ -1389,9 +1389,9 @@
       "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c"
     },
     {
-      "path": "assets/cinematic-game-D2BRq9k2.js",
+      "path": "assets/cinematic-game-DLdCwYBo.js",
       "bytes": 50754,
-      "sha256": "e7781c3c736e17bd8d738182d4037b089d17f64da3d868050203b05473d941d3"
+      "sha256": "dedceaa5bcb9bf33b3ecd47cf4bbc1e0c5785eb46eb3f1b2da5bde322ffb9f30"
     },
     {
       "path": "assets/cinematic-interaction-BenB2Ah0.js",
@@ -7224,14 +7224,14 @@
       "sha256": "c56d791e858321919256b45373e6ee2ee791031fd2b779eac7081c59c0daa89d"
     },
     {
-      "path": "assets/developer-actors-CbCa7pxR.js",
+      "path": "assets/developer-actors-NLma8A6w.js",
       "bytes": 19913,
-      "sha256": "348f38c17f0f5b128144b937281fa58c2cb8b4b568e960be901437a142bc3aea"
+      "sha256": "f344b15625a076d4e175d659780be2d7fc350eae68196ba2d414e3f0cf9f2242"
     },
     {
-      "path": "assets/developer-editor-3ZFXax_9.js",
+      "path": "assets/developer-editor-iSONvjvq.js",
       "bytes": 36518,
-      "sha256": "e67ff4c26486a8c1154002c1fa95d1375fc0a075eb9889cbe1120dd02deef23f"
+      "sha256": "d6078de67f1bb9ab65810a2895f33fa9cdaf882e891b8da912311e273871a2a6"
     },
     {
       "path": "assets/dialogue-C18xk6mI.webp",
@@ -7264,14 +7264,14 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-BenfCopt.js",
-      "bytes": 2822558,
-      "sha256": "35fa28758b9f0e2713003870c430d17a42afd6431a8b51ccb799f69b065828ad"
-    },
-    {
       "path": "assets/game-CTPmmHJX.css",
       "bytes": 102334,
       "sha256": "c3d789437296ab2b681655ee6c32d22bc3e1bf6b40e2ea850a75c5f464189522"
+    },
+    {
+      "path": "assets/game-Cxq-omRx.js",
+      "bytes": 2825204,
+      "sha256": "7366b4db48eb167adeda8f773f3b68deb26d5add2d768710c74aefc3506e6f7c"
     },
     {
       "path": "assets/game-tool-lease-D9J2OuiR.js",
@@ -7354,9 +7354,9 @@
       "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e"
     },
     {
-      "path": "assets/nearby-editor-DescdG0l.js",
-      "bytes": 4092,
-      "sha256": "251f52dad8bccd0882c6a1ba4182f3226171348cd168a96bfa7e6301152c2885"
+      "path": "assets/nearby-editor-CTNnuwMu.js",
+      "bytes": 4381,
+      "sha256": "a5d7d3858d116e61ba8b7ead1e5fb761d70b3f853e475c042dacce5e222d7fd5"
     },
     {
       "path": "assets/panel-DRx_KGK2.webp",
@@ -7374,9 +7374,9 @@
       "sha256": "8f6a5e95b6ac9cecfede6cdaa6fe0d535e8629b7d5c8f2ab00bd7870a62d9011"
     },
     {
-      "path": "assets/placement-document-CwzA-EvK.js",
+      "path": "assets/placement-document-BHI2W1Xi.js",
       "bytes": 8956,
-      "sha256": "7e91e228d9a2627b4d954f4eb1e3a36004595819f125dec75f1842bb177def7a"
+      "sha256": "6c22f1c6e7bb0a594101211eef5b13514feb9525128bf3cb14ba589b865e4430"
     },
     {
       "path": "assets/quest-props.json",
@@ -7491,7 +7491,7 @@
     {
       "path": "index.html",
       "bytes": 32965,
-      "sha256": "636561a36ad11da34f1e6495c2a45f99cf66fbc4e8b26ec264d9e6287bee2d6c"
+      "sha256": "33f047f869b5702bea829dddf105cce5a65e3b43c5a02c933f974fe1d2a266c0"
     },
     {
       "path": "KTX2_NOTICES.txt",

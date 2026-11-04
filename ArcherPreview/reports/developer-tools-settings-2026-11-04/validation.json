@@ -1,0 +1,54 @@
+{
+  "baseline": "025ec479345978270c2a4ac7a04d072b8f92ed42",
+  "browserAutomation": false,
+  "settingsPath": "설정 → 개발 도구",
+  "defaults": {
+    "nearby": false,
+    "authoring": false
+  },
+  "storageKey": "moonforest-developer-tools-v1",
+  "placement": "Both launchers use normal flow inside the settings dialog. No HUD launcher overlay.",
+  "performance": "No nearby import or traversal while OFF; inline enabled mode does not register a scene observer and does not traverse while settings is closed.",
+  "preserved": [
+    "HUD action positions and top action icons",
+    "combat and hit rules",
+    "mobile quality profiles",
+    "house/boss texture bytes",
+    "geometry and existing LOD"
+  ],
+  "tests": {
+    "passed": 74,
+    "total": 74,
+    "failed": 0,
+    "logSha256": "a224a6c5864d4c84d405230a1537b168e865e4417d4781ca6dac8a198a61d704"
+  },
+  "independentReview": {
+    "passed": true,
+    "reproducedCancelledConditions": 9,
+    "constructorCallsAfterCancellation": 0,
+    "entriesAfterCancellation": 0,
+    "normalEntryCalls": 1,
+    "method": "Independent agent executed actual onEdit and getPlacementEditor bodies; no full suite or browser."
+  },
+  "limits": [
+    "DOM/state regression checks and staged asset graph checks; no physical-device visual inspection."
+  ],
+  "sourceHashes": {
+    "src/main.js": "f9a2257d35760f65ae63bb01985fc7380d840ace87a16297effd62c9f2abd131",
+    "src/authoring-navigation.js": "7a13f53c282ec37da4fcda73ffc8a37868e9c2a6901d58b957dfbe840636a430",
+    "src/nearby-editor.js": "768c0d2bd00f472022b187ddc72a621917e61d5e0b068a4a625a9f5dd93f3e25",
+    "tests/developer-tool-settings.test.js": "26aca0c6bf3942e9af1fee9431d61891e06ca2824ffd3bdf1c9537237a6df27a",
+    "tests/nearby-editor.test.js": "42135795e41a3f96497c891ef32c7b2d8b06d90bccb1ce747adfc015d0bc1ab5",
+    "tests/startup-frame-failure.test.js": "c75daa77e8d7c5a7bc104e06e1290f7293af415fe94a1a857a8977ade5b0fd57",
+    "src/tool-visibility-settings.js": "4115c88314df651ebef11d11e46a423ffd76616dfbb77b551b6e9df949b8e70c"
+  },
+  "build": {
+    "passed": true,
+    "runtimeGraphChecked": true,
+    "changedPublicFiles": 10,
+    "verifiedSiteFiles": 1504,
+    "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "resourceBytes": 669635582,
+    "resourceGraphUnchanged": true
+  }
+}
