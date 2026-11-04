@@ -289,7 +289,7 @@ export class AuthoredPlacementRuntime {
  }
  update(dt=0,player){
   if(!this._current())return;this.lastPlayer=player??this.lastPlayer;
-  const position=this.lastPlayer?.position??this.world.camera.target??this.world.camera.getTarget();
+  const position=this.world.toolLease?.active?this.world.camera.getTarget():this.lastPlayer?.position??this.world.camera.target??this.world.camera.getTarget();
   this.visibility?.update(this.world.camera.globalPosition,position,Math.max(0,Number.isFinite(dt)?dt:0));
   if(this.existingPreview)this.existingPreview.record.root.setEnabled(true);
  }

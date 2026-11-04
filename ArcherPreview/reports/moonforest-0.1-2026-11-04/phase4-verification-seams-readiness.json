@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-11-04T04:12:14.308Z",
+  "deployedCommit": "7639943",
+  "mainSourceSha256": "601651fcc0d2f1a82e99258fe0699eee5129735838126127918e9ddc0db7fb2b",
+  "finding": "Actual deployed main pause/focus producers fail to reannounce cinematic readiness after initial hidden/settings state",
+  "reproduced": true,
+  "findings": [
+    {
+      "firstPause": "hidden",
+      "confirmed": true,
+      "initialReady": false,
+      "afterActualResumeCallbackReadyAnnouncements": [],
+      "lastAnnouncedReady": false,
+      "callbackSource": "deployed main restorePlayback -> syncPlayback",
+      "effect": "Parent transport waiting on host-ready:true remains blocked after game becomes available."
+    },
+    {
+      "firstPause": "settings",
+      "confirmed": true,
+      "initialReady": false,
+      "afterActualResumeCallbackReadyAnnouncements": [],
+      "lastAnnouncedReady": false,
+      "callbackSource": "deployed main syncPlayback",
+      "effect": "Parent transport waiting on host-ready:true remains blocked after game becomes available."
+    }
+  ],
+  "scope": "Exact deployed main callback AST executed with actual cinematic-game readiness producer and real NullEngine world, controlled DOM flags. No browser startup/layout/pixels claim."
+}

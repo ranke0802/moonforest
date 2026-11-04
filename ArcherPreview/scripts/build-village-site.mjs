@@ -55,7 +55,7 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
     }
   }
   for(const entry of await readdir(publicRoot,{withFileTypes:true})){
-    if(!entry.isFile()||!(entry.name==='resource-cache.js'||entry.name==='app.webmanifest'||/notice|licen[cs]e|credits|copying/i.test(entry.name)))continue;
+    if(!entry.isFile()||!(entry.name==='resource-cache.js'||entry.name==='app.webmanifest'||entry.name==='moonforest-help.html'||/notice|licen[cs]e|credits|copying/i.test(entry.name)))continue;
     if(!/\.(?:js|txt|md|html|json|webmanifest)$/i.test(entry.name)&&entry.name.includes('.'))continue;
     const absolute=resolve(publicRoot,entry.name);files.set(entry.name,{absolute,bytes:(await readFile(absolute)).length});
   }

@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-11-04T04:38:57.543Z",
+  "deployedCommit": "current-working-tree",
+  "mainSourceSha256": "8da36631c118a25f2f1c1dc9f2f3c9da2c587a639c798ff7aa0c5aac518c9f97",
+  "finding": "Current main pause/focus producers reannounce cinematic readiness after initial hidden/settings state",
+  "passed": true,
+  "findings": [
+    {
+      "firstPause": "hidden",
+      "confirmed": false,
+      "initialReady": false,
+      "afterActualResumeCallbackReadyAnnouncements": [
+        {
+          "channel": "moonforest-cinematic-studio",
+          "version": 1,
+          "requestId": "host-ready",
+          "reply": true,
+          "ok": true,
+          "ready": true,
+          "mapId": "village"
+        }
+      ],
+      "lastAnnouncedReady": true,
+      "callbackSource": "deployed main restorePlayback -> syncPlayback",
+      "effect": "Actual resume callback now announces ready:true to the waiting parent."
+    },
+    {
+      "firstPause": "settings",
+      "confirmed": false,
+      "initialReady": false,
+      "afterActualResumeCallbackReadyAnnouncements": [
+        {
+          "channel": "moonforest-cinematic-studio",
+          "version": 1,
+          "requestId": "host-ready",
+          "reply": true,
+          "ok": true,
+          "ready": true,
+          "mapId": "village"
+        }
+      ],
+      "lastAnnouncedReady": true,
+      "callbackSource": "deployed main syncPlayback",
+      "effect": "Actual resume callback now announces ready:true to the waiting parent."
+    }
+  ],
+  "scope": "Exact main callback AST executed with actual cinematic-game readiness producer and real NullEngine world, controlled DOM flags. No browser startup/layout/pixels claim."
+}

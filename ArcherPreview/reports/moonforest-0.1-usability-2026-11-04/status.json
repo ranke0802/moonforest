@@ -1,0 +1,51 @@
+{
+  "release": "MoonForest 0.1 ver",
+  "phase": "validated-ready-to-publish",
+  "userAcceptance": "Both functions through screen controls, without code/JSON/commands",
+  "baseline": "763994374d394ebbfe33bc25a398fcb8f96a0e90",
+  "constraints": {
+    "browserAutomation": false,
+    "paidAssets": false,
+    "qualityPolicy": "unchanged"
+  },
+  "reproduced": [
+    {
+      "issue": "Cinematic map travel sent map IDs to a character-only route function",
+      "repair": "Map-to-character translation before actual travel"
+    },
+    {
+      "issue": "Hidden/settings initial load announced not-ready and never announced recovery",
+      "repair": "Readiness producer notifications on sync/recovery and settled map generation"
+    },
+    {
+      "issue": "Actor add only edited document; nothing appeared without manual reload",
+      "repair": "Immediate actual preview refresh after actor change"
+    },
+    {
+      "issue": "Neutral camera jumped to world origin and actors overlapped live hero",
+      "repair": "Capture live map view/feet before initial load; owned hero visibility restoration"
+    },
+    {
+      "issue": "Save required export/commands/registration/reimport",
+      "repair": "Studio save-scene bridge + shared browser library + selected game-open path"
+    },
+    {
+      "issue": "Tool entry hidden in settings and catalog mostly read-only without clear first action",
+      "repair": "Visible create navigation and three supported prop choices + readiness-gated primary action"
+    }
+  ],
+  "verification": {
+    "tests": {
+      "total": 1653,
+      "passed": 1653,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 161407.5365
+    },
+    "actualSequenceReport": "../moonforest-0.1-2026-11-04/phase4-verification-usability-seams-summary.json",
+    "testLogSHA256": "0be937216df07c4f75ac44335502dd2b7c8459a1610c8bd01249e0d693efe13a",
+    "browserHandsOn": "unverified; original browser automation ban honored",
+    "physicalDevicePerformance": "unverified"
+  },
+  "nextAction": "Push reviewed repair and verify Actions/public changed-file hashes"
+}

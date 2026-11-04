@@ -1,0 +1,363 @@
+{
+  "generatedAt": "2026-11-04T04:27:05.431Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/cinematic-studio.js": "cdc98907c815b64a11b934788f5cdcc293645a49856c2c8daa22351b9d469a51",
+    "src/cinematic-studio.css": "07de01870d6086ba29175d1a7753f76d2493b7200111a72224524f8419fb2fa5",
+    "src/cinematic-game.js": "acd650f91f885554ee52d2e037ad4798e984a0fac5a53b21af666089d2e4d55a",
+    "src/cinematic-protocol.js": "e78155b9b2de2469d6cb0a22c9e3c8d4929785236bce9292437546df9658a79b",
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/game-tool-lease.js": "07b16f8452fdec4c62d3daeca493b187fca3ad1097920d582f78d3993515067a",
+    "src/authoring-navigation.js": "757d4473231cb920a897141179a5b28f8217cd78f7c79e0dcf69f5f441a10f13"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "first visible scene-open button reaches actual game readiness and captures its world view through real transport",
+      "passed": true,
+      "actualBridgeReplies": true,
+      "initialCameraFromLiveMap": true,
+      "anchorFeet": [
+        0,
+        0,
+        -10
+      ],
+      "coldModelParses": 0,
+      "iframeLoadEventRequired": false,
+      "iframeRevisionPreserved": true
+    },
+    {
+      "name": "actor add and move buttons prepare real native goblin and update actual host with hero ownership",
+      "passed": true,
+      "realGoblinParses": 1,
+      "actualHostActors": 1,
+      "liveHeroEnabled": false,
+      "sceneOwnsNoCombatActors": true,
+      "actorMoveApplied": true,
+      "nativeDraws": {
+        "draws": 3,
+        "mainDraws": 2,
+        "shadowDraws": 1,
+        "submittedTrianglesByPass": {
+          "main": 20824,
+          "shadow": 10412
+        },
+        "submittedTrianglesByRole": {
+          "outline": 10412,
+          "internal-lines": 0,
+          "surface-or-effect": 20824
+        },
+        "internalLines": "Existing internal-line material shader plugin retained in surface draws; zero standalone internal-line batches does not mean zero shader cost.",
+        "scope": "NullEngine actual CPU draw submissions including silhouettes/internal lines/shadow where selected; no rasterization/GPU or FPS result."
+      },
+      "resources": {
+        "meshes": 4,
+        "geometries": 2,
+        "materials": 4,
+        "textures": 6,
+        "skeletons": 1,
+        "animationGroups": 12,
+        "morphManagers": 0,
+        "transformNodes": 42,
+        "sceneObservers": 9,
+        "sceneObserverKinds": {
+          "onDisposeObservable": 5,
+          "onNewGeometryAddedObservable": 1,
+          "onNewMaterialAddedObservable": 1,
+          "onPointerObservable": 2
+        },
+        "nodeObservers": 1,
+        "pendingSceneItems": 0,
+        "battleEncounters": 0,
+        "estimatedMemory": {
+          "cpuUniqueGeometryBytes": 1244920,
+          "cpuUniqueMorphArrayBytes": 0,
+          "skeletonMatrixBytes": 4864,
+          "scope": "Lower-bound owned CPU buffer data and skeleton matrices, deduplicated by actual object identity. Excludes JS object overhead, decoded image caches, driver/GPU allocations and physical-device residency."
+        }
+      }
+    },
+    {
+      "name": "camera-save and playback buttons act on actual camera player and native timeline without fabricated replies",
+      "passed": true,
+      "cameraSavedFromActualHost": true,
+      "playbackActualTime": 0.1,
+      "actualPlayerState": "paused",
+      "commands": [
+        "capture-camera",
+        "load",
+        "load",
+        "load",
+        "pause",
+        "capture-camera",
+        "load",
+        "status",
+        "seek",
+        "loop",
+        "play",
+        "pause"
+      ]
+    },
+    {
+      "name": "work-save and work-open buttons emit an attached downloadable file and reopen the exact scene without text editing",
+      "passed": true,
+      "connectedDownloadAnchor": true,
+      "fileExtension": ".moonforest-scene",
+      "deferredUrlRevocation": true,
+      "exactFileReopen": true,
+      "noJsonEditing": true,
+      "note": "Native browser download/save-dialog behavior remains unmeasured."
+    },
+    {
+      "name": "two new works receive different stable IDs and remain saved together without advanced identifier editing",
+      "passed": true,
+      "primaryNewWorks": 2,
+      "coexistingSavedWorks": 2,
+      "stableDistinctIds": true,
+      "advancedIdentifierEdits": 0
+    },
+    {
+      "name": "game-save and game-open buttons persist the exact scene and navigate to a usable selected game without JSON or commands",
+      "passed": true,
+      "sharedStorageExact": true,
+      "gameUrl": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/index.html?release=moonforest-0.1&character=warrior-v3&rev=verification-new-flow&cinematic=1&scene=scene-20261104042705-3",
+      "selectedStoredSceneOpened": true,
+      "gameReadyBeforeExplicitPlay": true,
+      "gamePlayButtonWorks": true,
+      "coldNewGameParses": 1
+    }
+  ],
+  "traffic": [
+    {
+      "direction": "game-to-studio",
+      "id": "host-ready",
+      "ok": true,
+      "ready": false
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "host-ready",
+      "ok": true,
+      "ready": true
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "capture-camera",
+      "id": "studio-1"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-1",
+      "ok": true,
+      "state": "idle"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-2"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-2",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-3"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-3",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-4"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-4",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "pause",
+      "id": "studio-5"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-5",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "capture-camera",
+      "id": "studio-6"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-6",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-7"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-7",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "status",
+      "id": "studio-8"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-8",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "seek",
+      "id": "studio-9"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-9",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "loop",
+      "id": "studio-10"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-10",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "play",
+      "id": "studio-11"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-11",
+      "ok": true,
+      "state": "playing"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "pause",
+      "id": "studio-12"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-12",
+      "ok": true,
+      "state": "paused"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-13"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-13",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "save-scene",
+      "id": "studio-14"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-14",
+      "ok": true,
+      "saved": true
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "capture-camera",
+      "id": "studio-15"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-15",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-16"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-16",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "load",
+      "id": "studio-17"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-17",
+      "ok": true,
+      "state": "ready"
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "save-scene",
+      "id": "studio-18"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-18",
+      "ok": true,
+      "saved": true
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "save-scene",
+      "id": "studio-19"
+    },
+    {
+      "direction": "game-to-studio",
+      "id": "studio-19",
+      "ok": true,
+      "saved": true
+    },
+    {
+      "direction": "studio-to-game",
+      "command": "stop",
+      "id": "studio-20"
+    }
+  ],
+  "remainingTimers": {
+    "timeouts": 0,
+    "intervals": 0
+  },
+  "scope": "Actual Studio DOM button events and production transport wired to actual GameCinematics/SceneHost/lease/shared browser-storage logic over paired same-origin surfaces. Actual shipped native goblin geometry/rig/clips loaded with opaque1x1material fixtures. No hand-authored readiness/load/save replies. Programmatic camera pose, not native pointer gesture; controlled startup availability, not full main/browser startup. This is seam verification, not proof of visual usability, browser downloads, pixels or device performance."
+}

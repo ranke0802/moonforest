@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-11-04T04:38:56.761Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/main.js": "8da36631c118a25f2f1c1dc9f2f3c9da2c587a639c798ff7aa0c5aac518c9f97",
+    "src/authoring-navigation.js": "757d4473231cb920a897141179a5b28f8217cd78f7c79e0dcf69f5f441a10f13"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "normal release toolbar exposes both workflows and all actual main map callbacks translate map IDs correctly",
+      "passed": true,
+      "visibleWorkflowLinks": [
+        {
+          "label": "게임하기",
+          "href": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/index.html?character=warrior-v3&release=moonforest-0.1&rev=7639943"
+        },
+        {
+          "label": "맵 꾸미기",
+          "href": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/index.html?character=warrior-v3&release=moonforest-0.1&rev=7639943&developer=1"
+        },
+        {
+          "label": "컷씬 만들기",
+          "href": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/cinematic-studio.html?rev=7639943"
+        },
+        {
+          "label": "저장한 컷씬 보기",
+          "href": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/index.html?character=warrior-v3&release=moonforest-0.1&rev=7639943&cinematic=1"
+        },
+        {
+          "label": "짧은 사용 안내",
+          "href": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/moonforest-help.html?rev=7639943"
+        }
+      ],
+      "preReadyMapSelectionDisabled": true,
+      "normalMenuTravelCallbacks": 4,
+      "cinematicTravelCallbacks": 4,
+      "unknownDestinationErrors": 0,
+      "note": "Callbacks use a controlled map transition; actual map loading/visual layout is not exercised."
+    },
+    {
+      "name": "exact initial-frame main guard notifies tools only after load settles and once per generation",
+      "passed": true,
+      "duringLoadingCalls": 0,
+      "firstSettledGenerationCalls": 1,
+      "nextSettledGenerationCalls": 1,
+      "noPerFrameNotifications": true
+    }
+  ],
+  "scope": "Actual navigation DOM plus exact main callback/initial-frame guard AST; controlled navigation and readiness flags. Confirms route/action wiring, not full game startup, browser pointer behavior or visual discoverability."
+}

@@ -1,0 +1,520 @@
+{
+  "generatedAt": "2026-11-04T04:10:21.195Z",
+  "passed": true,
+  "base": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/",
+  "expectedDeployedCommit": "7639943",
+  "browserAutomation": false,
+  "cases": [
+    {
+      "name": "deployed legacy release editor player and iframe URLs return HTML with valid actual module entry URLs",
+      "passed": true,
+      "entries": [
+        {
+          "path": "?character=warrior-v3",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+          "htmlSha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+        },
+        {
+          "path": "?character=moonforest-0.1",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+          "htmlSha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+        },
+        {
+          "path": "?character=moonforest-0.1&developer=1",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+          "htmlSha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+        },
+        {
+          "path": "?character=moonforest-0.1&cinematic=1",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+          "htmlSha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+        },
+        {
+          "path": "?release=moonforest-0.1&character=warrior-v3&cinematicPreview=1",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+          "htmlSha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+        },
+        {
+          "path": "cinematic-studio.html",
+          "entry": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/cinematicStudio-D2WvlIOu.js",
+          "htmlSha256": "249ca264ae4a9f9108100c4fea062ca4864891a1f0796110cda01845551abc19"
+        }
+      ],
+      "note": "HTTP HTML equality does not prove client initialization or usability."
+    },
+    {
+      "name": "shipped tool chunks and iframe-relative assets resolve under the actual deployment subpath",
+      "passed": true,
+      "toolChunkUrls": [
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/asset-catalog-BZQ8cpPs.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/authored-placement-runtime-C1WmNDev.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~juytrnsx-DIRP6lJi.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mn6jjy26-DpDCMtQw.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~epy9wh9j-Bh3wKyVb.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~oixdi23l-dqz0dHXK.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~3uj71poc-BqltO0ki.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jdky65i5-DKkz0thF.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~h8czwtks-C6Xfc4yO.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kbid4c99-Ce77JD5z.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m34i4hxx-D3kDnvNy.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kf3g2tcp-CggIQgL7.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~e4n3a102-BRfcgNbX.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ku703bnn-DjnIUn53.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~g3fc4djz-DbE27l5S.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mmebaicm-BQAM2XS_.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~my5yezvh-UAaWFXU0.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mzpfqcw1-D-XQlhUT.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~eniaem58-1CfyBCSS.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m9j0ur7b-DxRCJ9xV.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~dnvdm5pu-lRpealg5.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ine84vmd-CGYiptFb.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cd5o6cah-DiLjA2YY.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jl77mod1-DBIWZ4hn.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~o4j8awu5-CZJPdoMF.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ngyzvn7x-BVZwlmgT.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BOHNWade.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jibqjdyw-Cp0w6PSE.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~js1b7g51-Dl6DHpQL.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cjtl9nw9-4vM9tZF_.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-oD446DGi.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-CIfi7n6e.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/developer-editor-Bh9w9-Jy.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~developer-editor-DXnj-yry.js",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/cinematic-game-DUE6UT1z.js"
+      ],
+      "gameSourceSha256": "750ae4254aad57bb1193921f011fec280c408a70d2aa1f687874ad6c00b66f78",
+      "studioSourceSha256": "c4116a37909b1b301e118cd58743ae96432a459b7813b20dff077da644a5cf31",
+      "assetBase": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/"
+    },
+    {
+      "name": "first selectable prop actual manifest model buffer and texture URLs are present over deployed HTTP",
+      "passed": true,
+      "firstProp": "crate-barrel-cluster",
+      "model": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf",
+      "bufferAndImageRefs": 2,
+      "goblinVersion": "Hooded Goblin - 12 source motions",
+      "meaning": "Proves URL availability and metadata, not actual browser decode/shader/interaction."
+    }
+  ],
+  "observations": [
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=warrior-v3",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "10356",
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=moonforest-0.1",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "10356",
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=moonforest-0.1&developer=1",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "10356",
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=moonforest-0.1&cinematic=1",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "10356",
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?release=moonforest-0.1&character=warrior-v3&cinematicPreview=1",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "10356",
+      "bytes": 35671,
+      "sha256": "66b6fc5f7c1602e5de7ec31a93f09c6d9d354e693a0ead103c57c90d8b813ee2"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/cinematic-studio.html",
+      "method": "GET",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "announcedBytes": "393",
+      "bytes": 833,
+      "sha256": "249ca264ae4a9f9108100c4fea062ca4864891a1f0796110cda01845551abc19"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/cinematicStudio-D2WvlIOu.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "8790"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/game-DMzcR2a4.js",
+      "method": "GET",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "649452",
+      "bytes": 2809877,
+      "sha256": "750ae4254aad57bb1193921f011fec280c408a70d2aa1f687874ad6c00b66f78"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/asset-catalog-BZQ8cpPs.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "31614"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/authored-placement-runtime-C1WmNDev.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "7014"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~juytrnsx-DIRP6lJi.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "35032"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mn6jjy26-DpDCMtQw.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "10401"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~epy9wh9j-Bh3wKyVb.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "388"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~oixdi23l-dqz0dHXK.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "1070"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~3uj71poc-BqltO0ki.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "177"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jdky65i5-DKkz0thF.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "200"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~h8czwtks-C6Xfc4yO.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "4717"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kbid4c99-Ce77JD5z.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "602"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m34i4hxx-D3kDnvNy.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "1588"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~kf3g2tcp-CggIQgL7.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "2203"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~e4n3a102-BRfcgNbX.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "440"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ku703bnn-DjnIUn53.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "4219"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~g3fc4djz-DbE27l5S.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "2628"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mmebaicm-BQAM2XS_.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "17291"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~my5yezvh-UAaWFXU0.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "14910"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~mzpfqcw1-D-XQlhUT.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "176"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~eniaem58-1CfyBCSS.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "2144"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~m9j0ur7b-DxRCJ9xV.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "5076"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~dnvdm5pu-lRpealg5.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "452"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ine84vmd-CGYiptFb.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "199"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cd5o6cah-DiLjA2YY.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "824"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jl77mod1-DBIWZ4hn.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "3285"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "87650"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~o4j8awu5-CZJPdoMF.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "20588"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~ngyzvn7x-BVZwlmgT.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "1193"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BOHNWade.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "3868"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jibqjdyw-Cp0w6PSE.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "184"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~js1b7g51-Dl6DHpQL.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "5642"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~cjtl9nw9-4vM9tZF_.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "3971"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-oD446DGi.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "5256"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-CIfi7n6e.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "4568"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/developer-editor-Bh9w9-Jy.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "7596"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/babylon-tools~developer-editor-DXnj-yry.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "20147"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/cinematic-game-DUE6UT1z.js",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "12696"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/cinematicStudio-D2WvlIOu.js",
+      "method": "GET",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "announcedBytes": "8790",
+      "bytes": 23170,
+      "sha256": "c4116a37909b1b301e118cd58743ae96432a459b7813b20dff077da644a5cf31"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/village.json",
+      "method": "GET",
+      "status": 200,
+      "type": "application/json; charset=utf-8",
+      "announcedBytes": "24844",
+      "bytes": 100847,
+      "sha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf",
+      "method": "GET",
+      "status": 200,
+      "type": "model/gltf+json",
+      "announcedBytes": "870",
+      "bytes": 2333,
+      "sha256": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
+      "method": "HEAD",
+      "status": 200,
+      "type": "application/octet-stream",
+      "announcedBytes": "129648"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/025ed1c44b253e7ab51a2e9cb86429c45512b1c04821eb28bd97a85f107aff85.ktx2",
+      "method": "HEAD",
+      "status": 200,
+      "type": "image/ktx2",
+      "announcedBytes": "241962"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/hooded-goblin.json",
+      "method": "GET",
+      "status": 200,
+      "type": "application/json; charset=utf-8",
+      "announcedBytes": "20296",
+      "bytes": 106221,
+      "sha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343"
+    },
+    {
+      "url": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+      "method": "HEAD",
+      "status": 200,
+      "type": "model/gltf+json",
+      "announcedBytes": "22625"
+    }
+  ],
+  "limits": [
+    "The deployed HTML/JS/assets can be fetched; this does not exercise browser startup, native pointer events, shader readiness, visual layout, GPU or actual UX.",
+    "No screenshot or functionality claim is inferred from successful HTTP status."
+  ]
+}

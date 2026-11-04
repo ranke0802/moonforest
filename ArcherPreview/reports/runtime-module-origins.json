@@ -2,16 +2,16 @@
   "version": 1,
   "chunks": [
     {
-      "fileName": "assets/cinematicStudio-D2WvlIOu.js",
+      "fileName": "assets/cinematicStudio-CwC7o545.js",
       "isEntry": true,
       "imports": [
         "assets/goblin-spec-BkFsagN0.js",
         "assets/asset-catalog-BZQ8cpPs.js",
         "assets/actor-definitions-DQrcBVjU.js",
-        "assets/cinematic-protocol-CuJ49ki-.js"
+        "assets/cinematic-protocol-Ch5R8SOf.js"
       ],
       "dynamicImports": [],
-      "bytes": 23170,
+      "bytes": 29157,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/src/cinematic-studio.css",
         "C:/dev/moonforest-archer/ArcherPreview/src/cinematic-studio.js",
@@ -19,7 +19,7 @@
       ]
     },
     {
-      "fileName": "assets/game-DMzcR2a4.js",
+      "fileName": "assets/game--ZRGzXGI.js",
       "isEntry": true,
       "imports": [
         "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -42,15 +42,15 @@
       ],
       "dynamicImports": [
         "assets/asset-catalog-BZQ8cpPs.js",
-        "assets/authored-placement-runtime-C1WmNDev.js",
-        "assets/game-DMzcR2a4.js",
-        "assets/placement-document-tuc32km8.js",
-        "assets/game-tool-lease-DVeWxHzv.js",
-        "assets/developer-actors-DJUuOKyz.js",
-        "assets/developer-editor-Bh9w9-Jy.js",
-        "assets/cinematic-game-DUE6UT1z.js"
+        "assets/authored-placement-runtime-CAbvr3mm.js",
+        "assets/game--ZRGzXGI.js",
+        "assets/placement-document-C0ey8alC.js",
+        "assets/game-tool-lease-Dw9nb4S4.js",
+        "assets/developer-actors-CQJFNiqB.js",
+        "assets/developer-editor-ByswrnW4.js",
+        "assets/cinematic-game-BOxTWAxF.js"
       ],
-      "bytes": 2804109,
+      "bytes": 2809407,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/src/styles.css",
         "C:/dev/moonforest-archer/ArcherPreview/src/dot-minimap.css",
@@ -64,6 +64,7 @@
         "C:/dev/moonforest-archer/ArcherPreview/src/release-route.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/authored-map-index.json",
         "C:/dev/moonforest-archer/ArcherPreview/src/authored-map-loader.js",
+        "C:/dev/moonforest-archer/ArcherPreview/src/authoring-navigation.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/ui-test-state.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/hud-top-actions.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/ui-test.js",
@@ -293,12 +294,12 @@
       ]
     },
     {
-      "fileName": "assets/actor-encounter-adapter-DyFlqzUl.js",
+      "fileName": "assets/actor-encounter-adapter-BV-2vYME.js",
       "isEntry": false,
       "imports": [
         "assets/babylon-game-dzYjm6Bm.js",
         "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js",
-        "assets/game-DMzcR2a4.js",
+        "assets/game--ZRGzXGI.js",
         "assets/actor-definitions-DQrcBVjU.js"
       ],
       "dynamicImports": [],
@@ -320,7 +321,7 @@
       ]
     },
     {
-      "fileName": "assets/authored-placement-runtime-C1WmNDev.js",
+      "fileName": "assets/authored-placement-runtime-CAbvr3mm.js",
       "isEntry": false,
       "imports": [
         "assets/rolldown-runtime-DK3Fl9T5.js",
@@ -328,11 +329,11 @@
         "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js",
         "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~g3fc4djz-DbE27l5S.js",
         "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js",
-        "assets/game-DMzcR2a4.js",
-        "assets/placement-document-tuc32km8.js"
+        "assets/game--ZRGzXGI.js",
+        "assets/placement-document-C0ey8alC.js"
       ],
       "dynamicImports": [],
-      "bytes": 21536,
+      "bytes": 21595,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/src/authored-placement-runtime.js"
       ]
@@ -3980,21 +3981,21 @@
       ]
     },
     {
-      "fileName": "assets/cinematic-game-DUE6UT1z.js",
+      "fileName": "assets/cinematic-game-BOxTWAxF.js",
       "isEntry": false,
       "imports": [
         "assets/babylon-game-dzYjm6Bm.js",
         "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js",
-        "assets/game-DMzcR2a4.js",
+        "assets/game--ZRGzXGI.js",
         "assets/asset-catalog-BZQ8cpPs.js",
         "assets/actor-definitions-DQrcBVjU.js",
-        "assets/cinematic-protocol-CuJ49ki-.js",
-        "assets/placement-document-tuc32km8.js",
-        "assets/authored-placement-runtime-C1WmNDev.js",
-        "assets/actor-encounter-adapter-DyFlqzUl.js"
+        "assets/cinematic-protocol-Ch5R8SOf.js",
+        "assets/placement-document-C0ey8alC.js",
+        "assets/authored-placement-runtime-CAbvr3mm.js",
+        "assets/actor-encounter-adapter-BV-2vYME.js"
       ],
       "dynamicImports": [],
-      "bytes": 33356,
+      "bytes": 36822,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/src/cinematic-player.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/cinematic-scene-host.js",
@@ -4004,11 +4005,11 @@
       ]
     },
     {
-      "fileName": "assets/cinematic-protocol-CuJ49ki-.js",
+      "fileName": "assets/cinematic-protocol-Ch5R8SOf.js",
       "isEntry": false,
       "imports": [],
       "dynamicImports": [],
-      "bytes": 26815,
+      "bytes": 26901,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/public/assets/audio.json",
         "C:/dev/moonforest-archer/ArcherPreview/src/cinematic-document.js",
@@ -4016,14 +4017,14 @@
       ]
     },
     {
-      "fileName": "assets/developer-actors-DJUuOKyz.js",
+      "fileName": "assets/developer-actors-CQJFNiqB.js",
       "isEntry": false,
       "imports": [
         "assets/babylon-game-dzYjm6Bm.js",
         "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~o7rzo1tq-29EzcLPb.js",
-        "assets/game-DMzcR2a4.js",
+        "assets/game--ZRGzXGI.js",
         "assets/actor-definitions-DQrcBVjU.js",
-        "assets/actor-encounter-adapter-DyFlqzUl.js"
+        "assets/actor-encounter-adapter-BV-2vYME.js"
       ],
       "dynamicImports": [],
       "bytes": 19913,
@@ -4033,7 +4034,7 @@
       ]
     },
     {
-      "fileName": "assets/developer-editor-Bh9w9-Jy.js",
+      "fileName": "assets/developer-editor-ByswrnW4.js",
       "isEntry": false,
       "imports": [
         "assets/babylon-game-dzYjm6Bm.js",
@@ -4041,24 +4042,25 @@
         "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~dnvdm5pu-lRpealg5.js",
         "assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-zjBUv_SR.js",
         "assets/babylon-tools~developer-editor-DXnj-yry.js",
-        "assets/game-DMzcR2a4.js",
+        "assets/game--ZRGzXGI.js",
         "assets/asset-catalog-BZQ8cpPs.js",
-        "assets/placement-document-tuc32km8.js",
-        "assets/authored-placement-runtime-C1WmNDev.js"
+        "assets/placement-document-C0ey8alC.js",
+        "assets/authored-placement-runtime-CAbvr3mm.js"
       ],
       "dynamicImports": [],
-      "bytes": 19209,
+      "bytes": 28008,
       "moduleIds": [
         "C:/dev/moonforest-archer/ArcherPreview/src/developer-editor.js"
       ]
     },
     {
-      "fileName": "assets/game-tool-lease-DVeWxHzv.js",
+      "fileName": "assets/game-tool-lease-Dw9nb4S4.js",
       "isEntry": false,
       "imports": [],
       "dynamicImports": [],
-      "bytes": 3869,
+      "bytes": 5383,
       "moduleIds": [
+        "C:/dev/moonforest-archer/ArcherPreview/src/tool-camera-input.js",
         "C:/dev/moonforest-archer/ArcherPreview/src/game-tool-lease.js"
       ]
     },
@@ -4077,11 +4079,11 @@
       ]
     },
     {
-      "fileName": "assets/placement-document-tuc32km8.js",
+      "fileName": "assets/placement-document-C0ey8alC.js",
       "isEntry": false,
       "imports": [
         "assets/witch-cave-layout-EZMYIgVS.js",
-        "assets/game-DMzcR2a4.js"
+        "assets/game--ZRGzXGI.js"
       ],
       "dynamicImports": [],
       "bytes": 7874,

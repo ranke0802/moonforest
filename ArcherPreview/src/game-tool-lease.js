@@ -1,3 +1,4 @@
+import {createToolCameraInput} from './tool-camera-input.js';
 // Loaded only by explicit authoring/cinematic paths. A lease borrows the game's
 // existing scene/frame loop; it never creates an engine, RAF or audio context.
 export function acquireGameToolLease({world,root,canvas,input,audio,getState,setReady,resetInput,reconcile},options={}){
@@ -67,6 +68,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    keyboard=camera.inputs?.attached?.keyboard??null;if(keyboard)camera.inputs.remove(keyboard);
    if(!camera.inputs?.attached?.pointers&&camera.inputs?.addPointers){camera.inputs.addPointers();ownedCameraInputs.push(camera.inputs.attached.pointers);}
    if(!camera.inputs?.attached?.mousewheel&&camera.inputs?.addMouseWheel){camera.inputs.addMouseWheel();ownedCameraInputs.push(camera.inputs.attached.mousewheel);}
+   if(canvas?.ownerDocument&&camera.inputs?.add){const movement=createToolCameraInput(canvas);camera.inputs.add(movement);ownedCameraInputs.push(movement);}
    for(const key of ['inertialAlphaOffset','inertialBetaOffset','inertialRadiusOffset','inertialPanningX','inertialPanningY'])if(key in camera)camera[key]=0;
    camera.attachControl(canvas,true);
   }

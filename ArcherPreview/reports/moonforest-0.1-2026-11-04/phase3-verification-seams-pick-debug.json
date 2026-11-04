@@ -1,0 +1,63 @@
+{
+  "findingStatus": "resolved",
+  "verifiedBy": "phase3-verification-seams-direct-editor.json",
+  "resolvedEditorSourceSha256": "ce3532abd4dc43ffddfb33bbeb57ec5534ece457c25b0d261044ed2b66641c26",
+  "resolution": "Shared editor picking now preserves isPickable and explicitly allows only immutable base support meshes. Original broad-predicate sky interception evidence retained below.",
+  "screen": [
+    1109.456391368257,
+    408.14192134401185,
+    0.9979206034140145
+  ],
+  "center": [
+    1.625,
+    0.9199999820854927,
+    34
+  ],
+  "camera": [
+    2.3086981773376465,
+    18.78437042236328,
+    17.10116195678711
+  ],
+  "screenPick": {
+    "hit": true,
+    "name": "painted-sky",
+    "distance": 0.9376206128612758
+  },
+  "directRayPick": {
+    "hit": true,
+    "name": "painted-sky",
+    "distance": 0.9922807156433568
+  },
+  "pickableFilter": {
+    "hit": true,
+    "name": "authored-authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8-crate-barrel-cluster_mesh0",
+    "id": "authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8",
+    "distance": 23.601649176205765
+  },
+  "propOnly": {
+    "hit": true,
+    "name": "authored-authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8-crate-barrel-cluster_mesh0",
+    "id": "authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8",
+    "distance": 23.6562886854924
+  },
+  "skyPickable": false,
+  "recordEnabled": true,
+  "meshes": [
+    {
+      "name": "authored-authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8-crate-barrel-cluster_mesh0",
+      "enabled": true,
+      "visible": true,
+      "pickable": true,
+      "vertices": 5640,
+      "center": [
+        1.625,
+        0.9199999820854927,
+        34
+      ],
+      "metadata": {
+        "placementInstanceId": "authored-8a47f80c-0cad-49a7-92a3-f11eae68dec8",
+        "authoredPlacement": true
+      }
+    }
+  ]
+}

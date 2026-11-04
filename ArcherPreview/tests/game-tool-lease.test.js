@@ -18,7 +18,7 @@ test('tool ownership uses one loop, pauses clocks, blocks input and restores exa
  assert.equal(f.state.ready,false);assert.equal(f.input.suspended,true);assert.equal(f.root.dataset.toolHudOwner,'editor');assert.equal(f.calls.attach,1);
  assert.throws(()=>acquireGameToolLease(f.capabilities),/다른/);
  lease.update(.05);lease.setPaused(true);lease.update(.1);lease.setPaused(false);lease.update(.05);assert.equal(elapsed,.1);
- f.camera.alpha=4;f.camera.fov=1;lease.release();lease.release();assert.equal(releases,1);assert.equal(f.camera.alpha,1);assert.equal(f.camera.fov,.7);assert.equal(f.state.ready,true);assert.equal(f.input.suspended,false);assert.equal(f.audio.environment,'village');assert.equal(f.audio.beds.desired.music,'village');assert.equal(f.root.dataset.toolHudOwner,undefined);assert.equal(f.calls.detach,1);assert.equal(f.calls.add,1);
+ f.camera.alpha=4;f.camera.fov=1;lease.release();lease.release();assert.equal(releases,1);assert.equal(f.camera.alpha,1);assert.equal(f.camera.fov,.7);assert.equal(f.state.ready,true);assert.equal(f.input.suspended,false);assert.equal(f.audio.environment,'village');assert.equal(f.audio.beds.desired.music,'village');assert.equal(f.root.dataset.toolHudOwner,undefined);assert.equal(f.calls.detach,1);assert.equal(f.calls.add,2,'one owned camera movement input and the restored prior keyboard input');
 });
 test('late prior-map release never restores old camera, audio or playable state into a new map',()=>{
  const f=fixture();let cancelled;const lease=acquireGameToolLease(f.capabilities,{onCancel:reason=>cancelled=reason});

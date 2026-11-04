@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-11-04T04:38:59.222Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/developer-editor.js": "ce3532abd4dc43ffddfb33bbeb57ec5534ece457c25b0d261044ed2b66641c26",
+    "src/authored-placement-runtime.js": "1537a6f16bd63890f855ef12d0979e0fce3d46bfa8133aca15b6d2ceb17a87f5",
+    "src/game-tool-lease.js": "07b16f8452fdec4c62d3daeca493b187fca3ad1097920d582f78d3993515067a",
+    "src/main.js": "8da36631c118a25f2f1c1dc9f2f3c9da2c587a639c798ff7aa0c5aac518c9f97"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "cold editor readiness enables one automatic real lease and only three supported prop choices",
+      "passed": true,
+      "preReadyDisabled": true,
+      "automaticLeaseEntries": 1,
+      "primaryPropChoices": 3,
+      "newModelLoads": 0
+    },
+    {
+      "name": "primary Place loads actual deployed manifest and shipped prop into viewed safe ground",
+      "passed": true,
+      "sourceLoads": 1,
+      "modelURLs": [
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7.gltf",
+        "https://ranke0802.github.io/moonforest/ArcherPreviewSite/assets/content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf"
+      ],
+      "actualNativeUtilityLayers": true,
+      "placementAtViewedGround": true,
+      "excludedPlayer": true,
+      "instanceId": "authored-46a97d13-54e3-4cd5-a6f3-7d78b050ab89"
+    },
+    {
+      "name": "real UtilityLayer pre-pointer ordering permits body drag; final UP ground point commits exactly once",
+      "passed": true,
+      "nativeRayPicks": true,
+      "utilityBeforeEditorSkip": false,
+      "bodyPointerOwnsDrag": true,
+      "cameraDetachedDuringDrag": true,
+      "finalReleaseCoordinateUsed": true,
+      "commitCount": 1,
+      "instances": 1,
+      "position": [
+        21.07241323662407,
+        0.72156446576304,
+        25.243198070761796
+      ]
+    },
+    {
+      "name": "coalesced touch UP without MOVE applies endpoint; pointer cancellation restores committed native pose",
+      "passed": true,
+      "touchReleaseWithoutMove": true,
+      "cancelCommits": 0,
+      "committedPoseRestored": true,
+      "cameraRestored": true
+    },
+    {
+      "name": "work file save apply and synchronous picker reopen preserve actual IDs without JSON editing",
+      "passed": true,
+      "attachedDownloadRequest": true,
+      "actualBrowserDownloadUnmeasured": true,
+      "appliedStorageExact": true,
+      "synchronousFilePicker": true,
+      "actualFileReopen": true,
+      "appliedGameRuntimeReloadExact": true,
+      "sourceLoads": 3
+    }
+  ],
+  "traffic": [
+    {
+      "type": 1,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 4,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 2,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 1,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 2,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 1,
+      "skipBeforeEditor": false
+    },
+    {
+      "type": 4,
+      "skipBeforeEditor": false
+    }
+  ],
+  "remainingTimers": {
+    "timeouts": 1,
+    "intervals": 0
+  },
+  "applicationPendingTimers": [],
+  "nodeHttpKeepAliveTimers": [
+    {
+      "delay": 4000,
+      "scheduledAt": 2998.214,
+      "stack": "Error: scheduled\n    at globalThis.setTimeout (file:///C:/dev/moonforest-archer/ArcherPreview/reports/moonforest-0.1-2026-11-04/phase3-verification-seams-direct-editor.mjs:17:242)\n    at Parser.setTimeout (node:internal/deps/undici/undici:7351:30)\n    at resumeH1 (node:internal/deps/undici/undici:7973:29)\n    at Object.resume (node:internal/deps/undici/undici:7807:11)\n    at _resume (node:internal/deps/undici/undici:9699:32)\n    at resume (node:internal/deps/undici/undici:9678:7)\n    at Client.<computed> [as _onImmediate] (node:internal/deps/undici/undici:9455:35)\n    at process.processImmediate (node:internal/timers:574:21)"
+    }
+  ],
+  "scope": "New primary editor DOM actions, real production manifest HTTP reader under deployed subpath, actual shipped decoded prop geometry and real native Scene.pick/UtilityLayer/GizmoManager pre-pointer ordering, camera controls and game lease. Model data loaded from matching local shipped files with opaque1x1materials and initializer injection. Native PointerInfoPre callbacks and controlled DOM events are exercised; full browser pointer capture/gestures, actual shader/GPU readiness, OS download UI and visual usability remain unverified. Any Node HTTP keep-alive timeout is separately identified by its undici internal scheduling stack; it is not an editor-owned timer."
+}

@@ -1,0 +1,108 @@
+{
+  "generatedAt": "2026-11-04T04:40:07.480Z",
+  "status": "Targeted new integration seams pass; browser usability remains unverified",
+  "passed": true,
+  "sourceHashes": {
+    "src/developer-editor.js": "ce3532abd4dc43ffddfb33bbeb57ec5534ece457c25b0d261044ed2b66641c26",
+    "src/authored-placement-runtime.js": "1537a6f16bd63890f855ef12d0979e0fce3d46bfa8133aca15b6d2ceb17a87f5",
+    "src/game-tool-lease.js": "07b16f8452fdec4c62d3daeca493b187fca3ad1097920d582f78d3993515067a",
+    "src/main.js": "8da36631c118a25f2f1c1dc9f2f3c9da2c587a639c798ff7aa0c5aac518c9f97",
+    "src/cinematic-studio.js": "cdc98907c815b64a11b934788f5cdcc293645a49856c2c8daa22351b9d469a51",
+    "src/cinematic-studio.css": "07de01870d6086ba29175d1a7753f76d2493b7200111a72224524f8419fb2fa5",
+    "src/cinematic-game.js": "acd650f91f885554ee52d2e037ad4798e984a0fac5a53b21af666089d2e4d55a",
+    "src/cinematic-protocol.js": "e78155b9b2de2469d6cb0a22c9e3c8d4929785236bce9292437546df9658a79b",
+    "src/cinematic-scene-host.js": "7b2c3be2da20bcb9f27d5d35ab47120ba471b847982448af16d9992daebc8105",
+    "src/authoring-navigation.js": "757d4473231cb920a897141179a5b28f8217cd78f7c79e0dcf69f5f441a10f13"
+  },
+  "reports": [
+    {
+      "filename": "phase3-verification-seams-direct-editor.json",
+      "sha256": "a8f48153d179e67cc329480a405f3cb6385f86db6a191db63496b4484c472c36",
+      "passed": true,
+      "checks": 5
+    },
+    {
+      "filename": "phase4-verification-seams-duplex.json",
+      "sha256": "f64f9eea0ac40f94a1f382c91e8d52b2a77662ceda88fe451c4e98282509992e",
+      "passed": true,
+      "checks": 6
+    },
+    {
+      "filename": "phase4-verification-seams-entry.json",
+      "sha256": "09c769382142fa26d1bc12d41488abc66cffb7ed83c5fae998cb50c0603c8aa1",
+      "passed": true,
+      "checks": 2
+    },
+    {
+      "filename": "phase4-verification-seams-readiness-current.json",
+      "sha256": "11c86875ec0ace54c9f6515c40afdaeebed242a0cdae1d9304a2b94cd4f9b19b",
+      "passed": true,
+      "checks": 2
+    }
+  ],
+  "newSequencesChecked": {
+    "mapEditor": [
+      "Cold unavailable state disables actions; settled readiness auto-enters once.",
+      "Only three approved props shown by default; actual production HTTP manifest + shipped geometry placed at viewed safe ground, excluding player.",
+      "Actual native Scene.pick and UtilityLayer pre-pointer ordering reach object-body drag; camera controls detach and restore.",
+      "Mouse final-UP and coalesced touch-UP coordinates commit once; cancellation restores committed frozen pose.",
+      "Work-save emits connected download request; browser apply persists exact IDs; synchronous file picker reopens the file and the actual game placement loader consumes it."
+    ],
+    "cinematic": [
+      "Actual Studio transport wired to actual game bridge, SceneHost, game lease and shipped native goblin; no fabricated readiness/load/save replies.",
+      "Primary buttons: scene open → actor add/move → camera save → play/pause → work file save/reopen → game save → game open.",
+      "Two new works receive distinct stable IDs, coexist in shared storage and selected second work opens in a fresh game controller before explicit Play.",
+      "Live hero visibility hides/restores with scene ownership; site subpath, release/map/scene parameters and revision survive iframe/game navigation."
+    ],
+    "main": [
+      "Exact current focus/dialog callback code reannounces ready:true after initial hidden or settings state.",
+      "Exact settled-frame guard notifies tools once per generation; actual toolbar DOM exposes both workflows.",
+      "Actual main map callbacks translate all four map IDs to correct character routes."
+    ]
+  },
+  "reproducedGapsClosed": [
+    {
+      "gap": "Initial hidden/settings readiness left Studio waiting after game became available.",
+      "evidence": "phase4-verification-seams-readiness.json",
+      "verifiedFix": "phase4-verification-seams-readiness-current.json"
+    },
+    {
+      "gap": "Custom editor picking predicate accepted an intentionally unpickable painted-sky mesh before the visible placed prop.",
+      "evidence": "phase3-verification-seams-pick-debug.json",
+      "verifiedFix": "phase3-verification-seams-direct-editor.json"
+    },
+    {
+      "gap": "Native axis UtilityLayer intercepted object-body drag while advanced controls were collapsed.",
+      "verifiedFix": "phase3-verification-seams-direct-editor.json"
+    },
+    {
+      "gap": "Cinematic map travel passed map IDs into a character-ID route API.",
+      "verifiedFix": "phase4-verification-seams-entry.json"
+    }
+  ],
+  "timerEvidence": {
+    "editorOwnedPendingTimeouts": 0,
+    "editorOwnedPendingIntervals": 0,
+    "nodeHttpKeepAliveTimeouts": 1,
+    "nodeHttpTimerMeaning": "Node undici HTTP connection keep-alive, identified by its internal scheduling stack; not an editor-owned callback.",
+    "duplexRemainingTimers": {
+      "timeouts": 0,
+      "intervals": 0
+    }
+  },
+  "deployedHttpEvidence": {
+    "filename": "phase4-verification-seams-http.json",
+    "checkedBeforeNewRepairDeployment": true,
+    "deployedBaselineCommit": "7639943",
+    "requests": 56,
+    "scope": "HTTP availability only for published entry/tool/model/buffer/texture URLs; successful status is not proof of client startup."
+  },
+  "notProven": [
+    "No browser automation was used. Real browser startup, computed layout, physical pointer/touch gestures and visual discoverability have not been observed.",
+    "Native PointerInfoPre and DOM events are controlled in Node; native scene picking/geometry/UtilityLayer and production callbacks are real.",
+    "Shader/decode initializer and opaque1x1 image fixtures remain at the Node resource boundary; actual WebGL/GPU rendering and shader readiness are unmeasured.",
+    "Connected download requests and exact file reopens are verified; OS/browser save-dialog behavior is unmeasured.",
+    "No GPU/device performance, frame-rate, physical memory or device active-cap claim.",
+    "Earlier 25/35 case counts are not used as evidence that these new user workflows were usable. This summary covers only the repaired seams above."
+  ]
+}

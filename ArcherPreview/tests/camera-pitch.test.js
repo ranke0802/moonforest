@@ -74,7 +74,7 @@ test('the actual main paused-render and settings callbacks correct the eye befor
  const focusFunction=source.slice(start,renderStart),pausedRender=source.slice(renderStart,renderEnd)+'}';let fogCalls=0,hudCalls=0,lootCalls=0;
  const follow=new CameraFollow();follow.update({followMotion:true});
  const main=new Function('actor','cameraPitch','cameraFollow','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog',
-  'let simulateFrame=false,playerHead=null;'+focusFunction+pausedRender+';return {render,syncCameraFocus};')(
+  'let simulateFrame=false,playerHead=null,ready=false,loadingAsset=false,mapTransition=null;'+focusFunction+pausedRender+';return {render,syncCameraFocus};')(
   actor,pitch,follow,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++);
  pitch.update({upwardLimited:false});camera.beta=2.8;camera.radius=17;main.render(0);assert.ok(camera.position.y>=1.5-.35-1e-5);assert.equal(fogCalls,1);assert.equal(hudCalls,1);assert.equal(lootCalls,1);
  const settingStart=source.indexOf('const cameraSettingChanged=')+'const cameraSettingChanged='.length,settingEnd=source.indexOf('\n',settingStart),lambda=source.slice(settingStart,settingEnd).trim().replace(/;$/,'');let refresh=0,wake=0,invalidations=0;
