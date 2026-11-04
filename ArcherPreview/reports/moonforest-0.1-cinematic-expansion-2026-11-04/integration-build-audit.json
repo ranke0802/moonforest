@@ -1,0 +1,1773 @@
+{
+  "generatedAt": "2026-11-04T10:24:05.632Z",
+  "passed": true,
+  "isolatedIntegration": true,
+  "remoteBase": "025ec479345978270c2a4ac7a04d072b8f92ed42",
+  "featureCommit": "22bf3d7",
+  "inputs": {
+    "origins": {
+      "path": "reports/moonforest-0.1-cinematic-expansion-2026-11-04/integration-runtime-module-origins.json",
+      "sha256": "ab446b95881122b6c14cc1037a9c2a49da1225b61e8306f9be12154ac750bc1f"
+    },
+    "manifest": {
+      "path": "dist-village/deployment-files.json",
+      "sha256": "266290c7244f0782fc20c024264eec4913ef25a422754678344a6319bd369421"
+    },
+    "sourceParity": {
+      "path": "reports/moonforest-0.1-cinematic-expansion-2026-11-04/integration-source-parity.json",
+      "sha256": "01731f7ade8da283a3c3c6a6a97bc85c1589c1b035002ab704344492977c5311"
+    },
+    "regression": {
+      "path": "reports/moonforest-0.1-cinematic-expansion-2026-11-04/integration-regression.json",
+      "sha256": "42162e3b9f60d0ba97e1fd2b1424b0d88f67e34cac53e035cda466acd850d59f"
+    }
+  },
+  "graph": {
+    "totalChunks": 55,
+    "mainEntry": "assets/game-C2YTN8XL.js",
+    "initialStaticChunks": 29,
+    "initialRawJavaScriptBytes": 10286746,
+    "initialHeavyModules": [],
+    "initialGizmoImplementations": [],
+    "nativeKtxLoaderRetained": true,
+    "staticAndDynamicAstImportsAgree": true,
+    "allChunkHashesMatchDistAndSyncedSite": true,
+    "lazyModules": {
+      "cinematic-document": [
+        "assets/cinematic-protocol-Dg1ppzR7.js"
+      ],
+      "cinematic-editing": [
+        "assets/cinematicStudio-DZ9ANcBl.js"
+      ],
+      "cinematic-player": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-studio": [
+        "assets/cinematicStudio-DZ9ANcBl.js"
+      ],
+      "cinematic-game": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-scene-host": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-interaction": [
+        "assets/cinematic-interaction-BHsna0by.js"
+      ],
+      "cinematic-subtitles": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-media": [
+        "assets/cinematic-protocol-Dg1ppzR7.js"
+      ],
+      "cinematic-audio": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-assets": [
+        "assets/cinematic-protocol-Dg1ppzR7.js"
+      ],
+      "cinematic-visual-adapter": [
+        "assets/cinematic-game-J-MzXCRn.js"
+      ],
+      "cinematic-path-view": [
+        "assets/cinematic-interaction-BHsna0by.js"
+      ],
+      "asset-catalog": [
+        "assets/asset-catalog-CcdZEJm8.js"
+      ],
+      "developer-editor": [
+        "assets/developer-editor-BRIB-kjb.js"
+      ],
+      "editor-workspace": [
+        "assets/developer-editor-BRIB-kjb.js"
+      ],
+      "tool-fine-zoom": [
+        "assets/tool-fine-zoom-qIveTlal.js"
+      ]
+    }
+  },
+  "resources": {
+    "baselineResourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "sourceResourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "builtResourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "computedIndexRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "sourceBuiltSiteIndexIdentical": true,
+    "canonicalCatalogRevision": "535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8",
+    "catalogIdentitySeparateFromDistribution": true,
+    "resourceEntries": 1161,
+    "deploymentFiles": 1503,
+    "deploymentBytes": 682392863
+  },
+  "features": {
+    "allBuiltExpansionControls": true,
+    "historyLimits": [
+      5,
+      5,
+      5
+    ],
+    "sourceCssSha256": "e0f15aaf7d78ffe0cde056919af5b798260b7b051ba9bcd973f8e41492d16af1",
+    "builtCssSha256": "b0b6cf45212c8ccc84f317d0fee5dfc0a2a64351265b2b64d350c8e2aeca2a1f",
+    "canonicalCssRulesMatch": true,
+    "guideMatchesSourceAndSite": true,
+    "guideSourceComparison": "Exact text after CRLF-to-LF normalization; emitted/site/staged guide bytes remain exact",
+    "catalogEntries": 84,
+    "normalBuildAutomaticCatalogReflection": true
+  },
+  "protectedHashes": {
+    "src/main.js": {
+      "normalizedSha256": "e801a45e5e869bbf9d2e3b7790371dd0f3d45a880dc7297e3c95fa4221949d3b",
+      "equalsRemote025": true
+    },
+    "src/map-route.js": {
+      "normalizedSha256": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "equalsRemote025": true
+    },
+    "src/player-texture-profile.js": {
+      "normalizedSha256": "92158a61645a24dd67e962b507621db0b3167b215613f6b3f3543960942849d2",
+      "equalsRemote025": true
+    },
+    "src/render-policy.js": {
+      "normalizedSha256": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "equalsRemote025": true
+    },
+    "src/village-outlines.js": {
+      "normalizedSha256": "832a55bcc87d11c2d61fb9f5bf43dd72ed1163ade4947b59c042c869092d5f42",
+      "equalsRemote025": true
+    },
+    "src/village-texture-budget.js": {
+      "normalizedSha256": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "equalsRemote025": true
+    },
+    "src/village-texture-streaming.js": {
+      "normalizedSha256": "b50dff4b6e1346c41401d16f8fba7227d19a729dc4cb144c56b1aa60236d0d62",
+      "equalsRemote025": true
+    },
+    "src/village-streamed-environment.js": {
+      "normalizedSha256": "b10bca92d1e59d9e2fd7601f811dccae7c5f1cdefd447fcc6c723834157fce40",
+      "equalsRemote025": true
+    },
+    "src/village-visibility.js": {
+      "normalizedSha256": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "equalsRemote025": true
+    }
+  },
+  "sourceHashMatches": {
+    "scripts/analyze-village-downloads.mjs": {
+      "normalizedSha256": "cad518f76d82aff136ab7c8b68a53a3a5de87f2c3a02ed5e105a75de48cb619b",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/apply-authored-map.mjs": {
+      "normalizedSha256": "db1926a81a2a52493aa06063cea2bd733f3eae44467a258c074b4e2e6a7fc741",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/apply-mourning-50k.mjs": {
+      "normalizedSha256": "e6a113c4a0ad0f822e45dcd6add29967ccf70a0ee5d70d7431ef6b88978ab9b3",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/apply-saint-reviewed.mjs": {
+      "normalizedSha256": "4f464e403ef29eb33bdd75bc0db95f948356797a8962779cc7d75a0880b1b7a4",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/asset-catalog-metadata.mjs": {
+      "normalizedSha256": "4c75c6c6f6edbe67573c2124fe7d29aef1ae7b9b7df2906f423c3f08b7015d67",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-boss-vertex-reuse.mjs": {
+      "normalizedSha256": "6cada28bfeebc6a3b7e96c2b73d91eb0059881a9f5974cd6e7407c7140d209e6",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-cave-attachments.mjs": {
+      "normalizedSha256": "3bfff4c5ead6ac755768525e38b72ae5643c900ab5c449058f1c6063f29918d8",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-cave-camera.mjs": {
+      "normalizedSha256": "901720565dbfbf3f029e3c30dd31ec37c5ea6a18c53bd73c6048f77e79f41f96",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-cave-enclosure.mjs": {
+      "normalizedSha256": "a8f1e18dbae16106cde0fa7b1c460c5d61927329b3b43a18b0055c140443668e",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-cave-framing.mjs": {
+      "normalizedSha256": "5ab165a78aa5a4987294f25cbfaebcf5d26083c681ffe1ab294f42091c376418",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-cave-mobile-view.mjs": {
+      "normalizedSha256": "85ab7921fdcec11b489fe0a362de1897dd57b24869cb67c14efc247f15ca890e",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-elena-clearance.mjs": {
+      "normalizedSha256": "d7969a4f0c89b575c462180ab36ed7949e1bf3f9c892ed46fbc0ec6cac24eb82",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-elena-navigation.mjs": {
+      "normalizedSha256": "9c8fd6bcf0cc1064bb92de3cb8c74b817b2398611d6d29b9f0d5459cef88b4f6",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-mourning-r9-death-clearance.mjs": {
+      "normalizedSha256": "4f15f3b22703e8a60506789cdc2d2e2729cafe150f748d10ef8469c113856525",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-mourning-r9-morphs.mjs": {
+      "normalizedSha256": "5458ccfc0c614263e023e362be8bab62a89671073ae4600ce77e4ab984532fe7",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-runtime-optimization.mjs": {
+      "normalizedSha256": "be00f6884452db53b98134e8d152c57355db5b472fb370a783d2f43b899c6773",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/audit-village-lods.mjs": {
+      "normalizedSha256": "d50570e2f58499f1609d5dc555c3a3451d56ea237aaa720c0087946d660a10fd",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/bake-cave-collision.mjs": {
+      "normalizedSha256": "670608c25becb3f08465d83d3f73da536f3b6dd90fbf35eb73a54509eee8c416",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/bake-cave-natural-dressing.mjs": {
+      "normalizedSha256": "65865d0f1d85fc811f6da10097ddda40f8a9b2bf06cbff882cbb1dde4de222cf",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/bake-laboratory-collision.mjs": {
+      "normalizedSha256": "342df5ff35351ff03489cdbcac1b7df94ff1a551d9291203e3638562af222e97",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/bake-mourning-cave-clearance.mjs": {
+      "normalizedSha256": "eff10d9eeb32f487f45fbf11367b4257c13e80c05517766c6a5bf4a81a0ec23b",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/benchmark-cave-camera.mjs": {
+      "normalizedSha256": "08589b01c2fc7ab19572680d28c6f2387df1b9c3e44c732c3816277fc8cc81ae",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/benchmark-elena-combat.mjs": {
+      "normalizedSha256": "86f5bd90bcd4d45ab537369652633f052ecfca07ca93a8541e3d46ac21603665",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/benchmark-elena-models.mjs": {
+      "normalizedSha256": "d0212d2e0aeb00904f9222a4b14662ccfb8835dee0c4f60739a6811797369515",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-asset-catalog.mjs": {
+      "normalizedSha256": "03e6833bee55a55f3f32f8c3eae15cda400e557db4c10a6244564172c178d774",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-plains-forest-edge.mjs": {
+      "normalizedSha256": "2c2e888db21f9abf1f512aa7aaced19b116c6e4436252db5471586df3ec4f6be",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-plains-review.mjs": {
+      "normalizedSha256": "e4f06f6088b9db83bf4b02b4859d058b76ce7a6bafa620224675ba2a7748f825",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-plains-village-exterior.mjs": {
+      "normalizedSha256": "45f0411b6ad13fd2b01a6d09021a9112695ada1ff2ff580a60b5e7ebe6cfe602",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-village-plains-outskirts.mjs": {
+      "normalizedSha256": "7bc0c0a4f08a6a1a8e817b131a567eb47cac171c16d6a17b4b7ed5d0ccc6bb2a",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/build-village-site.mjs": {
+      "normalizedSha256": "09ca533200f5ce27c3e664cbf116694cbd22b58a7e59acb76801ad2076118aaf",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/cave-collision-geometry.mjs": {
+      "normalizedSha256": "c300c7ca0fc462a91cb8c95b7051cdab907f6c6911662df091284fc716dabc5f",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/cave-source-fingerprint.mjs": {
+      "normalizedSha256": "7eff7bb0ee4f4ab0c4efc139ab5b3e3111dab46c716047a4c7610adea99e6f5b",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/cave-wall-relief.mjs": {
+      "normalizedSha256": "56c71324bfd659be7344d8e7dd514d523e0ebc1b0ccee2fa16e369401166c024",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/check-distant-forest.mjs": {
+      "normalizedSha256": "a27f612d955516aafe8ac068f9833c8210a04f3c6a1f14444aea730e7a3ce1aa",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/check-mobile-shadows.mjs": {
+      "normalizedSha256": "d6d8599f283d5b69975a70addf48e63273437231ebdf6b2776659322e9f7ee57",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/check-mountain-backdrop.mjs": {
+      "normalizedSha256": "8e03ba3473d3fa0952d5fdb2beab3e00fa071d07b85970590622c369e61b816a",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/check-tree-atlas.mjs": {
+      "normalizedSha256": "4799899fee74d74cc5c550775c6cce28bf068ff7de8e638e5e2e938cfb1b1dd0",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/check-tree-visibility.mjs": {
+      "normalizedSha256": "4cb406240c5a4a3cb54c8956fc9571eda5550c094dd5ff13a272dcac8a7db326",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/dump-shadow-shaders.mjs": {
+      "normalizedSha256": "9bff89b1078e374abfd287aecd04ff4205a97e7deb1f5829dd50f6c7b228450b",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/export-boundary-review.mjs": {
+      "normalizedSha256": "a9184f4dcbd0008face7cdfe67eaba5fddc4bd9b66f9b0fdd6e646520d467b28",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/export-cave-layout.mjs": {
+      "normalizedSha256": "e8504cbc7f21ce2f5261820348e4efac55ab70c779ce9642f9778a4db6432d9f",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/export-cave-natural-review.mjs": {
+      "normalizedSha256": "ed924d37085fd7de6c76c4bcfe804cc1fae0375bcc043172f06b31f6b9814fcf",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/export-cave-painted-light.mjs": {
+      "normalizedSha256": "026effb576234e213132b2043494dad95f82c216816006670a5fbf485e3453e7",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/export-mourning-runtime-review.mjs": {
+      "normalizedSha256": "178d050c7db2af70932e22c10754768f630f0421d4c4aa95993fa77163c0a684",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/measure-player-height.mjs": {
+      "normalizedSha256": "ff4273d265806493faca3ba3e5136260bfebfcb5b525c319cd00293fdb82c616",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/meshopt-lossless.js": {
+      "normalizedSha256": "6fdc276321a49156a40585ac739707a07f407551c4697d03988126147e913b25",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-cave-joachim.mjs": {
+      "normalizedSha256": "959294f5796eea5455e16706e14428fe453391ed7e1a3f806e525c134d922efe",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-cave-laboratory.mjs": {
+      "normalizedSha256": "843ae971296d11d2d5628e89df88b694782cd6f88995fb4fe664f4786b47c8c1",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-cave-wall-relief.mjs": {
+      "normalizedSha256": "e55e19ac4675ae4939101d527647c5aac7478e1dde6bd0015a4388420ddbde9e",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-elena.mjs": {
+      "normalizedSha256": "2984e1657a1fa0f4b30292efd3cccb714e5db681167005d3d3c4514c7bc3ce48",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-environment.mjs": {
+      "normalizedSha256": "d0cea1b9b31385674ac0ae47a87b68a5da8d303726a9e7db18e3f76839f4a9f2",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-goblin.mjs": {
+      "normalizedSha256": "e7e8b90576af33d32c31a369f9360ab13e0c0123d949213bf25d53cfed5f0cde",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-monster-forest.mjs": {
+      "normalizedSha256": "bdd0a2001fc02d60a4f1588b8751fd37de2b82a6e490670418b72143e8f1f343",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-monster-update.mjs": {
+      "normalizedSha256": "ec321b162bc6e5f3d19f7225dd62096bac0383b5d2ea26af1439ea11aeebee52",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-mourning-elena-v2-1.mjs": {
+      "normalizedSha256": "6265ac6175a76230b8001fcb0ba6598b6a18421c325599225dfa6212e9f300e2",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-mourning-elena.mjs": {
+      "normalizedSha256": "d5b4d44b1e99dae2404dff544704420a16aafe17349b1ceb548ee8d351507ddc",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-mourning-motion-expansion.mjs": {
+      "normalizedSha256": "07bc381ed139f94c346b0ba60bada994a90237203d3e8a575a81eaf01930a7b6",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-plains-assets.mjs": {
+      "normalizedSha256": "b49d22d23d8c8ca5e921166b6ca6bb31bcaaf5a0c88b79735d0707ea0ca3d366",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-tree-lods.mjs": {
+      "normalizedSha256": "ae6ea3450f78a55502e6d1c71a6f0f1bff4ecd9b77cd05920493b5dc6a946d31",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-ground.mjs": {
+      "normalizedSha256": "7eadef142a1b7842c1f03704d1c8d65db2030557b094f9ea693d3c5531b19629",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-ktx2.mjs": {
+      "normalizedSha256": "ada6c27649fa4cbc9696ac3c860bf09f3ebfb2359e5481a1ca5a5a948d6e97be",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-lods.mjs": {
+      "normalizedSha256": "098ede5f3a7cea4267889caf869885318818f13afed34eebcecdf700e2b492b8",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-meshopt.mjs": {
+      "normalizedSha256": "0f8654b8d5ca7b989ce71cd37506fd8d2b70d0e5e033d9b5c8e7d7b5fe6437a6",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-toon.mjs": {
+      "normalizedSha256": "ddfaff1c4b07d2fa18cc099ebfa3ee7dbb60b1ffd484f77c6b5f8572046c1aad",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-tree-refinement.mjs": {
+      "normalizedSha256": "486018d84241b45a73efe3df2ac30bc0ad35a269f517c616af65fd1fd7576637",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village-warrior.mjs": {
+      "normalizedSha256": "0f353fbf029d8212c2cec474a71d749818adb89299be8b85acc19cd90fcb47f0",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-village.mjs": {
+      "normalizedSha256": "4c1d6e5908895382253839fb241695cb7c0ef2df3c92a59a39eb732df8a45d47",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-web-warrior.mjs": {
+      "normalizedSha256": "beece007e5a2622d9f48c94bda3ec7a874b55961a506d6dc8175fe7ff70c6355",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/pack-witch-cave.mjs": {
+      "normalizedSha256": "064a5bf34a1518958407ad2421323d47a54023d3aaa88351b3279329bf2beab2",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/place-cave-wall-lanterns.mjs": {
+      "normalizedSha256": "158370f3b3ee8925a9c3b0daaa2559d77ba8487d48d9532cbc86fb126a13a302",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-audio.mjs": {
+      "normalizedSha256": "16f82a8a844429271e857c8d86119f640886b103fbf3936256232d7d847cbad7",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-cave-review.mjs": {
+      "normalizedSha256": "c0d5e10572d30e35d978a502dfbbd42fb3e20eed9793a05e0e3d8d70b4442593",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-download-bundles.mjs": {
+      "normalizedSha256": "af53799b7666629bd7ff58d8a5d84eac06c1f0b6f009e61b93aa5fdfe2b21347",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-forest-review.mjs": {
+      "normalizedSha256": "5b898f9262e9212b5960c8db909fc11bd6d7f1696a81f61423f16b8df9d2c0ab",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-legacy-cache.mjs": {
+      "normalizedSha256": "9957cd679061cdfb9d503ab9bc43dcb25f21c0a9f9ea06f34b2b92ffc23c5062",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-resources.mjs": {
+      "normalizedSha256": "0b1f406b445670e86d1e31f277b4df2e1c8d49dee0e94fbb99cb930df69da054",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/prepare-village-lods.mjs": {
+      "normalizedSha256": "5b2d8d0c027b1c9ab1641f4c7b6e692121e4d660a19f7c920ecd8578434a10d5",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/reduce-bear.mjs": {
+      "normalizedSha256": "bf9032f385c66b59a26535f84690e8a2b6f0dc34bbe5431e87a59761da2787bc",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/refresh-cinematic-catalog.mjs": {
+      "normalizedSha256": "e4afcb1bb5b5cac592b015574a09b4813e2e9c85ac5b846afe93e586abf66567",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/register-cinematic.mjs": {
+      "normalizedSha256": "722ff79301b0db30ae9de5087a018d3e24d4640a007e4722496baa69cf21f51c",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-charge-followup.mjs": {
+      "normalizedSha256": "49d10524a232dc05cda40729246c85fe9746705574da911b713c39f6a5dc6670",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-clearance.mjs": {
+      "normalizedSha256": "eb32a3dfd12db77d30d014979a1fd2a2c6852aef9f43ca95c0501cead6624662",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-combat-followup.mjs": {
+      "normalizedSha256": "931be511fdf7050bb1fa4c3023cfcddb0cab2f72d3861ee6c24247584c22a5dd",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-diagnostics-size.mjs": {
+      "normalizedSha256": "61435ec349940b3da18fed8a956230ea6cdf7af72f88658c5b417f2222a7accf",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-navigation.mjs": {
+      "normalizedSha256": "e4ce08275a388207b9ada2f0762e27f6fb89b2662bf2d8f844b694fdba0756ab",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena-two-phase.mjs": {
+      "normalizedSha256": "c66577bbed8f283949e2dd5a342d33965c06d1ec3a9484f47c9c00a497cc9693",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-elena.mjs": {
+      "normalizedSha256": "0f30d48dcde5deb2b6364c92aa17ba1207ec85cc91a2f73e4fa297b9eae24c2d",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/report-world-audio.mjs": {
+      "normalizedSha256": "576886f199a9165189698648ee961d6deeee4c1b8aa4179ce77ae1cdab32f59b",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/resource-bundles.mjs": {
+      "normalizedSha256": "2301549635a45c94169c13535047b4d6cb7261b06d0dca6420e3c2a04c9495ab",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/resource-pack.js": {
+      "normalizedSha256": "ef7fd35070353f56815d1b891499c1a2bed04aa0b8d96e00b9d3d40d581b6284",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/review-mourning-50k.mjs": {
+      "normalizedSha256": "7507457f6772b201c18ef7b51c5c7e69d930ce455b19148a5ada7a255b32986a",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/review-saint-50k.mjs": {
+      "normalizedSha256": "506786c2acc94d9cb6dbe229b8966768564aa5787fc820677bff03c2ceb85859",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/runtime-module-graph.mjs": {
+      "normalizedSha256": "3ffbd4106395505fb6dcf5a806f2a0ee8422d3a253312cc08fa48298a57c6018",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/stage-pages.mjs": {
+      "normalizedSha256": "8cb5d2b2eba9e33a536016b367462f68bdaf5ae0b169cf9572327afccb95b4e0",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/summarize-runtime-optimization.mjs": {
+      "normalizedSha256": "297785b5485c7ffc3afc5aea33a5f017d35c682172aae2be6145925ca3502f02",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/sync-monster-update.mjs": {
+      "normalizedSha256": "a90ff9c3774324b435b0f7b34e27ab88cffbaf5321912049de1bd562434e83ee",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/sync-village-site.mjs": {
+      "normalizedSha256": "5c6907e868f37bb90b4ab4ea905d02fbbcea4be8387d27dd683957745eb6f28c",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/tree-painted-colors.mjs": {
+      "normalizedSha256": "47fbec35b42828795887f919553318e063030200bbb095406c4016f727684344",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/validate-mourning-50k.mjs": {
+      "normalizedSha256": "220e06c964dc47b08056c6d89c2b2548b6ec35bf1563c54fe995c40bca7407c7",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/validate-saint-50k.mjs": {
+      "normalizedSha256": "367c06e07534bc303c7dacf589ba27d9c8d530c3b8064bf7d091814247d1a54d",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-cave-integration.mjs": {
+      "normalizedSha256": "3a22b24a4c95c207b18005433bba8dbcd775e75d42491f913f7e749ec3a2cb02",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-cave-painted-light-release.mjs": {
+      "normalizedSha256": "ecc40dfa054734c84bf8d3f61dd0ef84aeae7acaec4b6d25889e308b40c0389c",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-cave-player-fixes.mjs": {
+      "normalizedSha256": "fcc356b39d6314820e394c650534ac15fcdcf5ce6015e3ee89d8753ebeeaae69",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-cave-supplements.mjs": {
+      "normalizedSha256": "61bb8bcf11577c9f5144372febebe04b0c1e1de0464a155fd46b0d288be3b43c",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-ios-player-codec.mjs": {
+      "normalizedSha256": "bc2415b70f2d331b19c4dbd79e2fd64367162b07430d84dd2ee80e6c232677be",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/verify-v2-resources.mjs": {
+      "normalizedSha256": "57803f07b9a18755c57da506cd72a0de27615aab210cba7f9cea19b89984ef18",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/warrior-web-policy.js": {
+      "normalizedSha256": "32971aed959912b17bc38a6f498912dcb35c8002754e5abc1cf68ad1c8ff7920",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/web-geometry.js": {
+      "normalizedSha256": "819e9acf9d6b3693c577e5f3f815f06c884d349fce4d8ab1be64789f9902e546",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/weld-exact-vertices.js": {
+      "normalizedSha256": "23513f654d9fb5b3237cc6b186236a1bbf39956b14f6b625272f1c905690df4f",
+      "unchangedSinceIntegration": true
+    },
+    "scripts/world-audio-sources.json": {
+      "normalizedSha256": "682044e32b38cd9bd0a8012aa9f402ab69f000b582e463b10663d53527d0036f",
+      "unchangedSinceIntegration": true
+    },
+    "src/action-audio.js": {
+      "normalizedSha256": "58dd5efd20de5d2a7633519a63902f7b65b588f27db647666cedb1cece59d47f",
+      "unchangedSinceIntegration": true
+    },
+    "src/actor-definitions.js": {
+      "normalizedSha256": "ef8866e1ee78fbfdd90c8bc77fcc3deb3f3e1711e2fb0ad3ded42ec5cf93101e",
+      "unchangedSinceIntegration": true
+    },
+    "src/actor-encounter-adapter.js": {
+      "normalizedSha256": "7d1030cb61caa6a13bfa4a73d6b8bff5c3a17f9b22df0daad0a029fdfcfadb8f",
+      "unchangedSinceIntegration": true
+    },
+    "src/actor-population.js": {
+      "normalizedSha256": "6ad79185db1895c26dcd659deae0924b196469cb7a33435ad191dc9ff8624618",
+      "unchangedSinceIntegration": true
+    },
+    "src/animation.js": {
+      "normalizedSha256": "4fefda27ca95c1467b4b4e9b4f10809fb26f049435a371dbd0eec95190f0b740",
+      "unchangedSinceIntegration": true
+    },
+    "src/app-display.js": {
+      "normalizedSha256": "2be78b0926bc6a94cd4a132379ea3b578e7fa38ae20dbb7ae4ed98610fc9ccda",
+      "unchangedSinceIntegration": true
+    },
+    "src/asset-catalog.js": {
+      "normalizedSha256": "fd64805a8e1f1b7fcdddd8638b7ac1a16867291f1a983ad3738f2a842bee5ed2",
+      "unchangedSinceIntegration": true
+    },
+    "src/audio-beds.js": {
+      "normalizedSha256": "436a5213bceabdef2ebb860e23c55eab0fae024cc84ae1f27b1575f3e503ba74",
+      "unchangedSinceIntegration": true
+    },
+    "src/authored-map-index.json": {
+      "normalizedSha256": "0d2a069a3f8ccdb21435d4f46bed0726264af47b037f6c7d2d28c549c427ab5c",
+      "unchangedSinceIntegration": true
+    },
+    "src/authored-map-loader.js": {
+      "normalizedSha256": "2a15e300eb7d146d2478805381595e23cbc536d121d5f62c42cb97bf7cb7be11",
+      "unchangedSinceIntegration": true
+    },
+    "src/authored-placement-runtime.js": {
+      "normalizedSha256": "e45c99c8839dbcb7e3c5355e926ed3f440362367c13c91565433bdc371e6e47c",
+      "unchangedSinceIntegration": true
+    },
+    "src/authoring-navigation.js": {
+      "normalizedSha256": "757d4473231cb920a897141179a5b28f8217cd78f7c79e0dcf69f5f441a10f13",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-battle.js": {
+      "normalizedSha256": "48f06b48cfc216dd14cca7cd965bacd3ce44ed30ef5ec4c5af0391c4cd4e30b9",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-diagnostics.js": {
+      "normalizedSha256": "d695967e5725773db59ab4322eaf7fed1211aa2f024b8b08b587121880879c86",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-encounter.js": {
+      "normalizedSha256": "cd928d4fe7fe51ea2fa2d1d7f8cd09741596f991f11b3a6595f9522701f9609b",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-gpu-preparation.js": {
+      "normalizedSha256": "faaeac9875fee36328dda32a29da23f8c72c08f58358b22aacb3f02a5b544ae7",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-grab.js": {
+      "normalizedSha256": "2b349da3974b7aa9f8bf60aad677b8157bd26f3c0407a6449ec8d2ebb60f24b6",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-health-bar.js": {
+      "normalizedSha256": "2548e2fe467667eddce7d4b043beb04582505569fe60dd4ba8d03f280c62ba82",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-models.js": {
+      "normalizedSha256": "e56a3a5e45e6223d18fdb43fb6668e1e9d22f56976034e0e238aad22a3c00df4",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-music.js": {
+      "normalizedSha256": "b2887b6c12048b9ade81308543123ef1f1e7a7bac5df46ff686a92e9d599f71f",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-pattern-settings.js": {
+      "normalizedSha256": "723c843d3d812b44c4c0c8229824500f4eb7c229b4afb18530729f115ff2e988",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-preparation.js": {
+      "normalizedSha256": "7e1ac6223f3014fe35c937d10776c88ac382f2f5821275621f513a2e358a959b",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-selection.js": {
+      "normalizedSha256": "6c543cfda3875aecc8d2c2d316a3eb522ab54c886e4f7ea1f50c1c1543c3a82b",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-shader-warmup.js": {
+      "normalizedSha256": "1584f8d6eb0216c4561f115b7cffdb4fea9acae16952ef51b05170990ec14926",
+      "unchangedSinceIntegration": true
+    },
+    "src/boss-spec.js": {
+      "normalizedSha256": "9c95ef915ecf37e7803e642c86d8089d69dffcc4de454a05140c99266f765817",
+      "unchangedSinceIntegration": true
+    },
+    "src/camera-follow.js": {
+      "normalizedSha256": "c75ef07ce55c30e9da27eb2069632dbd808024c3cf1ac64e9c221eef65bb40f1",
+      "unchangedSinceIntegration": true
+    },
+    "src/camera-pitch.js": {
+      "normalizedSha256": "2cf2089d26c500d5a46e480f6a3c4f0f792019cba7364b714e06463fc53d3eac",
+      "unchangedSinceIntegration": true
+    },
+    "src/camera-zoom.js": {
+      "normalizedSha256": "f7eabcab6d2139e30ee06b71c6600ef383dba548a50c0d4492e49da516b6b5d7",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-fog-binding.js": {
+      "normalizedSha256": "9ed02102082cfd1e5fcf3ff14173d1f4d10a4e4fab1da5d1c2dc1be1947a1b85",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-fog-cover.js": {
+      "normalizedSha256": "96d8961929a9aeb11cb41bac35647e832c2629f226cbe31b1a9926d8a446d6ca",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-fog-of-war.js": {
+      "normalizedSha256": "5fbb3d29f094c90d33f3a497c8cccd02c1865fc7888e75c621dd7d82353002c4",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-fog-runtime.js": {
+      "normalizedSha256": "88faf5e72bee7ffa544b1bf5e04ecd06024becd2e99d0b150e6ee87926a95c97",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-collision-data.js": {
+      "normalizedSha256": "f32fbe510716e7cab718ffc4689e3f2cf92207fd00f6d3104647e37d141a32e8",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-collision.js": {
+      "normalizedSha256": "2cb185e4da0bc1c95e2bcb3502d8e5f44b4f84ae59b3a0ddeae837db13dcb6d4",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-geometry.js": {
+      "normalizedSha256": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-terrain-data.js": {
+      "normalizedSha256": "0311e48d538331a198fc504ac5f0fc387a5892ce67a3e85f3f3f639fa3f646c8",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-terrain.js": {
+      "normalizedSha256": "945bfee28e0cdc5468e34417192a70e22029e69b16cdceb9c233c932989bca92",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-laboratory-vault.js": {
+      "normalizedSha256": "220bcb33cd379f7cccdae4907bf61f1a7aff225494794d1ceb3806539846b3f7",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-lantern-mounts.js": {
+      "normalizedSha256": "b63ad4fd849ba911c57624e7b9719b948f382c9a7b177f4b558c9697de5e87e7",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-lantern-supports.js": {
+      "normalizedSha256": "fe20dd4cb93f5b5cdc68bf15eddd6d0068fd58fea77528f691408d8b3b7c4539",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-natural-dressing-data.js": {
+      "normalizedSha256": "804d676bd1c0487a25968fd0f92913e5aa1272e80ff9ef7782e4252e82fd9f48",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-natural-dressing.js": {
+      "normalizedSha256": "0b7d29cf96bf4754d7dd5c44a4d650baafc0c1e4d06ca0f1ed4ef4b6d174118a",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-painted-light-runtime.js": {
+      "normalizedSha256": "f4767e8681c7e2618fe7c85530680a4645304bdbbb7902ac41c895c18e40ee0c",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-painted-light.js": {
+      "normalizedSha256": "619782969d27a6e984cce8b7fdece31270b9e9e9e7f38c603d931ed0fc0ab8c5",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-player-fill.js": {
+      "normalizedSha256": "87cde0b24db7c3a675e94b25e250f034a1f1aab17e3c6467335f4d35a62326fb",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-rock-palette.js": {
+      "normalizedSha256": "08551f5c2bd842817b775414d400b4a4a58009a627a5cd0951092d7e6965445d",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-rock-shell.js": {
+      "normalizedSha256": "6c68819a500cbe09197c6eb6e176e1a964c9fd2e8bb5ba763097d9151d2c00ce",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-story-inspection.js": {
+      "normalizedSha256": "95f9dff770ccd42962d7aef0b27d548e6ddf0535acde52364654e2e4b0053e01",
+      "unchangedSinceIntegration": true
+    },
+    "src/cave-story.css": {
+      "normalizedSha256": "3fa332e9707cf2068be389d93d5a69927d36b81c8d309722b43d2d9dc3dbb59e",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest-data.js": {
+      "normalizedSha256": "f966bf6546df2779cbefcdec50808997149bb68ed08fa93132ff03779ef03fbb",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest-points.js": {
+      "normalizedSha256": "26b73c7a5e245a049e6dc37f274e274e211658b843716874d4d6b0fb421b711e",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest-props.js": {
+      "normalizedSha256": "54470ceb71c7fda4b446ab6064191576d7bb075c8e51204219600a90bcb869b0",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest-state.js": {
+      "normalizedSha256": "1ad49133b7b4bdc738486d065582d070d2b99cb3104cdb7614a0c40d5093b573",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest.css": {
+      "normalizedSha256": "b505e10f886f20a3499747a46c0a51e5af225fb0255c94ef99ed0992f7912d0a",
+      "unchangedSinceIntegration": true
+    },
+    "src/chapter-quest.js": {
+      "normalizedSha256": "238ee3363820026707f777bb9f537f7ecf727750c1fd082bc1f4c27c1b092918",
+      "unchangedSinceIntegration": true
+    },
+    "src/character-outlines.js": {
+      "normalizedSha256": "14eb7e9aea21aa5a1f30841dfa383fa233492f3bf969b553c76a1852d6c3aa5e",
+      "unchangedSinceIntegration": true
+    },
+    "src/character-render-cost.js": {
+      "normalizedSha256": "efdc322e500e2aead90b807fbbc66deb968fcde6f174b07a6813bde773188205",
+      "unchangedSinceIntegration": true
+    },
+    "src/character-style-settings.js": {
+      "normalizedSha256": "a0cad0ec04b3697941025b5203d3cec29c4938d62f9ffb499769e222c125d008",
+      "unchangedSinceIntegration": true
+    },
+    "src/character-style.js": {
+      "normalizedSha256": "31e1db799690f2e9a72f94c96e06ae04bab23ba4817dda60217b65d8e315777e",
+      "unchangedSinceIntegration": true
+    },
+    "src/chest-opening.js": {
+      "normalizedSha256": "972bcb4dc55631433ab38e67457fa037168f24efb1f14e26cbf2ea26471c0004",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-assets.js": {
+      "normalizedSha256": "f21159e9fddaa074408931b25716b2274f90901f61a3f580feaba64b851750cd",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-audio.js": {
+      "normalizedSha256": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-authoring.js": {
+      "normalizedSha256": "d326579b02da0f39d87fc6514b5aa6bf461c1bf5b8b407ceaaba674dabd4d390",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-document.js": {
+      "normalizedSha256": "42e88991da4c82b6482cbfa54a01468b80f6e23174bdf60530c3736acf224c75",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-editing.js": {
+      "normalizedSha256": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-game.js": {
+      "normalizedSha256": "97da65f1d1e876f6eb3386332133eeb642e3d66c0222ddce8e6106718da4f768",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-interaction.js": {
+      "normalizedSha256": "8ce6e0bdc00a047ae5ee0b4a72395d4e0800ed38882111b69b7eaa42d09a4038",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-media.js": {
+      "normalizedSha256": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-path-view.js": {
+      "normalizedSha256": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-player.js": {
+      "normalizedSha256": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-protocol.js": {
+      "normalizedSha256": "67c0d51f88ba83a403da05cf56fc223b92488e50f2a778f2c534271549ada7bb",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-registry.js": {
+      "normalizedSha256": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-registry.json": {
+      "normalizedSha256": "7c1051f6e2bc3943b7c1dbe4da229694455681b8875a346c99279e555edb733f",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-scene-host.js": {
+      "normalizedSha256": "a11d681151e2c4690b9ea83cb56a2651ad8a1ca65783afcbaf64fa6fea3fe9dd",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-studio.css": {
+      "normalizedSha256": "81a2b5a03cbc5844b4ff809e59944c3b69243d26b8d77159dca73d3c80f7460c",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-studio.js": {
+      "normalizedSha256": "e6f8d6b278a8b8e4b438e827b7d0a71a7b22c1bcfaf8f22e8d25995b23e8d994",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-subtitles.js": {
+      "normalizedSha256": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d",
+      "unchangedSinceIntegration": true
+    },
+    "src/cinematic-visual-adapter.js": {
+      "normalizedSha256": "1165147063f4fc3e4e9dccba816604dc7c295f88f77117e70421fe7b6611a15d",
+      "unchangedSinceIntegration": true
+    },
+    "src/combat-damage.js": {
+      "normalizedSha256": "854152974f79865e5225fe50c88f8de716556eba759b328b7021050b2fd14d70",
+      "unchangedSinceIntegration": true
+    },
+    "src/combat-readability.js": {
+      "normalizedSha256": "e4897d5050856cd65c9a957b3d81ba839c131473b1932350f72e6ba9cd5c057b",
+      "unchangedSinceIntegration": true
+    },
+    "src/commercial-ui.css": {
+      "normalizedSha256": "846285299ab0972e2994cb8bd734544324bd275ac0a756fb5a425804f67ecd37",
+      "unchangedSinceIntegration": true
+    },
+    "src/commercial-ui.js": {
+      "normalizedSha256": "fb6fd22438acc4cdc3224453e7a29012e9d1f51e8e2449ac3c4b3ea02dc34ca7",
+      "unchangedSinceIntegration": true
+    },
+    "src/controller.js": {
+      "normalizedSha256": "0b01850d8276d01c2880c35c5c10409af4f8f565cbe9491e25580572f18e0a14",
+      "unchangedSinceIntegration": true
+    },
+    "src/damage-numbers.js": {
+      "normalizedSha256": "1633d042f264f6b934d17232b82f1431e48aacb5b0e8119ce054d09214e830f6",
+      "unchangedSinceIntegration": true
+    },
+    "src/death-screen.js": {
+      "normalizedSha256": "e60cb337fe0483be57c87ef7b0235e666921a9019b2deea30abfea82e08b550d",
+      "unchangedSinceIntegration": true
+    },
+    "src/developer-actors.js": {
+      "normalizedSha256": "49d8f36fbfef5f1b2028c7195961db3f88b5bb073d122f96b9c52a169671a5c6",
+      "unchangedSinceIntegration": true
+    },
+    "src/developer-editor.js": {
+      "normalizedSha256": "81186949ab6db4ee6372845abd296eec055315e4ca3f4f205b25f6d4de61514a",
+      "unchangedSinceIntegration": true
+    },
+    "src/dodge-collision.js": {
+      "normalizedSha256": "506f7fa3c740fbba49a0d4082db5226d629eb4dbf0bd4b9816ce586c5071dd84",
+      "unchangedSinceIntegration": true
+    },
+    "src/dodge-sprint-input.js": {
+      "normalizedSha256": "b558f3e8c184e0c10329da3ed899270e2ee69632dd6f568b00eadec86c5c7b84",
+      "unchangedSinceIntegration": true
+    },
+    "src/dodge.js": {
+      "normalizedSha256": "752038956a00d23f475d2b94b328404f1677a50c1c546f63c7858e411a7c0f64",
+      "unchangedSinceIntegration": true
+    },
+    "src/dot-minimap.css": {
+      "normalizedSha256": "ce7e9b00612bb270d4c33fdcab56612e2fe74c965df6151d85bb54014889c8a6",
+      "unchangedSinceIntegration": true
+    },
+    "src/dot-minimap.js": {
+      "normalizedSha256": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af",
+      "unchangedSinceIntegration": true
+    },
+    "src/editable-asset-index.js": {
+      "normalizedSha256": "20f3795b1b38c0edc1718343ab6492da91de8fef17dc32e86b824b4946fe4517",
+      "unchangedSinceIntegration": true
+    },
+    "src/editor-workspace.js": {
+      "normalizedSha256": "f81b60a31236436322e9f979f55a3b4722bd301096d00c4e58fb437577abc3f2",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-charge.js": {
+      "normalizedSha256": "01cf9658f3308c3f2369c62fbadf9c1aa01fbd3cad52a14c968ed562187d53a6",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-encounter.js": {
+      "normalizedSha256": "30c3291fc1f88acf0d8aa823d4a7d88ce0b691d453c6542515c28accc0843b75",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-ground-magic.js": {
+      "normalizedSha256": "5926677da1349927aec7b45eec4b9d5fafee5ce620af93030abb82a5c212bc1b",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-ground-surface.js": {
+      "normalizedSha256": "36bebf0be96730f8b5d1beaa7b1652cc28ea4dd2ea0e1d3bd363bde77d49bea5",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-magic.js": {
+      "normalizedSha256": "30009d7ed44ab31cc2e2761e481e89ea35f2b29ed0302bcacd86b2eddf0466e4",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-reposition.js": {
+      "normalizedSha256": "11dec80e2fa922822802bdc16501539c82e446c26b86e98c0750e0b22e3eeba6",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-spec.js": {
+      "normalizedSha256": "c8388df2e19a3fd63dc11fa93dea02b8296e0c3b9e829f7a84dbf14d773bf950",
+      "unchangedSinceIntegration": true
+    },
+    "src/elena-style.js": {
+      "normalizedSha256": "7517b3a8113288dac251e814b522ca948108eb076235c4768481c5db031f7f5e",
+      "unchangedSinceIntegration": true
+    },
+    "src/enemy-collision.js": {
+      "normalizedSha256": "62ce9f5326eb1570342b57daa55d7d9bfe53ee88fffeb7485f3afb0324dbbfd5",
+      "unchangedSinceIntegration": true
+    },
+    "src/enemy-death.js": {
+      "normalizedSha256": "18eb6e692f53bc72396a46ddaa1aece176e80171333b73fa951f597a2321e20b",
+      "unchangedSinceIntegration": true
+    },
+    "src/environment.js": {
+      "normalizedSha256": "eb53a6190f00642923767c534e8a4594196052d0b1a95445e8ceab0b23c0d1bd",
+      "unchangedSinceIntegration": true
+    },
+    "src/equipment-stats.js": {
+      "normalizedSha256": "0e17867058694a0b1c92a7aba8af436b8c9751b000a6256b0709a96deceeb4f4",
+      "unchangedSinceIntegration": true
+    },
+    "src/equipment.js": {
+      "normalizedSha256": "26ba1b1725e4e747bb88ba244fcd9d8b19051ae6fed8b272311e2de4438e8840",
+      "unchangedSinceIntegration": true
+    },
+    "src/forest-layout.js": {
+      "normalizedSha256": "5e622aedbf32ed1b40c4147599e2f652eeb091c5dad691e97b65700742908439",
+      "unchangedSinceIntegration": true
+    },
+    "src/frame-diagnostics.js": {
+      "normalizedSha256": "1a5415717eee8455faccc0c99ff03b4fa3fc02508693f0d5e6d294326287d42a",
+      "unchangedSinceIntegration": true
+    },
+    "src/frame-loop.js": {
+      "normalizedSha256": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+      "unchangedSinceIntegration": true
+    },
+    "src/frame-rate-settings.js": {
+      "normalizedSha256": "57c51427423750184fc2f86ac68394e7a388c9de50757b5f32c833b4ead36322",
+      "unchangedSinceIntegration": true
+    },
+    "src/fullscreen.js": {
+      "normalizedSha256": "01634a4c849daaccaa8dbd478b0ac8f5539985360399d7874f8496fa8717ed76",
+      "unchangedSinceIntegration": true
+    },
+    "src/game-audio.js": {
+      "normalizedSha256": "53151438302144458226c83dfc229cd60e0cb75d3cdeecbedf927527c8998e09",
+      "unchangedSinceIntegration": true
+    },
+    "src/game-selection.css": {
+      "normalizedSha256": "dbb6de7ab186e787907fabcf1887b5b940c7ac50aeefced77fa88bde782543cd",
+      "unchangedSinceIntegration": true
+    },
+    "src/game-selection.js": {
+      "normalizedSha256": "04673d4fefe72d5d6d8c72865e94ec78abe871f7d4d853b69de0ae4beb291102",
+      "unchangedSinceIntegration": true
+    },
+    "src/game-tool-lease.js": {
+      "normalizedSha256": "71b46edf1c36cabc7fc3f216cc502fee75f87974c8973f10990cf64e574eba0b",
+      "unchangedSinceIntegration": true
+    },
+    "src/goblin-encounter.js": {
+      "normalizedSha256": "81aaa4a8cbd41cf06e592f8dc65f14cdafdd15bed48aeb5639936a2418bd04c0",
+      "unchangedSinceIntegration": true
+    },
+    "src/goblin-spec.js": {
+      "normalizedSha256": "5c985de911dc911a73dbb5abcaf568c928c52cf8b20dd51e57549f8cde4a411c",
+      "unchangedSinceIntegration": true
+    },
+    "src/gold-loot-view.js": {
+      "normalizedSha256": "a6b4585cbcfb8e8728d66c0012d7e81943ccf27efde67d257ff7d7d7412678c5",
+      "unchangedSinceIntegration": true
+    },
+    "src/gold-loot.js": {
+      "normalizedSha256": "216d21e922c76bc4bd19ab0158d240ad1616227c23349c4e9a87c7c564392fd0",
+      "unchangedSinceIntegration": true
+    },
+    "src/great-plains-decor.js": {
+      "normalizedSha256": "7415184ec553bcd8044376d58537eb70ff9d30528211fd913d6321027931d752",
+      "unchangedSinceIntegration": true
+    },
+    "src/great-plains-layout.js": {
+      "normalizedSha256": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "unchangedSinceIntegration": true
+    },
+    "src/great-plains-terrain.js": {
+      "normalizedSha256": "f742031d73dbf24b73fe977c06d975173ffc4e08e38b750b29867f1125659d7e",
+      "unchangedSinceIntegration": true
+    },
+    "src/healing-potion.js": {
+      "normalizedSha256": "660b400b11f46724c738a3c4e6afac06e5a612666454f81c6d2112213a00a365",
+      "unchangedSinceIntegration": true
+    },
+    "src/hit-feedback.js": {
+      "normalizedSha256": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c",
+      "unchangedSinceIntegration": true
+    },
+    "src/hud-layout.css": {
+      "normalizedSha256": "87807a77e48974399677965ebc81ea32b1e8df7093879a22d9011c98132c036c",
+      "unchangedSinceIntegration": true
+    },
+    "src/hud-layout.js": {
+      "normalizedSha256": "e303be7b1446fb3aaf6363f534321c38391d00db1a57493891ead18028a7b579",
+      "unchangedSinceIntegration": true
+    },
+    "src/hud-top-actions.js": {
+      "normalizedSha256": "6e6d31e1e62855af3baf26299d99f249317e4be465e69d0d441428d95dec2735",
+      "unchangedSinceIntegration": true
+    },
+    "src/input.js": {
+      "normalizedSha256": "6e1cb40add61e81e03bf644e30ef36ea3f46f50f30ec3eb2318c3a050e4fde73",
+      "unchangedSinceIntegration": true
+    },
+    "src/ktx-worker-supervisor.js": {
+      "normalizedSha256": "12feaa6619a522313cfc67e9ebecb63d01c895bacdaa2fe4a2291df4b0179ba6",
+      "unchangedSinceIntegration": true
+    },
+    "src/load-diagnostics.js": {
+      "normalizedSha256": "e700613e14ae857766386d8a80f428c3cef9c152adbdb279cc372aae64151ce6",
+      "unchangedSinceIntegration": true
+    },
+    "src/loading-art.js": {
+      "normalizedSha256": "fbb7d939844168785c3f5a079d8b7fb4f607cf0344b5d20007e0aa46a9627f24",
+      "unchangedSinceIntegration": true
+    },
+    "src/loading-view.js": {
+      "normalizedSha256": "3354c40b2b89210df815609f5c3147c648b9a86bac82d285092cc51121dc6bcc",
+      "unchangedSinceIntegration": true
+    },
+    "src/loot-rarity.js": {
+      "normalizedSha256": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698",
+      "unchangedSinceIntegration": true
+    },
+    "src/main.js": {
+      "normalizedSha256": "e801a45e5e869bbf9d2e3b7790371dd0f3d45a880dc7297e3c95fa4221949d3b",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-container.js": {
+      "normalizedSha256": "54a227dacf6fd9302d059f870e96a52b6d55b68df3d8d7879895603df18bac7d",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-decode-cache.js": {
+      "normalizedSha256": "c555c60c025ff1f39c6f52cfd02bec758f5f727ba9eeeeedbc94419c8e7c75e3",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-departure.js": {
+      "normalizedSha256": "f29df909fe813b7743a4edd91bfed74c5579fb0435711696d233fb0d67f6602a",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-load-lifetime.js": {
+      "normalizedSha256": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-manifests.js": {
+      "normalizedSha256": "ff926a92670432e6ed96b39da1731be37e430641b87f19818592315db7be6d21",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-navigation-cache.js": {
+      "normalizedSha256": "d4157195e9ffd34cf87b5a159235b647a8765e96e94a52efb5c956f75ca93220",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-resume.js": {
+      "normalizedSha256": "415ee5788a59ba96ea89382cce43eaa273ae3c967ba9e6e98160e25001632aaf",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-route.js": {
+      "normalizedSha256": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-shader-cache.js": {
+      "normalizedSha256": "c631c908d36f38ef8195a49efd6c8291629a78272e3b5c27b6e8dfa83406a7a7",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-terrain-cache.js": {
+      "normalizedSha256": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-texture-lifetime.js": {
+      "normalizedSha256": "9738a8c1293a57e51659fc5d423bdb10723c16c630bc9011cc475faf03c242af",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-transition.js": {
+      "normalizedSha256": "40de749347bcff13c166001ab8ec508e1f54e52f21ea912bca51f064fa69b625",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-travel.js": {
+      "normalizedSha256": "37c2a482ffeb20ac0d3e0045483ad9aa5f0c2e0c4f469acc671f1f86443f3521",
+      "unchangedSinceIntegration": true
+    },
+    "src/map-waypoints.js": {
+      "normalizedSha256": "d50711c1587ecae8d396e2becf914521c52a7c16c0b83f974e6f54da3c3dbff2",
+      "unchangedSinceIntegration": true
+    },
+    "src/melee-collision.js": {
+      "normalizedSha256": "120b720be73815c11e12abb704c34dca9e037b450080cd3141fc698f7a04b250",
+      "unchangedSinceIntegration": true
+    },
+    "src/meshopt-worker-supervisor.js": {
+      "normalizedSha256": "60136804bba7f7a44da40b41e39dd2adeae7e0db65fb2fde1f4e0c7d28399d6a",
+      "unchangedSinceIntegration": true
+    },
+    "src/minimap-travel.js": {
+      "normalizedSha256": "c445d822c6d746f36ac79468de3a78fb74d69000b9e7c5e5f3e89409e2d5ce4f",
+      "unchangedSinceIntegration": true
+    },
+    "src/mobile-texture-policy.js": {
+      "normalizedSha256": "93581b9581d203e98880726c009da66f792139afff0539e0317ebfca7faed998",
+      "unchangedSinceIntegration": true
+    },
+    "src/mobile-ui.css": {
+      "normalizedSha256": "fa0dd0b13f1804e511577de80ccc6fc9f79e356054e4ab41abe0d4577f28c111",
+      "unchangedSinceIntegration": true
+    },
+    "src/mobile-viewport.css": {
+      "normalizedSha256": "f87ffac62679ffbcfb4e1cb31287a91c9ca9514c4557f4197a2bb421a6a2192c",
+      "unchangedSinceIntegration": true
+    },
+    "src/monster-forest-layout.js": {
+      "normalizedSha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "unchangedSinceIntegration": true
+    },
+    "src/monster-forest-terrain.js": {
+      "normalizedSha256": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "unchangedSinceIntegration": true
+    },
+    "src/monster-toon.js": {
+      "normalizedSha256": "1825a938c70913c52c19e3b9ca2a5486ccde05bfe01aea0a9a97b87b7600d03a",
+      "unchangedSinceIntegration": true
+    },
+    "src/motion-speed-controls.js": {
+      "normalizedSha256": "39b366893e6238c86face3757b2161bd866b9fec7474bb136d7fd95d03e3cf1e",
+      "unchangedSinceIntegration": true
+    },
+    "src/mountain-backdrop.js": {
+      "normalizedSha256": "ae3ddbdfe9487dd1e92ef8f52be282e700539f5dc89cbc8055133987396fdc4a",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-camera-culling.js": {
+      "normalizedSha256": "021481d9b61bd76bbc2369c83b217dd79a59a03a963f2cb60b833ac029148c13",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-cave-clearance-data.js": {
+      "normalizedSha256": "c57c58002f7f9838792f162266834aef191669d2b9b8d5b5068fa7528112bbe5",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-cave-clearance.js": {
+      "normalizedSha256": "d7a76c396a9970881148baf7922ffaaa4cce69be8140078ec165fa3da2fd5737",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-cave-navigation.js": {
+      "normalizedSha256": "17f3ee4a186fae6b3a92674312cb5e8927fd17dc9d61a975b9bcbe89b1eeb616",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-death-depth-data.js": {
+      "normalizedSha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-death-depth.js": {
+      "normalizedSha256": "ea0262fc4d39a39d5c992c182c17f286656c78b1ecbc1c03e1c56b292b8e9d3c",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-death-knee-data.js": {
+      "normalizedSha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-death-knee.js": {
+      "normalizedSha256": "ae1a40ecb75efc65724a05b84d0bddf9a7de135e56d67a669f7009e4aa74a011",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-elena-animation.js": {
+      "normalizedSha256": "6ca34225c0fc8c201512c56256b5c6d495da68cb1d1d30467805e75c72b17e52",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-elena-encounter.js": {
+      "normalizedSha256": "38a212819d23f106011127220013a8c1ed3ee1eee3e461dc1264a0cfd4c1503c",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-elena-hurt.js": {
+      "normalizedSha256": "28853fe021c3539cff1ffceb2b67a2fbe6873c718e3c62ae83fb7b47164439a9",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-locomotion.js": {
+      "normalizedSha256": "b9df1f57eff40721004aa71b04448a0f00788ef922a14d97a452fc09d87c3179",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-motion-v2.js": {
+      "normalizedSha256": "da4629525754d81783de718bc120b3d284f7dd4c4b5234e72f50618d5cb2b742",
+      "unchangedSinceIntegration": true
+    },
+    "src/mourning-slam.js": {
+      "normalizedSha256": "95912b085739630941530804073c04bb5d273b90397258ac857e4b3a065305cf",
+      "unchangedSinceIntegration": true
+    },
+    "src/native-review.js": {
+      "normalizedSha256": "73e11028610d56c49e117db949b4f3bf7172c556f120bb430ca5b41fdbb7fcc5",
+      "unchangedSinceIntegration": true
+    },
+    "src/native-warrior.js": {
+      "normalizedSha256": "6d91910e864faaea73570e41660d8400a1c7336e71f03d94fbd7780a1401444b",
+      "unchangedSinceIntegration": true
+    },
+    "src/navigation-segment-cells.js": {
+      "normalizedSha256": "e2d01b26fec04369279692a14587ad72c54f780f1c2e934c2ccece0503c7cfe5",
+      "unchangedSinceIntegration": true
+    },
+    "src/navigation.js": {
+      "normalizedSha256": "fa60c92087ff2cc7f5abb4fc0b817131eda8c6909720a5629ca63d515f915adf",
+      "unchangedSinceIntegration": true
+    },
+    "src/nearby-editor.js": {
+      "normalizedSha256": "5170bfea0222d3412fece62c2027a9411bdad89f4305c50295546791ea98dc7d",
+      "unchangedSinceIntegration": true
+    },
+    "src/outdoor-vista.js": {
+      "normalizedSha256": "552200a0838875cfa7731be602a2a27e944d6960ca75d7800988680003868b6d",
+      "unchangedSinceIntegration": true
+    },
+    "src/overlay-readiness.js": {
+      "normalizedSha256": "5254cb6cda50e2f42b45ae2ca7193b6160f3f42d4954a5579305dd49653c5f15",
+      "unchangedSinceIntegration": true
+    },
+    "src/passive-health-regen.js": {
+      "normalizedSha256": "c4821eded576009af3cbd86815d5d641eba5b67c1a7805037292c4276bdf89cd",
+      "unchangedSinceIntegration": true
+    },
+    "src/placement-document.js": {
+      "normalizedSha256": "8046fc89838c74863e40670b2b4ad8adc79b2ae2505279258e5756656185f756",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-boundary-atmosphere.js": {
+      "normalizedSha256": "dc38833d315155d8c1789b728e11059492e424a8a827fe52393877ea7f83c870",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-forest-boundary.js": {
+      "normalizedSha256": "3d74c029e7c90a988f27e5d018bb8f312e5988bf6fff074d94ec8e8e327f6bc6",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-forest-edge.js": {
+      "normalizedSha256": "b8c357a153cf43b70ad70e924065d0f8d2ea6a9b594187bd6389cb0dcb29d528",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-overview.js": {
+      "normalizedSha256": "410152da4b25e7e52bbe56cb975d2aaf5c659ed937a8bfb47432ac3bf74a01c0",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-review-controls.js": {
+      "normalizedSha256": "e882b3d10f81b3858e035c1476113477482169fd77980e1ae793b38e3bc945dd",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-tree-transition.js": {
+      "normalizedSha256": "94ff36d429d6c33dda8463a3ffc6aea10108d7fab055b2f946136ffd87c684a6",
+      "unchangedSinceIntegration": true
+    },
+    "src/plains-view-distance.js": {
+      "normalizedSha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-combat.js": {
+      "normalizedSha256": "d35acf7464a2e8cfa994014b49fafbcbce4fd10afb385bbe412182a2d0d9ce5e",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-detail.js": {
+      "normalizedSha256": "f7bc2d5bf720cd5c6109ec912e083059d8672e65085776ab6a46ad7b10b52ace",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-dimensions.js": {
+      "normalizedSha256": "5c83e0fa93fd543dd51feb693c221983f7883127906027adba57b62454147e26",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-health-bar.js": {
+      "normalizedSha256": "84a8aec68671df0553d158f88f69cb7080f9f75423e2c0d003207c0185e4e96f",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-strikes.js": {
+      "normalizedSha256": "76ef46705e3e5c5bd64feafef42c39fb8a0a5559599a7aacaee111bce50f7785",
+      "unchangedSinceIntegration": true
+    },
+    "src/player-texture-profile.js": {
+      "normalizedSha256": "92158a61645a24dd67e962b507621db0b3167b215613f6b3f3543960942849d2",
+      "unchangedSinceIntegration": true
+    },
+    "src/portal-mist.js": {
+      "normalizedSha256": "286600aac376fe00452596adf85078482f3d229f7e9caa10e4332c9ce686e591",
+      "unchangedSinceIntegration": true
+    },
+    "src/pose-matrices.js": {
+      "normalizedSha256": "031cb7a5746edb41c3044d7dd8ac4ec094d33208f8af9201e2e5bb3b67022632",
+      "unchangedSinceIntegration": true
+    },
+    "src/projectiles.js": {
+      "normalizedSha256": "dae6aa8f10e674462e0df9e0a2300af9c6f8f29ece56e2078b81a9f687e52191",
+      "unchangedSinceIntegration": true
+    },
+    "src/quest-asset-review.js": {
+      "normalizedSha256": "cc100ff1559eb0df01e4d22e44a4a4d9dfcb0438320a197e93f46d7bdbc981bf",
+      "unchangedSinceIntegration": true
+    },
+    "src/release-route.js": {
+      "normalizedSha256": "bb3924c0dcd34942ff962d5cfc41d1abed4fedb1afcbb0dcb2c9bbdc7f087f96",
+      "unchangedSinceIntegration": true
+    },
+    "src/render-cpu-sampler.js": {
+      "normalizedSha256": "40b6d2700dccecbd3ad67d6d750c466d6c52d3c9441c031f7b19596a63c45fef",
+      "unchangedSinceIntegration": true
+    },
+    "src/render-policy.js": {
+      "normalizedSha256": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+      "unchangedSinceIntegration": true
+    },
+    "src/render-scale-settings.js": {
+      "normalizedSha256": "47144c5f1c92561714dd00fd9e2f0ec0eb9d948ec73c077d1520a29f7c8d1869",
+      "unchangedSinceIntegration": true
+    },
+    "src/resource-bundles.js": {
+      "normalizedSha256": "592fd04ef8ee45d8e4b76bec868a9c12f31a7cfee7118d267b7e7a1d3dd90593",
+      "unchangedSinceIntegration": true
+    },
+    "src/resource-cache.js": {
+      "normalizedSha256": "bb291fba9f7d3b1694229e0b96c1b2cbfd2becf12390126a9e559fd4f6a86b50",
+      "unchangedSinceIntegration": true
+    },
+    "src/resource-downloads.js": {
+      "normalizedSha256": "c5e2b0c1b77eafcf1ce28656ae2ecee7cf2b9c08e1ef736f728f2792ad3aa1c9",
+      "unchangedSinceIntegration": true
+    },
+    "src/resource-index.js": {
+      "normalizedSha256": "3543db1c26ccbd28d7b40666d933d00690cdcf3cc601712422b2641aa6350c7d",
+      "unchangedSinceIntegration": true
+    },
+    "src/resource-repair.js": {
+      "normalizedSha256": "7a1df037968e61d0405cd3859e71186e62b4df0287aa990e219120979ca4c21b",
+      "unchangedSinceIntegration": true
+    },
+    "src/runtime-timers.js": {
+      "normalizedSha256": "657c5cdc21744337b679d7bfa8e33fc97e8213e981646fc7c087b1786ffe201a",
+      "unchangedSinceIntegration": true
+    },
+    "src/runtime-version.js": {
+      "normalizedSha256": "7956a7d43e21041bd285dde7413a095099ab728b241fded454da25e554a40cf2",
+      "unchangedSinceIntegration": true
+    },
+    "src/scene-diagnostics.js": {
+      "normalizedSha256": "00b71e4cdd63ce8ec9b2f624e652a45a78d96e14920c26038648f6ae8feaa146",
+      "unchangedSinceIntegration": true
+    },
+    "src/scene-lighting.js": {
+      "normalizedSha256": "f4dc575fb6ee0af63243a826886e6d3247b42892660905d6cc830fac89840af8",
+      "unchangedSinceIntegration": true
+    },
+    "src/scene-ready.js": {
+      "normalizedSha256": "a14cd8bf39b0b995838f5e441548d6312b00fa9cb95b26e59f10da02c2a7e249",
+      "unchangedSinceIntegration": true
+    },
+    "src/scenery-collision-policy.js": {
+      "normalizedSha256": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9",
+      "unchangedSinceIntegration": true
+    },
+    "src/screen-projection.js": {
+      "normalizedSha256": "a575d3e89b8523b4b03878f8181c0e7f8878b0d849988f9e8245af8d16b557b4",
+      "unchangedSinceIntegration": true
+    },
+    "src/serial-player-textures.js": {
+      "normalizedSha256": "c40aff654309c1efd77892fc71a79e7bf82e543de4d52a8ee68e1e903027def7",
+      "unchangedSinceIntegration": true
+    },
+    "src/settings-panel.js": {
+      "normalizedSha256": "caed6642c55359488cba2863ec7e27c108e536f433ff18b2ecf6e1ef7f5a84fe",
+      "unchangedSinceIntegration": true
+    },
+    "src/sky.js": {
+      "normalizedSha256": "981547c5f8da56922107428835376cddb4d6fde1a98e1b91aba7d61b5e8869fe",
+      "unchangedSinceIntegration": true
+    },
+    "src/stamina-feedback.js": {
+      "normalizedSha256": "9ba33e815a0085a7141bc65fe3bf735ca66b4155d8f82c79702f184f7a07d17e",
+      "unchangedSinceIntegration": true
+    },
+    "src/startup-resources.js": {
+      "normalizedSha256": "3ec63bbe17b95ca0ce4cd7addef0e1ce5618f9845499c64fae5fad05136730c4",
+      "unchangedSinceIntegration": true
+    },
+    "src/static-map-instances.js": {
+      "normalizedSha256": "0be2d4e1f94b246b144d0f56d9457e1cf6109ba07e3b25faf4e039d9cfd5091c",
+      "unchangedSinceIntegration": true
+    },
+    "src/styles.css": {
+      "normalizedSha256": "bdadb216a0b5ac25bf5359e12d9015438fc316c29ae2365391867e2994c385cb",
+      "unchangedSinceIntegration": true
+    },
+    "src/summon-panel.js": {
+      "normalizedSha256": "c96924f9403753c3564bf40c453ff4925ac0d6fdf84b1d1555104dd77589932b",
+      "unchangedSinceIntegration": true
+    },
+    "src/targets.js": {
+      "normalizedSha256": "f237a71848cae2bbfa0b8ee2aa6072b6a4a847b01cf1da020fdcb32c339bc73c",
+      "unchangedSinceIntegration": true
+    },
+    "src/terrain-mesh.js": {
+      "normalizedSha256": "b315d4a704f5d8af1ca435fe7cd4cc5843ecc8f430ea71a1748f0aa15f0524f4",
+      "unchangedSinceIntegration": true
+    },
+    "src/terrain.js": {
+      "normalizedSha256": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9",
+      "unchangedSinceIntegration": true
+    },
+    "src/tool-camera-input.js": {
+      "normalizedSha256": "844ab8f69ce89ee48cbb93cf5adbdaec54cdfef1470f43781dd8531d93d1f504",
+      "unchangedSinceIntegration": true
+    },
+    "src/tool-fine-zoom.js": {
+      "normalizedSha256": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7",
+      "unchangedSinceIntegration": true
+    },
+    "src/tree-lod.js": {
+      "normalizedSha256": "7ab58e11c90027c842bcdf91c1d642f2cff356e665437b6d1081a5c97b49a44a",
+      "unchangedSinceIntegration": true
+    },
+    "src/tree-material.js": {
+      "normalizedSha256": "74301aae5dd071152ee7e4c104327307873fd46e5df2a3a0ad0ecff9c49481d8",
+      "unchangedSinceIntegration": true
+    },
+    "src/tree-occlusion.js": {
+      "normalizedSha256": "d6d6b6043b8abccc66553be74fc611111f3c98e846053a6decf7ffa476312a80",
+      "unchangedSinceIntegration": true
+    },
+    "src/tree-view-surface.js": {
+      "normalizedSha256": "e8ace8e08f8e274a4848834a2cab9e4735dc03bddfa854367edf16187d5b4882",
+      "unchangedSinceIntegration": true
+    },
+    "src/ui-test-art/provenance.json": {
+      "normalizedSha256": "e28e29d132a14625f35652fe4e906e8d0b05093b293e760692b68e89034cedcf",
+      "unchangedSinceIntegration": true
+    },
+    "src/ui-test-route.js": {
+      "normalizedSha256": "503a8826e8fab21d64564e94d0f33f36876780160efe6655e4de7229f217d135",
+      "unchangedSinceIntegration": true
+    },
+    "src/ui-test-state.js": {
+      "normalizedSha256": "4117908752ba54a35960af89d03f84fb010226c22b31324d19b38611fc6a5e7e",
+      "unchangedSinceIntegration": true
+    },
+    "src/ui-test.css": {
+      "normalizedSha256": "b10841005e55c6d2c6ea5c0dde6beb1867d0d55624a4ff4b0d7243d99a0a59db",
+      "unchangedSinceIntegration": true
+    },
+    "src/ui-test.js": {
+      "normalizedSha256": "8d46b285c6d0a46e8a959a659f3d7fd8c62ee16e63cf11189e0ce39e607954a0",
+      "unchangedSinceIntegration": true
+    },
+    "src/viewport-resize.js": {
+      "normalizedSha256": "8d299f8d354589b01fc552e4bd084592e8e710e397da0f233345cf817311153e",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-active-candidates.js": {
+      "normalizedSha256": "de1311a64ef00dd48aa63c31dee91da9caf8b9f4b64d51eb6146c0bed163a033",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-collision.js": {
+      "normalizedSha256": "a7e08da8df6a2031cbdede344d9188ee9335486828a13060d70954187702008e",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-demand.js": {
+      "normalizedSha256": "76b49ef6e11c66c83623abac2369fbae6a17d7ab42f545669fdbfc73aca74770",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-environment.js": {
+      "normalizedSha256": "f75e653558c4a2e546dc8de3a4aa707006e4565e709bda71fd725988c9cf3731",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-ground-layout.js": {
+      "normalizedSha256": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-ground.js": {
+      "normalizedSha256": "b92e269a4e0da08770c93a1ddc5ed588a223b7f59bd35caa051949cc446b7f52",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-instancing.js": {
+      "normalizedSha256": "95e5a0349045025a3870cb950d57fc17743e10561b4cec7072faed61dd58a5d7",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-ktx2.js": {
+      "normalizedSha256": "28a30c330cf2d4193e200316fcff65acfdbb0c0c4ebf36f0c5415b55bc526844",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-layout.js": {
+      "normalizedSha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-lod.js": {
+      "normalizedSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-meshopt.js": {
+      "normalizedSha256": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-navigation.js": {
+      "normalizedSha256": "e37eccd693ce2c952c7309a36ee79f2f07e08d657353bfc432f0fe172afd6a4f",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-occlusion.js": {
+      "normalizedSha256": "9f0df4d9c3d5f521abcd8eb474306e5e3b171dbb30afa59518fc3a0cef32bb23",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-outline-policy.js": {
+      "normalizedSha256": "75b33381d32ce89ed17fad1d8c5e905a2cf8a008555cb92ffdfce94ee636efef",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-outlines.js": {
+      "normalizedSha256": "832a55bcc87d11c2d61fb9f5bf43dd72ed1163ade4947b59c042c869092d5f42",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-outskirts-skirt.js": {
+      "normalizedSha256": "f426378dcfd05bfbfce0d349e7a9f4822b3f52285d725999288accab34692232",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-plains-boundary.js": {
+      "normalizedSha256": "8de2ea94680080b2c852c8b50419f14e80e849d543290679fe3c2eb414e96304",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-plains-handoff.js": {
+      "normalizedSha256": "97fe7fba3960e8f6099c9cf096ebc11afe93909f5b8427600a6f0bee719a6a1e",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-plains-outskirts-ground.js": {
+      "normalizedSha256": "0c565761b15fb7826bd1405f2e2aeed807c997319a40dcd3acd217d062b682e5",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-plains-outskirts.js": {
+      "normalizedSha256": "41c820db786c2324890bfe8219640f64c9892f40be7d06a2770453fa210676e8",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-policy.js": {
+      "normalizedSha256": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-review.js": {
+      "normalizedSha256": "ab9de1af3f9af06b445a87ecdcbca5dc53f93b284e59d42e425462d62c1f912a",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-shadow-fade.js": {
+      "normalizedSha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-shadow-policy.js": {
+      "normalizedSha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-streamed-environment.js": {
+      "normalizedSha256": "b10bca92d1e59d9e2fd7601f811dccae7c5f1cdefd447fcc6c723834157fce40",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-terrain.js": {
+      "normalizedSha256": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-texture-budget.js": {
+      "normalizedSha256": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-texture-streaming.js": {
+      "normalizedSha256": "b50dff4b6e1346c41401d16f8fba7227d19a729dc4cb144c56b1aa60236d0d62",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-toon.js": {
+      "normalizedSha256": "05a5fda41bf0359cd58c62b9676b32aaad5c0601f332def27f6e409cb9fffb98",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-training.js": {
+      "normalizedSha256": "3ccf18095bb166eae9587ad3c1ff55f7a36948b934b3ee1306f46e25b0435863",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-visibility.js": {
+      "normalizedSha256": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+      "unchangedSinceIntegration": true
+    },
+    "src/village-work-budget.js": {
+      "normalizedSha256": "0b32a8012afeec69bef404a9b72ea3fe9e705fe7d306233848b7cd12fdd38ca1",
+      "unchangedSinceIntegration": true
+    },
+    "src/warrior-controller.js": {
+      "normalizedSha256": "f1833938bcccaed1fb55480d1eec79e76af4b129b0d0450657ed09b12a5d0608",
+      "unchangedSinceIntegration": true
+    },
+    "src/warrior-v2.js": {
+      "normalizedSha256": "fde326d2c00da03b50438d374b9030d774d5519e65c4ab97347ccfda0eaa276c",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-atmosphere.js": {
+      "normalizedSha256": "fe9ac2dc2591dbd7f3b2be3b50010c791d52359c4893834be9dd871e650eca93",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-camera-data.js": {
+      "normalizedSha256": "661cb320af2b1581214fce63e8fc8aa26f2381b49fe500b5326d628ff86ee67e",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-camera.js": {
+      "normalizedSha256": "d94e99c3d234d3b01bc1b5cbaf2b21de8d5f1c414396bb17353051efcf013e11",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-collision-data.js": {
+      "normalizedSha256": "5e38efcf9c391c6f9f92c7b7264bc02ecde76c33bdfa7742fc0c899211f3745e",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-collision.js": {
+      "normalizedSha256": "270a093f154d430b8d047a2232b7cb7a681502ba95971d2503253425e5ea66d4",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-layout.js": {
+      "normalizedSha256": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-navigation.js": {
+      "normalizedSha256": "7f22e6454689f94e854e94b6ce343e3d35416133e960b55d31907d4d9bc3e645",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-ramp-profile.js": {
+      "normalizedSha256": "189268654955514ddfe191ad861e2f2b99e89f98fac7b721c4c7b62df6635047",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-sight-data.js": {
+      "normalizedSha256": "521e35dd388cc59aa9d4b861768526df098466deb6da0b0adf82ebaed6e764b8",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-sight.js": {
+      "normalizedSha256": "a91971b8ff9b1651b0a497ff967af2110fffd5d47281b852f9c874e0782f9c7f",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-surfaces.js": {
+      "normalizedSha256": "518d98a4198c22ec2639e46814399e7413be140901bac2e88e898ee22f87a1a7",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-terrain.js": {
+      "normalizedSha256": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-visibility.js": {
+      "normalizedSha256": "e685f268cfe2f7de5e02326f5731dac6324fdb5d9ab01f5d6cdbf41424ab4019",
+      "unchangedSinceIntegration": true
+    },
+    "src/witch-cave-water.js": {
+      "normalizedSha256": "7bde4b25d7e2287ae675efe77cde3d57f1d1c8db5eda9f7cf642be390c51091b",
+      "unchangedSinceIntegration": true
+    },
+    "src/world-limits.js": {
+      "normalizedSha256": "1c0e5b652cb9c0e69d588872008dbcd9991c050a2754e3985294e96c3c8fee77",
+      "unchangedSinceIntegration": true
+    },
+    "src/world.js": {
+      "normalizedSha256": "f9437ee8953cd1cdeb314b17b8dfcfecaa4be0db3684d9e19ee4ff3ca0c8f257",
+      "unchangedSinceIntegration": true
+    }
+  },
+  "wholeRegression": {
+    "total": 1822,
+    "passed": 1822,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "passedAll": true,
+    "sourceFiles": 32,
+    "sourceUnchanged": true,
+    "integratedRemoteBase": "025ec479345978270c2a4ac7a04d072b8f92ed42"
+  },
+  "priorKnownFixture": {
+    "historicalFailure": "verification-inherited-texture-fixture.json",
+    "currentStatus": "Remote025 carries valid1024profile fixture and fresh integrated full suite passes; historical record retained"
+  },
+  "stage": {
+    "checked": true,
+    "path": "integration-pages/ArcherPreviewSite",
+    "files": 1503
+  },
+  "scope": "Fresh isolated integration audit of built AST/origins, actual/synced/staged bytes, canonical catalog/resource separation, source parity and fresh full regression. Historical original-worktree reports unchanged. No browser, pixels, GPU/device/FPS or audible-sound claim."
+}

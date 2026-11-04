@@ -1,0 +1,9 @@
+{
+  "reason": "Ignored original model absent from clean isolated checkout",
+  "path": "assets/models/violet-warrior-v2.glb",
+  "bytes": 60409992,
+  "sha256": "f77e9096ac67e0efa0a4d44671c217d23eaa1e37177ac5278e4a1e54e8dab6eb",
+  "sourceUnchanged": true,
+  "tracked": false,
+  "noRuntimeSourceChanges": true
+}

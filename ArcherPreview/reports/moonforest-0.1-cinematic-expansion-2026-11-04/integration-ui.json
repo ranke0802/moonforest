@@ -1,0 +1,102 @@
+{
+  "worktree": "C:\\dev\\moonforest-cinematic-integration-20261104\\ArcherPreview",
+  "generatedAt": "2026-11-04T10:17:10.157Z",
+  "baselineRemote": "025ec479345978270c2a4ac7a04d072b8f92ed42",
+  "catalog": {
+    "entries": 84,
+    "revision": "535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8",
+    "contentRevision": "43238941cc2b4a11c11e9fe25425ac7b1c705b1a90b14c3b7697cbb48ddc1808",
+    "resourceIndexRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175"
+  },
+  "sourceBefore": {
+    "src/cinematic-studio.js": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+    "src/cinematic-studio.css": "e0f15aaf7d78ffe0cde056919af5b798260b7b051ba9bcd973f8e41492d16af1",
+    "src/cinematic-document.js": "58e5777b1550ddcd84b0150c875178a1e7e2ae34b949f420e84ef35a43a42d82",
+    "src/cinematic-assets.js": "a2d22b256fdf57d86befe10410347ce61005cdae06ddee69a6211df407188aa1",
+    "src/cinematic-media.js": "5dc626414ba5918bb88129f0d1357cdf78db21cf8b385d214af3d5dfb242a37a",
+    "src/cinematic-authoring.js": "5966855bdb6104ce76961b881d5c0714fcf6e6b4572b89992a77287ab5df4464",
+    "src/actor-definitions.js": "f0ab3a3ec21d7e03bce7669c42f8db929eae054c463e0b5514eada7d819ef29e",
+    "src/asset-catalog.js": "fd64805a8e1f1b7fcdddd8638b7ac1a16867291f1a983ad3738f2a842bee5ed2",
+    "src/editable-asset-index.js": "20f3795b1b38c0edc1718343ab6492da91de8fef17dc32e86b824b4946fe4517",
+    "tests/cinematic-expansion-ui.test.js": "f78f608b72352053e4dd524e01a7a87283ef92b2fdaf056cb2bde7c2b660063b",
+    "tests/cinematic-studio.test.js": "309abfa25f33bbc363fdc3bf9343893ff6b4ae41b154805d564e0d5a86493833",
+    "tests/cinematic-studio-layout.test.js": "aaeeac261d903f6fd9bbe3f58a0f9353f06a2fd4cce72380f0a567e6945fd118",
+    "tests/cinematic-workspace-controls.test.js": "2ac5378e54fa0a8a366e6661c6ddbef59783fbc2cd7592961a922a8274534dd2"
+  },
+  "cases": [
+    {
+      "name": "actual Studio file DOM migration and export a33bb141",
+      "passed": true,
+      "sourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+      "targetRevision": "535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8",
+      "assetId": "hooded-goblin",
+      "assetVersion": "Hooded Goblin - 12 source motions",
+      "contentHash": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+      "normalizedRevisionOnly": true,
+      "strictDefaultRejected": true,
+      "badAssetVersionRejected": true,
+      "badAssetHashRejected": true,
+      "unknownAssetRejected": true,
+      "malformedRevisionRejected": true,
+      "iframeUnloaded": true
+    },
+    {
+      "name": "actual Studio file DOM migration and export 480a0d3c",
+      "passed": true,
+      "sourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+      "targetRevision": "535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8",
+      "assetId": "hooded-goblin",
+      "assetVersion": "Hooded Goblin - 12 source motions",
+      "contentHash": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+      "normalizedRevisionOnly": true,
+      "strictDefaultRejected": true,
+      "badAssetVersionRejected": true,
+      "badAssetHashRejected": true,
+      "unknownAssetRejected": true,
+      "malformedRevisionRejected": true,
+      "iframeUnloaded": true
+    }
+  ],
+  "limits": [
+    "Actual LinkeDOM Studio controls and native postMessage transport unit checks; no browser automation or pixel claims",
+    "No production source edits, build, full suite, or historical report writes",
+    "Model/animation/native-game/4-map travel gates belong to the separate independent integration verifier"
+  ],
+  "focusedTests": {
+    "command": "node --test tests/cinematic-expansion-ui.test.js tests/cinematic-studio.test.js tests/cinematic-studio-layout.test.js tests/cinematic-workspace-controls.test.js",
+    "exitCode": 0,
+    "signal": null,
+    "summary": [
+      "ℹ tests 64",
+      "ℹ suites 0",
+      "ℹ pass 64",
+      "ℹ fail 0",
+      "ℹ cancelled 0",
+      "ℹ skipped 0",
+      "ℹ todo 0",
+      "ℹ duration_ms 16975.2938"
+    ],
+    "outputSha256": "2a42578dfe34990c2dbc85c54afd6754f3964ef709da35b3d37ad5c3103d307e",
+    "tests": 64,
+    "passed": 64,
+    "failed": 0
+  },
+  "networkRequests": 0,
+  "passed": true,
+  "sourceAfter": {
+    "src/cinematic-studio.js": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+    "src/cinematic-studio.css": "e0f15aaf7d78ffe0cde056919af5b798260b7b051ba9bcd973f8e41492d16af1",
+    "src/cinematic-document.js": "58e5777b1550ddcd84b0150c875178a1e7e2ae34b949f420e84ef35a43a42d82",
+    "src/cinematic-assets.js": "a2d22b256fdf57d86befe10410347ce61005cdae06ddee69a6211df407188aa1",
+    "src/cinematic-media.js": "5dc626414ba5918bb88129f0d1357cdf78db21cf8b385d214af3d5dfb242a37a",
+    "src/cinematic-authoring.js": "5966855bdb6104ce76961b881d5c0714fcf6e6b4572b89992a77287ab5df4464",
+    "src/actor-definitions.js": "f0ab3a3ec21d7e03bce7669c42f8db929eae054c463e0b5514eada7d819ef29e",
+    "src/asset-catalog.js": "fd64805a8e1f1b7fcdddd8638b7ac1a16867291f1a983ad3738f2a842bee5ed2",
+    "src/editable-asset-index.js": "20f3795b1b38c0edc1718343ab6492da91de8fef17dc32e86b824b4946fe4517",
+    "tests/cinematic-expansion-ui.test.js": "f78f608b72352053e4dd524e01a7a87283ef92b2fdaf056cb2bde7c2b660063b",
+    "tests/cinematic-studio.test.js": "309abfa25f33bbc363fdc3bf9343893ff6b4ae41b154805d564e0d5a86493833",
+    "tests/cinematic-studio-layout.test.js": "aaeeac261d903f6fd9bbe3f58a0f9353f06a2fd4cce72380f0a567e6945fd118",
+    "tests/cinematic-workspace-controls.test.js": "2ac5378e54fa0a8a366e6661c6ddbef59783fbc2cd7592961a922a8274534dd2"
+  },
+  "sourceUnchanged": true
+}
