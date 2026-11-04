@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-11-04T07:40:09.189Z",
+  "passed": true,
+  "sourceSha256": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7",
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "fine zoom uses the same small radius ratio at near/far distances and opposing steps invert",
+      "passed": true,
+      "radiusRatio60px": 1.006018036054065,
+      "maxStepRatio": 1.0120722888660778
+    },
+    {
+      "name": "huge finite deltas clamp, invalid values are inert and finite radius limits are respected",
+      "passed": true,
+      "cappedPixels": 120,
+      "finiteLimits": [
+        5,
+        20
+      ],
+      "fallbackLower": 0.01
+    },
+    {
+      "name": "native pending coarse zoom inertia is cleared and later camera frames do not jump",
+      "passed": true,
+      "subsequentFrames": 8,
+      "radius": 20.120360721081298,
+      "zoomVelocity": 0
+    },
+    {
+      "name": "fine zoom preserves target, orbit angles and pending pan/rotation input",
+      "passed": true,
+      "panAndRotationPreserved": true
+    },
+    {
+      "name": "connected Ctrl-wheel events consume once with nonpassive capture, while regular wheel stays untouched",
+      "passed": true,
+      "connectedDOM": true,
+      "capture": true,
+      "passive": false,
+      "ordinaryDelivered": true
+    },
+    {
+      "name": "line/page wheel units use canvas height fallbacks before the shared delta cap",
+      "passed": true,
+      "linePixels": 20,
+      "pagePixels": [
+        60,
+        80,
+        100
+      ],
+      "fallbackHeight": 800
+    },
+    {
+      "name": "detached camera consumes Ctrl-wheel without moving it; invalid wheel deltas never corrupt radius",
+      "passed": true,
+      "timelineOrDragProtected": true,
+      "invalidRadiusWrites": 0
+    },
+    {
+      "name": "stale scope and disposed listeners leave ordinary wheel ownership intact, with idempotent teardown",
+      "passed": true,
+      "teardownCalls": 1,
+      "staleInterceptions": 0,
+      "postDisposeInterceptions": 0
+    }
+  ],
+  "scope": "Pure numerical and native ArcRotateCamera movement/view checks, plus connected LinkeDOM wheel events and explicit capture/nonpassive registration auditing. LinkeDOM does not implement browser capture-order dispatch; native capture-before-Babylon A/B is independently verified. No browser automation/GPU/device performance claim."
+}

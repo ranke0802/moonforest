@@ -1,0 +1,11 @@
+[
+  "src/tool-fine-zoom.js",
+  "src/game-tool-lease.js",
+  "src/editor-workspace.js",
+  "src/cinematic-studio.js",
+  "public/moonforest-help.html",
+  "scripts/runtime-module-graph.mjs",
+  "tests/tool-fine-zoom.test.js",
+  "tests/editor-workspace-fine-zoom.test.js",
+  "tests/runtime-module-graph.test.js"
+]

@@ -1,0 +1,11 @@
+{
+  "src/tool-fine-zoom.js": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7",
+  "src/game-tool-lease.js": "ff89aa04ea8845e331345c2f83a428fa018d7b809f4aad083bda5a68861627d9",
+  "src/editor-workspace.js": "f81b60a31236436322e9f979f55a3b4722bd301096d00c4e58fb437577abc3f2",
+  "src/cinematic-studio.js": "5e19dc68ad54615a4a10bf22305d41e9f0a825476306bafd0cf8065a80d6e865",
+  "public/moonforest-help.html": "f8e83018963a93093b102c12c4389d4bc203ecb62cfb707559a917e2556d487c",
+  "scripts/runtime-module-graph.mjs": "6a8a7d0016d197ccb50ba6e192bee7f5142b37156c28dc447691fc0d89c0f7f3",
+  "tests/tool-fine-zoom.test.js": "d93755fa2e2a8ce894827055ce3c1852365c8bebcf6923b54236f46e60a1204b",
+  "tests/editor-workspace-fine-zoom.test.js": "06f1339103fea34d7fdbb41f10abebf3f92b57f6fa7ecfe79e49a234edcc6932",
+  "tests/runtime-module-graph.test.js": "59ed577a76e2277659e345e2704ec802374e7ebfb3c4d55620d796954988b63e"
+}

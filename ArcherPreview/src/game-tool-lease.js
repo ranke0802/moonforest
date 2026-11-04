@@ -1,4 +1,5 @@
 import {createToolCameraInput} from './tool-camera-input.js';
+import {attachToolFineZoom} from './tool-fine-zoom.js';
 // Loaded only by explicit authoring/cinematic paths. A lease borrows the game's
 // existing scene/frame loop; it never creates an engine, RAF or audio context.
 export function acquireGameToolLease({world,root,canvas,input,audio,getState,setReady,resetInput,reconcile},options={}){
@@ -11,7 +12,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   environment:audio.environment,combatMode:audio.combatMode,bossTheme:audio.bossTheme,musicWanted:audio.musicWanted,beds:{...audio.beds?.desired}};
  const doc=root.ownerDocument,style=doc.createElement('style');
  style.textContent='#app[data-tool-hud-owner] > :not(canvas):not([data-tool-ui]):not(style){visibility:hidden!important;pointer-events:none!important}';
- let active=true,paused=false,keyboard=null,disposeObserver,contextObserver,borrowedSceneInput=false,cameraMode='orbit',savedInputMap=null;const ownedCameraInputs=[];
+ let active=true,paused=false,keyboard=null,disposeObserver,contextObserver,fineZoom,borrowedSceneInput=false,cameraMode='orbit',savedInputMap=null;const ownedCameraInputs=[];
  const copyInputEntry=entry=>({...entry,...(entry.modifiers?{modifiers:{...entry.modifiers}}:{}),...(Array.isArray(entry.key)?{key:[...entry.key]}:{})});
  const ownedVoices=new Set();
  const sameWorld=()=>world.scene===scene&&world.mapId===mapId&&(world.toolGeneration??0)===generation&&!scene.isDisposed;
@@ -60,6 +61,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    const owns=world.toolLease===token,same=sameWorld();
    if(owns)world.toolLease=null;
    token.stopAudio();scene.onDisposeObservable.remove(disposeObserver);scene.getEngine?.().onContextLostObservable?.remove(contextObserver);
+   fineZoom?.dispose();
    style.remove();
    if(saved.hud===undefined)delete root.dataset.toolHudOwner;else root.dataset.toolHudOwner=saved.hud;
    if(owns){
@@ -92,6 +94,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();
    camera.lowerAlphaLimit=camera.upperAlphaLimit=null;camera.lowerBetaLimit=.03;camera.upperBetaLimit=Math.PI-.03;camera.lowerRadiusLimit=.25;camera.upperRadiusLimit=Math.max(200,savedCamera.upperRadiusLimit??0);
    token.attachCamera();
+   fineZoom=attachToolFineZoom(canvas,camera,{isCurrent:()=>token.isCurrent()&&!paused});
   }
   disposeObserver=scene.onDisposeObservable.addOnce(()=>token.cancel('scene-dispose',{restore:false}));
   contextObserver=scene.getEngine?.().onContextLostObservable?.add(()=>{

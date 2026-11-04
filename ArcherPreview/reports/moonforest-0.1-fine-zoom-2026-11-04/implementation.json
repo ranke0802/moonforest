@@ -1,0 +1,38 @@
+{
+  "release": "MoonForest 0.1 ver",
+  "request": "Hold Ctrl during zoom for fine adjustment",
+  "status": "validated-ready-to-publish",
+  "changes": [
+    "Canvas-scoped nonpassive Ctrl-wheel capture applies small proportional zoom with coarse inertia cleared",
+    "Ordinary wheel and existing pan/orbit inputs remain unchanged",
+    "Timeline playback and object-drag camera ownership protected",
+    "Editor Ctrl-click plus/minus buttons use the same fine adjustment",
+    "Studio, editor and guide show Ctrl-wheel hint"
+  ],
+  "verification": {
+    "total": 1735,
+    "passed": 1735,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "sourceFiles": 9,
+    "sourceUnchanged": true
+  },
+  "build": {
+    "files": 1452,
+    "bytes": 629392369,
+    "chunks": 56,
+    "changedSiteFiles": 14,
+    "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853"
+  },
+  "scope": {
+    "browserAutomation": false,
+    "pixels": "unverified",
+    "devicePerformance": "unverified"
+  },
+  "preserved": {
+    "dirtyReports": 43,
+    "unrelatedSource": "src/map-route.js"
+  },
+  "independentBuildAudit": "passed"
+}
