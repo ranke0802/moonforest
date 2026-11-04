@@ -37,7 +37,7 @@
             [
               -2.572968006134033,
               -1.4086027145385742,
-              3.6531094593783564e-8
+              3.6531094593783564e-08
             ],
             [
               2.5852560997009277,
@@ -67,7 +67,7 @@
             [
               -2.572968006134033,
               -1.4086027145385742,
-              3.6531094593783564e-8
+              3.6531094593783564e-08
             ],
             [
               2.5852560997009277,
@@ -128,7 +128,7 @@
           [
             -2.572968006134033,
             -1.4086027145385742,
-            3.6531094593783564e-8
+            3.6531094593783564e-08
           ],
           [
             2.5852560997009277,
@@ -154,7 +154,26 @@
           "./content/0f2114619348f165a6d6f67d795f1bad15e6a510a61948463feaf7956a950304.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/18044e68dde7c8bdd51131c7c24f236bc8abf41dfe7322d655396cdeea8f78f0.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 662271,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/18044e68dde7c8bdd51131c7c24f236bc8abf41dfe7322d655396cdeea8f78f0.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "forest-02-dead-tree": {
       "name": "고사목",
@@ -249,7 +268,7 @@
             [
               -2.525939702987671,
               -1.0082380771636963,
-              0.00007834184361854568
+              7.834184361854568e-05
             ],
             [
               2.522657871246338,
@@ -306,7 +325,26 @@
           "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 754041,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "forest-03-fallen-log": {
       "name": "속이 빈 쓰러진 통나무",
@@ -341,7 +379,7 @@
             [
               -2.2522988319396973,
               -0.5271841883659363,
-              3.208275867194743e-9
+              3.208275867194743e-09
             ],
             [
               2.2477011680603027,
@@ -432,7 +470,7 @@
           [
             -2.2522988319396973,
             -0.5271841883659363,
-            3.208275867194743e-9
+            3.208275867194743e-09
           ],
           [
             2.2477011680603027,
@@ -458,7 +496,26 @@
           "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 809624,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "forest-04-poison-fungi": {
       "name": "독버섯 군락",
@@ -493,7 +550,7 @@
             [
               -0.3444054424762726,
               -0.22276830673217773,
-              -1.0096522728986201e-8
+              -1.0096522728986201e-08
             ],
             [
               0.34650918841362,
@@ -584,7 +641,7 @@
           [
             -0.3444054424762726,
             -0.22276830673217773,
-            -1.0096522728986201e-8
+            -1.0096522728986201e-08
           ],
           [
             0.34650918841362,
@@ -610,7 +667,26 @@
           "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 230990,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "forest-05-thorn-bramble": {
       "name": "가시덤불",
@@ -645,7 +721,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-8
+              -1.4259423863904885e-08
             ],
             [
               1.2412517070770264,
@@ -675,7 +751,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-8
+              -1.4259423863904885e-08
             ],
             [
               1.2412517070770264,
@@ -705,7 +781,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-8
+              -1.4259423863904885e-08
             ],
             [
               1.2412517070770264,
@@ -736,7 +812,7 @@
           [
             -1.2387257814407349,
             -0.47186487913131714,
-            -1.4259423863904885e-8
+            -1.4259423863904885e-08
           ],
           [
             1.2412517070770264,
@@ -762,7 +838,26 @@
           "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/bd9a93812efd7daff477f381f8f4a508766a1649efd26680e073e1b09c814504.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 192360,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/bd9a93812efd7daff477f381f8f4a508766a1649efd26680e073e1b09c814504.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "forest-06-witch-cave-mouth": {
       "name": "마녀의 동굴 입구",
@@ -797,7 +892,7 @@
             [
               -3.7307798862457275,
               -2.7557108402252197,
-              -1.3587279568127997e-7
+              -1.3587279568127997e-07
             ],
             [
               3.734593152999878,
@@ -888,7 +983,7 @@
           [
             -3.7307798862457275,
             -2.7557108402252197,
-            -1.3587279568127997e-7
+            -1.3587279568127997e-07
           ],
           [
             3.734593152999878,
@@ -914,7 +1009,26 @@
           "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 779104,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "tree-02-slender-pine": {
       "name": "침엽수",
@@ -1033,6 +1147,25 @@
             5.75468635559082
           ]
         }
+      },
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 525613,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
       }
     },
     "rock-01-mossy-boulder": {

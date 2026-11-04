@@ -43,7 +43,7 @@ test('palette-only native receives zero unrelated UV mixing while original rocks
 });
 
 test('a textureless native structure cannot increase the compressed mobile high-texture budget',t=>{
- const engine=new NullEngine(),scene=new Scene(engine);t.after(()=>engine.dispose());engine.getCaps().etc2={};const assets=new Map([['old',{config:{highTextures:{textures:{albedo:{codec:'etc1s'}}}}}],['derived',{config:{surfaceStyle:'cave-palette'}}]]),world={scene,touchDevice:true};
+ const engine=new NullEngine(),scene=new Scene(engine);t.after(()=>engine.dispose());engine.getCaps().etc2={};const assets=new Map([['old',{config:{highTextures:{shading:'toon-color',textures:{albedo:{width:1024,height:1024,codec:'etc1s'}}}}}],['derived',{config:{surfaceStyle:'cave-palette'}}]]),world={scene,touchDevice:true};
  const streaming=new VillageTextureStreaming(world,assets,[],new URL('https://lab.test/assets/witch-cave.json'),{});assert.equal(streaming.budget,VILLAGE_TEXTURE_BUDGET.mobileCompressed);streaming.dispose();
 });
 

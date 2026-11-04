@@ -1,0 +1,7 @@
+{
+  "browserAutomation": false,
+  "productionDeadlineChanged": false,
+  "historicalV2Fixture": "Ignored original violet-warrior-v2.glb restored locally for cape preservation test. Not included in deployment.",
+  "manifestLedger": "Original historical iOS manifest ledger now matches exact baseline Git bytes; previous checkout differed by CRLF only. All image binaries untouched.",
+  "questPropDeadline": "20ms test uses the existing injected clock. Explicitly advances deadline only after decode begins, checks no update-loop retry, explicit retry success, disposal of late old completion, no timer retained."
+}

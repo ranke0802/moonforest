@@ -17,6 +17,7 @@ import {createWorld} from '../src/world.js';
 import {createTerrainGround} from '../src/terrain-mesh.js';
 import {villageOutskirtsSkirtHeight} from '../src/village-outskirts-skirt.js';
 import {boundaryContracts,firstTriggerPose,makeBoundaryCases} from '../reports/plains-boundary-followup-2026-11-03/boundary-cases.mjs';
+import {originalInputText} from './helpers/mobile-profile-contract.js';
 
 const hash=x=>createHash('sha256').update(x).digest('hex'),near=(a,b,tol=1e-8)=>assert.ok(Math.abs(a-b)<=tol,`${a} != ${b}`),facts=[];
 test('the complete native forest layout, terrain, material/LOD graph and ground remain the approved original',()=>{
@@ -26,7 +27,7 @@ test('the complete native forest layout, terrain, material/LOD graph and ground 
   'public/assets/monster-forest.json':'144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded',
   'public/assets/monster-forest-ground.json':'6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94',
  };
- for(const[file,sha]of Object.entries(expected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url),'utf8').replaceAll('\r\n','\n')),sha,file);
+ for(const[file,sha]of Object.entries(expected))assert.equal(hash(originalInputText(file,readFileSync(new URL('../'+file,import.meta.url),'utf8'))),sha,file+' original inputs');
  assert.equal(FOREST_PLACEMENTS.length,891);assert.equal(hash(JSON.stringify(FOREST_PLACEMENTS)),'5634f528e23e1d1f70c2b133edd8ea94189febc38f7c119671f213ee15fab818');
  const terrain=createMonsterForestTerrain();assert.equal(hash(Buffer.from(terrain.heights.buffer)),'014606f03dd9c5ad69f4378b20bbe3ab1eac8113d91c9f6c7d726801b8731ed3');
  const ground=JSON.parse(readFileSync(new URL('../public/assets/monster-forest-ground.json',import.meta.url)));

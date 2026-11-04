@@ -1,0 +1,18 @@
+{
+  "status": "validated-ready-for-deployment",
+  "baseline": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "commit": null,
+  "url": null,
+  "browserAutomation": false,
+  "build": "passed",
+  "tests": {
+    "tests": 1790,
+    "passed": 1790,
+    "failed": 0,
+    "logSha256": "046cf4175869563f8ddc25fe8ae9acead29efec7a6fa41324d9013ad1605759a"
+  },
+  "protectedAssetGraph": "39e31d51badfe0f6af3a9ead82951a1c991254ca608c41253f26e98e00eb2207",
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "actualDeviceFpsThermalsMeasured": false,
+  "isolation": "Only task-owned files copied from shared checkout; unrelated cinematic edits excluded."
+}

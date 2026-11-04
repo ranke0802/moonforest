@@ -1,0 +1,531 @@
+{
+  "applied": true,
+  "profiles": [
+    {
+      "map": "village",
+      "asset": "wood-01-palisade",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/60c6542768fe3d8cb227d90e022b2c0b1a614d9849eb3ac1683635dfbc5a14bb.ktx2",
+      "derived": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "wood-02-cross-barricade",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211.ktx2",
+      "derived": "./content/80c936a7c7cea829b6d55f0a5b22f9290b6eaaccb58c7e55605d1ef709eac152.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "tree-01-round-oak",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+      "derived": "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "tree-02-slender-pine",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+      "derived": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "watchtower",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/bf37277c2e55866681996d1437243733b488f071800f159c364e2329c830f84b.ktx2",
+      "derived": "./content/979ac39bc1f6467b42b497b803c88dca5ef964409497ee2e04af1e459b22bc2d.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "rail-fence",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/3c70b67a661d772ff670ff6e20677294cd48580dc2444556fc1db6b1f81dba12.ktx2",
+      "derived": "./content/6308c9b0348ffbf5b58ef5c0f01be5f3b4a0276cbcb20f562a8835006a4ffb70.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "market-stall",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/46f48a10a3ebbf7bc30d3a8eb7fbc22d4a7cc74c1a1306181fdfc15662aca916.ktx2",
+      "derived": "./content/06c957dc3c0e19998ec1c63d99f3df7700e74687d3d7185b95760108bf51480a.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "covered-wagon",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
+      "derived": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "handcart",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+      "derived": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "garden-bed",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/9cd057d3ceaad4cde23285331fb0ab04a579c21bcdd986c3aa9c7b034d2319fd.ktx2",
+      "derived": "./content/a879a258ab0e35cbed6bdb04534012def9f79a081657f74496aff8e79f0c09fd.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "firewood",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+      "derived": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+    },
+    {
+      "map": "village",
+      "asset": "crate-barrel-cluster",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+      "derived": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "tree-01-round-oak",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+      "derived": "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "rail-fence",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/3c70b67a661d772ff670ff6e20677294cd48580dc2444556fc1db6b1f81dba12.ktx2",
+      "derived": "./content/6308c9b0348ffbf5b58ef5c0f01be5f3b4a0276cbcb20f562a8835006a4ffb70.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "covered-wagon",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/4b6f6b6c4efa9330bc3682ab0576ae9b09d638028401a8be6aab31495dc7180a.ktx2",
+      "derived": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "crate-barrel-cluster",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+      "derived": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "waypost",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+      "derived": "./content/657c21eab55f56b864c21ad796b3513227e71d5778fed56e0b67889be68605f6.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "clue-bandage",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/cfe90696553ee52e77e1eaae1b4f1c97bf228dc222d466d12d20ca24f8901c03.ktx2",
+      "derived": "./content/5160c1c171c27e5c4e1ad5d9344a4186d32f32d9e855ce540685c4fd6b10c4c1.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "chest-common",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/dceb5594e241e3fd4b8929efb43d54110a2d188c481952cd1a29510d7f521b56.ktx2",
+      "derived": "./content/4ca5c5d69534c1f00e0521891e53277fea801335de602001a23169d25ece957c.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "tree-02-slender-pine",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+      "derived": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "handcart",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+      "derived": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "firewood",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+      "derived": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "forest-01-sickly-oak",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/0f2114619348f165a6d6f67d795f1bad15e6a510a61948463feaf7956a950304.ktx2",
+      "derived": "./content/18044e68dde7c8bdd51131c7c24f236bc8abf41dfe7322d655396cdeea8f78f0.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "forest-02-dead-tree",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2",
+      "derived": "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "forest-03-fallen-log",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2",
+      "derived": "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "forest-05-thorn-bramble",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2",
+      "derived": "./content/bd9a93812efd7daff477f381f8f4a508766a1649efd26680e073e1b09c814504.ktx2"
+    },
+    {
+      "map": "great-plains",
+      "asset": "forest-04-poison-fungi",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2",
+      "derived": "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-01-sickly-oak",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/0f2114619348f165a6d6f67d795f1bad15e6a510a61948463feaf7956a950304.ktx2",
+      "derived": "./content/18044e68dde7c8bdd51131c7c24f236bc8abf41dfe7322d655396cdeea8f78f0.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-02-dead-tree",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2",
+      "derived": "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-03-fallen-log",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2",
+      "derived": "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-04-poison-fungi",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2",
+      "derived": "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-05-thorn-bramble",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/69ab06e6cf2e0b04c0727b2604cfab860271f338e42149b15ca7cada01a2a0b4.ktx2",
+      "derived": "./content/bd9a93812efd7daff477f381f8f4a508766a1649efd26680e073e1b09c814504.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "forest-06-witch-cave-mouth",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2",
+      "derived": "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2"
+    },
+    {
+      "map": "monster-forest",
+      "asset": "tree-02-slender-pine",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+      "derived": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-01-eroded-wall",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/081b18b2af992bdd0953fb9fceb75a66b86deaede4e3515c012d2e9284048c49.ktx2",
+      "derived": "./content/2c75c027c32ba89962181356f1228156f1160fe632c7dd7a10687d0a3968be48.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-02-rock-ledge",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/d4fe586209fcf4860c59c8949ce8935ce2e29419d22267e243b6c81bfd37a7a2.ktx2",
+      "derived": "./content/0f109ceba6291502632afff5e0ceffe609c7a3722afc092e9bbda3dabf6df0c5.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-03-great-column",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/1f4f4765f6a1a54ec60fee45af764078f663a7fcf2db52caf0af7e441a5e797a.ktx2",
+      "derived": "./content/58fa5f23aa6be77439f59f5be9973324297dcaf1ba16311111c8e73bf0b59641.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-04-natural-arch",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/5d1a307977e07a527d6b812bfb68c7ba83e7a32a33703d3a176e6ab8fa034a3b.ktx2",
+      "derived": "./content/086d2d145b9182607075023102a8732f43807250676df1c3f97d8305736217b9.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-05-stalagmites",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/b39267ab70a997ec30091b2e632d016c017abd402931b00f49c8740d6064e88c.ktx2",
+      "derived": "./content/723786982dc6b7a64b5aa356b34c6fefec9c2efedcc7b723114b632816c7e2a9.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-06-stalactite-canopy",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/4c6eee2ffc2ef1eaa87281eb2d88ca2dc3f6d51b8bb329150e343ee685b00360.ktx2",
+      "derived": "./content/22eaad971f929a4387c8e963f6fc43e7e973a054ddc5794e79e0bb2b1edcf201.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-07-scree-ramp",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/a444e8cb12be303e49b4971c60700c88d604402bead9821d88ab8e0bcdc760b6.ktx2",
+      "derived": "./content/58a3ff88f3814550bb646b53b6de9268d035890d456bc01a9568ae2d578f7a68.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-08-timber-brace",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/9ed6d4872d8af377f4143af7abf6349b7e004fb764eeae09197b2b475f6d18ea.ktx2",
+      "derived": "./content/1dfdade00d8a41ad20dec136b17d33c6a524f30dffe6988065d8694b32b9da56.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-09-iron-gate-leaf",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/f23a678b1819d4f9df739fef4761fdf4e732dd047189c8c58c5269314911be3d.ktx2",
+      "derived": "./content/9c6e0afd347fba7f57b152bceb946d7329bdef6f01e73da22af608f3db526b66.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-10-hand-winch",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/7d709a7fcfa2730b1328174eed5dc70f1da0735009f716d3592bba9422ed6e04.ktx2",
+      "derived": "./content/ef42bde27241f8be17f232e7be70cdb4d7f60ccfac1b94edc266d217b64a6761.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-11-sluice-shutter",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/be8fd00f22ca9ed81e80ac159164102f47d6b98d8a66a9efb80eb833bc551ad4.ktx2",
+      "derived": "./content/1b5b7333329480f0c190ec6d4f49035a9ebd01bc09dbdc323bffbb547af025ea.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-12-lift-platform",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/0ad4557819488d779ceeb4e4161b0eeb469223ca629acd3ac5659df5a3533734.ktx2",
+      "derived": "./content/c42a950cd1037f40c3fdef44ad33f48b53182f61d892a398952bc64a3ee1560f.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-13-votive-lantern",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/86fc0a0b8274da4026e56773177080c60b28154ebdcbca37a8a83cf0d642a10e.ktx2",
+      "derived": "./content/9b2e8418e5889078ed0d2c27b842519446b9eb666598562e47a56ab4967c9249.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-14-hidden-pressure-stone",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/eba23d533ac9c5809fcd61bd5b6b04baf6746162246267b90b2a8221b8af9a3d.ktx2",
+      "derived": "./content/79f0034a7190b5bf3f9594364eafd5ae11d4e255f1b40a92468cec7606083df0.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-15-resurrection-altar",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/cff5dd9a978cae966fc993840d2dc21b6cfff5dfcad3804b52829d5e7fed5503.ktx2",
+      "derived": "./content/0757ce4d34745ac73eec72982711d18d2f7d617eff78ec86f573e5592a911b3c.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-16-soul-collector-arm",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/8ff3d416e4f0d7acaba4924cb3c1393a95f5b6bef9ca77b249554fbb211dd84f.ktx2",
+      "derived": "./content/850b7e6e513d10b57836894dc144461f6d78c894d3d38231d1b4f8a83770fa0d.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-17-faded-sacred-emblem",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/5be51db7886e161864e34fb358ad8efc403acb2e6d72cd47229f7a33b3e17cc2.ktx2",
+      "derived": "./content/588db0892dd986f85ba892d14b8942e2e9f6bc3e09e975b14476f2c33dbd7e6d.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-18-alchemy-workbench",
+      "from": 4096,
+      "to": 1024,
+      "source": "./content/e37e1ecc4610cb3b5081df63a5a6a315343fa8460b0acd1bb0fa8b4480e20f9b.ktx2",
+      "derived": "./content/8b0d704ffbf09edda1c8bf39e2c85514f951411d5caf7f655f2532aa97a622ec.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-19-apothecary-shelf",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/b905d10860c9f022b66b2d6dabf85638f8dd477f507fcfe0c5e2bb183f3ff7d5.ktx2",
+      "derived": "./content/dbb16df9c64f87130b7cf977b8b93c9087838363691044f5c286fd215510827f.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-20-modest-cot",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/12857a2937779780ab2707b7f1d1501578029cee54b8ba8bc7ea18a2549a52b0.ktx2",
+      "derived": "./content/45e80584282a0a38b92f1a44dcd16fdec2f706a018ff1ea26888d3bbedc5fabc.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-s01-solid-cliff-base",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/53b0a3a04b3c87736bd6870be51aba4a7fd5cb318c864b8056423488914b1617.ktx2",
+      "derived": "./content/d37b13c64a452856fd4576b553f3b996fc65dc2a333b45abf511734b9898b520.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "cave-s03-dry-spillway-rock",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/195d59f5b4c9029d2273e2fc80f56f2f814e40d376d435e71e8aa11ea51eb642.ktx2",
+      "derived": "./content/e84e5b95475019f41d67d91f2008c9db03cfb12bbf634be3fdc8d591dc49598b.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "forest-06-witch-cave-mouth",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2",
+      "derived": "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "crate-barrel-cluster",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+      "derived": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "firewood",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+      "derived": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+    },
+    {
+      "map": "witch-cave",
+      "asset": "handcart",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+      "derived": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+    },
+    {
+      "map": "village-plains-outskirts",
+      "asset": "waypost",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/79de06583e6ad97250349e2af0234d7a458d501cdaaf5a344953338706913b96.ktx2",
+      "derived": "./content/657c21eab55f56b864c21ad796b3513227e71d5778fed56e0b67889be68605f6.ktx2"
+    },
+    {
+      "map": "village-plains-outskirts",
+      "asset": "tree-01-round-oak",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/9488e2cf74a1896b1985bd2b7745620c289efe3bdef9d1869819d0d789f8f43e.ktx2",
+      "derived": "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2"
+    },
+    {
+      "map": "village-plains-outskirts",
+      "asset": "tree-02-slender-pine",
+      "from": 4096,
+      "to": 2048,
+      "source": "./content/c7c0bfb0a69be81d312816fd86ef76edac54e9a4213e02635eaae87b5645ca46.ktx2",
+      "derived": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+    },
+    {
+      "map": "village-plains-outskirts",
+      "asset": "handcart",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/7e5fa23addcca00f1485a0338a5471203e3f1743770078db40353add8f19adad.ktx2",
+      "derived": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+    },
+    {
+      "map": "village-plains-outskirts",
+      "asset": "firewood",
+      "from": 2048,
+      "to": 1024,
+      "source": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+      "derived": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+    }
+  ],
+  "uniqueDerived": 43,
+  "sourceFilesUnmodified": true,
+  "housesExcluded": true,
+  "bossesExcluded": true,
+  "downloadBytesBefore": 106814425,
+  "downloadBytesAfter": 25601083
+}

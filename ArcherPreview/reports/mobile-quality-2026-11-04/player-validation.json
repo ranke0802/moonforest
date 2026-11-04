@@ -1,0 +1,183 @@
+{
+  "branch": "codex/moonforest-0.1",
+  "baseCommit": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "browserAutomation": false,
+  "actualGpuUploadTested": false,
+  "renderedAppearanceTested": false,
+  "staged": false,
+  "committed": false,
+  "deployed": false,
+  "validation": {
+    "focusedTests": {
+      "passed": 11,
+      "failed": 0,
+      "command": "node --test tests/player-texture-profile.test.js tests/ios-player-memory.test.js"
+    },
+    "codec": {
+      "checks": 24,
+      "formats": [
+        "ASTC_4x4",
+        "BC7",
+        "S3TC",
+        "ETC2"
+      ],
+      "noRgbaFallback": true,
+      "command": "node --expose-gc tests/player-mobile4k-codec.mjs"
+    },
+    "nodeExecutable": "C:\\Users\\ryank\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion": "v24.22.1",
+    "sourcePlayerFilesVerifiedUnchanged": 55,
+    "geometryRigUvMaterialsClipsUnchanged": true,
+    "protectedAssets": "No boss or house assets read for conversion or written. Only derived player content and player selection/tests changed."
+  },
+  "profiles": [
+    {
+      "manifest": "warrior-v3-mobile4k",
+      "mobile": true,
+      "maxSize": 4096,
+      "encoding": "ktx2-uastc",
+      "gpuCompressed": true,
+      "estimatedGpuBytes": 83886240,
+      "maxImageRgbaBytes": 67108864,
+      "maxImageUploadBytes": 22369648,
+      "estimateScope": "Unique images with full mip chains; compressed uses ASTC/BC7/ETC2 alpha worst case. Excludes driver/decoder workspace and other scene resources.",
+      "capabilities": {
+        "maxTextureSize": 4096,
+        "formats": {
+          "astc": true,
+          "bptc": false,
+          "s3tc": false,
+          "etc2": false
+        }
+      }
+    },
+    {
+      "manifest": "warrior-v3-mobile2k-rgba",
+      "mobile": true,
+      "maxSize": 2048,
+      "encoding": "rgba",
+      "gpuCompressed": false,
+      "estimatedGpuBytes": 134217720,
+      "maxImageRgbaBytes": 16777216,
+      "maxImageUploadBytes": 22369620,
+      "estimateScope": "Unique images with full mip chains; compressed uses ASTC/BC7/ETC2 alpha worst case. Excludes driver/decoder workspace and other scene resources.",
+      "capabilities": {
+        "maxTextureSize": 4096,
+        "formats": {
+          "astc": false,
+          "bptc": false,
+          "s3tc": false,
+          "etc2": false
+        }
+      }
+    }
+  ],
+  "aggregateDecodedGpuBytes": {
+    "astc": 83886240,
+    "bptc": 83886240,
+    "s3tc": 41943120,
+    "etc2": 41943120
+  },
+  "integration": {
+    "selector": "playerTextureManifest remains compatible; selectPlayerTextureProfile exposes capabilities and estimates for loading diagnostics.",
+    "manifests": [
+      "warrior-v3-mobile4k",
+      "warrior-v3-mobile2k-rgba"
+    ],
+    "aliases": [
+      "warrior-v3",
+      "warrior-v4",
+      "warrior-v5",
+      "warrior-plains"
+    ],
+    "resourceInventory": "collectVillageSiteFiles auto-discovers the two new .json manifests. Regenerate resource-index/download bundles in the root integration build.",
+    "tests": "Only ios-player-memory selection test updated here. Root owns legacy cross-map assertions expecting warrior-v3-ios."
+  },
+  "limitations": [
+    "Offline codec checks are not real GPU upload or device render/performance measurements.",
+    "Memory counts are unique image mip chains, not whole scene/process memory; duplicated texture objects, drivers and decoder workspace are excluded.",
+    "Original 8K desktop and historical iOS profiles remain available and unchanged."
+  ],
+  "ownedFileLedger": [
+    {
+      "path": "src/player-texture-profile.js",
+      "sha256": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+      "bytes": 3507
+    },
+    {
+      "path": "scripts/pack-player-mobile4k.py",
+      "sha256": "c565b50a9c024767f442d99b9802b3571fb30d9738b51515fec7207d3eca4d81",
+      "bytes": 13973
+    },
+    {
+      "path": "tests/player-texture-profile.test.js",
+      "sha256": "32ca0e399ccbffa1a9b1e661586c98939ca9452a9f24eb7c212ef17f156ca047",
+      "bytes": 8462
+    },
+    {
+      "path": "tests/player-mobile4k-codec.mjs",
+      "sha256": "ff8c7e029f90def3f0b623b9f333402f411377030d04dc1aaca5ca89376ce15d",
+      "bytes": 3932
+    },
+    {
+      "path": "tests/ios-player-memory.test.js",
+      "sha256": "76e73a9d745126e09189166a2c9cdad46fbe862e285d27aecd3d58dc6e1aeed9",
+      "bytes": 6259
+    },
+    {
+      "path": "public/assets/warrior-v3-mobile4k.json",
+      "sha256": "56ddc28e073eaf243a574b0a3ff23f4b3a0a2e387fe7765d5598e926607a3e03",
+      "bytes": 7869
+    },
+    {
+      "path": "public/assets/warrior-v3-mobile2k-rgba.json",
+      "sha256": "e005ddfaa09bc30289a3b7cc5fbbed72b82b840624d6fe03c6cace1c60488fb7",
+      "bytes": 7866
+    },
+    {
+      "path": "public/assets/content/17049ee5cb09963090999a8e5271397e4377cc4b9b36d06f72799fa532e34dfe.gltf",
+      "sha256": "17049ee5cb09963090999a8e5271397e4377cc4b9b36d06f72799fa532e34dfe",
+      "bytes": 1484888
+    },
+    {
+      "path": "public/assets/content/1d06085b255756b8bb19849c5b7146018531d9f8a9227bf95013f597b14aa8b1.png",
+      "sha256": "1d06085b255756b8bb19849c5b7146018531d9f8a9227bf95013f597b14aa8b1",
+      "bytes": 3391865
+    },
+    {
+      "path": "public/assets/content/54a7c6d7143231e912d9869585b95944ea3552a8afbb99165117c03ae0ae870b.png",
+      "sha256": "54a7c6d7143231e912d9869585b95944ea3552a8afbb99165117c03ae0ae870b",
+      "bytes": 3924208
+    },
+    {
+      "path": "public/assets/content/58a5814d3bd08cf33bb8c9888449066b174e51a7b65d21ee1bbad584804e6e78.ktx2",
+      "sha256": "58a5814d3bd08cf33bb8c9888449066b174e51a7b65d21ee1bbad584804e6e78",
+      "bytes": 9114000
+    },
+    {
+      "path": "public/assets/content/6a7657a560d9b6eca305027374695367341e32e78d358ef6e99b1718c0d9e1b9.png",
+      "sha256": "6a7657a560d9b6eca305027374695367341e32e78d358ef6e99b1718c0d9e1b9",
+      "bytes": 955337
+    },
+    {
+      "path": "public/assets/content/a0ab7852ed1e6f3577142f40b48ebef7b7be5839b61b4d4130226b91c6ddb329.gltf",
+      "sha256": "a0ab7852ed1e6f3577142f40b48ebef7b7be5839b61b4d4130226b91c6ddb329",
+      "bytes": 1485132
+    },
+    {
+      "path": "public/assets/content/e259e424d8ae852ea8ba5675814d527cdb0e3cd4dc8cf1e3239190c6fe1f7a7a.ktx2",
+      "sha256": "e259e424d8ae852ea8ba5675814d527cdb0e3cd4dc8cf1e3239190c6fe1f7a7a",
+      "bytes": 6876897
+    },
+    {
+      "path": "reports/mobile-quality-2026-11-04/player-package.json",
+      "sha256": "ccabf70c31561739ad2f11530a7b007dbe6421b5cb6228fbaee72bad7b8e2c43",
+      "bytes": 27020
+    },
+    {
+      "path": "reports/mobile-quality-2026-11-04/player-codec.json",
+      "sha256": "aa7b836ced0cb884d753a62cc1a9e109966d0b039c4d03a0a8de9d92c7a8d29f",
+      "bytes": 9517
+    }
+  ]
+}

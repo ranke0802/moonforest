@@ -6,6 +6,7 @@ import {NullEngine,Scene,ArcRotateCamera,Vector3,PBRMaterial} from '@babylonjs/c
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+import {originalAssetGraph} from './helpers/mobile-profile-contract.js';
 import {PLAINS_PLACEMENTS,PLAINS_LOOKOUT,PLAINS_ROUTES,plainsObstacles} from '../src/great-plains-layout.js';
 import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {createVillageTransform} from '../src/village-environment.js';
@@ -22,7 +23,7 @@ const read=name=>JSON.parse(readFileSync(new URL('../public/assets/'+name,import
 
 test('694 retained tufts use the shipped geometry and one native draw batch at 240%, after removing only forest-overlap duplicates',async t=>{
  const manifest=read('great-plains.json'),forest=read('monster-forest.json');
- for(const[id,config]of Object.entries(baseline.assetGraphs))if(id!=='village-approach')assert.deepEqual(manifest.assets[id],config,'original model/texture/geometry LOD references remain exact: '+id);
+ for(const[id,config]of Object.entries(baseline.assetGraphs))if(id!=='village-approach')assert.deepEqual(originalAssetGraph(manifest.assets[id],id),config,'original model/texture/geometry LOD references remain exact: '+id);
  const addedSourceIds=Object.keys(manifest.assets).filter(id=>!baseline.assetGraphs[id]).sort();assert.deepEqual(addedSourceIds,['forest-04-poison-fungi','forest-05-thorn-bramble']);for(const id of addedSourceIds)assert.deepEqual(manifest.assets[id],forest.assets[id],'native forest foliage reuses its existing complete source graph');assert.equal(manifest.placementCount,PLAINS_PLACEMENTS.length);
  for(const name of ['warrior-v3.json','warrior-v3-ios.json'])assert.equal(read(name).textureProfile.maxSize,8192);
  for(const asset of Object.values(manifest.assets))assert.ok(!asset.highTextures||asset.highTextures.textures.albedo.width<=4096);

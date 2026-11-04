@@ -7,6 +7,7 @@ import {PLAINS_TREE_TRANSITION_PLAN,applyPlainsTreeTransition} from '../src/plai
 import {CHAPTER_POINTS} from '../src/chapter-quest-points.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
+import {originalInputText} from './helpers/mobile-profile-contract.js';
 
 const baseline=JSON.parse(readFileSync(new URL('../reports/plains-tree-mix-2026-11-03/baseline.json',import.meta.url))),oldById=new Map(baseline.placements.map(p=>[p.id,p])),currentById=new Map(PLAINS_PLACEMENTS.map(p=>[p.id,p])),facts=[];
 const changed=PLAINS_PLACEMENTS.filter(p=>JSON.stringify(p)!==JSON.stringify(oldById.get(p.id))),hash=x=>createHash('sha256').update(x).digest('hex');
@@ -20,8 +21,8 @@ test('tree mixing changes only24 existing species/heights and preserves both exa
  facts.push({case:'restricted-tree-only-edit',changedTrees:changed.length,changedSpecies:changed.filter(p=>p.asset!==oldById.get(p.id).asset).length,addedPlacements:0,forestBoundaryTrees:68,townBoundaryTrees:32,sidecarSourcesChanged:0,chestSupportsChanged:0});
 });
 
-test('the original forest, all models/textures, LOD and240% options remain byte-identical and every new trunk fits its old solid',()=>{
- for(const[file,sha]of Object.entries(baseline.hashes))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url),'utf8').replaceAll('\r\n','\n')),sha,file+' changed');
+test('the original forest, source models/textures, LOD and240% options remain exact apart from bounded additive mobile color profiles',()=>{
+ for(const[file,sha]of Object.entries(baseline.hashes))assert.equal(hash(originalInputText(file,readFileSync(new URL('../'+file,import.meta.url),'utf8'))),sha,file+' original inputs changed');
  const contracts={'forest-01-sickly-oak':.62,'forest-02-dead-tree':.48,'tree-02-slender-pine':.48,'tree-01-round-oak':.4};
  for(const p of changed){const config=baseline.manifests.plains.assets[p.asset];assert.ok(config);if(p.asset!=='tree-01-round-oak')assert.deepEqual(config,baseline.manifests.forest.assets[p.asset],p.asset+' differs from the existing forest source');assert.ok(p.scale*contracts[p.asset]<=p.colliderRadius*.95+1e-9,p.id+' native trunk exceeds its previous collider');assert.ok(p.scale*config.height>=4.5&&p.scale*config.height<=10.6);}
  const once=applyPlainsTreeTransition(structuredClone(baseline.placements)),twice=applyPlainsTreeTransition(structuredClone(once));assert.deepEqual(twice,once,'setup is idempotent');

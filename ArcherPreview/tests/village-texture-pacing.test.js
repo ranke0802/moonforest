@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import {NullEngine,Scene,ArcRotateCamera,Vector3} from '@babylonjs/core';
 import {VillageTextureStreaming,VILLAGE_TEXTURE_PACING} from '../src/village-texture-streaming.js';
 import {VillageGeometryStreaming} from '../src/village-demand.js';
-import {highTextureBytes} from '../src/village-texture-budget.js';
+import {highTextureBytes,VILLAGE_TEXTURE_BUDGET} from '../src/village-texture-budget.js';
 
 // Real camera and streaming manager, deterministic GPU completion surrogate.
 // This checks admission, materials and lifetimes, not phone GPU time or heat.
-function fixture(t){
+function fixture(t,{astc={},etc2={}}={}){
   const engine=new NullEngine({renderWidth:1560,renderHeight:720}),scene=new Scene(engine);
-  engine.getCaps().astc={};engine.getCaps().maxTextureSize=8192;
+  engine.getCaps().astc=astc;engine.getCaps().etc2=etc2;engine.getCaps().maxTextureSize=8192;
   const camera=new ArcRotateCamera('S23',0,1.2,6,new Vector3(0,1,0),scene);camera.fov=.65;camera.minZ=.05;
   const world={scene,camera,touchDevice:true,villageStreaming:{active:true,pending:null}};
   const f={now:0,group:0,starts:[],created:[],roots:[]},profile={shading:'toon-color',textures:{albedo:{width:4096,height:4096,codec:'etc1s'}},resources:[]};
@@ -33,6 +33,14 @@ function fixture(t){
   f.warm=async()=>{await f.steps(28);assert.equal(stream.resident.size,4);};
   t.after(()=>{stream.dispose();engine.dispose();});return f;
 }
+
+test('ASTC-only ETC1S fallback reserves full RGBA bytes and never admits four under-budgeted maps',async t=>{
+ const f=fixture(t,{etc2:null});await f.steps(28);
+ assert.equal(f.stream.budget,VILLAGE_TEXTURE_BUDGET.mobile);
+ assert.equal(f.stream.resident.size,1);
+ assert.equal(f.stats.highTextureBytes,highTextureBytes(f.profile,false));
+ assert.ok(f.stats.highTextureBytes+f.stats.highTextureReserved<=f.stream.budget);
+});
 
 test('mobile translation alone spaces uploads and still reaches the same 4K tier while continuously moving',async t=>{
   const f=fixture(t);await f.step();await f.steps(32,{move:true});

@@ -1,0 +1,73 @@
+{
+  "release": "MoonForest 0.1ver",
+  "baseline": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "browserAutomation": false,
+  "tests": {
+    "tests": 1790,
+    "pass": 1790,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "duration_ms": 172748.7124
+  },
+  "player": {
+    "mobileCompressedMax": 4096,
+    "fallbackMax": 2048,
+    "oldAstcMiB": 208,
+    "newAstcMiB": 80,
+    "fallbackRgbaMiB": 128,
+    "deviceGpuMemoryMeasured": false
+  },
+  "scenery": {
+    "uniqueDerived": 43,
+    "alternateEntries": 65,
+    "downloadBytesBefore": 106814425,
+    "downloadBytesAfter": 25601083,
+    "originalsPreserved": true
+  },
+  "renderScale": {
+    "mobileDefault": 85,
+    "desktopDefault": 100,
+    "options": [
+      75,
+      85,
+      100
+    ],
+    "uiCssSizePreserved": true,
+    "baseFps": 30,
+    "optionalFps": 60
+  },
+  "protected": {
+    "ok": true,
+    "protectedAssets": 10,
+    "contentFiles": 147,
+    "textureFiles": 38,
+    "contentBytes": 99371738,
+    "rawBossBytes": 44032908,
+    "protectedGraphSha256": "39e31d51badfe0f6af3a9ead82951a1c991254ca608c41253f26e98e00eb2207"
+  },
+  "independent": "passed",
+  "deployment": {
+    "status": "validated-ready-for-deployment",
+    "baseline": "5c65642fddca6472af614b4a8f12829d744cb37e",
+    "commit": null,
+    "url": null,
+    "browserAutomation": false,
+    "build": "passed",
+    "tests": {
+      "tests": 1790,
+      "passed": 1790,
+      "failed": 0,
+      "logSha256": "046cf4175869563f8ddc25fe8ae9acead29efec7a6fa41324d9013ad1605759a"
+    },
+    "protectedAssetGraph": "39e31d51badfe0f6af3a9ead82951a1c991254ca608c41253f26e98e00eb2207",
+    "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "actualDeviceFpsThermalsMeasured": false,
+    "isolation": "Only task-owned files copied from shared checkout; unrelated cinematic edits excluded."
+  },
+  "limits": [
+    "No actual Y700/S23 GPU upload, visual hands-on, FPS or thermal measurement.",
+    "CPU optimization results are Node/NullEngine reference costs, not device FPS gain."
+  ],
+  "farLinesAndShadows": "Existing distance/coverage caster and ink budgets retained; duplicate submission/preparation removed. No speculative new scenery internal-line pass or shader rewrite."
+}

@@ -122,10 +122,15 @@ export class VillageOutlines {
     this.observer=world.scene.onBeforeRenderObservable.add(()=>this.update(performance.now()));
   }
   addRecords(records){
+    // Instances of the same source share one attribute/LOD preparation. Limit
+    // reuse to this synchronous batch: the next addRecords call must discover
+    // newly installed LODs, and a late graded record still upgrades the source.
+    const preparedSources=new Map();
     for(const record of records)for(const mesh of record.meshes){
       if(this.entryMeshes.has(mesh))continue;this.entryMeshes.add(mesh);
       const tier=record.placement.lootTier??record.placement.tier;
-      const source=mesh.sourceMesh??mesh;this.sourceFor(source,!!tier);
+      const source=mesh.sourceMesh??mesh,tinted=!!tier||this.tintedSources.has(source);
+      if(!preparedSources.has(source)||(tinted&&!preparedSources.get(source))){this.sourceFor(source,tinted);preparedSources.set(source,tinted);}
       mesh.instancedBuffers.villageInk=new Vector2(0,0);
       if(this.tintedSources.has(source))mesh.instancedBuffers.villageInkTint=tier?Color3.FromHexString(lootRarity(tier).color):new Color3(.065,.052,.044);
       this.entries.push({record,mesh,coverage:0,inkWidth:tier?.028:villageInkWidth(record.placement.kind)});

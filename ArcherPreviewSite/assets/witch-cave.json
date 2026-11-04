@@ -255,6 +255,25 @@
           "590328f924cb948291ae3b6c5d78b0e387c0ff5f6231fa117ba74dc8d3df6615",
           "ef930570501f371f48fa54a3578a98430e2317831893a19a876cb9a9111812ff"
         ]
+      },
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/2c75c027c32ba89962181356f1228156f1160fe632c7dd7a10687d0a3968be48.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 773019,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/2c75c027c32ba89962181356f1228156f1160fe632c7dd7a10687d0a3968be48.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
       }
     },
     "cave-02-rock-ledge": {
@@ -407,7 +426,26 @@
           "./content/d4fe586209fcf4860c59c8949ce8935ce2e29419d22267e243b6c81bfd37a7a2.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/0f109ceba6291502632afff5e0ceffe609c7a3722afc092e9bbda3dabf6df0c5.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 673339,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/0f109ceba6291502632afff5e0ceffe609c7a3722afc092e9bbda3dabf6df0c5.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-03-great-column": {
       "name": "대형 자연 석주",
@@ -559,7 +597,26 @@
           "./content/1f4f4765f6a1a54ec60fee45af764078f663a7fcf2db52caf0af7e441a5e797a.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/58fa5f23aa6be77439f59f5be9973324297dcaf1ba16311111c8e73bf0b59641.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 806541,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/58fa5f23aa6be77439f59f5be9973324297dcaf1ba16311111c8e73bf0b59641.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-04-natural-arch": {
       "name": "자연 암교·굴 입구",
@@ -711,7 +768,26 @@
           "./content/5d1a307977e07a527d6b812bfb68c7ba83e7a32a33703d3a176e6ab8fa034a3b.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/086d2d145b9182607075023102a8732f43807250676df1c3f97d8305736217b9.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 777099,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/086d2d145b9182607075023102a8732f43807250676df1c3f97d8305736217b9.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-05-stalagmites": {
       "name": "석순 군락",
@@ -863,7 +939,26 @@
           "./content/b39267ab70a997ec30091b2e632d016c017abd402931b00f49c8740d6064e88c.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/723786982dc6b7a64b5aa356b34c6fefec9c2efedcc7b723114b632816c7e2a9.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 728567,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/723786982dc6b7a64b5aa356b34c6fefec9c2efedcc7b723114b632816c7e2a9.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-06-stalactite-canopy": {
       "name": "종유석 천장 모듈",
@@ -1015,7 +1110,26 @@
           "./content/4c6eee2ffc2ef1eaa87281eb2d88ca2dc3f6d51b8bb329150e343ee685b00360.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/22eaad971f929a4387c8e963f6fc43e7e973a054ddc5794e79e0bb2b1edcf201.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 754460,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/22eaad971f929a4387c8e963f6fc43e7e973a054ddc5794e79e0bb2b1edcf201.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-07-scree-ramp": {
       "name": "붕락 암반 경사로",
@@ -1110,7 +1224,7 @@
             [
               -2.0057082176208496,
               -4.333792686462402,
-              -0.00007160821405705065
+              -7.160821405705065e-05
             ],
             [
               2.012683629989624,
@@ -1167,7 +1281,26 @@
           "./content/a444e8cb12be303e49b4971c60700c88d604402bead9821d88ab8e0bcdc760b6.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/58a3ff88f3814550bb646b53b6de9268d035890d456bc01a9568ae2d578f7a68.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 808661,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/58a3ff88f3814550bb646b53b6de9268d035890d456bc01a9568ae2d578f7a68.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-08-timber-brace": {
       "name": "덧댄 목재 버팀대",
@@ -1232,7 +1365,7 @@
             [
               -1.5,
               -0.26950642466545105,
-              5.580807815874778e-9
+              5.580807815874778e-09
             ],
             [
               1.4996472597122192,
@@ -1262,7 +1395,7 @@
             [
               -1.5009844303131104,
               -0.2713656723499298,
-              5.580807815874778e-9
+              5.580807815874778e-09
             ],
             [
               1.4972178936004639,
@@ -1319,7 +1452,26 @@
           "./content/9ed6d4872d8af377f4143af7abf6349b7e004fb764eeae09197b2b475f6d18ea.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/1dfdade00d8a41ad20dec136b17d33c6a524f30dffe6988065d8694b32b9da56.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 229168,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/1dfdade00d8a41ad20dec136b17d33c6a524f30dffe6988065d8694b32b9da56.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-09-iron-gate-leaf": {
       "name": "철제 격자 문짝",
@@ -1384,7 +1536,7 @@
             [
               -1.250376582145691,
               -0.11269786208868027,
-              1.1431231072833725e-8
+              1.1431231072833725e-08
             ],
             [
               1.2491940259933472,
@@ -1471,7 +1623,26 @@
           "./content/f23a678b1819d4f9df739fef4761fdf4e732dd047189c8c58c5269314911be3d.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/9c6e0afd347fba7f57b152bceb946d7329bdef6f01e73da22af608f3db526b66.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 785000,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/9c6e0afd347fba7f57b152bceb946d7329bdef6f01e73da22af608f3db526b66.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-10-hand-winch": {
       "name": "수동 권양기·핸들",
@@ -1623,7 +1794,26 @@
           "./content/7d709a7fcfa2730b1328174eed5dc70f1da0735009f716d3592bba9422ed6e04.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/ef42bde27241f8be17f232e7be70cdb4d7f60ccfac1b94edc266d217b64a6761.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 220273,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/ef42bde27241f8be17f232e7be70cdb4d7f60ccfac1b94edc266d217b64a6761.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-11-sluice-shutter": {
       "name": "목재 수문 판",
@@ -1775,7 +1965,26 @@
           "./content/be8fd00f22ca9ed81e80ac159164102f47d6b98d8a66a9efb80eb833bc551ad4.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/1b5b7333329480f0c190ec6d4f49035a9ebd01bc09dbdc323bffbb547af025ea.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 221202,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/1b5b7333329480f0c190ec6d4f49035a9ebd01bc09dbdc323bffbb547af025ea.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-12-lift-platform": {
       "name": "밧줄 승강 발판",
@@ -1927,7 +2136,26 @@
           "./content/0ad4557819488d779ceeb4e4161b0eeb469223ca629acd3ac5659df5a3533734.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/c42a950cd1037f40c3fdef44ad33f48b53182f61d892a398952bc64a3ee1560f.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 806665,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/c42a950cd1037f40c3fdef44ad33f48b53182f61d892a398952bc64a3ee1560f.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-13-votive-lantern": {
       "name": "성녀의 봉헌 등불",
@@ -2079,7 +2307,26 @@
           "./content/86fc0a0b8274da4026e56773177080c60b28154ebdcbca37a8a83cf0d642a10e.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/9b2e8418e5889078ed0d2c27b842519446b9eb666598562e47a56ab4967c9249.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 229939,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/9b2e8418e5889078ed0d2c27b842519446b9eb666598562e47a56ab4967c9249.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-14-hidden-pressure-stone": {
       "name": "숨겨진 압력 석판",
@@ -2231,7 +2478,26 @@
           "./content/eba23d533ac9c5809fcd61bd5b6b04baf6746162246267b90b2a8221b8af9a3d.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/79f0034a7190b5bf3f9594364eafd5ae11d4e255f1b40a92468cec7606083df0.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 188716,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/79f0034a7190b5bf3f9594364eafd5ae11d4e255f1b40a92468cec7606083df0.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-15-resurrection-altar": {
       "name": "부활 제단·석관",
@@ -2383,7 +2649,26 @@
           "./content/cff5dd9a978cae966fc993840d2dc21b6cfff5dfcad3804b52829d5e7fed5503.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/0757ce4d34745ac73eec72982711d18d2f7d617eff78ec86f573e5592a911b3c.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 693447,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/0757ce4d34745ac73eec72982711d18d2f7d617eff78ec86f573e5592a911b3c.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-16-soul-collector-arm": {
       "name": "영혼 수집 관절 장치",
@@ -2535,7 +2820,26 @@
           "./content/8ff3d416e4f0d7acaba4924cb3c1393a95f5b6bef9ca77b249554fbb211dd84f.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/850b7e6e513d10b57836894dc144461f6d78c894d3d38231d1b4f8a83770fa0d.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 768338,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/850b7e6e513d10b57836894dc144461f6d78c894d3d38231d1b4f8a83770fa0d.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-17-faded-sacred-emblem": {
       "name": "타락한 성녀의 성표·천",
@@ -2687,7 +2991,26 @@
           "./content/5be51db7886e161864e34fb358ad8efc403acb2e6d72cd47229f7a33b3e17cc2.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/588db0892dd986f85ba892d14b8942e2e9f6bc3e09e975b14476f2c33dbd7e6d.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 773677,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/588db0892dd986f85ba892d14b8942e2e9f6bc3e09e975b14476f2c33dbd7e6d.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-18-alchemy-workbench": {
       "name": "연금술 작업대",
@@ -2839,7 +3162,26 @@
           "./content/e37e1ecc4610cb3b5081df63a5a6a315343fa8460b0acd1bb0fa8b4480e20f9b.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/8b0d704ffbf09edda1c8bf39e2c85514f951411d5caf7f655f2532aa97a622ec.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 205557,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/8b0d704ffbf09edda1c8bf39e2c85514f951411d5caf7f655f2532aa97a622ec.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "cave-19-apothecary-shelf": {
       "name": "서적·약병 선반",
@@ -2991,7 +3333,26 @@
           "./content/b905d10860c9f022b66b2d6dabf85638f8dd477f507fcfe0c5e2bb183f3ff7d5.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/dbb16df9c64f87130b7cf977b8b93c9087838363691044f5c286fd215510827f.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 666180,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/dbb16df9c64f87130b7cf977b8b93c9087838363691044f5c286fd215510827f.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-20-modest-cot": {
       "name": "소박한 침상",
@@ -3086,7 +3447,7 @@
             [
               -1.1502718925476074,
               -2.08227276802063,
-              2.751105121490127e-9
+              2.751105121490127e-09
             ],
             [
               1.149999976158142,
@@ -3143,7 +3504,26 @@
           "./content/12857a2937779780ab2707b7f1d1501578029cee54b8ba8bc7ea18a2549a52b0.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/45e80584282a0a38b92f1a44dcd16fdec2f706a018ff1ea26888d3bbedc5fabc.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 779625,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/45e80584282a0a38b92f1a44dcd16fdec2f706a018ff1ea26888d3bbedc5fabc.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-s01-solid-cliff-base": {
       "name": "두꺼운 절벽 기단",
@@ -3238,7 +3618,7 @@
             [
               -3.9701759815216064,
               -2.400526285171509,
-              0.00009538931772112846
+              9.538931772112846e-05
             ],
             [
               3.955699920654297,
@@ -3295,7 +3675,26 @@
           "./content/53b0a3a04b3c87736bd6870be51aba4a7fd5cb318c864b8056423488914b1617.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/d37b13c64a452856fd4576b553f3b996fc65dc2a333b45abf511734b9898b520.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 771022,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/d37b13c64a452856fd4576b553f3b996fc65dc2a333b45abf511734b9898b520.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "cave-s03-dry-spillway-rock": {
       "name": "폭포 수로 바위",
@@ -3447,7 +3846,26 @@
           "./content/195d59f5b4c9029d2273e2fc80f56f2f814e40d376d435e71e8aa11ea51eb642.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/e84e5b95475019f41d67d91f2008c9db03cfb12bbf634be3fdc8d591dc49598b.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 789065,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/e84e5b95475019f41d67d91f2008c9db03cfb12bbf634be3fdc8d591dc49598b.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "forest-06-witch-cave-mouth": {
       "name": "마녀의 동굴 입구",
@@ -3482,7 +3900,7 @@
             [
               -3.7307798862457275,
               -2.7557108402252197,
-              -1.3587279568127997e-7
+              -1.3587279568127997e-07
             ],
             [
               3.734593152999878,
@@ -3573,7 +3991,7 @@
           [
             -3.7307798862457275,
             -2.7557108402252197,
-            -1.3587279568127997e-7
+            -1.3587279568127997e-07
           ],
           [
             3.734593152999878,
@@ -3599,7 +4017,26 @@
           "./content/78a4302707826f4c65dc0970a98197dbef58bb82f6ebb008890dc7c2a41c91f7.ktx2"
         ]
       },
-      "visualReview": "APPROVED"
+      "visualReview": "APPROVED",
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 779104,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/00bedad5e85c6a4149a5f49782d241d836c454fca7e70bcd428c0b712c776943.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      }
     },
     "crate-barrel-cluster": {
       "name": "상자와 통 묶음",
@@ -3693,7 +4130,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74"
+      "toonSourceModelSha256": "431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206946,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "firewood": {
       "name": "장작 거치대",
@@ -3787,7 +4243,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9"
+      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206480,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "handcart": {
       "name": "두 바퀴 손수레",
@@ -3881,7 +4356,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204"
+      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 224690,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "rock-02-jagged-outcrop": {
       "name": "솟은 바위",

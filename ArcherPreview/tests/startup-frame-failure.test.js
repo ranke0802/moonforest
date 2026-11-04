@@ -14,6 +14,7 @@ import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
 import {setupMinimapTravel} from '../src/minimap-travel.js';
 import {travelWaypoint} from '../src/map-waypoints.js';
 import {releaseSelectionValue} from '../src/release-route.js';
+import {selectPlayerTextureProfile,playerTextureCapabilities} from '../src/player-texture-profile.js';
 
 const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8').replaceAll('\r\n','\n');
 const noop=()=>{},results=[];
@@ -42,7 +43,7 @@ async function until(check,message){for(let i=0;i<100;i++){if(check())return;awa
 // Execute the actual main loader, RAF guard, playback reconciliation and map
 // callbacks in one closure. Only asset/network/audio and GPU draw boundaries
 // are injected; readiness/RAF promises and retry DOM events retain ordering.
-function fixture(){
+function fixture({caps={maxTextureSize:4096,astc:{}},playerNavigator={userAgent:'Android SM-S911'}}={}){
  const dom=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),doc=dom.document;doc.hidden=false;
  for(const id of ['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
  for(const dialog of doc.querySelectorAll('dialog'))dialog.open=false;
@@ -55,7 +56,7 @@ function fixture(){
  const listenerCount=()=>[...listeners.values()].reduce((n,types)=>n+[...types.values()].reduce((m,set)=>m+set.size,0),0);
  let clockTime=0,timerId=0;const pendingTimers=new Map(),timerClock={now:()=>clockTime,setTimeout:(fn,ms)=>{pendingTimers.set(++timerId,{fn,at:clockTime+ms});return timerId;},clearTimeout:id=>pendingTimers.delete(id),advance(ms){clockTime+=ms;for(const [id,timer]of [...pendingTimers])if(timer.at<=clockTime){pendingTimers.delete(id);timer.fn();}},get size(){return pendingTimers.size;}};
  const owned={actors:new Set(),animators:new Set(),equipment:new Set(),containers:new Set(),lifetimeListeners:new Set(),lateDisposed:0,sceneRenders:0,inputResets:0};
- const engine={getCaps:()=>({}),runRenderLoop:callback=>engineCallbacks.add(callback),stopRenderLoop:callback=>engineCallbacks.delete(callback)};
+ const engine={getCaps:()=>caps,runRenderLoop:callback=>engineCallbacks.add(callback),stopRenderLoop:callback=>engineCallbacks.delete(callback)},playerManifestUrls=[];
  let now=0;
  const loadDiagnostics=new LoadDiagnostics(()=>++now),gate={stage:null,errorStage:null,errorFactory:null,counts:{},reached:null,release:null,late:null,timeoutStage:null,hold(stage){this.stage=stage;this.reached=null;this.release=null;},clear(){this.stage=null;this.errorStage=null;this.errorFactory=null;this.reached=null;this.release=null;this.timeoutStage=null;},at(stage){
   this.counts[stage]=(this.counts[stage]??0)+1;if(this.errorStage===stage)return Promise.reject(this.errorFactory?.()??Error('injected '+stage+' failure'));
@@ -76,7 +77,7 @@ function fixture(){
  const hudLayout={visible:false,closes:0,isOpen(){return this.visible;},close(){this.closes++;this.visible=false;}};
  const dependencies={releaseSelectionValue,releaseEnabled:false,FrameLoop,setupMinimapTravel,travelWaypoint,hudLayout,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},configurePlayerSize,WARRIOR_DIMENSIONS,createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),world,engine,boss,loadingView,loadDiagnostics,Vector3,TransformNode:PlayerNode,CharacterAnimator:Animator,WarriorEquipment:Equipment,WarriorV2Controller:Controller,NativeWarriorController:Controller,CharacterController:Controller,
   document:doc,$,loading:$('#loading'),canvas:{focus:noop,setAttribute:noop},location,history,gate,console:{error:noop},
-  initializeResourceCache:async()=>{},playerTextureManifest:()=> 'player',prepareStartupResources:async()=>config,fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
+  initializeResourceCache:async()=>{},playerTextureCapabilities,selectPlayerTextureProfile:(character,engineCaps)=>selectPlayerTextureProfile(character,engineCaps,playerNavigator),prepareStartupResources:async(_world,url)=>{playerManifestUrls.push(url.href);return config;},fetch:async()=>({ok:true,json:async()=>config}),migrateCachedGlb:async()=>{},
   loadVillage:()=>gate.at('map-model'),loadVillageTrainingTarget:async()=>{},loadTrainingGround:async()=>{},SceneLoader:{LoadAssetContainerAsync:async()=>{const value={meshes:[],transformNodes:[],animationGroups:[],addAllToScene:noop,dispose(){owned.containers.delete(this);}};owned.containers.add(value);return value;}},
   applyPlayerDetail:noop,applyCharacterSurfaceStyle:noop,attachCharacterOutlines:noop,applyAttackSpeed:noop,readAttackSpeed:()=>1,equipmentChoices:{sword:'violet-silver',shield:'teal-bronze'},
   motionSpeedControls:{apply:noop,setVisible:noop,isOpen:()=>false},deathScreen:{isOpen:()=>false},audio:{stopAll:noop,setEnvironment:noop,setSuspended:value=>audioStates.push(value),play:noop},actionAudio:{reset:noop},
@@ -89,7 +90,7 @@ function fixture(){
  };
  const runtime=Function(...Object.keys(dependencies),`
   const uiTest=null,uiTestEnabled=false,chapterQuests=null,journeyStorage=equipmentStorage;let character='warrior-v5',ready=false,loadingAsset=false,frameFailure=null,frameLoop,mapTransition=null,mapLoadingGeneration,minimapTravel,resumePose=null;
-  let config=null,container=null,actor=null,animator=null,controller=null,equipment=null,maxInfluences=0;
+  let config=null,container=null,actor=null,animator=null,controller=null,equipment=null,maxInfluences=0,playerTextureSelection=null;
   let arrowNode,arrowMesh,reviewFocus,playerHead,shieldNode,swordNode,combatResult=null,shotTarget=null,shotActionId=null,hiddenArrowForAction=null,mapPortal=null;
   const villageReview=null,villageReviewEnabled=false,villageOverview=false,mapDeparture=null,attackSources=new Set(),elapsed=0,qualityMode='high',VertexBuffer={MatricesWeightsExtraKind:'unused'};
   const isWarrior=()=>true,isV2=()=>true,isVillage=()=>true,isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains',isCave=()=>character==='warrior-v5';
@@ -97,12 +98,12 @@ function fixture(){
   const render=()=>{if(nextDrawError){const error=nextDrawError;nextDrawError=null;throw error;}};
   ${healthSource}\n${loadSource}\n${retryFunctionSource}\n${frameSource}\n${mapSource}\n${retrySource}
   reconcilePlayback=syncPlayback;syncPlayback();
-  return {load:loadCharacter,reconcile:syncPlayback,get transition(){return mapTransition;},get frameLoop(){return frameLoop;},
+  return {load:loadCharacter,reconcile:syncPlayback,get transition(){return mapTransition;},get frameLoop(){return frameLoop;},get playerTextureSelection(){return playerTextureSelection;},
    injectFailure(){nextDrawError=new TypeError('_uniforms[e] is undefined');frameLoop.draw(.016);},
    playerState(){return {character,actor,equipment,controller,hp:boss.combat.hp,potions:boss.potions.remaining};},
    snapshot(){return {ready,loading:loadingAsset,failed:frameLoop.failed,running:frameLoop.running,frameError:frameFailure?.message??null};}};
  `)(...Object.values(dependencies));
- return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates,world,input,boss,hudLayout,owned,timerClock,listenerCount};
+ return {dom,doc,raf,gate,runtime,loadDiagnostics,loadingView,engineCallbacks,audioStates,world,input,boss,hudLayout,owned,timerClock,listenerCount,caps,playerManifestUrls};
 }
 
 async function flushFrame(f){await until(()=>f.raf.length>0,'expected a pending presentation RAF');f.raf.shift()();await Promise.resolve();}
@@ -201,10 +202,12 @@ const heading=state=>Math.atan2(Math.sin(state.actor.rotation.y+state.camera.alp
 function ownedCounts(f){return Object.fromEntries(['actors','animators','equipment','containers','lifetimeListeners'].map(key=>[key,f.owned[key].size]));}
 function warmPlayer(f){
  f.boss.combat.hp=317;f.boss.potions.remaining=1;const state=f.runtime.playerState();state.actor.rotation.y=.8;f.world.camera.alpha=.7;f.world.camera.beta=1.18;f.world.camera.radius=17;f.input.panOffset={x:.3,y:.2,z:-.4};
- return {...state,camera:f.world.camera,relation:heading({...state,camera:f.world.camera}),listeners:f.listenerCount()};
+ return {...state,camera:f.world.camera,relation:heading({...state,camera:f.world.camera}),listeners:f.listenerCount(),textureSelection:f.runtime.playerTextureSelection};
 }
 function assertWarmState(f,previous,{paused=false}={}){
  const state=f.runtime.playerState();for(const key of ['actor','equipment','controller'])assert.strictEqual(state[key],previous[key],key+' must survive in-document map retry');
+ assert.strictEqual(f.runtime.playerTextureSelection,previous.textureSelection,'warm travel retains the selected player graph');
+ assert.equal(f.runtime.playerTextureSelection.manifest,'warrior-v3-mobile4k');
  assert.equal(state.hp,317);assert.equal(state.potions,1);assert.deepEqual(state.equipment.choices,{sword:'violet-silver',shield:'teal-bronze'});
  assert.equal(f.world.camera.radius,17);assert.equal(f.world.camera.beta,1.18);assert.ok(Math.abs(heading({...state,camera:f.world.camera})-previous.relation)<1e-12,'portal retry preserves player-back/camera relation');
  assert.ok(Math.abs(Math.hypot(f.input.panOffset.x,f.input.panOffset.z)-.5)<1e-12);assert.equal(f.input.panOffset.y,.2);
@@ -286,9 +289,22 @@ test('ordinary initial asset failure stays paused across focus/settings changes 
  f.doc.hidden=false;f.gate.clear();await success(f,{retry:true});assert.equal(f.engineCallbacks.size,1);
 });
 
+test('actual main capability rejection records the gate inputs before downloads and manual retry selects the bounded player graph',async()=>{
+ const f=fixture({caps:{maxTextureSize:1024,astc:{}}});await f.runtime.load();
+ assert.equal(f.runtime.snapshot().ready,false);assert.equal(f.runtime.snapshot().loading,false);assert.equal(f.runtime.snapshot().running,false);
+ assert.equal(f.runtime.playerTextureSelection.status,'selecting');assert.equal(f.runtime.playerTextureSelection.capabilities.maxTextureSize,1024);assert.equal(f.runtime.playerTextureSelection.capabilities.formats.astc,true);
+ assert.match(f.loadDiagnostics.snapshot().error,/MAX_TEXTURE_SIZE=1024/);assert.match(f.loadDiagnostics.snapshot().error,/ASTC=yes/);
+ assert.equal(f.playerManifestUrls.length,0,'unsupported capability never starts a player resource plan');assert.equal(f.owned.containers.size,0);assert.equal(f.owned.actors.size,0);assert.equal(f.engineCallbacks.size,0);
+ for(let i=0;i<4;i++)f.runtime.reconcile();assert.equal(f.playerManifestUrls.length,0,'focus/settings reconciliation cannot retry the rejected plan');
+ f.caps.maxTextureSize=4096;await success(f,{retry:true});
+ assert.equal(f.runtime.playerTextureSelection.status,'selected');assert.equal(f.runtime.playerTextureSelection.manifest,'warrior-v3-mobile4k');assert.equal(f.runtime.playerTextureSelection.maxSize,4096);
+ assert.deepEqual(f.playerManifestUrls,['https://example.test/assets/warrior-v3-mobile4k.json']);
+ results.push({kind:'actual-main-player-capability-gate',rejectedMaxTextureSize:1024,downloadPlansBeforeManualRetry:0,manualRetryProfile:f.runtime.playerTextureSelection.manifest,explicitNavigator:'Android SM-S911'});
+});
+
 test.after(()=>{
  const path=new URL('../reports/ios-uniform-fix/',import.meta.url);mkdirSync(path,{recursive:true});
- const report={mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop and transition modules. Network/model/audio and GPU draw are injected boundaries.',expectedCases:19,completedCases:results.length,success:results.length===19,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Ownership counters track the controlled player/asset/DOM/RAF fixture, not real device JS/GPU heap. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'};
+ const report={mainSourceSha256:createHash('sha256').update(source).digest('hex'),scope:'Actual main.js loadCharacter, assertFrameHealthy, FrameLoop draw guard/playback callback, map prepare/load/finish/onError callbacks and retry button binding; actual loading DOM, loading view, load diagnostics, frame loop, transition modules and player capability/profile policy with an explicit Android navigator. Network/model/audio and GPU draw are injected boundaries.',expectedCases:20,completedCases:results.length,success:results.length===20,results,browserAutomation:false,physicalDeviceTested:false,limitations:'Deterministic CPU/DOM async-interleaving tests. Ownership counters track the controlled player/asset/DOM/RAF fixture, not real device JS/GPU heap. Does not claim a real iPhone/S23 GPU shader render, visual review or thermal measurement.'};
  writeFileSync(new URL('startup-validation.json',path),JSON.stringify(report,null,2)+'\n');
  const warm=new URL('../reports/map-warm-repeat-2026-11-02/',import.meta.url);mkdirSync(warm,{recursive:true});writeFileSync(new URL('main-validation.json',warm),JSON.stringify(report,null,2)+'\n');
 });

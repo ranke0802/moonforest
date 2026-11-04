@@ -81,7 +81,26 @@
         ]
       },
       "sourceTask": "01a19bdb-d0bc-73d8-a343-fa7b5b5cef4c",
-      "triangles": 1918
+      "triangles": 1918,
+      "mobileHighTextures": {
+        "shading": "toon-color",
+        "textures": {
+          "albedo": {
+            "url": "./content/657c21eab55f56b864c21ad796b3513227e71d5778fed56e0b67889be68605f6.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206928,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/657c21eab55f56b864c21ad796b3513227e71d5778fed56e0b67889be68605f6.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      }
     },
     "rock-02-jagged-outcrop": {
       "name": "솟은 바위",
@@ -294,6 +313,25 @@
             3.6375392079353333
           ]
         }
+      },
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 611574,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
       }
     },
     "tree-02-slender-pine": {
@@ -413,6 +451,25 @@
             5.75468635559082
           ]
         }
+      },
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 525613,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
       }
     },
     "rock-01-mossy-boulder": {
@@ -601,7 +658,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204"
+      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 224690,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "firewood": {
       "name": "장작 거치대",
@@ -695,7 +771,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9"
+      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206480,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "village-plains-outskirts-ground": {
       "name": "대평원 입구 지면 · 기존 지형 조각",

@@ -9,15 +9,15 @@ import {serializeTextureCreation} from '../src/serial-player-textures.js';
 import {playerTextureManifest} from '../src/player-texture-profile.js';
 const base=new URL('../public/assets/',import.meta.url),read=p=>JSON.parse(readFileSync(new URL(p,base),'utf8'));
 
-test('iPhone/iPad and Android share the compressed 8K plan in both maps; desktop retains original maps',()=>{
+test('iPhone/iPad and Android share the compressed 4K plan in all maps; desktop retains original maps',()=>{
   const caps={astc:{},maxTextureSize:16384};
   for(const nav of [{userAgent:'Mozilla iPhone OS 18_0'},{userAgent:'iPad'},{platform:'MacIntel',maxTouchPoints:5},{userAgent:'Android SM-S911 Chrome'}]){
-    assert.equal(playerTextureManifest('warrior-v3',caps,nav),'warrior-v3-ios');
-    assert.equal(playerTextureManifest('warrior-v4',caps,nav),'warrior-v3-ios');
-    assert.throws(()=>playerTextureManifest('warrior-v3',{...caps,astc:null},nav),/8K/);
-    assert.throws(()=>playerTextureManifest('warrior-v3',{...caps,maxTextureSize:4096},nav),/8K/);
+    assert.equal(playerTextureManifest('warrior-v3',caps,nav),'warrior-v3-mobile4k');
+    assert.equal(playerTextureManifest('warrior-v4',caps,nav),'warrior-v3-mobile4k');
+    assert.equal(playerTextureManifest('warrior-v3',{...caps,astc:null},nav),'warrior-v3-mobile2k-rgba');
+    assert.equal(playerTextureManifest('warrior-v3',{...caps,maxTextureSize:4096},nav),'warrior-v3-mobile4k');
   }
-  assert.equal(playerTextureManifest('warrior-v4',{etc2:true,maxTextureSize:8192},{userAgent:'Android Chrome'}),'warrior-v3-ios');
+  assert.equal(playerTextureManifest('warrior-v4',{etc2:true,maxTextureSize:8192},{userAgent:'Android Chrome'}),'warrior-v3-mobile4k');
   assert.equal(playerTextureManifest('warrior-v3',caps,{platform:'MacIntel',maxTouchPoints:0}),'warrior-v3');
   assert.equal(playerTextureManifest('warrior-v2',caps,{userAgent:'iPhone'}),'warrior-v2');
   assert.equal(playerTextureManifest('archer',caps,{}),'character');

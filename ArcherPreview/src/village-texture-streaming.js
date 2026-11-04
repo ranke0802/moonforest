@@ -3,6 +3,7 @@ import {releaseMapTexture} from './map-texture-lifetime.js';
 import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
 import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS} from './map-load-lifetime.js';
+import {sceneryHighTextureProfile} from './mobile-texture-policy.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?12000:20000);
 export const VILLAGE_TEXTURE_PACING=Object.freeze({checkMs:250,motionHoldMs:600,visibleGapMs:750,fillDwellMs:250,replacementDwellMs:3000,minResidenceMs:6000,mobileMovingMs:2000,mobileIdleMs:750,desktopMovingMs:750,desktopIdleMs:350,visibleReplacementRatio:1.5});
@@ -22,14 +23,17 @@ export class VillageTextureStreaming {
     this.budget=world.touchDevice?VILLAGE_TEXTURE_BUDGET.mobile:VILLAGE_TEXTURE_BUDGET.desktop;
     this.maxTextureSize=world.scene.getEngine().getCaps().maxTextureSize;
     const caps=world.scene.getEngine().getCaps();
+    this.textureCapabilities=Object.fromEntries(['astc','etc2','s3tc','bptc','etc1','pvrtc'].map(key=>[key,!!caps[key]]));
     this.compressedSupported=!!(caps.astc||caps.etc2||caps.s3tc||caps.bptc||caps.etc1||caps.pvrtc);
-    const profiles=[...assets.values()].map(a=>a.config.highTextures).filter(Boolean);
-    if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>p.textures?.albedo?.codec))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
+    const profiles=[...assets].map(([id])=>this.profile(id)).filter(Boolean);
+    if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>this.profileBytes(p)<highTextureBytes(p,false)))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=new Float32Array(16);this.hasView=false;this.lastFov=null;this.motionUntil=0;this.lastFinished=-Infinity;
     this.seenSince=new Map();this.replacementSince=new Map();this.clock=()=>performance.now();
-    Object.assign(stats,{highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
+    Object.assign(stats,{highTextureProfile:world.touchDevice?'mobile-bounded-color/houses-original':'original',highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
     this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
   }
+  profile(id){return sceneryHighTextureProfile(id,this.assets.get(id)?.config,!!this.world?.touchDevice);}
+  profileBytes(config){return highTextureBytes(config,this.textureCapabilities??this.compressedSupported);}
   update(now){
     if(this.disposed||this.world.villageStreaming?.active===false||now<this.nextCheck)return;
     const policy=VILLAGE_TEXTURE_PACING;
@@ -86,7 +90,7 @@ export class VillageTextureStreaming {
     const policy=VILLAGE_TEXTURE_PACING,used=[...this.resident.values()].reduce((sum,e)=>sum+e.bytes,0);
     for(const [id,coverage]of [...candidates].sort((a,b)=>b[1]-a[1])){
       if(this.resident.has(id))continue;
-      const config=this.assets.get(id)?.config.highTextures,bytes=highTextureBytes(config,this.compressedSupported);
+      const config=this.profile(id),bytes=this.profileBytes(config);
       if(config?.textures?.albedo?.width>this.maxTextureSize||bytes>this.budget)continue;
       if(now-this.seenSince.get(id)<policy.fillDwellMs)continue;
       if(used+bytes<=this.budget)return {id,evict:[]};
@@ -151,7 +155,7 @@ export class VillageTextureStreaming {
     return texture;
   }
   start(id){
-    const config=this.assets.get(id)?.config.highTextures,bytes=highTextureBytes(config,this.compressedSupported);
+    const config=this.profile(id),bytes=this.profileBytes(config);
     this.syncStats();
     if(this.disposed||this.pending||this.resident.has(id)||!this.wanted.has(id)||this.failed.has(id)||config?.textures?.albedo?.width>this.maxTextureSize||this.stats.highTextureBytes+bytes>this.budget)return;
     const started=this.clock?.()??performance.now();
@@ -163,7 +167,7 @@ export class VillageTextureStreaming {
     }).finally(()=>{this.lastFinished=this.clock?.()??performance.now();this.stats.highTextureLastPrepareMs=Math.max(0,this.lastFinished-started);this.pending=null;this.pendingTask=null;this.pendingBytes=0;this.stats.highTexturePending=0;this.stats.highTexturePendingAsset=null;this.stats.highTextureStage=this.disposed?'disposed':'idle';this.syncStats();});
   }
   async load(id){
-    const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=asset.config.highTextures;
+    const asset=this.assets.get(id),materials=(asset.nearSource??asset.source).materials.filter(m=>m.albedoTexture),config=this.profile(id);
     if(!materials.length)throw new Error('Near material does not expose an albedo texture');
     const slots=config.shading==='toon-color'?{albedo:'albedoTexture'}:{albedo:'albedoTexture',normal:'bumpTexture',orm:'metallicTexture'},textures={},originals=materials.map(material=>({material,values:Object.fromEntries(Object.values(slots).map(k=>[k,material[k]]))}));
     try{
@@ -185,7 +189,7 @@ export class VillageTextureStreaming {
       // Synchronous material assignment/invalidation only: fetching, decoding,
       // prior KTX upload calls and later driver draw costs are not GPU time here.
       this.stats.highTextureLastPromoteMs=Math.max(0,(this.clock?.()??performance.now())-promoteStarted);
-      this.resident.set(id,{textures,originals,bytes:highTextureBytes(config,this.compressedSupported),resolution:config.textures.albedo.width,readyAt:this.clock?.()??performance.now()});this.stats.highTextureLoads++;this.syncStats();
+      this.resident.set(id,{textures,originals,bytes:this.profileBytes(config),resolution:config.textures.albedo.width,readyAt:this.clock?.()??performance.now()});this.stats.highTextureLoads++;this.syncStats();
       this.stats.highTextureFormat=textures.albedoTexture.getInternalTexture?.()?.format??null;
     }catch(error){Object.values(textures).forEach(t=>releaseMapTexture(t,this.world?.scene));throw error;}
   }

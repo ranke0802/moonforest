@@ -18,7 +18,7 @@ for(const [device,agent,width,height]of [
  ['Galaxy S23 portrait',{userAgent:'Android SM-S911 Chrome'},360,780],
  ['iPhone 14 Pro landscape',{userAgent:'iPhone OS 18_0 Safari'},852,393],
  ['iPhone 14 Pro portrait',{userAgent:'iPhone OS 18_0 Safari'},393,852],
-])test(device+': village/forest round trips share the 8K player and cached LODs',async t=>{
+])test(device+': village/forest round trips share the mobile 4K player and cached LODs',async t=>{
  const stored=new Map(),network=new Map(),sizes=read('resource-sizes').files,phases=[];
  const cache={async match(url){return stored.has(url)?new Response('cached'):undefined;},
   async put(url,response){let bytes=0;const reader=response.body.getReader();for(;;){const r=await reader.read();if(r.done)break;bytes+=r.value.length;}stored.set(url,bytes);},
@@ -44,10 +44,10 @@ for(const [device,agent,width,height]of [
    const camera=new ArcRotateCamera('startup',Math.PI*.38,1.18,4.8,target,scene);camera.fov=.65;camera.minZ=.05;camera.maxZ=350;
    const world={scene,camera,terrain,touchDevice:true,environmentManifest:forest?'monster-forest':'village',groundManifest:forest?'monster-forest-ground':'village-ground',placements:forest?FOREST_PLACEMENTS:undefined};
    const profile=playerTextureManifest(character,{astc:{},maxTextureSize:16384},agent);
-   assert.equal(profile,'warrior-v3-ios');let state;
+   assert.equal(profile,'warrior-v3-mobile4k');let state;
    const before=new Map(network);
    const manifest=await prepareStartupResources(world,new URL(`https://example.test/ArcherPreviewSite/assets/${profile}.json`),s=>state=s,()=>{});
-   assert.equal(manifest.textureProfile.maxSize,8192);assert.equal(manifest.textureProfile.preserveSourceResolution,true);
+   assert.equal(manifest.textureProfile.maxSize,4096);assert.equal(manifest.textureProfile.preserveSourceResolution,false);
    assert.ok(world.startupResources.initialLodModels<world.villagePrepared.assets.size*3,'distant tiers remain deferred');
    if(trip)for(const path of manifest.resources){const url=new URL(path,'https://example.test/ArcherPreviewSite/assets/').href;assert.equal(network.get(url),before.get(url),'no repeat player downloads');}
    if(trip>=3)assert.equal(state.total,0,'revisiting the same arrival view is entirely cached');

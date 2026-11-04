@@ -1,0 +1,254 @@
+{
+  "readOnlySourceReview": true,
+  "browserAutomation": false,
+  "actualGpuUploadTested": false,
+  "sourceFilesAtReview": [
+    {
+      "path": "src/mobile-texture-policy.js",
+      "sha256": "319798fa51981729f8cb7ccd3c8eaee3a5f15ea4e2737d7eda679c5b0edb9dfd"
+    },
+    {
+      "path": "src/village-texture-streaming.js",
+      "sha256": "0a5d87b6e50069cc4c8798b8434a464d71af6966a898cdd64046cf8ea3d77f40"
+    },
+    {
+      "path": "src/village-texture-budget.js",
+      "sha256": "6cf0d0964797015451834caf361387250896768ca84e6dd87ae498e64051ee21"
+    }
+  ],
+  "tested": {
+    "focusedTests": 50,
+    "failed": 0,
+    "headers": 43,
+    "codecCases": 61,
+    "intendedTargetCases": 49,
+    "sparseCapabilityCases": 12,
+    "command": "node --test tests/mobile-scenery-textures.test.js tests/village-texture-streaming.test.js tests/village-texture-pacing.test.js tests/village-texture-cancel.test.js tests/village-texture-promotion.test.js tests/village-ktx2.test.js tests/ground-retry-sdk.test.js",
+    "nodeExecutable": "C:\\Users\\ryank\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+    "nodeVersion": "v24.22.1"
+  },
+  "passedChecks": [
+    "All 43 distinct mobile textures: content hash, metadata byte count, bounded width/height, complete mips, codec/supercompression, BT709 primaries, sRGB transfer and alpha match original source headers.",
+    "43 actual ETC2 decodes and six codec/size representative ASTC or ASTC+ETC2/S3TC decodes retain dimensions, full mips, alpha, sRGB and compressed block payload lengths.",
+    "Real SDK Texture callbacks, actual packed instanced house geometry/material readiness, high-tier promotion/release, paced admission, shared pending allocations, late callbacks, map teardown, explicit retry, corruption repair and cancellation passed targeted tests.",
+    "admission/start/load/resident accounting use selected profile; prefetchResources uses selected profile resources. Startup LOD planning does not prefetch original high texture resources.",
+    "Desktop/protected house policy returns original object; new derived textures are present only for nonprotected environment entries. No root source edited by this review."
+  ],
+  "findingsAtReview": [
+    {
+      "priority": 2,
+      "file": "src/village-texture-streaming.js",
+      "function": "constructor/admission/start/load",
+      "title": "ASTC-only capability causes ETC1S RGBA fallback to exceed compressed reservation",
+      "trigger": "caps.astc=true; etc2/s3tc/bptc/pvrtc/etc1 false; selected codec=etc1s",
+      "evidence": {
+        "image": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+        "reservedBytes": 1398128,
+        "actualDecodedRgbaBytes": 5592404
+      },
+      "fix": "Use codec/capability-aware reservation at admission, start and resident accounting. Preserve legacy boolean API if needed. Root integration owner was notified and is implementing.",
+      "statusAtReview": "reported; source hashes above precede the root fix"
+    },
+    {
+      "priority": 3,
+      "file": "src/mobile-texture-policy.js",
+      "function": "sceneryHighTextureProfile",
+      "title": "Unknown codec metadata accepted despite invalid/unsupported fallback comment",
+      "trigger": "mobileHighTextures.textures.albedo.codec=\"unsupported-format\"",
+      "currentAssetsAffected": false,
+      "fix": "Whitelist supported codecs (etc1s/uastc) before selecting mobile metadata; curated 43 assets are valid.",
+      "statusAtReview": "reported to root"
+    }
+  ],
+  "capabilityAudit": [
+    {
+      "path": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+      "codec": "etc1s",
+      "hasAlpha": false,
+      "caps": {
+        "astc": true,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 32856,
+      "gpuBytes": 5592404
+    },
+    {
+      "path": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+      "codec": "etc1s",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": true,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 36492,
+      "gpuBytes": 1398128
+    },
+    {
+      "path": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+      "codec": "etc1s",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": true,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 35840,
+      "gpuBytes": 699136
+    },
+    {
+      "path": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+      "codec": "etc1s",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": true
+      },
+      "format": 36196,
+      "gpuBytes": 699064
+    },
+    {
+      "path": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+      "codec": "etc1s",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 32856,
+      "gpuBytes": 5592404
+    },
+    {
+      "path": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2",
+      "codec": "uastc",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": true
+      },
+      "format": 36196,
+      "gpuBytes": 2796216
+    },
+    {
+      "path": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2",
+      "codec": "uastc",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": true,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 35840,
+      "gpuBytes": 2796288
+    },
+    {
+      "path": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2",
+      "codec": "uastc",
+      "hasAlpha": false,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 32856,
+      "gpuBytes": 22369620
+    },
+    {
+      "path": "synthetic-64px-alpha-ETC1S",
+      "codec": "etc1s",
+      "hasAlpha": true,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": true,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 35842,
+      "gpuBytes": 2816
+    },
+    {
+      "path": "synthetic-64px-alpha-ETC1S",
+      "codec": "etc1s",
+      "hasAlpha": true,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": true
+      },
+      "format": 32856,
+      "gpuBytes": 21844
+    },
+    {
+      "path": "synthetic-64px-alpha-ETC1S",
+      "codec": "etc1s",
+      "hasAlpha": true,
+      "caps": {
+        "astc": false,
+        "bptc": true,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 36492,
+      "gpuBytes": 5488
+    },
+    {
+      "path": "synthetic-64px-alpha-ETC1S",
+      "codec": "etc1s",
+      "hasAlpha": true,
+      "caps": {
+        "astc": false,
+        "bptc": false,
+        "s3tc": false,
+        "pvrtc": false,
+        "etc2": false,
+        "etc1": false
+      },
+      "format": 32856,
+      "gpuBytes": 21844
+    }
+  ],
+  "limits": [
+    "NullEngine/SDK/codec evidence does not establish real GPU upload, appearance, heat, FPS or complete map rendering.",
+    "Current 43 scenery textures are opaque; alpha branch evidence uses a deterministic 64px temporary ETC1S fixture, not a new game asset."
+  ],
+  "artifacts": [
+    "reports/mobile-quality-2026-11-04/scenery-codec.mjs",
+    "reports/mobile-quality-2026-11-04/scenery-codec.json",
+    "reports/mobile-quality-2026-11-04/scenery-codec.log"
+  ]
+}

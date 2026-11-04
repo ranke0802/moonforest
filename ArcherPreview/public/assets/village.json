@@ -755,7 +755,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "c9137b5600a8eaa56714e31b66a3a9ea7ef33a5f328c6a9e2e02b12e6c46d3a8"
+      "toonSourceModelSha256": "c9137b5600a8eaa56714e31b66a3a9ea7ef33a5f328c6a9e2e02b12e6c46d3a8",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 219753,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "wood-02-cross-barricade": {
       "name": "교차 바리케이드",
@@ -849,7 +868,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "18f7c42381ffb220736e988c728f272ea3d8ddaf8c521c296077e0035ff9ed7c"
+      "toonSourceModelSha256": "18f7c42381ffb220736e988c728f272ea3d8ddaf8c521c296077e0035ff9ed7c",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/80c936a7c7cea829b6d55f0a5b22f9290b6eaaccb58c7e55605d1ef709eac152.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 186926,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/80c936a7c7cea829b6d55f0a5b22f9290b6eaaccb58c7e55605d1ef709eac152.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "wood-03-plank-gate": {
       "name": "북쪽 닫힌 문",
@@ -1062,6 +1100,25 @@
             3.6375392079353333
           ]
         }
+      },
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 611574,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/943b1bc9f467c9b67e687d5eaf3e31000a9a5ffb8201a3b4272d93f2409a4adf.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
       }
     },
     "tree-02-slender-pine": {
@@ -1181,6 +1238,25 @@
             5.75468635559082
           ]
         }
+      },
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 525613,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/303c60696fcd30367d0ebc088c1d17cb04b297e7efd8cd9e9daccb586c173c4e.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
       }
     },
     "rock-01-mossy-boulder": {
@@ -1651,7 +1727,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "50cc31bf6da2300c169e752c08b8fc2179e1a0787c35462c9e0183389be37fa4"
+      "toonSourceModelSha256": "50cc31bf6da2300c169e752c08b8fc2179e1a0787c35462c9e0183389be37fa4",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/979ac39bc1f6467b42b497b803c88dca5ef964409497ee2e04af1e459b22bc2d.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 715463,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/979ac39bc1f6467b42b497b803c88dca5ef964409497ee2e04af1e459b22bc2d.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
+      }
     },
     "rail-fence": {
       "name": "낮은 가로 목책",
@@ -1745,7 +1840,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "1eaf957c54c33adc8deb946b4206258d43e5ee3a0719f063ea848747e94b20cb"
+      "toonSourceModelSha256": "1eaf957c54c33adc8deb946b4206258d43e5ee3a0719f063ea848747e94b20cb",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/6308c9b0348ffbf5b58ef5c0f01be5f3b4a0276cbcb20f562a8835006a4ffb70.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 213403,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/6308c9b0348ffbf5b58ef5c0f01be5f3b4a0276cbcb20f562a8835006a4ffb70.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "bush": {
       "name": "올리브색 관목",
@@ -1933,7 +2047,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "7d663c626d13cc1df065e1eb9fae65ad4fdd47f96bf329485a81580aff301eb0"
+      "toonSourceModelSha256": "7d663c626d13cc1df065e1eb9fae65ad4fdd47f96bf329485a81580aff301eb0",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/06c957dc3c0e19998ec1c63d99f3df7700e74687d3d7185b95760108bf51480a.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 697491,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/06c957dc3c0e19998ec1c63d99f3df7700e74687d3d7185b95760108bf51480a.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
+      }
     },
     "covered-wagon": {
       "name": "천 덮개 짐마차",
@@ -2027,7 +2160,26 @@
         "colorEncoding": "KTX2 UASTC / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "5832291fe5c0581a0f2448f65eacf0d249b4f735d97f1073a9d57387af359700"
+      "toonSourceModelSha256": "5832291fe5c0581a0f2448f65eacf0d249b4f735d97f1073a9d57387af359700",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2",
+            "width": 2048,
+            "height": 2048,
+            "bytes": 4177283,
+            "codec": "uastc",
+            "alpha": false,
+            "gpuBlockBytes": 16
+          }
+        },
+        "resources": [
+          "./content/f6a5d5597f8d7ff05380928b658731001503ccd3b7687c0481e7ee435ffec66c.ktx2"
+        ],
+        "colorResolution": 2048,
+        "colorEncoding": "KTX2 UASTC / sRGB / full mip chain / mobile 2048",
+        "shading": "toon-color"
+      }
     },
     "handcart": {
       "name": "두 바퀴 손수레",
@@ -2121,7 +2273,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204"
+      "toonSourceModelSha256": "c021b37e17f2455924ea0bd2e1ed487aee2f301ca8f51adde52660dead4b7204",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 224690,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/e2ef053df0d7d58975740ca9a079982684e2c41ac53b73a06c5b4dae57322319.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "garden-bed": {
       "name": "채소와 꽃 텃밭",
@@ -2215,7 +2386,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "15dd917791e278d3034b6158d913961ffe979082f694d28219cbb1d04e735170"
+      "toonSourceModelSha256": "15dd917791e278d3034b6158d913961ffe979082f694d28219cbb1d04e735170",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/a879a258ab0e35cbed6bdb04534012def9f79a081657f74496aff8e79f0c09fd.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 177344,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/a879a258ab0e35cbed6bdb04534012def9f79a081657f74496aff8e79f0c09fd.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "firewood": {
       "name": "장작 거치대",
@@ -2309,7 +2499,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9"
+      "toonSourceModelSha256": "d7c703c5423351ec87c53a9283228e1dcf392f0a2ce5c158b03b495d81211fc9",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206480,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     },
     "crate-barrel-cluster": {
       "name": "상자와 통 묶음",
@@ -2403,7 +2612,26 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74"
+      "toonSourceModelSha256": "431bab011dedfd4d7d0cdc0ce27050d2e4191497f4e8feba9d70816c046d8a74",
+      "mobileHighTextures": {
+        "textures": {
+          "albedo": {
+            "url": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2",
+            "width": 1024,
+            "height": 1024,
+            "bytes": 206946,
+            "codec": "etc1s",
+            "alpha": false,
+            "gpuBlockBytes": 8
+          }
+        },
+        "resources": [
+          "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+        ],
+        "colorResolution": 1024,
+        "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
+        "shading": "toon-color"
+      }
     }
   },
   "missing": [],

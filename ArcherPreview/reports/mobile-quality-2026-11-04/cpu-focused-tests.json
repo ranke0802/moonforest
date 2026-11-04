@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "tests": 43,
+  "durationMs": 6955.6821,
+  "node": "v24.22.1",
+  "command": "node --test tests/village-shadow-reuse.test.js tests/village-shadow-stability.test.js tests/village-shadow-fade.test.js tests/village-outline-source-reuse.test.js tests/village-outline-render.test.js tests/village-outline-policy-cache.test.js tests/village-spatial-reuse.test.js tests/village-active-candidates-registry.test.js tests/village-active-candidates.test.js tests/authored-placement-runtime.test.js",
+  "sourceHashes": {
+    "src/village-visibility.js": "260c798dbf02ba1efef269bc0a3322fcdec89fb4f0e006ac74579a0756fa9092",
+    "src/village-outlines.js": "c10042d943221bd349c6c7c73f857ef1604194be3dadf858f619c6f5d466c3da",
+    "tests/village-shadow-reuse.test.js": "6ef0fd46ea9cfc5a083e08b45ac8afd5e1f4dc3350bdab5dfedf219ce153955f",
+    "tests/village-outline-source-reuse.test.js": "b4e6b29a4b601cafae41a8f4459f1968fe9d10ec671080c5518c16840abfe03b"
+  },
+  "diffCheckPassed": true,
+  "scope": "Focused Node regression only; no browser automation, GPU, physical FPS, visual or thermal validation.",
+  "firstAttempt": {
+    "passed": false,
+    "reason": "Default PATH node was an older unsupported runtime (t.after unavailable); rerun used bundled Node satisfying package engines."
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "reviewedAt": "2026-11-04T09:29:43.376Z",
+  "baseCommit": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "sourceHashes": {
+    "src/main.js": "25456b620cf14cbbc450cb1f6e13303dc37461a6c2709abfbe4d53b6d6266550",
+    "src/player-texture-profile.js": "e9c4a9691e5b53a00107cf88bc0f58492d2d3c33e52c8a6d97c0542d33ec6c4c",
+    "src/mobile-texture-policy.js": "93581b9581d203e98880726c009da66f792139afff0539e0317ebfca7faed998",
+    "src/village-texture-streaming.js": "7aee83a0b10e9365f7f7678fc09557f8c2f71dbf4a7a59ffae36d855839fb06d",
+    "src/village-texture-budget.js": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521",
+    "src/render-policy.js": "8615d113c6554385a523efd80762cc3ff36f76537f80157440d1235b35d798a8",
+    "src/render-scale-settings.js": "47144c5f1c92561714dd00fd9e2f0ec0eb9d948ec73c077d1520a29f7c8d1869",
+    "tests/startup-frame-failure.test.js": "a38f1665c616de22624d15f9821235c1d9b8825b8387d72b23effafdae7a6334",
+    "tests/witch-cave.test.js": "7b2007714fff54a4b8f6f67d3727efabf3ca1a931c57d0f94139cc4a2dad42f7"
+  },
+  "browserAutomation": false,
+  "actualGpuOrDeviceTest": false,
+  "fullSuiteDuplicated": false,
+  "checks": {
+    "mainInitialSynchronousOnChangeNoTDZ": true,
+    "twentyUnchangedRenderReapplicationsResizeCalls": 1,
+    "targetFpsPreserved": 60,
+    "playerCapabilityAndAliasCases": 48,
+    "selectedPlayerManifests": [
+      "warrior-v3-mobile4k",
+      "warrior-v3-mobile2k-rgba"
+    ],
+    "original8kPlayerImagesInSelectedPlans": 0,
+    "unrequestedBundleMembers": 0,
+    "sceneryAlternateEntries": 65,
+    "uniqueSceneryAlternates": 43,
+    "selectedResourceHashesVerified": 96,
+    "recordedDecoderOutputsWithinCurrentReservation": 57,
+    "syntheticDecoderCasesExcludedFromPublishedProfileComparison": 4,
+    "targetedFixtureTests": {
+      "files": [
+        "tests/startup-frame-failure.test.js",
+        "tests/witch-cave.test.js"
+      ],
+      "passed": 28,
+      "failed": 0,
+      "node": "v24.22.1"
+    },
+    "warmPlayerProfileIdentityPreservedAcrossMaps": true
+  },
+  "protectedAssets": {
+    "independentlyVerified": true,
+    "protectedAssets": 10,
+    "contentFiles": 147,
+    "textureFiles": 38,
+    "contentBytes": 99371738,
+    "rawBossBytes": 44032908,
+    "rawBossFiles": 2,
+    "graphSha256": "39e31d51badfe0f6af3a9ead82951a1c991254ca608c41253f26e98e00eb2207",
+    "allowedSceneryProfileAdditions": 65,
+    "verificationCommand": "node reports/mobile-quality-2026-11-04/verify-protected-assets.mjs"
+  },
+  "resolvedFindings": [
+    {
+      "id": "codec-reservation",
+      "detail": "ETC1S on ASTC-only capabilities falls back to RGBA. Current codec-specific reservation covers the recorded actual decoder bytes."
+    },
+    {
+      "id": "test-main-profile-injection",
+      "detail": "Actual main fixture injects real capability/profile policy with an explicit navigator; insufficient capability and bounded manual retry are covered."
+    }
+  ],
+  "pendingFindings": [],
+  "resourceIndex": {
+    "revision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+    "missingSelectedResources": []
+  },
+  "limitations": [
+    "No browser automation, visual review, GPU upload, device FPS/temperature or whole-scene GPU memory measurements were performed.",
+    "Resource-index packaging is checked against current disk data; source hashes identify the reviewed state."
+  ],
+  "status": "passed"
+}

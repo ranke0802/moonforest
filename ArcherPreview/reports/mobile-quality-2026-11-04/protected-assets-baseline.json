@@ -1,0 +1,1307 @@
+{
+  "schemaVersion": 1,
+  "baseCommit": "5c65642fddca6472af614b4a8f12829d744cb37e",
+  "method": "Git show for original manifests/raw boss sources; current content-addressed graph read and filename SHA-256 verification. Canonical hashes include every original JSON field. Only new assets[id].mobileHighTextures on nonprotected environment entries may be stripped for comparison. Player manifests are outside this audit.",
+  "allowedAddition": "assets[nonprotectedId].mobileHighTextures only",
+  "manifests": [
+    {
+      "path": "ArcherPreview/public/assets/elena.json",
+      "kind": "boss",
+      "sourceBytesSha256": "5d24f970341317845680f5f453274864d47ce11878121a9372fc5f3ce93092b2",
+      "originalFieldsSha256": "0ad1b7e51ba7a5f79b90eed15608ce36d877dafe04ef4fa48f0dae96b0729a36",
+      "assetCount": null
+    },
+    {
+      "path": "ArcherPreview/public/assets/environment.json",
+      "kind": "environment",
+      "sourceBytesSha256": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "originalFieldsSha256": "97c7bf854dd5d4c466c73473acae2fa5bb2dced9cc60142422d1ce86113f5ec3",
+      "assetCount": 5
+    },
+    {
+      "path": "ArcherPreview/public/assets/great-plains.json",
+      "kind": "environment",
+      "sourceBytesSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "originalFieldsSha256": "47ae2b16f210a1ded0023228729cfce706b84bbdb446acfd5f5a29420bd0c7a2",
+      "assetCount": 20
+    },
+    {
+      "path": "ArcherPreview/public/assets/guardian-bear.json",
+      "kind": "boss",
+      "sourceBytesSha256": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "originalFieldsSha256": "2d5eac59bce453f8959b5f9b4b97dd14449a7b1fd1dcc6af03fd2b122dea1187",
+      "assetCount": null
+    },
+    {
+      "path": "ArcherPreview/public/assets/hooded-goblin.json",
+      "kind": "boss",
+      "sourceBytesSha256": "05ebfad53646745f493fdcc4d3ceb6db68b2f7db0d7b484effe0f478898ef343",
+      "originalFieldsSha256": "1938f69f78eda03ae16eb9929c3e50621f0cf0110dac97f7299bf301273c30ac",
+      "assetCount": null
+    },
+    {
+      "path": "ArcherPreview/public/assets/monster-forest.json",
+      "kind": "environment",
+      "sourceBytesSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "originalFieldsSha256": "c51610e632782f314a834705caab27fea698bdb4bbf89c0d1a6eedd4241002b5",
+      "assetCount": 10
+    },
+    {
+      "path": "ArcherPreview/public/assets/mourning-elena.json",
+      "kind": "boss",
+      "sourceBytesSha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "originalFieldsSha256": "50cc2a6679e7b489a25c6eed061044f74c7291df4607af77251c62bee14c3ada",
+      "assetCount": null
+    },
+    {
+      "path": "ArcherPreview/public/assets/quest-props.json",
+      "kind": "environment",
+      "sourceBytesSha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "originalFieldsSha256": "dcc838c0aabfec40045d9a0c5675a9510dd7fde87b7945bef2327f4739f86b83",
+      "assetCount": 12
+    },
+    {
+      "path": "ArcherPreview/public/assets/village-plains-outskirts.json",
+      "kind": "environment",
+      "sourceBytesSha256": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "originalFieldsSha256": "3f026a55c76a2f3d42518d15928013800fffc149536aae0625b21de25f7baed8",
+      "assetCount": 8
+    },
+    {
+      "path": "ArcherPreview/public/assets/village.json",
+      "kind": "environment",
+      "sourceBytesSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "originalFieldsSha256": "1ffa5eedf2e25d50114b0e6e77a68132309eb0dc39e7af23cc9ba9da14ef06a8",
+      "assetCount": 25
+    },
+    {
+      "path": "ArcherPreview/public/assets/witch-cave.json",
+      "kind": "environment",
+      "sourceBytesSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "originalFieldsSha256": "032bfe886590d776be8919d883fd016a8e5e48d39ae02dd0a1ff37f69dd110a0",
+      "assetCount": 29
+    }
+  ],
+  "protectedAssets": [
+    {
+      "manifest": "ArcherPreview/public/assets/elena.json",
+      "id": "elena",
+      "reason": "all-boss-fields-and-model-graph",
+      "definitionSha256": "0ad1b7e51ba7a5f79b90eed15608ce36d877dafe04ef4fa48f0dae96b0729a36",
+      "graphSha256": "1e0887c5d5a64124519e97e8986478c65bd7587ecbece1175c2598ce356edb6f",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/31b50633725fccf74a1146f354fdd1b3aff70fd8d3c258df6e94d04815054f95.bin",
+        "ArcherPreview/public/assets/content/448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+        "ArcherPreview/public/assets/content/9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a.ktx2"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/great-plains.json",
+      "id": "village-approach",
+      "reason": "village-approach-facade",
+      "definitionSha256": "2a66e7bf9c7600690e30e31c561fdb45a4ed63a9c75a0768d9ad767d4d576d83",
+      "graphSha256": "a5ddae8c71d7d515c54b2a314ea7f6b88101cd21661121278f7a6795461bd124",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/00cb0803a3122f6508d5bc1da8be0677737396000eade8d17bf6021bca5a66ae.ktx2",
+        "ArcherPreview/public/assets/content/250d59278665b898d926dcdbc60207ca5515b79524f69c7d119832a4cada3a17.ktx2",
+        "ArcherPreview/public/assets/content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+        "ArcherPreview/public/assets/content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
+        "ArcherPreview/public/assets/content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
+        "ArcherPreview/public/assets/content/6b6bbb88a4393f5fa6bba9148ca86dac75bec7b22ee142bedc4f9dd34642e010.ktx2",
+        "ArcherPreview/public/assets/content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
+        "ArcherPreview/public/assets/content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
+        "ArcherPreview/public/assets/content/a4dda588b82d032545cc601aac57a156a59f4d89e194fab6912a8774f6200453.ktx2",
+        "ArcherPreview/public/assets/content/b70e16fe81b0e2bcc4d9466addda535d10dda58e9462aef506380ef81f29878f.ktx2",
+        "ArcherPreview/public/assets/content/b7746d2ba9c7703f95005ae5910cc191c98907906bb63b10b9471b238e7449aa.ktx2",
+        "ArcherPreview/public/assets/content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
+        "ArcherPreview/public/assets/content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
+        "ArcherPreview/public/assets/content/dfbf522e3a086e05986d4403b45c9b87696401f7d0060a576cda107fabb2ea4a.ktx2",
+        "ArcherPreview/public/assets/content/e7049e71324e12deba9f137f22be54245804eda8be3cfc06946eeebc0f286681.ktx2",
+        "ArcherPreview/public/assets/content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
+        "ArcherPreview/public/assets/content/f4f17a2369d8f4b6aab4395f5bdc56e7eea4b48ca638f1dd949e071a43719d89.ktx2",
+        "ArcherPreview/public/assets/content/fa785e346e675f70095ed6f0c78a03b0a9c13d5cc40b106293764a66d629e08a.ktx2"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/guardian-bear.json",
+      "id": "guardian-bear",
+      "reason": "all-boss-fields-and-model-graph",
+      "definitionSha256": "2d5eac59bce453f8959b5f9b4b97dd14449a7b1fd1dcc6af03fd2b122dea1187",
+      "graphSha256": "2407186b84dfe4875fd9598ec82e6c44717c6898fda9381f61fe3b14d4bcfd5f",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
+        "ArcherPreview/public/assets/content/01ff56fc2fa4ccff836c2dec520b1d86e00b2ba967c5a11c4862134be3e70670.bin",
+        "ArcherPreview/public/assets/content/0dcb5c9ce48890bb0742f4eb93785ddce804de100f52ba86a8e84afb5cbe5071.bin",
+        "ArcherPreview/public/assets/content/175d89150911080f4b0f96c29e546a1f97d00b73b56ede39c3ce134c13f12478.bin",
+        "ArcherPreview/public/assets/content/1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png",
+        "ArcherPreview/public/assets/content/48edbc6042b567063557a199c61e611d6cbf9af751bdf0f1c63a9da924237245.png",
+        "ArcherPreview/public/assets/content/628e7d9446694d4cccee824fe1fd926d82a67bc84c75c7eabea286d73f482ec3.bin",
+        "ArcherPreview/public/assets/content/6b987d8af7d4a52d6b2eaafcb97768a8defe6a6acdc9a2fca99a98fd47306e7c.png",
+        "ArcherPreview/public/assets/content/6c4486b3152f4387f424e40f08da253fce8d0e15fc3e6635511333f05478bbad.bin",
+        "ArcherPreview/public/assets/content/7a511dfa5494a28cde7c88ee13c50a03ab3123e5b1598afc27d994f07e09fb0e.bin",
+        "ArcherPreview/public/assets/content/83024c43e21c1042014966f4c46ddff1fddcd1953efa942015168d1ea14ee8f4.bin",
+        "ArcherPreview/public/assets/content/894a611b8b9c6bde2d0439770624e65e5d88046a55f5c1c9b608a805145aa5c8.bin",
+        "ArcherPreview/public/assets/content/921e7c550ec9d328979f19d62b5e594d267cf8cbe488a90df77828a8a030400f.bin",
+        "ArcherPreview/public/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+        "ArcherPreview/public/assets/content/a44a00965373e64d4a5a30656ced9e2c3e00a90462cf2335b35f96b42b8bc2b6.bin",
+        "ArcherPreview/public/assets/content/a536e909e31049e831c3e27c7b9abcb82bfcccd5bd5606a6b348f9a60ea87129.bin",
+        "ArcherPreview/public/assets/content/b5d9ea12fed09478c9b64d648aee87d12795d3413525666fb2dc697a7b4323af.bin",
+        "ArcherPreview/public/assets/content/bbe1eab856aa63c54709cf09a36aa024b1835099e8f0524d9f3ce8a34f98058d.bin",
+        "ArcherPreview/public/assets/content/bf614e8b98e2fa4b90cd0b2720a3846b8b3232e805b8a5aaab1b6582e176ea34.bin",
+        "ArcherPreview/public/assets/content/c008eb05c40bcea18fa0fa2dcd8dbab67751d22ef97729b34d56ce3540dd9f12.bin",
+        "ArcherPreview/public/assets/content/c695c9f3804401145a03f4ee849980a0eabd59c22c88f280c17221b75930821f.bin",
+        "ArcherPreview/public/assets/content/c89b15c0c431a572927948d68c80cde0f16318ce0dee0d10e400c161e64c5104.bin",
+        "ArcherPreview/public/assets/content/df11f94fa9fdfa75736372f269e7c23f90ac5b153c8b3fd1d9433e03df88da49.bin",
+        "ArcherPreview/public/assets/content/e823af9ef5840e07f9f9a16831132b3a73ec6bdf280c99744766b9605b6faa4a.bin",
+        "ArcherPreview/public/assets/content/ee35dbc8e05634d5db33822a7e1c0932408c2dfcf03a19eae0ed5b83b0e09f2f.bin",
+        "ArcherPreview/public/assets/content/ee6645490d991330f3a841c6a809b9f5635f9b28a2c3e4df1696f56c08512d5b.bin"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/hooded-goblin.json",
+      "id": "hooded-goblin",
+      "reason": "all-boss-fields-and-model-graph",
+      "definitionSha256": "1938f69f78eda03ae16eb9929c3e50621f0cf0110dac97f7299bf301273c30ac",
+      "graphSha256": "cdef9423e794826e44b4ccda928570c88fa94f4c7ad024bdf188e1e075d77bd3",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/02e3009824e84a528c9333a95d7f7d8b56d811a9bf004a4d1e89313a31242f96.bin",
+        "ArcherPreview/public/assets/content/072d306c5f3b500c79a1be850528f43dffcaba32978715ee77bfd006c908033e.bin",
+        "ArcherPreview/public/assets/content/33c41a5732fbe13e5573340309a2f258d671e376152568f17ebe13e8e52c2edd.png",
+        "ArcherPreview/public/assets/content/4249732ab18a108b19943950a41343b738a2de53b315c0551f368bf100715f13.bin",
+        "ArcherPreview/public/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+        "ArcherPreview/public/assets/content/74d8b2804d49fa56771542789640702b24aca6d28feedc10d5b44a334cb78afd.bin",
+        "ArcherPreview/public/assets/content/8c59435c8625fe6d03c93de01c1daa31dee228878950ef0d6411c3ed355b0546.bin",
+        "ArcherPreview/public/assets/content/8db2c13f107766857fd9d2fbed6cb8ef01baa6a30b43feaa3056258963c00c4f.bin",
+        "ArcherPreview/public/assets/content/998c74285145a495d0a52361df0179ebbedab0c862e42fea6f342e7da314f497.bin",
+        "ArcherPreview/public/assets/content/a46cb1827b50c45b70b8f36bb256fa4b0a60bea008142c790252e33dd1110546.bin",
+        "ArcherPreview/public/assets/content/c21d8583f8f3125489a9534da5e1821e30044c678e7536317aaf92284fd41c93.bin",
+        "ArcherPreview/public/assets/content/c9d27212a5638a6a365879944893ffe360aa755bf07ad22080fe93d8c57a5690.bin",
+        "ArcherPreview/public/assets/content/cd992d750368b4521536ad83de058763cf3c223f114f8ed766f27bfc4cc5c922.bin",
+        "ArcherPreview/public/assets/content/d25537cd4b2c0360a9305944cc48c05f21fee8fb44755b6fe59712cd3d7a95c0.png",
+        "ArcherPreview/public/assets/content/d76007873bc330cfc94985fcd60a5e92c9e3659216e5620fa5518195e25c8d6b.bin",
+        "ArcherPreview/public/assets/content/faba397680ccd33667bd9b0a6fdb0414a6ef0640bfb2ed8d468dd1700c20ba7d.bin",
+        "ArcherPreview/public/assets/content/fb48ceac6843d00163a9b6d6b8177e839126f83aa133898fbfc74ba5feaf4509.bin"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/mourning-elena.json",
+      "id": "mourning-elena",
+      "reason": "all-boss-fields-and-model-graph",
+      "definitionSha256": "50cc2a6679e7b489a25c6eed061044f74c7291df4607af77251c62bee14c3ada",
+      "graphSha256": "77a8f086644530a1c42fc04cf6e5ad500a674280e4a38c5cd9e0c4662feff504",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+        "ArcherPreview/public/assets/content/b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
+        "ArcherPreview/public/assets/content/e1f363e87344cf26f53f6a8b6ae448b9a70b810798c259b632c9a46ad2146793.bin"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/village.json",
+      "id": "house-01-cottage",
+      "reason": "category-building",
+      "definitionSha256": "d03e85177cb480ebc9205138c1201d3123a3991cf9dd468152cb1eee23470468",
+      "graphSha256": "6b928a1d7786f482a57281e665c0e9e9e184fe9a938c56a3c123b6aa4c644b6c",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/032f4bd8a2b07af9392a50fcb1fb26325d419afcd1e01b78ba0e733a09540350.bin",
+        "ArcherPreview/public/assets/content/15334b9ae0090dee2c9bdd9f45844e9e25201793c79afd27a7c6a7ccf0ad9629.gltf",
+        "ArcherPreview/public/assets/content/1e07ead68061bb1be6f00ed49f2a1a41a2d0e33020d3f9bec164242b2338e0bf.ktx2",
+        "ArcherPreview/public/assets/content/294cc78dff39106c64c1a5981427d0d63374ee15ec540773489158e13ad56191.bin",
+        "ArcherPreview/public/assets/content/29c58722102c2edeb1fce7ac7b3e2df52ca05ae13579860a3aec3d9f5c003fb7.gltf",
+        "ArcherPreview/public/assets/content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2",
+        "ArcherPreview/public/assets/content/7babd4ebc09033db0ab0fd9a6701fbb5ea8c0f89bb5a19895249c567c416dba7.bin",
+        "ArcherPreview/public/assets/content/7e12637435ea79e25acc502c2ef8a0edebf6f060f789de617c865f64e1d58424.gltf",
+        "ArcherPreview/public/assets/content/829c4b384c97cfc6aa3472eae921602fcea65eca426bb5c23840393149ab1d5c.bin",
+        "ArcherPreview/public/assets/content/894cedb6b3010ece65eaee2f806ced2207beb1ce5c3bfc6fa903a84a3805676c.bin",
+        "ArcherPreview/public/assets/content/8a4013458e6aabb65327bf0731c3e621679f2a46e0fa1990f605636ea3fbd2b0.gltf",
+        "ArcherPreview/public/assets/content/a88505eb86f7ab4f673565f1aa5b2d5da7b231c98b40bb6971cc6d21114b22cb.bin",
+        "ArcherPreview/public/assets/content/abc99f733a16d0a7084a502fa20f1973a03744660a3309aacd20efff0ae7fece.bin",
+        "ArcherPreview/public/assets/content/b3200a3792fe28c1c2fe6dac2feb5bc4e2db30ab680c4d7182ea8a0cb84c9f9c.ktx2",
+        "ArcherPreview/public/assets/content/b65e6a7cecd251fda9120b3c97b6fd540d739c7ddd4101e4de9317064caa86d9.bin",
+        "ArcherPreview/public/assets/content/b86c6a46a9259512a8e8c7e89861983df4e3090230cd376f1fb0f88d3166f4f6.bin",
+        "ArcherPreview/public/assets/content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/village.json",
+      "id": "house-02-tall-home",
+      "reason": "category-building",
+      "definitionSha256": "b84996fe5daae964a3d7233119efdce9c5c039580c77c8b62bd49cb21ba8ff31",
+      "graphSha256": "e21a880659a502cb9297a34235f04664ca50d35e57c1f84a41a8cf47c60b9b5a",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/126363afd4070fbdd0912a3ff3820f524d4ac126f78bf8a2a8fc9eda4556e81d.gltf",
+        "ArcherPreview/public/assets/content/24c0c198d5aa691745482580e6062af240d3541fc3bfb10bfb2433bc57ef125b.ktx2",
+        "ArcherPreview/public/assets/content/3ae26a1b1af38f173b60011ed2517384ab764a7438440815ba0601dc417f8d47.bin",
+        "ArcherPreview/public/assets/content/3cd51a5ed3ad72fe69f2faa9779097fdb8586c645699f42e18265c0d1abc3217.gltf",
+        "ArcherPreview/public/assets/content/3e1d6eb7d28a9f6cc5664ad98de08d00eaee84e3c662c4e8ea7c98d8baa653db.bin",
+        "ArcherPreview/public/assets/content/3f90472315ae25260b53ae13a8f06f4c182081571ce7368988ce8817c369181b.ktx2",
+        "ArcherPreview/public/assets/content/77d2de2a62ce26e615be60a984d91e0631149a18fa5443e04d31fb7e5ce7f096.bin",
+        "ArcherPreview/public/assets/content/87e91c4a3c07fd89e7716e8a9fd035ad253a2b179cf07ceafab65d860f1b1052.bin",
+        "ArcherPreview/public/assets/content/8a995f550a3f93e171bf38dc04779227b40eb09488261d06fb1dbd0e686ff0f5.bin",
+        "ArcherPreview/public/assets/content/92ab0f08d1b15d2440197122c8c3c6b0d5c8ad3a68d8c0eab6228374faa00c3a.ktx2",
+        "ArcherPreview/public/assets/content/988055f7204e4c05e7e7865ab1e08f859098dcfccb768cf45f3b125827d8adb1.bin",
+        "ArcherPreview/public/assets/content/ab919d182eaeda4f0a56f8487b634dd442c43f4f774adf626cb6d478c9114d94.bin",
+        "ArcherPreview/public/assets/content/b1f6a16f5cb527f2a07918fc4a36ee0b461945f7de6a4703a436b0cc1548c2b5.bin",
+        "ArcherPreview/public/assets/content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
+        "ArcherPreview/public/assets/content/d6e3620e05b4f5094f4c9b5c9d0b8d650a1cb0014a692283445cda04a7efb20f.gltf",
+        "ArcherPreview/public/assets/content/d9660fef10fb8d19ce9cbdab01fda609b8eb4e18175edc5e71b00a691870129d.bin",
+        "ArcherPreview/public/assets/content/e18b68a7bcdda41235d273d65b45b3b19f7f3da47d19f13c0bd23423d8c4f885.gltf"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/village.json",
+      "id": "house-03-workshop",
+      "reason": "category-building",
+      "definitionSha256": "c470816070e9190503592c9e6836419a640f9b60ef77698b79ca68d8a934bc04",
+      "graphSha256": "21bf9ce303c8ec6fe1ac870ffa4af89fdb8ae003f5556ae409fea4d5dd815eb8",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/104d44f4a985d2195bdea7753bf8532e5ee799c8a766ac419d546f9dd4ef33c7.gltf",
+        "ArcherPreview/public/assets/content/39ed02f527f54a67485a45ca79c7d217c2dd4b88a7bb822feb2aee9b7d9241c3.bin",
+        "ArcherPreview/public/assets/content/3eb1c28710f8e3a74240932ae2120807317e2e168566ba118b4eda6b5118f3ca.bin",
+        "ArcherPreview/public/assets/content/42571c967da699c6c59d35e389c271d5f169072eac4894537f3dfb6110f5f575.bin",
+        "ArcherPreview/public/assets/content/64319d96d51141f0b45e5e4c94c06323854fb4352052e9218f337c6ec58672c7.ktx2",
+        "ArcherPreview/public/assets/content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
+        "ArcherPreview/public/assets/content/766161b96b92cfa96247d8523e658c558c7d07958f1ddf947e11fd936e0a78dc.bin",
+        "ArcherPreview/public/assets/content/8761ab113044763f21c1a03ed3fc07f5a45600d28d4081a873654841cf9fd9dd.gltf",
+        "ArcherPreview/public/assets/content/8ac74de425ed0a2dfc9c71049e51900bef69dd58d00139fddfd959d5f69dc503.gltf",
+        "ArcherPreview/public/assets/content/93c0b3ed76b29051602d60f8ee10deb825455b9b1233f77990954dc0d0a55b1d.bin",
+        "ArcherPreview/public/assets/content/93e946dbe59b8df3d7da306abae8acc09129892a9dc964a7b3860492a0128bbb.bin",
+        "ArcherPreview/public/assets/content/975d2abbced19aa882da18ee260ab864a1919cc37b6d8f61247627bdbad8d89f.bin",
+        "ArcherPreview/public/assets/content/9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54.ktx2",
+        "ArcherPreview/public/assets/content/b90ca48437a044c682387dfaed4cb9e07144bb2c993c4763fb31102ccfb06843.gltf",
+        "ArcherPreview/public/assets/content/c786b4b7a1b2de170463d22c4105e696570638381229e5fe24cae4d7a684df41.ktx2",
+        "ArcherPreview/public/assets/content/e52ce46ddd459643a363c92867ab10a5c667875953f9082c46595f8a3c7a1307.bin",
+        "ArcherPreview/public/assets/content/e73e3b5a9fb86f308dd7ad16632ba143d39db9c6e7c570d5c7723381eb8380e9.bin"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/village.json",
+      "id": "house-04-forest-hut",
+      "reason": "category-building",
+      "definitionSha256": "0a8d1026385dfc5dd774c56066019e49a92adc27e2023dbd418b678411513586",
+      "graphSha256": "7d514e35877a50ca12d090717a170d833dc70a2f64bf232a36b0a204d536f2c1",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/085c3bdfc27852766833aa596af604a5bcf4e252fdfd6e2c858a8c6f970bd08a.bin",
+        "ArcherPreview/public/assets/content/09c2d7ffac59a285d3499ffa36253749e13ad7bd8480b6022e8f490a5800a27b.gltf",
+        "ArcherPreview/public/assets/content/1ee7416110b495e5ec08436f5b3f45f52a5431fd2f267685e151e3fbbe5ec8b6.bin",
+        "ArcherPreview/public/assets/content/3315c2d4df2d0bb7fd92aa0e8e60de12307ca21b2b76eb5ed3dbf7e8c0a4a72d.bin",
+        "ArcherPreview/public/assets/content/5c4a3935cb6e4791643afa0da27e8f38f3998d7f71ae615ce51a89c35de0a420.bin",
+        "ArcherPreview/public/assets/content/6504753b92f30a05e067d35c9013d1784f50f02ce964b8ac56e47c8f80161a82.gltf",
+        "ArcherPreview/public/assets/content/6bae6248a2eb5c81a7d3ada30c2933a74c336d5c22818a3f6d39aedc269d756e.ktx2",
+        "ArcherPreview/public/assets/content/6e85d46beeafd9080c391c9e89c926286a596c9a0cd41007c3d78613ccfa58bd.bin",
+        "ArcherPreview/public/assets/content/8083ea0c78a069b838cfba0e98462605974aff320f58e9c5d43a38ffa010d757.bin",
+        "ArcherPreview/public/assets/content/8e280a00e72613a71eb6a3539650f46cc60013cbc662ffe026eb8857cfaafaa5.ktx2",
+        "ArcherPreview/public/assets/content/983266251930b73eb0eac25db007c1351f37a3dcbfa49455c625d54ccb3ced41.bin",
+        "ArcherPreview/public/assets/content/98453ad9e937d2ac7c3fb28c9e56e3a0f83b9bab05a2561da5e610d5ac8301b7.bin",
+        "ArcherPreview/public/assets/content/ad560f4b18fa364201a4e0bb87ee4aae587fe22f111c4a0dc950209f0729a608.gltf",
+        "ArcherPreview/public/assets/content/afd1cade2c6865f58eca8eb2dd36f93328c77d7ed932fe15b080bafb90078c52.gltf",
+        "ArcherPreview/public/assets/content/d243d00324339440bd312d13b8e091f5a8de89c7697feee13c0d665a43c4f26b.bin",
+        "ArcherPreview/public/assets/content/d72f4b2316e7771a3499b8a8b4ce5ce2647b64b33e599dbd8edfc9ee181dec27.ktx2",
+        "ArcherPreview/public/assets/content/dfbf522e3a086e05986d4403b45c9b87696401f7d0060a576cda107fabb2ea4a.ktx2"
+      ]
+    },
+    {
+      "manifest": "ArcherPreview/public/assets/village.json",
+      "id": "chapel",
+      "reason": "category-building",
+      "definitionSha256": "030a02167686a7c841a4a7da080175c29a1141286decc269c3f6013cf6397979",
+      "graphSha256": "48db83051533c65be42578d60b2e694e473336688c70539a6bf3a501c99ec342",
+      "contentPaths": [
+        "ArcherPreview/public/assets/content/00cb0803a3122f6508d5bc1da8be0677737396000eade8d17bf6021bca5a66ae.ktx2",
+        "ArcherPreview/public/assets/content/0e57e26dfaf49538f04475ea4098e6043714c4e147d7396d50ead1c6927f7c9e.bin",
+        "ArcherPreview/public/assets/content/29c6e7cf088e1065cf31d3236e918289905d6e921b10d40390c9d5eb1412fa7f.bin",
+        "ArcherPreview/public/assets/content/2a1ee101aca0c41f0909e41b088c7156c4ad181eeb39e58ef95a5dde8af7339e.gltf",
+        "ArcherPreview/public/assets/content/5f30a053d3fa3f6f6fc381614ba9d31887da26195b3cebe1b44b7088b07bc106.gltf",
+        "ArcherPreview/public/assets/content/6fa1878c08381ab89df96aed278548ceb4f65d04681d9a3aec082892ddb674a8.bin",
+        "ArcherPreview/public/assets/content/734668a7fe9d9a405628ea435d068b7d07e939ad53dc9793d0884e88a66464c9.ktx2",
+        "ArcherPreview/public/assets/content/7778c3dcb43c8cb96d2c3c348035eea0f054d5522eec2d4da70ce2551fa65d50.ktx2",
+        "ArcherPreview/public/assets/content/8936ebe7b044574b4e6bc5b28546e4d9084412cfb6222117b00891b8ca090161.bin",
+        "ArcherPreview/public/assets/content/8b9e5edbedfed237ceb8baefc36093e182dc38c3860cb13e05fa44e5450e06da.bin",
+        "ArcherPreview/public/assets/content/8cce2db435c1db80b17f703fadb2ed04d687b68de18ba534d1e7e830becf1b75.bin",
+        "ArcherPreview/public/assets/content/a1d943c083af8c339be936287f8250c26977f324a97fd87280bfa70959a758f7.gltf",
+        "ArcherPreview/public/assets/content/ae807fd9df1d2a7385d586a0e8a28404b8a668b39d35194b6946fdf43cd4bcb6.bin",
+        "ArcherPreview/public/assets/content/d660d14f095a88e75c75eb9ed3ad435aaa886ba869b2d5e067598ac5e3097e6c.ktx2",
+        "ArcherPreview/public/assets/content/de0dac4142ea3a58fd35b17dcc6932f581ccc5eaeb907c47cd0b798719b959ab.bin",
+        "ArcherPreview/public/assets/content/eae0605a65453db52dea323a9a83afb6c0785c6284ea7f597684ea8746ea80d5.bin",
+        "ArcherPreview/public/assets/content/f04a3610c3fb32cb013febc024619225202b60f4bf265bafd48a72d74addc43a.gltf"
+      ]
+    }
+  ],
+  "contentGraphSha256": "39e31d51badfe0f6af3a9ead82951a1c991254ca608c41253f26e98e00eb2207",
+  "contentFiles": [
+    {
+      "path": "ArcherPreview/public/assets/content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
+      "sha256": "0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399",
+      "bytes": 176624,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/00cb0803a3122f6508d5bc1da8be0677737396000eade8d17bf6021bca5a66ae.ktx2",
+      "sha256": "00cb0803a3122f6508d5bc1da8be0677737396000eade8d17bf6021bca5a66ae",
+      "bytes": 102475,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/01ff56fc2fa4ccff836c2dec520b1d86e00b2ba967c5a11c4862134be3e70670.bin",
+      "sha256": "01ff56fc2fa4ccff836c2dec520b1d86e00b2ba967c5a11c4862134be3e70670",
+      "bytes": 116000,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/02e3009824e84a528c9333a95d7f7d8b56d811a9bf004a4d1e89313a31242f96.bin",
+      "sha256": "02e3009824e84a528c9333a95d7f7d8b56d811a9bf004a4d1e89313a31242f96",
+      "bytes": 46004,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/032f4bd8a2b07af9392a50fcb1fb26325d419afcd1e01b78ba0e733a09540350.bin",
+      "sha256": "032f4bd8a2b07af9392a50fcb1fb26325d419afcd1e01b78ba0e733a09540350",
+      "bytes": 7501,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/072d306c5f3b500c79a1be850528f43dffcaba32978715ee77bfd006c908033e.bin",
+      "sha256": "072d306c5f3b500c79a1be850528f43dffcaba32978715ee77bfd006c908033e",
+      "bytes": 111300,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/085c3bdfc27852766833aa596af604a5bcf4e252fdfd6e2c858a8c6f970bd08a.bin",
+      "sha256": "085c3bdfc27852766833aa596af604a5bcf4e252fdfd6e2c858a8c6f970bd08a",
+      "bytes": 59502,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/09c2d7ffac59a285d3499ffa36253749e13ad7bd8480b6022e8f490a5800a27b.gltf",
+      "sha256": "09c2d7ffac59a285d3499ffa36253749e13ad7bd8480b6022e8f490a5800a27b",
+      "bytes": 2755,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/0dcb5c9ce48890bb0742f4eb93785ddce804de100f52ba86a8e84afb5cbe5071.bin",
+      "sha256": "0dcb5c9ce48890bb0742f4eb93785ddce804de100f52ba86a8e84afb5cbe5071",
+      "bytes": 278880,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/0e57e26dfaf49538f04475ea4098e6043714c4e147d7396d50ead1c6927f7c9e.bin",
+      "sha256": "0e57e26dfaf49538f04475ea4098e6043714c4e147d7396d50ead1c6927f7c9e",
+      "bytes": 34266,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/104d44f4a985d2195bdea7753bf8532e5ee799c8a766ac419d546f9dd4ef33c7.gltf",
+      "sha256": "104d44f4a985d2195bdea7753bf8532e5ee799c8a766ac419d546f9dd4ef33c7",
+      "bytes": 2751,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/126363afd4070fbdd0912a3ff3820f524d4ac126f78bf8a2a8fc9eda4556e81d.gltf",
+      "sha256": "126363afd4070fbdd0912a3ff3820f524d4ac126f78bf8a2a8fc9eda4556e81d",
+      "bytes": 2771,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/15334b9ae0090dee2c9bdd9f45844e9e25201793c79afd27a7c6a7ccf0ad9629.gltf",
+      "sha256": "15334b9ae0090dee2c9bdd9f45844e9e25201793c79afd27a7c6a7ccf0ad9629",
+      "bytes": 2323,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/175d89150911080f4b0f96c29e546a1f97d00b73b56ede39c3ce134c13f12478.bin",
+      "sha256": "175d89150911080f4b0f96c29e546a1f97d00b73b56ede39c3ce134c13f12478",
+      "bytes": 46480,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png",
+      "sha256": "1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e",
+      "bytes": 5871045,
+      "type": "png"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/1e07ead68061bb1be6f00ed49f2a1a41a2d0e33020d3f9bec164242b2338e0bf.ktx2",
+      "sha256": "1e07ead68061bb1be6f00ed49f2a1a41a2d0e33020d3f9bec164242b2338e0bf",
+      "bytes": 891885,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/1ee7416110b495e5ec08436f5b3f45f52a5431fd2f267685e151e3fbbe5ec8b6.bin",
+      "sha256": "1ee7416110b495e5ec08436f5b3f45f52a5431fd2f267685e151e3fbbe5ec8b6",
+      "bytes": 59287,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/24c0c198d5aa691745482580e6062af240d3541fc3bfb10bfb2433bc57ef125b.ktx2",
+      "sha256": "24c0c198d5aa691745482580e6062af240d3541fc3bfb10bfb2433bc57ef125b",
+      "bytes": 2702936,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/250d59278665b898d926dcdbc60207ca5515b79524f69c7d119832a4cada3a17.ktx2",
+      "sha256": "250d59278665b898d926dcdbc60207ca5515b79524f69c7d119832a4cada3a17",
+      "bytes": 28020,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/294cc78dff39106c64c1a5981427d0d63374ee15ec540773489158e13ad56191.bin",
+      "sha256": "294cc78dff39106c64c1a5981427d0d63374ee15ec540773489158e13ad56191",
+      "bytes": 23346,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/29c58722102c2edeb1fce7ac7b3e2df52ca05ae13579860a3aec3d9f5c003fb7.gltf",
+      "sha256": "29c58722102c2edeb1fce7ac7b3e2df52ca05ae13579860a3aec3d9f5c003fb7",
+      "bytes": 2762,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/29c6e7cf088e1065cf31d3236e918289905d6e921b10d40390c9d5eb1412fa7f.bin",
+      "sha256": "29c6e7cf088e1065cf31d3236e918289905d6e921b10d40390c9d5eb1412fa7f",
+      "bytes": 15410,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/2a1ee101aca0c41f0909e41b088c7156c4ad181eeb39e58ef95a5dde8af7339e.gltf",
+      "sha256": "2a1ee101aca0c41f0909e41b088c7156c4ad181eeb39e58ef95a5dde8af7339e",
+      "bytes": 2743,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/31b50633725fccf74a1146f354fdd1b3aff70fd8d3c258df6e94d04815054f95.bin",
+      "sha256": "31b50633725fccf74a1146f354fdd1b3aff70fd8d3c258df6e94d04815054f95",
+      "bytes": 4270628,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3315c2d4df2d0bb7fd92aa0e8e60de12307ca21b2b76eb5ed3dbf7e8c0a4a72d.bin",
+      "sha256": "3315c2d4df2d0bb7fd92aa0e8e60de12307ca21b2b76eb5ed3dbf7e8c0a4a72d",
+      "bytes": 33500,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/33c41a5732fbe13e5573340309a2f258d671e376152568f17ebe13e8e52c2edd.png",
+      "sha256": "33c41a5732fbe13e5573340309a2f258d671e376152568f17ebe13e8e52c2edd",
+      "bytes": 7524925,
+      "type": "png"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/39ed02f527f54a67485a45ca79c7d217c2dd4b88a7bb822feb2aee9b7d9241c3.bin",
+      "sha256": "39ed02f527f54a67485a45ca79c7d217c2dd4b88a7bb822feb2aee9b7d9241c3",
+      "bytes": 43516,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3ae26a1b1af38f173b60011ed2517384ab764a7438440815ba0601dc417f8d47.bin",
+      "sha256": "3ae26a1b1af38f173b60011ed2517384ab764a7438440815ba0601dc417f8d47",
+      "bytes": 32970,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3cd51a5ed3ad72fe69f2faa9779097fdb8586c645699f42e18265c0d1abc3217.gltf",
+      "sha256": "3cd51a5ed3ad72fe69f2faa9779097fdb8586c645699f42e18265c0d1abc3217",
+      "bytes": 2771,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3e1d6eb7d28a9f6cc5664ad98de08d00eaee84e3c662c4e8ea7c98d8baa653db.bin",
+      "sha256": "3e1d6eb7d28a9f6cc5664ad98de08d00eaee84e3c662c4e8ea7c98d8baa653db",
+      "bytes": 9781,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3eb1c28710f8e3a74240932ae2120807317e2e168566ba118b4eda6b5118f3ca.bin",
+      "sha256": "3eb1c28710f8e3a74240932ae2120807317e2e168566ba118b4eda6b5118f3ca",
+      "bytes": 48956,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/3f90472315ae25260b53ae13a8f06f4c182081571ce7368988ce8817c369181b.ktx2",
+      "sha256": "3f90472315ae25260b53ae13a8f06f4c182081571ce7368988ce8817c369181b",
+      "bytes": 256671,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/4249732ab18a108b19943950a41343b738a2de53b315c0551f368bf100715f13.bin",
+      "sha256": "4249732ab18a108b19943950a41343b738a2de53b315c0551f368bf100715f13",
+      "bytes": 192920,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/42571c967da699c6c59d35e389c271d5f169072eac4894537f3dfb6110f5f575.bin",
+      "sha256": "42571c967da699c6c59d35e389c271d5f169072eac4894537f3dfb6110f5f575",
+      "bytes": 9860,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a.gltf",
+      "sha256": "441f3031c191ff5426478a7f37dd95e77b961f821a8ce6cd38b41a5ee4279c4a",
+      "bytes": 29274,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f.gltf",
+      "sha256": "448480b12cb204cc97a969b492a3303aedffb243d20169058b9ebdef1b79163f",
+      "bytes": 842752,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/48edbc6042b567063557a199c61e611d6cbf9af751bdf0f1c63a9da924237245.png",
+      "sha256": "48edbc6042b567063557a199c61e611d6cbf9af751bdf0f1c63a9da924237245",
+      "bytes": 8830267,
+      "type": "png"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+      "sha256": "5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff",
+      "bytes": 1124105,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/5c4a3935cb6e4791643afa0da27e8f38f3998d7f71ae615ce51a89c35de0a420.bin",
+      "sha256": "5c4a3935cb6e4791643afa0da27e8f38f3998d7f71ae615ce51a89c35de0a420",
+      "bytes": 8888,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/5f30a053d3fa3f6f6fc381614ba9d31887da26195b3cebe1b44b7088b07bc106.gltf",
+      "sha256": "5f30a053d3fa3f6f6fc381614ba9d31887da26195b3cebe1b44b7088b07bc106",
+      "bytes": 2287,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752.ktx2",
+      "sha256": "61ef18b2a657bd70b1c723e1de060e0a318929ce222a3b764786a2b49e2f0752",
+      "bytes": 11541902,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/628e7d9446694d4cccee824fe1fd926d82a67bc84c75c7eabea286d73f482ec3.bin",
+      "sha256": "628e7d9446694d4cccee824fe1fd926d82a67bc84c75c7eabea286d73f482ec3",
+      "bytes": 230076,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/64319d96d51141f0b45e5e4c94c06323854fb4352052e9218f337c6ec58672c7.ktx2",
+      "sha256": "64319d96d51141f0b45e5e4c94c06323854fb4352052e9218f337c6ec58672c7",
+      "bytes": 741689,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e.ktx2",
+      "sha256": "64b6cce02e19408bcd2e22a0b27c0ba4cc794bb25467bc1c80982925d92f3a8e",
+      "bytes": 88811,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6504753b92f30a05e067d35c9013d1784f50f02ce964b8ac56e47c8f80161a82.gltf",
+      "sha256": "6504753b92f30a05e067d35c9013d1784f50f02ce964b8ac56e47c8f80161a82",
+      "bytes": 2314,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012.bin",
+      "sha256": "6b295d9b4b3e528925db1e09c280e96c1a160dde256b8b51862ba1305ccfa012",
+      "bytes": 9123770,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6b6bbb88a4393f5fa6bba9148ca86dac75bec7b22ee142bedc4f9dd34642e010.ktx2",
+      "sha256": "6b6bbb88a4393f5fa6bba9148ca86dac75bec7b22ee142bedc4f9dd34642e010",
+      "bytes": 29408,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6b987d8af7d4a52d6b2eaafcb97768a8defe6a6acdc9a2fca99a98fd47306e7c.png",
+      "sha256": "6b987d8af7d4a52d6b2eaafcb97768a8defe6a6acdc9a2fca99a98fd47306e7c",
+      "bytes": 5709345,
+      "type": "png"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6bae6248a2eb5c81a7d3ada30c2933a74c336d5c22818a3f6d39aedc269d756e.ktx2",
+      "sha256": "6bae6248a2eb5c81a7d3ada30c2933a74c336d5c22818a3f6d39aedc269d756e",
+      "bytes": 2403566,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc.gltf",
+      "sha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+      "bytes": 309817,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6c4486b3152f4387f424e40f08da253fce8d0e15fc3e6635511333f05478bbad.bin",
+      "sha256": "6c4486b3152f4387f424e40f08da253fce8d0e15fc3e6635511333f05478bbad",
+      "bytes": 167328,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6e85d46beeafd9080c391c9e89c926286a596c9a0cd41007c3d78613ccfa58bd.bin",
+      "sha256": "6e85d46beeafd9080c391c9e89c926286a596c9a0cd41007c3d78613ccfa58bd",
+      "bytes": 53299,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/6fa1878c08381ab89df96aed278548ceb4f65d04681d9a3aec082892ddb674a8.bin",
+      "sha256": "6fa1878c08381ab89df96aed278548ceb4f65d04681d9a3aec082892ddb674a8",
+      "bytes": 26276,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/734668a7fe9d9a405628ea435d068b7d07e939ad53dc9793d0884e88a66464c9.ktx2",
+      "sha256": "734668a7fe9d9a405628ea435d068b7d07e939ad53dc9793d0884e88a66464c9",
+      "bytes": 270101,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/74d8b2804d49fa56771542789640702b24aca6d28feedc10d5b44a334cb78afd.bin",
+      "sha256": "74d8b2804d49fa56771542789640702b24aca6d28feedc10d5b44a334cb78afd",
+      "bytes": 93492,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2",
+      "sha256": "74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80",
+      "bytes": 87140,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/766161b96b92cfa96247d8523e658c558c7d07958f1ddf947e11fd936e0a78dc.bin",
+      "sha256": "766161b96b92cfa96247d8523e658c558c7d07958f1ddf947e11fd936e0a78dc",
+      "bytes": 23665,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/7778c3dcb43c8cb96d2c3c348035eea0f054d5522eec2d4da70ce2551fa65d50.ktx2",
+      "sha256": "7778c3dcb43c8cb96d2c3c348035eea0f054d5522eec2d4da70ce2551fa65d50",
+      "bytes": 852259,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/77d2de2a62ce26e615be60a984d91e0631149a18fa5443e04d31fb7e5ce7f096.bin",
+      "sha256": "77d2de2a62ce26e615be60a984d91e0631149a18fa5443e04d31fb7e5ce7f096",
+      "bytes": 164175,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/7a511dfa5494a28cde7c88ee13c50a03ab3123e5b1598afc27d994f07e09fb0e.bin",
+      "sha256": "7a511dfa5494a28cde7c88ee13c50a03ab3123e5b1598afc27d994f07e09fb0e",
+      "bytes": 118524,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/7babd4ebc09033db0ab0fd9a6701fbb5ea8c0f89bb5a19895249c567c416dba7.bin",
+      "sha256": "7babd4ebc09033db0ab0fd9a6701fbb5ea8c0f89bb5a19895249c567c416dba7",
+      "bytes": 24463,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/7e12637435ea79e25acc502c2ef8a0edebf6f060f789de617c865f64e1d58424.gltf",
+      "sha256": "7e12637435ea79e25acc502c2ef8a0edebf6f060f789de617c865f64e1d58424",
+      "bytes": 2323,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8083ea0c78a069b838cfba0e98462605974aff320f58e9c5d43a38ffa010d757.bin",
+      "sha256": "8083ea0c78a069b838cfba0e98462605974aff320f58e9c5d43a38ffa010d757",
+      "bytes": 166714,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/829c4b384c97cfc6aa3472eae921602fcea65eca426bb5c23840393149ab1d5c.bin",
+      "sha256": "829c4b384c97cfc6aa3472eae921602fcea65eca426bb5c23840393149ab1d5c",
+      "bytes": 128757,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/83024c43e21c1042014966f4c46ddff1fddcd1953efa942015168d1ea14ee8f4.bin",
+      "sha256": "83024c43e21c1042014966f4c46ddff1fddcd1953efa942015168d1ea14ee8f4",
+      "bytes": 151060,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8761ab113044763f21c1a03ed3fc07f5a45600d28d4081a873654841cf9fd9dd.gltf",
+      "sha256": "8761ab113044763f21c1a03ed3fc07f5a45600d28d4081a873654841cf9fd9dd",
+      "bytes": 2310,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/87e91c4a3c07fd89e7716e8a9fd035ad253a2b179cf07ceafab65d860f1b1052.bin",
+      "sha256": "87e91c4a3c07fd89e7716e8a9fd035ad253a2b179cf07ceafab65d860f1b1052",
+      "bytes": 7999,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8936ebe7b044574b4e6bc5b28546e4d9084412cfb6222117b00891b8ca090161.bin",
+      "sha256": "8936ebe7b044574b4e6bc5b28546e4d9084412cfb6222117b00891b8ca090161",
+      "bytes": 132710,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/894a611b8b9c6bde2d0439770624e65e5d88046a55f5c1c9b608a805145aa5c8.bin",
+      "sha256": "894a611b8b9c6bde2d0439770624e65e5d88046a55f5c1c9b608a805145aa5c8",
+      "bytes": 72044,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/894cedb6b3010ece65eaee2f806ced2207beb1ce5c3bfc6fa903a84a3805676c.bin",
+      "sha256": "894cedb6b3010ece65eaee2f806ced2207beb1ce5c3bfc6fa903a84a3805676c",
+      "bytes": 35611,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8a4013458e6aabb65327bf0731c3e621679f2a46e0fa1990f605636ea3fbd2b0.gltf",
+      "sha256": "8a4013458e6aabb65327bf0731c3e621679f2a46e0fa1990f605636ea3fbd2b0",
+      "bytes": 2762,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8a995f550a3f93e171bf38dc04779227b40eb09488261d06fb1dbd0e686ff0f5.bin",
+      "sha256": "8a995f550a3f93e171bf38dc04779227b40eb09488261d06fb1dbd0e686ff0f5",
+      "bytes": 50595,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8ac74de425ed0a2dfc9c71049e51900bef69dd58d00139fddfd959d5f69dc503.gltf",
+      "sha256": "8ac74de425ed0a2dfc9c71049e51900bef69dd58d00139fddfd959d5f69dc503",
+      "bytes": 2751,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8b9e5edbedfed237ceb8baefc36093e182dc38c3860cb13e05fa44e5450e06da.bin",
+      "sha256": "8b9e5edbedfed237ceb8baefc36093e182dc38c3860cb13e05fa44e5450e06da",
+      "bytes": 23323,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8c59435c8625fe6d03c93de01c1daa31dee228878950ef0d6411c3ed355b0546.bin",
+      "sha256": "8c59435c8625fe6d03c93de01c1daa31dee228878950ef0d6411c3ed355b0546",
+      "bytes": 97944,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8cce2db435c1db80b17f703fadb2ed04d687b68de18ba534d1e7e830becf1b75.bin",
+      "sha256": "8cce2db435c1db80b17f703fadb2ed04d687b68de18ba534d1e7e830becf1b75",
+      "bytes": 8672,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8db2c13f107766857fd9d2fbed6cb8ef01baa6a30b43feaa3056258963c00c4f.bin",
+      "sha256": "8db2c13f107766857fd9d2fbed6cb8ef01baa6a30b43feaa3056258963c00c4f",
+      "bytes": 1019428,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/8e280a00e72613a71eb6a3539650f46cc60013cbc662ffe026eb8857cfaafaa5.ktx2",
+      "sha256": "8e280a00e72613a71eb6a3539650f46cc60013cbc662ffe026eb8857cfaafaa5",
+      "bytes": 239076,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7.ktx2",
+      "sha256": "902c56247c21bced92cb409cc5cb421237271ebae7ece83a6a1e50f8409e7bd7",
+      "bytes": 754948,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/921e7c550ec9d328979f19d62b5e594d267cf8cbe488a90df77828a8a030400f.bin",
+      "sha256": "921e7c550ec9d328979f19d62b5e594d267cf8cbe488a90df77828a8a030400f",
+      "bytes": 3376656,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/92ab0f08d1b15d2440197122c8c3c6b0d5c8ad3a68d8c0eab6228374faa00c3a.ktx2",
+      "sha256": "92ab0f08d1b15d2440197122c8c3c6b0d5c8ad3a68d8c0eab6228374faa00c3a",
+      "bytes": 819734,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/93c0b3ed76b29051602d60f8ee10deb825455b9b1233f77990954dc0d0a55b1d.bin",
+      "sha256": "93c0b3ed76b29051602d60f8ee10deb825455b9b1233f77990954dc0d0a55b1d",
+      "bytes": 7028,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/93e946dbe59b8df3d7da306abae8acc09129892a9dc964a7b3860492a0128bbb.bin",
+      "sha256": "93e946dbe59b8df3d7da306abae8acc09129892a9dc964a7b3860492a0128bbb",
+      "bytes": 154657,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/975d2abbced19aa882da18ee260ab864a1919cc37b6d8f61247627bdbad8d89f.bin",
+      "sha256": "975d2abbced19aa882da18ee260ab864a1919cc37b6d8f61247627bdbad8d89f",
+      "bytes": 28190,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29.gltf",
+      "sha256": "97f04d988e882c439cfe1821f705b3b8a71a792f1a997ea07cd153381d5ffe29",
+      "bytes": 801166,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/983266251930b73eb0eac25db007c1351f37a3dcbfa49455c625d54ccb3ced41.bin",
+      "sha256": "983266251930b73eb0eac25db007c1351f37a3dcbfa49455c625d54ccb3ced41",
+      "bytes": 37433,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/98453ad9e937d2ac7c3fb28c9e56e3a0f83b9bab05a2561da5e610d5ac8301b7.bin",
+      "sha256": "98453ad9e937d2ac7c3fb28c9e56e3a0f83b9bab05a2561da5e610d5ac8301b7",
+      "bytes": 66169,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/988055f7204e4c05e7e7865ab1e08f859098dcfccb768cf45f3b125827d8adb1.bin",
+      "sha256": "988055f7204e4c05e7e7865ab1e08f859098dcfccb768cf45f3b125827d8adb1",
+      "bytes": 29365,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/998c74285145a495d0a52361df0179ebbedab0c862e42fea6f342e7da314f497.bin",
+      "sha256": "998c74285145a495d0a52361df0179ebbedab0c862e42fea6f342e7da314f497",
+      "bytes": 126140,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a.ktx2",
+      "sha256": "9b2a4fc63fef9b0d19dbe148bd661af2108954c19b088070bc322dd75e6a434a",
+      "bytes": 2862725,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54.ktx2",
+      "sha256": "9ba7b4a1d055acaf2bf898df812916a7bd05a42d81f68d8f1a0b22b4eea8db54",
+      "bytes": 2377621,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a1d943c083af8c339be936287f8250c26977f324a97fd87280bfa70959a758f7.gltf",
+      "sha256": "a1d943c083af8c339be936287f8250c26977f324a97fd87280bfa70959a758f7",
+      "bytes": 2743,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a44a00965373e64d4a5a30656ced9e2c3e00a90462cf2335b35f96b42b8bc2b6.bin",
+      "sha256": "a44a00965373e64d4a5a30656ced9e2c3e00a90462cf2335b35f96b42b8bc2b6",
+      "bytes": 162680,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a46cb1827b50c45b70b8f36bb256fa4b0a60bea008142c790252e33dd1110546.bin",
+      "sha256": "a46cb1827b50c45b70b8f36bb256fa4b0a60bea008142c790252e33dd1110546",
+      "bytes": 23744,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a4dda588b82d032545cc601aac57a156a59f4d89e194fab6912a8774f6200453.ktx2",
+      "sha256": "a4dda588b82d032545cc601aac57a156a59f4d89e194fab6912a8774f6200453",
+      "bytes": 29447,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a536e909e31049e831c3e27c7b9abcb82bfcccd5bd5606a6b348f9a60ea87129.bin",
+      "sha256": "a536e909e31049e831c3e27c7b9abcb82bfcccd5bd5606a6b348f9a60ea87129",
+      "bytes": 422968,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/a88505eb86f7ab4f673565f1aa5b2d5da7b231c98b40bb6971cc6d21114b22cb.bin",
+      "sha256": "a88505eb86f7ab4f673565f1aa5b2d5da7b231c98b40bb6971cc6d21114b22cb",
+      "bytes": 3932,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ab919d182eaeda4f0a56f8487b634dd442c43f4f774adf626cb6d478c9114d94.bin",
+      "sha256": "ab919d182eaeda4f0a56f8487b634dd442c43f4f774adf626cb6d478c9114d94",
+      "bytes": 44471,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/abc99f733a16d0a7084a502fa20f1973a03744660a3309aacd20efff0ae7fece.bin",
+      "sha256": "abc99f733a16d0a7084a502fa20f1973a03744660a3309aacd20efff0ae7fece",
+      "bytes": 27173,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ad560f4b18fa364201a4e0bb87ee4aae587fe22f111c4a0dc950209f0729a608.gltf",
+      "sha256": "ad560f4b18fa364201a4e0bb87ee4aae587fe22f111c4a0dc950209f0729a608",
+      "bytes": 2314,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ae807fd9df1d2a7385d586a0e8a28404b8a668b39d35194b6946fdf43cd4bcb6.bin",
+      "sha256": "ae807fd9df1d2a7385d586a0e8a28404b8a668b39d35194b6946fdf43cd4bcb6",
+      "bytes": 38760,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/afd1cade2c6865f58eca8eb2dd36f93328c77d7ed932fe15b080bafb90078c52.gltf",
+      "sha256": "afd1cade2c6865f58eca8eb2dd36f93328c77d7ed932fe15b080bafb90078c52",
+      "bytes": 2757,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b1f6a16f5cb527f2a07918fc4a36ee0b461945f7de6a4703a436b0cc1548c2b5.bin",
+      "sha256": "b1f6a16f5cb527f2a07918fc4a36ee0b461945f7de6a4703a436b0cc1548c2b5",
+      "bytes": 49993,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b3200a3792fe28c1c2fe6dac2feb5bc4e2db30ab680c4d7182ea8a0cb84c9f9c.ktx2",
+      "sha256": "b3200a3792fe28c1c2fe6dac2feb5bc4e2db30ab680c4d7182ea8a0cb84c9f9c",
+      "bytes": 276871,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b5d9ea12fed09478c9b64d648aee87d12795d3413525666fb2dc697a7b4323af.bin",
+      "sha256": "b5d9ea12fed09478c9b64d648aee87d12795d3413525666fb2dc697a7b4323af",
+      "bytes": 141764,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b65e6a7cecd251fda9120b3c97b6fd540d739c7ddd4101e4de9317064caa86d9.bin",
+      "sha256": "b65e6a7cecd251fda9120b3c97b6fd540d739c7ddd4101e4de9317064caa86d9",
+      "bytes": 15941,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b70e16fe81b0e2bcc4d9466addda535d10dda58e9462aef506380ef81f29878f.ktx2",
+      "sha256": "b70e16fe81b0e2bcc4d9466addda535d10dda58e9462aef506380ef81f29878f",
+      "bytes": 28696,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b7746d2ba9c7703f95005ae5910cc191c98907906bb63b10b9471b238e7449aa.ktx2",
+      "sha256": "b7746d2ba9c7703f95005ae5910cc191c98907906bb63b10b9471b238e7449aa",
+      "bytes": 30603,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b86c6a46a9259512a8e8c7e89861983df4e3090230cd376f1fb0f88d3166f4f6.bin",
+      "sha256": "b86c6a46a9259512a8e8c7e89861983df4e3090230cd376f1fb0f88d3166f4f6",
+      "bytes": 39707,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b90ca48437a044c682387dfaed4cb9e07144bb2c993c4763fb31102ccfb06843.gltf",
+      "sha256": "b90ca48437a044c682387dfaed4cb9e07144bb2c993c4763fb31102ccfb06843",
+      "bytes": 2310,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
+      "sha256": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9",
+      "bytes": 2120278,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/bbe1eab856aa63c54709cf09a36aa024b1835099e8f0524d9f3ce8a34f98058d.bin",
+      "sha256": "bbe1eab856aa63c54709cf09a36aa024b1835099e8f0524d9f3ce8a34f98058d",
+      "bytes": 106904,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318.ktx2",
+      "sha256": "be990a26eb95c1efe74c29409faa94a86a7776d0da0e936057fa83043fda9318",
+      "bytes": 97845,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/bf614e8b98e2fa4b90cd0b2720a3846b8b3232e805b8a5aaab1b6582e176ea34.bin",
+      "sha256": "bf614e8b98e2fa4b90cd0b2720a3846b8b3232e805b8a5aaab1b6582e176ea34",
+      "bytes": 92960,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c008eb05c40bcea18fa0fa2dcd8dbab67751d22ef97729b34d56ce3540dd9f12.bin",
+      "sha256": "c008eb05c40bcea18fa0fa2dcd8dbab67751d22ef97729b34d56ce3540dd9f12",
+      "bytes": 257964,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c21d8583f8f3125489a9534da5e1821e30044c678e7536317aaf92284fd41c93.bin",
+      "sha256": "c21d8583f8f3125489a9534da5e1821e30044c678e7536317aaf92284fd41c93",
+      "bytes": 28196,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c695c9f3804401145a03f4ee849980a0eabd59c22c88f280c17221b75930821f.bin",
+      "sha256": "c695c9f3804401145a03f4ee849980a0eabd59c22c88f280c17221b75930821f",
+      "bytes": 74368,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c786b4b7a1b2de170463d22c4105e696570638381229e5fe24cae4d7a684df41.ktx2",
+      "sha256": "c786b4b7a1b2de170463d22c4105e696570638381229e5fe24cae4d7a684df41",
+      "bytes": 233200,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c89b15c0c431a572927948d68c80cde0f16318ce0dee0d10e400c161e64c5104.bin",
+      "sha256": "c89b15c0c431a572927948d68c80cde0f16318ce0dee0d10e400c161e64c5104",
+      "bytes": 116200,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/c9d27212a5638a6a365879944893ffe360aa755bf07ad22080fe93d8c57a5690.bin",
+      "sha256": "c9d27212a5638a6a365879944893ffe360aa755bf07ad22080fe93d8c57a5690",
+      "bytes": 112784,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/cd992d750368b4521536ad83de058763cf3c223f114f8ed766f27bfc4cc5c922.bin",
+      "sha256": "cd992d750368b4521536ad83de058763cf3c223f114f8ed766f27bfc4cc5c922",
+      "bytes": 90524,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d243d00324339440bd312d13b8e091f5a8de89c7697feee13c0d665a43c4f26b.bin",
+      "sha256": "d243d00324339440bd312d13b8e091f5a8de89c7697feee13c0d665a43c4f26b",
+      "bytes": 11216,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d25537cd4b2c0360a9305944cc48c05f21fee8fb44755b6fe59712cd3d7a95c0.png",
+      "sha256": "d25537cd4b2c0360a9305944cc48c05f21fee8fb44755b6fe59712cd3d7a95c0",
+      "bytes": 5810584,
+      "type": "png"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d660d14f095a88e75c75eb9ed3ad435aaa886ba869b2d5e067598ac5e3097e6c.ktx2",
+      "sha256": "d660d14f095a88e75c75eb9ed3ad435aaa886ba869b2d5e067598ac5e3097e6c",
+      "bytes": 2738921,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d6e3620e05b4f5094f4c9b5c9d0b8d650a1cb0014a692283445cda04a7efb20f.gltf",
+      "sha256": "d6e3620e05b4f5094f4c9b5c9d0b8d650a1cb0014a692283445cda04a7efb20f",
+      "bytes": 2314,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d72f4b2316e7771a3499b8a8b4ce5ce2647b64b33e599dbd8edfc9ee181dec27.ktx2",
+      "sha256": "d72f4b2316e7771a3499b8a8b4ce5ce2647b64b33e599dbd8edfc9ee181dec27",
+      "bytes": 740650,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d76007873bc330cfc94985fcd60a5e92c9e3659216e5620fa5518195e25c8d6b.bin",
+      "sha256": "d76007873bc330cfc94985fcd60a5e92c9e3659216e5620fa5518195e25c8d6b",
+      "bytes": 2368,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/d9660fef10fb8d19ce9cbdab01fda609b8eb4e18175edc5e71b00a691870129d.bin",
+      "sha256": "d9660fef10fb8d19ce9cbdab01fda609b8eb4e18175edc5e71b00a691870129d",
+      "bytes": 56856,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce.ktx2",
+      "sha256": "ddaf32fa0236ca992d325994b3e9888c64b723c8fc86891881f0e8dbb338f1ce",
+      "bytes": 103574,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/de0dac4142ea3a58fd35b17dcc6932f581ccc5eaeb907c47cd0b798719b959ab.bin",
+      "sha256": "de0dac4142ea3a58fd35b17dcc6932f581ccc5eaeb907c47cd0b798719b959ab",
+      "bytes": 4190,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/df11f94fa9fdfa75736372f269e7c23f90ac5b153c8b3fd1d9433e03df88da49.bin",
+      "sha256": "df11f94fa9fdfa75736372f269e7c23f90ac5b153c8b3fd1d9433e03df88da49",
+      "bytes": 95284,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/dfbf522e3a086e05986d4403b45c9b87696401f7d0060a576cda107fabb2ea4a.ktx2",
+      "sha256": "dfbf522e3a086e05986d4403b45c9b87696401f7d0060a576cda107fabb2ea4a",
+      "bytes": 94839,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e18b68a7bcdda41235d273d65b45b3b19f7f3da47d19f13c0bd23423d8c4f885.gltf",
+      "sha256": "e18b68a7bcdda41235d273d65b45b3b19f7f3da47d19f13c0bd23423d8c4f885",
+      "bytes": 2314,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e1f363e87344cf26f53f6a8b6ae448b9a70b810798c259b632c9a46ad2146793.bin",
+      "sha256": "e1f363e87344cf26f53f6a8b6ae448b9a70b810798c259b632c9a46ad2146793",
+      "bytes": 4298014,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e52ce46ddd459643a363c92867ab10a5c667875953f9082c46595f8a3c7a1307.bin",
+      "sha256": "e52ce46ddd459643a363c92867ab10a5c667875953f9082c46595f8a3c7a1307",
+      "bytes": 36621,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e7049e71324e12deba9f137f22be54245804eda8be3cfc06946eeebc0f286681.ktx2",
+      "sha256": "e7049e71324e12deba9f137f22be54245804eda8be3cfc06946eeebc0f286681",
+      "bytes": 28953,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e73e3b5a9fb86f308dd7ad16632ba143d39db9c6e7c570d5c7723381eb8380e9.bin",
+      "sha256": "e73e3b5a9fb86f308dd7ad16632ba143d39db9c6e7c570d5c7723381eb8380e9",
+      "bytes": 40998,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e823af9ef5840e07f9f9a16831132b3a73ec6bdf280c99744766b9605b6faa4a.bin",
+      "sha256": "e823af9ef5840e07f9f9a16831132b3a73ec6bdf280c99744766b9605b6faa4a",
+      "bytes": 3712,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/eae0605a65453db52dea323a9a83afb6c0785c6284ea7f597684ea8746ea80d5.bin",
+      "sha256": "eae0605a65453db52dea323a9a83afb6c0785c6284ea7f597684ea8746ea80d5",
+      "bytes": 22659,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ee35dbc8e05634d5db33822a7e1c0932408c2dfcf03a19eae0ed5b83b0e09f2f.bin",
+      "sha256": "ee35dbc8e05634d5db33822a7e1c0932408c2dfcf03a19eae0ed5b83b0e09f2f",
+      "bytes": 327684,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/ee6645490d991330f3a841c6a809b9f5635f9b28a2c3e4df1696f56c08512d5b.bin",
+      "sha256": "ee6645490d991330f3a841c6a809b9f5635f9b28a2c3e4df1696f56c08512d5b",
+      "bytes": 76692,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/f04a3610c3fb32cb013febc024619225202b60f4bf265bafd48a72d74addc43a.gltf",
+      "sha256": "f04a3610c3fb32cb013febc024619225202b60f4bf265bafd48a72d74addc43a",
+      "bytes": 2287,
+      "type": "gltf"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2",
+      "sha256": "f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044",
+      "bytes": 26871,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/f4f17a2369d8f4b6aab4395f5bdc56e7eea4b48ca638f1dd949e071a43719d89.ktx2",
+      "sha256": "f4f17a2369d8f4b6aab4395f5bdc56e7eea4b48ca638f1dd949e071a43719d89",
+      "bytes": 28176,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/fa785e346e675f70095ed6f0c78a03b0a9c13d5cc40b106293764a66d629e08a.ktx2",
+      "sha256": "fa785e346e675f70095ed6f0c78a03b0a9c13d5cc40b106293764a66d629e08a",
+      "bytes": 29472,
+      "type": "ktx2"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/faba397680ccd33667bd9b0a6fdb0414a6ef0640bfb2ed8d468dd1700c20ba7d.bin",
+      "sha256": "faba397680ccd33667bd9b0a6fdb0414a6ef0640bfb2ed8d468dd1700c20ba7d",
+      "bytes": 452620,
+      "type": "bin"
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/fb48ceac6843d00163a9b6d6b8177e839126f83aa133898fbfc74ba5feaf4509.bin",
+      "sha256": "fb48ceac6843d00163a9b6d6b8177e839126f83aa133898fbfc74ba5feaf4509",
+      "bytes": 157304,
+      "type": "bin"
+    }
+  ],
+  "rawBossFiles": [
+    {
+      "path": "ArcherPreview/public/assets/guardian-bear.glb",
+      "sha256": "c4d45d6795d2dd22df00e56e79330102f7f68edc12d1de39da4f806e515d201e",
+      "bytes": 27830416
+    },
+    {
+      "path": "ArcherPreview/assets/models/hooded-goblin.glb",
+      "sha256": "59cdd64d6c248645699477c8eccab12695ea90b70aa510410544c28c79409a35",
+      "bytes": 16202492
+    }
+  ],
+  "sharedWith": [
+    {
+      "asset": "ArcherPreview/public/assets/great-plains.json#tree-01-round-oak",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village-plains-outskirts.json#tree-01-round-oak",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wall-01-straight",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/b70e16fe81b0e2bcc4d9466addda535d10dda58e9462aef506380ef81f29878f.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wall-02-corner",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/250d59278665b898d926dcdbc60207ca5515b79524f69c7d119832a4cada3a17.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wall-03-breached",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/6b6bbb88a4393f5fa6bba9148ca86dac75bec7b22ee142bedc4f9dd34642e010.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wood-01-palisade",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/e7049e71324e12deba9f137f22be54245804eda8be3cfc06946eeebc0f286681.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wood-02-cross-barricade",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/f077180fd5205862cff2dd8879f3a3e406dd4881118da1d6fdc3fd409ce1c044.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#wood-03-plank-gate",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/a4dda588b82d032545cc601aac57a156a59f4d89e194fab6912a8774f6200453.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#tree-01-round-oak",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/74db2500b0fbeb859ff1305eec3f229b3eac1ee28473efd597b13803aba7fd80.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#well",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/b7746d2ba9c7703f95005ae5910cc191c98907906bb63b10b9471b238e7449aa.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#watchtower",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/f4f17a2369d8f4b6aab4395f5bdc56e7eea4b48ca638f1dd949e071a43719d89.ktx2"
+      ]
+    },
+    {
+      "asset": "ArcherPreview/public/assets/village.json#market-stall",
+      "protectedSharedPaths": [
+        "ArcherPreview/public/assets/content/fa785e346e675f70095ed6f0c78a03b0a9c13d5cc40b106293764a66d629e08a.ktx2"
+      ]
+    }
+  ],
+  "totals": {
+    "protectedAssets": 10,
+    "contentFiles": 147,
+    "textureFiles": 38,
+    "contentBytes": 99371738,
+    "rawBossBytes": 44032908
+  }
+}

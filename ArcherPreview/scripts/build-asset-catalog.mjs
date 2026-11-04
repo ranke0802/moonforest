@@ -15,6 +15,18 @@ const layouts={'village':VILLAGE_PLACEMENTS,'great-plains':PLAINS_PLACEMENTS,'mo
 export const CATALOG_MANIFESTS=['village','village-plains-outskirts','great-plains','monster-forest','witch-cave','quest-props','environment','guardian-bear','hooded-goblin','elena','mourning-elena','character','warrior','warrior-v2','warrior-v3','warrior-v3-ios'];
 const actors=new Set(['guardian-bear','hooded-goblin','elena','mourning-elena']),players=new Set(['character','warrior','warrior-v2','warrior-v3','warrior-v3-ios']);
 
+const canonicalCatalogValue=value=>Array.isArray(value)?value.map(canonicalCatalogValue):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonicalCatalogValue(value[key])])):value;
+// Approved saved scenes reference the shipped catalog's legacy distribution
+// revision. Preserve that identity only for this exact canonical entry set;
+// mobile-only texture packages must not invalidate those existing scenes.
+// Every other definition/model/UV/version change receives its own entry hash.
+const legacyEntriesSha256='f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5';
+const legacyCatalogRevision='a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853';
+export function catalogRevisionForEntries(entries){
+  const fingerprint=sha(JSON.stringify(canonicalCatalogValue(entries)));
+  return fingerprint===legacyEntriesSha256?legacyCatalogRevision:fingerprint;
+}
+
 export function catalogRuntimePath(manifest,reference){
   if(typeof reference!=='string'||!reference||reference.includes('\\')||isAbsolute(reference))throw new Error('Catalog paths must be deployable relative references');
   const base=new URL(manifest,'https://catalog.invalid/'),url=new URL(reference,base);
@@ -79,9 +91,10 @@ export async function buildAssetCatalog({projectRoot=root}={}){
       entries.set(key,entry);
     }
   }
-  const catalog={version:1,revision:index.revision,entries:[...entries.values()].sort((a,b)=>a.assetId.localeCompare(b.assetId)||a.version.localeCompare(b.version))};
+  const catalogEntries=[...entries.values()].sort((a,b)=>a.assetId.localeCompare(b.assetId)||a.version.localeCompare(b.version));
+  const catalog={version:1,revision:catalogRevisionForEntries(catalogEntries),entries:catalogEntries};
   catalog.contentRevision=sha(JSON.stringify(catalog));
-  return {catalog,manifestEvidence,runtimeHashes,modelsRead:cache.size};
+  return {catalog,resourceRevision:index.revision,manifestEvidence,runtimeHashes,modelsRead:cache.size};
 }
 
 export function catalogModule(catalog){
@@ -143,13 +156,13 @@ export async function inventoryLocalAssets(roots,runtimeHashes,{maxMetadataFiles
 
 async function main(){
   const result=await buildAssetCatalog(),output=resolve(root,'src/asset-catalog.js'),module=catalogModule(result.catalog),indexOutput=resolve(root,'src/editable-asset-index.js'),indexModule=editableIndexModule(result.catalog),check=process.argv.includes('--check');
-  if(check){if(await readFile(output,'utf8')!==module||await readFile(indexOutput,'utf8')!==indexModule)throw new Error('Generated asset catalog/index is stale');}
+  if(check){if((await readFile(output,'utf8')).replaceAll('\r\n','\n')!==module||(await readFile(indexOutput,'utf8')).replaceAll('\r\n','\n')!==indexModule)throw new Error('Generated asset catalog/index is stale');}
   else{await writeFile(output,module);await writeFile(indexOutput,indexModule);}
   const reportDir=resolve(root,'reports/moonforest-0.1-2026-11-04');await mkdir(reportDir,{recursive:true});
   const inventoryRoots=[];for(let i=2;i<process.argv.length;i++)if(process.argv[i]==='--inventory-root')inventoryRoots.push(process.argv[++i]);
   if(inventoryRoots.length){const inventory=await inventoryLocalAssets(inventoryRoots,result.runtimeHashes);await writeFile(resolve(reportDir,'phase3-local-inventory.json'),JSON.stringify(inventory,null,2)+'\n');}
   const entries=result.catalog.entries;
-  const report={version:1,resourceRevision:result.catalog.revision,catalogContentRevision:result.catalog.contentRevision,entries:entries.length,modelsRead:result.modelsRead,manifests:result.manifestEvidence,editable:entries.filter(e=>e.placement.supported).map(e=>({assetId:e.assetId,version:e.version,contentHash:e.contentHash,usedMaps:e.usedMaps})),reviewCounts:Object.fromEntries([...new Set(entries.map(e=>e.reviewStatus))].map(status=>[status,entries.filter(e=>e.reviewStatus===status).length])),sameIdsWithMultipleVersions:[...new Set(entries.map(e=>e.assetId))].filter(id=>entries.filter(e=>e.assetId===id).length>1),publicPaths:'deployable-relative-only; local provenance exists only in phase3-local-inventory.json',metadata:'Actual glTF accessor index counts, node-instance triangle submissions, material/texture definitions, skins/joint union, animation names and accessor/node-transform bounds; no external geometry buffers decoded.',reduction:{adopted:false,reason:'No evidence-backed non-protected reduction with equivalent GPU/pixel views is available. Protected houses/trees/rocks/woodwalls and all animated actor profiles stay locked. Separate candidate IDs/versions are required for any future review; approved sources were not modified.'},preview:'Existing thumbnail reference only when present; otherwise load-on-explicit-selection. Search/catalog module imports no renderer, model, textures or preload jobs.',limitations:['Metadata is not GPU allocation/time, physical-device FPS or polygon-source count.','glTF bounds are static accessor/node-transform bounds; posed actors retain their existing runtime skinned bounds and are not static-placement candidates.','Local source approval/hash evidence is inventoried separately and does not auto-approve deployed manifests without explicit review status.','Thirteen approved static prop/tree/rock/plant types are editable independent copies. Soft plants are decorative; solid collision is ground-only and tree bodies use existing certified trunk profiles. Existing base instances require a separate per-map eligibility check.','Normal startup lazy separation, placement/navigation/minimap integration and final build are owned by root/A/verifier.']};
+  const report={version:1,resourceRevision:result.resourceRevision,catalogRevision:result.catalog.revision,catalogContentRevision:result.catalog.contentRevision,entries:entries.length,modelsRead:result.modelsRead,manifests:result.manifestEvidence,editable:entries.filter(e=>e.placement.supported).map(e=>({assetId:e.assetId,version:e.version,contentHash:e.contentHash,usedMaps:e.usedMaps})),reviewCounts:Object.fromEntries([...new Set(entries.map(e=>e.reviewStatus))].map(status=>[status,entries.filter(e=>e.reviewStatus===status).length])),sameIdsWithMultipleVersions:[...new Set(entries.map(e=>e.assetId))].filter(id=>entries.filter(e=>e.assetId===id).length>1),publicPaths:'deployable-relative-only; local provenance exists only in phase3-local-inventory.json',metadata:'Actual glTF accessor index counts, node-instance triangle submissions, material/texture definitions, skins/joint union, animation names and accessor/node-transform bounds; no external geometry buffers decoded.',reduction:{adopted:false,reason:'No evidence-backed non-protected reduction with equivalent GPU/pixel views is available. Protected houses/trees/rocks/woodwalls and all animated actor profiles stay locked. Separate candidate IDs/versions are required for any future review; approved sources were not modified.'},preview:'Existing thumbnail reference only when present; otherwise load-on-explicit-selection. Search/catalog module imports no renderer, model, textures or preload jobs.',limitations:['Metadata is not GPU allocation/time, physical-device FPS or polygon-source count.','glTF bounds are static accessor/node-transform bounds; posed actors retain their existing runtime skinned bounds and are not static-placement candidates.','Local source approval/hash evidence is inventoried separately and does not auto-approve deployed manifests without explicit review status.','Thirteen approved static prop/tree/rock/plant types are editable independent copies. Soft plants are decorative; solid collision is ground-only and tree bodies use existing certified trunk profiles. Existing base instances require a separate per-map eligibility check.','Normal startup lazy separation, placement/navigation/minimap integration and final build are owned by root/A/verifier.']};
   await writeFile(resolve(reportDir,'phase3-catalog-report.json'),JSON.stringify(report,null,2)+'\n');
   console.log(JSON.stringify({checked:check,entries:entries.length,modelsRead:result.modelsRead,editable:report.editable.map(e=>e.assetId),revision:result.catalog.revision}));
 }

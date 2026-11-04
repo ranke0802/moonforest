@@ -24,7 +24,7 @@ import {setupGameSelection} from './game-selection.js';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
-import {playerTextureManifest} from './player-texture-profile.js';
+import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
@@ -90,6 +90,7 @@ import {inspectMapTerrainCache} from './map-terrain-cache.js';
 import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import {setupFrameRateControl} from './frame-rate-settings.js';
+import {setupRenderScaleControl,renderResolutionSnapshot} from './render-scale-settings.js';
 import {setupPlainsViewDistanceControl,applyPlainsViewDistance,plainsRenderRange} from './plains-view-distance.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
@@ -203,11 +204,18 @@ let toastTimer;
 let qualityMode = 'high';
 try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
+let renderViewportKey='';
+const renderScaleControl=setupRenderScaleControl({host:$('.settings-display-options'),storage:equipmentStorage,touchDevice,onChange:()=>applyRenderQuality()});
+if(import.meta.hot)import.meta.hot.dispose(()=>renderScaleControl.dispose());
+const renderResolution=()=>renderResolutionSnapshot({engine,canvas,deviceRatio:window.devicePixelRatio,quality:qualityMode,touchDevice,percent:renderScaleControl.value});
 const loadDiagnostics=new LoadDiagnostics();
 const sceneDiagnostics=new SceneDiagnostics();
+let playerTextureSelection=null;
 // Copy only scalar work state so old delay events cannot change as streaming
 // and candidate selection advance. No extra scene traversal is needed.
 const mapWorkDiagnostics=()=>({
+  renderResolution:renderResolution(),
+  playerTextures:playerTextureSelection,
   activeMeshCandidates:world?.environment?.activeMeshCandidates?{...world.environment.activeMeshCandidates}:null,
   textureWork:world?.environment?{
     asset:world.environment.highTexturePendingAsset??null,
@@ -261,10 +269,16 @@ function resizeScreenProjection(){
 
 function applyRenderQuality() {
   if (!engine) return;
-  const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice);
+  const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice,renderScaleControl.value);
+  const viewportKey=`${canvas.clientWidth}:${canvas.clientHeight}:${ratio}`;
   // Babylon divides CSS dimensions by this value. HiDPI requires its reciprocal.
-  engine.setHardwareScalingLevel(1 / ratio);
-  engine.resize();
+  // setHardwareScalingLevel already resizes. Map arrival reapplies lighting,
+  // but an unchanged canvas/scale must not reallocate its backing buffer.
+  if(viewportKey!==renderViewportKey){
+    if(engine.getHardwareScalingLevel()!==1/ratio)engine.setHardwareScalingLevel(1/ratio);
+    else engine.resize();
+    renderViewportKey=viewportKey;
+  }
   resizeScreenProjection();
   renderActivity.wake();
   engine.maxFPS=renderActivity.limit({quality:qualityMode});
@@ -455,7 +469,12 @@ async function loadCharacter() {
   try {
     await initializeResourceCache();
     if(villageReview)await villageReview.startLoad();
-    const manifestName=playerTextureManifest(character,engine.getCaps());
+    const caps=engine.getCaps();
+    // Retain the exact gate inputs even if selection fails before downloads.
+    playerTextureSelection={status:'selecting',capabilities:playerTextureCapabilities(caps)};
+    const selectedProfile=selectPlayerTextureProfile(character,caps);
+    playerTextureSelection={status:'selected',...selectedProfile};
+    const manifestName=selectedProfile.manifest;
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
     if(isVillage()&&!villageOverview){world.camera.setTarget(new Vector3(mapSpawn().x,world.terrain.heightAt(mapSpawn().x,mapSpawn().z)+WARRIOR_DIMENSIONS.stableFocusHeight,mapSpawn().z));world.camera.getViewMatrix();world.camera.getProjectionMatrix();}

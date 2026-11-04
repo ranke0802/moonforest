@@ -41,10 +41,16 @@ test('late old manifest failure is silent and a stalled current decode times out
  const f=fixture(t,{readManifest:()=>{if(++reads===1){entered.resolve();return old.promise;}return Promise.resolve(manifest);}});
  const first=f.props.load(points());await entered.promise;f.props.release();old.reject(Error('old map request'));assert.equal(await first,false);
  assert.equal(await f.props.load(points()),true);
- const stalled=deferred();let calls=0;
- const g=fixture(t,{timeoutMs:20,loadContainer:()=>++calls===1?stalled.promise:Promise.resolve(g.container())});
- const p=points();assert.equal(await g.props.load(p),true);g.props.update(p,{x:2,z:3},()=>true);await g.props.whenIdle();assert.equal(g.props.inspect().lastError.name,'TimeoutError');
+ // Exercise the same deadline deterministically: a 20 ms wall-clock budget
+ // can also expire during successful setup when the full suite runs in parallel.
+ const stalled=deferred(),decodeEntered=deferred(),pending=new Map();let calls=0,time=0,timerId=0;
+ const timers={now:()=>time,setTimeout:(fn,ms)=>{pending.set(++timerId,{fn,at:time+ms});return timerId;},clearTimeout:id=>pending.delete(id)};
+ const g=fixture(t,{timeoutMs:20,timers,loadContainer:()=>{if(++calls===1){decodeEntered.resolve();return stalled.promise;}return Promise.resolve(g.container());}});
+ const p=points();assert.equal(await g.props.load(p),true);g.props.update(p,{x:2,z:3},()=>true);await decodeEntered.promise;
+ time=20;for(const [id,timer]of [...pending])if(timer.at<=time){pending.delete(id);timer.fn();}
+ await g.props.whenIdle();assert.equal(g.props.inspect().lastError.name,'TimeoutError');
  for(let i=0;i<10;i++)g.props.update(p,{x:2,z:3},()=>true);await g.props.whenIdle();assert.equal(calls,1,'failed model must not retry every update');
  const retry=points();assert.equal(await g.props.load(retry),true);g.props.update(retry,{x:2,z:3},()=>true);await g.props.whenIdle();
  const late=g.container(),mesh=late.meshes[0];stalled.resolve(late);await new Promise(resolve=>setImmediate(resolve));assert.equal(mesh.isDisposed(),true);
+ assert.equal(retry[0].visual.isEnabled(),true);assert.equal(pending.size,0,'timed-out and successful lifetimes release their timers');
 });

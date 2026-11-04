@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "tests": {
+    "affected": 21,
+    "passed": 21,
+    "finalHelperAndMaskRecheck": 7,
+    "finalHelperAndMaskPassed": 7,
+    "fullSuiteRerun": false
+  },
+  "files": [
+    "tests/helpers/mobile-profile-contract.js",
+    "tests/mobile-profile-contract.test.js",
+    "tests/plains-landscape-render.test.js",
+    "tests/plains-tree-transition.test.js",
+    "tests/plains-two-boundary-regression.test.js",
+    "tests/mourning-cave-clearance.test.js"
+  ],
+  "sourceHashes": {
+    "tests/helpers/mobile-profile-contract.js": "37e1f6b4b78c4f16e03c292dc86605fee6b1f13745c402d32d8e6d65a2d3f586",
+    "tests/mobile-profile-contract.test.js": "caec09a69c41daecedcf55fc023681da8f5926669648ead7169fc5f913067419",
+    "tests/plains-landscape-render.test.js": "3b0ff0978fe9134864c6e7994eb72df08f4b5d90e561c95b21f37f478d26ddca",
+    "tests/plains-tree-transition.test.js": "83ff6a8d272b22cbd35a95a2a4d55c8e1d13391f295eeae40de723c4d2fb715a",
+    "tests/plains-two-boundary-regression.test.js": "73c7ce42488916b55e357d3227f979acf30173e88ba31a2011a9c8fd2a93fec5",
+    "tests/mourning-cave-clearance.test.js": "95119857a65dbf75d6f667a724f85190c7aed1f75e05b3a5950007cd29955680"
+  },
+  "historicalHashesChanged": 0,
+  "preservedInputs": [
+    {
+      "path": "src/monster-forest-layout.js",
+      "expected": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a",
+      "actual": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a"
+    },
+    {
+      "path": "src/monster-forest-terrain.js",
+      "expected": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9",
+      "actual": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9"
+    },
+    {
+      "path": "public/assets/monster-forest.json",
+      "expected": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "actual": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded"
+    },
+    {
+      "path": "public/assets/monster-forest-ground.json",
+      "expected": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94",
+      "actual": "6203bf6673aee63c908fc76098aec0cf7230f3b7bea382e5ee9c5f62fa8fcd94"
+    },
+    {
+      "path": "src/village-layout.js",
+      "expected": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2",
+      "actual": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2"
+    },
+    {
+      "path": "src/village-terrain.js",
+      "expected": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3",
+      "actual": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3"
+    },
+    {
+      "path": "src/village-ground-layout.js",
+      "expected": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed",
+      "actual": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed"
+    },
+    {
+      "path": "public/assets/village.json",
+      "expected": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "actual": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f"
+    },
+    {
+      "path": "public/assets/village-ground.json",
+      "expected": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c",
+      "actual": "7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c"
+    },
+    {
+      "path": "public/assets/great-plains.json",
+      "expected": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "actual": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde"
+    },
+    {
+      "path": "public/assets/great-plains-ground.json",
+      "expected": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38",
+      "actual": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38"
+    },
+    {
+      "path": "public/assets/village-plains-outskirts.json",
+      "expected": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce",
+      "actual": "902ac72c8096bb42a57937a1ca629ab6f62e4c0dba6d7aa5602d40e9b36e77ce"
+    },
+    {
+      "path": "src/plains-view-distance.js",
+      "expected": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "actual": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597"
+    }
+  ],
+  "originalForestResourcesVerified": 122,
+  "rawBakeHashOrProfileIndependentLegacyHashSupported": true,
+  "geometryOrOriginalTextureEditsStillRejected": true,
+  "mobileMetadataValidation": [
+    "albedo only",
+    "1024 or 2048 square",
+    "larger original source retained",
+    "original codec and alpha retained",
+    "content hash and byte count",
+    "actual KTX2 dimensions and full mip chain",
+    "no extra profile keys",
+    "houses and actors excluded"
+  ],
+  "runtimeSourcesOrBakesChanged": false,
+  "limits": [
+    "No browser automation, pixel, GPU or device performance validation.",
+    "Only authorized asset.mobileHighTextures is excluded from historical source-graph equality; every other original field and source file remains fingerprinted."
+  ]
+}

@@ -18,6 +18,7 @@ export class VillageVisibility {
     this.cast=new Set();this.castRecords=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
     this.shadowFade=new ShadowFadeBudget(touch?28:44);
     this.shadowScratch=new Set();this.shadowCandidateFlags=new Uint8Array(records.length);
+    this.shadowState=new Map();this.shadowStateReady=false;
     for(const [index,record] of records.entries()){
       const key=cellKey(record.placement.x,record.placement.z);
       if(!this.cells.has(key))this.cells.set(key,{records:[],indices:[],min:new Vector3(Infinity,Infinity,Infinity),max:new Vector3(-Infinity,-Infinity,-Infinity),active:true});
@@ -77,7 +78,29 @@ export class VillageVisibility {
     Object.assign(this.stats,{activeCells,activeInstances});
   }
   updateShadows(dt){
-    const active=this.shadowFade.update(dt),next=this.shadowScratch;next.clear();let major=0,fading=0;
+    const active=this.shadowFade.update(dt);
+    // The fade budget still advances every frame. Once it settles, retain the
+    // identical caster set instead of rebuilding it and writing every static
+    // instance attribute again. Inspect mutable mesh lists/attributes so live
+    // placement edits and a late geometry installation are observed immediately.
+    const states=this.shadowState;let changed=!this.shadowStateReady||states.size!==active.size;
+    for(const [record,fade]of active){
+      let state=states.get(record);
+      if(!state){state={meshes:[],fade:NaN,fogVisible:null,kind:null};states.set(record,state);changed=true;}
+      const visible=record.fogVisible!==false,meshes=record.meshes;
+      if(state.fade!==fade||state.fogVisible!==visible||state.kind!==record.placement.kind||state.meshes.length!==meshes.length)changed=true;
+      if(visible)for(let i=0;i<meshes.length;i++){
+        const mesh=meshes[i];
+        if(state.meshes[i]!==mesh||(mesh.instancedBuffers&&mesh.instancedBuffers[shadowFadeAttribute]!==fade))changed=true;
+      }
+      if(changed){state.meshes.length=meshes.length;for(let i=0;i<meshes.length;i++)state.meshes[i]=meshes[i];}
+      state.fade=fade;state.fogVisible=visible;state.kind=record.placement.kind;
+    }
+    if(states.size!==active.size)for(const record of states.keys())if(!active.has(record))states.delete(record);
+    this.shadowStateReady=true;
+    if(!changed){this.stats.shadowUpdateSkips=(this.stats.shadowUpdateSkips??0)+1;return;}
+    this.stats.shadowUpdates=(this.stats.shadowUpdates??0)+1;
+    const next=this.shadowScratch;next.clear();let major=0,fading=0;
     for(const r of this.castRecords)if(!active.has(r)){
       r.shadowCaster=false;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.delete(r);
     }
@@ -92,5 +115,5 @@ export class VillageVisibility {
     for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
     this.shadowScratch=this.cast;this.cast=next;Object.assign(this.stats,{shadowCasters:next.size,majorShadowCasters:major,fadingShadows:fading});
   }
-  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();this.shadowFade.clear();}
+  dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();this.shadowFade.clear();this.shadowState.clear();}
 }
