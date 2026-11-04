@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-11-04T06:40:23.182Z",
+  "before": [
+    0,
+    1.119999997317791,
+    6
+  ],
+  "afterPan": [
+    -0.07236059288680553,
+    1.1548839319944382,
+    5.945081374451518
+  ],
+  "expected": {
+    "position": [
+      4.125,
+      3.963749997317791,
+      0.3125
+    ],
+    "target": [
+      0,
+      1.119999997317791,
+      6
+    ],
+    "fov": 0.65
+  },
+  "immediate": {
+    "position": [
+      4.1250000000000036,
+      3.96374999731779,
+      0.3125000000000018
+    ],
+    "target": [
+      0,
+      1.119999997317791,
+      6
+    ],
+    "fov": 0.65
+  },
+  "afterSeekFrame": {
+    "position": [
+      4.1250000000000036,
+      3.96374999731779,
+      0.3125000000000018
+    ],
+    "target": [
+      0,
+      1.119999997317791,
+      6
+    ],
+    "fov": 0.65
+  },
+  "passed": true,
+  "sourceHashes": {
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b"
+  },
+  "sourceUnchanged": true,
+  "scope": "Native canvas DOM pan through production InputManager/PlaygroundInput/lease/default host, then absolute timeline seek/play using actual main frame callback. Actual shipped goblin geometry/rig/clips through default loader with local image/material-free model fixture. No browser-pixel/GPU/device measurement."
+}

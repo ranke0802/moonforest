@@ -38,7 +38,7 @@ test('actual new-life restart restores resource owners and cannot inherit the ol
 
 for(const loading of [false,true])test(`actual zero/loading render cannot retain recovery debt (loading=${loading})`,()=>{
   const combat=new PlayerCombat(),actor={position:Vector3.Zero()},events=[];combat.hp=400;combat.recover(1.9,actor,(...args)=>events.push(args));
-  const env={mapDeparture:null,mapTransition:{busy:false},ready:!loading,loadingAsset:loading,boss:{combat},actor,controller:{dead:false},frameDiagnostics:{mark:()=>null,measure:noop},syncCameraFocus:noop,syncCaveFog:noop,world:{tick:noop,scene:{render:noop},caveCamera:{beginFrame:noop,endFrame:noop,applied:false}},screenProjection:{beginFrame:noop},updateHealthBars:noop,goldLootView:{project:noop},training:{update:noop},projectiles:{update:noop},damageNumbers:null};
+  const env={cinematicAuthoringPreview:false,mapDeparture:null,mapTransition:{busy:false},ready:!loading,loadingAsset:loading,boss:{combat},actor,controller:{dead:false},frameDiagnostics:{mark:()=>null,measure:noop},syncCameraFocus:noop,syncCaveFog:noop,world:{tick:noop,scene:{render:noop},caveCamera:{beginFrame:noop,endFrame:noop,applied:false}},screenProjection:{beginFrame:noop},updateHealthBars:noop,goldLootView:{project:noop},training:{update:noop},projectiles:{update:noop},damageNumbers:null};
   const render=bind(env,`let simulateFrame=false,elapsed=0,statusTime=0;${between('function render(dt)','\nfunction bindMapPortal')}return render;`);render(loading ? .1 : 0);
   assert.equal(combat.hp,400);assert.equal(combat.passiveRecovery.elapsed,0);assert.equal(events.length,0);assert.equal(combat.recover(.1,actor,noop),0);
 });

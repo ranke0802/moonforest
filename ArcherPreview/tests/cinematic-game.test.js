@@ -1,21 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
-import {NullEngine,Scene,ArcRotateCamera,Vector3} from '@babylonjs/core';
+import {NullEngine,Scene,ArcRotateCamera,Vector3,TransformNode} from '@babylonjs/core';
 import {setupGameCinematics} from '../src/cinematic-game.js';
 import {createCinematicDraft,evaluateCinematic} from '../src/cinematic-document.js';
 import {ASSET_CATALOG} from '../src/asset-catalog.js';
 import {cinematicCommand} from '../src/cinematic-protocol.js';
 
 const settle=async()=>{for(let i=0;i<8;i++)await new Promise(resolve=>setImmediate(resolve));};
-function fixture(t,{preview=true,ready=true,raw=null,readyTimeoutMs=1000}={}){
+function fixture(t,{preview=true,ready=true,raw=null,readyTimeoutMs=1000,hero=false}={}){
  const {document,window}=parseHTML('<html><body><main id="app"></main></body></html>'),root=document.getElementById('app'),engine=new NullEngine(),scene=new Scene(engine),camera=new ArcRotateCamera('camera',1,1,10,Vector3.Zero(),scene),state={ready},messages=[],listeners=new Map(),values=new Map();if(raw)values.set('moonforest-0.1:cinematics:registered:v1',raw);
  const win={parent:{postMessage:(value,origin)=>messages.push({value,origin})},location:new URL('https://game.example/sub/index.html?release=moonforest-0.1'),addEventListener:(name,fn)=>listeners.set(name,fn),removeEventListener:(name,fn)=>{if(listeners.get(name)===fn)listeners.delete(name);}},storage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};
  const world={scene,camera,mapId:'village',toolGeneration:0,async acquireToolLease(options){state.ready=false;const lease={owner:options.owner,active:true,isCurrent:()=>lease.active&&world.toolLease===lease,stopAudio(){},playAudio(){return true;},release(){if(!lease.active)return;lease.active=false;if(world.toolLease===lease)world.toolLease=null;state.ready=true;},options};world.toolLease=lease;return lease;}};
- const api=setupGameCinematics({root,world,getPlayer:()=>null,getState:()=>state,storage,window:win,preview,readyTimeoutMs});
+ const playerNode=hero?new TransformNode('live-game-player',scene):null;
+ const api=setupGameCinematics({root,world,getPlayer:()=>playerNode,getState:()=>state,storage,window:win,preview,readyTimeoutMs});
  const draft=createCinematicDraft({catalogRevision:ASSET_CATALOG.revision,mapId:'village',cutsceneId:'neutral:test'});
  t.after(async()=>{await api.dispose();scene.dispose();engine.dispose();});
- return {api,world,camera,state,root,document,window,win,messages,listeners,storage,values,draft,send:(command,id,payload={})=>listeners.get('message')?.({source:win.parent,origin:win.location.origin,data:cinematicCommand(command,id,payload)})};
+ return {api,world,camera,state,root,document,window,win,messages,listeners,storage,values,draft,playerNode,send:(command,id,payload={})=>listeners.get('message')?.({source:win.parent,origin:win.location.origin,data:cinematicCommand(command,id,payload)})};
 }
 test('same-scene game bridge gates readiness, rejects spoofed sources and samples the shared timeline',async t=>{
  const f=fixture(t,{ready:false});assert.equal(f.messages[0].value.ready,false);
@@ -40,4 +41,22 @@ test('corrupted browser registry is isolated; explicit registration survives reo
 test('studio game-save reopens the exact selected scene through visible game controls without file conversion',async t=>{
  const f=fixture(t),saved=await f.api.execute({command:'save-scene',document:f.draft});assert.equal(saved.saved,true);const address=new URL(saved.gameUrl);assert.equal(address.searchParams.get('scene'),f.draft.cutsceneId);assert.equal(address.searchParams.get('character'),'warrior-v3');assert.equal(address.searchParams.get('cinematic'),'1');assert.equal(f.api.player.state,'idle','saving does not start a cinematic');
  await f.api.dispose();f.win.location=address;const game=setupGameCinematics({root:f.root,world:f.world,getState:()=>f.state,getPlayer:()=>null,storage:f.storage,window:f.win});t.after(()=>game.dispose());await settle();assert.equal(game.player.state,'ready');assert.equal(game.player.document.cutsceneId,f.draft.cutsceneId);const play=f.root.querySelector('[data-action="play"]');assert.equal(play.disabled,false);play.dispatchEvent(new f.window.Event('click',{bubbles:true}));await settle();assert.equal(game.player.state,'playing');const stop=f.root.querySelector('[data-action="stop"]');stop.dispatchEvent(new f.window.Event('click',{bubbles:true}));await settle();assert.equal(f.world.toolLease,null);assert.equal(f.state.ready,true);assert.doesNotMatch(f.root.querySelector('.cinematic-game').textContent,/node scripts|JSON|레지스트리/);
+});
+
+test('authoring completion keeps the scene and separate centered descriptions editable without returning to gameplay',async t=>{
+ const f=fixture(t,{hero:true}),node=f.playerNode;assert.equal(node.isEnabled(),false);assert.equal(f.root.dataset.cinematicPreview,'true');
+ f.draft.duration=.2;f.draft.shots[0].end=.2;f.draft.tracks.subtitles=[{start:0,end:.2,text:'고블린\n숲을 지키는 몬스터',placement:'center'},{start:0,end:.2,text:'아래 자막'}];
+ await f.api.load(f.draft);const lease=f.world.toolLease,actorResources=f.api.host.inspect().actors;
+ assert.equal(f.root.querySelector('.cinematic-center-text').textContent,'고블린\n숲을 지키는 몬스터');assert.equal(f.root.querySelector('.cinematic-subtitles').textContent,'아래 자막');
+ await f.api.execute({command:'play'});lease.options.onFrame(.25);assert.equal(f.api.player.state,'completed');assert.equal(f.api.inspect().retained,true);assert.equal(f.world.toolLease,lease);assert.equal(lease.active,true);assert.equal(f.state.ready,false);assert.equal(node.isEnabled(),false);
+ const revised=structuredClone(f.draft);revised.tracks.subtitles[0].text='수정한 설명';await f.api.execute({command:'patch-document',document:revised});assert.equal(f.root.querySelector('.cinematic-center-text').textContent,'수정한 설명');
+ await f.api.execute({command:'seek',time:.1});assert.equal(f.api.player.state,'paused');await f.api.execute({command:'play'});lease.options.onFrame(.25);assert.equal(f.api.player.state,'completed');assert.equal(f.world.toolLease,lease);assert.equal(f.api.host.inspect().actors,actorResources);
+ await f.api.execute({command:'stop'});assert.equal(f.world.toolLease,null);assert.equal(node.isEnabled(),false,'outer preview isolation survives explicit scene release');assert.equal(f.root.querySelector('.cinematic-center-text').textContent,'');
+ await f.api.dispose();assert.equal(node.isEnabled(),true);assert.equal(f.root.dataset.cinematicPreview,undefined);assert.equal(f.root.querySelector('.cinematic-center-text'),null);
+});
+
+test('ordinary game completion restores its borrowed scene and clears center text',async t=>{
+ const f=fixture(t,{preview:false,hero:true});f.draft.duration=.1;f.draft.shots[0].end=.1;f.draft.tracks.subtitles=[{start:0,end:.1,text:'몬스터 소개',placement:'center'}];
+ await f.api.load(f.draft);await f.api.execute({command:'play'});f.world.toolLease.options.onFrame(.25);await settle();assert.equal(f.api.player.state,'completed');assert.equal(f.api.inspect().retained,false);assert.equal(f.world.toolLease,null);assert.equal(f.state.ready,true);assert.equal(f.playerNode.isEnabled(),true);assert.equal(f.root.querySelector('.cinematic-center-text').textContent,'');
+ assert.equal(f.root.dataset.cinematicPreview,undefined);
 });

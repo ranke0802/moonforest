@@ -1,0 +1,256 @@
+{
+  "generatedAt": "2026-11-04T06:40:25.066Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "src/cinematic-document.js": "4b533d754c689bdec41b792a0ebd29fa9b5956b84b2545b5e034b296c6fe0783",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/cinematic-path-view.js": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "exact main preview startup and no-lease render guard freeze gameplay",
+      "passed": true,
+      "startup": {
+        "flag": true,
+        "inputSuspended": true,
+        "sourceSha256": "c8cf9d1c1e36cc43d305019749925ab63cce28fbc5ccd9b6ed5badc61e0f8359"
+      },
+      "frame": {
+        "renderSha256": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+        "barePreviewGuardSha256": "e1588587bac9ccf5f1146727bd1ed043854adc7f33c5fd69548a694c10291a59",
+        "guardBeforeGameplaySimulation": true
+      },
+      "heroHidden": true,
+      "inputSuspended": true,
+      "simulateFrame": false
+    },
+    {
+      "name": "actual default-loader actors follow independent paths and native follow camera at quarter samples",
+      "passed": true,
+      "modelParses": 1,
+      "actors": 2,
+      "quarters": [
+        {
+          "progress": 0,
+          "time": 0,
+          "actor1": [
+            -1,
+            0.11999999731779099,
+            6
+          ],
+          "target": [
+            -1,
+            1.119999997317791,
+            6
+          ]
+        },
+        {
+          "progress": 0.25,
+          "time": 0.5,
+          "actor1": [
+            -0.5,
+            0.11999999731779099,
+            6
+          ],
+          "target": [
+            -0.5,
+            1.119999997317791,
+            6
+          ]
+        },
+        {
+          "progress": 0.5,
+          "time": 1,
+          "actor1": [
+            0,
+            0.11999999731779099,
+            6
+          ],
+          "target": [
+            0,
+            1.119999997317791,
+            6
+          ]
+        },
+        {
+          "progress": 0.75,
+          "time": 1.5,
+          "actor1": [
+            0.5,
+            0.11999999731779099,
+            6
+          ],
+          "target": [
+            0.5,
+            1.119999997317791,
+            6
+          ]
+        },
+        {
+          "progress": 1,
+          "time": 2,
+          "actor1": [
+            1,
+            0.11999999731779099,
+            6
+          ],
+          "target": [
+            1,
+            1.119999997317791,
+            6
+          ]
+        }
+      ],
+      "path": {
+        "selectedActorId": "actor-1",
+        "points": [
+          {
+            "time": 0,
+            "position": [
+              -1,
+              0.11999999731779099,
+              6
+            ],
+            "interpolation": "linear"
+          },
+          {
+            "time": 2,
+            "position": [
+              1,
+              0.11999999731779099,
+              6
+            ],
+            "interpolation": "linear"
+          },
+          {
+            "time": 6,
+            "position": [
+              1,
+              0.11999999731779099,
+              10
+            ],
+            "interpolation": "linear"
+          }
+        ],
+        "segmentCount": 2,
+        "visible": true,
+        "meshesOwned": 1
+      },
+      "sourceProof": [
+        {
+          "id": "hooded-goblin",
+          "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "clips": [
+            "Dodge_Roll",
+            "Fall_Dead_from_Abdominal_Injury",
+            "Gangnam_Groove",
+            "Knock_Down",
+            "Parkour_Vault_with_Roll",
+            "Right_Jab_from_Guard",
+            "Running",
+            "Sneaky_Walk_inplace",
+            "Sword_Judgment",
+            "Sword_Parry_Backward_2",
+            "Walk_Turn_Right",
+            "Walking"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "natural preview end retains last actor camera text input HUD and hero ownership without audio",
+      "passed": true,
+      "retained": true,
+      "time": 6,
+      "leaseActive": true,
+      "lastCamera": {
+        "position": [
+          -6,
+          3.11999999731779,
+          2
+        ],
+        "target": [
+          1,
+          1.119999997317791,
+          10
+        ],
+        "fov": 0.65
+      },
+      "centerText": true,
+      "pathVisible": true
+    },
+    {
+      "name": "retained seek and replay reuse exact live operation with no model clone binding or material work",
+      "passed": true,
+      "nativeCountsUnchanged": true,
+      "operationIdentityUnchanged": true,
+      "modelParses": 1,
+      "hostAcquisitions": 1
+    },
+    {
+      "name": "retained document patches keep a single nonpickable path owner without native material geometry growth",
+      "passed": true,
+      "edits": 8,
+      "meshesOwned": 1,
+      "materials": 14,
+      "geometries": 8
+    },
+    {
+      "name": "explicit stop releases session and path while outer preview remains isolated",
+      "passed": true,
+      "sessionReleased": true,
+      "pathMeshes": 0,
+      "outerPreviewIsolated": true,
+      "simulateFrame": false
+    },
+    {
+      "name": "map error and disposal from retained end release exact native actor path and controller ownership",
+      "passed": true,
+      "mapRetiredActors": 0,
+      "errorReleased": true,
+      "disposedPathMeshes": 0,
+      "disposedSkeletons": 0,
+      "heroRestored": true,
+      "inputRestoredToPreviewStartup": true
+    },
+    {
+      "name": "ordinary game host completion retains original release and full gameplay restoration",
+      "passed": true,
+      "retained": false,
+      "leaseReleased": true,
+      "inputSuspended": false,
+      "heroRestored": true,
+      "hudRestored": true,
+      "cameraRestored": true,
+      "sourceProof": [
+        {
+          "id": "hooded-goblin",
+          "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "clips": [
+            "Dodge_Roll",
+            "Fall_Dead_from_Abdominal_Injury",
+            "Gangnam_Groove",
+            "Knock_Down",
+            "Parkour_Vault_with_Roll",
+            "Right_Jab_from_Guard",
+            "Running",
+            "Sneaky_Walk_inplace",
+            "Sword_Judgment",
+            "Sword_Parry_Backward_2",
+            "Walk_Turn_Right",
+            "Walking"
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Core integration before Studio freeze: actual current main startup/render AST, createWorld/PlaygroundInput/BossBattle/default GameCinematics/SceneHost/Player/scoped GLTF loader and actual native geometry/skin/clips. Calls production bridge API directly; primary Studio DOM workflow is a separate later gate. Local inline decoded geometry without materials/images, declared DOM viewport and audio voice fixtures are used. No GPU/pixels/trusted browser/device-performance claim."
+}

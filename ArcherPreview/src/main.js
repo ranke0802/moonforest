@@ -114,6 +114,7 @@ const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
+const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1';
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=MOONFOREST_RELEASE_LABEL;document.documentElement.dataset.release=MOONFOREST_RELEASE;}
@@ -635,6 +636,10 @@ function render(dt) {
     world.villageVisibility?.update(world.camera.globalPosition,toolFocus,dt);world.treeOcclusion?.update(world.camera.globalPosition,toolFocus,dt,playerDimensions(actor));
     world.lighting.follow(toolFocus);world.scene.render(false);return;
   }
+  if(cinematicAuthoringPreview){
+    simulateFrame=false;boss?.combat?.passiveRecovery?.reset();const focus=world.camera.getTarget();
+    world.villageVisibility?.update(world.camera.globalPosition,focus,dt);world.treeOcclusion?.update(world.camera.globalPosition,focus,dt,playerDimensions(actor));world.lighting.follow(focus);world.scene.render(false);return;
+  }
   simulateFrame=dt>0;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
@@ -849,6 +854,7 @@ try {
   training.relocate(world.trainingSpawn);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
+  if(cinematicAuthoringPreview)input.setSuspended(true);
   input.dodgeSprintGesture=new DodgeSprintGesture({onDodge:()=>actions.dodge(),onSprint:(held,seconds)=>controller?.setSprintHeld?.(held,seconds)});
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});if(frameLoop&&!frameLoop.running)reconcilePlayback();frameLoop?.recover();};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});

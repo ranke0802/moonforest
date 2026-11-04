@@ -1,0 +1,179 @@
+{
+  "generatedAt": "2026-11-04T06:43:23.831Z",
+  "passed": true,
+  "baseline": "bb48047ce021e6b25b73cbb8eb126981b70d472b",
+  "failedEvidence": [],
+  "staleSources": [],
+  "sourceHashes": {
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "src/cinematic-document.js": "4b533d754c689bdec41b792a0ebd29fa9b5956b84b2545b5e034b296c6fe0783",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/cinematic-path-view.js": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b",
+    "src/cinematic-protocol.js": "6c969508bacb9decb53c7734f22c4889fe3893abead1febc4d0445718518d737",
+    "src/cinematic-studio.js": "bed1e0831349d65682a343e44ecfff100021b6a4ebc7f5f8f81d2e2058d19639",
+    "src/cinematic-studio.css": "489e193bbf32dd62bfb8f16b92b9bd64240ec449b325a29fc35fa2452b41b260",
+    "src/cinematic-authoring.js": "48f4fbf9870e0ce12927c06e0f49fdeb72b51d2b89773b9a767a6e5f0ce6c76b"
+  },
+  "evidence": [
+    {
+      "file": "verification-core.json",
+      "passed": true,
+      "checks": 8,
+      "cases": [
+        {
+          "name": "exact main preview startup and no-lease render guard freeze gameplay",
+          "passed": true
+        },
+        {
+          "name": "actual default-loader actors follow independent paths and native follow camera at quarter samples",
+          "passed": true
+        },
+        {
+          "name": "natural preview end retains last actor camera text input HUD and hero ownership without audio",
+          "passed": true
+        },
+        {
+          "name": "retained seek and replay reuse exact live operation with no model clone binding or material work",
+          "passed": true
+        },
+        {
+          "name": "retained document patches keep a single nonpickable path owner without native material geometry growth",
+          "passed": true
+        },
+        {
+          "name": "explicit stop releases session and path while outer preview remains isolated",
+          "passed": true
+        },
+        {
+          "name": "map error and disposal from retained end release exact native actor path and controller ownership",
+          "passed": true
+        },
+        {
+          "name": "ordinary game host completion retains original release and full gameplay restoration",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "file": "verification-camera-input.json",
+      "passed": true,
+      "checks": 1
+    },
+    {
+      "file": "verification-workflow.json",
+      "passed": true,
+      "checks": 10,
+      "cases": [
+        {
+          "name": "primary actor-add cold-loads actual goblin and enters isolated preview",
+          "passed": true
+        },
+        {
+          "name": "start0 time2 native canvas drag and point-save preserve start and create real path",
+          "passed": true
+        },
+        {
+          "name": "independent second path timing deletion undo redo and visible native route work",
+          "passed": true
+        },
+        {
+          "name": "quarter controls match independent native transforms and actor direction scale management work",
+          "passed": true
+        },
+        {
+          "name": "motion sequence source ranges loop intervals and blend drive actual native skeleton with path",
+          "passed": true
+        },
+        {
+          "name": "camera native view capture exact intermediate cut smooth interval and selected actor follow work",
+          "passed": true
+        },
+        {
+          "name": "center monster description bottom subtitle and effect timing volume reach actual preview DOM",
+          "passed": true
+        },
+        {
+          "name": "UI loop completion retains scene ownership and exact time then seek replay uses same prepared operation",
+          "passed": true
+        },
+        {
+          "name": "immediate native end edit file export exact reopen browser-save and explicit game-open work",
+          "passed": true
+        },
+        {
+          "name": "ordinary game consumes exact authored file and completion restores gameplay ownership",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "acceptance": [
+    {
+      "feature": 1,
+      "verified": "Preview end holds actual actors/final camera/text/input/HUD/hero ownership and quiet audio; exact time/start/end/loop/seek/replay work. Ordinary game completion still releases and restores."
+    },
+    {
+      "feature": 2,
+      "verified": "Two actual goblins receive independent0→2s paths through Studio controls and full native canvas dragging; later edits preserve time0."
+    },
+    {
+      "feature": 3,
+      "verified": "Point retime/remove/undo/redo, visible nonpickable route and0/25/50/75/100% native world comparisons pass; owned path resources remain bounded."
+    },
+    {
+      "feature": 4,
+      "verified": "GUI face-path/manual rotate/scale/undo/redo and actor duplicate/delete pass with independent targets."
+    },
+    {
+      "feature": 5,
+      "verified": "Actual source clip selection/range/loop/scene intervals/blends change native skeleton poses while path motion continues."
+    },
+    {
+      "feature": 6,
+      "verified": "Native camera capture, exact1s intermediate cut, step versus smooth, selected-actor follow and shot copy/delete pass; native pan cannot drift after absolute seek/play."
+    },
+    {
+      "feature": 7,
+      "verified": "Center monster description, independent bottom subtitle, effect time/volume and actor/timeline management reach production preview state."
+    },
+    {
+      "feature": 8,
+      "verified": "Immediate native end edit is included in connected file-export request, exact file reopen/browser save and explicit normal-game consumption; no automatic navigation at completion."
+    }
+  ],
+  "lifecycle": {
+    "mapChange": true,
+    "retainedSampleError": true,
+    "retainedDispose": true,
+    "normalGameRestoration": true,
+    "warmReplay": {
+      "sameOperation": true,
+      "hostReacquisitions": 0,
+      "extraModelParses": 0,
+      "extraNativeClonesBindingsMaterials": 0
+    }
+  },
+  "example": {
+    "path": "authoring-example.moonforest-scene",
+    "bytes": 5256,
+    "sha256": "24a8621286277e1159fe9e345218daeddc467fcb6415a0c2537230f3368c9ff6",
+    "actors": 2,
+    "assetIds": [
+      "hooded-goblin"
+    ],
+    "duration": 2,
+    "shots": 2,
+    "source": "Exact bytes captured from tested Studio export and reopened/played through normal game storage flow.",
+    "registeredInProject": false,
+    "automaticTrigger": false
+  },
+  "scope": "Independent current-source Node/native integration only; no fullsuite/build/deploy performed by this verifier. Primary workflow uses actual DOM controls and native canvas→PlaygroundInput/Babylon InputManager, production protocol/main callbacks/default host/player/scoped loader and actual shipped goblin geometry/rig/clips. Local inline decoded model/image-material omission, audio voice service and declared viewport/capture scheduling are fixtures.",
+  "unverified": [
+    "Trusted browser events/capture timing and computed layout/pixels/visual usability.",
+    "Real texture/shader/GPU/audio output, browser OS save dialog, physical-device FPS or thermal behavior."
+  ]
+}

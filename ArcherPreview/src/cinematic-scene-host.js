@@ -207,7 +207,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
   },
   sample(frame,{token,lease,prepared,seeking=false}={}){
    const session=sessions.get(token);if(!session||session.lease!==lease||session.prepared!==prepared)throw bossPreparationCancelled();check(session);
-   const camera=world.camera;camera.inertialAlphaOffset=camera.inertialBetaOffset=camera.inertialRadiusOffset=camera.inertialPanningX=camera.inertialPanningY=0;
+   const camera=world.camera;camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();camera.inertialAlphaOffset=camera.inertialBetaOffset=camera.inertialRadiusOffset=camera.inertialPanningX=camera.inertialPanningY=0;
    camera.setTarget(Vector3.FromArray(frame.camera.target));if(camera.setPosition)camera.setPosition(Vector3.FromArray(frame.camera.position));else camera.position.copyFromFloats(...frame.camera.position);camera.fov=frame.camera.fov;camera.getViewMatrix(true);camera.getProjectionMatrix(true);
    const statics=[];
    for(const actor of frame.actors){

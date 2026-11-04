@@ -1,0 +1,301 @@
+{
+  "generatedAt": "2026-11-04T06:42:15.209Z",
+  "passed": true,
+  "sourceHashes": {
+    "src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "src/cinematic-document.js": "4b533d754c689bdec41b792a0ebd29fa9b5956b84b2545b5e034b296c6fe0783",
+    "src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "src/cinematic-protocol.js": "6c969508bacb9decb53c7734f22c4889fe3893abead1febc4d0445718518d737",
+    "src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "src/cinematic-path-view.js": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+    "src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "src/cinematic-studio.js": "bed1e0831349d65682a343e44ecfff100021b6a4ebc7f5f8f81d2e2058d19639",
+    "src/cinematic-studio.css": "489e193bbf32dd62bfb8f16b92b9bd64240ec449b325a29fc35fa2452b41b260",
+    "src/cinematic-authoring.js": "48f4fbf9870e0ce12927c06e0f49fdeb72b51d2b89773b9a767a6e5f0ce6c76b",
+    "src/game-tool-lease.js": "148882da6c8fd02cafa6b5fc90d8feabef0bd57a00d082743af31cf1b107b41b"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "primary actor-add cold-loads actual goblin and enters isolated preview",
+      "passed": true,
+      "modelParses": 1,
+      "actualMainPreviewGuard": {
+        "renderSha256": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+        "barePreviewGuardSha256": "e1588587bac9ccf5f1146727bd1ed043854adc7f33c5fd69548a694c10291a59",
+        "guardBeforeGameplaySimulation": true
+      },
+      "actualInputRouter": true,
+      "sourceProof": [
+        {
+          "id": "hooded-goblin",
+          "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+          "triangles": 10412,
+          "clips": [
+            "Dodge_Roll",
+            "Fall_Dead_from_Abdominal_Injury",
+            "Gangnam_Groove",
+            "Knock_Down",
+            "Parkour_Vault_with_Roll",
+            "Right_Jab_from_Guard",
+            "Running",
+            "Sneaky_Walk_inplace",
+            "Sword_Judgment",
+            "Sword_Parry_Backward_2",
+            "Walk_Turn_Right",
+            "Walking"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "start0 time2 native canvas drag and point-save preserve start and create real path",
+      "passed": true,
+      "actor": "actor-1",
+      "times": [
+        0,
+        2
+      ],
+      "start": [
+        0,
+        0,
+        0
+      ],
+      "end": [
+        -0.22917786311539112,
+        0,
+        -0.562876576665599
+      ],
+      "nativeCanvasBoundary": true
+    },
+    {
+      "name": "independent second path timing deletion undo redo and visible native route work",
+      "passed": true,
+      "actor": "actor-2",
+      "firstPathUnchanged": true,
+      "times": [
+        0,
+        2
+      ],
+      "routeMeshes": 1,
+      "sourceModelParses": 1
+    },
+    {
+      "name": "quarter controls match independent native transforms and actor direction scale management work",
+      "passed": true,
+      "quarters": [
+        {
+          "progress": 0,
+          "time": 0,
+          "positions": [
+            {
+              "id": "actor-1",
+              "position": [
+                0,
+                0.11999999731779099,
+                6
+              ]
+            },
+            {
+              "id": "actor-2",
+              "position": [
+                1.5,
+                0.11999999731779099,
+                6
+              ]
+            }
+          ]
+        },
+        {
+          "progress": 0.25,
+          "time": 0.5,
+          "positions": [
+            {
+              "id": "actor-1",
+              "position": [
+                -0.05729446577884778,
+                0.11999999731779099,
+                5.8592808558336005
+              ]
+            },
+            {
+              "id": "actor-2",
+              "position": [
+                1.6230468753690235,
+                0.11999999731779099,
+                6.032401376536381
+              ]
+            }
+          ]
+        },
+        {
+          "progress": 0.5,
+          "time": 1,
+          "positions": [
+            {
+              "id": "actor-1",
+              "position": [
+                -0.11458893155769556,
+                0.11999999731779099,
+                5.718561711667201
+              ]
+            },
+            {
+              "id": "actor-2",
+              "position": [
+                1.7460937507380472,
+                0.11999999731779099,
+                6.064802753072762
+              ]
+            }
+          ]
+        },
+        {
+          "progress": 0.75,
+          "time": 1.5,
+          "positions": [
+            {
+              "id": "actor-1",
+              "position": [
+                -0.17188339733654334,
+                0.11999999731779099,
+                5.5778425675008005
+              ]
+            },
+            {
+              "id": "actor-2",
+              "position": [
+                1.8691406261070709,
+                0.11999999731779099,
+                6.0972041296091435
+              ]
+            }
+          ]
+        },
+        {
+          "progress": 1,
+          "time": 2,
+          "positions": [
+            {
+              "id": "actor-1",
+              "position": [
+                -0.22917786311539112,
+                0.11999999731779099,
+                5.437123423334401
+              ]
+            },
+            {
+              "id": "actor-2",
+              "position": [
+                1.9921875014760944,
+                0.11999999731779099,
+                6.129605506145524
+              ]
+            }
+          ]
+        }
+      ],
+      "orientToPath": true,
+      "manualRotationTurnsFacingOff": true,
+      "scaleUndoRedo": true,
+      "duplicateDeleted": true
+    },
+    {
+      "name": "motion sequence source ranges loop intervals and blend drive actual native skeleton with path",
+      "passed": true,
+      "clips": [
+        {
+          "clipId": "Walking",
+          "start": 0,
+          "end": 1.1,
+          "clipStart": 0.1,
+          "clipEnd": 0.8,
+          "blendIn": 0,
+          "blendOut": 0.1,
+          "loop": true
+        },
+        {
+          "clipId": "Running",
+          "start": 1,
+          "end": 2,
+          "clipStart": 0,
+          "clipEnd": 0.6,
+          "blendIn": 0.1,
+          "blendOut": 0,
+          "loop": true
+        }
+      ],
+      "nativePoseHashesDistinct": true
+    },
+    {
+      "name": "camera native view capture exact intermediate cut smooth interval and selected actor follow work",
+      "passed": true,
+      "shots": [
+        {
+          "id": "shot-1",
+          "start": 0,
+          "end": 1,
+          "interpolation": "smooth",
+          "lookAtActorId": "actor-2"
+        },
+        {
+          "id": "shot-2",
+          "start": 1,
+          "end": 2,
+          "interpolation": "smooth",
+          "lookAtActorId": "actor-2"
+        }
+      ],
+      "cutTime": 1,
+      "immediateCutVerified": true,
+      "smoothMidpointVerified": true,
+      "nativeFollow": true,
+      "copyDeleteRestored": true
+    },
+    {
+      "name": "center monster description bottom subtitle and effect timing volume reach actual preview DOM",
+      "passed": true,
+      "centerText": true,
+      "bottomText": true,
+      "effect": {
+        "time": 0.2,
+        "audioId": "ui_click",
+        "volume": 0.4
+      }
+    },
+    {
+      "name": "UI loop completion retains scene ownership and exact time then seek replay uses same prepared operation",
+      "passed": true,
+      "repeatCheckboxVerified": true,
+      "retainedEnd": true,
+      "time": 2,
+      "noNavigation": true,
+      "sameOperation": true,
+      "modelParses": 1,
+      "additionalNativeClonesBindingsMaterials": 0,
+      "hostReacquisitions": 0
+    },
+    {
+      "name": "immediate native end edit file export exact reopen browser-save and explicit game-open work",
+      "passed": true,
+      "example": "authoring-example.moonforest-scene",
+      "exampleSha256": "24a8621286277e1159fe9e345218daeddc467fcb6415a0c2537230f3368c9ff6",
+      "fileBytes": 5256,
+      "actors": 2,
+      "sameFileDataReopened": true,
+      "gameURL": "https://authoring-verification.test/moonforest/ArcherPreviewSite/index.html?release=moonforest-0.1&character=warrior-v3&rev=authoring-verification&cinematic=1&scene=scene-20261104064207-1"
+    },
+    {
+      "name": "ordinary game consumes exact authored file and completion restores gameplay ownership",
+      "passed": true,
+      "sameDocument": true,
+      "normalRetained": false,
+      "inputRestored": true,
+      "heroHudRestored": true,
+      "cameraRestored": true,
+      "actualDefaultModelRequests": 1
+    }
+  ],
+  "scope": "Independent actual Studio DOM/button/native-canvas workflow with paired production protocol, exact main startup/render callbacks, createWorld/PlaygroundInput/BossBattle/default host/player/scoped GLTF loader and actual shipped goblin geometry/rig/clips. Local inline geometry without images/materials, audio voice service and declared viewport/capture scheduling are Node fixtures. No source changes, browser automation, actual visual/pixel/OS download/GPU/device-performance claim."
+}

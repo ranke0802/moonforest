@@ -30,7 +30,7 @@ test('development actors and editors remain lazy while the normal game keeps its
   const widget=good();widget[0].modules['/project/src/main.js']={};widget[1].modules[`/project/node_modules/@babylonjs/core/Gizmos/${file}.js`]={};
   assert.throws(()=>verifyRuntimeModuleGraph(widget),/Development module entered the initial game graph/);
  }
- for(const file of ['editor-workspace','cinematic-interaction']){
+ for(const file of ['editor-workspace','cinematic-interaction','cinematic-path-view','cinematic-authoring']){
   const leaked=good();leaked[0].modules['/project/src/main.js']={};leaked[1].modules[`/project/src/${file}.js`]={};
   assert.throws(()=>verifyRuntimeModuleGraph(leaked),/Development module entered the initial game graph/);
  }

@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-11-04T06:42:01.616Z",
+  "files": {
+    "ArcherPreview/public/moonforest-help.html": "49feae6c4dfcd1ff9a99648f74f0f38d2ef0427d681955b238530ec0b1a05329",
+    "ArcherPreview/scripts/runtime-module-graph.mjs": "690c2460630a634a65ef5176b15e2b5c7288c0921b1b73cb4be487a709a18893",
+    "ArcherPreview/src/cinematic-authoring.js": "48f4fbf9870e0ce12927c06e0f49fdeb72b51d2b89773b9a767a6e5f0ce6c76b",
+    "ArcherPreview/src/cinematic-document.js": "4b533d754c689bdec41b792a0ebd29fa9b5956b84b2545b5e034b296c6fe0783",
+    "ArcherPreview/src/cinematic-game.js": "fe4505ad06310f02d25ecc52646082c947dfe959c00e4e65082a99c1c100e4ce",
+    "ArcherPreview/src/cinematic-interaction.js": "a6ea724a20c9fcf07c55571c8fff7fa27367b3e876d058591b71e1ea4d561db1",
+    "ArcherPreview/src/cinematic-path-view.js": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63",
+    "ArcherPreview/src/cinematic-player.js": "d4b66ce79a326bce999acbee8a09fe6ab6b6eeaedf3803cfbf0f257fc5c1a61f",
+    "ArcherPreview/src/cinematic-protocol.js": "6c969508bacb9decb53c7734f22c4889fe3893abead1febc4d0445718518d737",
+    "ArcherPreview/src/cinematic-scene-host.js": "58e84171a04c6a47fc0d9fab8a02964342052a211ad75c722cf615a56818b4da",
+    "ArcherPreview/src/cinematic-studio.js": "bed1e0831349d65682a343e44ecfff100021b6a4ebc7f5f8f81d2e2058d19639",
+    "ArcherPreview/src/cinematic-studio.css": "489e193bbf32dd62bfb8f16b92b9bd64240ec449b325a29fc35fa2452b41b260",
+    "ArcherPreview/src/main.js": "a0a21a2c897204ce173083f64f12d725531a25d0468fb1dce4f6f496fe76e9b4",
+    "ArcherPreview/tests/cinematic-authoring.test.js": "395411b2c6567dd508f1e715fbc8df6b5668c7b4629700ac81570bf12feee70e",
+    "ArcherPreview/tests/cinematic-game.test.js": "a749d2d4719e4037cd68eefbac3e335dfcb8e6ed1af3d8f0ecc06413bda83221",
+    "ArcherPreview/tests/cinematic-path-runtime.test.js": "10fffcf565ad6958b8a2708748f6d2370110378e20bd8781380eaf221c43d8a1",
+    "ArcherPreview/tests/cinematic-preview-lifecycle.test.js": "799a073fb8a377705e23ed8e06e153375d7be91a3bbad05538ceaf40c80e479b",
+    "ArcherPreview/tests/cinematic-studio.test.js": "a1c18fb17016ff863444753aaae35a073e4b772f3f2420e6e2864635bae93423",
+    "ArcherPreview/tests/runtime-module-graph.test.js": "bc036a8fc4fc86f09ce7ea208e57083d41af75f3953028aae19e57f3c77cd249",
+    "ArcherPreview/tests/camera-pitch.test.js": "8147114996a9aa04ecee87dd06e2e78873479df95cd345af50f565c11833316f",
+    "ArcherPreview/tests/player-resource-lifecycle.test.js": "afbbdfa768c5634a882790adb2213bd6e67ebd3ce1a84004310b10c1f8901997",
+    "ArcherPreview/tests/ios-playback-recovery.test.js": "559aa1d996cc2c891d0abcd8e041edd9cecea9439f4dcebdb34151e21cfa9b13"
+  }
+}

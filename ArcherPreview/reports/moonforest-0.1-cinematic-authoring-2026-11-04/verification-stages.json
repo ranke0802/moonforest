@@ -1,0 +1,69 @@
+{
+  "baseline": "bb48047ce021e6b25b73cbb8eb126981b70d472b",
+  "stages": [
+    {
+      "stage": 0,
+      "name": "Contract and legacy data",
+      "checkpoints": [
+        "Preview-only retainOnComplete with normal-game default release.",
+        "Optional orientToPath and shot lookAtActorId/lookAtOffset are strict, bounded and backward compatible."
+      ]
+    },
+    {
+      "stage": 1,
+      "name": "Actual cold authoring entry",
+      "checkpoints": [
+        "Studio DOM→native transport→exact main readiness→actual createWorld/BossBattle/default scoped loader/host.",
+        "Only model/image fetch boundary fixtures; no fake host, preparation, readiness or direct observable pointer delivery."
+      ]
+    },
+    {
+      "stage": 2,
+      "name": "Independent actor paths",
+      "checkpoints": [
+        "Start at0, select2s, real canvas DOM drag, save point; repeat for another actor.",
+        "Point list, retime/delete/undo/redo and visible-line toggle have coherent ownership/cleanup."
+      ]
+    },
+    {
+      "stage": 3,
+      "name": "Runtime quarter comparisons",
+      "checkpoints": [
+        "Compare0/25/50/75/100% local values and native actor world transforms to independent interpolation.",
+        "Direction facing handles endpoints/repeated positions; rigid anchor conversion is correct."
+      ]
+    },
+    {
+      "stage": 4,
+      "name": "Motion and camera",
+      "checkpoints": [
+        "Actual registered clips with edited ranges/blends/loop accompany path movement.",
+        "Multiple contiguous camera shots, transitions and actor follow match evaluator/native camera targets."
+      ]
+    },
+    {
+      "stage": 5,
+      "name": "Retained end and warm replay",
+      "checkpoints": [
+        "Completion retains actors, final camera, input suspension, HUD/hero ownership and exact cursor.",
+        "Seek/replay works without model parses, new actor creation, skeleton/rebind/material clone increments."
+      ]
+    },
+    {
+      "stage": 6,
+      "name": "Save and game consumption",
+      "checkpoints": [
+        "Immediate file-save after native edit includes pending changes; reopen exact document.",
+        "Browser save and explicit game-open consume identical document; ordinary game completion restores camera/input/HUD/hero."
+      ]
+    },
+    {
+      "stage": 7,
+      "name": "Explicit interruption",
+      "checkpoints": [
+        "Stop/map/dispose/error from retained end releases exact ownership and path overlays.",
+        "Late work cannot mutate new map/document; cleanup leaves no owned scene observer/timer/path material growth."
+      ]
+    }
+  ]
+}
