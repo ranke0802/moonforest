@@ -1,0 +1,112 @@
+{
+  "baseline": "91afb42",
+  "sourceHashes": {
+    "src/cinematic-studio.js": "315c35972b639c3b1684d32a2cc5a6159e8f46bb9ba599573f22e1aaf0a41472",
+    "src/cinematic-studio.css": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "src/cinematic-subtitles.js": "0f42d7597a370f753ce04c1f00c5736cd1ef7b5919234c608d9a37f3589860ca",
+    "src/cinematic-game.js": "795bfcbbe803d18a3a51724a105ed6e841bee0a7fec06e2572305973fd620aeb",
+    "src/cinematic-document.js": "d8fb61a4eacca4748fbbea9385e0765a6646ae88eb2f81ac2f5859134f79872e",
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/game-tool-lease.js": "ff89aa04ea8845e331345c2f83a428fa018d7b809f4aad083bda5a68861627d9",
+    "src/tool-fine-zoom.js": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7",
+    "public/moonforest-help.html": "81de40c2b1a73f2ba2e9d1fb6a2ad5ed845087fbcb02b5d3606753fbf7a98325"
+  },
+  "cases": [
+    {
+      "name": "All baseline handlers retained; unique controls occupy intended regions; actual preview text selection opens inspector with no history or seek/patch",
+      "passed": true,
+      "baselineHandlers": 49,
+      "candidateHandlers": 51,
+      "missingActions": [],
+      "selectionNoPosition": true,
+      "selectionHistoryNoOp": true,
+      "dragAfterSelection": true
+    },
+    {
+      "name": "Separate camera/motion/path/text/audio lanes select only the relevant inspector and exact target time without editing",
+      "passed": true,
+      "lanes": 5,
+      "actualDefaultActorLoads": 1,
+      "actorUsedOnlyForControlBindings": true,
+      "staleSelectionRejected": true,
+      "modeToolbarUsesActualLease": true
+    },
+    {
+      "name": "Delayed lane seek/actor replies serialize before Play and current-time capture without a late pause",
+      "passed": true,
+      "heldActorReply": true,
+      "positiveNativeClockAfterPlay": true,
+      "heldLaneSeekReply": true,
+      "commandOrderVerified": true
+    },
+    {
+      "name": "Current-time save records exact start/interior/end, updates existing boundary and drains pending seek before capture/Undo",
+      "passed": true,
+      "start": true,
+      "interior": 1,
+      "end": 6,
+      "boundaryNoDuplicate": true,
+      "queuedUndoExact": true
+    },
+    {
+      "name": "All prior literal action controls remain reachable; file dialog/export/reopen and game storage preserve exact schema and subtitle position",
+      "passed": true,
+      "priorLiteralControls": 39,
+      "missingLiteralControls": [],
+      "fileSha256": "e1b98a18d721753442f08985027d85cb9acf9239ce1129a9a4cc2ea18e8d4e8f",
+      "exactRoundtrip": true
+    },
+    {
+      "name": "Responsive regions and reachable scrolling/dialog constraints exist without a browser pixel claim",
+      "passed": true,
+      "regions": [
+        "library",
+        "preview",
+        "selected inspector",
+        "timeline"
+      ],
+      "cssSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+      "shortDesktopScrollFallbackThroughHeight": 800,
+      "simultaneousChipsInIndependentFlow": true,
+      "declaredGridExamples": [
+        {
+          "viewport": [
+            1200,
+            900
+          ],
+          "mode": "3columns",
+          "centerTrackWidth": 660
+        },
+        {
+          "viewport": [
+            900,
+            900
+          ],
+          "mode": "videoAboveTwoPanels",
+          "videoTrackHeight": 432,
+          "panelTrackHeight": 270
+        },
+        {
+          "viewport": [
+            360,
+            800
+          ],
+          "mode": "videoThenLibraryThenInspector",
+          "videoHeight": 384,
+          "libraryMaxHeight": 336,
+          "inspectorMaxHeight": 440.00000000000006
+        }
+      ],
+      "actualComputedLayout": false
+    }
+  ],
+  "scope": "Bounded independent actual Studio↔default game/controller/native-main engine fixture, direct DOM selection and toolbar controls. One existing default goblin may be used only to check actor/motion/path control bindings, not to repeat renderer/geometry tests.",
+  "limits": [
+    "Node/NullEngine and declared canvas rectangle; no browser layout, trusted input, pixels or device performance claim",
+    "Responsive evidence is CSS structure and reachable DOM controls, not computed layout"
+  ],
+  "layoutCssSourceSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+  "sourceUnchanged": true,
+  "passed": true,
+  "generatedAt": "2026-11-04T08:35:25.161Z"
+}

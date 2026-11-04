@@ -1,0 +1,12 @@
+{
+  "src/cinematic-studio.js": "315c35972b639c3b1684d32a2cc5a6159e8f46bb9ba599573f22e1aaf0a41472",
+  "src/cinematic-studio.css": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+  "src/cinematic-subtitles.js": "0f42d7597a370f753ce04c1f00c5736cd1ef7b5919234c608d9a37f3589860ca",
+  "src/cinematic-game.js": "795bfcbbe803d18a3a51724a105ed6e841bee0a7fec06e2572305973fd620aeb",
+  "public/moonforest-help.html": "81de40c2b1a73f2ba2e9d1fb6a2ad5ed845087fbcb02b5d3606753fbf7a98325",
+  "tests/cinematic-subtitles.test.js": "daaae241c74c58af0f1f8d3b40e2c3d65dcb32eff40f2ec91b2f1dfb2e709e17",
+  "tests/cinematic-studio-layout.test.js": "cd532835db6c483c662884d833f88e2a76caa64d6ae35f99c71376362e166c07",
+  "tests/cinematic-studio-layout-css.test.js": "9cf211ec31ae9c204dc76e8f507b359a74db1475311cf9740c962c8fc11dd7a0",
+  "tests/cinematic-studio.test.js": "be5d44d7cbea921b47c37c4efc9a748c5be7a8515f5905e664684787d4c985d6",
+  "tests/cinematic-workspace-controls.test.js": "85a9fabe91970d59c4a4d85d1ab0c4190d2a4e442761148de933d4e4e1a94938"
+}

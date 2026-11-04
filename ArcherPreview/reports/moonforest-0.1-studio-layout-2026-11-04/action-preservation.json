@@ -1,0 +1,7 @@
+{
+  "baseline": "91afb42711b683a6376f2bc38cf7a7cb68a9ebd3",
+  "baselineLiteralActions": 39,
+  "currentLiteralActions": 40,
+  "missing": [],
+  "scope": "Static source availability; independent native DOM gate checks actual controls and selection reachability"
+}

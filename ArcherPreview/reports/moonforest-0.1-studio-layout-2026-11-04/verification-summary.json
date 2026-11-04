@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-11-04T08:36:16.768Z",
+  "passed": true,
+  "baseline": "91afb42",
+  "connectedGate": {
+    "path": "verification-layout.json",
+    "cases": 6,
+    "sourceUnchanged": true
+  },
+  "baselineAvailability": {
+    "actionHandlers": 49,
+    "literalControls": 39,
+    "excludedInterpolatedSelectorTemplates": [
+      "${action}",
+      "view-${mode}"
+    ],
+    "missingActionHandlers": [],
+    "missingLiteralControls": []
+  },
+  "fixedFinding": {
+    "before": "verification-layout-before-selection-fix.json",
+    "beforeStudioSha256": "a4c730bd726d1bd7c92867396f2008f269cce67a0a368eb1e724a5f2e5557227",
+    "symptom": "Pan then target-select left the actual tool lease in pan; actor picking is disabled in pan mode.",
+    "afterStudioSha256": "315c35972b639c3b1684d32a2cc5a6159e8f46bb9ba599573f22e1aaf0a41472",
+    "verified": "Target-select returns underlying camera mode to orbit and updates real orbit/pan aria state."
+  },
+  "verified": [
+    "Actual default Studio/game/controller/native main scheduling: subtitle-selection opens inspector without document/history/seek/patch and ongoing drag completes",
+    "Five separate non-overlap lane groups select correct target/time; simultaneous two actor motions and two captions are independently selectable",
+    "Held actual lane seek/actor replies drain before Play/current save; no late pause and native scheduled clock advances",
+    "Current-time save handles start/interior/end and updates existing boundary without duplicate shots; held seek followed by capture and Undo restores exact document",
+    "All baseline literal controls remain reachable in relevant region/inspector/dialog; exact export/reopen/browser-save preserve schema and subtitle percentages",
+    "Desktop/medium/narrow/short-height CSS constraints and scrolling/dialog structure checked"
+  ],
+  "sourceHashes": {
+    "src/cinematic-studio.js": "315c35972b639c3b1684d32a2cc5a6159e8f46bb9ba599573f22e1aaf0a41472",
+    "src/cinematic-studio.css": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "src/cinematic-subtitles.js": "0f42d7597a370f753ce04c1f00c5736cd1ef7b5919234c608d9a37f3589860ca",
+    "src/cinematic-game.js": "795bfcbbe803d18a3a51724a105ed6e841bee0a7fec06e2572305973fd620aeb",
+    "src/cinematic-document.js": "d8fb61a4eacca4748fbbea9385e0765a6646ae88eb2f81ac2f5859134f79872e",
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/game-tool-lease.js": "ff89aa04ea8845e331345c2f83a428fa018d7b809f4aad083bda5a68861627d9",
+    "src/tool-fine-zoom.js": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7",
+    "public/moonforest-help.html": "81de40c2b1a73f2ba2e9d1fb6a2ad5ed845087fbcb02b5d3606753fbf7a98325"
+  },
+  "currentSourceHashMismatches": [],
+  "limits": [
+    "Node/NullEngine and declared canvas rectangle; no browser layout, trusted input, pixels or device performance claim",
+    "Responsive evidence is CSS structure and reachable DOM controls, not computed layout"
+  ],
+  "example": {
+    "path": "verification-layout-scene.moonforest-scene",
+    "sha256": "e1b98a18d721753442f08985027d85cb9acf9239ce1129a9a4cc2ea18e8d4e8f"
+  },
+  "independentProductionEdits": 0,
+  "buildAudit": "Pending root new-build-ready request"
+}

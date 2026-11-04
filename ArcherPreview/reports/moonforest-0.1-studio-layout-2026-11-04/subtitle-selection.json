@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "tests": 9,
+  "sourceHashes": {
+    "src/cinematic-subtitles.js": "0f42d7597a370f753ce04c1f00c5736cd1ef7b5919234c608d9a37f3589860ca",
+    "src/cinematic-game.js": "795bfcbbe803d18a3a51724a105ed6e841bee0a7fec06e2572305973fd620aeb",
+    "tests/cinematic-subtitles.test.js": "daaae241c74c58af0f1f8d3b40e2c3d65dcb32eff40f2ec91b2f1dfb2e709e17"
+  },
+  "changes": [
+    "Preview text pointerdown emits guarded selection event without scene mutation",
+    "Parent inspector can select text without changing existing drag gesture ownership"
+  ],
+  "scope": "Native DOM/NullEngine; no browser pixels or device performance verification"
+}

@@ -1,0 +1,18 @@
+{
+  "total": 1762,
+  "passed": 1762,
+  "failed": 0,
+  "skipped": 0,
+  "cancelled": 0,
+  "sourceFiles": 10,
+  "sourceUnchanged": false,
+  "sourceUnchangedDuringRun": true,
+  "postRegressionNormalization": {
+    "file": "src/cinematic-studio.css",
+    "beforeSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "afterSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+    "onlyFinalWhitespace": true,
+    "rulesUnchanged": true,
+    "reason": "Remove extra empty EOF line flagged by git diff --check"
+  }
+}

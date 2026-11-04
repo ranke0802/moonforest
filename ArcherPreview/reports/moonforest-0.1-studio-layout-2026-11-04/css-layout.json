@@ -1,0 +1,53 @@
+{
+  "task": "Cinematic Studio workspace layout and Korean guide",
+  "baseline": "91afb42",
+  "owner": "/root/rendering",
+  "requestedSpawn": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "note": "Reused existing successfully created agent; backend model resolution was not independently surfaced."
+  },
+  "files": {
+    "src/cinematic-studio.css": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+    "public/moonforest-help.html": "81de40c2b1a73f2ba2e9d1fb6a2ad5ed845087fbcb02b5d3606753fbf7a98325",
+    "tests/cinematic-studio-layout-css.test.js": "9cf211ec31ae9c204dc76e8f507b359a74db1475311cf9740c962c8fc11dd7a0"
+  },
+  "changes": [
+    "Replaced accumulated CSS overrides with one grouped stylesheet using B's existing control/DOM contract.",
+    "At desktop width1180+ and height801+, the root is a bounded100dvh grid with250px library, flexible preview and290px inspector; side panels independently scroll.",
+    "Medium widths761–1179 show the preview across the top and bounded library/inspector below; the root grows safely instead of shrinking the video to fit every panel.",
+    "At width760 and below, preview/library/inspector stack in that order; video has240px minimum height, camera dock moves below it, panels have bounded independent scroll and transport scrolls horizontally.",
+    "Short desktop viewport height800 and below uses a470px main workspace and scrolling document. This conservatively avoids shrinking the video after header, toolbar, timeline and footer reservations; it does not infer browser text metrics.",
+    "Timeline remains a separate grid section with bounded lane scroll, fixed labels and horizontally scrolling lane items.",
+    "Dock wrappers remain pointer-transparent; actual controls accept pointers. No preview ancestor transforms or new external CSS resources.",
+    "Kept focus-visible treatment,40px buttons, native hidden semantics and scrolling90dvh dialogs.",
+    "Guide explains regions, current-time capture versus whole-work file save, header history, lane navigation, drag and Ctrl zoom."
+  ],
+  "verification": {
+    "command": "node --test tests/cinematic-studio-layout-css.test.js",
+    "passed": 5,
+    "failed": 0,
+    "scope": [
+      "PostCSS syntax/resource and desktop scroll-ownership contracts",
+      "Responsive video-first order, declared size constraints, desktop600/681/768/800px overflow fallback and801/900px bounded viewport boundaries",
+      "No transformed embedded-viewport ancestors or pointer-stealing dock wrappers",
+      "Lane overflow and keyboard/dialog controls",
+      "Korean help region/action consistency"
+    ],
+    "rerunAfterEofNormalization": true
+  },
+  "limits": [
+    "No browser automation, screenshots or device/pixel rendering claims.",
+    "These tests inspect parsed CSS and help DOM; they do not measure browser layout, text metrics or touch targets on a device.",
+    "B owns Studio behavior/DOM tests; C owns independent selection/action/layout contract verification.",
+    "No runtime gameplay, rendering-quality, asset, texture or LOD changes."
+  ],
+  "postRegressionNormalization": {
+    "file": "src/cinematic-studio.css",
+    "beforeSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "afterSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+    "onlyFinalWhitespace": true,
+    "rulesUnchanged": true,
+    "reason": "Remove extra empty EOF line flagged by git diff --check"
+  }
+}

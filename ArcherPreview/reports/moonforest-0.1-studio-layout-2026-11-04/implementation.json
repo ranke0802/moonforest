@@ -1,0 +1,73 @@
+{
+  "release": "MoonForest 0.1 ver",
+  "status": "validated-ready-to-publish",
+  "changes": [
+    "Three-region library / central video / contextual inspector, with independent scrolling",
+    "Clicking actors or subtitles opens selected settings; subtitle selection never patches/seeks or adds history during drag",
+    "Five distinct timeline lanes with serialized target/time navigation and independently reachable simultaneous tracks",
+    "Current-time primary camera save plus retained start/middle/end/add controls at video lower right",
+    "Header history5counts and file actions; advanced coordinates collapsed",
+    "Video-first medium/narrow layout and scroll-safe short desktop fallback"
+  ],
+  "preserved": [
+    "All49 existing action handlers and39 literal controls",
+    "Existing scene schema/files, native orbit/pan/drag/Ctrl fine zoom and actor animation/path controls",
+    "Five-step undo/redo, file import/export, temporary reopen and game storage",
+    "Original assets, textures, LOD,30/60FPS options and ordinary gameplay"
+  ],
+  "integrationFinding": {
+    "issue": "Pan mode survived the new select action and prevented native actor picking",
+    "fix": "Selection action restores existing orbit mode and toolbar state",
+    "independentRecheck": "passed"
+  },
+  "regression": {
+    "total": 1762,
+    "passed": 1762,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "sourceFiles": 10,
+    "sourceUnchanged": false,
+    "sourceUnchangedDuringRun": true,
+    "postRegressionNormalization": {
+      "file": "src/cinematic-studio.css",
+      "beforeSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+      "afterSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+      "onlyFinalWhitespace": true,
+      "rulesUnchanged": true,
+      "reason": "Remove extra empty EOF line flagged by git diff --check"
+    }
+  },
+  "verification": {
+    "connectedGroups": 6,
+    "rootSubtitleSelectionTests": 9,
+    "studioFocusedTests": 51,
+    "cssFocusedTests": 5,
+    "staticActionLiteralsPreserved": 39
+  },
+  "build": {
+    "files": 1452,
+    "bytes": 629416654,
+    "chunks": 56,
+    "changedSiteFiles": 13,
+    "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853"
+  },
+  "limits": [
+    "Native DOM/NullEngine and declared CSS verified; browser pixels/trusted OS interactions not inspected",
+    "No physical-device FPS/heat measurements"
+  ],
+  "preservation": {
+    "preexistingTrackedChanges": 122,
+    "dirtyReports": 43
+  },
+  "independentBuildAudit": "passed-final-eof-normalized-build",
+  "postRegressionNormalization": {
+    "file": "src/cinematic-studio.css",
+    "beforeSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "afterSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+    "onlyFinalWhitespace": true,
+    "rulesUnchanged": true,
+    "reason": "Remove extra empty EOF line flagged by git diff --check"
+  },
+  "postRegressionCssChecks": 5
+}

@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-11-04T08:46:06.775Z",
+  "passed": true,
+  "inputs": {
+    "moduleOrigins": {
+      "path": "reports/moonforest-0.1-studio-layout-2026-11-04/runtime-module-origins.json",
+      "sha256": "4a7e043d8c96db867e79c311256c7e679e66e5d3f34d5bcc9cb7ed122c162410"
+    },
+    "deploymentManifest": {
+      "path": "dist-village/deployment-files.json",
+      "sha256": "e2ce9e88a906f19615223a786faa547ed57796e82ef7a1b743bf2d31f8c66771"
+    }
+  },
+  "graph": {
+    "totalChunks": 56,
+    "mainEntry": "assets/game-DtiQwBtZ.js",
+    "initialStaticChunks": 30,
+    "initialRawJavaScriptBytes": 10278924,
+    "initialDistinctModuleOrigins": 3066,
+    "allBuiltChunkAstImportsAgree": true,
+    "allBuiltChunkHashesMatchDeployment": true,
+    "initialDevelopmentModules": [],
+    "initialGizmoImplementations": [],
+    "nativeKtxLoaderInitiallyPresent": true,
+    "lazyLocations": {
+      "cinematic-subtitles": [
+        "assets/cinematic-game-C_hRgRJB.js"
+      ],
+      "tool-fine-zoom": [
+        "assets/tool-fine-zoom-qIveTlal.js"
+      ],
+      "developer-editor": [
+        "assets/developer-editor-DgrBB3jJ.js"
+      ],
+      "editor-workspace": [
+        "assets/developer-editor-DgrBB3jJ.js"
+      ],
+      "asset-catalog": [
+        "assets/asset-catalog-DaYTbf3s.js"
+      ],
+      "cinematic-studio": [
+        "assets/cinematicStudio-xftBpKW-.js"
+      ],
+      "cinematic-authoring": [
+        "assets/cinematicStudio-xftBpKW-.js"
+      ],
+      "cinematic-path-view": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-interaction": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-game": [
+        "assets/cinematic-game-C_hRgRJB.js"
+      ],
+      "cinematic-scene-host": [
+        "assets/cinematic-game-C_hRgRJB.js"
+      ]
+    },
+    "byteAccounting": "Uses final deployment bytes, including Vite mapDeps preloads inserted after origin capture.",
+    "fineZoomOutsideInitialGameClosure": true,
+    "allBuiltInterChunkDynamicAstImportsAgree": true,
+    "optimizedSelfDynamicOrigins": [
+      "assets/game-DtiQwBtZ.js",
+      "assets/babylon-game-CRNdG57U.js"
+    ],
+    "dynamicImportAccounting": "Inter-chunk AST imports exactly match origins; same-chunk origin imports can compile to local Promise continuations and require no fetched import.",
+    "subtitleHelperOutsideInitialGameClosure": true
+  },
+  "resources": {
+    "expectedRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "manifestRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "sourceIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexExactlyMatchesSource": true,
+    "resourceIndexSha256": "9e3fb9f5539bef9cdb766c48cb1a222bd519bcbc080d2c0684718aaa65491565",
+    "deploymentFiles": 1452,
+    "deploymentRawBytes": 629416654,
+    "baselineDeploymentManifest": {
+      "path": "reports/moonforest-0.1-playback-repair-2026-11-04/pages/ArcherPreviewSite/deployment-files.json",
+      "sha256": "a96b648b81dff3ffcb3d476fbde5a81295f78589f12475c1cacf1a365d2544a0"
+    },
+    "publishedResourceAssets": {
+      "compared": 1370,
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "scope": "Independent read-only build-graph/origin and built-JavaScript integrity audit. Initial graph means static imports from the main game entry; explicit dynamic editor/cinematic routes may load tools. The resource index matches the existing approved resource revision exactly. This is not a browser download, startup, visual-quality, GPU or device-performance measurement.",
+  "hints": {
+    "editor-workspace": {
+      "present": true,
+      "chunks": [
+        "assets/developer-editor-DgrBB3jJ.js"
+      ]
+    },
+    "cinematic-studio": {
+      "present": true,
+      "chunks": [
+        "assets/cinematicStudio-xftBpKW-.js"
+      ]
+    },
+    "guide": {
+      "present": true,
+      "path": "moonforest-help.html",
+      "builtExactlyMatchesSource": true,
+      "sha256": "81de40c2b1a73f2ba2e9d1fb6a2ad5ed845087fbcb02b5d3606753fbf7a98325"
+    }
+  },
+  "subtitleWorkspace": {
+    "builtDockAndCueHints": true,
+    "builtHistoryConstructorLimits": [
+      5,
+      5,
+      5
+    ],
+    "guidePositionAndHistoryHints": true
+  },
+  "studioLayout": {
+    "builtHeaderVersion": "0.1",
+    "builtRegionsAndPrimarySave": true,
+    "builtSelectionReturnsOrbit": true,
+    "historyLimits": [
+      5,
+      5,
+      5
+    ],
+    "stylesheet": {
+      "path": "assets/cinematicStudio-Dgab7eAq.css",
+      "sourceSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+      "builtSha256": "6f56545ee7ae37a1acbeaf464bb9909533c1f067e4bd73a313f7b6f94e7d5cdf",
+      "canonicalSourceSha256": "42c1cbe8cf6a413632f4e3a3e0700b0f42f79504db1cfb24dcdb246c63cc7a42",
+      "normalizedBuiltSha256": "42c1cbe8cf6a413632f4e3a3e0700b0f42f79504db1cfb24dcdb246c63cc7a42",
+      "fullCanonicalRuleMatch": true,
+      "unusedCompilerGeneratedProperties": [
+        {
+          "name": "--lightningcss-light",
+          "value": ""
+        },
+        {
+          "name": "--lightningcss-dark",
+          "value": "initial"
+        }
+      ]
+    },
+    "guideExactlyMatchesSource": true
+  },
+  "postRegressionNormalization": {
+    "path": "reports/moonforest-0.1-studio-layout-2026-11-04/post-regression-normalization.json",
+    "sha256": "9927d52247aaa07927fc6bdbb4b309848f44287f1431128e5416246fee1e129e",
+    "beforeSourceSha256": "e31eb52f153da2f4be301033ab63645592a49ff4da2b27ae6815b52b6a5f585c",
+    "afterSourceSha256": "227cb7175de7869cf74eea972d00c26fd71a6810b1896dba0bf6d060812caf1a",
+    "independentlyReconstructedRemovedEof": "\"\\r\\n\"",
+    "rulesUnchanged": true,
+    "nativeAndWholeTestsNotRepeated": "EOF-only byte change; current emitted stylesheet and all chunk hashes independently rechecked."
+  }
+}
