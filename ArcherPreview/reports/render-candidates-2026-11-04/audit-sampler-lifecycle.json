@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-04T00:00:48.168Z",
+  "sourceSha256Lf": {
+    "src/render-cpu-sampler.js": "40b6d2700dccecbd3ad67d6d750c466d6c52d3c9441c031f7b19596a63c45fef",
+    "src/scene-diagnostics.js": "00b71e4cdd63ce8ec9b2f624e652a45a78d96e14920c26038648f6ae8feaa146"
+  },
+  "lifecycle": {
+    "roundTrips": 50,
+    "enablePauseMapResetAndSceneReplacement": true,
+    "contextLossRestore": true,
+    "engineEndAfterError": true,
+    "actualSceneRenderErrorRestoredDescriptors": true,
+    "failedRenderDoesNotPublishPartialSample": true,
+    "sceneDisposal": true,
+    "observerPlateau": true,
+    "engineAndSceneOwnDescriptorsRestored": true,
+    "externalSceneWrapperPassthrough": true
+  },
+  "nativeSdk": {
+    "drawCalls": 80,
+    "drawBatchesExactlyEqual": true,
+    "engineAndSceneDescriptorsRestoredAfterEveryFrame": true,
+    "sampledGroups": {
+      "drawCommands": {
+        "calls": 80,
+        "ms": 0.004400000000487125
+      },
+      "effectEnable": {
+        "calls": 80,
+        "ms": 0.003699999999753345
+      },
+      "bufferBinding": {
+        "calls": 80,
+        "ms": 0.0037000000002080924
+      },
+      "textureSet": {
+        "calls": 0,
+        "ms": 0
+      },
+      "bufferUpdate": {
+        "calls": 0,
+        "ms": 0
+      },
+      "candidateSelection": {
+        "calls": 1,
+        "ms": 0
+      }
+    },
+    "effectCacheChanges": 1
+  },
+  "localNodeOverhead": {
+    "plain": {
+      "samples": 400,
+      "meanMs": 0.11939449999999795,
+      "medianMs": 0.09280000000012478,
+      "p95Ms": 0.21309999999994034,
+      "maxMs": 1.0585000000000946
+    },
+    "sampledEveryFrame": {
+      "samples": 400,
+      "meanMs": 0.1509194999999994,
+      "medianMs": 0.12590000000000146,
+      "p95Ms": 0.25900000000001455,
+      "maxMs": 0.5666000000001077
+    },
+    "meanDeltaMs": 0.031525000000001455,
+    "medianDeltaMs": 0.03309999999987667,
+    "note": "Alternating20 batches of20 frames; sampling forced every measured frame to expose overhead. Production samples at most1Hz. No camera/asset quality changes. This is a NullEngine CPU fixture, not a device FPS or GPU result."
+  },
+  "limitations": [
+    "No WebGL shader-driver compilation, GPU execution, browser pixels/compositing, phone FPS or thermal benefit is measured.",
+    "Counter durations are inclusive and can overlap. Their sum is not scene render time. EffectChanges counts engine cached Effect identity changes, not GPU program changes.",
+    "Sampled frames include timing/wrapper overhead and may perturb the frame being observed. Do not infer the cause of earlier driver/texture stalls from this fixture."
+  ]
+}

@@ -1,0 +1,870 @@
+{
+  "baseline": "c65e731",
+  "candidateSourceHashes": {
+    "src/village-active-candidates.js": "e47c070bbd905b1526e7fbb9e77e5e9f0f0bc6ebef72f320edf6e56e9bc6ce26",
+    "src/village-streamed-environment.js": "d64ab3c1689767090f27121535806d16a66df6a0130e04a10c54177278cb8cf2"
+  },
+  "logEvidenceSha256": "92dfdbfbb5210a2d20e803f32c42d5723f2e5e97c5e41091beef4da88ab0828a",
+  "validationSha256": "c9cdc95c4f37d53ec56dfc64e30b7c23dca9cb60a2293cb125e4e866a1f731fc",
+  "verdict": {
+    "renderSemantics": "PASS: all4maps×2fixedcameras preserve active order and every actual main/shadow native batch field. Fully warmed position/normal/UV/index streams are unchanged.",
+    "cpuWork": "Native Mesh.isReady calls fall151–1072perview; InstancedMesh.isReady, both getLOD methods and both _preActivate methods remain identical. Extra Node.isEnabled calls and candidate guards are measurable added work.",
+    "cpuReference": "Small positive active-evaluation median evidence across8views, with mixed tail behavior; full scene medians improve in7views and worsen in1. This does not establish a large FPS or thermal improvement.",
+    "phoneResult": "NOT MEASURED. No browser automation, GPU driver measurement, input latency measurement or physical-device thermal/FPS A/B was performed."
+  },
+  "observedLog": {
+    "latestOneSecondFps": 40.658276863504355,
+    "lastTenSecondIntervalMeanMs": 24.277723970915446,
+    "equivalentTenSecondFps": 41.19002263960137,
+    "targetMissFraction": 0.5641646489104116,
+    "textureIdleDelayedEvents": 31,
+    "allRetainedDelayedEvents": 32,
+    "textureAndGeometryIdleDelayedEvents": 28,
+    "note": "Threshold-selected32events are biased and older than the rolling summary. Texture-idle delayed events exclude a texture-only explanation; CPU submission remains distinct from GPU time."
+  },
+  "abProtocol": {
+    "maps": 4,
+    "fixedViews": 8,
+    "actualPackedModels": 90,
+    "pairedTimingSamplesPerView": 32,
+    "timedSceneRenders": 512,
+    "order": "AB/BA alternating eachpair",
+    "controls": [
+      "Same engine/scene/geometry/lighting/camera within eachpair",
+      "Pinned scheduling clock prevents150ms ink selection changes betweenpairs",
+      "Native method identities are unchanged; V8 precise coverage separately counts SDK calls",
+      "No streaming admission or decoded-image work duringpaired renders",
+      "Timing samples disable precise coverage and draw recording",
+      "Active-evaluation hrtime covers Babylon onBeforeActiveMeshesEvaluation through onAfterActiveMeshesEvaluation, including provider work",
+      "Main and shadow batch equality also checks actual Effect ids and source-instance matrix hashes",
+      "A second baseline draw checks stability for eachview",
+      "Runtime source hashes match before and after therun"
+    ]
+  },
+  "timingSummary": {
+    "activeMedianBetterViews": 8,
+    "activeMedianWorseOrEqualViews": 0,
+    "activeP95BetterViews": 6,
+    "activeP95WorseOrEqualViews": 2,
+    "sceneMedianBetterViews": 7,
+    "sceneMedianWorseOrEqualViews": 1,
+    "sceneP95BetterViews": 4,
+    "sceneP95WorseOrEqualViews": 4,
+    "providerAloneSlowerViews": 8,
+    "interpretation": "Native empty-root readiness/prefix savings offset the additional gate in active median reference samples. Provider-only timing rises, tails are mixed, and the absolute CPU differences are small desktop observations."
+  },
+  "views": [
+    {
+      "map": "village",
+      "view": "fixed-front",
+      "candidates": {
+        "before": 1303,
+        "after": 1036,
+        "reduction": 267
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1264,
+          "instanceIsReady": 510,
+          "nodeIsEnabled": 2087,
+          "meshGetLOD": 969,
+          "instanceGetLOD": 510,
+          "meshPreActivate": 1459,
+          "instancePreActivate": 510
+        },
+        "after": {
+          "meshIsReady": 997,
+          "instanceIsReady": 510,
+          "nodeIsEnabled": 2570,
+          "meshGetLOD": 969,
+          "instanceGetLOD": 510,
+          "meshPreActivate": 1459,
+          "instancePreActivate": 510
+        },
+        "meshIsReadyReduction": 267
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "851f0a4f904ff7e09225d0207d6ffc9d656cece92d2c43eea0d283342c8419dd",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.013172,
+          "median": 0.014776000000000001,
+          "p95": 0.019172,
+          "mean": 0.01584075,
+          "max": 0.041096
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.028584000000000002,
+          "median": 0.031584,
+          "p95": 0.041228,
+          "mean": 0.034973875,
+          "max": 0.11006
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.0479,
+          "median": 1.7269,
+          "p95": 2.4946,
+          "mean": 1.83429375,
+          "max": 8.2033
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.0565,
+          "median": 1.5621,
+          "p95": 2.6404,
+          "mean": 1.63064375,
+          "max": 2.6418
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.6604,
+          "median": 2.5914,
+          "p95": 3.7313,
+          "mean": 2.8041593750000002,
+          "max": 11.3968
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.6228,
+          "median": 2.4081,
+          "p95": 3.825,
+          "mean": 2.6089343749999996,
+          "max": 5.3833
+        }
+      }
+    },
+    {
+      "map": "village",
+      "view": "fixed-reverse",
+      "candidates": {
+        "before": 1079,
+        "after": 588,
+        "reduction": 491
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1040,
+          "instanceIsReady": 286,
+          "nodeIsEnabled": 1860,
+          "meshGetLOD": 520,
+          "instanceGetLOD": 286,
+          "meshPreActivate": 789,
+          "instancePreActivate": 286
+        },
+        "after": {
+          "meshIsReady": 549,
+          "instanceIsReady": 286,
+          "nodeIsEnabled": 2119,
+          "meshGetLOD": 520,
+          "instanceGetLOD": 286,
+          "meshPreActivate": 789,
+          "instancePreActivate": 286
+        },
+        "meshIsReadyReduction": 491
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "851f0a4f904ff7e09225d0207d6ffc9d656cece92d2c43eea0d283342c8419dd",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.013104,
+          "median": 0.014912000000000002,
+          "p95": 0.021392,
+          "mean": 0.016294499999999996,
+          "max": 0.044256000000000004
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.03284,
+          "median": 0.036224,
+          "p95": 0.040704000000000004,
+          "mean": 0.038471375,
+          "max": 0.102316
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.6524,
+          "median": 0.8612,
+          "p95": 2.9542,
+          "mean": 1.0407499999999998,
+          "max": 3.8455
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.6086,
+          "median": 0.8386,
+          "p95": 2.4982,
+          "mean": 0.9852343750000002,
+          "max": 3.0759
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.6901,
+          "median": 2.1125,
+          "p95": 4.5231,
+          "mean": 2.2871406249999997,
+          "max": 6.6034
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.5422,
+          "median": 2.0161,
+          "p95": 3.9729,
+          "mean": 2.202215625,
+          "max": 5.3253
+        }
+      }
+    },
+    {
+      "map": "great-plains",
+      "view": "fixed-front",
+      "candidates": {
+        "before": 1627,
+        "after": 555,
+        "reduction": 1072
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1613,
+          "instanceIsReady": 287,
+          "nodeIsEnabled": 2974,
+          "meshGetLOD": 498,
+          "instanceGetLOD": 287,
+          "meshPreActivate": 774,
+          "instancePreActivate": 287
+        },
+        "after": {
+          "meshIsReady": 541,
+          "instanceIsReady": 287,
+          "nodeIsEnabled": 3219,
+          "meshGetLOD": 498,
+          "instanceGetLOD": 287,
+          "meshPreActivate": 774,
+          "instancePreActivate": 287
+        },
+        "meshIsReadyReduction": 1072
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "54d4eac00905053024bd1953b15bbd8f3b00a91f0bafd0bf58e272fc535eae8c",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.045011999999999996,
+          "median": 0.049976,
+          "p95": 0.070808,
+          "mean": 0.053594875,
+          "max": 0.080364
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.075028,
+          "median": 0.081292,
+          "p95": 0.103584,
+          "mean": 0.087417875,
+          "max": 0.212668
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.8709,
+          "median": 1.1292,
+          "p95": 2.1682,
+          "mean": 1.2923875,
+          "max": 4.3322
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.6986,
+          "median": 0.8707,
+          "p95": 1.8273,
+          "mean": 0.9645,
+          "max": 2.9253
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.8802,
+          "median": 2.3317,
+          "p95": 3.6165,
+          "mean": 2.5617031249999997,
+          "max": 6.8938
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.6664,
+          "median": 1.9483,
+          "p95": 3.1245,
+          "mean": 2.11716875,
+          "max": 4.4117
+        }
+      }
+    },
+    {
+      "map": "great-plains",
+      "view": "fixed-reverse",
+      "candidates": {
+        "before": 1972,
+        "after": 1260,
+        "reduction": 712
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1958,
+          "instanceIsReady": 632,
+          "nodeIsEnabled": 3347,
+          "meshGetLOD": 1219,
+          "instanceGetLOD": 632,
+          "meshPreActivate": 1841,
+          "instancePreActivate": 632
+        },
+        "after": {
+          "meshIsReady": 1246,
+          "instanceIsReady": 632,
+          "nodeIsEnabled": 3952,
+          "meshGetLOD": 1219,
+          "instanceGetLOD": 632,
+          "meshPreActivate": 1841,
+          "instancePreActivate": 632
+        },
+        "meshIsReadyReduction": 712
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "54d4eac00905053024bd1953b15bbd8f3b00a91f0bafd0bf58e272fc535eae8c",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.048188,
+          "median": 0.052148,
+          "p95": 0.062552,
+          "mean": 0.053280249999999994,
+          "max": 0.071624
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.07052800000000001,
+          "median": 0.075556,
+          "p95": 0.10481199999999999,
+          "mean": 0.08145387500000002,
+          "max": 0.17257999999999998
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.7809,
+          "median": 2.3573,
+          "p95": 2.9506,
+          "mean": 2.5922437499999997,
+          "max": 9.1471
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.579,
+          "median": 2.0667,
+          "p95": 3.0363,
+          "mean": 2.151271875,
+          "max": 3.5368
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 3.0235,
+          "median": 3.5883,
+          "p95": 4.3133,
+          "mean": 3.8065625,
+          "max": 11.5264
+        },
+        "new": {
+          "samples": 32,
+          "min": 2.5992,
+          "median": 3.2444,
+          "p95": 4.7902,
+          "mean": 3.3946312499999998,
+          "max": 5.6369
+        }
+      }
+    },
+    {
+      "map": "monster-forest",
+      "view": "fixed-front",
+      "candidates": {
+        "before": 1457,
+        "after": 1085,
+        "reduction": 372
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1439,
+          "instanceIsReady": 545,
+          "nodeIsEnabled": 2396,
+          "meshGetLOD": 1040,
+          "instanceGetLOD": 545,
+          "meshPreActivate": 1533,
+          "instancePreActivate": 545
+        },
+        "after": {
+          "meshIsReady": 1067,
+          "instanceIsReady": 545,
+          "nodeIsEnabled": 2914,
+          "meshGetLOD": 1040,
+          "instanceGetLOD": 545,
+          "meshPreActivate": 1533,
+          "instancePreActivate": 545
+        },
+        "meshIsReadyReduction": 372
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "30425c07fdfe5688cc6cef5732981392851d7c5485ef29e02d7d22794eb03940",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.022804,
+          "median": 0.025367999999999998,
+          "p95": 0.040948000000000005,
+          "mean": 0.02683825,
+          "max": 0.049608
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.03784,
+          "median": 0.042184,
+          "p95": 0.0529,
+          "mean": 0.044066249999999994,
+          "max": 0.09242800000000001
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.1467,
+          "median": 1.4317,
+          "p95": 2.424,
+          "mean": 1.6895781250000002,
+          "max": 6.6479
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.0965,
+          "median": 1.3695,
+          "p95": 2.2787,
+          "mean": 1.4805249999999999,
+          "max": 3.089
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 2.08,
+          "median": 2.7272,
+          "p95": 3.7657,
+          "mean": 2.9216718749999995,
+          "max": 10.0362
+        },
+        "new": {
+          "samples": 32,
+          "min": 2.0598,
+          "median": 2.6019,
+          "p95": 4.25,
+          "mean": 2.6927562499999995,
+          "max": 4.66
+        }
+      }
+    },
+    {
+      "map": "monster-forest",
+      "view": "fixed-reverse",
+      "candidates": {
+        "before": 1164,
+        "after": 499,
+        "reduction": 665
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 1146,
+          "instanceIsReady": 252,
+          "nodeIsEnabled": 2102,
+          "meshGetLOD": 454,
+          "instanceGetLOD": 252,
+          "meshPreActivate": 658,
+          "instancePreActivate": 252
+        },
+        "after": {
+          "meshIsReady": 481,
+          "instanceIsReady": 252,
+          "nodeIsEnabled": 2327,
+          "meshGetLOD": 454,
+          "instanceGetLOD": 252,
+          "meshPreActivate": 658,
+          "instancePreActivate": 252
+        },
+        "meshIsReadyReduction": 665
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "30425c07fdfe5688cc6cef5732981392851d7c5485ef29e02d7d22794eb03940",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.022224,
+          "median": 0.02418,
+          "p95": 0.029244,
+          "mean": 0.025501875,
+          "max": 0.053104
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.041887999999999995,
+          "median": 0.04472,
+          "p95": 0.058516000000000006,
+          "mean": 0.04719512500000001,
+          "max": 0.10337999999999999
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.6129,
+          "median": 0.9554,
+          "p95": 1.9789,
+          "mean": 1.0911468749999997,
+          "max": 3.9954
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.596,
+          "median": 0.7939,
+          "p95": 1.8102,
+          "mean": 0.8763000000000002,
+          "max": 2.1921
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.3663,
+          "median": 1.8354,
+          "p95": 3.5327,
+          "mean": 2.0507500000000003,
+          "max": 5.9143
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.3886,
+          "median": 1.7018,
+          "p95": 2.9789,
+          "mean": 1.8345062499999996,
+          "max": 3.55
+        }
+      }
+    },
+    {
+      "map": "witch-cave",
+      "view": "fixed-front",
+      "candidates": {
+        "before": 298,
+        "after": 147,
+        "reduction": 151
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 285,
+          "instanceIsReady": 84,
+          "nodeIsEnabled": 821,
+          "meshGetLOD": 62,
+          "instanceGetLOD": 57,
+          "meshPreActivate": 117,
+          "instancePreActivate": 57
+        },
+        "after": {
+          "meshIsReady": 134,
+          "instanceIsReady": 84,
+          "nodeIsEnabled": 856,
+          "meshGetLOD": 62,
+          "instanceGetLOD": 57,
+          "meshPreActivate": 117,
+          "instancePreActivate": 57
+        },
+        "meshIsReadyReduction": 151
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "8c235b84534188d41c7e1a329197b2001385d6430f96472ea294e7324ef064fb",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.004616,
+          "median": 0.004984,
+          "p95": 0.009264,
+          "mean": 0.005937875,
+          "max": 0.027004
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.008723999999999999,
+          "median": 0.009455999999999999,
+          "p95": 0.017,
+          "mean": 0.011584750000000001,
+          "max": 0.05912
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.2557,
+          "median": 0.3056,
+          "p95": 0.504,
+          "mean": 0.36177812499999995,
+          "max": 1.1586
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.2224,
+          "median": 0.304,
+          "p95": 0.4757,
+          "mean": 0.3226093749999999,
+          "max": 0.5665
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.2846,
+          "median": 1.5283,
+          "p95": 3.9578,
+          "mean": 1.84085625,
+          "max": 6.8436
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.2021,
+          "median": 1.5813,
+          "p95": 2.2233,
+          "mean": 1.6507249999999998,
+          "max": 2.4769
+        }
+      }
+    },
+    {
+      "map": "witch-cave",
+      "view": "fixed-reverse",
+      "candidates": {
+        "before": 297,
+        "after": 145,
+        "reduction": 152
+      },
+      "readiness": {
+        "before": {
+          "meshIsReady": 284,
+          "instanceIsReady": 83,
+          "nodeIsEnabled": 808,
+          "meshGetLOD": 61,
+          "instanceGetLOD": 56,
+          "meshPreActivate": 113,
+          "instancePreActivate": 56
+        },
+        "after": {
+          "meshIsReady": 132,
+          "instanceIsReady": 83,
+          "nodeIsEnabled": 842,
+          "meshGetLOD": 61,
+          "instanceGetLOD": 56,
+          "meshPreActivate": 113,
+          "instancePreActivate": 56
+        },
+        "meshIsReadyReduction": 152
+      },
+      "activeOrderAndMainShadowBatchesEqual": true,
+      "geometryStreamsUnchanged": true,
+      "geometryStreamsSha256": "8c235b84534188d41c7e1a329197b2001385d6430f96472ea294e7324ef064fb",
+      "candidateQueryMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.004532,
+          "median": 0.004992,
+          "p95": 0.02448,
+          "mean": 0.00701275,
+          "max": 0.031703999999999996
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.008204,
+          "median": 0.0091,
+          "p95": 0.050428,
+          "mean": 0.012489125,
+          "max": 0.05946799999999999
+        }
+      },
+      "activeEvaluationIncludingProviderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 0.2427,
+          "median": 0.3065,
+          "p95": 0.4357,
+          "mean": 0.339528125,
+          "max": 1.1045
+        },
+        "new": {
+          "samples": 32,
+          "min": 0.234,
+          "median": 0.2899,
+          "p95": 0.4337,
+          "mean": 0.30773125,
+          "max": 0.6883
+        }
+      },
+      "sceneRenderMs": {
+        "baseline": {
+          "samples": 32,
+          "min": 1.1504,
+          "median": 1.4081,
+          "p95": 1.6882,
+          "mean": 1.47123125,
+          "max": 3.6902
+        },
+        "new": {
+          "samples": 32,
+          "min": 1.1473,
+          "median": 1.3947,
+          "p95": 2.1328,
+          "mean": 1.460928125,
+          "max": 2.1339
+        }
+      }
+    }
+  ],
+  "preservation": [
+    {
+      "path": "src/player-texture-profile.js",
+      "baselineSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "currentSha256": "e90747a364e767e774758d02c4cfb778faeff96e74e1703ace4e67a4464ba372",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/plains-view-distance.js",
+      "baselineSha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "currentSha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-lod.js",
+      "baselineSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "currentSha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-policy.js",
+      "baselineSha256": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "currentSha256": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-shadow-policy.js",
+      "baselineSha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362",
+      "currentSha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-shadow-fade.js",
+      "baselineSha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27",
+      "currentSha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/character-outlines.js",
+      "baselineSha256": "14eb7e9aea21aa5a1f30841dfa383fa233492f3bf969b553c76a1852d6c3aa5e",
+      "currentSha256": "14eb7e9aea21aa5a1f30841dfa383fa233492f3bf969b553c76a1852d6c3aa5e",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "src/village-outlines.js",
+      "baselineSha256": "eb4fe820f1852cc42b8f0e5132a3cceb55037fd1e7ac26beb34f45bb31462246",
+      "currentSha256": "eb4fe820f1852cc42b8f0e5132a3cceb55037fd1e7ac26beb34f45bb31462246",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/warrior-v3.json",
+      "baselineSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "currentSha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/warrior-v3-ios.json",
+      "baselineSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "currentSha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/village.json",
+      "baselineSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "currentSha256": "be8e8164bbba573651bf3fcd77b77da3b357f8cd11125c103e5ee4076ce4940f",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/great-plains.json",
+      "baselineSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "currentSha256": "1999dcf9efdaf577add833bda372491a91bc7baf7523b5fa8f1ea4a58d4debde",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/monster-forest.json",
+      "baselineSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "currentSha256": "144e8fda49d94b47b4a7c75864c3a70af1f5d2289027da2d6ad071dcf84c4ded",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    },
+    {
+      "path": "public/assets/witch-cave.json",
+      "baselineSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "currentSha256": "3d072e10ff7592e03294521fe6b59ae9c0cecc4956ccd87626157189695c2978",
+      "unchanged": true,
+      "hashScope": "UTF8, CRLF normalized to LF"
+    }
+  ],
+  "allProtectedPathsUnchanged": true,
+  "limitations": [
+    "NullEngine does not measure GPU time, physical-device FPS, input latency, thermal state or visual quality.",
+    "Actual shipped geometry/LOD/UV/vertex streams, native instances and real world light/shadow/cull setup are used. Downloaded textures and material image decoding are replaced with1x1 opaque PBR albedo fixtures; no player/boss asset is added to this map-only comparison.",
+    "Triplet CPU timings include V8 precise-coverage and draw-recording overhead; separate reference timings disable both, but remain noisy desktop CPU observations and cannot predict phone FPS.",
+    "A complete rendered batch equality includes main and shadow sources, geometry ids, primitive ranges, instance order, instance matrix hashes and actual Effect ids."
+  ],
+  "files": [
+    "reports/render-candidates-2026-11-04/extract-log.mjs",
+    "reports/render-candidates-2026-11-04/log-evidence.json",
+    "reports/render-candidates-2026-11-04/verify-four-map-ab.mjs",
+    "reports/render-candidates-2026-11-04/four-map-ab-validation.json",
+    "reports/render-candidates-2026-11-04/four-map-ab.log",
+    "reports/render-candidates-2026-11-04/assess-ab.mjs",
+    "reports/render-candidates-2026-11-04/ab-assessment.json"
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-03T23:58:17.443719+00:00",
+  "baseline": "c65e731",
+  "runtimeEditedByReviewer": false,
+  "sourceSha256Lf": {
+    "src/village-active-candidates.js": "e47c070bbd905b1526e7fbb9e77e5e9f0f0bc6ebef72f320edf6e56e9bc6ce26",
+    "src/village-streamed-environment.js": "b10bca92d1e59d9e2fd7601f811dccae7c5f1cdefd447fcc6c723834157fce40",
+    "src/village-instancing.js": "95e5a0349045025a3870cb950d57fc17743e10561b4cec7072faed61dd58a5d7"
+  },
+  "focused": {
+    "passed": 4,
+    "failed": 0
+  },
+  "actualNativeProbe": {
+    "steps": 7,
+    "batchesAndLodAndShadowEqual": true,
+    "sourcePreActivateTraceEqual": true,
+    "mutationsFailOpen": [
+      "material",
+      "subMeshes",
+      "skeleton",
+      "morphTargetManager",
+      "actionManager",
+      "isReady",
+      "isEnabled",
+      "getTotalVertices",
+      "nativeGeometry"
+    ],
+    "providerOwnedRestoration": true,
+    "externalWrapperPassThrough": true
+  },
+  "decision": "Current disabled owned empty-clone-root extension is safe within the inspected production contract. No runtime change is requested. No spatial/frustum or arbitrary half-mesh filter is implemented or approved by this audit.",
+  "sourceAndLodContract": [
+    "Only descendants of each newly instantiated placement are registered as empty clone roots. Original container sources and source LODs are not registered.",
+    "Only native Mesh roots with no geometry, material, submeshes, skeleton, morph manager, thin instances or action manager and native methods may be skipped, only while actually disabled.",
+    "All enabled roots, geometry-bearing sources/LODs, dynamic and quest actors retain original provider order. Geometry/material/behavior attachment immediately fails open.",
+    "Native instance preActivate and per-render-pass visible instance storage remain untouched; actual before/after source preActivate traces are identical.",
+    "Shadow selection and native shadow renderList remain independent of camera frustum; offscreen casters remain eligible under existing policy."
+  ],
+  "whyBroadFrustumIsUnapproved": [
+    "Native scene skips frustum tests for scene._skipFrustumClipping or mesh.alwaysSelectAsActiveMesh. A naive prefilter could discard native-visible objects.",
+    "Main camera absence is not absence from shadow, RTT or secondary camera passes. Do not reuse a primary-camera filtered list for those passes.",
+    "Invisible geometry sources may still own visible native instance/LOD batches; source isVisible=false is not proof that its instances have no rendering work.",
+    "getLOD/preActivate reset visibleInstances and cache state before native drawing. Excluding source meshes needs actual batch equality across camera return and LOD changes, not only static active counts.",
+    "Cave camera can render using temporarily constrained transforms. Cached pre-collision world planes or approximate placement/cell bounds can reject native-visible geometry.",
+    "Skinned/morphed or custom LOD/frustum/action objects can require preparation even when a bounding guess is outside; current empty-root contract excludes these classes."
+  ],
+  "diagnosticWrapperReview": [
+    "Sampling one frame at1Hz while collecting is reasonable only with clear sampled CPU/inclusive labels; it cannot identify GPU elapsed time or driver wait.",
+    "Return values, receiver, exceptions and original own descriptors must be preserved, including methods inherited from the prototype.",
+    "Pause/disposal/error/context loss must release hooks, and a retained external wrapper must become an unmeasured passthrough.",
+    "Previously reported nonconfigurable+writable descriptor issue is fixed by skipping nonconfigurable own methods; independent sampler lifecycle11focused regressions and50roundtrips passed. See audit-sampler-lifecycle.json."
+  ],
+  "limitations": [
+    "Actual Babylon9.31 CPU draw/batch/LOD/shadow and source-preActivate paths, with native per-render-pass instancing storage, were exercised in NullEngine.",
+    "No GPU/WebGL driver, browser pixels, phone FPS or thermal result is measured.",
+    "A smaller candidate count alone does not prove visual equality. Actual native draws were nonzero at every stage in this probe."
+  ],
+  "samplerIndependentReview": "reports/render-candidates-2026-11-04/audit-sampler-lifecycle.json"
+}

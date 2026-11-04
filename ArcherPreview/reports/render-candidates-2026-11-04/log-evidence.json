@@ -1,0 +1,2609 @@
+{
+  "baseline": "c65e731",
+  "input": {
+    "sha256": "3e7496849158961c4df84aa6efd6bf632eafca3cee60bd2861228c0392275fc5",
+    "createdAt": "2026-11-03T23:47:55.217Z",
+    "bundle": "./assets/index-CCxf0g6u.js",
+    "character": "warrior-v3",
+    "renderSize": [
+      1664,
+      768
+    ],
+    "quality": "high",
+    "gpuStatus": "unsupported"
+  },
+  "summary": {
+    "reported": {
+      "fps": 40.658276863504355,
+      "frameMs": 30.899999976158142,
+      "maxMs": 36.90000003576279,
+      "p95Ms": 33.80000001192093,
+      "slowFrames": 0,
+      "thresholdMs": 50,
+      "targetFps": 60,
+      "samples": 413,
+      "maxWorkMs": 32.30000001192093,
+      "meanFrameMs": 24.277723970915446,
+      "meanWorkMs": 16.17457627023392,
+      "p95WorkMs": 25.799999952316284,
+      "missedTargetFrames": 233,
+      "missedTargetThresholdMs": 20.833333333333332
+    },
+    "fpsWindowSeconds": 1,
+    "intervalMeanWindowSeconds": 10,
+    "reciprocalMeanFrameFps": 41.19002263960137,
+    "lastOneSecondImpliedMeanIntervalMs": 24.595238095238095,
+    "targetMissFraction": 0.5641646489104116,
+    "interpretation": "40.658FPS is the latest1second.24.2777ms is the last10seconds413samples, equivalent41.190FPS. slowFrames0 uses50ms, while233/413=56.4% exceed the separate20.833ms target-overrun threshold. Different windows must not be called inconsistent or interpreted as a controlled before/after result."
+  },
+  "priorLogDescriptiveOnly": {
+    "sha256": "18a39909acb5a5fd3b801cf104fcbee08b50b5006f9a796c94ede74c6c5a929a",
+    "createdAt": "2026-11-03T17:15:09.658Z",
+    "bundle": "./assets/index-BmLa5VqP.js",
+    "character": "warrior-v3",
+    "summary": {
+      "fps": 45.36489151873767,
+      "frameMs": 17.399999976158142,
+      "maxMs": 75.19999998807907,
+      "p95Ms": 36,
+      "slowFrames": 2,
+      "thresholdMs": 50,
+      "targetFps": 60,
+      "samples": 459,
+      "maxWorkMs": 26.599999964237213,
+      "meanFrameMs": 21.79847494553377,
+      "meanWorkMs": 14.203050110594639,
+      "p95WorkMs": 21.5,
+      "missedTargetFrames": 237,
+      "missedTargetThresholdMs": 20.833333333333332
+    },
+    "reciprocalMeanFrameFps": 45.87476887711758,
+    "controlledComparison": false,
+    "reason": "Different camera paths, map residency, loading phases, observation windows and device thermal history. This is a new observation, not a causal A/B benchmark."
+  },
+  "delayedEventGroups": {
+    "all": {
+      "events": 32,
+      "frameIntervalMs": {
+        "samples": 32,
+        "min": 50.2,
+        "mean": 61.706250000000004,
+        "p95": 98.1,
+        "max": 119.5
+      },
+      "cpuSubmitMs": {
+        "samples": 32,
+        "min": 14.1,
+        "mean": 30.712500000000002,
+        "p95": 83.1,
+        "max": 94.9
+      },
+      "sceneMs": {
+        "samples": 32,
+        "min": 12.5,
+        "mean": 25.16874999180436,
+        "p95": 57.89999997615814,
+        "max": 59.299999952316284
+      },
+      "activeMeshesMs": {
+        "samples": 32,
+        "min": 3.899999976158142,
+        "mean": 9.621874995529652,
+        "p95": 18.30000001192093,
+        "max": 35.39999997615814
+      },
+      "drawSubmissionMs": {
+        "samples": 32,
+        "min": 6,
+        "mean": 10.493749989196658,
+        "p95": 23,
+        "max": 33.799999952316284
+      },
+      "renderTargetsMs": {
+        "samples": 32,
+        "min": 1.5,
+        "mean": 2.965624999254942,
+        "p95": 8.700000047683716,
+        "max": 12
+      },
+      "worldUpdateMs": {
+        "samples": 32,
+        "min": 0.19999998807907104,
+        "mean": 0.6374999992549419,
+        "p95": 0.800000011920929,
+        "max": 6.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 32,
+        "min": 0.09999996423721313,
+        "mean": 0.49062501080334187,
+        "p95": 0.5000000596046448,
+        "max": 7.500000059604645
+      }
+    },
+    "textureIdle": {
+      "events": 31,
+      "frameIntervalMs": {
+        "samples": 31,
+        "min": 50.2,
+        "mean": 62.0516129032258,
+        "p95": 98.1,
+        "max": 119.5
+      },
+      "cpuSubmitMs": {
+        "samples": 31,
+        "min": 14.1,
+        "mean": 30.906451612903226,
+        "p95": 83.1,
+        "max": 94.9
+      },
+      "sceneMs": {
+        "samples": 31,
+        "min": 12.5,
+        "mean": 25.254838701217405,
+        "p95": 57.89999997615814,
+        "max": 59.299999952316284
+      },
+      "activeMeshesMs": {
+        "samples": 31,
+        "min": 3.899999976158142,
+        "mean": 9.648387091775094,
+        "p95": 18.30000001192093,
+        "max": 35.39999997615814
+      },
+      "drawSubmissionMs": {
+        "samples": 31,
+        "min": 6,
+        "mean": 10.532258052979746,
+        "p95": 23,
+        "max": 33.799999952316284
+      },
+      "renderTargetsMs": {
+        "samples": 31,
+        "min": 1.5,
+        "mean": 2.977419355223256,
+        "p95": 8.700000047683716,
+        "max": 12
+      },
+      "worldUpdateMs": {
+        "samples": 31,
+        "min": 0.19999998807907104,
+        "mean": 0.6516129028412604,
+        "p95": 0.800000011920929,
+        "max": 6.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 31,
+        "min": 0.09999996423721313,
+        "mean": 0.4903225898742676,
+        "p95": 0.40000003576278687,
+        "max": 7.500000059604645
+      }
+    },
+    "textureAndGeometryIdle": {
+      "events": 28,
+      "frameIntervalMs": {
+        "samples": 28,
+        "min": 50.2,
+        "mean": 62.232142857142854,
+        "p95": 98.1,
+        "max": 119.5
+      },
+      "cpuSubmitMs": {
+        "samples": 28,
+        "min": 14.1,
+        "mean": 30.400000000000002,
+        "p95": 83.1,
+        "max": 94.9
+      },
+      "sceneMs": {
+        "samples": 28,
+        "min": 12.5,
+        "mean": 24.49999999148505,
+        "p95": 54.10000002384186,
+        "max": 57.89999997615814
+      },
+      "activeMeshesMs": {
+        "samples": 28,
+        "min": 3.899999976158142,
+        "mean": 8.799999997019768,
+        "p95": 17,
+        "max": 18.30000001192093
+      },
+      "drawSubmissionMs": {
+        "samples": 28,
+        "min": 6,
+        "mean": 10.574999988079071,
+        "p95": 23,
+        "max": 33.799999952316284
+      },
+      "renderTargetsMs": {
+        "samples": 28,
+        "min": 1.5,
+        "mean": 3.017857142857143,
+        "p95": 8.700000047683716,
+        "max": 12
+      },
+      "worldUpdateMs": {
+        "samples": 28,
+        "min": 0.19999998807907104,
+        "mean": 0.653571428997176,
+        "p95": 0.800000011920929,
+        "max": 6.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 28,
+        "min": 0.09999996423721313,
+        "mean": 0.5107142946549824,
+        "p95": 0.40000003576278687,
+        "max": 7.500000059604645
+      }
+    },
+    "texturePending": {
+      "events": 1,
+      "frameIntervalMs": {
+        "samples": 1,
+        "min": 51,
+        "mean": 51,
+        "p95": 51,
+        "max": 51
+      },
+      "cpuSubmitMs": {
+        "samples": 1,
+        "min": 24.7,
+        "mean": 24.7,
+        "p95": 24.7,
+        "max": 24.7
+      },
+      "sceneMs": {
+        "samples": 1,
+        "min": 22.5,
+        "mean": 22.5,
+        "p95": 22.5,
+        "max": 22.5
+      },
+      "activeMeshesMs": {
+        "samples": 1,
+        "min": 8.800000011920929,
+        "mean": 8.800000011920929,
+        "p95": 8.800000011920929,
+        "max": 8.800000011920929
+      },
+      "drawSubmissionMs": {
+        "samples": 1,
+        "min": 9.300000011920929,
+        "mean": 9.300000011920929,
+        "p95": 9.300000011920929,
+        "max": 9.300000011920929
+      },
+      "renderTargetsMs": {
+        "samples": 1,
+        "min": 2.599999964237213,
+        "mean": 2.599999964237213,
+        "p95": 2.599999964237213,
+        "max": 2.599999964237213
+      },
+      "worldUpdateMs": {
+        "samples": 1,
+        "min": 0.19999998807907104,
+        "mean": 0.19999998807907104,
+        "p95": 0.19999998807907104,
+        "max": 0.19999998807907104
+      },
+      "hudUpdateMs": {
+        "samples": 1,
+        "min": 0.5000000596046448,
+        "mean": 0.5000000596046448,
+        "p95": 0.5000000596046448,
+        "max": 0.5000000596046448
+      }
+    },
+    "moving": {
+      "events": 20,
+      "frameIntervalMs": {
+        "samples": 20,
+        "min": 50.2,
+        "mean": 63.38000000000001,
+        "p95": 91.2,
+        "max": 98.1
+      },
+      "cpuSubmitMs": {
+        "samples": 20,
+        "min": 17.8,
+        "mean": 36.565,
+        "p95": 83.1,
+        "max": 94.9
+      },
+      "sceneMs": {
+        "samples": 20,
+        "min": 16.100000023841858,
+        "mean": 29.03999999165535,
+        "p95": 57.89999997615814,
+        "max": 59.299999952316284
+      },
+      "activeMeshesMs": {
+        "samples": 20,
+        "min": 6.599999964237213,
+        "mean": 10.949999991059304,
+        "p95": 18.30000001192093,
+        "max": 35.39999997615814
+      },
+      "drawSubmissionMs": {
+        "samples": 20,
+        "min": 6.600000023841858,
+        "mean": 12.134999984502793,
+        "p95": 23,
+        "max": 33.799999952316284
+      },
+      "renderTargetsMs": {
+        "samples": 20,
+        "min": 1.5,
+        "mean": 3.2950000017881393,
+        "p95": 8.700000047683716,
+        "max": 12
+      },
+      "worldUpdateMs": {
+        "samples": 20,
+        "min": 0.30000001192092896,
+        "mean": 0.7849999964237213,
+        "p95": 0.800000011920929,
+        "max": 6.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 20,
+        "min": 0.09999996423721313,
+        "mean": 0.6100000083446503,
+        "p95": 0.40000003576278687,
+        "max": 7.500000059604645
+      }
+    },
+    "plainsTextureIdle": {
+      "events": 6,
+      "frameIntervalMs": {
+        "samples": 6,
+        "min": 50.2,
+        "mean": 77.59999999999998,
+        "p95": 98.1,
+        "max": 98.1
+      },
+      "cpuSubmitMs": {
+        "samples": 6,
+        "min": 22.2,
+        "mean": 59.51666666666667,
+        "p95": 94.9,
+        "max": 94.9
+      },
+      "sceneMs": {
+        "samples": 6,
+        "min": 19.5,
+        "mean": 41.25,
+        "p95": 57.89999997615814,
+        "max": 57.89999997615814
+      },
+      "activeMeshesMs": {
+        "samples": 6,
+        "min": 6.599999964237213,
+        "mean": 11.98333332935969,
+        "p95": 18.30000001192093,
+        "max": 18.30000001192093
+      },
+      "drawSubmissionMs": {
+        "samples": 6,
+        "min": 7.5,
+        "mean": 18.483333309491474,
+        "p95": 33.799999952316284,
+        "max": 33.799999952316284
+      },
+      "renderTargetsMs": {
+        "samples": 6,
+        "min": 1.9000000357627869,
+        "mean": 5.266666680574417,
+        "p95": 12,
+        "max": 12
+      },
+      "worldUpdateMs": {
+        "samples": 6,
+        "min": 0.30000001192092896,
+        "mean": 1.3833333452542622,
+        "p95": 6.800000011920929,
+        "max": 6.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 6,
+        "min": 0.09999996423721313,
+        "mean": 1.4499999980131786,
+        "p95": 7.500000059604645,
+        "max": 7.500000059604645
+      }
+    },
+    "villageTextureIdle": {
+      "events": 25,
+      "frameIntervalMs": {
+        "samples": 25,
+        "min": 50.2,
+        "mean": 58.32000000000001,
+        "p95": 69.7,
+        "max": 119.5
+      },
+      "cpuSubmitMs": {
+        "samples": 25,
+        "min": 14.1,
+        "mean": 24.04,
+        "p95": 38.5,
+        "max": 64.5
+      },
+      "sceneMs": {
+        "samples": 25,
+        "min": 12.5,
+        "mean": 21.415999989509583,
+        "p95": 33.69999998807907,
+        "max": 59.299999952316284
+      },
+      "activeMeshesMs": {
+        "samples": 25,
+        "min": 3.899999976158142,
+        "mean": 9.08799999475479,
+        "p95": 11.799999952316284,
+        "max": 35.39999997615814
+      },
+      "drawSubmissionMs": {
+        "samples": 25,
+        "min": 6,
+        "mean": 8.62399999141693,
+        "p95": 16.099999964237213,
+        "max": 16.69999998807907
+      },
+      "renderTargetsMs": {
+        "samples": 25,
+        "min": 1.5,
+        "mean": 2.427999997138977,
+        "p95": 4,
+        "max": 4
+      },
+      "worldUpdateMs": {
+        "samples": 25,
+        "min": 0.19999998807907104,
+        "mean": 0.4759999966621399,
+        "p95": 0.800000011920929,
+        "max": 0.800000011920929
+      },
+      "hudUpdateMs": {
+        "samples": 25,
+        "min": 0.09999996423721313,
+        "mean": 0.260000011920929,
+        "p95": 0.40000003576278687,
+        "max": 0.40000003576278687
+      }
+    }
+  },
+  "candidateSnapshots": [
+    {
+      "map": "warrior-plains",
+      "scanned": 3036,
+      "submitted": 1879,
+      "skipped": 1157,
+      "owned": 1439,
+      "skippedFraction": 0.3810935441370224,
+      "untracked": 1597,
+      "enabledOrCustomOwned": 282,
+      "events": 5
+    },
+    {
+      "map": "warrior-plains",
+      "scanned": 3036,
+      "submitted": 1835,
+      "skipped": 1201,
+      "owned": 1439,
+      "skippedFraction": 0.3955862977602108,
+      "untracked": 1597,
+      "enabledOrCustomOwned": 238,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1684,
+      "submitted": 1247,
+      "skipped": 437,
+      "owned": 752,
+      "skippedFraction": 0.25950118764845603,
+      "untracked": 932,
+      "enabledOrCustomOwned": 315,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1688,
+      "submitted": 1338,
+      "skipped": 350,
+      "owned": 752,
+      "skippedFraction": 0.20734597156398105,
+      "untracked": 936,
+      "enabledOrCustomOwned": 402,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1712,
+      "submitted": 1451,
+      "skipped": 261,
+      "owned": 752,
+      "skippedFraction": 0.15245327102803738,
+      "untracked": 960,
+      "enabledOrCustomOwned": 491,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1718,
+      "submitted": 1338,
+      "skipped": 380,
+      "owned": 753,
+      "skippedFraction": 0.22118742724097787,
+      "untracked": 965,
+      "enabledOrCustomOwned": 373,
+      "events": 2
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1719,
+      "submitted": 1332,
+      "skipped": 387,
+      "owned": 753,
+      "skippedFraction": 0.225130890052356,
+      "untracked": 966,
+      "enabledOrCustomOwned": 366,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1317,
+      "skipped": 403,
+      "owned": 753,
+      "skippedFraction": 0.23430232558139535,
+      "untracked": 967,
+      "enabledOrCustomOwned": 350,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1286,
+      "skipped": 434,
+      "owned": 753,
+      "skippedFraction": 0.25232558139534883,
+      "untracked": 967,
+      "enabledOrCustomOwned": 319,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1267,
+      "skipped": 453,
+      "owned": 753,
+      "skippedFraction": 0.2633720930232558,
+      "untracked": 967,
+      "enabledOrCustomOwned": 300,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1252,
+      "skipped": 468,
+      "owned": 753,
+      "skippedFraction": 0.27209302325581397,
+      "untracked": 967,
+      "enabledOrCustomOwned": 285,
+      "events": 6
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1247,
+      "skipped": 473,
+      "owned": 753,
+      "skippedFraction": 0.275,
+      "untracked": 967,
+      "enabledOrCustomOwned": 280,
+      "events": 4
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1242,
+      "skipped": 478,
+      "owned": 753,
+      "skippedFraction": 0.2779069767441861,
+      "untracked": 967,
+      "enabledOrCustomOwned": 275,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1272,
+      "skipped": 448,
+      "owned": 753,
+      "skippedFraction": 0.26046511627906976,
+      "untracked": 967,
+      "enabledOrCustomOwned": 305,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1268,
+      "skipped": 452,
+      "owned": 753,
+      "skippedFraction": 0.2627906976744186,
+      "untracked": 967,
+      "enabledOrCustomOwned": 301,
+      "events": 2
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1254,
+      "skipped": 466,
+      "owned": 753,
+      "skippedFraction": 0.2709302325581395,
+      "untracked": 967,
+      "enabledOrCustomOwned": 287,
+      "events": 1
+    },
+    {
+      "map": "warrior-v3",
+      "scanned": 1720,
+      "submitted": 1211,
+      "skipped": 509,
+      "owned": 753,
+      "skippedFraction": 0.29593023255813955,
+      "untracked": 967,
+      "enabledOrCustomOwned": 244,
+      "events": 2
+    }
+  ],
+  "currentCandidateSnapshot": {
+    "scanned": 1720,
+    "submitted": 1211,
+    "skipped": 509,
+    "owned": 753
+  },
+  "currentTextureSnapshot": {
+    "asset": null,
+    "stage": "idle",
+    "lastPromoteMs": 1.5
+  },
+  "textureStreaming": {
+    "highTextureAssets": 4,
+    "highTexturePending": 0,
+    "highTexturePendingAsset": null,
+    "highTextureStage": "idle",
+    "highTextureLastPromoteMs": 1.5,
+    "highTextureMax": 4096,
+    "highTextureLoads": 13,
+    "highTextureReleases": 9,
+    "highTextureError": null,
+    "highTextureBudget": 100663296,
+    "highTextureBytes": 55924160,
+    "highTextureReserved": 0,
+    "highTexturePeak": 95071024,
+    "highTextureQueued": 0,
+    "highTextureMoving": false,
+    "highTextureMovingLoads": 6,
+    "highTextureCooldownMs": 0,
+    "highTextureLastPrepareMs": 708.9000000357628,
+    "highTextureFormat": 37808
+  },
+  "confirmed": [
+    "31of32 retained delay events have texturePending0 and stageidle;28also have geometryPending0. Texture preparation is not required for the recorded delays.",
+    "Six plains movement delay events have3036scanned/1835–1879submitted and1157–1201skipped. The disabled-instance filter is operating, but still scans the full native list and retains all untracked source/LOD/dynamic candidates.",
+    "The village final snapshot scans1720, submits1211, skips509, owns753.967candidates are untracked;244owned instances remain submitted. These counts describe work candidates, not actual visible draws.",
+    "Target60 is frequently missed inside the last10second summary even though its50ms slow-event count is0. The retained events span earlier portions of the session and are a different population."
+  ],
+  "unresolved": [
+    "The log has no candidate-provider duration; O(n) WeakSet/method checks can be identified in source but their elapsed CPU contribution is unmeasured.",
+    "CPU draw-submission counters include driver-call waits and can overlap render-target work; they are not GPU elapsed measurements and must not be added as independent disjoint stages.",
+    "A long frame interval with a shorter current JS submission cannot identify input, GC, OS scheduling, GPU throttling or the prior-frame driver delay. No input-event latency timestamp or physical temperature exists in this log."
+  ],
+  "sourceReferences": [
+    {
+      "revision": "c65e731",
+      "path": "src/frame-diagnostics.js",
+      "line": 34
+    },
+    {
+      "revision": "c65e731",
+      "path": "src/frame-diagnostics.js",
+      "line": 40
+    },
+    {
+      "revision": "c65e731",
+      "path": "src/frame-diagnostics.js",
+      "line": 17
+    },
+    {
+      "revision": "c65e731",
+      "path": "src/frame-diagnostics.js",
+      "line": 38
+    },
+    {
+      "revision": "c65e731",
+      "path": "src/village-active-candidates.js",
+      "line": 17
+    }
+  ],
+  "controlledABPlan": {
+    "baseline": "c65e731 public provider: disabled registered frozen native instances only; compare the new provider against this exact implementation, plus native baseline where useful.",
+    "fixedInputs": "Four authoritative map layouts/manifests, actual shipped packed geometry and identical lighting/camera/LOD state; omit downloaded images in NullEngine while preserving material feature contracts. Freeze view and enabled/visibility flags within each A/B pair.",
+    "order": "Render warmup, then alternate baseline/new/baseline on the same engine and scene for each fixed camera. No geometry streaming or texture admission between paired renders.",
+    "equality": "Assert actual active mesh names, native main-camera and shadow batch source/index ranges/instance names and matrices, geometry/LOD selection, material state and pass order. Record effect/readiness calls and candidate classifications independently.",
+    "boundaries": "Include visible/hidden shared sources, source LODs, enabled/disabled frozen instances, dynamic player-like meshes, nested parent disable, custom methods, custom/subset providers and release/revisit. A source hidden from its own draw can still be needed for instance preactivation.",
+    "measurements": "SDK candidate/readiness calls and CPU reference timing only. No GPU driver, phone FPS, heat, texture quality or visual-certification claim."
+  },
+  "samplingLimitations": [
+    "Only32threshold-selected delayed events are retained; groupmeans and maxima describe this biased retained set, not all frames or session frequency.",
+    "summary is a rolling latest10seconds; fps is a rolling latest1second.",
+    "Draw/active/shadow equality can be validated in NullEngine, but real driver/GPU/mobile behavior remains unmeasured."
+  ],
+  "events": [
+    {
+      "atSeconds": 96,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval-and-current-work",
+      "frameIntervalMs": 73.5,
+      "cpuSubmitMs": 94.9,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1879,
+        "skipped": 1157,
+        "owned": 1439
+      },
+      "position": [
+        -40.1,
+        -18.1
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 127,
+        "sceneMs": 45.09999996423721,
+        "animationMs": 0.5999999642372131,
+        "activeMeshesMs": 17,
+        "renderTargetsMs": 4.5,
+        "drawSubmissionMs": 22.599999964237213,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 7.500000059604645
+    },
+    {
+      "atSeconds": 96.1,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval-and-current-work",
+      "frameIntervalMs": 98.1,
+      "cpuSubmitMs": 83.1,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1879,
+        "skipped": 1157,
+        "owned": 1439
+      },
+      "position": [
+        -40.8,
+        -18.2
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 57.89999997615814,
+        "animationMs": 0.6000000238418579,
+        "activeMeshesMs": 13.5,
+        "renderTargetsMs": 8.700000047683716,
+        "drawSubmissionMs": 33.799999952316284,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 6.800000011920929,
+      "hudUpdateMs": 0.40000003576278687
+    },
+    {
+      "atSeconds": 96.2,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval-and-current-work",
+      "frameIntervalMs": 91.2,
+      "cpuSubmitMs": 69.2,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1879,
+        "skipped": 1157,
+        "owned": 1439
+      },
+      "position": [
+        -41.5,
+        -18.2
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 54.10000002384186,
+        "animationMs": 0.5,
+        "activeMeshesMs": 18.30000001192093,
+        "renderTargetsMs": 12,
+        "drawSubmissionMs": 23,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.19999992847442627
+    },
+    {
+      "atSeconds": 96.2,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval-and-current-work",
+      "frameIntervalMs": 71.5,
+      "cpuSubmitMs": 58.7,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1879,
+        "skipped": 1157,
+        "owned": 1439
+      },
+      "position": [
+        -42,
+        -18.3
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 44.200000047683716,
+        "animationMs": 1,
+        "activeMeshesMs": 6.599999964237213,
+        "renderTargetsMs": 1.9000000357627869,
+        "drawSubmissionMs": 7.5,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.3999999761581421
+    },
+    {
+      "atSeconds": 96.3,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 81.1,
+      "cpuSubmitMs": 22.2,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1879,
+        "skipped": 1157,
+        "owned": 1439
+      },
+      "position": [
+        -42.5,
+        -18.4
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 19.5,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 7.600000023841858,
+        "renderTargetsMs": 2.099999964237213,
+        "drawSubmissionMs": 9.199999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.10000002384185791,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.09999996423721313
+    },
+    {
+      "atSeconds": 97,
+      "map": "warrior-plains",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 50.2,
+      "cpuSubmitMs": 29,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.899999976158142
+      },
+      "candidates": {
+        "scanned": 3036,
+        "submitted": 1835,
+        "skipped": 1201,
+        "owned": 1439
+      },
+      "position": [
+        -47.2,
+        -19.2
+      ],
+      "camera": [
+        37.98,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 124,
+        "sceneMs": 26.69999998807907,
+        "animationMs": 0.5,
+        "activeMeshesMs": 8.899999976158142,
+        "renderTargetsMs": 2.400000035762787,
+        "drawSubmissionMs": 14.799999952316284,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.10000002384185791
+    },
+    {
+      "atSeconds": 110.4,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 51.6,
+      "cpuSubmitMs": 16.6,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.699999988079071
+      },
+      "candidates": {
+        "scanned": 1684,
+        "submitted": 1247,
+        "skipped": 437,
+        "owned": 752
+      },
+      "position": [
+        -0.7,
+        78.7
+      ],
+      "camera": [
+        39.14,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 123,
+        "sceneMs": 15,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 6.800000011920929,
+        "renderTargetsMs": 1.699999988079071,
+        "drawSubmissionMs": 6,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.19999998807907104,
+      "hudUpdateMs": 0.19999998807907104
+    },
+    {
+      "atSeconds": 112.7,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 68.7,
+      "cpuSubmitMs": 19.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1688,
+        "submitted": 1338,
+        "skipped": 350,
+        "owned": 752
+      },
+      "position": [
+        -0.6,
+        63.6
+      ],
+      "camera": [
+        39.14,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 17.799999952316284,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 7.399999976158142,
+        "renderTargetsMs": 1.5,
+        "drawSubmissionMs": 7.299999952316284,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.6000000238418579,
+      "hudUpdateMs": 0.10000002384185791
+    },
+    {
+      "atSeconds": 116.7,
+      "map": "warrior-v3",
+      "activity": "이동 · 모델 준비",
+      "trigger": "interval",
+      "frameIntervalMs": 61.2,
+      "cpuSubmitMs": 24.6,
+      "texturePending": 0,
+      "geometryPending": 1,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.100000023841858
+      },
+      "candidates": {
+        "scanned": 1712,
+        "submitted": 1451,
+        "skipped": 261,
+        "owned": 752
+      },
+      "position": [
+        -0.6,
+        35
+      ],
+      "camera": [
+        39.14,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 143,
+        "sceneMs": 21.5,
+        "animationMs": 0.5,
+        "activeMeshesMs": 10.5,
+        "renderTargetsMs": 2.5,
+        "drawSubmissionMs": 7.699999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.699999988079071,
+      "hudUpdateMs": 0.40000003576278687
+    },
+    {
+      "atSeconds": 121.4,
+      "map": "warrior-v3",
+      "activity": "이동 · 모델 준비",
+      "trigger": "interval-and-current-work",
+      "frameIntervalMs": 50.2,
+      "cpuSubmitMs": 64.5,
+      "texturePending": 0,
+      "geometryPending": 1,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1718,
+        "submitted": 1338,
+        "skipped": 380,
+        "owned": 753
+      },
+      "position": [
+        -2.6,
+        2
+      ],
+      "camera": [
+        39.14,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 59.299999952316284,
+        "animationMs": 1.2999999523162842,
+        "activeMeshesMs": 35.39999997615814,
+        "renderTargetsMs": 3.300000011920929,
+        "drawSubmissionMs": 16.099999964237213,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0.10000002384185791,
+      "worldUpdateMs": 0.800000011920929,
+      "hudUpdateMs": 0.3999999761581421
+    },
+    {
+      "atSeconds": 121.4,
+      "map": "warrior-v3",
+      "activity": "이동 · 모델 준비",
+      "trigger": "interval",
+      "frameIntervalMs": 69.7,
+      "cpuSubmitMs": 17.8,
+      "texturePending": 0,
+      "geometryPending": 1,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1718,
+        "submitted": 1338,
+        "skipped": 380,
+        "owned": 753
+      },
+      "position": [
+        -2.7,
+        1.5
+      ],
+      "camera": [
+        39.14,
+        1.18,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 16.100000023841858,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 6.799999952316284,
+        "renderTargetsMs": 2,
+        "drawSubmissionMs": 6.600000023841858,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.10000002384185791
+    },
+    {
+      "atSeconds": 128.3,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 57.8,
+      "cpuSubmitMs": 22.5,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.0999999642372131
+      },
+      "candidates": {
+        "scanned": 1719,
+        "submitted": 1332,
+        "skipped": 387,
+        "owned": 753
+      },
+      "position": [
+        5.3,
+        0.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 133,
+        "sceneMs": 19.599999964237213,
+        "animationMs": 0.5,
+        "activeMeshesMs": 7.800000011920929,
+        "renderTargetsMs": 2.199999988079071,
+        "drawSubmissionMs": 7.899999976158142,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.20000004768371582
+    },
+    {
+      "atSeconds": 128.6,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 50.7,
+      "cpuSubmitMs": 27.3,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.0999999642372131
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1317,
+        "skipped": 403,
+        "owned": 753
+      },
+      "position": [
+        4.6,
+        3.2
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 136,
+        "sceneMs": 25,
+        "animationMs": 0.5,
+        "activeMeshesMs": 10,
+        "renderTargetsMs": 2.699999988079071,
+        "drawSubmissionMs": 11.400000035762787,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5,
+      "hudUpdateMs": 0.40000003576278687
+    },
+    {
+      "atSeconds": 130.2,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 50.7,
+      "cpuSubmitMs": 38.5,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.0999999642372131
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1286,
+        "skipped": 434,
+        "owned": 753
+      },
+      "position": [
+        0.9,
+        13.4
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 135,
+        "sceneMs": 33.69999998807907,
+        "animationMs": 0.8999999761581421,
+        "activeMeshesMs": 11.799999952316284,
+        "renderTargetsMs": 4,
+        "drawSubmissionMs": 16.69999998807907,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5999999642372131,
+      "hudUpdateMs": 0.40000003576278687
+    },
+    {
+      "atSeconds": 132.1,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 50.7,
+      "cpuSubmitMs": 14.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.0999999642372131
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1267,
+        "skipped": 453,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 12.900000035762787,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 4.100000023841858,
+        "renderTargetsMs": 1.699999988079071,
+        "drawSubmissionMs": 6.600000023841858,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.20000004768371582,
+      "hudUpdateMs": 0.30000001192092896
+    },
+    {
+      "atSeconds": 132.9,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 51.1,
+      "cpuSubmitMs": 14.1,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 12.5,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 3.899999976158142,
+        "renderTargetsMs": 1.800000011920929,
+        "drawSubmissionMs": 6.199999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.10000002384185791
+    },
+    {
+      "atSeconds": 133.5,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 54.5,
+      "cpuSubmitMs": 17.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 14.899999976158142,
+        "animationMs": 0.2999999523162842,
+        "activeMeshesMs": 5.800000011920929,
+        "renderTargetsMs": 1.699999988079071,
+        "drawSubmissionMs": 6,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.30000007152557373
+    },
+    {
+      "atSeconds": 133.7,
+      "map": "warrior-v3",
+      "activity": "텍스처 준비",
+      "trigger": "interval",
+      "frameIntervalMs": 51,
+      "cpuSubmitMs": 24.7,
+      "texturePending": 1,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": "house-03-workshop",
+        "stage": "texture:albedo",
+        "lastPromoteMs": 0.800000011920929
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 22.5,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 8.800000011920929,
+        "renderTargetsMs": 2.599999964237213,
+        "drawSubmissionMs": 9.300000011920929,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.19999998807907104,
+      "hudUpdateMs": 0.5000000596046448
+    },
+    {
+      "atSeconds": 134,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 50.3,
+      "cpuSubmitMs": 16.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 14.800000011920929,
+        "animationMs": 0.30000001192092896,
+        "activeMeshesMs": 6.100000023841858,
+        "renderTargetsMs": 1.899999976158142,
+        "drawSubmissionMs": 6.300000011920929,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.19999998807907104,
+      "hudUpdateMs": 0.30000001192092896
+    },
+    {
+      "atSeconds": 134.3,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 51.2,
+      "cpuSubmitMs": 20.2,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 18,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 7.399999976158142,
+        "renderTargetsMs": 2.200000047683716,
+        "drawSubmissionMs": 6.799999952316284,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.20000004768371582,
+      "hudUpdateMs": 0.3999999761581421
+    },
+    {
+      "atSeconds": 143.8,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 50.3,
+      "cpuSubmitMs": 23.7,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1252,
+        "skipped": 468,
+        "owned": 753
+      },
+      "position": [
+        0.4,
+        15.5
+      ],
+      "camera": [
+        42.15,
+        1.37,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 134,
+        "sceneMs": 21.399999976158142,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 8.600000023841858,
+        "renderTargetsMs": 2.599999964237213,
+        "drawSubmissionMs": 7.800000011920929,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.10000002384185791,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.30000001192092896,
+      "hudUpdateMs": 0.2999999523162842
+    },
+    {
+      "atSeconds": 148.4,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 60.3,
+      "cpuSubmitMs": 22.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1247,
+        "skipped": 473,
+        "owned": 753
+      },
+      "position": [
+        1.6,
+        15.6
+      ],
+      "camera": [
+        43.28,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 126,
+        "sceneMs": 19.69999998807907,
+        "animationMs": 0.6000000238418579,
+        "activeMeshesMs": 9.100000023841858,
+        "renderTargetsMs": 2.5,
+        "drawSubmissionMs": 7.299999952316284,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.30000001192092896
+    },
+    {
+      "atSeconds": 148.6,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 54.5,
+      "cpuSubmitMs": 24.7,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1247,
+        "skipped": 473,
+        "owned": 753
+      },
+      "position": [
+        1.6,
+        15.6
+      ],
+      "camera": [
+        43.28,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 127,
+        "sceneMs": 22.399999976158142,
+        "animationMs": 0.2999999523162842,
+        "activeMeshesMs": 10.199999988079071,
+        "renderTargetsMs": 3.600000023841858,
+        "drawSubmissionMs": 8.100000023841858,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0.10000002384185791,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.699999988079071,
+      "hudUpdateMs": 0.30000001192092896
+    },
+    {
+      "atSeconds": 148.7,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 69.4,
+      "cpuSubmitMs": 21.8,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1247,
+        "skipped": 473,
+        "owned": 753
+      },
+      "position": [
+        1.4,
+        15.4
+      ],
+      "camera": [
+        43.28,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 17.69999998807907,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 6.900000035762787,
+        "renderTargetsMs": 1.899999976158142,
+        "drawSubmissionMs": 7.199999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.20000004768371582
+    },
+    {
+      "atSeconds": 148.8,
+      "map": "warrior-v3",
+      "activity": "이동",
+      "trigger": "interval",
+      "frameIntervalMs": 60.7,
+      "cpuSubmitMs": 20.2,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1247,
+        "skipped": 473,
+        "owned": 753
+      },
+      "position": [
+        1.1,
+        15.3
+      ],
+      "camera": [
+        43.28,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 128,
+        "sceneMs": 17,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 7.600000023841858,
+        "renderTargetsMs": 2,
+        "drawSubmissionMs": 6.699999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5,
+      "hudUpdateMs": 0.19999998807907104
+    },
+    {
+      "atSeconds": 148.9,
+      "map": "warrior-v3",
+      "activity": "이동 · 회전/시점 조작",
+      "trigger": "interval",
+      "frameIntervalMs": 50.8,
+      "cpuSubmitMs": 18.3,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1242,
+        "skipped": 478,
+        "owned": 753
+      },
+      "position": [
+        0.5,
+        15.1
+      ],
+      "camera": [
+        43.26,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 129,
+        "sceneMs": 16.100000023841858,
+        "animationMs": 0.40000003576278687,
+        "activeMeshesMs": 6.699999988079071,
+        "renderTargetsMs": 1.899999976158142,
+        "drawSubmissionMs": 6.800000011920929,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5,
+      "hudUpdateMs": 0.3999999761581421
+    },
+    {
+      "atSeconds": 149,
+      "map": "warrior-v3",
+      "activity": "이동 · 회전/시점 조작",
+      "trigger": "interval",
+      "frameIntervalMs": 50.2,
+      "cpuSubmitMs": 18.8,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1272,
+        "skipped": 448,
+        "owned": 753
+      },
+      "position": [
+        0.3,
+        15
+      ],
+      "camera": [
+        43.13,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 124,
+        "sceneMs": 16.80000001192093,
+        "animationMs": 0.5,
+        "activeMeshesMs": 7.199999988079071,
+        "renderTargetsMs": 2,
+        "drawSubmissionMs": 7,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5,
+      "hudUpdateMs": 0.09999996423721313
+    },
+    {
+      "atSeconds": 149,
+      "map": "warrior-v3",
+      "activity": "이동 · 회전/시점 조작",
+      "trigger": "interval",
+      "frameIntervalMs": 50.2,
+      "cpuSubmitMs": 21.9,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1268,
+        "skipped": 452,
+        "owned": 753
+      },
+      "position": [
+        0.1,
+        15
+      ],
+      "camera": [
+        43.05,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 124,
+        "sceneMs": 19.19999998807907,
+        "animationMs": 0.3999999761581421,
+        "activeMeshesMs": 8.300000011920929,
+        "renderTargetsMs": 2,
+        "drawSubmissionMs": 7.199999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5999999642372131,
+      "hudUpdateMs": 0.10000002384185791
+    },
+    {
+      "atSeconds": 149.1,
+      "map": "warrior-v3",
+      "activity": "이동 · 회전/시점 조작",
+      "trigger": "interval",
+      "frameIntervalMs": 57.8,
+      "cpuSubmitMs": 30.2,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1268,
+        "skipped": 452,
+        "owned": 753
+      },
+      "position": [
+        -0.1,
+        15
+      ],
+      "camera": [
+        42.99,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 124,
+        "sceneMs": 27.19999998807907,
+        "animationMs": 0.6000000238418579,
+        "activeMeshesMs": 10.599999964237213,
+        "renderTargetsMs": 3.5,
+        "drawSubmissionMs": 12.099999964237213,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.5,
+      "hudUpdateMs": 0.2999999523162842
+    },
+    {
+      "atSeconds": 149.2,
+      "map": "warrior-v3",
+      "activity": "이동 · 회전/시점 조작",
+      "trigger": "interval",
+      "frameIntervalMs": 53.9,
+      "cpuSubmitMs": 28.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1254,
+        "skipped": 466,
+        "owned": 753
+      },
+      "position": [
+        -0.5,
+        15.1
+      ],
+      "camera": [
+        42.85,
+        1.34,
+        12.17
+      ],
+      "render": {
+        "drawCalls": 125,
+        "sceneMs": 26.299999952316284,
+        "animationMs": 0.5,
+        "activeMeshesMs": 10.099999964237213,
+        "renderTargetsMs": 2.800000011920929,
+        "drawSubmissionMs": 11.099999964237213,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.3999999761581421,
+      "hudUpdateMs": 0.20000004768371582
+    },
+    {
+      "atSeconds": 156.5,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 62,
+      "cpuSubmitMs": 31.5,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.199999988079071
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1211,
+        "skipped": 509,
+        "owned": 753
+      },
+      "position": [
+        -1.7,
+        14
+      ],
+      "camera": [
+        42.67,
+        1.64,
+        1.7
+      ],
+      "render": {
+        "drawCalls": 123,
+        "sceneMs": 28.599999964237213,
+        "animationMs": 0.5,
+        "activeMeshesMs": 9.5,
+        "renderTargetsMs": 4,
+        "drawSubmissionMs": 13,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.800000011920929,
+      "hudUpdateMs": 0.40000003576278687
+    },
+    {
+      "atSeconds": 157.3,
+      "map": "warrior-v3",
+      "activity": "플레이",
+      "trigger": "interval",
+      "frameIntervalMs": 119.5,
+      "cpuSubmitMs": 25.4,
+      "texturePending": 0,
+      "geometryPending": 0,
+      "textureWork": {
+        "asset": null,
+        "stage": "idle",
+        "lastPromoteMs": 1.5
+      },
+      "candidates": {
+        "scanned": 1720,
+        "submitted": 1211,
+        "skipped": 509,
+        "owned": 753
+      },
+      "position": [
+        -1.7,
+        14
+      ],
+      "camera": [
+        42.67,
+        1.64,
+        1.7
+      ],
+      "render": {
+        "drawCalls": 123,
+        "sceneMs": 21.899999976158142,
+        "animationMs": 0.5,
+        "activeMeshesMs": 8.599999964237213,
+        "renderTargetsMs": 2.699999988079071,
+        "drawSubmissionMs": 9.699999988079071,
+        "gpu": {
+          "status": "unsupported",
+          "asynchronous": true,
+          "scope": "engine-frame",
+          "intervalMs": 250,
+          "pending": false,
+          "ageMs": null,
+          "samples": 0,
+          "meanMs": null,
+          "p95Ms": null,
+          "latest": null,
+          "retained": null,
+          "disjointEvents": 0,
+          "invalidSamples": 0,
+          "timeouts": 0
+        }
+      },
+      "bossUpdateMs": 0,
+      "contactsMs": 0,
+      "worldUpdateMs": 0.800000011920929,
+      "hudUpdateMs": 0.10000002384185791
+    }
+  ]
+}

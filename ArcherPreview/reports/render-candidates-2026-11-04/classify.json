@@ -1,0 +1,112 @@
+{
+  "scope": "Babylon NullEngine, real map layouts and decoded packed geometry, placeholder materials; baseline reproduces prior instance filter, 30 alternating warm samples, render CPU includes candidate scan. Not GPU, phone, or FPS measurements.",
+  "rows": [
+    {
+      "map": "village",
+      "classes": {
+        "Mesh/enabled/visible/geometry": 32,
+        "InstancedMesh/enabled/visible/geometry": 392,
+        "GroundMesh/enabled/visible/geometry": 1,
+        "Mesh/enabled/visible/empty": 365
+      },
+      "stats": {
+        "scanned": 1548,
+        "submitted": 790,
+        "skipped": 758,
+        "owned": 1488
+      },
+      "baseline": {
+        "instanceReadyCalls": 392,
+        "meshReadyCalls": 1140,
+        "sceneMsMedian": 1.6338999999998123
+      },
+      "filtered": {
+        "instanceReadyCalls": 392,
+        "meshReadyCalls": 761,
+        "sceneMsMedian": 1.580500000000029
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "great-plains",
+      "classes": {
+        "Mesh/enabled/visible/geometry": 20,
+        "InstancedMesh/enabled/visible/geometry": 154,
+        "GroundMesh/enabled/visible/geometry": 1,
+        "Mesh/enabled/visible/empty": 112
+      },
+      "stats": {
+        "scanned": 2697,
+        "submitted": 287,
+        "skipped": 2410,
+        "owned": 2649
+      },
+      "baseline": {
+        "instanceReadyCalls": 154,
+        "meshReadyCalls": 1480,
+        "sceneMsMedian": 1.175799999999981
+      },
+      "filtered": {
+        "instanceReadyCalls": 154,
+        "meshReadyCalls": 275,
+        "sceneMsMedian": 1.035899999999856
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "monster-forest",
+      "classes": {
+        "Mesh/enabled/visible/geometry": 20,
+        "InstancedMesh/enabled/visible/geometry": 436,
+        "GroundMesh/enabled/visible/geometry": 1,
+        "Mesh/enabled/visible/empty": 409
+      },
+      "stats": {
+        "scanned": 1828,
+        "submitted": 866,
+        "skipped": 962,
+        "owned": 1780
+      },
+      "baseline": {
+        "instanceReadyCalls": 436,
+        "meshReadyCalls": 1330,
+        "sceneMsMedian": 1.8355000000001382
+      },
+      "filtered": {
+        "instanceReadyCalls": 436,
+        "meshReadyCalls": 849,
+        "sceneMsMedian": 1.6512000000002445
+      },
+      "activeMatch": true
+    },
+    {
+      "map": "witch-cave",
+      "classes": {
+        "Mesh/disabled/visible/geometry": 3,
+        "InstancedMesh/disabled/visible/geometry": 27,
+        "GroundMesh/enabled/visible/geometry": 1,
+        "Mesh/enabled/visible/geometry": 17,
+        "Mesh/enabled/hidden/geometry": 2,
+        "InstancedMesh/enabled/visible/geometry": 50,
+        "Mesh/enabled/visible/empty": 28
+      },
+      "stats": {
+        "scanned": 424,
+        "submitted": 128,
+        "skipped": 296,
+        "owned": 352
+      },
+      "baseline": {
+        "instanceReadyCalls": 77,
+        "meshReadyCalls": 268,
+        "sceneMsMedian": 0.8139000000001033
+      },
+      "filtered": {
+        "instanceReadyCalls": 77,
+        "meshReadyCalls": 120,
+        "sceneMsMedian": 0.7546000000002095
+      },
+      "activeMatch": true
+    }
+  ]
+}

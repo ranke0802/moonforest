@@ -189,7 +189,9 @@ export function loadStreamedVillage(world,{
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
         for(const node of instance.rootNodes)node.parent=record.facing;
-        record.meshes=record.root.getChildMeshes().filter(m=>m.getTotalVertices()>0);
+        const children=record.root.getChildMeshes();
+        record.meshes=children.filter(m=>m.getTotalVertices()>0);
+        for(const mesh of children)if(!mesh.getTotalVertices())candidates.addEmptyRoot(mesh);
         for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();candidates.add(mesh);}
         record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
       }

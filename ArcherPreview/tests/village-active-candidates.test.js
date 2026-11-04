@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {NullEngine, Scene, FreeCamera, Vector3, MeshBuilder, StandardMaterial, TransformNode} from '@babylonjs/core';
+import {NullEngine, Scene, FreeCamera, Vector3, Mesh, MeshBuilder, StandardMaterial, TransformNode} from '@babylonjs/core';
 import {VillageActiveCandidates} from '../src/village-active-candidates.js';
 import {prepareMapMaterials} from '../src/map-shader-cache.js';
 
@@ -49,12 +49,36 @@ test('custom subset and retained external wrapper preserve provider behavior acr
  scene.dispose(); engine.dispose();
 });
 
+test('only disabled owned empty clone roots are omitted and later attachments or overrides restore them', () => {
+ const {engine, scene, source} = setup(), root = new TransformNode('placement', scene);
+ const empty = new Mesh('empty', scene); empty.parent = root;
+ const unowned = new Mesh('unowned', scene); unowned.setEnabled(false);
+ const candidates = new VillageActiveCandidates(scene);
+ candidates.addEmptyRoot(empty); candidates.addEmptyRoot(empty); candidates.addEmptyRoot(source);
+ assert.equal(candidates.stats.owned, 1);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned']);
+ root.setEnabled(false);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'unowned']);
+ empty.material = new StandardMaterial('added-material', scene);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned']);
+ empty.material = null; empty.isReady = () => true;
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned']);
+ delete empty.isReady;
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'unowned']);
+ const geometry = MeshBuilder.CreateBox('new-geometry', {}, scene); geometry.geometry.applyToMesh(empty);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned', 'new-geometry']);
+ root.setEnabled(true);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned', 'new-geometry']);
+ candidates.dispose(); scene.dispose(); engine.dispose();
+});
+
 test('real SDK rendering preserves active instances and draw batches through repeated visibility changes', async () => {
- const {engine, scene, source} = setup(); const roots = [];
- for (let i = 0; i < 32; i++) { const entry = makeInstance(source, `tree-${i}`, i % 4 === 0); entry.root.position.x = (i % 8) - 4; roots.push(entry.root); }
+ const {engine, scene, source} = setup(); const roots = [], emptyRoots = [];
+ for (let i = 0; i < 32; i++) { const entry = makeInstance(source, `tree-${i}`, i % 4 === 0); entry.root.position.x = (i % 8) - 4; const empty = new Mesh(`empty-${i}`, scene); empty.parent = entry.root; emptyRoots.push(empty); roots.push(entry.root); }
  const dynamic = MeshBuilder.CreateBox('actor', {}, scene); dynamic.position.y = 1;
  const original = scene.getActiveMeshCandidates; const candidates = new VillageActiveCandidates(scene);
  for (const mesh of scene.meshes) candidates.add(mesh);
+ for (const mesh of emptyRoots) candidates.addEmptyRoot(mesh);
  await prepareMapMaterials([source, dynamic]);
  const filtered = scene.getActiveMeshCandidates; const draws = []; const draw = engine.drawElementsType.bind(engine);
  engine.drawElementsType = (...args) => { draws.push(args.slice(0, 4)); return draw(...args); };
