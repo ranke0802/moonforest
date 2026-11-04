@@ -1,0 +1,49 @@
+{
+  "scope": "Bounded final-source check after legacy center-hit-area and rapid-drag cue-refresh changes. Actual Studio↔game/default controller/DOM through existing real main/native engine fixture; no models needed.",
+  "sourceHashes": {
+    "src/cinematic-document.js": "d8fb61a4eacca4748fbbea9385e0765a6646ae88eb2f81ac2f5859134f79872e",
+    "src/cinematic-game.js": "b60ab1b276cae7d8b7bb16772aa9adb73e6eba2dfecf31954cc0582e3e2721a0",
+    "src/cinematic-subtitles.js": "060d96266240898c780031db31b4d7be129bca05993df5dc9751bae98f8acfe2",
+    "src/cinematic-studio.js": "1c36743d41a9bd5da1e3fe6a65f8571662c0ba4ad14ac264d934c44aceac3cad",
+    "src/cinematic-studio.css": "758491e7e2e27a5fbf33f4aab8e50febaab68c0507f2ee0984f68f3e36f88b98",
+    "src/main.js": "e2e5c627116cc993f213d5fe3eb63f8a55a6059a5ec8c6b1d7fe72224bf5d0f9",
+    "src/game-tool-lease.js": "ff89aa04ea8845e331345c2f83a428fa018d7b809f4aad083bda5a68861627d9",
+    "public/moonforest-help.html": "b36217f15952cfa61c2a805a95dd487e166df50be3b91f23db00b180d8580c49"
+  },
+  "cases": [
+    {
+      "name": "Legacy centered span uses an intrinsic flex hit area and bounded width without transformed containing blocks",
+      "passed": true,
+      "alignItems": "center",
+      "legacyMaxWidth": "100%",
+      "legacyPosition": "flow",
+      "transformedAncestors": 0
+    },
+    {
+      "name": "Second drag before next child sample carries fresh previousPosition and survives actual queued transport/history",
+      "passed": true,
+      "childPatchRequestHeld": true,
+      "secondPreviousPosition": {
+        "x": 40,
+        "y": 45
+      },
+      "finalPosition": {
+        "x": 60,
+        "y": 55
+      },
+      "oneUndoPerDrag": true
+    },
+    {
+      "name": "Actual per-cue center/bottom reset controls clear explicit position and undo restores exact document",
+      "passed": true,
+      "centerAndBottomPresets": true,
+      "twoUndoRestoreExact": true
+    }
+  ],
+  "limits": [
+    "Declared canvas CSS rectangle and Node DOM; no browser computed box/pixels or trusted pointer-capture claim"
+  ],
+  "sourceUnchanged": true,
+  "passed": true,
+  "generatedAt": "2026-11-04T08:06:22.120Z"
+}

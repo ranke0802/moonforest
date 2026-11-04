@@ -23,7 +23,7 @@ export function verifyRuntimeModuleGraph(output){
     if(!chunk.isEntry)continue;
     const staticChunks=closure(name);
     if(staticChunks.some(item=>contains(item,'/src/main.js'))){
-      const developmentOnly=/(?:^|\/)src\/(?:developer-[^/]+|editor-workspace|actor-population|actor-definitions|actor-encounter-adapter|asset-catalog|placement-document|authored-placement-runtime|game-tool-lease|tool-camera-input|tool-fine-zoom|cinematic-(?:document|player|scene-host|studio|protocol|game|registry|interaction|path-view|authoring))\.js$/;
+      const developmentOnly=/(?:^|\/)src\/(?:developer-[^/]+|editor-workspace|actor-population|actor-definitions|actor-encounter-adapter|asset-catalog|placement-document|authored-placement-runtime|game-tool-lease|tool-camera-input|tool-fine-zoom|cinematic-(?:document|player|scene-host|studio|protocol|game|registry|interaction|path-view|authoring|subtitles))\.js$/;
       for(const item of staticChunks)for(const id of Object.keys(item.modules??{})){
         const normalized=id.replaceAll('\\','/');
         if(developmentOnly.test(normalized)||/\/@babylonjs\/core\/Gizmos\/(?:gizmoManager|positionGizmo|rotationGizmo|scaleGizmo|boundingBoxGizmo)\.js$/.test(normalized))throw new Error(`Development module entered the initial game graph: ${id}`);

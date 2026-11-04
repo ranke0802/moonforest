@@ -74,7 +74,7 @@ export function validateCinematicDocument(input,references={}){
     number(track.blendIn,p+'.blendIn',0,Math.max(0,track.end-track.start));number(track.blendOut,p+'.blendOut',0,Math.max(0,track.end-track.start));
   }
   for(const actor of actors){if(!plain(actor))continue;const segments=animations.filter(a=>plain(a)&&a.actorId===actor.actorId);for(const point of segments.flatMap(a=>[a.start,a.end]))if(segments.filter(a=>a.start<=point&&a.end>point).length>2){add('$.tracks.animations','At most two clip segments may blend per actor');break;}}
-  for(const [i,track]of array(doc.tracks.subtitles,'$.tracks.subtitles',CINEMATIC_LIMITS.subtitles).entries()){const p='$.tracks.subtitles['+i+']';if(object(track,['start','end','text','placement'],p)){interval(track,p);string(track.text,p+'.text',1000);if(track.placement!==undefined&&!['bottom','center'].includes(track.placement))add(p+'.placement','Expected bottom or center');}}
+  for(const [i,track]of array(doc.tracks.subtitles,'$.tracks.subtitles',CINEMATIC_LIMITS.subtitles).entries()){const p='$.tracks.subtitles['+i+']';if(object(track,['start','end','text','placement','position'],p)){interval(track,p);string(track.text,p+'.text',1000);if(track.placement!==undefined&&!['bottom','center'].includes(track.placement))add(p+'.placement','Expected bottom or center');if(track.position!==undefined&&object(track.position,['x','y'],p+'.position')){number(track.position.x,p+'.position.x',0,100);number(track.position.y,p+'.position.y',0,100);}}}
   const audioIds=new Set(references.audioIds??[]);
   for(const [i,track]of array(doc.tracks.audio,'$.tracks.audio',CINEMATIC_LIMITS.audio).entries()){const p='$.tracks.audio['+i+']';if(object(track,['time','audioId','volume'],p)){time(track.time,p+'.time');if(!audioIds.has(track.audioId))add(p+'.audioId','Unknown audio ID');number(track.volume,p+'.volume',0,1);}}
   for(const [i,track]of array(doc.tracks.events,'$.tracks.events',CINEMATIC_LIMITS.events).entries()){const p='$.tracks.events['+i+']';if(object(track,['time','type','label'],p)){time(track.time,p+'.time');if(!CINEMATIC_EVENTS.includes(track.type))add(p+'.type','Event is not allowlisted');string(track.label,p+'.label',160);}}
@@ -124,7 +124,7 @@ export function evaluateCinematic(document,time){
   const position=anchored(vec(shot.from.position,shot.to.position,u),anchor),target=anchored(vec(shot.from.target,shot.to.target,u),anchor),follow=actors.find(actor=>actor.actorId===shot.lookAtActorId);
   if(follow){const offset=rotate(anchor.rotation,shot.lookAtOffset??[0,1,0]),next=follow.position.map((value,i)=>value+offset[i]);if(Math.hypot(...position.map((value,i)=>value-next[i]))>=.001)target.splice(0,3,...next);}
   if(Math.hypot(...position.map((value,i)=>value-target[i]))<.001)target[2]+=.01;
-  return {time:t,shotId:shot.shotId,camera:{position,target,fov:lerp(shot.from.fov,shot.to.fov,u)},actors,subtitles:document.tracks.subtitles.filter(s=>t>=s.start&&(t<s.end||t===document.duration&&s.end===document.duration)).map(s=>({text:s.text,start:s.start,end:s.end,...(s.placement?{placement:s.placement}:{})}))};
+  return {time:t,shotId:shot.shotId,camera:{position,target,fov:lerp(shot.from.fov,shot.to.fov,u)},actors,subtitles:document.tracks.subtitles.filter(s=>t>=s.start&&(t<s.end||t===document.duration&&s.end===document.duration)).map(s=>({text:s.text,start:s.start,end:s.end,...(s.placement?{placement:s.placement}:{}),...(s.position?{position:{x:s.position.x,y:s.position.y}}:{})}))};
 }
 
 export function cinematicEventsBetween(document,from,to){

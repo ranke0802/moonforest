@@ -1,0 +1,46 @@
+{
+  "release": "MoonForest 0.1 ver",
+  "status": "validated-ready-to-publish",
+  "requests": [
+    "Independently move subtitle and center-description text",
+    "Keep start, middle, end camera-save and shot-add controls by preview lower right",
+    "Undo and redo five steps with available counts"
+  ],
+  "changes": [
+    "Optional finite0..100percent per-cue position persists through schema/evaluator/files/game storage",
+    "Preview-only text drag uses shared camera/scene ownership, per-gesture history and clean cancellation",
+    "Compact unique lower-right camera/history dock; narrow screens place it immediately below video",
+    "Studio history capped to five steps, serialized with pending seeks and camera capture; new edits clear redo",
+    "Both direct positioning and simple coordinate/reset controls available"
+  ],
+  "regression": {
+    "total": 1749,
+    "passed": 1749,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "sourceFiles": 10,
+    "sourceUnchanged": true
+  },
+  "independentVerification": {
+    "connectedGroups": 9,
+    "finalSpotGroups": 3,
+    "summary": "verification-summary.json"
+  },
+  "build": {
+    "files": 1452,
+    "bytes": 629404563,
+    "chunks": 56,
+    "changedSiteFiles": 14,
+    "resourceRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853"
+  },
+  "preservation": {
+    "dirtyReports": 43,
+    "preexistingTrackedChanges": 122
+  },
+  "limits": [
+    "Native DOM/NullEngine and generated CSS structure verified; browser pixels and trusted OS interaction not inspected",
+    "No physical-device FPS or heat measurement"
+  ],
+  "independentBuildAudit": "passed"
+}

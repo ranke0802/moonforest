@@ -1,0 +1,12 @@
+[
+  "src/cinematic-document.js",
+  "src/cinematic-game.js",
+  "src/cinematic-subtitles.js",
+  "src/cinematic-studio.js",
+  "src/cinematic-studio.css",
+  "public/moonforest-help.html",
+  "scripts/runtime-module-graph.mjs",
+  "tests/runtime-module-graph.test.js",
+  "tests/cinematic-subtitles.test.js",
+  "tests/cinematic-workspace-controls.test.js"
+]

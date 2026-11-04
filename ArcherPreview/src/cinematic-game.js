@@ -9,6 +9,7 @@ import {parseCinematicCommand,cinematicReply} from './cinematic-protocol.js';
 import {listRegisteredCinematics,loadRegisteredCinematic} from './cinematic-registry.js';
 import {authoringUrl,AUTHORING_MAPS} from './authoring-navigation.js';
 import {createCinematicInteraction} from './cinematic-interaction.js';
+import {createCinematicSubtitles} from './cinematic-subtitles.js';
 import {Vector3} from '@babylonjs/core/Maths/math.vector.js';
 
 const storageKey='moonforest-0.1:cinematics:registered:v1';
@@ -28,17 +29,21 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
  const previewHeroes=new Map(),previewStyle=preview?doc.createElement('style'):null,oldPreviewMode=root.dataset.cinematicPreview;
  function holdPreviewHero(){if(!preview)return;for(const node of previewHeroes.keys())if(node.isDisposed?.())previewHeroes.delete(node);const node=getPlayer?.();if(!node?.setEnabled||node.isDisposed?.())return;if(!previewHeroes.has(node))previewHeroes.set(node,node.isEnabled());node.setEnabled(false);}
  if(preview){root.dataset.cinematicPreview='true';previewStyle.textContent='#app[data-cinematic-preview] > :not(canvas):not([data-tool-ui]):not(style):not(#loading){visibility:hidden!important;pointer-events:none!important}';root.append(previewStyle);holdPreviewHero();}
- let disposed=false,epoch=0,pendingReady=null,loaded=null,externalResume=false,local={},panel=null,style=null,imported=null,uiBusy=false,readySignature=null,autoOpenStarted=false,interaction=null;
+ let disposed=false,epoch=0,pendingReady=null,loaded=null,externalResume=false,local={},panel=null,style=null,imported=null,uiBusy=false,readySignature=null,autoOpenStarted=false,interaction=null,subtitleView=null;
  const host=createHost({world,battle,getPlayer,getState,audioIds:Object.keys(audioManifest.sounds),audioEnabled:true,acquireToolLease:async options=>{
   const node=getPlayer?.(),hide=player.document?.actors.length>0&&node?.setEnabled,owner=hide?{enabled:playerVisualOwners.get(node)?.enabled??node.isEnabled()}:null;
   const lease=await world.acquireToolLease({...options,onRelease:(...args)=>{if(owner&&playerVisualOwners.get(node)===owner){playerVisualOwners.delete(node);if(!node.isDisposed?.())node.setEnabled(owner.enabled);}options.onRelease?.(...args);}});
   if(owner&&lease.active){playerVisualOwners.set(node,owner);node.setEnabled(false);}return lease;
- },onSubtitles:rows=>{subtitles.textContent=rows.filter(row=>typeof row==='string'||row.placement!=='center').map(row=>typeof row==='string'?row:row.text).join('\n');centerText.textContent=rows.filter(row=>typeof row==='object'&&row.placement==='center').map(row=>row.text).join('\n');},onMarker:label=>status('표식: '+label)});
+ },onSubtitles:rows=>subtitleView?.render(rows),onMarker:label=>status('표식: '+label)});
  const player=new Player({host,retainOnComplete:preview,references:cinematicReferences(world),onState:state=>{host.setPlaybackState(state.state);renderState(state);}});
  const ownLease=()=>world.toolLease?.active&&/^cinematic-/.test(world.toolLease.owner??'');
  const ready=()=>{const state=getState();return !!(!disposed&&(state.ready||ownLease())&&!state.loading&&!state.dead&&!state.failed&&!state.hidden&&!state.settings);};
+ subtitleView=createCinematicSubtitles({root,canvas:world.scene.getEngine?.().getRenderingCanvas?.()??root.querySelector('canvas'),preview,bottom:subtitles,center:centerText,getContext:()=>({document:player.document,mapId:world.mapId,time:player.time,state:player.state,retained:player.inspect().retained,lease:host.getLiveLease?.()??world.toolLease,generation:epoch,enabled:ready(),detached:world.camera.inputs?.attachedToElement===false}),onEdit:value=>{
+  const previous=player.document,cue=previous?.tracks.subtitles[value.subtitleIndex];if(!cue||previous.cutsceneId!==value.cutsceneId||previous.mapId!==value.mapId)return false;
+  const document={...previous,tracks:{...previous.tracks,subtitles:previous.tracks.subtitles.map((row,index)=>index===value.subtitleIndex?{...row,position:{...value.position}}:row)}};player.document=document;loaded=document;post('subtitle-edited',{ok:true,...value});return true;
+ }});
  function status(message){const node=panel?.querySelector('[data-status]');if(node)node.textContent=message;}
- function renderState(state){if(disposed)return;interaction?.setPlaybackState(state.state);const labels={idle:'컷씬을 선택해 주세요.',preparing:'장면을 여는 중…',ready:'준비 완료 · 재생을 누르세요.',playing:'재생 중',paused:'일시정지',completed:'재생이 끝났습니다.',cancelled:'재생을 종료했습니다.',error:'장면을 열지 못했습니다.'};status(`${labels[state.state]??'준비 중'}${state.duration?' · '+state.time.toFixed(1)+' / '+state.duration.toFixed(1)+'초':''}${state.error?'\n'+state.error:''}`);const seek=panel?.querySelector('[data-seek]');if(seek){seek.max=state.duration;seek.value=state.time;seek.disabled=!['ready','playing','paused'].includes(state.state);}if(!['ready','playing','paused','preparing',...(preview?['completed']:[])].includes(state.state)){subtitles.textContent='';centerText.textContent='';interaction?.clear();}updateButtons();}
+ function renderState(state){if(disposed)return;interaction?.setPlaybackState(state.state);subtitleView?.setPlaybackState(state.state);const labels={idle:'컷씬을 선택해 주세요.',preparing:'장면을 여는 중…',ready:'준비 완료 · 재생을 누르세요.',playing:'재생 중',paused:'일시정지',completed:'재생이 끝났습니다.',cancelled:'재생을 종료했습니다.',error:'장면을 열지 못했습니다.'};status(`${labels[state.state]??'준비 중'}${state.duration?' · '+state.time.toFixed(1)+' / '+state.duration.toFixed(1)+'초':''}${state.error?'\n'+state.error:''}`);const seek=panel?.querySelector('[data-seek]');if(seek){seek.max=state.duration;seek.value=state.time;seek.disabled=!['ready','playing','paused'].includes(state.state);}if(!['ready','playing','paused','preparing',...(preview?['completed']:[])].includes(state.state)){subtitleView?.clear();interaction?.clear();}updateButtons();}
  function post(id,payload){if(preview&&win?.parent&&win.parent!==win)win.parent.postMessage(cinematicReply(id,payload),win.location.origin);}
  function cancelReady(){if(!pendingReady)return;const job=pendingReady;pendingReady=null;clearTimeout(job.timer);job.reject(cancelled());}
  function waitReady(request){
@@ -46,7 +51,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{if(pendingReady?.request===request)pendingReady=null;reject(new Error('게임 준비 대기 시간이 초과되었습니다.'));},readyTimeoutMs);pendingReady={request,timer,resolve,reject};});
  }
  function notifyReady(){
-  if(disposed)return;holdPreviewHero();const available=ready(),signature=world.mapId+':'+available;if(signature!==readySignature){readySignature=signature;post('host-ready',{ok:true,ready:available,mapId:world.mapId});}
+  if(disposed)return;holdPreviewHero();subtitleView.refresh();const available=ready(),signature=world.mapId+':'+available;if(signature!==readySignature){readySignature=signature;post('host-ready',{ok:true,ready:available,mapId:world.mapId});}
   if(available&&pendingReady){const job=pendingReady;pendingReady=null;clearTimeout(job.timer);job.resolve();}
   updateButtons();const wanted=new URL(win.location.href).searchParams.get('scene');if(!preview&&available&&wanted&&!autoOpenStarted){autoOpenStarted=true;const select=panel?.querySelector('[data-registered]'),option=[...select.children].find(row=>row.value.endsWith(':'+wanted));if(option){for(const row of select.children)row.selected=row===option;void runUi(async()=>{await open(await selectedDocument());});}else status('저장한 컷씬을 찾지 못했습니다. 작업 파일을 열어 주세요.');}
  }
@@ -78,7 +83,7 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   else if(command.command==='pause'){externalResume=false;player.pause();}
   else if(command.command==='resume'){externalResume=false;world.wakeToolPlayback?.();if(world.toolLease?.paused)throw new Error('화면이 숨겨져 있거나 다른 창이 열려 일시정지 상태입니다.');if(player.state!=='playing'&&!player.resume())throw new Error('먼저 장면을 열어 주세요.');}
   else if(command.command==='seek'){if(!player.seek(command.time))throw new Error('준비 후 유효한 시간으로 탐색하세요.');world.wakeToolPlayback?.();}
-  else if(command.command==='stop'){externalResume=false;++epoch;cancelReady();await player.stop('skip');subtitles.textContent='';centerText.textContent='';}
+  else if(command.command==='stop'){externalResume=false;++epoch;cancelReady();await player.stop('skip');subtitleView.clear();}
   else if(command.command==='loop')player.setLoop(command.loop);
   else if(command.command==='capture-camera'){const camera=host.captureCamera(),target=camera.target;return {...player.inspect(),camera,playerPosition:getPlayer?.()?.position?.asArray?.()??null,focusPosition:[target[0],world.terrain?.heightAt?.(target[0],target[2])??getPlayer?.()?.position?.y??0,target[2]]};}
   return player.inspect();
@@ -120,6 +125,6 @@ export function setupGameCinematics({root,world,battle,getPlayer,getState,storag
   panel.querySelector('[data-loop]').onchange=event=>{player.setLoop(event.target.checked);};panel.querySelector('[data-seek]').oninput=event=>{player.seek(Number(event.target.value));};
  }
  const observer=world.scene.onDisposeObservable.addOnce(()=>{void api.dispose();});
- const api={player,host,load,open,saveScene,execute,notifyReady,inspect:()=>({...player.inspect(),host:host.inspect(),interaction:interaction?.inspect(),pendingReady:!!pendingReady}),leaveMap(){++epoch;cancelReady();interaction?.clear();externalResume=false;loaded=null;subtitles.textContent='';centerText.textContent='';void player.stop('map-change');void host.evictIdle?.();readySignature=null;post('host-ready',{ok:true,ready:false,mapId:world.mapId});},async dispose(){if(disposed)return;disposed=true;++epoch;cancelReady();interaction?.dispose();if(preview)win.removeEventListener('message',receive);world.scene.onDisposeObservable.remove(observer);panel?.remove();style?.remove();subtitles.remove();centerText.remove();await player.dispose();await host.dispose();previewStyle?.remove();if(preview){if(oldPreviewMode===undefined)delete root.dataset.cinematicPreview;else root.dataset.cinematicPreview=oldPreviewMode;for(const [node,enabled]of previewHeroes)if(!node.isDisposed?.())node.setEnabled(enabled);previewHeroes.clear();}}};
+ const api={player,host,load,open,saveScene,execute,notifyReady,inspect:()=>({...player.inspect(),host:host.inspect(),interaction:interaction?.inspect(),subtitles:subtitleView.inspect(),pendingReady:!!pendingReady}),leaveMap(){++epoch;cancelReady();interaction?.clear();externalResume=false;loaded=null;subtitleView.clear();void player.stop('map-change');void host.evictIdle?.();readySignature=null;post('host-ready',{ok:true,ready:false,mapId:world.mapId});},async dispose(){if(disposed)return;disposed=true;++epoch;cancelReady();interaction?.dispose();subtitleView.dispose();if(preview)win.removeEventListener('message',receive);world.scene.onDisposeObservable.remove(observer);panel?.remove();style?.remove();subtitles.remove();centerText.remove();await player.dispose();await host.dispose();previewStyle?.remove();if(preview){if(oldPreviewMode===undefined)delete root.dataset.cinematicPreview;else root.dataset.cinematicPreview=oldPreviewMode;for(const [node,enabled]of previewHeroes)if(!node.isDisposed?.())node.setEnabled(enabled);previewHeroes.clear();}}};
  notifyReady();return api;
 }

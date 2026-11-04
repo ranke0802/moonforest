@@ -1,0 +1,51 @@
+{
+  "task": "per-cue subtitle viewport position and preview dragging",
+  "baseline": "eebbd67",
+  "owner": "/root/rendering",
+  "requestedSpawn": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "note": "Reused existing successful agent; backend model resolution was not independently surfaced."
+  },
+  "files": {
+    "src/cinematic-document.js": "d8fb61a4eacca4748fbbea9385e0765a6646ae88eb2f81ac2f5859134f79872e",
+    "src/cinematic-game.js": "b60ab1b276cae7d8b7bb16772aa9adb73e6eba2dfecf31954cc0582e3e2721a0",
+    "src/cinematic-subtitles.js": "060d96266240898c780031db31b4d7be129bca05993df5dc9751bae98f8acfe2",
+    "tests/cinematic-subtitles.test.js": "40e884466ccbbc4add0212c21e00500f46e5085c8a1bfd73cebc449132c8ddc1"
+  },
+  "behavior": [
+    "Optional x/y percentages preserve legacy evaluation shape when absent.",
+    "Concurrent cues have independent reused text nodes, textContent rendering, and canvas-relative centered positions.",
+    "Ready, paused and retained-completed preview cues can be dragged under a current unpaused lease; gameplay/playing/detached state disables hit targets.",
+    "Final pointerup samples the endpoint once; cancel/blur/Escape/stale map, generation, time, document or lease cancels without an edit.",
+    "Successful edit updates the child document immutably before posting the indexed cue identity and previous position to Studio.",
+    "Center layout uses no transformed ancestor and fits ordinary cue hit areas to text; wheel input is untouched."
+  ],
+  "verification": {
+    "focused": {
+      "command": "node --test tests/cinematic-subtitles.test.js",
+      "passed": 8,
+      "failed": 0
+    },
+    "existing": {
+      "command": "node --test tests/cinematic-game.test.js tests/cinematic-document-player.test.js",
+      "passed": 17,
+      "failed": 0,
+      "note": "These ran on the same game/document production source before only the new DOM helper received final center hit-area and consecutive-drag refresh changes; new8 were rerun after those helper changes."
+    },
+    "coverage": [
+      "Strict finite percentage boundaries and malformed position payloads; JSON roundtrip and independent evaluator copies.",
+      "Concurrent positions, literal text safety, legacy multiline containers and untransformed center ancestry.",
+      "Bubbling DOM drag input isolation, node identity reuse during sampling, endpoint-only touch movement and measured canvas clamps.",
+      "Pointer cancel, window blur, Escape, playing/gameplay/retained state and stale ownership cleanup.",
+      "No RAF or wheel interception; idempotent disposal and capture release.",
+      "Actual default game controller with native NullEngine/camera: edit event, unchanged camera transform, immediate consecutive drag identity, save/seek/play/pause/map cleanup."
+    ]
+  },
+  "limits": [
+    "Linkedom/native NullEngine tests do not establish browser pixel typography or OS pointer-capture behavior.",
+    "Independent whole-Studio transport/native-scene verification is owned by verifier C.",
+    "Text bounding uses measured dimensions when available; long text is constrained to canvas dimensions.",
+    "No new assets, engine, render loop or paid resources."
+  ]
+}

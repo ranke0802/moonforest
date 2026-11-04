@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-04T08:09:44.775Z",
+  "passed": true,
+  "inputs": {
+    "moduleOrigins": {
+      "path": "reports/moonforest-0.1-subtitle-workspace-2026-11-04/runtime-module-origins.json",
+      "sha256": "46ddadf9bab4f6df4584f60a7480fef41769e961321623c88422c17a8d596109"
+    },
+    "deploymentManifest": {
+      "path": "dist-village/deployment-files.json",
+      "sha256": "4da23ee8802e1807dd4fd64c6ef99f197a7e301b1f81a1ee1c32160b17e4179e"
+    }
+  },
+  "graph": {
+    "totalChunks": 56,
+    "mainEntry": "assets/game-BjCrU6qf.js",
+    "initialStaticChunks": 30,
+    "initialRawJavaScriptBytes": 10278924,
+    "initialDistinctModuleOrigins": 3066,
+    "allBuiltChunkAstImportsAgree": true,
+    "allBuiltChunkHashesMatchDeployment": true,
+    "initialDevelopmentModules": [],
+    "initialGizmoImplementations": [],
+    "nativeKtxLoaderInitiallyPresent": true,
+    "lazyLocations": {
+      "cinematic-subtitles": [
+        "assets/cinematic-game-C-TRu_eO.js"
+      ],
+      "tool-fine-zoom": [
+        "assets/tool-fine-zoom-qIveTlal.js"
+      ],
+      "developer-editor": [
+        "assets/developer-editor-CA8T057y.js"
+      ],
+      "editor-workspace": [
+        "assets/developer-editor-CA8T057y.js"
+      ],
+      "asset-catalog": [
+        "assets/asset-catalog-DaYTbf3s.js"
+      ],
+      "cinematic-studio": [
+        "assets/cinematicStudio-msQDmKAq.js"
+      ],
+      "cinematic-authoring": [
+        "assets/cinematicStudio-msQDmKAq.js"
+      ],
+      "cinematic-path-view": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-interaction": [
+        "assets/cinematic-interaction-BenB2Ah0.js"
+      ],
+      "cinematic-game": [
+        "assets/cinematic-game-C-TRu_eO.js"
+      ],
+      "cinematic-scene-host": [
+        "assets/cinematic-game-C-TRu_eO.js"
+      ]
+    },
+    "byteAccounting": "Uses final deployment bytes, including Vite mapDeps preloads inserted after origin capture.",
+    "fineZoomOutsideInitialGameClosure": true,
+    "allBuiltInterChunkDynamicAstImportsAgree": true,
+    "optimizedSelfDynamicOrigins": [
+      "assets/game-BjCrU6qf.js",
+      "assets/babylon-game-CRNdG57U.js"
+    ],
+    "dynamicImportAccounting": "Inter-chunk AST imports exactly match origins; same-chunk origin imports can compile to local Promise continuations and require no fetched import.",
+    "subtitleHelperOutsideInitialGameClosure": true
+  },
+  "resources": {
+    "expectedRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "manifestRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "sourceIndexRevision": "a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853",
+    "builtIndexExactlyMatchesSource": true,
+    "resourceIndexSha256": "9e3fb9f5539bef9cdb766c48cb1a222bd519bcbc080d2c0684718aaa65491565",
+    "deploymentFiles": 1452,
+    "deploymentRawBytes": 629404563,
+    "baselineDeploymentManifest": {
+      "path": "reports/moonforest-0.1-playback-repair-2026-11-04/pages/ArcherPreviewSite/deployment-files.json",
+      "sha256": "a96b648b81dff3ffcb3d476fbde5a81295f78589f12475c1cacf1a365d2544a0"
+    },
+    "publishedResourceAssets": {
+      "compared": 1370,
+      "added": [],
+      "removed": [],
+      "changed": []
+    }
+  },
+  "scope": "Independent read-only build-graph/origin and built-JavaScript integrity audit. Initial graph means static imports from the main game entry; explicit dynamic editor/cinematic routes may load tools. The resource index matches the existing approved resource revision exactly. This is not a browser download, startup, visual-quality, GPU or device-performance measurement.",
+  "hints": {
+    "editor-workspace": {
+      "present": true,
+      "chunks": [
+        "assets/developer-editor-CA8T057y.js"
+      ]
+    },
+    "cinematic-studio": {
+      "present": true,
+      "chunks": [
+        "assets/cinematicStudio-msQDmKAq.js"
+      ]
+    },
+    "guide": {
+      "present": true,
+      "path": "moonforest-help.html",
+      "builtExactlyMatchesSource": true,
+      "sha256": "b36217f15952cfa61c2a805a95dd487e166df50be3b91f23db00b180d8580c49"
+    }
+  },
+  "subtitleWorkspace": {
+    "builtDockAndCueHints": true,
+    "builtHistoryConstructorLimits": [
+      5,
+      5,
+      5
+    ],
+    "guidePositionAndHistoryHints": true
+  }
+}
