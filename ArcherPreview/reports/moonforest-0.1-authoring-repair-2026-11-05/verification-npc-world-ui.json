@@ -1,0 +1,312 @@
+{
+  "kind": "independent-shared-IDB-normal-game-settings-NPC-native",
+  "before": {
+    "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+    "src/tool-visibility-settings.js": "0be640fa64c92e9b32533830da1f4c284a5e355a4a0ce67a6cab275473ff39a8",
+    "src/developer-tools.js": "63c07ab8b7e0937c9381f9c47950c666533867d31312298aef7c8baa9278924a",
+    "src/nearby-editor.js": "685e456f07ccf052ea9e925210efbe26168ace8af77fab1c3a781aae25efd301",
+    "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+    "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+    "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+    "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "src/game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+    "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+    "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8"
+  },
+  "checks": [
+    {
+      "name": "real Studio file registration is visible in fresh normal-game singleton without reimport",
+      "passed": true,
+      "evidence": {
+        "assetId": "independent-future-npc",
+        "IDBOpens": 2,
+        "modelLoadsOnImport": 0,
+        "normalPreviewFlag": false
+      }
+    },
+    {
+      "name": "existing two settings checkboxes immediately open root-mounted in-game tools and actual ActorEditor",
+      "passed": true,
+      "evidence": {
+        "checkboxes": 2,
+        "duplicateCheckboxes": 0,
+        "settingsClosed": true,
+        "rootModal": true,
+        "lease": "actor-editor",
+        "NPCChoices": [
+          "대장장이",
+          "독립 미래 NPC"
+        ]
+      }
+    },
+    {
+      "name": "actual game Add/play/transform/Apply persists future NPC and20 motions at native viewed ground center",
+      "passed": true,
+      "evidence": {
+        "instanceId": "npc-instance-d556f7ec-8956-47a8-b399-6a58160344c9",
+        "position": [
+          -0.35116460014029927,
+          0.11999999731779054,
+          7.836184654384824
+        ],
+        "rotation": [
+          0,
+          0.13052619222005157,
+          0,
+          0.9914448613738104
+        ],
+        "scale": 1.1,
+        "clip": "Casual_Walk",
+        "clock": 0.09378640000000041,
+        "localReads": 1
+      }
+    },
+    {
+      "name": "Delete/play/pose Cancel restores original NPC enabled state, clock and transform; native empty orbit remains usable",
+      "passed": true,
+      "evidence": {
+        "enabledRestored": true,
+        "exactSnapshotRestored": true,
+        "nativeOrbit": true,
+        "nativeSceneInputOwner": null
+      }
+    },
+    {
+      "name": "real production battle goblin is inventoried by nearby checkbox and edited in place with exact Cancel restoration",
+      "passed": true,
+      "evidence": {
+        "id": "live-actor:1",
+        "kind": "goblin",
+        "triangles": 10412,
+        "sameRoot": true,
+        "sameRig": true,
+        "sameBrain": true,
+        "HP": 180,
+        "newModelRequests": 0,
+        "exactWorldMatricesRestored": 44
+      }
+    },
+    {
+      "name": "live monster Apply retains position/direction/scale without replacing AI or rig",
+      "passed": true,
+      "evidence": {
+        "position": [
+          1,
+          0.11999999731779099,
+          8.800000190734863
+        ],
+        "scale": [
+          0.8579999629663828,
+          0.8579999804496765,
+          0.8579999629663828
+        ],
+        "rotation": [
+          0,
+          2.879793235668283,
+          0
+        ],
+        "HP": 180,
+        "sameAI": true,
+        "sameRig": true,
+        "routeCleared": true,
+        "note": "Normal battle AI may move the actor again after returning to gameplay."
+      }
+    },
+    {
+      "name": "saved custom NPC survives departure/reentry with same ID and releases old source clone",
+      "passed": true,
+      "evidence": {
+        "sameInstanceId": "npc-instance-d556f7ec-8956-47a8-b399-6a58160344c9",
+        "restoredPose": {
+          "id": "npc-instance-d556f7ec-8956-47a8-b399-6a58160344c9",
+          "instanceId": "npc-instance-d556f7ec-8956-47a8-b399-6a58160344c9",
+          "kind": "npc",
+          "label": "독립 미래 NPC",
+          "assetId": "independent-future-npc",
+          "assetVersion": "future-1",
+          "mapId": "village",
+          "position": [
+            -0.35116460014029927,
+            0.11999999731779054,
+            7.836184654384824
+          ],
+          "rotation": [
+            0,
+            0.13052619222005157,
+            0,
+            0.9914448613738104
+          ],
+          "scale": 1.1,
+          "clipId": "Casual_Walk",
+          "loop": true
+        },
+        "newNativeClone": true,
+        "note": "Bounded actual NpcWorld map-ID/generation lifecycle; terrain/map model loading is covered by the prior director gate, not repeated here."
+      }
+    }
+  ],
+  "limits": [
+    "Actual Studio native file input and production shared IDB singleton, followed by fresh normal-game world using the same IDB database.",
+    "Actual merged main lazy getter/settings callback source is executed; the NPC runtime uses the actual factory with loader bytes/image boundaries from the native fixture. Cosmetic toast/minimap invalidation is observed as a no-op.",
+    "Only Node Vite environment substitution is import.meta.env.BASE_URL for the default production BossModelLibrary; source control flow is unchanged.",
+    "Native canvas events, actual Babylon camera/rigs and engine-frame callbacks; no browser pixels, GPU, shader compilation or device performance claim."
+  ],
+  "after": {
+    "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+    "src/tool-visibility-settings.js": "0be640fa64c92e9b32533830da1f4c284a5e355a4a0ce67a6cab275473ff39a8",
+    "src/developer-tools.js": "63c07ab8b7e0937c9381f9c47950c666533867d31312298aef7c8baa9278924a",
+    "src/nearby-editor.js": "685e456f07ccf052ea9e925210efbe26168ace8af77fab1c3a781aae25efd301",
+    "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+    "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+    "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+    "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "src/game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+    "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+    "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8"
+  },
+  "sourceUnchanged": true,
+  "passed": true,
+  "mainCallbacks": {
+    "mainSHA256": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+    "settingsSHA256": "fa3266f1ac9a4547216b4cc9e3683fcd3ebb84de248e9762ef0c42a9a132a815",
+    "getters": {
+      "getNpcWorld": "0fd48e727b43055ed8ca9fce2e66d47bbf95ac8606ebcdc0e2de9afb04e17211",
+      "getActorEditor": "24a8d95904b196aa8f8fe2a5e935b7c90536eb04d86297da195448fec5ce48e1",
+      "getPlacementEditor": "c83c17274d0e837f1d12e898331849b551b4c83e60447e7237fd046c8be7e478",
+      "getGameCinematics": "8a53c47187c96537ca59a38a9011ae26b55605e9aecfa1f88a76f42ad9da04a5"
+    },
+    "getState": {
+      "aliases": [
+        "toolState"
+      ],
+      "sourceSha256": "e60862b00e7e80eb1e11a5ae10f614e1875fb8491554c321b97ec2badaf9b8b3"
+    },
+    "loaderBoundary": "actual existing NpcWorld early-return in main getter; factory/container fetch+texture boundary only"
+  },
+  "notifications": [
+    "배우 배치를 게임에 적용했습니다.",
+    "배우 배치를 게임에 적용했습니다."
+  ],
+  "runtime": {
+    "library": {
+      "packages": 1,
+      "bytes": 15414960
+    },
+    "factoryCounters": {
+      "created": 2,
+      "warmCalls": 2,
+      "disposed": 2,
+      "localContainerReads": 2
+    },
+    "localProof": [
+      {
+        "fileName": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222.gltf",
+        "buffers": [
+          {
+            "bytes": 13970148,
+            "sha256": "49dfddf312c5fdce67c24b55df174373e88147d395080648aeb667388ce0b552"
+          }
+        ],
+        "meshes": [
+          {
+            "name": "tripo_node_2a54a49f-163a-43f5-a46c-b8f725782fc0",
+            "triangles": 10655,
+            "vertices": 14438,
+            "indicesSHA256": "bc61acc20a2ed7146b55399dbaa8dfca70f7b22ea728a0d17f8d4ea9aebab7ea"
+          }
+        ],
+        "clips": [
+          "Idle_02",
+          "Alert",
+          "Run_02",
+          "Agree_Gesture",
+          "Big_Wave_Hello",
+          "Casual_Walk",
+          "Chair_Sit_Idle_M",
+          "Confused_Scratch",
+          "Formal_Bow",
+          "Listening_Gesture",
+          "Sit_to_Stand_Transition_M",
+          "Stand_and_Chat",
+          "Stand_to_Sit_Transition_M",
+          "Hit_Reaction",
+          "Male_Bend_Over_Pick_Up",
+          "Collect_Object",
+          "Wave_for_Help",
+          "Stand_Talking_Angry",
+          "Talk_with_Hands_Open",
+          "Shrug"
+        ]
+      },
+      {
+        "fileName": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222.gltf",
+        "buffers": [
+          {
+            "bytes": 13970148,
+            "sha256": "49dfddf312c5fdce67c24b55df174373e88147d395080648aeb667388ce0b552"
+          }
+        ],
+        "meshes": [
+          {
+            "name": "tripo_node_2a54a49f-163a-43f5-a46c-b8f725782fc0",
+            "triangles": 10655,
+            "vertices": 14438,
+            "indicesSHA256": "bc61acc20a2ed7146b55399dbaa8dfca70f7b22ea728a0d17f8d4ea9aebab7ea"
+          }
+        ],
+        "clips": [
+          "Idle_02",
+          "Alert",
+          "Run_02",
+          "Agree_Gesture",
+          "Big_Wave_Hello",
+          "Casual_Walk",
+          "Chair_Sit_Idle_M",
+          "Confused_Scratch",
+          "Formal_Bow",
+          "Listening_Gesture",
+          "Sit_to_Stand_Transition_M",
+          "Stand_and_Chat",
+          "Stand_to_Sit_Transition_M",
+          "Hit_Reaction",
+          "Male_Bend_Over_Pick_Up",
+          "Collect_Object",
+          "Wave_for_Help",
+          "Stand_Talking_Angry",
+          "Talk_with_Hands_Open",
+          "Shrug"
+        ]
+      }
+    ],
+    "objectURLs": [
+      {
+        "url": "blob:nodedata:cb8c5db3-c4d5-418e-81ab-43a5b82afec4",
+        "type": "application/octet-stream",
+        "bytes": 13970148
+      },
+      {
+        "url": "blob:nodedata:c3694947-f333-47be-8fb1-2131efaf15b0",
+        "type": "application/octet-stream",
+        "bytes": 13970148
+      }
+    ],
+    "IDBOpens": 2,
+    "normalNativeFrames": {
+      "draws": 7,
+      "attempts": 7,
+      "requests": 8,
+      "pending": 1,
+      "frameLoopFrames": 7,
+      "running": true,
+      "background": false,
+      "hidden": false,
+      "renderEvenInBackground": false,
+      "maxFPS": 30
+    }
+  },
+  "complete": true
+}

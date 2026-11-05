@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {MapLoadLifetime} from '../src/map-load-lifetime.js';
-import {KtxWorkerSupervisor} from '../src/ktx-worker-supervisor.js';
+import {KtxWorkerSupervisor,KTX_WORKER_IDLE_MS} from '../src/ktx-worker-supervisor.js';
 import {MeshoptWorkerSupervisor} from '../src/meshopt-worker-supervisor.js';
 import {runtimeTimers} from '../src/runtime-timers.js';
 
@@ -34,7 +34,7 @@ for(const kind of ['ktx','meshopt'])test(`${kind} default browser timers survive
  const clock=browserClock(t),workers=[],createWorker=()=>{const worker=new Worker(kind);workers.push(worker);return worker;};
  const pool=kind==='ktx'?new KtxWorkerSupervisor({createWorker,urls:{}}):new MeshoptWorkerSupervisor({createWorker,decoderUrl:'https://pinned.test/decoder.js'});
  const submit=()=>kind==='ktx'?pool.decode(new Uint8Array(4),{},{}):pool.decodeGltfBufferAsync(new Uint8Array(4),1,4,'ATTRIBUTES','NONE');
- const normal=submit();await flush();workers.at(-1).complete();await normal;await flush();clock.advance(1000);assert.equal(clock.size,0);assert.equal(workers.at(-1).terminated,true);
+ const normal=submit();await flush();workers.at(-1).complete();await normal;await flush();clock.advance(kind==='ktx'?KTX_WORKER_IDLE_MS:1000);assert.equal(clock.size,0);assert.equal(workers.at(-1).terminated,true);
  const failure=submit().catch(e=>e);await flush();clock.advance(45000);assert.equal((await failure).name,'TimeoutError');assert.equal(pool.inspect().status,'failed');assert.equal(clock.size,0);assert.equal(pool.recover(),true);
  const retry=submit();await flush();workers.at(-1).complete();await retry;await flush();pool.dispose();await flush();assert.equal(clock.size,0);assert.equal(pool.inspect().queued,0);assert.equal(pool.inspect().active,null);assert.ok(workers.every(w=>w.terminated));
 });

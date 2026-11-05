@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-05",
+  "owner": "resources",
+  "status": "guide-only-final-frozen",
+  "changedSource": "public/moonforest-help.html",
+  "reason": "Remote integration preserves the two existing Settings options and mounts the developer launcher in managed mode. Replace the prior standalone checkbox/dock instructions.",
+  "instructions": [
+    "설정 > 개발 도구 > 게임 / 만들기 opens the in-game MoonForest0.1 developer tools and closes Settings.",
+    "설정 > 개발 도구 > 주변 오브젝트 편집 opens the separate nearby floating list and closes Settings.",
+    "Both rows use 게임 화면에서 열기 to reopen; defaults remainOFF; disabling removes the matching tool window.",
+    "NPC import/20-motion/application/cancel and single-step scene File opening instructions preserved."
+  ],
+  "checks": {
+    "passed": true,
+    "html": "LinkeDOM parses the guide and finds the developer-tool instructions.",
+    "labels": "Actual tool-visibility-settings/developer-tools labels match guide; obsolete 개발도구 켜기 and floating dock instructions absent.",
+    "integration": "Read-only main source confirms setupDeveloperToolSettings inGame:true and setupDeveloperTools managed:true.",
+    "format": "git diff --check, LF EOF and trailing-whitespace check PASS.",
+    "limits": "Copy-only update. No production behavior change, screenshot/browser claim or repeated runtime suite."
+  },
+  "sha256": {
+    "public/moonforest-help.html": "aa5518cb012a20b6432e734d46efb738924b0703b1fa6c5ee9292f91bb8d931c",
+    "reference/src/tool-visibility-settings.js": "0be640fa64c92e9b32533830da1f4c284a5e355a4a0ce67a6cab275473ff39a8",
+    "reference/src/developer-tools.js": "63c07ab8b7e0937c9381f9c47950c666533867d31312298aef7c8baa9278924a",
+    "unchanged/src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+    "unchanged/src/cinematic-studio.css": "14b4d33ff408ec185362ca157eeee3e7607e9db2f0c14efcd4658d555e441dee",
+    "unchanged/src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+  }
+}

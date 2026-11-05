@@ -12,6 +12,7 @@ import {deathHaloAdvance} from './mourning-motion-v2.js';
 import {getCinematicDefinitions,cinematicStaticCatalog,cinematicStaticManifest} from './cinematic-assets.js';
 import {createCinematicVisualFactory} from './cinematic-visual-adapter.js';
 import {readMapManifest} from './map-manifests.js';
+import {getNpcCatalog} from './npc-library.js';
 
 const MAX_ACTORS=20,MAX_BYTES=512*1024*1024;
 const copy=value=>value?.clone?.()??value;
@@ -75,6 +76,7 @@ export function createCinematicPoseSampler(encounter){
  return {
   defaultClip,bindings:bindings.length,
   sample(input,time=0){
+   const inPlaceNpc=encounter.config.npc?.rootMotion==='in-place'&&encounter.npcCarrier&&encounter.npcMotionRoot&&encounter.npcMotionAnchor;if(inPlaceNpc)encounter.npcCarrier.position.copyFrom(encounter.npcCarrierOrigin);
    const active=input?.filter(item=>item.weight>0)??[],animations=active.length?active:defaultClip?[{clipId:defaultClip,time:0,weight:1}]:[],poseTime=active.length?time:0;
    for(const item of animations)if(!groups.has(item.clipId))throw new Error('Cinematic clip is not prepared: '+item.clipId);
    for(const binding of bindings){
@@ -91,6 +93,7 @@ export function createCinematicPoseSampler(encounter){
     }
     assign(binding,out);
    }
+   if(inPlaceNpc){encounter.actor.computeWorldMatrix(true);encounter.npcCarrier.computeWorldMatrix(true);refreshPoseMatrices(poseNodes);const relative=Vector3.TransformCoordinates(encounter.npcMotionRoot.getAbsolutePosition(),encounter.actor.getWorldMatrix().clone().invert());encounter.npcCarrier.position.x-=relative.x-encounter.npcMotionAnchor.x;encounter.npcCarrier.position.z-=relative.z-encounter.npcMotionAnchor.z;encounter.npcCarrier.computeWorldMatrix(true);}
    if(mourning){
     const weights={walk:0,cast:0,idle:0,hit:0};let death=null,cast=null;
     Object.assign(animator,{walkTime:0,hairTime:0,idleTime:0,castTime:0,hitTime:0,deathTime:0,breathClock:poseTime,haloTime:poseTime%48,gaitBlend:0,hitPulseWeight:0,hitPulseTime:1,clothInitialized:false,deathStarted:false});
@@ -207,7 +210,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
    const prepared={actors:new Map(),staticRuntime:null,document,world:session.world};session.prepared=prepared;
    try{
     if(document.actors.length>caps.actors)throw new Error('Cinematic actor count cap reached');
-    const counts=new Map(),plan=document.actors.map(actor=>{if(!actor.actorDefinitionId)return {actor};const definition=definitionAt(actorDefinitions,actor.actorDefinitionId);if(!definition||definition.assetId!==actor.assetId||definition.assetVersion!==actor.assetVersion)throw new Error('Cinematic actor definition/version conflict');const count=(counts.get(actor.actorDefinitionId)??0)+1;counts.set(actor.actorDefinitionId,count);if(count>(definition.population?.maxPooled??caps.actors))throw new Error('Cinematic per-definition actor cap reached');return {actor,definition,key:actor.actorDefinitionId+'#'+count};});
+    const dynamicDefinitions={...getCinematicDefinitions(getNpcCatalog(catalog)),...(actorDefinitions instanceof Map?Object.fromEntries(actorDefinitions):actorDefinitions)},counts=new Map(),plan=document.actors.map(actor=>{if(!actor.actorDefinitionId)return {actor};const definition=definitionAt(dynamicDefinitions,actor.actorDefinitionId);if(!definition||definition.assetId!==actor.assetId||definition.assetVersion!==actor.assetVersion)throw new Error('Cinematic actor definition/version conflict');const count=(counts.get(actor.actorDefinitionId)??0)+1;counts.set(actor.actorDefinitionId,count);if(count>(definition.population?.maxPooled??caps.actors))throw new Error('Cinematic per-definition actor cap reached');return {actor,definition,key:actor.actorDefinitionId+'#'+count};});
     const protectedKeys=new Set(plan.filter(item=>item.key).map(item=>item.key));evict(protectedKeys);const frame=evaluateCinematic(document,time??session.preparationTime),staticActors=[];
     for(const {actor,definition,key}of plan){
      check(session);const initial=frame.actors.find(item=>item.actorId===actor.actorId);

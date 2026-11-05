@@ -1,0 +1,272 @@
+{
+  "baseline": "99fcd56",
+  "passed": true,
+  "sourceSha256": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+  "cases": [
+    {
+      "case": "player-pose-strike-equivalence",
+      "fps": 15,
+      "frames": 270,
+      "maxWorldMatrixError": 0,
+      "strikeSweepSamples": 33,
+      "rollClipTravel": 1.3599999999999997,
+      "baselineCreated": 8568,
+      "cachedCreated": 5304,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 5304,
+        "reused": 3264,
+        "evicted": 10,
+        "currentBindings": 1224
+      }
+    },
+    {
+      "case": "player-pose-strike-equivalence",
+      "fps": 30,
+      "frames": 540,
+      "maxWorldMatrixError": 0,
+      "strikeSweepSamples": 56,
+      "rollClipTravel": 1.3599999999999997,
+      "baselineCreated": 8568,
+      "cachedCreated": 5304,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 5304,
+        "reused": 3264,
+        "evicted": 10,
+        "currentBindings": 1224
+      }
+    },
+    {
+      "case": "player-pose-strike-equivalence",
+      "fps": 60,
+      "frames": 1080,
+      "maxWorldMatrixError": 0,
+      "strikeSweepSamples": 102,
+      "rollClipTravel": 1.3599999999999997,
+      "baselineCreated": 8568,
+      "cachedCreated": 5304,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 5304,
+        "reused": 3264,
+        "evicted": 10,
+        "currentBindings": 1224
+      }
+    },
+    {
+      "case": "bear-pose-event-equivalence",
+      "fps": 15,
+      "frames": 300,
+      "maxWorldMatrixError": 0,
+      "brainEvents": 5,
+      "visited": [
+        "Block6",
+        "Right_Jab_from_Guard",
+        "Left_Hook_from_Guard",
+        "Stand_Up3",
+        "Weapon_Combo",
+        "Shield_Push_Left",
+        "Skill_03",
+        "Knock_Down_1"
+      ],
+      "baselineCreated": 2958,
+      "cachedCreated": 2262,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 2262,
+        "reused": 696,
+        "evicted": 9,
+        "currentBindings": 696
+      }
+    },
+    {
+      "case": "bear-pose-event-equivalence",
+      "fps": 30,
+      "frames": 600,
+      "maxWorldMatrixError": 0,
+      "brainEvents": 5,
+      "visited": [
+        "Block6",
+        "Right_Jab_from_Guard",
+        "Left_Hook_from_Guard",
+        "Stand_Up3",
+        "Weapon_Combo",
+        "Shield_Push_Left",
+        "Skill_03",
+        "Knock_Down_1"
+      ],
+      "baselineCreated": 2958,
+      "cachedCreated": 2262,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 2262,
+        "reused": 696,
+        "evicted": 9,
+        "currentBindings": 696
+      }
+    },
+    {
+      "case": "bear-pose-event-equivalence",
+      "fps": 60,
+      "frames": 1200,
+      "maxWorldMatrixError": 0,
+      "brainEvents": 5,
+      "visited": [
+        "Block6",
+        "Right_Jab_from_Guard",
+        "Left_Hook_from_Guard",
+        "Stand_Up3",
+        "Weapon_Combo",
+        "Shield_Push_Left",
+        "Skill_03",
+        "Knock_Down_1"
+      ],
+      "baselineCreated": 2958,
+      "cachedCreated": 2262,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 2262,
+        "reused": 696,
+        "evicted": 9,
+        "currentBindings": 696
+      }
+    },
+    {
+      "case": "recurring-binding-work",
+      "asset": "warrior-v3",
+      "tracksPerClip": 408,
+      "transitions": 60,
+      "baselineCreated": 24480,
+      "cachedCreated": 1224,
+      "bindingsAvoided": 23256,
+      "baselineMedianTransitionAndSampleMs": 3.128600000000006,
+      "cachedMedianTransitionAndSampleMs": 1.7210999999988417,
+      "inactiveManualSamples": 0,
+      "inactiveRuntimeSamples": 0,
+      "maxWorldMatrixError": 0,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 1224,
+        "reused": 23256,
+        "evicted": 0,
+        "currentBindings": 1224
+      }
+    },
+    {
+      "case": "recurring-binding-work",
+      "asset": "guardian-bear",
+      "tracksPerClip": 174,
+      "transitions": 60,
+      "baselineCreated": 10440,
+      "cachedCreated": 522,
+      "bindingsAvoided": 9918,
+      "baselineMedianTransitionAndSampleMs": 1.1937999999972817,
+      "cachedMedianTransitionAndSampleMs": 0.7580999999991036,
+      "inactiveManualSamples": 0,
+      "inactiveRuntimeSamples": 0,
+      "maxWorldMatrixError": 0,
+      "cache": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 522,
+        "reused": 9918,
+        "evicted": 0,
+        "currentBindings": 522
+      }
+    },
+    {
+      "case": "bear20-clip-lifecycle",
+      "passes": 3,
+      "maximumCachedClips": 2,
+      "maximumLiveNativeBindings": 522,
+      "afterDispose": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 0,
+        "created": 10440,
+        "reused": 0,
+        "evicted": 57,
+        "currentBindings": 0
+      }
+    },
+    {
+      "case": "superseded-fades",
+      "transitions": 80,
+      "normalized": true,
+      "poseEquivalent": true
+    },
+    {
+      "case": "native-callback-fallback",
+      "groups": [
+        "group-callback",
+        "native-observer",
+        "native-callback",
+        "events",
+        "additive",
+        "sparse"
+      ],
+      "logicalCallbacksPreserved": true
+    },
+    {
+      "case": "late-callback-fallback",
+      "staleEndCallbacks": 0,
+      "played": 1,
+      "paused": 1,
+      "ended": 1
+    },
+    {
+      "case": "superseded-keys",
+      "cacheInvalidated": true,
+      "newAuthoredPose": 24
+    },
+    {
+      "case": "superseded-group-owner",
+      "sameTargetAndDifferentTarget": true,
+      "freshOwnerStarted": true,
+      "oldNativeBindingsReleased": true,
+      "staleChannelProofRejected": true
+    },
+    {
+      "case": "unmapped-owner-disposal",
+      "cachedNativeBindingsReleased": true,
+      "afterDisposeBindings": 0
+    },
+    {
+      "case": "aliased-group-owner",
+      "cachedOwnersDrained": true,
+      "freshOwnerStarted": true,
+      "afterDisposeBindings": 0
+    }
+  ],
+  "limitations": [
+    "CPU-only Babylon9.31 NullEngine with actual shipped TRS tracks/hierarchy. Images/GPU rasterization and actual S23 scheduling/thermals/FPS are not measured.",
+    "Cache disabled is the original stop/delete path; opt-in retains at most2 zero-weight paused native groups outside active manual sampling. SDK still performs bounded paused animatable checks.",
+    "Desktop transition/sample medians are observational; operation counts and pose/strike equality are the assertions. No claim that the observed mobile framePrelude is entirely animation allocation.",
+    "Controller/brain results and timing are unchanged; both animators consume the same authoritative results."
+  ]
+}

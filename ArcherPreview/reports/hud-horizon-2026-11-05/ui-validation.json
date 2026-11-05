@@ -1,0 +1,458 @@
+{
+  "baseline": "8bfabf0",
+  "scope": "Independent source/cascade and CSS geometry audit; no source edits, browser automation, images or new assets.",
+  "cascade": "Used the existing commercial-ui-independent CSS parser helper in production stylesheet import order. Actual release data-ui-test and data-commercial-ui selectors included.",
+  "variantLifecycle": {
+    "markedForStamina": true,
+    "ordinaryMessageClearsVariant": true,
+    "timeoutsMs": [
+      4000,
+      4000
+    ],
+    "previousTimeoutCanceled": true
+  },
+  "hudLayout": {
+    "groups": 10,
+    "version": 1,
+    "noticeExcluded": true,
+    "combatCentersUnchanged": true
+  },
+  "viewports": [
+    {
+      "viewport": [
+        480,
+        320
+      ],
+      "safeInsets": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+      },
+      "fontPx": 20,
+      "notice": {
+        "x": 90,
+        "y": 101.80000000000001,
+        "width": 148,
+        "height": 78
+      },
+      "widthBasis": "authored 148px",
+      "expectedLines": 2,
+      "controls": {
+        "attack-button": {
+          "x": 346,
+          "y": 180,
+          "width": 76,
+          "height": 76
+        },
+        "guard-button": {
+          "x": 290,
+          "y": 106,
+          "width": 62,
+          "height": 62
+        },
+        "dodge-button": {
+          "x": 270,
+          "y": 190,
+          "width": 62,
+          "height": 62
+        },
+        "potion-button": {
+          "x": 352,
+          "y": 100,
+          "width": 62,
+          "height": 62
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "calc(50% - 76px)",
+        "top": "44%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        480,
+        320
+      ],
+      "safeInsets": {
+        "left": 24,
+        "right": 24,
+        "top": 24,
+        "bottom": 24
+      },
+      "fontPx": 20,
+      "notice": {
+        "x": 90,
+        "y": 101.80000000000001,
+        "width": 148,
+        "height": 78
+      },
+      "widthBasis": "authored 148px",
+      "expectedLines": 2,
+      "controls": {
+        "attack-button": {
+          "x": 322,
+          "y": 156,
+          "width": 76,
+          "height": 76
+        },
+        "guard-button": {
+          "x": 266,
+          "y": 82,
+          "width": 62,
+          "height": 62
+        },
+        "dodge-button": {
+          "x": 246,
+          "y": 166,
+          "width": 62,
+          "height": 62
+        },
+        "potion-button": {
+          "x": 328,
+          "y": 76,
+          "width": 62,
+          "height": 62
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "calc(50% - 76px)",
+        "top": "44%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "safeInsets": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+      },
+      "fontPx": 20,
+      "notice": {
+        "x": 178,
+        "y": 101.80000000000001,
+        "width": 148,
+        "height": 78
+      },
+      "widthBasis": "authored 148px",
+      "expectedLines": 2,
+      "controls": {
+        "attack-button": {
+          "x": 434,
+          "y": 180,
+          "width": 76,
+          "height": 76
+        },
+        "guard-button": {
+          "x": 378,
+          "y": 106,
+          "width": 62,
+          "height": 62
+        },
+        "dodge-button": {
+          "x": 358,
+          "y": 190,
+          "width": 62,
+          "height": 62
+        },
+        "potion-button": {
+          "x": 440,
+          "y": 100,
+          "width": 62,
+          "height": 62
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "calc(50% - 32px)",
+        "top": "44%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "safeInsets": {
+        "left": 24,
+        "right": 24,
+        "top": 24,
+        "bottom": 24
+      },
+      "fontPx": 20,
+      "notice": {
+        "x": 178,
+        "y": 101.80000000000001,
+        "width": 148,
+        "height": 78
+      },
+      "widthBasis": "authored 148px",
+      "expectedLines": 2,
+      "controls": {
+        "attack-button": {
+          "x": 410,
+          "y": 156,
+          "width": 76,
+          "height": 76
+        },
+        "guard-button": {
+          "x": 354,
+          "y": 82,
+          "width": 62,
+          "height": 62
+        },
+        "dodge-button": {
+          "x": 334,
+          "y": 166,
+          "width": 62,
+          "height": 62
+        },
+        "potion-button": {
+          "x": 416,
+          "y": 76,
+          "width": 62,
+          "height": 62
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "calc(50% - 32px)",
+        "top": "44%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        832,
+        384
+      ],
+      "safeInsets": {
+        "left": 24,
+        "right": 24,
+        "top": 24,
+        "bottom": 24
+      },
+      "fontPx": 20,
+      "notice": {
+        "x": 290,
+        "y": 126.6,
+        "width": 252,
+        "height": 54
+      },
+      "widthBasis": "estimated text advance, not browser measured",
+      "expectedLines": 1,
+      "controls": {
+        "attack-button": {
+          "x": 657.12,
+          "y": 220,
+          "width": 76,
+          "height": 76
+        },
+        "guard-button": {
+          "x": 601.12,
+          "y": 146,
+          "width": 62,
+          "height": 62
+        },
+        "dodge-button": {
+          "x": 581.12,
+          "y": 230,
+          "width": 62,
+          "height": 62
+        },
+        "potion-button": {
+          "x": 663.12,
+          "y": 140,
+          "width": 62,
+          "height": 62
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "50%",
+        "top": "40%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        1179,
+        778
+      ],
+      "safeInsets": {
+        "left": 0,
+        "right": 0,
+        "top": 0,
+        "bottom": 0
+      },
+      "fontPx": 29.563999999999997,
+      "notice": {
+        "x": 413.289,
+        "y": 277.5052,
+        "width": 352.42199999999997,
+        "height": 67.3896
+      },
+      "widthBasis": "estimated text advance, not browser measured",
+      "expectedLines": 1,
+      "controls": {
+        "attack-button": {
+          "x": 983.5400000000001,
+          "y": 583.5,
+          "width": 101.14,
+          "height": 101.14
+        },
+        "guard-button": {
+          "x": 911.7400000000001,
+          "y": 493.7,
+          "width": 77.8,
+          "height": 77.8
+        },
+        "dodge-button": {
+          "x": 891.7400000000001,
+          "y": 602.84,
+          "width": 77.8,
+          "height": 77.8
+        },
+        "potion-button": {
+          "x": 998.8800000000001,
+          "y": 487.7,
+          "width": 77.8,
+          "height": 77.8
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "50%",
+        "top": "40%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    },
+    {
+      "viewport": [
+        778,
+        1179
+      ],
+      "safeInsets": {
+        "left": 0,
+        "right": 0,
+        "top": 24,
+        "bottom": 24
+      },
+      "fontPx": 29.563999999999997,
+      "notice": {
+        "x": 212.78900000000002,
+        "y": 437.90520000000004,
+        "width": 352.42199999999997,
+        "height": 67.3896
+      },
+      "widthBasis": "estimated text advance, not browser measured",
+      "expectedLines": 1,
+      "controls": {
+        "attack-button": {
+          "x": 603.76,
+          "y": 923,
+          "width": 112,
+          "height": 112
+        },
+        "guard-button": {
+          "x": 524.76,
+          "y": 826,
+          "width": 85,
+          "height": 85
+        },
+        "dodge-button": {
+          "x": 504.76,
+          "y": 946,
+          "width": 85,
+          "height": 85
+        },
+        "potion-button": {
+          "x": 622.76,
+          "y": 820,
+          "width": 85,
+          "height": 85
+        }
+      },
+      "combatOverlapAreas": {
+        "attack-button": 0,
+        "guard-button": 0,
+        "dodge-button": 0,
+        "potion-button": 0
+      },
+      "styles": {
+        "left": "50%",
+        "top": "40%",
+        "transform": "translate(-50%,-50%)",
+        "scale": "1",
+        "pointerEvents": "none"
+      }
+    }
+  ],
+  "passed": true,
+  "existingTests": {
+    "passed": 27,
+    "suites": [
+      "hud-layout.test.js",
+      "hud-layout-independent.test.js",
+      "hud-hold-contextmenu.test.js",
+      "combat-readability.test.js"
+    ]
+  },
+  "limitations": [
+    "CSS equations and static selector cascade are not browser typography or pixel rendering. Large max-content notice widths use a 10.5em estimate; short landscape width148px is authored and does not depend on font metrics.",
+    "The short landscape panel is expected to wrap the existing Korean sentence to two lines. Its horizontal separation from combat controls remains valid if a fallback font wraps differently.",
+    "Reviewed default HUD layout with 0px and24px safe-area cases. User-edited HUD offsets/scales can create other overlaps.",
+    "A transient action warning may overlap passive quest text or boss HP text. It remains noninteractive. No claimed total HUD-overlap elimination."
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "baseline": "0fb713c",
+  "generatedAt": "2026-11-05T02:43:53.445Z",
+  "worktree": "C:\\dev\\moonforest-cinematic-integration-20261104\\ArcherPreview",
+  "baselineStudioSha256": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+  "baselineReproduction": {
+    "failed": 2,
+    "actual": [
+      "Studio DOM input2→actual Game status0→field0 overwritten",
+      "native real File choice→current Studio/player document stays old without hidden apply click"
+    ]
+  },
+  "sourceHashesAtRepairFreeze": {
+    "src/cinematic-studio.js": "b46a8249cfa062c6da5aa4b4b940f517e2832d4fcd448bb29dfc1395e7d22ee5",
+    "public/moonforest-help.html": "642f277ca3fe5bf9019fe8017fdd39336b638c162ea2c0c7d43d0e362b0cc119",
+    "tests/cinematic-authoring-repair-ui.test.js": "70593da772d8b5d1812a362e859e756e2f54198859c465fa7b2bd6d4c81e9b0c",
+    "tests/cinematic-studio.test.js": "1f9bd2a5ef618333c8930febade58379f3f9aad7f60287883f28547dd8a288da",
+    "tests/cinematic-expansion-ui.test.js": "d0bce12b3aa46cc80fba9f9227d0c359706e75c2ec1353457f216d911a19920c",
+    "src/cinematic-game.js": "75aae82a0d03eff7e913199d4562bdb2a4a1a5a7ef3eda5a0bef0905e9775b6a",
+    "src/cinematic-protocol.js": "3c6e9acde02b21337ad0c024b565c54f50b1c250572e352750acb0e85f7ce078",
+    "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+  },
+  "focused": {
+    "passed": 70,
+    "failed": 0,
+    "newActualDuplexCases": 6,
+    "command": "node --test tests/cinematic-authoring-repair-ui.test.js tests/cinematic-studio.test.js tests/cinematic-expansion-ui.test.js tests/cinematic-studio-layout.test.js tests/cinematic-workspace-controls.test.js"
+  },
+  "changes": [
+    "Keep focused/dirty time text intact during status polling; snapshot Enter/change/button values, serialize seeks, reject obsolete navigation/poll replies",
+    "Saved-work button directly invokes chooser within the click; choosing a valid scene/json/binary project validates, applies and prepares preview at0 without second apply",
+    "Snapshot and clear native File input for same-file reselection; import serial/epoch guards reject cancelled or superseded reads; invalid data preserves document",
+    "Spawn exact returned screen-ground point even when actors overlap; reject explicit null/no-ground; select rather than auto-focus; same-project actor-list load requests child camera preservation"
+  ],
+  "newChecks": [
+    "Real authenticated Studio/Game transport and actual host/player seek on Enter/button/change with delayed real status reply",
+    "Actual native File path, scene/json/real MFCP1 package containing WAV bytes, same File twice",
+    "Invalid JSON, slow native File after Cancel/New preserves document",
+    "Two real shipped goblins use identical captured ground point with camera position/target/FOV unchanged; no Add seek/focus requests"
+  ],
+  "ownership": {
+    "edited": [
+      "src/cinematic-studio.js",
+      "public/moonforest-help.html",
+      "tests/cinematic-authoring-repair-ui.test.js",
+      "tests/cinematic-studio.test.js",
+      "tests/cinematic-expansion-ui.test.js"
+    ],
+    "rootOwned": [
+      "src/cinematic-game.js",
+      "src/cinematic-protocol.js"
+    ],
+    "otherAgentOwned": [
+      "src/cinematic-ground.js",
+      "src/cinematic-interaction.js",
+      "src/game-tool-lease.js"
+    ]
+  },
+  "limitations": [
+    "Node LinkeDOM/native Babylon NullEngine and decoded shipped model fixture; no browser/CUA/CDP, screenshot, GPU pixel or audible-output claims",
+    "Native chooser invocation is verified as synchronous input click; actual operating-system file dialog is not automated",
+    "No whole-suite/build/stage/deploy by this agent",
+    "NPC UI is held until independent repair gate completes"
+  ]
+}

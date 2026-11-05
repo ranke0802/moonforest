@@ -1,0 +1,577 @@
+{
+  "generatedAt": "2026-11-05T03:34:21.890Z",
+  "passed": true,
+  "status": "Independent integration gates complete; final whole-suite/build/deployment evidence is owned by root and is not inferred from these gates.",
+  "baseline": {
+    "reportedSource": "0fb713c",
+    "beforeBugs": 5,
+    "remoteIntegrated": "36fd9a3",
+    "activeRepository": "C:/dev/moonforest-cinematic-integration-20261104/ArcherPreview",
+    "originalUserDirtyRepositoryUntouched": true
+  },
+  "gateResults": [
+    {
+      "gate": "Original first-entry bugs",
+      "observed": 5,
+      "artifact": "verification-before.json"
+    },
+    {
+      "gate": "First repair on original source freeze",
+      "passed": 12,
+      "artifact": "verification-repair.json"
+    },
+    {
+      "gate": "Same native first-entry cases after remote integration",
+      "passed": 12,
+      "artifact": "verification-repair-merged.json",
+      "note": "A rerun of the same12 cases, not12 additional unique features."
+    },
+    {
+      "gate": "NPC data-only ZIP/GLB/IDB corruption and ownership",
+      "passed": 9,
+      "artifact": "verification-npc-data.json"
+    },
+    {
+      "gate": "Exact supplied-model registration lineage",
+      "passed": true,
+      "artifact": "verification-npc-registration.json"
+    },
+    {
+      "gate": "Native Studio→Game NPC clips, rigs, file/storage, ink",
+      "passed": 7,
+      "artifact": "verification-npc-native.json"
+    },
+    {
+      "gate": "Shared IDB→normal game/settings/real battle editor",
+      "passed": 7,
+      "artifact": "verification-npc-world-ui.json"
+    }
+  ],
+  "repairedUserEntryFlows": [
+    "A geometry-free pixel inside oversized actor bounds now reaches native ArcRotate left-drag instead of moving the actor. True body drags retain native village hillside height plus the original foot offset; pointercancel restores transform/history.",
+    "Add uses an actual camera-center ground ray and preserves the current camera; no-ground views reject explicitly.",
+    "The focused numeric time draft survives the real500ms clock poll and stale status ACK. Enter, the visible Move action and change/blur commit the captured time once.",
+    "The actual header Open click invokes the native file input synchronously. A File change validates and automatically opens the scene or binary-audio project; choosing the same file again works. Late file reads cannot replace New work.",
+    "Existing settings checkboxes developer-nearby-enabled and developer-authoring-enabled close settings and show root-mounted in-game tools; no duplicate third checkbox. Real main lazy callbacks route nearby battle actors to the actual actor editor."
+  ],
+  "npcEvidence": {
+    "assetId": "moonforest-resident2-blacksmith",
+    "sourceGLBSHA256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+    "originalPackageSHA256": "2863a41bf38691831f5b35931a98dbde28527538674ac52722c2593f59a70a3c",
+    "catalogRevision": "ebeb9e1ab78dcde40792b7e4b68fb9d5c4c1e5dc07321bf4c36d55bbdcf4a12f",
+    "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
+    "entriesBefore": 84,
+    "entriesAfter": 85,
+    "allOriginal84EntriesExactlyPreserved": true,
+    "exactOriginalModelStructures": true,
+    "accessorProofCount": 4060,
+    "images": [
+      {
+        "index": 0,
+        "sha256": "53b9e5b9092576bcca7be489a4b6da13088b59402640b74efb5a0c13dd313425",
+        "bytes": 2884959,
+        "width": 4096,
+        "height": 4096,
+        "losslessEncodedCopy": true
+      }
+    ],
+    "triangles": 10655,
+    "bones": 66,
+    "clips": 20,
+    "scale": 1,
+    "height": 1.8499997703133602,
+    "style": {
+      "toon": true,
+      "pbr": false,
+      "outline": true,
+      "outlinePixels": 0.6,
+      "interior": true,
+      "interiorStrength": 0.25,
+      "brightness": 1.2
+    },
+    "sourceAnimationPolicy": "All20 native channels were compared with the actual Animation.evaluate result, and source key digests remained unchanged. Runtime horizontal root-motion compensation retains the actor footprint; carrierY and original sit/rest channels are retained.",
+    "futurePackage": "An inert synthetic manifest/GLB metadata variant with the original model binary is imported through actual Studio File events into the production asynchronous IDB branch. Fresh normal-game UI sees it without another import. Only explicit Add requests the source. Scene files retain exact asset/version references; another device requires the same NPC package import.",
+    "sharedRigPolicy": "Independent native skeletons and poses, shared original geometry; no extra GLB parse for seeks or same-scene file reopen.",
+    "gameEditing": "A real default BossBattle.summon goblin is edited through nearby selection without replacing root, rig, AI or HP. Cancel restores all captured world matrices; Apply retains pose and clears route state. Normal gameplay AI may move it afterward."
+  },
+  "lateColorStageRepair": {
+    "finding": "Actual game materials output gamma-encoded color before the first post process; raw linear ink was incorrectly mixed into that input.",
+    "beforeArtifact": "verification-ink-color-stage-before.json",
+    "fixedArtifact": "verification-ink-color-stage-fixed.json",
+    "fixedManagerSHA256": "32b45ed34d1864d95b64344e15429b4805401ff3f2e1218810f65be8585ff3b6",
+    "verification": "Native manager uniform bind matches exact piecewise sRGB output encoding for current gamma input, while explicit linear-input configuration retains original linear ink. Existing PP/resource ownership is unchanged.",
+    "historicalNote": "Original model/world gates retained at their historical source hashes. Only this uniform adapter changed afterward; bounded color/configuration/ownership proof covers that delta. Root reruns whole/build on final source."
+  },
+  "styleEvidence": {
+    "implementation": "NPC-specific toon bands/silhouette plus NPC-only normal/depth RTT and post process on the existing engine/camera chain. Existing world color post process survives hiding/disposal; no scene.customRenderTargets insertion and no second world depth render.",
+    "independentNative": "Actual supplied-model meshes register with the real native manager; only public NullEngine depth allocation is supplied because NullEngine does not provide framebuffer depth attachments. All owned model/download Blob URLs and adapters are disposed.",
+    "supportingReports": [
+      {
+        "file": "npc-ink-shader.json",
+        "sha256": "199505d0953369e9370ee4265d28f2206171e259fc76ea86cb1587390f4fb633",
+        "writtenAt": "2026-11-05T03:10:33.670Z",
+        "generatedAt": null,
+        "owner": "B: original shader math port",
+        "passed": null,
+        "sourceUnchanged": null,
+        "cases": [],
+        "sourceHashes": {
+          "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+          "tests/npc-ink-shaders.test.js": "f4815c559fd6ac66cd1cd78c0b007b643aea462886f839f36e9b79eafdb41906",
+          "unchanged/src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+          "unchanged/src/cinematic-studio.css": "14b4d33ff408ec185362ca157eeee3e7607e9db2f0c14efcd4658d555e441dee",
+          "unchanged/public/moonforest-help.html": "746e096dc3d7c1c23ac088f7efb3b05d8ea805e4624e4e402b6dfbf17d9a28a7"
+        }
+      },
+      {
+        "file": "npc-runtime.json",
+        "sha256": "e9903c7ce7895c342935d2c89dce1d471c77f82dcf435df1897c1291532b10ac",
+        "writtenAt": "2026-11-05T03:33:50.820Z",
+        "generatedAt": "2026-11-05T03:33:50.7902877Z",
+        "owner": "A: runtime/world/editor/RTT unit regressions",
+        "passed": null,
+        "sourceUnchanged": null,
+        "cases": [],
+        "sourceHashes": {
+          "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+          "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+          "src/cinematic-assets.js": "7ddccf1980d4e7407fb37899835b189d1ca9d2ed8195629dcec562dfb260bccd",
+          "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8",
+          "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+          "src/character-style.js": "f270eee600ff268e87047db9d25356339e73dcb319b8b673f8ca3aade0a4291f",
+          "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+          "src/npc-interior-ink.js": "32b45ed34d1864d95b64344e15429b4805401ff3f2e1218810f65be8585ff3b6",
+          "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+          "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+          "src/live-actor-handles.js": "7d8d1172516ef8347e037ee6553d42a5bd74b62e868912d2bfc39c705cb3f3ad",
+          "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+          "tests/npc-world-editor.test.js": "f4bb3dd1729127454c69dc4d47a5c23addcae1e3be8e86ac314d676fa0779478",
+          "tests/npc-interior-ink.test.js": "464a94cba9ca6ca5c522655f9539612ffea08e1a0e6f73c6ab18f540c1626013",
+          "tests/npc-ink-shaders.test.js": "f4815c559fd6ac66cd1cd78c0b007b643aea462886f839f36e9b79eafdb41906"
+        }
+      },
+      {
+        "file": "npc-studio.json",
+        "sha256": "faba32f35e72b3548e1a9b38946d408846c5ab658aeef2b4105433b92d5882ee",
+        "writtenAt": "2026-11-05T03:02:46.710Z",
+        "generatedAt": null,
+        "owner": "B: Studio UI unit regressions",
+        "passed": null,
+        "sourceUnchanged": null,
+        "cases": [],
+        "sourceHashes": {
+          "src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+          "src/cinematic-studio.css": "14b4d33ff408ec185362ca157eeee3e7607e9db2f0c14efcd4658d555e441dee",
+          "public/moonforest-help.html": "746e096dc3d7c1c23ac088f7efb3b05d8ea805e4624e4e402b6dfbf17d9a28a7",
+          "tests/cinematic-authoring-repair-ui.test.js": "70f65b0f885ce3fdf013ba45bcf9efaee437dae47d1471d33f313079c62cfd46",
+          "tests/cinematic-npc-studio.test.js": "add6caa8c66992a582a7ca6216826dc0b02ecd19f6356c71d66775e9d26e4a72",
+          "tests/cinematic-studio.test.js": "1f9bd2a5ef618333c8930febade58379f3f9aad7f60287883f28547dd8a288da",
+          "tests/cinematic-expansion-ui.test.js": "d0bce12b3aa46cc80fba9f9227d0c359706e75c2ec1353457f216d911a19920c",
+          "dependency/src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+          "dependency/src/cinematic-assets.js": "7ddccf1980d4e7407fb37899835b189d1ca9d2ed8195629dcec562dfb260bccd",
+          "dependency/src/asset-catalog.js": "0a0bb7cd5eab37b0a1e25b03f1b409ffb0ee3b184f15e85bfbe8de2c4eada801"
+        }
+      }
+    ],
+    "limits": "3240 source-math probes and native lifecycle tests do not prove WebGL shader compilation, image equivalence or on-device rendering."
+  },
+  "historicalArtifacts": [
+    {
+      "file": "verification-before.json",
+      "sha256": "b9763cb39600c5fa247103cda1934596a9e03a43c77214de5963000cb0d3d4e3",
+      "writtenAt": "2026-11-05T02:34:05.353Z",
+      "generatedAt": "2026-11-05T02:34:05.352Z",
+      "owner": "independent verifier",
+      "passed": null,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "focused numeric typing→status poll→Enter→change/blur",
+          "passed": null
+        },
+        {
+          "name": "header saved-work Open→native File change",
+          "passed": null
+        },
+        {
+          "name": "capture current camera center for actor spawn",
+          "passed": null
+        },
+        {
+          "name": "real left DOM drag through geometry-free actor bounds",
+          "passed": null
+        },
+        {
+          "name": "real actor body drag across actual village hillside",
+          "passed": null
+        }
+      ],
+      "sourceHashes": {
+        "cinematic-game.js": "5dd51f84585711511179769bfb3125c85524a140e3e718ef11851d7832ed536d",
+        "cinematic-studio.js": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+        "cinematic-interaction.js": "eb58fda99d76be2f42d631d08b84199a10e8f30fbcfe97d42420e8c8a28a6e46",
+        "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+      }
+    },
+    {
+      "file": "verification-repair.json",
+      "sha256": "d27480835fd9dbbb20551335dc6dd9cb9db191262f8717e2a80637d49c9725f8",
+      "writtenAt": "2026-11-05T02:43:47.825Z",
+      "generatedAt": "2026-11-05T02:43:47.824Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "focused typing survives real status ACK and Enter/blur seeks intended time",
+          "passed": true
+        },
+        {
+          "name": "explicit numeric Move / invalid empty / Enter+change dedupe",
+          "passed": true
+        },
+        {
+          "name": "header Open→real File→auto applied preview and same-file second selection",
+          "passed": true
+        },
+        {
+          "name": "binary audio project auto opens; invalid/cancelled choices preserve work",
+          "passed": true
+        },
+        {
+          "name": "late file completion cannot replace New work",
+          "passed": true
+        },
+        {
+          "name": "native camera center terrain ray spawns actor without moving view",
+          "passed": true
+        },
+        {
+          "name": "upward/no-ground capture rejects add explicitly without offscreen fallback",
+          "passed": true
+        },
+        {
+          "name": "geometry-free AABB pixel left-drag reaches native ArcRotate",
+          "passed": true
+        },
+        {
+          "name": "native actual-village hillside drag retains foot offset 0",
+          "passed": true
+        },
+        {
+          "name": "native actual-village hillside drag retains foot offset 0.65",
+          "passed": true
+        },
+        {
+          "name": "native pointercancel restores pose/history and orbit remains attached",
+          "passed": true
+        },
+        {
+          "name": "tool release clears native input ownership",
+          "passed": true
+        }
+      ],
+      "sourceHashes": {
+        "cinematic-game.js": "75aae82a0d03eff7e913199d4562bdb2a4a1a5a7ef3eda5a0bef0905e9775b6a",
+        "cinematic-studio.js": "b46a8249cfa062c6da5aa4b4b940f517e2832d4fcd448bb29dfc1395e7d22ee5",
+        "cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+        "cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+        "cinematic-protocol.js": "3c6e9acde02b21337ad0c024b565c54f50b1c250572e352750acb0e85f7ce078",
+        "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+      }
+    },
+    {
+      "file": "verification-repair-merged.json",
+      "sha256": "df852db52dfe83b47a2bc2c6aa78bb7a4544e22472b19bd5d8a482c7cbaebd7a",
+      "writtenAt": "2026-11-05T03:21:36.917Z",
+      "generatedAt": "2026-11-05T03:21:36.915Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "focused typing survives real status ACK and Enter/blur seeks intended time",
+          "passed": true
+        },
+        {
+          "name": "explicit numeric Move / invalid empty / Enter+change dedupe",
+          "passed": true
+        },
+        {
+          "name": "header Open→real File→auto applied preview and same-file second selection",
+          "passed": true
+        },
+        {
+          "name": "binary audio project auto opens; invalid/cancelled choices preserve work",
+          "passed": true
+        },
+        {
+          "name": "late file completion cannot replace New work",
+          "passed": true
+        },
+        {
+          "name": "native camera center terrain ray spawns actor without moving view",
+          "passed": true
+        },
+        {
+          "name": "upward/no-ground capture rejects add explicitly without offscreen fallback",
+          "passed": true
+        },
+        {
+          "name": "geometry-free AABB pixel left-drag reaches native ArcRotate",
+          "passed": true
+        },
+        {
+          "name": "native actual-village hillside drag retains foot offset 0",
+          "passed": true
+        },
+        {
+          "name": "native actual-village hillside drag retains foot offset 0.65",
+          "passed": true
+        },
+        {
+          "name": "native pointercancel restores pose/history and orbit remains attached",
+          "passed": true
+        },
+        {
+          "name": "tool release clears native input ownership",
+          "passed": true
+        }
+      ],
+      "sourceHashes": {
+        "main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+        "pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+        "cinematic-game.js": "c2165ea60475c9a98f3b9ab10b5296e8d35b596d9a5aed68564f30909f9131c3",
+        "cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+        "cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+        "cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+        "cinematic-protocol.js": "3c6e9acde02b21337ad0c024b565c54f50b1c250572e352750acb0e85f7ce078",
+        "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+      }
+    },
+    {
+      "file": "verification-blacksmith-package.json",
+      "sha256": "a6e0723169d4fb6c9746357c3cef28f2f31eb153f97925adc9b8f6ba2cfc1af1",
+      "writtenAt": "2026-11-05T02:35:36.904Z",
+      "generatedAt": "2026-11-05T02:35:36.899Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": null,
+      "cases": [],
+      "sourceHashes": null
+    },
+    {
+      "file": "verification-npc-data.json",
+      "sha256": "8076127af66a44058dab4cb7152ce82a1e8a9e27d16437bc0c20e4e3977554c3",
+      "writtenAt": "2026-11-05T02:49:01.716Z",
+      "generatedAt": "2026-11-05T02:49:01.710Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "supplied actual ZIP is data only and preserves original20clip/66bone/10655triangle model",
+          "passed": true
+        },
+        {
+          "name": "invalid package IDs/scales/look/hash/clip descriptors reject before installation",
+          "passed": true
+        },
+        {
+          "name": "GLB externalURI/buffer bounds/chunk corruption and ZIP CRC/traversal/duplicates reject",
+          "passed": true
+        },
+        {
+          "name": "unregistered future NPC ZIP gets exact new identity without source changes or script execution",
+          "passed": true
+        },
+        {
+          "name": "memory library registers/deduplicates metadata and detects same-version source conflicts",
+          "passed": true
+        },
+        {
+          "name": "each selected source owns one BIN BlobURL and releases exactly once; abort cannot create a URL",
+          "passed": true
+        },
+        {
+          "name": "production two-store IndexedDB branch persists across instances; failed transaction commits neither store",
+          "passed": true
+        },
+        {
+          "name": "corrupt IDB body and cancelled delayed body read reject without BlobURLs",
+          "passed": true
+        },
+        {
+          "name": "missing production IndexedDB has no silent memory install fallback",
+          "passed": true
+        }
+      ],
+      "sourceHashes": {
+        "npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+        "npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2"
+      }
+    },
+    {
+      "file": "verification-npc-registration.json",
+      "sha256": "30df17d4eaf1f9145fb29b2c1648c389aceb9b49d6f590f037747d5f57913465",
+      "writtenAt": "2026-11-05T03:02:34.046Z",
+      "generatedAt": "2026-11-05T03:02:34.034Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": null,
+      "cases": [],
+      "sourceHashes": null
+    },
+    {
+      "file": "verification-npc-native.json",
+      "sha256": "efc81c326b62e55db4e444153dd6d02e24ba79badc4b3cc020b1e0c33a6f423e",
+      "writtenAt": "2026-11-05T03:27:43.461Z",
+      "generatedAt": null,
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "metadata-only boot and exact builtin choice",
+          "passed": true
+        },
+        {
+          "name": "actual builtin Add prepares original model at ground center without moving camera",
+          "passed": true
+        },
+        {
+          "name": "all20 native animation channels equal authored evaluation; in-place policy leaves source keys and vertical channels intact",
+          "passed": true
+        },
+        {
+          "name": "real synchronous ZIP picker installs future metadata in shared production IDB without scene or model mutation",
+          "passed": true
+        },
+        {
+          "name": "future Add reaches actual Game validator, owned BIN URL and native66-bone clone; second life has independent rig",
+          "passed": true
+        },
+        {
+          "name": "future NPC scene exports/reopens through real header File and saves validated game storage without another GLB parse",
+          "passed": true
+        },
+        {
+          "name": "real NPC-only normal/depth post pass retains world pipeline and disposes owned resources",
+          "passed": true
+        }
+      ],
+      "sourceHashes": {
+        "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+        "src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+        "src/cinematic-game.js": "c2165ea60475c9a98f3b9ab10b5296e8d35b596d9a5aed68564f30909f9131c3",
+        "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+        "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8",
+        "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+        "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+        "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+        "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+        "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+        "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+        "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+        "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+        "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+        "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334"
+      }
+    },
+    {
+      "file": "verification-npc-world-ui.json",
+      "sha256": "e12f7ba376a0072766efec98710341de9f467eae185a2d0e932e4967b366d130",
+      "writtenAt": "2026-11-05T03:25:41.377Z",
+      "generatedAt": null,
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [
+        {
+          "name": "real Studio file registration is visible in fresh normal-game singleton without reimport",
+          "passed": true
+        },
+        {
+          "name": "existing two settings checkboxes immediately open root-mounted in-game tools and actual ActorEditor",
+          "passed": true
+        },
+        {
+          "name": "actual game Add/play/transform/Apply persists future NPC and20 motions at native viewed ground center",
+          "passed": true
+        },
+        {
+          "name": "Delete/play/pose Cancel restores original NPC enabled state, clock and transform; native empty orbit remains usable",
+          "passed": true
+        },
+        {
+          "name": "real production battle goblin is inventoried by nearby checkbox and edited in place with exact Cancel restoration",
+          "passed": true
+        },
+        {
+          "name": "live monster Apply retains position/direction/scale without replacing AI or rig",
+          "passed": true
+        },
+        {
+          "name": "saved custom NPC survives departure/reentry with same ID and releases old source clone",
+          "passed": true
+        }
+      ],
+      "sourceHashes": {
+        "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+        "src/tool-visibility-settings.js": "0be640fa64c92e9b32533830da1f4c284a5e355a4a0ce67a6cab275473ff39a8",
+        "src/developer-tools.js": "63c07ab8b7e0937c9381f9c47950c666533867d31312298aef7c8baa9278924a",
+        "src/nearby-editor.js": "685e456f07ccf052ea9e925210efbe26168ace8af77fab1c3a781aae25efd301",
+        "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+        "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+        "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+        "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+        "src/game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1",
+        "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+        "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+        "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+        "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8"
+      }
+    },
+    {
+      "file": "verification-ink-color-stage-before.json",
+      "sha256": "91ca70f4d8c9cd094b6e697f01edf208d9e4ca749f606fec7881c2a1f79d76c7",
+      "writtenAt": "2026-11-05T03:32:15.264Z",
+      "generatedAt": "2026-11-05T03:32:15.260Z",
+      "owner": "independent verifier",
+      "passed": false,
+      "sourceUnchanged": true,
+      "cases": [],
+      "sourceHashes": {
+        "src/world.js": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+        "src/monster-toon.js": "97323f012a4abbcb8c3320d34f9d9b8018d6ad0ec30f47391ceb373ac0c932fc",
+        "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+        "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+        "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+      }
+    },
+    {
+      "file": "verification-ink-color-stage-fixed.json",
+      "sha256": "ef3bd978fc841fa678999a282e3b81f2380630a3d9c495ecec651330912ccf12",
+      "writtenAt": "2026-11-05T03:33:50.098Z",
+      "generatedAt": "2026-11-05T03:33:50.097Z",
+      "owner": "independent verifier",
+      "passed": true,
+      "sourceUnchanged": true,
+      "cases": [],
+      "sourceHashes": {
+        "src/world.js": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+        "src/monster-toon.js": "97323f012a4abbcb8c3320d34f9d9b8018d6ad0ec30f47391ceb373ac0c932fc",
+        "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+        "src/npc-interior-ink.js": "32b45ed34d1864d95b64344e15429b4805401ff3f2e1218810f65be8585ff3b6",
+        "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+      }
+    }
+  ],
+  "limits": [
+    "No browser/CUA/CDP automation was used. Browser appearance, actual mouse-device UX, shader compilation, rendered pixels and device GPU/FPS remain unverified.",
+    "Textures use the documented one-pixel native upload fixture; exact original4K encoded image bytes and dimensions are verified separately.",
+    "Node supplies the Vite BASE_URL constant and XHR byte transport for the unchanged default BossModelLibrary URL path. Babylon performs native GLTF loading, rig construction and battle preparation.",
+    "The bounded world reentry check changes actual NpcWorld map IDs/generation and reloads saved actors. It does not repeat the earlier full four-map resource/director gate.",
+    "The two12-case repair records overlap; supporting sibling unit reports are not counted as independent verifier cases."
+  ]
+}

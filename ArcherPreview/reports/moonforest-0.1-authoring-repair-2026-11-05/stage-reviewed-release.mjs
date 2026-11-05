@@ -1,0 +1,34 @@
+import {readFile,writeFile,readdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+const report=import.meta.dirname,app=resolve(report,'../..'),repo=resolve(app,'..'),prefix='ArcherPreview/reports/moonforest-0.1-authoring-repair-2026-11-05/';
+const base='36fd9a3bc143b76f708ebc514ff002ac5ac9bf5e',original='0fb713c36335c8429d5a9618c0ef0a2840046697';
+const json=async path=>JSON.parse(await readFile(path,'utf8'));
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const git=(args,options={})=>execFileSync('git',args,{cwd:repo,maxBuffer:32*1024*1024,stdio:['pipe','pipe','pipe'],...options});
+const names=args=>git(args,{encoding:'utf8'}).split('\0').filter(Boolean);
+const audit=await json(resolve(report,'current-build-audit.json')),regression=await json(resolve(report,'regression.json'));
+if(!audit.passed||!audit.stage.checked||audit.stage.files!==1540||!regression.passedAll||!regression.sourceUnchanged)throw Error('Final gates incomplete');
+if(git(['rev-parse','MERGE_HEAD'],{encoding:'utf8'}).trim()!==base)throw Error('Unexpected remote merge target');
+if(names(['diff','--name-only','--diff-filter=U','-z']).length)throw Error('Unresolved merge conflicts');
+const hashes=await json(resolve(report,'tested-source-hashes.json'));
+for(const [path,sha256]of Object.entries(hashes))if(hash(await readFile(resolve(app,path)))!==sha256)throw Error('Tested source changed: '+path);
+const remote=names(['diff','--name-only','-z',original,base]);
+const dirs=['ArcherPreview/src','ArcherPreview/scripts','ArcherPreview/tests','ArcherPreview/public/moonforest-help.html'];
+const implementation=[...new Set([...names(['diff','--name-only','-z',base,'--',...dirs]),...names(['ls-files','--others','--exclude-standard','-z','--',...dirs])])];
+const npc=await json(resolve(report,'npc-public-paths.json')),site=await json(resolve(report,'release-paths.json'));
+const exclude=new Set(['release.json','workflow.json','live-verification.json','live-first-attempt.json','staged-validation.json']);
+const reports=(await readdir(report)).filter(name=>/\.(json|mjs)$/.test(name)&&!exclude.has(name)).map(name=>prefix+name);
+const selected=[...new Set([...implementation,...site,...reports])].sort();
+git(['-c','core.safecrlf=false','add','--pathspec-from-file=-','--pathspec-file-nul'],{input:selected.join('\0')+'\0'});
+git(['-c','core.safecrlf=false','add','-f','--pathspec-from-file=-','--pathspec-file-nul'],{input:npc.join('\0')+'\0'});
+const allowed=new Set([...remote,...selected,...npc]),staged=names(['diff','--cached','--name-only','-z']).sort();
+for(const path of staged)if(!allowed.has(path))throw Error('Unreviewed staged path: '+path);
+for(const path of [...selected,...npc])if(!staged.includes(path)&&!names(['ls-files','-z','--',path]).includes(path))throw Error('Missing reviewed path: '+path);
+git(['diff','--cached','--check','--',...implementation,...reports,...npc]);
+const manifest=await json(resolve(repo,'ArcherPreviewSite/deployment-files.json'));
+for(const path of [...site,...npc]){const bytes=git(['show',':'+path]);if(!bytes.equals(await readFile(resolve(repo,path))))throw Error('Index bytes differ: '+path);if(path.startsWith('ArcherPreviewSite/')&&!path.endsWith('/deployment-files.json')){const row=manifest.files.find(row=>'ArcherPreviewSite/'+row.path===path);if(!row||row.bytes!==bytes.length||row.sha256!==hash(bytes))throw Error('Staged public file differs from manifest: '+path);}}
+for(const path of implementation){const disk=await readFile(resolve(repo,path),'utf8'),blob=git(['show',':'+path],{encoding:'utf8'});if(disk.replaceAll('\r\n','\n')!==blob.replaceAll('\r\n','\n'))throw Error('Staged implementation differs: '+path);}
+const result={passed:true,remoteBase:base,mergeIncludesRemoteChanges:true,stagedFiles:staged.length,ownImplementationFiles:implementation.length,changedPublicFiles:site.length,npcPublicSourceFiles:npc.length,ownReportFiles:reports.length,testedSources:Object.keys(hashes).length,sourceUnchanged:true,siteAndNpcBytesMatch:true,unreviewedStagedPaths:0,paths:staged};
+await writeFile(resolve(report,'staged-validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({...result,paths:undefined}));

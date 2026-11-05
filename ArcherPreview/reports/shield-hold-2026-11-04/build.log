@@ -1,0 +1,89 @@
+vite v8.3.4 building client environment for production...
+transforming...
+
+new URL('../',import.meta.url) doesn't exist at build time, it will remain unchanged to be resolved at runtime. If this is intended, you can use the /* @vite-ignore */ comment to suppress this warning.
+✓ 3581 modules transformed.
+rendering chunks...
+computing gzip size...
+dist-village/cinematic-studio.html                                                                                                        1.33 kB │ gzip:     0.63 kB
+dist-village/assets/LICENSE-CKvGJ7Cc.txt                                                                                                  4.35 kB │ gzip:     2.01 kB
+dist-village/assets/apple-CP-uTjm2.webp                                                                                                  11.98 kB
+dist-village/assets/bandage-DI6G-E0G.webp                                                                                                12.12 kB
+dist-village/assets/crest-Do6MRU1o.webp                                                                                                  16.79 kB
+dist-village/assets/pie-C3Mqs8wy.webp                                                                                                    19.86 kB
+dist-village/index.html                                                                                                                  33.54 kB │ gzip:    10.31 kB
+dist-village/assets/round-B_dqBk5T.webp                                                                                                  60.61 kB
+dist-village/assets/button-BdSxdhv1.webp                                                                                                 84.59 kB
+dist-village/assets/paper-tlqYx2wy.webp                                                                                                 103.49 kB
+dist-village/assets/icons-DDN_1YTf.webp                                                                                                 123.31 kB
+dist-village/assets/dialogue-C18xk6mI.webp                                                                                              139.42 kB
+dist-village/assets/galmuri-bold-D_UVhCLw.woff2                                                                                         166.35 kB
+dist-village/assets/panel-DRx_KGK2.webp                                                                                                 214.49 kB
+dist-village/assets/galmuri-regular-D65D4OMv.woff2                                                                                      505.40 kB
+dist-village/assets/cinematicStudio-DqRHF94o.css                                                                                         13.36 kB │ gzip:     3.61 kB
+dist-village/assets/game-CTPmmHJX.css                                                                                                   102.33 kB │ gzip:    20.86 kB
+dist-village/assets/rolldown-runtime-DK3Fl9T5.js                                                                                          0.15 kB │ gzip:     0.15 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~muckwa6k-BqltO0ki.js      0.25 kB │ gzip:     0.17 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~kca0fus9-Cl7r4P7a.js      0.37 kB │ gzip:     0.27 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fil187nt-Bh3wKyVb.js      0.62 kB │ gzip:     0.38 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~j5yqk5s4-oNUmK_Nx.js      0.84 kB │ gzip:     0.45 kB
+dist-village/assets/tool-fine-zoom-qIveTlal.js                                                                                            0.86 kB │ gzip:     0.51 kB
+dist-village/assets/babylon-tools~game~cinematicStudio-CRzLMJPS.js                                                                        1.53 kB │ gzip:     0.80 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~ls3dg3uy-PB5wIfsI.js      1.89 kB │ gzip:     0.83 kB
+dist-village/assets/nearby-editor-FNYWdkOV.js                                                                                             4.38 kB │ gzip:     2.22 kB
+dist-village/assets/babylon-lazy~game~cinematic-interaction~gpuRenderParticles.fragment~iblCopyVoxelBufferToGri~f77h0bqs-BGfBU0C8.js      4.79 kB │ gzip:     2.00 kB
+dist-village/assets/actor-definitions-ibB0CAlo.js                                                                                         5.32 kB │ gzip:     2.07 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~mlv4olpj-DyT7xMkv.js      5.95 kB │ gzip:     2.19 kB
+dist-village/assets/editable-asset-index-Cz_nbi5N.js                                                                                      6.09 kB │ gzip:     2.42 kB
+dist-village/assets/babylon-lazy~game~boundingBoxRenderer.fragment~volumetricLightingRenderVolume.fragment~volu~lst12rop-pF88eZXz.js      6.59 kB │ gzip:     2.04 kB
+dist-village/assets/game-tool-lease-cQhkTM3H.js                                                                                           6.67 kB │ gzip:     2.93 kB
+dist-village/assets/cinematic-interaction-BHsna0by.js                                                                                     7.32 kB │ gzip:     3.13 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~gg1sn0f8-DnJqXwQB.js      7.64 kB │ gzip:     2.51 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~jih39cw8-D92cBIs4.js      8.97 kB │ gzip:     2.30 kB
+dist-village/assets/placement-document-CPCKDPK9.js                                                                                        9.03 kB │ gzip:     3.73 kB
+dist-village/assets/actor-encounter-adapter-PWQnU_VZ.js                                                                                   9.83 kB │ gzip:     3.98 kB
+dist-village/assets/babylon-lazy~flowGraphDebugBlock.pure~basisTextureLoader~gaussianSplatting.fragment~texture~dgc1yiyy-_KM_y4dC.js      9.94 kB │ gzip:     3.10 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~jmh4848c-CpsmENlg.js     10.27 kB │ gzip:     3.38 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~gftpphwu-Rm85ZZve.js     11.75 kB │ gzip:     3.21 kB
+dist-village/assets/babylon-lazy~volumetricLightingBlendVolume.fragment~selectionOutline.fragment~oitFinalSimpl~kl5r0adj-I8QxOGxm.js     11.99 kB │ gzip:     2.93 kB
+dist-village/assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~dyof8ah7--9ReBtMI.js     12.57 kB │ gzip:     2.99 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~gipfcqbd-BE14NjZL.js     12.68 kB │ gzip:     3.68 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runt~vzq2rerw-DhpZz0bU.js     14.97 kB │ gzip:     4.45 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~oy3cnr3c-Dtl-88fc.js     15.30 kB │ gzip:     3.89 kB
+dist-village/assets/babylon-lazy~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectReferenc~kl70yd8u-DcfRgfMO.js     15.37 kB │ gzip:     4.51 kB
+dist-village/assets/babylon-lazy~developer-editor~noise.fragment~selection.fragment~selection.vertex~gaussianSp~lk0bdjdo-BUd3skWf.js     15.66 kB │ gzip:     4.14 kB
+dist-village/assets/babylon-lazy~gpuRenderParticles.vertex~noise.fragment~selection.fragment~textureProcessor.fragment-CH8gCXoW.js       15.89 kB │ gzip:     3.89 kB
+dist-village/assets/babylon-lazy~flowGraphUnsupportedInteractivityBlock~subSurfaceScattering.fragment~volumetri~gr3wijok-7zuP6G-k.js     17.71 kB │ gzip:     5.42 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~c3a4cq1l-CGRJfUqB.js     18.27 kB │ gzip:     5.00 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~ibcdt74i-CkNUykTp.js     19.90 kB │ gzip:     5.50 kB
+dist-village/assets/developer-actors-D2e4ik5M.js                                                                                         19.91 kB │ gzip:     7.82 kB
+dist-village/assets/authored-placement-runtime-xz1SoeoV.js                                                                               27.18 kB │ gzip:     8.74 kB
+dist-village/assets/developer-editor-KI-e4_Of.js                                                                                         36.42 kB │ gzip:    13.36 kB
+dist-village/assets/babylon-lazy~screenSpaceCurvature.fragment~meshBlending.fragment~ddsTextureLoader~lod3D.fra~h64nf1sf-BpLuwycQ.js     43.64 kB │ gzip:     9.80 kB
+dist-village/assets/cinematic-protocol-Dg1ppzR7.js                                                                                       45.14 kB │ gzip:    16.25 kB
+dist-village/assets/babylon-lazy~meshBlending.fragment~selection.vertex~gaussianSplattingVoxel.fragment~gaussia~okxnmmuf-BdL7IOia.js     48.23 kB │ gzip:    10.35 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~j7ha8cbk-g7ADsaxD.js     59.80 kB │ gzip:    14.65 kB
+dist-village/assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~zg6kltdv-BljkKZco.js     64.53 kB │ gzip:    16.03 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~kh6xjt3u-C-dYyr9r.js     68.34 kB │ gzip:    17.15 kB
+dist-village/assets/cinematic-game-CCD0M8Lw.js                                                                                           72.23 kB │ gzip:    25.21 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~mkovgbzx-eNZvXkAJ.js     80.04 kB │ gzip:    20.56 kB
+dist-village/assets/cinematicStudio-DZ9ANcBl.js                                                                                          89.36 kB │ gzip:    28.82 kB
+dist-village/assets/babylon-tools~game~cinematic-interaction-Bk4IdV0B.js                                                                 91.07 kB │ gzip:    26.74 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-game~authored-placement-runtime-jxvh36s2.js           95.60 kB │ gzip:    23.98 kB
+dist-village/assets/babylon-tools~developer-editor-Bj_vm6ep.js                                                                          108.51 kB │ gzip:    19.65 kB
+dist-village/assets/goblin-spec-CFJ_pnT-.js                                                                                             154.51 kB │ gzip:    51.03 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fgu227k1-s7mPgyzS.js    160.96 kB │ gzip:    34.54 kB
+dist-village/assets/asset-catalog-CcdZEJm8.js                                                                                           233.62 kB │ gzip:    31.43 kB
+dist-village/assets/babylon-tools~game~developer-editor~developer-actors~cinematic-interaction~cinematic-game~a~fdq8jh0h-LNQ2ht3P.js    266.57 kB │ gzip:    64.46 kB
+dist-village/assets/game-Tf7UYdq9.js                                                                                                  2,777.78 kB │ gzip:   628.27 kB
+dist-village/assets/babylon-game-CRNdG57U.js                                                                                          6,336.92 kB │ gzip: 1,367.92 kB
+
+[INEFFECTIVE_DYNAMIC_IMPORT] src/map-load-lifetime.js is dynamically imported by src/authored-map-loader.js but also statically imported by src/authored-placement-runtime.js, src/boss-models.js, src/chapter-quest-props.js, src/cinematic-registry.js, src/cinematic-scene-host.js, ..., dynamic import will not move module into another chunk.
+
+[plugin builtin:vite-reporter]
+(!) Some chunks are larger than 1800 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 2.13s
+{"outDir":"C:\\dev\\moonforest-shield-guard\\ArcherPreview\\dist-village","manifestCount":30,"contentFiles":1161,"publishedResourceFiles":1431,"publishedResourceBytes":669625073,"sourceAssets":25,"bundleAudit":{"revision":"480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175","files":1161,"bundles":230,"packedBytes":61652139,"bundledFiles":848},"runtimeGraph":{"chunks":55,"entriesChecked":1}}

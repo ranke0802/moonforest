@@ -1,4 +1,4 @@
-import { Matrix, Vector3 } from '@babylonjs/core';
+import { Matrix, Vector3, Viewport } from '@babylonjs/core';
 
 // One size read on resize, one camera snapshot per frame, shared by all HUDs.
 export class ScreenProjection {
@@ -6,6 +6,7 @@ export class ScreenProjection {
     this.scene = scene;
     this.identity = Matrix.Identity();
     this.point = new Vector3();
+    this.viewport = new Viewport(0,0,0,0);
     this.result = {};
   }
   resize(width, height) { this.cssWidth = width; this.cssHeight = height; }
@@ -13,7 +14,7 @@ export class ScreenProjection {
     const engine = this.scene.getEngine();
     this.width = engine.getRenderWidth(); this.height = engine.getRenderHeight();
     this.scaleX = this.cssWidth / this.width; this.scaleY = this.cssHeight / this.height;
-    this.viewport = this.scene.activeCamera.viewport.toGlobal(this.width, this.height);
+    this.scene.activeCamera.viewport.toGlobalToRef(this.width, this.height, this.viewport);
     this.transform = this.scene.getTransformMatrix();
     return this;
   }

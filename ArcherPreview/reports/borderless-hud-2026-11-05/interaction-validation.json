@@ -1,0 +1,62 @@
+{
+  "baseline": "5d1ee03",
+  "passed": true,
+  "scope": "Independent read-only DOM/interaction/accessibility-source audit and existing Node test suites after the borderless CSS candidate. No browser, source edits or new tests. Root integration refresh: player-anchor logic was subsequently added in main.js; final regression results are recorded separately.",
+  "tests": {
+    "passed": 32,
+    "failed": 0,
+    "files": [
+      "tests/commercial-ui.test.js",
+      "tests/commercial-ui-independent.test.js",
+      "tests/player-resource-hud.test.js",
+      "tests/hud-layout.test.js",
+      "tests/hud-layout-independent.test.js",
+      "tests/hud-hold-contextmenu.test.js"
+    ]
+  },
+  "protectedInteractionSourcesUnchanged": true,
+  "checks": {
+    "topActionOrder": [
+      "fps",
+      "bag",
+      "journal",
+      "summon",
+      "fullscreen",
+      "settings"
+    ],
+    "originalDOMNodesAndEventHandlersPreserved": true,
+    "ariaAndTitlesPreserved": true,
+    "FPSClickEnterSpacePreserved": true,
+    "modalFocusRestoreAndEscapePreserved": true,
+    "heldInputAndContextMenuCancellationPreserved": true,
+    "staminaNoticePointerEvents": "none",
+    "normalTopControlsAndNoticeHaveNoBackgroundPanelOrBorder": true,
+    "keyboardFocus": "Top icons gain a gold glow and underlined visible labels; the role=button FPS span gains a gold underline. Focus indicators remain distinct without restoring a rectangular panel.",
+    "existingTargetDeclarations": {
+      "topIconsDesktop": "48px by48px; min-width44px",
+      "topIconsNarrow": "44px by44px; existing min-width40px",
+      "FPS": "min-height44px; existing min-width48px/narrow40px"
+    },
+    "staminaTextSizeAndTimingPreserved": true,
+    "staminaPosition": "actual player projection, stable upright head height plus12CSSpx gap",
+    "extraSchedulingObservers": 0,
+    "warningProjection": "one existing ScreenProjection use only while warning is active"
+  },
+  "sourceHashes": {
+    "src/commercial-ui.css": "d9271bd033778732d7096727670ac639f4ba474b748c4c0157ed30688a4cbd6d",
+    "src/mobile-ui.css": "b6414d4f1ca1444a12db4f2a5f25b3b20a00d03181b1e56d0a6cb9db1aeda807",
+    "src/commercial-ui.js": "553eb9f4789be0e36996fff094ada403841713fbfdc8191994a2fe1d3f58128e",
+    "src/hud-top-actions.js": "19eb9cd10d7f68c9ea96ea1af207a1f706eaec10ef8b993c2c3b34f15661eddd",
+    "src/main.js": "6b5d98c8f77f058b98107cc6a27e5eb2e0e930d1e06d4077be58b2e6bb423bde",
+    "src/input.js": "a27ebe5fed1bdfe41f4b77064ecaa24714930344fb54af3ccc4f99a92301bc1f",
+    "src/hud-layout.js": "ffa51bb3f65b5a69d51a7b155f1ccb265ed4f623e235f568bc2e21977e75d0de",
+    "src/shield-hold-input.js": "0b3d1d8bb1444a44134c038e548e133e377a32537263824ffb8020fb45bf4c2e",
+    "src/dodge-sprint-input.js": "397b37220c02c0aeb1768259b6892e07283d75bc43b420364e29f6e995e526aa",
+    "index.html": "3c3883efc0f358a2a31bbbce1282eaf630555c241cc9317fbe3869f64e8a9e58",
+    "src/stamina-notice-anchor.js": "cf5de94b34c3afa0e3156c14a4538a7027ae7e03499e5a1d1170f97ad1102d2f"
+  },
+  "limitations": [
+    "Source selectors and DOM/state test contracts were inspected; no native browser focus rendering, computed pixel layout or physical touch test was performed."
+  ],
+  "authorizedMainChange": "Warning show/reset/projection lifecycle; top buttons, inputs, HUD exports and modal handlers unchanged."
+}

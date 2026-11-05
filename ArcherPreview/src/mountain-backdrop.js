@@ -8,6 +8,10 @@ const grass = [.32, .40, .29], rock = [.53, .54, .49], distant = [.40, .51, .55]
 // a continuous wall. Heights/widths are authored, not regenerated on each load.
 const nearPeaks = [[.12,8,.28],[.73,6,.23],[1.22,10,.31],[1.95,6,.35],[2.43,9,.26],[3.18,7,.38],[3.81,9,.28],[4.4,5,.23],[4.88,8,.36],[5.54,6,.3],[6.04,7,.21]];
 const farPeaks = [[.28,17,.3],[.94,20,.39],[1.65,14,.3],[2.19,19,.33],[2.91,15,.31],[3.58,21,.42],[4.25,17,.35],[4.99,20,.45],[5.75,17,.32]];
+export const MOUNTAIN_RIDGE_LAYOUT=Object.freeze({
+  far:Object.freeze({segments:128,radii:Object.freeze([79,90,110,123,143])}),
+  near:Object.freeze({segments:192,radii:Object.freeze([43,50,55,58,68,86])}),
+});
 function peakHeight(angle, peaks) {
   let height=0;
   for (const [center,top,width] of peaks) {
@@ -39,7 +43,7 @@ export function createMountainBackdrop(scene) {
   }
   function ridge(segments, far) {
     const rows = far ? [0,.23,1,.53,0] : [0,.16,.34,.78,1,0];
-    const radii = far ? [79,90,110,123,143] : [43,50,55,58,68,86];
+    const radii = MOUNTAIN_RIDGE_LAYOUT[far?'far':'near'].radii;
     const points = [], profiles = [];
     for (let i=0;i<segments;i++) {
       const angle = i/segments*TAU;
@@ -79,8 +83,8 @@ export function createMountainBackdrop(scene) {
       }
     }
   }
-  ridge(128,true);
-  ridge(192,false);
+  ridge(MOUNTAIN_RIDGE_LAYOUT.far.segments,true);
+  ridge(MOUNTAIN_RIDGE_LAYOUT.near.segments,false);
   const mesh = new Mesh('forest-mountain-backdrop',scene);
   const data = new VertexData();
   data.positions=positions;data.colors=colors;data.indices=indices;data.applyToMesh(mesh,false);

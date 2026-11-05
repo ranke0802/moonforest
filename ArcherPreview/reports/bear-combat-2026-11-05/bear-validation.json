@@ -1,0 +1,437 @@
+{
+  "baseline": "99fcd56",
+  "scope": "Actual shipped guardian-bear packed geometry, independently cloned skeletons/animation targets, native Babylon NullEngine matrix recompositions and shader-effect cache. Alignment compares the previous method against the optimized method on identical native animation samples; binding-cache behavior is separately tested in animation-combat-bindings.test.js. Downloaded images are omitted; original skin/clip/geometry streams are retained. CPU timings are local process samples, not phone FPS or GPU measurements.",
+  "cases": [
+    {
+      "state": "Right_Jab_from_Guard",
+      "mode": "attack",
+      "time": 0.4,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true,
+      "localCpu": {
+        "before": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.13451833333333524,
+          "roundMeanMs": [
+            0.16740499999999278,
+            0.12972166666666757,
+            0.13451833333333524,
+            0.0971550000000055,
+            0.1457700000000083
+          ]
+        },
+        "after": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.1156174999999924,
+          "roundMeanMs": [
+            0.5147650000000037,
+            0.11726333333332756,
+            0.09555833333333794,
+            0.1156174999999924,
+            0.10545166666665864
+          ]
+        }
+      }
+    },
+    {
+      "state": "Weapon_Combo",
+      "mode": "attack",
+      "time": 1.1,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    },
+    {
+      "state": "Skill_02",
+      "mode": "attack",
+      "time": 1.4,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    },
+    {
+      "state": "Knock_Down_1",
+      "mode": "down",
+      "time": 0.3,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    },
+    {
+      "state": "Knock_Down_1",
+      "mode": "down",
+      "time": 1.5,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true,
+      "localCpu": {
+        "before": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.1489024999999856,
+          "roundMeanMs": [
+            0.15146583333333485,
+            0.11899583333333794,
+            0.11715416666667504,
+            0.1534174999999929,
+            0.1489024999999856
+          ]
+        },
+        "after": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.15553333333332375,
+          "roundMeanMs": [
+            0.31278416666665787,
+            0.15553333333332375,
+            0.11225500000000466,
+            0.17088666666665328,
+            0.11506666666665903
+          ]
+        }
+      }
+    },
+    {
+      "state": "Knock_Down_1",
+      "mode": "down",
+      "time": 3,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    },
+    {
+      "state": "Stand_Up3",
+      "mode": "recover",
+      "time": 0.3,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    },
+    {
+      "state": "Stand_Up3",
+      "mode": "recover",
+      "time": 2,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true,
+      "localCpu": {
+        "before": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.16321250000000873,
+          "roundMeanMs": [
+            0.4326216666666672,
+            0.16321250000000873,
+            0.13945916666666563,
+            0.1876658333333277,
+            0.1303349999999985
+          ]
+        },
+        "after": {
+          "scope": "alignment plus full imported-transform refresh; wrapped native work counters enabled",
+          "frames": 600,
+          "medianMs": 0.1218225000000075,
+          "roundMeanMs": [
+            0.15316249999999249,
+            0.1218225000000075,
+            0.10417833333332661,
+            0.44092583333334306,
+            0.10123666666666699
+          ]
+        }
+      }
+    },
+    {
+      "state": "Stand_Up3",
+      "mode": "recover",
+      "time": 3.8,
+      "before": {
+        "forced": 10,
+        "calls": 71,
+        "recomposed": 70
+      },
+      "after": {
+        "forced": 3,
+        "calls": 68,
+        "recomposed": 67
+      },
+      "maxWorldMatrixError": 0,
+      "maxBoneMatrixError": 0,
+      "maxSkinnedPositionError": 0,
+      "contactCapsulesEqual": true
+    }
+  ],
+  "limitations": [
+    "No browser or real GPU driver compilation/upload/fence timing.",
+    "No change to combat windows, capsule geometry, animation rate, skin influences, textures, geometry LOD or shadow settings."
+  ],
+  "asset": {
+    "transformNodes": 60,
+    "skeletons": 1,
+    "bones": [
+      58
+    ],
+    "clips": 20,
+    "clipTargets": [
+      {
+        "name": "Axe_Spin_Attack",
+        "targets": 174
+      },
+      {
+        "name": "Backflip",
+        "targets": 174
+      },
+      {
+        "name": "baseball_pitching",
+        "targets": 174
+      },
+      {
+        "name": "Block6",
+        "targets": 174
+      },
+      {
+        "name": "Flying_Fist_Kick",
+        "targets": 174
+      },
+      {
+        "name": "Knock_Down_1",
+        "targets": 174
+      },
+      {
+        "name": "Left_Hook_from_Guard",
+        "targets": 174
+      },
+      {
+        "name": "Left_Uppercut_from_Guard",
+        "targets": 174
+      },
+      {
+        "name": "Lunge_Spin_Kick",
+        "targets": 174
+      },
+      {
+        "name": "mage_soell_cast_6",
+        "targets": 174
+      },
+      {
+        "name": "Right_Jab_from_Guard",
+        "targets": 174
+      },
+      {
+        "name": "Rising_Flying_Kick",
+        "targets": 174
+      },
+      {
+        "name": "Running",
+        "targets": 174
+      },
+      {
+        "name": "Shield_Push_Left",
+        "targets": 174
+      },
+      {
+        "name": "Skill_01",
+        "targets": 174
+      },
+      {
+        "name": "Skill_02",
+        "targets": 174
+      },
+      {
+        "name": "Skill_03",
+        "targets": 174
+      },
+      {
+        "name": "Stand_Up3",
+        "targets": 174
+      },
+      {
+        "name": "Walking",
+        "targets": 174
+      },
+      {
+        "name": "Weapon_Combo",
+        "targets": 174
+      }
+    ],
+    "bodies": [
+      {
+        "name": "output_unwrapped",
+        "vertices": 41898,
+        "triangles": 30000,
+        "influences": 5,
+        "extraWeights": true,
+        "boneTexture": true
+      }
+    ],
+    "outlines": 1,
+    "casters": 1
+  },
+  "productionBindingCache": {
+    "enabled": true,
+    "eligible": true,
+    "limit": 2,
+    "cached": 2,
+    "created": 1044,
+    "reused": 0,
+    "evicted": 3,
+    "currentBindings": 522
+  },
+  "shaderCoverage": {
+    "preparedEffects": 6,
+    "transitions": [
+      {
+        "state": "Right_Jab_from_Guard",
+        "newEffects": 0,
+        "draws": [
+          {
+            "renderPass": 8,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          }
+        ],
+        "shadowDraws": 1
+      },
+      {
+        "state": "Knock_Down_1",
+        "newEffects": 0,
+        "draws": [
+          {
+            "renderPass": 8,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          }
+        ],
+        "shadowDraws": 1
+      },
+      {
+        "state": "Stand_Up3",
+        "newEffects": 0,
+        "draws": [
+          {
+            "renderPass": 8,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          },
+          {
+            "renderPass": 7,
+            "indices": 90000
+          }
+        ],
+        "shadowDraws": 1
+      }
+    ],
+    "firstFadingHitNewEffects": 0,
+    "opaqueShadowCastersPerBear": 1,
+    "bodySkinSettingsUnchanged": true
+  },
+  "passed": true
+}

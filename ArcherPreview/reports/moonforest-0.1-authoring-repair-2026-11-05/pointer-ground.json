@@ -1,0 +1,76 @@
+{
+  "task": "Terrain-aware cinematic actor drag and native mouse camera ownership repair",
+  "baseline": "0fb713c",
+  "workspace": "C:/dev/moonforest-cinematic-integration-20261104/ArcherPreview",
+  "owner": "/root/rendering",
+  "requestedSpawn": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "note": "Existing explicitly requested agent reused; backend model resolution not independently surfaced."
+  },
+  "sourceHashes": {
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "src/game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1",
+    "tests/cinematic-pointer-repair.test.js": "4b00c4e0ffa9c8de6d7b708fd82613c57604e998af50f1141a1fbf2270e7bb99",
+    "tests/cinematic-expansion-runtime.test.js": "e7443da2cb3bdb07d8b17891e68ea5009b80636f5f8f6f05edaf9a27477c37ab"
+  },
+  "rootCauses": [
+    {
+      "issue": "Mouse orbit was consumed by empty-looking actor/original regions",
+      "evidence": "Before source changes, actual canvas.dispatchEvent -> native SceneInputManager -> ArcRotateCamera orbit/pan passed in empty space. The same native gesture through a hollow Torus native mesh MISS/AABB hit entered actor drag and left camera alpha unchanged. Unadopted originals also claimed DOWN merely for selection."
+    },
+    {
+      "issue": "Actors could not be placed onto hills",
+      "evidence": "Interaction intersected every pointer ray with the original actor-Y plane. Native body drag onto a real TerrainHeightField/CreateTerrainGround slope retained old Y instead of preserving clearance over the new ground."
+    }
+  ],
+  "changes": [
+    "Exact authored actor geometry hits still own direct drag. AABB-only and unadopted original candidates remain click-selectable on UP only if movement<=3CSSpx; DOWN/MOVE/UP pass through for native camera gestures.",
+    "New cinematicTerrainHit(world,ray) tests the actual unpickable ground only, with bounded height-field fallback; cinematicGroundAtScreen accepts native canvas-local CSS pointer coordinates including DPR scaling.",
+    "Terrain drag preserves original worldY-terrainHeight(originalXZ) foot/floating offset and recomputes terrain Y after horizontal grab offset. Explicit rotation/scale stay unchanged; no ground hit at drag start retains the prior fixed-altitude plane behavior.",
+    "Cancel/blur/dispose restores exact original actor pose without onChange; successful final UP commits once including no-intervening-MOVE endpoint.",
+    "game-tool-lease source remained unchanged because actual native lease pointer delivery/orbit/pan/restore was already working."
+  ],
+  "api": {
+    "module": "src/cinematic-ground.js",
+    "exports": [
+      "cinematicTerrainHit(world,ray) -> Vector3|null",
+      "cinematicGroundAtScreen(world,x,y) -> Vector3|null"
+    ],
+    "coordinates": "Screen x/y are canvas-local CSS pixels; capture center uses canvas.getBoundingClientRect().width/2,height/2."
+  },
+  "verification": {
+    "before": {
+      "command": "node --test tests/cinematic-pointer-repair.test.js",
+      "passed": 1,
+      "failed": 2,
+      "note": "Run before source edits; confirms native stream works and reproduces AABB orbit and hill clearance defects."
+    },
+    "after": {
+      "command": "node --test tests/cinematic-pointer-repair.test.js tests/game-tool-lease.test.js",
+      "passed": 12,
+      "failed": 0
+    },
+    "legacyClick": {
+      "command": "node --test --test-name-pattern='existing native prop click' tests/cinematic-expansion-runtime.test.js",
+      "passed": 1,
+      "failed": 0,
+      "note": "Root explicitly approved changing only obsolete DOWN expectation to true DOWN+UP click."
+    },
+    "coverage": [
+      "Actual CSS-offset/DPR2 canvas events and native pointer/camera input; no fake scene.pick or direct observable-only substitutes in new fixture.",
+      "Orbit -> pan -> orbit; post-body-drag orbit; pan over actor; exact manual-game input-map restoration.",
+      "Native hollow mesh miss and bounding fallback click selection.",
+      "Actual terrain slope, retained2m floating clearance, final-UP endpoint, navigation identity unchanged.",
+      "Pointercancel, blur and dispose pose/capture/camera cleanup.",
+      "Original prop orbit gesture vs stationary one-click selection without clone/mutation.",
+      "Shared ground helper actual geometry, DPR2 center, bounded height solver and immutable input ray."
+    ]
+  },
+  "limits": [
+    "No browser automation, screenshots or physical-device claims.",
+    "Independent actual shipped actor/terrain and full game repair gate is owned by verifier C.",
+    "Height fallback sampling is bounded; actual ground geometry is queried first. No navigation, terrain geometry, material, texture, LOD, gameplay/combat-stat edits."
+  ]
+}

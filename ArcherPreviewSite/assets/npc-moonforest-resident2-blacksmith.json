@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "complete": true,
+  "assets": {
+    "moonforest-resident2-blacksmith": {
+      "name": "대장장이",
+      "category": "npc",
+      "version": "2026-11-05-npc20-v1",
+      "scale": 1,
+      "bodyHeight": 1.8499997703133602,
+      "animations": {
+        "idle": "Idle_02",
+        "alert": "Alert",
+        "run": "Run_02",
+        "agree": "Agree_Gesture",
+        "greet": "Big_Wave_Hello",
+        "walk": "Casual_Walk",
+        "sit_idle": "Chair_Sit_Idle_M",
+        "confused": "Confused_Scratch",
+        "bow": "Formal_Bow",
+        "listen": "Listening_Gesture",
+        "stand_up": "Sit_to_Stand_Transition_M",
+        "talk": "Stand_and_Chat",
+        "sit_down": "Stand_to_Sit_Transition_M",
+        "hit": "Hit_Reaction",
+        "pick_up": "Male_Bend_Over_Pick_Up",
+        "collect": "Collect_Object",
+        "call_for_help": "Wave_for_Help",
+        "angry_talk": "Stand_Talking_Angry",
+        "explain": "Talk_with_Hands_Open",
+        "shrug": "Shrug"
+      },
+      "npc": {
+        "sourceSha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+        "look": {
+          "toon": true,
+          "pbr": false,
+          "outline": true,
+          "outlinePixels": 0.6,
+          "interior": true,
+          "interiorStrength": 0.25,
+          "brightness": 1.2
+        },
+        "clips": [
+          {
+            "key": "Idle_02",
+            "uiLabel": "기본 대기",
+            "gameState": "idle",
+            "loopCandidate": true
+          },
+          {
+            "key": "Alert",
+            "uiLabel": "경계",
+            "gameState": "alert",
+            "loopCandidate": true
+          },
+          {
+            "key": "Run_02",
+            "uiLabel": "달리기",
+            "gameState": "run",
+            "loopCandidate": true
+          },
+          {
+            "key": "Agree_Gesture",
+            "uiLabel": "동의하기",
+            "gameState": "agree",
+            "loopCandidate": false
+          },
+          {
+            "key": "Big_Wave_Hello",
+            "uiLabel": "손 흔들어 인사",
+            "gameState": "greet",
+            "loopCandidate": false
+          },
+          {
+            "key": "Casual_Walk",
+            "uiLabel": "일상 걷기",
+            "gameState": "walk",
+            "loopCandidate": true
+          },
+          {
+            "key": "Chair_Sit_Idle_M",
+            "uiLabel": "의자에 앉아 대기",
+            "gameState": "sit_idle",
+            "loopCandidate": true
+          },
+          {
+            "key": "Confused_Scratch",
+            "uiLabel": "난처해하며 긁기",
+            "gameState": "confused",
+            "loopCandidate": false
+          },
+          {
+            "key": "Formal_Bow",
+            "uiLabel": "정중한 인사",
+            "gameState": "bow",
+            "loopCandidate": false
+          },
+          {
+            "key": "Listening_Gesture",
+            "uiLabel": "이야기 듣기",
+            "gameState": "listen",
+            "loopCandidate": true
+          },
+          {
+            "key": "Sit_to_Stand_Transition_M",
+            "uiLabel": "앉았다 일어나기",
+            "gameState": "stand_up",
+            "loopCandidate": false
+          },
+          {
+            "key": "Stand_and_Chat",
+            "uiLabel": "서서 대화",
+            "gameState": "talk",
+            "loopCandidate": true
+          },
+          {
+            "key": "Stand_to_Sit_Transition_M",
+            "uiLabel": "의자에 앉기",
+            "gameState": "sit_down",
+            "loopCandidate": false
+          },
+          {
+            "key": "Hit_Reaction",
+            "uiLabel": "피격 반응",
+            "gameState": "hit",
+            "loopCandidate": false
+          },
+          {
+            "key": "Male_Bend_Over_Pick_Up",
+            "uiLabel": "숙여서 줍기",
+            "gameState": "pick_up",
+            "loopCandidate": false
+          },
+          {
+            "key": "Collect_Object",
+            "uiLabel": "물건 수집",
+            "gameState": "collect",
+            "loopCandidate": false
+          },
+          {
+            "key": "Wave_for_Help",
+            "uiLabel": "도움 요청",
+            "gameState": "call_for_help",
+            "loopCandidate": false
+          },
+          {
+            "key": "Stand_Talking_Angry",
+            "uiLabel": "화내며 대화",
+            "gameState": "angry_talk",
+            "loopCandidate": true
+          },
+          {
+            "key": "Talk_with_Hands_Open",
+            "uiLabel": "손을 펴며 대화",
+            "gameState": "explain",
+            "loopCandidate": true
+          },
+          {
+            "key": "Shrug",
+            "uiLabel": "어깨 으쓱",
+            "gameState": "shrug",
+            "loopCandidate": false
+          }
+        ],
+        "rootMotion": "in-place",
+        "defaultClip": "Idle_02"
+      },
+      "model": "./content/2d116356297497acb76656d741cd8a841fae7d6e7212189af5574651ffe360bf.gltf",
+      "resources": [
+        "./content/53b9e5b9092576bcca7be489a4b6da13088b59402640b74efb5a0c13dd313425.jpg",
+        "./content/b01efa9ca8491398050df9ac629c086764a0fe880e08b79f6fdfeb2e3c75dff2.bin",
+        "./content/9c881a337b066e2d5a04db714a1407c28563860d49e56527c4b363cbb0d1bc80.bin",
+        "./content/74362a75b00a1f0681bc4adc51f687ad417588dee6b7435edb807238021bdc5b.bin",
+        "./content/2b644f089f1f280f277412816efe53a204ad72e68a30803daeb379608c3145ee.bin",
+        "./content/16bfa729c9e26318da320cb78698527e47ef194537b89931e72594d6b172ead4.bin",
+        "./content/d651f4ee79d248a24ba8e8e64feb47c2fd466be643c191d3c5725c254148f1df.bin",
+        "./content/2ee4e2e6ec5f0d33c6a676592c6ed45653697fb0943279122c5f8c2643de2b36.bin",
+        "./content/c85f86e02148e5f18afbf1e3cd043ef76390bead2ecf62f7a678c2bb5e2816c5.bin",
+        "./content/133fea16f904ffaf2b2128367ab7390de00cb39928baffc8cf72bd7e54b14102.bin",
+        "./content/e2dee40b157cf1dc540c5b180f25ac5655a66068f3f6d575249db62f4424730a.bin",
+        "./content/ff5e1ae4493d8de2f667323d34281103c1e48ba21ba3bf7a07e229f24d2192ac.bin",
+        "./content/e63160a88c9dc794b55c82f1ebdab5bd8cb9373b906e84e63b9d6559ebfac3f8.bin",
+        "./content/61efb317496f7a81a2a601065feec152c30bee0101c291895f27c7d977e2a1b7.bin",
+        "./content/eb12fad90367f6bcfac6456d1763f6fdcd3578a4cda98277afd23beabd43a5e7.bin",
+        "./content/57d638b958211dd252bb9a9493362b486ef48f6f1ac2e8b43e986345dae55c3e.bin",
+        "./content/820a830e1a22c23676812d01d32b8f90b3478831dc4614bb3c1dc839841f4639.bin",
+        "./content/163b8a859d31a0fa6c22655f40c23deed6ec70ec84837ad078407151338d4982.bin",
+        "./content/599c1289ffe0be7f242ed75cc0ab4c4566ad44eb93bb4ef9d86a10824658c46d.bin",
+        "./content/77922a9822b04195000944bec70e757c5798eed3ee39e071786991416cd36147.bin",
+        "./content/7c1a1bf1b0b1900e086cf0d963efa944ef2bf756f596389720e70327ff8f82c7.bin",
+        "./content/14c8b582beb8c612716dbf734a5253bade377d56f457c29012a9c1a3c050bb60.bin",
+        "./content/6a97cf31794e3bce62fe1b5227c3d378eba7e0b673f9fe0048419bfa59c5265a.bin",
+        "./content/2d116356297497acb76656d741cd8a841fae7d6e7212189af5574651ffe360bf.gltf"
+      ],
+      "visualReview": "APPROVED",
+      "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
+      "sourceModelSha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a"
+    }
+  }
+}

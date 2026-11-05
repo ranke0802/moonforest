@@ -1,0 +1,11 @@
+{
+  "total": 2012,
+  "passed": 2012,
+  "failed": 0,
+  "skipped": 0,
+  "cancelled": 0,
+  "passedAll": true,
+  "sourceFiles": 833,
+  "sourceUnchanged": true,
+  "integratedRemoteBase": "36fd9a3bc143b76f708ebc514ff002ac5ac9bf5e"
+}

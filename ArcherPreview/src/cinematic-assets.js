@@ -10,7 +10,7 @@ export function getCinematicDefinitions(catalog=ASSET_CATALOG){
  for(const entry of catalog.entries){
   if(Object.values(definitions).some(def=>def.assetId===entry.assetId&&def.assetVersion===entry.version))continue;
   const id=cinematicDefinitionId(entry);if(definitions[id])throw new Error('Cinematic definition ID conflict');
-  definitions[id]={definitionVersion:1,actorDefinitionId:id,label:entry.name??entry.assetId,assetId:entry.assetId,assetVersion:entry.version,category:entry.category,cinematic:true,cinematicStatic:![entry.geometry,...(entry.geometry.lods??[])].some(level=>level.skinned||level.clips||level.morphTargets),encounterType:'cinematic-visual',animation:Object.fromEntries((entry.geometry.clipNames??[]).filter(Boolean).map(name=>[name,name])),population:{maxPooled:20,idleSeconds:30,estimatedBytes:Math.max(1024*1024,(entry.geometry.vertices??0)*64+(entry.geometry.bones??0)*64)},runtime:entry.runtime,bounds:entry.bounds};
+  definitions[id]={definitionVersion:1,actorDefinitionId:id,label:entry.name??entry.assetId,assetId:entry.assetId,assetVersion:entry.version,category:entry.category,cinematic:true,cinematicStatic:![entry.geometry,...(entry.geometry.lods??[])].some(level=>level.skinned||level.clips||level.morphTargets),encounterType:'cinematic-visual',animation:{...Object.fromEntries((entry.geometry.clipNames??[]).filter(Boolean).map(name=>[name,name])),...(entry.npc?.defaultClip?{idle:entry.npc.defaultClip}:{})},population:{maxPooled:20,idleSeconds:30,estimatedBytes:Math.max(1024*1024,(entry.geometry.vertices??0)*64+(entry.geometry.bones??0)*64)},runtime:entry.runtime,bounds:entry.bounds};
  }
  return definitions;
 }

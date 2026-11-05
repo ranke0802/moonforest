@@ -12,6 +12,16 @@ export function safeQueryBounds(min,max,camera,nearPlane){
   return n.x*(n.x>=0?min.x:max.x)+n.y*(n.y>=0?min.y:max.y)+n.z*(n.z>=0?min.z:max.z)+nearPlane.d>.1;
 }
 
+function queryShaderReady(renderer,mesh,engine){
+  const shader=renderer._colorShaderForOcclusionQuery,pass=renderer._renderPassIdForOcclusionQuery;
+  if(!shader||pass===undefined)return false;
+  // The SDK renderer uses a separate per-submesh draw wrapper for this pass.
+  // Testing the restored scene pass could approve a still-uncompiled query.
+  const previous=engine.currentRenderPassId;
+  try{engine.currentRenderPassId=pass;return shader.isReady(mesh,undefined,mesh.subMeshes[0])&&mesh.hasBoundingInfo;}
+  finally{engine.currentRenderPassId=previous;}
+}
+
 // Query the full, slightly expanded bounds against the actual depth buffer.
 // No guessed house proxies: a single visible sample retains the entire group.
 // Camera movement always reveals groups before rendering and invalidates old results.
@@ -35,7 +45,10 @@ export class VillageOcclusion {
       proxy.position.copyFrom(min.add(max).scale(.5));proxy.isVisible=false;proxy.isPickable=false;proxy.setEnabled(false);proxy.computeWorldMatrix(true);proxy.freezeWorldMatrix();
       this.groups.push({items,proxy,min,max,query:null,pending:false,epoch:0,hiddenSamples:0,lastQuery:-Infinity});
     }
-    this.after=world.scene.onAfterRenderObservable.add(()=>this.afterRender());
+    this.after=world.scene.onAfterRenderObservable.add(()=>{
+      const start=world.frameDiagnostics?.mark()??null;
+      try{this.afterRender();}finally{world.frameDiagnostics?.measure('sceneryOcclusionMs',start);}
+    });
   }
   reveal(group){
     group.hiddenSamples=0;
@@ -75,10 +88,13 @@ export class VillageOcclusion {
         const g=this.groups[this.cursor++%this.groups.length];
         if(!safe(g)){this.reveal(g);continue;}
         if(g.pending||now-g.lastQuery<300||!g.items.some(r=>r.cellActive!==false&&r.fogVisible!==false))continue;
-        // Warm the shader outside a query. An uncompiled shader must never be
-        // mistaken for a zero-sample (hidden) box.
-        renderer.renderOcclusionBoundingBox(g.proxy);
-        if(!renderer._colorShaderForOcclusionQuery?.isReady(g.proxy,undefined,g.proxy.subMeshes[0]))continue;
+        // Only a cold query pass needs an outside-query initialization call.
+        // Once ready, the SDK binds everything for the one draw inside the
+        // query; repeating that draw beforehand contributes no query samples.
+        if(!queryShaderReady(renderer,g.proxy,engine)){
+          renderer.renderOcclusionBoundingBox(g.proxy);
+          if(!queryShaderReady(renderer,g.proxy,engine))continue;
+        }
         g.query??=engine.createQuery();
         const algorithm=AbstractMesh.OCCLUSION_ALGORITHM_TYPE_CONSERVATIVE;
         if(!engine.beginOcclusionQuery(algorithm,g.query))continue;

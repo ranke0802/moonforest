@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-11-05T02:49:01.710Z",
+  "passed": true,
+  "cases": [
+    {
+      "name": "supplied actual ZIP is data only and preserves original20clip/66bone/10655triangle model",
+      "pass": true,
+      "evidence": {
+        "modelSHA": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+        "triangles": 10655,
+        "bones": 66,
+        "clips": 20,
+        "height": 1.8499997703133602,
+        "sourceTracksUntouched": true,
+        "deliberateRuntimeRootMotion": "in-place",
+        "vendorReviewScriptsExecuted": false
+      }
+    },
+    {
+      "name": "invalid package IDs/scales/look/hash/clip descriptors reject before installation",
+      "pass": true,
+      "evidence": {
+        "rejectedVariants": 11,
+        "oversizeBodyRead": false,
+        "numericIdRegression": true
+      }
+    },
+    {
+      "name": "GLB externalURI/buffer bounds/chunk corruption and ZIP CRC/traversal/duplicates reject",
+      "pass": true,
+      "evidence": {
+        "invalidGlbs": 5,
+        "invalidZipCases": 4,
+        "originalModelSHAAfter": "c3f7ceec521fc117fe8d7b9d868729a2e878f4b3728def66b33dc3858ec577b9"
+      }
+    },
+    {
+      "name": "unregistered future NPC ZIP gets exact new identity without source changes or script execution",
+      "pass": true,
+      "evidence": {
+        "assetId": "independent-future-npc",
+        "version": "future-1",
+        "sha256": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222",
+        "sameOriginalGeometryAndAnimationBinary": "49dfddf312c5fdce67c24b55df174373e88147d395080648aeb667388ce0b552",
+        "vendorJavaScriptExecuted": false
+      }
+    },
+    {
+      "name": "memory library registers/deduplicates metadata and detects same-version source conflicts",
+      "pass": true,
+      "evidence": {
+        "registered": [
+          {
+            "assetId": "independent-future-npc",
+            "version": "future-1"
+          }
+        ],
+        "notifications": 2,
+        "globalRevisionUnchanged": true,
+        "conflictPreservedOriginal": true
+      }
+    },
+    {
+      "name": "each selected source owns one BIN BlobURL and releases exactly once; abort cannot create a URL",
+      "pass": true,
+      "evidence": {
+        "urlsCreated": 2,
+        "urlsRevoked": 2,
+        "oneURLPerSelection": true,
+        "exactOriginalBIN": true,
+        "preAbortNoURL": true
+      }
+    },
+    {
+      "name": "production two-store IndexedDB branch persists across instances; failed transaction commits neither store",
+      "pass": true,
+      "evidence": {
+        "metadataRecords": 1,
+        "modelRecords": 1,
+        "opens": 2,
+        "failedWriteAtomic": true,
+        "rehydratedSourceVerified": true
+      }
+    },
+    {
+      "name": "corrupt IDB body and cancelled delayed body read reject without BlobURLs",
+      "pass": true,
+      "evidence": {
+        "corruptSourceRejected": true,
+        "lateAbortedReadRejected": true,
+        "urlsCreated": 0
+      }
+    },
+    {
+      "name": "missing production IndexedDB has no silent memory install fallback",
+      "pass": true,
+      "evidence": {
+        "builtinsCanHydrateWithoutStorage": true,
+        "localInstallRejects": true,
+        "silentMemoryFallback": false
+      }
+    }
+  ],
+  "sourceBefore": {
+    "npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2"
+  },
+  "sourceAfter": {
+    "npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2"
+  },
+  "sourceUnchanged": true,
+  "originalPackageSHA256": "2863a41bf38691831f5b35931a98dbde28527538674ac52722c2593f59a70a3c",
+  "originalModelSHA256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+  "scope": "Independent package/data/library ownership gate with supplied actual GLB. Synthetic future variant changes JSON metadata only, preserves all original binary geometry/skin/animation/image bytes, remains in memory. IDB is an asynchronous transaction fixture, not browser storage proof. No package JS executed, no source edits, no engine/browser/device/appearance claims."
+}

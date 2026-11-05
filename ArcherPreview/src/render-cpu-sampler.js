@@ -6,12 +6,12 @@ const methods={
  bufferUpdate:['updateDynamicVertexBuffer','updateDynamicIndexBuffer'],
 };
 
-// One sampled scene render per second, only while diagnostics collect. These
+// Periodic and bounded event-requested renders, only while diagnostics collect. These
 // are inclusive engine-method CPU times (including cached/no-op calls), not GL
 // command counts or GPU execution. Nested groups must never be added together.
 export class RenderCpuSampler {
  constructor(scene,{now=()=>performance.now(),intervalMs=1000,staleMs=2500}={}){
-  Object.assign(this,{scene,now,intervalMs,staleMs});this.engine=scene.getEngine();this.active=false;this.disposed=false;this.next=0;this.sequence=0;this.latest=null;this.pending=null;this.hooks=[];
+  Object.assign(this,{scene,now,intervalMs,staleMs});this.engine=scene.getEngine();this.active=false;this.disposed=false;this.next=0;this.sequence=0;this.latest=null;this.pending=null;this.hooks=[];this.requested=null;this.eventAfter=0;
   this.before=scene.onBeforeRenderObservable.add(()=>this.begin());
   this.after=scene.onAfterRenderObservable.add(()=>this.end());
   // A failed render may not reach onAfterRender; do not retain wrapped methods.
@@ -19,8 +19,14 @@ export class RenderCpuSampler {
   this.lost=this.engine.onContextLostObservable?.add(()=>{this.contextLost=true;this.reset();});
   this.restored=this.engine.onContextRestoredObservable?.add(()=>{this.contextLost=false;this.reset();});
  }
- setActive(active){const next=Boolean(active)&&!this.disposed;if(this.active===next)return;this.active=next;if(!this.active)this.cancel();else this.next=0;}
- reset(){this.cancel();this.latest=null;this.next=0;}
+ setActive(active){const next=Boolean(active)&&!this.disposed;if(this.active===next)return;this.active=next;if(!this.active){this.cancel();this.requested=null;}else this.next=0;}
+ reset(){this.cancel();this.latest=null;this.next=0;this.requested=null;this.eventAfter=0;}
+ requestCapture(reason){
+  if(!this.active||this.disposed||this.contextLost)return false;
+  // One coalesced request, never a queue. Event probes are opt-in just like
+  // periodic probes, with at most four extra sampled frames per second.
+  this.requested=String(reason??'event').slice(0,64);return true;
+ }
  restore(){
   for(const {owner,name,wrapper,descriptor} of this.hooks){
    if(owner[name]!==wrapper)continue;
@@ -30,9 +36,12 @@ export class RenderCpuSampler {
  }
  cancel(){this.restore();this.pending=null;}
  begin(){
-  if(this.disposed||!this.active||this.contextLost||this.pending||this.now()<this.next)return;
-  const started=this.now();this.next=started+this.intervalMs;
-  const pending=this.pending={sampleId:++this.sequence,sceneFrameId:this.scene.getFrameId(),startedAtMs:started,effectChanges:0,groups:{}};
+  if(this.disposed||!this.active||this.contextLost||this.pending)return;
+  const started=this.now(),eventReady=this.requested!==null&&started>=this.eventAfter;
+  if(started<this.next&&!eventReady)return;
+  const reason=this.requested??'periodic';if(this.requested!==null)this.eventAfter=started+250;
+  this.requested=null;this.next=started+this.intervalMs;
+  const pending=this.pending={sampleId:++this.sequence,sceneFrameId:this.scene.getFrameId(),startedAtMs:started,reason,effectChanges:0,groups:{}};
   try{
    const probes=[...Object.entries(methods).map(([group,names])=>[this.engine,group,names]),[this.scene,'candidateSelection',['getActiveMeshCandidates']]];
    for(const [owner,group,names]of probes){
@@ -65,6 +74,6 @@ export class RenderCpuSampler {
   const status=this.disposed?'disabled':this.contextLost?'context-lost':!this.active?'paused':!this.latest?'pending':ageMs>this.staleMs?'stale':'sampled';
   return {status,scope:'sampled-scene-engine-method-cpu',intervalMs:this.intervalMs,ageMs,pending:Boolean(this.pending),latest:status==='sampled'?this.latest:null,retained:status==='paused'?this.latest:null};
  }
- dispose(){if(this.disposed)return;this.cancel();this.disposed=true;this.active=false;this.latest=null;
+ dispose(){if(this.disposed)return;this.cancel();this.disposed=true;this.active=false;this.latest=null;this.requested=null;
   this.scene.onBeforeRenderObservable.remove(this.before);this.scene.onAfterRenderObservable.remove(this.after);this.engine.onEndFrameObservable.remove(this.engineEnd);this.engine.onContextLostObservable?.remove(this.lost);this.engine.onContextRestoredObservable?.remove(this.restored);}
 }

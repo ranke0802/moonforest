@@ -1,0 +1,114 @@
+{
+  "generatedAt": "2026-11-05T03:33:50.7902877Z",
+  "scope": "NPC visual runtime, standalone actor editor, supplied NPC look",
+  "requestedAgentConfiguration": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "xhigh",
+    "backendResolution": "Not independently surfaced by tool metadata",
+    "reuseExistingAgent": true
+  },
+  "sourceFrozen": true,
+  "sourceHashes": {
+    "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/cinematic-assets.js": "7ddccf1980d4e7407fb37899835b189d1ca9d2ed8195629dcec562dfb260bccd",
+    "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8",
+    "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+    "src/character-style.js": "f270eee600ff268e87047db9d25356339e73dcb319b8b673f8ca3aade0a4291f",
+    "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+    "src/npc-interior-ink.js": "32b45ed34d1864d95b64344e15429b4805401ff3f2e1218810f65be8585ff3b6",
+    "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+    "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+    "src/live-actor-handles.js": "7d8d1172516ef8347e037ee6553d42a5bd74b62e868912d2bfc39c705cb3f3ad",
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+    "tests/npc-world-editor.test.js": "f4bb3dd1729127454c69dc4d47a5c23addcae1e3be8e86ac314d676fa0779478",
+    "tests/npc-interior-ink.test.js": "464a94cba9ca6ca5c522655f9539612ffea08e1a0e6f73c6ab18f540c1626013",
+    "tests/npc-ink-shaders.test.js": "f4815c559fd6ac66cd1cd78c0b007b643aea462886f839f36e9b79eafdb41906"
+  },
+  "api": {
+    "storage": "NPC_WORLD_STORAGE_KEY = moonforest-0.1:npc-world:v1; saved custom NPC placements only; per-map cap20",
+    "identity": "listEditableActorHandles(world,battle); WeakMap root session IDs; existing combat actors never persist random IDs",
+    "editor": "setupActorEditor(...) -> enter({selection,importPackage,isCurrent}),leaveMap,listNearby,inspect,dispose; optional external isCurrent checked before/after all asynchronous entry boundaries, separately from lease-owned ready=false",
+    "world": "createNpcWorld({world,catalog,getState,storage,onError,...}) -> ensureMap/add/setTransform/play/snapshot/restore/remove/list/listNearby/persist/get/setPaused/leaveMap/inspect/dispose",
+    "look": "applyNpcLook(asset,look,{root,referenceHeight,baseScale}); inspectNpcInteriorInk(scene)"
+  },
+  "fixes": [
+    "Actual geometry owns actor DOWN drag; empty AABB only selects on stationary UP so native orbit survives. Terrain drag follows height field preserving authored foot/flying offset.",
+    "Independent native NPC rigs share selected source geometry/materials; original clip names preserved. NPC-only root-motion carrier removes X/Z translation while preserving Y and absolute pose seeking.",
+    "Existing NPC Delete/Play/Transform snapshots enabled flag plus pose/clip/clock, restoring on Cancel. Selected motion captured before busy UI render.",
+    "Existing monster/NPC transform edits borrow native root only, restore matrix object/quaternion mode/freeze states on Cancel; Apply resumes existing AI and preserves combat stats.",
+    "Local BIN blob URL releases only after actual container loading settles, including loaders ignoring abort.",
+    "NPC supplied toon bands and brightness, .6px silhouette color, shared8-neighbor normal/depth contour; prior albedo-derivative crease branch disabled for NPC only.",
+    "One NPC-only normal/depth RTT and one first PostProcess read actual main-render depth for occlusion; no additional whole-world depth draw. All hidden releases GPU pass resources, last unregister removes own observers/resources.",
+    "External tool-option OFF invalidates pending hydrate/runtime/ensureMap/lease entry; stale acquired lease restores only same original map/generation.",
+    "Final color-stage repair: preserve original linear ink constant; bind exact piecewise sRGB OETF into the normal game already-encoded first-PP input, retain linear ink when actual image processing is deferred by postprocess. No base color or global pipeline changes."
+  ],
+  "validation": [
+    {
+      "details": [
+        "Independent rig/skeleton/clip ownership; root-motion Y preservation and exact repeated native palettes",
+        "Hidden/settings/tool-paused clocks, one-shot to idle, stable saved IDs, cap20, map teardown",
+        "Local-source abort/late-result URL ownership",
+        "Delete-to-Cancel, motion-to-Cancel, staged deletion Apply, new-NPC Cancel",
+        "Borrowed world-parent transforms, matrix/quaternion/frozen identity restoration, unchanged combat stats",
+        "Native RTT/PP attachment/depth/draw-list lifecycle, existing pass preservation, warm hide/show/camera replacement/resize",
+        "B exact supplied shader CPU oracle3240 points plus occlusion/reverse depth/profile coverage",
+        "Five async tool-option OFF/map-generation regressions, including valid lease-owned ready=false."
+      ],
+      "failed": 0,
+      "command": "node24 --test tests/npc-world-editor.test.js tests/npc-interior-ink.test.js tests/npc-ink-shaders.test.js",
+      "passed": 21
+    },
+    {
+      "failed": 0,
+      "command": "node24 --test tests/cinematic-scene-host.test.js tests/cinematic-expansion-runtime.test.js",
+      "passed": 25
+    },
+    {
+      "passed": 3,
+      "failed": 0,
+      "command": "node24 --test tests/npc-interior-ink.test.js (after explicit clamp/cache and active-effect bind guard)"
+    },
+    {
+      "stage": "Final narrow color adapter",
+      "details": [
+        "Native Scene/PBR default applyByPostProcess=false and manager onApply binder yield exact OETF values.",
+        "Dynamic false-to-true-to-false branch binds gamma/linear/gamma with same normal/depth/profile bindings and no global setting mutation.",
+        "Three prior ink lifecycle cases and six exact shader/math cases remain passing."
+      ],
+      "passed": 10,
+      "failed": 0,
+      "command": "node24 --test tests/npc-interior-ink.test.js tests/npc-ink-shaders.test.js"
+    }
+  ],
+  "limits": [
+    "No browser automation or pixel/device visual equivalence claim. NullEngine lifecycle test replaces only the unsupported public depth-allocation boundary; shader math is separately compared to inert supplied source.",
+    "Hardware depth-texture support required for screen contour; unsupported engines skip screen pass without falling back to texture-edge ink.",
+    "Borrowed existing game actors apply their current transform only. Existing AI may move them afterward; combat stats/rewards/quests/navigation remain owned by existing gameplay.",
+    "Custom NPC persistence is scoped to this browser and map; package import/storage errors surface to user. No mass automatic NPC spawning.",
+    "No new engine, RAF, generated art, paid assets, texture reduction, build, full suite, staging or deployment by this agent."
+  ],
+  "independentGate": "Verifier C rechecking final native color binding; parent owns final whole regression/build/deploy.",
+  "colorStageRepair": {
+    "independentBeforeProof": "verification-ink-color-stage-before.json",
+    "previousBroaderValidation": "Historical earlier checks retained. Parent owns final whole regression/build after this narrow source change.",
+    "encodedUniform": [
+      0.2527895373391935,
+      0.22091636254849623,
+      0.25766782522323645
+    ],
+    "nativeSceneDefaultApplyByPostProcess": false,
+    "pixelEquivalenceClaim": false,
+    "deferredLinearUniform": [
+      0.052,
+      0.04,
+      0.054
+    ],
+    "method": "Exact sRGB piecewise OETF (exponent1/2.4); pinned Babylon toGammaSpace(true) uses approximate.41666 and was not used",
+    "sourceLinear": [
+      0.052,
+      0.04,
+      0.054
+    ]
+  }
+}

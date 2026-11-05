@@ -1,0 +1,255 @@
+{
+  "baseline": "5d1ee03",
+  "scope": "Final CSS resource/performance audit plus authorized village fog palette and actor-anchored stamina-warning updates. No browser or device timing.",
+  "protectedTextHashNormalization": "CRLF normalized to LF before SHA-256 and baseline comparison",
+  "protectedFilesUnchanged": true,
+  "protectedFiles": [
+    {
+      "file": "src/commercial-ui.js",
+      "sha256": "fb6fd22438acc4cdc3224453e7a29012e9d1f51e8e2449ac3c4b3ea02dc34ca7",
+      "unchanged": true
+    },
+    {
+      "file": "src/input.js",
+      "sha256": "17ff8399c751104be2882b3c8e22fe1c344f5395cbe7df0a536676bdf3134edc",
+      "unchanged": true
+    },
+    {
+      "file": "src/frame-loop.js",
+      "sha256": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810",
+      "unchanged": true
+    },
+    {
+      "file": "src/animation.js",
+      "sha256": "ae59b1507000c8542ebc3822c61617b7f3902c8bc5969ea887ed08a9bfe15cd1",
+      "unchanged": true
+    },
+    {
+      "file": "src/warrior-v2.js",
+      "sha256": "fae2edbc771da1a9a8a8fd6bb8b583f58b4383c14415a815dfbc8475aca0d624",
+      "unchanged": true
+    },
+    {
+      "file": "src/player-texture-profile.js",
+      "sha256": "92158a61645a24dd67e962b507621db0b3167b215613f6b3f3543960942849d2",
+      "unchanged": true
+    },
+    {
+      "file": "src/mobile-texture-policy.js",
+      "sha256": "93581b9581d203e98880726c009da66f792139afff0539e0317ebfca7faed998",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-lod.js",
+      "sha256": "847ed96073bb60bf1f4f7f247981b4c4c451dd03872f23fcdb6ef01a4c4afba3",
+      "unchanged": true
+    },
+    {
+      "file": "src/village-policy.js",
+      "sha256": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62",
+      "unchanged": true
+    },
+    {
+      "file": "src/plains-view-distance.js",
+      "sha256": "5d4a302ff50f56e68c2db1516ffd33ef5aea8444ed92b54d73bde83d784e1597",
+      "unchanged": true
+    },
+    {
+      "file": "src/great-plains-layout.js",
+      "sha256": "7d3f1ae16107ab0785388c6f593f1a84ad77537c4c0e458c258127ac3835cc6b",
+      "unchanged": true
+    },
+    {
+      "file": "src/great-plains-terrain.js",
+      "sha256": "f742031d73dbf24b73fe977c06d975173ffc4e08e38b750b29867f1125659d7e",
+      "unchanged": true
+    },
+    {
+      "file": "src/outdoor-vista.js",
+      "sha256": "03cc2fa00d165bc5c6d586ca02df4fd4be4f61feb9892b29d6066ff6bb4f3db6",
+      "unchanged": true
+    },
+    {
+      "file": "src/mountain-backdrop.js",
+      "sha256": "5775f7834073c4441497c2d3b85a9a8a5c5f4f663951b840f88a270deb9cab8e",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3.json",
+      "sha256": "93cfe8b954d123df263cc13c2c144946e023bf1cb286bd2fd36fdf3380ebb067",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3-mobile4k.json",
+      "sha256": "f566e947384268f7250ae1111317795622f0f93a385e5181cdd50fcb73b5e1dd",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3-mobile2k-rgba.json",
+      "sha256": "d4f3d7c47b91892595e1ff2688216d40f20cdd0ab69f6bcdbb17ff46e5d5541f",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/warrior-v3-ios.json",
+      "sha256": "338bb740b51cf42accdcb93a572a4385c3e3ddca515e2c4e7b24feb05b425c87",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/great-plains.json",
+      "sha256": "04f177f3fe1f055b44868f2fa1a22ca22d31a91d87912069091cbf97b391dad3",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/great-plains-ground.json",
+      "sha256": "94b676dd22e10f4d97bb48ee36e8b702454e5da35f3973c1ea889f690d0f3d38",
+      "unchanged": true
+    },
+    {
+      "file": "public/assets/guardian-bear.json",
+      "sha256": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0",
+      "unchanged": true
+    }
+  ],
+  "trackedAssetOrModelChanges": [],
+  "cssSnapshot": [
+    {
+      "file": "src/commercial-ui.css",
+      "sha256": "d9271bd033778732d7096727670ac639f4ba474b748c4c0157ed30688a4cbd6d",
+      "changed": true
+    },
+    {
+      "file": "src/mobile-ui.css",
+      "sha256": "b6414d4f1ca1444a12db4f2a5f25b3b20a00d03181b1e56d0a6cb9db1aeda807",
+      "changed": true
+    }
+  ],
+  "cssFinalReviewed": true,
+  "limitations": [
+    "No FPS improvement or zero-cost claim; browser compositing, offscreen surface allocation and mobile GPU time were not measured.",
+    "This report excludes pre-existing untracked preparation artifacts and generated catalogs; tracked runtime resource/source hashes are compared to the baseline."
+  ],
+  "finalCssFindings": {
+    "filters": [
+      {
+        "file": "src/commercial-ui.css",
+        "selector": "#app[data-commercial-ui] .commercial-top:before",
+        "filter": "drop-shadow(0 0 1px #090d0cf5)"
+      },
+      {
+        "file": "src/commercial-ui.css",
+        "selector": "#app[data-commercial-ui] .commercial-top:focus-visible:before",
+        "filter": "drop-shadow(0 0 2px #ffe3a0)"
+      }
+    ],
+    "filterScope": "Only the five existing small icon ::before pseudo-elements. Normal state uses one 1px drop-shadow; keyboard focus replaces it with one 2px shadow on the focused icon, without animation.",
+    "nominalIconCssPixels": {
+      "desktopMaximumSingleIcon": [
+        40,
+        40
+      ],
+      "desktopFiveIconArea": 5972,
+      "mobileMaximumSingleIcon": [
+        36,
+        36
+      ],
+      "mobileFiveIconArea": 4680
+    },
+    "fullscreenOrCanvasOrContainerFilter": false,
+    "newAnimatedFilterOrGlow": false,
+    "newBackdropBlur": false,
+    "newWillChange": false,
+    "cssImageUrls": [
+      {
+        "file": "src/commercial-ui.css",
+        "urlsUnchanged": true
+      },
+      {
+        "file": "src/mobile-ui.css",
+        "urlsUnchanged": true
+      }
+    ],
+    "changedSourcePaths": [
+      "src/commercial-ui.css",
+      "src/main.js",
+      "src/mobile-ui.css",
+      "src/world.js",
+      "src/stamina-notice-anchor.js"
+    ],
+    "trackedAssetOrModelChanges": [],
+    "cssAddsPerFrameJavaScript": false,
+    "authorizedWarningProjectionPerFrame": true
+  },
+  "performanceAssessment": {
+    "expectedCost": "Small bounded browser icon paint/filter work plus a bounded active-warning projection/update. Net timing relative to removed boxes is not measured.",
+    "gameResources": "No new game WebGL textures, materials, geometry, LODs or decoded source assets. The21 remaining protected source/manifest hashes match the baseline; main.js, the new warning helper and world.js are separately authorized changes.",
+    "browserResources": "CSS filters may use small browser-managed intermediate raster/compositing surfaces. Their exact allocation, caching and CPU/GPU cost are not measured.",
+    "fps": "The existing FPS text updates approximately twice per second; its single text-shadow repaints with text changes. No new timer or frame work.",
+    "warning": "The warning retains one text-shadow and gains one actor-height projection only while active, using the existing HUD frame. No new scheduler, timer, listener or animated bone update; existing four-second toast timer remains authoritative."
+  },
+  "passed": true,
+  "authorizedAtmosphereChange": {
+    "file": "src/world.js",
+    "baselineSha256": "f9437ee8953cd1cdeb314b17b8dfcfecaa4be0db3684d9e19ee4ff3ca0c8f257",
+    "sha256": "336d4ceb13a5d1b62a608cc8bc2c2064ee5ebf55028be5574cb633601472e3bb",
+    "scope": "Village-only existing engine-fog color at initial scene creation and map replacement. Actual sky color, forest/cave/plains palettes and plains boundary interpolation remain unchanged.",
+    "villageFog": [
+      0.29,
+      0.32,
+      0.25
+    ],
+    "newPerFrameWork": false,
+    "newTextures": false,
+    "newLights": false,
+    "newGeometry": false,
+    "newFogDistanceOrLodPolicy": false
+  },
+  "authorizedWarningAnchorChange": {
+    "files": [
+      {
+        "file": "src/main.js",
+        "baselineSha256": "43ffde0a1c6a0d4fb17ed76f6f104e806e3886ead4a7a54f1d79df565bda234a",
+        "sha256": "a07f6894ffb9453178ff698102859da6bcd993bbce6cc95c42fc05e9d30fa84b",
+        "scope": "Existing toast/show/timer/reset and projected-HUD integration for actor-anchored stamina notice."
+      },
+      {
+        "file": "src/stamina-notice-anchor.js",
+        "newFile": true,
+        "sha256": "cf5de94b34c3afa0e3156c14a4538a7027ae7e03499e5a1d1170f97ad1102d2f",
+        "scope": "One reusable Vector3 plus warning state; no owned clock, listener, animation frame or cooldown."
+      }
+    ],
+    "perFrameWork": {
+      "inactiveOrDisposed": "Immediate return before projection; zero warning projections.",
+      "visibleWarning": "One additional use of the existing ScreenProjection.project() after the existing beginFrame(); uses upright actor height, with no animated head-bone traversal.",
+      "hiddenOrInvalid": "Zero projections when the warning is inactive or fails visibility/actor/projection validation; valid pending warnings project once before being revealed.",
+      "allocation": "Reuses Vector3 and ScreenProjection result; visible updates still form small validation arrays and CSS coordinate strings. The main call supplies an options object. No zero-allocation claim.",
+      "domWrites": "CSS coordinate variables update only when their string values change. Canvas offsets are read in the existing resize/layout callback, not per warning frame."
+    },
+    "lifecycle": "Reset on ordinary-toast replacement, timeout, death/restart, character load, map change and pagehide; disposed during departure.",
+    "helperOwnedSchedulingCalls": {
+      "requestAnimationFrame": 0,
+      "setTimeout": 0,
+      "setInterval": 0,
+      "addEventListener": 0
+    },
+    "existingMainScheduling": {
+      "requestAnimationFrame": {
+        "baseline": 4,
+        "current": 4
+      },
+      "setTimeout": {
+        "baseline": 1,
+        "current": 1
+      },
+      "setInterval": {
+        "baseline": 0,
+        "current": 0
+      },
+      "addEventListener": {
+        "baseline": 45,
+        "current": 45
+      }
+    },
+    "newRafTimerOrListener": false
+  }
+}

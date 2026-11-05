@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-05",
+  "owner": "resources",
+  "status": "focused-pass-source-frozen-await-independent-native-npc",
+  "worktree": "C:/dev/moonforest-cinematic-integration-20261104/ArcherPreview",
+  "baseline": "0fb713c",
+  "scope": {
+    "production": ["src/cinematic-studio.js", "src/cinematic-studio.css", "public/moonforest-help.html"],
+    "newTests": ["tests/cinematic-authoring-repair-ui.test.js", "tests/cinematic-npc-studio.test.js"],
+    "approvedObsoleteAssertionsUpdated": ["tests/cinematic-studio.test.js", "tests/cinematic-expansion-ui.test.js"],
+    "excluded": "No changes to Game, loaders, schema, actor runtime, source assets, historical verification fixtures, build or deployment."
+  },
+  "uiContract": {
+    "pickerButton": "[data-action=npc-import]",
+    "fileInput": "[data-field=npc-file]",
+    "status": "[data-view=npc-status]",
+    "category": "npc",
+    "builtinAssetId": "moonforest-resident2-blacksmith",
+    "storage": "Local packages persist in the current browser; other devices need the same package installed first.",
+    "import": "Snapshot and clear the native File input synchronously; validate ZIP/GLB using npc-library; serialize via fileEdits; refresh reference catalog and definitions without committing scene/history.",
+    "metadata": "Entry hydration, subscription and palette search do not load models or open the iframe. Models remain lazy until explicit Add/Load.",
+    "motions": "Use reference-catalog NPC labels, exact clip durations and defaultClip; deduplicate idle aliases while retaining all20 source clips.",
+    "cleanup": "Remove metadata subscription and window focus listener on Studio destroy.",
+    "guide": "Exact source labels document Settings > 개발도구 켜기, the in-game developer launcher, nearby NPC/monster entry, NPC add/motion/apply/cancel flow. Guide-only final update after Studio freeze; native HTML/exact-label checks pass."
+  },
+  "verification": {
+    "command": "node --test tests/cinematic-authoring-repair-ui.test.js tests/cinematic-npc-studio.test.js tests/cinematic-studio.test.js tests/cinematic-studio-layout.test.js tests/cinematic-workspace-controls.test.js tests/cinematic-expansion-ui.test.js",
+    "node": "24",
+    "passed": 74,
+    "failed": 0,
+    "newNpcCases": [
+      "Built-in blacksmith has separate NPC category,20 labeled clips and defaultIdle_02 with zero startup model/iframe commands.",
+      "Visible native picker validates a real ZIP containing skinned GLB, registers metadata, preserves scene/history and never executes review.js; explicit Add uses imported clip data.",
+      "External library subscriptions and metadata refresh reveal GLB entries without changing scene; disposal unsubscribes.",
+      "Invalid packages and unavailable browser storage preserve scene and permit retry."
+    ],
+    "repairCases": "Six actual Studio/Game/SceneHost/native transport tests remain green: typing/polling, Enter/button/change, real scene/project Files, same-file reselection, invalid/cancel/New isolation, exact-center Add with unchanged camera.",
+    "adapter": "New repair test imports C's current verification-native-fixture.mjs resolving actual main.toolState. Historical fixtures remain untouched.",
+    "diffCheck": "PASS for all owned tracked sources/test changes; all owned sources/new tests end with LF.",
+    "limitations": "No browser automation, screenshot, native OS file-dialog visual claim, build or deployment. NPC focused UI tests use real parser/store with native DOM and controlled command transport; C independently verifies actual runtime/model chain."
+  },
+  "sha256": {
+    "src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+    "src/cinematic-studio.css": "14b4d33ff408ec185362ca157eeee3e7607e9db2f0c14efcd4658d555e441dee",
+    "public/moonforest-help.html": "746e096dc3d7c1c23ac088f7efb3b05d8ea805e4624e4e402b6dfbf17d9a28a7",
+    "tests/cinematic-authoring-repair-ui.test.js": "70f65b0f885ce3fdf013ba45bcf9efaee437dae47d1471d33f313079c62cfd46",
+    "tests/cinematic-npc-studio.test.js": "add6caa8c66992a582a7ca6216826dc0b02ecd19f6356c71d66775e9d26e4a72",
+    "tests/cinematic-studio.test.js": "1f9bd2a5ef618333c8930febade58379f3f9aad7f60287883f28547dd8a288da",
+    "tests/cinematic-expansion-ui.test.js": "d0bce12b3aa46cc80fba9f9227d0c359706e75c2ec1353457f216d911a19920c",
+    "dependency/src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+    "dependency/src/cinematic-assets.js": "7ddccf1980d4e7407fb37899835b189d1ca9d2ed8195629dcec562dfb260bccd",
+    "dependency/src/asset-catalog.js": "0a0bb7cd5eab37b0a1e25b03f1b409ffb0ee3b184f15e85bfbe8de2c4eada801"
+  }
+}

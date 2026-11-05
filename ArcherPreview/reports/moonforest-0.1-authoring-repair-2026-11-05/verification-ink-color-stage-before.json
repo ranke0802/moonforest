@@ -1,0 +1,98 @@
+{
+  "generatedAt": "2026-11-05T03:32:15.260Z",
+  "mode": "before-fix",
+  "passed": false,
+  "findingVerified": true,
+  "concreteMismatch": true,
+  "pipeline": {
+    "sceneApplyByPostProcess": false,
+    "materialApplyByPostProcess": false,
+    "defines": {
+      "WHITEBALANCE": false,
+      "VIGNETTE": false,
+      "VIGNETTEBLENDMODEMULTIPLY": true,
+      "VIGNETTEBLENDMODEOPAQUE": false,
+      "TONEMAPPING": 0,
+      "CONTRAST": true,
+      "EXPOSURE": true,
+      "COLORCURVES": false,
+      "COLORGRADING": false,
+      "COLORGRADING3D": false,
+      "SAMPLER3DGREENDEPTH": true,
+      "SAMPLER3DBGRMAP": true,
+      "DITHER": false,
+      "IMAGEPROCESSINGPOSTPROCESS": false,
+      "SKIPFINALCOLORCLAMP": false,
+      "IMAGEPROCESSING": true
+    },
+    "exposure": 1.15,
+    "contrast": 1.08,
+    "firstPost": "npc-interior-ink",
+    "inputEncoding": "PBR applies image processing/toGammaSpace in the material before the first post-process input. No app source enables applyByPostProcess."
+  },
+  "original": {
+    "file": "shared/interior-ink.js",
+    "sha256": "53146d57b15ff0b61744cd1883f5f942ee8f21196c5b3eedfcddeac0c3951e10",
+    "transparent": true,
+    "toneMapped": false,
+    "fragmentColorSpaceInclude": true,
+    "inkLinear": [
+      0.052,
+      0.04,
+      0.054
+    ],
+    "inkDisplaySRGB": [
+      0.2527895373391935,
+      0.22091636254849623,
+      0.25766782522323645
+    ]
+  },
+  "actualInkUniform": [
+    0.052,
+    0.04,
+    0.054
+  ],
+  "numericDisplayBlend": {
+    "base": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "alpha": 0.25,
+    "actual": [
+      0.388,
+      0.385,
+      0.3885
+    ],
+    "expectedOriginalEncoding": [
+      0.4381973843347984,
+      0.43022909063712406,
+      0.4394169563058091
+    ],
+    "beforeRawLinear": [
+      0.388,
+      0.385,
+      0.3885
+    ]
+  },
+  "nativeShaderEvidence": {
+    "PBRBranchSHA256": "054abf05a35ff916963ddd1ff4ec208c9bc79c25d9cb7d28462fdd75b5bec6f6",
+    "imageProcessingFunctionsSHA256": "31d72e6d7a20baf98b5b9913fca08bbe853350a22ddce2aa29200e1c2fe96d27"
+  },
+  "before": {
+    "src/world.js": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+    "src/monster-toon.js": "97323f012a4abbcb8c3320d34f9d9b8018d6ad0ec30f47391ceb373ac0c932fc",
+    "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+    "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+  },
+  "after": {
+    "src/world.js": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+    "src/monster-toon.js": "97323f012a4abbcb8c3320d34f9d9b8018d6ad0ec30f47391ceb373ac0c932fc",
+    "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+    "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+  },
+  "sourceUnchanged": true,
+  "limits": "Native configuration/defines/actual manager uniform binding plus exact sRGB transfer arithmetic. Does not compile a GPU shader or prove pixels, complete Three/Babylon visual equivalence, tone/lighting equivalence or device rendering."
+}

@@ -12,7 +12,7 @@ import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
 import { PlayerCombat } from './player-combat.js';
 import {playerDimensions} from './player-dimensions.js';
-import { orderPoseNodes, refreshPoseMatrices } from './pose-matrices.js';
+import { orderPoseNodes, refreshPoseMatrices, refreshPoseBranch } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
 import { EnemyDeath,enableEnemyFade } from './enemy-death.js';
@@ -207,7 +207,7 @@ export class BossEncounter {
     }
   }
   createBrain(durations){return new BossBrain(durations);}
-  createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations);}
+  createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations,{bindingCacheSize:this.kind==='bear'?2:0});}
   prepareAsset(){}
   async prepareAuxiliary(){}
   // Actor movement may need a larger environment envelope than its combat body.
@@ -300,8 +300,11 @@ export class BossEncounter {
   alignPose(){
     // Keep source skeletal animation untouched. Separate planar root travel from the
     // encounter's position so clip transitions/loop boundaries never teleport the boss.
-    this.carrier.position.setAll(0);this.actor.computeWorldMatrix(true);this.carrier.computeWorldMatrix(true);
-    const hip=this.nodes['mixamorig:Hips'];hip.computeWorldMatrix(true);
+    // Refresh the imported hip branch in parent order instead of forcing its
+    // external actor/carrier again at each ancestor.
+    this.carrier.position.setAll(0);this.actor.computeWorldMatrix(true);
+    this.carrier.markAsDirty();this.carrier.computeWorldMatrix();
+    const hip=this.nodes['mixamorig:Hips'];refreshPoseBranch(hip,this.carrier);
     const relative=Vector3.TransformCoordinates(hip.getAbsolutePosition(),this.actor.getWorldMatrix().clone().invert());
     const clip=this.config.catalog.find(c=>c.name===this.brain.state),ground=clip.groundTrack;
     const sampleTime=['move','approach'].includes(this.brain.mode)&&clip.duration>0?this.brain.time%clip.duration:this.brain.time;
@@ -404,12 +407,13 @@ export class BossEncounter {
     if(action?.state==='dodge'&&action.actionId!=null){
       this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'Dodge',false,'evade');return false;
     }
-    // Block throughout the shield-push cast, including its wind-up and recovery.
+    // Block throughout the shield-push cast, including its wind-up and recovery,
+    // and the same contact rules apply while the shield is pressed or held.
     // Contact is still required; distant attacks cannot trigger a parry.
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
-      if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45});
+      if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45,recoil:!(action?.shieldPending||action?.guarding)});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block');this.onChange(this);
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null,knockdown:heavy});

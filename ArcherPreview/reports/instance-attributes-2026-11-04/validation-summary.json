@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "node": "v24.22.1",
+  "tests": {
+    "passed": 44,
+    "total": 44,
+    "durationMs": 11664.8386,
+    "fullSuiteRun": false,
+    "files": [
+      "tests/village-instance-attributes.test.js",
+      "tests/village-outline-render.test.js",
+      "tests/village-outline-source-reuse.test.js",
+      "tests/village-shadow-stability.test.js",
+      "tests/village-shadow-fade.test.js",
+      "tests/village-shadow-reuse.test.js",
+      "tests/village-tree-rotation.test.js",
+      "tests/material-plugin-map-identity.test.js",
+      "tests/four-map-outline-optimization.test.js",
+      "tests/cave-open-surfaces.test.js",
+      "tests/cave-laboratory-legacy-clip.test.js"
+    ]
+  },
+  "nativeComparison": {
+    "passed": true,
+    "maps": 4,
+    "views": 12,
+    "packedModels": 90,
+    "bufferUpdateCalls": {
+      "baseline": 1428,
+      "candidate": 942,
+      "reductionPercent": 34.03361344537815
+    },
+    "allNativeBatchesMatricesAndConsumedAttributeBytesIdentical": true
+  },
+  "sourceHashes": {
+    "src/village-instance-attributes.js": "35de6fc1abaaf1d4445ae1c38cf45be3a49349826c125c8dfd531cc5ab5d978e",
+    "src/village-instancing.js": "3ef1c8e894c4cd71d6fc04dd0b66929463e2c13aaaca1837b660994a29352835",
+    "tests/village-instance-attributes.test.js": "b16319a9ff38e7fe1787eab961195839c127156fe46953ecb5947f7989f0dfec",
+    "reports/instance-attributes-2026-11-04/verify-native-attributes.mjs": "274c4a211ba1349c9a71c409b0629efc06362ec27d7cd2640a6fa9ebef48b225"
+  },
+  "reviewGuards": [
+    "source custom/instance storage and engine identity",
+    "late external prototype hooks honored",
+    "source buffer ownership",
+    "unknown or unready effect full native fallback",
+    "foreign per-source override",
+    "reentry and exception restoration",
+    "foreign bag replacement preserved",
+    "skinned/morphed/animated actors excluded",
+    "late tint/LOD/new pass/inactive instances",
+    "dispose restores original method"
+  ],
+  "limits": [
+    "Desktop NullEngine scene CPU medians and p95 are mixed; no whole-frame CPU performance claim.",
+    "Fewer dynamic upload calls are measured; real driver/GPU/frame pacing and device thermal benefit remain unmeasured.",
+    "The prior mobile 105ms spike is not proven fixed.",
+    "Shader-consumed attribute bytes are exact; unused capacity padding is outside the equality claim."
+  ],
+  "stagedCommittedDeployed": false
+}

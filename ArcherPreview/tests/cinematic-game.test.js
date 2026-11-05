@@ -29,7 +29,7 @@ test('same-scene game bridge gates readiness, rejects spoofed sources and sample
  await f.api.dispose();assert.equal(f.listeners.size,0);
 });
 test('superseded and timed-out readiness requests cannot later acquire a scene',async t=>{
- const f=fixture(t,{ready:false,readyTimeoutMs:20}),first=f.api.load(f.draft),firstRejected=assert.rejects(first,{name:'AbortError'});await Promise.resolve();assert.equal(f.api.inspect().pendingReady,true);const second=f.api.load({...f.draft,cutsceneId:'neutral:second'}),secondRejected=assert.rejects(second,/준비 대기/);await firstRejected;await secondRejected;assert.equal(f.api.inspect().pendingReady,false);assert.equal(f.world.toolLease,undefined);f.state.ready=true;f.api.notifyReady();await settle();assert.equal(f.api.host.inspect().active,false);
+ const f=fixture(t,{ready:false,readyTimeoutMs:20}),first=f.api.load(f.draft),firstRejected=assert.rejects(first,{name:'AbortError'});for(let i=0;i<50&&!f.api.inspect().pendingReady;i++)await Promise.resolve();assert.equal(f.api.inspect().pendingReady,true);const second=f.api.load({...f.draft,cutsceneId:'neutral:second'}),secondRejected=assert.rejects(second,/준비 대기/);await firstRejected;await secondRejected;assert.equal(f.api.inspect().pendingReady,false);assert.equal(f.world.toolLease,undefined);f.state.ready=true;f.api.notifyReady();await settle();assert.equal(f.api.host.inspect().active,false);
  const before=f.api.load(f.draft);await before;const bad={...f.draft,duration:Infinity};await assert.rejects(f.api.load(bad));assert.equal(f.api.player.state,'ready','invalid replacement preserves the valid scene lease');
 });
 test('corrupted browser registry is isolated; explicit registration survives reopen with the same IDs',async t=>{

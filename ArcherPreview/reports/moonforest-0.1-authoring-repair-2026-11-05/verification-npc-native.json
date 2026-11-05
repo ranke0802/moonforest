@@ -1,0 +1,303 @@
+{
+  "kind": "independent-native-NPC-integration",
+  "date": "2026-11-05",
+  "limits": [
+    "Native DOM events, actual Studio transport, actual default Game/SceneHost and model/animation loaders.",
+    "NullEngine substitutes framebuffer/texture upload; material image boundary is one pixel. No browser UX, shader compile, pixels, audibility, GPU or device performance claim.",
+    "Shared asynchronous IDB fixture is installed before the production singleton is imported. Supplied package scripts are never evaluated."
+  ],
+  "before": {
+    "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+    "src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+    "src/cinematic-game.js": "c2165ea60475c9a98f3b9ab10b5296e8d35b596d9a5aed68564f30909f9131c3",
+    "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+    "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+    "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+    "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+    "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+    "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+    "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334"
+  },
+  "checks": [
+    {
+      "name": "metadata-only boot and exact builtin choice",
+      "passed": true,
+      "evidence": {
+        "assetId": "moonforest-resident2-blacksmith",
+        "clips": 20,
+        "modelRequests": 0,
+        "iframe": null
+      },
+      "milliseconds": 7.608200000000579
+    },
+    {
+      "name": "actual builtin Add prepares original model at ground center without moving camera",
+      "passed": true,
+      "evidence": {
+        "actorId": "actor-1",
+        "position": [
+          -1.6011646001402993,
+          -4.440892098500626e-16,
+          1.836184654384824
+        ],
+        "triangles": 10655,
+        "bones": 66,
+        "clips": [
+          "Idle_02",
+          "Alert",
+          "Run_02",
+          "Agree_Gesture",
+          "Big_Wave_Hello",
+          "Casual_Walk",
+          "Chair_Sit_Idle_M",
+          "Confused_Scratch",
+          "Formal_Bow",
+          "Listening_Gesture",
+          "Sit_to_Stand_Transition_M",
+          "Stand_and_Chat",
+          "Stand_to_Sit_Transition_M",
+          "Hit_Reaction",
+          "Male_Bend_Over_Pick_Up",
+          "Collect_Object",
+          "Wave_for_Help",
+          "Stand_Talking_Angry",
+          "Talk_with_Hands_Open",
+          "Shrug"
+        ],
+        "defaultIdle": "Idle_02",
+        "style": {
+          "toon": true,
+          "pbr": false,
+          "outline": true,
+          "outlinePixels": 0.6,
+          "interior": true,
+          "interiorStrength": 0.25,
+          "brightness": 1.2
+        }
+      },
+      "milliseconds": 2007.083200000001
+    },
+    {
+      "name": "all20 native animation channels equal authored evaluation; in-place policy leaves source keys and vertical channels intact",
+      "passed": true,
+      "evidence": {
+        "clips": 20,
+        "channels": 3840,
+        "distinctNativePalettes": 20,
+        "sourceKeysSHA256": "2b4761d2e0b513ed436bfbc22e354a64e45588acaa0880d9bc6e80cec6162d83",
+        "carrierVerticalUnchanged": true,
+        "modelReloads": 0
+      },
+      "milliseconds": 9568.654199999999
+    },
+    {
+      "name": "real synchronous ZIP picker installs future metadata in shared production IDB without scene or model mutation",
+      "passed": true,
+      "evidence": {
+        "assetId": "independent-future-npc",
+        "sha256": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222",
+        "modelLoads": 0,
+        "packages": {
+          "packages": 1,
+          "bytes": 15414960
+        },
+        "IDBEvents": [
+          "close"
+        ]
+      },
+      "milliseconds": 8190.778300000002
+    },
+    {
+      "name": "future Add reaches actual Game validator, owned BIN URL and native66-bone clone; second life has independent rig",
+      "passed": true,
+      "evidence": {
+        "actors": 3,
+        "localSourceReads": 1,
+        "localContainer": {
+          "fileName": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222.gltf",
+          "buffers": [
+            {
+              "bytes": 13970148,
+              "sha256": "49dfddf312c5fdce67c24b55df174373e88147d395080648aeb667388ce0b552"
+            }
+          ],
+          "meshes": [
+            {
+              "name": "tripo_node_2a54a49f-163a-43f5-a46c-b8f725782fc0",
+              "triangles": 10655,
+              "vertices": 14438,
+              "indicesSHA256": "bc61acc20a2ed7146b55399dbaa8dfca70f7b22ea728a0d17f8d4ea9aebab7ea"
+            }
+          ],
+          "clips": [
+            "Idle_02",
+            "Alert",
+            "Run_02",
+            "Agree_Gesture",
+            "Big_Wave_Hello",
+            "Casual_Walk",
+            "Chair_Sit_Idle_M",
+            "Confused_Scratch",
+            "Formal_Bow",
+            "Listening_Gesture",
+            "Sit_to_Stand_Transition_M",
+            "Stand_and_Chat",
+            "Stand_to_Sit_Transition_M",
+            "Hit_Reaction",
+            "Male_Bend_Over_Pick_Up",
+            "Collect_Object",
+            "Wave_for_Help",
+            "Stand_Talking_Angry",
+            "Talk_with_Hands_Open",
+            "Shrug"
+          ]
+        },
+        "sharedGeometry": true,
+        "independentSkeletons": true,
+        "independentPoses": true
+      },
+      "milliseconds": 2830.234400000001
+    },
+    {
+      "name": "future NPC scene exports/reopens through real header File and saves validated game storage without another GLB parse",
+      "passed": true,
+      "evidence": {
+        "bytes": 3073,
+        "sha256": "14f220d294c4fe19fb7414f3a10e5fd6d9cfb4e03f2f96181fa5577a762a396a",
+        "actors": 3,
+        "noModelDataInScene": true,
+        "exactFileRoundtrip": true,
+        "exactGameStorage": true,
+        "additionalLocalParses": 0
+      },
+      "milliseconds": 663.3906999999963
+    },
+    {
+      "name": "real NPC-only normal/depth post pass retains world pipeline and disposes owned resources",
+      "passed": true,
+      "evidence": {
+        "before": {
+          "registered": 3,
+          "visible": 3,
+          "renderTargets": 1,
+          "postProcesses": 1,
+          "normalFrames": 1,
+          "resourceCycles": 1,
+          "worldDepthRenders": 0,
+          "rafOwned": false,
+          "maximumProfiles": 4,
+          "depthSupported": true
+        },
+        "allocations": 2,
+        "after": {
+          "registered": 0,
+          "visible": 0,
+          "renderTargets": 0,
+          "postProcesses": 0,
+          "normalFrames": 0,
+          "resourceCycles": 0,
+          "worldDepthRenders": 0,
+          "rafOwned": false
+        },
+        "existingPostPreserved": true,
+        "worldDepthRenders": 0
+      },
+      "milliseconds": 210.61039999999775
+    }
+  ],
+  "after": {
+    "src/main.js": "8d95a5303a2fbc840cbdb5a7a4dc7db7ad2eac3da8ad64aa8426e954860697bf",
+    "src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+    "src/cinematic-game.js": "c2165ea60475c9a98f3b9ab10b5296e8d35b596d9a5aed68564f30909f9131c3",
+    "src/cinematic-scene-host.js": "762ec822c9a98a350089a163d1240fba249f0ab6390cf6f7ab980b1932e000b7",
+    "src/cinematic-visual-adapter.js": "5cb58649ce59350a4b62b84a5c1e97666930767a5b812d0cde833769cb5b89e8",
+    "src/cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "src/cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "src/npc-packages.js": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762",
+    "src/npc-library.js": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2",
+    "src/npc-look.js": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10",
+    "src/npc-interior-ink.js": "693a7909599894955e3fd3a28b019f4403fc71a848ae25e4939e1835d1b1bb39",
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+    "src/npc-world.js": "c97515ade43585d0fae871b12ffd9b0772cbcd8ffdb96b8baaaef9c79a80c062",
+    "src/actor-editor.js": "3af5a0ee4cfdba41e3950e8754523fa38ea19c5d0b81496979e36caaf5bf7f6f",
+    "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334"
+  },
+  "sourceUnchanged": true,
+  "passed": true,
+  "runtime": {
+    "factoryCounters": {
+      "created": 3,
+      "warmCalls": 3,
+      "disposed": 3,
+      "localContainerReads": 1
+    },
+    "localProof": [
+      {
+        "fileName": "6d2890bd6669438943ea181dffb6d3032d793e2b7953f9e2224ba67981f01222.gltf",
+        "buffers": [
+          {
+            "bytes": 13970148,
+            "sha256": "49dfddf312c5fdce67c24b55df174373e88147d395080648aeb667388ce0b552"
+          }
+        ],
+        "meshes": [
+          {
+            "name": "tripo_node_2a54a49f-163a-43f5-a46c-b8f725782fc0",
+            "triangles": 10655,
+            "vertices": 14438,
+            "indicesSHA256": "bc61acc20a2ed7146b55399dbaa8dfca70f7b22ea728a0d17f8d4ea9aebab7ea"
+          }
+        ],
+        "clips": [
+          "Idle_02",
+          "Alert",
+          "Run_02",
+          "Agree_Gesture",
+          "Big_Wave_Hello",
+          "Casual_Walk",
+          "Chair_Sit_Idle_M",
+          "Confused_Scratch",
+          "Formal_Bow",
+          "Listening_Gesture",
+          "Sit_to_Stand_Transition_M",
+          "Stand_and_Chat",
+          "Stand_to_Sit_Transition_M",
+          "Hit_Reaction",
+          "Male_Bend_Over_Pick_Up",
+          "Collect_Object",
+          "Wave_for_Help",
+          "Stand_Talking_Angry",
+          "Talk_with_Hands_Open",
+          "Shrug"
+        ]
+      }
+    ],
+    "objectURLs": [
+      {
+        "url": "blob:nodedata:0e692ff9-2b84-439e-a8ce-3c87fdad85f7",
+        "type": "application/octet-stream",
+        "bytes": 13970148
+      },
+      {
+        "url": "blob:nodedata:fb45e48a-4e90-432e-b64f-dbf061576883",
+        "type": "application/json",
+        "bytes": 3073
+      }
+    ],
+    "revoked": [
+      "blob:nodedata:0e692ff9-2b84-439e-a8ce-3c87fdad85f7",
+      "blob:nodedata:fb45e48a-4e90-432e-b64f-dbf061576883"
+    ],
+    "IDBMetadataRows": 1
+  },
+  "cleanup": {
+    "allOwnedURLsRevoked": true,
+    "allAdaptersDisposed": true
+  },
+  "complete": true
+}

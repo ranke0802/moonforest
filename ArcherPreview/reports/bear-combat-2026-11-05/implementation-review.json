@@ -1,0 +1,37 @@
+{
+  "status": "validated-awaiting-deployment",
+  "baseline": "99fcd56cb9ea404e3eaf5fa9524d3c8c83acd9fa",
+  "date": "2026-11-05",
+  "browserAutomation": false,
+  "tests": {
+    "tests": 1952,
+    "pass": 1952,
+    "fail": 0,
+    "finalOwnershipFixTests": 39,
+    "finalOwnershipFixPass": 39,
+    "finalOwnershipFixFail": 0,
+    "note": "Final source:1952/1952 full regression checks passed after cache ownership hardening. Earlier39 focused checks also passed.",
+    "finalSourceFullSuite": true
+  },
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "preserved": [
+    "Current player texture profiles including mobile4K",
+    "House and boss textures",
+    "All geometry",
+    "LOD and view distances",
+    "Combat controls/timing/hit rules",
+    "Shadow quality",
+    "HUD positions",
+    "30FPS default /60FPS option"
+  ],
+  "validation": "Actual shipped assets, Babylon9.31 NullEngine, controlled query oracle and four-map screening. No actual S23 FPS/heat/GPU recapture.",
+  "bundle": "game-D4Mh9OWb.js",
+  "protectedNonCodeFilesUnchanged": 1438,
+  "build": {
+    "success": true,
+    "runtimeChunks": 55,
+    "siteFiles": 1503,
+    "siteBytes": 682420170,
+    "changedPublicFiles": 8
+  }
+}

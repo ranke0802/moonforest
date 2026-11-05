@@ -65,11 +65,15 @@ export function readFrameDiagnosticPreference(storage,key='moonforest-frame-diag
   }catch{return false;}
 }
 
-export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
+export const DRAW_CPU_DIAGNOSTICS_KEY='moonforest-draw-cpu-diagnostics-v1';
+export function readDrawCpuDiagnosticPreference(storage){try{return storage?.getItem(DRAW_CPU_DIAGNOSTICS_KEY)==='1';}catch{return false;}}
+
+export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onDrawCpuEnabled=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
   const detailDialog=get('diagnostic-detail-dialog'),expand=get('diagnostic-expand');
+  const drawCpuToggle=get('draw-cpu-diagnostics-toggle');
   const compactView=()=>{
     if(panel.dataset){if(panel.dataset.expanded!=='false')panel.dataset.expanded='false';if(panel.dataset.presentation!=='compact')panel.dataset.presentation='compact';}
     panel.classList?.remove('expanded','is-expanded');
@@ -79,27 +83,35 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   };
   compactView();
   expand?.setAttribute?.('aria-expanded','false');
-  expand?.addEventListener('click',()=>{compactView();if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint();detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
+  expand?.addEventListener('click',()=>{compactView();if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint({details:true});detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
   for(const id of ['close-diagnostic-detail','diagnostic-detail-done'])get(id)?.addEventListener('click',()=>detailDialog?.close());
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
-  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0};
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};
   enabled=readFrameDiagnosticPreference(storage,key);
+  let drawCpuEnabled=!!drawCpuToggle&&readDrawCpuDiagnosticPreference(storage);
+  let diagnosticSamples=0,diagnosticTotal=0,diagnosticMax=0,diagnosticLast=null,diagnosticCompletedAt=null;
+  const resetDiagnosticCpu=()=>{diagnosticSamples=0;diagnosticTotal=0;diagnosticMax=0;diagnosticLast=null;diagnosticCompletedAt=null;};
   const setText=(id,value)=>{const node=get(id);if(node&&node.textContent!==value)node.textContent=value;};
   const sampleMemory=(force=false)=>{const at=now();if(force||at>=nextMemory){nextMemory=at+1000;memorySample={...memory(),sampleAtMs:at};}return memorySample;};
-  const paint=()=>{
+  const paint=({details=false}={})=>{
     if(!enabled)return;const s=monitor.summary(),ms=value=>value===null?'—':Math.round(value);
+    setText('diagnostic-fps',paused?'일시정지 · 직전 기록':`${s.fps===null?'집계 중':Math.round(s.fps)+' FPS'} · 목표 ${s.targetFps}`);
+    setText('diagnostic-frame',`${ms(s.frameMs)} ms · p95 ${ms(s.p95Ms)} ms`);
+    const last=monitor.events.at(-1),recent=last&&monitor.last!==null&&(monitor.last-monitor.started)/1000-last.atSeconds<3;
+    panel.dataset.delayed=String(Boolean(recent&&!paused));
+    // Keep collecting report data; avoid hidden detail DOM/string work during play.
+    // Legacy markup without a detail dialog retains its existing inline view.
+    if(detailDialog&&!detailDialog.open&&!details)return;
     const load=loads?.snapshot(),mem=sampleMemory(),seconds=value=>(value/1000).toFixed(1)+'초',mib=value=>Number.isFinite(value)?(value/1048576).toFixed(0):'—';
     setText('diagnostic-load',load?`${load.label} · ${seconds(load.totalMs)}${load.phase==='error'?' · 실패':load.phase==='complete'?'':' · 준비 중'}`:'최근 로딩 기록 없음');
     setText('diagnostic-load-phases',load?`다운로드 ${seconds(load.downloadMs)} · 모델 ${seconds(load.modelMs)} · 화면 ${seconds(load.screenMs)}`:'다운로드 — · 모델 — · 화면 —');
     setText('diagnostic-memory',`JS 메모리 ${mib(mem.jsUsedBytes)} / ${mib(mem.jsLimitBytes)} MiB${mem.jsUsedBytes==null?' (미지원)':''}`);
     setText('diagnostic-textures',`배경 고해상도 텍스처 추정 ${mib(mem.backgroundHighTextureEstimateBytes)} / ${mib(mem.backgroundHighTextureBudgetBytes)} MiB`);
-    setText('diagnostic-fps',paused?'일시정지 · 직전 기록':`${s.fps===null?'집계 중':Math.round(s.fps)+' FPS'} · 목표 ${s.targetFps}`);
-    setText('diagnostic-frame',`${ms(s.frameMs)} ms · p95 ${ms(s.p95Ms)} ms`);
     setText('diagnostic-detail-frame',`최근 10초 · 최대 ${ms(s.maxMs)} ms · p95 ${ms(s.p95Ms)} ms${paused?' · 정지 전 기록':''}`);
     setText('diagnostic-render',`드로콜 ${Number.isFinite(metrics.drawCalls)?metrics.drawCalls:'—'} · 화면 CPU ${Number.isFinite(metrics.sceneMs)?metrics.sceneMs.toFixed(1):'—'} ms`);
     setText('diagnostic-gpu',gpuDiagnosticLine(metrics.gpu));
@@ -110,26 +122,34 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     const view=zoom();
     setText('diagnostic-zoom',view?`화면 배율 ${view.factor.toFixed(2)}×`:'화면 배율 —');
     setText('diagnostic-zoom-range',view?`최소 ${view.minEnabled?view.minZoom.toFixed(2)+'×':'해제'} · 최대 ${view.maxEnabled?view.maxZoom.toFixed(2)+'×':'해제'}`:'최소 — · 최대 —');
-    const last=monitor.events.at(-1),recent=last&&monitor.last!==null&&(monitor.last-monitor.started)/1000-last.atSeconds<3;
-    panel.dataset.delayed=String(Boolean(recent&&!paused));
     const detail=last?`최근 지연 ${Math.round(last.frameMs)} ms · ${last.activity??'플레이'}`:'회전·이동하며 확인하세요';
     setText('diagnostic-detail',paused?'측정 대기 · 설정/초기 로딩 중 제외':detail);
   };
-  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;onEnabled(enabled);paint();};
+  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;if(drawCpuToggle){drawCpuToggle.checked=drawCpuEnabled;drawCpuToggle.disabled=!enabled;}onEnabled(enabled);onDrawCpuEnabled(enabled&&drawCpuEnabled);paint();};
+  drawCpuToggle?.addEventListener('change',()=>{
+    drawCpuEnabled=drawCpuToggle.checked===true;try{storage?.setItem(DRAW_CPU_DIAGNOSTICS_KEY,drawCpuEnabled?'1':'0');}catch{/* Keep session preference. */}
+    onDrawCpuEnabled(enabled&&drawCpuEnabled);if(enabled)refreshGpu();paint();
+  });
   toggle.addEventListener('change',()=>{
-    enabled=toggle.checked;setCollecting(false);monitor.reset();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(!enabled&&detailDialog?.open)detailDialog.close();if(comparison)comparison.open=false;
+    enabled=toggle.checked;setCollecting(false);monitor.reset();resetDiagnosticCpu();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(!enabled&&detailDialog?.open)detailDialog.close();if(comparison)comparison.open=false;
     try{storage?.setItem(key,enabled?'1':'0');}catch{/* Keep session choice. */}sync();
   });
-  reset.addEventListener('click',()=>{monitor.reset();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
+  reset.addEventListener('click',()=>{monitor.reset();resetDiagnosticCpu();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
   const snapshot=()=>{
     if(enabled)refreshGpu();
     const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
+    report.diagnosticOptions={drawCpuEnabled};
+    report.diagnosticCpuMs={scope:'synchronous-endFrame-collection-only',window:'since-diagnostic-reset',samples:diagnosticSamples,meanMs:diagnosticSamples?diagnosticTotal/diagnosticSamples:null,maxMs:diagnosticSamples?diagnosticMax:null,latestMs:diagnosticLast,latestCompletedAtMs:diagnosticCompletedAt};
     report.measurement+=' Boss comparison uses up to 3 seconds before, preparation frames, then 5 seconds of active play after visibility; target FPS/camera/combat changes are recorded, not held fixed. A summon-menu pause preserves its preceding play window with baselineSource/baselineAgeMs; other pauses discard it. Missing baseline produces null deltas, not zero cost. delta.jsUsedBytes is the before/after difference, not total memory. Draw calls include outlines and shadow passes. CPU scene/animation/boss/contact times overlap and must not be summed. Resource stage includes cache/network/decode, not network-only time. JS heap is approximate and may change with GC; exact GPU memory is unavailable.';
     report.measurement+=' A delay event now records either a long preceding frame interval or long current JavaScript submission (trigger). frameMs ends at the current frame start; jsSubmitMs and context describe current work. They are not the same interval and must not be added or assumed to share one cause.';
     report.measurement+=' activeMeshesMs, renderTargetsMs and drawSubmissionMs are CPU scene counters, not GPU time. They overlap with sceneMs and may overlap each other. worldUpdateMs covers camera/lighting/visibility before scene.render; hudUpdateMs covers HUD/quest/save work before rendering and projected feedback after rendering. These are current-frame CPU sections and do not measure browser compositing, temperature or GPU utilization.';
+    report.measurement+=' framePreludeMs measures gameplay preparation before the boss update, including controller/animation selection and action audio. sceneCallMs measures the complete synchronous scene.render call, including all its after-render observers; sceneMs remains the SDK counter with its own observer boundary. contactsMs is nested inside rendering; do not sum these fields as independent costs. Viewport resize callbacks run outside these gameplay-frame sections and are reported separately in viewportResize.';
+    report.measurement+=' playerControllerMs, playerAnimationMs and actionAudioMs are diagnostic-only sections nested within framePreludeMs. playerAnimationMs includes manual CharacterAnimator transitions and pose sampling before rendering; the SDK animationMs counter has a separate render boundary. These sections are not GPU time and must not be added to their enclosing counters.';
+    report.measurement+=' sceneryGeometryMs, sceneryTextureMs and sceneryOcclusionMs measure synchronous after-render callbacks only while diagnostics collect play frames. They are nested within sceneCallMs and may sit outside the SDK sceneMs observer boundary. They do not measure asynchronous decode/download duration or GPU query execution; an occlusion callback can still include CPU driver wait.';
     report.measurement+=' activeMeshCandidates reports the last candidate-provider input, omitted registered disabled static instances/empty clone roots and submitted candidates, not final visible/drawn meshes. textureWork.stage covers resource/texture preparation or material promotion; lastPromoteMs is the last successful synchronous material assignment CPU duration, not GPU upload time or the current pending job duration.';
-    report.measurement+=' drawCpu samples engine method CPU calls during at most one scene render per second while diagnostics collect. latest is historical and identified by sampleId/sceneFrameId/ageMs; it is not necessarily the delay event frame. Groups include cached/no-op calls and inclusive nested time and must not be summed or treated as actual GL calls. effectChanges counts engine effect-reference changes. Driver blocking, browser scheduling and GPU execution cannot be separated by these CPU clocks; no synchronous GPU read is added.';
+    report.measurement+=' drawCpu is separately opt-in and defaults off. When selected, it periodically samples one scene render per second and can capture coalesced event-requested frames after defeat, viewport changes or texture promotion, spaced by at least 250ms. Its wrappers/timers can perturb that render. latest is historical and identified by reason/sampleId/sceneFrameId/ageMs; it is not necessarily the delay event frame. Groups include cached/no-op calls and inclusive nested time and must not be summed or treated as actual GL calls. effectChanges counts engine effect-reference changes. Driver blocking, browser scheduling and GPU execution cannot be separated by these CPU clocks; no synchronous GPU read is added.';
+    report.measurement+=' diagnosticCpuMs separately summarizes synchronous endFrame collection (counter snapshots, delay/boss recording, memory sampling and any scheduled HUD paint) since diagnostic reset. It excludes scene instrumentation/drawCpu hooks inside rendering, beginFrame, snapshot/copy work and GPU execution. It runs after jsSubmitMs is captured and is not attributed to any preceding frame interval or individual delay; its own final scalar bookkeeping is excluded.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
     return report;
   };
@@ -155,10 +175,10 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
       if(!collecting){if(enabled){monitor.suspend();if(!paused){refreshGpu();bosses.suspend();paused=true;paint();}}return;}
       paused=false;for(const name in sections)sections[name]=0;monitor.begin(now(),targetFps);
     },
-    endFrame(){if(!collecting)return;const time=now();metrics={...renderMetrics()};
-      monitor.end(time,()=>({...context(),render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
+    endFrame(){if(!collecting)return;const time=now();try{metrics={...renderMetrics()};
+      monitor.end(time,()=>({...context(),diagnosticOptions:{drawCpuEnabled},render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
       bosses.frame(time,{intervalStart:monitor.frameStart-monitor.interval,frameMs:monitor.interval,cpuMs:Math.max(0,time-monitor.frameStart),...metrics,...sections,targetFps:monitor.targetFps},sampleMemory(),context);
-      if(time>=next){next=time+500;paint();}},
+      if(time>=next){next=time+500;paint();}}finally{const completed=now(),cost=Math.max(0,completed-time);diagnosticSamples++;diagnosticTotal+=cost;diagnosticMax=Math.max(diagnosticMax,cost);diagnosticLast=cost;diagnosticCompletedAt=completed;}},
     suspend({preserveBossBaseline=false}={}){setCollecting(false);if(enabled)refreshGpu();paused=true;monitor.suspend();bosses.suspend({preserveBaseline:enabled&&preserveBossBaseline,at:enabled&&preserveBossBaseline?now():0});paint();},
   };
 }

@@ -1,0 +1,643 @@
+{
+  "generatedAt": "2026-11-05T02:35:36.899Z",
+  "passed": true,
+  "provenance": {
+    "packagePath": "C:/Users/ryank/Documents/ChatGPT/MM Project/output/blacksmith-npc/2026-11-04/delivery/Blacksmith_NPC20_Game.zip",
+    "zipSha256": "2863a41bf38691831f5b35931a98dbde28527538674ac52722c2593f59a70a3c",
+    "bytes": 7390382
+  },
+  "entries": [
+    {
+      "name": "npc-review.html",
+      "size": 3398,
+      "compressed": 1619,
+      "sha256": "952e28028c5608342b0e612f2fcfa064fd307e1d612860e1874f3611cf174d82"
+    },
+    {
+      "name": "working/blacksmith_NPC20_185cm.glb",
+      "size": 15427564,
+      "compressed": 6850039,
+      "sha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a"
+    },
+    {
+      "name": "asset-manifest.json",
+      "size": 14473,
+      "compressed": 4273,
+      "sha256": "1818ec73737c695782e6f110c825152e9fdc098a0c06b0ec8eb9161519e28134"
+    },
+    {
+      "name": "사용안내_통합정보.txt",
+      "size": 4119,
+      "compressed": 2407,
+      "sha256": "e0d1a53fb5ec07d298478333c45206a781c3391c2d184ea8cf03df38fec43dff"
+    },
+    {
+      "name": "NPC_공통_애니메이션_20개.csv",
+      "size": 2485,
+      "compressed": 1222,
+      "sha256": "7b4388d472cff740e3b0ff40b37ee72eb86ea3359d22a04da02ae46bc7daa448"
+    },
+    {
+      "name": "npc-common-animations-20.json",
+      "size": 12159,
+      "compressed": 2272,
+      "sha256": "da5b65c73c779d07844ab11ea4c7d57f4d968073d6f61f70756fa5b730cd527c"
+    },
+    {
+      "name": "npc20-package-audit.json",
+      "size": 10781,
+      "compressed": 3024,
+      "sha256": "49174e20b666d1d3ebfeda2973b3301f70ffd9a43659dec0c69b046aff459e8f"
+    },
+    {
+      "name": "fbx-export-audit.json",
+      "size": 8861,
+      "compressed": 634,
+      "sha256": "5114bd48a5b8a1a8076644734e81a56a46c4cd642e64945e2be742fcad9637d0"
+    },
+    {
+      "name": "animation-data-audit.json",
+      "size": 6684,
+      "compressed": 544,
+      "sha256": "b05033165298777de0f52f2e474f552a6d879c6c474e921e4ad33276587b27d4"
+    },
+    {
+      "name": "검수_NPC20_완료.png",
+      "size": 55060,
+      "compressed": 49750,
+      "sha256": "51884620ccfab9286193d499a7c73fd9012b352b501f46f0059996463f87d416"
+    },
+    {
+      "name": "qa-npc20/browser-runtime-audit.json",
+      "size": 1047,
+      "compressed": 430,
+      "sha256": "bd16844ac1b11680758205655ed604c592864b69d6fa3d69d60d1c934db570f7"
+    },
+    {
+      "name": "shared/interior-ink.js",
+      "size": 4028,
+      "compressed": 1526,
+      "sha256": "53146d57b15ff0b61744cd1883f5f942ee8f21196c5b3eedfcddeac0c3951e10"
+    },
+    {
+      "name": "shared/npc-look.js",
+      "size": 701,
+      "compressed": 393,
+      "sha256": "1f15fc385dd0af52e0c7a68f5d646efc67463e58db5d00f0260853ab2bc7243f"
+    },
+    {
+      "name": "shared/npc-review.js",
+      "size": 8621,
+      "compressed": 3521,
+      "sha256": "1044eb5613286485310bb931d4cab96b71530ac3f5def8aad7dae08a2148a297"
+    },
+    {
+      "name": "shared/silhouette-effect.js",
+      "size": 13474,
+      "compressed": 3326,
+      "sha256": "ffa8987a4d4b35173cdc8f5425d3076bf91280b746c3e809bb32b5d6e6a22e33"
+    },
+    {
+      "name": "shared/toon-look.js",
+      "size": 3610,
+      "compressed": 1493,
+      "sha256": "7f4cb8579e154e929acce433335e2d125a013f6ff6c3dd8705581c6704e28f59"
+    },
+    {
+      "name": "vendor/THREE-LICENSE.txt",
+      "size": 1081,
+      "compressed": 644,
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
+    },
+    {
+      "name": "vendor/build/three.core.js",
+      "size": 1443059,
+      "compressed": 285200,
+      "sha256": "78b2c4218834ca8670547ed2315bfc21a00ff4dc3403bbffc8c31493d31d14de"
+    },
+    {
+      "name": "vendor/build/three.module.js",
+      "size": 650153,
+      "compressed": 129538,
+      "sha256": "bbf5ed13fe4373f5bd38b14ea8e62e9f157327da5638edc6d3863e08b167c9c7"
+    },
+    {
+      "name": "vendor/addons/controls/OrbitControls.js",
+      "size": 40504,
+      "compressed": 8470,
+      "sha256": "faabb4e8dfd9235ee4a9fd7c9a3d75f90f1689dbd4944bd6fd32117dacec5f93"
+    },
+    {
+      "name": "vendor/addons/loaders/GLTFLoader.js",
+      "size": 114959,
+      "compressed": 25218,
+      "sha256": "97642d720f16cc9a0c9844934198e4d0c023bea8e89576d0f7545d03b2d103d2"
+    },
+    {
+      "name": "vendor/addons/utils/BufferGeometryUtils.js",
+      "size": 37621,
+      "compressed": 8630,
+      "sha256": "5c552223a9309883743b80538d6e9cdb45e3227f30d3ec56fb2c39b46e78d595"
+    },
+    {
+      "name": "vendor/addons/utils/SkeletonUtils.js",
+      "size": 11535,
+      "compressed": 3187,
+      "sha256": "b1632a703206c3d830de9fcbe515696770d04b71a15ee6b50afa6d2c3298c86f"
+    }
+  ],
+  "manifest": {
+    "assetId": "moonforest-resident2-blacksmith",
+    "character": "대장장이",
+    "version": "2026-11-05-npc20-v1",
+    "completedAt": "2026-11-05T09:45:53.455303+09:00",
+    "model": "working/blacksmith_NPC20_185cm.glb",
+    "modelSha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+    "metersPerUnit": 1,
+    "heightMeters": 1.8499997703133602,
+    "heightDefinition": "Overall rest-pose mesh bounds including hair and boots. Not barefoot anatomical height.",
+    "applyExtraScale": false,
+    "triangles": 10655,
+    "bones": 66,
+    "skeleton": "Mixamo",
+    "fbxFps": 30,
+    "textureSize": [
+      4096,
+      4096
+    ],
+    "animationCount": 20,
+    "defaultClip": "Idle_02",
+    "clips": [
+      {
+        "key": "Idle_02",
+        "action_id": 11,
+        "uiLabel": "기본 대기",
+        "durationSeconds": 1.8666666746139526,
+        "channels": 192,
+        "sha256": "44cf1b0f20e06d7219c4fa68abeab5412ba8d2d5ac7f6bee2d3fbb05b8a3a035",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Idle_02.glb",
+        "meshyUiLabel": "대기 1",
+        "gameState": "idle",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Idle_02.fbx",
+        "fbxSha256": "c42d952e6790e4e4e2e66ac2c55cf47809ab196fe2913837150459e613d3bb4b"
+      },
+      {
+        "key": "Alert",
+        "action_id": 2,
+        "uiLabel": "경계",
+        "durationSeconds": 4,
+        "channels": 192,
+        "sha256": "1088920e45f7f8e5546fdea92647bc4592da5b4114bf65171bdfde33ea39795c",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Alert.glb",
+        "meshyUiLabel": "경계",
+        "gameState": "alert",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Alert.fbx",
+        "fbxSha256": "81bf52be32937f96c4019c42352e7efeb2d7bee15d1fbe3722d7522b085a2df9"
+      },
+      {
+        "key": "Run_02",
+        "action_id": 14,
+        "uiLabel": "달리기",
+        "durationSeconds": 0.699999988079071,
+        "channels": 192,
+        "sha256": "3daa3f17899cd501ba21f4a287884c0557e0dc73f2d6d068353fbe111aefa61f",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Run_02.glb",
+        "meshyUiLabel": "달리기 2",
+        "gameState": "run",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Run_02.fbx",
+        "fbxSha256": "2f066a8e611db4771dfbed6bbba62ff5cb3b1cb61cce4cecbaf089cffc81faeb"
+      },
+      {
+        "key": "Agree_Gesture",
+        "action_id": 25,
+        "uiLabel": "동의하기",
+        "durationSeconds": 13,
+        "channels": 192,
+        "sha256": "080dbe6e3c4dffeca1886712319e14a7a26cadc1de62b5d2162ad61d8526212d",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Agree_Gesture.glb",
+        "meshyUiLabel": "동의 제스처",
+        "gameState": "agree",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Agree_Gesture.fbx",
+        "fbxSha256": "efe8940c5358bb359eee70b1db2e625a8c0ed5006482d3508cf54155918edb4a"
+      },
+      {
+        "key": "Big_Wave_Hello",
+        "action_id": 28,
+        "uiLabel": "손 흔들어 인사",
+        "durationSeconds": 5.333333492279053,
+        "channels": 192,
+        "sha256": "6cc4cac64f3f8ea2f664a5e4703d7dc1e08ec9133b83cb3cdb5bca8286077e32",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Big_Wave_Hello.glb",
+        "meshyUiLabel": "큰 파도 인사",
+        "gameState": "greet",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Big_Wave_Hello.fbx",
+        "fbxSha256": "8611894c6795ec22a68db20e48de4206a3f4f18f49a9009543bf4fe19b99c6ae"
+      },
+      {
+        "key": "Casual_Walk",
+        "action_id": 30,
+        "uiLabel": "일상 걷기",
+        "durationSeconds": 4.166666507720947,
+        "channels": 192,
+        "sha256": "c75a1ab309fe47fef941375b11f75dce17b2319edeb46cb96459114a4518d749",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Casual_Walk.glb",
+        "meshyUiLabel": "자연스러운 걷기",
+        "gameState": "walk",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Casual_Walk.fbx",
+        "fbxSha256": "b583c4c0dcee9f51ca3908d2b4103393d0079757d5cab44b2a917ea21bf3b2c9"
+      },
+      {
+        "key": "Chair_Sit_Idle_M",
+        "action_id": 33,
+        "uiLabel": "의자에 앉아 대기",
+        "durationSeconds": 10.666666984558105,
+        "channels": 192,
+        "sha256": "dae8c1145119732555160c0b70b0cecf9a4336c72d91743415cc834121602a4d",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Chair_Sit_Idle_M.glb",
+        "meshyUiLabel": "의자에 앉아 대기 남성",
+        "gameState": "sit_idle",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Chair_Sit_Idle_M.fbx",
+        "fbxSha256": "4e4abd7da81d1a167cbd7a813626bdaa175dfbcf2c936d743c40e8bad36a34ca"
+      },
+      {
+        "key": "Confused_Scratch",
+        "action_id": 36,
+        "uiLabel": "난처해하며 긁기",
+        "durationSeconds": 11.5,
+        "channels": 192,
+        "sha256": "0ced593747357a590f2826ee1c397c3ac92339cd7f3adec314a8de3d27881af9",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Confused_Scratch.glb",
+        "meshyUiLabel": "혼란스러워하며 긁기",
+        "gameState": "confused",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Confused_Scratch.fbx",
+        "fbxSha256": "57bdfcfcfd8f377772e64a66efedf39b5a1f5bff932f19f146f836ed1141fff4"
+      },
+      {
+        "key": "Formal_Bow",
+        "action_id": 41,
+        "uiLabel": "정중한 인사",
+        "durationSeconds": 7.666666507720947,
+        "channels": 192,
+        "sha256": "bbd4c9c434073188cf9b79b43927a170488b386f9593cb3e9170d1f7120c3801",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Formal_Bow.glb",
+        "meshyUiLabel": "정형식 벤디션",
+        "gameState": "bow",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Formal_Bow.fbx",
+        "fbxSha256": "889a306be174fa877ba236a25edbe136daa1ffb3dc2064d513ad8c0ef9eb6cd2"
+      },
+      {
+        "key": "Listening_Gesture",
+        "action_id": 47,
+        "uiLabel": "이야기 듣기",
+        "durationSeconds": 9.333333015441895,
+        "channels": 192,
+        "sha256": "1e3d673aac47e599202df4400765e5cc9370c78e5327664cae80e9a5795186c6",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Listening_Gesture.glb",
+        "meshyUiLabel": "듣기 제스처",
+        "gameState": "listen",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Listening_Gesture.fbx",
+        "fbxSha256": "96859f2a2543a215d4db0bcd52885d7a3743481145ea450ed994a0d46f641283"
+      },
+      {
+        "key": "Sit_to_Stand_Transition_M",
+        "action_id": 53,
+        "uiLabel": "앉았다 일어나기",
+        "durationSeconds": 6.166666507720947,
+        "channels": 192,
+        "sha256": "e05d7b20c822f815502dae478ad9ae8367ff18014d40c14da3cb239c907b391e",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Sit_to_Stand_Transition_M.glb",
+        "meshyUiLabel": "앉아서 일어나는 전환 남성",
+        "gameState": "stand_up",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Sit_to_Stand_Transition_M.fbx",
+        "fbxSha256": "c35f4919bf38600f6f84feea3b08bb12b5639616ef5cc360bbe99ea2d130256f"
+      },
+      {
+        "key": "Stand_and_Chat",
+        "action_id": 56,
+        "uiLabel": "서서 대화",
+        "durationSeconds": 5.166666507720947,
+        "channels": 192,
+        "sha256": "b2045a223ac18e161d003e89a9a9478ff00afc8aba83c185be705da096a99ec1",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Stand_and_Chat.glb",
+        "meshyUiLabel": "일어서서 이야기하기",
+        "gameState": "talk",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Stand_and_Chat.fbx",
+        "fbxSha256": "cc9a331be85ebc710b0625b2b81bbe7a63ade222e499b825f88958c5876230e2"
+      },
+      {
+        "key": "Stand_to_Sit_Transition_M",
+        "action_id": 57,
+        "uiLabel": "의자에 앉기",
+        "durationSeconds": 4.733333587646484,
+        "channels": 192,
+        "sha256": "e8579283d5ff1a8048e06447de7352b3a0e3fde9897fc2ae78d4bb5a0b94576e",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Stand_to_Sit_Transition_M.glb",
+        "meshyUiLabel": "일어서서 앉는 전환 남성",
+        "gameState": "sit_down",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Stand_to_Sit_Transition_M.fbx",
+        "fbxSha256": "facfe2372100f6cc944066281dcb0a3635aca779d46eba007fb0966f27cc2e38"
+      },
+      {
+        "key": "Hit_Reaction",
+        "action_id": 178,
+        "uiLabel": "피격 반응",
+        "durationSeconds": 1.6333333253860474,
+        "channels": 192,
+        "sha256": "1fbcce638bd063e8f696a5c546c4032d2f929a9c55fa2410d8f03d86264561d4",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Hit_Reaction.glb",
+        "meshyUiLabel": "히트 반응",
+        "gameState": "hit",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Hit_Reaction.fbx",
+        "fbxSha256": "7271a30be9a03db1833e3bbec1e82d4764bb9552037f14cd4b669fcc6dd1b67e"
+      },
+      {
+        "key": "Male_Bend_Over_Pick_Up",
+        "action_id": 276,
+        "uiLabel": "숙여서 줍기",
+        "durationSeconds": 7.166666507720947,
+        "channels": 192,
+        "sha256": "78462359e5cc0d688561b2668d4a273e6b01c36f0df3642af1cb88ed64b94295",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Male_Bend_Over_Pick_Up.glb",
+        "meshyUiLabel": "남성이 앞으로 숙여 물건을 주웁니다.",
+        "gameState": "pick_up",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Male_Bend_Over_Pick_Up.fbx",
+        "fbxSha256": "354d626894b49e039f8d55d294d11964087a26e270dfc57c92b67fd0c6372f21"
+      },
+      {
+        "key": "Collect_Object",
+        "action_id": 284,
+        "uiLabel": "물건 수집",
+        "durationSeconds": 6,
+        "channels": 192,
+        "sha256": "86abba965698c54e78826275e94b6a3c1a7b2b965392b89770b20f7793444779",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Collect_Object.glb",
+        "meshyUiLabel": "객체 수집",
+        "gameState": "collect",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Collect_Object.fbx",
+        "fbxSha256": "c1891f2d59f6603e8ec9c031d45653bdc4e57c802b1372301d14312ad29b9fb6"
+      },
+      {
+        "key": "Wave_for_Help",
+        "action_id": 291,
+        "uiLabel": "도움 요청",
+        "durationSeconds": 5.0333333015441895,
+        "channels": 192,
+        "sha256": "2b4aecf4a61c1859d37568bc9710ea02b05d5e247577ba2e790a420fc8daad81",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Wave_for_Help.glb",
+        "meshyUiLabel": "도움을 요청하는 손짓",
+        "gameState": "call_for_help",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Wave_for_Help.fbx",
+        "fbxSha256": "82bf236f0209c702488897ff8822000c1cfea322116e77ea984485f4d76b14a8"
+      },
+      {
+        "key": "Stand_Talking_Angry",
+        "action_id": 311,
+        "uiLabel": "화내며 대화",
+        "durationSeconds": 20.799999237060547,
+        "channels": 192,
+        "sha256": "9b60e0270f56ba1770f6898c8e2306d850d626ec53ae754dda3dd1d61349df33",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Stand_Talking_Angry.glb",
+        "meshyUiLabel": "서 있어서 화를 내며 말하기",
+        "gameState": "angry_talk",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Stand_Talking_Angry.fbx",
+        "fbxSha256": "b1c1b1cf98252d2e93badf6375382444ceb25c3d76a22111cd3aa4e69795b453"
+      },
+      {
+        "key": "Talk_with_Hands_Open",
+        "action_id": 313,
+        "uiLabel": "손을 펴며 대화",
+        "durationSeconds": 3.9666666984558105,
+        "channels": 192,
+        "sha256": "7317e7110a2376a3468bd8ac2c1e0bbcdf38a8b2b86cea728e0ce6c53bb0dbac",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Talk_with_Hands_Open.glb",
+        "meshyUiLabel": "손을 벌려 이야기하다",
+        "gameState": "explain",
+        "loopCandidate": true,
+        "fbxFile": "fbx/Talk_with_Hands_Open.fbx",
+        "fbxSha256": "f9418462acca18b99236f7f2f5c253bf56f114902bbcbd193faa31f439fdbc50"
+      },
+      {
+        "key": "Shrug",
+        "action_id": 317,
+        "uiLabel": "어깨 으쓱",
+        "durationSeconds": 1.9999998807907104,
+        "channels": 192,
+        "sha256": "857d84f5873a11f2a449f8e9d3a45f5fd22c7b6eefdcc072a702b74de5ec4f2b",
+        "meshIdentical": true,
+        "bindMatricesCompatible": true,
+        "rawFile": "source/meshy-web/glb/Shrug.glb",
+        "meshyUiLabel": "으쓱",
+        "gameState": "shrug",
+        "loopCandidate": false,
+        "fbxFile": "fbx/Shrug.fbx",
+        "fbxSha256": "f38a4536e4bdcf9d8dab314e553b6f56e7eed66e75ea661b49666b5be4dfd78c"
+      }
+    ],
+    "renderProfile": {
+      "baseMaterial": "KHR_materials_unlit",
+      "runtime": "shared/npc-look.js",
+      "toon": true,
+      "pbr": false,
+      "outline": true,
+      "outlinePixels": 0.6,
+      "interior": true,
+      "interiorStrength": 0.25,
+      "brightness": 1.2
+    },
+    "motionPolicy": "Original sampler times, tracks and root translations retained. No retiming, motion extraction, or forced loop stitching.",
+    "clipSubstitution": {
+      "requested": {
+        "action_id": 0,
+        "key": "Idle"
+      },
+      "delivered": {
+        "action_id": 11,
+        "key": "Idle_02"
+      },
+      "reason": "Action 0 returned HTTP 400 in Meshy web."
+    },
+    "provenance": {
+      "geometryGenerations": 1,
+      "textureApplications": 1,
+      "paidMeshyApiCalls": 0,
+      "rigSubmittedByUser": true,
+      "meshyRigId": "01a1a8c6-2a80-719a-a483-535833a57d8f",
+      "meshyWebAddedCount": 22,
+      "extraDefaultClips": [
+        "Walking",
+        "Running"
+      ],
+      "selected20Downloads": {
+        "glb": 20,
+        "fbx": 20
+      },
+      "meshyCreditsBeforeAnimations": 32,
+      "meshyCreditsAfterAnimations": 32
+    }
+  },
+  "model": {
+    "path": "working/blacksmith_NPC20_185cm.glb",
+    "sha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+    "bytes": 15427564,
+    "embeddedBinBytes": 13970148,
+    "triangles": 10655,
+    "uniqueMeshTriangles": 10655,
+    "vertices": 14438,
+    "materials": 1,
+    "textures": 1,
+    "images": 1,
+    "meshes": 1,
+    "renderNodes": 1,
+    "skinned": true,
+    "skins": 1,
+    "bones": 66,
+    "clips": 20,
+    "clipNames": [
+      "Idle_02",
+      "Alert",
+      "Run_02",
+      "Agree_Gesture",
+      "Big_Wave_Hello",
+      "Casual_Walk",
+      "Chair_Sit_Idle_M",
+      "Confused_Scratch",
+      "Formal_Bow",
+      "Listening_Gesture",
+      "Sit_to_Stand_Transition_M",
+      "Stand_and_Chat",
+      "Stand_to_Sit_Transition_M",
+      "Hit_Reaction",
+      "Male_Bend_Over_Pick_Up",
+      "Collect_Object",
+      "Wave_for_Help",
+      "Stand_Talking_Angry",
+      "Talk_with_Hands_Open",
+      "Shrug"
+    ],
+    "clipDurations": {
+      "Idle_02": 1.8666666746139526,
+      "Alert": 4,
+      "Run_02": 0.699999988079071,
+      "Agree_Gesture": 13,
+      "Big_Wave_Hello": 5.333333492279053,
+      "Casual_Walk": 4.166666507720947,
+      "Chair_Sit_Idle_M": 10.666666984558105,
+      "Confused_Scratch": 11.5,
+      "Formal_Bow": 7.666666507720947,
+      "Listening_Gesture": 9.333333015441895,
+      "Sit_to_Stand_Transition_M": 6.166666507720947,
+      "Stand_and_Chat": 5.166666507720947,
+      "Stand_to_Sit_Transition_M": 4.733333587646484,
+      "Hit_Reaction": 1.6333333253860474,
+      "Male_Bend_Over_Pick_Up": 7.166666507720947,
+      "Collect_Object": 6,
+      "Wave_for_Help": 5.0333333015441895,
+      "Stand_Talking_Angry": 20.799999237060547,
+      "Talk_with_Hands_Open": 3.9666666984558105,
+      "Shrug": 1.9999998807907104
+    },
+    "morphTargets": 0,
+    "bounds": {
+      "min": [
+        -0.48667556047439575,
+        1.5109918649613974e-8,
+        -0.23181481659412384
+      ],
+      "max": [
+        0.48667556047439575,
+        1.8499997854232788,
+        0.23181481659412384
+      ],
+      "size": [
+        0.9733511209487915,
+        1.8499997703133602,
+        0.4636296331882477
+      ]
+    },
+    "bufferURIs": [
+      null
+    ],
+    "imageSources": [
+      {
+        "mimeType": "image/jpeg",
+        "bufferView": 6,
+        "uri": null
+      }
+    ]
+  },
+  "styleSources": {
+    "shared/npc-look.js": {
+      "sha256": "1f15fc385dd0af52e0c7a68f5d646efc67463e58db5d00f0260853ab2bc7243f",
+      "text": "import {ElinaToonLook} from './toon-look.js';\n\n// Exact renderer used by the existing character review. Runtime effects are\n// supplied separately because FBX/glTF cannot encode screen-space ink passes.\nexport const NPC_LOOK=Object.freeze({mode:'toon',pbr:false,outline:true,outlinePixels:0.60,interior:true,interiorStrength:0.25,brightness:1.20});\nexport function createNpcLook(renderer,profile=NPC_LOOK){\n  const look=new ElinaToonLook(renderer);\n  look.width=profile.outlinePixels;look.outlined=profile.outline;\n  look.interior.enabled=profile.interior;look.interior.strength=profile.interiorStrength;\n  look.interior.scale=1.85;\n  renderer.toneMappingExposure=profile.brightness;\n  return look;\n}\n"
+    },
+    "shared/toon-look.js": {
+      "sha256": "7f4cb8579e154e929acce433335e2d125a013f6ff6c3dd8705581c6704e28f59",
+      "text": "import * as T from 'three';\nimport {OutlineEffect} from './silhouette-effect.js';\nimport {InteriorInk} from './interior-ink.js';\n\n// Same ink profile as Joachim's hero-matched look; no internal hull contours.\nexport const HERO_INK={color:[.028,.022,.030],pixels:.55,mode:'stencil exterior silhouette only'};\nexport class ElinaToonLook{\n  constructor(renderer){\n    this.renderer=renderer;this.width=HERO_INK.pixels;this.outlined=true;\n    this.sunWorld=new T.Vector3(-.35,.65,.75).normalize();this.sunView={value:new T.Vector3()};\n    this.effect=new OutlineEffect(renderer,{defaultThickness:.001,defaultColor:HERO_INK.color,defaultKeepAlive:true});\n    this.effect.autoClear=true;this.cache=new Map();this.activeMaterials=new Set();\n    this.interior=new InteriorInk(renderer);\n  }\n  material(original,mode){\n    if(mode==='material')return original;\n    const key=original.uuid+':'+mode;\n    if(this.cache.has(key))return this.cache.get(key);\n    const baseMap=original.map||original.emissiveMap;\n    const baseColor=!original.map&&original.emissiveMap?original.emissive:original.color;\n    const common={name:'Elina_'+mode,map:mode==='clay'?null:baseMap,color:mode==='clay'?0xaaa39c:baseColor,side:T.DoubleSide,transparent:original.transparent,opacity:original.opacity,alphaTest:original.alphaTest};\n    let mat;\n    if(mode==='toon'){\n      mat=new T.MeshToonMaterial(common);\n      // Retain the painted base colour and add the village's bright diffuse bands.\n      // Metal, roughness, normal, reflection and specular maps are intentionally absent.\n      mat.onBeforeCompile=shader=>{\n        shader.uniforms.elinaSunView=this.sunView;\n        shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\\nuniform vec3 elinaSunView;');\n        shader.fragmentShader=shader.fragmentShader.replace('vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + totalEmissiveRadiance;',`\n          float elinaFacing=dot(normalize(normal),normalize(elinaSunView));\n          float elinaBand=.78+.14*smoothstep(-.10,-.02,elinaFacing)+.12*smoothstep(.48,.56,elinaFacing);\n          vec3 outgoingLight=diffuseColor.rgb*elinaBand;\n        `);\n      };\n      mat.customProgramCacheKey=()=> 'elina-hero-bright-toon-v1';\n    }else if(mode==='clay')mat=new T.MeshStandardMaterial({...common,roughness:.85});\n    else mat=new T.MeshBasicMaterial(common);\n    this.cache.set(key,mat);return mat;\n  }\n  apply(model,mode){\n    this.activeMaterials.clear();\n    model.traverse(mesh=>{\n      if(!mesh.isMesh)return;\n      mesh.userData.reviewOriginal??=mesh.material;\n      const source=mesh.userData.reviewOriginal;\n      const convert=original=>{\n        const mat=this.material(original,mode);\n        Object.assign(mat,{stencilWrite:true,stencilRef:1,stencilWriteMask:1,stencilFunc:T.AlwaysStencilFunc,stencilZPass:T.ReplaceStencilOp});\n        mat.userData.outlineParameters={visible:true,thickness:.001,color:HERO_INK.color,keepAlive:true};\n        this.activeMaterials.add(mat);return mat;\n      };\n      mesh.material=Array.isArray(source)?source.map(convert):convert(source);\n    });\n    this.mode=mode;\n  }\n  render(scene,camera,height){\n    camera.updateMatrixWorld();\n    this.sunView.value.copy(this.sunWorld).transformDirection(camera.matrixWorldInverse);\n    for(const mat of this.activeMaterials)mat.userData.outlineParameters.thickness=this.width*2/height;\n    if(this.interior.enabled)this.interior.capture(scene,camera);\n    this.effect.enabled=this.outlined;this.effect.render(scene,camera);\n    if(this.interior.enabled)this.interior.draw();\n  }\n}\n"
+    },
+    "shared/interior-ink.js": {
+      "sha256": "53146d57b15ff0b61744cd1883f5f942ee8f21196c5b3eedfcddeac0c3951e10",
+      "text": "import * as T from 'three';\r\n\r\n// Geometry contours: depth breaks and strong normal changes, never triangle edges.\r\nexport class InteriorInk{\r\n  constructor(renderer){\r\n    this.renderer=renderer;this.enabled=true;this.strength=.75;this.width=.8;this.scale=1;\r\n    this.target=new T.WebGLRenderTarget(1,1,{minFilter:T.NearestFilter,magFilter:T.NearestFilter,depthBuffer:true});\r\n    this.target.texture.colorSpace=T.NoColorSpace;this.target.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);\r\n    this.normalMaterial=new T.MeshNormalMaterial({side:T.DoubleSide});this.normalMaterial.toneMapped=false;\r\n    this.u={tNormal:{value:this.target.texture},tDepth:{value:this.target.depthTexture},texel:{value:new T.Vector2()},nearFar:{value:new T.Vector2()},pixelWorldFactor:{value:0},scale:{value:1},strength:{value:.75},ink:{value:new T.Color().setRGB(.052,.040,.054)}};\r\n    this.material=new T.ShaderMaterial({uniforms:this.u,transparent:true,depthTest:false,depthWrite:false,toneMapped:false,\r\n      vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,\r\n      fragmentShader:`\r\n        #include <common>\r\n        #include <packing>\r\n        varying vec2 vUv;uniform sampler2D tNormal,tDepth;uniform vec2 texel,nearFar;uniform float pixelWorldFactor,scale,strength;uniform vec3 ink;\r\n        float distanceAt(vec2 uv){return -perspectiveDepthToViewZ(texture2D(tDepth,uv).r,nearFar.x,nearFar.y);}\r\n        float edgeAt(vec2 off,vec3 n,float z){\r\n          vec2 uv=vUv+off*texel;vec4 other=texture2D(tNormal,uv);if(other.a<.5)return 0.;\r\n          vec3 nn=normalize(other.rgb*2.-1.);float dz=distanceAt(uv)-z;\r\n          float slope=(abs(n.x*off.x)+abs(n.y*off.y))/max(.22,abs(n.z));\r\n          float threshold=max(.0008*scale,z*pixelWorldFactor*1.4)+z*pixelWorldFactor*slope*1.8;\r\n          float depthLine=smoothstep(threshold,threshold*2.4,dz);\r\n          float normalLine=smoothstep(.16,.40,1.-dot(n,nn));\r\n          return max(depthLine,normalLine*.78);\r\n        }\r\n        void main(){\r\n          vec4 center=texture2D(tNormal,vUv);if(center.a<.5)discard;\r\n          vec3 n=normalize(center.rgb*2.-1.);float z=distanceAt(vUv);float e=0.;\r\n          e=max(e,edgeAt(vec2(1,0),n,z));e=max(e,edgeAt(vec2(-1,0),n,z));e=max(e,edgeAt(vec2(0,1),n,z));e=max(e,edgeAt(vec2(0,-1),n,z));\r\n          e=max(e,edgeAt(vec2(.707,.707),n,z));e=max(e,edgeAt(vec2(-.707,.707),n,z));e=max(e,edgeAt(vec2(.707,-.707),n,z));e=max(e,edgeAt(vec2(-.707,-.707),n,z));\r\n          if(e<.035)discard;gl_FragColor=vec4(ink,clamp(e*strength,0.,.9));\r\n          #include <colorspace_fragment>\r\n        }`});\r\n    this.quadScene=new T.Scene();this.quadCamera=new T.OrthographicCamera(-1,1,1,-1,0,1);this.quadScene.add(new T.Mesh(new T.PlaneGeometry(2,2),this.material));this.size=new T.Vector2();\r\n  }\r\n  capture(scene,camera){\r\n    const r=this.renderer;r.getDrawingBufferSize(this.size);\r\n    if(this.target.width!==this.size.x||this.target.height!==this.size.y)this.target.setSize(this.size.x,this.size.y);\r\n    const oldTarget=r.getRenderTarget(),background=scene.background,override=scene.overrideMaterial,clear=r.getClearColor(new T.Color()),alpha=r.getClearAlpha();\r\n    const layerMask=camera.layers.mask;camera.layers.set(1);scene.background=null;scene.overrideMaterial=this.normalMaterial;r.setRenderTarget(this.target);r.setClearColor(0,0);r.clear();r.render(scene,camera);\r\n    camera.layers.mask=layerMask;scene.background=background;scene.overrideMaterial=override;r.setRenderTarget(oldTarget);r.setClearColor(clear,alpha);\r\n    this.u.texel.value.set(this.width*r.getPixelRatio()/this.size.x,this.width*r.getPixelRatio()/this.size.y);this.u.nearFar.value.set(camera.near,camera.far);\r\n    this.u.pixelWorldFactor.value=2*Math.tan(T.MathUtils.degToRad(camera.fov*.5))/(this.size.y/r.getPixelRatio());this.u.scale.value=this.scale;this.u.strength.value=this.strength;\r\n  }\r\n  draw(){const r=this.renderer,clear=r.autoClear;r.autoClear=false;r.render(this.quadScene,this.quadCamera);r.autoClear=clear;}\r\n}\r\n"
+    },
+    "shared/silhouette-effect.js": {
+      "sha256": "ffa8987a4d4b35173cdc8f5425d3076bf91280b746c3e809bb32b5d6e6a22e33",
+      "text": "// Three.js OutlineEffect, MIT. Local modification: stencil masks internal hull contours.\r\nimport {\r\n\tBackSide,\r\n\tNotEqualStencilFunc,\r\n\tKeepStencilOp,\r\n\tColor,\r\n\tShaderMaterial,\r\n\tUniformsLib,\r\n\tUniformsUtils\r\n} from 'three';\r\n\r\n/**\r\n * An outline effect for toon shaders.\r\n *\r\n * Note that this class can only be used with {@link WebGLRenderer}.\r\n * When using {@link WebGPURenderer}, use {@link ToonOutlinePassNode}.\r\n *\r\n * ```js\r\n * const effect = new OutlineEffect( renderer );\r\n *\r\n * function render() {\r\n *\r\n * \teffect.render( scene, camera );\r\n *\r\n * }\r\n * ```\r\n *\r\n * @three_import import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';\r\n */\r\nclass OutlineEffect {\r\n\r\n\t/**\r\n\t * Constructs a new outline effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {OutlineEffect~Options} [parameters] - The configuration parameter.\r\n\t */\r\n\tconstructor( renderer, parameters = {} ) {\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t\tconst defaultThickness = parameters.defaultThickness !== undefined ? parameters.defaultThickness : 0.003;\r\n\t\tconst defaultColor = new Color().fromArray( parameters.defaultColor !== undefined ? parameters.defaultColor : [ 0, 0, 0 ] );\r\n\t\tconst defaultAlpha = parameters.defaultAlpha !== undefined ? parameters.defaultAlpha : 1.0;\r\n\t\tconst defaultKeepAlive = parameters.defaultKeepAlive !== undefined ? parameters.defaultKeepAlive : false;\r\n\r\n\t\t// object.material.uuid -> outlineMaterial or\r\n\t\t// object.material[ n ].uuid -> outlineMaterial\r\n\t\t// save at the outline material creation and release\r\n\t\t// if it's unused removeThresholdCount frames\r\n\t\t// unless keepAlive is true.\r\n\t\tconst cache = {};\r\n\r\n\t\tconst removeThresholdCount = 60;\r\n\r\n\t\t// outlineMaterial.uuid -> object.material or\r\n\t\t// outlineMaterial.uuid -> object.material[ n ]\r\n\t\t// save before render and release after render.\r\n\t\tconst originalMaterials = {};\r\n\r\n\t\t// object.uuid -> originalOnBeforeRender\r\n\t\t// save before render and release after render.\r\n\t\tconst originalOnBeforeRenders = {};\r\n\r\n\t\t//this.cache = cache;  // for debug\r\n\r\n\t\tconst uniformsOutline = {\r\n\t\t\toutlineThickness: { value: defaultThickness },\r\n\t\t\toutlineColor: { value: defaultColor },\r\n\t\t\toutlineAlpha: { value: defaultAlpha }\r\n\t\t};\r\n\r\n\t\tconst vertexShader = [\r\n\t\t\t'#include <common>',\r\n\t\t\t'#include <uv_pars_vertex>',\r\n\t\t\t'#include <displacementmap_pars_vertex>',\r\n\t\t\t'#include <fog_pars_vertex>',\r\n\t\t\t'#include <morphtarget_pars_vertex>',\r\n\t\t\t'#include <skinning_pars_vertex>',\r\n\t\t\t'#include <logdepthbuf_pars_vertex>',\r\n\t\t\t'#include <clipping_planes_pars_vertex>',\r\n\r\n\t\t\t'uniform float outlineThickness;',\r\n\r\n\t\t\t'vec4 calculateOutline( vec4 pos, vec3 normal, vec4 skinned ) {',\r\n\t\t\t'\tfloat thickness = outlineThickness;',\r\n\t\t\t'\tconst float ratio = 1.0;', // TODO: support outline thickness ratio for each vertex\r\n\t\t\t'\tvec4 pos2 = projectionMatrix * modelViewMatrix * vec4( skinned.xyz + normal, 1.0 );',\r\n\t\t\t// NOTE: subtract pos2 from pos because BackSide objectNormal is negative\r\n\t\t\t'\tvec4 norm = normalize( pos - pos2 );',\r\n\t\t\t'\treturn pos + norm * thickness * pos.w * ratio;',\r\n\t\t\t'}',\r\n\r\n\t\t\t'void main() {',\r\n\r\n\t\t\t'\t#include <uv_vertex>',\r\n\r\n\t\t\t'\t#include <beginnormal_vertex>',\r\n\t\t\t'\t#include <morphnormal_vertex>',\r\n\t\t\t'\t#include <skinbase_vertex>',\r\n\t\t\t'\t#include <skinnormal_vertex>',\r\n\r\n\t\t\t'\t#include <begin_vertex>',\r\n\t\t\t'\t#include <morphtarget_vertex>',\r\n\t\t\t'\t#include <skinning_vertex>',\r\n\t\t\t'\t#include <displacementmap_vertex>',\r\n\t\t\t'\t#include <project_vertex>',\r\n\r\n\t\t\t'\tvec3 outlineNormal = - objectNormal;', // the outline material is always rendered with BackSide\r\n\r\n\t\t\t'\tgl_Position = calculateOutline( gl_Position, outlineNormal, vec4( transformed, 1.0 ) );',\r\n\r\n\t\t\t'\t#include <logdepthbuf_vertex>',\r\n\t\t\t'\t#include <clipping_planes_vertex>',\r\n\t\t\t'\t#include <fog_vertex>',\r\n\r\n\t\t\t'}',\r\n\r\n\t\t].join( '\\n' );\r\n\r\n\t\tconst fragmentShader = [\r\n\r\n\t\t\t'#include <common>',\r\n\t\t\t'#include <fog_pars_fragment>',\r\n\t\t\t'#include <logdepthbuf_pars_fragment>',\r\n\t\t\t'#include <clipping_planes_pars_fragment>',\r\n\r\n\t\t\t'uniform vec3 outlineColor;',\r\n\t\t\t'uniform float outlineAlpha;',\r\n\r\n\t\t\t'void main() {',\r\n\r\n\t\t\t'\t#include <clipping_planes_fragment>',\r\n\t\t\t'\t#include <logdepthbuf_fragment>',\r\n\r\n\t\t\t'\tgl_FragColor = vec4( outlineColor, outlineAlpha );',\r\n\r\n\t\t\t'\t#include <tonemapping_fragment>',\r\n\t\t\t'\t#include <colorspace_fragment>',\r\n\t\t\t'\t#include <fog_fragment>',\r\n\t\t\t'\t#include <premultiplied_alpha_fragment>',\r\n\r\n\t\t\t'}'\r\n\r\n\t\t].join( '\\n' );\r\n\r\n\t\tfunction createMaterial() {\r\n\r\n\t\t\treturn new ShaderMaterial( {\r\n\t\t\t\ttype: 'OutlineEffect',\r\n\t\t\t\tuniforms: UniformsUtils.merge( [\r\n\t\t\t\t\tUniformsLib[ 'fog' ],\r\n\t\t\t\t\tUniformsLib[ 'displacementmap' ],\r\n\t\t\t\t\tuniformsOutline\r\n\t\t\t\t] ),\r\n\t\t\t\tvertexShader: vertexShader,\r\n\t\t\t\tfragmentShader: fragmentShader,\r\n\t\t\t\tside: BackSide,\r\n\t\t\t\tstencilWrite:true, stencilRef:1, stencilFunc:NotEqualStencilFunc, stencilFuncMask:1, stencilWriteMask:0, stencilFail:KeepStencilOp, stencilZFail:KeepStencilOp, stencilZPass:KeepStencilOp\r\n\t\t\t} );\r\n\r\n\t\t}\r\n\r\n\t\tfunction getOutlineMaterialFromCache( originalMaterial ) {\r\n\r\n\t\t\tlet data = cache[ originalMaterial.uuid ];\r\n\r\n\t\t\tif ( data === undefined ) {\r\n\r\n\t\t\t\tdata = {\r\n\t\t\t\t\tmaterial: createMaterial(),\r\n\t\t\t\t\tused: true,\r\n\t\t\t\t\tkeepAlive: defaultKeepAlive,\r\n\t\t\t\t\tcount: 0\r\n\t\t\t\t};\r\n\r\n\t\t\t\tcache[ originalMaterial.uuid ] = data;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tdata.used = true;\r\n\r\n\t\t\treturn data.material;\r\n\r\n\t\t}\r\n\r\n\t\tfunction getOutlineMaterial( originalMaterial ) {\r\n\r\n\t\t\tconst outlineMaterial = getOutlineMaterialFromCache( originalMaterial );\r\n\r\n\t\t\toriginalMaterials[ outlineMaterial.uuid ] = originalMaterial;\r\n\r\n\t\t\tupdateOutlineMaterial( outlineMaterial, originalMaterial );\r\n\r\n\t\t\treturn outlineMaterial;\r\n\r\n\t\t}\r\n\r\n\t\tfunction isCompatible( object ) {\r\n\r\n\t\t\tconst geometry = object.geometry;\r\n\t\t\tconst hasNormals = ( geometry !== undefined ) && ( geometry.attributes.normal !== undefined );\r\n\r\n\t\t\treturn ( object.isMesh === true && object.material !== undefined && hasNormals === true );\r\n\r\n\t\t}\r\n\r\n\t\tfunction setOutlineMaterial( object ) {\r\n\r\n\t\t\tif ( isCompatible( object ) === false ) return;\r\n\r\n\t\t\tif ( Array.isArray( object.material ) ) {\r\n\r\n\t\t\t\tfor ( let i = 0, il = object.material.length; i < il; i ++ ) {\r\n\r\n\t\t\t\t\tobject.material[ i ] = getOutlineMaterial( object.material[ i ] );\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tobject.material = getOutlineMaterial( object.material );\r\n\r\n\t\t\t}\r\n\r\n\t\t\toriginalOnBeforeRenders[ object.uuid ] = object.onBeforeRender;\r\n\t\t\tobject.onBeforeRender = onBeforeRender;\r\n\r\n\t\t}\r\n\r\n\t\tfunction restoreOriginalMaterial( object ) {\r\n\r\n\t\t\tif ( isCompatible( object ) === false ) return;\r\n\r\n\t\t\tif ( Array.isArray( object.material ) ) {\r\n\r\n\t\t\t\tfor ( let i = 0, il = object.material.length; i < il; i ++ ) {\r\n\r\n\t\t\t\t\tobject.material[ i ] = originalMaterials[ object.material[ i ].uuid ];\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tobject.material = originalMaterials[ object.material.uuid ];\r\n\r\n\t\t\t}\r\n\r\n\t\t\tobject.onBeforeRender = originalOnBeforeRenders[ object.uuid ];\r\n\r\n\t\t}\r\n\r\n\t\tfunction onBeforeRender( renderer, scene, camera, geometry, material ) {\r\n\r\n\t\t\tconst originalMaterial = originalMaterials[ material.uuid ];\r\n\r\n\t\t\t// just in case\r\n\t\t\tif ( originalMaterial === undefined ) return;\r\n\r\n\t\t\tupdateUniforms( material, originalMaterial );\r\n\r\n\t\t}\r\n\r\n\t\tfunction updateUniforms( material, originalMaterial ) {\r\n\r\n\t\t\tconst outlineParameters = originalMaterial.userData.outlineParameters;\r\n\r\n\t\t\tmaterial.uniforms.outlineAlpha.value = originalMaterial.opacity;\r\n\r\n\t\t\tif ( outlineParameters !== undefined ) {\r\n\r\n\t\t\t\tif ( outlineParameters.thickness !== undefined ) material.uniforms.outlineThickness.value = outlineParameters.thickness;\r\n\t\t\t\tif ( outlineParameters.color !== undefined ) material.uniforms.outlineColor.value.fromArray( outlineParameters.color );\r\n\t\t\t\tif ( outlineParameters.alpha !== undefined ) material.uniforms.outlineAlpha.value = outlineParameters.alpha;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tif ( originalMaterial.displacementMap ) {\r\n\r\n\t\t\t\tmaterial.uniforms.displacementMap.value = originalMaterial.displacementMap;\r\n\t\t\t\tmaterial.uniforms.displacementScale.value = originalMaterial.displacementScale;\r\n\t\t\t\tmaterial.uniforms.displacementBias.value = originalMaterial.displacementBias;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tfunction updateOutlineMaterial( material, originalMaterial ) {\r\n\r\n\t\t\tif ( material.name === 'invisible' ) return;\r\n\r\n\t\t\tconst outlineParameters = originalMaterial.userData.outlineParameters;\r\n\r\n\t\t\tmaterial.fog = originalMaterial.fog;\r\n\t\t\tmaterial.toneMapped = originalMaterial.toneMapped;\r\n\t\t\tmaterial.premultipliedAlpha = originalMaterial.premultipliedAlpha;\r\n\t\t\tmaterial.displacementMap = originalMaterial.displacementMap;\r\n\r\n\t\t\tif ( outlineParameters !== undefined ) {\r\n\r\n\t\t\t\tif ( originalMaterial.visible === false ) {\r\n\r\n\t\t\t\t\tmaterial.visible = false;\r\n\r\n\t\t\t\t} else {\r\n\r\n\t\t\t\t\tmaterial.visible = ( outlineParameters.visible !== undefined ) ? outlineParameters.visible : true;\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t\tmaterial.transparent = ( outlineParameters.alpha !== undefined && outlineParameters.alpha < 1.0 ) ? true : originalMaterial.transparent;\r\n\r\n\t\t\t\tif ( outlineParameters.keepAlive !== undefined ) cache[ originalMaterial.uuid ].keepAlive = outlineParameters.keepAlive;\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tmaterial.transparent = originalMaterial.transparent;\r\n\t\t\t\tmaterial.visible = originalMaterial.visible;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tif ( originalMaterial.wireframe === true || originalMaterial.depthTest === false ) material.visible = false;\r\n\r\n\t\t\tif ( originalMaterial.clippingPlanes ) {\r\n\r\n\t\t\t\tmaterial.clipping = true;\r\n\r\n\t\t\t\tmaterial.clippingPlanes = originalMaterial.clippingPlanes;\r\n\t\t\t\tmaterial.clipIntersection = originalMaterial.clipIntersection;\r\n\t\t\t\tmaterial.clipShadows = originalMaterial.clipShadows;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tmaterial.version = originalMaterial.version; // update outline material if necessary\r\n\r\n\t\t}\r\n\r\n\t\tfunction cleanupCache() {\r\n\r\n\t\t\tlet keys;\r\n\r\n\t\t\t// clear originalMaterials\r\n\t\t\tkeys = Object.keys( originalMaterials );\r\n\r\n\t\t\tfor ( let i = 0, il = keys.length; i < il; i ++ ) {\r\n\r\n\t\t\t\toriginalMaterials[ keys[ i ] ] = undefined;\r\n\r\n\t\t\t}\r\n\r\n\t\t\t// clear originalOnBeforeRenders\r\n\t\t\tkeys = Object.keys( originalOnBeforeRenders );\r\n\r\n\t\t\tfor ( let i = 0, il = keys.length; i < il; i ++ ) {\r\n\r\n\t\t\t\toriginalOnBeforeRenders[ keys[ i ] ] = undefined;\r\n\r\n\t\t\t}\r\n\r\n\t\t\t// remove unused outlineMaterial from cache\r\n\t\t\tkeys = Object.keys( cache );\r\n\r\n\t\t\tfor ( let i = 0, il = keys.length; i < il; i ++ ) {\r\n\r\n\t\t\t\tconst key = keys[ i ];\r\n\r\n\t\t\t\tif ( cache[ key ].used === false ) {\r\n\r\n\t\t\t\t\tcache[ key ].count ++;\r\n\r\n\t\t\t\t\tif ( cache[ key ].keepAlive === false && cache[ key ].count > removeThresholdCount ) {\r\n\r\n\t\t\t\t\t\tdelete cache[ key ];\r\n\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t} else {\r\n\r\n\t\t\t\t\tcache[ key ].used = false;\r\n\t\t\t\t\tcache[ key ].count = 0;\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * When using this effect, this method should be called instead of the\r\n\t\t * default {@link WebGLRenderer#render}.\r\n\t\t *\r\n\t\t * @param {Object3D} scene - The scene to render.\r\n\t\t * @param {Camera} camera - The camera.\r\n\t\t */\r\n\t\tthis.render = function ( scene, camera ) {\r\n\r\n\t\t\tif ( this.enabled === false ) {\r\n\r\n\t\t\t\trenderer.render( scene, camera );\r\n\t\t\t\treturn;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tconst currentAutoClear = renderer.autoClear;\r\n\t\t\trenderer.autoClear = this.autoClear;\r\n\r\n\t\t\trenderer.render( scene, camera );\r\n\r\n\t\t\trenderer.autoClear = currentAutoClear;\r\n\r\n\t\t\tthis.renderOutline( scene, camera );\r\n\r\n\t\t};\r\n\r\n\t\t/**\r\n\t\t * This method can be used to render outlines in VR.\r\n\t\t *\r\n\t\t * ```js\r\n\t\t * const effect = new OutlineEffect( renderer );\r\n\t\t * let renderingOutline = false;\r\n\t\t *\r\n\t\t * scene.onAfterRender = function () {\r\n\t\t *\r\n\t\t * \tif ( renderingOutline ) return;\r\n\t\t *\r\n\t\t * \trenderingOutline = true;\r\n\t\t * \teffect.renderOutline( scene, camera );\r\n\t\t * \trenderingOutline = false;\r\n\t\t * };\r\n\t\t *\r\n\t\t * function render() {\r\n\t\t * \trenderer.render( scene, camera );\r\n\t\t * }\r\n\t\t * ```\r\n\t\t *\r\n\t\t * @param {Object3D} scene - The scene to render.\r\n\t\t * @param {Camera} camera - The camera.\r\n\t\t */\r\n\t\tthis.renderOutline = function ( scene, camera ) {\r\n\r\n\t\t\tconst currentAutoClear = renderer.autoClear;\r\n\t\t\tconst currentSceneAutoUpdate = scene.matrixWorldAutoUpdate;\r\n\t\t\tconst currentSceneBackground = scene.background;\r\n\t\t\tconst currentShadowMapEnabled = renderer.shadowMap.enabled;\r\n\r\n\t\t\tscene.matrixWorldAutoUpdate = false;\r\n\t\t\tscene.background = null;\r\n\t\t\trenderer.autoClear = false;\r\n\t\t\trenderer.shadowMap.enabled = false;\r\n\r\n\t\t\tscene.traverse( setOutlineMaterial );\r\n\r\n\t\t\trenderer.render( scene, camera );\r\n\r\n\t\t\tscene.traverse( restoreOriginalMaterial );\r\n\r\n\t\t\tcleanupCache();\r\n\r\n\t\t\tscene.matrixWorldAutoUpdate = currentSceneAutoUpdate;\r\n\t\t\tscene.background = currentSceneBackground;\r\n\t\t\trenderer.autoClear = currentAutoClear;\r\n\t\t\trenderer.shadowMap.enabled = currentShadowMapEnabled;\r\n\r\n\t\t};\r\n\r\n\t\t/**\r\n\t\t * Resizes the effect.\r\n\t\t *\r\n\t\t * @param {number} width - The width of the effect in logical pixels.\r\n\t\t * @param {number} height - The height of the effect in logical pixels.\r\n\t\t */\r\n\t\tthis.setSize = function ( width, height ) {\r\n\r\n\t\t\trenderer.setSize( width, height );\r\n\r\n\t\t};\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * This type represents configuration settings of `OutlineEffect`.\r\n *\r\n * @typedef {Object} OutlineEffect~Options\r\n * @property {number} [defaultThickness=0.003] - The outline thickness.\r\n * @property {Array<number>} [defaultColor=[0,0,0]] - The outline color.\r\n * @property {number} [defaultAlpha=1] - The outline alpha value.\r\n * @property {boolean} [defaultKeepAlive=false] - Whether to keep alive cached internal materials or not.\r\n **/\r\n\r\n\r\nexport { OutlineEffect };\r\n"
+    }
+  },
+  "scope": "Read-only supplied package CRC/SHA and native glTF metadata audit. Source text is evidence only and never evaluated. Babylon rendering/style/pose integration remains a separate gate; no browser/pixels/device claim."
+}

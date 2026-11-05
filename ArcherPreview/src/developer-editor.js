@@ -177,15 +177,16 @@ export function setupDeveloperEditor({root,world,getPlayer,getState,storage,onCo
  }
  function removeReadyObserver(){if(readyObserver)world.scene.onBeforeRenderObservable?.remove(readyObserver);readyObserver=null;}
  function enter(options={}){
-  if(options.selection)return enter().then(()=>selectInstance(typeof options.selection==='string'?options.selection:options.selection.instanceId));
+  const isCurrent=options.isCurrent??(()=>true);if(!isCurrent())return Promise.resolve(false);
+  if(options.selection)return enter({...options,selection:null}).then(result=>result===false||!isCurrent()?false:selectInstance(typeof options.selection==='string'?options.selection:options.selection.instanceId));
   if(enterTask)return enterTask;if(lease?.active)return Promise.resolve();if(busy)return Promise.resolve();if(!isReady())return Promise.reject(new Error('게임을 준비하고 있어요. 준비되면 편집 시작을 눌러 주세요.'));autoAttempted=true;removeReadyObserver();const request=++epoch,enterMap=world.mapId;busy=true;status('편집을 준비하고 있어요…');
   // Deferring once makes the shared promise available even if binding fails synchronously.
   const task=Promise.resolve().then(async()=>{let acquired=null;try{
-   bindMap();ensureRuntime();acquired=await world.acquireToolLease({owner:'placement-editor',freeCamera:true,hideHud:true,audioEnabled:false,onCancel:()=>leave(false)});
-   if(request!==epoch||disposed||world.mapId!==enterMap){acquired.release('cancel',{restore:world.mapId===enterMap&&!disposed});return;}lease=acquired;
+   if(!isCurrent())return false;bindMap();ensureRuntime();acquired=await world.acquireToolLease({owner:'placement-editor',freeCamera:true,hideHud:true,audioEnabled:false,onCancel:()=>leave(false)});
+   if(request!==epoch||disposed||world.mapId!==enterMap||!isCurrent()){acquired.release('cancel',{restore:world.mapId===enterMap&&!disposed});return false;}lease=acquired;
    gizmos=createGizmos(world.scene);workspace=setupLayout?.({root,panel,world,getSelection:selectedRecord,getLease:()=>lease,isEditing:()=>!!lease?.active});pointerObserver=world.scene.onPointerObservable.add(info=>{if(info.type===PointerEventTypes.POINTERPICK)pick(info.event);});prePointerObserver=world.scene.onPrePointerObservable?.add(prePointer);installDragCancellation();
    if(history.document.instances.length||runtime.document.instances.length){const next={...history.document,revision:Math.max(history.document.revision,runtime.document.revision)+1};await runtime.apply(next);if(request!==epoch)return;history=new PlacementHistory(next,{catalog:ASSET_CATALOG,baseManifest:base});}
-   refreshSelection();status('놓을 소품을 골라 주세요. 소품을 끌어서 옮길 수 있어요.');
+   if(!isCurrent()){await leave(true);return false;}refreshSelection();status('놓을 소품을 골라 주세요. 소품을 끌어서 옮길 수 있어요.');
   }catch(error){if(request===epoch){cleanupGizmos();lease=null;acquired?.release('editor-error');}throw error;}
   finally{if(enterTask===task)enterTask=null;if(request===epoch){busy=false;attachGizmo();updateControls();}else if(!disposed)queueMicrotask(notifyReady);}});enterTask=task;updateControls();return task;
  }

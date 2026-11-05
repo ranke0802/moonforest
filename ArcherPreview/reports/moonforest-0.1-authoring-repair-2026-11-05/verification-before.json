@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-11-05T02:34:05.352Z",
+  "baseline": "0fb713c",
+  "completed": true,
+  "sourceBefore": {
+    "cinematic-game.js": "5dd51f84585711511179769bfb3125c85524a140e3e718ef11851d7832ed536d",
+    "cinematic-studio.js": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+    "cinematic-interaction.js": "eb58fda99d76be2f42d631d08b84199a10e8f30fbcfe97d42420e8c8a28a6e46",
+    "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+  },
+  "sourceAfter": {
+    "cinematic-game.js": "5dd51f84585711511179769bfb3125c85524a140e3e718ef11851d7832ed536d",
+    "cinematic-studio.js": "a78f9d10c277ea4771ec89e153d034ec39076da0e08bb157327768fdf40286eb",
+    "cinematic-interaction.js": "eb58fda99d76be2f42d631d08b84199a10e8f30fbcfe97d42420e8c8a28a6e46",
+    "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+  },
+  "sourceUnchanged": true,
+  "cases": [
+    {
+      "name": "focused numeric typing→status poll→Enter→change/blur",
+      "typed": "2.4",
+      "afterPoll": "0",
+      "afterEnter": 0,
+      "finalPlayerTime": 0,
+      "observedBug": true,
+      "missedBefore": "Earlier fixture set value and dispatched change immediately, with no focused typing interval or delayed status acknowledgement."
+    },
+    {
+      "name": "header saved-work Open→native File change",
+      "pickerClicks": 0,
+      "selectedFileClass": "File",
+      "afterFileChange": "scene-20261105023404-1",
+      "expected": "real-file-entry",
+      "secondApplyEnabled": true,
+      "fileValueAfterChange": "C:\\fakepath\\저장한 작업.moonforest-scene",
+      "observedBug": true,
+      "missedBefore": "Earlier integration deliberately clicked import-apply after file validation and never tested header click activation or automatic reopen."
+    },
+    {
+      "name": "capture current camera center for actor spawn",
+      "cameraTarget": [
+        10,
+        12,
+        10
+      ],
+      "capturedFocus": [
+        10,
+        0.11999999731779099,
+        10
+      ],
+      "trueCenterGroundHit": [
+        -1.8797775575542595,
+        0.11999999731779099,
+        -9.800074604753181
+      ],
+      "projectedCapturePoint": {
+        "x": 480.0000193779176,
+        "y": 726.331790522758
+      },
+      "viewportCenter": {
+        "x": 480,
+        "y": 270
+      },
+      "offCenterPixels": 456.33179052275835,
+      "observedBug": true,
+      "missedBefore": "Prior first-add test refocused on the new actor afterward; it never checked the pre-focus spawn ray at a high/panned camera target."
+    },
+    {
+      "name": "real left DOM drag through geometry-free actor bounds",
+      "gap": {
+        "x": 419,
+        "y": 99
+      },
+      "before": {
+        "alpha": 1.0303768265243125,
+        "beta": 1.0956194772968015,
+        "position": [
+          0,
+          0.11999999731779099,
+          6
+        ]
+      },
+      "after": {
+        "alpha": 1.0303768265243123,
+        "beta": 1.0956194772968015,
+        "position": [
+          0.8692710567085888,
+          0.11999999731779099,
+          6.362639539841793
+        ]
+      },
+      "pre": [
+        {
+          "type": 1,
+          "event": "pointerdown",
+          "skip": false
+        },
+        {
+          "type": 4,
+          "event": "pointermove",
+          "skip": false
+        },
+        {
+          "type": 2,
+          "event": "pointerup",
+          "skip": false
+        }
+      ],
+      "observedBug": true,
+      "missedBefore": "Prior native drag probes intentionally targeted visible actor triangles. Empty pixels inside hollow/oversized bounds were never tested as camera gestures."
+    },
+    {
+      "name": "real actor body drag across actual village hillside",
+      "hill": {
+        "a": [
+          22,
+          0.6145849823951721,
+          -30
+        ],
+        "b": [
+          26,
+          1.6251550912857056,
+          -30
+        ]
+      },
+      "placed": [
+        26.456945390576532,
+        0.6145849823951739,
+        -30.762231150419844
+      ],
+      "terrainHeightAtPlacedXZ": 1.4813436250970502,
+      "heightError": -0.8667586427018763,
+      "observedBug": true,
+      "missedBefore": "Prior drag controls used a flat Y-plane near spawn; tests checked X/Z movement and quarter-path interpolation, not terrain contact."
+    }
+  ],
+  "scope": "Independent native DOM/actual Babylon input, actual heightfield geometry and Studio→production Game/Host. Controlled existing500ms UI interval is invoked with real status replies. No browser automation, pixels/device/audibility claim."
+}

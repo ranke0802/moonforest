@@ -1,0 +1,176 @@
+{
+  "baseline": "8bfabf0",
+  "scope": "Independent CPU ray/triangle intersection audit of the actual candidate mountain buffer and native camera/terrain/navigation. No browser, GPU, screenshot, texture or asset generation.",
+  "sourceHashes": {
+    "src/great-plains-layout.js": "609ab3fe0a5bdd87ac6078df8ede899dc6f051a70cc71e1c3d5d675cab57c301",
+    "src/great-plains-terrain.js": "126caaccd7ff174213700cfa6dcaaf7f47c79a7174183976243eb7e4ffd73a19",
+    "src/village-layout.js": "26424fa0c3386bafa67bffd86072d6aa204d161fd87587cf81f1d1fde2e934f7",
+    "src/village-terrain.js": "78a120c01636191acb7f5f3ec2a030f890ca1d847e07b62667de0b2923b241e2",
+    "src/monster-forest-layout.js": "9d56908db03a7db9d816a764a9e59e0786644af17d9abd3c5925b9897d90c3f0",
+    "src/monster-forest-terrain.js": "ffbae162f6991357be397592438dcd9e68b88f013337974382114d858e7df201",
+    "src/village-navigation.js": "6ee214bff008d46a632ab6e5dff13a0e135870bdfaf745bb47cb35176d410f9b",
+    "src/navigation.js": "c26667f1a267587c19e265866671af9fd49df0ec41f69515eef55f2340440cf2",
+    "src/map-route.js": "df5169cc034b40ed9b52ef9c566a9e4eeab12aa9f3c4b7eeae47d8a173c27e92",
+    "src/village-plains-boundary.js": "f47ffd0c22fb655c001dcd2ecc3634c9ad2988ccf66841a7b48dc07a3146d508",
+    "src/plains-forest-boundary.js": "a98c67e47ad02bf33a93fc56d4c6834babbbe47e4c30f6c99d0ea65aa147ce0c",
+    "src/camera-zoom.js": "f0fa8a2cc1d9152f3fa25b2474407f9e96b4dfcb920cd839552a26d19412e609",
+    "src/camera-pitch.js": "689d159b44bff78609ac0d6fd8843a979321647dafc13b48f76ce4ae0e94b95c"
+  },
+  "coverage": [
+    {
+      "actor": "hill",
+      "targetRadius": 160,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "hill",
+      "targetRadius": 220,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "hill",
+      "targetRadius": 300,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "hill",
+      "targetRadius": 420,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "village-arrival",
+      "targetRadius": 160,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "village-arrival",
+      "targetRadius": 220,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "village-arrival",
+      "targetRadius": 300,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "village-arrival",
+      "targetRadius": 420,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "forest-arrival",
+      "targetRadius": 160,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "forest-arrival",
+      "targetRadius": 220,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "forest-arrival",
+      "targetRadius": 300,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "forest-arrival",
+      "targetRadius": 420,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "junction",
+      "targetRadius": 160,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "junction",
+      "targetRadius": 220,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "junction",
+      "targetRadius": 300,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    },
+    {
+      "actor": "junction",
+      "targetRadius": 420,
+      "tested": 101,
+      "hidden": 101,
+      "percent": 100,
+      "uncoveredDegrees": []
+    }
+  ],
+  "cameraObstructions": [],
+  "portalObstructions": [],
+  "failures": [],
+  "minimumTrianglePlanarRadius": 106.57519398173682,
+  "cameraCases": 2048,
+  "maximumSampledVertexEyeDistance": 777.9253602617576,
+  "cameraFar": 1024,
+  "portalOpeningSectors": [
+    {
+      "centerDegrees": -159.5,
+      "halfWidthDegrees": 30
+    },
+    {
+      "centerDegrees": -50,
+      "halfWidthDegrees": 24
+    }
+  ],
+  "roundTrips": 32,
+  "resourceCounts": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "triangles": 2944,
+  "plainsPositionHash": "ca8f16b3bbe7f5f96c1b93c911d829b072c8f9d6177c39ea85b9314d824247c5",
+  "passed": true
+}

@@ -1,0 +1,312 @@
+{
+  "baseline": "99fcd56",
+  "passed": true,
+  "maps": [
+    {
+      "map": "village",
+      "records": 753,
+      "assets": 27,
+      "nearSourcePrimitives": 27,
+      "instanceMeshes": 753,
+      "highTextureRecords": 752,
+      "nearEligibleRecords": 752,
+      "occlusionEligibleRecords": 189,
+      "occlusionGroups": 42,
+      "protectedAssets": [
+        "house-01-cottage",
+        "house-02-tall-home",
+        "house-03-workshop",
+        "house-04-forest-hut",
+        "chapel"
+      ],
+      "oracleViews": 18,
+      "identicalCandidateOrderAndCoverage": true,
+      "profilesUnchanged": true,
+      "oracleFrustumTests": 11028,
+      "productionFrustumTests": 11028,
+      "cpuMedianMs": {
+        "screenOnly": 0.29080000000001294,
+        "productionUpdate": 0.33270875000000616
+      },
+      "pairedRunsMs": {
+        "screenOnly": [
+          0.48509125000000497,
+          0.20441000000000714,
+          0.3757599999999911,
+          0.34546124999999395,
+          0.2773850000000039,
+          0.2815812499999993,
+          0.29080000000001294
+        ],
+        "productionUpdate": [
+          0.688481250000018,
+          0.33270875000000616,
+          0.3082800000000134,
+          0.3078912500000115,
+          0.42918749999998906,
+          0.3429800000000114,
+          0.27031125000000883
+        ]
+      },
+      "activeCandidateRegistry": [
+        {
+          "enabledFraction": 0.08,
+          "owned": 1506,
+          "disabledGuards": 1384,
+          "submitted": 149,
+          "medianMs": 0.11365200000000186,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.16,
+          "owned": 1506,
+          "disabledGuards": 1264,
+          "submitted": 269,
+          "medianMs": 0.08969399999999345,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.6,
+          "owned": 1506,
+          "disabledGuards": 602,
+          "submitted": 931,
+          "medianMs": 0.04041200000000875,
+          "stableFrameSceneScans": 0
+        }
+      ]
+    },
+    {
+      "map": "great-plains",
+      "records": 1424,
+      "assets": 20,
+      "nearSourcePrimitives": 35,
+      "instanceMeshes": 1439,
+      "highTextureRecords": 729,
+      "nearEligibleRecords": 729,
+      "occlusionEligibleRecords": 6,
+      "occlusionGroups": 6,
+      "protectedAssets": [
+        "village-approach"
+      ],
+      "oracleViews": 18,
+      "identicalCandidateOrderAndCoverage": true,
+      "profilesUnchanged": true,
+      "oracleFrustumTests": 10692,
+      "productionFrustumTests": 10692,
+      "cpuMedianMs": {
+        "screenOnly": 0.2578362499999912,
+        "productionUpdate": 0.30143749999999725
+      },
+      "pairedRunsMs": {
+        "screenOnly": [
+          0.47255625000000234,
+          0.6811587500000087,
+          0.8820849999999837,
+          0.224412499999994,
+          0.2299387499999966,
+          0.2578362499999912,
+          0.21189624999999523
+        ],
+        "productionUpdate": [
+          0.3332274999999981,
+          0.4822137500000053,
+          0.30143749999999725,
+          0.4280762500000037,
+          0.25701124999998226,
+          0.25663750000001073,
+          0.25622000000000755
+        ]
+      },
+      "activeCandidateRegistry": [
+        {
+          "enabledFraction": 0.08,
+          "owned": 2863,
+          "disabledGuards": 2620,
+          "submitted": 278,
+          "medianMs": 0.4502479999999923,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.16,
+          "owned": 2863,
+          "disabledGuards": 2392,
+          "submitted": 506,
+          "medianMs": 0.30630866666667617,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.6,
+          "owned": 2863,
+          "disabledGuards": 1138,
+          "submitted": 1760,
+          "medianMs": 0.10694400000000315,
+          "stableFrameSceneScans": 0
+        }
+      ]
+    },
+    {
+      "map": "monster-forest",
+      "records": 891,
+      "assets": 10,
+      "nearSourcePrimitives": 10,
+      "instanceMeshes": 891,
+      "highTextureRecords": 891,
+      "nearEligibleRecords": 891,
+      "occlusionEligibleRecords": 132,
+      "occlusionGroups": 42,
+      "protectedAssets": [],
+      "oracleViews": 18,
+      "identicalCandidateOrderAndCoverage": true,
+      "profilesUnchanged": true,
+      "oracleFrustumTests": 13068,
+      "productionFrustumTests": 13068,
+      "cpuMedianMs": {
+        "screenOnly": 0.2418537500000184,
+        "productionUpdate": 0.3282200000000103
+      },
+      "pairedRunsMs": {
+        "screenOnly": [
+          0.20176874999999656,
+          0.3005175000000008,
+          0.2418537500000184,
+          0.2537287500000048,
+          0.2427599999999984,
+          0.21681375000002845,
+          0.21256625000000895
+        ],
+        "productionUpdate": [
+          0.7294637499999908,
+          0.4775549999999839,
+          0.22933749999999692,
+          0.5628099999999904,
+          0.22389249999998811,
+          0.3282200000000103,
+          0.23520499999999628
+        ]
+      },
+      "activeCandidateRegistry": [
+        {
+          "enabledFraction": 0.08,
+          "owned": 1782,
+          "disabledGuards": 1638,
+          "submitted": 154,
+          "medianMs": 0.19184200000000903,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.16,
+          "owned": 1782,
+          "disabledGuards": 1496,
+          "submitted": 296,
+          "medianMs": 0.15185399999999694,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.6,
+          "owned": 1782,
+          "disabledGuards": 712,
+          "submitted": 1080,
+          "medianMs": 0.053580000000001744,
+          "stableFrameSceneScans": 0
+        }
+      ]
+    },
+    {
+      "map": "witch-cave",
+      "records": 212,
+      "assets": 29,
+      "nearSourcePrimitives": 29,
+      "instanceMeshes": 212,
+      "highTextureRecords": 211,
+      "nearEligibleRecords": 211,
+      "occlusionEligibleRecords": 36,
+      "occlusionGroups": 24,
+      "protectedAssets": [],
+      "oracleViews": 18,
+      "identicalCandidateOrderAndCoverage": true,
+      "profilesUnchanged": true,
+      "oracleFrustumTests": 3092,
+      "productionFrustumTests": 3092,
+      "cpuMedianMs": {
+        "screenOnly": 0.05427875000000313,
+        "productionUpdate": 0.07429999999999382
+      },
+      "pairedRunsMs": {
+        "screenOnly": [
+          0.3799600000000282,
+          0.06618999999996049,
+          0.05427875000000313,
+          0.05256750000003194,
+          0.052397500000006404,
+          0.05448999999998705,
+          0.04960999999998421
+        ],
+        "productionUpdate": [
+          0.1819212499999594,
+          0.07553250000000844,
+          0.06209875000004104,
+          0.06481250000001637,
+          0.07429999999999382,
+          0.07916250000002947,
+          0.06445250000001579
+        ]
+      },
+      "activeCandidateRegistry": [
+        {
+          "enabledFraction": 0.08,
+          "owned": 424,
+          "disabledGuards": 390,
+          "submitted": 63,
+          "medianMs": 0.034597333333319207,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.16,
+          "owned": 424,
+          "disabledGuards": 356,
+          "submitted": 97,
+          "medianMs": 0.026231333333344084,
+          "stableFrameSceneScans": 0
+        },
+        {
+          "enabledFraction": 0.6,
+          "owned": 424,
+          "disabledGuards": 168,
+          "submitted": 285,
+          "medianMs": 0.010370666666664571,
+          "stableFrameSceneScans": 0
+        }
+      ]
+    }
+  ],
+  "changedPolicy": false,
+  "activeCandidatesChanged": false,
+  "screeningSourceChanged": false,
+  "evidence": "Read-only audit of the original culling, exact projected coverage, full texture update and active-candidate registry. No screening optimization was retained without demonstrated gain.",
+  "relatedOcclusionValidation": "occlusion-validation.json",
+  "afterRenderBoundary": {
+    "sdkEnd": "node_modules/@babylonjs/core/Instrumentation/sceneInstrumentation.js:442",
+    "observers": [
+      {
+        "source": "src/village-occlusion.js:48",
+        "work": "Poll available GPU occlusion results, then draw up to two query proxies; gated by GPU query support."
+      },
+      {
+        "source": "src/village-demand.js:152",
+        "work": "Every 200 ms, recompute/cache map demand and choose the next missing geometry tier."
+      },
+      {
+        "source": "src/village-texture-streaming.js:41",
+        "work": "Every 250 ms, screen instances and update texture admission/residency."
+      }
+    ],
+    "interpretation": "These map observers are normally registered after the SDK end counter. Contact callbacks onAfterAnimations are inside that SDK interval. State resources does not identify synchronous transfer cost: prefetch runs through deferred Promise jobs. Measure observer costs before attributing a recorded sceneCallMs minus sceneMs gap."
+  },
+  "rejectedExperiment": "Size-first native-instance rejection removed 83–98% of plane tests but did not consistently improve local CPU time, so it is not included. The measured texture screening cost is not evidence for attributing the logged 14–17 ms after-render gaps to this scan.",
+  "limitations": [
+    "Packed glTF POSITION accessor bounds, authored node translations and actual placement/terrain transforms drive real Babylon InstancedMesh bounds; source triangles/materials are not rendered.",
+    "Paired Node/NullEngine CPU timings are local screening measurements, not mobile FPS, browser/GPU timings, or proof that screening caused a specific recorded delay.",
+    "Runtime root visibility and geometry residency vary; the count includes every authored placement and near-source primitive, while oracle views also disable placements and change LOD eligibility.",
+    "No texture cap, protected-house profile, coverage threshold, dwell/cooldown, geometry LOD, collision, boss, rotation gate or update frequency changes."
+  ]
+}

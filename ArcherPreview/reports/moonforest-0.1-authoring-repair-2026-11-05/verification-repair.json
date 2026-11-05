@@ -1,0 +1,239 @@
+{
+  "generatedAt": "2026-11-05T02:43:47.824Z",
+  "passed": true,
+  "cases": [
+    {
+      "name": "focused typing survives real status ACK and Enter/blur seeks intended time",
+      "pass": true,
+      "evidence": {
+        "typed": "2.4",
+        "playerTime": 2.4,
+        "latePollDidNotRollback": true
+      }
+    },
+    {
+      "name": "explicit numeric Move / invalid empty / Enter+change dedupe",
+      "pass": true,
+      "evidence": {
+        "time": 3.2,
+        "duplicateRequests": 1
+      }
+    },
+    {
+      "name": "header Open→real File→auto applied preview and same-file second selection",
+      "pass": true,
+      "evidence": {
+        "pickerClicks": 2,
+        "changeEvents": 2,
+        "noSecondApplyClick": true,
+        "inputValueReset": true
+      }
+    },
+    {
+      "name": "binary audio project auto opens; invalid/cancelled choices preserve work",
+      "pass": true,
+      "evidence": {
+        "packageBytes": 17357,
+        "localAudioSHA256": "56d4af65701c26df20bd4021eda95b6e830348ce3a746086079fe89285548dc9",
+        "invalidPreservesDocument": true,
+        "cancelPreservesDocument": true
+      }
+    },
+    {
+      "name": "late file completion cannot replace New work",
+      "pass": true,
+      "evidence": {
+        "old": "repair-native-file",
+        "current": "scene-20261105024347-2"
+      }
+    },
+    {
+      "name": "native camera center terrain ray spawns actor without moving view",
+      "pass": true,
+      "evidence": {
+        "captured": [
+          -1.879777557554263,
+          0.11999999731779099,
+          -9.800074604753185
+        ],
+        "projected": {
+          "x": 480.00469165812706,
+          "y": 270.00048114513663
+        },
+        "center": {
+          "x": 480,
+          "y": 270
+        },
+        "cameraPreserved": true,
+        "source": [
+          {
+            "id": "hooded-goblin",
+            "sourceSha256": "6c2b84f4f3164fca49ab43cb601302ebc5f455ae6a1c7c3f2eb770603318a2fc",
+            "triangles": 10412,
+            "clips": [
+              "Dodge_Roll",
+              "Fall_Dead_from_Abdominal_Injury",
+              "Gangnam_Groove",
+              "Knock_Down",
+              "Parkour_Vault_with_Roll",
+              "Right_Jab_from_Guard",
+              "Running",
+              "Sneaky_Walk_inplace",
+              "Sword_Judgment",
+              "Sword_Parry_Backward_2",
+              "Walk_Turn_Right",
+              "Walking"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "upward/no-ground capture rejects add explicitly without offscreen fallback",
+      "pass": true,
+      "evidence": {
+        "placementError": "화면 중앙에 바닥이 보이도록 시점을 내려 주세요.",
+        "actorCount": 1
+      }
+    },
+    {
+      "name": "geometry-free AABB pixel left-drag reaches native ArcRotate",
+      "pass": true,
+      "evidence": {
+        "gap": {
+          "x": 363,
+          "y": 99
+        },
+        "before": {
+          "alpha": 1.5707963267948966,
+          "beta": 1.9513027039072615,
+          "position": [
+            -1.879777557554263,
+            0.11999999731779099,
+            -9.800074604753185
+          ]
+        },
+        "after": {
+          "alpha": 1.8011779946129258,
+          "beta": 1.8591500367800498
+        },
+        "nativeEvents": [
+          {
+            "type": 1,
+            "event": "pointerdown"
+          },
+          {
+            "type": 4,
+            "event": "pointermove"
+          },
+          {
+            "type": 2,
+            "event": "pointerup"
+          }
+        ],
+        "actorUnmoved": true
+      }
+    },
+    {
+      "name": "native actual-village hillside drag retains foot offset 0",
+      "pass": true,
+      "evidence": {
+        "hill": {
+          "a": [
+            22,
+            0.6145849823951721,
+            -30
+          ],
+          "b": [
+            26,
+            1.6251550912857056,
+            -30
+          ]
+        },
+        "placed": [
+          26.184752128055862,
+          1.8309118178278398,
+          -29.158951447432912
+        ],
+        "terrainHeight": 1.8309118178278398,
+        "footOffset": 0,
+        "navigationUnchanged": true
+      }
+    },
+    {
+      "name": "native actual-village hillside drag retains foot offset 0.65",
+      "pass": true,
+      "evidence": {
+        "hill": {
+          "a": [
+            22,
+            0.6145849823951721,
+            -30
+          ],
+          "b": [
+            26,
+            1.6251550912857056,
+            -30
+          ]
+        },
+        "placed": [
+          26.37614312606637,
+          2.5990617242578162,
+          -28.03404045729198
+        ],
+        "terrainHeight": 1.949061724257816,
+        "footOffset": 0.65,
+        "navigationUnchanged": true
+      }
+    },
+    {
+      "name": "native pointercancel restores pose/history and orbit remains attached",
+      "pass": true,
+      "evidence": {
+        "restoredPosition": [
+          26.37614312606637,
+          2.5990617242578162,
+          -28.03404045729198
+        ],
+        "historyUnchanged": true,
+        "orbitStillWorks": true
+      }
+    },
+    {
+      "name": "tool release clears native input ownership",
+      "pass": true,
+      "evidence": {
+        "lease": null,
+        "nativeSceneInputOwner": null
+      }
+    }
+  ],
+  "sourceBefore": {
+    "cinematic-game.js": "75aae82a0d03eff7e913199d4562bdb2a4a1a5a7ef3eda5a0bef0905e9775b6a",
+    "cinematic-studio.js": "b46a8249cfa062c6da5aa4b4b940f517e2832d4fcd448bb29dfc1395e7d22ee5",
+    "cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "cinematic-protocol.js": "3c6e9acde02b21337ad0c024b565c54f50b1c250572e352750acb0e85f7ce078",
+    "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+  },
+  "sourceAfter": {
+    "cinematic-game.js": "75aae82a0d03eff7e913199d4562bdb2a4a1a5a7ef3eda5a0bef0905e9775b6a",
+    "cinematic-studio.js": "b46a8249cfa062c6da5aa4b4b940f517e2832d4fcd448bb29dfc1395e7d22ee5",
+    "cinematic-interaction.js": "0cc2c7d7029fdc1328b5c965b475c15ced8c12d72b9c0a87ec226c3f0b7cad03",
+    "cinematic-ground.js": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916",
+    "cinematic-protocol.js": "3c6e9acde02b21337ad0c024b565c54f50b1c250572e352750acb0e85f7ce078",
+    "game-tool-lease.js": "bc100937f33d332c9ed22ee298cc7fda3af6d2ec55e84294820bf7df122235e1"
+  },
+  "sourceUnchanged": true,
+  "native": {
+    "main": "590907379018e2219564a8456efe3195cb632c42616ab73da826d5da48671bd4",
+    "render": "2b036cc1fa7f44a838d3d9944b812f1c33a22ef665e3082a1b94928213dbea71",
+    "syncPlayback": "35798cd4402b12f5638161ce144ef442a3f3893225d84f37409b11e8c6f9cbff",
+    "frameLoopRegistration": "5068d657b23e8bebd99de0f120a89976f037e2423a8442fe01c870af052b4480",
+    "policy": "engine.renderEvenInBackground=cinematicAuthoringPreview;",
+    "toolWake": "world.wakeToolPlayback=()=>{syncPlayback();wakeRendering();};",
+    "nativeFrameGate": "af375b4201a818642b0b165456fe067de2b1d05e27e4d8234483e71109091649",
+    "nativeFocusHandlers": "e47ce87d658eb91bb5f13e589beadc935d8790e2834d56b34558ca97b5974e2c"
+  },
+  "scope": "Independent repaired first-entry gate: actual Studio transport/Game/Host, actual shipped goblin geometry, actual village heightfield/ground, native canvas→Babylon input→ArcRotate/interaction and native engine frames. Existing500ms UI polling has controlled delivery. No browser appearance, device FPS/GPU or audibility claim."
+}

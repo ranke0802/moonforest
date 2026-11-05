@@ -1,0 +1,153 @@
+{
+  "entries": 85,
+  "catalogRevision": "ebeb9e1ab78dcde40792b7e4b68fb9d5c4c1e5dc07321bf4c36d55bbdcf4a12f",
+  "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
+  "changed": [
+    "asset-catalog.js",
+    "editable-asset-index.js"
+  ],
+  "npc": {
+    "name": "대장장이",
+    "category": "npc",
+    "scale": 1,
+    "bones": 66,
+    "clips": 20,
+    "triangles": 10655,
+    "npc": {
+      "sourceSha256": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+      "look": {
+        "toon": true,
+        "pbr": false,
+        "outline": true,
+        "outlinePixels": 0.6,
+        "interior": true,
+        "interiorStrength": 0.25,
+        "brightness": 1.2
+      },
+      "clips": [
+        {
+          "key": "Idle_02",
+          "uiLabel": "기본 대기",
+          "gameState": "idle",
+          "loopCandidate": true
+        },
+        {
+          "key": "Alert",
+          "uiLabel": "경계",
+          "gameState": "alert",
+          "loopCandidate": true
+        },
+        {
+          "key": "Run_02",
+          "uiLabel": "달리기",
+          "gameState": "run",
+          "loopCandidate": true
+        },
+        {
+          "key": "Agree_Gesture",
+          "uiLabel": "동의하기",
+          "gameState": "agree",
+          "loopCandidate": false
+        },
+        {
+          "key": "Big_Wave_Hello",
+          "uiLabel": "손 흔들어 인사",
+          "gameState": "greet",
+          "loopCandidate": false
+        },
+        {
+          "key": "Casual_Walk",
+          "uiLabel": "일상 걷기",
+          "gameState": "walk",
+          "loopCandidate": true
+        },
+        {
+          "key": "Chair_Sit_Idle_M",
+          "uiLabel": "의자에 앉아 대기",
+          "gameState": "sit_idle",
+          "loopCandidate": true
+        },
+        {
+          "key": "Confused_Scratch",
+          "uiLabel": "난처해하며 긁기",
+          "gameState": "confused",
+          "loopCandidate": false
+        },
+        {
+          "key": "Formal_Bow",
+          "uiLabel": "정중한 인사",
+          "gameState": "bow",
+          "loopCandidate": false
+        },
+        {
+          "key": "Listening_Gesture",
+          "uiLabel": "이야기 듣기",
+          "gameState": "listen",
+          "loopCandidate": true
+        },
+        {
+          "key": "Sit_to_Stand_Transition_M",
+          "uiLabel": "앉았다 일어나기",
+          "gameState": "stand_up",
+          "loopCandidate": false
+        },
+        {
+          "key": "Stand_and_Chat",
+          "uiLabel": "서서 대화",
+          "gameState": "talk",
+          "loopCandidate": true
+        },
+        {
+          "key": "Stand_to_Sit_Transition_M",
+          "uiLabel": "의자에 앉기",
+          "gameState": "sit_down",
+          "loopCandidate": false
+        },
+        {
+          "key": "Hit_Reaction",
+          "uiLabel": "피격 반응",
+          "gameState": "hit",
+          "loopCandidate": false
+        },
+        {
+          "key": "Male_Bend_Over_Pick_Up",
+          "uiLabel": "숙여서 줍기",
+          "gameState": "pick_up",
+          "loopCandidate": false
+        },
+        {
+          "key": "Collect_Object",
+          "uiLabel": "물건 수집",
+          "gameState": "collect",
+          "loopCandidate": false
+        },
+        {
+          "key": "Wave_for_Help",
+          "uiLabel": "도움 요청",
+          "gameState": "call_for_help",
+          "loopCandidate": false
+        },
+        {
+          "key": "Stand_Talking_Angry",
+          "uiLabel": "화내며 대화",
+          "gameState": "angry_talk",
+          "loopCandidate": true
+        },
+        {
+          "key": "Talk_with_Hands_Open",
+          "uiLabel": "손을 펴며 대화",
+          "gameState": "explain",
+          "loopCandidate": true
+        },
+        {
+          "key": "Shrug",
+          "uiLabel": "어깨 으쓱",
+          "gameState": "shrug",
+          "loopCandidate": false
+        }
+      ],
+      "rootMotion": "in-place",
+      "defaultClip": "Idle_02"
+    }
+  }
+}

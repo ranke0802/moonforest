@@ -78,6 +78,25 @@ test('CPU stage counters accumulate only during play and reset on the next frame
  f.toggle(false);const before=f.counts().clockCalls;assert.equal(f.diagnostic.mark(),null);f.diagnostic.measure('hudUpdateMs',null);assert.equal(f.counts().clockCalls,before);
 });
 
+test('manual player animation sections stay inside prelude and do not replace SDK animation time',()=>{
+ const f=ui({stored:'1',renderMetrics:()=>({animationMs:.4})});
+ f.setTime(0);f.diagnostic.beginFrame(true,60);f.setTime(4);f.diagnostic.endFrame();
+ f.setTime(20);f.diagnostic.beginFrame(true,60);
+ const prelude=f.diagnostic.mark(),controller=f.diagnostic.mark();
+ f.setTime(22);f.diagnostic.measure('playerControllerMs',controller);
+ const animation=f.diagnostic.mark();f.setTime(34);f.diagnostic.measure('playerAnimationMs',animation);
+ const audio=f.diagnostic.mark();f.setTime(35);f.diagnostic.measure('actionAudioMs',audio);
+ f.diagnostic.measure('framePreludeMs',prelude);f.setTime(80);f.diagnostic.endFrame();
+ const report=f.diagnostic.snapshot(),event=report.recentDelays.at(-1);
+ assert.equal(event.playerControllerMs,2);assert.equal(event.playerAnimationMs,12);assert.equal(event.actionAudioMs,1);assert.equal(event.framePreludeMs,15);
+ assert.equal(event.render.animationMs,.4);assert.match(report.measurement,/sections nested within framePreludeMs/);
+ f.setTime(100);f.diagnostic.beginFrame(true,60);f.setTime(160);f.diagnostic.endFrame();
+ for(const key of ['playerControllerMs','playerAnimationMs','actionAudioMs'])assert.equal(f.diagnostic.snapshot().recentDelays.at(-1)[key],0);
+ f.toggle(false);const calls=f.counts().clockCalls;
+ for(const key of ['playerControllerMs','playerAnimationMs','actionAudioMs'])f.diagnostic.measure(key,f.diagnostic.mark());
+ assert.equal(f.counts().clockCalls,calls);
+});
+
 test('GPU collecting hooks transition once and reset/map/pause stop pending measurement without enabling disabled work',()=>{
  const transitions=[],boundaries=[];let reads=0;
  const f=ui({onCollecting:v=>transitions.push(v),onMapChanged:()=>boundaries.push('map'),onReset:()=>boundaries.push('reset'),renderMetrics:()=>{reads++;return {};}});

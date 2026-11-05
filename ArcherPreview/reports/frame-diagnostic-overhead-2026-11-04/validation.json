@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "validatedAt": "2026-11-04T11:23:08.500Z",
+  "baseCommit": "3db5bd8",
+  "scope": "Separate optional engine-method CPU probes from basic FPS/scene/asynchronous GPU diagnostics; skip hidden detail paint; separately summarize endFrame collector CPU.",
+  "sourceSha256": {
+    "src/frame-diagnostics.js": "1fca440f982239cbc99e1c2479a0df2b0e266793e601f772bca616986336320a",
+    "src/scene-diagnostics.js": "75dc1f9fc0eaf28c571707318eee96b419818d378d84c4f2d0de9c0eb1402df0",
+    "src/settings-panel.js": "880fe347a75544433040c0ef3b369cff421939031360b2399d8c8529f2e3c798",
+    "src/main.js": "61de0a7482049d7267bd4a936e4229c9a87dd9af0ba5246bfa34857c9039819a",
+    "tests/diagnostic-overhead.test.js": "a0c749ead916892e3a83922872ae6a31797cc8ffe7662c836926a0ff8bdc9123",
+    "tests/diagnostic-detail-dialog.test.js": "e67a08766bab10a34af013711829658a8352ed3fc4c1ff76ac073bdade0f14e8"
+  },
+  "checks": {
+    "drawCpuDefaultOff": true,
+    "separatePersistentKey": "moonforest-draw-cpu-diagnostics-v1",
+    "basicCollectionRetainsSceneCountersAndAsyncGpu": true,
+    "nativeMethodsUnchangedWithoutOptIn": true,
+    "nativeMethodsRestoredOn": [
+      "option-off",
+      "pause",
+      "context-loss",
+      "scene-replacement",
+      "dispose"
+    ],
+    "detailDomWritesSkippedWhileClosed": true,
+    "snapshotAndMemoryRemainCollected": true,
+    "preferenceSurvivesBasicDiagnosticOff": true,
+    "deniedStorageKeepsSessionPreference": true,
+    "mainChange": "one onDrawCpuEnabled callback",
+    "diagnosticCpuMs": {
+      "scope": "synchronous-endFrame-collection-only",
+      "window": "since-diagnostic-reset",
+      "scalarFields": [
+        "samples",
+        "meanMs",
+        "maxMs",
+        "latestMs",
+        "latestCompletedAtMs"
+      ],
+      "excludes": [
+        "render instrumentation/drawCpu hooks",
+        "beginFrame",
+        "copy/snapshot",
+        "GPU execution",
+        "final scalar bookkeeping"
+      ],
+      "notAssignedToPriorIntervalOrDelay": true,
+      "injectedCostTest": {
+        "gameSubmissionMs": 4,
+        "collectorSamples": 3,
+        "collectorMeanMs": 3.6666666666666665,
+        "collectorMaxMs": 5,
+        "collectorLatestMs": 3
+      }
+    }
+  },
+  "validation": {
+    "command": "node --test tests/diagnostic-overhead.test.js tests/frame-diagnostics.test.js tests/gpu-diagnostics.test.js tests/render-cpu-sampler.test.js tests/diagnostic-detail-dialog.test.js tests/diagnostic-settings-summary.test.js",
+    "node": "v24.22.1",
+    "tests": 41,
+    "passed": 41,
+    "failed": 0,
+    "syntaxChecksPassed": true,
+    "gitDiffWhitespaceCheckPassed": true
+  },
+  "browserAutomation": false,
+  "fullSuiteRun": false,
+  "physicalDeviceTested": false,
+  "gpuPerformanceMeasured": false,
+  "limitations": [
+    "CPU/DOM and actual pinned Babylon NullEngine method/lifecycle behavior are verified; no real-device FPS, temperature, GPU upload or visual measurement is claimed.",
+    "Detailed engine-method probes remain intrusive when explicitly selected. diagnosticCpuMs excludes their in-render overhead and must not be interpreted as total instrumentation overhead.",
+    "Basic diagnostic counters, frame timing windows and target FPS are preserved."
+  ]
+}

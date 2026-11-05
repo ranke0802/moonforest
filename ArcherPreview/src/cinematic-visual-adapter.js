@@ -1,5 +1,5 @@
 import {TransformNode,Vector3,VertexBuffer} from '@babylonjs/core';
-import {loadMapContainer} from './map-container.js';
+import {loadMapContainer,readMapContainer} from './map-container.js';
 import {readMapManifest} from './map-manifests.js';
 import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
 import {instantiateBossModel} from './boss-models.js';
@@ -9,26 +9,29 @@ import {attachCharacterOutlines,attachCharacterOutlinesAsync,isRuntimeOutline} f
 import {prepareBossShaders} from './boss-shader-warmup.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
+import {getNpcSource,getNpcCatalog} from './npc-library.js';
+import {applyNpcLook} from './npc-look.js';
 
 // A visual-only, scoped container cache. Independent rigs/animation targets,
 // shared original geometry/textures, no brain, collision, rewards or battle list.
-export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders}={}){
+export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,readNpcContainer=readMapContainer,resolveNpcSource=getNpcSource,resolveCatalog=getNpcCatalog,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders}={}){
  const scene=world.scene,entries=new Map(),adapters=new Set();let disposed=false,initialized;
  const rootUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
  function release(entry){if(--entry.refs>0)return;entries.delete(entry.key);entry.controller.abort(mapLoadAbortError());const finish=()=>{entry.container?.dispose();for(const material of entry.derived)material.dispose(false,false);entry.derived.clear();};finish();entry.pending.finally(finish).catch(()=>{});}
  function sourceFor(definition){
   const key=definition.assetId+'@'+definition.assetVersion;let entry=entries.get(key);if(entry){entry.refs++;return entry;}
-  const asset=catalog.entries.find(row=>row.assetId===definition.assetId&&row.version===definition.assetVersion);if(!asset)throw new Error('Unknown cinematic catalog asset/version');
+  const asset=resolveCatalog(catalog).entries.find(row=>row.assetId===definition.assetId&&row.version===definition.assetVersion);if(!asset)throw new Error('Unknown cinematic catalog asset/version');
   entry={key,asset,refs:1,controller:new AbortController(),container:null,derived:new Set()};entries.set(key,entry);
-  entry.pending=(async()=>{const lifetime=new MapLoadLifetime({signal:entry.controller.signal,stage:'cinematic-visual-source'});let container;try{
-   initialized??=initialize();await lifetime.wait(initialized);const url=new URL(asset.runtime.manifest,rootUrl),manifest=await lifetime.wait(readManifest(url)),config=manifest.assets?.[asset.runtime.assetKey]??manifest,model=new URL(config.model??config.lods?.find(row=>row.level===0)?.model??config.lods?.[0]?.model,url);
-   if(model.href!==new URL(asset.runtime.model,rootUrl).href)throw new Error('Cinematic catalog/runtime model conflict');
-   container=await lifetime.run(()=>loadContainer(model,scene,{lifetime,signal:lifetime.signal}),{onLate:value=>value?.dispose()});lifetime.check();if(disposed||scene.isDisposed)throw mapLoadAbortError();
+  entry.pending=(async()=>{const lifetime=new MapLoadLifetime({signal:entry.controller.signal,stage:'cinematic-visual-source'});let container,npcSource;try{
+   initialized??=initialize();await lifetime.wait(initialized);npcSource=await lifetime.run(()=>resolveNpcSource(asset,{signal:lifetime.signal}),{onLate:source=>source?.release()});let config;
+   if(npcSource){config=npcSource.config;const owned=npcSource;npcSource=null;const pendingContainer=Promise.resolve().then(()=>readNpcContainer(scene,structuredClone(owned.json),owned.rootUrl,{lifetime,fileName:asset.contentHash+'.gltf'})).finally(()=>owned.release());container=await lifetime.run(()=>pendingContainer,{onLate:value=>value?.dispose()});}
+   else{const url=new URL(asset.runtime.manifest,rootUrl),manifest=await lifetime.wait(readManifest(url)),raw=manifest.assets?.[asset.runtime.assetKey]??manifest,model=new URL(raw.model??raw.lods?.find(row=>row.level===0)?.model??raw.lods?.[0]?.model,url);config=raw;if(model.href!==new URL(asset.runtime.model,rootUrl).href)throw new Error('Cinematic catalog/runtime model conflict');container=await lifetime.run(()=>loadContainer(model,scene,{lifetime,signal:lifetime.signal}),{onLate:value=>value?.dispose()});}
+   config=asset.npc?{...config,npc:config.npc??asset.npc}:config;lifetime.check();if(disposed||scene.isDisposed)throw mapLoadAbortError();
    for(const group of container.animationGroups)group.stop();const before=new Set(container.meshes.map(mesh=>mesh.material));
-   if(asset.geometry.skinned||asset.geometry.clips||asset.geometry.morphTargets)applyMonsterToon(container);else applyVillageToon(container.meshes,world.lighting??{direction:new Vector3(0,1,0),shadowsActive:false});
+   if(asset.geometry.skinned||asset.geometry.clips||asset.geometry.morphTargets)applyMonsterToon(container);else applyVillageToon(container.meshes,world.lighting??{direction:new Vector3(0,1,0),shadowsActive:false});if(config.npc)applyNpcLook(container,config.npc.look);
    for(const mesh of container.meshes)if(mesh.material&&!before.has(mesh.material))entry.derived.add(mesh.material);
    entry.config=config;entry.container=container;container=null;return entry;
-  }finally{container?.dispose();lifetime.close();}})();entry.pending.catch(()=>{});return entry;
+  }finally{container?.dispose();npcSource?.release();lifetime.close();}})();entry.pending.catch(()=>{});return entry;
  }
  function create(definition,context={}){
   if(disposed)throw mapLoadAbortError();const entry=sourceFor(definition);let retired=false,warming,asset,root;
@@ -45,7 +48,8 @@ export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest
      const idle=asset.animationGroups.some(group=>group.name===entry.config.animations?.idle)?entry.config.animations.idle:asset.animationGroups[0]?.name;
      encounter.actor=root;encounter.asset=asset;encounter.config={...entry.config,animations:{...entry.config.animations,idle}};
      for(const mesh of asset.meshes){mesh.isPickable=true;mesh.checkCollisions=false;mesh.alwaysSelectAsActiveMesh=true;mesh.metadata={...mesh.metadata,moonforestWarmMaterial:true,cinematicVisual:true};if(mesh.skeleton){mesh.skeleton.useTextureToStoreBoneMatrices=true;if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;}}
-     world.lighting?.registerMeshes(asset.meshes);if(preparation?.incremental)await attachCharacterOutlinesAsync(asset,'scarecrow',preparation);else attachCharacterOutlines(asset,'scarecrow');
+     if(encounter.config.npc){encounter.npcCarrier=facing;encounter.npcCarrierOrigin=facing.position.clone();const targets=[...new Set(asset.animationGroups.flatMap(group=>group.targetedAnimations.filter(row=>row.animation.targetProperty==='position').map(row=>row.target)))];encounter.npcMotionRoot=targets.find(node=>{for(let parent=node.parent;parent&&parent!==root;parent=parent.parent)if(targets.includes(parent))return false;return true;})??asset.skeletons.flatMap(skeleton=>skeleton.bones.filter(bone=>!bone.getParent()).map(bone=>bone.getTransformNode())).find(Boolean);root.computeWorldMatrix(true);facing.computeWorldMatrix(true);encounter.npcMotionRoot?.computeWorldMatrix(true);encounter.npcMotionAnchor=encounter.npcMotionRoot?Vector3.TransformCoordinates(encounter.npcMotionRoot.getAbsolutePosition(),root.getWorldMatrix().clone().invert()):null;}
+     world.lighting?.registerMeshes(asset.meshes);if(preparation?.incremental)await attachCharacterOutlinesAsync(asset,'scarecrow',preparation);else attachCharacterOutlines(asset,'scarecrow');if(encounter.config.npc)applyNpcLook(asset,encounter.config.npc.look,{root,referenceHeight:entry.asset.referenceHeight??entry.config.height??1.85,baseScale:root.scaling.y});
      await prepareShaders(asset,{preparation,shadows:world.shadows});check();if(!isCurrent())throw mapLoadAbortError();return asset;
     })();return warming;
    },

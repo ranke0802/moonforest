@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-05",
+  "owner": "resources",
+  "status": "pure-source-frozen-pass6-await-render-manager-integration",
+  "scope": ["NEW src/npc-ink-shaders.js", "NEW tests/npc-ink-shaders.test.js"],
+  "provenance": {
+    "package": "Blacksmith_NPC20_Game.zip",
+    "packageSha256": "2863a41bf38691831f5b35931a98dbde28527538674ac52722c2593f59a70a3c",
+    "inertEntry": "shared/interior-ink.js",
+    "inertSourceSha256": "53146d57b15ff0b61744cd1883f5f942ee8f21196c5b3eedfcddeac0c3951e10",
+    "readMethod": "Read the original source text recorded by independent package CRC/SHA audit; no supplied JavaScript imported or executed."
+  },
+  "contract": {
+    "factory": "buildNpcInkFragment({maxProfiles=64}) returns GLSL fragment source; accepted profile count2..64 with0 reserved.",
+    "postprocess": "textureSampler and vUV are the native Babylon color source; tNormal,tDepth,tSceneDepth,texel,nearFar,pixelWorldFactor,ink,npcProfiles,reverseDepth supplied by A manager.",
+    "profile": "tNormal.a=.5+profileIndex/128; decoded rounded index1..63; fixed WebGL1-safe loop selects vec2(height*worldScale,strength), default(1.85,.25).",
+    "depth": "Both textures are hardware nonlinear perspective depth0..1 with same camera near/far. reverseDepth reverses both before reconstruction/comparison.",
+    "occlusion": "Reject center AND every neighbor NPC sample behind main-scene depth by more than1e-6 raw depth; shared tolerance agreed with A for native self-depth precision.",
+    "originalMath": "Exact8edge samples:4axial and4diagonal .707 offsets; slope denominator max(.22,abs(n.z)); threshold=max(.0008*scale,z*pixelWorldFactor*1.4)+z*pixelWorldFactor*slope*1.8; depth smoothstep2.4; normal smoothstep(.16,.40)*.78; cutoff.035; alpha clamp0...9.",
+    "composition": "Linear mix(base.rgb,ink,alpha), preserve base.a. No duplicate gamma/color-space conversion. Background/occluded/weak-edge samples return original base color. No world pass/resources created by this pure module.",
+    "cpuExports": ["NPC_INK_OFFSETS", "NPC_INK_DEPTH_EPSILON", "npcInkViewDistance", "npcInkDepthOccluded", "npcInkEdgeAt", "evaluateNpcInk"]
+  },
+  "verification": {
+    "command": "node --test tests/npc-ink-shaders.test.js",
+    "passed": 6,
+    "failed": 0,
+    "numericOracleProbes": 3240,
+    "cases": [
+      "Inert original source SHA and all8neighbor/threshold constants match.",
+      "Fixed uniform-profile loop and native postprocess shader contract; no discard/gamma/library includes.",
+      "Perspective hardware/reverse depth reconstruct near/far/intermediate distance.",
+      "Independent transcription of original edgeAt matches3240 slope/scale/distance/offset/normal probes and explicit .5depth/.39normal boundary goldens.",
+      "Equal/front/self-depth tolerance, center occlusion, each neighbor occlusion, missing NPC mask and reverse-depth equivalent results.",
+      "Per-NPC height/strength, weak-edge cutoff, alpha cap and linear color/base-alpha compositing."
+    ],
+    "format": "Owned new files have LF EOF and no trailing spaces; git diff --check passes.",
+    "limitations": "Pure CPU/numerical/source verification only. No GPU shader compile, browser, pixel quality, foreground appearance or device performance claim. A owns native render target/depth/style lifecycle; C independent native integration remains required."
+  },
+  "sha256": {
+    "src/npc-ink-shaders.js": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b",
+    "tests/npc-ink-shaders.test.js": "f4815c559fd6ac66cd1cd78c0b007b643aea462886f839f36e9b79eafdb41906",
+    "unchanged/src/cinematic-studio.js": "56fb1882005d4b00d3ba63a083ce32e3ff75fc9cc308075fde8dde0c6e287fb3",
+    "unchanged/src/cinematic-studio.css": "14b4d33ff408ec185362ca157eeee3e7607e9db2f0c14efcd4658d555e441dee",
+    "unchanged/public/moonforest-help.html": "746e096dc3d7c1c23ac088f7efb3b05d8ea805e4624e4e402b6dfbf17d9a28a7"
+  }
+}
