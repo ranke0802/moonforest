@@ -37,6 +37,19 @@
   },
   "inputs": [
     {
+      "id": "file:Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
+      "path": "Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
+      "bytes": 12804,
+      "sha256": "ce97044cc38428e275530a1125cc644ee5be6d198b324cfe50ae8192c0959331",
+      "origins": [
+        "C:/Users/ryank/Downloads/문포레스트-great-plains-작업 (6).moonmap"
+      ],
+      "requiredBy": [
+        "authored-map-project"
+      ],
+      "status": "bundled"
+    },
+    {
       "id": "file:Sources/environment/village/asset-plan.json",
       "path": "Sources/environment/village/asset-plan.json",
       "bytes": 10730,
@@ -26765,8 +26778,8 @@
     }
   ],
   "summary": {
-    "files": 2055,
-    "bytes": 12319513920,
+    "files": 2056,
+    "bytes": 12319526724,
     "missing": [],
     "layoutDuplicates": 44
   },

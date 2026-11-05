@@ -28,8 +28,14 @@ export function placementCatalogAsset(catalog,assetId,version){
  if(entries.length!==1)fail('assetVersion',entries.length?'ambiguous asset version':'unknown asset ID/version','ASSET_VERSION_CONFLICT');
  return entries[0];
 }
-function canonical(value){if(Array.isArray(value))return '['+value.map(canonical).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+canonical(value[key])).join(',')+'}';return JSON.stringify(value);}
-function revision(value){let hash=0xcbf29ce484222325n;for(const char of canonical(value)){hash^=BigInt(char.codePointAt(0));hash=BigInt.asUintN(64,hash*0x100000001b3n);}return 'base-v1-'+hash.toString(16).padStart(16,'0');}
+function fingerprintNumber(value){const scaled=value*1e6,lower=Math.floor(scaled);return (Math.abs(scaled-lower-.5)<1e-5?lower+1:Math.round(scaled))/1e6;}
+function canonical(value,quantize=false){if(Array.isArray(value))return '['+value.map(item=>canonical(item,quantize)).join(',')+']';if(value&&typeof value==='object')return '{'+Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+canonical(value[key],quantize)).join(',')+'}';return JSON.stringify(quantize&&typeof value==='number'&&Number.isFinite(value)?fingerprintNumber(value):value);}
+function revision(value,quantize=false){let hash=0xcbf29ce484222325n;for(const char of canonical(value,quantize)){hash^=BigInt(char.codePointAt(0));hash=BigInt.asUintN(64,hash*0x100000001b3n);}return 'base-v1-'+hash.toString(16).padStart(16,'0');}
+// Audited 2026-11-05: the supplied work's 15 touched native sources match the
+// current layout exactly and all actual terrain supports validate. These two
+// old fingerprints are compatible ONLY with this exact canonical layout. A
+// later structural/asset/layout change must fail closed rather than rebase it.
+function compatiblePlainsRevision(base,previous){return base.mapId==='great-plains'&&base.baseRevision==='base-v1-6fc3db2cf9acf956'&&['base-v1-b2818f0d0797c28a','base-v1-765c947dda5b0795'].includes(previous);}
 
 export function basePlacementEditability(mapId,source,asset){
  return editableBasePlacement(mapId,source,asset);
@@ -45,7 +51,10 @@ export function createBasePlacementManifest(mapId,{catalog,placements=layouts[ma
  });
  // Editor capabilities do not change the immutable-layout revision. Old saved
  // overlays still refer to the exact same source transforms and stable IDs.
- const baseRevision=revision({mapId,instances});
+ // Procedural plains coordinates may differ in insignificant final bits across
+ // JS engines. Quantize only fingerprint inputs, never geometry or saved poses.
+ // Other maps retain their existing revision contract and saved-work format.
+ const baseRevision=revision({mapId,instances},mapId==='great-plains');
  for(const instance of instances){const asset=catalogEntries(catalog).find(entry=>entry.assetId===instance.assetId&&(entry.version??entry.assetVersion)===instance.assetVersion),policy=basePlacementEditability(mapId,instance.source,asset);Object.assign(instance,policy,{readOnly:!policy.editable});}
  const protectedIds=[...seen,...CHAPTER_POINTS.filter(point=>point.map===mapId).map(point=>point.id)];
  return {version:1,mapId,coordinateSystem:PLACEMENT_COORDINATE_SYSTEM,baseRevision,instances,protectedIds:[...new Set(protectedIds)]};
@@ -68,7 +77,7 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
  if(!Number.isSafeInteger(document.revision)||document.revision<0)fail('revision','expected a nonnegative safe integer');
  if(expectedRevision!==undefined&&document.revision!==expectedRevision)fail('revision','document revision conflict','REVISION_CONFLICT');
  baseManifest??=createBasePlacementManifest(document.mapId,{catalog});
- if(baseManifest.mapId!==document.mapId||baseManifest.baseRevision!==document.baseRevision)fail('baseRevision','base map revision conflict','BASE_REVISION_CONFLICT');
+ if(baseManifest.mapId!==document.mapId||baseManifest.baseRevision!==document.baseRevision&&!compatiblePlainsRevision(baseManifest,document.baseRevision))fail('baseRevision','base map revision conflict','BASE_REVISION_CONFLICT');
  if(!Array.isArray(document.instances)||document.instances.length>maxInstances)fail('instances',`expected at most ${maxInstances} instances`);
  const protectedIds=new Set(baseManifest.protectedIds??baseManifest.instances.map(row=>row.instanceId)),baseRows=new Map(baseManifest.instances.map(row=>[row.instanceId,row])),baseIds=new Set(baseRows.keys()),seen=new Set();
  const removedBaseIds=document.removedBaseIds??[];
@@ -106,7 +115,7 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
   return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale,...(aspect?{aspect}:{}),...(frontYaw!==undefined?{frontYaw}:{})},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{})};
  });
  const overridden=new Set(instances.map(instance=>instance.sourceInstanceId).filter(Boolean));for(const instance of instances)if(overridden.has(instance.attachment.supportId))fail('attachment.supportId','이 소품에 붙인 장식을 먼저 옮겨 주세요. 편집 중인 기존 소품은 고정 지지면으로 사용할 수 없어요.');
- return {...copy(document),instances};
+ return {...copy(document),baseRevision:baseManifest.baseRevision,instances};
 }
 
 export class PlacementHistory {

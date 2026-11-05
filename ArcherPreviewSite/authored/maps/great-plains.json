@@ -1,0 +1,506 @@
+{
+  "version": 1,
+  "mapId": "great-plains",
+  "baseRevision": "base-v1-6fc3db2cf9acf956",
+  "revision": 214,
+  "coordinateSystem": "RH_Y_UP_METRES",
+  "instances": [
+    {
+      "instanceId": "outcrop-stone-109",
+      "assetId": "rock-01-mossy-boulder",
+      "assetVersion": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+      "transform": {
+        "position": [
+          50.124018815125716,
+          0.3001362235794529,
+          -9.786685798460276
+        ],
+        "rotation": [
+          0,
+          -0.5816187613103587,
+          0,
+          0.8134615027718298
+        ],
+        "scale": 2.891258862510039
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0.0021768093846123754,
+          0.9999363755559858,
+          -0.011068258257810914
+        ],
+        "offset": -0.02500002585065897,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "outcrop-stone-109"
+    },
+    {
+      "instanceId": "grass-428",
+      "assetId": "grass-tuft",
+      "assetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+      "transform": {
+        "position": [
+          37.60041809082031,
+          0.530374837330811,
+          10.638769149780273
+        ],
+        "rotation": [
+          0,
+          0.9779369108906648,
+          0,
+          0.20890045073580843
+        ],
+        "scale": 2.4381603926802353
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "offset": -0.024999988488190183,
+        "supportId": "terrain"
+      },
+      "collision": "none",
+      "sourceInstanceId": "grass-428"
+    },
+    {
+      "instanceId": "meadow-oak-7",
+      "assetId": "forest-01-sickly-oak",
+      "assetVersion": "8d89e5b93775f1d4cc2a751f6eb90924a5f0fe0b9bfd805549e94ec3b683d445",
+      "transform": {
+        "position": [
+          40.9611103164379,
+          0.5031349298888356,
+          14.957042195631681
+        ],
+        "rotation": [
+          0,
+          0.7547188932707118,
+          0,
+          0.6560483154008036
+        ],
+        "scale": 3.2796576125191685
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0.014109646504013133,
+          0.9988289446657455,
+          -0.04627804202259009
+        ],
+        "offset": -0.025000005960464478,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "meadow-oak-7"
+    },
+    {
+      "instanceId": "lookout-oak",
+      "assetId": "tree-01-round-oak",
+      "assetVersion": "5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559",
+      "transform": {
+        "position": [
+          -33.43289833773313,
+          8.074669586812021,
+          -23.062820450712803
+        ],
+        "rotation": [
+          0,
+          0.09983341491649012,
+          0,
+          0.9950041654516386
+        ],
+        "scale": 1.8863581106366112
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.005595336115741829,
+          0.9999804274379314,
+          0.0027994561621979444
+        ],
+        "offset": -0.02500009536743164,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "lookout-oak"
+    },
+    {
+      "instanceId": "grove-gate-south-tree-4",
+      "assetId": "tree-01-round-oak",
+      "assetVersion": "5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559",
+      "transform": {
+        "position": [
+          -81.36827850341797,
+          0.5060427009520089,
+          -9.693355560302734
+        ],
+        "rotation": [
+          0,
+          -0.6064535188165628,
+          0,
+          0.7951189404831259
+        ],
+        "scale": 0.8850000301996868
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "offset": -0.025000137036756187,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "grove-gate-south-tree-4"
+    },
+    {
+      "instanceId": "grove-gate-south-tree-3",
+      "assetId": "tree-02-slender-pine",
+      "assetVersion": "cee7e65140c81946d9401afb05dc6c115f5f983dbb46e4e841bc1c3cd79d0249",
+      "transform": {
+        "position": [
+          -92.15115827033097,
+          0.12211767360065533,
+          -7.585137726771187
+        ],
+        "rotation": [
+          0,
+          0.9726994516108286,
+          0,
+          -0.23206847445526402
+        ],
+        "scale": 1.147971478582353
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.0046044301070102414,
+          0.9999828443584218,
+          -0.003620802705200271
+        ],
+        "offset": -0.024999908237333,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "grove-gate-south-tree-3"
+    },
+    {
+      "instanceId": "meadow-oak-0",
+      "assetId": "tree-01-round-oak",
+      "assetVersion": "5538e1885e7db61f8234a2bad9d4bd0b4a4d2fcb034df817ca772040d3c42559",
+      "transform": {
+        "position": [
+          -70.46206806865804,
+          0.47211879725622485,
+          -54.343261426029194
+        ],
+        "rotation": [
+          0,
+          0.8987669726791115,
+          0,
+          -0.4384266515863574
+        ],
+        "scale": 1.1595672300780817
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.3266224699129338,
+          0.9390657131287166,
+          -0.10711371795446968
+        ],
+        "offset": -0.024999976158138537,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "meadow-oak-0"
+    },
+    {
+      "instanceId": "grass-82",
+      "assetId": "grass-tuft",
+      "assetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+      "transform": {
+        "position": [
+          -70.64448547363281,
+          1.2996263448912901,
+          -45.934120178222656
+        ],
+        "rotation": [
+          0,
+          0.09161557397608727,
+          0,
+          0.9957944499770183
+        ],
+        "scale": 0.9491349251335296
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "offset": -0.025000328274468853,
+        "supportId": "terrain"
+      },
+      "collision": "none",
+      "sourceInstanceId": "grass-82"
+    },
+    {
+      "instanceId": "rim-cliff-9",
+      "assetId": "rock-02-jagged-outcrop",
+      "assetVersion": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+      "transform": {
+        "position": [
+          -57.66245164201494,
+          0.3630269948202966,
+          -103.48645356712974
+        ],
+        "rotation": [
+          0,
+          0.32642557376594566,
+          0,
+          0.9452229074623473
+        ],
+        "scale": 5.969900272230499
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0.027642932137401096,
+          0.9995521207952793,
+          0.011464123015149966
+        ],
+        "offset": -0.7249999385315533,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "rim-cliff-9"
+    },
+    {
+      "instanceId": "grass-462",
+      "assetId": "grass-tuft",
+      "assetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+      "transform": {
+        "position": [
+          -24.840991973876953,
+          0.2793606489449587,
+          -83.92449951171875
+        ],
+        "rotation": [
+          0,
+          -0.05660353087085015,
+          0,
+          0.9983967349170132
+        ],
+        "scale": 1.5233651529160592
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "offset": -0.02500000293551352,
+        "supportId": "terrain"
+      },
+      "collision": "none",
+      "sourceInstanceId": "grass-462"
+    },
+    {
+      "instanceId": "rim-cliff-10",
+      "assetId": "rock-02-jagged-outcrop",
+      "assetVersion": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+      "transform": {
+        "position": [
+          -23.092032765582218,
+          0.05209538142890968,
+          -107.38647982935427
+        ],
+        "rotation": [
+          0,
+          0.982037741125342,
+          0,
+          -0.18868459133017731
+        ],
+        "scale": 6.018440385884904
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.018536318771042358,
+          0.999624810985396,
+          -0.020165370039485816
+        ],
+        "offset": -0.7249999878728772,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "rim-cliff-10"
+    },
+    {
+      "instanceId": "rail-27",
+      "assetId": "rail-fence",
+      "assetVersion": "4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19",
+      "transform": {
+        "position": [
+          -70.85878538713102,
+          0.17701269084256704,
+          -33.044857664310854
+        ],
+        "rotation": [
+          0,
+          -0.19866932806419207,
+          0,
+          0.9800665783948163
+        ],
+        "scale": 0.8500000021674415
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.00935475536932654,
+          0.9983711421088082,
+          0.056281001735342784
+        ],
+        "offset": -0.02500000223517418,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "rail-27"
+    },
+    {
+      "instanceId": "authored-bdeca366-0596-4a04-9d12-bcca8aea1358",
+      "assetId": "rail-fence",
+      "assetVersion": "4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19",
+      "transform": {
+        "position": [
+          -73.66623070726145,
+          0.16306971390585845,
+          -33.98193377272844
+        ],
+        "rotation": [
+          0,
+          -0.13052619222005157,
+          0,
+          0.9914448613738104
+        ],
+        "scale": 1
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.005383433434220779,
+          0.9987797167408097,
+          0.049092729315116324
+        ],
+        "offset": 0,
+        "supportId": "terrain"
+      },
+      "collision": "solid"
+    },
+    {
+      "instanceId": "authored-d53ba22a-b3b3-4942-9cf6-e371a38287cd",
+      "assetId": "rail-fence",
+      "assetVersion": "4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19",
+      "transform": {
+        "position": [
+          -79.67662731986344,
+          0.12185044004383934,
+          -35.050032659453414
+        ],
+        "rotation": [
+          0,
+          -0.13052619222005157,
+          0,
+          0.9914448613738104
+        ],
+        "scale": 1
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          -0.0026409825060781395,
+          0.99999625256318,
+          -0.0007211594825630623
+        ],
+        "offset": 0,
+        "supportId": "terrain"
+      },
+      "collision": "solid"
+    },
+    {
+      "instanceId": "grass-90",
+      "assetId": "grass-tuft",
+      "assetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+      "transform": {
+        "position": [
+          -69.86406707763672,
+          1.9574359943713233,
+          1.33633553981781
+        ],
+        "rotation": [
+          0,
+          0.9993318925847445,
+          0,
+          0.03654816634241122
+        ],
+        "scale": 1.6559496251239036
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "offset": -0.025000124200730056,
+        "supportId": "terrain"
+      },
+      "collision": "none",
+      "sourceInstanceId": "grass-90"
+    },
+    {
+      "instanceId": "landscape-rock-12",
+      "assetId": "rock-01-mossy-boulder",
+      "assetVersion": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+      "transform": {
+        "position": [
+          -72.84701700668144,
+          2.1686065770494114,
+          3.0461879400132155
+        ],
+        "rotation": [
+          0,
+          0.5809183434390945,
+          0,
+          0.8139618407861502
+        ],
+        "scale": 0.3139016284150493
+      },
+      "attachment": {
+        "surface": "ground",
+        "normal": [
+          0.003892152430475927,
+          0.9979594704667272,
+          -0.0637318323542285
+        ],
+        "offset": -0.2875399589538574,
+        "supportId": "terrain"
+      },
+      "collision": "solid",
+      "sourceInstanceId": "landscape-rock-12"
+    }
+  ],
+  "removedBaseIds": [
+    "grove-lookout-west-tree-3"
+  ]
+}

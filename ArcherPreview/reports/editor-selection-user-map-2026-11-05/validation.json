@@ -1,0 +1,54 @@
+{
+  "scope": "Selected object details, one-click placement after browser apply, and deployment of supplied great-plains moonmap",
+  "checks": {
+    "editorPlacementRuntimeAndProjectTests": {"tests": 67, "passed": 67},
+    "plainsRevisionAndProjectTests": {"tests": 18, "passed": 18, "overlapsPreviousRun": true},
+    "shippedTreeNativeCanvasPicking": "Node/NullEngine DOM input regression passed",
+    "build": "passed",
+    "deploymentGraphChecksums": "passed",
+    "browserAutomationUsed": false,
+    "physicalDevicePerformanceMeasured": false
+  },
+  "editor": {
+    "rootCause": "Apply releases the editing lease; visible placement buttons still required that lease, and reentry discarded the selection",
+    "placementRestartsEditingThroughExistingLease": true,
+    "selectedCatalogVariantAndSameMapObjectPreserved": true,
+    "selectedNamePositionRotationScaleVisible": true,
+    "lateStreamedNativeMeshesPickableInEditor": true,
+    "offCancellationAndFailureRollbackPreserved": true
+  },
+  "userMap": {
+    "source": "Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
+    "sourceSha256": "ce97044cc38428e275530a1125cc644ee5be6d198b324cfe50ae8192c0959331",
+    "sourceBytes": 12804,
+    "sourcePreservedExactlyAndRegisteredForPortablePackaging": true,
+    "mapId": "great-plains",
+    "revision": 214,
+    "baseOverrides": 14,
+    "newFences": 2,
+    "removedNativeTrees": 1,
+    "assetVersions": 7,
+    "originalBaseRevision": "base-v1-b2818f0d0797c28a",
+    "canonicalBaseRevision": "base-v1-6fc3db2cf9acf956",
+    "publishedSha256": "6e079eb676efb18f9920f990a0d00a8e06de442445ab7f1ecd03912153b0a51e",
+    "posesAndRemovalsUnchanged": true,
+    "all15TouchedSourcesMatchRecentNativeLayouts": true,
+    "terrainSupportMaxHeightErrorMeters": 0,
+    "terrainSupportMinimumNormalDot": 0.9273122494,
+    "actualNearLodGeometryCommit": {"models": 7, "records": 16, "suppressedNativeRecords": 15},
+    "departureRestoresNavigationAndReleasesAuthoredResources": true
+  },
+  "revisionCompatibility": {
+    "plainsFingerprintOnlyQuantizedToMeters": 0.000001,
+    "sourceAndSavedTransformsRounded": false,
+    "knownLegacyAliasesRequireExactCurrentCanonicalTarget": true,
+    "unknownOrStructurallyChangedRevisionsRejected": true,
+    "otherThreeMapRevisionContractsUnchanged": true,
+    "browserLocalAppliedDataAndDraftsPreservedUntilExplicitSave": true,
+    "note": "Numeric fingerprint fragility was found and hardened; the original mismatch was not proven to be caused by a specific browser or Math implementation."
+  },
+  "protectedResources": {
+    "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
+    "modelsTexturesLodAndCombatUnchanged": true
+  }
+}

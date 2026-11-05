@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
-  "bytes": 703382401,
+  "bytes": 703397759,
   "files": [
     {
       "path": "app.webmanifest",
@@ -14,14 +14,14 @@
       "sha256": "380e5f16a439850d724033dfe3f98642ce1ec75304741332eb0473f312bfa8e2"
     },
     {
-      "path": "assets/actor-editor-BROX_Xah.js",
+      "path": "assets/actor-editor-DWiHAdox.js",
       "bytes": 15478,
-      "sha256": "ecde7b56d98a6b7179d32d027a8f9f1c699fe03f5d944f36c5fe48745b44a9db"
+      "sha256": "6c42a16a261297ebb106f9705d0d4a6613e44d7e605b2599c754fc6d90f004f5"
     },
     {
-      "path": "assets/actor-encounter-adapter-p6aDmV_Z.js",
+      "path": "assets/actor-encounter-adapter-Dh9sTgl2.js",
       "bytes": 9834,
-      "sha256": "9e91df4160816729058cea9895ad4417c942eb1b974e78a15fb1b6cdbad2d223"
+      "sha256": "7c64cb49f5a2e00955298ad205c5edae263dc1acba406a475e9e8f207c476dd7"
     },
     {
       "path": "assets/apple-CP-uTjm2.webp",
@@ -39,9 +39,9 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/authored-placement-runtime-CIHhgit9.js",
+      "path": "assets/authored-placement-runtime-BBX_u51r.js",
       "bytes": 33433,
-      "sha256": "4baf42d9163a01428eab3ddbe853d9809041609f9e2be79547fc2bd51629a961"
+      "sha256": "e4a513824db3d3be82272bb87d7c4b3c3a4217effc95b0a3fa0476040f3b9671"
     },
     {
       "path": "assets/babylon-game-CkG4AARJ.js",
@@ -1414,9 +1414,9 @@
       "sha256": "b8cda115a6a0776b37c2d13ee0a7b15d41bb911b3a271cb4a6df13df4917e14c"
     },
     {
-      "path": "assets/cinematic-game-BsqOF8yf.js",
+      "path": "assets/cinematic-game-CYbVnltW.js",
       "bytes": 47500,
-      "sha256": "56bc280156238b64c1b56e8d795c1a41ad42eae30cadf76a8cc475105e741498"
+      "sha256": "925beb55630aa279229548260b178ee7be4c9333b5d61be6c757d6295d298cf2"
     },
     {
       "path": "assets/cinematic-ground-ginYcNNz.js",
@@ -1434,9 +1434,9 @@
       "sha256": "2e756267d15210fa5a966f5914b9d1e59d658ab24b11f5f8cbb7d8ae7a151e60"
     },
     {
-      "path": "assets/cinematic-scene-host-C937u-5l.js",
+      "path": "assets/cinematic-scene-host-DBTI0HEl.js",
       "bytes": 39613,
-      "sha256": "86a25ae9693e2df46252eab985198cc735e8ea4e8813f79f420de6f8ed49d650"
+      "sha256": "523c7c6ab8b50d49fda944b177366f7b17cf755b660c62b4a8627943a35a7fa0"
     },
     {
       "path": "assets/cinematicStudio-Bf-16Jw_.css",
@@ -1444,9 +1444,9 @@
       "sha256": "071bb30ffc9bc1fcf9e85aea2b3b08a79a2cf734ddf350bc0596edb35ad83feb"
     },
     {
-      "path": "assets/cinematicStudio-CM4Gcvnc.js",
+      "path": "assets/cinematicStudio-CN3-VgPM.js",
       "bytes": 93376,
-      "sha256": "34638d3d798664268180de9b8d3f538f34c6a878b7c3731d0aa7b2fea72948ef"
+      "sha256": "f30dd492b2b0aa416a0a46bbe813e68e46afa6b7a60b62fac1d3f8379c24ccc5"
     },
     {
       "path": "assets/content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
@@ -7379,14 +7379,14 @@
       "sha256": "c56d791e858321919256b45373e6ee2ee791031fd2b779eac7081c59c0daa89d"
     },
     {
-      "path": "assets/developer-actors-BfN8aDx0.js",
+      "path": "assets/developer-actors-BApu9clf.js",
       "bytes": 19913,
-      "sha256": "8e08bf2e6f09016d66febaf6eacd58d88c5d60489d9cd4603bd272b0fe0fdd94"
+      "sha256": "aa27482950ce7ae7dba958e9439c9e474bdd9097db1a52aba5c620029f64addb"
     },
     {
-      "path": "assets/developer-editor-BHc1sH9E.js",
-      "bytes": 33814,
-      "sha256": "e198525d4083791f5f6b5044a123c07e9a436bf7fde9fac56036a66636480a37"
+      "path": "assets/developer-editor-7ITuMXBX.js",
+      "bytes": 35792,
+      "sha256": "c238a6cc6c4e362a819992b87d6075a8804515d48ac3d890e393508f49e25dba"
     },
     {
       "path": "assets/developer-tools-q26dUb-0.js",
@@ -7404,9 +7404,9 @@
       "sha256": "b393d869ad04c67a563980079ecb47375f07e0ee3054296113432912b63f8d19"
     },
     {
-      "path": "assets/editor-cave-collision-CFhqlx5y.js",
+      "path": "assets/editor-cave-collision-CRKxjdpI.js",
       "bytes": 2354832,
-      "sha256": "d644e3b504248746423fd5f0b6cf8df73557ec8efd5127fba8f40195570c0c75"
+      "sha256": "656b8f15c3a91f1fb6d695286bcacf20b7ac2759a88f31f334afd3531e949b26"
     },
     {
       "path": "assets/editor-workspace-BxO6o84q.js",
@@ -7434,9 +7434,9 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-CoW69m9o.js",
-      "bytes": 2804193,
-      "sha256": "59b268fd3857d57cd2e539d64c96c3f06ba8cbcbb982b4de40ef7022680be1c3"
+      "path": "assets/game-BtRN0hQm.js",
+      "bytes": 2804375,
+      "sha256": "b16f8d6b6c734f9d4cd649c3b07f7085178a0a8d2bc87bfd6479e9bdd937ce06"
     },
     {
       "path": "assets/game-Dj6cZsyp.css",
@@ -7544,9 +7544,9 @@
       "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27"
     },
     {
-      "path": "assets/npc-world-Bg_LCIEQ.js",
+      "path": "assets/npc-world-B1LV645_.js",
       "bytes": 8372,
-      "sha256": "60983540a6cca9bfd461b92767a0065613ce2f2719899e56e65ae76221fb5123"
+      "sha256": "607c32fb871d921e44ee99b8808900841be2e0efa1a0b31ca564412034179f39"
     },
     {
       "path": "assets/panel-DRx_KGK2.webp",
@@ -7564,9 +7564,9 @@
       "sha256": "8f6a5e95b6ac9cecfede6cdaa6fe0d535e8629b7d5c8f2ab00bd7870a62d9011"
     },
     {
-      "path": "assets/placement-document-BAIPP5i8.js",
-      "bytes": 10027,
-      "sha256": "295f63e037a7c85f1f8474bd3d8fdba6bab4cd03ba68f2f72a6f046aafe2e582"
+      "path": "assets/placement-document-BqVI0PI9.js",
+      "bytes": 10421,
+      "sha256": "2279f4eb927a2c0e116e9e4f8cc3544f79d1b1f5f9f4b75f0942ce9a9b41eb47"
     },
     {
       "path": "assets/quest-props.json",
@@ -7669,14 +7669,19 @@
       "sha256": "588e8abac1b838cc76d9a68a56e3b1c6279179e4ddd902c8559bcbb71da19cf9"
     },
     {
+      "path": "authored/maps/great-plains.json",
+      "bytes": 12804,
+      "sha256": "6e079eb676efb18f9920f990a0d00a8e06de442445ab7f1ecd03912153b0a51e"
+    },
+    {
       "path": "cinematic-studio.html",
       "bytes": 1504,
-      "sha256": "e868d23e9d8e0341238952afa7934064063b1a69327b0fe30c987c8b20e85ee5"
+      "sha256": "46b5be33aa6cf0670be03d85273872b78a3c479cf8be8246177b94cf3c8334e4"
     },
     {
       "path": "index.html",
       "bytes": 33361,
-      "sha256": "a3ac16a03b2c4c59bd6a9d04a0399fec2b0eec76086d3f468b91a1fe032868d6"
+      "sha256": "1c5a9a6063d94c6e2165fed168180c6d801f43c04c00e128a541a1528cba127b"
     },
     {
       "path": "KTX2_NOTICES.txt",

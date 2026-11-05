@@ -1,1 +1,11 @@
-{"version":1,"maps":{}}
+{
+  "version": 1,
+  "maps": {
+    "great-plains": {
+      "path": "authored/maps/great-plains.json",
+      "sha256": "6e079eb676efb18f9920f990a0d00a8e06de442445ab7f1ecd03912153b0a51e",
+      "revision": 214,
+      "baseRevision": "base-v1-6fc3db2cf9acf956"
+    }
+  }
+}
