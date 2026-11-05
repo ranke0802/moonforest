@@ -1,0 +1,43 @@
+{
+  "baseline": "99fcd56",
+  "passed": true,
+  "cases": [
+    {
+      "case": "native-ready-query-draws",
+      "queries": 33,
+      "oldDraws": 66,
+      "currentDraws": 33,
+      "visibilityCadenceTimeoutAndEpochEqual": true,
+      "drawReductionPercent": 50
+    },
+    {
+      "case": "query-pass-readiness",
+      "unreadyQueries": 0,
+      "unreadyDraws": 0,
+      "readyQueries": 2,
+      "readyDraws": 2,
+      "restoredScenePass": true
+    },
+    {
+      "case": "native-cold-initialization",
+      "queriesBeforeReadiness": 0,
+      "firstRendererInitializationOutsideQuery": true
+    },
+    {
+      "case": "fail-open-and-pass-restore",
+      "failedAdmissionDraws": 0,
+      "readinessExceptionRevealsAll": true
+    },
+    {
+      "case": "observer-cost-lifetime",
+      "finallyMeasured": true,
+      "removedOnDispose": true,
+      "noPollingTimersAdded": true
+    }
+  ],
+  "limitations": [
+    "Real Babylon 9.31 BoundingBoxRenderer/ShaderMaterial/NullEngine drawElementsType is exercised; query availability/results are controlled.",
+    "Counts demonstrate removal of redundant outside-query draw calls, not actual GPU time, mobile FPS or causation of a recorded delay.",
+    "Cold shaders initialize outside queries; readiness is checked under the same dedicated render pass as the actual query draw."
+  ]
+}

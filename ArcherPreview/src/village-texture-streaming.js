@@ -38,7 +38,10 @@ export class VillageTextureStreaming {
     });
     this.contextRestoredObserver=engine.onContextRestoredObservable?.add(()=>{if(!this.disposed){this.contextLost=false;this.nextCheck=0;}});
     this.disposeObserver=world.scene.onDisposeObservable.addOnce(()=>this.dispose());
-    this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
+    this.observer=world.scene.onAfterRenderObservable.add(()=>{
+      const start=world.frameDiagnostics?.mark();
+      try{this.update(performance.now());}finally{world.frameDiagnostics?.measure('sceneryTextureMs',start??null);}
+    });
   }
   profile(id){return sceneryHighTextureProfile(id,this.assets.get(id)?.config,!!this.world?.touchDevice);}
   profileBytes(config){return highTextureBytes(config,this.textureCapabilities??this.compressedSupported);}

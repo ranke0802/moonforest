@@ -7,3 +7,11 @@ export function orderPoseNodes(nodes){
 // Root correction occurs within the same Babylon render ID. Invalidate each bone
 // once in parent order; force=true recursively recomputes every ancestor per bone.
 export function refreshPoseMatrices(nodes){for(const node of nodes){node.markAsDirty();node.computeWorldMatrix();}}
+
+// Refresh a single imported branch after its external anchor was updated.
+// Forcing the leaf recursively recomputes the same anchor and ancestors again.
+export function refreshPoseBranch(node,anchor){
+  const branch=[];
+  for(let current=node;current&&current!==anchor;current=current.parent)branch.push(current);
+  for(let i=branch.length-1;i>=0;i--){branch[i].markAsDirty();branch[i].computeWorldMatrix();}
+}

@@ -149,7 +149,10 @@ export class VillageGeometryStreaming {
   constructor(world,records,load,has,stats){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
     this.demand=new VillageDemandCache(world,records,stats);
-    this.observer=world.scene.onAfterRenderObservable.add(()=>this.update(performance.now()));
+    this.observer=world.scene.onAfterRenderObservable.add(()=>{
+      const start=world.frameDiagnostics?.mark();
+      try{this.update(performance.now());}finally{world.frameDiagnostics?.measure('sceneryGeometryMs',start??null);}
+    });
   }
   async initial(plan){for(const request of plan)if(!this.has(request))await this.load(request);}
   update(now){
