@@ -7,6 +7,7 @@ import {Observable} from '@babylonjs/core/Misc/observable.js';
 import {nearbyEditableObjects,setupNearbyEditor} from '../src/nearby-editor.js';
 import {EDITABLE_ASSET_INDEX} from '../src/editable-asset-index.js';
 import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
+import {parseAst} from 'rolldown/parseAst';
 
 const cases=[],files=['src/nearby-editor.js','src/main.js','src/editable-asset-index.js'],hash=path=>createHash('sha256').update(readFileSync(new URL('../'+path,import.meta.url))).digest('hex'),sourceHashes=Object.fromEntries(files.map(path=>[path,hash(path)])),settle=async()=>{for(let i=0;i<6;i++)await new Promise(resolve=>setImmediate(resolve));};
 function check(name,run){test(name,async t=>{try{const evidence=await run(t);cases.push({name,passed:true,...evidence});}catch(error){cases.push({name,passed:false,error:error.message});throw error;}});}
@@ -49,9 +50,9 @@ check('click then disposal/map-generation change cannot dispatch queued stale se
 });
 
 function mainNearbyCallback(){
- const text=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),marker='onEdit:async id=>',start=text.indexOf('{',text.indexOf(marker));assert.ok(start>0);let depth=0,quote=null,escape=false,end=start;
- for(;end<text.length;end++){const char=text[end];if(quote){if(escape)escape=false;else if(char==='\\')escape=true;else if(char===quote)quote=null;continue;}if(char==='\''||char==='"'||char==='`'){quote=char;continue;}if(char==='{')depth++;else if(char==='}'&&--depth===0){end++;break;}}
- const body=text.slice(start,end);assert.match(body,/getPlacementEditor/);return new Function('world','getPlacementEditor','document','controller','boss','mapTransition',`let ready=true,loadingAsset=false;return {run:async id=>${body},setReady(value){ready=value;},setLoading(value){loadingAsset=value;}};`);
+ const text=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),nodes=[];const walk=node=>{if(!node||typeof node!=='object')return;if(node.type)nodes.push(node);for(const value of Object.values(node))if(Array.isArray(value))value.forEach(walk);else if(value&&typeof value==='object')walk(value);};walk(parseAst(text));
+ const setup=nodes.find(node=>node.type==='CallExpression'&&node.callee?.name==='setupNearbyEditor'),callback=setup?.arguments[0].properties.find(node=>node.key?.name==='onEdit')?.value;assert.equal(callback?.type,'ArrowFunctionExpression');
+ const body=text.slice(callback.body.start,callback.body.end);assert.match(body,/getPlacementEditor/);assert.match(body,/getActorEditor/);return new Function('world','getPlacementEditor','document','controller','boss','mapTransition','getActorEditor',`let ready=true,loadingAsset=false;return {run:async(id,row)=>${body},setReady(value){ready=value;},setLoading(value){loadingAsset=value;}};`);
 }
 check('actual main lazy-loader callback forwards selection and rejects old-map results before acquiring editor',async()=>{
  const make=mainNearbyCallback(),world={mapId:'village',toolGeneration:3,scene:{isDisposed:false}},entered=[],doc={hidden:false,querySelector:()=>null},controller={dead:false},boss={playerHp:100},transition={busy:false};let resolve;const control=make(world,()=>new Promise(done=>resolve=done),doc,controller,boss,transition),pending=control.run('base-cart');world.mapId='monster-forest';world.toolGeneration++;resolve({enter:value=>entered.push(value)});await assert.rejects(pending);assert.deepEqual(entered,[]);
@@ -59,4 +60,7 @@ check('actual main lazy-loader callback forwards selection and rejects old-map r
 });
 check('actual main deferred callback rechecks readiness, modal, death and scene disposal',async()=>{
  const make=mainNearbyCallback();for(const state of ['not-ready','loading','modal','dead','scene-disposed']){const world={mapId:'village',toolGeneration:1,scene:{isDisposed:false}},doc={hidden:false,querySelector:()=>null},controller={dead:false},boss={playerHp:100},transition={busy:false},entered=[];let resolve;const callback=make(world,()=>new Promise(done=>resolve=done),doc,controller,boss,transition),pending=callback.run('base-cart');if(state==='not-ready')callback.setReady(false);else if(state==='loading')callback.setLoading(true);else if(state==='modal')doc.querySelector=()=>({});else if(state==='dead')controller.dead=true;else world.scene.isDisposed=true;resolve({enter:value=>entered.push(value)});await assert.rejects(pending,undefined,state);assert.deepEqual(entered,[],state);}return {deferredGuards:['ready','loading','modal','dead','scene-disposed']};
+});
+check('actual main routes nearby NPC and monster selections to the actor editor',async()=>{
+ const make=mainNearbyCallback(),world={mapId:'village',toolGeneration:1,scene:{isDisposed:false}},entered=[];let props=0,actors=0;const callback=make(world,async()=>{props++;return {enter(){}};},{hidden:false,querySelector:()=>null},{dead:false},{playerHp:100},{busy:false},async()=>{actors++;return {enter:options=>entered.push(options)};});await callback.run('live-actor:1',{kind:'actor'});assert.equal(props,0);assert.equal(actors,1);assert.deepEqual(entered,[{selection:'live-actor:1'}]);return {actorEditorCalls:actors,propEditorCalls:props};
 });
