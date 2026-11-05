@@ -22,6 +22,13 @@
 /* Detailed diagnostics live in their own modal. No persisted expanded state
    may turn the exploration HUD into a scrolling input surface. */
 #app > #frame-diagnostics > :not(#diagnostic-expand):not(#diagnostic-fps):not(#diagnostic-frame){display:none!important}
+/* Resource rejection must remain legible after the legacy HUD's 2/3 scale.
+   This variant is separate from ordinary notices and never captures input. */
+#app>#toast.stamina-notice{top:40%;bottom:auto;left:50%;right:auto;transform:translate(-50%,-50%);transform-origin:center;scale:1;box-sizing:border-box;width:max-content;max-width:min(620px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px));margin:0;padding:12px 20px;border:1px solid #bca16b;border-radius:6px;background:#101c18ed;color:#ffe8ad;font-size:clamp(20px,3.8vmin,30px);font-weight:700;line-height:1.4;text-align:center;text-shadow:0 1px 2px #000;pointer-events:none;z-index:1100}
+@media(orientation:landscape) and (max-width:640px) and (max-height:400px){
+  #app>#toast.stamina-notice{top:44%;left:calc(50% - 32px);width:148px;max-width:min(148px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px));padding:10px 12px;font-size:20px}
+}
+@media(orientation:landscape) and (max-width:567px) and (max-height:400px){#app>#toast.stamina-notice{left:calc(50% - 76px)}}
 @media (pointer:coarse){
   #app>.topbar .brand{font-size:9px;letter-spacing:1px}
   #app>.topbar .brand .moon-mark{display:none}

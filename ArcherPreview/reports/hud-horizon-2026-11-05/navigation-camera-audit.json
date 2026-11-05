@@ -1,0 +1,199 @@
+{
+  "baseline": "8bfabf0",
+  "legalCenterRadius": 106,
+  "enemyRadius": 105.5,
+  "playerRadius": 0.28809887268420753,
+  "terrainSquareHalf": 144,
+  "extendedGroundSquareHalf": 454,
+  "obstacles": 775,
+  "legalHalfMeterSamples": 131660,
+  "highestLegalSample": {
+    "x": -34.5,
+    "z": -26.5,
+    "height": 8.129275679588318
+  },
+  "lowestLegalSample": {
+    "x": 84,
+    "z": -4,
+    "height": -0.5052461624145519
+  },
+  "lookout": {
+    "x": -28,
+    "z": -20,
+    "height": 8,
+    "capRadius": 9,
+    "cliffWidth": 3,
+    "stretchX": 1.1,
+    "rampStartX": -61,
+    "rampTopX": -37,
+    "rampHalfWidth": 3,
+    "rampShoulder": 6
+  },
+  "camera": {
+    "referenceRadius": 17,
+    "zoom": [
+      1.2,
+      10
+    ],
+    "orbitRadius": [
+      1.7,
+      14.166666666666668
+    ],
+    "panXZ": 4,
+    "panY": [
+      -0.8,
+      2.5
+    ],
+    "beta": [
+      0.25,
+      1.78
+    ],
+    "unrestrictedUpperBeta": 3.106592653589793,
+    "stableFocusHeight": 1.3504634657072228,
+    "maximumDefaultPlanarEyeRadius": 124.16666666666667,
+    "highestSampleEyeY": 25.70599845286301,
+    "minimumPitchLimitedEyeAboveTerrain": 0.23535532370887075
+  },
+  "corridors": [
+    {
+      "name": "village",
+      "portal": {
+        "x": -94,
+        "z": -35,
+        "radius": 3,
+        "destination": "warrior-v3",
+        "label": "마을로 돌아가기",
+        "arrival": {
+          "x": 0.35,
+          "z": 70
+        },
+        "roadPassage": true
+      },
+      "arrival": {
+        "x": -87,
+        "z": -32
+      },
+      "outwardBearingDegrees": -156.80140948635182,
+      "portalBearingDegrees": -159.57766697527657,
+      "targets": [
+        {
+          "x": -163.9928940358751,
+          "z": -64.61616593151042,
+          "radius": 176.2637744800396,
+          "bearingDegrees": -158.49466284953132
+        },
+        {
+          "x": -141.01426828542367,
+          "z": -16.689317937711685,
+          "radius": 141.99844081291693,
+          "bearingDegrees": -173.25032880337227
+        },
+        {
+          "x": -113.43991738488194,
+          "z": -81.02947003897575,
+          "radius": 139.40728055265302,
+          "bearingDegrees": -144.46200194034807
+        },
+        {
+          "x": -107.92504720477358,
+          "z": -2.508223188861649,
+          "radius": 107.9541893476939,
+          "bearingDegrees": -178.6686618038403
+        },
+        {
+          "x": -80.35069630423185,
+          "z": -66.8483752901257,
+          "radius": 104.52243623023902,
+          "bearingDegrees": -140.24097811159857
+        }
+      ]
+    },
+    {
+      "name": "forest",
+      "portal": {
+        "x": 65,
+        "z": -72,
+        "radius": 3,
+        "destination": "warrior-v4",
+        "label": "마물의 숲으로 들어가기",
+        "arrival": {
+          "x": 0,
+          "z": 46
+        },
+        "roadPassage": true
+      },
+      "arrival": {
+        "x": 61,
+        "z": -66
+      },
+      "outwardBearingDegrees": -56.309932474020215,
+      "portalBearingDegrees": -47.92497794915637,
+      "targets": [
+        {
+          "x": 93.28971000748668,
+          "z": -114.43456501123003,
+          "radius": 147.64226922731305,
+          "bearingDegrees": -50.812283128298176
+        },
+        {
+          "x": 55.84744676228372,
+          "z": -110.55166363765343,
+          "radius": 123.85720666525214,
+          "bearingDegrees": -63.19843792773288
+        },
+        {
+          "x": 104.10636383387865,
+          "z": -78.37905225659014,
+          "radius": 130.3127423675567,
+          "bearingDegrees": -36.975167198293256
+        },
+        {
+          "x": 26.448336362346577,
+          "z": -66.4529980377477,
+          "radius": 71.52283163117023,
+          "bearingDegrees": -68.29741230591361
+        },
+        {
+          "x": 74.70725343394152,
+          "z": -34.28038665668441,
+          "radius": 82.19682855788874,
+          "bearingDegrees": -24.648634103045797
+        }
+      ]
+    }
+  ],
+  "boundaryYaws": {
+    "village": 1.1659045405098132,
+    "forest": -0.5880026035475674
+  },
+  "plainsPlacementCount": 1424,
+  "routeCount": 8,
+  "scope": "CPU audit of actual triangular Float32 terrain and current navigation. Legal max/min sampled on0.5m grid, not an analytic extrema proof. Camera bounds use user-requested normal zoom; disabled/custom zoom/pitch settings remain unrestricted by this report.",
+  "baselineGeometry": {
+    "positionHash": "03edb183f287385f3fbaff4a6401388dae1f28d8529573dd3cfc43be509ed3b5",
+    "colorHash": "276de78b0d85f906a417b3ccbd08c985062e3a06fa35b4f2e3c6c31c608c7ce9",
+    "indexHash": "9436ca79fa9eeee6e3b9d0c4a5162a1b73ca48d281993918b28c2fca9f4f4f23",
+    "triangles": 2944,
+    "vertices": 8832,
+    "material": {
+      "unlit": true,
+      "backFaceCulling": false,
+      "fogEnabled": true
+    }
+  },
+  "protectedSourceHashes": {
+    "src/great-plains-layout.js": "609ab3fe0a5bdd87ac6078df8ede899dc6f051a70cc71e1c3d5d675cab57c301",
+    "src/great-plains-terrain.js": "126caaccd7ff174213700cfa6dcaaf7f47c79a7174183976243eb7e4ffd73a19",
+    "src/village-layout.js": "26424fa0c3386bafa67bffd86072d6aa204d161fd87587cf81f1d1fde2e934f7",
+    "src/village-terrain.js": "78a120c01636191acb7f5f3ec2a030f890ca1d847e07b62667de0b2923b241e2",
+    "src/monster-forest-layout.js": "9d56908db03a7db9d816a764a9e59e0786644af17d9abd3c5925b9897d90c3f0",
+    "src/monster-forest-terrain.js": "ffbae162f6991357be397592438dcd9e68b88f013337974382114d858e7df201",
+    "src/village-navigation.js": "6ee214bff008d46a632ab6e5dff13a0e135870bdfaf745bb47cb35176d410f9b",
+    "src/navigation.js": "c26667f1a267587c19e265866671af9fd49df0ec41f69515eef55f2340440cf2",
+    "src/map-route.js": "df5169cc034b40ed9b52ef9c566a9e4eeab12aa9f3c4b7eeae47d8a173c27e92",
+    "src/village-plains-boundary.js": "f47ffd0c22fb655c001dcd2ecc3634c9ad2988ccf66841a7b48dc07a3146d508",
+    "src/plains-forest-boundary.js": "a98c67e47ad02bf33a93fc56d4c6834babbbe47e4c30f6c99d0ea65aa147ce0c",
+    "src/camera-zoom.js": "f0fa8a2cc1d9152f3fa25b2474407f9e96b4dfcb920cd839552a26d19412e609",
+    "src/camera-pitch.js": "689d159b44bff78609ac0d6fd8843a979321647dafc13b48f76ce4ae0e94b95c"
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "baseline": "8bfabf0",
+  "passed": true,
+  "sourceHashes": {
+    "outdoor-vista.js": "1da6f236c116527b29ca62d42a23ecb49c1b13276d383385b1bd26b79bac3182",
+    "mountain-backdrop.js": "1cc95e0e3f19a2a0ac80e8ee387f6aebddc7b565b073c71b1cf75b33c56f97f5"
+  },
+  "facts": [
+    {
+      "case": "horizon-and-distant-skirt-coverage",
+      "legalEyes": [
+        [
+          0,
+          1.6,
+          0
+        ],
+        [
+          -34.5,
+          25.705998452855788,
+          -26.5
+        ],
+        [
+          -120,
+          18,
+          0
+        ],
+        [
+          0,
+          18,
+          120
+        ],
+        [
+          87,
+          18,
+          86
+        ],
+        [
+          -87,
+          2,
+          -32
+        ],
+        [
+          61,
+          2,
+          -66
+        ]
+      ],
+      "horizonRays": 1260,
+      "skirtRays": 1260,
+      "oldExposedSkirtRays": 539,
+      "newExposedSkirtRays": 0,
+      "maxMountainHitDistance": 481.0785575796644,
+      "farPlane": 1024,
+      "sdkRayOracleChecks": 42
+    },
+    {
+      "case": "playable-envelope-and-camera-clearance",
+      "minimumTrianglePlanarRadius": 106.57519398173682,
+      "playerCenterLimit": 106,
+      "checkedPlayerEnvelope": 106.29,
+      "cameraRays": 1152,
+      "occlusions": 0,
+      "maximumDefaultOrbit": 14.166666666666668,
+      "maximumPanXZ": 4,
+      "minimumPanY": -0.8
+    },
+    {
+      "case": "native-passage-sight-corridors",
+      "rays": 33,
+      "mountainOcclusions": 0,
+      "nativeVillageAndForestGeometryChanged": false
+    },
+    {
+      "case": "static-resource-and-roundtrip-invariants",
+      "triangles": 2944,
+      "roundTrips": 32,
+      "resources": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "newTextures": 0,
+      "newLights": 0,
+      "newShadowPasses": 0,
+      "newFrameObservers": 0,
+      "unchangedNativeMountainPalette": true,
+      "villageAndForestBaseRestoredExactly": true
+    }
+  ],
+  "limitations": [
+    "Actual static Babylon mesh and terrain heightfield with CPU triangle/SDK ray checks; no browser, screenshot, rasterized output, GPU or mobile timing measurements.",
+    "Camera clearance covers normal configured1.2x–10x zoom, maximum4m horizontal pan and extreme low vertical pan; disabling the zoom bound can move the camera outside this default envelope.",
+    "The low buried apron preserves orbit-camera clearance; the static visible slopes rise outside it. Native connected-town/forest sight corridors remain open."
+  ]
+}

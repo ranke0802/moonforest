@@ -302,7 +302,8 @@ function applyRenderQuality() {
   if(!document.hidden)frameLoop?.invalidate();
 }
 
-function toast(message) {
+function toast(message, {stamina=false}={}) {
+  $('#toast').classList.toggle('stamina-notice',stamina);
   $('#toast').textContent = message; $('#toast').hidden = false;
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 4000);
 }
@@ -334,7 +335,7 @@ function leaveElenaReview() {
 function updateButtons() {
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0;
-  if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.');audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}
+  if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.',{stamina:true});audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}
   const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,controller?.shieldHeld,controller?.guarding,boss?.active,boss?.playerAlive,boss?.loading,boss?.canUsePotion,boss?.canEscapeGrab,boss?.potions.remaining,boss?.potions.pulsesLeft,rejected].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));

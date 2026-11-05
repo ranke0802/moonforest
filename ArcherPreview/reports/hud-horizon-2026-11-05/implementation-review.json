@@ -1,0 +1,52 @@
+{
+  "status": "validated-awaiting-deployment",
+  "date": "2026-11-05",
+  "baseline": "8bfabf0ccb2d40783e193ae4c6e2ca1f1c97e1ad",
+  "browserAutomation": false,
+  "tests": {
+    "tests": 1956,
+    "pass": 1956,
+    "fail": 0
+  },
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "changes": {
+    "staminaNotice": {
+      "defaultPosition": "center40%",
+      "fontCssPx": [
+        20,
+        30
+      ],
+      "shortLandscape": "two-line148px panel, unchanged combat controls",
+      "otherNotices": "unchanged placement and4s timeout"
+    },
+    "plainsHorizon": {
+      "playableRadius": 106,
+      "footRadius": 106.8,
+      "triangles": 2944,
+      "extraTextures": 0,
+      "extraLights": 0,
+      "extraShadowPasses": 0,
+      "perFrameGeometryWork": false,
+      "nativeVillageForestMapGeometry": "unchanged"
+    }
+  },
+  "sourceHashes": {
+    "src/main.js": "7f77c70dadd40943ce49fba829bf3e9bb931fae2976877f45f3611162fa080de",
+    "src/mobile-ui.css": "3042da99142a5d3202c04ab3cc4d93519745dfead4c77626b8a36196f80bf3d8",
+    "src/mountain-backdrop.js": "1cc95e0e3f19a2a0ac80e8ee387f6aebddc7b565b073c71b1cf75b33c56f97f5",
+    "src/outdoor-vista.js": "1da6f236c116527b29ca62d42a23ecb49c1b13276d383385b1bd26b79bac3182"
+  },
+  "validationLimits": [
+    "CPU geometry/camera/ray audit and CSS cascade/box equations; no actual game screenshot or browser automation.",
+    "Transient central warning can overlap passive quest/boss text on very small landscape screens. Custom HUD offsets may create other overlaps.",
+    "No actual mobile FPS/GPU/thermal measurement."
+  ],
+  "protectedNonCodeFilesUnchanged": 1438,
+  "build": {
+    "success": true,
+    "runtimeChunks": 55,
+    "siteFiles": 1503,
+    "siteBytes": 682421849,
+    "changedPublicFiles": 9
+  }
+}
