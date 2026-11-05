@@ -32,7 +32,7 @@ export function setupDeveloperEditor({root,world,getPlayer,getState,storage,onCo
  // listbox. Metadata browsing does not create any model or runtime resource.
  const category=panel.querySelector('[data-category]'),categoryLabel=category.closest('label'),oldAssets=panel.querySelector('[data-assets]'),variantLabel=doc.createElement('label'),variants=doc.createElement('select');variants.dataset.assets='';variants.dataset.variants='';variants.size=4;variants.setAttribute('role','listbox');variants.setAttribute('aria-label','모양 선택');variantLabel.append('모양 ',variants);oldAssets.replaceWith(categoryLabel,variantLabel);
  const showAll=panel.querySelector('[data-show-all]');showAll.closest('label').replaceChildren(showAll,' 새로 놓을 수 없는 모양도 보기');panel.querySelector('[data-help]').innerHTML='① 종류와 모양을 골라 놓으세요.<br>② 대상을 마우스나 손가락으로 끌어 옮기세요.<br>③ 게임에 적용하면 바로 플레이할 수 있어요.';
- let disposed=false,epoch=0,busy=false,lease=null,gizmos=null,workspace=null,pointerObserver=null,prePointerObserver=null,readyObserver=null,enterTask=null,autoAttempted=false,history=null,base=null,runtime=null,mapId=null,selectedId=null,selectedAsset=null,beforeApplied=null,draftRaw=null,appliedRaw=null,snapArmed=false,moveArmed=false,dragging=false,dragFinishing=false,directDrag=null,cameraLock=null,gizmoObservers=[],dragTask=Promise.resolve(),dragInvalid=false;
+ let disposed=false,epoch=0,busy=false,lease=null,gizmos=null,workspace=null,pointerObserver=null,prePointerObserver=null,readyObserver=null,enterTask=null,hiding=null,autoAttempted=false,history=null,base=null,runtime=null,mapId=null,selectedId=null,selectedAsset=null,beforeApplied=null,draftRaw=null,appliedRaw=null,snapArmed=false,moveArmed=false,dragging=false,dragFinishing=false,directDrag=null,cameraLock=null,gizmoObservers=[],dragTask=Promise.resolve(),dragInvalid=false;
  const dragListeners=[],baseMeshes=new Map();
  const downloads=new Map(),field=name=>panel.querySelector(`[data-field="${name}"]`),button=name=>panel.querySelector(`[data-cmd="${name}"]`),status=(value,error=false)=>{const output=panel.querySelector('[data-status]');output.textContent=value;output.dataset.error=String(error);};
  function failure(error){if(error?.name==='AbortError'||disposed)return;panel.querySelector('[data-error-detail]').textContent=String(error?.message??error);panel.querySelector('[data-error-detail]').hidden=false;status(friendlyError(error),true);}
@@ -178,6 +178,7 @@ export function setupDeveloperEditor({root,world,getPlayer,getState,storage,onCo
  function removeReadyObserver(){if(readyObserver)world.scene.onBeforeRenderObservable?.remove(readyObserver);readyObserver=null;}
  function enter(options={}){
   const isCurrent=options.isCurrent??(()=>true);if(!isCurrent())return Promise.resolve(false);
+  if(disposed)return Promise.resolve(false);if(hiding)return hiding.then(()=>enter(options));panel.hidden=false;
   if(options.selection)return enter({...options,selection:null}).then(result=>result===false||!isCurrent()?false:selectInstance(typeof options.selection==='string'?options.selection:options.selection.instanceId));
   if(enterTask)return enterTask;if(lease?.active)return Promise.resolve();if(busy)return Promise.resolve();if(!isReady())return Promise.reject(new Error('게임을 준비하고 있어요. 준비되면 편집 시작을 눌러 주세요.'));autoAttempted=true;removeReadyObserver();const request=++epoch,enterMap=world.mapId;busy=true;status('편집을 준비하고 있어요…');
   // Deferring once makes the shared promise available even if binding fails synchronously.
@@ -190,13 +191,18 @@ export function setupDeveloperEditor({root,world,getPlayer,getState,storage,onCo
   }catch(error){if(request===epoch){cleanupGizmos();lease=null;acquired?.release('editor-error');}throw error;}
   finally{if(enterTask===task)enterTask=null;if(request===epoch){busy=false;attachGizmo();updateControls();}else if(!disposed)queueMicrotask(notifyReady);}});enterTask=task;updateControls();return task;
  }
- function notifyReady(){if(disposed)return;updateControls();if(autoEnter&&!autoAttempted&&!lease?.active&&!busy&&!enterTask&&isReady())enter().catch(failure);}
+ function notifyReady(){if(disposed||panel.hidden)return;updateControls();if(autoEnter&&!autoAttempted&&!lease?.active&&!busy&&!enterTask&&isReady())enter().catch(failure);}
  function cleanupGizmos(){unlockCamera();workspace?.dispose();workspace=null;for(const {target,type,listener}of dragListeners)target.removeEventListener(type,listener);dragListeners.length=0;if(pointerObserver)world.scene.onPointerObservable.remove(pointerObserver);if(prePointerObserver)world.scene.onPrePointerObservable?.remove(prePointerObserver);pointerObserver=null;prePointerObserver=null;for(const {gizmo,start,change,end}of gizmoObservers){gizmo.onDragStartObservable?.remove(start);gizmo.onDragObservable?.remove(change);gizmo.onDragEndObservable?.remove(end);}gizmoObservers=[];gizmos?.dispose();gizmos=null;}
  async function leave(restore=true,keep=false){
   epoch++;busy=false;dragging=false;dragFinishing=false;directDrag=null;snapArmed=false;moveArmed=false;try{persistDraft();}catch(error){failure(error);}cleanupGizmos();runtime?.clearExistingPreview?.();runtime?.clearPreview();
   const held=lease;lease=null;
   try{if(restore&&!keep&&runtime&&!runtime.disposed&&world.mapId===mapId){const restored={...beforeApplied,revision:Math.max(runtime.document.revision,history.document.revision)+1};await runtime.apply(restored);}}
   finally{held?.release('editor-exit',{restore});updateControls();}
+ }
+ function hide(){
+  if(disposed)return Promise.resolve();panel.hidden=true;autoAttempted=true;removeReadyObserver();
+  if(hiding)return hiding;if(!lease?.active&&!enterTask&&!busy)return Promise.resolve();
+  const pending=enterTask;hiding=Promise.allSettled([leave(true),pending]).then(()=>{hiding=null;});return hiding;
  }
  function download(){if(!history)throw new Error('소품을 놓은 뒤 작업을 저장해 주세요.');const blob=new Blob([serializePlacementDocument(history.document)],{type:'application/json'}),url=URL.createObjectURL(blob),link=doc.createElement('a');link.href=url;link.download=`문포레스트-${mapId}-작업.moonmap`;link.hidden=true;(doc.body??root).append(link);try{link.click();}finally{link.remove();downloads.set(url,setTimeout(()=>{URL.revokeObjectURL(url);downloads.delete(url);},1000));}status('작업을 파일로 저장했어요. 저장한 작업 열기로 이어서 만들 수 있어요.');}
  const action=async event=>{
@@ -223,6 +229,6 @@ export function setupDeveloperEditor({root,world,getPlayer,getState,storage,onCo
  panel.addEventListener('click',action);panel.querySelector('[data-query]').addEventListener('input',()=>search());category.addEventListener('change',()=>search());panel.querySelector('[data-show-all]').addEventListener('change',()=>{categories();search();});variants.addEventListener('change',()=>{const entry=ASSET_CATALOG.entries.find(row=>row.assetId+'@'+row.version===variants.value);if(entry)updateAsset(entry);});panel.querySelector('[data-instances]').addEventListener('change',event=>{selectedId=event.target.value;refreshSelection();});for(const selector of ['[data-mode]','[data-axis]','[data-grid]'])panel.querySelector(selector).addEventListener('change',attachGizmo);panel.querySelector('[data-import]').addEventListener('change',imported);
  panel.querySelector('[data-advanced]').addEventListener('toggle',()=>{if(dragging)finishDrag(true).then(attachGizmo).catch(failure);else attachGizmo();});
  const observer=world.scene.onDisposeObservable.addOnce(()=>api.dispose());
- const api={isEditing:()=>!!lease?.active,inspect:()=>({mapId,editing:!!lease?.active,selectedId,document:history?.document,runtime:runtime?.diagnostics()}),enter,selectInstance,focusSelection,notifyReady,leaveMap(){autoAttempted=false;leave(false).catch(failure);},dispose(){if(disposed)return;disposed=true;removeReadyObserver();leave(false).catch(()=>{});world.scene.onDisposeObservable.remove(observer);for(const [url,timer]of downloads){clearTimeout(timer);URL.revokeObjectURL(url);}downloads.clear();panel.removeEventListener('click',action);panel.remove();style.remove();}};
+ const api={isEditing:()=>!!lease?.active,inspect:()=>({mapId,editing:!!lease?.active,selectedId,document:history?.document,runtime:runtime?.diagnostics()}),enter,hide,selectInstance,focusSelection,notifyReady,leaveMap(){autoAttempted=false;leave(false).catch(failure);},dispose(){if(disposed)return;disposed=true;removeReadyObserver();leave(false).catch(()=>{});world.scene.onDisposeObservable.remove(observer);for(const [url,timer]of downloads){clearTimeout(timer);URL.revokeObjectURL(url);}downloads.clear();panel.removeEventListener('click',action);panel.remove();style.remove();}};
  categories();search();if(autoEnter)readyObserver=world.scene.onBeforeRenderObservable?.add(notifyReady);queueMicrotask(notifyReady);return api;
 }

@@ -21,7 +21,7 @@ import {setupCommercialUi} from './commercial-ui.js';
 import {setupHudLayout} from './hud-layout.js';
 import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
-import {setupDeveloperToolSettings} from './tool-visibility-settings.js';
+import {setupDeveloperToolSettings,createDeveloperToolSessions} from './tool-visibility-settings.js';
 import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
@@ -1193,13 +1193,15 @@ try {
     }).catch(error=>{console.error('[Actor lab]',error);toast('배우 실험 도구를 불러오지 못했습니다.');});
   }
   let placementEditorTask=null;
-  const getPlacementEditor=async(canOpen=()=>true)=>{
+  const getPlacementEditor=async(canOpen=()=>true,{autoEnter=false}={})=>{
+    if(!canOpen())throw new Error('오브젝트 편집 설정이 꺼졌습니다.');
     if(world.developmentEditor)return world.developmentEditor;
-    placementEditorTask??=import('./developer-editor.js').then(({setupDeveloperEditor})=>{
-      if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
-      if(!canOpen())throw new Error('오브젝트 편집 설정이 꺼졌습니다.');
-      return world.developmentEditor=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter:new URLSearchParams(location.search).get('developer')==='1'});
-    }).catch(error=>{placementEditorTask=null;throw error;});return placementEditorTask;
+    // Cache only the module: each caller must retain its own settings generation.
+    placementEditorTask??=import('./developer-editor.js').catch(error=>{placementEditorTask=null;throw error;});
+    const {setupDeveloperEditor}=await placementEditorTask;
+    if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
+    if(!canOpen())throw new Error('오브젝트 편집 설정이 꺼졌습니다.');
+    return world.developmentEditor??=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter});
   };
   const toolState=()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:loadingAsset||mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true||frameLoop?.loadingFailed===true});
   let npcWorldTask=null,actorEditorTask=null,gameCinematicsTask=null;
@@ -1210,48 +1212,58 @@ try {
       const runtime=createNpcWorld({world,catalog:ASSET_CATALOG,getState:toolState,storage:journeyStorage,onError:error=>{if(error.name!=='AbortError'){console.error('[NPC]',error);toast(error.message);}}});world.npcWorld=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
     }).catch(error=>{npcWorldTask=null;throw error;});return npcWorldTask;
   };
-  const getActorEditor=async()=>{
+  const getActorEditor=async(canOpen=()=>true)=>{
+    if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
     if(world.developmentActorEditor)return world.developmentActorEditor;
-    actorEditorTask??=Promise.all([import('./actor-editor.js'),getNpcWorld()]).then(([{setupActorEditor},npcWorld])=>{
-      if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');const editor=setupActorEditor({root:$('#app'),world,battle:boss,npcWorld,getPlayer:()=>actor,getState:toolState,storage:journeyStorage,notify:toast});world.developmentActorEditor=editor;world.scene.onDisposeObservable.addOnce(()=>editor.dispose());return editor;
-    }).catch(error=>{actorEditorTask=null;throw error;});return actorEditorTask;
+    actorEditorTask??=Promise.all([import('./actor-editor.js'),getNpcWorld()]).catch(error=>{actorEditorTask=null;throw error;});
+    const [{setupActorEditor},npcWorld]=await actorEditorTask;
+    if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
+    return world.developmentActorEditor??=setupActorEditor({root:$('#app'),world,battle:boss,npcWorld,getPlayer:()=>actor,getState:toolState,storage:journeyStorage,notify:toast});
   };
   world.restoreNpcActors=async()=>{
     if(!releaseEnabled||new URLSearchParams(location.search).get('cinematicPreview')==='1')return;
     try{const raw=journeyStorage?.getItem('moonforest-0.1:npc-world:v1');if(!raw||!JSON.parse(raw).maps?.[world.mapId]?.length)return;const mapId=world.mapId,generation=world.toolGeneration,runtime=await getNpcWorld();if(world.mapId===mapId&&world.toolGeneration===generation&&toolState().ready)await runtime.ensureMap();}catch(error){if(error.name!=='AbortError'){console.error('[NPC restore]',error);toast('저장한 NPC를 열지 못했습니다. '+error.message);}}
   };
-  const getGameCinematics=async()=>{
+  const getGameCinematics=async(canOpen=()=>true)=>{
+    if(!canOpen())throw new Error('컷씬 도구 설정이 꺼졌습니다.');
     if(world.developmentCinema)return world.developmentCinema;
-    gameCinematicsTask??=import('./cinematic-game.js').then(({setupGameCinematics})=>{
-      if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');return world.developmentCinema=setupGameCinematics({root:$('#app'),world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,preview:new URLSearchParams(location.search).get('cinematicPreview')==='1',travel:id=>mapTransition.travel(travelUrl(location.href,authoringCharacter(id))),getState:toolState});
-    }).catch(error=>{gameCinematicsTask=null;throw error;});return gameCinematicsTask;
+    gameCinematicsTask??=import('./cinematic-game.js').catch(error=>{gameCinematicsTask=null;throw error;});
+    const {setupGameCinematics}=await gameCinematicsTask;
+    if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');if(!canOpen())throw new Error('컷씬 도구 설정이 꺼졌습니다.');
+    return world.developmentCinema??=setupGameCinematics({root:$('#app'),world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,preview:new URLSearchParams(location.search).get('cinematicPreview')==='1',travel:id=>mapTransition.travel(travelUrl(location.href,authoringCharacter(id))),getState:toolState});
   };
-  if(releaseEnabled&&new URLSearchParams(location.search).get('developer')==='1'){
-    getPlacementEditor().then(editor=>editor.notifyReady?.()).catch(error=>{console.error('[Placement editor]',error);toast('배치 편집기를 불러오지 못했습니다.');});
-  }
-  if(releaseEnabled&&['cinematic','cinematicPreview'].some(key=>new URLSearchParams(location.search).get(key)==='1')){
+  const toolSessions=createDeveloperToolSessions({getEnabled:id=>developerTools?.enabled(id)===true,getTools:()=>[world.developmentEditor,world.developmentActorEditor,world.developmentCinema]});
+  world.scene.onDisposeObservable.addOnce(()=>toolSessions.dispose());
+  if(import.meta.hot)import.meta.hot.dispose(()=>toolSessions.dispose());
+  if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1'){
     getGameCinematics().then(api=>api.notifyReady()).catch(error=>{console.error('[Cinematic player]',error);toast('컷씬 도구를 불러오지 못했습니다.');});
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
     const settingsDialog=$('#motion-speed-dialog');
-    developerTools=world.developmentToolSettings=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,inGame:true,mounts:{
+    developerTools=world.developmentToolSettings=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,inGame:true,onDisable:id=>toolSessions.close(id),mounts:{
       nearby:async({host,isCurrent})=>{
         const [{setupNearbyEditor},{listEditableActorHandles}]=await Promise.all([import('./nearby-editor.js'),import('./live-actor-handles.js')]);if(!isCurrent()||world.scene.isDisposed)return;
         const control=setupNearbyEditor({root:$('#app'),world,getPlayer:()=>actor,getState:toolState,
           getActors:()=>[...listEditableActorHandles(world,boss),...(world.npcWorld?.list()??[]).map(row=>({...row,name:row.label,root:world.npcWorld.get(row.id)?.encounter.actor,kind:'actor',source:'npc-authored'}))],
-          onAddActor:async()=>{if(!isCurrent())return false;const editor=await getActorEditor();if(!isCurrent()||!developerTools?.enabled('nearby'))return false;return editor.enter();},
+          onAddActor:()=>toolSessions.open('nearby',isCurrent,async current=>{const editor=await getActorEditor(current);if(!current())return false;return editor.enter({isCurrent:current});}),
           onEdit:async(id,row)=>{
-            const mapId=world.mapId,generation=world.toolGeneration,canOpen=()=>isCurrent()&&developerTools?.enabled('nearby')===true&&!world.scene.isDisposed&&world.mapId===mapId&&world.toolGeneration===generation&&ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')&&!controller?.dead&&boss.playerHp>0;
-            const editor=await(row?.kind==='actor'?getActorEditor():getPlacementEditor(canOpen));
-            if(!canOpen())throw new Error('지역이 준비된 뒤 가까운 대상을 다시 골라 주세요.');
-            try{if(await editor.enter({selection:id,isCurrent:()=>isCurrent()&&developerTools?.enabled('nearby')===true&&world.mapId===mapId&&world.toolGeneration===generation})===false)throw new Error('게임을 준비한 뒤 대상을 다시 골라 주세요.');}catch(error){toast(error.message);throw error;}
+            const mapId=world.mapId,generation=world.toolGeneration;
+            return toolSessions.open('nearby',isCurrent,async current=>{
+              const canOpen=()=>current()&&developerTools?.enabled('nearby')===true&&!world.scene.isDisposed&&world.mapId===mapId&&world.toolGeneration===generation&&ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')&&!controller?.dead&&boss.playerHp>0;
+              const editor=await(row?.kind==='actor'?getActorEditor(canOpen):getPlacementEditor(canOpen));
+              if(!canOpen())throw new Error('지역이 준비된 뒤 가까운 대상을 다시 골라 주세요.');
+              try{if(await editor.enter({selection:id,isCurrent:()=>current()&&developerTools?.enabled('nearby')===true&&world.mapId===mapId&&world.toolGeneration===generation})===false)throw new Error('게임을 준비한 뒤 대상을 다시 골라 주세요.');}catch(error){toast(error.message);throw error;}
+            });
           }});
         world.nearbyEditor=control;return {show:control.show,update:control.update,dispose(){control.dispose();if(world.nearbyEditor===control)world.nearbyEditor=null;}};
       },
       authoring:async({host,isCurrent})=>{
         const {setupDeveloperTools}=await import('./developer-tools.js');
         if(!isCurrent()||world.scene.isDisposed)return;
-        const tools=setupDeveloperTools({root:$('#app'),managed:true,getState:toolState,studioUrl:new URL('./cinematic-studio.html',location.href).href,onProps:async()=>{const editor=await getPlacementEditor(isCurrent);if(!isCurrent())return false;return editor.enter({isCurrent});},onActors:async options=>{const editor=await getActorEditor();if(!isCurrent())return false;return editor.enter({...options,isCurrent});},onCinema:async()=>{const api=await getGameCinematics();if(!isCurrent())return false;api.show();api.notifyReady();}});
+        const tools=setupDeveloperTools({root:$('#app'),managed:true,getState:toolState,studioUrl:new URL('./cinematic-studio.html',location.href).href,
+          onProps:()=>toolSessions.open('authoring',isCurrent,async current=>{const editor=await getPlacementEditor(current);if(!current())return false;return editor.enter({isCurrent:current});}),
+          onActors:options=>toolSessions.open('authoring',isCurrent,async current=>{const editor=await getActorEditor(current);if(!current())return false;return editor.enter({...options,isCurrent:current});}),
+          onCinema:()=>toolSessions.open('authoring',isCurrent,async current=>{const api=await getGameCinematics(current);if(!current())return false;api.show();})});
         const control=setupAuthoringNavigation({root:$('#app'),host:tools.navigationHost,href:location.href,mapId:world.mapId,getState:()=>({ready:(ready||!!world.toolLease?.active)&&!loadingAsset,mapId:world.mapId}),onMapChange:async id=>{if(!isCurrent()||id===world.mapId)return;await mapTransition.travel(travelUrl(location.href,authoringCharacter(id)));world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();}});
         const lab=document.createElement('a'),url=new URL(location.href);for(const key of ['developer','actorLab','cinematic','cinematicPreview'])url.searchParams.delete(key);url.searchParams.set('actorLab','1');lab.href=url.href;lab.textContent='배우 실험';tools.navigationHost.append(lab);
         world.authoringNavigation=control;return {show:tools.show,notifyReady:control.notifyReady,dispose(){tools.dispose();control.dispose();lab.remove();if(world.authoringNavigation===control)world.authoringNavigation=null;}};
@@ -1259,6 +1271,13 @@ try {
     }});
     world.scene.onDisposeObservable.addOnce(()=>developerTools?.dispose());
     if(import.meta.hot)import.meta.hot.dispose(()=>developerTools?.dispose());
+    // An old editor URL must not override an explicitly disabled setting.
+    const authoringEnabled=()=>developerTools?.enabled('authoring')===true;
+    if(authoringEnabled()&&new URLSearchParams(location.search).get('developer')==='1'){
+      void toolSessions.open('authoring',authoringEnabled,async current=>{const editor=await getPlacementEditor(current,{autoEnter:true});if(current())editor.notifyReady?.();}).catch(error=>{if(authoringEnabled())toast(error.message);});
+    }else if(authoringEnabled()&&new URLSearchParams(location.search).get('cinematic')==='1'){
+      void toolSessions.open('authoring',authoringEnabled,async current=>{const api=await getGameCinematics(current);if(current())api.show();}).catch(error=>{if(authoringEnabled())toast(error.message);});
+    }
   }
   loadCharacter();
 } catch (error) {

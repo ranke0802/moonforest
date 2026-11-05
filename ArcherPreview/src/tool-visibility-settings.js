@@ -1,4 +1,30 @@
 export const DEVELOPER_TOOLS_KEY='moonforest-developer-tools-v1';
+
+// The settings switch owns launched editors as well as its lightweight menu.
+// Hidden controllers retain drafts/documents, but release their gameplay lease.
+export function createDeveloperToolSessions({getEnabled=()=>true,getTools=()=>[]}={}){
+ let current=null,closing=Promise.resolve(),disposed=false;
+ async function open(owner,isCurrent,work){
+  if(disposed||!getEnabled(owner)||!isCurrent())return false;
+  const ticket={owner};current=ticket;
+  const valid=()=>!disposed&&current===ticket&&getEnabled(owner)&&isCurrent();
+  await closing;
+  if(!valid())return false;
+  return work(valid);
+ }
+ function close(owner){
+  if(!current||current.owner!==owner)return closing;
+  current=null;
+  const jobs=[closing];
+  for(const tool of new Set(getTools().filter(Boolean))){
+   try{jobs.push(tool.hide?.());}catch(error){jobs.push(Promise.reject(error));}
+  }
+  closing=Promise.allSettled(jobs).then(()=>{});
+  return closing;
+ }
+ return {open,close,dispose(){if(disposed)return closing;const pending=close(current?.owner);disposed=true;return pending;}};
+}
+
 const tools=[['nearby','주변 오브젝트 편집'],['authoring','게임 / 만들기']];
 export function readDeveloperTools(storage){
   try{const value=JSON.parse(storage?.getItem(DEVELOPER_TOOLS_KEY)??'null');return Object.fromEntries(tools.map(([id])=>[id,value?.[id]===true]));}
@@ -7,7 +33,7 @@ export function readDeveloperTools(storage){
 
 // Launchers live in settings flow, never over the player's movable HUD.
 // Each async mount owns a generation so an old import cannot resurrect an OFF tool.
-export function setupDeveloperToolSettings({host,dialog,storage,mounts={},inGame=false}){
+export function setupDeveloperToolSettings({host,dialog,storage,mounts={},inGame=false,onDisable=()=>{}}){
   const doc=host.ownerDocument,section=doc.createElement('details');section.className='settings-section';section.id='developer-tools-settings';
   const title=doc.createElement('summary');title.textContent='개발 도구';section.append(title);
   const body=doc.createElement('div');body.className='settings-section-body';section.append(body);
@@ -18,6 +44,7 @@ export function setupDeveloperToolSettings({host,dialog,storage,mounts={},inGame
   function refresh(){if(disposed)return;for(const row of entries.values())if(row.enabled){row.api?.update?.();row.api?.notifyReady?.();}}
   async function apply(row,enabled,{persist=true}={}){
     row.enabled=enabled===true;row.input.checked=row.enabled;if(row.openButton)row.openButton.disabled=!row.enabled;const generation=++row.generation;
+    if(!row.enabled)onDisable(row.id);
     row.api?.dispose?.();row.api=null;row.container.replaceChildren();row.container.hidden=!row.enabled;
     if(persist)save();if(!row.enabled||disposed)return;
     if(inGame&&persist)closeDialog();
@@ -37,5 +64,5 @@ export function setupDeveloperToolSettings({host,dialog,storage,mounts={},inGame
   }
   for(const [id,row]of entries)void apply(row,saved[id],{persist:false});
   dialog?.addEventListener('toggle',refresh);
-  return {enabled:id=>!disposed&&entries.get(id)?.enabled===true,refresh,dispose(){if(disposed)return;disposed=true;dialog?.removeEventListener('toggle',refresh);for(const row of entries.values()){row.generation++;row.api?.dispose?.();row.input.removeEventListener('change',row.change);row.openButton?.removeEventListener('click',row.open);}section.remove();}};
+  return {enabled:id=>!disposed&&entries.get(id)?.enabled===true,refresh,dispose(){if(disposed)return;disposed=true;dialog?.removeEventListener('toggle',refresh);for(const row of entries.values()){row.generation++;onDisable(row.id);row.api?.dispose?.();row.input.removeEventListener('change',row.change);row.openButton?.removeEventListener('click',row.open);}section.remove();}};
 }

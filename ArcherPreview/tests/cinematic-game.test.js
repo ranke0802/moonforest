@@ -60,3 +60,22 @@ test('ordinary game completion restores its borrowed scene and clears center tex
  await f.api.load(f.draft);await f.api.execute({command:'play'});f.world.toolLease.options.onFrame(.25);await settle();assert.equal(f.api.player.state,'completed');assert.equal(f.api.inspect().retained,false);assert.equal(f.world.toolLease,null);assert.equal(f.state.ready,true);assert.equal(f.playerNode.isEnabled(),true);assert.equal(f.root.querySelector('.cinematic-center-text').textContent,'');
  assert.equal(f.root.dataset.cinematicPreview,undefined);
 });
+
+test('hiding the ordinary cinematic viewer stops its lease and preserves the loaded and registered scene for reopening',async t=>{
+ const f=fixture(t,{preview:false});await f.api.load(f.draft);f.api.saveScene(f.draft);const saved=f.storage.getItem('moonforest-0.1:cinematics:registered:v1'),panel=f.root.querySelector('.cinematic-game');await f.api.execute({command:'play'});
+ const hiding=f.api.hide();assert.equal(panel.hidden,true);await hiding;assert.equal(f.world.toolLease,null);assert.equal(f.state.ready,true);assert.equal(f.api.inspect().pendingReady,false);assert.equal(f.storage.getItem('moonforest-0.1:cinematics:registered:v1'),saved);
+ f.api.show();assert.equal(panel.hidden,false);await f.api.execute({command:'play'});assert.equal(f.api.player.state,'playing');assert.equal(f.api.player.document.cutsceneId,f.draft.cutsceneId);assert.equal(f.root.querySelector('[data-registered]').children.length,1);
+});
+
+test('a cinematic file import finishing after hide cannot reacquire gameplay or reopen its viewer',async t=>{
+ const f=fixture(t,{preview:false}),bytes=new TextEncoder().encode(JSON.stringify(f.draft)),panel=f.root.querySelector('.cinematic-game'),input=f.root.querySelector('[data-import]');let finish,started=false;const gate=new Promise(resolve=>finish=resolve);t.after(()=>finish(bytes.buffer));
+ Object.defineProperty(input,'files',{value:[{size:bytes.byteLength,arrayBuffer(){started=true;return gate;}}],configurable:true});const importing=input.onchange({target:input});await settle();assert.equal(started,true);
+ await f.api.hide();assert.equal(panel.hidden,true);finish(bytes.buffer);await importing;await settle();assert.equal(panel.hidden,true);assert.equal(f.world.toolLease?.active??false,false);assert.equal(f.api.host.inspect().active,false);assert.equal(f.state.ready,true);
+});
+
+test('a stale import after OFF/ON cannot replace or stop the newly opened cinematic document',async t=>{
+ const f=fixture(t,{preview:false}),input=f.root.querySelector('[data-import]'),oldBytes=new TextEncoder().encode(JSON.stringify(f.draft));let finish;const gate=new Promise(resolve=>finish=resolve);t.after(()=>finish(oldBytes.buffer));
+ Object.defineProperty(input,'files',{value:[{size:oldBytes.byteLength,arrayBuffer:()=>gate}],configurable:true});const old=input.onchange({target:input});await settle();await f.api.hide();f.api.show();
+ const next={...structuredClone(f.draft),cutsceneId:'neutral:new-after-on'};Object.defineProperty(input,'files',{value:[new Blob([JSON.stringify(next)],{type:'application/json'})],configurable:true});await input.onchange({target:input});assert.equal(f.api.player.document.cutsceneId,next.cutsceneId);const lease=f.world.toolLease;
+ finish(oldBytes.buffer);await old;await settle();assert.equal(f.root.querySelector('.cinematic-game').hidden,false);assert.equal(f.api.player.document.cutsceneId,next.cutsceneId);assert.equal(f.world.toolLease,lease);assert.equal(lease.active,true);assert.equal(f.state.ready,false);assert.equal(input.disabled,false);
+});
