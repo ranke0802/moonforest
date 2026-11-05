@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -8,7 +9,7 @@ import {readRuntimeGltf} from '../tests/helpers/read-runtime-gltf.js';
 import {hash} from './resource-pack.js';
 import {FOREST_PLACEMENTS,FOREST_ROUTES,FOREST_CLEARINGS} from '../src/monster-forest-layout.js';
 
-const source=resolve(process.env.FOREST_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/monster-forest-models/2026-10-28/runtime');
+const source=resolve(process.env.FOREST_SOURCE??sourcePath("forest-runtime"));
 const root=resolve(import.meta.dirname,'../public/assets'),content=resolve(root,'content');await mkdir(content,{recursive:true});
 const input=JSON.parse(await readFile(resolve(source,'forest-assets.json'),'utf8')),village=JSON.parse(await readFile(resolve(root,'village.json'),'utf8'));
 const assets={},engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;

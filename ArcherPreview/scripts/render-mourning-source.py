@@ -1,10 +1,14 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Render a read-only source rig review with authored actions in Blender 4.5."""
 import bpy, json, math, sys
 from pathlib import Path
 from mathutils import Vector
 
 OUT=Path(__file__).resolve().parents[1]/'reports/elena-two-phase'
-SOURCE=Path(r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1/rigging/tripo-1-move/exports/tripo1_move_rig.blend')
+SOURCE=Path(rstr(source_path("mourning-elena", "rigging/tripo-1-move/exports/tripo1_move_rig.blend")))
 def main():
     bpy.ops.wm.open_mainfile(filepath=str(SOURCE),load_ui=False)
     scene=bpy.context.scene

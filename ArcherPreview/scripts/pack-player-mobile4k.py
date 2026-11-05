@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Derive bounded mobile player textures, preserving source player/other assets.
 
 Uses the existing player manifests, Pillow, numpy and local KTX-Software. Only
@@ -184,7 +188,7 @@ def normalize_textures(gltf, source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--work', type=Path, default=Path(tempfile.gettempdir()) / 'moonforest-player-mobile4k-v1')
-    parser.add_argument('--ktx', default='C:/Program Files/KTX-Software/bin/ktx.exe')
+    parser.add_argument('--ktx', default=tool_path('ktx'))
     parser.add_argument('--report', type=Path, default=ROOT / 'reports/mobile-quality-2026-11-04/player-package.json')
     args = parser.parse_args()
     args.work.mkdir(parents=True, exist_ok=True)

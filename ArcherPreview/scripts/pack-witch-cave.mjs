@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -10,8 +11,8 @@ import {hash} from './resource-pack.js';
 import {CAVE_PLACEMENTS,CAVE_ROUTES,CAVE_ROOMS,CAVE_ASSET_IDS,CAVE_SUPPLEMENT_IDS} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 
-const source=resolve(process.env.CAVE_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-models/2026-10-29');
-const supplementSource=resolve(process.env.CAVE_SUPPLEMENT_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-supplement-models/2026-10-30');
+const source=resolve(process.env.CAVE_SOURCE??sourcePath("cave"));
+const supplementSource=resolve(process.env.CAVE_SUPPLEMENT_SOURCE??sourcePath("cave-supplement"));
 const root=resolve(import.meta.dirname,'../public/assets'),content=resolve(root,'content'),report=resolve(import.meta.dirname,'../reports/witch-cave-v5');
 await mkdir(content,{recursive:true});await mkdir(report,{recursive:true});
 const read=async path=>JSON.parse((await readFile(path,'utf8')).replace(/^\uFEFF/,''));

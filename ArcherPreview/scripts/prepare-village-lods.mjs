@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 // Offline only. Existing meshes and painted textures are the only inputs.
 import {readFile,writeFile,mkdir,access} from 'node:fs/promises';
 import {resolve} from 'node:path';
@@ -6,7 +7,7 @@ import {hash} from './resource-pack.js';
 
 const option=name=>{const i=process.argv.indexOf(name);return i<0?null:process.argv[i+1];};
 const base=resolve(import.meta.dirname,'../public/assets');
-const out=resolve(option('--out')??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/geometry-lod');
+const out=resolve(option('--out')??sourcePath("village-lods"));
 await mkdir(out,{recursive:true});
 const baselinePath=resolve(out,'baseline-manifest.json');
 try{await access(baselinePath);}catch{await writeFile(baselinePath,await readFile(resolve(base,'village.json')));}

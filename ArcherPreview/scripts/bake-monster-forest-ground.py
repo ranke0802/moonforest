@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Local terrain paint from the authored map; no generated artwork or service calls."""
 import hashlib,json,math,subprocess
 from pathlib import Path
@@ -38,7 +42,7 @@ for p in layout['placements']:
  cd.ellipse((x-r,y-r*.7,x+r,y+r*.7),fill=(30,34,27,55))
 paint=Image.alpha_composite(paint.convert('RGBA'),contacts.filter(ImageFilter.GaussianBlur(unit*.2)))
 paint.putalpha(Image.fromarray(np.uint8(64+191*wear)));paint.save(out/'forest-ground.png');paint.convert('RGB').save(out/'forest-ground-review.png')
-ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe')
+ktx=Path(tool_path('ktx'))
 subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-lz','--qlevel','255','--clevel','1','--generate-mipmap','--threads','4',str(out/'forest-ground.png'),str(out/'forest-ground.ktx2')],check=True,capture_output=True)
 data=(out/'forest-ground.ktx2').read_bytes();url='./content/'+hashlib.sha256(data).hexdigest()+'.ktx2';(assets/url).write_bytes(data)
 village=json.loads((assets/'village-ground.json').read_text());detail=village['detail']

@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -16,7 +17,7 @@ export function basisModel(model,images){
   return g;
 }
 
-export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/ktx2-download',publicRoot=resolve(root,'public')}={}){
+export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??sourcePath("village-ktx2"),publicRoot=resolve(root,'public')}={}){
   const assets=resolve(publicRoot,'assets'),content=resolve(assets,'content');await mkdir(content,{recursive:true});
   const read=async p=>JSON.parse(await readFile(p,'utf8'));
   const approvals=await read(resolve(output,'approval.json')),ledger=await read(resolve(output,'conversions.json'));
@@ -30,7 +31,7 @@ export async function packVillageKtx2({output=process.env.VILLAGE_KTX2_DIR??'C:/
   async function texture(url,codec='etc1s'){
     const source=basename(url).split('.')[0],profile=codec==='uastc'?(approvals.uastcProfile??codec):(approvals.etcProfile??codec),row=ledger[source+'-'+profile];
     if(!row||row.width>4096)throw new Error('Missing bounded KTX2 conversion: '+source);
-    const original=await readFile(row.source),bytes=await readFile(resolve(output,row.file));
+    const original=await readFile(resolve(assets, url)),bytes=await readFile(resolve(output,row.file));
     if(hash(original)!==source||hash(bytes)!==row.sha256)throw new Error('Compression content hash mismatch');
     const name=await put(bytes,'ktx2');return {url:'./content/'+name,width:row.width,height:row.height,bytes:bytes.length,codec,alpha:row.alpha,gpuBlockBytes:codec==='uastc'||row.alpha?16:8};
   }

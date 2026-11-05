@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -26,7 +27,7 @@ export function packTreeGeometry(raw){
   return {bytes:Buffer.concat(chunks),bufferViews,accessors,primitive:{attributes,indices:index,material:0,mode:4}};
 }
 
-export async function packVillageTreeRefinement(root=resolve(import.meta.dirname,'../public/assets'),source=resolve(process.env.VILLAGE_TREE_REFINEMENT_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/natural-ground-trees')){
+export async function packVillageTreeRefinement(root=resolve(import.meta.dirname,'../public/assets'),source=resolve(process.env.VILLAGE_TREE_REFINEMENT_DIR??sourcePath("village-natural"))){
   const read=p=>readFile(p,'utf8').then(JSON.parse);
   const [manifest,baseline,audit,review]=await Promise.all([read(resolve(root,'village.json')),read(resolve(source,'baseline-manifest.json')),read(resolve(source,'refinement-audit.json')),read(resolve(source,'approval.json'))]);
   if(review.status!=='APPROVED'||review.auditSha256!==hash(await readFile(resolve(source,'refinement-audit.json'))))throw new Error('Tree geometry needs reviewed evidence');

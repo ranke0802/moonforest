@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Objective texture comparison and compact visual evidence sheets."""
 import json, math
 from pathlib import Path
@@ -5,7 +9,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 OUT=Path(__file__).resolve().parents[1]/'reports/elena-two-phase'
-font=ImageFont.truetype('C:/Windows/Fonts/arial.ttf',18)
+font=ImageFont.truetype(__import__('os').environ.get('REVIEW_FONT', 'DejaVuSans.ttf'),18)
 def sheet(paths,labels,out,cols=3,tile=384):
     rows=math.ceil(len(paths)/cols);canvas=Image.new('RGB',(cols*tile,rows*(tile+32)),(27,33,40));d=ImageDraw.Draw(canvas)
     for i,(p,label)in enumerate(zip(paths,labels)):

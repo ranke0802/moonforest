@@ -1,9 +1,10 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import assert from 'node:assert/strict';
 const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-two-phase');
-const out=resolve('C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-two-phase-review/2026-10-30');
+const out=resolve(projectPath("ArcherPreview/reports/archive/elena-two-phase-review/2026-10-30"));
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
 const baseline='8560c82',revision=process.argv[2]??'pending',deployed=process.argv.includes('--deployed');
 const [asset,cpu,index]=await Promise.all([read(resolve(dir,'asset-pack-report.json')),read(resolve(dir,'animation-benchmark.json')),read(resolve(root,'public/assets/resource-index.json'))]);

@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Read-only GLB audit and texture review; source data is never modified."""
 import io, json, math, struct, hashlib, os
 from pathlib import Path
@@ -5,7 +9,7 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = Path(r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1')
+SOURCE = Path(rstr(source_path("mourning-elena")))
 MODEL = os.environ.get('MOURNING_ELENA_MODEL', 'tripo-1-move')
 OUT = ROOT / os.environ.get('MOURNING_ELENA_REPORT_DIR', 'reports/elena-two-phase')
 OUT.mkdir(parents=True, exist_ok=True)

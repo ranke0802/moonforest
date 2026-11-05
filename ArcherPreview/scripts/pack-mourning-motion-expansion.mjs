@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -10,8 +11,8 @@ import {R9_CLIPS,R9_MORPHS,accessorBytes,compareBodyCorners,morphTextureEstimate
 export const R10_CAST_CLIPS={cast:'Chimera_Arcane_Cast_3s',cast_slam:'Chimera_Advance_Slam_3s',cast_alternate:'Chimera_Alternating_Cast_3s'};
 export const R10_CLIPS=[...R9_CLIPS,R10_CAST_CLIPS.cast_slam,R10_CAST_CLIPS.cast_alternate];
 const root=resolve(import.meta.dirname,'..'),review=resolve(root,'reports/elena-motion-expansion');
-const source=process.env.MOURNING_MOTION_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-motion-expansion/2026-10-31';
-const original='C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1/models/tripo-1-move-v2-1/model.glb';
+const source=process.env.MOURNING_MOTION_SOURCE??sourcePath("mourning-motion");
+const original=sourcePath("mourning-elena", "models/tripo-1-move-v2-1/model.glb");
 const read=async path=>JSON.parse(await readFile(path,'utf8'));
 function unchangedClip(before,after,name){
  const channels=(input)=>{const g=input.gltf,a=g.animations.find(a=>a.name===name);assert.ok(a,name);return new Map(a.channels.map(c=>{const s=a.samplers[c.sampler];return [g.nodes[c.target.node].name+':'+c.target.path,{interpolation:s.interpolation??'LINEAR',time:accessorBytes(input,s.input),value:accessorBytes(input,s.output)}];}));};

@@ -1,10 +1,14 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Bounded offline ETC1S color profiles from the existing Joachim albedo."""
 import hashlib,json,subprocess,sys
 from pathlib import Path
 from PIL import Image
 
 source,out=map(Path,sys.argv[1:3]);out.mkdir(parents=True,exist_ok=True)
-ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe')
+ktx=Path(tool_path('ktx'))
 image=Image.open(source).convert('RGB');profiles=[]
 for size in (4096,1024,512,256):
     png=out/f'color-{size}.png';target=out/f'color-{size}.ktx2'

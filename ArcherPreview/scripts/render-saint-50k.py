@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Offline candidate review using actual game-deformed meshes; originals read only."""
 import bpy,json,math
 from pathlib import Path
@@ -5,7 +9,7 @@ import numpy as np
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'reports/saint-50k-2026-11-02'
-REVIEW=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/saint-50k-review/2026-11-02');REVIEW.mkdir(parents=True,exist_ok=True)
+REVIEW=Path(str(project_path("ArcherPreview/reports/archive/saint-50k-review/2026-11-02")));REVIEW.mkdir(parents=True,exist_ok=True)
 r=json.loads((OUT/'motion-validation.json').read_text(encoding='utf-8'));binary=(OUT/r['binary']).read_bytes()
 def array(v,n):return np.frombuffer(binary,dtype='<u4' if v['type']=='uint32' else '<f4',count=v['count'],offset=v['byteOffset']).reshape(-1,n)
 bpy.ops.wm.read_factory_settings(use_empty=True);scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE_NEXT';scene.render.resolution_x=1000;scene.render.resolution_y=1000;scene.render.resolution_percentage=100;scene.render.film_transparent=True;scene.render.image_settings.file_format='PNG'

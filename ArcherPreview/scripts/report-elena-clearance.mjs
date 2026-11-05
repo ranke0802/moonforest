@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-clearance');
-const out=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-clearance/2026-10-30');
+const out=resolve(process.argv[2]??projectPath("ArcherPreview/reports/archive/elena-clearance/2026-10-30"));
 const read=(base,name)=>JSON.parse(readFileSync(resolve(base,name),'utf8'));
 const geometry=read(dir,'geometry-audit.json'),combat=read(dir,'combat-audit.json'),stress=read(dir,'combat-stress.json'),mask=read(dir,'runtime-mask-review.json');
 const deployment=read(dir,'deployment.json'),http=read(dir,'live-http.json'),before=read(dir,'resource-index-before.json'),after=read(root,'public/assets/resource-index.json');

@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {readAccessor} from './web-geometry.js';
-const directory=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/geometry-lod');
+const directory=resolve(process.argv[2]??sourcePath("village-lods"));
 const baseline=JSON.parse(await readFile(resolve(directory,'baseline-manifest.json'),'utf8'));
 const candidate=JSON.parse(await readFile(resolve(directory,'assets/village.json'),'utf8'));
 async function load(lod){

@@ -1,9 +1,13 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Verify the delivered r8 GLB against the preserved r7 bytes without editing either."""
 import json, struct, hashlib
 from pathlib import Path
 import numpy as np
 
-SOURCE=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1')
+SOURCE=Path(str(source_path("mourning-elena")))
 OUT=Path(__file__).resolve().parents[1]/'reports/elena-motion-v2'
 OUT.mkdir(parents=True,exist_ok=True)
 TYPES={5120:'i1',5121:'u1',5122:'<i2',5123:'<u2',5125:'<u4',5126:'<f4'}

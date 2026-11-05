@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -39,11 +40,11 @@ export function morphTextureEstimate(g,maxTextureSize=4096){
 }
 
 export async function packMourningR9(){
- const source=process.env.MOURNING_ELENA_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1',review=resolve(root,'reports/elena-motion-v2-1'),content=resolve(root,'public/assets/content');
+ const source=process.env.MOURNING_ELENA_SOURCE??sourcePath("mourning-elena"),review=resolve(root,'reports/elena-motion-v2-1'),content=resolve(root,'public/assets/content');
  const read=async p=>JSON.parse(await readFile(p,'utf8'));await mkdir(review,{recursive:true});
  const handoff=await read(resolve(source,'rigging/tripo-1-move-v2-1/handoff-manifest.json'));
  assert.equal(handoff.revision,'r9-attack-shape-repair');assert.equal(handoff.files.length,11);
- const inventory=async()=>{const result=[];for(const f of handoff.files){const bytes=await readFile(f.path),sha256=hash(bytes);assert.equal(bytes.length,f.bytes,f.path);assert.equal(sha256,f.sha256,f.path);result.push({path:f.path,bytes:bytes.length,sha256});}return result;};
+ const inventory=async()=>{const result=[];for(const f of handoff.files){const bytes=await readFile(resolve(source,f.path)),sha256=hash(bytes);assert.equal(bytes.length,f.bytes,f.path);assert.equal(sha256,f.sha256,f.path);result.push({path:f.path,bytes:bytes.length,sha256});}return result;};
  const sourceBefore=await inventory();
  const baselineText=(await run('git',['show','ed9a376:ArcherPreview/public/assets/mourning-elena.json'],{cwd:root,windowsHide:true,maxBuffer:1024*1024})).stdout;
  const previous=JSON.parse(baselineText);assert.equal(previous.rigRevision,'r8-v2-cast-wind-idle-hit');

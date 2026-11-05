@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -12,7 +13,7 @@ for(const [id,a]of Object.entries(manifest.assets)){
  for(const b of g.buffers)if(b.uri)await writeFile(resolve(folder,b.uri),files.get(b.uri).data);
  for(const [i,im]of g.images.entries()){
   const source=resolve(assets,'content',im.uri),name='color-'+i+'.png';
-  const result=spawnSync('C:/Program Files/KTX-Software/bin/ktx.exe',['extract','--transcode','rgba8','--level','0',source,resolve(folder,name)],{encoding:'utf8',windowsHide:true});
+  const result=spawnSync(toolPath('ktx'),['extract','--transcode','rgba8','--level','0',source,resolve(folder,name)],{encoding:'utf8',windowsHide:true});
   if(result.status!==0)throw new Error(result.stderr);
   im.uri=name;im.mimeType='image/png';
  }

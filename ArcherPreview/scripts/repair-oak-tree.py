@@ -1,9 +1,13 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Restore the supplied oak's connected trunk; simplify detached foliage only."""
 import bpy, bmesh, json
 from pathlib import Path
 from mathutils import Vector
 
-P = Path('C:/dev/warrior')
+P = Path(str(project_path('Sources/training')))
 bpy.ops.wm.open_mainfile(filepath=str(P/'blender/environment/oak-tree-source.blend'))
 bpy.context.preferences.filepaths.save_version = 0
 meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
@@ -44,7 +48,7 @@ for obj in [o for o in bpy.context.scene.objects if o.type == 'MESH']:
     assert len(obj.data.polygons) > 10000, 'Connected trunk must be preserved'
     report.append({'sourceFaces':before,'preservedTrunkFaces':len(obj.data.polygons),'foliageFaces':len(foliage.data.polygons)})
 
-image = bpy.data.images.load(str(P/'assets/environment/textures/oak-tree-painted.png'), check_existing=False)
+image = bpy.data.images.load(str(project_path('ArcherPreview/assets/environment/textures/oak-tree-painted.png')), check_existing=False)
 image.colorspace_settings.name = 'sRGB'; image.pack()
 for mat in bpy.data.materials:
     if not mat.use_nodes: continue
@@ -63,8 +67,8 @@ bpy.ops.object.select_all(action='DESELECT')
 for obj in bpy.context.scene.objects:
     if obj.type == 'MESH': obj.select_set(True)
 bpy.ops.wm.save_as_mainfile(filepath=str(P/'blender/environment/oak-tree.blend'))
-bpy.ops.export_scene.gltf(filepath=str(P/'assets/environment/models/oak-tree.glb'), export_format='GLB', use_selection=True, export_animations=False, export_image_format='JPEG', export_jpeg_quality=90)
-(P/'reports/oak-repair.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+bpy.ops.export_scene.gltf(filepath=str(project_path('ArcherPreview/assets/environment/models/oak-tree.glb')), export_format='GLB', use_selection=True, export_animations=False, export_image_format='JPEG', export_jpeg_quality=90)
+project_path('ArcherPreview/reports/oak-repair.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
 
 scene=bpy.context.scene; scene.render.engine='CYCLES'; scene.cycles.samples=16; scene.cycles.use_denoising=True
 scene.world=bpy.data.worlds.new('Preview sky');scene.world.use_nodes=True
@@ -79,5 +83,5 @@ scene.collection.objects.link(cam);scene.camera=cam;data.type='ORTHO';data.ortho
 scene.render.resolution_x=800;scene.render.resolution_y=800;scene.render.resolution_percentage=100
 for name,loc in [('front',(7,-10,6)),('side',(-10,-3,5))]:
     cam.location=loc;cam.rotation_euler=(Vector((0,0,3))-cam.location).to_track_quat('-Z','Y').to_euler()
-    scene.render.filepath=str(P/f'reports/oak-repaired-{name}.png');bpy.ops.render.render(write_still=True)
+    scene.render.filepath=str(project_path(f'ArcherPreview/reports/oak-repaired-{name}.png'));bpy.ops.render.render(write_still=True)
 print('REPAIRED',json.dumps(report),flush=True)

@@ -1,11 +1,12 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,copyFile,mkdir} from 'node:fs/promises';
 import {resolve,basename} from 'node:path';
 import {hash} from './resource-pack.js';
 import {validVillageTextureProfile} from '../src/village-texture-budget.js';
 
 const option=name=>{const i=process.argv.indexOf(name);return i<0?null:process.argv[i+1];};
-const source=resolve(option('--source')??process.env.VILLAGE_LOD_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/geometry-lod');
-const textureSource=resolve(option('--textures')??process.env.VILLAGE_TEXTURE_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/mobile-4k');
+const source=resolve(option('--source')??process.env.VILLAGE_LOD_DIR??sourcePath("village-lods"));
+const textureSource=resolve(option('--textures')??process.env.VILLAGE_TEXTURE_DIR??sourcePath("village-textures"));
 const target=resolve(import.meta.dirname,'../public/assets');
 const read=name=>readFile(resolve(source,name),'utf8').then(JSON.parse);
 const [baseline,candidate,geometry,approval]=await Promise.all(['baseline-manifest.json','assets/village.json','geometry-audit.json','approval.json'].map(read));

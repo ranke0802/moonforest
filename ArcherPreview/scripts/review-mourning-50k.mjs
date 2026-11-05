@@ -1,3 +1,4 @@
+import {sourcePath as bundledSourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 // Isolated feasibility candidate. Never writes public/ or production manifests.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
@@ -11,7 +12,7 @@ import {basisModel} from './pack-village-ktx2.mjs';
 
 const root=resolve(import.meta.dirname,'..');
 const out=resolve(root,'reports/mourning-50k-2026-11-02');
-const sourcePath='C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-motion-expansion/2026-10-31/models/model.glb';
+const sourcePath=bundledSourcePath("mourning-motion", "models/model.glb");
 const sourceBytes=await readFile(sourcePath),config=JSON.parse(await readFile(existsSync(resolve(out,'manifest-before.json'))?resolve(out,'manifest-before.json'):resolve(root,'public/assets/mourning-elena.json'),'utf8'));
 assert.equal(hash(sourceBytes),config.sourceSha256,'Use exactly the shipped revision');
 const input=splitGlb(sourceBytes),g=input.gltf,candidate=structuredClone(g),files=new Map(input.files);

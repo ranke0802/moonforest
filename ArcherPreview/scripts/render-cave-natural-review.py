@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Offline geometry review; textures and lighting only approximate Babylon.
 
 Run export-cave-natural-review.mjs first. Blender does not reproduce Babylon's
@@ -7,7 +11,7 @@ import bpy, json, math, os
 from pathlib import Path
 from mathutils import Matrix, Vector
 
-out=Path(os.environ.get('CAVE_NATURAL_REVIEW_OUT',r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/cave-natural-review/2026-11-03'))
+out=Path(os.environ.get('CAVE_NATURAL_REVIEW_OUT',rstr(project_path("ArcherPreview/reports/archive/cave-natural-review/2026-11-03"))))
 data=json.loads((out/'scene-snapshot.json').read_text(encoding='utf8'))
 print('Blender',bpy.app.version_string,flush=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)

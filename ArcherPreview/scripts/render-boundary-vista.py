@@ -1,9 +1,13 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Offline colour/shape review of shipped mountain geometry, not gameplay capture."""
 import bpy,json,math,sys
 from pathlib import Path
 from mathutils import Vector
 root=Path(sys.argv[sys.argv.index('--')+1]);data=json.loads((root/'outdoor-vista-geometry.json').read_text())
-out=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/boundary-continuity/2026-11-03');out.mkdir(parents=True,exist_ok=True)
+out=Path(str(project_path("ArcherPreview/reports/archive/boundary-continuity/2026-11-03")));out.mkdir(parents=True,exist_ok=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE_NEXT';scene.render.resolution_x=1280;scene.render.resolution_y=720;scene.render.resolution_percentage=100
 scene.world.color=(.43,.57,.66);scene.view_settings.view_transform='Standard';scene.view_settings.look='Medium High Contrast';scene.view_settings.exposure=0;scene.view_settings.gamma=1

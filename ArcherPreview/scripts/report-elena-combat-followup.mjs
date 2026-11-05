@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..'),reports=resolve(root,'reports/elena-combat-followup');
-const output=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-combat-review/2026-10-30');
+const output=resolve(process.argv[2]??projectPath("ArcherPreview/reports/archive/elena-combat-review/2026-10-30"));
 const read=name=>JSON.parse(readFileSync(resolve(reports,name),'utf8'));
 const stress=read('combat-stress.json'),before=read('performance-baseline.json'),after=read('performance-current.json');
 const deployment=read('deployment.json'),log=readFileSync(resolve(reports,'full-tests.log'),'utf8');
@@ -24,7 +25,7 @@ const report={generatedAt:new Date().toISOString(),head,baseline:'b983cfc',resou
   lifecycle:stress.replays,spellCaseCount:stress.spellCases.length,comparison,
   preserved:{playerMax:8192,backgroundMax:4096,lod:true,currentModel:'r7-shoulder-led-upper-arm-cast',toon:true,pbr:false,outlinePixels:.5,interiorLine:.2,brightness:1.35},
   limits:{browserAutomation:false,physicalS23Tested:false,gpuFrameTimesMeasured:false},
-  futureHandoff:'C:/Users/ryank/Documents/ChatGPT/MM Project/output/integration-coordination/elena-runtime-handoff.json'};
+  futureHandoff:projectPath("ArcherPreview/reports/archive/integration-coordination/elena-runtime-handoff.json")};
 mkdirSync(output,{recursive:true});writeFileSync(resolve(output,'verification.json'),JSON.stringify(report,null,2)+'\n');
 for(const name of ['combat-stress.json','performance-baseline.json','performance-current.json','full-tests.log','final-movement-regression.log'])copyFileSync(resolve(reports,name),resolve(output,name));
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

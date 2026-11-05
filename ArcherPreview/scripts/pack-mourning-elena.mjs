@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {execFile} from 'node:child_process';
@@ -8,10 +9,11 @@ import {compressMeshopt,decodeMeshoptBuffers} from './meshopt-lossless.js';
 import {basisModel} from './pack-village-ktx2.mjs';
 
 const run=promisify(execFile),root=resolve(import.meta.dirname,'..'),review=resolve(root,'reports/elena-motion-v2');
-const source=process.env.MOURNING_ELENA_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1';
-const ktx=process.env.KTX_EXE??'C:/Program Files/KTX-Software/bin/ktx.exe';
+const source=process.env.MOURNING_ELENA_SOURCE??sourcePath("mourning-elena");
+const ktx=process.env.KTX_EXE??toolPath('ktx');
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
-const audit=await read(resolve(review,'asset-source-audit.json'));
+await mkdir(review,{recursive:true});
+const audit=await read(sourcePath('elena-motion-v2-pack','asset-source-audit.json'));
 const bytes=await readFile(resolve(source,'models/tripo-1-move-v2/model.glb'));
 assert.equal(hash(bytes),audit.sourceSha256,'Source changed after audit');
 const input=splitGlb(bytes),g=input.gltf;
@@ -21,11 +23,11 @@ assert.equal(g.skins.reduce((n,s)=>n+s.joints.length,0),255);
 assert.equal(g.images.length,1);
 const textureAudit=audit.images[0],texturePath=resolve(review,'asset-mourning-color.ktx2');
 assert.ok(textureAudit.size.every(v=>v<=4096));
-const encodeArgs=['create','--format',textureAudit.alpha?'R8G8B8A8_SRGB':'R8G8B8_SRGB','--encode','basis-lz','--qlevel','255','--clevel','2','--no-endpoint-rdo','--no-selector-rdo','--generate-mipmap','--assign-tf','srgb','--assign-primaries','bt709','--threads','4','--compare-psnr','--compare-ssim',textureAudit.png,texturePath];
-const previousAudit=await read(resolve(root,'reports/elena-two-phase/asset-source-audit.json'));
+const encodeArgs=['create','--format',textureAudit.alpha?'R8G8B8A8_SRGB':'R8G8B8_SRGB','--encode','basis-lz','--qlevel','255','--clevel','2','--no-endpoint-rdo','--no-selector-rdo','--generate-mipmap','--assign-tf','srgb','--assign-primaries','bt709','--threads','4','--compare-psnr','--compare-ssim',sourcePath('elena-motion-v2-pack','asset-source-texture-0.png'),texturePath];
+const previousAudit=await read(sourcePath('elena-two-phase-pack','asset-source-audit.json'));
 const textureReused=textureAudit.sourceSha256===previousAudit.images[0].sourceSha256;
 if(textureReused){
-  await copyFile(resolve(root,'reports/elena-two-phase/asset-mourning-color.ktx2'),texturePath);
+  await copyFile(sourcePath('elena-two-phase-pack','asset-mourning-color.ktx2'),texturePath);
   await writeFile(resolve(review,'asset-texture-encode.log'),'Reused identical r7 4K ETC1S q255, no-RDO texture: source image SHA-256 unchanged.\n');
 }else{
   console.log('Encoding original-resolution ETC1S texture...');

@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
 import {resolve,dirname} from 'node:path';
@@ -9,10 +10,10 @@ import {createVillageTerrain} from '../src/village-terrain.js';
 import {PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
 import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {villageToPlains,VILLAGE_PLAINS_BOUNDARY} from '../src/village-plains-boundary.js';
-const root=resolve(import.meta.dirname,'..'),assets=resolve(root,'public/assets'),report=resolve(root,'reports/boundary-continuity-2026-11-03'),out='C:/Users/ryank/Documents/ChatGPT/MM Project/output/boundary-continuity/2026-11-03';
+const root=resolve(import.meta.dirname,'..'),assets=resolve(root,'public/assets'),report=resolve(root,'reports/boundary-continuity-2026-11-03'),out=projectPath("ArcherPreview/reports/archive/boundary-continuity/2026-11-03");
 await mkdir(out,{recursive:true});const read=async p=>JSON.parse(await readFile(p,'utf8'));
 const before=await read(resolve(report,'before.json')),village=await read(resolve(assets,'village.json')),plains=await read(resolve(assets,'great-plains.json')),selection=await read(resolve(report,'village-exterior.json'));
-const ktx='C:/Program Files/KTX-Software/bin/ktx.exe',configs={beforeFacade:before.plainsManifest.assets['village-approach'],afterFacade:plains.assets['village-approach']};
+const ktx=toolPath('ktx'),configs={beforeFacade:before.plainsManifest.assets['village-approach'],afterFacade:plains.assets['village-approach']};
 for(const p of VILLAGE_PLACEMENTS.filter(p=>selection.selected.includes(p.id)||p.kind==='tree'))configs[p.asset]=village.assets[p.asset];
 for(const[id,config]of Object.entries(plains.assets))configs[id]=config;
 const folders={};

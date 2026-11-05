@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -6,8 +7,8 @@ import {compressMeshopt} from './meshopt-lossless.js';
 import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_STREAM,PLAINS_SPAN} from '../src/great-plains-layout.js';
 
 const root=resolve(import.meta.dirname,'..'),base=resolve(root,'public/assets'),content=resolve(base,'content');
-const source=resolve(process.env.PLAINS_SOURCE??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/plains-implementation/2026-11-02-v1');
-const python='C:/Users/ryank/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe';
+const source=resolve(process.env.PLAINS_SOURCE??sourcePath("plains"));
+const python=toolPath('python');
 const work=resolve(root,'reports/great-plains-2026-11-02');await mkdir(work,{recursive:true});
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
 const generation=await read(resolve(source,'generation-results.json'));

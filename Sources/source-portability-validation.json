@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "baseline": "6812674",
+  "scope": "Portable source collection and authoring/repack path migration; no runtime art or geometry changes.",
+  "complete": true,
+  "inventory": {
+    "path": "Sources/source-inputs.json",
+    "files": 2055,
+    "bytes": 12319513920,
+    "allHashesVerified": true,
+    "missing": [],
+    "directories": 32,
+    "aliases": 4
+  },
+  "deduplication": {
+    "removedFiles": 4,
+    "savedBytes": 23033776,
+    "aliases": [
+      {
+        "alias": "Sources/actors/mourning-motion/models/model-r11-alternate-return.glb",
+        "canonical": "Sources/actors/mourning-motion/models/model.glb",
+        "bytes": 16987220,
+        "sha256": "2e0b4cf4883b333b99a83c77ab7b49180507eeb1a956dbfde85478bfe5a2b0ed"
+      },
+      {
+        "alias": "Sources/actors/mourning-motion/handoff-r11.json",
+        "canonical": "Sources/actors/mourning-motion/handoff.json",
+        "bytes": 6842,
+        "sha256": "1573c9936c6eda7ebb270ceb9cd2fdfa381a0c858211b37693ced47616e45f8c"
+      },
+      {
+        "alias": "Sources/actors/blacksmith-npc/source/meshy-web/Hit_Reaction.glb",
+        "canonical": "Sources/actors/blacksmith-npc/source/meshy-web/glb/Hit_Reaction.glb",
+        "bytes": 3919436,
+        "sha256": "1fbcce638bd063e8f696a5c546c4032d2f929a9c55fa2410d8f03d86264561d4"
+      },
+      {
+        "alias": "Sources/actors/elena-pack/elena-motion-v2/asset-mourning-color.ktx2",
+        "canonical": "Sources/actors/elena-pack/elena-two-phase/asset-mourning-color.ktx2",
+        "bytes": 2120278,
+        "sha256": "b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9"
+      }
+    ],
+    "retainedPolicy": "FBX raw-texture siblings, self-contained glTF/buffer/image layouts, and existing standard-build runtime names retained where removing would break native relative imports.",
+    "necessaryDuplicateBytes": 292766627
+  },
+  "nativeBlender": {
+    "files": 31,
+    "images": 162,
+    "unpackedImagePathsRemapped": 3,
+    "linkedLibraries": 0,
+    "savedSourceFiles": 0,
+    "allDependenciesLocalViaAdapter": true,
+    "skill": "C:/Users/ryank/.codex/skills/blender-expert/SKILL.md",
+    "version": "4.5.14 LTS",
+    "readOnly": true
+  },
+  "sourceGraph": {
+    "gltfSources": 211,
+    "externalResourceReferences": 813,
+    "missing": []
+  },
+  "currentSourceMatches": [
+    {
+      "name": "current blacksmith",
+      "path": "Sources/actors/blacksmith-npc/integrated-motion-2026-11-05/package/working/blacksmith_NPC20_185cm.glb",
+      "expected": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+      "actual": "3e1c3cf4446144a0ace96e1722627c36e6add692325f867f1863fccb9c814d3a",
+      "match": true
+    },
+    {
+      "name": "current mourning Elena",
+      "path": "Sources/actors/mourning-motion/models/model.glb",
+      "expected": "2e0b4cf4883b333b99a83c77ab7b49180507eeb1a956dbfde85478bfe5a2b0ed",
+      "actual": "2e0b4cf4883b333b99a83c77ab7b49180507eeb1a956dbfde85478bfe5a2b0ed",
+      "match": true
+    },
+    {
+      "name": "saint Elena original",
+      "path": "Sources/actors/saint-elena/Meshy_Elena_All_Animations.fbx",
+      "expected": "3896b89995c7b424aa3f6a35139127609c263e4063c48d5e9165a679baece4ac",
+      "actual": "3896b89995c7b424aa3f6a35139127609c263e4063c48d5e9165a679baece4ac",
+      "match": true
+    }
+  ],
+  "pathMigration": {
+    "changedScripts": 53,
+    "checkedMjs": 28,
+    "checkedPython": 48,
+    "syntaxFailures": [],
+    "remainingAbsoluteDrivePathsInChangedProcessingScripts": [],
+    "resolverTests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "toolPolicy": "Explicit KTX_EXE/PYTHON_EXE override first; Windows Python then uses Tools/portable/runtime/win-x64/python/python.exe if present; otherwise PATH. External Blender/KTX and third-party authoring packages are documented prerequisites.",
+    "archival": "Old review/version-replay scripts documented in Sources/README.md; sync-monster-update disabled. Legacy origins in inventories/audits are provenance, not resolver fallbacks."
+  },
+  "excluded": [
+    "Generated review renders and videos",
+    "Copied browser sites/vendor directories and package caches",
+    "Historical backup revisions",
+    "Redundant generated GLB interchange copies when original FBX and textures remain; required repack GLBs kept"
+  ],
+  "limits": [
+    "No browser, renders, asset generation, Blender saves, art edits or commit.",
+    "Original Blender bytes remain unchanged; use Sources/open-blend.py for the three old unpacked image references.",
+    "Historical version replay assertions intentionally require matching historical runtime manifests; normal build/test do not invoke them.",
+    "Parent owns standard build/test/archive extraction validation."
+  ]
+}

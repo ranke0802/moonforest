@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Paint terrain from traversable road coordinates; reuse the game's detail map."""
 import hashlib,json,math,subprocess,os
 from pathlib import Path
@@ -92,7 +96,7 @@ if forest_boundary and forest_paint.exists():
  source=np.asarray(Image.open(forest_paint).convert('RGBA'));sx=np.clip(np.rint((fx+80)/160*source.shape[1]).astype(int),0,source.shape[1]-1);sy=np.clip(np.rint((80-fz)/160*source.shape[0]).astype(int),0,source.shape[0]-1)
  paint=Image.fromarray(np.uint8(np.clip(np.asarray(paint)*(1-blend[:,:,None])+source[sy,sx]*blend[:,:,None],0,255)))
 paint.save(out/'plains-ground.png')
-ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe');target=out/'plains-ground.ktx2'
+ktx=Path(tool_path('ktx'));target=out/'plains-ground.ktx2'
 subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-lz','--qlevel','235','--clevel','1','--generate-mipmap','--threads','4',str(out/'plains-ground.png'),str(target)],check=True,capture_output=True)
 data=target.read_bytes();url='./content/'+hashlib.sha256(data).hexdigest()+'.ktx2';(assets/url).write_bytes(data)
 v=json.loads((assets/'village-ground.json').read_text());detail=v['detail']

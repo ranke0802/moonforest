@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Add mobile-only color tiers without rewriting any source texture or model."""
 import argparse, copy, hashlib, json, subprocess, time
 from pathlib import Path
@@ -20,7 +24,7 @@ def main():
     parser.add_argument('--apply',action='store_true'); args=parser.parse_args()
     out=args.output; out.mkdir(parents=True,exist_ok=True); assets=ROOT/'public/assets'; content=assets/'content'
     ledger_path=out/'conversions.json'; ledger=read(ledger_path) if ledger_path.exists() else {}
-    ktx='C:/Program Files/KTX-Software/bin/ktx.exe'
+    ktx=tool_path('ktx')
     def run(command):
         result=subprocess.run(command,capture_output=True,text=True)
         if result.returncode: raise RuntimeError(result.stdout+'\n'+result.stderr)

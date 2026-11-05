@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Sequential, resumable local texture conversion. Never calls a model generator.
 
 Outputs are reviewed separately; pack-village-ktx2.mjs installs approved results.
@@ -9,7 +13,7 @@ from PIL import Image, ImageDraw
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT = Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28/ktx2')
+DEFAULT = Path(str(project_path('ArcherPreview/reports/texture-conversions')))
 
 def read(path): return json.loads(path.read_text(encoding='utf-8'))
 def write(path, value): path.write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
@@ -17,7 +21,7 @@ def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,default=DEFAULT)
-    p.add_argument('--ktx',default='C:/Program Files/KTX-Software/bin/ktx.exe')
+    p.add_argument('--ktx',default=tool_path('ktx'))
     p.add_argument('--uastc',nargs='*',default=[]);p.add_argument('--rdo',action='store_true')
     p.add_argument('--uastc-lambda',type=float,default=1);p.add_argument('--uastc-dict',type=int,default=4096)
     p.add_argument('--etc-clevel',type=int,default=1);p.add_argument('--etc-rdo',action='store_true')

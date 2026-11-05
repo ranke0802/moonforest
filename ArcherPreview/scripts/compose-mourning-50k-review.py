@@ -1,11 +1,15 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 from pathlib import Path
 from PIL import Image,ImageDraw,ImageFont,ImageChops
 import json,html
 import numpy as np
 
-OUT=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-50k-review/2026-11-02')
+OUT=Path(str(project_path("ArcherPreview/reports/archive/mourning-50k-review/2026-11-02")))
 ROOT=Path(__file__).resolve().parents[1]
-font_path='C:/Windows/Fonts/malgun.ttf'
+font_path=__import__('os').environ.get('REVIEW_FONT', 'DejaVuSans.ttf')
 def font(size):return ImageFont.truetype(font_path,size)
 BG=(24,27,35);FG=(239,235,226)
 titles={'idle-front':'전체 정면','idle-quarter':'전체 사선','idle-side':'측면','idle-back':'후면','face-detail':'얼굴 · 기도하는 손 확대','cast':'한쪽 팔 마법 시전','slam':'전진 내려찍기','alternate':'교대 시전','death':'사망 자세'}

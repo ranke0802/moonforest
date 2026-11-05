@@ -35,3 +35,13 @@ __pycache__/
 # Generated music exports (runtime audio is tracked under Assets)
 /Tools/Music/exports/
 /Tools/Music/WorldSoundtrack/exports/
+
+# Portable archives and copied binary inputs live physically in the workspace.
+# Package.cmd includes these from disk; do not duplicate them in Git objects.
+/exports/portable/
+/.cache/
+/Sources/actors/
+/Sources/environment/
+/Sources/training/
+/Tools/portable/runtime/
+/ArcherPreview/assets/models/violet-warrior-v2.glb

@@ -1,8 +1,12 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Actual shipped LOD2 geometry review; lighting approximates the game."""
 import bpy,json,math
 from pathlib import Path
 from mathutils import Matrix,Vector
-out=Path(r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/boundary-continuity/2026-11-03');data=json.loads((out/'scene.json').read_text());print('Blender',bpy.app.version_string,flush=True)
+out=Path(rstr(project_path("ArcherPreview/reports/archive/boundary-continuity/2026-11-03")));data=json.loads((out/'scene.json').read_text());print('Blender',bpy.app.version_string,flush=True)
 bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene;scene.render.engine='BLENDER_EEVEE_NEXT' if bpy.app.version<(5,0,0) else 'BLENDER_EEVEE';scene.render.resolution_x=1280;scene.render.resolution_y=800;scene.render.resolution_percentage=100;scene.render.image_settings.file_format='PNG';scene.world.color=(.45,.45,.45);scene.view_settings.view_transform='Standard'
 templates={}

@@ -1,10 +1,14 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import json, sys
 import numpy as np
 
-OUT = Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/saint-50k-review/2026-11-02')
-FONT = 'C:/Windows/Fonts/malgun.ttf'
+OUT = Path(str(project_path("ArcherPreview/reports/archive/saint-50k-review/2026-11-02")))
+FONT = __import__('os').environ.get('REVIEW_FONT', 'DejaVuSans.ttf')
 BG = (24, 27, 35)
 FG = (239, 235, 226)
 DEPLOYED = '--deployed' in sys.argv

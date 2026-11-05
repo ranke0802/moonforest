@@ -1,0 +1,1326 @@
+{
+  "blenderVersion": "4.5.14 LTS",
+  "readOnly": true,
+  "files": [
+    {
+      "path": "Sources/environment/village/natural-ground-trees/natural-trees.blend",
+      "images": [
+        {
+          "name": "base-color",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\public\\assets\\content\\a226d7b6fd10e211bb61fa5b4a64e24e511a7630c7ee28282526a05a41cf9f02.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\village\\natural-ground-trees\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\public\\assets\\content\\a226d7b6fd10e211bb61fa5b4a64e24e511a7630c7ee28282526a05a41cf9f02.jpg",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.001",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\public\\assets\\content\\48e2abb56811d786dd011ddfe02e1648270fe151250beb0563ec833b2c2fe53f.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\village\\natural-ground-trees\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\public\\assets\\content\\48e2abb56811d786dd011ddfe02e1648270fe151250beb0563ec833b2c2fe53f.jpg",
+          "packed": true,
+          "exists": true
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-01-sickly-oak/refined-oak.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-01-sickly-oak\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-02-dead-tree/prepared.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-02-dead-tree\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-02-dead-tree\\..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-02-dead-tree\\..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-02-dead-tree\\..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-02-dead-tree\\..\\..\\source\\forest-02-dead-tree\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-03-fallen-log/prepared.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-03-fallen-log\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-03-fallen-log\\..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-03-fallen-log\\..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-03-fallen-log\\..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-03-fallen-log\\..\\..\\source\\forest-03-fallen-log\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-04-poison-fungi/prepared.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-04-poison-fungi\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-04-poison-fungi\\..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-04-poison-fungi\\..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-04-poison-fungi\\..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-04-poison-fungi\\..\\..\\source\\forest-04-poison-fungi\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-05-thorn-bramble/prepared.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-05-thorn-bramble\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-05-thorn-bramble\\..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-05-thorn-bramble\\..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-05-thorn-bramble\\..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-05-thorn-bramble\\..\\..\\source\\forest-05-thorn-bramble\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-06-witch-cave-mouth/prepared.blend",
+      "images": [
+        {
+          "name": "base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-06-witch-cave-mouth\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-06-witch-cave-mouth\\..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-06-witch-cave-mouth\\..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-06-witch-cave-mouth\\..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\forest\\working\\forest-06-witch-cave-mouth\\..\\..\\source\\forest-06-witch-cave-mouth\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/cave/working/cave-19-apothecary-shelf/prepared.blend",
+      "images": [
+        {
+          "name": "base-color-4k.png",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\witch-cave-models\\2026-10-29\\working\\cave-19-apothecary-shelf\\base-color-4k.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\witch-cave-models\\2026-10-29\\working\\cave-19-apothecary-shelf\\base-color-4k.png",
+          "packed": false,
+          "exists": true
+        },
+        {
+          "name": "cave-18-alchemy-workbench_base_color.png",
+          "path": "//..\\cave-18-alchemy-workbench\\base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave\\working\\cave-19-apothecary-shelf\\..\\cave-18-alchemy-workbench\\base-color-4k.png",
+          "packed": false,
+          "exists": false
+        },
+        {
+          "name": "cave-19-apothecary-shelf_base_color.png",
+          "path": "//base-color-4k.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave\\working\\cave-19-apothecary-shelf\\base-color-4k.png",
+          "packed": false,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move/exports/tripo1_move_rig.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model_basecolor",
+          "path": "//..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\mourning-elena\\rigging\\tripo-1-move\\exports\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2/exports/hair_refine_candidate.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model_basecolor",
+          "path": "//..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\mourning-elena\\rigging\\tripo-1-move-v2\\exports\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2/exports/tripo1_move_rig.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model_basecolor",
+          "path": "//..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\mourning-elena\\rigging\\tripo-1-move-v2\\exports\\..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2-1/exports/tripo1_move_rig.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model_basecolor",
+          "path": "//..\\..\\..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\mourning-elena\\rigging\\tripo-1-move-v2-1\\exports\\..\\..\\..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/mourning-motion/exports/elena-motion-expanded-r11.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model_basecolor",
+          "path": "//..\\..\\..\\..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\mourning-motion\\exports\\..\\..\\..\\..\\..\\revisions\\revisions\\source\\tripo-1\\tripo_convert_b9a89d0a-0a92-46bc-9173-f472b6895b11.fbm\\fantasy_character_3d_model_basecolor.JPEG",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-cluster-source.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\grass-cluster\\Meshy_AI_Grass_assets__1023053615_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\grass-cluster\\Meshy_AI_Grass_assets__1023053615_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-cluster.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\grass-cluster\\Meshy_AI_Grass_assets__1023053615_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\grass-cluster\\Meshy_AI_Grass_assets__1023053615_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-tuft-source.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\grass-tuft\\Meshy_AI_Grass__1023053542_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\grass-tuft\\Meshy_AI_Grass__1023053542_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-tuft.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\grass-tuft\\Meshy_AI_Grass__1023053542_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\grass-tuft\\Meshy_AI_Grass__1023053542_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/oak-tree-source.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\oak-tree\\Meshy_AI_tree_1023053428_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\oak-tree\\Meshy_AI_tree_1023053428_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/oak-tree.blend",
+      "images": [
+        {
+          "name": "oak-tree-painted.png",
+          "path": "C:\\dev\\warrior\\assets\\environment\\textures\\oak-tree-painted.png",
+          "resolved": "C:\\dev\\warrior\\assets\\environment\\textures\\oak-tree-painted.png",
+          "packed": true,
+          "exists": true
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/scarecrow.blend",
+      "images": [
+        {
+          "name": "emissive",
+          "path": "//..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\emissive.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\emissive.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "normal",
+          "path": "//..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\normal.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\normal.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "scarecrow-painted.png",
+          "path": "C:\\dev\\warrior\\assets\\environment\\textures\\scarecrow-painted.png",
+          "resolved": "C:\\dev\\warrior\\assets\\environment\\textures\\scarecrow-painted.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\scarecrow\\Meshy_AI_Sunlit_Scarecrow_1023053954_texture.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/verdant-tree-source.blend",
+      "images": [
+        {
+          "name": "Image_0",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_0.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_0.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Image_2",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_2.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_2.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Image_3",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_3.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_3.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/training/blender/environment/verdant-tree.blend",
+      "images": [
+        {
+          "name": "Image_2",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_2.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_2.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Image_3",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_3.jpg",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\Image_3.jpg",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\training\\blender\\environment\\..\\..\\assets\\environment\\source\\verdant-tree\\Meshy_AI_Verdant_Tree_1023053310_texture.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "verdant-tree-painted.png",
+          "path": "C:\\dev\\warrior\\assets\\environment\\textures\\verdant-tree-painted.png",
+          "resolved": "C:\\dev\\warrior\\assets\\environment\\textures\\verdant-tree-painted.png",
+          "packed": true,
+          "exists": true
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/goblin/Hooded_Goblin.blend",
+      "images": [
+        {
+          "name": "BakedMaterial_baseColor.png",
+          "path": "//..\\..\\assets\\goblin\\source\\model.fbm\\BakedMaterial_baseColor.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\goblin\\..\\..\\assets\\goblin\\source\\model.fbm\\BakedMaterial_baseColor.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\goblin\\..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\goblin\\..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\goblin\\..\\..\\assets\\goblin\\source\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/guardian-bear/Guardian_Bear_Boss.blend",
+      "images": [
+        {
+          "name": "normal",
+          "path": "//input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\guardian-bear\\input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0",
+          "path": "//input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\guardian-bear\\input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\guardian-bear\\input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\guardian-bear\\input\\Meshy_AI_Guardian_Bear_biped\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/guardian-bear/Guardian_Bear_Boss_30k.blend",
+      "images": [
+        {
+          "name": "normal",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic-texture_0_roughness",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/warrior/Violet_Vanguard_V2.blend",
+      "images": [
+        {
+          "name": "Bunnyguard_Shield_Equipment_Albedo",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Bunnyguard_Shield_Albedo.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Bunnyguard_Shield_Albedo.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Bunnyguard_Shield_Equipment_Surface",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Bunnyguard_Shield_Surface.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Bunnyguard_Shield_Surface.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Golden_Oathblade_Equipment_Albedo",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Golden_Oathblade_Albedo.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Golden_Oathblade_Albedo.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Golden_Oathblade_Equipment_Surface",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Golden_Oathblade_Surface.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Golden_Oathblade_Surface.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Meshy_AI_Violet_Vanguard_1019043850_texture_normal.png",
+          "path": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-animation-v1\\input\\character\\Meshy_AI_Violet_Vanguard_1019043850_texture_fbx\\Meshy_AI_Violet_Vanguard_1019043850_texture_normal.png",
+          "resolved": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-animation-v1\\input\\character\\Meshy_AI_Violet_Vanguard_1019043850_texture_fbx\\Meshy_AI_Violet_Vanguard_1019043850_texture_normal.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "texture_0.png",
+          "path": "//..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\warrior\\..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0.png.001",
+          "path": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0.png",
+          "resolved": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png",
+          "path": "//..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\warrior\\..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png.001",
+          "path": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png",
+          "path": "//..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\warrior\\..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png.001",
+          "path": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png",
+          "path": "//..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\actors\\warrior\\..\\backups\\before_shield_push_20261021\\backups\\input\\Meshy_AI_Violet_Vanguard_biped\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png.001",
+          "path": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\dev\\blender-workbench\\projects\\violet-vanguard-biped-equipped\\v2\\knockdown\\input\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Violet_Vanguard_Equipment_Albedo",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Violet_Vanguard_Albedo.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Violet_Vanguard_Albedo.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Violet_Vanguard_Equipment_Surface",
+          "path": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Violet_Vanguard_Surface.png",
+          "resolved": "C:\\dev\\blender-workbench\\output\\violet-vanguard-equipment-v2\\textures\\Violet_Vanguard_Surface.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/warrior/v6-motion-transfer/Warrior_V6_CapeRevision06.blend",
+      "images": [
+        {
+          "name": "armored_knight_3d_model_Clone1_basecolor",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "armored_knight_3d_model_Clone1_basecolor.001",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "armored_knight_3d_model_Clone1_normal",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "armored_knight_3d_model_Clone1_normal.001",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "armored_knight_3d_model_Clone1_rm",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "armored_knight_3d_model_Clone1_rm.001",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Bunnyguard_Shield_Albedo",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Golden_Oathblade_Albedo",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "Warrior_Head_Clean_v2_8K",
+          "path": "C:\\dev\\warrior\\temp\\warrior_new_v2_assets\\warrior_head_clean_v2_8k.png",
+          "resolved": "C:\\dev\\warrior\\temp\\warrior_new_v2_assets\\warrior_head_clean_v2_8k.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "Warrior_Head_Clean_v2_8K.001",
+          "path": "C:\\dev\\warrior\\temp\\warrior_new_v2_assets\\warrior_head_clean_v2_8k.png",
+          "resolved": "C:\\dev\\warrior\\temp\\warrior_new_v2_assets\\warrior_head_clean_v2_8k.png",
+          "packed": true,
+          "exists": true
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/saint-elena/Elena_Meshy_Ready_160cm_Grounded.blend",
+      "images": [
+        {
+          "name": "fantasy_character_3d_model231_basecolor.jpg",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/cave-laboratory/large-joints-clay.blend",
+      "images": [
+        {
+          "name": "base-color",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\crate-barrel-cluster\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\crate-barrel-cluster\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.001",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\firewood\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\firewood\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.002",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\handcart\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\handcart\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.003",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-02-jagged-outcrop\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-02-jagged-outcrop\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.004",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-01-mossy-boulder\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-01-mossy-boulder\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "cave-ground.png",
+          "path": "//..\\..\\..\\witch-cave-art-direction\\2026-10-31\\implementation-review\\after\\cave-ground.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\witch-cave-art-direction\\2026-10-31\\implementation-review\\after\\cave-ground.png",
+          "packed": false,
+          "exists": false
+        },
+        {
+          "name": "color-0.png",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-01-eroded-wall\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-01-eroded-wall\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.001",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-02-rock-ledge\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-02-rock-ledge\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.002",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-03-great-column\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-03-great-column\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.003",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-04-natural-arch\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-04-natural-arch\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.004",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-05-stalagmites\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-05-stalagmites\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.005",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-06-stalactite-canopy\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-06-stalactite-canopy\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.006",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-07-scree-ramp\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-07-scree-ramp\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.007",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-08-timber-brace\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-08-timber-brace\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.008",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-09-iron-gate-leaf\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-09-iron-gate-leaf\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.009",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-10-hand-winch\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-10-hand-winch\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.010",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-11-sluice-shutter\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-11-sluice-shutter\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.011",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-12-lift-platform\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-12-lift-platform\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.012",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-13-votive-lantern\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-13-votive-lantern\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.013",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-14-hidden-pressure-stone\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-14-hidden-pressure-stone\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.014",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-15-resurrection-altar\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-15-resurrection-altar\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.015",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-16-soul-collector-arm\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-16-soul-collector-arm\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.016",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-17-faded-sacred-emblem\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-17-faded-sacred-emblem\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.017",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-18-alchemy-workbench\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-18-alchemy-workbench\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.018",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-19-apothecary-shelf\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-19-apothecary-shelf\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.019",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-20-modest-cot\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-20-modest-cot\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.020",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s01-solid-cliff-base\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s01-solid-cliff-base\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.021",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s03-dry-spillway-rock\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s03-dry-spillway-rock\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.022",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\forest-06-witch-cave-mouth\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\forest-06-witch-cave-mouth\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "tripo_5087683a_69e1_485c_97ec_ade4fd804395_baseColor",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/environment/cave-laboratory/large-joints-palette-review.blend",
+      "images": [
+        {
+          "name": "base-color",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\crate-barrel-cluster\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\crate-barrel-cluster\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.001",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\firewood\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\firewood\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.002",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\handcart\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\handcart\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.003",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-02-jagged-outcrop\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-02-jagged-outcrop\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "base-color.004",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-01-mossy-boulder\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\rock-01-mossy-boulder\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "cave-ground.png",
+          "path": "//..\\..\\..\\witch-cave-art-direction\\2026-10-31\\implementation-review\\after\\cave-ground.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\witch-cave-art-direction\\2026-10-31\\implementation-review\\after\\cave-ground.png",
+          "packed": false,
+          "exists": false
+        },
+        {
+          "name": "color-0.png",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-01-eroded-wall\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-01-eroded-wall\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.001",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-02-rock-ledge\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-02-rock-ledge\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.002",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-03-great-column\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-03-great-column\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.003",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-04-natural-arch\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-04-natural-arch\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.004",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-05-stalagmites\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-05-stalagmites\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.005",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-06-stalactite-canopy\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-06-stalactite-canopy\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.006",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-07-scree-ramp\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-07-scree-ramp\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.007",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-08-timber-brace\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-08-timber-brace\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.008",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-09-iron-gate-leaf\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-09-iron-gate-leaf\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.009",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-10-hand-winch\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-10-hand-winch\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.010",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-11-sluice-shutter\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-11-sluice-shutter\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.011",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-12-lift-platform\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-12-lift-platform\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.012",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-13-votive-lantern\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-13-votive-lantern\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.013",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-14-hidden-pressure-stone\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-14-hidden-pressure-stone\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.014",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-15-resurrection-altar\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-15-resurrection-altar\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.015",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-16-soul-collector-arm\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-16-soul-collector-arm\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.016",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-17-faded-sacred-emblem\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-17-faded-sacred-emblem\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.017",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-18-alchemy-workbench\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-18-alchemy-workbench\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.018",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-19-apothecary-shelf\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-19-apothecary-shelf\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.019",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-20-modest-cot\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-20-modest-cot\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.020",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s01-solid-cliff-base\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s01-solid-cliff-base\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.021",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s03-dry-spillway-rock\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\cave-s03-dry-spillway-rock\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "color-0.png.022",
+          "path": "//..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\forest-06-witch-cave-mouth\\color-0.png",
+          "resolved": "C:\\dev\\MoonForest\\Sources\\environment\\cave-laboratory\\..\\..\\..\\..\\..\\..\\..\\..\\..\\dev\\moonforest-archer\\ArcherPreview\\reports\\witch-cave-v5\\forest-06-witch-cave-mouth\\color-0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "tripo_5087683a_69e1_485c_97ec_ade4fd804395_baseColor",
+          "path": "",
+          "resolved": "",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    },
+    {
+      "path": "Sources/actors/azure-elf/Azure_Elf_Blossom_Running.blend",
+      "images": [
+        {
+          "name": "Meshy_AI_Azure_Elf_Blossom_biped_texture_0.png",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "Meshy_AI_Azure_Elf_Blossom_biped_texture_0_metallic.png",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_metallic.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_metallic.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "Meshy_AI_Azure_Elf_Blossom_biped_texture_0_normal.png",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_normal.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_normal.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "Meshy_AI_Azure_Elf_Blossom_biped_texture_0_roughness.png",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_roughness.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\Meshy_AI_Azure_Elf_Blossom_biped_texture_0_roughness.png",
+          "packed": true,
+          "exists": true
+        },
+        {
+          "name": "texture_0",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_metallic.png.001",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_metallic.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_metallic.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_normal.png.001",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_normal.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_normal.png",
+          "packed": true,
+          "exists": false
+        },
+        {
+          "name": "texture_0_roughness.png.001",
+          "path": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_roughness.png",
+          "resolved": "C:\\Users\\ryank\\Documents\\ChatGPT\\MM Project\\output\\azure-elf-blossom\\source\\Meshy_AI_Azure_Elf_Blossom_biped\\model.fbm\\texture_0_roughness.png",
+          "packed": true,
+          "exists": false
+        }
+      ],
+      "libraries": []
+    }
+  ]
+}

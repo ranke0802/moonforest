@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-charge-followup'),perf=resolve(root,'reports/elena-fps-followup');
-const out=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-charge-review/2026-10-30');
+const out=resolve(process.argv[2]??projectPath("ArcherPreview/reports/archive/elena-charge-review/2026-10-30"));
 const read=(folder,name)=>JSON.parse(readFileSync(resolve(folder,name),'utf8'));
 const deployment=read(dir,'deployment.json'),stress=read(dir,'combat-stress.json'),before=read(perf,'model-performance-baseline.json'),after=read(perf,'model-performance-current.json');
 const log=readFileSync(resolve(dir,'full-tests.log'),'utf8'),pass=Number(log.match(/(?:ℹ |# )pass (\d+)/)?.[1]),total=Number(log.match(/(?:ℹ |# )tests (\d+)/)?.[1]),fail=Number(log.match(/(?:ℹ |# )fail (\d+)/)?.[1]);

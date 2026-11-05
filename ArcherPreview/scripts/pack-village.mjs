@@ -1,10 +1,11 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import { readFile, writeFile, mkdir, access, rm } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { splitGlb, hash } from './resource-pack.js';
 
 const root=resolve(import.meta.dirname,'..');
 const option=name=>{const i=process.argv.indexOf(name);return i<0?null:process.argv[i+1];};
-const source=resolve(option('--source')??process.env.VILLAGE_SOURCE_DIR??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/village-warrior-v3/2026-10-28');
+const source=resolve(option('--source')??process.env.VILLAGE_SOURCE_DIR??sourcePath("village"));
 const fixture=process.argv.includes('--fixture');
 const plan=JSON.parse(await readFile(resolve(source,'asset-plan.json'),'utf8'));
 if(plan.assets.length!==25||new Set(plan.assets.map(a=>a.id)).size!==25)throw new Error('Village needs exactly 25 unique source assets.');

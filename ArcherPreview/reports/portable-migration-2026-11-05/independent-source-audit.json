@@ -1,0 +1,271 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-05T06:09:42.039Z",
+  "root": "C:\\dev\\MoonForest",
+  "head": "681267417bd2d628b6bc9f12daa51b3de7860bab",
+  "branch": "codex/portable-workspace-2026-11-05",
+  "scope": "Read-only independent source/resource and Git portability audit; no browser or game changes.",
+  "history": {
+    "6812674": true,
+    "cccaeb2": true,
+    "a8b190a": true,
+    "36fd9a3": true,
+    "5d1ee03": true,
+    "8bfabf0": true,
+    "99fcd56": true,
+    "40ab932": true
+  },
+  "git": {
+    "directoryIsRealDirectory": true,
+    "commonDirInsideRoot": true,
+    "alternatesPresent": false,
+    "worktreeRegistryPresent": false,
+    "origin": "https://github.com/ranke0802/moonforest.git",
+    "objectPackHardlinks": [
+      {
+        "name": "pack-6e9f9b674f8a21fa7129e92a19ea8e971f98b6d3.pack",
+        "linkCount": 1
+      },
+      {
+        "name": "pack-bb473f0868866134b65e063ae835d677329b175b.pack",
+        "linkCount": 1
+      }
+    ],
+    "linkedTracked": []
+  },
+  "trackedFiles": 10078,
+  "sourceChangesFromReviewedHead": [],
+  "runtime": {
+    "manifestCount": 31,
+    "requiredFiles": 1225,
+    "contentFiles": 1185,
+    "bytes": 623070026,
+    "inventorySha256": "36c89110ff6f202b759b329035006e2d9cff171eb4b4ff60d5f1e054bba96337",
+    "contentHashesVerified": true
+  },
+  "siblingAudio": {
+    "files": 193,
+    "bytes": 53127030,
+    "inventorySha256": "311c70b874ed080d724f9a0b482dc9c23537b3c1d49becc345b24ecea95e6cbd"
+  },
+  "legacyTestFixture": {
+    "path": "ArcherPreview/assets/models/violet-warrior-v2.glb",
+    "present": true,
+    "bytes": 60409992,
+    "sha256": "f77e9096ac67e0efa0a4d44671c217d23eaa1e37177ac5278e4a1e54e8dab6eb",
+    "requiredBy": "tests/warrior-v3-package.test.js:20"
+  },
+  "absoluteSourceReferences": [],
+  "suspiciousTrackedPaths": [],
+  "oldTrees": [
+    {
+      "root": "C:\\dev\\moonforest-archer",
+      "untrackedResources": 141,
+      "alreadyTrackedAtTarget": 52,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb",
+        "ArcherPreview/public/assets/content/011d32c60e03c9ebc7fe7276490ff817dde3f45e9055af74786650b7699a6d40.bin",
+        "ArcherPreview/public/assets/content/02c23638044de79a4e27a7b1e09cbff3742cd6919b319917edb37025a98eeac0.png",
+        "ArcherPreview/public/assets/content/07a8408e1ccf4fbf106838dadb4595a092aa5f898e93fb23140ac29f0bacb95a.gltf",
+        "ArcherPreview/public/assets/content/0afe7350fcb00427088a38c2d0b105e623dbb652ddc755c641039fa8a232c8b7.gltf",
+        "ArcherPreview/public/assets/content/0f6a07f60dc0ce91a10dc523767282327e9408b5cb5e3b4b7279179288bb2b7d.gltf",
+        "ArcherPreview/public/assets/content/1089fbcd56c49bb715d85325ec33f0ea577e0044addded71d729cfb1bcd4dad8.png",
+        "ArcherPreview/public/assets/content/11129375c1dc794e59d399b02eac93169eadb8a0f7b29eb0ad68d4aa99d93545.gltf",
+        "ArcherPreview/public/assets/content/146540eee2046bd49d3fc83bf14d431fe2d29b3627d2f52be89d6f35546ca9bb.bin",
+        "ArcherPreview/public/assets/content/1611fdb307c644410a16f203a1af2b9b5330645703c3833070387623f6ac363c.png",
+        "ArcherPreview/public/assets/content/1747542475e77f4200609d573792e19e0540da611dff5bdb0f7a16530e2dcd5c.png",
+        "ArcherPreview/public/assets/content/18ce262c54bf4f55b12d20041a8fb7ef4464858ed97bdf7fd21936e291809086.png",
+        "ArcherPreview/public/assets/content/1a255ede96eff362703ce1aa32c1b32a033bef959f281a85877d5d0ab3a353c9.webp",
+        "ArcherPreview/public/assets/content/1b253fccbe722e38453510b16a0b0c3586563afae655bdfeb2d5020684a79136.png",
+        "ArcherPreview/public/assets/content/205648955e3bc2b2e7106f6ab3e33d3072c76cb70562c28217827431b110608c.gltf",
+        "ArcherPreview/public/assets/content/22ec14b59ca8765f8289a1117bb3e2d2b31e962942ae1f4ead67552e73f90d29.gltf",
+        "ArcherPreview/public/assets/content/262d5a7d72446d480a0f1fe3aadc904b9e296ee095950584117f7ce9e3de05fd.png",
+        "ArcherPreview/public/assets/content/275811eddf4d35cf9a403ac56b42d67b8e400c42f994e77dbf86abc307c9c124.png",
+        "ArcherPreview/public/assets/content/28a9ab00399adc6884beb939d195362eda99c1c80ac4c0dc14426c469b7725b0.gltf",
+        "ArcherPreview/public/assets/content/2a33dcaf4af470f90da5f9c890a8aa08b7051202fc56c865b310c84d365745a6.ktx2",
+        "ArcherPreview/public/assets/content/33095e5ac3b1cae21318bf3c8c8d221c5202c2e6c2849dbae8e0d7df0ec0cb62.gltf",
+        "ArcherPreview/public/assets/content/331497d833283132a16e57286ada55cb439ab7ae25b21bd3820ee7bb454b75ab.gltf",
+        "ArcherPreview/public/assets/content/3662cf2f97a9ab562026c0804d59b9eda2f4019c06458e55ecc40cd05efc6a5b.png",
+        "ArcherPreview/public/assets/content/3cee7b98026ea6fdfeb09cde057fc5364887e5ef7b7215182f3a9323348f9919.gltf",
+        "ArcherPreview/public/assets/content/3d3e7a2cf79f2f0def3f6b87f0b4cb206c730a5d9dd35540fcb61e0f7fabe454.bin",
+        "ArcherPreview/public/assets/content/44348efba97cbe84c702eef118ce69ceff11fe9d26f0f0ff0853fd31590829b5.gltf",
+        "ArcherPreview/public/assets/content/457fb78293e16dc73d6e7d727e974d648aa25c50b6f938374ed06702444ec55d.png",
+        "ArcherPreview/public/assets/content/46f2310bacfa4d2fc484357a1e489cbfbd116e39e4477400d32d40c465ab9b38.png",
+        "ArcherPreview/public/assets/content/4896f109483b0a5944e5207b3082d7a91666bee0f41a24131d64305b4acb7525.ktx2",
+        "ArcherPreview/public/assets/content/4a678f14d297ab467b675b279cabb0979262d747e7a31b1ccce95aa46b1af796.ktx2",
+        "ArcherPreview/public/assets/content/51c0560947211eed2eecf621a23124df650ac80d514b09224bd5d61408f27b43.png",
+        "ArcherPreview/public/assets/content/527213f258ba637cd7b501d326a4858a410e948cf2e2e97be81e1572bc95b44c.ktx2",
+        "ArcherPreview/public/assets/content/54e8b24c8bf544e7c7d7b376cccb2f9f3fe7c68660ce625a2e6b9dd2b1aa6d3a.gltf",
+        "ArcherPreview/public/assets/content/5945b49c231055654240f873ebd6a6ec24c45535749a332027c3d7f4151a4b68.gltf",
+        "ArcherPreview/public/assets/content/5aa6c7ee40fb9de9ba49289308dd77139be51c6ce33fe4cd01fa474f66184189.gltf",
+        "ArcherPreview/public/assets/content/5bf298c336b955eb8a7fbc765f26c65fe74186c3f8863f844e7cd4ffc5db0c73.bin",
+        "ArcherPreview/public/assets/content/5d91820ea6bc3c071e2fc7c02100ee9d578a58ec8c1b88aca6c5c6bce41d1b02.png",
+        "ArcherPreview/public/assets/content/5daf08c1c099cd50df3fb01b3a2c6478b79b964fb0996d053334cb9c8e3e0ed9.ktx2",
+        "ArcherPreview/public/assets/content/5e9db0215832853c11c161f9ac3c6a88801cdc5216b1c63b1b56e1298b4b39ae.gltf",
+        "ArcherPreview/public/assets/content/61db9859f2bd1b69964941d5a65a819d8f2d74b7d7ceb2589e18ebf7bca2b9a0.gltf",
+        "ArcherPreview/public/assets/content/642407bf00dede440bff7f7c8883dce345576867fc5edb23c8a17ecae57b946b.gltf",
+        "ArcherPreview/public/assets/content/6af26c6cef9aa91314a2ef58e8e922873a7d2c83d0016af527054ef005b15687.png",
+        "ArcherPreview/public/assets/content/780342457522f2fe6ab272df3b11ba6e8fa94e10ee48e9751387b05a174c8e1b.png",
+        "ArcherPreview/public/assets/content/7834f00db9681100fc1c40d72229d10610467b8387e1ed02fc232b437e9418e4.ktx2",
+        "ArcherPreview/public/assets/content/7a12e254300990553b971e5fbf4612eb4e82954df81db5034a1d58988d6160d9.gltf",
+        "ArcherPreview/public/assets/content/7c789d0395707138a2b7dabf4669e02f4dee8e58fd183ca355bf6cda58b1f1a4.gltf",
+        "ArcherPreview/public/assets/content/7ce3fb73e8cde99fdad4f889f78f43b4cb0fb7cd12dec95dc777e16b8823b590.gltf",
+        "ArcherPreview/public/assets/content/8078e50e22bc59c7468e892b4a286eb015d0144adad28294c3eac2d45b79fb8c.gltf",
+        "ArcherPreview/public/assets/content/869c1d23543c13c3ef0d1e3fe758232bfc39ff57f6064f7d4b65eaf29e560a97.ktx2",
+        "ArcherPreview/public/assets/content/884eb1fdffc69f5dbb17a1b0fe52fabab1fba0a2ccea4dbe67e0bca7bbc03a95.png",
+        "ArcherPreview/public/assets/content/88c8c0270ecf975bb8275822f2654db60384d096590d30bb9403caf3c148a377.bin",
+        "ArcherPreview/public/assets/content/8e79e262ddcc0a4b7a9b5ebd853b407bf7057bc8beb3aac6210854f14c36ac7c.gltf",
+        "ArcherPreview/public/assets/content/8ef11730fcd724bbd3d84bf94395d2e10d8682f85970d1b9ba3e3aa7fe803c17.png",
+        "ArcherPreview/public/assets/content/93c51ce999fd1633627f6a5c641d154ece98ba809f7635fee16ec19cf2233638.png",
+        "ArcherPreview/public/assets/content/97fe631fa0cf6fe45b3cb83eddfa9b155f84fcb15b860e8078dcbae0a0e1448c.gltf",
+        "ArcherPreview/public/assets/content/9d625f06da5be6d681ef55539c32454be5a8ab5d980dae197f1ae3cc98703cd9.gltf",
+        "ArcherPreview/public/assets/content/a3c790984db8b5ff311c4627b413fa7e43fc7c2843e3755ebd1024f26c2bec09.gltf",
+        "ArcherPreview/public/assets/content/a3e08eeeeaaf4b1c729b5f66382e674f00c35b3b3fbc06688d6c180ed8f7b1d4.ktx2",
+        "ArcherPreview/public/assets/content/a4c4232016007b8cd8f9a22448fbc8d26089dbbc86e227c7773c69f3e30262c3.gltf",
+        "ArcherPreview/public/assets/content/a6c43b7495565e3ea47609a452fdd6c32ed1d0a1123ed3ed751ab28b4f1cc239.gltf",
+        "ArcherPreview/public/assets/content/a838cf9d276ff2b26523f50e509fa29efa817a245607e79d86da6cadec25c92f.bin",
+        "ArcherPreview/public/assets/content/a98fb4cfda2ca4d8e0cb6eec0f30e595cd2b8f5f882e082fa571e38ed4c2f6da.bin",
+        "ArcherPreview/public/assets/content/b1cf612670a52dc51e7ac8f4efeec4d5bdb997c9abfeaad6ec45dd3211896df0.gltf",
+        "ArcherPreview/public/assets/content/b323d4494e476d8534093578783dfcc3f5ef504e0a33844dfd7e7e6cb7190baf.gltf",
+        "ArcherPreview/public/assets/content/b53d8839aa9967ee53b19c53bcca4fd5282f6ab9d9c1c90a5d312f2ef01f5171.png",
+        "ArcherPreview/public/assets/content/b6827d657a1dc32eb37b8ab188faebad5ce8bea33de98a1b20035797063468d0.gltf",
+        "ArcherPreview/public/assets/content/bbf4312452cb1651ffcea9b6940aeffbcd3da1040cba6c2f91bd5c80b56fd2a2.gltf",
+        "ArcherPreview/public/assets/content/bf724c955f2489fe3db24717e63ae69b570a0c68dc03dfb0118dad43511f1dfc.png",
+        "ArcherPreview/public/assets/content/c1e6c9d1fe898f2af3c102cb841e165d96519ab0cc133a7677b7422d9000d26b.ktx2",
+        "ArcherPreview/public/assets/content/c3a78898ea8b9f595836a267ea49abba77016a6cee163646ed8444efe61faae1.gltf",
+        "ArcherPreview/public/assets/content/cdc72a7bf04d49248b33d028feb11f7da7690f044569c6baf1771a402902d2a2.gltf",
+        "ArcherPreview/public/assets/content/d3101e43043817566669b312877e7ff92ade1d336bc84911befc8054c05ca7ab.gltf",
+        "ArcherPreview/public/assets/content/d3c0d853d05449b5c253e0581206ee0c6f7806ff43c94af2f8b9dec130b13754.bin",
+        "ArcherPreview/public/assets/content/d4fcc319555f10841a1d9238b4b0e9ceaf71e87c2a0c18ddea490622f782ee16.ktx2",
+        "ArcherPreview/public/assets/content/d7333e5e78d6e97c09115de4c49742c0de0cd7714720d405c98f9b986a33cd37.png",
+        "ArcherPreview/public/assets/content/d8ff8dcebfda98930df6aa25960571403935d5c9a38980b296d638b5f666fab7.gltf",
+        "ArcherPreview/public/assets/content/dc389577df7b3c4ea096923f4fd28a373132290449235cbbc5edcab874575828.ktx2",
+        "ArcherPreview/public/assets/content/e17e2f231f69f92b682a6a472b18faa2120d6dae1dafd41d544f6d249270c1c4.png",
+        "ArcherPreview/public/assets/content/e2a7aa57b96028ada2e59b8ba9bcfb1d9bef5eca2bcdc3da5434c40599465e44.png",
+        "ArcherPreview/public/assets/content/e4d38c1c3ede04771454a2a314beef0eaef1ee70ac7b3838d9904dbd511f89f6.webp",
+        "ArcherPreview/public/assets/content/e6d8c9a388386dc60d14fcbfcbb1f9da3bb16ee797bd80b995e97b572ed03a68.ktx2",
+        "ArcherPreview/public/assets/content/e89c212456a4993e5bfdf621e1a6c840de05db5d5876c0a4a0e38ff805b24950.bin",
+        "ArcherPreview/public/assets/content/ea6682677b388fe00457ce3d264636898fda615214a9de7af21fb2a3d44a841f.gltf",
+        "ArcherPreview/public/assets/content/ec4a0c64debb48a41808204408d513eef649061adf6599ea6817c0d8fa96abc0.bin",
+        "ArcherPreview/public/assets/content/ef627d5aa688d56f9bd58d2470aff3fef1040b961ffe1eb3bcbd8afa99622723.gltf",
+        "ArcherPreview/public/assets/content/f52835553672f4ee03facd436ad1da30beb5fc0bee782505bf3adb3bef6d03dc.webp",
+        "ArcherPreview/public/assets/content/f903846849cdcbae69bdd251b2aca31b4d574e9899af1fcc9a74a17baf451e26.bin",
+        "ArcherPreview/public/assets/content/fe4a5e8689a9ebed49dc1678d3f96edd84303e197a6742a7f2e8941162488ffe.gltf",
+        "ArcherPreview/public/assets/content/ff8da802f3357091ebecd3d079d892425a0f863b4a9e553e0c761e5a808001ff.ktx2"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-bear-combat",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-cinematic-integration-20261104",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-hud-horizon",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-loading-review",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-mobile-quality",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-rotation-stutter",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-shield-guard",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-ui-settings",
+      "untrackedResources": 1,
+      "alreadyTrackedAtTarget": 0,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb"
+      ],
+      "missingRequiredByRuntime": []
+    },
+    {
+      "root": "C:\\dev\\moonforest-witch-cave-v5",
+      "untrackedResources": 29,
+      "alreadyTrackedAtTarget": 2,
+      "missingFromTarget": [
+        "ArcherPreview/assets/models/violet-warrior-v2.glb",
+        "ArcherPreview/public/assets/content/07a8408e1ccf4fbf106838dadb4595a092aa5f898e93fb23140ac29f0bacb95a.gltf",
+        "ArcherPreview/public/assets/content/0f6a07f60dc0ce91a10dc523767282327e9408b5cb5e3b4b7279179288bb2b7d.gltf",
+        "ArcherPreview/public/assets/content/10ca900633f41160f303d6ae857223a245f2aecddfa8b226551c589083bfda47.ktx2",
+        "ArcherPreview/public/assets/content/11129375c1dc794e59d399b02eac93169eadb8a0f7b29eb0ad68d4aa99d93545.gltf",
+        "ArcherPreview/public/assets/content/1a34a1b2c27d58a62e65b08f3e40cbaa8a5421e1313c40da5b7ac3ad7a2fcca3.ktx2",
+        "ArcherPreview/public/assets/content/3cee7b98026ea6fdfeb09cde057fc5364887e5ef7b7215182f3a9323348f9919.gltf",
+        "ArcherPreview/public/assets/content/48125b4216eaf246493a9938fa3329b525bda370b5c62d54256f812262f1725d.ktx2",
+        "ArcherPreview/public/assets/content/5aa6c7ee40fb9de9ba49289308dd77139be51c6ce33fe4cd01fa474f66184189.gltf",
+        "ArcherPreview/public/assets/content/5e9db0215832853c11c161f9ac3c6a88801cdc5216b1c63b1b56e1298b4b39ae.gltf",
+        "ArcherPreview/public/assets/content/61db9859f2bd1b69964941d5a65a819d8f2d74b7d7ceb2589e18ebf7bca2b9a0.gltf",
+        "ArcherPreview/public/assets/content/642407bf00dede440bff7f7c8883dce345576867fc5edb23c8a17ecae57b946b.gltf",
+        "ArcherPreview/public/assets/content/66af0020ccaec7758dfa3c4b7913da55594c90584153d4962becf8ef440f4e75.ktx2",
+        "ArcherPreview/public/assets/content/7ce3fb73e8cde99fdad4f889f78f43b4cb0fb7cd12dec95dc777e16b8823b590.gltf",
+        "ArcherPreview/public/assets/content/8078e50e22bc59c7468e892b4a286eb015d0144adad28294c3eac2d45b79fb8c.gltf",
+        "ArcherPreview/public/assets/content/8e79e262ddcc0a4b7a9b5ebd853b407bf7057bc8beb3aac6210854f14c36ac7c.gltf",
+        "ArcherPreview/public/assets/content/9d625f06da5be6d681ef55539c32454be5a8ab5d980dae197f1ae3cc98703cd9.gltf",
+        "ArcherPreview/public/assets/content/a3c790984db8b5ff311c4627b413fa7e43fc7c2843e3755ebd1024f26c2bec09.gltf",
+        "ArcherPreview/public/assets/content/b323d4494e476d8534093578783dfcc3f5ef504e0a33844dfd7e7e6cb7190baf.gltf",
+        "ArcherPreview/public/assets/content/b6d031ffcc164362f39e11bc92f2e76243966390060017760c9dfde18202d177.ktx2",
+        "ArcherPreview/public/assets/content/bbf4312452cb1651ffcea9b6940aeffbcd3da1040cba6c2f91bd5c80b56fd2a2.gltf",
+        "ArcherPreview/public/assets/content/c61e6447d31c15bc0faec061cf50f77c846e302563c30ff605c8943bf2d47790.ktx2",
+        "ArcherPreview/public/assets/content/cdc72a7bf04d49248b33d028feb11f7da7690f044569c6baf1771a402902d2a2.gltf",
+        "ArcherPreview/public/assets/content/d3101e43043817566669b312877e7ff92ade1d336bc84911befc8054c05ca7ab.gltf",
+        "ArcherPreview/public/assets/content/d8ff8dcebfda98930df6aa25960571403935d5c9a38980b296d638b5f666fab7.gltf",
+        "ArcherPreview/public/assets/content/ef627d5aa688d56f9bd58d2470aff3fef1040b961ffe1eb3bcbd8afa99622723.gltf",
+        "ArcherPreview/public/assets/content/fe4a5e8689a9ebed49dc1678d3f96edd84303e197a6742a7f2e8941162488ffe.gltf"
+      ],
+      "missingRequiredByRuntime": []
+    }
+  ],
+  "limitations": [
+    "Historical asset regeneration paths are audited separately from the current runtime/build dependency graph.",
+    "A clean credential-pattern scan is a scoped check, not proof that arbitrary historical Git objects contain no secret.",
+    "System Node/npm and operating-system files remain external tooling unless supplied in the optional portable runtime."
+  ]
+}

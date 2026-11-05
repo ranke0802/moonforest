@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "baseline": "681267417bd2d628b6bc9f12daa51b3de7860bab",
+  "workspace": "C:/dev/MoonForest",
+  "scope": "Independent workspace/source migration; no game source, runtime art, texture or LOD change",
+  "canonicalSetup": {"localPhysicalDependencies": true, "npmCi": "passed", "packages": 39},
+  "gameTests": {"passed": 2012, "failed": 0, "skipped": 0},
+  "build": {"command": "root build (build:village)", "passed": true, "manifests": 31, "contentFiles": 1185, "publishedResourceFiles": 1459, "publishedResourceBytes": 688117857},
+  "authoringInputs": {"physicalFiles": 2055, "bytes": 12319513920, "nativeBlendFilesAudited": 31, "externalGltfReferencesChecked": 813},
+  "sourceDeduplication": {"logicalAliases": 4, "savedBytes": 23033776},
+  "defaultArchiveOmissions": {"rebuildableDeploymentFiles": 5173, "rebuildableDeploymentBytes": 2397000459, "alsoExcluded": ["application node_modules", "build outputs", "caches", "temporary files", "exports", "working .git directory (standalone history bundle included instead)"]},
+  "evidence": ["source portability evidence under Sources", "independent-source-audit.json", "independent-runtime-inventory.json", "duplicate-audit.json"],
+  "finalRelocationQa": "Performed after archive creation; final results are stored separately under exports/portable/qa-* to keep the packaged snapshot unchanged",
+  "limits": "No browser automation or real-device gameplay/GPU/FPS/thermal verification was performed for this migration"
+}

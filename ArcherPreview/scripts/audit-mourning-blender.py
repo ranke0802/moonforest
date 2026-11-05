@@ -1,8 +1,12 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Read-only Blender inspection; saves evidence, never saves over the source blend."""
 import bpy, json
 from pathlib import Path
 OUT=Path(__file__).resolve().parents[1]/'reports/elena-two-phase'
-SOURCE=Path(r'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elina-three-model-review/2026-10-30-v1/rigging/tripo-1-move/exports/tripo1_move_rig.blend')
+SOURCE=Path(rstr(source_path("mourning-elena", "rigging/tripo-1-move/exports/tripo1_move_rig.blend")))
 def main():
     bpy.ops.wm.open_mainfile(filepath=str(SOURCE),load_ui=False)
     data={'version':list(bpy.app.version),'fps':bpy.context.scene.render.fps,'frameRange':[bpy.context.scene.frame_start,bpy.context.scene.frame_end],

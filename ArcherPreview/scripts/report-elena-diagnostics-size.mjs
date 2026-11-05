@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {execFileSync} from 'node:child_process';
 const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-diagnostics-size'),motion=resolve(root,'reports/elena-motion-v2');
-const out=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-diagnostics-size/2026-10-30');
+const out=resolve(process.argv[2]??projectPath("ArcherPreview/reports/archive/elena-diagnostics-size/2026-10-30"));
 const read=(base,name)=>JSON.parse(readFileSync(resolve(base,name),'utf8'));
 const before=read(dir,'resource-index-before.json'),current=read(root,'public/assets/resource-index.json'),oldInventory=read(dir,'deployment-files-before.json'),inventory=read(root,'../ArcherPreviewSite/deployment-files.json');
 const deployment=read(dir,'deployment.json'),http=read(dir,'live-http.json'),pack=read(motion,'asset-pack-report.json'),source=read(motion,'source-comparison.json'),animation=read(motion,'animation-benchmark.json');

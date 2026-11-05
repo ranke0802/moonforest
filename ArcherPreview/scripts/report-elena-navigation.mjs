@@ -1,8 +1,9 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
-const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-navigation'),out=resolve(process.argv[2]??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/elena-navigation/2026-10-30');
+const root=resolve(import.meta.dirname,'..'),dir=resolve(root,'reports/elena-navigation'),out=resolve(process.argv[2]??projectPath("ArcherPreview/reports/archive/elena-navigation/2026-10-30"));
 const read=(base,name)=>JSON.parse(readFileSync(resolve(base,name),'utf8'));
 const before=read(dir,'before.json'),after=read(dir,'after.json'),stress=read(dir,'combat-stress.json'),deployment=read(dir,'deployment.json'),http=read(dir,'live-http.json');
 const index=read(root,'public/assets/resource-index.json'),oldIndex=read(dir,'resource-index-before.json'),inventory=read(root,'../ArcherPreviewSite/deployment-files.json'),previous=read(dir,'deployment-files-before.json');

@@ -1,0 +1,13 @@
+# Portable project rules
+
+- Treat this repository directory as the entire project. Derive paths from the owning script or an explicit repository root; never depend on old worktree paths, user-profile attachments, global caches, or an external asset directory.
+- Keep every required raw source physically inside the repository, register it in `Sources/source-inputs.json`, and resolve asset workflow inputs through `Sources/resolve-source.mjs`. Historical origin paths are audit fields only; never use them as fallbacks.
+- Preserve the root `Assets` tree: web tests and audio processing use repository-relative paths into it. Prepared runtime files in `ArcherPreview/public` remain available without re-running legacy raw asset generation.
+- Require Node >=22.12, preferably 24. Use the included public Windows runtime when present; other platforms use installed tools. Do not refer to a private Codex runtime or copy private runtime packages into this project.
+- Install application dependencies with `npm ci` in `ArcherPreview`. Its `node_modules` must be a real local directory. Do not introduce junctions, symlinks, external Git object alternates, or worktree `.git` pointer files as project dependencies.
+- Use root `npm run dev`, `npm run build:village`, and `npm test` (or the same commands inside `ArcherPreview`). Root build uses the prepared-resource village builder. Do not run legacy repacking to solve ordinary setup/build/test work.
+- Keep the portable launch and package commands working after relocation. Package through `Tools/portable/cli.mjs pack`; include required untracked source files, licenses, source hashes and standalone Git history. Application dependencies, generated builds, caches, temporary files and exports stay out. Bundled npm's own internal dependencies are the explicit toolchain exception.
+- Reject source paths outside the repository and links/reparse points rather than silently following them. When changing portability tools, run `npm run portable:test` and `npm run portable:verify`; verify a fresh extraction for material packaging changes.
+- Do not use browser automation for game validation. Describe Node/NullEngine, build and static HTTP evidence accurately; they do not establish real-device FPS, heat or GPU behavior.
+- Preserve current approved game behavior, texture quality, LOD and combat input/timing unless the user explicitly asks to change them. Migration and packaging must not repack or downgrade art.
+- Raw source folders and public Windows toolchain binaries are intentionally Git-ignored but must remain physical files here. Package.cmd inventories and includes them. A Git clone by itself is not the full authoring package; transfer the portable ZIP or the complete workspace.

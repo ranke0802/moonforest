@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Offline same-camera comparison of actual runtime-deformed meshes; no browser."""
 import bpy,json,math,sys
 from pathlib import Path
@@ -7,7 +11,7 @@ from mathutils.bvhtree import BVHTree
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'reports/mourning-50k-2026-11-02'
-REVIEW=Path('C:/Users/ryank/Documents/ChatGPT/MM Project/output/mourning-50k-review/2026-11-02')
+REVIEW=Path(str(project_path("ArcherPreview/reports/archive/mourning-50k-review/2026-11-02")))
 REVIEW.mkdir(parents=True,exist_ok=True)
 report=json.loads((OUT/'motion-validation.json').read_text(encoding='utf-8'))
 data=(OUT/report['binary']).read_bytes()

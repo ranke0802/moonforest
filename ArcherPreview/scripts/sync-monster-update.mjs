@@ -1,7 +1,9 @@
+throw new Error('Archived 2026-10-27 synchronization script. Use the portable project build/package commands; this historical deployment is intentionally disabled.');
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
-const root=path.resolve(import.meta.dirname,'..'),repo=path.resolve(root,'..'),canonical='C:/dev/warrior',report=canonical+'/reports/bear30k-toon',backup=canonical+'/backups/pre-bear30k-toon-20261027';
+const root=path.resolve(import.meta.dirname,'..'),repo=path.resolve(root,'..'),canonical=projectPath('Sources/training'),report=canonical+'/reports/bear30k-toon',backup=canonical+'/backups/pre-bear30k-toon-20261027';
 const copy=(from,to)=>{fs.mkdirSync(path.dirname(to),{recursive:true});fs.copyFileSync(from,to);};
 fs.writeFileSync(backup+'/hooded-goblin.json',execFileSync('git',['show','bb23b1e:ArcherPreview/public/assets/hooded-goblin.json'],{cwd:repo}));
 const authored=['src/monster-toon.js','src/boss-encounter.js','scripts/resource-pack.js','scripts/prepare-resources.mjs','scripts/pack-goblin.mjs','scripts/reduce-bear.mjs','scripts/pack-monster-update.mjs','scripts/sync-monster-update.mjs','tests/monster-toon.test.js','tests/monster-toon-review.html','tests/monster-toon-review.js'];
@@ -26,5 +28,5 @@ for(const target of [repo+'/ArcherPreviewSite',canonical+'/dist']){
 }
 staged.push('ArcherPreviewSite/index.html',...packed.map(p=>'ArcherPreviewSite/'+path.relative(root+'/public',p).replaceAll('\\','/')));
 fs.writeFileSync(report+'/stage-files.json',JSON.stringify([...new Set(staged)],null,2));
-fs.writeFileSync(backup+'/ROLLBACK.txt',`Before update: bb23b1e (warrior and archer branches)\nOriginal bear: guardian-bear.glb (116,010 triangles, 20 clips).\nOriginal editable source remains C:/dev/warrior/blender/guardian-bear/Guardian_Bear_Boss.blend\nReduced editable copy: C:/dev/warrior/blender/guardian-bear/Guardian_Bear_Boss_30k.blend\n\nGeometry-only rollback: restore the backed-up GLB to canonical assets/models and repository ArcherPreview/public/assets, then run the monster packer and rebuild. Toon shading can remain.\nFull visual rollback: restore the old guardian-bear.json, hooded-goblin.json and boss-encounter.js from this folder; restore resource-pack.js, prepare-resources.mjs and pack-goblin.mjs from bb23b1e; rebuild and sync deployment. Existing immutable old resources remain available. Do not reset the entire repository or overwrite subsequent unrelated changes.\n`);
+fs.writeFileSync(backup+'/ROLLBACK.txt',`Before update: bb23b1e (warrior and archer branches)\nOriginal bear: guardian-bear.glb (116,010 triangles, 20 clips).\nOriginal editable source remains Sources/actors/guardian-bear/Guardian_Bear_Boss.blend\nReduced editable copy: Sources/actors/guardian-bear/Guardian_Bear_Boss_30k.blend\n\nGeometry-only rollback: restore the backed-up GLB to canonical assets/models and repository ArcherPreview/public/assets, then run the monster packer and rebuild. Toon shading can remain.\nFull visual rollback: restore the old guardian-bear.json, hooded-goblin.json and boss-encounter.js from this folder; restore resource-pack.js, prepare-resources.mjs and pack-goblin.mjs from bb23b1e; rebuild and sync deployment. Existing immutable old resources remain available. Do not reset the entire repository or overwrite subsequent unrelated changes.\n`);
 console.log(JSON.stringify({canonical,deploy:repo+'/ArcherPreviewSite',staged:staged.length,bundles}));

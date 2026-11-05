@@ -1,9 +1,10 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {buildCavePaintLight,CAVE_PAINT_LIGHT_CONFIG,CAVE_PAINT_LIGHT_POLICY,sampleCavePaintLight} from '../src/cave-painted-light.js';
-const output=resolve(process.env.CAVE_PAINT_REVIEW_OUT??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/witch-cave-lighting-review/2026-11-01/field');
+const output=resolve(process.env.CAVE_PAINT_REVIEW_OUT??projectPath("ArcherPreview/reports/archive/witch-cave-lighting-review/2026-11-01/field"));
 await mkdir(output,{recursive:true});const terrain=createWitchCaveTerrain(),started=performance.now(),map=buildCavePaintLight(terrain),elapsedMs=performance.now()-started;
 const samples=map.emitters.map(e=>({id:e.id,position:[e.x,e.y,e.z],sample:sampleCavePaintLight(map,e.x,terrain.heightAt(e.x,e.z)+.1,e.z)}));
 const json={scope:'Static CPU painted light factor; no runtime, scene, navigation bake or deployment mutation',...CAVE_PAINT_LIGHT_CONFIG,policy:CAVE_PAINT_LIGHT_POLICY,orientation:'row0=minZ; col0=minX; texel centres; RawTexture invertY=false, gammaSpace=false, no mipmaps, bilinear/clamp',channels:'RGB linear floor factor; A encodes floorMin..floorMax. CPU sample.rgb additionally applies heightFactor; rawRGB does not.',approximation:'2.5D static painted factor, not physical light/shadow. Final .8m of each3D ray accepts the receiving surface; earlier walls still block. Combined1.125m bilinear support plus .8m surface allowance can soften near-wall light within up to1.925m. High terrain shoulders can still darken lower walls because the receiver height is a single floor-height field.',width:map.width,height:map.height,rect:map.rect,data:Array.from(map.data),emitters:map.emitters,stats:map.stats,samples,elapsedMs,sha256:createHash('sha256').update(map.data).digest('hex')};

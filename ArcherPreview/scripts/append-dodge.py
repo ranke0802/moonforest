@@ -1,8 +1,12 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Append one authored clip without rewriting approved meshes, textures or old clips."""
 import copy,json,struct,hashlib
 from pathlib import Path
 ASSETS=Path(__file__).resolve().parent.parent/'public/assets'
-Q=Path('C:/dev/blender-workbench/projects/violet-vanguard-biped-equipped/v2/dodge')
+Q=Path(str(source_path("warrior-dodge")))
 target=ASSETS/'violet-warrior-v2.glb';backup=Q/'before_dodge.glb'
 if not backup.exists():backup.write_bytes(target.read_bytes())
 def read(path):

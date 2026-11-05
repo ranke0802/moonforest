@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": "Sources/environment/village/natural-ground-trees/natural-trees.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-01-sickly-oak/refined-oak.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-02-dead-tree/prepared.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-03-fallen-log/prepared.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-04-poison-fungi/prepared.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-05-thorn-bramble/prepared.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/forest/working/forest-06-witch-cave-mouth/prepared.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/cave/working/cave-19-apothecary-shelf/prepared.blend",
+      "remappedImages": 1,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move/exports/tripo1_move_rig.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2/exports/hair_refine_candidate.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2/exports/tripo1_move_rig.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/mourning-elena/rigging/tripo-1-move-v2-1/exports/tripo1_move_rig.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/mourning-motion/exports/elena-motion-expanded-r11.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-cluster-source.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-cluster.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-tuft-source.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/grass-tuft.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/oak-tree-source.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/oak-tree.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/scarecrow.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/verdant-tree-source.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/training/blender/environment/verdant-tree.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/goblin/Hooded_Goblin.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/guardian-bear/Guardian_Bear_Boss.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/guardian-bear/Guardian_Bear_Boss_30k.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/warrior/Violet_Vanguard_V2.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/warrior/v6-motion-transfer/Warrior_V6_CapeRevision06.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/saint-elena/Elena_Meshy_Ready_160cm_Grounded.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/cave-laboratory/large-joints-clay.blend",
+      "remappedImages": 1,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/environment/cave-laboratory/large-joints-palette-review.blend",
+      "remappedImages": 1,
+      "linkedLibraries": 0
+    },
+    {
+      "path": "Sources/actors/azure-elf/Azure_Elf_Blossom_Running.blend",
+      "remappedImages": 0,
+      "linkedLibraries": 0
+    }
+  ],
+  "complete": true,
+  "savedSourceFiles": 0,
+  "remappedImages": 3
+}

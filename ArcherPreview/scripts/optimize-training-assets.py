@@ -1,6 +1,10 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 import bpy, bmesh, json
 from pathlib import Path
-ROOT=Path('C:/dev/warrior');report=[]
+ROOT=Path(str(project_path('Sources/training')));report=[]
 for key,budget in [('verdant-tree',45000),('oak-tree',24000),('grass-tuft',2400),('grass-cluster',6000),('scarecrow',18000)]:
     # Oak's connected trunk must not undergo whole-mesh decimation.
     # Rebuild it with repair-oak-tree.py, which reduces detached foliage only.
@@ -18,7 +22,7 @@ for key,budget in [('verdant-tree',45000),('oak-tree',24000),('grass-tuft',2400)
                 mod=o.modifiers.new('Welded web budget','DECIMATE');mod.ratio=budget/tris;bpy.ops.object.modifier_apply(modifier=mod.name)
     bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'blender/environment'/f'{key}.blend'))
     def export(name):
-        path=ROOT/'assets/environment/models'/f'{name}.glb'
+        path=project_path('ArcherPreview/assets/environment/models')/f'{name}.glb'
         bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_selection=True,export_animations=False,export_image_format='JPEG',export_jpeg_quality=90)
         entry={'key':name,'triangles':sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects),'bytes':path.stat().st_size}
         report.append(entry);print('OPTIMIZED',json.dumps(entry),flush=True)
@@ -30,4 +34,4 @@ for key,budget in [('verdant-tree',45000),('oak-tree',24000),('grass-tuft',2400)
             if tris>8000:
                 mod=o.modifiers.new('Distant silhouette','DECIMATE');mod.ratio=8000/tris;bpy.ops.object.modifier_apply(modifier=mod.name)
         export(key+'-far')
-(ROOT/'reports/environment-optimized.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+project_path('ArcherPreview/reports/environment-optimized.json').write_text(json.dumps(report,indent=2),encoding='utf-8')

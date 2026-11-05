@@ -1,3 +1,4 @@
+import {sourcePath, projectPath, toolPath} from '../../Sources/resolve-source.mjs';
 // Snapshot current authored geometry for the offline Blender review. Does not
 // change any game asset, runtime scene, or rendered-quality setting.
 import {readFile,writeFile,mkdir,copyFile} from 'node:fs/promises';
@@ -12,7 +13,7 @@ import {CAVE_LABORATORY_GEOMETRY,clipLaboratoryCeiling} from '../src/cave-labora
 import {appendLaboratoryVault} from '../src/cave-laboratory-vault.js';
 
 const root=resolve(import.meta.dirname,'..'),assets=resolve(root,'public/assets');
-const out=resolve(process.env.CAVE_NATURAL_REVIEW_OUT??'C:/Users/ryank/Documents/ChatGPT/MM Project/output/cave-natural-review/2026-11-03');
+const out=resolve(process.env.CAVE_NATURAL_REVIEW_OUT??projectPath("ArcherPreview/reports/archive/cave-natural-review/2026-11-03"));
 const old=resolve(root,'reports/witch-cave-v5'),manifest=JSON.parse(await readFile(resolve(assets,'witch-cave.json'),'utf8'));
 const previous=JSON.parse(await readFile(resolve(old,'review-scene.json'),'utf8'));await mkdir(out,{recursive:true});
 const folders={};
@@ -24,7 +25,7 @@ for(const [id,a]of Object.entries(manifest.assets)){
  for(const b of g.buffers??[])if(b.uri){const dest=resolve(folder,b.uri);await mkdir(dirname(dest),{recursive:true});await writeFile(dest,files.get(b.uri).data);}
  for(const [i,im]of (g.images??[]).entries()){
   const filename=`color-${i}.png`,source=resolve(assets,'content',im.uri);
-  const r=spawnSync('C:/Program Files/KTX-Software/bin/ktx.exe',['extract','--transcode','rgba8','--level','0',source,resolve(folder,filename)],{encoding:'utf8',windowsHide:true});
+  const r=spawnSync(toolPath('ktx'),['extract','--transcode','rgba8','--level','0',source,resolve(folder,filename)],{encoding:'utf8',windowsHide:true});
   if(r.status!==0)throw Error(`Texture decode ${id}: ${r.stderr}`);im.uri=filename;im.mimeType='image/png';
  }
  for(const t of g.textures??[])if(t.extensions?.KHR_texture_basisu){t.source=t.extensions.KHR_texture_basisu.source;delete t.extensions.KHR_texture_basisu;}

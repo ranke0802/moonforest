@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Bake non-repeating cave strata/footwear masks in world space; no AI calls."""
 import hashlib,json,math,subprocess,os
 from pathlib import Path
@@ -75,7 +79,7 @@ for p in layout['placements']:
  x,y=pixel(p['x'],p['z']);r=2.2*unit;gd.ellipse((x-r,y-r,x+r,y+r),fill=(215,157,82,48))
 paint=Image.alpha_composite(paint.convert('RGBA'),glow.filter(ImageFilter.GaussianBlur(unit*.7)))
 paint.putalpha(Image.fromarray(np.uint8(64+191*wear)));paint.save(out/'cave-ground.png');paint.convert('RGB').save(out/'cave-ground-review.png')
-ktx=Path('C:/Program Files/KTX-Software/bin/ktx.exe')
+ktx=Path(tool_path('ktx'))
 subprocess.run([str(ktx),'create','--format','R8G8B8A8_SRGB','--encode','basis-lz','--qlevel','255','--clevel','1','--generate-mipmap','--threads','4',str(out/'cave-ground.png'),str(out/'cave-ground.ktx2')],check=True,capture_output=True)
 subprocess.run([str(ktx),'validate',str(out/'cave-ground.ktx2')],check=True,capture_output=True)
 data=(out/'cave-ground.ktx2').read_bytes();url='./content/'+hashlib.sha256(data).hexdigest()+'.ktx2';(assets/url).write_bytes(data)

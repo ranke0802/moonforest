@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'Sources'))
+from resolve_source import source_path, project_path, tool_path
 """Derive an 8K UASTC player profile, one existing texture at a time.
 
 Original player, geometry, UVs, rig, and village assets remain untouched.
@@ -16,7 +20,7 @@ def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--output', required=True, type=Path)
-    parser.add_argument('--ktx', default='C:/Program Files/KTX-Software/bin/ktx.exe')
+    parser.add_argument('--ktx', default=tool_path('ktx'))
     args=parser.parse_args(); out=args.output; out.mkdir(parents=True, exist_ok=True)
     assets=ROOT/'public/assets'; config=read(assets/'warrior-v3.json')
     model=assets/config['model']; original=read(model); gltf=copy.deepcopy(original)
