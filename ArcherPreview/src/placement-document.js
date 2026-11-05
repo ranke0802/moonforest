@@ -52,8 +52,15 @@ export function createBasePlacementManifest(mapId,{catalog,placements=layouts[ma
 }
 export function createEmptyPlacementDocument(baseManifest){return {version:1,mapId:baseManifest.mapId,baseRevision:baseManifest.baseRevision,revision:0,coordinateSystem:PLACEMENT_COORDINATE_SYSTEM,instances:[]};}
 
+// Uniform editing preserves a native length/depth aspect, but aspect metadata
+// must never bypass the same effective size budget as ordinary uniform scale.
+export function placementScaleRange(asset,source,aspect=[1,1,1]){
+ const placement=asset.placement,scale=source?(source.scale??1):0,unit=asset.units?.metersPerSourceUnit??1,size=asset.bounds?.size??[],native=source?[source.length&&size[0]?source.length/(size[0]*unit):scale,scale,source.depth&&size[2]?source.depth/(size[2]*unit):scale]:[0,0,0],max=placement.scaleMax??10;
+ return {min:Math.min(placement.scaleMin??.1,source?scale*.1:Infinity),max:Math.min(Math.max(max,scale),...aspect.map((ratio,index)=>Math.max(max,native[index])/ratio))};
+}
+
 export function validatePlacementDocument(document,{catalog,baseManifest,expectedRevision,maxInstances=128}={}){
- object(document,'document',['version','mapId','baseRevision','revision','coordinateSystem','instances']);
+ object(document,'document',['version','mapId','baseRevision','revision','coordinateSystem','instances','removedBaseIds']);
  if(document.version!==1)fail('version','unsupported document version');
  if(!PLACEMENT_MAPS.includes(document.mapId))fail('mapId','unsupported map');
  if(document.coordinateSystem!==PLACEMENT_COORDINATE_SYSTEM)fail('coordinateSystem','expected '+PLACEMENT_COORDINATE_SYSTEM);
@@ -64,34 +71,39 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
  if(baseManifest.mapId!==document.mapId||baseManifest.baseRevision!==document.baseRevision)fail('baseRevision','base map revision conflict','BASE_REVISION_CONFLICT');
  if(!Array.isArray(document.instances)||document.instances.length>maxInstances)fail('instances',`expected at most ${maxInstances} instances`);
  const protectedIds=new Set(baseManifest.protectedIds??baseManifest.instances.map(row=>row.instanceId)),baseRows=new Map(baseManifest.instances.map(row=>[row.instanceId,row])),baseIds=new Set(baseRows.keys()),seen=new Set();
+ const removedBaseIds=document.removedBaseIds??[];
+ if(!Array.isArray(removedBaseIds)||removedBaseIds.length>baseRows.size)fail('removedBaseIds','expected original placement IDs');
+ const removed=new Set();for(const id of removedBaseIds){identifier(id,'removedBaseIds');if(removed.has(id)||!baseRows.get(id)?.editable)fail('removedBaseIds','duplicate or noneditable original placement');removed.add(id);}
  const instances=document.instances.map((instance,index)=>{
   const path=`instances[${index}]`;object(instance,path,['instanceId','assetId','assetVersion','transform','attachment','collision','sourceInstanceId']);
   const instanceId=identifier(instance.instanceId,path+'.instanceId');
   const sourceInstanceId=instance.sourceInstanceId===undefined?undefined:identifier(instance.sourceInstanceId,path+'.sourceInstanceId'),source=sourceInstanceId===undefined?null:baseRows.get(sourceInstanceId);
   if(sourceInstanceId!==undefined){if(sourceInstanceId!==instanceId)fail(path+'.sourceInstanceId','base replacement must keep its original stable ID');if(!source?.editable)fail(path+'.sourceInstanceId',source?.reason??'unknown or locked base placement','READ_ONLY_BASE');if(instance.assetId!==source.assetId||instance.assetVersion!==source.assetVersion)fail(path+'.assetId','base replacement must retain its source asset and version');}
-  if(seen.has(instanceId)||(protectedIds.has(instanceId)&&!source))fail(path+'.instanceId','duplicate or protected base/quest ID');seen.add(instanceId);
+  if(seen.has(instanceId)||removed.has(instanceId)||(protectedIds.has(instanceId)&&!source))fail(path+'.instanceId','duplicate or protected/removed base ID');seen.add(instanceId);
   const assetId=identifier(instance.assetId,path+'.assetId');
   if(typeof instance.assetVersion!=='string'||instance.assetVersion.length>200)fail(path+'.assetVersion','invalid asset version');
   const asset=placementCatalogAsset(catalog,assetId,instance.assetVersion),placement=asset.placement;
-  if(asset.reviewStatus!=='approved'||!placement?.supported||placement.baked||placement.collision==='structural-baked')fail(path+'.assetId',placement?.reason??'asset is not an approved editable independent prop','READ_ONLY_ASSET');
-  object(instance.transform,path+'.transform',['position','rotation','scale']);
+  if(!placement?.supported||placement.baked||placement.collision==='structural-baked')fail(path+'.assetId',placement?.reason??'asset does not support static object placement','READ_ONLY_ASSET');
+  object(instance.transform,path+'.transform',['position','rotation','scale','aspect','frontYaw']);
   const position=vector(instance.transform.position,3,path+'.transform.position'),rotation=vector(instance.transform.rotation,4,path+'.transform.rotation',1),length=Math.hypot(...rotation);
   if(Math.abs(length-1)>1e-5)fail(path+'.transform.rotation','expected a normalized quaternion');
   const scale=finite(instance.transform.scale,path+'.transform.scale',100);
-  if(scale<(placement.scaleMin??.1)||scale>(placement.scaleMax??10))fail(path+'.transform.scale','outside approved uniform scale range');
+  const aspect=instance.transform.aspect===undefined?undefined:vector(instance.transform.aspect,3,path+'.transform.aspect',100);if(aspect?.some(value=>value<=0))fail(path+'.transform.aspect','expected positive native aspect ratios');
+  const frontYaw=instance.transform.frontYaw===undefined?undefined:finite(instance.transform.frontYaw,path+'.transform.frontYaw');
+  const scaleRange=placementScaleRange(asset,source?.source,aspect);if(scale+1e-6<scaleRange.min||scale-1e-6>scaleRange.max)fail(path+'.transform.scale','outside approved uniform scale range');
   object(instance.attachment,path+'.attachment',['surface','normal','offset','supportId']);
   const {surface}=instance.attachment;
   if(!['ground','wall','ceiling','free'].includes(surface)||(surface!=='free'&&!placement.surfaces?.includes(surface)))fail(path+'.attachment.surface','unsupported surface');
   const normal=vector(instance.attachment.normal,3,path+'.attachment.normal',1);
   if(Math.abs(Math.hypot(...normal)-1)>1e-5)fail(path+'.attachment.normal','expected a normalized surface normal');
   if(surface==='ground'&&normal[1]<.3||surface==='wall'&&Math.abs(normal[1])>.8||surface==='ceiling'&&normal[1]>-.3)fail(path+'.attachment.normal','normal does not match surface type');
-  const offset=finite(instance.attachment.offset,path+'.attachment.offset',20),supportId=instance.attachment.supportId??(surface==='ground'?'terrain':null);
+  const offset=finite(instance.attachment.offset,path+'.attachment.offset',source?200:20),supportId=instance.attachment.supportId??(surface==='ground'?'terrain':null);
   if(surface==='free'&&instance.attachment.supportId!==undefined&&instance.attachment.supportId!==null)fail(path+'.attachment.supportId','free placement must not retain a support reference');
-  if(surface!=='free'&&supportId!=='terrain'&&!baseIds.has(supportId))fail(path+'.attachment.supportId','support must be terrain or an immutable base placement; overlay parenting is unsupported');
+  if(surface!=='free'&&supportId!=='terrain'&&(!baseIds.has(supportId)||removed.has(supportId)))fail(path+'.attachment.supportId','support must be terrain or an existing base placement; removed supports are unavailable');
   if((surface==='wall'||surface==='ceiling')&&supportId==='terrain')fail(path+'.attachment.supportId','wall/ceiling requires an immutable base mesh support');
   if(!['solid','none'].includes(instance.collision))fail(path+'.collision','expected solid or none');
   if(instance.collision==='solid'&&(surface!=='ground'||placement.collision!=='independent-static'||placement.solidSurfaces&&!placement.solidSurfaces.includes(surface)))fail(path+'.collision','solid collision is certified only for ground-attached independent props');
-  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{})};
+  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale,...(aspect?{aspect}:{}),...(frontYaw!==undefined?{frontYaw}:{})},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{})};
  });
  const overridden=new Set(instances.map(instance=>instance.sourceInstanceId).filter(Boolean));for(const instance of instances)if(overridden.has(instance.attachment.supportId))fail('attachment.supportId','이 소품에 붙인 장식을 먼저 옮겨 주세요. 편집 중인 기존 소품은 고정 지지면으로 사용할 수 없어요.');
  return {...copy(document),instances};

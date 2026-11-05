@@ -1,0 +1,148 @@
+✔ glTF metadata counts actual scene instances, triangle modes, joint union, clips and transformed accessor bounds without buffers (2.9954ms)
+✔ catalog path boundary rejects URLs, absolute paths and encoded traversal (1.2653ms)
+✔ generated catalog is deterministic and fresh, with exact source model metadata and deployable paths only (784.6812ms)
+✔ legacy82 and expanded84 retain exact identity while the new NPC receives its own catalog revision (144.9357ms)
+✔ mobile-only profile distribution and a new valid global index keep identical catalog entries and saved-scene identity (120.0129ms)
+✔ actual model UV mapping and actor version changes invalidate entry identity; a forged content filename still fails (170.2599ms)
+✔ the small nearby-edit index agrees with catalog eligibility without importing model, renderer or full catalog data (2.302ms)
+✔ search and version lookup use metadata only and disambiguate same IDs across versions (4.5557ms)
+✔ all shipped static ordinary categories are addable without weakening deformation or art-review safeguards (1.8846ms)
+✔ local inventory separates exact deployed hashes, explicit nearby review, candidates and working artifacts without autoapproval (19.4767ms)
+✔ the exported file passes local validation, registers unchanged JSON and rejects stale project revisions (271.3966ms)
+✔ malformed/unsafe IDs and nonfinite transforms cannot write project data (158.5883ms)
+✔ ordinary play has no authored work or fetch, and applied browser data is a separate source from drafts (32.6756ms)
+✔ a project file with the wrong SHA never replaces active geometry/navigation (237.6651ms)
+✔ a moonmap house move, original-wall removal and added wall survive CLI registration into the real deploy file graph (128.5759ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ preview changes one instance without navigation/revision work; commits move exact solid bounds and restore base navigation (810.7259ms)
+✔ real mesh wall and ceiling anchors preserve normal offset and add no ground collision (489.8771ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:02]: Babylon.js v9.31.0 - Null engine
+✔ map departure cancels a selected source and disposes its exact late container without an actor or obstacle (396.4514ms)
+✔ failed staged outline preparation preserves the committed document transform navigation revision and owner (364.3014ms)
+✔ the last source owner releases admitted high textures before disposing its material container (345.0521ms)
+✔ committed target preview crosses cells without ghosts or navigation edits and cancels to the exact saved transform (358.7764ms)
+✔ nonpublishing cinematic visuals sample multiple free transforms without overwriting world placement state (361.2582ms)
+✔ same-ID base edits preserve native visual/collision on adoption, move every collider part, suppress visibility and restore on undo/reopen/dispose (358.7898ms)
+✔ failed base adoption leaves original visibility, all collider parts and native source resources untouched (373.3061ms)
+✔ new trees collide by certified trunk rather than crown and tilted trunks conservatively cover their changed body (334.9197ms)
+✔ a nonuniform original fence preserves its native aspect, analytic collider thickness and actual delete/undo ownership (291.7127ms)
+✔ a static single-model catalog asset remains addable without requesting nonexistent reduced tiers (289.8276ms)
+✔ nonuniform new tree trunks cover both enlarged horizontal axes (309.0828ms)
+✔ legacy native records without a facing property retain their actual child facing on adoption (297.5112ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ actual render excludes hidden base, LOD, ink and shadow candidates; late arrivals cannot reveal roots (131.2476ms)
+✔ unseen enemy body, contact, spells, ink and UI point gate agree while gameplay visibility is restored (29.6641ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:00]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:00]: Babylon.js v9.31.0 - Null engine
+✔ hidden terrain uses a sparse rock shell and never submits both ground versions (538.6233ms)
+ℹ {"updates":1,"raySteps":18675,"visibleCells":448,"exploredCells":448,"opaqueSamples":25600,"arrayBytes":282884,"uploads":1,"hiddenRecords":186,"hiddenMeshes":0,"hiddenShadowCasters":0,"detailPatches":2,"coverPatches":34,"coverDraws":12,"coverTriangles":3360,"distanceHiddenCoverPatches":0,"revision":1,"maskBytes":102400,"sharedTerrainGeometry":false,"originalGroundTriangles":73728,"shellTriangles":10080,"coverPatchLimit":36,"overlappingGroundPatches":0,"coverDistanceCulling":true,"coverDistanceEligible":false,"coverHideDistance":54,"coverShowDistance":50,"reusedRockTexture":"cave-fog-inactive-sampler","actualPlacementCount":212}
+✔ material fog runs after Elena hit flash and village tint; partial legacy overlays cannot leak (37.8493ms)
+✔ cave memory survives map roundtrips, material plugins rebind without observer or geometry leaks (2452.9042ms)
+✔ steady frames reuse inventory and only recheck dynamic objects; new material is attached on first frame (119.4563ms)
+ℹ {"scope":"NullEngine CPU gate only; no device FPS claim","records":212,"frames":1000,"meanMs":0.0026814000000003942,"p95Ms":0.003200000000106229}
+ℹ {"scope":"CPU gate only: 300 static records, 32 dynamic meshes; forced mask refresh includes record/patch upload work","steady":{"meanMs":0.012656100000008337,"p95Ms":0.018999999999323336},"refresh":{"meanMs":0.6337425000000015,"p95Ms":0.924300000000585}}
+✔ pooled frozen material and outline bind a complete shared fallback after fog disposal (6.181ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ real canvas events reach native SceneInputManager for shipped-prop drag at CSS coordinates and DPR 2 (374.9603ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ real touch pointercancel after a preview does not become a translated pointer-up commit (175.3447ms)
+✔ native pan inertia stops before a prop drag renders its next frame (155.8407ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ first-use UI waits for ready, auto-enters once and opens the usable prop category (189.9494ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ actual scene picks drag an owned prop without moving camera or publishing until pointer-up (162.0964ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ touch cancel restores the committed prop; ground-click move commits once without numeric input (95.1207ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ native gizmo drag detaches camera before the Babylon behavior and restores it after commit (81.1106ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ save and open work files keep IDs and transforms without exposing serialization controls (93.8177ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ a coalesced touch release uses its final ground point even without a final move event (71.1425ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ concurrent ready/manual entry shares one lease and a late cancelled lease restores readiness (67.6683ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ category then native variant listbox selects tree/plant definitions without eager model creation (69.5798ms)
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+✔ nearby base selection adopts one stable-ID override and duplicate/delete/undo preserve source identity (38.7653ms)
+✔ duplicating an existing tiny prop keeps its exact effective size within the new-object scale budget (23.7453ms)
+✔ catalog-only UI allocates no runtime; place/transform/undo/redo/apply/reopen retain the exported instance ID (224.936ms)
+✔ terrain snap uses actual height and its normalized slope rather than a flat visual plane (0.5408ms)
+✔ hiding the real placement editor saves its draft, rolls back preview, and preserves applied placements when idle (140.5897ms)
+✔ real editor adds structural categories, edits and deletes originals, and saves an applied moonmap with every change (135.3947ms)
+✔ a deletion-only draft reapplies after OFF rollback and reopen (102.38ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:01]: Babylon.js v9.31.0 - Null engine
+✔ every editable village native object produces a valid exact initial override without model loads (953.3989ms)
+✔ every editable great-plains native object produces a valid exact initial override without model loads (1748.8336ms)
+✔ every editable monster-forest native object produces a valid exact initial override without model loads (1129.0036ms)
+✔ every editable witch-cave native object produces a valid exact initial override without model loads (651.5366ms)
+✔ the forest entrance object owns its three explicitly authored analytic shell pieces on delete and undo (754.938ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:58]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:59]: Babylon.js v9.31.0 - Null engine
+BJS - [18:01:00]: Babylon.js v9.31.0 - Null engine
+✔ complete near-mesh ownership exactly reproduces every approved body, sight and camera cell (78.137ms)
+✔ removing one owner preserves all overlapping retained contributors rather than erasing an aggregate cell (1.3166ms)
+✔ actual transformed mesh preparation moves body, eye-height and raised-camera occupancy and caches revision-only commits (1049.9965ms)
+✔ actual cave runtime commits base deletions into owned clearance and camera hooks, undo/dispose restore the exact original gate (1000.1729ms)
+✔ a full 128-object cave commit reuses fixed-size typed scratch buffers and retains a bounded sparse cache (901.1299ms)
+✔ departing after a terrain swap restores the owned cached cave field without touching the new region (783.3036ms)
+✔ all static definitions are discoverable without model loads, with one explicit terrain-shell boundary (16.3063ms)
+✔ actual shipped village objects use original stable IDs in the proximity list (0.9481ms)
+✔ distance sorting, tie-breaking, radius boundary and limit are deterministic (1.2703ms)
+✔ same-ID moved base overlays replace the old position and deduplicate against original placements (0.418ms)
+✔ protected cave/base reasons stay visible while independently authored props remain editable (19.9101ms)
+✔ native DOM clicks dispatch the exact selected ID once while work is pending (10.0767ms)
+✔ a rejected edit remains readable and allows retry without retaining busy state (3.1454ms)
+✔ tool ownership and nonplayable states hide the nearby menu without stale dispatch (3.5215ms)
+✔ click then disposal/map-generation change cannot dispatch queued stale selection (2.7819ms)
+✔ actual main lazy-loader callback forwards selection and rejects old-map results before acquiring editor (34.3258ms)
+✔ actual main deferred callback rechecks readiness, modal, death and scene disposal (40.7226ms)
+✔ actual main routes nearby NPC and monster selections to the actor editor (37.8684ms)
+✔ four immutable base manifests keep original placement and quest IDs with deterministic revision (269.1036ms)
+✔ eligible base replacements retain exact IDs/assets, roundtrip through history and cannot forge protected or dependent targets (43.9894ms)
+✔ strict documents reject unknown fields, nonfinite transforms, nonunit quaternions, unsafe scale and versions (24.124ms)
+✔ surface references are immutable, typed and cannot retain arbitrary payloads; only ground can be solid (30.0769ms)
+✔ history keeps stable IDs through move duplicate delete undo redo save and reopen, with monotonic revisions (11.1705ms)
+✔ base removal and native aspect metadata roundtrip strictly without weakening immutable terrain boundaries (30.9626ms)
+✔ native aspects cannot bypass the effective uniform size budget, while length-scaled originals retain their exact native extent (25.9995ms)
+✔ village entry statically reaches the KTX loader and all emitted links resolve (3.325ms)
+✔ rejects missing static or dynamic internal chunks (2.5144ms)
+✔ a loader reached only lazily does not satisfy the initial graph (0.4665ms)
+✔ development actors and editors remain lazy while the normal game keeps its initial loader (2.5835ms)
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+BJS - [18:00:57]: Babylon.js v9.31.0 - Null engine
+✔ camera field matches current actual source layout and preserves arched clearance by height (62.1324ms)
+✔ actual route eyes remain outside solid terrain, near-LOD rocks and ceiling at close/wide/upward angles (346.5709ms)
+✔ render guard preserves requested zoom/pinch, rendered matrices and outside-cave camera state (216.7783ms)
+✔ the actual landmark entrance participates in camera clearance without filling its arch opening (229.3358ms)
+ℹ tests 92
+ℹ suites 0
+ℹ pass 92
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9617.2108

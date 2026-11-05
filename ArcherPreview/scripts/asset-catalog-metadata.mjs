@@ -43,7 +43,6 @@ export function gltfCatalogMetadata(gltf){
   return {triangles:renderNodes?triangles:meshTriangles.reduce((a,b)=>a+b,0),uniqueMeshTriangles:meshTriangles.reduce((a,b)=>a+b,0),vertices:[...positions].reduce((sum,i)=>sum+(gltf.accessors[i]?.count??0),0),materials:(gltf.materials??[]).length,textures:(gltf.textures??[]).length,images:(gltf.images??[]).length,meshes:meshes.length,renderNodes,skinned:skins.length>0,skins:skins.length,bones:new Set(skins.flatMap(s=>s.joints??[])).size,clips:(gltf.animations??[]).length,clipNames:(gltf.animations??[]).map(a=>a.name??null),clipDurations,morphTargets:Math.max(0,...meshes.flatMap(m=>m.primitives.map(p=>p.targets?.length??0))),bounds};
 }
 
-const editableStatic=new Set(['handcart','firewood','crate-barrel-cluster','tree-01-round-oak','tree-02-slender-pine','forest-01-sickly-oak','forest-02-dead-tree','rock-01-mossy-boulder','rock-02-jagged-outcrop','bush','garden-bed','forest-04-poison-fungi','forest-05-thorn-bramble']);
 const softPlants=new Set(['bush','garden-bed','forest-04-poison-fungi','forest-05-thorn-bramble']);
 // Existing navigators certify tree trunks rather than opaque crown bounds.
 // These are their world-metre dimensions for a placement with scale1.
@@ -54,8 +53,10 @@ const treeBodies={
   'forest-02-dead-tree':{radius:.48,height:6,offset:[0,0,0],source:'forestObstacles dead tree'},
 };
 export function catalogPlacementPolicy({assetId,category,reviewStatus,skinned=false,clips=0,morphTargets=0,deformedLod=false,structural=false,baked=false}){
-  const animated=skinned||clips>0||morphTargets>0||deformedLod,supported=editableStatic.has(assetId)&&reviewStatus==='approved'&&!animated&&!structural&&!baked,soft=softPlants.has(assetId);
-  return {supported,sourceKind:category==='plant'?(assetId==='garden-bed'?'garden':'shrub'):category,collision:supported?(soft?'none':'independent-static'):structural||baked?'structural-baked':'none',defaultCollision:supported&&!soft?'solid':'none',...(supported&&treeBodies[assetId]?{body:{shape:'trunk-capsule',...treeBodies[assetId]}}:{}),baked:!!baked,scaleMin:.1,scaleMax:10,surfaces:supported?['ground','wall','ceiling','free']:[],solidSurfaces:supported&&!soft?['ground']:[],reason:supported?null:animated?'Animated or deformed assets use their dedicated actor lifecycle, not static placement.':reviewStatus!=='approved'?'No explicit visual approval is recorded in this runtime manifest.':structural||baked?'Structural collision, support or terrain pads require a certified derived-data rebuild.':'This asset is outside the reviewed independent static placement types.'};
+  const animated=skinned||clips>0||morphTargets>0||deformedLod,terrain=['village-plains-outskirts-ground','cave-derived-laboratory-rock'].includes(assetId),supported=!animated&&!terrain,soft=category==='plant'||softPlants.has(assetId)||assetId==='cave-14-hidden-pressure-stone';
+  // Editing a shipped model does not change its visual approval or source art.
+  // Structural scenery uses the same lazy geometry/texture/LOD lifecycle as props.
+  return {supported,sourceKind:category==='plant'?(assetId==='garden-bed'?'garden':'shrub'):category,collision:supported?(soft?'none':'independent-static'):'none',defaultCollision:supported&&!soft?'solid':'none',...(supported&&treeBodies[assetId]?{body:{shape:'trunk-capsule',...treeBodies[assetId]}}:{}),baked:false,scaleMin:.1,scaleMax:10,surfaces:supported?['ground','wall','ceiling','free']:[],solidSurfaces:supported&&!soft?['ground']:[],reason:supported?null:animated?'Animated or deformed assets use their dedicated actor lifecycle, not static placement.':assetId==='cave-derived-laboratory-rock'?'연구실 통합 지형은 바닥·천장·연결 통로가 함께 묶여 있어 지형 도구에서 고쳐야 해요.':'연속된 바닥은 지형 도구에서 고쳐 주세요.'};
 }
 export function catalogReductionPolicy({assetId,category,skinned=false}){
   const protectedType=['building','tree','rock','wall','fence','defense'].includes(category)||/house|chapel|tree|rock|wall|palisade|timber|wood-|fence/i.test(assetId);

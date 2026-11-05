@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {Observable} from '@babylonjs/core';
 import {ASSET_CATALOG,getCatalogAsset} from '../src/asset-catalog.js';
 import {createBasePlacementManifest,createEmptyPlacementDocument} from '../src/placement-document.js';
+import {collectVillageSiteFiles} from '../scripts/build-village-site.mjs';
 import {applyAuthoredMap} from '../scripts/apply-authored-map.mjs';
 import {authoredMapReference,authoredMapStorageKey,loadAuthoredMap} from '../src/authored-map-loader.js';
 
@@ -40,4 +41,15 @@ test('a project file with the wrong SHA never replaces active geometry/navigatio
  const world={mapId:'village',toolGeneration:1,navigation,scene:{isDisposed:false,onDisposeObservable:new Observable()},authoredPlacements:existing};
  await assert.rejects(loadAuthoredMap(world,{registry:{version:1,maps:{village:{path:'authored/maps/village.json',sha256:'0'.repeat(64),revision:1,baseRevision:document().baseRevision}}},baseUrl:'https://game.test/ArcherPreviewSite/'}),/해시/);
  assert.equal(disposed,0);assert.equal(world.authoredPlacements,existing);assert.equal(world.navigation,navigation);
+});
+
+
+test('a moonmap house move, original-wall removal and added wall survive CLI registration into the real deploy file graph',async t=>{
+ const projectRoot=await temporary(t),input=join(projectRoot,'village-work.moonmap'),base=createBasePlacementManifest('village',{catalog:ASSET_CATALOG}),house=base.instances.find(row=>row.editable&&row.source.kind==='building'),wall=base.instances.find(row=>row.editable&&row.source.kind==='wall'),asset=getCatalogAsset('wall-01-straight');
+ const common={attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid'},doc={...createEmptyPlacementDocument(base),revision:4,removedBaseIds:[wall.instanceId],instances:[{...common,instanceId:house.instanceId,sourceInstanceId:house.instanceId,assetId:house.assetId,assetVersion:house.assetVersion,transform:{position:[12,0,8],rotation:[0,0,0,1],scale:1.25,aspect:[1.8,1,.6],frontYaw:.4}},{...common,instanceId:'authored-added-stonewall',assetId:asset.assetId,assetVersion:asset.version,transform:{position:[20,0,12],rotation:[0,0,0,1],scale:1}}]};
+ const text=JSON.stringify(doc,null,2)+'\n';await writeFile(input,text);const result=await applyAuthoredMap(input,{projectRoot,dryRun:false});assert.equal(result.removedBaseObjects,1);assert.deepEqual(JSON.parse(await readFile(result.target,'utf8')),doc);
+ const publicRoot=join(projectRoot,'public');await mkdir(join(publicRoot,'assets'),{recursive:true});await writeFile(join(publicRoot,'resource-cache.js'),'// fixture');
+ const inventory=await collectVillageSiteFiles(publicRoot,{requireCompleteVillage:false});assert.ok(inventory.files.has('authored/maps/village.json'));assert.equal(await readFile(inventory.files.get('authored/maps/village.json').absolute,'utf8'),text);
+ const registry=JSON.parse(await readFile(result.indexPath,'utf8')),reference=authoredMapReference('village',null,registry);assert.equal(reference.sha256,createHash('sha256').update(text).digest('hex'));assert.equal(reference.revision,4);assert.equal(reference.baseRevision,doc.baseRevision);
+ await writeFile(result.target,text.replace('1.25','1.35'));await assert.rejects(collectVillageSiteFiles(publicRoot,{requireCompleteVillage:false}),/hash mismatch/);
 });

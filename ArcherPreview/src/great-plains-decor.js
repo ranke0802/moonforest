@@ -1,21 +1,14 @@
-import {Color3,DynamicTexture,Mesh,MeshBuilder,StandardMaterial,Vector3} from '@babylonjs/core';
-import {PLAINS_STREAM,PLAINS_PLACEMENTS} from './great-plains-layout.js';
+import {Color3,DynamicTexture,Mesh,MeshBuilder,StandardMaterial} from '@babylonjs/core';
+import {PLAINS_PLACEMENTS} from './great-plains-layout.js';
+import {createPlainsRiver} from './plains-river.js';
 
-// Authored route signage and a simple diffuse water ribbon. This owns every
+// Authored route signage and a single-pass flowing river. This owns every
 // resource it creates and is disposed before a new map is made visible.
 export function configurePlainsDecor(world){
  world.plainsDecor?.dispose();world.plainsDecor=null;
  if(!world.plains)return;
  const meshes=[],materials=[],textures=[],scene=world.scene;
- const waterMaterial=new StandardMaterial('plains-stream-water',scene);
- waterMaterial.diffuseColor=new Color3(.35,.59,.60);waterMaterial.specularColor=Color3.Black();waterMaterial.alpha=.88;materials.push(waterMaterial);
- const left=[],right=[];
- for(let i=0;i<PLAINS_STREAM.length;i++){
-  const p=PLAINS_STREAM[i],n=PLAINS_STREAM[Math.min(i+1,PLAINS_STREAM.length-1)],a=PLAINS_STREAM[Math.max(0,i-1)];
-  const dx=n[0]-a[0],dz=n[1]-a[1],length=Math.hypot(dx,dz)||1;
-  left.push(new Vector3(p[0]-dz/length*2,-.18,p[1]+dx/length*2));right.push(new Vector3(p[0]+dz/length*2,-.18,p[1]-dx/length*2));
- }
- const river=MeshBuilder.CreateRibbon('plains-stream',{pathArray:[left,right],sideOrientation:2},scene);river.material=waterMaterial;meshes.push(river);
+ const river=createPlainsRiver(world);meshes.push(river.mesh);
  const label=(name,lines,x,z,y,width,height)=>{
   const texture=new DynamicTexture(name,{width:512,height:256},scene,false);textures.push(texture);
   const ctx=texture.getContext();ctx.fillStyle='#4b3c27';ctx.fillRect(0,0,512,256);ctx.strokeStyle='#bba87b';ctx.lineWidth=9;ctx.strokeRect(10,10,492,236);
@@ -30,6 +23,6 @@ export function configurePlainsDecor(world){
  for(const p of PLAINS_PLACEMENTS.filter(p=>p.lootTier))label('chest-tier-'+p.id,[p.lootTier===2?'II':'I','보급함'],p.x,p.z+.5,.62,.42,.21);
  for(const mesh of meshes){mesh.isPickable=false;if(!mesh.billboardMode)mesh.freezeWorldMatrix();}
  let disposed=false;const observer=scene.onDisposeObservable.addOnce(()=>dispose());
- const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);for(const m of meshes)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};
- world.plainsDecor={dispose,meshes};
+ const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);river.dispose();for(const m of meshes)if(m!==river.mesh)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};
+ world.plainsDecor={dispose,meshes,river,tick:seconds=>river.tick(seconds)};
 }

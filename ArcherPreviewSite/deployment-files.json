@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
-  "bytes": 700998386,
+  "bytes": 703382401,
   "files": [
     {
       "path": "app.webmanifest",
@@ -9,19 +9,19 @@
       "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
     },
     {
-      "path": "assets/actor-definitions-ibB0CAlo.js",
+      "path": "assets/actor-definitions-DYM7leBJ.js",
       "bytes": 5328,
-      "sha256": "6d7a7e72ea90d403d0b7d0a157bde9c7107378455ba9a4dbe0d3955a8b26bfb1"
+      "sha256": "380e5f16a439850d724033dfe3f98642ce1ec75304741332eb0473f312bfa8e2"
     },
     {
-      "path": "assets/actor-editor-Bhz7T4nv.js",
+      "path": "assets/actor-editor-BROX_Xah.js",
       "bytes": 15478,
-      "sha256": "771487d0a51b053841fda1792a2800ce44a4ff202eebdea518bedbcb898008b4"
+      "sha256": "ecde7b56d98a6b7179d32d027a8f9f1c699fe03f5d944f36c5fe48745b44a9db"
     },
     {
-      "path": "assets/actor-encounter-adapter-26VO8lpO.js",
+      "path": "assets/actor-encounter-adapter-p6aDmV_Z.js",
       "bytes": 9834,
-      "sha256": "8641a5aa48fdb8167a721e9b244b81e3dda5b9ad70ec4a9ac227759bfc92a4f4"
+      "sha256": "9e91df4160816729058cea9895ad4417c942eb1b974e78a15fb1b6cdbad2d223"
     },
     {
       "path": "assets/apple-CP-uTjm2.webp",
@@ -29,9 +29,9 @@
       "sha256": "4209ffebdce68312ee16cd13de4f5ec29a6f2c9e1321dbf5ef9788346ecf271c"
     },
     {
-      "path": "assets/asset-catalog-B-iMSri6.js",
-      "bytes": 238591,
-      "sha256": "d5c55ddef5ff07f671ffe139bca31892fa6ddd3a470f8f958cad328db7e175d4"
+      "path": "assets/asset-catalog-smQ4fznz.js",
+      "bytes": 236662,
+      "sha256": "447fa333e7e5c4d5e6640e1794389472ee4dec01cf1dee37e12f8ee0ae12ef37"
     },
     {
       "path": "assets/audio.json",
@@ -39,74 +39,74 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/authored-placement-runtime-CE9pajdB.js",
-      "bytes": 27071,
-      "sha256": "e7258d79df107987d5b7c74c99efdb51ef99485e70be8a880c17d0f6aab56204"
+      "path": "assets/authored-placement-runtime-CIHhgit9.js",
+      "bytes": 33433,
+      "sha256": "4baf42d9163a01428eab3ddbe853d9809041609f9e2be79547fc2bd51629a961"
     },
     {
-      "path": "assets/babylon-game-Bp_kWzU6.js",
+      "path": "assets/babylon-game-CkG4AARJ.js",
       "bytes": 6336948,
-      "sha256": "ef6bcd9fddb79aa33485fa33d3f5ff34e75f59210c4a4ea0ac2f3cea7b77317b"
+      "sha256": "fd8faabcef7ed9c4f1a028875113669162c7ea89667d42288d73d87b460a759f"
     },
     {
-      "path": "assets/babylon-lazy~developer-editor~noise.fragment~selection.fragment~selection.vertex~gaussianSp~lk0bdjdo-Bcg2oobz.js",
+      "path": "assets/babylon-lazy~developer-editor~noise.fragment~selection.fragment~selection.vertex~gaussianSp~lk0bdjdo-CKkOnelM.js",
       "bytes": 15665,
-      "sha256": "77167d74fd737c7047bb69977bade0cf4f36850893fe1f6ee5fbb57f1b053532"
+      "sha256": "9ccbbacdc6a1aae6dfcca535572fcbde0857467a12a9c91bd9aea3d7b28db144"
     },
     {
-      "path": "assets/babylon-lazy~flowGraphDebugBlock.pure~basisTextureLoader~gaussianSplatting.fragment~texture~dgc1yiyy-BhutJvxi.js",
+      "path": "assets/babylon-lazy~flowGraphDebugBlock.pure~basisTextureLoader~gaussianSplatting.fragment~texture~dgc1yiyy-DMvppGYs.js",
       "bytes": 9947,
-      "sha256": "75370aee5f7dbdcf943452b56cd127c3f582c3e605f5c4f77730db58af1d6bcc"
+      "sha256": "fa19536ef99d36602863550fe177ed5d71cc57a014f64549595b76a6dd244c8a"
     },
     {
-      "path": "assets/babylon-lazy~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectReferenc~kl70yd8u-8kK_-XTf.js",
+      "path": "assets/babylon-lazy~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectReferenc~kl70yd8u-RJvNqQ9k.js",
       "bytes": 15378,
-      "sha256": "027a81f309edd11779a183d22682e2488e6da3c673523087db25c4ad788e7d9c"
+      "sha256": "55fb6f51a54ded11703302ef1b1ffe443d5387c9ec3fc0cabda53830568ce34b"
     },
     {
-      "path": "assets/babylon-lazy~flowGraphUnsupportedInteractivityBlock~subSurfaceScattering.fragment~volumetri~gr3wijok-Dr0cyGEG.js",
+      "path": "assets/babylon-lazy~flowGraphUnsupportedInteractivityBlock~subSurfaceScattering.fragment~volumetri~gr3wijok-BTHBeIAn.js",
       "bytes": 17715,
-      "sha256": "5a643a1e0d82ad7ccc6d35d388ec7a491e811d2513f3aa74bdbb682dae9da468"
+      "sha256": "c7c225cdc8477ee2d77867a12d18c29ae3bc35daad1cb5bed14c9ab0880f6364"
     },
     {
-      "path": "assets/babylon-lazy~game~cinematic-interaction~gpuRenderParticles.fragment~iblCopyVoxelBufferToGri~f77h0bqs-tvon5f4s.js",
+      "path": "assets/babylon-lazy~game~cinematic-interaction~gpuRenderParticles.fragment~iblCopyVoxelBufferToGri~f77h0bqs-DfQWG0FI.js",
       "bytes": 4799,
-      "sha256": "27223fb7c5a0b0ec00d7736fdfe6553ba754f5261923d5fba328faa548472739"
+      "sha256": "0677e727574e7bd540c2c601c393d0f9ccd95bda7f1f4ff6980382bee719ebfb"
     },
     {
-      "path": "assets/babylon-lazy~game~volumetricLightingRenderVolume.fragment~volumetricLightingRenderVolume.fr~j7lx7d17-CSsejTow.js",
+      "path": "assets/babylon-lazy~game~volumetricLightingRenderVolume.fragment~volumetricLightingRenderVolume.fr~j7lx7d17-B2IeqP-m.js",
       "bytes": 6592,
-      "sha256": "494aa59beacd9e7040276f5ec90c094854834bdbafa6f82d424df0f631b4b40a"
+      "sha256": "69a8fd7b8b8bdb11db778c413356d82a6259482b7fd864bf6cee323ae1fe14f7"
     },
     {
-      "path": "assets/babylon-lazy~gpuRenderParticles.vertex~noise.fragment~selection.fragment~textureProcessor.fragment-DVszHVvv.js",
+      "path": "assets/babylon-lazy~gpuRenderParticles.vertex~noise.fragment~selection.fragment~textureProcessor.fragment-DRVVxE5h.js",
       "bytes": 15896,
-      "sha256": "e076eec9f62c8f99408cd9058f79ab453023e6a5629a642c3bfdc7b286343c30"
+      "sha256": "9451d9994f441ce1e4c6049bb6935d5f9bbc9abd658447795309f524956e12e4"
     },
     {
-      "path": "assets/babylon-lazy~meshBlending.fragment~selection.vertex~gaussianSplattingVoxel.fragment~gaussia~okxnmmuf-BFoIpats.js",
+      "path": "assets/babylon-lazy~meshBlending.fragment~selection.vertex~gaussianSplattingVoxel.fragment~gaussia~okxnmmuf-DS_TCIYF.js",
       "bytes": 48236,
-      "sha256": "84ccf24db2a9c2a2aee33e138e1ee80d8216718365576c71be4456090d7eba03"
+      "sha256": "5216e1eb1c38b1c11392fdf5e0763ab2d7a7ec02ef8e8e64e1030066d75e842a"
     },
     {
-      "path": "assets/babylon-lazy~screenSpaceCurvature.fragment~meshBlending.fragment~ddsTextureLoader~lod3D.fra~h64nf1sf-DpfGZ1Rs.js",
+      "path": "assets/babylon-lazy~screenSpaceCurvature.fragment~meshBlending.fragment~ddsTextureLoader~lod3D.fra~h64nf1sf-C7z9XEGy.js",
       "bytes": 43641,
-      "sha256": "ac9c94494d3547c0414842ba5e0a6671b5acae92c0ea45188f7ef60b5fe781d0"
+      "sha256": "13be31899f6141b0ff690923c589f0b742401fc7186e807577b25caec918a4a1"
     },
     {
-      "path": "assets/babylon-lazy~volumetricLightingBlendVolume.fragment~selectionOutline.fragment~oitFinalSimpl~kl5r0adj-DpiyxTaE.js",
+      "path": "assets/babylon-lazy~volumetricLightingBlendVolume.fragment~selectionOutline.fragment~oitFinalSimpl~kl5r0adj-BpawJa9b.js",
       "bytes": 11995,
-      "sha256": "4b1bc83fdf7af02d54521b0deae8f31413a20185d0616e8765eada71c6f5e9ef"
+      "sha256": "cfeb9ea492b756e00245c74f8e952934a971ac4b0d8212718d5501898b694868"
     },
     {
-      "path": "assets/babylon-tools~developer-editor-DApoXhKl.js",
+      "path": "assets/babylon-tools~developer-editor-DBeOkgL8.js",
       "bytes": 108518,
-      "sha256": "5290bf4415befbc99c4c3837c8ad9708a101371c6c241444bf758d872bf42760"
+      "sha256": "0eb596986071cd009244ec3decf7231f29d2ff14d2ef428fb1c4d0b8a5691ace"
     },
     {
-      "path": "assets/babylon-tools~game~cinematic-interaction-Dq0sw1ll.js",
+      "path": "assets/babylon-tools~game~cinematic-interaction-xFD1xHn1.js",
       "bytes": 91074,
-      "sha256": "3533d19902a2b1a059543fee1109ec73d93ccb47b8a6a7e4b33a1532f653f248"
+      "sha256": "b10a7849158b8e11cb20e87536b90b69e19b8b71018237e3645900c32a7fe70b"
     },
     {
       "path": "assets/babylon-tools~game~cinematicStudio-CRzLMJPS.js",
@@ -114,119 +114,119 @@
       "sha256": "bcc465e3e61dc3878a69ffa95ccb53cb82d95b1639ada223420b281ebd150048"
     },
     {
-      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~bcl01c18-Br5LT2-r.js",
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~od5le7z9-BmDiME9T.js",
       "bytes": 12576,
-      "sha256": "674f8675af020e60327e4e6a6836d83b37b1558a599a2682584ced93cbe8233d"
+      "sha256": "c3affe061ec4b9abc6938385d6e9fcfabeeb6cddacb23547a5d1852604507edb"
     },
     {
-      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~hj0tdedi-DgRK7x6b.js",
+      "path": "assets/babylon-tools~game~flowGraphEventReferenceBlock~flowGraphGLTFDataProvider~flowGraphObjectRe~wj9ctf1s-D2mB0XXj.js",
       "bytes": 64532,
-      "sha256": "4f227acc31f6745e9637b92c2a240894b4a9f5038641322b08fb726f099d95ec"
+      "sha256": "2d49840cf63ffd056c11fe6fcfdeda27c1034d137989eecfb6bfced7295206d1"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~d9yot3t5-BnrwQtb2.js",
-      "bytes": 8970,
-      "sha256": "89f6e609ef0bc77201210c427a8e2c7051fbef1c0ca80973745988110e821977"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~ibwdmtmi-Bqv8SBV1.js",
-      "bytes": 14978,
-      "sha256": "5ef7933c1c8a033922e4c284dfcda0ca547f2acdc1d341755f0bf75ae0f86d24"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~iv41pcwx-CneI376f.js",
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~ck443ah0-DUF7V-Ti.js",
       "bytes": 84277,
-      "sha256": "3fcacae534be50a501f68ebeda50cebaef59227e48e165fb43c3177866bb336b"
+      "sha256": "b9c46e57a85316755041742417f4297051061d797693c7a0a9d5ed36e266c0a1"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~pbglaj9t-BfR3ocst.js",
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~gxcue6h4-B8r29NQr.js",
+      "bytes": 14978,
+      "sha256": "93a4234c5c82576206b5ca45d94ca00ee76a63e9c0b20882b109c696b09a9bee"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~hbk6xi24-DFWzmchW.js",
+      "bytes": 8970,
+      "sha256": "0ee2901d560fc2e3090e79a9f5e884517a898f18816a2fce1da472feb9e70f37"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-game~authored-plac~mq3bcj31-BPrOKhBl.js",
       "bytes": 12689,
-      "sha256": "52df62a8f545ed9988c35d83cc3d7b50dc592a356caa49eff18b14cff2e41d93"
+      "sha256": "a0972b5fd1ab8f1d12b56ca7a820d53d628bc7f59f827aa560f3416e42438643"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~b1wvrf90-N2lEKWF7.js",
-      "bytes": 1895,
-      "sha256": "03bde3f435c9af01d313007ae9875efd48fea9cc31d2c68302f620a705238ae7"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~bsqto1g4-IkeqDq06.js",
-      "bytes": 277915,
-      "sha256": "37a24fa8531845e72fa2e166d950b3756ebcfb3792faf22bbdac6cbc12b1a388"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~e1wyj3tk-CboMiWr-.js",
-      "bytes": 18270,
-      "sha256": "9e1cd8cbfb480c12d6e9c2dcab064497e82c1f1e17a36fac4591368ca4fdd7c2"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~e6vaoacn-BqltO0ki.js",
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~b0n2ne5x-BqltO0ki.js",
       "bytes": 256,
       "sha256": "772614714ad7dbd504ea642f4f6decd8bfeb86eb64aea221cfd1d54cd7ebed8a"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~etgyxaok-DwIsqj0K.js",
-      "bytes": 68347,
-      "sha256": "de91f23f397249dc1f4bab8be099f9b3393d640952e5c15411c89acbc371554e"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~f96rwgfb-Bih6e3VJ.js",
-      "bytes": 7642,
-      "sha256": "77d1495e64fcbc3965b3e1b39fc16b839b44413cf293675924e8364150b411ad"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~gf006cjm-NDRIBdez.js",
-      "bytes": 59809,
-      "sha256": "4dcefd6c6578c05d540b75cf1ab1e6ef07b17cef2462bfe6c9674cf13fe5d988"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~gf81uyy5-CAe8KdZ4.js",
-      "bytes": 373,
-      "sha256": "866b2e680ee2d8a3138497d9baa3c62d6dc461273f0b3d948e89da157fb60f4c"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~irmosc11-CGyI3AR6.js",
-      "bytes": 160964,
-      "sha256": "ac8ef12738753157d9da65c4ecfbd5fe723d34046b3eb4aa07356a4c2246aec6"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~k9dfd11h-C_VPW3zD.js",
-      "bytes": 11753,
-      "sha256": "bb30956a89e9f1ddab807b6f513060f87e54d59aa1e8383d60a238c5906ddbca"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~ki8fw3s9-W9qmS-b6.js",
-      "bytes": 844,
-      "sha256": "066e685b97f34912293884c7dd79668cfb46c963247f14385b0a296305efa030"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~lkzi7s8g-YYZeDwMT.js",
-      "bytes": 19900,
-      "sha256": "f866bba0007955eadb8fa68f32ab83b2d9f2926eca3ce621fb15f76823cd5eb9"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~lnyma91q-BHev7uF7.js",
-      "bytes": 10270,
-      "sha256": "e7aba4352f57a9ab0b8f2c264aaada2366df86b6837eec5cce5d8a6160199c0a"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~mhvtaizz-rhH0vt2l.js",
-      "bytes": 15301,
-      "sha256": "a25f25e42acaf5b1b581ced36b5742de8fa5a7864f597b9c59c29a190f95a85b"
-    },
-    {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~mqjs10lc-DyjqzM9s.js",
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~b8bl8lmz-C9RWaX-x.js",
       "bytes": 5959,
-      "sha256": "9fdb32b33e533c88a1bf35d621c44447929eacda68fc41be94d3ef01492b959f"
+      "sha256": "0ba827bda73128e64c81ff16da92f6aaec5f6c43f19a04f02bbc078ffb3ab768"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~nrjp92q5-B5VOmtbY.js",
-      "bytes": 80042,
-      "sha256": "310c4398b59b0b537486f06fa1c6b6103a9f96379fa34ba2311a6d0d682d2ab8"
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~bi7kpmdv-BdAPc9lu.js",
+      "bytes": 15301,
+      "sha256": "f71316fb59bd2b38118607ad6e60736def117eadcd999ea092073d13a68ee586"
     },
     {
-      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~oozbecka-Bh3wKyVb.js",
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~btqnwb92-Bh3wKyVb.js",
       "bytes": 629,
       "sha256": "e9919f6ef1e757205dbbf0da4f6f44741265263d642b5eaa02a3318529c53263"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~cmazhn5i-Cltdqx8Z.js",
+      "bytes": 11753,
+      "sha256": "7a615b0e64bb07ca8ebb14ba31c493710574db6c77697aa535a9dfd7d0d71183"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~ejpv4f2n-BoxUTSjm.js",
+      "bytes": 68347,
+      "sha256": "7c5947de05d221d0a552af02e9b1fbb7b2da4aa35836770b8c18772f1256046f"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~ezkna6rl-BwW7xBAy.js",
+      "bytes": 373,
+      "sha256": "6322c47bd243d46a99f60acfcb5623ae69869e593a327116fb125f92ed7ec14b"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~g1hudyb4-N-yN7zNy.js",
+      "bytes": 18270,
+      "sha256": "b2ca6f957fa170489633d84c5e5be8c9af57fa44059ae3fcf68a16e5d5594b67"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~gxg0zcpd-BjnyYb_0.js",
+      "bytes": 19900,
+      "sha256": "3d2039dffc77a47797987e905aaa8c693b79125836cfb5c076a7dac6ba628f4d"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~hfk60uhv-DEdiQNIe.js",
+      "bytes": 277915,
+      "sha256": "21c53f430bc17198988000a0d3ed476d284fab9a9f32bf841e13b6a0b9d6236c"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~iod455e0-U40XBnIm.js",
+      "bytes": 1895,
+      "sha256": "87ca7cef41fc9d74a2fc1862aee7ccdb0d42a96fffa0a2c022ae6c63986ddfa7"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~is0m1aer-DM_Q9mMk.js",
+      "bytes": 80042,
+      "sha256": "2e5ed8a2cc6ef329fbfb2d070cbb6cb08e89df801f3089e40aadc444ef87bcdd"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~kmv5moqb-lOfcCEfW.js",
+      "bytes": 10270,
+      "sha256": "251aefb98d9d7807fd857ec8106c76d2cc724b0d2fed4599255fd8f58d4b53f4"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~lzlub3zw--xDqKTWK.js",
+      "bytes": 160964,
+      "sha256": "b41d3db74bca0aab620f4c94d951ccf862fdb2a00b65fb2a6acbb016dfdb2bf2"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~nm94pzdp-CXz0Lolt.js",
+      "bytes": 59809,
+      "sha256": "11ecea89b132dd26f27f85dc1bce1922a2966f8c32dd0da8b34e108c49ff0fc1"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~o9mpn642-CXJJ28-r.js",
+      "bytes": 844,
+      "sha256": "8a87fba485d8c80b68c049101718101964b6bbfdc1cdcd41cbeb210e1ccdc3ec"
+    },
+    {
+      "path": "assets/babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~ouiq6h9a-B2GOHhte.js",
+      "bytes": 7642,
+      "sha256": "5076d38dc8c38dae6aa180f76bbfd0f317fcb4454190eed04353334ee9d1944f"
     },
     {
       "path": "assets/bandage-DI6G-E0G.webp",
@@ -1409,24 +1409,24 @@
       "sha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c"
     },
     {
-      "path": "assets/cinematic-document-BGw9hJfy.js",
+      "path": "assets/cinematic-document-CSZt0Rfj.js",
       "bytes": 23442,
-      "sha256": "595eed2ade97f90e2495eee0a0e78974147b15bfbd8ebd371818e656ac2cf33c"
+      "sha256": "b8cda115a6a0776b37c2d13ee0a7b15d41bb911b3a271cb4a6df13df4917e14c"
     },
     {
-      "path": "assets/cinematic-game-CvyOqQ4u.js",
+      "path": "assets/cinematic-game-BsqOF8yf.js",
       "bytes": 47500,
-      "sha256": "1bd8f7b61d41c5316aed17055132c25de69181e52db5e74fba010eef09ffab0b"
+      "sha256": "56bc280156238b64c1b56e8d795c1a41ad42eae30cadf76a8cc475105e741498"
     },
     {
-      "path": "assets/cinematic-ground-Dt028hmF.js",
+      "path": "assets/cinematic-ground-ginYcNNz.js",
       "bytes": 2385,
-      "sha256": "02c818600d55041efff4ea71e9f509c7bd477ea684541965747b6b32826348da"
+      "sha256": "f946310fcbc43f3ba64b0ec14e353a03c1d5b6bf545961a103d3d02c097a0c02"
     },
     {
-      "path": "assets/cinematic-interaction-BChqstmN.js",
+      "path": "assets/cinematic-interaction-UXSsKMpc.js",
       "bytes": 8259,
-      "sha256": "7f52c2abb4a3c098b392830a2906e9f6bda1510e5e93aee25b207650ec744f51"
+      "sha256": "a7209ea1ab91ae3ada06c06222f257c5e4927306948df60be2cb7fdb8e9d9604"
     },
     {
       "path": "assets/cinematic-protocol-CGxaaoUo.js",
@@ -1434,9 +1434,9 @@
       "sha256": "2e756267d15210fa5a966f5914b9d1e59d658ab24b11f5f8cbb7d8ae7a151e60"
     },
     {
-      "path": "assets/cinematic-scene-host-C2trUeY9.js",
-      "bytes": 39608,
-      "sha256": "dd212982100775b636ad32ac18b03efcbc2c72d3881c9d1001bf9ed21114fc1f"
+      "path": "assets/cinematic-scene-host-C937u-5l.js",
+      "bytes": 39613,
+      "sha256": "86a25ae9693e2df46252eab985198cc735e8ea4e8813f79f420de6f8ed49d650"
     },
     {
       "path": "assets/cinematicStudio-Bf-16Jw_.css",
@@ -1444,9 +1444,9 @@
       "sha256": "071bb30ffc9bc1fcf9e85aea2b3b08a79a2cf734ddf350bc0596edb35ad83feb"
     },
     {
-      "path": "assets/cinematicStudio-BIIyU8lp.js",
+      "path": "assets/cinematicStudio-CM4Gcvnc.js",
       "bytes": 93376,
-      "sha256": "b28b2a6af891437a4c48c5c92ce51cc4a8421909ed4165646d675be340b64b67"
+      "sha256": "34638d3d798664268180de9b8d3f538f34c6a878b7c3731d0aa7b2fea72948ef"
     },
     {
       "path": "assets/content/0000e11502a31ee84ac3b0d6d3fe1f705178613629292a217c84130f66329399.bin",
@@ -7379,14 +7379,14 @@
       "sha256": "c56d791e858321919256b45373e6ee2ee791031fd2b779eac7081c59c0daa89d"
     },
     {
-      "path": "assets/developer-actors-C7TAfzbV.js",
+      "path": "assets/developer-actors-BfN8aDx0.js",
       "bytes": 19913,
-      "sha256": "e83086b892e4b2888d28d096f4266c11d343447c8f5941d474b99ea4acacb7a3"
+      "sha256": "8e08bf2e6f09016d66febaf6eacd58d88c5d60489d9cd4603bd272b0fe0fdd94"
     },
     {
-      "path": "assets/developer-editor-nsZ_Zf8w.js",
-      "bytes": 32426,
-      "sha256": "d0ef32ccd666cc759ec03299265428b2698ef1d051773a50b63924441b01c125"
+      "path": "assets/developer-editor-BHc1sH9E.js",
+      "bytes": 33814,
+      "sha256": "e198525d4083791f5f6b5044a123c07e9a436bf7fde9fac56036a66636480a37"
     },
     {
       "path": "assets/developer-tools-q26dUb-0.js",
@@ -7399,14 +7399,19 @@
       "sha256": "0f5a0a03febb7ca203ac2c8cd51de0a79bb61cec4fee9d9e33ec73288a196a51"
     },
     {
-      "path": "assets/editable-asset-index-C0419vd6.js",
-      "bytes": 6090,
-      "sha256": "0c899c2e8dac0aad2bcd0f96aef1f81970d27db53326957b6258ae7b73d74746"
+      "path": "assets/editable-asset-index-DgWQ3L_j.js",
+      "bytes": 21605,
+      "sha256": "b393d869ad04c67a563980079ecb47375f07e0ee3054296113432912b63f8d19"
     },
     {
-      "path": "assets/editor-workspace-CieZYrlr.js",
+      "path": "assets/editor-cave-collision-CFhqlx5y.js",
+      "bytes": 2354832,
+      "sha256": "d644e3b504248746423fd5f0b6cf8df73557ec8efd5127fba8f40195570c0c75"
+    },
+    {
+      "path": "assets/editor-workspace-BxO6o84q.js",
       "bytes": 4716,
-      "sha256": "94503a292de8a8901dfda93656903ce158b5475f80c984544c2899d304090b5f"
+      "sha256": "7d4e80d6f76b49c5e1668b0520cc624c6a197d58727be785ca27d968a333d875"
     },
     {
       "path": "assets/elena.json",
@@ -7429,9 +7434,9 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-C1yWZsyf.js",
-      "bytes": 2799098,
-      "sha256": "c3bb996d45bdfc683b600f8e1b7e823d6705fded74e8fd569d38645930db75fd"
+      "path": "assets/game-CoW69m9o.js",
+      "bytes": 2804193,
+      "sha256": "59b268fd3857d57cd2e539d64c96c3f06ba8cbcbb982b4de40ef7022680be1c3"
     },
     {
       "path": "assets/game-Dj6cZsyp.css",
@@ -7444,9 +7449,9 @@
       "sha256": "e69534b7f8a6574b090095f8ddc5ccf3b020520c27f30537e176bf6e16ca8aeb"
     },
     {
-      "path": "assets/goblin-spec-CFJ_pnT-.js",
-      "bytes": 154514,
-      "sha256": "e6a34d3d433a6aeb5933eb4e28d162e887478bfab12dc033a5682d99a05c505c"
+      "path": "assets/goblin-spec-0WEBC2GZ.js",
+      "bytes": 156207,
+      "sha256": "92e7b67d8d9492605a0585fdc24c464f97c8d2fc21ea45806bd2abf837a87d26"
     },
     {
       "path": "assets/great-plains-ground.json",
@@ -7524,9 +7529,9 @@
       "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e"
     },
     {
-      "path": "assets/nearby-editor-TaZXuW6X.js",
-      "bytes": 5420,
-      "sha256": "fe3dac178293073db54c101a7b1139f4f1eb99e7f007c44d392c6d5d378b84fb"
+      "path": "assets/nearby-editor-DnaBl7KL.js",
+      "bytes": 5483,
+      "sha256": "c97cf4bf7d673850ba9d70b6f0dead173f352059a8667ad8c282f8148e5e99d5"
     },
     {
       "path": "assets/npc-library-D4I4UNBJ.js",
@@ -7539,9 +7544,9 @@
       "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27"
     },
     {
-      "path": "assets/npc-world-GgK40eo-.js",
+      "path": "assets/npc-world-Bg_LCIEQ.js",
       "bytes": 8372,
-      "sha256": "dfd8f99cfdff43d81205bda0cab79beb8f5136ad9daf88cf8e27a28deb869241"
+      "sha256": "60983540a6cca9bfd461b92767a0065613ce2f2719899e56e65ae76221fb5123"
     },
     {
       "path": "assets/panel-DRx_KGK2.webp",
@@ -7559,9 +7564,9 @@
       "sha256": "8f6a5e95b6ac9cecfede6cdaa6fe0d535e8629b7d5c8f2ab00bd7870a62d9011"
     },
     {
-      "path": "assets/placement-document-D843IA5m.js",
-      "bytes": 9036,
-      "sha256": "263368e8c04d5061e4ff33d462555913a8d0f34c78472e31f2df023ee8be23c4"
+      "path": "assets/placement-document-BAIPP5i8.js",
+      "bytes": 10027,
+      "sha256": "295f63e037a7c85f1f8474bd3d8fdba6bab4cd03ba68f2f72a6f046aafe2e582"
     },
     {
       "path": "assets/quest-props.json",
@@ -7666,12 +7671,12 @@
     {
       "path": "cinematic-studio.html",
       "bytes": 1504,
-      "sha256": "3f8efb400d3ad24960cf138b9b8cb81498850f3f4a5a33eff46f20bccefbf24e"
+      "sha256": "e868d23e9d8e0341238952afa7934064063b1a69327b0fe30c987c8b20e85ee5"
     },
     {
       "path": "index.html",
       "bytes": 33361,
-      "sha256": "8176fada9d77d62d921e9e80e6b0dd7c42ce19c75004a7054054972d79dfe7aa"
+      "sha256": "a3ac16a03b2c4c59bd6a9d04a0399fec2b0eec76086d3f468b91a1fe032868d6"
     },
     {
       "path": "KTX2_NOTICES.txt",

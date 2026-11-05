@@ -3,7 +3,7 @@ import {isSoftVegetation} from './scenery-collision-policy.js';
 import {VILLAGE_PLACEMENTS} from './village-layout.js';
 import {villageHeight} from './village-terrain.js';
 import {VILLAGE_PLAINS_BOUNDARY as boundary,villageToPlains,boundaryExteriorPlacement,isVillageBoundaryTree} from './village-plains-boundary.js';
-import {FOREST_EDGE_ROAD,FOREST_EDGE_CLEARINGS,joinForestEdge} from './plains-forest-edge.js';
+import {FOREST_EDGE_ROAD,FOREST_EDGE_CLEARINGS,forestEdgeWeight,joinForestEdge} from './plains-forest-edge.js';
 import {forestToPlains} from './plains-forest-boundary.js';
 import {applyPlainsTreeTransition} from './plains-tree-transition.js';
 
@@ -186,6 +186,47 @@ function addGroundScenery(out,add){
   }
  }
 }
+function composeRiverBanks(out){
+ // Recompose only the retained bank stones after the other authored scenery.
+ // Their IDs, the two crossroads reuses and every unrelated seeded placement
+ // stay stable. Both source rocks are already resident in the plains manifest.
+ const banks=out.filter(p=>p.id.startsWith('river-stone-')&&!p.composition&&forestEdgeWeight(p.x,p.z)<=.15);
+ const groups=new Map(),random=seedRandom(26110519),placed=[];
+ for(const p of banks){
+  let nearest=0,distance=Infinity;
+  for(let i=0;i<PLAINS_STREAM.length;i++){const [x,z]=PLAINS_STREAM[i],d=Math.hypot(x-p.x,z-p.z);if(d<distance){distance=d;nearest=i;}}
+  const group=Math.floor(nearest/11);if(!groups.has(group))groups.set(group,[]);groups.get(group).push(p);
+ }
+ const solid=out.filter(p=>!banks.includes(p)&&!p.id.startsWith('river-stone-')&&!p.background&&!isSoftVegetation(p)&&(p.colliderRadius||p.colliderFootprint));
+ for(const [group,stones]of groups){
+  const center=Math.min(PLAINS_STREAM.length-3,group*11+5+Math.round(Math.sin(group*2.7)*1.5)),point=PLAINS_STREAM[center],before=PLAINS_STREAM[center-1],after=PLAINS_STREAM[center+1];
+  const dx=after[0]-before[0],dz=after[1]-before[1],length=Math.hypot(dx,dz),tx=dx/length,tz=dz/length,preferred=group%2?1:-1;
+  for(const [slot,p]of stones.entries()){
+   // One broad embedded anchor, a few shoulder stones and a scatter of chips.
+   // Some reaches favour one bank entirely; the opposite side stays open.
+   const role=slot===0?'anchor':slot<4?'shoulder':'small',jagged=(group+slot*3)%5<2;
+   const scale=role==='anchor'?(jagged?.46:.88)+random()*(jagged?.16:.3):role==='shoulder'?(jagged?.21:.38)+random()*(jagged?.12:.2):(jagged?.075:.11)+random()*(jagged?.09:.18);
+   const height=(jagged?4.5:2.2)*scale,radius=(jagged?2.95:2.49)*scale,side=group%4===1||slot%5<3?preferred:-preferred;
+   const yaw=random()*Math.PI*2,burial=height*(.18+random()*.26);
+   let candidate=null;
+   for(let attempt=0;attempt<18;attempt++){
+    const angle=slot*2.399963+group*.73+attempt*.83,along=Math.sin(angle)*(1.2+random()*2.8),offset=2.45+radius+random()*(role==='anchor'?1.1:2.1);
+    const x=point[0]+tx*along-tz*offset*side,z=point[1]+tz*along+tx*offset*side;
+    if(plainsRoadDistance(x,z)<=radius+.8||plainsStreamDistance(x,z)<2.25+radius||forestEdgeWeight(x,z)>.15)continue;
+    if(solid.some(o=>Math.hypot(x-o.x,z-o.z)<radius+(o.colliderRadius??Math.hypot(...o.colliderFootprint)/2)+.15))continue;
+    if(placed.some(o=>Math.hypot(x-o.x,z-o.z)<(radius+o.colliderRadius)*.76+.1))continue;
+    candidate={x,z};break;
+   }
+   if(!candidate){
+    // A crowded shoulder can keep one low isolated pebble; never force a
+    // large anchor into a tree, neighbouring rock or the open watercourse.
+    const scale=.1+random()*.065,radius=2.49*scale;
+    Object.assign(p,{asset:'rock-01-mossy-boulder',scale,colliderRadius:radius,yaw,yOffset:-2.2*scale*(.2+random()*.2),riverGroup:group,riverBank:Math.sign((p.x-point[0])*-tz+(p.z-point[1])*tx)||side,riverRole:'small'});placed.push(p);continue;
+   }
+   Object.assign(p,candidate,{asset:jagged?'rock-02-jagged-outcrop':'rock-01-mossy-boulder',scale,colliderRadius:radius,yaw,yOffset:-burial,riverGroup:group,riverBank:side,riverRole:role});placed.push(p);
+  }
+ }
+}
 function makePlacements(){
  const random=seedRandom(26110202),out=[];
  const add=(id,asset,x,z,kind,scale=1,radius=0,yaw=0,extra={})=>out.push({id,asset,x,z,kind,scale,yaw,colliderRadius:radius,...extra});
@@ -237,6 +278,7 @@ function makePlacements(){
  }
  addGroveScenery(out,add);
  addGroundScenery(out,add);
+ composeRiverBanks(out);
  return applyPlainsTreeTransition(out);
 }
 export const PLAINS_PLACEMENTS=joinForestEdge(makePlacements());

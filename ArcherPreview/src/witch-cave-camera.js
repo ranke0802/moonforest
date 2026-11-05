@@ -39,7 +39,7 @@ export function caveCameraBlocked(terrain,x,y,z,padding=.3){
  if(Math.hypot(x,z)>70)return true;
  if(terrain.heightAt(x,z)+padding>=y)return true;
  if(caveCameraCeilingHeight(x,z)-padding<=y)return true;
- return caveCameraRockBlocked(x,y,z,padding);
+ return terrain.authoredCaveCollision?terrain.authoredCaveCollision.cameraBlocked(x,y,z,padding):caveCameraRockBlocked(x,y,z,padding);
 }
 // Trace the family of valid orbit eyes, including CameraPitch's upward lift.
 // No picking, render-mesh access or allocation is performed per sample.
@@ -123,8 +123,8 @@ export class CaveCameraGuard {
   const floor=world.terrain.heightAt(actor?.x??this.base.x,actor?.z??this.base.z),roof=caveCameraCeilingHeight(this.base.x,this.base.z);
   this.base.y=Math.max(floor+minimumFocus,Math.min(roof-.65,this.base.y));
   const key=this.lastKey;
-  if(this.lastTerrain!==world.terrain||this.base.x!==key[0]||this.base.y!==key[1]||this.base.z!==key[2]||camera.alpha!==key[3]||camera.beta!==key[4]||this.savedRadius!==key[5]){
-   this.framing=caveReadableCamera(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius,{bodyScale:dimensions.ratio});key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;
+  if(this.lastTerrain!==world.terrain||this.lastCollision!==world.terrain.authoredCaveCollision||this.base.x!==key[0]||this.base.y!==key[1]||this.base.z!==key[2]||camera.alpha!==key[3]||camera.beta!==key[4]||this.savedRadius!==key[5]){
+   this.framing=caveReadableCamera(world.terrain,this.base,camera.alpha,camera.beta,this.savedRadius,{bodyScale:dimensions.ratio});key[0]=this.base.x;key[1]=this.base.y;key[2]=this.base.z;key[3]=camera.alpha;key[4]=camera.beta;key[5]=this.savedRadius;this.lastTerrain=world.terrain;this.lastCollision=world.terrain.authoredCaveCollision;
   }
   const targetCorrection=this.framing.beta-this.savedBeta;
   // Requested input remains authoritative. The transient correction eases in

@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-05T09:02:26.591Z",
+  "passed": true,
+  "validation": "92 targeted Node/NullEngine/real DOM-event cases in 13 suites. No browser or physical-device/GPU performance claim.",
+  "catalog": {
+    "entries": 85,
+    "addable": 71,
+    "revision": "ebeb9e1ab78dcde40792b7e4b68fb9d5c4c1e5dc07321bf4c36d55bbdcf4a12f",
+    "previousRevision": "ebeb9e1ab78dcde40792b7e4b68fb9d5c4c1e5dc07321bf4c36d55bbdcf4a12f",
+    "modelMaterialTextureLodUnitsReviewMetadataUnchanged": true,
+    "addableByCategory": {
+      "background": 1,
+      "building": 5,
+      "defense": 4,
+      "fence": 1,
+      "plant": 7,
+      "prop": 32,
+      "rock": 12,
+      "tree": 6,
+      "wall": 3
+    }
+  },
+  "maps": [
+    {
+      "mapId": "village",
+      "total": 753,
+      "editable": 752,
+      "boundaries": [
+        {
+          "instanceId": "village-plains-outskirts-ground",
+          "assetId": "village-plains-outskirts-ground",
+          "reason": "연속된 바닥은 지형 도구에서 고쳐 주세요."
+        }
+      ],
+      "baseRevision": "base-v1-df702ffd5fbba4a6"
+    },
+    {
+      "mapId": "great-plains",
+      "total": 1424,
+      "editable": 1424,
+      "boundaries": [],
+      "baseRevision": "base-v1-765c947dda5b0795"
+    },
+    {
+      "mapId": "monster-forest",
+      "total": 891,
+      "editable": 891,
+      "boundaries": [],
+      "baseRevision": "base-v1-00b8ad6c8679e30d"
+    },
+    {
+      "mapId": "witch-cave",
+      "total": 212,
+      "editable": 211,
+      "boundaries": [
+        {
+          "instanceId": "cavern-149",
+          "assetId": "cave-derived-laboratory-rock",
+          "reason": "연구실 통합 지형은 바닥·천장·연결 통로가 함께 묶여 있어 지형 도구에서 고쳐야 해요."
+        }
+      ],
+      "baseRevision": "base-v1-ec3bab9e672e6ec3"
+    }
+  ],
+  "exactInitialNativeFrames": 3278,
+  "cave": {
+    "owners": 210,
+    "nearLodTriangles": 1044175,
+    "baselineDifferences": {
+      "body": 0,
+      "sight": 0,
+      "camera": 0
+    },
+    "certificateBytes": 2348631,
+    "loading": "Dynamic import only for collision-affecting cave documents; empty/unmodified play does not import certificate or rebuild fields.",
+    "rebuild": "Paused apply transaction only. Complete retained-owner union plus actual transformed near meshes. No per-frame bake or mesh raycasts.",
+    "scratch": "One reusable body/sight/camera scratch set per commit; 128-object test observes exactly two full camera arrays (final+scratch).",
+    "maskCache": {
+      "maxEntries": 256,
+      "maxEstimatedBytes": 16777216
+    },
+    "preparedFieldCache": 1,
+    "removedArchEvidence": {
+      "instanceId": "cavern-88",
+      "cameraReleased": {
+        "x": -38.199999999999996,
+        "y": 0.125,
+        "z": 28.60000000000001
+      },
+      "sightReleased": {
+        "x": -38.199999999999996,
+        "z": 29.80000000000001
+      }
+    },
+    "disposal": "Restores the specifically owned cached terrain hook even after world terrain changes; clears caches, geometry, source textures and observers."
+  },
+  "moonmap": {
+    "extension": ".moonmap",
+    "content": "Existing version1 JSON with optional removedBaseIds and transform.aspect/frontYaw; old moonmap imports remain compatible.",
+    "verified": "Real UI save after apply; house move/nonuniform aspect, original wall deletion, added stonewall -> existing apply-authored-map CLI -> SHA registry -> collectVillageSiteFiles deployment graph.",
+    "applyCommand": "node scripts/apply-authored-map.mjs <work.moonmap> --apply",
+    "deployment": "Build/publish remains the existing developer pipeline; browser download does not itself publish."
+  },
+  "preserved": {
+    "sourceArt": true,
+    "qualityAndLod": true,
+    "reviewMetadata": true,
+    "actorEditorLifecycle": true,
+    "unchangedNativeColliders": true,
+    "terrainAndLaboratoryFields": true,
+    "riverSyntheticObstacles": true,
+    "questAndTravelPoints": true
+  },
+  "limits": [
+    "The one integrated cave laboratory shell and continuous outskirts ground remain terrain-tool boundaries with explicit UI reasons.",
+    "Animated/skinned/morphing actors remain in the existing NPC/monster editor.",
+    "Geometry edits do not author region entrance, quest, signage-text or other scripted interaction coordinates; linked objects show a concise hint.",
+    "Existing overlay budget remains 128 simultaneous instances and 8 concurrently held asset definitions.",
+    "New ordinary solid props outside caves use conservative transformed mesh bounds; unchanged originals retain exact existing collider parts. Upright moves/scales preserve oriented parts, tilted parts use conservative bounds.",
+    "No browser pixel, mobile heat or hardware-FPS validation was performed."
+  ],
+  "sourceHashes": {
+    "scripts/asset-catalog-metadata.mjs": "3c6b104aafa03c3b4fba5ee025ad0bab2eb88813db4930da4079aa4138252c02",
+    "scripts/build-asset-catalog.mjs": "b299c76a0caa5d5db2cfdfd938a2f14131f4165e786034a7822076be6664def2",
+    "scripts/apply-authored-map.mjs": "66ddc04b1532bad4db6ba94d6630f87cd9a45c10a2c9fbb4d5223ec3d44f7041",
+    "scripts/bake-editor-cave-collision.mjs": "c7f10e425a054cd5f35f6e7fcc5acdc686642efcdcb6e0611f81a4735a3b286e",
+    "src/asset-catalog.js": "7b9f67aaa99c2ff90d9f246c10bd195a1e0ed4a6cb6aaf6a0252430927f7da18",
+    "src/editable-asset-index.js": "f4145b39a2bd34f4bb4f47d57c6fb4a1dd6309661968f10eb6477c1ada9b3fa9",
+    "src/placement-document.js": "5204073091b4a266b9b3ac1490603503d24d6ada528bbb6b3b03d9191383bf00",
+    "src/authored-placement-runtime.js": "dfc1731c58e991edec12db56ff834e18c7654161a1f1b2f61be1aee4466b60a7",
+    "src/developer-editor.js": "3444beb2d8039c583a302fb0204d1671560912e81576b0a4461532aef74a23f5",
+    "src/nearby-editor.js": "9ce26203a833e236087d73e01bd42647493b932e2b7ed01281a86c544a09e04b",
+    "src/editor-cave-grid.js": "dc37c638f5723f3e2f2cfce49921552cf211483373864054ce10f1264b9e3dd2",
+    "src/editor-cave-collision.js": "889a788e371e2233bbd0480a38267758643925fec29c795e28e476a5e13c6481",
+    "src/editor-cave-collision-data.js": "ec4cfea28fd0574a03490ac80c02478e4b5720de245da2f4e1448e92f484a998",
+    "src/witch-cave-camera.js": "d719e9296e028d70663ab6cb1cc7fc3ed5b65fddf8f72caee06a743bbfe6a5b0",
+    "src/cave-fog-runtime.js": "5a47d983cbeddcc55e56ebcd0a62bd6889813681481239ba95b1182459b359bc"
+  }
+}

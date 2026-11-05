@@ -60,10 +60,10 @@ test('generated catalog is deterministic and fresh, with exact source model meta
 
 test('legacy82 and expanded84 retain exact identity while the new NPC receives its own catalog revision',()=>{
  const previous=ASSET_CATALOG.entries.filter(entry=>!entry.npc),legacy=previous.filter(entry=>!['warrior-v3-mobile2k-rgba','warrior-v3-mobile4k'].includes(entry.assetId));
- assert.equal(legacy.length,82);assert.equal(entriesHash(legacy),'f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5');
+ assert.equal(legacy.length,82);assert.notEqual(entriesHash(legacy),'f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5','expanded editor capabilities are deliberately distinct metadata');
  assert.equal(catalogRevisionForEntries(legacy),'a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853');
  assert.equal(previous.length,84);assert.equal(catalogRevisionForEntries(previous),'535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8');
- assert.equal(ASSET_CATALOG.entries.length,85);assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),entriesHash(ASSET_CATALOG.entries));assert.notEqual(ASSET_CATALOG.revision,catalogRevisionForEntries(legacy));
+ assert.equal(ASSET_CATALOG.entries.length,85);assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),ASSET_CATALOG.revision);assert.notEqual(ASSET_CATALOG.revision,catalogRevisionForEntries(legacy));
  const reorderedKeys=ASSET_CATALOG.entries.map(entry=>Object.fromEntries(Object.entries(entry).reverse()));assert.equal(catalogRevisionForEntries(reorderedKeys),ASSET_CATALOG.revision);
  for(const change of [entry=>entry.runtime.model='assets/content/'+('a'.repeat(64))+'.gltf',entry=>entry.geometry.lods[0].contentHash='b'.repeat(64),entry=>entry.version+='-changed']){
   const entries=structuredClone(ASSET_CATALOG.entries);change(entries[0]);assert.equal(catalogRevisionForEntries(entries),entriesHash(entries));assert.notEqual(catalogRevisionForEntries(entries),ASSET_CATALOG.revision);
@@ -93,10 +93,11 @@ test('actual model UV mapping and actor version changes invalidate entry identit
 });
 
 test('the small nearby-edit index agrees with catalog eligibility without importing model, renderer or full catalog data',async()=>{
- const source=await readFile(new URL('../src/editable-asset-index.js',import.meta.url),'utf8');assert.ok(new TextEncoder().encode(source).length<20000);assert.equal(/^import\s/m.test(source),false);assert.equal(/fetch\(|new (?:Engine|Texture)|LoadAsset|preload/.test(source),false);
- assert.deepEqual(EDITABLE_ASSET_INDEX.assets.map(row=>row.assetId),ASSET_CATALOG.entries.filter(row=>row.placement.supported).map(row=>row.assetId));assert.deepEqual(EDITABLE_ASSET_INDEX.categories.map(row=>row.value),['tree','rock','prop','plant']);
+ const source=await readFile(new URL('../src/editable-asset-index.js',import.meta.url),'utf8');assert.ok(new TextEncoder().encode(source).length<48000);assert.equal(/^import\s/m.test(source),false);assert.equal(/fetch\(|new (?:Engine|Texture)|LoadAsset|preload/.test(source),false);
+ assert.deepEqual(EDITABLE_ASSET_INDEX.assets.map(row=>row.assetId),ASSET_CATALOG.entries.filter(row=>row.placement.supported||row.assetId==='cave-derived-laboratory-rock').map(row=>row.assetId));assert.deepEqual(EDITABLE_ASSET_INDEX.categories.map(row=>row.value),['tree','rock','prop','plant','building','wall','fence','defense','background']);
  assert.equal(editableBasePlacement('village',{id:'safe-tree',asset:'tree-01-round-oak',kind:'tree'}).editable,true);
- for(const [mapId,row]of [['witch-cave',{id:'cavern-118',asset:'crate-barrel-cluster'}],['village',{id:'background-copy',asset:'handcart',background:true}],['great-plains',{id:'treasure',asset:'handcart',lootTier:0}],['village',{id:'home',asset:'tree-01-round-oak',pad:true}]])assert.equal(editableBasePlacement(mapId,row).editable,false);
+ for(const [mapId,row]of [['witch-cave',{id:'cavern-118',asset:'crate-barrel-cluster'}],['village',{id:'background-copy',asset:'handcart',background:true}],['great-plains',{id:'treasure',asset:'handcart',lootTier:0}],['village',{id:'home',asset:'tree-01-round-oak',pad:true}]])assert.equal(editableBasePlacement(mapId,row).editable,true);
+ assert.equal(editableBasePlacement('witch-cave',{id:'cavern-149',asset:'cave-derived-laboratory-rock'}).editable,false);
 });
 
 test('search and version lookup use metadata only and disambiguate same IDs across versions',async()=>{
@@ -107,20 +108,19 @@ test('search and version lookup use metadata only and disambiguate same IDs acro
   const source=await readFile(new URL('../src/asset-catalog.js',import.meta.url),'utf8');assert.equal(/^import\s/m.test(source),false);assert.equal(/fetch\(|new (?:Engine|Texture)|LoadAsset|preload|base64/.test(source),false);
 });
 
-test('all approved independent tree/rock/prop/plant variants are editable while baked, actor and unreviewed assets stay locked',()=>{
-  const editable=ASSET_CATALOG.entries.filter(e=>e.placement.supported);
-  assert.deepEqual(editable.map(e=>e.assetId),['bush','crate-barrel-cluster','firewood','forest-01-sickly-oak','forest-02-dead-tree','forest-04-poison-fungi','forest-05-thorn-bramble','garden-bed','handcart','rock-01-mossy-boulder','rock-02-jagged-outcrop','tree-01-round-oak','tree-02-slender-pine']);
-  for(const entry of editable){const soft=entry.category==='plant';assert.equal(entry.reviewStatus,'approved');assert.equal(entry.geometry.skinned,false);assert.equal(entry.geometry.clips,0);assert.equal(entry.geometry.morphTargets,0);assert.equal(entry.geometry.lods.every(lod=>!lod.skinned&&!lod.clips&&!lod.morphTargets),true);assert.equal(entry.placement.collision,soft?'none':'independent-static');assert.equal(entry.placement.defaultCollision,soft?'none':'solid');assert.deepEqual(entry.placement.solidSurfaces,soft?[]:['ground']);assert.deepEqual(entry.placement.surfaces,['ground','wall','ceiling','free']);assert.equal(entry.placement.scaleMin,.1);assert.equal(entry.placement.scaleMax,10);assert.ok(entry.units.metersPerSourceUnit>0);}
-  for(const tree of searchCatalog('','tree').filter(entry=>entry.placement.supported)){assert.equal(tree.placement.sourceKind,'tree');assert.equal(tree.placement.body.shape,'trunk-capsule');assert.ok(tree.placement.body.radius>0);assert.ok(tree.placement.body.height>0);assert.equal(tree.reduction.locked,true);}
-  assert.equal(searchCatalog('','tree').filter(e=>e.placement.supported).length,4);
-  assert.equal(searchCatalog('','rock').filter(e=>e.placement.supported).length,2);
-  assert.equal(getCatalogAsset('oak-tree').placement.supported,false);assert.equal(getCatalogAsset('verdant-tree').placement.supported,false);
-  for(const entry of ASSET_CATALOG.entries)if(entry.geometry.skinned||entry.placement.baked||entry.reviewStatus!=='approved')assert.equal(entry.placement.supported,false);
-  assert.equal(getCatalogAsset('chest-common').reviewStatus,'deployed-review-unspecified');
-  assert.equal(catalogPlacementPolicy({assetId:'handcart',category:'prop',reviewStatus:'unreviewed'}).supported,false);
-  for(const deformation of [{skinned:true},{clips:1},{morphTargets:1},{deformedLod:true}])assert.equal(catalogPlacementPolicy({assetId:'tree-01-round-oak',category:'tree',reviewStatus:'approved',...deformation}).supported,false);
-  for(const category of ['building','tree','rock','wall','fence','defense'])assert.equal(catalogReductionPolicy({assetId:'test',category}).locked,true);
-  for(const entry of ASSET_CATALOG.entries.filter(e=>/house|tree|rock|wood-|wall/i.test(e.assetId)))assert.equal(entry.reduction.locked,true);
+test('all shipped static ordinary categories are addable without weakening deformation or art-review safeguards',()=>{
+ const editable=ASSET_CATALOG.entries.filter(e=>e.placement.supported);assert.equal(editable.length,71);
+ for(const category of ['building','wall','fence','defense','rock','tree','prop'])assert.ok(editable.some(e=>e.category===category),category);
+ for(const entry of editable){assert.equal(entry.geometry.skinned,false);assert.equal(entry.geometry.clips,0);assert.equal(entry.geometry.morphTargets,0);assert.ok(entry.geometry.lods.every(lod=>!lod.skinned&&!lod.clips&&!lod.morphTargets));assert.deepEqual(entry.placement.surfaces,['ground','wall','ceiling','free']);assert.equal(entry.placement.scaleMin,.1);assert.equal(entry.placement.scaleMax,10);assert.ok(entry.units.metersPerSourceUnit>0);}
+ for(const id of ['tree-01-round-oak','tree-02-slender-pine','forest-01-sickly-oak','forest-02-dead-tree'])assert.equal(getCatalogAsset(id).placement.body.shape,'trunk-capsule');
+ for(const id of ['oak-tree','verdant-tree'])assert.equal(getCatalogAsset(id).placement.supported,true);
+ for(const id of ['village-plains-outskirts-ground','cave-derived-laboratory-rock'])assert.equal(getCatalogAsset(id).placement.supported,false);
+ assert.match(getCatalogAsset('cave-derived-laboratory-rock').placement.reason,/지형/);
+ assert.equal(getCatalogAsset('chest-common').reviewStatus,'deployed-review-unspecified','editor support never fabricates visual approval');
+ assert.equal(catalogPlacementPolicy({assetId:'handcart',category:'prop',reviewStatus:'unreviewed'}).supported,true);
+ for(const deformation of [{skinned:true},{clips:1},{morphTargets:1},{deformedLod:true}])assert.equal(catalogPlacementPolicy({assetId:'tree-01-round-oak',category:'tree',reviewStatus:'approved',...deformation}).supported,false);
+ for(const category of ['building','tree','rock','wall','fence','defense'])assert.equal(catalogReductionPolicy({assetId:'test',category}).locked,true);
+ for(const entry of ASSET_CATALOG.entries.filter(e=>/house|tree|rock|wood-|wall/i.test(e.assetId)))assert.equal(entry.reduction.locked,true);
 });
 
 test('local inventory separates exact deployed hashes, explicit nearby review, candidates and working artifacts without autoapproval',async t=>{

@@ -16,18 +16,18 @@ const levels=[0,1,2].map(level=>({level,model:`content/test-${level}.gltf`,resou
 const manifest={assets:{'test-prop':{geometryLod:true,category:'prop',height:1,bounds:[2,1,1],lods:levels,mobileNear:levels[0]}}};
 const row=(x=3,z=0)=>({instanceId:'overlay-1',assetId:asset.assetId,assetVersion:asset.version,transform:{position:[x,0,z],rotation:[0,0,0,1],scale:1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid'});
 const deferred=()=>{let resolve;return {promise:new Promise(r=>resolve=r),get resolve(){return resolve;}};};
-async function fixture(t,{loadContainer,publish=true,editableBase,placement=asset.placement}={}){
+async function fixture(t,{loadContainer,publish=true,editableBase,nativeAspect=[1,1,1],singleModel=false,placement=asset.placement}={}){
  const engine=new NullEngine();engine.getCaps().instancedArrays=true;const world=createWorld(engine,{village:true,touchDevice:true});world.navigation=new VillageNavigation([]);world.terrain.heightAt=()=>0;
  caveFogFallback(world.scene).getInternalTexture().isReady=true;
  world.placements=[{id:'base-support',asset:'test-prop',x:0,z:6,yaw:0,scale:1,kind:'wall'}];
  const support=MeshBuilder.CreateBox('base-support',{width:4,height:4,depth:1},world.scene);support.position.set(0,4,6);support.computeWorldMatrix(true);world.villageRenderRecords=[{placement:world.placements[0],meshes:[support]}];
- let baseRecord;if(editableBase){const root=new TransformNode('native-'+editableBase.id,world.scene),facing=new TransformNode(root.name+'-front',world.scene),mesh=MeshBuilder.CreateBox('native-body',{width:2,height:1,depth:1},world.scene);facing.parent=root;mesh.parent=facing;mesh.position.y=.5;root.position.set(editableBase.x,-.025,editableBase.z);root.rotation.y=editableBase.yaw;root.scaling.setAll(editableBase.scale);facing.rotation.y=.4;mesh.computeWorldMatrix(true);const box=mesh.getBoundingInfo().boundingBox;baseRecord={root,facing,meshes:[mesh],placement:editableBase,min:box.minimumWorld.clone(),max:box.maximumWorld.clone()};world.placements.push(editableBase);world.villageRenderRecords.push(baseRecord);world.navigation=new VillageNavigation([...villageObstacles([editableBase]),{id:'retained-unrelated',x:-30,z:0,radius:1,height:2}]);world.camera.setTarget(new Vector3(editableBase.x,.5,editableBase.z));world.camera.radius=8;}
+ let baseRecord;if(editableBase){const root=new TransformNode('native-'+editableBase.id,world.scene),facing=new TransformNode(root.name+'-front',world.scene),mesh=MeshBuilder.CreateBox('native-body',{width:2,height:1,depth:1},world.scene);facing.parent=root;mesh.parent=facing;mesh.position.y=.5;root.position.set(editableBase.x,-.025,editableBase.z);root.rotation.y=editableBase.yaw;root.scaling.copyFromFloats(...nativeAspect.map(value=>value*editableBase.scale));facing.rotation.y=.4;mesh.computeWorldMatrix(true);const box=mesh.getBoundingInfo().boundingBox;baseRecord={root,facing,meshes:[mesh],placement:editableBase,min:box.minimumWorld.clone(),max:box.maximumWorld.clone()};world.placements.push(editableBase);world.villageRenderRecords.push(baseRecord);world.navigation=new VillageNavigation([...villageObstacles([editableBase]),{id:'retained-unrelated',x:-30,z:0,radius:1,height:2}]);world.camera.setTarget(new Vector3(editableBase.x,.5,editableBase.z));world.camera.radius=8;}
  let loads=0;
  const load=async()=>{
   loads++;const container=new AssetContainer(world.scene),source=MeshBuilder.CreateBox('source',{width:2,height:1,depth:1},world.scene);source.position.y=.5;source.material=new StandardMaterial('prop-paint',world.scene);
   container.meshes.push(source);container.materials.push(source.material);container.rootNodes.push(source);container.removeAllFromScene();return container;
  };
- const options={catalog:{entries:[{...asset,placement}]},publish,baseUrl:'https://placement.test/',initialize:async()=>{},readManifest:async()=>manifest,loadContainer:loadContainer?((...args)=>loadContainer(load,...args)):load},createRuntime=()=>new AuthoredPlacementRuntime(world,options),runtime=createRuntime();
+ const options={catalog:{entries:[{...asset,placement}]},publish,baseUrl:'https://placement.test/',initialize:async()=>{},readManifest:async()=>singleModel?{assets:{'test-prop':{category:'prop',model:'content/test-0.gltf'}}}:manifest,loadContainer:loadContainer?((...args)=>loadContainer(load,...args)):load},createRuntime=()=>new AuthoredPlacementRuntime(world,options),runtime=createRuntime();
  t.after(()=>{runtime.dispose();world.scene.dispose();engine.dispose();});return {runtime,world,engine,loads:()=>loads,baseRecord,createRuntime};
 }
 
@@ -125,4 +125,27 @@ test('failed base adoption leaves original visibility, all collider parts and na
 test('new trees collide by certified trunk rather than crown and tilted trunks conservatively cover their changed body',async t=>{
  const f=await fixture(t,{placement:{...asset.placement,sourceKind:'tree',body:{shape:'trunk-capsule',radius:.32,height:8,offset:[0,0,0]}}}),instance=row(),document={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[instance]};await f.runtime.apply(document);const record=f.runtime.records.get(instance.instanceId);assert.equal(record.placement.kind,'tree');assert.equal(record.obstacle.radius,.32);assert.equal(record.obstacle.source,'existing-certified-tree-trunk');assert.equal(f.world.navigation.free({x:3.7,z:0},.1),true,'the crown/model box is not a ground obstacle');assert.equal(f.world.navigation.free({x:3.2,z:0},.1),false);
  const tilted=structuredClone(document);tilted.revision=2;tilted.instances[0].transform.rotation=[0,0,Math.sin(Math.PI/8),Math.cos(Math.PI/8)];await f.runtime.apply(tilted);assert.equal(record.obstacle.shape,'box');assert.equal(record.obstacle.source,'conservative-tilted-tree-trunk');assert.ok(record.obstacle.halfWidth>2);assert.equal(f.world.navigation.free({x:0,z:0},.1),false);
+});
+
+
+test('a nonuniform original fence preserves its native aspect, analytic collider thickness and actual delete/undo ownership',async t=>{
+ const source={...baseProp,id:'existing-fence',kind:'fence',scale:1,colliderParts:[{x:0,z:0,footprint:[4,.3]}]},f=await fixture(t,{editableBase:source,nativeAspect:[2,1,.6]}),base=f.world.navigation,original=f.baseRecord.facing.getWorldMatrix().clone(),item=f.runtime.createBaseOverride(source.id);assert.ok(Math.abs(item.transform.aspect[0]-2)<1e-6);assert.ok(Math.abs(item.transform.aspect[2]-.6)<1e-6);
+ const doc={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[item]};await f.runtime.apply(doc);const matrix=f.runtime.records.get(source.id).facing.getWorldMatrix();for(let i=0;i<16;i++)assert.ok(Math.abs(matrix.m[i]-original.m[i])<1e-5);
+ const moved=structuredClone(doc);moved.revision=2;moved.instances[0].transform.position[0]+=12;await f.runtime.apply(moved);const part=f.runtime.records.get(source.id).obstacles[0],old=base.obstacles.find(row=>row.id===part.id);assert.ok(Math.abs(part.halfWidth-old.halfWidth)<1e-5);assert.ok(Math.abs(part.halfDepth-old.halfDepth)<1e-5,'moving a wall retains its thin collider instead of expanding rotated bounds');assert.ok(Math.abs(part.x-old.x-12)<1e-5);
+ await f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:3,removedBaseIds:[source.id]});assert.equal(f.runtime.records.size,0);assert.equal(f.baseRecord.root.isEnabled(),false);assert.equal(f.world.navigation.obstacles.some(row=>row.id===old.id),false);assert.ok(f.world.navigation.obstacles.some(row=>row.id==='retained-unrelated'));
+ await f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:4});assert.equal(f.world.navigation,base);assert.equal(f.baseRecord.root.isEnabled(),true);
+});
+
+test('a static single-model catalog asset remains addable without requesting nonexistent reduced tiers',async t=>{
+ const f=await fixture(t,{singleModel:true});await f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[row()]});const entry=[...f.runtime.assets.values()][0];assert.equal(entry.levels.length,1);assert.equal(entry.baseLevel,0);assert.equal(f.runtime.streaming.has({id:entry.key,level:1}),true);assert.equal(f.runtime.streaming.has({id:entry.key,level:2}),true);assert.equal(f.loads(),1);
+});
+
+
+test('nonuniform new tree trunks cover both enlarged horizontal axes',async t=>{
+ const body={shape:'trunk-capsule',radius:.2,height:1,offset:[0,0,0]},f=await fixture(t,{placement:{...asset.placement,body}}),item=row();item.transform.aspect=[2,1,3];await f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[item]});assert.ok(Math.abs(f.runtime.records.get(item.instanceId).obstacle.radius-.6)<1e-6);assert.equal(f.world.navigation.free({x:3.5,z:0},.05),false);
+});
+
+
+test('legacy native records without a facing property retain their actual child facing on adoption',async t=>{
+ const f=await fixture(t,{editableBase:baseProp}),expected=f.baseRecord.facing.getWorldMatrix().clone();delete f.baseRecord.facing;const item=f.runtime.createBaseOverride(baseProp.id);assert.ok(Math.abs(item.transform.frontYaw-.4)<1e-6);await f.runtime.apply({...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[item]});const actual=f.runtime.records.get(baseProp.id).facing.getWorldMatrix();for(let i=0;i<16;i++)assert.ok(Math.abs(actual.m[i]-expected.m[i])<1e-5);
 });

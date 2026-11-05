@@ -40,7 +40,7 @@ export function fogBoundsFullyVisible(fog,min,max){
 }
 
 export class CaveFogRuntime {
-  constructor(world,{memory=world.caveFogMemory??=new CaveFogMemory(4),isOpaque=(x,z)=>world.terrain.heightAt(x,z)>caveSurface(x,z).height+1.5||caveRockOccludes(x,z,.2),coverDistanceCulling=true,...options}={}){
+  constructor(world,{memory=world.caveFogMemory??=new CaveFogMemory(4),isOpaque=(x,z)=>world.terrain.heightAt(x,z)>caveSurface(x,z).height+1.5||(world.terrain.authoredCaveCollision?world.terrain.authoredCaveCollision.sightBlocked(x,z,.2):caveRockOccludes(x,z,.2)),coverDistanceCulling=true,...options}={}){
     this.world=world;this.fog=new CaveFogOfWar({...options,isOpaque,memory,mapKey:'witch-cave'});this.rect=new Vector4(this.fog.minX,this.fog.minZ,this.fog.cols*this.fog.cellSize,this.fog.rows*this.fog.cellSize);
     this.texture=new RawTexture(this.fog.rgba,this.fog.cols,this.fog.rows,Constants.TEXTUREFORMAT_RGBA,world.scene,false,false,Texture.BILINEAR_SAMPLINGMODE,Constants.TEXTURETYPE_UNSIGNED_BYTE);
     this.texture.name='cave-player-visibility';this.texture.wrapU=this.texture.wrapV=Texture.CLAMP_ADDRESSMODE;this.texture.gammaSpace=false;

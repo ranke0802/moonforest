@@ -1,0 +1,49 @@
+{
+  "scope": "Plains river and bank composition; ordinary map-object editing; existing .moonmap download and deployment workflow",
+  "validation": {
+    "fullSuite": {"tests": 2056, "passed": 2053, "failed": 3, "failureFile": "tests/plains-tree-transition.test.js", "reason": "Historical whole-layout assertions included the deliberately recomposed 110 bank rocks"},
+    "afterNarrowAssertionUpdate": {"suites": 6, "tests": 41, "passed": 41, "productionCodeChangedAfterFullSuite": false},
+    "editorFocused": {"suites": 13, "tests": 92, "passed": 92},
+    "build": "passed",
+    "deploymentGraphChecksumValidation": "passed",
+    "browserAutomationUsed": false,
+    "physicalDevicePerformanceMeasured": false
+  },
+  "river": {
+    "vertices": 483,
+    "triangles": 640,
+    "opaqueDraws": 1,
+    "noiseSize": [64, 64],
+    "noiseBytesWithoutMipmaps": 16384,
+    "textureSamplesPerFragment": 2,
+    "renderTargets": 0,
+    "additionalShadowPasses": 0,
+    "perFrameGeometryOrTextureUploads": 0,
+    "nativeOffscreenShaderCompileAndFlowCheck": "passed; simplified PC GL preview, not in-game or mobile performance evidence",
+    "bankObjectsBefore": 110,
+    "bankObjectsAfter": 110,
+    "bankNearLodTriangleDelta": 520,
+    "nonbankPlacementsPreserved": 1314,
+    "terrainAndSyntheticRiverCollisionPreserved": true
+  },
+  "editor": {
+    "addableStaticAssetTypes": 71,
+    "editableExistingObjects": 3278,
+    "existingInstanceAndAssetBudgetsPreserved": true,
+    "caveCollisionOwnershipBaselineDifferences": 0,
+    "caveCollisionCertificate": "lazy editor-only import; no per-frame rebuild",
+    "terrainExceptions": ["village-plains-outskirts-ground", "cave-derived-laboratory-rock"],
+    "exportExtension": ".moonmap",
+    "internalFormat": "version-1 JSON with optional native aspect and removed-base metadata",
+    "existingExportReopenDeploymentFlowVerified": true,
+    "testFixturesPublished": false
+  },
+  "protectedResources": {
+    "resourceRevision": "fa6d6760d60785b5c1c7e27c775e72133379782a3bd09e3bfb0aa22a7e2aa604",
+    "manifests": 31,
+    "contentFiles": 1185,
+    "publishedResourceFiles": 1459,
+    "sourceModelsTexturesAndLodUnchanged": true,
+    "combatInputAndTimingUnchanged": true
+  }
+}

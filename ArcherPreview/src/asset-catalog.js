@@ -143,16 +143,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.1,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -300,16 +307,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.05403682071266449,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -633,16 +647,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5.085721015930176,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -792,16 +813,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.9993390042800456,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -951,16 +979,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 12,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1110,16 +1145,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 4.603260517120361,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1269,16 +1311,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.4000000953674316,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1428,16 +1477,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.7916697343462147,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1587,16 +1643,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.3929312229156494,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1746,16 +1809,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.4579057693481445,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -1905,16 +1975,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.3534045219421387,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2064,16 +2141,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.3000000715255737,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2223,16 +2307,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.4737372398376465,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2382,16 +2473,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.4281153678894043,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2541,16 +2639,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.2000000476837158,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2700,16 +2805,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.2997235059738159,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
+        "collision": "none",
         "defaultCollision": "none",
-        "baked": true,
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -2859,16 +2969,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.7321051359176636,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3018,16 +3135,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 4.5,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3177,16 +3301,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 4,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3336,16 +3467,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.005134344100952,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3495,16 +3633,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.2000000474310006,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3654,16 +3799,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.3525594472885132,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -3815,14 +3967,14 @@ export const ASSET_CATALOG = {
       "placement": {
         "supported": false,
         "sourceKind": "rock",
-        "collision": "structural-baked",
+        "collision": "none",
         "defaultCollision": "none",
-        "baked": true,
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "reason": "연구실 통합 지형은 바닥·천장·연결 통로가 함께 묶여 있어 지형 도구에서 고쳐야 해요."
       },
       "reduction": {
         "locked": true,
@@ -3972,16 +4124,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.7728869915008545,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -4131,16 +4290,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.84709095954895,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -4290,16 +4456,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 10,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "building",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -4596,16 +4769,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.47179975498801086,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -4760,16 +4940,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.15917692934916317,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -4921,16 +5108,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.25,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -5080,16 +5274,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.36,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -5240,16 +5441,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.18,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -5404,16 +5612,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 1.5707963267949,
       "referenceHeight": 3.1,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -6435,16 +6650,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.150843617092017,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -6937,16 +7159,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5.500000135872796,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "rock",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -7258,16 +7487,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.20258415436877045,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -7378,16 +7614,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.2861021179705858,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "shrub",
         "collision": "none",
         "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -7542,16 +7783,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.42,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "shrub",
         "collision": "none",
         "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -8197,16 +8443,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 6,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "building",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -8356,16 +8609,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 8,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "building",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -8515,16 +8775,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "building",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -8674,16 +8941,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "building",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -8833,16 +9107,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.2,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -8992,16 +9273,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.046805474861627075,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -9151,16 +9439,21 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.32,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "shrub",
         "collision": "none",
         "defaultCollision": "none",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
         "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -9763,16 +10056,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 6.15119344740998,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "tree",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -9920,16 +10220,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 0.05182432228023701,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -10084,16 +10391,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.1,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "fence",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -10578,16 +10892,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.850113508902723,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -11127,16 +11448,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 5.4040300799533725,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "tree",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -11286,16 +11614,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 9.933465957641602,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "background",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -11447,14 +11782,14 @@ export const ASSET_CATALOG = {
       "placement": {
         "supported": false,
         "sourceKind": "background",
-        "collision": "structural-baked",
+        "collision": "none",
         "defaultCollision": "none",
-        "baked": true,
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
         "surfaces": [],
         "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "reason": "연속된 바닥은 지형 도구에서 고쳐 주세요."
       },
       "reduction": {
         "locked": false,
@@ -11604,16 +11939,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.8,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "wall",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -11763,16 +12105,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.8,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "wall",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -11922,16 +12271,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.8,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "wall",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -12923,16 +13279,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 8,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "defense",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -13091,16 +13454,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.2,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "none",
-        "defaultCollision": "none",
+        "collision": "independent-static",
+        "defaultCollision": "solid",
         "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "No explicit visual approval is recorded in this runtime manifest."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -13250,16 +13620,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.6,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "prop",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": false,
@@ -13409,16 +13786,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 2.6,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "defense",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -13568,16 +13952,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 1.4,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "defense",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -13727,16 +14118,23 @@ export const ASSET_CATALOG = {
       "forwardYaw": 0,
       "referenceHeight": 3.4,
       "placement": {
-        "supported": false,
+        "supported": true,
         "sourceKind": "defense",
-        "collision": "structural-baked",
-        "defaultCollision": "none",
-        "baked": true,
+        "collision": "independent-static",
+        "defaultCollision": "solid",
+        "baked": false,
         "scaleMin": 0.1,
         "scaleMax": 10,
-        "surfaces": [],
-        "solidSurfaces": [],
-        "reason": "Structural collision, support or terrain pads require a certified derived-data rebuild."
+        "surfaces": [
+          "ground",
+          "wall",
+          "ceiling",
+          "free"
+        ],
+        "solidSurfaces": [
+          "ground"
+        ],
+        "reason": null
       },
       "reduction": {
         "locked": true,
@@ -13747,7 +14145,7 @@ export const ASSET_CATALOG = {
       }
     }
   ],
-  "contentRevision": "33039d251a3a89af85ea667d8cbe1bd3cb4bf6a7604810e1c2a3e947aeddcd93"
+  "contentRevision": "6546d1c2730382f34bac19548a8d95269a1961f84a4b9b26adac89eb7d2d23fe"
 };
 export function getCatalogAsset(assetId,version){const entries=ASSET_CATALOG.entries.filter(entry=>entry.assetId===assetId&&(version===undefined||entry.version===version));if(entries.length!==1)throw new RangeError(entries.length?"Asset version is ambiguous: "+assetId:"Unknown catalog asset/version: "+assetId);return entries[0];}
 export function searchCatalog(query="",category=""){const terms=String(query).toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);return ASSET_CATALOG.entries.filter(entry=>(!category||entry.category===category)&&terms.every(term=>[entry.assetId,entry.name,...entry.tags].join(" ").toLocaleLowerCase().includes(term)));}

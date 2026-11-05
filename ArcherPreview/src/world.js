@@ -145,7 +145,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS);
   const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
-    tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);}};
+    tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);this.plainsDecor?.tick(time);}};
   world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);configurePlainsDecor(world);return world;
 }
 

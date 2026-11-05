@@ -19,9 +19,9 @@ export async function applyAuthoredMap(input,{projectRoot=resolve(import.meta.di
  if(old&&old.sha256!==sha256&&document.revision<=old.revision)throw new Error('Project placement revision conflict');
  const entry={path,sha256,revision:document.revision,baseRevision:document.baseRevision};
  if(!dryRun){await atomic(target,bytes);index.maps[document.mapId]=entry;await atomic(indexPath,JSON.stringify(index,null,2)+'\n');}
- return {valid:true,dryRun,mapId:document.mapId,instances:document.instances.length,entry,target,indexPath,sourceUnmodified:true,validation:'Strict IDs/version/transform/revision checks; physical support is rechecked atomically by the game runtime.'};
+ return {valid:true,dryRun,mapId:document.mapId,instances:document.instances.length,removedBaseObjects:document.removedBaseIds?.length??0,entry,target,indexPath,sourceUnmodified:true,validation:'Strict IDs/version/transform/native-aspect/removal/revision checks; physical support is rechecked atomically by the game runtime.'};
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
- const args=process.argv.slice(2),file=args.find(value=>!value.startsWith('--'));if(!file)throw new Error('Usage: node scripts/apply-authored-map.mjs <export.json> [--apply]');
+ const args=process.argv.slice(2),file=args.find(value=>!value.startsWith('--'));if(!file)throw new Error('Usage: node scripts/apply-authored-map.mjs <work.moonmap> [--apply]');
  console.log(JSON.stringify(await applyAuthoredMap(file,{dryRun:!args.includes('--apply')})));
 }
