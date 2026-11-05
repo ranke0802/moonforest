@@ -1,0 +1,37 @@
+{
+  "status": "validated-awaiting-deployment",
+  "date": "2026-11-05",
+  "baseline": "5d1ee03483fb112d8cbde6fd2df6d4ca3b305a1b",
+  "browserAutomation": false,
+  "resourceRevision": "480a0d3c63fc6271b56f09ca170513c11809fb909606d5f3ab10fe85278f0175",
+  "changes": {
+    "topControls": "transparent surface and borderless normal/hover/active controls; one small alpha-contour on each of5static icons; keyboard focus still visible; original order/hit areas/handlers retained",
+    "staminaNotice": "transparent text-only20-30CSSpx, centered on actual player CSS projection above stable head height; no viewport/short-screen horizontal offset",
+    "villageDistanceTone": "engine fog endpoint olive[.29,.32,.25] for village initialload andreturn; actual sky and other maps retain their palettes; fog ranges/LOD unchanged"
+  },
+  "warningWork": "existing projected HUD update only while warning is active; no newRAF/timer/listener; existing4second shared toast timeout",
+  "build": {
+    "success": true,
+    "runtimeChunks": 55,
+    "siteFiles": 1503,
+    "siteBytes": 682424503,
+    "changedPublishedFiles": 9
+  },
+  "limits": [
+    "Node/Babylon NullEngine and CSS cascade audits, no native-browser pixel rendering or physical-device FPS/GPU/heat measurement.",
+    "Toon LOD pixels already disable engine fog; village change targets fogged floor/character/background endpoint, not authored texture hue."
+  ],
+  "protectedNonCodeFilesUnchanged": 1438,
+  "tests": {
+    "tests": 1966,
+    "pass": 1966,
+    "fail": 0
+  },
+  "sourceHashes": {
+    "src/commercial-ui.css": "d9271bd033778732d7096727670ac639f4ba474b748c4c0157ed30688a4cbd6d",
+    "src/mobile-ui.css": "b6414d4f1ca1444a12db4f2a5f25b3b20a00d03181b1e56d0a6cb9db1aeda807",
+    "src/main.js": "6b5d98c8f77f058b98107cc6a27e5eb2e0e930d1e06d4077be58b2e6bb423bde",
+    "src/world.js": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+    "src/stamina-notice-anchor.js": "cf5de94b34c3afa0e3156c14a4538a7027ae7e03499e5a1d1170f97ad1102d2f"
+  }
+}

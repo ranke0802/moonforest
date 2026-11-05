@@ -34,6 +34,14 @@ const caveTrainingSpawn={x:-39,z:39};
 // Cover the 240% desktop fog end from the playable rim plus the normal maximum
 // camera radius. Only stretch the non-playable outer ring; add no triangles.
 const PLAINS_GROUND_BORDER=310;
+export const VILLAGE_FOG_COLOR=Object.freeze(new Color3(.29,.32,.25));
+function outdoorFogColor({village,forest,plains,cave}){
+  if(forest)return new Color3(.19,.23,.21);
+  // Painted scenery keeps its authored hue; the outdoor floor and characters
+  // still receive engine fog. Village air should meet its muted olive ground,
+  // without replacing the sky's independently bound horizon colour.
+  return village&&!plains&&!cave?VILLAGE_FOG_COLOR.clone():SKY_HORIZON.clone();
+}
 function mapNavigation({cave,forest,plains,village}){
   const obstacles=plains?plainsObstacles():cave?caveObstacles():forest?forestObstacles():village?villageObstacles():FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
@@ -55,10 +63,10 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   scene.fogMode = Scene.FOGMODE_LINEAR;
   const villagePolicy=village?villageRenderRange(touchDevice):null;
   scene.fogStart = villagePolicy?.fogStart??FOG_START; scene.fogEnd = villagePolicy?.fogEnd??FOG_END;
-  scene.fogColor = SKY_HORIZON.clone();
+  scene.fogColor = outdoorFogColor({village,forest,plains,cave});
   scene.imageProcessingConfiguration.exposure = 1.15;
   scene.imageProcessingConfiguration.contrast = 1.08;
-  if(forest){scene.fogColor=new Color3(.19,.23,.21);scene.imageProcessingConfiguration.exposure=1.08;}
+  if(forest)scene.imageProcessingConfiguration.exposure=1.08;
   const camera = new ArcRotateCamera('review-camera', Math.PI * .38, 1.18, 4.8, new Vector3(0, 1.02, 0), scene);
   camera.minZ = .05; camera.maxZ = SKYLINE_VIEW_DISTANCE;
   camera.lowerRadiusLimit = .8; camera.upperRadiusLimit = villagePolicy?.maxCameraRadius??14;
@@ -160,7 +168,7 @@ export function replaceWorldMap(world,character){
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;
   world.ground.isPickable=false;world.ground.freezeWorldMatrix();world.lighting.registerMeshes([world.ground]);
-  world.scene.fogColor=forest?new Color3(.19,.23,.21):SKY_HORIZON.clone();
+  world.scene.fogColor=outdoorFogColor({village:true,forest,plains,cave});
   world.scene.imageProcessingConfiguration.exposure=forest?1.08:1.15;
   world.scene.fogStart=world.villagePolicy.fogStart;world.scene.fogEnd=world.villagePolicy.fogEnd;
   configureCaveAtmosphere(world);

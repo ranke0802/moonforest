@@ -67,6 +67,7 @@ test('actual main prepare and real map transition publish destination art before
  const f=fixture(),seen=[];let generation,attempt=0,fail=true;
  const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),prepareSource=main.match(/mapTransition=createMapTransition\(\{\s*prepare:(href=>\{[\s\S]*?\r?\n\s*\}),\r?\n\s*release:/)?.[1];assert.ok(prepareSource,'actual main map prepare callback must be present');
  const noop=()=>{},env={character:'warrior-v3',controller:null,container:null,staminaFeedback:{reset:noop},applyPlayerFlash:noop,location:{href:'https://example.test/?character=warrior-v3'},loadingView:f.view,mapLoadingGeneration:undefined,ready:true,loadingAsset:false,resumePose:null,mapPortal:null,combatResult:null,
+  staminaNoticeAnchor:{reset:noop,dispose:noop,setOffset:noop},
   saveMapPosition:noop,hudLayout:{close:()=>seen.push({phase:'hud-layout-close'})},minimapTravel:null,minimap:{hide:noop},chapterQuests:null,leaveElenaReview:noop,frameDiagnostics:{mapChanged:noop,suspend:noop},loadDiagnostics:{begin:noop},updateButtons:noop,input:{reset:noop},cancelAttackInput:noop,boss:{combat:{passiveRecovery:{reset:noop}},hide:noop,allPooled:[]},frameLoop:{setPaused:noop},audio:{stopAll:noop,play:noop},actionAudio:{reset:noop},goldLoot:{clearDrops:noop},goldLootView:{clear:noop},projectiles:{clear:noop},training:{setSelected:noop},strikeSampler:{reset:noop},world:{cancelResourceDownloads:noop}};
  const actualPrepare=new Function('env',`with(env){return (${prepareSource});}`)(env);
  const transition=createMapTransition({

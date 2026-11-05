@@ -27,7 +27,7 @@ test('actual game HUD wiring keeps health readable and only enables a nearby liv
 
 test('viewport resize resolves notch padding once; damage layout can consume it without DOM reads per frame',()=>{
  const source=main.slice(main.indexOf('function resizeScreenProjection()'),main.indexOf('\nfunction applyRenderQuality'));
- let reads=0;const env={screenProjection:{resize(w,h){this.size=[w,h];}},canvas:{clientWidth:852,clientHeight:393},$:()=>({}),getComputedStyle:()=>{reads++;return {getPropertyValue:n=>n.endsWith('left')?'59px':n.endsWith('bottom')?'21px':'0px'};}};
+ let reads=0;const env={screenProjection:{resize(w,h){this.size=[w,h];}},staminaNoticeAnchor:{setOffset(){}},canvas:{clientWidth:852,clientHeight:393,offsetLeft:0,offsetTop:0},$:()=>({}),getComputedStyle:()=>{reads++;return {getPropertyValue:n=>n.endsWith('left')?'59px':n.endsWith('bottom')?'21px':'0px'};}};
  const resize=Function('env','with(env){'+source+';return resizeScreenProjection;}')(env);resize();
  assert.deepEqual(env.screenProjection.size,[852,393]);assert.deepEqual(env.screenProjection.safeInsets,{top:0,right:0,bottom:21,left:59});assert.equal(reads,1);
 });

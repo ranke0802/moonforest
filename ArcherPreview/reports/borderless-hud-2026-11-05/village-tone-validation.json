@@ -1,0 +1,258 @@
+{
+  "baseline": "5d1ee03",
+  "passed": true,
+  "sourceSha256": "0a79956b3156eca2993b4d25d149e2b9402e0e10807e211cbe21979da0b00a20",
+  "facts": [
+    {
+      "case": "initial-village-existing-fog-uniform",
+      "rows": [
+        {
+          "touchDevice": false,
+          "fog": [
+            0.29,
+            0.32,
+            0.25
+          ],
+          "fogDistances": [
+            88,
+            105
+          ],
+          "pbrLinearFog": [
+            0.06565617762934217,
+            0.08153234852935623,
+            0.04736614270344993
+          ],
+          "skyHorizon": [
+            0.61,
+            0.71,
+            0.77
+          ]
+        },
+        {
+          "touchDevice": true,
+          "fog": [
+            0.29,
+            0.32,
+            0.25
+          ],
+          "fogDistances": [
+            65,
+            80
+          ],
+          "pbrLinearFog": [
+            0.06565617762934217,
+            0.08153234852935623,
+            0.04736614270344993
+          ],
+          "skyHorizon": [
+            0.61,
+            0.71,
+            0.77
+          ]
+        }
+      ],
+      "newTextures": 0,
+      "newLights": 0,
+      "newFrameObservers": 0
+    },
+    {
+      "case": "actual-tint-path-trace",
+      "sourceRows": [
+        {
+          "asset": "tree-01-round-oak",
+          "level": 0,
+          "materialFactors": "white base, black emission",
+          "textureSize": 2048
+        },
+        {
+          "asset": "tree-01-round-oak",
+          "level": 1,
+          "materialFactors": "white base, black emission",
+          "textureSize": 1024
+        },
+        {
+          "asset": "tree-01-round-oak",
+          "level": 2,
+          "materialFactors": "white base, black emission",
+          "textureSize": 512
+        },
+        {
+          "asset": "tree-02-slender-pine",
+          "level": 0,
+          "materialFactors": "white base, black emission",
+          "textureSize": 2048
+        },
+        {
+          "asset": "tree-02-slender-pine",
+          "level": 1,
+          "materialFactors": "white base, black emission",
+          "textureSize": 1024
+        },
+        {
+          "asset": "tree-02-slender-pine",
+          "level": 2,
+          "materialFactors": "white base, black emission",
+          "textureSize": 512
+        },
+        {
+          "asset": "house-03-workshop",
+          "level": 0,
+          "materialFactors": "white base, black emission",
+          "textureSize": 2048
+        },
+        {
+          "asset": "house-03-workshop",
+          "level": 1,
+          "materialFactors": "white base, black emission",
+          "textureSize": 1024
+        },
+        {
+          "asset": "house-03-workshop",
+          "level": 2,
+          "materialFactors": "white base, black emission",
+          "textureSize": 512
+        },
+        {
+          "asset": "rock-02-jagged-outcrop",
+          "level": 0,
+          "materialFactors": "white base, black emission",
+          "textureSize": 1024
+        },
+        {
+          "asset": "rock-02-jagged-outcrop",
+          "level": 1,
+          "materialFactors": "white base, black emission",
+          "textureSize": 512
+        },
+        {
+          "asset": "rock-02-jagged-outcrop",
+          "level": 2,
+          "materialFactors": "white base, black emission",
+          "textureSize": 256
+        }
+      ],
+      "shaderRows": [
+        {
+          "level": 0,
+          "engineFog": false,
+          "distanceTone": "existing scalar, no RGB hue replacement"
+        },
+        {
+          "level": 1,
+          "engineFog": false,
+          "distanceTone": "existing scalar, no RGB hue replacement"
+        },
+        {
+          "level": 2,
+          "engineFog": false,
+          "distanceTone": "existing scalar, no RGB hue replacement"
+        }
+      ],
+      "fogReceivers": "outdoor floor and characters; toon scenery remains hue-preserving",
+      "newSourceMaterialsOrTextures": false
+    },
+    {
+      "case": "outdoor-cave-roundtrip-lifecycle",
+      "mapChanges": 12,
+      "rows": [
+        {
+          "cycle": 1,
+          "destination": "warrior-v4",
+          "destinationFog": [
+            0.19,
+            0.23,
+            0.21
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        },
+        {
+          "cycle": 1,
+          "destination": "warrior-v5",
+          "destinationFog": [
+            0.024,
+            0.028,
+            0.038
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        },
+        {
+          "cycle": 1,
+          "destination": "warrior-plains",
+          "destinationFog": [
+            0.61,
+            0.71,
+            0.77
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        },
+        {
+          "cycle": 2,
+          "destination": "warrior-v4",
+          "destinationFog": [
+            0.19,
+            0.23,
+            0.21
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        },
+        {
+          "cycle": 2,
+          "destination": "warrior-v5",
+          "destinationFog": [
+            0.024,
+            0.028,
+            0.038
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        },
+        {
+          "cycle": 2,
+          "destination": "warrior-plains",
+          "destinationFog": [
+            0.61,
+            0.71,
+            0.77
+          ],
+          "restoredVillageFog": [
+            0.29,
+            0.32,
+            0.25
+          ]
+        }
+      ],
+      "warmVillageResources": [
+        31,
+        5,
+        4,
+        3,
+        3
+      ],
+      "plainsForestEndpointsUnchanged": true
+    }
+  ],
+  "limitations": [
+    "CPU/NullEngine source-material and expanded-shader/fog-uniform inspection; no browser rasterization, screenshot or device timing.",
+    "The village change affects existing engine-fog receivers. Toon scenery already disables engine fog and preserves texture hue; its distance tone, dithering, geometry, LOD and textures remain unchanged.",
+    "The actual sky horizon and plains-to-forest interpolation retain their prior palettes."
+  ]
+}

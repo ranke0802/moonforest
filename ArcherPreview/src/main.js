@@ -76,6 +76,7 @@ import {setupCharacterStylePanel} from './character-style-settings.js';
 import {applyCharacterSurfaceStyle,setSceneCharacterStyles} from './character-style.js';
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import {StaminaFailureFeedback,applyPlayerFlash} from './stamina-feedback.js';
+import {StaminaNoticeAnchor} from './stamina-notice-anchor.js';
 import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
@@ -152,6 +153,7 @@ let engine, world, actor, controller, animator, container, config, input, review
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
 const staminaFeedback=new StaminaFailureFeedback();
+const staminaNoticeAnchor=new StaminaNoticeAnchor($('#toast'));
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let screenProjection;
 let reconcilePlayback=()=>{};
@@ -271,16 +273,19 @@ function applyAttackSpeed(value) {
 }
 applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
-const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
+const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaNoticeAnchor.reset();staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
 
 function resizeScreenProjection(){
   if(!screenProjection)return;
   screenProjection.resize(canvas.clientWidth,canvas.clientHeight);
+  staminaNoticeAnchor.setOffset(canvas.offsetLeft,canvas.offsetTop);
   // CSS env() resolves the phone's notch insets here, once per viewport change.
   // Damage/HUD layout consumes these numbers without frame-by-frame DOM reads.
   const style=getComputedStyle($('#app'));
   screenProjection.safeInsets=Object.fromEntries(['top','right','bottom','left'].map(side=>[side,Math.max(0,parseFloat(style.getPropertyValue(`--safe-inset-${side}`))||0)]));
 }
+
+function updateStaminaNotice(){staminaNoticeAnchor.update(screenProjection,actor,{visible:ready&&!loadingAsset&&!mapTransition?.busy&&isV2()&&!controller?.dead&&boss?.playerHp>0});}
 
 function applyRenderQuality() {
   if (!engine) return;
@@ -303,9 +308,11 @@ function applyRenderQuality() {
 }
 
 function toast(message, {stamina=false}={}) {
+  staminaNoticeAnchor?.reset();
   $('#toast').classList.toggle('stamina-notice',stamina);
   $('#toast').textContent = message; $('#toast').hidden = false;
-  clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 4000);
+  if(stamina)staminaNoticeAnchor?.show();
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { staminaNoticeAnchor?.reset();$('#toast').hidden = true; }, 4000);
 }
 function updateSummonControls(encounter=boss) {
   const cave=isCave(),selection=bossSelection.current(cave),disabled=!ready||!isV2()||!!encounter?.loading;
@@ -404,7 +411,7 @@ function resetBeforeBoss(){
   audio.stopAll();actionAudio.reset();audio.play('revive');
   boss.resetBattle();audio.setEnvironment(character);controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;
   controller.resetStamina?.();
-  staminaFeedback.reset(controller);
+  staminaNoticeAnchor.reset();staminaFeedback.reset(controller);
   input.reset();attackSources.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
   actor.rotationQuaternion=null;actor.rotation.set(0,config.forwardYaw||0,0);actor.position.setAll(0);
   if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
@@ -474,7 +481,7 @@ async function loadCharacter() {
   world.developmentActors?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
-  loadingAsset = true; ready = false;staminaFeedback.reset(controller);audio.stopAll();actionAudio.reset();updateButtons();
+  loadingAsset = true; ready = false;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);audio.stopAll();actionAudio.reset();updateButtons();
   boss?.combat?.passiveRecovery?.reset();
   const arrival=consumeTravel(travelStorage,character);
   resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:!!arrival});
@@ -686,7 +693,7 @@ function render(dt) {
   }
   simulateFrame=dt>0;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
-  if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
+  if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
   const framePreludeStart=frameDiagnostics.mark();
   elapsed += dt;
   world.tick(elapsed);
@@ -806,6 +813,7 @@ function render(dt) {
   frameDiagnostics.measure('sceneCallMs',sceneCallStart);
   const projectedHudStart=frameDiagnostics.mark();
   screenProjection.beginFrame();
+  updateStaminaNotice();
   damageNumbers?.update(dt,screenProjection);
   goldLootView.project(screenProjection);
   updateHealthBars();
@@ -925,7 +933,7 @@ try {
   syncDiagnosticFullscreen();
   mapDeparture=createMapDeparture({
     prepare:href=>{world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
-    release:()=>{input.dispose();audio.dispose();engine.dispose();},
+    release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>location.replace(url),
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
   });
@@ -937,7 +945,7 @@ try {
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
-      ready=false;loadingAsset=true;staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
+      ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
@@ -1026,7 +1034,7 @@ try {
   // preview frame; combat remains frozen during both settings dialogs.
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
-  window.addEventListener('pagehide',()=>{frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
+  window.addEventListener('pagehide',()=>{staminaNoticeAnchor.reset();frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);

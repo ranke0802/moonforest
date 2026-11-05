@@ -1,0 +1,262 @@
+{
+  "date": "2026-11-05",
+  "passed": true,
+  "scope": "Read-only top-control state cascade and transparent stamina notice/character-anchor wiring audit. No source edits or new tests.",
+  "stylesheetOrder": [
+    "styles.css",
+    "dot-minimap.css",
+    "ui-test.css",
+    "chapter-quest.css",
+    "mobile-viewport.css",
+    "mobile-ui.css",
+    "game-selection.css",
+    "cave-story.css",
+    "commercial-ui.css",
+    "hud-layout.css"
+  ],
+  "topActionOrder": [
+    "fps",
+    "bag",
+    "journal",
+    "summon",
+    "fullscreen",
+    "settings"
+  ],
+  "cases": {
+    "retainedTopControlStates": 180,
+    "refreshedNoticeCascades": 5,
+    "note": "Top controls are unchanged from the completed six-state audit; no full geometry rerun."
+  },
+  "findings": [
+    "All six controls retain transparent surfaces, no border/box shadow/backdrop blur across normal, hover, focus, active and disabled states.",
+    "Existing disabled button opacity and cursor remain; all declared dimensions match baseline.",
+    "Five icons have one static alpha-following 1px drop shadow. Focus has a light icon contour and underlined brighter label; focusable FPS span is explicitly covered.",
+    "Bag/journal hover and focus labels have no background panel.",
+    "Stamina notice stays text-only and noninteractive. Left/top now consume --stamina-notice-x/y from the character projection, with translate:none and transform:translate(-50%,-100%); former short-landscape X/Y offsets are removed. Typography and responsive width/padding remain.",
+    "Top control changes are CSS-only. Character anchoring uses the existing projected-HUD update, with no new observer, listener, timer, animation frame, DOM measurement or image asset."
+  ],
+  "existingTests": {
+    "files": [
+      "tests/commercial-ui.test.js",
+      "tests/hud-layout.test.js"
+    ],
+    "passed": 13,
+    "failed": 0,
+    "status": "13/13 earlier commercial-ui and HUD-layout tests remain the top-control evidence. Updated anchor/main full-suite validation is owned by root; this report makes no new test-run claim."
+  },
+  "failures": [],
+  "viewports": [
+    {
+      "viewport": [
+        1179,
+        778
+      ],
+      "controlsChecked": 6,
+      "statesPerControl": 6,
+      "declaredControlDimensionsMatchBaseline": true,
+      "stamina": {
+        "background": "none",
+        "border": "0",
+        "box-shadow": "none",
+        "backdrop-filter": "none",
+        "top": "var(--stamina-notice-y,40%)",
+        "left": "var(--stamina-notice-x,50%)",
+        "translate": "none",
+        "width": "max-content",
+        "max-width": "min(620px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px))",
+        "padding": "12px 20px",
+        "font-size": "clamp(20px,3.8vmin,30px)",
+        "font-weight": "700",
+        "line-height": "1.4",
+        "transform": "translate(-50%,-100%)",
+        "scale": "1",
+        "pointer-events": "none",
+        "z-index": "1100"
+      }
+    },
+    {
+      "viewport": [
+        832,
+        384
+      ],
+      "controlsChecked": 6,
+      "statesPerControl": 6,
+      "declaredControlDimensionsMatchBaseline": true,
+      "stamina": {
+        "background": "none",
+        "border": "0",
+        "box-shadow": "none",
+        "backdrop-filter": "none",
+        "top": "var(--stamina-notice-y,40%)",
+        "left": "var(--stamina-notice-x,50%)",
+        "translate": "none",
+        "width": "max-content",
+        "max-width": "min(620px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px))",
+        "padding": "12px 20px",
+        "font-size": "clamp(20px,3.8vmin,30px)",
+        "font-weight": "700",
+        "line-height": "1.4",
+        "transform": "translate(-50%,-100%)",
+        "scale": "1",
+        "pointer-events": "none",
+        "z-index": "1100"
+      }
+    },
+    {
+      "viewport": [
+        568,
+        320
+      ],
+      "controlsChecked": 6,
+      "statesPerControl": 6,
+      "declaredControlDimensionsMatchBaseline": true,
+      "stamina": {
+        "background": "none",
+        "border": "0",
+        "box-shadow": "none",
+        "backdrop-filter": "none",
+        "top": "var(--stamina-notice-y,40%)",
+        "left": "var(--stamina-notice-x,50%)",
+        "translate": "none",
+        "width": "148px",
+        "max-width": "min(148px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px))",
+        "padding": "10px 12px",
+        "font-size": "20px",
+        "font-weight": "700",
+        "line-height": "1.4",
+        "transform": "translate(-50%,-100%)",
+        "scale": "1",
+        "pointer-events": "none",
+        "z-index": "1100"
+      }
+    },
+    {
+      "viewport": [
+        480,
+        320
+      ],
+      "controlsChecked": 6,
+      "statesPerControl": 6,
+      "declaredControlDimensionsMatchBaseline": true,
+      "stamina": {
+        "background": "none",
+        "border": "0",
+        "box-shadow": "none",
+        "backdrop-filter": "none",
+        "top": "var(--stamina-notice-y,40%)",
+        "left": "var(--stamina-notice-x,50%)",
+        "translate": "none",
+        "width": "148px",
+        "max-width": "min(148px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px))",
+        "padding": "10px 12px",
+        "font-size": "20px",
+        "font-weight": "700",
+        "line-height": "1.4",
+        "transform": "translate(-50%,-100%)",
+        "scale": "1",
+        "pointer-events": "none",
+        "z-index": "1100"
+      }
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "controlsChecked": 6,
+      "statesPerControl": 6,
+      "declaredControlDimensionsMatchBaseline": true,
+      "stamina": {
+        "background": "none",
+        "border": "0",
+        "box-shadow": "none",
+        "backdrop-filter": "none",
+        "top": "var(--stamina-notice-y,40%)",
+        "left": "var(--stamina-notice-x,50%)",
+        "translate": "none",
+        "width": "max-content",
+        "max-width": "min(620px,calc(100% - var(--safe-left,0px) - var(--safe-right,0px) - 32px))",
+        "padding": "12px 20px",
+        "font-size": "clamp(20px,3.8vmin,30px)",
+        "font-weight": "700",
+        "line-height": "1.4",
+        "transform": "translate(-50%,-100%)",
+        "scale": "1",
+        "pointer-events": "none",
+        "z-index": "1100"
+      }
+    }
+  ],
+  "limitations": [
+    "No browser automation, physical device rendering or performance measurement.",
+    "CSS helper models selector/media cascade; variable expressions are recorded, not browser-rasterized. Anchor source/wiring inspected read-only.",
+    "No full anchored-warning overlap/geometry claim; prior fixed viewport placement claims have been replaced."
+  ],
+  "interactionEvidence": {
+    "states": [
+      "normal",
+      "hover",
+      "focus",
+      "active",
+      "disabled",
+      "disabled-hover"
+    ],
+    "iconNormal": {
+      "filter": "drop-shadow(0 0 1px #090d0cf5)",
+      "inset": "4px",
+      "background-image": "url('./ui-test-art/icons.webp')"
+    },
+    "iconFocus": {
+      "surface": {
+        "outline": "0",
+        "color": "#e7d4a2"
+      },
+      "icon": {
+        "filter": "drop-shadow(0 0 2px #ffe3a0)"
+      },
+      "label": {
+        "background": "none",
+        "opacity": "1",
+        "color": "#fff1bd",
+        "text-decoration": "underline"
+      }
+    },
+    "fpsFocus": {
+      "surface": {
+        "outline": "0",
+        "text-decoration": "underline",
+        "color": "#fff1bd"
+      },
+      "icon": {},
+      "label": {}
+    },
+    "bagHoverLabel": {
+      "background": "none",
+      "opacity": "1"
+    }
+  },
+  "anchor": {
+    "source": "src/stamina-notice-anchor.js",
+    "css": "src/mobile-ui.css:27",
+    "wiring": "src/main.js:156,281,288,311,696,816",
+    "coordinates": "Project actor position plus upright playerDimensions(actor).height into canvas-local CSS pixels; add canvas offset; subtract 12 CSS px from Y.",
+    "variables": {
+      "x": "--stamina-notice-x",
+      "y": "--stamina-notice-y"
+    },
+    "cssFallbacks": "50% X and 40% Y are fallback values only. show() hides until a valid character projection supplies px variables.",
+    "cssTransform": {
+      "translate": "none",
+      "transform": "translate(-50%,-100%)",
+      "scale": "1"
+    },
+    "shortLandscape": "Responsive 148px width/20px font retained; former 32px/76px horizontal offsets and 44% top removed.",
+    "inactiveBehavior": "No projection work while inactive; invalid/offscreen/dead/loading/reset states clear variables and hide the notice; ordinary toast replacement clears anchoring.",
+    "lifecycleInspection": {
+      "existingProjectedHudFrame": true,
+      "resizeOffset": true,
+      "noOwnScheduling": true,
+      "oldSmallOffsetsRemoved": true
+    }
+  }
+}
