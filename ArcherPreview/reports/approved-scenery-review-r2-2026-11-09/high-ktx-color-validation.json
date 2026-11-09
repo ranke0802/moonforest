@@ -1,0 +1,352 @@
+{
+  "scope": "17 final high-resolution ETC1S KTX mip0 vs reviewed same-resolution color PNG; statistics include only candidate mesh UV triangle interior pixel centers, not empty atlas.",
+  "thresholdMeaning": "MAE >5/255, p95 >20/255 or >40/255 channels >1% is an investigative flag, not a perceptual pass/fail.",
+  "limitations": [
+    "KTX extracted CPU RGBA8, not actual GPU raster.",
+    "Nearest UV pixel-center coverage does not directly measure bilinear/trilinear sampling or lower mip levels.",
+    "High profiles only, not near/mobile or every in-game lighting condition."
+  ],
+  "assets": [
+    {
+      "id": "wood-01-palisade",
+      "sourceModelSha256": "5015cfac302ee3935a6571793af94d2dd12e3f195c78dc00e2fbaf6104a78738",
+      "sourceImageSha256": "caf78a06072d7730d97782dfe8470e72064524c3fbf554d4b2607ac32aa16d76",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "39e6b95cd1ed717f89ded633e7f4b0da1d812f2289596c25fffa673ff493f7ba",
+      "extractedRgbaSha256": "9d5b548ae6fa4e906b84e9f80d200222eb1475a6c5f304974521ef62b07f86a2",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 1549382,
+      "surfaceCoverageFraction": 0.3694014549255371,
+      "meanAbsoluteErrorPerChannel": 1.9297668360675417,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 0.0003930599426093759,
+      "psnrDb": 36.084057890759034,
+      "investigate": false
+    },
+    {
+      "id": "wood-02-cross-barricade",
+      "sourceModelSha256": "5ea66de3a01b30fae9eb96b50e7cd36f6524929075cc49ef518a4bfb5bb5e8f9",
+      "sourceImageSha256": "57d435f9c9a16c017414e662ac4e3f912fc28de8eb2f10e363245044e0bfccdb",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "a2a377f51f77f430ae6cccb013d65260e1c48f8b0d666419065f8865e3d85f99",
+      "extractedRgbaSha256": "b3526e1a12ce7de6ffb613444530c2f2648ab3e0a5c6b4f535a746cb9f8a3494",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 1785782,
+      "surfaceCoverageFraction": 0.4257636070251465,
+      "meanAbsoluteErrorPerChannel": 1.3645342301953243,
+      "p95AbsoluteErrorPerChannel": 6,
+      "over40ChannelFraction": 0.0002355644007312576,
+      "psnrDb": 38.3095772144691,
+      "investigate": false
+    },
+    {
+      "id": "wood-03-plank-gate",
+      "sourceModelSha256": "15c7f71ed4175c963b317592ce7cd9e2f1b090fb4caeaee1823594bf3ff2111c",
+      "sourceImageSha256": "d7860639c95bfb73544d096e9ab3c8cf14e481bf8540c88b5d02c8f16b9b337c",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "3cc28a08460790b344bac7ce080bd37d44255b1d26a8389415fb0d8c9e42d1a6",
+      "extractedRgbaSha256": "fc1390cf4d3d32043939c050100fa970dab3def9ae6f477622c9ba5d7645f654",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 1753966,
+      "surfaceCoverageFraction": 0.41817808151245117,
+      "meanAbsoluteErrorPerChannel": 1.9208380702172485,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 4.1619962986739764e-05,
+      "psnrDb": 36.944701385344715,
+      "investigate": false
+    },
+    {
+      "id": "well",
+      "sourceModelSha256": "b4a6eb0c693dc5844861b114092c6f071a94ea5dd570cd1979ef4617c6c67f80",
+      "sourceImageSha256": "7c7989fc5e702db31efeb27eb678db46829c5766943eb865796186d2875bf83d",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "6dc7696948764b31de57a2c2e2dc7a6cdeb49d2ce3e13bb50c79743b2eb5825c",
+      "extractedRgbaSha256": "66754342323178529e2b4721411a6de18b906694b360072fcd13477e5db816ad",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 558011,
+      "surfaceCoverageFraction": 0.133040189743042,
+      "meanAbsoluteErrorPerChannel": 1.442365234138156,
+      "p95AbsoluteErrorPerChannel": 7,
+      "over40ChannelFraction": 0.0001039406033214399,
+      "psnrDb": 37.64908102485451,
+      "investigate": false
+    },
+    {
+      "id": "forest-04-poison-fungi",
+      "sourceModelSha256": "1811e82371f79ad44ca83a89b6941588a3e3858bd44d3891c1bd512ef99866e3",
+      "sourceImageSha256": "75eef08ed97a297bedc6e270224dd1ffe000db32ad91e24f71d45a3978df41fd",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "b56972d0c86e76d37b15e5b66d14a9ff9a5a6f6138f3c69b6b6901bfee686626",
+      "extractedRgbaSha256": "4bef3617b18e3566a521d0c320f86ad844635030804e66ea358fe9017e95b06c",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 4707786,
+      "surfaceCoverageFraction": 0.28060591220855713,
+      "meanAbsoluteErrorPerChannel": 1.4268404865188575,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 4.6093853883757674e-05,
+      "psnrDb": 38.02926491989937,
+      "investigate": false
+    },
+    {
+      "id": "forest-02-dead-tree",
+      "sourceModelSha256": "9e0fe59e61c2aa772b932d0039e1b82b20a2fa141bfd3dc95655e409be35ffdc",
+      "sourceImageSha256": "da83ce7a6eece73ee1c931a0995506513d69334a9006faa0650e927855c4d17c",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "923e0d958152f17b6ef5429b6aa4667c95d4841c51ff69ea01c386fbe3cf27a0",
+      "extractedRgbaSha256": "d627257356122088be18d6b78843dbd9fd6604d19e67d85cb232c0193feb96f4",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 5801897,
+      "surfaceCoverageFraction": 0.34582000970840454,
+      "meanAbsoluteErrorPerChannel": 2.1582190560547123,
+      "p95AbsoluteErrorPerChannel": 9,
+      "over40ChannelFraction": 0.00014604418750166254,
+      "psnrDb": 35.58953040894886,
+      "investigate": false
+    },
+    {
+      "id": "forest-03-fallen-log",
+      "sourceModelSha256": "c5d328eace42c252719e741c996f488219a42ae1b35c3de7812771b16dbdd0b1",
+      "sourceImageSha256": "76110d70e34b0a2479005f9b219c0495579aea56e3f6ae557e0e48654fa16076",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "fba5f24d8a8c955c20145be39fa1bf4745b4ea2a70c9b867344070b05d7d2052",
+      "extractedRgbaSha256": "50cec4afb92a03adbce694501b546fc71f91f28e67cd33c65bbbde7189051db1",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 6876616,
+      "surfaceCoverageFraction": 0.4098782539367676,
+      "meanAbsoluteErrorPerChannel": 1.81846240457031,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 0.0001408153855520409,
+      "psnrDb": 36.540109923468165,
+      "investigate": false
+    },
+    {
+      "id": "firewood",
+      "sourceModelSha256": "d843b94b5702d7a17cdfa65915b60314e750add280d1ae30c4d951a57812ace6",
+      "sourceImageSha256": "3dafd03ae189d3bf343405e4dd25b68eca6a523a547cb2cc2c1f150627556130",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7",
+      "extractedRgbaSha256": "ef57660da8dffc6032df98cc906ecf0feb9c5b8fcb793c55c07fa89c58f5b711",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 1842406,
+      "surfaceCoverageFraction": 0.43926382064819336,
+      "meanAbsoluteErrorPerChannel": 1.4618149673126697,
+      "p95AbsoluteErrorPerChannel": 7,
+      "over40ChannelFraction": 0.00022742001491527926,
+      "psnrDb": 37.63013745629985,
+      "investigate": false
+    },
+    {
+      "id": "crate-barrel-cluster",
+      "sourceModelSha256": "b7e8235b4b1b0c037fe3cf89f5c0a4890a9d6d8ac741755417c26c2b540bd185",
+      "sourceImageSha256": "5efa9d69e3ab1772b658c3da4bca53919ed9fd9ba616b3eb09cb89544223cce3",
+      "sourceType": "straight-RGB derived from RGBA, byte-exact RGB",
+      "ktxSha256": "6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0",
+      "extractedRgbaSha256": "0709cfea3e44f480a60a9a51eb9c5d8c17860baa2a56e38ccadd8c44ca170319",
+      "resolution": [
+        2048,
+        2048
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 1461551,
+      "surfaceCoverageFraction": 0.3484609127044678,
+      "meanAbsoluteErrorPerChannel": 1.7584657212326722,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 0.00011950774667915569,
+      "psnrDb": 36.53106967743183,
+      "investigate": false
+    },
+    {
+      "id": "cave-08-timber-brace",
+      "sourceModelSha256": "99770b6c623cdb41be63a5f0e766a2ee6bad2d2a4bd4ddb520e77cd4cfafc2ec",
+      "sourceImageSha256": "608631b0f0a9857c549fd63c2ff8e141e25d278ba1b6f603b396fa72c29db56a",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "13d3e07edf4a618d6a26dc5b02159a83fb953cb8b88ba4531f417cc1b0b216b4",
+      "extractedRgbaSha256": "58e8fa39d0b66e64b8db1703a48274410f4c38f965cd6ff577601d4c2ca445a5",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 7901026,
+      "surfaceCoverageFraction": 0.4709378480911255,
+      "meanAbsoluteErrorPerChannel": 2.057456926058295,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 6.539235115371936e-05,
+      "psnrDb": 36.43847881260354,
+      "investigate": false
+    },
+    {
+      "id": "cave-11-sluice-shutter",
+      "sourceModelSha256": "784567c124eb5407d069e4fc67fb082ca01efd5266ddbcaf7fdb09d7dfc778c0",
+      "sourceImageSha256": "e327abf241c0053f3b388e057c3b9f391bbbb70e654af07f99c79b94d52a26b7",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "e689e05d966bed117393e18159a70241432590e0f084e2d3dd3fb7b52d0b29a1",
+      "extractedRgbaSha256": "9dfe54abad81e403ee51ea1c123a6eecb6ece7247f6fe10f95d8d8dd142b3c9c",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 7814370,
+      "surfaceCoverageFraction": 0.46577274799346924,
+      "meanAbsoluteErrorPerChannel": 1.9057375493268598,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 1.932337475701816e-05,
+      "psnrDb": 36.87304854149049,
+      "investigate": false
+    },
+    {
+      "id": "cave-12-lift-platform",
+      "sourceModelSha256": "82f7be95d429878bb7fcb95b70bf2db78f878dcecc3531c928339f925fdfe4f1",
+      "sourceImageSha256": "f5cc8480b24373f3faa895e750f5ff0a6da5d06b79005bcab82cb985bc33bfcb",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "2af940e4a74c91718d6245754392379aad7a0528b3f5ceb493f8e604b0c572e4",
+      "extractedRgbaSha256": "28df7e9db2a7838e9f97c74a547a3025f4eb4e453c57b4bccb93271f56aaa074",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 5613164,
+      "surfaceCoverageFraction": 0.33457064628601074,
+      "meanAbsoluteErrorPerChannel": 1.780707339627585,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 2.9989028172583827e-05,
+      "psnrDb": 37.18808024641811,
+      "investigate": false
+    },
+    {
+      "id": "cave-14-hidden-pressure-stone",
+      "sourceModelSha256": "924fb824399e707c5fb23c8547725706a4ea9e2db0d8e69a48d007dcd29ece10",
+      "sourceImageSha256": "b7886d0e111e0a45daeb3f25098319c9e42167d6a33bdb0b6141a84ed360fe49",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "49d20e8dd209e537e92db6428f45fbed684fd9a52733ee2511a49a734d551461",
+      "extractedRgbaSha256": "498ce161d7e81b1bc75c73b7399e5bc17aba947ba68cf6dd2866494e4e429bdf",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 10645616,
+      "surfaceCoverageFraction": 0.6345281600952148,
+      "meanAbsoluteErrorPerChannel": 0.9348396560612369,
+      "p95AbsoluteErrorPerChannel": 5,
+      "over40ChannelFraction": 1.0332891962287575e-06,
+      "psnrDb": 42.190515709341426,
+      "investigate": false
+    },
+    {
+      "id": "cave-15-resurrection-altar",
+      "sourceModelSha256": "0c1cb4bc2a103e04834836e0b942ceac23fef5551dad38fa85fd3b609b445a43",
+      "sourceImageSha256": "ef6d46e39a3bdf2545935795d2590ad5a7cd9ee1043931618bb25f48f36042d8",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "f3b46faf9f503499ade234ef2b2fd1effeccb1429c4e84f5f13f88afdb1509c7",
+      "extractedRgbaSha256": "c2a76f3ed4ef5297a0cd9c30d1ca0ce278158a6ecaf32d0f0dfe96deabd379af",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 7778234,
+      "surfaceCoverageFraction": 0.4636188745498657,
+      "meanAbsoluteErrorPerChannel": 2.0224780243604568,
+      "p95AbsoluteErrorPerChannel": 9,
+      "over40ChannelFraction": 8.678062398225613e-05,
+      "psnrDb": 36.31142209514963,
+      "investigate": false
+    },
+    {
+      "id": "cave-16-soul-collector-arm",
+      "sourceModelSha256": "f01e336dce488153feaeb4521bd56b73026e9a7f25db46299d2258e4b2a305dd",
+      "sourceImageSha256": "05386ced2b670e7949a80daca73bc78aa079f26e6ff8cc63e921c6119530ddf2",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "58ab0722c061741a47756a4a47586b59a05f36244c8c1df6b7f5dd4d3e2762cd",
+      "extractedRgbaSha256": "cb04d4aebfa36998cc519869c44ba2eb0d1c5c96a9a9fe5011f9084ba71883d7",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 6818519,
+      "surfaceCoverageFraction": 0.4064154028892517,
+      "meanAbsoluteErrorPerChannel": 2.14896001120869,
+      "p95AbsoluteErrorPerChannel": 9,
+      "over40ChannelFraction": 5.338402664860214e-05,
+      "psnrDb": 36.22132059304189,
+      "investigate": false
+    },
+    {
+      "id": "cave-17-faded-sacred-emblem",
+      "sourceModelSha256": "24ba04165072ea178bd283a25991677a92a7155a3c33da205455f4f9f702dbe2",
+      "sourceImageSha256": "5203e0034f616a8cdc5d8eb783221a9f493567d0a853ce797b5ffc6a213ea63a",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "3847dd40674afcd083465cd43bef657a1539a3f77023c589d0e5ae00d95e866f",
+      "extractedRgbaSha256": "f26795728c6ed18fedf40a7d90179e940f5c57b8dc54203cfdcb96ca85ba071f",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 7505461,
+      "surfaceCoverageFraction": 0.4473603367805481,
+      "meanAbsoluteErrorPerChannel": 1.8552916780639235,
+      "p95AbsoluteErrorPerChannel": 8,
+      "over40ChannelFraction": 0.0001558420817411038,
+      "psnrDb": 36.88108553605646,
+      "investigate": false
+    },
+    {
+      "id": "cave-19-apothecary-shelf",
+      "sourceModelSha256": "9824101a3c6310778173ba088e1b8a61a25a488608350a759e7efc45f8f6f9ab",
+      "sourceImageSha256": "81c9f23eaefd10ed2775d8a3279f5f4b5aa6071711f1d6e4847b5788e5e57eee",
+      "sourceType": "reviewed RGB PNG",
+      "ktxSha256": "c0d8edf0c6d2c3e702571f856a13d4696fcf3a9d5f0867eae270160b52563b95",
+      "extractedRgbaSha256": "c1959f5ba5961e773f18327fa7ea315223a82143c1c5d4143c5554de24d940a5",
+      "resolution": [
+        4096,
+        4096
+      ],
+      "mipLevel": 0,
+      "surfacePixels": 6471446,
+      "surfaceCoverageFraction": 0.38572824001312256,
+      "meanAbsoluteErrorPerChannel": 1.7355029051209472,
+      "p95AbsoluteErrorPerChannel": 7,
+      "over40ChannelFraction": 1.2671047552587166e-05,
+      "psnrDb": 37.794226132550875,
+      "investigate": false
+    }
+  ],
+  "investigateCount": 0
+}

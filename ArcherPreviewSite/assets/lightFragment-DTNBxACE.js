@@ -1,0 +1,1 @@
+export{Mi as lightFragment}from"./babylon-game-uE9lshiC.js";

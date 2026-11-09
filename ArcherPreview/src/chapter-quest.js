@@ -1,3 +1,6 @@
+import {createItemDropView} from './item-drop-view.js';
+import {ITEM_DROP_MODELS,ITEM_DROP_CHOICES} from './item-drop-data.js';
+import {GOLD_REWARDS} from './gold-loot.js';
 import {CHAPTER_QUESTS} from './chapter-quest-data.js';
 import {ChapterJourney} from './chapter-quest-state.js';
 import {CHAPTER_POINTS,QUEST_APPLE_TREE} from './chapter-quest-points.js';
@@ -16,8 +19,12 @@ const questRewardItems=q=>Object.entries(q.rewards??{}).filter(([,count])=>count
 const itemDescription=id=>consumable(id)?`체력을 최대 ${lootItem(id)?.heal??{pie:120,potion:160,bandage:80}[id]} 회복합니다. 체력이 회복된 경우에만 물품을 소모합니다.`:itemCategory(id)==='quest'?'의뢰를 위해 보관하는 물품입니다. 수첩에서 관련 목표를 확인하세요.':'의뢰와 탐험으로 얻은 보관용 물품입니다.';
 const npcNames={elder:'노년 여성',smith:'대장장이',farmer:'농부',herbalist:'약초사',youth:'청년',merchant:'상인',guard:'자경단 전사'};
 const npcLines={elder:'받은 건 많지. 마지막으로 뭘 해 줬느냐고 물으면… 말이 잘 안 나오는구나.',smith:'이 리벳, 내가 박은 거야. 가져간 날도 장부에 남아 있어. 묻는 사람이 없었지.',farmer:'그날도 하나 더 구웠는데… 문 앞에 두고 그냥 돌아왔죠.',herbalist:'같은 병이라고, 안에 든 것까지 같은 건 아니지. 그 애가 괜찮은지도 물었어야 했는데.',youth:'다친 것 같았어. 그때라도 누굴 불렀으면… 아니, 길은 여기야.',merchant:'돈은 다시 벌면 되지만… 아내의 초상화는 다시 구할 수 없네.',guard:'지키는 건 맞서 서는 일만 있는 줄 알았지.'};
-export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{},onPauseChange=()=>{},heal=()=>0,creditGold=()=>{},createProps=createQuestProps,openEquipment=null}){
- const journey=new ChapterJourney(storage),doc=root.ownerDocument,win=doc.defaultView,abort=new AbortController(),props=createProps(world);
+export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{},onPauseChange=()=>{},heal=()=>0,creditGold=()=>{},createProps=createQuestProps,openEquipment=null,onInteract=()=>{},createDropView=createItemDropView}){
+ const journey=new ChapterJourney(storage),doc=root.ownerDocument,win=doc.defaultView,abort=new AbortController(),props=createProps(world);world.questProps=props;
+ const chestSettingsKey='moonforest-chest-drop-settings-v1';let chestSettings={};
+ try{const value=JSON.parse(storage?.getItem(chestSettingsKey)??'{}');if(value&&typeof value==='object'&&!Array.isArray(value))chestSettings=value;}catch{}
+ const saveChestSettings=(id,settings)=>{if(!storage)throw Error('상자 설정을 저장할 공간이 없습니다.');const next=structuredClone(chestSettings);next[world.mapId]??={};next[world.mapId][id]={assetId:settings.assetId,effectEnabled:settings.effectEnabled===true};storage.setItem(chestSettingsKey,JSON.stringify(next));chestSettings=next;};world.saveQuestChestSettings=saveChestSettings;
+ let dropView=null,dropTime=null;
  let currentMap=null,points=[],nearest=null,lastTime=-Infinity,selected=journey.value.tracked,screen='journal',timer,disposed=false,signature='',appleHits=0,appleDrops=0,lastStrike=null,lastPropError=null,selectedItem=null,bagFilter='all',dialogMessage='',lastFocus=null;
  const hud=doc.createElement('section');hud.id='chapter-hud';hud.dataset.ui='';hud.innerHTML=`<div class="chapter-stack"><button class="chapter-track uit-track" data-chapter="journal"><small>첫 장 · 사라진 성녀</small><strong></strong><span></span></button><div class="chapter-story">${button('story','이야기')}</div></div><div class="chapter-context">${button('interact','조사하기')}</div>`;root.append(hud);root.dataset.uiTest='true';
  const dialog=doc.createElement('dialog');dialog.id='chapter-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-label','첫 장 의뢰와 소지품');dialog.setAttribute('aria-labelledby','chapter-dialog-title');root.append(dialog);
@@ -45,6 +52,8 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
   dialog.innerHTML=`<header><div><small>${kicker}</small><h2 id="chapter-dialog-title">${title}</h2></div>${button('close','돌아가기 ×')}</header><nav aria-label="기록과 소지품">${[['journal','의뢰'],['story','이야기'],['bag','가방']].map(([id,name])=>button(id,name,'',false,`aria-pressed="${screen===id}"`)).join('')}</nav><div class="chapter-dialog-content">${content}</div><footer class="chapter-dialog-footer"><output class="chapter-dialog-feedback" role="status" aria-live="polite">${esc(dialogMessage)}</output></footer>`;
  }
  function storyOrBag(){return screen==='bag'?bag():story();}
+ function dropPose(position){const heightAt=(x,z)=>world.terrain?.heightAt?.(x,z)??0,ground=heightAt(position.x,position.z),origin={x:position.x,y:(Number.isFinite(position.y)?position.y:ground)+.4,z:position.z};let landing={x:position.x,y:ground+.04,z:position.z};const angle=Math.random()*Math.PI*2;for(const distance of [.7,.4,.2]){const x=position.x+Math.cos(angle)*distance,z=position.z+Math.sin(angle)*distance,p={x,z};if(world.navigation?.free&&!world.navigation.free(p,.08))continue;if(world.navigation?.segmentClear&&!world.navigation.segmentClear(position,p,.05))continue;landing={x,y:heightAt(x,z)+.04,z};break;}return {origin,position:landing};}
+ function updateDrops(time,state){const dt=dropTime===null?0:Math.max(0,Math.min(.1,time-dropTime));dropTime=time;const rows=journey.value.pendingDrops.filter(d=>d.mapId===state.map&&Math.hypot(d.position.x-state.position.x,d.position.z-state.position.z)<30).sort((a,b)=>Math.hypot(a.position.x-state.position.x,a.position.z-state.position.z)-Math.hypot(b.position.x-state.position.x,b.position.z-state.position.z)).slice(0,64);if(!rows.length){dropView?.sync([],dt);return;}if(!dropView){try{dropView=createDropView(world,{onError:error=>{console.error('[아이템 드롭]',error);notify('아이템 모델을 불러오지 못했습니다. 지역에 다시 들어오면 재시도합니다.');}});}catch(error){console.error('[아이템 드롭]',error);return;}}dropView.sync(rows,dt);if(state.dead||state.busy)return;for(const drop of rows)if(dropView.ready(drop.id)&&Math.hypot(drop.position.x-state.position.x,drop.position.z-state.position.z)<=1.1&&(!world.navigation?.segmentClear||world.navigation.segmentClear(state.position,drop.position,.05))){const collected=journey.collectDrop(drop.id);if(collected)notify('아이템을 획득했습니다.');}}
  function talk(id){if(!safe())return false;const v=journey.value,map=getState().map;
   if(Object.hasOwn(npcNames,id)&&map==='village'){journey.record('talk:'+id,1,'talk:'+id);if(v.done.includes('M09'))journey.record('talk:after-'+id,1,'talk:after-'+id);notify(npcLines[id]);return true;}
   if(id==='vial-compare'&&map==='village'&&v.facts['inspect:empty-vial'])return journey.record('talk:'+id,1,'talk:'+id);
@@ -59,9 +68,10 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
  function interact(){if(!safe()||!nearest||Math.hypot(getState().position.x-nearest.x,getState().position.z-nearest.z)>3)return;const p=nearest;if(!visible(p)||props.isReady?.(p)===false||!world.navigation.segmentClear(getState().position,p,.05))return;
   if(p.id==='apple-tree'){notify('나무 가까이에서 J 또는 공격 버튼을 짧게 누르세요. 떨어진 사과는 G로 줍습니다.');}
   else if(p.id==='apple-drop'){const count=Math.min(2,Math.max(0,6-(journey.value.bag.apple??0)));if(count){journey.collect('apple',count);appleDrops--;notify(`사과 ${count}개를 주웠습니다.`);}else notify('사과는 충분합니다. 수첩에서 의뢰를 확인하세요.');}
-  else if(p.tier){const rewards=journey.openChest(p);if(rewards){p.opened=true;props.openChest?.(p);nearest=null;const grade=lootRarity(p.tier);notify(`${grade.name} · ${grade.itemName} +1 · ${grade.gold} G`,p.tier);}}
+  else if(p.tier){const drop=journey.openChest(p,dropPose({x:p.x,y:p.visual?.position?.y,z:p.z}));if(drop){p.opened=true;props.openChest?.(p);nearest=null;notify('상자가 열렸습니다. 떨어진 보상에 가까이 가세요.',p.tier);}else notify('보상을 놓을 수 없습니다. 바닥의 아이템을 먼저 주워 주세요.');}
   else if(p.item){journey.collect(p.item,p.count,'point:'+p.id);notify((names[p.item]??p.label)+' 수집');}
   else{journey.record(p.key,1,'point:'+p.id);notify(p.text||p.label);}
+  onInteract({id:p.id,kind:'object',mapId:getState().map});
   refresh(true);
  }
  function action(name,id){if(name==='close'){close();return;}if(!safe())return;
@@ -73,7 +83,7 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
   if(name==='accept'){if(journey.accept(id))notify('의뢰를 수락했습니다.');render();}
   if(name==='claim'){const q=CHAPTER_QUESTS.find(q=>q.id===id);if(['Q01','Q02','Q05','Q06','Q09'].includes(id)&&getState().map!=='village'){notify('마을에서 의뢰 물품을 전달하세요.');return;}const reward=journey.claim(id);if(reward)notify(`${q.name} 완료 · XP ${reward.xp}`);render();}
   if(name==='track'){journey.track(id);close();}
-  if(name==='talk'){talk(id);render();}
+  if(name==='talk'){if(talk(id))onInteract({id,kind:'npc',mapId:getState().map});render();}
   if(name==='tactic'){journey.record('read:'+id,1,'read:'+id);notify('전술을 수첩에 기록했습니다.');}
   if(name==='interact')interact();
   if(name==='quick'){journey.quick();notify('애플파이를 Z 빠른 사용에 등록했습니다.');render();}
@@ -87,18 +97,18 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
  function refresh(force=false){creditGold(journey.value.bag.gold??0);const q=CHAPTER_QUESTS.find(q=>q.id===journey.value.tracked)??CHAPTER_QUESTS[0],o=journey.progress(q).find(o=>o.value<o.count),text=journey.status(q.id)==='done'?'완료':o?`${o.label} · ${o.value}/${o.count}`:'수첩에서 보상 받기';const sig=q.id+text+nearest?.id;
   if(force||sig!==signature){signature=sig;hud.querySelector('strong').textContent=q.name;hud.querySelector('.chapter-track span').textContent=text;const b=hud.querySelector('[data-chapter=interact]');b.hidden=!nearest;b.textContent=nearest?nearest.label+' · G':'';}
  }
- const api={journey,talk,isOpen:()=>dialog.open,releaseMap(){props.release();currentMap=null;points=[];nearest=null;},
-  defeat({kind,phase}){const key=kind==='elena'&&phase===2?'mourning-elena':kind;journey.record('kill:'+key);if(kind==='goblin'){journey.collect('goblin-iron');notify('고블린 철붙이 1개 수집');}},
+ const api={journey,talk,isOpen:()=>dialog.open,releaseMap(){props.release();dropView?.clear();dropTime=null;currentMap=null;points=[];nearest=null;},
+  defeat(event,{rewardEnabled=true,dropAssetId='',dropEffectEnabled=false}={}){const {kind,phase,position}=event,key=kind==='elena'&&phase===2?'mourning-elena':kind,killKey='kill:'+key;if(!rewardEnabled||!position){journey.record(killKey);return;}const rewards={};if(GOLD_REWARDS[kind])rewards.gold=GOLD_REWARDS[kind];if(kind==='goblin')rewards['goblin-iron']=1;const requested=Object.entries(ITEM_DROP_MODELS).find(([,asset])=>asset===dropAssetId)?.[0];if(requested)rewards[requested]=(rewards[requested]??0)+1;if(!Object.keys(rewards).length){journey.record(killKey);return;}const item=requested??(kind==='goblin'?'goblin-iron':null),model=ITEM_DROP_MODELS[item]??'clue-satchel',id='monster-'+(globalThis.crypto?.randomUUID?.()??Date.now().toString(36)+Math.random().toString(36).slice(2)),drop={id,mapId:getState().map,model,effectEnabled:dropEffectEnabled===true,...dropPose(position),rewards};if(!journey.recordDefeatDrop(killKey,drop)){journey.record(killKey);notify('바닥의 보상이 가득 찼습니다. 아이템을 먼저 주워 주세요.');}},
   action(kind){if(getState().map==='village')journey.record('action:'+kind);},
   event(key,count=1,token){return journey.record(key,count,token);},
   strike(result,position){if(getState().map!=='village'||!['active','ready'].includes(journey.status('Q01'))||!['slash','attack','moveAttack'].includes(result.state)||result.actionId===lastStrike||Math.hypot(position.x-QUEST_APPLE_TREE.x,position.z-QUEST_APPLE_TREE.z)>3.4)return;lastStrike=result.actionId;appleHits++;if((journey.value.bag.apple??0)<6)appleDrops=Math.min(3,appleDrops+1);journey.record('apple:strike');notify('사과가 떨어졌습니다. 가까이에서 G로 줍기');},
-  update(time){const s=getState();if(!s.ready)return;props.animate?.(time);if(time-lastTime<.15)return;lastTime=time;
-   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);return {...p,x:position.x,z:position.z,opened:!!p.tier&&journey.seen.has('point:'+p.id)};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
+  update(time){const s=getState();if(!s.ready)return;props.animate?.(time);updateDrops(time,s);if(time-lastTime<.15)return;lastTime=time;
+   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);const setting=chestSettings[s.map]?.[p.id],dropAssetId=ITEM_DROP_CHOICES.some(([id])=>id===setting?.assetId)?setting.assetId:'';return {...p,x:position.x,z:position.z,dropAssetId,dropEffectEnabled:setting?.effectEnabled===true,opened:!!p.tier&&journey.seen.has('point:'+p.id)};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
    if(s.map==='village')journey.record('visit:village',1,'visit:village');
    if(s.map==='great-plains'&&Math.hypot(s.position.x+5,s.position.z-25)<8)journey.record('visit:junction',1,'visit:junction');
    if(s.map==='monster-forest'&&Math.hypot(s.position.x-27,s.position.z+36)<6)journey.record('visit:cave-camp',1,'visit:cave-camp');
    nearest=safe()&&!dialog.open?points.filter(p=>visible(p)&&props.isReady?.(p)!==false).map(p=>({p,d:Math.hypot(p.x-s.position.x,p.z-s.position.z)})).filter(v=>v.d<3&&world.navigation.segmentClear(s.position,v.p,.05)).sort((a,b)=>a.d-b.d)[0]?.p??null:null;
    props.update(points,s.position,displayable);const failure=props.stats?.lastError;if(failure&&failure!==lastPropError){lastPropError=failure;notify('소품 준비가 중단됐습니다. 의뢰 기록은 유지되며, 지역에 다시 들어오면 다시 준비합니다.');}refresh();
-  },propDiagnostics:()=>props.inspect?.()??null,inspect:()=>({screen:dialog.open?screen:'explore',...journey.value,props:props.inspect?.()??null}),dispose(){if(disposed)return;disposed=true;close();abort.abort();props.dispose();clearTimeout(timer);hud.remove();dialog.remove();notice.remove();topButtons.forEach(b=>b.remove());}};
+  },propDiagnostics:()=>props.inspect?.()??null,inspect:()=>({screen:dialog.open?screen:'explore',...journey.value,props:props.inspect?.()??null}),dispose(){if(disposed)return;disposed=true;close();abort.abort();props.dispose();dropView?.dispose();if(world.saveQuestChestSettings===saveChestSettings)delete world.saveQuestChestSettings;if(world.questProps===props)world.questProps=null;clearTimeout(timer);hud.remove();dialog.remove();notice.remove();topButtons.forEach(b=>b.remove());}};
  world.scene.onDisposeObservable.addOnce(()=>api.dispose());refresh(true);return api;
 }

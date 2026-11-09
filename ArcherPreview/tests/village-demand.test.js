@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,statSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {NullEngine,Scene,ArcRotateCamera,Vector3,MeshBuilder,AssetContainer,StandardMaterial} from '@babylonjs/core';
 import {VILLAGE_PLACEMENTS,VILLAGE_SPAWN} from '../src/village-layout.js';
-import {placementBounds,villageDemand,VillageDemandCache,VillageGeometryStreaming} from '../src/village-demand.js';
+import {placementBounds,villageDemand,createVillageDemandIndex,VillageDemandCache,VillageGeometryStreaming} from '../src/village-demand.js';
 import {installVillageGeometry} from '../src/village-streamed-environment.js';
 import {villageLodSources,hasVillageGeometry,projectedCoverage,villageLodTier} from '../src/village-lod.js';
 import {VillageOutlines} from '../src/village-outlines.js';
@@ -16,6 +17,7 @@ import {PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
 import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {CameraPitch} from '../src/camera-pitch.js';
 import {PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
+import {approvedVillageExteriorVersion} from '../scripts/approved-village-exterior-policy.mjs';
 const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('village.json',base)));
 function fixture(t,touch=false){
  const engine=new NullEngine({renderWidth:touch?900:1280,renderHeight:touch?450:720}),scene=new Scene(engine);scene.useRightHandedSystem=true;
@@ -86,6 +88,7 @@ test('real plains village exterior stays inside streaming bounds and follows the
  const {world}=fixture(t,true),config=JSON.parse(readFileSync(new URL('great-plains.json',base))).assets['village-approach'];
  Object.assign(world,{plains:true,mapId:'great-plains',plainsViewDistance:2.4,terrain:createGreatPlainsTerrain()});world.camera.maxZ=PLAINS_VISTA_FAR;
  const placement=PLAINS_PLACEMENTS.find(p=>p.id==='village-exterior'),record=createVillageTransform(world,placement,config),bounds=placementBounds(world,placement,config);
+ const originalBounds=placementBounds(world,placement,{...config,approvedVillageExterior:undefined});
  const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));
  for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(b.uri).data).toString('base64');
  const loader=new GLTFFileLoader();loader.skipMaterials=true;
@@ -97,7 +100,21 @@ test('real plains village exterior stays inside streaming bounds and follows the
   m.computeWorldMatrix(true);triangles+=m.getTotalIndices()/3;const box=m.getBoundingInfo().boundingBox;
   for(const axis of ['x','y','z'])assert.ok(box.minimumWorld[axis]>=bounds.min[axis]&&box.maximumWorld[axis]<=bounds.max[axis],'prefab '+axis+' bounds');
  }
- assert.equal(triangles,187522);
+ if(config.approvedVillageExterior){
+  const raw=readFileSync(new URL(config.lods[0].model,base)),contentHash=createHash('sha256').update(raw).digest('hex');
+  assert.equal(approvedVillageExteriorVersion('village-approach',config,{contentHash,triangles}),config.approvedVillageExterior.catalogAssetVersion);
+  assert.equal(triangles,44828);assert.ok(bounds.max.y>originalBounds.max.y,'authored high triangle must expand actual demand bounds');
+  t.diagnostic(JSON.stringify({scope:'approved exterior bounds; not device performance',previousMaxY:originalBounds.max.y,actualMaxY:bounds.max.y,previousRadius:originalBounds.radius,conservativeRadius:bounds.radius,thresholdsUnchanged:true}));
+  for(let mask=0;mask<8;mask++){const point=new Vector3(...['x','y','z'].map((key,i)=>mask&(1<<i)?bounds.max[key]:bounds.min[key]));assert.ok(Vector3.Distance(point,bounds.center)<=bounds.radius,'demand sphere must enclose every actual bounding-box corner');}
+  const forged=structuredClone(config);forged.approvedVillageExterior.appliedModelSha256='0'.repeat(64);const rejected=placementBounds(world,placement,forged);
+  assert.deepEqual(rejected.min.asArray(),originalBounds.min.asArray());assert.deepEqual(rejected.max.asArray(),originalBounds.max.asArray());assert.equal(rejected.radius,originalBounds.radius);
+  for(const variant of [{yaw:0,scale:.75,x:-30,z:10},{yaw:Math.PI/2,scale:1.2,x:20,z:-40},{yaw:1.27,scale:.9,length:60,depth:70,elevation:undefined,topElevation:7}]){
+   const altered={...placement,...variant},frame=createVillageTransform(world,altered,config),box=placementBounds(world,altered,config);
+   const instance=container.instantiateModelsToScene(n=>n+'-variant-bounds',false,{doNotInstantiate:false});for(const node of instance.rootNodes)node.parent=frame.facing;
+   for(const mesh of frame.root.getChildMeshes().filter(m=>m.getTotalVertices()>0)){mesh.computeWorldMatrix(true);const actual=mesh.getBoundingInfo().boundingBox;for(const axis of ['x','y','z'])assert.ok(actual.minimumWorld[axis]>=box.min[axis]-1e-5&&actual.maximumWorld[axis]<=box.max[axis]+1e-5,'approved exterior variant '+axis+' enclosed');}
+   frame.root.dispose();
+  }
+ }else assert.equal(triangles,187522);
  const records=[{placement,bounds}],pitch=new CameraPitch(world.camera,{warrior:true});
  const moveCamera=(x,z,towardTown,beta=.88)=>{
   world.camera.alpha=Math.atan2(placement.z-z,placement.x-x)+(towardTown?Math.PI:0);world.camera.beta=beta;
@@ -120,6 +137,15 @@ test('S23-size rotation and movement demand matches the uncached plan, including
   const cached=cache.get();assert.deepEqual(cached,villageDemand(world,records));assert.equal(cache.get(),cached);
  }
  assert.equal(cache.stats.demandEvaluations,96);assert.equal(cache.stats.demandCacheHits,96);
+});
+test('indexed and direct camera demand agree with the approved exterior and 1,000-plus records',t=>{
+ const {world,records}=fixture(t,true),config=JSON.parse(readFileSync(new URL('great-plains.json',base))).assets['village-approach'];
+ if(!config.approvedVillageExterior)return t.skip('approved exterior not yet applied');
+ Object.assign(world,{plains:true,mapId:'great-plains',plainsViewDistance:2.4,terrain:createGreatPlainsTerrain()});world.camera.maxZ=PLAINS_VISTA_FAR;
+ const placement=PLAINS_PLACEMENTS.find(p=>p.id==='village-exterior');records.push({placement,bounds:placementBounds(world,placement,config)});
+ while(records.length<1024){const sample=records[records.length%VILLAGE_PLACEMENTS.length];records.push({placement:sample.placement,bounds:sample.bounds});}
+ const index=createVillageDemandIndex(records);assert.ok(index);
+ for(let i=0;i<32;i++){world.camera.alpha=i*Math.PI/16;world.camera.beta=.65+(i%8)*.09;world.camera.radius=8+(i%7);world.camera.setTarget(new Vector3(-87+(i%8)*20,1.2,-72+Math.floor(i/8)*22));assert.deepEqual(villageDemand(world,records,index),villageDemand(world,records),`view ${i}`);}
 });
 test('far-to-near promotion retains exact geometry, existing instance identity and native LOD selection',async t=>{
  const {world}=fixture(t),asset={tiers:new Map(),baseLevel:Infinity},containers=[];

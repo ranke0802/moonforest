@@ -1,0 +1,1 @@
+export{Wl as FlowGraphSetPhysicsMotionTypeBlock,Gl as RegisterFlowGraphSetPhysicsMotionTypeBlock}from"./babylon-game-uE9lshiC.js";

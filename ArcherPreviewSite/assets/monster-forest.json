@@ -189,14 +189,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+          "model": "./content/0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886.gltf",
           "resources": [
-            "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
-            "./content/46c2d8e65e3ab7d122cd935d2d278212a8b1498f98f433ff2573fc484bea3f0f.bin",
-            "./content/430b14d7709572fb19790405ed62979d3ca96194dfd480db99f0fe973e098a70.ktx2"
+            "./content/877a095e023dd3b2c6d16098596519e1ad9cd03496b277461f4e4e9e85473baf.bin",
+            "./content/63742b1e448f27257f28e4ce48f55442075e411416bf81b034ecf5a01bb5b340.ktx2",
+            "./content/0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886.gltf"
           ],
-          "bytes": 419400,
-          "triangles": 4994,
+          "bytes": 344845,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -280,14 +280,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
+        "model": "./content/0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886.gltf",
         "resources": [
-          "./content/beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39.gltf",
-          "./content/46c2d8e65e3ab7d122cd935d2d278212a8b1498f98f433ff2573fc484bea3f0f.bin",
-          "./content/430b14d7709572fb19790405ed62979d3ca96194dfd480db99f0fe973e098a70.ktx2"
+          "./content/877a095e023dd3b2c6d16098596519e1ad9cd03496b277461f4e4e9e85473baf.bin",
+          "./content/63742b1e448f27257f28e4ce48f55442075e411416bf81b034ecf5a01bb5b340.ktx2",
+          "./content/0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886.gltf"
         ],
-        "bytes": 419400,
-        "triangles": 4994,
+        "bytes": 344845,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -312,17 +312,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2",
+            "url": "./content/923e0d958152f17b6ef5429b6aa4667c95d4841c51ff69ea01c386fbe3cf27a0.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2866044,
+            "bytes": 2296377,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/616ab8180dc44a1357daf7e4281b88bd40e93d6cb597582b77a3e38c5324b82e.ktx2"
+          "./content/923e0d958152f17b6ef5429b6aa4667c95d4841c51ff69ea01c386fbe3cf27a0.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -330,20 +330,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2",
+            "url": "./content/b2b3ff1ffcd7fb11c4333405d1436e07239621b2419cd5d9f221e0107569c2d4.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 754041,
+            "bytes": 752614,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/dfb7e565666729e157588f263638a5c6f153173e1034ef66c67d17db22a12003.ktx2"
+          "./content/b2b3ff1ffcd7fb11c4333405d1436e07239621b2419cd5d9f221e0107569c2d4.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "forest-02-dead-tree",
+        "requestedCap": 1000,
+        "actualTriangles": 2000,
+        "catalogAssetVersion": "beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39",
+        "beforeModelSha256": "beb10a1e2819ff457db7e7aa3bc0807a80d884bb3e875f94af7231349c31dc39",
+        "appliedModelSha256": "0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886",
+        "nativeConfigSha256": "8936fde4b455c27dd592d812e276c469d7907f1ba5a03a48e845f8ddbf6a2504",
+        "lodModels": [
+          "0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886",
+          "f5d66178912f0ddfa944e6b83ceb08b2e7e6974224ccf7df284ea1da38b36c04",
+          "30e2d287d267f2592e1bfbbd9c4a0272106b93ea10fcc9d6b3c60c93d6533690"
+        ],
+        "mobileNearModelSha256": "0d70e32a5da8f3703a81d156574e2e02fa5c18cc21f68befcec59ccabf0ea886",
+        "derivedAtlasSourceSha256": "a9ceef11b97092551c3557acc828fe07079c217f1af58bc1f829a36d79d4488a",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "forest-03-fallen-log": {
@@ -360,14 +379,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+          "model": "./content/ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845.gltf",
           "resources": [
-            "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
-            "./content/6beabd065d46e46d79acbf4bf68a205fad39cc85e50f43a2f35d323fdc343b67.bin",
-            "./content/9aa2a460f6fe74cda30fd31033956f8cc3a94d5b8474002f7966a394deb33d71.ktx2"
+            "./content/c740373d34f8957405847948b669c99169bef52512f5b8ce45c4f07b4c4855a2.bin",
+            "./content/ac7ef0ae35024c9111a02ae73b52ac979bd8bf36d317d5f26f7eb05c60e11bcb.ktx2",
+            "./content/ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845.gltf"
           ],
-          "bytes": 419061,
-          "triangles": 4999,
+          "bytes": 283187,
+          "triangles": 999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -451,14 +470,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
+        "model": "./content/ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845.gltf",
         "resources": [
-          "./content/2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d.gltf",
-          "./content/6beabd065d46e46d79acbf4bf68a205fad39cc85e50f43a2f35d323fdc343b67.bin",
-          "./content/9aa2a460f6fe74cda30fd31033956f8cc3a94d5b8474002f7966a394deb33d71.ktx2"
+          "./content/c740373d34f8957405847948b669c99169bef52512f5b8ce45c4f07b4c4855a2.bin",
+          "./content/ac7ef0ae35024c9111a02ae73b52ac979bd8bf36d317d5f26f7eb05c60e11bcb.ktx2",
+          "./content/ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845.gltf"
         ],
-        "bytes": 419061,
-        "triangles": 4999,
+        "bytes": 283187,
+        "triangles": 999,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -483,17 +502,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2",
+            "url": "./content/fba5f24d8a8c955c20145be39fa1bf4745b4ea2a70c9b867344070b05d7d2052.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 3138796,
+            "bytes": 2117947,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/423916662ecc178af19209646a818bb73d6f47bb5ffe250ea89d571f781f59da.ktx2"
+          "./content/fba5f24d8a8c955c20145be39fa1bf4745b4ea2a70c9b867344070b05d7d2052.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -501,20 +520,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2",
+            "url": "./content/da4e9e495a4ee150ca5cdcf2c03a3e226f0c588cbbebc916e0a8fd2ee1015004.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 809624,
+            "bytes": 682088,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/ed38fccb8df9c9689c2f3aadf16f01eeb1fe228871a21d9f01943c2fcf03ff3e.ktx2"
+          "./content/da4e9e495a4ee150ca5cdcf2c03a3e226f0c588cbbebc916e0a8fd2ee1015004.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "forest-03-fallen-log",
+        "requestedCap": 1000,
+        "actualTriangles": 999,
+        "catalogAssetVersion": "2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d",
+        "beforeModelSha256": "2953ad5dbf65e8440562e6396d43b002b5b24d0be92674af223d30cffbf0d44d",
+        "appliedModelSha256": "ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845",
+        "nativeConfigSha256": "401a5076200b88c751fc8be781620f1599a1838ee7f7ba4afde29905df381692",
+        "lodModels": [
+          "ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845",
+          "6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5",
+          "73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1"
+        ],
+        "mobileNearModelSha256": "ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845",
+        "derivedAtlasSourceSha256": "52d5493d5ecfeb82b204e877d507eb8c7e8e93e9d7094d4288feb04f110b1015",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "forest-04-poison-fungi": {
@@ -531,14 +569,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+          "model": "./content/e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7.gltf",
           "resources": [
-            "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
-            "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
-            "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+            "./content/dd37c03c063e251dc667698316ea719343d40a5adceadcef39ae5b79d08b7be5.bin",
+            "./content/d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287.ktx2",
+            "./content/e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7.gltf"
           ],
-          "bytes": 402167,
-          "triangles": 5000,
+          "bytes": 375069,
+          "triangles": 3174,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -622,14 +660,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
+        "model": "./content/e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7.gltf",
         "resources": [
-          "./content/4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f.gltf",
-          "./content/126f18127af550d17d352618962a27bc297f78ea6c234035360a3ded368bcd00.bin",
-          "./content/cc81f4996a1740602b3c1221aa3c8e9f51cb8d4f1940f0ca4a7a027bff5872a6.ktx2"
+          "./content/dd37c03c063e251dc667698316ea719343d40a5adceadcef39ae5b79d08b7be5.bin",
+          "./content/d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287.ktx2",
+          "./content/e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7.gltf"
         ],
-        "bytes": 402167,
-        "triangles": 5000,
+        "bytes": 375069,
+        "triangles": 3174,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -654,17 +692,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2",
+            "url": "./content/b56972d0c86e76d37b15e5b66d14a9ff9a5a6f6138f3c69b6b6901bfee686626.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2998974,
+            "bytes": 1985147,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/5df11b0e4b6eee47fc2483804de71616bf82a6aed51c8c03e602e9c8c4bc49d9.ktx2"
+          "./content/b56972d0c86e76d37b15e5b66d14a9ff9a5a6f6138f3c69b6b6901bfee686626.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -672,20 +710,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2",
+            "url": "./content/d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 230990,
+            "bytes": 242636,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/8a733bdf0445c2501103c82e974ec571634c5735459c8377d28bf7096f6bff9d.ktx2"
+          "./content/d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "forest-04-poison-fungi",
+        "requestedCap": 700,
+        "actualTriangles": 3174,
+        "catalogAssetVersion": "4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f",
+        "beforeModelSha256": "4a91272e3a53ce26ace58646247053ef2d5a38bc1badf3a4a0856bbd543c227f",
+        "appliedModelSha256": "e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7",
+        "nativeConfigSha256": "16d0f5bedfbb255e62ba6c2950825b1eeac4656f7678e37403cb2d95216ad4fb",
+        "lodModels": [
+          "e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7",
+          "39f9e012c6d511c801f21c41941ae009dc9189260354cadb30e89281aca4d538",
+          "071c3c8f28ff97fc0f3df35158ab1b5b5c56983181cfa772fd3ddd55056c3895"
+        ],
+        "mobileNearModelSha256": "e22cc4faecaeb755ef6677718116faf0e4f9739611936c4f66eeff47cbb7b7e7",
+        "derivedAtlasSourceSha256": "30698be49c8b5ca53399426c7b0902462ad3b0220958c66755e51d118723ac88",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "forest-05-thorn-bramble": {

@@ -1,0 +1,1 @@
+export{Va as layerVertexShaderWGSL}from"./babylon-game-uE9lshiC.js";

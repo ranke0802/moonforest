@@ -1,0 +1,1 @@
+export{Sd as bonesVertexWGSL}from"./babylon-game-uE9lshiC.js";

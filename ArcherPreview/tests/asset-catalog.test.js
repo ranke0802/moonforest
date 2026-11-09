@@ -80,6 +80,23 @@ test('historical catalog identities remain reproducible; approved scenery change
  }
 });
 
+test('R2 accepted scenery keeps placement identity while catalog records the actual reviewed render geometry',async t=>{
+ const selected=ASSET_CATALOG.entries.filter(entry=>entry.reduction?.revision==='approved-review-r2-2026-11-09');
+ if(!selected.length){t.skip('R2 candidate assets have not been applied');return;}
+ const ledger=JSON.parse(await readFile(sourcePath('approved-review-r2-2026-11-09','approval.json'),'utf8'));
+ assert.equal(selected.length,20);assert.equal(ledger.assets.length,20);
+ for(const item of ledger.assets){
+  const current=selected.find(entry=>entry.assetId===item.id);assert.ok(current,item.id+' missing R2 catalog entry');
+  const config=item.applications[0].afterConfig,meta=config.r2Geometry;
+  assert.equal(current.version,meta.catalogAssetVersion,item.id+' original placement identity');
+  assert.equal(current.contentHash,meta.appliedModelSha256,item.id+' actual content identity');
+  assert.equal(current.geometry.triangles,item.actualTriangles,item.id+' approved triangles');
+  assert.equal(current.reduction.approvedTriangles,item.actualTriangles,item.id+' approved triangles must not be recast as an enforced budget');
+  assert.equal(current.reduction.locked,true);
+  const bytes=await readFile(new URL('../public/'+current.runtime.model,import.meta.url));assert.equal(createHash('sha256').update(bytes).digest('hex'),current.contentHash);
+ }
+});
+
 test('mobile-only profile distribution and a new valid global index keep identical catalog entries and saved-scene identity',async t=>{
  const fixture=await catalogProject(t),before=await buildAssetCatalog({projectRoot:fixture.directory});
  const texture=await fixture.addContent(Buffer.from('mobile-only-texture-distribution'),'ktx2');

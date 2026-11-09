@@ -52,7 +52,7 @@ test('all original point identities, reward tiers, models, labels and save condi
  assert.deepEqual(Object.fromEntries(Object.keys(definitions).map(map=>[map,CHAPTER_POINTS.filter(p=>p.map===map&&p.tier).length])),{village:6,'great-plains':9,'monster-forest':7,'witch-cave':7});
  assert.equal(new Set(CHAPTER_POINTS.map(p=>p.id)).size,CHAPTER_POINTS.length);
  const values=new Map(),storage={getItem:key=>values.get(key),setItem:(key,value)=>values.set(key,value)};
- for(const point of CHAPTER_POINTS.filter(p=>p.tier)){const journey=new ChapterJourney(storage);assert.ok(journey.openChest(point));assert.equal(journey.openChest({...point,x:point.x+1,yaw:point.yaw+.2}),null,'position must never become part of the reward token');assert.equal(new ChapterJourney(storage).openChest(point),null,'opened chest survives reload');}
+ const open=(journey,p)=>journey.openChest(p,{origin:{x:p.x,y:0,z:p.z},position:{x:p.x,y:0,z:p.z}});for(const point of CHAPTER_POINTS.filter(p=>p.tier)){const journey=new ChapterJourney(storage);assert.ok(open(journey,point));assert.equal(open(journey,{...point,x:point.x+1,yaw:point.yaw+.2}),null,'position must never become part of the reward token');assert.equal(open(new ChapterJourney(storage),point),null,'opened chest survives reload');}
 });
 
 for(const map of Object.keys(definitions))test(`${map} chests belong to existing scenery or solid cavern walls with a clear reachable front`,()=>{

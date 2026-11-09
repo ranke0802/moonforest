@@ -13,13 +13,15 @@ import {caveObstacles} from '../src/witch-cave-layout.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {MOURNING_SIZE} from '../src/elena-spec.js';
 import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
+import {caveCollisionManifest} from '../scripts/cave-collision-source.mjs';
 const raw=Buffer.from(data.values,'base64'),values=new Uint16Array(raw.buffer.slice(raw.byteOffset,raw.byteOffset+raw.byteLength)),sha=b=>createHash('sha256').update(b).digest('hex'),base=new URL('../public/assets/',import.meta.url),near=(a,b)=>assert.ok(Math.abs(a-b)<1e-12,`${a} differs from${b}`);
 
 test('native body field pins the preserved source/ground epoch while approved camera and sight cells stay delivered',()=>{
   assert.equal(data.version,contract.version);assert.equal(data.revision,contract.revision);assert.equal(data.sourceSha256,contract.sourceSha256);assert.equal(data.terrainSha256,contract.terrainSha256);
   const expected=caveSourceFingerprint();for(const d of [data,CAVE_COLLISION_DATA,CAVE_CAMERA_DATA,CAVE_SIGHT_DATA])assert.equal(d.fingerprint,expected);
   assert.equal(data.algorithm,'whole-cell-exact-native-body-v1');assert.equal(data.step,.125);assert.equal(data.quantum,.001);assert.deepEqual(data.bodyBand,[.22,1.75]);
-  const model=JSON.parse(readFileSync(new URL(data.model,base))),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),config=manifest.assets[contract.assetId];assert.equal(config.lods[0].model,data.model);assert.equal(config.sourceSha256,data.sourceSha256);
+  const model=JSON.parse(readFileSync(new URL(data.model,base))),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),config=manifest.assets[contract.assetId],collisionConfig=caveCollisionManifest(manifest).assets[contract.assetId];
+  assert.equal(collisionConfig.lods[0].model,data.model,'the actual collision epoch uses the preserved source, independently of render-only R2 replacement');assert.equal(config.sourceSha256,data.sourceSha256);
   for(const buffer of model.buffers)if(buffer.uri){const bytes=readFileSync(new URL(buffer.uri,new URL(data.model,base)));assert.equal(sha(bytes),data.modelResources[buffer.uri]);}
 });
 

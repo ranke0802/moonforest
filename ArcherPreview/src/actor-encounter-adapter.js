@@ -176,11 +176,12 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
           encounter.active=false;encounter.setShadowCasting(true);encounter.player=null;encounter.ring.setEnabled(false);
         }else{
           battle.applyAttackSettings?.(encounter);
-          if(!battle.encounters.includes(encounter))battle.encounters.push(encounter);
-          battle.active=true;
+          if(value.staged===true)encounter.actor.setEnabled(false);
+          else{if(!battle.encounters.includes(encounter))battle.encounters.push(encounter);battle.active=true;}
         }
         return adapter;
       },
+      reveal(){if(!active||definition.category==='npc'||encounter.actor.isDisposed())return false;encounter.actor.setEnabled(true);if(!battle.encounters.includes(encounter))battle.encounters.push(encounter);battle.active=true;return true;},
       update(dt){
         if(!active||definition.category!=='npc')return;
         encounter.animator.update(dt); // combat actors update only in BossBattle

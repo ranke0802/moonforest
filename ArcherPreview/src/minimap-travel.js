@@ -1,5 +1,19 @@
-import {isWorldCharacter,travelUrl} from './map-route.js';
+import {isWorldCharacter,travelUrl,mapForCharacter,mapPortals} from './map-route.js';
 import {ELENA_SANCTUARY_WAYPOINT} from './map-waypoints.js';
+import {ELENA_HOME} from './elena-spec.js';
+
+// Look inward from the destination entrance, independent of the old view.
+export function applyMinimapArrivalPose(actor,camera,pan,{destination,position,waypoint}={}){
+ const portals=mapPortals(mapForCharacter(destination));
+ const portal=portals.reduce((best,p)=>!best||Math.hypot(p.x-position.x,p.z-position.z)<Math.hypot(best.x-position.x,best.z-position.z)?p:best,null);
+ const dx=waypoint?ELENA_HOME.x-position.x:portal?position.x-portal.x:0,dz=waypoint?ELENA_HOME.z-position.z:portal?position.z-portal.z:1;
+ const yaw=Math.hypot(dx,dz)>.001?Math.atan2(dx,dz):Math.PI;
+ actor.rotation.y=yaw;camera.alpha=-Math.PI/2-yaw;
+ if(pan)Object.assign(pan,{x:0,y:0,z:0});
+ for(const key of ['inertialAlphaOffset','inertialPanningX','inertialPanningY'])if(key in camera)camera[key]=0;
+ camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();
+ return yaw;
+}
 
 export const MINIMAP_REGIONS=Object.freeze([
  {map:'village',character:'warrior-v3',label:'마을',note:'성문 앞길로 이동'},

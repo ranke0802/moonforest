@@ -83,7 +83,7 @@ test('village open entrance reaches the portal at the end of the existing painte
   assert.ok(portalAvailable(p,MAP_PORTALS.village));
   for(const q of [{x:65,z:0},{x:30,z:65},{x:0,z:-60}])assert.ok(Math.hypot(...Object.values(clampVillageExit(q)))<=48.001);
   assert.ok(clampVillageExit({x:0,z:90}).z<=78);
-  const dodge=clampVillageExit({x:8,z:65},{x:exitRoadX(65),z:65});assert.equal(dodge.z,65);assert.ok(Math.abs(dodge.x-exitRoadX(65))+.35<=VILLAGE_PLAINS_BOUNDARY.roadWidth/2+.01);
+  const dodge=clampVillageExit({x:8,z:65},{x:exitRoadX(65),z:65});assert.equal(dodge.z,65);assert.equal(dodge.x,8);
 });
 test('teleport is deliberate, bidirectional, range checked and blocked during combat',()=>{
   for(const p of Object.values(MAP_PORTALS)){

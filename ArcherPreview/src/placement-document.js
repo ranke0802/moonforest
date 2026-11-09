@@ -5,6 +5,7 @@ import {FOREST_PLACEMENTS} from './monster-forest-layout.js';
 import {CAVE_PLACEMENTS} from './witch-cave-layout.js';
 import {CHAPTER_POINTS} from './chapter-quest-points.js';
 import {editableBasePlacement} from './editable-asset-index.js';
+import {normalizeInteraction} from './interaction-data.js';
 
 export const PLACEMENT_COORDINATE_SYSTEM='RH_Y_UP_METRES';
 export const PLACEMENT_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
@@ -69,7 +70,7 @@ export function placementScaleRange(asset,source,aspect=[1,1,1]){
 }
 
 export function validatePlacementDocument(document,{catalog,baseManifest,expectedRevision,maxInstances=128}={}){
- object(document,'document',['version','mapId','baseRevision','revision','coordinateSystem','instances','removedBaseIds']);
+ object(document,'document',['version','mapId','baseRevision','revision','coordinateSystem','instances','removedBaseIds','terrainPatches']);
  if(document.version!==1)fail('version','unsupported document version');
  if(!PLACEMENT_MAPS.includes(document.mapId))fail('mapId','unsupported map');
  if(document.coordinateSystem!==PLACEMENT_COORDINATE_SYSTEM)fail('coordinateSystem','expected '+PLACEMENT_COORDINATE_SYSTEM);
@@ -79,12 +80,22 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
  baseManifest??=createBasePlacementManifest(document.mapId,{catalog});
  if(baseManifest.mapId!==document.mapId||baseManifest.baseRevision!==document.baseRevision&&!compatiblePlainsRevision(baseManifest,document.baseRevision))fail('baseRevision','base map revision conflict','BASE_REVISION_CONFLICT');
  if(!Array.isArray(document.instances)||document.instances.length>maxInstances)fail('instances',`expected at most ${maxInstances} instances`);
+ if(document.terrainPatches!==undefined){
+  if(!Array.isArray(document.terrainPatches)||document.terrainPatches.length>32)fail('terrainPatches','expected at most 32 terrain patches');
+  if(document.mapId==='witch-cave'&&document.terrainPatches.length)fail('terrainPatches','동굴 지형은 평탄화를 지원하지 않습니다.');
+  const patchIds=new Set();for(const [i,patch]of document.terrainPatches.entries()){
+   const path=`terrainPatches[${i}]`;object(patch,path,['id','x','z','halfWidth','halfDepth','height','blend']);identifier(patch.id,path+'.id');if(patchIds.has(patch.id))fail(path+'.id','duplicate patch ID');patchIds.add(patch.id);
+   for(const key of ['x','z','height'])finite(patch[key],path+'.'+key,200);
+   for(const key of ['halfWidth','halfDepth'])if(finite(patch[key],path+'.'+key,30)<.5)fail(path+'.'+key,'expected at least 0.5');
+   if(finite(patch.blend,path+'.blend',15)<.5)fail(path+'.blend','expected at least 0.5');
+  }
+ }
  const protectedIds=new Set(baseManifest.protectedIds??baseManifest.instances.map(row=>row.instanceId)),baseRows=new Map(baseManifest.instances.map(row=>[row.instanceId,row])),baseIds=new Set(baseRows.keys()),seen=new Set();
  const removedBaseIds=document.removedBaseIds??[];
  if(!Array.isArray(removedBaseIds)||removedBaseIds.length>baseRows.size)fail('removedBaseIds','expected original placement IDs');
  const removed=new Set();for(const id of removedBaseIds){identifier(id,'removedBaseIds');if(removed.has(id)||!baseRows.get(id)?.editable)fail('removedBaseIds','duplicate or noneditable original placement');removed.add(id);}
  const instances=document.instances.map((instance,index)=>{
-  const path=`instances[${index}]`;object(instance,path,['instanceId','assetId','assetVersion','transform','attachment','collision','sourceInstanceId']);
+  const path=`instances[${index}]`;object(instance,path,['instanceId','assetId','assetVersion','transform','attachment','collision','sourceInstanceId','interaction']);
   const instanceId=identifier(instance.instanceId,path+'.instanceId');
   const sourceInstanceId=instance.sourceInstanceId===undefined?undefined:identifier(instance.sourceInstanceId,path+'.sourceInstanceId'),source=sourceInstanceId===undefined?null:baseRows.get(sourceInstanceId);
   if(sourceInstanceId!==undefined){if(sourceInstanceId!==instanceId)fail(path+'.sourceInstanceId','base replacement must keep its original stable ID');if(!source?.editable)fail(path+'.sourceInstanceId',source?.reason??'unknown or locked base placement','READ_ONLY_BASE');if(instance.assetId!==source.assetId||instance.assetVersion!==source.assetVersion)fail(path+'.assetId','base replacement must retain its source asset and version');}
@@ -112,7 +123,8 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
   if((surface==='wall'||surface==='ceiling')&&supportId==='terrain')fail(path+'.attachment.supportId','wall/ceiling requires an immutable base mesh support');
   if(!['solid','none'].includes(instance.collision))fail(path+'.collision','expected solid or none');
   if(instance.collision==='solid'&&(surface!=='ground'||placement.collision!=='independent-static'||placement.solidSurfaces&&!placement.solidSurfaces.includes(surface)))fail(path+'.collision','solid collision is certified only for ground-attached independent props');
-  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale,...(aspect?{aspect}:{}),...(frontYaw!==undefined?{frontYaw}:{})},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{})};
+  let interaction;try{interaction=normalizeInteraction(instance.interaction);}catch(error){fail(path+'.interaction',error.message);}
+  return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale,...(aspect?{aspect}:{}),...(frontYaw!==undefined?{frontYaw}:{})},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{}),...(interaction?{interaction}:{})};
  });
  const overridden=new Set(instances.map(instance=>instance.sourceInstanceId).filter(Boolean));for(const instance of instances)if(overridden.has(instance.attachment.supportId))fail('attachment.supportId','이 소품에 붙인 장식을 먼저 옮겨 주세요. 편집 중인 기존 소품은 고정 지지면으로 사용할 수 없어요.');
  return {...copy(document),baseRevision:baseManifest.baseRevision,instances};

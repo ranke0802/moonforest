@@ -1,0 +1,1 @@
+export{Yi as backgroundPixelShaderWGSL}from"./babylon-game-uE9lshiC.js";

@@ -1,0 +1,1 @@
+export{go as OpenPBRMaterial,_o as OpenPBRMaterialDefines,vo as RegisterOpenpbrMaterial}from"./babylon-game-uE9lshiC.js";

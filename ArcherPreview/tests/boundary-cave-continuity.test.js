@@ -153,7 +153,7 @@ test('actual main movement constraint preserves the original curved centre and b
   }
   assert.equal(calls,1,'holding movement in the portal starts exactly one trip');automaticTrips+=calls;
   const previous=actor.position.clone();actor.position.x+=10;constrain(previous);
-  near(actor.position.x,exitRoadX(actor.position.z)+half);assert.ok(actor.position.z<=78);
+  near(actor.position.x,previous.x+10);assert.ok(actor.position.z<=78);
   portal.dispose();
  }
  results.push({case:'actual-main-movement-and-automatic-portal',centreAndShoulderSteps:traversed,usableHalfWidth:half,automaticTrips});

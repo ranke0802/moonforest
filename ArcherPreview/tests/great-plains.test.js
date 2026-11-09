@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import {approvedVillageExteriorVersion} from '../scripts/approved-village-exterior-policy.mjs';
 import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS,PLAINS_LOOKOUT,PLAINS_RADIUS,plainsObstacles,plainsRoadDistance,plainsStreamDistance} from '../src/great-plains-layout.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {mapPortals,mapForCharacter,worldSpawn,portalHeadingTurn,portalAvailable,travelUrl} from '../src/map-route.js';
@@ -128,7 +130,12 @@ test('plains reuses complete existing forest and village LOD graphs',()=>{
  for(const p of PLAINS_PLACEMENTS)assert.ok(plains.assets[p.asset],p.id+' has no asset config');
  const exterior=plains.assets['village-approach'];
  assert.equal(new Set(exterior.lods.map(l=>l.model)).size,1,'preserve integrated shared exterior geometry');
- assert.ok(exterior.lods.every(l=>l.textureSize===2048),'retain actual exterior 2K metadata');
+ if(exterior.approvedVillageExterior){
+  const bytes=readFileSync(new URL('../public/assets/'+exterior.lods[0].model,import.meta.url)),gltf=JSON.parse(bytes),contentHash=createHash('sha256').update(bytes).digest('hex');
+  const triangles=gltf.meshes.reduce((sum,mesh)=>sum+mesh.primitives.reduce((n,p)=>n+gltf.accessors[p.indices].count/3,0),0);
+  assert.equal(approvedVillageExteriorVersion('village-approach',exterior,{contentHash,triangles}),exterior.approvedVillageExterior.catalogAssetVersion,'approved profile preserves native authoring identity');
+  assert.ok(exterior.lods.every(l=>l.textureSize===4096),'approved external atlas metadata matches all 4K profiles');assert.equal(exterior.mobileNear.textureSize,4096);
+ }else assert.ok(exterior.lods.every(l=>l.textureSize===2048),'retain historical exterior 2K metadata before approval');
 });
 
 test('authored route network stays walkable through clustered scenery',()=>{

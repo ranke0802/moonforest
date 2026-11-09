@@ -10,13 +10,16 @@ export class GoldLoot {
   }
   persist(){try{this.storage?.setItem(LEDGER_KEY,JSON.stringify({version:1,balance:this.balance,credits:this.credits}));this.storage?.setItem(STORAGE_KEY,String(this.balance));}catch{}}
   creditCumulative(source,total){if(!Number.isSafeInteger(total)||total<0)return 0;const delta=Math.max(0,total-(this.credits[source]??0));if(!delta)return 0;this.credits[source]=total;this.balance+=delta;this.persist();this.onBalance(this.balance);return delta;}
-  drop(kind,position) {
+  drop(kind,position,{canLand=()=>true,heightAt=null}={}) {
     const amount=GOLD_REWARDS[kind];if(!amount)return null;
     // Bound the number of draw calls even during repeated test summons.
-    let pile=this.drops.find(d=>Math.hypot(d.position.x-position.x,d.position.z-position.z)<.45);
+    let pile=this.drops.find(d=>Math.hypot((d.origin??d.position).x-position.x,(d.origin??d.position).z-position.z)<.45);
     if(!pile&&this.drops.length>=64)pile=this.drops.reduce((a,b)=>Math.hypot(a.position.x-position.x,a.position.z-position.z)<Math.hypot(b.position.x-position.x,b.position.z-position.z)?a:b);
     if(pile){pile.amount+=amount;return pile;}
-    pile={id:++this.serial,amount,position:{x:position.x,y:(position.y??0)+.04,z:position.z},age:0};this.drops.push(pile);return pile;
+    const id=++this.serial,origin={x:position.x,y:(position.y??0)+.04,z:position.z},angle=id*2.399963229728653;
+    let landing={...origin};
+    for(const distance of [.7,.45,.2]){const x=origin.x+Math.cos(angle)*distance,z=origin.z+Math.sin(angle)*distance;if(!canLand(origin,{x,z}))continue;const ground=heightAt?.(x,z);landing={x,y:Number.isFinite(ground)?ground+.04:origin.y,z};break;}
+    pile={id,amount,origin,position:landing,age:0};this.drops.push(pile);return pile;
   }
   update(dt,player,canCollect=true,canReach=()=>true) {
     const collected=[];

@@ -1,0 +1,1 @@
+export{ci as bumpFragment}from"./babylon-game-uE9lshiC.js";

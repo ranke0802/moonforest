@@ -1,0 +1,1 @@
+export{Oi as colorPixelShader}from"./babylon-game-uE9lshiC.js";

@@ -5,14 +5,64 @@ import {NullEngine,Scene,ArcRotateCamera,Vector3,PBRMaterial,TransformNode} from
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
-import {configureVillageSurfaceCulling,CAVE_OPEN_SURFACE_ASSETS,caveStructuralRecord,installVillageGeometry} from '../src/village-streamed-environment.js';
+import {configureVillageSurfaceCulling,CAVE_OPEN_SURFACE_ASSETS,R2_REVIEWED_TWO_SIDED_ASSETS,caveStructuralRecord,installVillageGeometry} from '../src/village-streamed-environment.js';
 import {prepareVillageInstancing} from '../src/village-instancing.js';
 import {prepareTreeOcclusion} from '../src/tree-occlusion.js';
 import {applyVillageToon} from '../src/village-toon.js';
 import {VillageOutlines} from '../src/village-outlines.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {sourcePath} from '../../Sources/resolve-source.mjs';
 
 const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base)));
+
+test('only an approved R2 near asset preserves its authored two-sided material in every map',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);t.after(()=>engine.dispose());
+ const expected=['forest-03-fallen-log','chest-common','cave-08-timber-brace','cave-09-iron-gate-leaf','cave-11-sluice-shutter','cave-12-lift-platform','cave-14-hidden-pressure-stone','cave-19-apothecary-shelf'];
+ assert.deepEqual(R2_REVIEWED_TWO_SIDED_ASSETS,expected);
+ for(const id of expected){
+  for(const cave of [true,false]){
+   const material=new PBRMaterial(id+String(cave),scene);material.backFaceCulling=false;const mesh={material},marker={revision:'approved-review-r2-2026-11-09',assetId:id},counts=[scene.meshes.length,scene.materials.length,scene.textures.length];
+   configureVillageSurfaceCulling(mesh,{assetId:id,category:'prop',cave,level:0,r2Geometry:marker});assert.equal(material.backFaceCulling,false,id+' approved near');
+   assert.deepEqual([scene.meshes.length,scene.materials.length,scene.textures.length],counts,'no extra mesh, material, or texture');
+   configureVillageSurfaceCulling(mesh,{assetId:id,category:'prop',cave,level:1,r2Geometry:marker});assert.equal(material.backFaceCulling,true,id+' old distant LOD');
+   configureVillageSurfaceCulling(mesh,{assetId:id,category:'prop',cave,level:0,r2Geometry:marker});assert.equal(material.backFaceCulling,false,id+' near after LOD change');
+   material.dispose();
+  }
+ }
+ for(const id of ['village-approach','cave-derived-laboratory-rock','unknown']){const material=new PBRMaterial(id,scene);material.backFaceCulling=false;configureVillageSurfaceCulling({material},{assetId:id,category:'prop',level:0,r2Geometry:{revision:'approved-review-r2-2026-11-09',assetId:id}});assert.equal(material.backFaceCulling,true,id+' is outside the R2 exception');material.dispose();}
+ const oneSided=new PBRMaterial('one-sided',scene);configureVillageSurfaceCulling({material:oneSided},{assetId:'chest-common',category:'prop',level:0,r2Geometry:{revision:'approved-review-r2-2026-11-09',assetId:'chest-common'}});assert.equal(oneSided.backFaceCulling,true,'one-sided source remains one-sided');
+ for(const category of ['tree','plant']){const material=new PBRMaterial(category,scene);configureVillageSurfaceCulling({material},{assetId:'unrelated',category,level:0});assert.equal(material.backFaceCulling,false,'existing foliage policy is unchanged');material.dispose();}
+});
+
+test('approved village exterior preserves authored sidedness only for its exact separate marker',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);t.after(()=>engine.dispose());
+ const marker={revision:'approved-village-exterior-2026-11-09',assetId:'village-approach'};
+ for(const level of [0,1,2]){
+  const material=new PBRMaterial('exterior-'+level,scene);material.backFaceCulling=false;const counts=[scene.meshes.length,scene.geometries.length,scene.materials.length,scene.textures.length];
+  configureVillageSurfaceCulling({material},{assetId:'village-approach',category:'background',level,approvedVillageExterior:marker});assert.equal(material.backFaceCulling,false);
+  assert.deepEqual([scene.meshes.length,scene.geometries.length,scene.materials.length,scene.textures.length],counts,'no additional mesh, material, texture, or pass');material.dispose();
+ }
+ for(const [id,approval]of [['village-approach',undefined],['village-approach',{...marker,revision:'unapproved'}],['village-approach',{...marker,assetId:'other'}],['other',marker]]){
+  const material=new PBRMaterial('control',scene);material.backFaceCulling=false;configureVillageSurfaceCulling({material},{assetId:id,category:'background',level:0,approvedVillageExterior:approval});assert.equal(material.backFaceCulling,true,'nonmatching or absent exterior marker remains unchanged');material.dispose();
+ }
+ const oneSided=new PBRMaterial('exterior-one-sided',scene);configureVillageSurfaceCulling({material:oneSided},{assetId:'village-approach',category:'background',level:0,approvedVillageExterior:marker});assert.equal(oneSided.backFaceCulling,true,'authored one-sided materials stay one-sided');
+});
+
+test('actual approved R2 near glTFs retain authored two-sided render materials after toon setup',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>engine.dispose());
+ let ledger;try{ledger=JSON.parse(readFileSync(sourcePath('approved-review-r2-2026-11-09','approval.json')));}catch{t.skip('R2 sources have not been staged');return;}
+ for(const id of R2_REVIEWED_TWO_SIDED_ASSETS){
+  const entry=ledger.assets.find(row=>row.id===id);assert.ok(entry,id);const app=entry.applications[0],live=JSON.parse(readFileSync(new URL(app.manifest,base))).assets[id];
+  if(!live.r2Geometry){t.skip('R2 candidate assets have not been applied');return;}
+  const source=await readRuntimeGltf(new URL(live.lods[0].model,base));assert.ok(source.gltf.materials.every(mat=>mat.doubleSided===true),id+' actual glTF');
+  for(const buffer of source.gltf.buffers)if(buffer.uri)buffer.uri='data:application/octet-stream;base64,'+Buffer.from(source.files.get(buffer.uri).data).toString('base64');
+  const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:source.gltf},''),meshes=container.meshes.filter(mesh=>mesh.getTotalVertices());assert.ok(meshes.length,id);
+  for(const mesh of meshes){const material=new PBRMaterial(id+'-actual',scene);material.backFaceCulling=false;mesh.material=material;}
+  applyVillageToon(meshes,{direction:Vector3.Up(),shadowsActive:false});
+  for(const mesh of meshes){const geometry=mesh.geometry,counts=[scene.meshes.length,scene.geometries.length,scene.materials.length,scene.textures.length];configureVillageSurfaceCulling(mesh,{cave:app.manifest==='witch-cave.json',assetId:id,category:live.category,level:0,r2Geometry:live.r2Geometry});assert.equal(mesh.material.backFaceCulling,false,id);assert.equal(mesh.geometry,geometry);assert.deepEqual([scene.meshes.length,scene.geometries.length,scene.materials.length,scene.textures.length],counts);}
+  container.dispose();
+ }
+});
 async function loadSource(scene,id,level){
  const source=await readRuntimeGltf(new URL(manifest.assets[id].lods.find(l=>l.level===level).model,base));
  for(const b of source.gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(source.files.get(b.uri).data).toString('base64');

@@ -1,0 +1,1 @@
+export{Vi as backgroundVertexShader}from"./babylon-game-uE9lshiC.js";

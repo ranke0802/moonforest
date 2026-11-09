@@ -711,16 +711,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/8cbd4f8fa5bf5fabcba6bf0a211592f5c32e4af6c1a50fb5b231673e74ad82d6.gltf",
+          "model": "./content/e31ae859dcc3684dce0b25ebdf9e4754e65a3b613337f76806c8136b13ca4269.gltf",
           "resources": [
-            "./content/2f8687b174c4c1d4c35e2486fb6321008011b96a0e81a5a1110d695b788b0df0.bin",
-            "./content/9f63cfde137a91d0e09bc1137b6cddfba696cd953f93f43b467cb2ac443286c5.ktx2",
-            "./content/8cbd4f8fa5bf5fabcba6bf0a211592f5c32e4af6c1a50fb5b231673e74ad82d6.gltf"
+            "./content/56509f25dee9aa2b09b93e1cae2f52e1c1c4ed01903606ae98e163b82bf448e9.bin",
+            "./content/984a450a81f8d97fbf7643fdb4f88e92c7788b8cd95ce17c47c71b94242f23de.ktx2",
+            "./content/e31ae859dcc3684dce0b25ebdf9e4754e65a3b613337f76806c8136b13ca4269.gltf"
           ],
-          "triangles": 5265,
+          "triangles": 1479,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 411810
+          "bytes": 339780,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -757,32 +762,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c4d56a3f03d6abb2aa020b91f9b892fa13932df00fadcc95f6266ab7e746149f.gltf",
+        "model": "./content/1b05cb79d7efad6c10cca3e633ea1ad694b6f5b66841591b23f2540186ff8b13.gltf",
         "resources": [
-          "./content/2f8687b174c4c1d4c35e2486fb6321008011b96a0e81a5a1110d695b788b0df0.bin",
-          "./content/4a69a4af7e4f5c18290cd7b7cea81f522eb671f291ae049748db0c935ef6efcc.ktx2",
-          "./content/c4d56a3f03d6abb2aa020b91f9b892fa13932df00fadcc95f6266ab7e746149f.gltf"
+          "./content/56509f25dee9aa2b09b93e1cae2f52e1c1c4ed01903606ae98e163b82bf448e9.bin",
+          "./content/149eec5be249cb326a250655aa5afdb14b28c1fb00ead678e964fdbb5d6ec722.ktx2",
+          "./content/1b05cb79d7efad6c10cca3e633ea1ad694b6f5b66841591b23f2540186ff8b13.gltf"
         ],
-        "triangles": 5265,
+        "triangles": 1479,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 249002
+        "bytes": 183399,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/60c6542768fe3d8cb227d90e022b2c0b1a614d9849eb3ac1683635dfbc5a14bb.ktx2",
+            "url": "./content/39e6b95cd1ed717f89ded633e7f4b0da1d812f2289596c25fffa673ff493f7ba.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 836124,
+            "bytes": 702069,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/60c6542768fe3d8cb227d90e022b2c0b1a614d9849eb3ac1683635dfbc5a14bb.ktx2"
+          "./content/39e6b95cd1ed717f89ded633e7f4b0da1d812f2289596c25fffa673ff493f7ba.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -792,21 +802,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2",
+            "url": "./content/984a450a81f8d97fbf7643fdb4f88e92c7788b8cd95ce17c47c71b94242f23de.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 219753,
+            "bytes": 252346,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/26f3cef71bcc77b4efed18fedfbf2ebb9f6f2f393a202897494fe62f175f7783.ktx2"
+          "./content/984a450a81f8d97fbf7643fdb4f88e92c7788b8cd95ce17c47c71b94242f23de.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "wood-01-palisade",
+        "requestedCap": 1500,
+        "actualTriangles": 1479,
+        "catalogAssetVersion": "8cbd4f8fa5bf5fabcba6bf0a211592f5c32e4af6c1a50fb5b231673e74ad82d6",
+        "beforeModelSha256": "8cbd4f8fa5bf5fabcba6bf0a211592f5c32e4af6c1a50fb5b231673e74ad82d6",
+        "appliedModelSha256": "e31ae859dcc3684dce0b25ebdf9e4754e65a3b613337f76806c8136b13ca4269",
+        "nativeConfigSha256": "cb762fe30ee51da92da55c4a008378e5458a5193a7386665e3546b7e60927724",
+        "lodModels": [
+          "e31ae859dcc3684dce0b25ebdf9e4754e65a3b613337f76806c8136b13ca4269",
+          "43429f3b5aaffa1365601f67b3f1f108a74e99eb1a35be0415a8f9c3b8c62e24",
+          "267e3b48cfd9b461ed9d21b568a872c5bbb5893988b8a744dac50e1e2c680c48"
+        ],
+        "mobileNearModelSha256": "1b05cb79d7efad6c10cca3e633ea1ad694b6f5b66841591b23f2540186ff8b13",
+        "derivedAtlasSourceSha256": "066b11f2683d52a67c1539810e044ca7c22f34fa323acd6af69b5e651d266466",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "wood-02-cross-barricade": {
@@ -824,16 +853,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/05f6cf949c765478aaf373052c8ec2f5fc3adbf771341e305098630c2475ef75.gltf",
+          "model": "./content/7ad392300be678f5c8ebef536af91e28a48a0075a86d618e5bc3fca3811cc0f0.gltf",
           "resources": [
-            "./content/984f2736dd9addc4c3e3ecb5afb00574ecd4e202951a4dd984a51612c7ee5400.bin",
-            "./content/5c1adce6ccf77f3ad9563fe85784ed35fa4b96cb6e9423b0b6af670a4561fe89.ktx2",
-            "./content/05f6cf949c765478aaf373052c8ec2f5fc3adbf771341e305098630c2475ef75.gltf"
+            "./content/b5bfa9512d404d7bb3e38f53c5608e5cd10b8ce1bde699fd51b925976b347e26.bin",
+            "./content/80ecb61b73fa92ee8333f85ab11b4bad6813c88f554d33656aa1c7620eb06e22.ktx2",
+            "./content/7ad392300be678f5c8ebef536af91e28a48a0075a86d618e5bc3fca3811cc0f0.gltf"
           ],
-          "triangles": 5173,
+          "triangles": 1488,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 364693
+          "bytes": 288947,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -870,32 +904,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/6660af6a2affc4c37b4d52227e7c47e6e604a94b1934934290d9c241173b8575.gltf",
+        "model": "./content/dd1db9c20a92e6b962db34d3a41b947ba2444facbfb6309911b8f10603d4d062.gltf",
         "resources": [
-          "./content/984f2736dd9addc4c3e3ecb5afb00574ecd4e202951a4dd984a51612c7ee5400.bin",
-          "./content/29c2e01f89130e7699c17f6096ed92fe6a858bdb7a03fb7ef9eb4a0f60078547.ktx2",
-          "./content/6660af6a2affc4c37b4d52227e7c47e6e604a94b1934934290d9c241173b8575.gltf"
+          "./content/b5bfa9512d404d7bb3e38f53c5608e5cd10b8ce1bde699fd51b925976b347e26.bin",
+          "./content/b77d19ff1ed24ae077c63586ae8abb5b52d2c26757ca74a557378091d0126a33.ktx2",
+          "./content/dd1db9c20a92e6b962db34d3a41b947ba2444facbfb6309911b8f10603d4d062.gltf"
         ],
-        "triangles": 5173,
+        "triangles": 1488,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 230565
+        "bytes": 152125,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211.ktx2",
+            "url": "./content/a2a377f51f77f430ae6cccb013d65260e1c48f8b0d666419065f8865e3d85f99.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 651457,
+            "bytes": 605998,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/ed62346446ab2932bb5c111ab16063d8071288d5fb093b3a78dba9dde3215211.ktx2"
+          "./content/a2a377f51f77f430ae6cccb013d65260e1c48f8b0d666419065f8865e3d85f99.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -905,21 +944,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/80c936a7c7cea829b6d55f0a5b22f9290b6eaaccb58c7e55605d1ef709eac152.ktx2",
+            "url": "./content/80ecb61b73fa92ee8333f85ab11b4bad6813c88f554d33656aa1c7620eb06e22.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 186926,
+            "bytes": 224801,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/80c936a7c7cea829b6d55f0a5b22f9290b6eaaccb58c7e55605d1ef709eac152.ktx2"
+          "./content/80ecb61b73fa92ee8333f85ab11b4bad6813c88f554d33656aa1c7620eb06e22.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "wood-02-cross-barricade",
+        "requestedCap": 1500,
+        "actualTriangles": 1488,
+        "catalogAssetVersion": "05f6cf949c765478aaf373052c8ec2f5fc3adbf771341e305098630c2475ef75",
+        "beforeModelSha256": "05f6cf949c765478aaf373052c8ec2f5fc3adbf771341e305098630c2475ef75",
+        "appliedModelSha256": "7ad392300be678f5c8ebef536af91e28a48a0075a86d618e5bc3fca3811cc0f0",
+        "nativeConfigSha256": "51b980fe079d3c5db2a5dfa8fa496f2b50b49a02f5b95c9078959a125f39f2ff",
+        "lodModels": [
+          "7ad392300be678f5c8ebef536af91e28a48a0075a86d618e5bc3fca3811cc0f0",
+          "e5083c0f4ffb97936c05e587bdadcd2c018713c0dae9bab3e448ab5bcb616a3e",
+          "316899c6b861b0c2a5f2509346ccb38337a1dfe9ef3847c3968b87df3ae8a7bc"
+        ],
+        "mobileNearModelSha256": "dd1db9c20a92e6b962db34d3a41b947ba2444facbfb6309911b8f10603d4d062",
+        "derivedAtlasSourceSha256": "221e5027b56ec7f9481615a4e31d6661759286173745accfe70196bd2c53cbf9",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "wood-03-plank-gate": {
@@ -937,16 +995,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/da4dd069cccc6c95896bfbd5274a3a7fdf40f75a2af909e9c95f7c61401c29b2.gltf",
+          "model": "./content/d61ff060dab75420b8377e8370e3596c8283fc10e4141e17d485081573cb24a8.gltf",
           "resources": [
-            "./content/19b1c102108a9bae38b0b67c9069295a855e3d5a5efdfc59aaf9116ef924a71d.bin",
-            "./content/dfdbb565d6283b683a07cb44450f553c37038881f42f4ce1995d440f2fc2411a.ktx2",
-            "./content/da4dd069cccc6c95896bfbd5274a3a7fdf40f75a2af909e9c95f7c61401c29b2.gltf"
+            "./content/6dd1a0bf0351add923666ed15fd27d6fc766f5c05abb2891e60a61a015c08a5f.bin",
+            "./content/572420f6793fda74ff3b5bb5ef6abbec9bd3bf09f262ff0e26e968bb41427e42.ktx2",
+            "./content/d61ff060dab75420b8377e8370e3596c8283fc10e4141e17d485081573cb24a8.gltf"
           ],
-          "triangles": 4933,
+          "triangles": 1454,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 406169
+          "bytes": 308468,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -983,38 +1046,62 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/7bf0b221df73f476fc22c954e01fd265dba86ccd98bca1995177692faaad374d.gltf",
+        "model": "./content/89cc47740f857f736265267907be0c77906c66f4d18712318861dc85ea6eae97.gltf",
         "resources": [
-          "./content/19b1c102108a9bae38b0b67c9069295a855e3d5a5efdfc59aaf9116ef924a71d.bin",
-          "./content/0212baf3a2a816df0415336b1d22c4a756ea43aea6d2d176fe1c2febbf362452.ktx2",
-          "./content/7bf0b221df73f476fc22c954e01fd265dba86ccd98bca1995177692faaad374d.gltf"
+          "./content/6dd1a0bf0351add923666ed15fd27d6fc766f5c05abb2891e60a61a015c08a5f.bin",
+          "./content/ca545f8c1b02c451f6eebc99102ddc78fa23c55d3a97679e1ec1cbba18e73625.ktx2",
+          "./content/89cc47740f857f736265267907be0c77906c66f4d18712318861dc85ea6eae97.gltf"
         ],
-        "triangles": 4933,
+        "triangles": 1454,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 244472
+        "bytes": 164303,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/605e105b399ebdeeebc89131a509cb1a7f43240f4c60ca50ed35bd56d3908e94.ktx2",
+            "url": "./content/3cc28a08460790b344bac7ce080bd37d44255b1d26a8389415fb0d8c9e42d1a6.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 819040,
+            "bytes": 677660,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/605e105b399ebdeeebc89131a509cb1a7f43240f4c60ca50ed35bd56d3908e94.ktx2"
+          "./content/3cc28a08460790b344bac7ce080bd37d44255b1d26a8389415fb0d8c9e42d1a6.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "9ea7c33ae8b9b647ac52eeee12bd3adf7c139647f94974f2aea8524ee4b8c912"
+      "toonSourceModelSha256": "9ea7c33ae8b9b647ac52eeee12bd3adf7c139647f94974f2aea8524ee4b8c912",
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "wood-03-plank-gate",
+        "requestedCap": 1500,
+        "actualTriangles": 1454,
+        "catalogAssetVersion": "da4dd069cccc6c95896bfbd5274a3a7fdf40f75a2af909e9c95f7c61401c29b2",
+        "beforeModelSha256": "da4dd069cccc6c95896bfbd5274a3a7fdf40f75a2af909e9c95f7c61401c29b2",
+        "appliedModelSha256": "d61ff060dab75420b8377e8370e3596c8283fc10e4141e17d485081573cb24a8",
+        "nativeConfigSha256": "209e8f874aa69cefd14facf0457f7cac6414851251a5e960be8d9d3f8645504f",
+        "lodModels": [
+          "d61ff060dab75420b8377e8370e3596c8283fc10e4141e17d485081573cb24a8",
+          "6a4864fbe9bbbd382e6cddc05332d8cc0e35a1a48e2034e3be2435a885aa0a09",
+          "41933e0f93565174262bab74c53ac39d26170c1aefb5b44a92c5779153515fda"
+        ],
+        "mobileNearModelSha256": "89cc47740f857f736265267907be0c77906c66f4d18712318861dc85ea6eae97",
+        "derivedAtlasSourceSha256": "83b30c9039884396a42e39f460484043cae34dc46919f730fcd920634c2516d6",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
+      }
     },
     "tree-01-round-oak": {
       "name": "참나무",
@@ -1605,16 +1692,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/6c0837d86572ad1f9e5861691d81582334d5ffdfccb4da2567305b8a7e708f59.gltf",
+          "model": "./content/28248ada19c079ed41034968692e998adae1309eee307bbb933df1c797744a0c.gltf",
           "resources": [
-            "./content/6733c0b4843bad56c6cda6ecdb51702f8f01cf210e1e5aa87c71919b47dbee6e.bin",
-            "./content/c82c8aef20295223fd62d6e582204387c3afbbd5c92403617b272f68b6d09b75.ktx2",
-            "./content/6c0837d86572ad1f9e5861691d81582334d5ffdfccb4da2567305b8a7e708f59.gltf"
+            "./content/84bd33b6f2246b0dabc0101b46f90d82455b390bc22de0581a61f7d7d5833c01.bin",
+            "./content/23b8f66f4a347f104580dbb8e9a6658086514a7acf27fd3ef662558d156f2fc3.ktx2",
+            "./content/28248ada19c079ed41034968692e998adae1309eee307bbb933df1c797744a0c.gltf"
           ],
-          "triangles": 4822,
+          "triangles": 3011,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 416145
+          "bytes": 436116,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -1651,38 +1743,62 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/625f63ecafe9c7f58f278c7a1579782ef2770189b315a8885cc133b1d1774321.gltf",
+        "model": "./content/b40a3f77d0046e33f77aa8ae5c0c23eb2a015326153c8a61e6f3e7bb5883ad1c.gltf",
         "resources": [
-          "./content/6733c0b4843bad56c6cda6ecdb51702f8f01cf210e1e5aa87c71919b47dbee6e.bin",
-          "./content/5810636ca53578966bb85499d995be5a05acbfb48a2af1712fd0981541a861af.ktx2",
-          "./content/625f63ecafe9c7f58f278c7a1579782ef2770189b315a8885cc133b1d1774321.gltf"
+          "./content/84bd33b6f2246b0dabc0101b46f90d82455b390bc22de0581a61f7d7d5833c01.bin",
+          "./content/93f4ab6c4592de2b035cd71e118aeb6eec60c037a393c6630e2c6bb85087209b.ktx2",
+          "./content/b40a3f77d0046e33f77aa8ae5c0c23eb2a015326153c8a61e6f3e7bb5883ad1c.gltf"
         ],
-        "triangles": 4822,
+        "triangles": 3011,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 246765
+        "bytes": 274080,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/614446e6799b805d356912d04c5917c2ecc240b19a685714709263bdf112c5ce.ktx2",
+            "url": "./content/6dc7696948764b31de57a2c2e2dc7a6cdeb49d2ce3e13bb50c79743b2eb5825c.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 848388,
+            "bytes": 623409,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/614446e6799b805d356912d04c5917c2ecc240b19a685714709263bdf112c5ce.ktx2"
+          "./content/6dc7696948764b31de57a2c2e2dc7a6cdeb49d2ce3e13bb50c79743b2eb5825c.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "48f632f765f4f44b692fddc42cb6491fb572147b9dd5d4d95a3007e0ae7c3e14"
+      "toonSourceModelSha256": "48f632f765f4f44b692fddc42cb6491fb572147b9dd5d4d95a3007e0ae7c3e14",
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "well",
+        "requestedCap": 3000,
+        "actualTriangles": 3011,
+        "catalogAssetVersion": "6c0837d86572ad1f9e5861691d81582334d5ffdfccb4da2567305b8a7e708f59",
+        "beforeModelSha256": "6c0837d86572ad1f9e5861691d81582334d5ffdfccb4da2567305b8a7e708f59",
+        "appliedModelSha256": "28248ada19c079ed41034968692e998adae1309eee307bbb933df1c797744a0c",
+        "nativeConfigSha256": "641fc6243c8f1510686a2ca2fa04f8cc0f55618722a6a4d141bc3a93b6db8911",
+        "lodModels": [
+          "28248ada19c079ed41034968692e998adae1309eee307bbb933df1c797744a0c",
+          "1e3bb182dd30b717e9683d08029be2f924a4294f40aaf044b87923b3128528dd",
+          "63ff241c512ba053e942950fd54fb9c54e42d82a78565bde095f9916f6d156fe"
+        ],
+        "mobileNearModelSha256": "b40a3f77d0046e33f77aa8ae5c0c23eb2a015326153c8a61e6f3e7bb5883ad1c",
+        "derivedAtlasSourceSha256": "f5449b2fdb51687716091f17d919b0b2ff31956d38ce074f1e7c7ad37f65dac0",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
+      }
     },
     "watchtower": {
       "name": "목조 감시탑",
@@ -2507,16 +2623,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf",
+          "model": "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf",
           "resources": [
-            "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-            "./content/abd36d58cfd1c85553cced694a8ed27a3c3a0f56477cd4b5105a1ec234833e9e.ktx2",
-            "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf"
+            "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+            "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
+            "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf"
           ],
-          "triangles": 4815,
+          "triangles": 1941,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 391870
+          "bytes": 306283,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -2553,32 +2674,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf",
+        "model": "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf",
         "resources": [
-          "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-          "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
-          "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf"
+          "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+          "./content/38f45ab1efb41c9564e63f17734d04ebf52ca2021274c1dc8c0a82d568cb74d0.ktx2",
+          "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf"
         ],
-        "triangles": 4815,
+        "triangles": 1941,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 241797
+        "bytes": 168781,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+            "url": "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 731878,
+            "bytes": 609531,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2"
+          "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -2588,21 +2714,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "url": "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 206480,
+            "bytes": 223839,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+          "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "firewood",
+        "requestedCap": 2000,
+        "actualTriangles": 1941,
+        "catalogAssetVersion": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "beforeModelSha256": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "appliedModelSha256": "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+        "nativeConfigSha256": "c65a851970ff3d3986b0b5e5c4d5f6b87f42d687c424cd42f9a2de0c3f9c11be",
+        "lodModels": [
+          "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+          "2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9",
+          "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2"
+        ],
+        "mobileNearModelSha256": "68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f",
+        "derivedAtlasSourceSha256": "32cdc1dd7313eb61c4bb7c01eb69974c5b5e705bbb1a099fac5b4c1eef84d49c",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "crate-barrel-cluster": {
@@ -2620,16 +2765,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf",
+          "model": "./content/dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789.gltf",
           "resources": [
-            "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
-            "./content/025ed1c44b253e7ab51a2e9cb86429c45512b1c04821eb28bd97a85f107aff85.ktx2",
-            "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf"
+            "./content/bcae42bd65062c7b4d173af09945d20ae97fa59fad84d63579671be906c97a2a.bin",
+            "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2",
+            "./content/dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789.gltf"
           ],
-          "triangles": 4683,
+          "triangles": 1964,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 390785
+          "bytes": 313869,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -2666,32 +2816,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "model": "./content/0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58.gltf",
         "resources": [
-          "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
-          "./content/1429c47367287cdd8a5db729f96fcb3fa68d3e9d6a38111c31e9be77f53b6c58.ktx2",
-          "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf"
+          "./content/bcae42bd65062c7b4d173af09945d20ae97fa59fad84d63579671be906c97a2a.bin",
+          "./content/534b6a4d579bc8c854a53cc030bf020dc3aac8b9079653fc06369ed5143aec42.ktx2",
+          "./content/0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58.gltf"
         ],
-        "triangles": 4683,
+        "triangles": 1964,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 242895
+        "bytes": 178253,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+            "url": "./content/6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 735658,
+            "bytes": 602272,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2"
+          "./content/6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -2701,21 +2856,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2",
+            "url": "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 206946,
+            "bytes": 223166,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+          "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "crate-barrel-cluster",
+        "requestedCap": 2000,
+        "actualTriangles": 1964,
+        "catalogAssetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "beforeModelSha256": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "appliedModelSha256": "dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789",
+        "nativeConfigSha256": "a3e3c20d140359f1938e87e100249a6c046ac1b0c91f79b34628b3edc33dcd13",
+        "lodModels": [
+          "dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789",
+          "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5",
+          "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+        ],
+        "mobileNearModelSha256": "0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58",
+        "derivedAtlasSourceSha256": "66e4f7d6556b96e25c1bcf66daa00d93d5f6b73dbe8db5452ed64935325e0953",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     }
   },

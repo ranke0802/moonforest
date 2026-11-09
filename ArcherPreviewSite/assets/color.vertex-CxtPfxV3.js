@@ -1,0 +1,1 @@
+export{Di as colorVertexShader}from"./babylon-game-uE9lshiC.js";

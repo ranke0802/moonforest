@@ -7,7 +7,9 @@ import {isDeepStrictEqual} from 'node:util';
 import {MeshoptDecoder} from 'meshoptimizer';
 import {sourcePath,projectRoot} from '../../../Sources/resolve-source.mjs';
 import {readAccessor} from '../../scripts/web-geometry.js';
-import {APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION,sceneryNativeFingerprint,approvedSceneryVersion} from '../../scripts/approved-scenery-policy.mjs';
+import {APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION,sceneryNativeFingerprint,approvedSceneryVersion,approvedR2SceneryVersion,SCENERY_REVIEW_R2_REVISION,SCENERY_REVIEW_R2_LEDGER_SHA256} from '../../scripts/approved-scenery-policy.mjs';
+import {gltfCatalogMetadata} from '../../scripts/asset-catalog-metadata.mjs';
+import {approvedVillageExteriorVersion,assertLegacyExteriorWritable} from '../../scripts/approved-village-exterior-policy.mjs';
 
 const assetsBase=new URL('../../public/assets/',import.meta.url),hash=value=>createHash('sha256').update(value).digest('hex');
 const sceneryCategories=new Set(['tree','rock','prop','plant','defense','fence']);
@@ -21,6 +23,30 @@ const application=JSON.parse(readFileSync(new URL('../../reports/approved-scener
 const beforeRows=new Map;for(const saved of approval.beforeManifests){const {data}=registeredBytes(saved.sourceId);assert.equal(hash(data),saved.sha256,saved.manifest+' immutable before graph');const manifest=JSON.parse(data);for(const [id,asset]of Object.entries(manifest.assets??{}))if(plans.has(id)){if(!beforeRows.has(id))beforeRows.set(id,[]);beforeRows.get(id).push({manifest:saved.manifest,asset});}}
 const contentBase=new URL('../../public/assets/content/',import.meta.url),resourceCache=new Map,modelCache=new Map,tierCache=new Map,expectedCache=new Map;
 function contentBytes(name){name=basename(name);assert.match(name,/^[a-f0-9]{64}\.[a-z0-9]+$/,'content-addressed source resource');if(!resourceCache.has(name)){const data=readFileSync(new URL(name,contentBase));assert.equal(hash(data),name.split('.')[0],name+' actual content hash');resourceCache.set(name,data);}return resourceCache.get(name);}
+export function originalVillageExteriorGraph(asset,id,manifest){
+ if(id!=='village-approach'||(manifest&&manifest!=='great-plains.json'))return asset;
+ if(!asset.approvedVillageExterior){assertLegacyExteriorWritable(asset);return asset;}
+ const bytes=contentBytes(asset.lods[0].model),info=gltfCatalogMetadata(JSON.parse(bytes));
+ approvedVillageExteriorVersion(id,asset,{contentHash:hash(bytes),triangles:info.triangles});
+ const plan=JSON.parse(registeredBytes('village-exterior-shell-review','runtime','plan.json').data);
+ assert.deepEqual(asset,plan.afterAsset,'live exterior is exactly the registered approved config');return structuredClone(plan.beforeAsset);
+}
+// Return the prior complete config only after the immutable approval, actual
+// packed model bytes, each profile resource and full graph have all matched.
+export function originalR2AssetGraph(asset,id,manifest){
+ const ledgerBytes=registeredBytes('approved-review-r2-2026-11-09','approval.json').data;
+ assert.equal(hash(ledgerBytes),SCENERY_REVIEW_R2_LEDGER_SHA256,'immutable R2 ledger hash');const ledger=JSON.parse(ledgerBytes);
+ assert.equal(ledger.revision,SCENERY_REVIEW_R2_REVISION);
+ const rows=ledger.assets.find(a=>a.id===id)?.applications.filter(a=>!manifest||a.manifest===manifest)??[];
+ if(!asset.r2Geometry){if(rows.length)assert.ok(rows.some(a=>isDeepStrictEqual(a.beforeConfig,asset)),id+' R2 replacement requires exact approval marker');return asset;}
+ const row=rows.find(a=>isDeepStrictEqual(a.afterConfig,asset));
+ assert.ok(row,id+' has no exact registered R2 before/after graph');
+ const nearBytes=contentBytes(asset.model??asset.lods[0].model),metadata=gltfCatalogMetadata(JSON.parse(nearBytes));
+ approvedR2SceneryVersion(id,asset,{contentHash:hash(nearBytes),triangles:metadata.triangles});
+ const references=new Set();const visit=value=>{if(typeof value==='string'&&/^\.\/content\//.test(value))references.add(value);else if(Array.isArray(value))value.forEach(visit);else if(value&&typeof value==='object')Object.values(value).forEach(visit);};visit(asset);
+ for(const reference of references){const bytes=contentBytes(reference);if(reference.endsWith('.gltf')){const gltf=JSON.parse(bytes);for(const part of [...(gltf.buffers??[]),...(gltf.images??[])])if(part.uri&&!part.uri.startsWith('data:'))contentBytes(part.uri);}}
+ return structuredClone(row.beforeConfig);
+}
 function readGeometry(path,raw){if(modelCache.has(path))return modelCache.get(path);raw??=readFileSync(path);const gltf=JSON.parse(raw),files=new Map;for(const b of gltf.buffers.filter(b=>b.uri))files.set(b.uri,{data:b.uri.startsWith('data:')?Buffer.from(b.uri.split(',')[1],'base64'):readFileSync(resolve(dirname(path),b.uri))});const decoded=structuredClone(gltf),decodedBuffers=new Map;for(const view of decoded.bufferViews??[]){const ext=view.extensions?.EXT_meshopt_compression;if(!ext)continue;assert.equal(ext.filter??'NONE','NONE','approved pack must be lossless');const source=files.get(decoded.buffers[ext.buffer].uri).data,target=new Uint8Array(view.byteLength);MeshoptDecoder.decodeGltfBuffer(target,ext.count,ext.byteStride,source.subarray(ext.byteOffset??0,(ext.byteOffset??0)+ext.byteLength),ext.mode,ext.filter);if(!decodedBuffers.has(view.buffer))decodedBuffers.set(view.buffer,Buffer.alloc(decoded.buffers[view.buffer].byteLength));decodedBuffers.get(view.buffer).set(target,view.byteOffset??0);delete view.extensions.EXT_meshopt_compression;if(!Object.keys(view.extensions).length)delete view.extensions;}for(const [index,data]of decodedBuffers){const uri='approved-decoded-'+index;files.set(uri,{data});decoded.buffers[index]={uri,byteLength:data.length};}const value={gltf:decoded,packed:gltf,files,raw};modelCache.set(path,value);return value;}
 function approvedTier(id,t){const key=id+':'+t.tier;if(tierCache.has(key))return tierCache.get(key);const r=results.get(key);assert.ok(r,key+' applied tier');assert.equal(r.changed,t.changed);assert.equal(r.beforeModel,t.oldModel);assert.equal(r.beforeTriangles,t.beforeTriangles);assert.equal(r.triangles,t.afterTriangles);const oldBytes=contentBytes(t.oldModel);assert.equal(hash(oldBytes),t.oldModelSha256,key+' original model');if(!t.changed){assert.equal(r.model,t.oldModel,key+' preserved URL');const value={...r};tierCache.set(key,value);return value;}
  const source=registeredBytes(t.sourceId);assert.equal(hash(source.data),t.sourceSha256,key+' immutable approved source');const runtime=contentBytes(r.model);assert.equal(hash(runtime),r.modelSha256,key+' packed model hash');const canonical=readGeometry(source.path,source.data),packed=readGeometry(fileURLToPath(new URL(r.model,assetsBase)),runtime);
@@ -36,6 +62,8 @@ function historicalApprovedAsset(asset,id,manifest){if(asset.geometryBudget===un
 // these registered geometry replacements. Every current field and resource is
 // checked before recovering the immutable graph; arbitrary fields are not lost.
 export function originalAssetGraph(asset,id,manifest){
+ asset=originalVillageExteriorGraph(asset,id,manifest);
+ asset=originalR2AssetGraph(asset,id,manifest);
  const profile=asset.mobileHighTextures;
  if(profile!==undefined){
   assert.ok(sceneryCategories.has(asset.category)&&!protectedIds.has(id)&&!id.startsWith('house'),id+' is excluded from mobile scenery profiles');
@@ -60,7 +88,7 @@ export function originalAssetGraph(asset,id,manifest){
 export function originalManifestText(text,manifestName){
  const manifest=JSON.parse(text);let additive=false;
  for(const [id,asset]of Object.entries(manifest.assets??{})){
-  additive||=Object.hasOwn(asset,'mobileHighTextures')||Object.hasOwn(asset,'geometryBudget');manifest.assets[id]=originalAssetGraph(asset,id,manifestName);
+  additive||=Object.hasOwn(asset,'mobileHighTextures')||Object.hasOwn(asset,'geometryBudget')||Object.hasOwn(asset,'r2Geometry')||Object.hasOwn(asset,'approvedVillageExterior');manifest.assets[id]=originalAssetGraph(asset,id,manifestName);
  }
  // Project to the exact historical authored format only after the complete
  // current contract has validated. These hashes describe that source graph,

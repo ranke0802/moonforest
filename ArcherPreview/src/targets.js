@@ -95,6 +95,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
     ring.isVisible = false;
     const target = { id: definition.id, name: definition.name, position: root.position, aimPoint: new Vector3(), hits: 0 };
     const record = { target, root, sway, ring, ringMaterial, centerMaterial, bullseye, hitAge: Infinity, heavy:false, stun:0, gate:new MeleeContactGate(), parts:sway.getChildMeshes() };
+    record.encounter={actor:root,active:true,kind:'training',displayName:definition.name,onEdited(){bullseye.computeWorldMatrix(true);target.aimPoint.copyFrom(bullseye.getAbsolutePosition());}};
     bullseye.computeWorldMatrix(true);
     target.aimPoint.copyFrom(bullseye.getAbsolutePosition());
     records.push(record);
@@ -104,6 +105,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
   const targets = records.map(record => record.target);
   return {
     targets,
+    editableEncounters(){return disposed?[]:records.map(record=>record.encounter);},
     relocate(position){for(const record of records){record.root.position.x=position?.x??-1;record.root.position.z=position?.z??-4;terrain?.place(record.root.position);record.bullseye.computeWorldMatrix(true);record.target.aimPoint.copyFrom(record.bullseye.getAbsolutePosition());}},
     applyModel(asset) {
       if(disposed)return;
@@ -159,7 +161,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
         const matrix=record.sway.computeWorldMatrix(true);
         const capsules=[[[0,.55,0],[0,1.20,0],.29],[[0,1.3,0],[0,1.76,0],.22],
           [[-.75,1.065,0],[.75,1.065,0],.13]].map(([a,b,radius])=>({
-            points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius}));
+            points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius:radius*Math.max(Math.abs(record.root.absoluteScaling.x),Math.abs(record.root.absoluteScaling.y),Math.abs(record.root.absoluteScaling.z))}));
         const contacts=record.gate.collect({...sample,capsules});
         for(const hit of contacts.hits){this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);}
       }

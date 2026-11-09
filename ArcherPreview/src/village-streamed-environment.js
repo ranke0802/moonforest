@@ -30,12 +30,18 @@ const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','woo
 // Solid walls, foundations and the closed canopy retain the ordinary policy.
 export const CAVE_OPEN_SURFACE_ASSETS=Object.freeze(['cave-04-natural-arch','cave-13-votive-lantern','cave-15-resurrection-altar','cave-16-soul-collector-arm','cave-17-faded-sacred-emblem','cave-s03-dry-spillway-rock','forest-06-witch-cave-mouth']);
 const openCaveSurfaces=new Set(CAVE_OPEN_SURFACE_ASSETS);
-export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category}={}){
+// These exact approved R2 near meshes were reviewed with their authored
+// double-sided surfaces. Existing lower LODs keep their previous culling policy.
+export const R2_REVIEWED_TWO_SIDED_ASSETS=Object.freeze(['forest-03-fallen-log','chest-common','cave-08-timber-brace','cave-09-iron-gate-leaf','cave-11-sluice-shutter','cave-12-lift-platform','cave-14-hidden-pressure-stone','cave-19-apothecary-shelf']);
+const r2TwoSided=new Set(R2_REVIEWED_TWO_SIDED_ASSETS);
+export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category,level,r2Geometry,approvedVillageExterior}={}){
   const material=mesh.material;if(!material)return;
   material.metadata??={};
   if(!Object.hasOwn(material.metadata,'villageAuthoredBackFaceCulling'))material.metadata.villageAuthoredBackFaceCulling=material.backFaceCulling;
   const authoredTwoSided=material.metadata.villageAuthoredBackFaceCulling===false;
-  material.backFaceCulling=!(['tree','plant'].includes(category)||(cave&&authoredTwoSided&&openCaveSurfaces.has(assetId)));
+  const reviewedNear=level===0&&r2Geometry?.revision==='approved-review-r2-2026-11-09'&&r2Geometry.assetId===assetId&&r2TwoSided.has(assetId)&&authoredTwoSided;
+  const reviewedExterior=assetId==='village-approach'&&approvedVillageExterior?.revision==='approved-village-exterior-2026-11-09'&&approvedVillageExterior.assetId===assetId&&authoredTwoSided;
+  material.backFaceCulling=!(['tree','plant'].includes(category)||reviewedNear||reviewedExterior||(cave&&authoredTwoSided&&openCaveSurfaces.has(assetId)));
 }
 export function caveStructuralRecord(record,asset){return record.placement.kind==='rock'||asset?.config?.category==='rock';}
 
@@ -180,7 +186,7 @@ export function loadStreamedVillage(world,{
       if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
       prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
       for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
-      for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category});}
+      for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
       world.lighting.registerMeshes(meshes);
       await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
       installVillageGeometry(asset,container,level,world);

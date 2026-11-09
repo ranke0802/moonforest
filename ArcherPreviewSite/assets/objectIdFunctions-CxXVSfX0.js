@@ -1,0 +1,1 @@
+export{Ci as objectIdFunctionsWGSL}from"./babylon-game-uE9lshiC.js";

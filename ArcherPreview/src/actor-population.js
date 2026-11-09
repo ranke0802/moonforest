@@ -13,13 +13,13 @@ export class ActorPopulationLimitError extends Error {
 // This owner schedules existing encounter adapters. Combat/contact/animation
 // order remains with BossBattle; combat adapters deliberately have no-op update.
 export class ActorPopulation {
- constructor({definitions,createAdapter,validateSpawn=()=>true,preparationFactory,limits={},onDeath=()=>{},onReward=()=>{},onRespawn=()=>{},onError=()=>{}}={}){
+ constructor({definitions,createAdapter,validateSpawn=()=>true,preparationFactory,limits={},onDeath=()=>{},onReward=()=>{},onRespawn=()=>{},onError=()=>{},autoRecycle=true}={}){
   if(typeof createAdapter!=='function')throw new TypeError('createAdapter is required');
   this.definitions=definitions instanceof Map?definitions:new Map(Object.entries(definitions??{}));
   this.createAdapter=createAdapter;this.validateSpawn=validateSpawn;
   this.preparationFactory=preparationFactory??(options=>createBossPreparation(options));
   this.limits={total:Math.min(MAX_DEVELOPMENT_ACTORS,whole(limits.total,20)),active:Math.min(MAX_DEVELOPMENT_ACTORS,whole(limits.active,20)),perDefinition:limits.perDefinition??20,perType:limits.perType??{monster:20,boss:20,npc:20},estimatedMemoryBytes:nonnegative(limits.estimatedMemoryBytes,512*MIB),concurrentPreparations:Math.max(1,whole(limits.concurrentPreparations,1)),idleSeconds:nonnegative(limits.idleSeconds,120)};
-  this.onDeath=onDeath;this.onReward=onReward;this.onRespawn=onRespawn;this.onError=onError;
+  this.onDeath=onDeath;this.onReward=onReward;this.onRespawn=onRespawn;this.onError=onError;this.autoRecycle=autoRecycle;
   this.records=new Map();this.tasks=new Set();this.queue=[];this.running=0;this.generation=0;this.generationRevision=0;this.serial=0;this.clock=0;this.paused=false;this.disposed=false;
   this.stats={created:0,reused:0,activated:0,disposed:0,cancelled:0,deaths:0,rewardsObserved:0,respawns:0,decisionUpdates:0,farDecisionSkips:0,errors:0,peakEntries:0,peakEstimatedBytes:0};
  }
@@ -190,7 +190,7 @@ export class ActorPopulation {
    if(snapshot.rewardGranted&&!record.flags.reward){record.flags.reward=true;this.stats.rewardsObserved++;this._emit(this.onReward,record,snapshot,context);}
    if(snapshot.dead){
     record.state=snapshot.dying?'dying':'corpse';
-    if(snapshot.corpseGone)this.recycle(record,{respawn:true});
+    if(snapshot.corpseGone&&this.autoRecycle)this.recycle(record,{respawn:true});
    }else if(snapshot.active===false)this.recycle(record);
   }
  }

@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "assets": 20,
+  "manifests": [
+    {
+      "manifest": "great-plains.json",
+      "assetsChanged": 6,
+      "sha256": "c810960e77804e870563a07d4411cb92a10bbd47ab365d453aee815743466476",
+      "otherConfigsAndTopLevelUnchanged": true
+    },
+    {
+      "manifest": "monster-forest.json",
+      "assetsChanged": 3,
+      "sha256": "eb9cd03794c5a433bba9b096ae385b64afd4ed840f3aa0f4dd42e317c918a6f4",
+      "otherConfigsAndTopLevelUnchanged": true
+    },
+    {
+      "manifest": "quest-props.json",
+      "assetsChanged": 1,
+      "sha256": "5bd843e95b3c04541a42ae24cb5fb27f1677247570e298651df79954a6f9a6eb",
+      "otherConfigsAndTopLevelUnchanged": true
+    },
+    {
+      "manifest": "village-plains-outskirts.json",
+      "assetsChanged": 1,
+      "sha256": "d2770fb3b15984b7baa1c54532d295697383887f3219452dc9cf4bf7429128ab",
+      "otherConfigsAndTopLevelUnchanged": true
+    },
+    {
+      "manifest": "village.json",
+      "assetsChanged": 6,
+      "sha256": "4d553cca0db228c4cf6325f81d18d836a42d560bd82f67f96e6b405c006360b6",
+      "otherConfigsAndTopLevelUnchanged": true
+    },
+    {
+      "manifest": "witch-cave.json",
+      "assetsChanged": 12,
+      "sha256": "ca44907dab1940dc02e155a6d2feab22afb77655759b463465403e9fa495efaf",
+      "otherConfigsAndTopLevelUnchanged": true
+    }
+  ],
+  "applications": 29,
+  "note": "Exact structural comparison to registered before snapshot; browser/GPU/FPS not measured."
+}

@@ -1,0 +1,1 @@
+export{fr as colorVertexShaderWGSL}from"./babylon-game-uE9lshiC.js";

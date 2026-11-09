@@ -1,0 +1,528 @@
+{
+  "passed": true,
+  "approvalSha256": "50810e4bebd88cc7b3ca3adadab653f81db8b0ec21b5a8fa7d015ad7dc00be5b",
+  "textures": [
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-1024-q255-nordo.ktx2",
+      "sha256": "de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-4096-q255-nordo.ktx2",
+      "sha256": "13d3e07edf4a618d6a26dc5b02159a83fb953cb8b88ba4531f417cc1b0b216b4",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-1024-q255-nordo.ktx2",
+      "sha256": "0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-4096-q255-nordo.ktx2",
+      "sha256": "e689e05d966bed117393e18159a70241432590e0f084e2d3dd3fb7b52d0b29a1",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-1024-q255-nordo.ktx2",
+      "sha256": "2d9c4983f532dd64d3f17a9a6c7dfc75b4cee2d6031e42ebaf95317a5bca161f",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-4096-q255-nordo.ktx2",
+      "sha256": "2af940e4a74c91718d6245754392379aad7a0528b3f5ceb493f8e604b0c572e4",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-2048-q255-nordo.ktx2",
+      "sha256": "64e4278387cb363110cceb216b863191584030089d84c4e4b860e75b96c0214f",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-1024-q255-nordo.ktx2",
+      "sha256": "aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-4096-q255-nordo.ktx2",
+      "sha256": "49d20e8dd209e537e92db6428f45fbed684fd9a52733ee2511a49a734d551461",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-1024-q255-nordo.ktx2",
+      "sha256": "6e6dbe7642c3822078b9db91051005e91ea0e4167b255d5205ee93f842e95b63",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-4096-q255-nordo.ktx2",
+      "sha256": "f3b46faf9f503499ade234ef2b2fd1effeccb1429c4e84f5f13f88afdb1509c7",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-2048-q255-nordo.ktx2",
+      "sha256": "af21b3191b2878f1972da7c879b5deb4a434b1f2e080d2dbac0ac5f9c70c1662",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-1024-q255-nordo.ktx2",
+      "sha256": "39c3212665e4138747f624955597654ff4365def11c94c789c6d96fb69749054",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-4096-q255-nordo.ktx2",
+      "sha256": "58ab0722c061741a47756a4a47586b59a05f36244c8c1df6b7f5dd4d3e2762cd",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-2048-q255-nordo.ktx2",
+      "sha256": "4da5b7d44e00eaafdd181b1c772abc4367f4f9c18037302489197b976e9ce954",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-1024-q255-nordo.ktx2",
+      "sha256": "d237f81a5b16a78e04882d25a10c6309173a1adbaf775b431c099e045a094c7b",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-4096-q255-nordo.ktx2",
+      "sha256": "3847dd40674afcd083465cd43bef657a1539a3f77023c589d0e5ae00d95e866f",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-2048-q255-nordo.ktx2",
+      "sha256": "eb0b840d0b3af19ff26803b352cf797e250de36a9e77c5fc4b49ccd94ab39506",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-1024-q255-nordo.ktx2",
+      "sha256": "6c369cfeeb6e4ba28aa8331528d012cac5fc1553d0836462a381ffb09059f498",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-4096-q255-nordo.ktx2",
+      "sha256": "c0d8edf0c6d2c3e702571f856a13d4696fcf3a9d5f0867eae270160b52563b95",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-2048-q255-nordo.ktx2",
+      "sha256": "2e7e513bc79e63a60b6196b0f2d36164e25a4e0fecc2830b44f7861f6d6dbb3d",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-1024-q255-nordo-rgb.ktx2",
+      "sha256": "984a450a81f8d97fbf7643fdb4f88e92c7788b8cd95ce17c47c71b94242f23de",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-512-q255-nordo-rgb.ktx2",
+      "sha256": "149eec5be249cb326a250655aa5afdb14b28c1fb00ead678e964fdbb5d6ec722",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-2048-q255-nordo-rgb.ktx2",
+      "sha256": "39e6b95cd1ed717f89ded633e7f4b0da1d812f2289596c25fffa673ff493f7ba",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-1024-q255-nordo-rgb.ktx2",
+      "sha256": "80ecb61b73fa92ee8333f85ab11b4bad6813c88f554d33656aa1c7620eb06e22",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-512-q255-nordo-rgb.ktx2",
+      "sha256": "b77d19ff1ed24ae077c63586ae8abb5b52d2c26757ca74a557378091d0126a33",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-2048-q255-nordo-rgb.ktx2",
+      "sha256": "a2a377f51f77f430ae6cccb013d65260e1c48f8b0d666419065f8865e3d85f99",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-1024-q255-nordo-rgb.ktx2",
+      "sha256": "572420f6793fda74ff3b5bb5ef6abbec9bd3bf09f262ff0e26e968bb41427e42",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-512-q255-nordo-rgb.ktx2",
+      "sha256": "ca545f8c1b02c451f6eebc99102ddc78fa23c55d3a97679e1ec1cbba18e73625",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-2048-q255-nordo-rgb.ktx2",
+      "sha256": "3cc28a08460790b344bac7ce080bd37d44255b1d26a8389415fb0d8c9e42d1a6",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-1024-q255-nordo-rgb.ktx2",
+      "sha256": "23b8f66f4a347f104580dbb8e9a6658086514a7acf27fd3ef662558d156f2fc3",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-512-q255-nordo-rgb.ktx2",
+      "sha256": "93f4ab6c4592de2b035cd71e118aeb6eec60c037a393c6630e2c6bb85087209b",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-2048-q255-nordo-rgb.ktx2",
+      "sha256": "6dc7696948764b31de57a2c2e2dc7a6cdeb49d2ce3e13bb50c79743b2eb5825c",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-1024-q255-nordo-rgb.ktx2",
+      "sha256": "d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-4096-q255-nordo-rgb.ktx2",
+      "sha256": "b56972d0c86e76d37b15e5b66d14a9ff9a5a6f6138f3c69b6b6901bfee686626",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-1024-q255-nordo-rgb.ktx2",
+      "sha256": "63742b1e448f27257f28e4ce48f55442075e411416bf81b034ecf5a01bb5b340",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-4096-q255-nordo-rgb.ktx2",
+      "sha256": "923e0d958152f17b6ef5429b6aa4667c95d4841c51ff69ea01c386fbe3cf27a0",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-2048-q255-nordo-rgb.ktx2",
+      "sha256": "b2b3ff1ffcd7fb11c4333405d1436e07239621b2419cd5d9f221e0107569c2d4",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-1024-q255-nordo-rgb.ktx2",
+      "sha256": "ac7ef0ae35024c9111a02ae73b52ac979bd8bf36d317d5f26f7eb05c60e11bcb",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-4096-q255-nordo-rgb.ktx2",
+      "sha256": "fba5f24d8a8c955c20145be39fa1bf4745b4ea2a70c9b867344070b05d7d2052",
+      "size": 4096,
+      "mips": 13
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-2048-q255-nordo-rgb.ktx2",
+      "sha256": "da4e9e495a4ee150ca5cdcf2c03a3e226f0c588cbbebc916e0a8fd2ee1015004",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-1024-q255-nordo-rgb.ktx2",
+      "sha256": "b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-512-q255-nordo-rgb.ktx2",
+      "sha256": "38f45ab1efb41c9564e63f17734d04ebf52ca2021274c1dc8c0a82d568cb74d0",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-2048-q255-nordo-rgb.ktx2",
+      "sha256": "115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7",
+      "size": 2048,
+      "mips": 12
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-1024-q255-nordo-rgb.ktx2",
+      "sha256": "a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b",
+      "size": 1024,
+      "mips": 11
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-512-q255-nordo-rgb.ktx2",
+      "sha256": "534b6a4d579bc8c854a53cc030bf020dc3aac8b9079653fc06369ed5143aec42",
+      "size": 512,
+      "mips": 10
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-2048-q255-nordo-rgb.ktx2",
+      "sha256": "6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0",
+      "size": 2048,
+      "mips": 12
+    }
+  ],
+  "models": 58,
+  "applications": 29,
+  "checks": [
+    {
+      "id": "wood-01-palisade",
+      "manifest": "village.json",
+      "triangles": 1479,
+      "oldLod1Triangles": 2631,
+      "oldLod2Triangles": 1647,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "wood-02-cross-barricade",
+      "manifest": "village.json",
+      "triangles": 1488,
+      "oldLod1Triangles": 2586,
+      "oldLod2Triangles": 1137,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "wood-03-plank-gate",
+      "manifest": "village.json",
+      "triangles": 1454,
+      "oldLod1Triangles": 2465,
+      "oldLod2Triangles": 1520,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "well",
+      "manifest": "village.json",
+      "triangles": 3011,
+      "oldLod1Triangles": 2466,
+      "oldLod2Triangles": 1556,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-04-poison-fungi",
+      "manifest": "great-plains.json",
+      "triangles": 3174,
+      "oldLod1Triangles": 2750,
+      "oldLod2Triangles": 2000,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-04-poison-fungi",
+      "manifest": "monster-forest.json",
+      "triangles": 3174,
+      "oldLod1Triangles": 2750,
+      "oldLod2Triangles": 2000,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-02-dead-tree",
+      "manifest": "great-plains.json",
+      "triangles": 2000,
+      "oldLod1Triangles": 2734,
+      "oldLod2Triangles": 1383,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-02-dead-tree",
+      "manifest": "monster-forest.json",
+      "triangles": 2000,
+      "oldLod1Triangles": 2734,
+      "oldLod2Triangles": 1383,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-03-fallen-log",
+      "manifest": "great-plains.json",
+      "triangles": 999,
+      "oldLod1Triangles": 2749,
+      "oldLod2Triangles": 1399,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "forest-03-fallen-log",
+      "manifest": "monster-forest.json",
+      "triangles": 999,
+      "oldLod1Triangles": 2749,
+      "oldLod2Triangles": 1399,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "firewood",
+      "manifest": "great-plains.json",
+      "triangles": 1941,
+      "oldLod1Triangles": 2407,
+      "oldLod2Triangles": 1719,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "firewood",
+      "manifest": "village-plains-outskirts.json",
+      "triangles": 1941,
+      "oldLod1Triangles": 2407,
+      "oldLod2Triangles": 1719,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "firewood",
+      "manifest": "village.json",
+      "triangles": 1941,
+      "oldLod1Triangles": 2407,
+      "oldLod2Triangles": 1719,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "firewood",
+      "manifest": "witch-cave.json",
+      "triangles": 1941,
+      "oldLod1Triangles": 2407,
+      "oldLod2Triangles": 1719,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "crate-barrel-cluster",
+      "manifest": "great-plains.json",
+      "triangles": 1964,
+      "oldLod1Triangles": 3091,
+      "oldLod2Triangles": 1969,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "crate-barrel-cluster",
+      "manifest": "village.json",
+      "triangles": 1964,
+      "oldLod1Triangles": 3091,
+      "oldLod2Triangles": 1969,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "crate-barrel-cluster",
+      "manifest": "witch-cave.json",
+      "triangles": 1964,
+      "oldLod1Triangles": 3091,
+      "oldLod2Triangles": 1969,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "chest-common",
+      "manifest": "great-plains.json",
+      "triangles": 981,
+      "oldLod1Triangles": 4479,
+      "oldLod2Triangles": 4479,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "chest-common",
+      "manifest": "quest-props.json",
+      "triangles": 981,
+      "oldLod1Triangles": 4479,
+      "oldLod2Triangles": 4479,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-08-timber-brace",
+      "manifest": "witch-cave.json",
+      "triangles": 1500,
+      "oldLod1Triangles": 3500,
+      "oldLod2Triangles": 2250,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-09-iron-gate-leaf",
+      "manifest": "witch-cave.json",
+      "triangles": 1500,
+      "oldLod1Triangles": 3405,
+      "oldLod2Triangles": 2189,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-11-sluice-shutter",
+      "manifest": "witch-cave.json",
+      "triangles": 1691,
+      "oldLod1Triangles": 3500,
+      "oldLod2Triangles": 2250,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-12-lift-platform",
+      "manifest": "witch-cave.json",
+      "triangles": 1499,
+      "oldLod1Triangles": 3500,
+      "oldLod2Triangles": 2250,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-14-hidden-pressure-stone",
+      "manifest": "witch-cave.json",
+      "triangles": 1500,
+      "oldLod1Triangles": 3499,
+      "oldLod2Triangles": 2250,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-15-resurrection-altar",
+      "manifest": "witch-cave.json",
+      "triangles": 2097,
+      "oldLod1Triangles": 2741,
+      "oldLod2Triangles": 1702,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-16-soul-collector-arm",
+      "manifest": "witch-cave.json",
+      "triangles": 2885,
+      "oldLod1Triangles": 3282,
+      "oldLod2Triangles": 2095,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-17-faded-sacred-emblem",
+      "manifest": "witch-cave.json",
+      "triangles": 1500,
+      "oldLod1Triangles": 3300,
+      "oldLod2Triangles": 2121,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-19-apothecary-shelf",
+      "manifest": "witch-cave.json",
+      "triangles": 1500,
+      "oldLod1Triangles": 3492,
+      "oldLod2Triangles": 2238,
+      "oldDistanceModelsRetained": true
+    },
+    {
+      "id": "cave-derived-laboratory-rock",
+      "manifest": "witch-cave.json",
+      "triangles": 2500,
+      "oldLod1Triangles": 3158,
+      "oldLod2Triangles": 2374,
+      "oldDistanceModelsRetained": true
+    }
+  ],
+  "limitations": [
+    "Static CPU and KTX metadata tests; no actual GPU render or real-device FPS/heat guarantee.",
+    "The pre-existing mid/far LOD models are retained as explicitly approved quality-preserving exceptions."
+  ]
+}

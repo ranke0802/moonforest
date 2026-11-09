@@ -724,16 +724,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf",
+          "model": "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf",
           "resources": [
-            "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-            "./content/abd36d58cfd1c85553cced694a8ed27a3c3a0f56477cd4b5105a1ec234833e9e.ktx2",
-            "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf"
+            "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+            "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
+            "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf"
           ],
-          "triangles": 4815,
+          "triangles": 1941,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 391870
+          "bytes": 306283,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -770,32 +775,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf",
+        "model": "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf",
         "resources": [
-          "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-          "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
-          "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf"
+          "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+          "./content/38f45ab1efb41c9564e63f17734d04ebf52ca2021274c1dc8c0a82d568cb74d0.ktx2",
+          "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf"
         ],
-        "triangles": 4815,
+        "triangles": 1941,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 241797
+        "bytes": 168781,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+            "url": "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 731878,
+            "bytes": 609531,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2"
+          "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -805,21 +815,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "url": "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 206480,
+            "bytes": 223839,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+          "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "firewood",
+        "requestedCap": 2000,
+        "actualTriangles": 1941,
+        "catalogAssetVersion": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "beforeModelSha256": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "appliedModelSha256": "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+        "nativeConfigSha256": "c65a851970ff3d3986b0b5e5c4d5f6b87f42d687c424cd42f9a2de0c3f9c11be",
+        "lodModels": [
+          "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+          "2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9",
+          "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2"
+        ],
+        "mobileNearModelSha256": "68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f",
+        "derivedAtlasSourceSha256": "32cdc1dd7313eb61c4bb7c01eb69974c5b5e705bbb1a099fac5b4c1eef84d49c",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "village-plains-outskirts-ground": {

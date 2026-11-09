@@ -1,0 +1,1 @@
+export{po as PBRMaterial,mo as RegisterPBRMaterial,ho as RegisterPbrMaterial}from"./babylon-game-uE9lshiC.js";

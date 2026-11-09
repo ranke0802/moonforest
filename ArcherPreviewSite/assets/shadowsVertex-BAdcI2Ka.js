@@ -1,0 +1,1 @@
+export{ca as shadowsVertexWGSL}from"./babylon-game-uE9lshiC.js";

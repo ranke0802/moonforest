@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {parseHTML} from 'linkedom';
+import {setupAuthoredInteractions} from '../src/authored-interactions.js';
+import {normalizeInteraction} from '../src/interaction-data.js';
+
+test('interaction data is bounded and rejects executable or malformed extra fields',()=>{
+ assert.deepEqual(normalizeInteraction({label:' 읽기 ',text:' 기록 ',range:3}),{label:'읽기',text:'기록',range:3});assert.throws(()=>normalizeInteraction({label:'a',text:'b',range:3,script:'x'}));assert.throws(()=>normalizeInteraction({label:'a',text:'',range:3}));assert.throws(()=>normalizeInteraction({label:'a',text:'b',range:9}));
+});
+
+test('a live NPC interaction participates without changing quest controls',()=>{
+ const {document,window}=parseHTML('<html><body><main></main></body></html>'),root=document.querySelector('main'),create=document.createElement.bind(document);document.createElement=(name,...args)=>{const e=create(name,...args);if(name==='dialog'){Object.defineProperty(e,'open',{get:()=>e.hasAttribute('open')});e.showModal=()=>e.setAttribute('open','');e.close=()=>{e.removeAttribute('open');e.dispatchEvent(new window.Event('close'));};}return e;};
+ const npc={displayName:'경비',interaction:{label:'대화하기',text:'마을을 지키고 있습니다.',range:3},actor:{position:{x:1,y:0,z:0},isEnabled:()=>true}},world={navigation:{segmentClear:()=>true}},api=setupAuthoredInteractions({root,world,getState:()=>({ready:true,position:{x:0,z:0}}),getLiveNpc:()=>[npc]});api.update(1);assert.match(root.querySelector('button').textContent,/대화하기/);root.querySelector('button').click();assert.equal(root.querySelector('dialog p').textContent,npc.interaction.text);api.dispose();
+});
+
+test('object and NPC interactions use proximity, preserve text as text, and pause/resume safely',()=>{
+ const {document,window}=parseHTML('<html><body><main><canvas></canvas></main></body></html>'),root=document.querySelector('main'),create=document.createElement.bind(document);document.createElement=(name,...args)=>{const element=create(name,...args);if(name==='dialog'){Object.defineProperty(element,'open',{get(){return element.hasAttribute('open');}});element.showModal=()=>element.setAttribute('open','');element.close=()=>{element.removeAttribute('open');element.dispatchEvent(new window.Event('close'));};}return element;};
+ const obj={instanceId:'obj',interaction:{label:'읽기',text:'<script>안녕</script>',range:3}},record={root:{position:{x:3,y:0,z:0}},entry:{catalog:{name:'편지'}},bounds:{min:{x:2,y:0,z:-1},max:{x:4,y:1,z:1}}},state={ready:true,position:{x:0,z:0}},npc={id:'npc-1',label:'주민',interaction:{label:'대화',text:'안녕하세요',range:3}},actor={position:{x:10,y:0,z:0},isEnabled:()=>true},world={mapId:'great-plains',placementOverlay:{instances:[obj]},authoredPlacements:{records:new Map([['obj',record]])},npcWorld:{list:()=>[npc],get:()=>({encounter:{actor}})},navigation:{segmentClear:()=>true}};let resets=0,pauses=0,interactions=[];
+ const api=setupAuthoredInteractions({root,world,getState:()=>state,resetInput:()=>resets++,onPauseChange:()=>pauses++,onInteract:value=>interactions.push(value)});api.update(1);const button=root.querySelector('.authored-interaction-button');assert.equal(button.hidden,false);assert.match(button.textContent,/읽기/);button.click();const dialog=root.querySelector('dialog');assert.equal(api.isOpen(),true);assert.equal(dialog.querySelector('p').textContent,'<script>안녕</script>');assert.equal(dialog.querySelector('script'),null);assert.equal(resets,1);assert.equal(pauses,1);assert.deepEqual(interactions[0],{id:'obj',kind:'object',mapId:'great-plains'});dialog.querySelector('button').click();assert.equal(api.isOpen(),false);assert.equal(resets,2);assert.equal(pauses,2);
+ state.position={x:8,z:0};api.update(2);assert.match(button.textContent,/대화/);button.click();assert.equal(dialog.querySelector('p').textContent,'안녕하세요');assert.deepEqual(interactions[1],{id:'npc-1',kind:'npc',mapId:'great-plains'});dialog.querySelector('button').click();state.combat=true;api.update(3);assert.equal(button.hidden,true);state.combat=false;world.toolLease={active:true};api.update(4);assert.equal(button.hidden,true);api.dispose();assert.equal(root.querySelector('dialog'),null);
+});

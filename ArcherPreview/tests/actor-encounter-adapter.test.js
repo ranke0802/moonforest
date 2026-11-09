@@ -173,3 +173,20 @@ test('ordinary summon/hide retains its existing recreate/dispose behavior unless
   await e.summon({position:Vector3.Zero(),rotation:{y:0}},{position:new Vector3(0,0,4)});
   assert.deepEqual(calls,['dispose','create']);assert.notEqual(e.animator,old);e.hide();assert.deepEqual(calls,['dispose','create','dispose']);
 });
+
+test('staged group actors stay hidden and outside battle until committed',async t=>{
+ const f=fixture(t),a=f.factory(getActorDefinition('hooded-goblin.standard')),b=f.factory(getActorDefinition('hooded-goblin.standard'));
+ await a.activate({position:new Vector3(0,0,4),staged:true},{preparation:prepare()});await b.activate({position:new Vector3(3,0,4),staged:true},{preparation:prepare()});
+ assert.equal(a.encounter.actor.isEnabled(),false);assert.equal(b.encounter.actor.isEnabled(),false);assert.equal(f.battle.encounters.length,0);assert.equal(a.reveal(),true);assert.equal(b.reveal(),true);assert.equal(f.battle.encounters.length,2);assert.equal(a.encounter.actor.isEnabled(),true);assert.equal(b.encounter.actor.isEnabled(),true);
+});
+import {createAuthoredMonsterRuntime} from '../src/authored-monster-runtime.js';
+import {ActorPopulation} from '../src/actor-population.js';
+import {emptyMonsterSpawns} from '../src/monster-spawn-document.js';
+test('actual pooled encounters enter together, wait for all corpses, and respawn as a group',async t=>{
+ const f=fixture(t);f.world.navigation={free:()=>true};const store=new Map(),storage={getItem:k=>store.get(k)??null,setItem:(k,v)=>store.set(k,v)},state={ready:true,dead:false,paused:false};
+ class ImmediatePopulation extends ActorPopulation{constructor(opts){super({...opts,preparationFactory:()=>prepare()});}}
+ const runtime=createAuthoredMonsterRuntime({world:f.world,battle:f.battle,getPlayer:()=>f.player,getState:()=>state,storage,Factory:()=>f.factory,Population:ImmediatePopulation});t.after(()=>runtime.dispose());const doc=emptyMonsterSpawns(),row=(id,x)=>({id,definitionId:'hooded-goblin.standard',groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x,z:4,yaw:0,delaySeconds:2,randomRadius:2,drop:{assetId:'',effectEnabled:false}});doc.maps.village=[row('a',-3),row('b',3)];runtime.replace(doc);runtime.beforeBattle(0,f.player);
+ for(let i=0;i<80&&runtime.inspect().groups[0]?.state!=='active';i++)await new Promise(r=>setTimeout(r,2));assert.equal(runtime.inspect().groups[0].state,'active');assert.equal(f.battle.encounters.length,2);
+ const [a,b]=f.battle.encounters;a.brain.hp=0;a.death.advance(5);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'active');b.brain.hp=0;b.death.advance(5);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'waiting');assert.equal(f.battle.encounters.length,0);
+ runtime.beforeBattle(2,f.player);for(let i=0;i<80&&runtime.inspect().groups[0]?.state!=='active';i++)await new Promise(r=>setTimeout(r,2));assert.equal(runtime.inspect().groups[0].state,'active');assert.equal(f.battle.encounters.length,2);runtime.leaveMap();assert.equal(f.battle.encounters.length,0);
+});

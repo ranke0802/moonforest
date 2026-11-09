@@ -1,0 +1,1 @@
+export{t as PBRMaterialLoadingAdapter}from"./babylon-game-uE9lshiC.js";

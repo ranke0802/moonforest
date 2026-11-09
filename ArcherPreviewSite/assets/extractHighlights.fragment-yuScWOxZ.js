@@ -1,0 +1,1 @@
+export{rn as extractHighlightsPixelShader}from"./babylon-game-uE9lshiC.js";

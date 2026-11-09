@@ -76,7 +76,7 @@ export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
         record.drop=drop;
         record.root.setEnabled(visibleAt(drop.position));
         const label=`${drop.amount} G`;if(record.label.textContent!==label)record.label.textContent=label;
-        if(!record.settled){const t=Math.min(1,drop.age/.6);record.root.position.set(drop.position.x,drop.position.y+Math.sin(t*Math.PI)*.38,drop.position.z);if(t===1){record.settled=true;record.root.freezeWorldMatrix();for(const mesh of record.root.getChildMeshes())mesh.freezeWorldMatrix();}}
+        if(!record.settled){const t=Math.min(1,drop.age/.6),origin=drop.origin??drop.position,travel=1-(1-t)*(1-t),bounce=!drop.origin?Math.sin(t*Math.PI)*.38:t<.72?Math.sin(Math.PI*t/.72)*.38:Math.sin(Math.PI*(t-.72)/.28)*.075;record.root.position.set(origin.x+(drop.position.x-origin.x)*travel,origin.y+(drop.position.y-origin.y)*travel+bounce,origin.z+(drop.position.z-origin.z)*travel);if(t===1){record.settled=true;record.root.freezeWorldMatrix();for(const mesh of record.root.getChildMeshes())mesh.freezeWorldMatrix();}}
       }
     },
     project(projection){for(const {root,label} of records.values()){anchor.copyFrom(root.position);anchor.y+=.22;const p=projection.project(anchor),visible=visibleAt(root.position);root.setEnabled(visible);label.hidden=!p.visible||!visible;label.style.transform=`translate3d(${p.x}px,${p.y}px,0) translate(-50%,-100%)`;}},

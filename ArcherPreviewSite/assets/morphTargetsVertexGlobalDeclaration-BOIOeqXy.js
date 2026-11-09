@@ -1,0 +1,1 @@
+export{zd as morphTargetsVertexGlobalDeclaration}from"./babylon-game-uE9lshiC.js";

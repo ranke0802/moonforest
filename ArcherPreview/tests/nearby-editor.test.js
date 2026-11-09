@@ -30,6 +30,12 @@ check('actual shipped village objects use original stable IDs in the proximity l
 check('distance sorting, tie-breaking, radius boundary and limit are deterministic',()=>{
  const world={mapId:'village',placements:[source('z','handcart',3,4),source('a','firewood',-3,-4),source('near','bush',.2),source('edge','handcart',12),source('far','handcart',12.01)]};assert.deepEqual(nearbyEditableObjects(world,{x:0,z:0}).map(row=>row.instanceId),['near','a','z','edge']);assert.deepEqual(nearbyEditableObjects(world,{x:0,z:0},{limit:2}).map(row=>row.instanceId),['near','a']);assert.deepEqual(nearbyEditableObjects(world,null),[]);return {inclusiveRadius:12,tieOrder:'instanceId'};
 });
+check('dense nearby scenery does not hide everything after the first twelve objects',()=>{
+ const world={mapId:'village',placements:Array.from({length:90},(_,i)=>source('item-'+i,'handcart',i*.1,0))},rows=nearbyEditableObjects(world,{x:0,z:0});assert.equal(rows.length,90);assert.ok(rows.every(row=>row.editable));return {visible:rows.length};
+});
+check('nearby search filters without losing the exact target identity',async t=>{
+ const f=fixture(t,{placements:[source('cart-a','handcart',1),source('wood-b','firewood',2)]}),search=f.root.querySelector('[data-nearby-search]');search.value='fire';search.dispatchEvent(new f.window.Event('input',{bubbles:true}));assert.equal(f.row('cart-a'),null);assert.ok(f.row('wood-b'));search.value='';search.dispatchEvent(new f.window.Event('input',{bubbles:true}));assert.ok(f.row('cart-a'));return {filterRetainsStableIds:true};
+});
 check('same-ID moved base overlays replace the old position and deduplicate against original placements',()=>{
  const instance=overlay('base-cart','handcart',25,0,{sourceInstanceId:'base-cart'}),world={mapId:'village',placements:[source('base-cart','handcart',1)],placementOverlay:{instances:[instance,overlay('my-crate','crate-barrel-cluster',2)]}};const origin=nearbyEditableObjects(world,{x:0,z:0});assert.deepEqual(origin.map(row=>row.instanceId),['my-crate']);const moved=nearbyEditableObjects(world,{x:25,z:0});assert.equal(moved.length,1);assert.equal(moved[0].instanceId,'base-cart');assert.equal(moved[0].distance,0);assert.equal(moved[0].source,'base');assert.equal(moved[0].editable,true);return {sameId:'base-cart',oldPositionRemoved:true,newPositionListedOnce:true};
 });

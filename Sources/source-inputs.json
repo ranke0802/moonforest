@@ -34,7 +34,9 @@
     "elena-boss-pack": "Sources/actors/elena-pack/elena-boss",
     "elena-two-phase-pack": "Sources/actors/elena-pack/elena-two-phase",
     "elena-motion-v2-pack": "Sources/actors/elena-pack/elena-motion-v2",
-    "approved-scenery-budgets": "Sources/environment/approved-geometry/2026-11-09"
+    "approved-scenery-budgets": "Sources/environment/approved-geometry/2026-11-09",
+    "village-exterior-shell-review": "Sources/environment/village-exterior-shell/2026-11-09",
+    "approved-review-r2-2026-11-09": "Sources/environment/approved-geometry/2026-11-09-r2"
   },
   "inputs": [
     {
@@ -28490,6 +28492,1722 @@
       ],
       "requiredBy": [
         "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/candidate.gltf",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/candidate.gltf",
+      "bytes": 1368,
+      "sha256": "74ea584094951ef445fc07d1c7f22b68fe591a602142908e09669bc12f000885",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/candidate.bin",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/candidate.bin",
+      "bytes": 2833488,
+      "sha256": "a294bb7df100fb137c5e75f0867da9086b95a8ef54e4bb493a72e38d34126a2d",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/atlas.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/atlas.png",
+      "bytes": 7224163,
+      "sha256": "8c90ee332ed4e3edc53f844b60b00cefa26d22144cc6b4e9b0bcf6ec93bed369",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/authoring-packed.blend",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/authoring-packed.blend",
+      "bytes": 37722442,
+      "sha256": "90d2ce0ab08992647da20fe5ba9f9a8048da5fdb6c66207cd1bfe818ee135e69",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/REPRODUCE.md",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/REPRODUCE.md",
+      "bytes": 2157,
+      "sha256": "299dfb5b105336490fdde1c8e3b1286406beebe43102287f8006480614650895",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/bake.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/bake.py",
+      "bytes": 10167,
+      "sha256": "8760ea7ff30c521b905877d90d56bee7243bc78d7fbcbd92feb1a23359e07a58",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/final.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/final.py",
+      "bytes": 4144,
+      "sha256": "f00aaf4c6244b3c7dc58994a236abaeb7d5359279c87f1a8ec4e71e8517de21e",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/repair-contamination.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/repair-contamination.py",
+      "bytes": 3779,
+      "sha256": "6fff5abd39d96f7c321d4d679eaa34848f6873450d1a4d92b79c3bb931f35273",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/extract-source-textures.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/extract-source-textures.py",
+      "bytes": 546,
+      "sha256": "d2f8303d28e8464fdf4104540b73a4c9f1c14cdff702defa37605b70f2ab3a8a",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/repack-authoring.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/repack-authoring.py",
+      "bytes": 575,
+      "sha256": "e54f299519cf03507e4879c498100a18b1697c5b86c9fd8b10b068c0d0446e68",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/nearest-source-samples.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/nearest-source-samples.json",
+      "bytes": 2522434,
+      "sha256": "e04facaed3992261d80045fc766ecbbfc5d5e8d45774e92f424f2f27ae5f2f59",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/test-report.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/test-report.json",
+      "bytes": 1824,
+      "sha256": "067215b693374c50bcad7d4bb6ebaa45ebf13fbbdb02a7f238a59c9239f2ec4b",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/bake-report.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/bake-report.json",
+      "bytes": 3784,
+      "sha256": "c7e6188af62cd75a76ded9d1ed532cde963979c086b3432c9d3e63cf31e81bb5",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/geometry-verification.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/geometry-verification.json",
+      "bytes": 1073,
+      "sha256": "eabf036bf073cc3e6d72362f911b0c6d6d330f3fc2bbd9c461b8d600c934c558",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/padding-repair.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/padding-repair.json",
+      "bytes": 675,
+      "sha256": "9ce64bfbfdee8a021bad3cb8a51cf689653494c22543651bbd152f1e581a5386",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/raw-final4096.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/raw-final4096.png",
+      "bytes": 10905174,
+      "sha256": "fbc360644115746c52f380f37da9bb58b95e02a65a49dbcc8092352f368c6854",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/coverage-final4096.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/coverage-final4096.png",
+      "bytes": 752661,
+      "sha256": "e84c43e451984b4b8afc546927b6a38e95bd8f78907e8461458e58846876f88b",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/miss-final4096.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/miss-final4096.png",
+      "bytes": 313466,
+      "sha256": "78af34bd243eea7bdb34cf32fa59c52688b4606ea0fb0bc92b21171f3830a5a3",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/suspect-covered-final4096.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/suspect-covered-final4096.png",
+      "bytes": 21371,
+      "sha256": "3d7da8d3d7c46334ddd4b9c121e41fd5ab4b4583ed949a31a71b259364de4c63",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/accepted-shell.glb",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/accepted-shell.glb",
+      "bytes": 1545256,
+      "sha256": "dedd5d0a7ca894db09c09e624af95caafa4daf0c150bf24c7c4d657669020422",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/README.md",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/README.md",
+      "bytes": 2104,
+      "sha256": "caed219b46d212582ec2f9f3121bf130f8d54493b835ccfadb473314194d16af",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/great-plains.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/great-plains.json",
+      "bytes": 99382,
+      "sha256": "6bd632fa3c90d975459091ccb5a505670b815f2f0c410cd99c0b1140a754c3f6",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/monster-forest.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/monster-forest.json",
+      "bytes": 53023,
+      "sha256": "f31017d44a3ff18b84a0e79da4ad7c11759d6823dd8a377625400a7c7e2752e4",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/quest-props.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/quest-props.json",
+      "bytes": 38299,
+      "sha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/village-plains-outskirts.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/village-plains-outskirts.json",
+      "bytes": 70411,
+      "sha256": "ceac44c90ba3a5c7b32a68e0e27be0427922b4c7d6585d19a21c403cc9e9e886",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/village.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/village.json",
+      "bytes": 112776,
+      "sha256": "84c4191da0aed73b13d4162ee599f17493b840344c222d59f9ddba36bbc270fb",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/before/witch-cave.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/before/witch-cave.json",
+      "bytes": 166238,
+      "sha256": "289f199731ef010a0540a6d35969c8663bdb5d952cdccaa93ddab65903dc9d14",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/wood-01-palisade.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/wood-01-palisade.gltf",
+      "bytes": 147656,
+      "sha256": "5015cfac302ee3935a6571793af94d2dd12e3f195c78dc00e2fbaf6104a78738",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade.png",
+      "bytes": 3523329,
+      "sha256": "066b11f2683d52a67c1539810e044ca7c22f34fa323acd6af69b5e651d266466",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/wood-02-cross-barricade.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/wood-02-cross-barricade.gltf",
+      "bytes": 111638,
+      "sha256": "5ea66de3a01b30fae9eb96b50e7cd36f6524929075cc49ef518a4bfb5bb5e8f9",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade.png",
+      "bytes": 2961168,
+      "sha256": "221e5027b56ec7f9481615a4e31d6661759286173745accfe70196bd2c53cbf9",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/wood-03-plank-gate.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/wood-03-plank-gate.gltf",
+      "bytes": 124863,
+      "sha256": "15c7f71ed4175c963b317592ce7cd9e2f1b090fb4caeaee1823594bf3ff2111c",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate.png",
+      "bytes": 3477998,
+      "sha256": "83b30c9039884396a42e39f460484043cae34dc46919f730fcd920634c2516d6",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/well.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/well.gltf",
+      "bytes": 305006,
+      "sha256": "b4a6eb0c693dc5844861b114092c6f071a94ea5dd570cd1979ef4617c6c67f80",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/well.png",
+      "bytes": 1951125,
+      "sha256": "f5449b2fdb51687716091f17d919b0b2ff31956d38ce074f1e7c7ad37f65dac0",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/forest-04-poison-fungi.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/forest-04-poison-fungi.gltf",
+      "bytes": 318601,
+      "sha256": "1811e82371f79ad44ca83a89b6941588a3e3858bd44d3891c1bd512ef99866e3",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi.png",
+      "bytes": 11009155,
+      "sha256": "30698be49c8b5ca53399426c7b0902462ad3b0220958c66755e51d118723ac88",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/forest-02-dead-tree.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/forest-02-dead-tree.gltf",
+      "bytes": 223627,
+      "sha256": "9e0fe59e61c2aa772b932d0039e1b82b20a2fa141bfd3dc95655e409be35ffdc",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree.png",
+      "bytes": 14032367,
+      "sha256": "a9ceef11b97092551c3557acc828fe07079c217f1af58bc1f829a36d79d4488a",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/forest-03-fallen-log.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/forest-03-fallen-log.gltf",
+      "bytes": 126733,
+      "sha256": "c5d328eace42c252719e741c996f488219a42ae1b35c3de7812771b16dbdd0b1",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log.png",
+      "bytes": 13172993,
+      "sha256": "52d5493d5ecfeb82b204e877d507eb8c7e8e93e9d7094d4288feb04f110b1015",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/firewood.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/firewood.gltf",
+      "bytes": 148065,
+      "sha256": "d843b94b5702d7a17cdfa65915b60314e750add280d1ae30c4d951a57812ace6",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood.png",
+      "bytes": 3003933,
+      "sha256": "32cdc1dd7313eb61c4bb7c01eb69974c5b5e705bbb1a099fac5b4c1eef84d49c",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/crate-barrel-cluster.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/crate-barrel-cluster.gltf",
+      "bytes": 158927,
+      "sha256": "b7e8235b4b1b0c037fe3cf89f5c0a4890a9d6d8ac741755417c26c2b540bd185",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster.png",
+      "bytes": 2965140,
+      "sha256": "66e4f7d6556b96e25c1bcf66daa00d93d5f6b73dbe8db5452ed64935325e0953",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/chest-common.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/chest-common.gltf",
+      "bytes": 91189,
+      "sha256": "7b6a7b67611e02232ed5d894d66653f75d602898363c8de0e257033485ebaadf",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-08-timber-brace.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-08-timber-brace.gltf",
+      "bytes": 152385,
+      "sha256": "99770b6c623cdb41be63a5f0e766a2ee6bad2d2a4bd4ddb520e77cd4cfafc2ec",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace.png",
+      "bytes": 13957108,
+      "sha256": "608631b0f0a9857c549fd63c2ff8e141e25d278ba1b6f603b396fa72c29db56a",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-09-iron-gate-leaf.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-09-iron-gate-leaf.gltf",
+      "bytes": 156626,
+      "sha256": "491804860712aeeef8ca8a2109ccc00333037af91d9adc32f29acb7baa44af69",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-11-sluice-shutter.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-11-sluice-shutter.gltf",
+      "bytes": 232317,
+      "sha256": "784567c124eb5407d069e4fc67fb082ca01efd5266ddbcaf7fdb09d7dfc778c0",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter.png",
+      "bytes": 11043603,
+      "sha256": "e327abf241c0053f3b388e057c3b9f391bbbb70e654af07f99c79b94d52a26b7",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-12-lift-platform.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-12-lift-platform.gltf",
+      "bytes": 153629,
+      "sha256": "82f7be95d429878bb7fcb95b70bf2db78f878dcecc3531c928339f925fdfe4f1",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform.png",
+      "bytes": 10545661,
+      "sha256": "f5cc8480b24373f3faa895e750f5ff0a6da5d06b79005bcab82cb985bc33bfcb",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-14-hidden-pressure-stone.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-14-hidden-pressure-stone.gltf",
+      "bytes": 121884,
+      "sha256": "924fb824399e707c5fb23c8547725706a4ea9e2db0d8e69a48d007dcd29ece10",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone.png",
+      "bytes": 10893549,
+      "sha256": "b7886d0e111e0a45daeb3f25098319c9e42167d6a33bdb0b6141a84ed360fe49",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-15-resurrection-altar.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-15-resurrection-altar.gltf",
+      "bytes": 306889,
+      "sha256": "0c1cb4bc2a103e04834836e0b942ceac23fef5551dad38fa85fd3b609b445a43",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar.png",
+      "bytes": 10262930,
+      "sha256": "ef6d46e39a3bdf2545935795d2590ad5a7cd9ee1043931618bb25f48f36042d8",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-16-soul-collector-arm.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-16-soul-collector-arm.gltf",
+      "bytes": 367500,
+      "sha256": "f01e336dce488153feaeb4521bd56b73026e9a7f25db46299d2258e4b2a305dd",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm.png",
+      "bytes": 10899466,
+      "sha256": "05386ced2b670e7949a80daca73bc78aa079f26e6ff8cc63e921c6119530ddf2",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-17-faded-sacred-emblem.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-17-faded-sacred-emblem.gltf",
+      "bytes": 126237,
+      "sha256": "24ba04165072ea178bd283a25991677a92a7155a3c33da205455f4f9f702dbe2",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem.png",
+      "bytes": 12712027,
+      "sha256": "5203e0034f616a8cdc5d8eb783221a9f493567d0a853ce797b5ffc6a213ea63a",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-19-apothecary-shelf.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-19-apothecary-shelf.gltf",
+      "bytes": 183367,
+      "sha256": "9824101a3c6310778173ba088e1b8a61a25a488608350a759e7efc45f8f6f9ab",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf.png",
+      "bytes": 8354285,
+      "sha256": "81c9f23eaefd10ed2775d8a3279f5f4b5aa6071711f1d6e4847b5788e5e57eee",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/models/cave-derived-laboratory-rock.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/models/cave-derived-laboratory-rock.gltf",
+      "bytes": 125414,
+      "sha256": "111e7bb91242a66ec4ed99e0086055acebb2cfc4006649ede20b2d7419518811",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/approval.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/approval.json",
+      "bytes": 388471,
+      "sha256": "50810e4bebd88cc7b3ca3adadab653f81db8b0ec21b5a8fa7d015ad7dc00be5b",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/texture-audit.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/texture-audit.json",
+      "bytes": 11293,
+      "sha256": "91c796efef6cc203c852714a8160f6bdb60cfc3e48079d0d4cfcaae9278acad5",
+      "origins": [
+        "MoonForest independent review audit, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-1024-q255-nordo.ktx2",
+      "bytes": 263544,
+      "sha256": "de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-08-timber-brace-4096-q255-nordo.ktx2",
+      "bytes": 2564789,
+      "sha256": "13d3e07edf4a618d6a26dc5b02159a83fb953cb8b88ba4531f417cc1b0b216b4",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-1024-q255-nordo.ktx2",
+      "bytes": 247930,
+      "sha256": "0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-11-sluice-shutter-4096-q255-nordo.ktx2",
+      "bytes": 2242240,
+      "sha256": "e689e05d966bed117393e18159a70241432590e0f084e2d3dd3fb7b52d0b29a1",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-1024-q255-nordo.ktx2",
+      "bytes": 252487,
+      "sha256": "2d9c4983f532dd64d3f17a9a6c7dfc75b4cee2d6031e42ebaf95317a5bca161f",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-4096-q255-nordo.ktx2",
+      "bytes": 2260383,
+      "sha256": "2af940e4a74c91718d6245754392379aad7a0528b3f5ceb493f8e604b0c572e4",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-2048-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-12-lift-platform-2048-q255-nordo.ktx2",
+      "bytes": 763717,
+      "sha256": "64e4278387cb363110cceb216b863191584030089d84c4e4b860e75b96c0214f",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-1024-q255-nordo.ktx2",
+      "bytes": 213795,
+      "sha256": "aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-14-hidden-pressure-stone-4096-q255-nordo.ktx2",
+      "bytes": 1902878,
+      "sha256": "49d20e8dd209e537e92db6428f45fbed684fd9a52733ee2511a49a734d551461",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-1024-q255-nordo.ktx2",
+      "bytes": 256558,
+      "sha256": "6e6dbe7642c3822078b9db91051005e91ea0e4167b255d5205ee93f842e95b63",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-4096-q255-nordo.ktx2",
+      "bytes": 2251817,
+      "sha256": "f3b46faf9f503499ade234ef2b2fd1effeccb1429c4e84f5f13f88afdb1509c7",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-2048-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-15-resurrection-altar-2048-q255-nordo.ktx2",
+      "bytes": 770902,
+      "sha256": "af21b3191b2878f1972da7c879b5deb4a434b1f2e080d2dbac0ac5f9c70c1662",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-1024-q255-nordo.ktx2",
+      "bytes": 265058,
+      "sha256": "39c3212665e4138747f624955597654ff4365def11c94c789c6d96fb69749054",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-4096-q255-nordo.ktx2",
+      "bytes": 2442629,
+      "sha256": "58ab0722c061741a47756a4a47586b59a05f36244c8c1df6b7f5dd4d3e2762cd",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-2048-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-16-soul-collector-arm-2048-q255-nordo.ktx2",
+      "bytes": 819972,
+      "sha256": "4da5b7d44e00eaafdd181b1c772abc4367f4f9c18037302489197b976e9ce954",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-1024-q255-nordo.ktx2",
+      "bytes": 248522,
+      "sha256": "d237f81a5b16a78e04882d25a10c6309173a1adbaf775b431c099e045a094c7b",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-4096-q255-nordo.ktx2",
+      "bytes": 2205594,
+      "sha256": "3847dd40674afcd083465cd43bef657a1539a3f77023c589d0e5ae00d95e866f",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-2048-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-17-faded-sacred-emblem-2048-q255-nordo.ktx2",
+      "bytes": 737258,
+      "sha256": "eb0b840d0b3af19ff26803b352cf797e250de36a9e77c5fc4b49ccd94ab39506",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-1024-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-1024-q255-nordo.ktx2",
+      "bytes": 218119,
+      "sha256": "6c369cfeeb6e4ba28aa8331528d012cac5fc1553d0836462a381ffb09059f498",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-4096-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-4096-q255-nordo.ktx2",
+      "bytes": 1891409,
+      "sha256": "c0d8edf0c6d2c3e702571f856a13d4696fcf3a9d5f0867eae270160b52563b95",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-2048-q255-nordo.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/cave-19-apothecary-shelf-2048-q255-nordo.ktx2",
+      "bytes": 644409,
+      "sha256": "2e7e513bc79e63a60b6196b0f2d36164e25a4e0fecc2830b44f7861f6d6dbb3d",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/straight-rgb-proof.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/straight-rgb-proof.json",
+      "bytes": 4459,
+      "sha256": "6dcc6fb5ee647edf971fb3a832a54f8255d3deac37c2181720025159d28d8c05",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade.straight-rgb.png",
+      "bytes": 2801056,
+      "sha256": "caf78a06072d7730d97782dfe8470e72064524c3fbf554d4b2607ac32aa16d76",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade.straight-rgb.png",
+      "bytes": 2257642,
+      "sha256": "57d435f9c9a16c017414e662ac4e3f912fc28de8eb2f10e363245044e0bfccdb",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate.straight-rgb.png",
+      "bytes": 2708121,
+      "sha256": "d7860639c95bfb73544d096e9ab3c8cf14e481bf8540c88b5d02c8f16b9b337c",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/well.straight-rgb.png",
+      "bytes": 1508839,
+      "sha256": "7c7989fc5e702db31efeb27eb678db46829c5766943eb865796186d2875bf83d",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi.straight-rgb.png",
+      "bytes": 8464944,
+      "sha256": "75eef08ed97a297bedc6e270224dd1ffe000db32ad91e24f71d45a3978df41fd",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree.straight-rgb.png",
+      "bytes": 11266760,
+      "sha256": "da83ce7a6eece73ee1c931a0995506513d69334a9006faa0650e927855c4d17c",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log.straight-rgb.png",
+      "bytes": 10494297,
+      "sha256": "76110d70e34b0a2479005f9b219c0495579aea56e3f6ae557e0e48654fa16076",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood.straight-rgb.png",
+      "bytes": 2263353,
+      "sha256": "3dafd03ae189d3bf343405e4dd25b68eca6a523a547cb2cc2c1f150627556130",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster.straight-rgb.png",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster.straight-rgb.png",
+      "bytes": 2327100,
+      "sha256": "5efa9d69e3ab1772b658c3da4bca53919ed9fd9ba616b3eb09cb89544223cce3",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-1024-q255-nordo-rgb.ktx2",
+      "bytes": 252346,
+      "sha256": "984a450a81f8d97fbf7643fdb4f88e92c7788b8cd95ce17c47c71b94242f23de",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-512-q255-nordo-rgb.ktx2",
+      "bytes": 95965,
+      "sha256": "149eec5be249cb326a250655aa5afdb14b28c1fb00ead678e964fdbb5d6ec722",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-01-palisade-2048-q255-nordo-rgb.ktx2",
+      "bytes": 702069,
+      "sha256": "39e6b95cd1ed717f89ded633e7f4b0da1d812f2289596c25fffa673ff493f7ba",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-1024-q255-nordo-rgb.ktx2",
+      "bytes": 224801,
+      "sha256": "80ecb61b73fa92ee8333f85ab11b4bad6813c88f554d33656aa1c7620eb06e22",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-512-q255-nordo-rgb.ktx2",
+      "bytes": 87979,
+      "sha256": "b77d19ff1ed24ae077c63586ae8abb5b52d2c26757ca74a557378091d0126a33",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-02-cross-barricade-2048-q255-nordo-rgb.ktx2",
+      "bytes": 605998,
+      "sha256": "a2a377f51f77f430ae6cccb013d65260e1c48f8b0d666419065f8865e3d85f99",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-1024-q255-nordo-rgb.ktx2",
+      "bytes": 237162,
+      "sha256": "572420f6793fda74ff3b5bb5ef6abbec9bd3bf09f262ff0e26e968bb41427e42",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-512-q255-nordo-rgb.ktx2",
+      "bytes": 92997,
+      "sha256": "ca545f8c1b02c451f6eebc99102ddc78fa23c55d3a97679e1ec1cbba18e73625",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/wood-03-plank-gate-2048-q255-nordo-rgb.ktx2",
+      "bytes": 677660,
+      "sha256": "3cc28a08460790b344bac7ce080bd37d44255b1d26a8389415fb0d8c9e42d1a6",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/well-1024-q255-nordo-rgb.ktx2",
+      "bytes": 258854,
+      "sha256": "23b8f66f4a347f104580dbb8e9a6658086514a7acf27fd3ef662558d156f2fc3",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/well-512-q255-nordo-rgb.ktx2",
+      "bytes": 96818,
+      "sha256": "93f4ab6c4592de2b035cd71e118aeb6eec60c037a393c6630e2c6bb85087209b",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/well-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/well-2048-q255-nordo-rgb.ktx2",
+      "bytes": 623409,
+      "sha256": "6dc7696948764b31de57a2c2e2dc7a6cdeb49d2ce3e13bb50c79743b2eb5825c",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-1024-q255-nordo-rgb.ktx2",
+      "bytes": 242636,
+      "sha256": "d553919d9c837778faf1f7f697e8ee0861fa419c76d368857016d17767d9d287",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-4096-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-04-poison-fungi-4096-q255-nordo-rgb.ktx2",
+      "bytes": 1985147,
+      "sha256": "b56972d0c86e76d37b15e5b66d14a9ff9a5a6f6138f3c69b6b6901bfee686626",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-1024-q255-nordo-rgb.ktx2",
+      "bytes": 249432,
+      "sha256": "63742b1e448f27257f28e4ce48f55442075e411416bf81b034ecf5a01bb5b340",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-4096-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-4096-q255-nordo-rgb.ktx2",
+      "bytes": 2296377,
+      "sha256": "923e0d958152f17b6ef5429b6aa4667c95d4841c51ff69ea01c386fbe3cf27a0",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-02-dead-tree-2048-q255-nordo-rgb.ktx2",
+      "bytes": 752614,
+      "sha256": "b2b3ff1ffcd7fb11c4333405d1436e07239621b2419cd5d9f221e0107569c2d4",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-1024-q255-nordo-rgb.ktx2",
+      "bytes": 227172,
+      "sha256": "ac7ef0ae35024c9111a02ae73b52ac979bd8bf36d317d5f26f7eb05c60e11bcb",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-4096-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-4096-q255-nordo-rgb.ktx2",
+      "bytes": 2117947,
+      "sha256": "fba5f24d8a8c955c20145be39fa1bf4745b4ea2a70c9b867344070b05d7d2052",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/forest-03-fallen-log-2048-q255-nordo-rgb.ktx2",
+      "bytes": 682088,
+      "sha256": "da4e9e495a4ee150ca5cdcf2c03a3e226f0c588cbbebc916e0a8fd2ee1015004",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-1024-q255-nordo-rgb.ktx2",
+      "bytes": 223839,
+      "sha256": "b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-512-q255-nordo-rgb.ktx2",
+      "bytes": 86337,
+      "sha256": "38f45ab1efb41c9564e63f17734d04ebf52ca2021274c1dc8c0a82d568cb74d0",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/firewood-2048-q255-nordo-rgb.ktx2",
+      "bytes": 609531,
+      "sha256": "115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-1024-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-1024-q255-nordo-rgb.ktx2",
+      "bytes": 223166,
+      "sha256": "a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-512-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-512-q255-nordo-rgb.ktx2",
+      "bytes": 87550,
+      "sha256": "534b6a4d579bc8c854a53cc030bf020dc3aac8b9079653fc06369ed5143aec42",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-2048-q255-nordo-rgb.ktx2",
+      "path": "Sources/environment/approved-geometry/2026-11-09-r2/textures/crate-barrel-cluster-2048-q255-nordo-rgb.ktx2",
+      "bytes": 602272,
+      "sha256": "6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0",
+      "origins": [
+        "Canonical MoonForest user-approved R2 review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-review-r2-2026-11-09"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/plan.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/plan.json",
+      "bytes": 15810,
+      "sha256": "1e632a699678042941b62f2aa80d582f2fea94d8d015dfc983ed736044602cfd",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/b5f6705d826a55deb39ac591fcfe81814057d4d3d163ac136b8421946ad7953f.bin",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/b5f6705d826a55deb39ac591fcfe81814057d4d3d163ac136b8421946ad7953f.bin",
+      "bytes": 1637582,
+      "sha256": "b5f6705d826a55deb39ac591fcfe81814057d4d3d163ac136b8421946ad7953f",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/df3020b42f478be68e9b079e117b51aaede96720eda78391fac3e7f1d7c03041.ktx2",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/df3020b42f478be68e9b079e117b51aaede96720eda78391fac3e7f1d7c03041.ktx2",
+      "bytes": 10696155,
+      "sha256": "df3020b42f478be68e9b079e117b51aaede96720eda78391fac3e7f1d7c03041",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/bc70ff9e9c809de821a746d2d364643ff29043ebbe236a20d5e520c81af94aa6.gltf",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/bc70ff9e9c809de821a746d2d364643ff29043ebbe236a20d5e520c81af94aa6.gltf",
+      "bytes": 2390,
+      "sha256": "bc70ff9e9c809de821a746d2d364643ff29043ebbe236a20d5e520c81af94aa6",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/atlas-straight-rgb.png",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/atlas-straight-rgb.png",
+      "bytes": 7159816,
+      "sha256": "475a68f9bf7bd376ff3bdf243292c98129ca91be6b3579014aa74b1f4b9e82d5",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/runtime/approval.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/runtime/approval.json",
+      "bytes": 1744,
+      "sha256": "deb36cb86cb0f657581aeda0d2122376a099d494cde7b31356a492c23cdfede2",
+      "origins": [
+        "MoonForest user-approved village exterior review / 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-shell-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/authoring-validation.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/authoring-validation.json",
+      "bytes": 440,
+      "sha256": "2e8b142040debbdb0451f0cd511bed4c1ed12928f374f4ba1bfb467e0c2413e2",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/suspect-mask-validation.json",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/suspect-mask-validation.json",
+      "bytes": 296,
+      "sha256": "66e9ca13ee8d749abe89af4c03dd301a00ff8c11b552e4916613625206b4aaec",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/village-exterior-shell/2026-11-09/verify-authoring.py",
+      "path": "Sources/environment/village-exterior-shell/2026-11-09/verify-authoring.py",
+      "bytes": 1199,
+      "sha256": "cb3e5888ca77a07c0e46415a1ee9b6f0b74f59dd425a0e179dafe3445089ce0a",
+      "origins": [
+        "MoonForest canonical review derivative, 2026-11-09"
+      ],
+      "requiredBy": [
+        "village-exterior-textured-review-authoring"
       ],
       "status": "bundled"
     }

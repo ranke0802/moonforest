@@ -12,6 +12,8 @@ import {LoadDiagnostics} from '../src/load-diagnostics.js';
 import {applyPlainsViewDistance} from '../src/plains-view-distance.js';
 import {setupMinimapTravel} from '../src/minimap-travel.js';
 import {travelWaypoint} from '../src/map-waypoints.js';
+import {applyMinimapArrivalPose} from '../src/minimap-travel.js';
+import {safeRoadArrival} from '../src/map-travel.js';
 import {captureVillagePlainsHandoff} from '../src/village-plains-handoff.js';
 import {villageToPlains,plainsToVillage} from '../src/village-plains-boundary.js';
 import {createMapPortal} from '../src/map-travel.js';
@@ -93,7 +95,7 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}},modelFaults=[];
  const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},combat:{passiveRecovery:{reset:noop}},combatCount:0,hide(){boss.hides++;},hides:0,activateResident:async()=>{boss.activations++;},activations:0};
  const equipment=Object.freeze({sword:'existing-sword',shield:'existing-shield'}),orientation={type:'landscape-primary'},calls=[];
- const boundary={releaseSelectionValue,releaseEnabled:false,setupMinimapTravel,travelWaypoint,hudLayout:null,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop},applyPlayerFlash:noop,container:{meshes:[]},chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
+ const boundary={releaseSelectionValue,releaseEnabled:false,setupMinimapTravel,travelWaypoint,applyMinimapArrivalPose,safeRoadArrival,hudLayout:null,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop},applyPlayerFlash:noop,container:{meshes:[]},chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
   staminaNoticeAnchor:{reset:noop,dispose:noop,setOffset:noop},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},

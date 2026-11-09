@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
-import {MINIMAP_REGIONS,minimapTravelBlocked,minimapTravelUrl,setupMinimapTravel} from '../src/minimap-travel.js';
+import {MINIMAP_REGIONS,minimapTravelBlocked,minimapTravelUrl,setupMinimapTravel,applyMinimapArrivalPose} from '../src/minimap-travel.js';
 import {ELENA_SANCTUARY_WAYPOINT,travelWaypoint} from '../src/map-waypoints.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
 import {caveObstacles,CAVE_ROUTES} from '../src/witch-cave-layout.js';
@@ -13,6 +13,13 @@ import {worldSpawn} from '../src/map-route.js';
 import {DotMinimap} from '../src/dot-minimap.js';
 
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
+test('minimap arrival faces into each destination and puts camera behind player without changing zoom',()=>{
+ for(const destination of ['warrior-v3','warrior-plains','warrior-v4','warrior-v5']){
+  const position=worldSpawn(destination,'?arrival=portal&from=warrior-v3'),actor={rotation:{y:2}},camera={alpha:2,beta:.9,radius:17},pan={x:4,y:2,z:3};
+  const yaw=applyMinimapArrivalPose(actor,camera,pan,{destination,position});assert.ok(Number.isFinite(yaw));assert.ok(Math.abs(Math.cos(camera.alpha)+Math.sin(yaw))<1e-10);assert.ok(Math.abs(Math.sin(camera.alpha)+Math.cos(yaw))<1e-10);assert.deepEqual(pan,{x:0,y:0,z:0});assert.equal(camera.radius,17);assert.equal(camera.beta,.9);
+ }
+ const actor={rotation:{}},camera={},pan={};const position=ELENA_SANCTUARY_WAYPOINT.position,yaw=applyMinimapArrivalPose(actor,camera,pan,{destination:'warrior-v5',position,waypoint:ELENA_SANCTUARY_WAYPOINT});assert.ok(Math.sin(yaw)<0&&Math.cos(yaw)<0);
+});
 function fixture(options={}){
  const {document,window}=parseHTML('<html><body><main id="app"><aside id="map"><strong>마을</strong><canvas></canvas><small>● 나 · ◆ 포탈</small></aside><dialog id="other"></dialog></main></body></html>');
  const create=document.createElement.bind(document);document.createElement=(name,...args)=>{

@@ -1,0 +1,1 @@
+export{Sr as defaultVertexShader}from"./babylon-game-uE9lshiC.js";

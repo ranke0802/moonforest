@@ -8,7 +8,18 @@ import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {prepareVillageStart} from '../src/village-streamed-environment.js';
 import {validVillageTextureProfile} from '../src/village-texture-budget.js';
 import {CAVE_LABORATORY_GEOMETRY} from '../src/cave-laboratory-geometry.js';
+import {originalR2AssetGraph} from './helpers/mobile-profile-contract.js';
 const base=new URL('../public/assets/',import.meta.url),read=name=>JSON.parse(readFileSync(new URL(name,base)));
+
+// Only exact ledger-approved replacements may invert near and middle geometry.
+// The projection validates the actual model and every referenced file hash.
+function assertCaveLodContract(id,asset){
+  assert.equal(asset.lods.length,3);
+  const before=originalR2AssetGraph(asset,id,'witch-cave.json');
+  assert.ok(asset.lods[2].triangles<asset.lods[1].triangles,id+' far LOD order');
+  assert.ok(asset.lods[1].triangles<asset.lods[0].triangles || asset.r2Geometry && before!==asset,id+' near LOD requires approved R2');
+  return before;
+}
 
 test('cave publishes 22 approved Meshy types, six unchanged reuses and one image-free derived enclosure without the removed Joachim body',()=>{
   const m=read('witch-cave.json'),village=read('village.json'),forest=read('monster-forest.json');
@@ -20,11 +31,10 @@ test('cave publishes 22 approved Meshy types, six unchanged reuses and one image
   for(const [id,a]of Object.entries(m.assets)){
     const derived=id===CAVE_LABORATORY_GEOMETRY.assetId;
     if(!CAVE_ASSET_IDS.includes(id)&&!derived)assert.deepEqual(a,village.assets[id]??forest.assets[id]);
-    assert.equal(a.lods.length,3);if(!derived){assert.ok(validVillageTextureProfile(a.highTextures));assert.ok(a.highTextures.textures.albedo.width<=4096);}else{
-      assert.equal(a.surfaceStyle,'cave-palette');assert.equal(a.essentialStructural,true);assert.equal(a.highTextures,undefined);assert.equal(a.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);assert.equal(a.terrainSha256,CAVE_LABORATORY_GEOMETRY.terrainSha256);assert.equal(a.approvedRevision,CAVE_LABORATORY_GEOMETRY.revision);assert.equal(a.newGenerationCalls,0);assert.deepEqual(a.lods.map(l=>l.triangles),[4512,3158,2374]);
+    const original=assertCaveLodContract(id,a);if(!derived){assert.ok(validVillageTextureProfile(a.highTextures));assert.ok(a.highTextures.textures.albedo.width<=4096);}else{
+      assert.equal(a.surfaceStyle,'cave-palette');assert.equal(a.essentialStructural,true);assert.equal(a.highTextures,undefined);assert.equal(a.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);assert.equal(a.terrainSha256,CAVE_LABORATORY_GEOMETRY.terrainSha256);assert.equal(a.approvedRevision,CAVE_LABORATORY_GEOMETRY.revision);assert.equal(a.newGenerationCalls,0);assert.deepEqual(original.lods.map(l=>l.triangles),[4512,3158,2374]);
     }
     assert.equal(a.mobileNear.triangles,a.lods[0].triangles);
-    assert.ok(a.lods[2].triangles<a.lods[1].triangles&&a.lods[1].triangles<a.lods[0].triangles);
     if(id.startsWith('cave-'))assert.ok(a.lods[0].triangles<=5000);
     for(const tier of a.lods){
       const g=read(tier.model);assert.ok(g.extensionsRequired.includes('EXT_meshopt_compression'));
@@ -40,6 +50,16 @@ test('cave publishes 22 approved Meshy types, six unchanged reuses and one image
     }
     if(!derived){const high=a.highTextures.textures.albedo,bytes=readFileSync(new URL(high.url,base));assert.equal(bytes.readUInt32LE(20),high.width);assert.equal(bytes.readUInt32LE(24),high.height);}
   }
+});
+
+test('cave LOD inversion rejects missing, forged or altered R2 approval',()=>{
+  const id='cave-08-timber-brace',a=read('witch-cave.json').assets[id];
+  assert.ok(a.r2Geometry);assert.ok(a.lods[0].triangles<a.lods[1].triangles);
+  assert.doesNotThrow(()=>assertCaveLodContract(id,a));
+  const missing=structuredClone(a);delete missing.r2Geometry;assert.throws(()=>assertCaveLodContract(id,missing));
+  const forged=structuredClone(a);forged.r2Geometry.revision='forged';assert.throws(()=>assertCaveLodContract(id,forged));
+  const modified=structuredClone(a);modified.lods[1].triangles--;assert.throws(()=>assertCaveLodContract(id,modified));
+  assert.throws(()=>assertCaveLodContract('cave-unapproved',a));
 });
 
 test('cave entrance defers distant boss-room detail and shares one demand plan',async t=>{

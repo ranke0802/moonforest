@@ -1,0 +1,1 @@
+export{Mr as gaussianSplattingWGSL}from"./babylon-game-uE9lshiC.js";

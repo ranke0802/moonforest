@@ -1,0 +1,1 @@
+export{r as volumetricLightingRenderVolumePixelShader}from"./babylon-lazy~game~volumetricLightingRenderVolume.fragment~volumetricLightingRenderVolume.fr~i2s47d06-Dg2XtPqT.js";

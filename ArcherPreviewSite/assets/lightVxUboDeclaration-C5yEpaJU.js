@@ -1,0 +1,1 @@
+export{Ki as lightVxUboDeclaration}from"./babylon-game-uE9lshiC.js";

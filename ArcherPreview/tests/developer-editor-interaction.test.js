@@ -20,17 +20,17 @@ function fixture(t,{ready=true,autoEnter=true,deferLease=false,deferApply=false,
   constructor(){stats.runtimes++;this.mapId=world.mapId;this.baseManifest=createBasePlacementManifest(world.mapId,{catalog:ASSET_CATALOG,placements});this.document=createEmptyPlacementDocument(this.baseManifest);this.records=new Map();this.disposed=false;}
   createBaseOverride(id){const row=this.baseManifest.instances.find(row=>row.instanceId===id);return {instanceId:id,sourceInstanceId:id,assetId:row.assetId,assetVersion:row.assetVersion,transform:structuredClone(row.transform),attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid'};}
   diagnostics(){return {instances:this.records.size};}
-  clearPreview(){}
+  clearPreview(){this.previewRecord?.root.dispose();this.previewRecord=null;}
   clearExistingPreview(){if(!this.previous)return;const record=this.records.get(this.previous.instanceId);if(record)this.set(record,this.previous);this.previous=null;}
-  set(record,instance){record.instance=structuredClone(instance);record.root.position.copyFromFloats(...instance.transform.position);record.root.position.y+=.5;record.root.scaling.setAll(instance.transform.scale);record.root.rotationQuaternion=Quaternion.FromArray(instance.transform.rotation);record.root.computeWorldMatrix(true);}
+  set(record,instance){record.instance=structuredClone(instance);record.root.position.copyFromFloats(...instance.transform.position);record.root.position.y+=.5;record.root.scaling.setAll(instance.transform.scale);record.root.rotationQuaternion=Quaternion.FromArray(instance.transform.rotation);record.root.computeWorldMatrix(true);const bounds=record.root.getBoundingInfo().boundingBox;record.min=bounds.minimumWorld.clone();record.max=bounds.maximumWorld.clone();}
   async previewExisting(instance){stats.previews++;const record=this.records.get(instance.instanceId);this.previous??=structuredClone(record.instance);this.set(record,instance);return record;}
-  async preview(){}
+  async preview(instance){if(!this.previewRecord){const root=MeshBuilder.CreateBox('placement-preview-test',{size:1},scene);root.isPickable=false;this.previewRecord={root};}this.set(this.previewRecord,instance);return this.previewRecord;}
   async apply(value){if(deferApply)await new Promise(resolve=>gate.apply=resolve);this.clearExistingPreview();const valid=validatePlacementDocument(value,{catalog:ASSET_CATALOG,baseManifest:this.baseManifest});for(const record of this.records.values())record.root.dispose();this.records.clear();for(const instance of valid.instances){const root=MeshBuilder.CreateBox(instance.instanceId,{size:1},scene);root.metadata={placementInstanceId:instance.instanceId};const record={instance,root};this.records.set(instance.instanceId,record);this.set(record,instance);}this.document=valid;world.placementOverlay=structuredClone(valid);stats.applies++;return valid;}
  }
  const manager={gizmos:{positionGizmo:nativeGizmo},attachToNode(node){this.attached=node;},isHovered:false},api=setupDeveloperEditor({root,world,getPlayer:()=>player,getState:()=>state,storage:{getItem:key=>store.get(key)??null,setItem:(key,value)=>store.set(key,value)},Runtime,autoEnter,setupLayout:null,createGizmos:()=>{stats.gizmos++;return {manager,dispose(){stats.gizmoDisposals++;}};}});
  t.after(()=>{api.dispose();scene.dispose();engine.dispose();});
- const button=name=>root.querySelector(`[data-cmd="${name}"]`),click=async name=>{button(name).dispatchEvent(new window.Event('click',{bubbles:true}));await settle();scene.setTransformMatrix(camera.getViewMatrix(true),camera.getProjectionMatrix(true));},project=point=>Vector3.Project(point,Matrix.Identity(),scene.getTransformMatrix(),camera.viewport.toGlobal(800,600)),pointer=async(type,point,{pointerId=1,eventType='pointermove'}={})=>{const screen=project(point),info=new PointerInfoPre(type,{button:0,pointerId,type:eventType,preventDefault(){}},screen.x,screen.y);scene.pointerX=screen.x;scene.pointerY=screen.y;scene.onPrePointerObservable.notifyObservers(info,type);await settle();return info;};
- return {api,root,document,window,world,state,stats,store,gate,options,player,nativeGizmo,manager,button,click,pointer,get cameraCounts(){return {detach:detachCount,attach:attachCount};}};
+ const button=name=>root.querySelector(`[data-cmd="${name}"]`),clickRaw=async name=>{button(name).dispatchEvent(new window.Event('click',{bubbles:true}));await settle();scene.setTransformMatrix(camera.getViewMatrix(true),camera.getProjectionMatrix(true));},project=point=>Vector3.Project(point,Matrix.Identity(),scene.getTransformMatrix(),camera.viewport.toGlobal(800,600)),pointer=async(type,point,{pointerId=1,eventType='pointermove',pointerType='mouse'}={})=>{const screen=project(point),info=new PointerInfoPre(type,{button:0,pointerId,pointerType,type:eventType,preventDefault(){}},screen.x,screen.y);scene.pointerX=screen.x;scene.pointerY=screen.y;scene.onPrePointerObservable.notifyObservers(info,type);await settle();return info;},click=async name=>{await clickRaw(name);if(name==='place'&&api.inspect().placing){const count=api.inspect().document.instances.length;await pointer(PointerEventTypes.POINTERDOWN,new Vector3(8+count*3,0,3),{eventType:'pointerdown'});}};
+ return {api,root,document,window,world,state,stats,store,gate,options,player,nativeGizmo,manager,button,click,clickRaw,pointer,get cameraCounts(){return {detach:detachCount,attach:attachCount};}};
 }
 
 test('first-use UI waits for ready, auto-enters once and opens the usable prop category',async t=>{
@@ -38,6 +38,40 @@ test('first-use UI waits for ready, auto-enters once and opens the usable prop c
  f.state.ready=true;f.api.notifyReady();await settle();assert.equal(f.api.isEditing(),true);assert.equal(f.stats.leases,1);assert.equal(f.options[0].hideHud,true);assert.equal(f.button('place').disabled,false);assert.equal(f.world.scene.onBeforeRenderObservable.observers.filter(observer=>!observer._willBeUnregistered).length,0);
  f.api.notifyReady();await f.click('enter');assert.equal(f.stats.leases,1);await f.click('place');const instance=f.api.inspect().document.instances[0];assert.ok(Math.hypot(instance.transform.position[0]-f.player.position.x,instance.transform.position[2]-f.player.position.z)>1.3,'camera focus spawn moves clear of the player');assert.equal(f.root.querySelector('[data-instances] option[selected]').textContent.includes(instance.instanceId),false);
  await f.click('apply');assert.equal(f.api.isEditing(),false);f.api.notifyReady();await settle();assert.equal(f.stats.leases,1,'applying does not immediately reopen the editor');assert.ok(f.store.get(authoredMapStorageKey('village')));assert.equal(f.button('export').disabled,false,'the applied work remains saveable');
+});
+
+test('placement preview follows pointer, stays uncommitted when red, and places once on a valid left click',async t=>{
+ const f=fixture(t);await settle();f.world.navigation.obstacles.push({x:12,z:3,radius:1});await f.clickRaw('place');assert.equal(f.api.inspect().document.instances.length,0);assert.equal(f.api.inspect().placing.valid,false);assert.equal(f.root.querySelector('.placement-preview-actions').dataset.valid,'false');
+ await f.pointer(PointerEventTypes.POINTERMOVE,new Vector3(8,0,3));assert.equal(f.api.inspect().placing.valid,true);assert.equal(f.root.querySelector('.placement-preview-actions').dataset.valid,'true');
+ await f.pointer(PointerEventTypes.POINTERMOVE,new Vector3(12,0,3));assert.equal(f.api.inspect().placing.valid,false);assert.equal(f.root.querySelector('.placement-preview-actions').dataset.valid,'false');await f.pointer(PointerEventTypes.POINTERDOWN,new Vector3(12,0,3),{eventType:'pointerdown'});assert.equal(f.api.inspect().document.instances.length,0);
+ await f.pointer(PointerEventTypes.POINTERMOVE,new Vector3(8,0,3));await f.pointer(PointerEventTypes.POINTERDOWN,new Vector3(8,0,3),{eventType:'pointerdown'});assert.equal(f.api.inspect().document.instances.length,1);assert.equal(f.api.inspect().placing,null);assert.equal(f.root.querySelector('.placement-preview-actions'),null);assert.equal(f.button('apply').disabled,false);
+});
+
+test('touch chooses a position before confirmation and cancel removes only the preview',async t=>{
+ const f=fixture(t);await settle();await f.clickRaw('place');await f.pointer(PointerEventTypes.POINTERDOWN,new Vector3(8,0,3),{eventType:'pointerdown',pointerType:'touch'});assert.equal(f.api.inspect().document.instances.length,0);assert.equal(f.api.inspect().placing.valid,true);await f.clickRaw('place-confirm');assert.equal(f.api.inspect().document.instances.length,1);
+ await f.clickRaw('place');assert.ok(f.api.inspect().placing);await f.clickRaw('place-cancel');assert.equal(f.api.inspect().document.instances.length,1);assert.equal(f.api.inspect().placing,null);assert.equal(f.root.querySelector('.placement-preview-actions'),null);
+});
+
+test('entering placement does not search the map center for a free position',async t=>{
+ const f=fixture(t);await settle();f.world.navigation.findFree=()=>{throw Error('no free automatic point');};await f.clickRaw('place');assert.ok(f.api.inspect().placing);assert.equal(f.api.inspect().document.instances.length,0);await f.clickRaw('place-cancel');assert.equal(f.api.inspect().placing,null);
+});
+
+test('object interaction is saved in the map document and follows undo and apply',async t=>{
+ const f=fixture(t);await settle();await f.click('place');f.root.querySelector('[data-interaction-label]').value='읽기';f.root.querySelector('[data-interaction-text]').value='낡은 기록을 발견했다.';f.root.querySelector('[data-interaction-range]').value='4';await f.click('interaction-save');
+ assert.deepEqual(f.api.inspect().document.instances[0].interaction,{label:'읽기',text:'낡은 기록을 발견했다.',range:4});await f.click('undo');assert.equal(f.api.inspect().document.instances[0].interaction,undefined);await f.click('redo');await f.click('apply');assert.equal(JSON.parse(f.store.get(authoredMapStorageKey('village'))).instances[0].interaction.text,'낡은 기록을 발견했다.');
+});
+
+test('closing the editor during delayed preview cannot commit the cancelled object',async t=>{
+ const f=fixture(t);await settle();const runtime=f.world.authoredPlacements,preview=runtime.preview.bind(runtime);let release,started=false;runtime.preview=async row=>{started=true;await new Promise(resolve=>release=resolve);return preview(row);};
+ await f.clickRaw('place');assert.equal(started,true);const closing=f.api.hide();release();await closing;await settle();assert.equal(f.api.inspect().placing,null);assert.equal(f.api.inspect().document.instances.length,0);assert.equal(f.root.querySelector('.placement-preview-actions'),null);
+});
+
+test('selected building exposes flatten controls and includes the patch in undo and saved map',async t=>{
+ const f=fixture(t);await settle();const category=f.root.querySelector('[data-category]');category.value='building';category.dispatchEvent(new f.window.Event('change'));await f.click('place');
+ const item=f.api.inspect().document.instances[0],runtime=f.world.authoredPlacements,record=runtime.records.get(item.instanceId);record.min=new Vector3(2,0,1);record.max=new Vector3(6,6,5);f.world.terrain.step=1;f.world.terrain.half=50;
+ runtime.editedTerrain=patches=>({heightAt:()=>patches[0]?.height??0});assert.equal(f.button('flatten').disabled,false);await f.click('flatten');
+ let doc=f.api.inspect().document;assert.equal(doc.terrainPatches.length,1);assert.deepEqual({x:doc.terrainPatches[0].x,z:doc.terrainPatches[0].z,halfWidth:doc.terrainPatches[0].halfWidth},{x:4,z:3,halfWidth:4});
+ await f.click('undo');assert.equal(f.api.inspect().document.terrainPatches,undefined);await f.click('redo');assert.equal(f.api.inspect().document.terrainPatches.length,1);await f.click('apply');assert.equal(JSON.parse(f.store.get(authoredMapStorageKey('village'))).terrainPatches.length,1);
 });
 
 test('actual scene picks drag an owned prop without moving camera or publishing until pointer-up',async t=>{
@@ -118,7 +152,7 @@ test('Preview also re-enters after Apply while keeping the applied placement doc
 });
 
 test('a failed additional placement keeps the committed selection and its visible transform, then allows retry',async t=>{
- const f=fixture(t);await settle();await f.click('place');const selected=f.api.inspect().document.instances[0],runtime=f.world.authoredPlacements,apply=runtime.apply.bind(runtime);runtime.apply=async value=>{if(value.instances.length>1)throw Error('Placement asset cache limit reached');return apply(value);};await f.click('place');assert.equal(f.api.inspect().selectedId,selected.instanceId);assert.equal(f.root.querySelector('[data-instances]').value,selected.instanceId);assert.equal(f.api.inspect().document.instances.length,1);assert.equal(f.root.querySelector('[data-field="x"]').value,String(Number(selected.transform.position[0].toFixed(5))));assert.equal(f.button('place').disabled,false);assert.equal(f.root.querySelector('[data-status]').dataset.error,'true');runtime.apply=apply;await f.click('place');assert.equal(f.api.inspect().document.instances.length,2);assert.equal(f.api.inspect().selectedId,f.api.inspect().document.instances[1].instanceId);
+ const f=fixture(t);await settle();await f.click('place');const selected=f.api.inspect().document.instances[0],runtime=f.world.authoredPlacements,apply=runtime.apply.bind(runtime);runtime.apply=async value=>{if(value.instances.length>1)throw Error('Placement asset cache limit reached');return apply(value);};await f.click('place');assert.equal(f.api.inspect().selectedId,selected.instanceId);assert.equal(f.root.querySelector('[data-instances]').value,selected.instanceId);assert.equal(f.api.inspect().document.instances.length,1);assert.equal(f.root.querySelector('[data-field="x"]').value,String(Number(selected.transform.position[0].toFixed(5))));assert.equal(f.button('place').disabled,true);assert.equal(f.root.querySelector('[data-status]').dataset.error,'true');runtime.apply=apply;await f.clickRaw('place-confirm');assert.equal(f.api.inspect().document.instances.length,2);assert.equal(f.api.inspect().selectedId,f.api.inspect().document.instances[1].instanceId);
 });
 
 

@@ -1,0 +1,1 @@
+export{ai as openpbrPixelShaderWGSL}from"./babylon-game-uE9lshiC.js";

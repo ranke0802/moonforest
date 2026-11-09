@@ -1,10 +1,17 @@
-import {Frustum,Vector3} from '@babylonjs/core';
+import {Frustum,Vector3,Matrix,Quaternion} from '@babylonjs/core';
 import {projectedCoverage,villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {plainsRenderRange} from './plains-view-distance.js';
 
 // The 1000-record cutoff is empirical: local paired tests found no consistent
 // benefit for the current village, forest and cave. Overview uses a direct scan.
 const DEMAND_INDEX_MIN_RECORDS=1000;
+
+// The accepted shell has one authored triangle above the original native
+// frame. Bounds are from its immutable glTF POSITION accessor; the normal
+// native frame continues to control placement scale and collisions.
+const APPROVED_EXTERIOR_MODEL='bc70ff9e9c809de821a746d2d364643ff29043ebbe236a20d5e520c81af94aa6';
+const APPROVED_EXTERIOR_MIN=[-38.47310256958008,-0.12774726748466492,-42.48561477661133];
+const APPROVED_EXTERIOR_MAX=[39.35612106323242,23.00206184387207,44.41767883300781];
 
 // Enclose the exact demand spheres, not just placement centres. A cell that is
 // wholly outside the range/frustum cannot contain an eligible record. Records
@@ -58,7 +65,20 @@ export function placementBounds(world,p,config){
   }
   foundation=p.elevation??(p.topElevation!==undefined?p.topElevation-height:foundation);
   const center=new Vector3(p.x,foundation-.025+(p.yOffset??0)+height*.5,p.z);
-  return {center,radius:half.length(),min:center.subtract(half),max:center.add(half)};
+  const min=center.subtract(half),max=center.add(half),marker=config.approvedVillageExterior;
+  const approved=marker?.revision==='approved-village-exterior-2026-11-09'&&marker.assetId==='village-approach'&&marker.appliedModelSha256===APPROVED_EXTERIOR_MODEL&&p.asset==='village-approach'&&config.lods?.length===3&&config.lods.every(t=>t.model===`./content/${APPROVED_EXTERIOR_MODEL}.gltf`)&&config.mobileNear?.model===`./content/${APPROVED_EXTERIOR_MODEL}.gltf`;
+  if(!approved)return {center,radius:half.length(),min,max};
+  // Match createVillageTransform's root scale/anchor and facing rotation.
+  // This runs once per exterior placement, before its first stream demand.
+  const scaleX=p.length?p.length/config.bounds[0]:scale,scaleZ=p.depth?p.depth/config.bounds[2]:scale;
+  const root=Matrix.Compose(new Vector3(scaleX,scale,scaleZ),Quaternion.RotationYawPitchRoll(p.yaw,0,0),new Vector3(p.x,foundation-.025+(p.yOffset??0),p.z));
+  const matrix=Matrix.RotationY(config.frontYawOffset??0).multiply(root);
+  for(let mask=0;mask<8;mask++){
+    const local=new Vector3(...APPROVED_EXTERIOR_MIN.map((v,i)=>mask&(1<<i)?APPROVED_EXTERIOR_MAX[i]:v));
+    const point=Vector3.TransformCoordinates(local,matrix);min.minimizeInPlace(point);max.maximizeInPlace(point);
+  }
+  const axis=['x','y','z'].map(key=>Math.max(Math.abs(min[key]-center[key]),Math.abs(max[key]-center[key])));
+  return {center,radius:Math.hypot(...axis)+1e-6,min,max};
 }
 
 // Demand is spatial, while downloads are deduplicated by asset/tier. A rotated

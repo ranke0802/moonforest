@@ -69,7 +69,14 @@ test('budget wall preserves historical relief metadata, exact 4K texture bytes a
  assert.deepEqual(asset.mobileNear,asset.lods[0]);assert.equal(asset.highTextures.textures.albedo.url,'./content/081b18b2af992bdd0953fb9fceb75a66b86deaede4e3515c012d2e9284048c49.ktx2');
  const high=fs.readFileSync(new URL(asset.highTextures.textures.albedo.url,base));assert.equal(high.readUInt32LE(20),4096);assert.equal(high.readUInt32LE(24),4096);assert.equal(digest(high),'081b18b2af992bdd0953fb9fceb75a66b86deaede4e3515c012d2e9284048c49');
  assert.equal(CAVE_LABORATORY_GEOMETRY.sourceSha256,'eadcb1b51b5314ac6bfc8ac5fbd5951d027ef51fc6636063caedf55bf304bd6b');assert.equal(CAVE_LABORATORY_GEOMETRY.revision,'lab-large-joints-r3-v1');
- const native=manifest.assets['cave-derived-laboratory-rock'];assert.equal(native.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);assert.deepEqual(native.lods.map(l=>l.triangles),[4512,3158,2374]);assert.equal(native.vertexRelief,undefined,'Rejected r3 visual prototype must not enter deployment');
+ const native=manifest.assets['cave-derived-laboratory-rock'];assert.equal(native.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);
+ if(native.r2Geometry){
+  const r2=JSON.parse(fs.readFileSync(sourcePath('approved-review-r2-2026-11-09','approval.json'))),entry=r2.assets.find(row=>row.id==='cave-derived-laboratory-rock'),application=entry.applications.find(row=>row.manifest==='witch-cave.json');
+  assert.deepEqual(application.beforeConfig.lods.map(l=>l.triangles),[4512,3158,2374],'The historic native source remains recorded');
+  assert.deepEqual(native,application.afterConfig,'The current native render is exactly the approved R2 candidate');
+  assert.equal(entry.actualTriangles,2500);assert.deepEqual(native.lods.map(l=>l.triangles),[2500,3158,2374]);
+ }else assert.deepEqual(native.lods.map(l=>l.triangles),[4512,3158,2374]);
+ assert.equal(native.vertexRelief,undefined,'Rejected r3 visual prototype must not enter deployment');
  assert.equal(asset.vertexRelief.sourceStats.newTriangles,0);assert.equal(asset.vertexRelief.sourceStats.newDrawCalls,0);assert.equal(asset.vertexRelief.sourceStats.newTextures,0);
  assert.equal(asset.vertexRelief.sourceModels,undefined,'Historic sources must not become live deployment links');assert.equal(asset.vertexRelief.sourceModelHashes.length,3);assert.ok(asset.vertexRelief.sourceModelHashes.every(value=>/^[a-f0-9]{64}$/.test(value)));
 });

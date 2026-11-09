@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "revision": "approved-review-r2-2026-11-09",
+  "status": "applied-local",
+  "assets": [
+    {
+      "id": "wood-01-palisade",
+      "requestedCap": 1500,
+      "actualTriangles": 1479,
+      "sourceModelSha256": "5015cfac302ee3935a6571793af94d2dd12e3f195c78dc00e2fbaf6104a78738",
+      "sourceTextureSha256": "066b11f2683d52a67c1539810e044ca7c22f34fa323acd6af69b5e651d266466",
+      "sourceRgbSha256": "caf78a06072d7730d97782dfe8470e72064524c3fbf554d4b2607ac32aa16d76",
+      "manifests": [
+        "village.json"
+      ]
+    },
+    {
+      "id": "wood-02-cross-barricade",
+      "requestedCap": 1500,
+      "actualTriangles": 1488,
+      "sourceModelSha256": "5ea66de3a01b30fae9eb96b50e7cd36f6524929075cc49ef518a4bfb5bb5e8f9",
+      "sourceTextureSha256": "221e5027b56ec7f9481615a4e31d6661759286173745accfe70196bd2c53cbf9",
+      "sourceRgbSha256": "57d435f9c9a16c017414e662ac4e3f912fc28de8eb2f10e363245044e0bfccdb",
+      "manifests": [
+        "village.json"
+      ]
+    },
+    {
+      "id": "wood-03-plank-gate",
+      "requestedCap": 1500,
+      "actualTriangles": 1454,
+      "sourceModelSha256": "15c7f71ed4175c963b317592ce7cd9e2f1b090fb4caeaee1823594bf3ff2111c",
+      "sourceTextureSha256": "83b30c9039884396a42e39f460484043cae34dc46919f730fcd920634c2516d6",
+      "sourceRgbSha256": "d7860639c95bfb73544d096e9ab3c8cf14e481bf8540c88b5d02c8f16b9b337c",
+      "manifests": [
+        "village.json"
+      ]
+    },
+    {
+      "id": "well",
+      "requestedCap": 3000,
+      "actualTriangles": 3011,
+      "sourceModelSha256": "b4a6eb0c693dc5844861b114092c6f071a94ea5dd570cd1979ef4617c6c67f80",
+      "sourceTextureSha256": "f5449b2fdb51687716091f17d919b0b2ff31956d38ce074f1e7c7ad37f65dac0",
+      "sourceRgbSha256": "7c7989fc5e702db31efeb27eb678db46829c5766943eb865796186d2875bf83d",
+      "manifests": [
+        "village.json"
+      ]
+    },
+    {
+      "id": "forest-04-poison-fungi",
+      "requestedCap": 700,
+      "actualTriangles": 3174,
+      "sourceModelSha256": "1811e82371f79ad44ca83a89b6941588a3e3858bd44d3891c1bd512ef99866e3",
+      "sourceTextureSha256": "30698be49c8b5ca53399426c7b0902462ad3b0220958c66755e51d118723ac88",
+      "sourceRgbSha256": "75eef08ed97a297bedc6e270224dd1ffe000db32ad91e24f71d45a3978df41fd",
+      "manifests": [
+        "great-plains.json",
+        "monster-forest.json"
+      ]
+    },
+    {
+      "id": "forest-02-dead-tree",
+      "requestedCap": 1000,
+      "actualTriangles": 2000,
+      "sourceModelSha256": "9e0fe59e61c2aa772b932d0039e1b82b20a2fa141bfd3dc95655e409be35ffdc",
+      "sourceTextureSha256": "a9ceef11b97092551c3557acc828fe07079c217f1af58bc1f829a36d79d4488a",
+      "sourceRgbSha256": "da83ce7a6eece73ee1c931a0995506513d69334a9006faa0650e927855c4d17c",
+      "manifests": [
+        "great-plains.json",
+        "monster-forest.json"
+      ]
+    },
+    {
+      "id": "forest-03-fallen-log",
+      "requestedCap": 1000,
+      "actualTriangles": 999,
+      "sourceModelSha256": "c5d328eace42c252719e741c996f488219a42ae1b35c3de7812771b16dbdd0b1",
+      "sourceTextureSha256": "52d5493d5ecfeb82b204e877d507eb8c7e8e93e9d7094d4288feb04f110b1015",
+      "sourceRgbSha256": "76110d70e34b0a2479005f9b219c0495579aea56e3f6ae557e0e48654fa16076",
+      "manifests": [
+        "great-plains.json",
+        "monster-forest.json"
+      ]
+    },
+    {
+      "id": "firewood",
+      "requestedCap": 2000,
+      "actualTriangles": 1941,
+      "sourceModelSha256": "d843b94b5702d7a17cdfa65915b60314e750add280d1ae30c4d951a57812ace6",
+      "sourceTextureSha256": "32cdc1dd7313eb61c4bb7c01eb69974c5b5e705bbb1a099fac5b4c1eef84d49c",
+      "sourceRgbSha256": "3dafd03ae189d3bf343405e4dd25b68eca6a523a547cb2cc2c1f150627556130",
+      "manifests": [
+        "great-plains.json",
+        "village-plains-outskirts.json",
+        "village.json",
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "crate-barrel-cluster",
+      "requestedCap": 2000,
+      "actualTriangles": 1964,
+      "sourceModelSha256": "b7e8235b4b1b0c037fe3cf89f5c0a4890a9d6d8ac741755417c26c2b540bd185",
+      "sourceTextureSha256": "66e4f7d6556b96e25c1bcf66daa00d93d5f6b73dbe8db5452ed64935325e0953",
+      "sourceRgbSha256": "5efa9d69e3ab1772b658c3da4bca53919ed9fd9ba616b3eb09cb89544223cce3",
+      "manifests": [
+        "great-plains.json",
+        "village.json",
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "chest-common",
+      "requestedCap": 1000,
+      "actualTriangles": 981,
+      "sourceModelSha256": "7b6a7b67611e02232ed5d894d66653f75d602898363c8de0e257033485ebaadf",
+      "sourceTextureSha256": null,
+      "sourceRgbSha256": null,
+      "manifests": [
+        "great-plains.json",
+        "quest-props.json"
+      ]
+    },
+    {
+      "id": "cave-08-timber-brace",
+      "requestedCap": 1500,
+      "actualTriangles": 1500,
+      "sourceModelSha256": "99770b6c623cdb41be63a5f0e766a2ee6bad2d2a4bd4ddb520e77cd4cfafc2ec",
+      "sourceTextureSha256": "608631b0f0a9857c549fd63c2ff8e141e25d278ba1b6f603b396fa72c29db56a",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-09-iron-gate-leaf",
+      "requestedCap": 1500,
+      "actualTriangles": 1500,
+      "sourceModelSha256": "491804860712aeeef8ca8a2109ccc00333037af91d9adc32f29acb7baa44af69",
+      "sourceTextureSha256": null,
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-11-sluice-shutter",
+      "requestedCap": 1500,
+      "actualTriangles": 1691,
+      "sourceModelSha256": "784567c124eb5407d069e4fc67fb082ca01efd5266ddbcaf7fdb09d7dfc778c0",
+      "sourceTextureSha256": "e327abf241c0053f3b388e057c3b9f391bbbb70e654af07f99c79b94d52a26b7",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-12-lift-platform",
+      "requestedCap": 1500,
+      "actualTriangles": 1499,
+      "sourceModelSha256": "82f7be95d429878bb7fcb95b70bf2db78f878dcecc3531c928339f925fdfe4f1",
+      "sourceTextureSha256": "f5cc8480b24373f3faa895e750f5ff0a6da5d06b79005bcab82cb985bc33bfcb",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-14-hidden-pressure-stone",
+      "requestedCap": 1500,
+      "actualTriangles": 1500,
+      "sourceModelSha256": "924fb824399e707c5fb23c8547725706a4ea9e2db0d8e69a48d007dcd29ece10",
+      "sourceTextureSha256": "b7886d0e111e0a45daeb3f25098319c9e42167d6a33bdb0b6141a84ed360fe49",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-15-resurrection-altar",
+      "requestedCap": 1500,
+      "actualTriangles": 2097,
+      "sourceModelSha256": "0c1cb4bc2a103e04834836e0b942ceac23fef5551dad38fa85fd3b609b445a43",
+      "sourceTextureSha256": "ef6d46e39a3bdf2545935795d2590ad5a7cd9ee1043931618bb25f48f36042d8",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-16-soul-collector-arm",
+      "requestedCap": 1500,
+      "actualTriangles": 2885,
+      "sourceModelSha256": "f01e336dce488153feaeb4521bd56b73026e9a7f25db46299d2258e4b2a305dd",
+      "sourceTextureSha256": "05386ced2b670e7949a80daca73bc78aa079f26e6ff8cc63e921c6119530ddf2",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-17-faded-sacred-emblem",
+      "requestedCap": 1500,
+      "actualTriangles": 1500,
+      "sourceModelSha256": "24ba04165072ea178bd283a25991677a92a7155a3c33da205455f4f9f702dbe2",
+      "sourceTextureSha256": "5203e0034f616a8cdc5d8eb783221a9f493567d0a853ce797b5ffc6a213ea63a",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-19-apothecary-shelf",
+      "requestedCap": 1500,
+      "actualTriangles": 1500,
+      "sourceModelSha256": "9824101a3c6310778173ba088e1b8a61a25a488608350a759e7efc45f8f6f9ab",
+      "sourceTextureSha256": "81c9f23eaefd10ed2775d8a3279f5f4b5aa6071711f1d6e4847b5788e5e57eee",
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    },
+    {
+      "id": "cave-derived-laboratory-rock",
+      "requestedCap": 2500,
+      "actualTriangles": 2500,
+      "sourceModelSha256": "111e7bb91242a66ec4ed99e0086055acebb2cfc4006649ede20b2d7419518811",
+      "sourceTextureSha256": null,
+      "sourceRgbSha256": null,
+      "manifests": [
+        "witch-cave.json"
+      ]
+    }
+  ],
+  "manifests": [
+    {
+      "manifest": "great-plains.json",
+      "beforeSha256": "6bd632fa3c90d975459091ccb5a505670b815f2f0c410cd99c0b1140a754c3f6",
+      "afterSha256": "c810960e77804e870563a07d4411cb92a10bbd47ab365d453aee815743466476"
+    },
+    {
+      "manifest": "monster-forest.json",
+      "beforeSha256": "f31017d44a3ff18b84a0e79da4ad7c11759d6823dd8a377625400a7c7e2752e4",
+      "afterSha256": "eb9cd03794c5a433bba9b096ae385b64afd4ed840f3aa0f4dd42e317c918a6f4"
+    },
+    {
+      "manifest": "quest-props.json",
+      "beforeSha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "afterSha256": "5bd843e95b3c04541a42ae24cb5fb27f1677247570e298651df79954a6f9a6eb"
+    },
+    {
+      "manifest": "village-plains-outskirts.json",
+      "beforeSha256": "ceac44c90ba3a5c7b32a68e0e27be0427922b4c7d6585d19a21c403cc9e9e886",
+      "afterSha256": "d2770fb3b15984b7baa1c54532d295697383887f3219452dc9cf4bf7429128ab"
+    },
+    {
+      "manifest": "village.json",
+      "beforeSha256": "84c4191da0aed73b13d4162ee599f17493b840344c222d59f9ddba36bbc270fb",
+      "afterSha256": "4d553cca0db228c4cf6325f81d18d836a42d560bd82f67f96e6b405c006360b6"
+    },
+    {
+      "manifest": "witch-cave.json",
+      "beforeSha256": "289f199731ef010a0540a6d35969c8663bdb5d952cdccaa93ddab65903dc9d14",
+      "afterSha256": "ca44907dab1940dc02e155a6d2feab22afb77655759b463465403e9fa495efaf"
+    }
+  ],
+  "retention": "Original source and original content-addressed runtime files retained.",
+  "limitations": [
+    "No browser automation.",
+    "No real-device FPS/heat or GPU raster measurements."
+  ]
+}

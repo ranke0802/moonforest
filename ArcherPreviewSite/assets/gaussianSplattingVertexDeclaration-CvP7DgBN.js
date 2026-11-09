@@ -1,0 +1,1 @@
+export{Nr as gaussianSplattingVertexDeclarationWGSL}from"./babylon-game-uE9lshiC.js";

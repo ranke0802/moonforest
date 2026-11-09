@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {emptyMonsterSpawns,validateMonsterSpawns} from '../src/monster-spawn-document.js';
+const row=(id,extra={})=>({id,definitionId:'hooded-goblin.standard',groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x:1,z:2,yaw:0,delaySeconds:30,randomRadius:3,drop:{assetId:'',effectEnabled:false},...extra});
+test('monster placement records round trip and grouped lifetime configuration stays consistent',()=>{const doc=emptyMonsterSpawns();doc.maps['great-plains']=[row('one'),row('two',{x:4})];assert.equal(validateMonsterSpawns(JSON.stringify(doc)).valid,true);doc.maps['great-plains'][1].respawn=false;assert.match(validateMonsterSpawns(doc).errors.join(),/같은 그룹/);});
+test('invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected',()=>{const doc=emptyMonsterSpawns();doc.maps.village=[row('one'),row('one',{definitionId:'evil',x:Infinity})];assert.equal(validateMonsterSpawns(doc).valid,false);doc.maps={other:[]};assert.equal(validateMonsterSpawns(doc).valid,false);});

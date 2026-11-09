@@ -1,0 +1,30 @@
+// Independent player-facing text interactions; chapter quests retain G and
+// their own existing reward/progress rules. No author-supplied HTML is executed.
+export function setupAuthoredInteractions({root,world,getState,getLiveNpc=()=>[],resetInput=()=>{},onPauseChange=()=>{},onInteract=()=>{}}){
+ const doc=root.ownerDocument,win=doc.defaultView,button=doc.createElement('button'),dialog=doc.createElement('dialog'),style=doc.createElement('style');let disposed=false,nearest=null,lastUpdate=-Infinity,lastFocus=null;
+ button.dataset.ui='';button.className='authored-interaction-button';button.hidden=true;button.type='button';
+ dialog.dataset.ui='';dialog.className='authored-interaction-dialog';dialog.setAttribute('aria-label','상호작용');dialog.innerHTML='<article><h2></h2><p></p><button type="button" data-interaction-close>닫기</button></article>';
+ style.textContent='.authored-interaction-button{position:fixed;z-index:720;right:calc(env(safe-area-inset-right) + clamp(44px,8vw,96px) + clamp(76px,13vh,112px) + clamp(62px,10vh,85px) + 16px);bottom:calc(env(safe-area-inset-bottom) + clamp(92px,12vh,120px) + clamp(76px,13vh,112px) + 66px);max-width:150px;min-height:46px;padding:9px 18px;border:1px solid #d4bd84;border-radius:8px;background:#203a2fee;color:#f9ecd0;font:600 14px system-ui}.authored-interaction-button[hidden]{display:none!important}.authored-interaction-dialog{max-width:min(520px,calc(100vw - 40px));border:1px solid #bda87b;border-radius:12px;padding:20px;background:#182c22;color:#f4ead4;font:16px/1.65 system-ui}.authored-interaction-dialog::backdrop{background:#0009}.authored-interaction-dialog h2{margin:0 0 12px}.authored-interaction-dialog p{white-space:pre-wrap;overflow-wrap:anywhere;max-height:50vh;overflow:auto}.authored-interaction-dialog button{min-height:44px;padding:8px 18px;background:#3b5b41;color:#fff;border:1px solid #aebf9b;border-radius:6px;font:inherit}';root.append(style,button,dialog);
+ function candidates(){
+  const rows=[];
+  for(const item of world.placementOverlay?.instances??[]){if(!item.interaction)continue;const record=world.authoredPlacements?.records?.get(item.instanceId);if(!record)continue;const p=record.root.position;rows.push({id:item.instanceId,kind:'object',name:record.entry?.catalog?.name??'오브젝트',interaction:item.interaction,position:p,bounds:record.bounds});}
+  for(const row of world.npcWorld?.list?.()??[]){if(!row.interaction)continue;const record=world.npcWorld.get(row.id),actor=record?.encounter?.actor;if(!actor||actor.isEnabled?.()===false)continue;rows.push({id:row.id,kind:'npc',name:row.label??'NPC',interaction:row.interaction,position:actor.getAbsolutePosition?.()??actor.position});}
+  for(const encounter of getLiveNpc()){const actor=encounter?.actor;if(!encounter?.interaction||!actor||actor.isEnabled?.()===false)continue;rows.push({id:encounter.id??encounter.config?.id??'',kind:'npc', name:encounter.displayName??encounter.config?.name??'NPC',interaction:encounter.interaction,position:actor.getAbsolutePosition?.()??actor.position});}
+  return rows;
+ }
+ function targetPoint(row,position){const b=row.bounds;if(!b?.min||!b?.max)return {x:row.position.x,z:row.position.z};return {x:Math.max(b.min.x,Math.min(b.max.x,position.x)),z:Math.max(b.min.z,Math.min(b.max.z,position.z))};}
+ function findNearest(){const state=getState(),position=state.position;if(!position||!state.ready||state.dead||state.busy||state.combat||state.hidden||world.toolLease?.active||world.storyboardOpening?.blocksGame||doc.querySelector('dialog[open]'))return null;
+  return candidates().map(row=>{const point=targetPoint(row,position),distance=Math.hypot(point.x-position.x,point.z-position.z);return {...row,point,distance};}).filter(row=>{
+   if(row.distance>row.interaction.range)return false;
+   if(world.caveFog&&!world.caveFog.allowsPoint({x:row.position.x,y:row.position.y,z:row.position.z}))return false;
+   if(row.distance<.2||!world.navigation?.segmentClear)return true;
+   const amount=Math.max(0,1-.2/row.distance),end={x:position.x+(row.point.x-position.x)*amount,z:position.z+(row.point.z-position.z)*amount};return world.navigation.segmentClear(position,end,.05);
+  }).sort((a,b)=>a.distance-b.distance)[0]??null;
+ }
+ function update(time=0,force=false){if(disposed||!force&&time-lastUpdate<.15)return;lastUpdate=time;nearest=findNearest();button.hidden=!nearest;if(nearest)button.textContent=nearest.interaction.label+' · U';}
+ function open(){if(disposed||dialog.open)return;nearest=findNearest();if(!nearest)return;lastFocus=doc.activeElement;dialog.querySelector('h2').textContent=nearest.name;dialog.querySelector('p').textContent=nearest.interaction.text;resetInput();dialog.showModal();button.hidden=true;onPauseChange();onInteract({id:nearest.id,kind:nearest.kind,mapId:world.mapId});}
+ function close(){if(dialog.open)dialog.close();}
+ const key=event=>{if(event.code!=='KeyU'||event.repeat||event.ctrlKey||event.altKey||event.metaKey||/INPUT|SELECT|TEXTAREA/.test(event.target?.tagName??''))return;if(findNearest()){event.preventDefault();open();}};
+ const closed=()=>{resetInput();onPauseChange();if(lastFocus?.isConnected)lastFocus.focus?.({preventScroll:true});};button.addEventListener('click',open);dialog.querySelector('[data-interaction-close]').addEventListener('click',close);dialog.addEventListener('close',closed);win.addEventListener('keydown',key);
+ return {update,isOpen:()=>dialog.open,close,inspect:()=>({nearest:nearest?.id??null,open:dialog.open}),dispose(){if(disposed)return;disposed=true;if(dialog.open)dialog.close();win.removeEventListener('keydown',key);button.removeEventListener('click',open);dialog.querySelector('[data-interaction-close]').removeEventListener('click',close);dialog.removeEventListener('close',closed);button.remove();dialog.remove();style.remove();}};
+}

@@ -1,0 +1,8 @@
+export const ITEM_DROP_MODELS=Object.freeze({apple:'apple',pie:'apple-pie',feed:'pet-food',herb:'moon-dew-herb',bandage:'clue-bandage',locket:'memory-locket',cargo:'clue-satchel','goblin-iron':'goblin-club',potion:'contaminated-vial','travel-tonic':'contaminated-vial','concentrated-tonic':'contaminated-vial','refined-tonic':'contaminated-vial','greater-tonic':'contaminated-vial','restoration-water':'contaminated-vial'});
+export const DROP_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
+const validId=/^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/;
+export function validateItemDrop(value){
+ if(!value||typeof value!=='object'||!validId.test(value.id??'')||!DROP_MAPS.includes(value.mapId)||!Object.values(ITEM_DROP_MODELS).includes(value.model)||!value.origin||!value.position||!['x','y','z'].every(k=>Number.isFinite(value.origin[k])&&Number.isFinite(value.position[k])&&Math.abs(value.origin[k])<10000&&Math.abs(value.position[k])<10000)||(value.effectEnabled!==undefined&&typeof value.effectEnabled!=='boolean')||!value.rewards||typeof value.rewards!=='object'||Array.isArray(value.rewards))return false;
+ const entries=Object.entries(value.rewards);return entries.length>0&&entries.length<=16&&entries.every(([id,count])=>/^[a-zA-Z0-9:_-]{1,90}$/.test(id)&&Number.isSafeInteger(count)&&count>0&&count<=100000);
+}
+export const ITEM_DROP_CHOICES=Object.freeze([['','추가 소품 없음'],['apple','사과'],['apple-pie','애플파이'],['pet-food','반려동물 먹이'],['moon-dew-herb','달이슬풀'],['clue-bandage','붕대'],['contaminated-vial','약병'],['goblin-club','고블린 철붙이'],['memory-locket','초상화 펜던트'],['clue-satchel','상품 꾸러미']].map(row=>Object.freeze(row)));

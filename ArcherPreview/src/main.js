@@ -1,14 +1,18 @@
+import {createStoryboardEvents} from './storyboard-events.js';
+import {validateStoryboard} from './storyboard-document.js';
 import './styles.css';
 import './dot-minimap.css';
 import {DotMinimap} from './dot-minimap.js';
-import {setupMinimapTravel} from './minimap-travel.js';
+import {setupMinimapTravel,applyMinimapArrivalPose} from './minimap-travel.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
 import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL} from './release-route.js';
 import {loadAuthoredMap} from './authored-map-loader.js';
 import {authoringCharacter,setupAuthoringNavigation} from './authoring-navigation.js';
+import {readStoryboardOpening,setupStoryboardOpening} from './storyboard-opening.js';
 import {setupUiTest} from './ui-test.js';
 import {setupChapterQuests} from './chapter-quest.js';
+import {setupAuthoredInteractions} from './authored-interactions.js';
 import './ui-test.css';
 import './chapter-quest.css';
 import './mobile-viewport.css';
@@ -35,7 +39,7 @@ import {applyPlayerDetail} from './player-detail.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
-import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit} from './map-travel.js';
+import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit,safeRoadArrival} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
@@ -273,7 +277,7 @@ function applyAttackSpeed(value) {
 }
 applyAttackSpeed(attackSpeed);
 const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
-const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaNoticeAnchor.reset();staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:resetBeforeBoss});
+const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaNoticeAnchor.reset();staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:()=>{world.authoredMonsters?.leaveMap();resetBeforeBoss();world.storyboardEvents?.emit('restart');}});
 
 function resizeScreenProjection(){
   if(!screenProjection)return;
@@ -476,8 +480,8 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
-  world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
-  world.developmentActors?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
+  world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+  world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
   loadingAsset = true; ready = false;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);audio.stopAll();actionAudio.reset();updateButtons();
@@ -629,7 +633,7 @@ async function loadCharacter() {
     equipment?.dispose(); equipment = null;
     if (container) container.dispose(); container = null;
     updateButtons();
-  } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready){mapTransition?.recover();reconcilePlayback();world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();} }
+  } finally { loadingAsset = false; $('#character-select').disabled = false;if(ready){world.storyboardEvents?.emit('map-enter',{mapId:world.mapId});if(!world.storyboardOpening&&!world.storyboardGameStarted){world.storyboardGameStarted=true;world.storyboardEvents?.emit('game-start',{mapId:world.mapId});}mapTransition?.recover();reconcilePlayback();world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();} }
 }
 
 async function retryLoading(){
@@ -675,6 +679,11 @@ function syncCameraFocus(dt,{snap=false}={}){
 
 function render(dt) {
   if(mapDeparture?.departing)return;
+  world.storyboardOpening?.update();
+  world.storyboardEvents?.update();
+  if(world.storyboardDeathPlayback){const events=world.storyboardEvents?.inspect();if(!events||!events.active&&!events.queued){world.storyboardDeathPlayback=false;deathScreen.show();return;}}
+  if(world.storyboardExitPending){const events=world.storyboardEvents?.inspect();if(!events||!events.active&&!events.queued){world.storyboardExitPending=false;world.showGameExit?.();return;}}
+  if((ready||world.toolLease?.active)&&!loadingAsset&&!mapTransition?.busy&&!world.storyboardOpening?.blocksStoryboard&&!world.storyboardEvents?.inspect().active)world.developmentStoryboardLive?.update();
   if(ready&&!loadingAsset&&!mapTransition?.busy&&world.authoringReadyGeneration!==(world.toolGeneration??0)){
     world.authoringReadyGeneration=world.toolGeneration??0;world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();void world.restoreNpcActors?.();
   }
@@ -690,7 +699,7 @@ function render(dt) {
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();const focus=world.camera.getTarget();
     world.villageVisibility?.update(world.camera.globalPosition,focus,dt);world.treeOcclusion?.update(world.camera.globalPosition,focus,dt,playerDimensions(actor));world.lighting.follow(focus);world.scene.render(false);return;
   }
-  simulateFrame=dt>0;
+  simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
   const framePreludeStart=frameDiagnostics.mark();
@@ -781,10 +790,10 @@ function render(dt) {
     const actionAudioStart=frameDiagnostics.mark();
     actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime,strideScale:playerDimensions(actor).ratio});
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
-    world.developmentActors?.beforeBattle(dt,actor);
+    world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
     const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);audio.setBossContext(boss?.encounters);actionAudio.boss(boss,dt);
-    world.developmentActors?.afterBattle(actor);
+    world.developmentActors?.afterBattle(actor);world.authoredMonsters?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,playerDimensions(actor).goldHeight,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
@@ -802,7 +811,7 @@ function render(dt) {
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.guarding?'방어 태세':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
     text('#speed-label', `${result.speed.toFixed(2)} m/s`);
     text('#target-label', isV2() ? '검·방패 장착 · 검술 3종 / 방패 밀치기' : isWarrior() ? '검·방패 장착 · 달리기 / 찌르기·베기' : selectedTarget ? `${selectedTarget.name} · 명중 ${selectedTarget.hits}` : controller.dead ? '부활하면 전투를 재개합니다' : '허수아비 가까이 이동하세요');
-    updateButtons();mapPortal?.update(dt);minimap.update(actor,elapsed);saveMapPosition();uiTest?.update(elapsed);
+    updateButtons();mapPortal?.update(dt);minimap.update(actor,elapsed);saveMapPosition();uiTest?.update(elapsed);world.authoredInteractions?.update(elapsed);
     frameDiagnostics.measure('hudUpdateMs',hudUpdateStart);
   }
   statusTime += dt;
@@ -834,9 +843,10 @@ function travelFromMinimap(href){
     if(!world.navigation.free(waypoint.position,playerDimensions(actor).moveRadius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
     input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
     actor.position.set(waypoint.position.x,0,waypoint.position.z);world.terrain.place(actor.position);
+    applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination:character,position:waypoint.position,waypoint});
     syncCameraFocus(0,{snap:true});syncCaveFog(true);world.lighting.follow(actor.position,true);saveMapPosition(true);return true;
   }
-  return mapTransition.travel(href);
+  return mapTransition.travel(href,{minimap:true});
 }
 
 try {
@@ -859,7 +869,7 @@ try {
     world.acquireToolLease=async options=>{
       const {acquireGameToolLease}=await import('./game-tool-lease.js');
       return acquireGameToolLease({world,root:$('#app'),canvas,input,audio,
-        getState:()=>({ready,loading:loadingAsset||!!mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true}),
+        getState:()=>({ready,loading:loadingAsset||!!mapTransition?.busy,dead:(controller?.dead||boss?.playerHp<=0)&&!(world.storyboardDeathPlayback&&String(options.owner??'').startsWith('cinematic-')),hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true}),
         setReady:value=>{ready=value;updateButtons();},resetInput:()=>{input?.reset();cancelAttackInput();},reconcile:()=>reconcilePlayback()},options);
     };
   }
@@ -892,7 +902,7 @@ try {
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
-    if(encounter.playerHp<=0)deathScreen.show();
+    if(encounter.playerHp<=0){world.developmentStoryboardLive?.update();if(!world.storyboardDeathPlayback&&!deathScreen.isOpen()){const events=world.storyboardEvents?.inspect();const count=!events?.active&&!events?.queued?world.storyboardEvents?.emit('death',{mapId:world.mapId})??0:0;if(count){world.storyboardDeathPlayback=true;input?.reset();cancelAttackInput();}else deathScreen.show();}}
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
       if(options.captured){actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
@@ -902,7 +912,7 @@ try {
     if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
-  },{onDefeat:event=>{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');goldLoot.drop(event.kind,event.position);chapterQuests?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  },{onDefeat:event=>{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
@@ -916,6 +926,7 @@ try {
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,damageFeedback,world.terrain);
+  world.trainingTargets=training;
   training.relocate(world.trainingSpawn);
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
@@ -931,7 +942,7 @@ try {
   for(const name of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(name,syncDiagnosticFullscreen);
   syncDiagnosticFullscreen();
   mapDeparture=createMapDeparture({
-    prepare:href=>{world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    prepare:href=>{world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>location.replace(url),
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
@@ -939,8 +950,8 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:href=>{
-      world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
-      world.developmentActors?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
+      world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+      world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
@@ -962,7 +973,8 @@ try {
       const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);
       if(handoff){actor.rotation.y=handoff.yaw;world.camera.alpha=handoff.alpha;if(handoff.pan&&input.panOffset)Object.assign(input.panOffset,handoff.pan);}
-      carryPortalPose(actor,world.camera,input.panOffset,{from:handoff?.from??sourceCharacter,to:destination});
+      if(context?.minimap)applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination,position:spawn,waypoint});
+      else carryPortalPose(actor,world.camera,input.panOffset,{from:handoff?.from??sourceCharacter,to:destination});
       controller.cancelAttack();controller.staggerRemaining=0;controller.hitPose=null;
       animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
       cameraPitch.follow(cameraFollow.focus(actor,playerHead).add(new Vector3(input.panOffset.x,input.panOffset.y,input.panOffset.z)),0,{snap:true});
@@ -972,6 +984,7 @@ try {
       await prepareMapResources(world,new URL(`${import.meta.env.BASE_URL}assets/`,location.href),s=>{loadingView.download(s,loadingGeneration);loadDiagnostics.download(s);},s=>loadingView.stream(s));
       loadDiagnostics.phase('model');loadingView.preparing(undefined,loadingGeneration);await loadVillage(world);
       await world.loadAuthoredMap?.();
+      if(handoff){const safe=safeRoadArrival(world,actor.position,playerDimensions(actor).moveRadius,movementLimit);actor.position.x=safe.x;actor.position.z=safe.z;world.terrain.place(actor.position);syncCameraFocus(0,{snap:true});}
       world.environment.legacyTrainingModel='scarecrow';updatePlainsBoundaryAtmosphere(world,actor.position,true);world.lighting.follow(actor.position,true);
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
@@ -985,6 +998,7 @@ try {
     finish:async()=>{
       assertFrameHealthy();
       loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
+      world.storyboardEvents?.emit('map-enter',{mapId:world.mapId});
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
       applyRenderQuality();loadingView.reveal(mapLoadingGeneration);showMinimap();world.villageStreaming.active=true;
@@ -1013,11 +1027,11 @@ try {
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
-    const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
+    const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
     world.toolLease?.setPaused(paused);
     if(paused){input.reset();cancelAttackInput();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
-    audio.setSuspended(document.hidden||settingsOpen||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
+    audio.setSuspended(document.hidden||settingsOpen||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
     world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();world.developmentToolSettings?.refresh();
   };
   const dialogObserver=new MutationObserver(syncPlayback);
@@ -1156,7 +1170,7 @@ try {
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
   window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
   if(isWorldCharacter(character)&&!elenaReviewMode&&new URLSearchParams(location.search).get('legacyUiTest')!=='1'){
-    chapterQuests=setupChapterQuests({root:$('#app'),world,storage:journeyStorage,openEquipment:()=>{const section=$('.character-info')?.closest('details');if(section)section.open=true;$('#motion-speed-toggle').click();},creditGold:total=>goldLoot.creditCumulative('chapter-one',total),getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,map:world.mapId,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy}),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),heal:amount=>{if(!ready||loadingAsset||boss.playerHp<=0||boss.potions.active)return 0;const gained=Math.min(amount,boss.playerMaxHp-boss.playerHp);if(gained>0){boss.combat.hp+=gained;updateHealthBars();boss.onChange(boss);}return gained;}});uiTest=chapterQuests;
+    chapterQuests=setupChapterQuests({root:$('#app'),world,storage:journeyStorage,onInteract:({id,kind,mapId})=>world.storyboardEvents?.emit(kind==='npc'?'npc-interact':'object-interact',{targetId:id,mapId}),openEquipment:()=>{const section=$('.character-info')?.closest('details');if(section)section.open=true;$('#motion-speed-toggle').click();},creditGold:total=>goldLoot.creditCumulative('chapter-one',total),getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,map:world.mapId,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy}),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),heal:amount=>{if(!ready||loadingAsset||boss.playerHp<=0||boss.potions.active)return 0;const gained=Math.min(amount,boss.playerMaxHp-boss.playerHp);if(gained>0){boss.combat.hp+=gained;updateHealthBars();boss.onChange(boss);}return gained;}});uiTest=chapterQuests;
   }else if(uiTestEnabled){
     uiTest=setupUiTest({root:$('#app'),storage:journeyStorage,
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character}),
@@ -1173,6 +1187,10 @@ try {
       },
     });
     if(import.meta.hot)import.meta.hot.dispose(()=>uiTest.dispose());
+  }
+  if(isWorldCharacter(character)&&!cinematicAuthoringPreview){
+    world.authoredInteractions=setupAuthoredInteractions({root:$('#app'),world,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy,hidden:document.hidden}),getLiveNpc:()=>(boss.encounters??[]).filter(e=>e.type==='npc'||e.category==='npc'||e.config?.npc),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onInteract:({id,kind,mapId})=>world.storyboardEvents?.emit(kind==='npc'?'npc-interact':'object-interact',{targetId:id,mapId})});
+    world.scene.onDisposeObservable.addOnce(()=>world.authoredInteractions?.dispose());
   }
   if(isWorldCharacter(character)){
     commercialUi=setupCommercialUi({root:$('#app'),onDiagnostics:()=>$('#diagnostic-expand')?.click()});
@@ -1200,7 +1218,7 @@ try {
     const {setupDeveloperEditor}=await placementEditorTask;
     if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
     if(!canOpen())throw new Error('오브젝트 편집 설정이 꺼졌습니다.');
-    return world.developmentEditor??=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter});
+    return world.developmentEditor??=setupDeveloperEditor({root:$('#app'),world,getPlayer:()=>actor,getLiveActors:()=>[...(boss?.encounters??[]).filter(e=>e.active!==false).map(e=>e.actor),...(world.npcWorld?.list()??[]).map(row=>world.npcWorld.get(row.id)?.encounter.actor),...(world.trainingTargets?.editableEncounters?.()??[]).map(e=>e.actor)],getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!document.hidden&&!document.querySelector('dialog[open]')}),storage:journeyStorage,onCommit:()=>minimap.invalidate(world),canApply:()=>world.navigation.free(actor.position,playerDimensions(actor).moveRadius),autoEnter});
   };
   const toolState=()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:loadingAsset||mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true||frameLoop?.loadingFailed===true});
   let npcWorldTask=null,actorEditorTask=null,gameCinematicsTask=null;
@@ -1211,34 +1229,67 @@ try {
       const runtime=createNpcWorld({world,catalog:ASSET_CATALOG,getState:toolState,storage:journeyStorage,onError:error=>{if(error.name!=='AbortError'){console.error('[NPC]',error);toast(error.message);}}});world.npcWorld=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
     }).catch(error=>{npcWorldTask=null;throw error;});return npcWorldTask;
   };
+  let authoredMonsterTask=null;
+  const getAuthoredMonsters=async()=>{
+    if(world.authoredMonsters)return world.authoredMonsters;
+    authoredMonsterTask??=import('./authored-monster-runtime.js').then(({createAuthoredMonsterRuntime})=>{
+      if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
+      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);},onError:error=>console.error('[몬스터 배치]',error)});
+      world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
+    }).catch(error=>{authoredMonsterTask=null;throw error;});return authoredMonsterTask;
+  };
+  try{if(releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&journeyStorage?.getItem('moonforest-monster-spawns-v1'))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
   const getActorEditor=async(canOpen=()=>true)=>{
     if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
     if(world.developmentActorEditor)return world.developmentActorEditor;
     actorEditorTask??=Promise.all([import('./actor-editor.js'),getNpcWorld()]).catch(error=>{actorEditorTask=null;throw error;});
     const [{setupActorEditor},npcWorld]=await actorEditorTask;
     if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
-    return world.developmentActorEditor??=setupActorEditor({root:$('#app'),world,battle:boss,npcWorld,getPlayer:()=>actor,getState:toolState,storage:journeyStorage,notify:toast});
+    return world.developmentActorEditor??=setupActorEditor({root:$('#app'),world,battle:boss,npcWorld,getMonsterRuntime:getAuthoredMonsters,getPlayer:()=>actor,getState:toolState,storage:journeyStorage,notify:toast});
   };
   world.restoreNpcActors=async()=>{
     if(!releaseEnabled||new URLSearchParams(location.search).get('cinematicPreview')==='1')return;
     try{const raw=journeyStorage?.getItem('moonforest-0.1:npc-world:v1');if(!raw||!JSON.parse(raw).maps?.[world.mapId]?.length)return;const mapId=world.mapId,generation=world.toolGeneration,runtime=await getNpcWorld();if(world.mapId===mapId&&world.toolGeneration===generation&&toolState().ready)await runtime.ensureMap();}catch(error){if(error.name!=='AbortError'){console.error('[NPC restore]',error);toast('저장한 NPC를 열지 못했습니다. '+error.message);}}
   };
+  const cinematicToolState=()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:loadingAsset||mapTransition?.busy,dead:(controller?.dead||boss.playerHp<=0)&&!world.storyboardDeathPlayback,hidden:document.hidden,settings:!!document.querySelector('dialog[open]'),failed:frameLoop?.failed===true||mapTransition?.failed===true||frameLoop?.loadingFailed===true});
   const getGameCinematics=async(canOpen=()=>true)=>{
     if(!canOpen())throw new Error('컷씬 도구 설정이 꺼졌습니다.');
     if(world.developmentCinema)return world.developmentCinema;
     gameCinematicsTask??=import('./cinematic-game.js').catch(error=>{gameCinematicsTask=null;throw error;});
     const {setupGameCinematics}=await gameCinematicsTask;
     if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');if(!canOpen())throw new Error('컷씬 도구 설정이 꺼졌습니다.');
-    return world.developmentCinema??=setupGameCinematics({root:$('#app'),world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,preview:new URLSearchParams(location.search).get('cinematicPreview')==='1',travel:id=>mapTransition.travel(travelUrl(location.href,authoringCharacter(id))),getState:toolState});
+    return world.developmentCinema??=setupGameCinematics({root:$('#app'),world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,preview:new URLSearchParams(location.search).get('cinematicPreview')==='1',travel:id=>mapTransition.travel(travelUrl(location.href,authoringCharacter(id))),getState:cinematicToolState});
   };
-  const toolSessions=createDeveloperToolSessions({getEnabled:id=>developerTools?.enabled(id)===true,getTools:()=>[world.developmentEditor,world.developmentActorEditor,world.developmentCinema]});
+  const eventParams=new URLSearchParams(location.search);
+  if(releaseEnabled&&!uiTestEnabled&&!['cinematicPreview','cinematic','developer','actorLab','elenaReview','plainsReview','villageReview'].some(key=>eventParams.has(key))){
+  world.storyboardEvents=createStoryboardEvents({storage:journeyStorage,getMap:()=>world.mapId,getCinema:()=>getGameCinematics(),recordQuest:(key,event,story)=>{if(!chapterQuests)throw Error('퀘스트 시스템이 준비되지 않았습니다.');return chapterQuests.event(key,1,event.once?('story-event:'+story.id+':'+event.id):undefined);},onError:error=>{console.error('[스토리 이벤트]',error);toast(error.message);},canStart:()=>{const state=toolState();const linear=world.developmentStoryboardLive?.inspect?.();return state.ready&&!state.hidden&&!state.settings&&!state.failed&&(!state.dead||world.storyboardDeathPlayback)&&!world.toolLease?.active&&!world.storyboardOpening?.blocksGame&&!world.developmentStoryboardEditor?.isVisible?.()&&(!linear||!['preparing','scene'].includes(linear.status));}});
+  try{const saved=journeyStorage?.getItem('moonforest-storyboard-draft-v1');const checked=saved&&validateStoryboard(saved);if(checked?.valid)world.storyboardEvents.configure(checked.document);}catch{}
+  world.scene.onDisposeObservable.addOnce(()=>world.storyboardEvents?.dispose());
+  }
+  const toolSessions=createDeveloperToolSessions({getEnabled:id=>developerTools?.enabled(id)===true,getTools:()=>[world.developmentEditor,world.developmentActorEditor,world.developmentCinema,world.developmentStoryboardEditor]});
   world.scene.onDisposeObservable.addOnce(()=>toolSessions.dispose());
   if(import.meta.hot)import.meta.hot.dispose(()=>toolSessions.dispose());
+  const openingParams=new URLSearchParams(location.search);
+  const openingStory=releaseEnabled&&!uiTestEnabled&&!['cinematicPreview','cinematic','developer','actorLab','elenaReview','plainsReview','villageReview'].some(key=>openingParams.has(key))?readStoryboardOpening(journeyStorage):null;
+  if(openingStory){
+    const {setupStoryboardLive}=await import('./storyboard-live.js');
+    const live=world.developmentStoryboardLive=setupStoryboardLive({root:$('#app'),storage:journeyStorage,world,battle:boss,getPlayer:()=>actor,getQuests:()=>chapterQuests?.inspect(),getCinema:()=>getGameCinematics(),onEdit:()=>world.developmentStoryboardEditor?.show()});
+    world.storyboardOpening=setupStoryboardOpening({root:$('#app'),document:openingStory,live,world,input,isReady:()=>{const state=toolState();return state.ready&&!state.hidden&&!state.settings&&!state.failed;},isFailed:()=>toolState().failed,travel:id=>mapTransition.travel(travelUrl(location.href,authoringCharacter(id))),wake:()=>wakeRendering(),onStart:()=>{world.storyboardGameStarted=true;world.storyboardEvents?.emit('game-start',{mapId:world.mapId});}});
+    world.scene.onDisposeObservable.addOnce(()=>{world.storyboardOpening?.dispose();live.dispose();});
+  }
   if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1'){
     getGameCinematics().then(api=>api.notifyReady()).catch(error=>{console.error('[Cinematic player]',error);toast('컷씬 도구를 불러오지 못했습니다.');});
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'){
     const settingsDialog=$('#motion-speed-dialog');
+    const exitButton=document.createElement('button'),exitScreen=document.createElement('section'),exitStyle=document.createElement('style');
+    exitButton.type='button';exitButton.textContent='게임 종료';exitButton.dataset.ui='';settingsDialog.querySelector('.settings-sections').append(exitButton);
+    exitScreen.dataset.toolUi='';exitScreen.hidden=true;exitScreen.className='story-game-exit';exitScreen.innerHTML='<div><h1>게임을 종료했습니다</h1><p>다시 시작하면 게임을 다시 불러옵니다.</p><button type="button" data-game-restart>다시 시작</button></div>';
+    exitStyle.textContent='.story-game-exit[hidden]{display:none!important}.story-game-exit{position:fixed;inset:0;z-index:1200;background:#101c16;color:#f5edd7;display:grid;place-items:center;text-align:center;font:16px system-ui}.story-game-exit button{min-height:48px;padding:12px 24px;border:1px solid #b9a36e;border-radius:5px;background:#263e2e;color:#fff4d6;font:inherit}';$('#app').append(exitStyle,exitScreen);
+    world.showGameExit=()=>{world.gameExited=true;exitScreen.hidden=false;input.reset();input.setSuspended(true);audio.stopAll();frameLoop.setPaused(true);exitScreen.querySelector('button').focus?.();};
+    exitScreen.querySelector('button').addEventListener('click',()=>location.reload());
+    exitButton.addEventListener('click',()=>{if(!ready||loadingAsset||mapTransition?.busy||controller?.dead||boss.playerHp<=0||world.toolLease?.active){toast('플레이 중에 다시 시도해 주세요.');return;}settingsDialog.close();input.reset();input.setSuspended(true);const count=world.storyboardEvents?.emit('game-exit',{mapId:world.mapId})??0;if(count){world.storyboardExitPending=true;wakeRendering();}else world.showGameExit();});
+    world.scene.onDisposeObservable.addOnce(()=>{exitButton.remove();exitScreen.remove();exitStyle.remove();delete world.showGameExit;});
     developerTools=world.developmentToolSettings=setupDeveloperToolSettings({host:settingsDialog.querySelector('.settings-sections'),dialog:settingsDialog,storage:equipmentStorage,inGame:true,onDisable:id=>toolSessions.close(id),mounts:{
       nearby:async({host,isCurrent})=>{
         const [{setupNearbyEditor},{listEditableActorHandles}]=await Promise.all([import('./nearby-editor.js'),import('./live-actor-handles.js')]);if(!isCurrent()||world.scene.isDisposed)return;
@@ -1259,13 +1310,23 @@ try {
       authoring:async({host,isCurrent})=>{
         const {setupDeveloperTools}=await import('./developer-tools.js');
         if(!isCurrent()||world.scene.isDisposed)return;
+        const openStoryboard=async()=>{
+          if(!world.developmentStoryboardEditor){
+            const [{setupStoryboardEditor},{setupStoryboardLive}]=await Promise.all([import('./storyboard-editor.js'),import('./storyboard-live.js')]);
+            if(!isCurrent()||world.scene.isDisposed)return false;
+            const live=world.developmentStoryboardLive??=setupStoryboardLive({root:$('#app'),storage:journeyStorage,world,battle:boss,getPlayer:()=>actor,getQuests:()=>chapterQuests?.inspect(),getCinema:()=>getGameCinematics(isCurrent),onEdit:()=>world.developmentStoryboardEditor?.show()});
+            world.developmentStoryboardEditor=setupStoryboardEditor({root:$('#app'),storage:journeyStorage,getMap:()=>world.mapId,getPosition:()=>actor?.position,studioUrl:new URL('./cinematic-studio.html',location.href).href,onMapEditor:async()=>{const editor=await getPlacementEditor(isCurrent);return editor.enter({isCurrent});},onStart:(document,options)=>live.start(document,options),onStop:()=>live.stop(),onDocumentChange:document=>world.storyboardEvents?.configure(document),getTargets:(mapId,trigger)=>mapId!==world.mapId?[]:trigger==='npc-interact'?(world.npcWorld?.list?.()??[]).map(row=>({id:row.id,name:row.label??'NPC'})):(world.placementOverlay?.instances??[]).filter(row=>row.interaction).map(row=>({id:row.instanceId,name:world.authoredPlacements?.records?.get(row.instanceId)?.entry?.catalog?.name??'오브젝트'}))});
+          }
+          world.developmentStoryboardEditor.show();return true;
+        };
         const tools=setupDeveloperTools({root:$('#app'),managed:true,getState:toolState,studioUrl:new URL('./cinematic-studio.html',location.href).href,
+          onStoryboard:()=>toolSessions.open('authoring',isCurrent,openStoryboard),
           onProps:()=>toolSessions.open('authoring',isCurrent,async current=>{const editor=await getPlacementEditor(current);if(!current())return false;return editor.enter({isCurrent:current});}),
           onActors:options=>toolSessions.open('authoring',isCurrent,async current=>{const editor=await getActorEditor(current);if(!current())return false;return editor.enter({...options,isCurrent:current});}),
           onCinema:()=>toolSessions.open('authoring',isCurrent,async current=>{const api=await getGameCinematics(current);if(!current())return false;api.show();})});
         const control=setupAuthoringNavigation({root:$('#app'),host:tools.navigationHost,href:location.href,mapId:world.mapId,getState:()=>({ready:(ready||!!world.toolLease?.active)&&!loadingAsset,mapId:world.mapId}),onMapChange:async id=>{if(!isCurrent()||id===world.mapId)return;await mapTransition.travel(travelUrl(location.href,authoringCharacter(id)));world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();}});
         const lab=document.createElement('a'),url=new URL(location.href);for(const key of ['developer','actorLab','cinematic','cinematicPreview'])url.searchParams.delete(key);url.searchParams.set('actorLab','1');lab.href=url.href;lab.textContent='배우 실험';tools.navigationHost.append(lab);
-        world.authoringNavigation=control;return {show:tools.show,notifyReady:control.notifyReady,dispose(){tools.dispose();control.dispose();lab.remove();if(world.authoringNavigation===control)world.authoringNavigation=null;}};
+        world.authoringNavigation=control;return {show:tools.show,notifyReady:control.notifyReady,dispose(){world.developmentStoryboardEditor?.dispose();world.developmentStoryboardEditor=null;if(!world.storyboardOpening){world.developmentStoryboardLive?.dispose();world.developmentStoryboardLive=null;}tools.dispose();control.dispose();lab.remove();if(world.authoringNavigation===control)world.authoringNavigation=null;}};
       },
     }});
     world.scene.onDisposeObservable.addOnce(()=>developerTools?.dispose());

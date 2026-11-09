@@ -13,6 +13,8 @@ import {listRegisteredCinematics,DEFAULT_CINEMATIC_REFERENCES} from '../src/cine
 import {validateCinematicDocument} from '../src/cinematic-document.js';
 import {getCinematicDefinitions} from '../src/cinematic-assets.js';
 import {refreshCinematicCatalog} from './refresh-cinematic-catalog.mjs';
+import {approvedR2SceneryVersion} from './approved-scenery-policy.mjs';
+import {gltfCatalogMetadata} from './asset-catalog-metadata.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 const contentName=/^[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
@@ -32,7 +34,18 @@ export async function collectVillageSiteFiles(publicDirectory,{requireCompleteVi
   if(requireCompleteVillage){
     const village=JSON.parse(await readFile(resolve(assetsRoot,'village.json'),'utf8'));
     if(!village.complete||village.developmentFixture||village.availableAssetCount!==25||Object.keys(village.assets??{}).length!==25||VILLAGE_ASSET_IDS.some(id=>village.assets[id]?.visualReview!=='APPROVED'))throw new Error('The production village needs all 25 approved assets; fixtures cannot be published.');
-    if(village.geometryLod?.nearColorResolution!==4096||Object.values(village.assets).some(a=>!a.geometryLod||a.lods?.length!==3||a.mobileNear?.triangles!==a.lods[0].triangles||!(a.lods[2].triangles<a.lods[1].triangles&&a.lods[1].triangles<a.lods[0].triangles)||!validVillageTextureProfile(a.highTextures)))throw new Error('Production needs original mobile near geometry, at most 4K color, and two reduced geometry LODs.');
+    if(village.geometryLod?.nearColorResolution!==4096)throw new Error('Production needs original mobile near geometry, at most 4K color, and two geometry LODs.');
+    for(const [id,a] of Object.entries(village.assets)){
+      if(!a.geometryLod||a.lods?.length!==3||a.mobileNear?.triangles!==a.lods[0].triangles||!validVillageTextureProfile(a.highTextures))throw new Error('Production needs original mobile near geometry, at most 4K color, and two geometry LODs.');
+      let approvedR2=false;
+      if(a.r2Geometry){
+        const reference=a.lods[0].model;
+        if(typeof reference!=='string'||!/^\.\/content\/[a-f0-9]{64}\.gltf$/.test(reference))throw new Error('Unsafe R2 near model reference: '+id);
+        const bytes=await readFile(resolve(assetsRoot,reference)),gltf=JSON.parse(bytes),metadata=gltfCatalogMetadata(gltf);
+        approvedR2SceneryVersion(id,a,{contentHash:hash(bytes),triangles:metadata.triangles});approvedR2=true;
+      }
+      if(!(a.lods[2].triangles<a.lods[1].triangles&&(a.lods[1].triangles<a.lods[0].triangles||approvedR2)))throw new Error('Production needs the original reduced distant geometry LODs: '+id);
+    }
   }
   const enqueue=(url,base)=>{
     if(url.startsWith('data:'))return;

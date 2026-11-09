@@ -10,6 +10,7 @@ import {VillageOutlines} from '../src/village-outlines.js';
 import {VillageVisibility} from '../src/village-visibility.js';
 import {villageObstacles} from '../src/village-layout.js';
 import {caveFogRootEnabled} from '../src/cave-fog-of-war.js';
+import {VertexBuffer} from '@babylonjs/core';
 
 const asset={assetId:'test-prop',version:'approved-test-version',reviewStatus:'approved',runtime:{manifest:'assets/test.json',assetKey:'test-prop',model:'assets/content/test-0.gltf'},units:{metersPerSourceUnit:1},pivot:{offset:[0,0,0]},forwardYaw:0,placement:{supported:true,baked:false,collision:'independent-static',scaleMin:.1,scaleMax:10,surfaces:['ground','wall','ceiling']}};
 const levels=[0,1,2].map(level=>({level,model:`content/test-${level}.gltf`,resources:[],textureSize:1}));
@@ -30,6 +31,25 @@ async function fixture(t,{loadContainer,publish=true,editableBase,nativeAspect=[
  const options={catalog:{entries:[{...asset,placement}]},publish,baseUrl:'https://placement.test/',initialize:async()=>{},readManifest:async()=>singleModel?{assets:{'test-prop':{category:'prop',model:'content/test-0.gltf'}}}:manifest,loadContainer:loadContainer?((...args)=>loadContainer(load,...args)):load},createRuntime=()=>new AuthoredPlacementRuntime(world,options),runtime=createRuntime();
  t.after(()=>{runtime.dispose();world.scene.dispose();engine.dispose();});return {runtime,world,engine,loads:()=>loads,baseRecord,createRuntime};
 }
+
+test('terrain patch commits, reloads and restores its original field and visible ground',async t=>{
+ const f=await fixture(t);delete f.world.terrain.heightAt;const base=f.world.terrain.heights.slice(),patch={id:'terrain-test',x:0,z:0,halfWidth:4,halfDepth:4,height:3,blend:3};
+ let doc={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,terrainPatches:[patch]};await f.runtime.apply(doc);assert.equal(f.world.terrain.heightAt(0,0),3);
+ let positions=f.world.ground.getVerticesData(VertexBuffer.PositionKind);for(let i=0;i<base.length;i++)assert.equal(positions[i*3+1],f.world.terrain.heights[i]);
+ doc={...doc,revision:2,terrainPatches:[]};await f.runtime.apply(doc);assert.deepEqual(f.world.terrain.heights,base);
+ await f.runtime.apply({...doc,revision:3,terrainPatches:[patch]});assert.equal(f.world.terrain.heightAt(0,0),3);f.runtime.dispose();assert.deepEqual(f.world.terrain.heights,base);
+});
+
+test('a saved patch and grounded solid object load together against the edited field; failed preparation leaves the previous ground',async t=>{
+ const f=await fixture(t);delete f.world.terrain.heightAt;const base=f.world.terrain.heights.slice(),instance=row(0,0);instance.transform.position[1]=3;
+ const patch={id:'building',x:0,z:0,halfWidth:4,halfDepth:4,height:3,blend:3},doc={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,terrainPatches:[patch],instances:[instance]};
+ await f.runtime.apply(doc);assert.equal(f.world.terrain.heightAt(0,0),3);assert.ok(Math.abs(f.runtime.records.get(instance.instanceId).root.position.y-3)<1e-6);assert.equal(f.world.navigation.free({x:0,z:0},.3,48),false);
+ const prepare=VillageOutlines.prototype.prepare;VillageOutlines.prototype.prepare=async()=>{throw Error('injected terrain staging failure');};
+ try{const changed=structuredClone(doc);changed.revision=2;changed.terrainPatches[0].height=5;changed.instances[0].transform.position[1]=5;await assert.rejects(f.runtime.apply(changed),/injected terrain staging failure/);}finally{VillageOutlines.prototype.prepare=prepare;}
+ assert.equal(f.world.terrain.heightAt(0,0),3);assert.equal(f.runtime.records.get(instance.instanceId).root.position.y,3);f.runtime.dispose();assert.deepEqual(f.world.terrain.heights,base);
+ const fresh=f.createRuntime();try{await fresh.apply(doc);assert.equal(f.world.terrain.heightAt(0,0),3);assert.equal(fresh.records.get(instance.instanceId).root.position.y,3);}finally{fresh.dispose();}
+ assert.deepEqual(f.world.terrain.heights,base);
+});
 
 test('preview changes one instance without navigation/revision work; commits move exact solid bounds and restore base navigation',async t=>{
  const f=await fixture(t),original=f.world.navigation;
@@ -67,6 +87,10 @@ test('map departure cancels a selected source and disposes its exact late contai
  const f=await fixture(t,{loadContainer:async load=>{late=await load();const dispose=late.dispose.bind(late);late.dispose=()=>{disposed++;dispose();};entered.resolve();await gate.promise;return late;}});
  const pending=f.runtime.preview(row());await entered.promise;f.runtime.leaveMap();await assert.rejects(pending,{name:'AbortError'});gate.resolve();await new Promise(resolve=>setImmediate(resolve));
  assert.equal(f.runtime.records.size,0);assert.equal(f.runtime.assets.size,0);assert.equal(f.world.navigation.obstacles.length,0);assert.equal(disposed,1);
+});
+
+test('cancelling a pending placement preview cannot publish a late asset or obstacle',async t=>{
+ const gate=deferred(),entered=deferred(),f=await fixture(t,{loadContainer:async load=>{const value=await load();entered.resolve();await gate.promise;return value;}});const pending=f.runtime.preview(row());await entered.promise;f.runtime.clearPreview();gate.resolve();await assert.rejects(pending,{name:'AbortError'});assert.equal(f.runtime.previewRecord,null);assert.equal(f.runtime.records.size,0);assert.equal(f.world.placementOverlay??null,null);
 });
 
 test('failed staged outline preparation preserves the committed document transform navigation revision and owner',async t=>{

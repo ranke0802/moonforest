@@ -32,3 +32,8 @@ test('unavailable or invalid saved gold does not break gameplay',()=>{
   const loot=new GoldLoot({storage:{getItem(){throw Error();},setItem(){throw Error();}}});
   loot.drop('goblin',{x:0,z:0});loot.update(1,{x:0,z:0});assert.equal(loot.balance,10);
 });
+
+test('new drops choose a reachable landing point and fall back safely when blocked',()=>{
+ const loot=new GoldLoot(),a=loot.drop('bear',{x:2,y:1,z:3},{canLand:()=>true,heightAt:()=>2});assert.equal(Math.hypot(a.position.x-2,a.position.z-3).toFixed(2),'0.70');assert.equal(a.position.y,2.04);assert.deepEqual(a.origin,{x:2,y:1.04,z:3});
+ const b=loot.drop('goblin',{x:9,y:0,z:10},{canLand:()=>false});assert.deepEqual(b.position,b.origin);assert.equal(loot.update(.6,{x:b.position.x,z:b.position.z}).length,1);assert.equal(loot.balance,10);
+});

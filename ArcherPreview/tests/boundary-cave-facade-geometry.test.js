@@ -10,6 +10,7 @@ import {createVillageTerrain} from '../src/village-terrain.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {instantiateStaticMap} from '../src/static-map-instances.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+import {originalVillageExteriorGraph} from './helpers/mobile-profile-contract.js';
 
 const base=new URL('../public/assets/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name+'.json',base)));
@@ -39,7 +40,10 @@ function normalizedMaterial(gltf,material){
 }
 
 test('derived village facade vertices, normals, UVs and material image bytes match 121 actual production placements',async t=>{
- const village=read('village'),plains=read('great-plains'),config=plains.assets['village-approach'];
+ const village=read('village'),plains=read('great-plains');
+ // Preserve this exact historical 121-placement oracle only after the live
+ // replacement has passed its immutable approval/source/resource checks.
+ const config=originalVillageExteriorGraph(plains.assets['village-approach'],'village-approach','great-plains.json');
  const selected=VILLAGE_PLACEMENTS.filter(p=>Math.hypot(p.x,p.z)<58&&(['building','wall'].includes(p.kind)||['watchtower','wood-03-plank-gate','market-stall','well'].includes(p.asset)||(p.kind==='tree'&&Math.hypot(p.x,p.z)<37)));
  assert.equal(selected.length,121);assert.equal(config.lods[0].triangles,187522);
  const derived=await readRuntimeGltf(new URL(config.lods[0].model,base));

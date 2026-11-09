@@ -1415,14 +1415,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78.gltf",
+          "model": "./content/01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0.gltf",
           "resources": [
-            "./content/7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78.gltf",
-            "./content/6be3dc020f72035afb454085eee0317d490a60b53a9b35b0a0a43f3c1b1f9002.bin",
-            "./content/37838ba10da125e117b3611e470dbdda1c3d9597010988c6dc94907d0e3af6b4.ktx2"
+            "./content/dde4a242715220b468c233d3af6fc79b1fe8e2d65f29496cb61eb091b9bd2eb8.bin",
+            "./content/de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51.ktx2",
+            "./content/01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0.gltf"
           ],
-          "bytes": 408863,
-          "triangles": 5000,
+          "bytes": 338491,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1506,14 +1506,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78.gltf",
+        "model": "./content/01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0.gltf",
         "resources": [
-          "./content/7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78.gltf",
-          "./content/6be3dc020f72035afb454085eee0317d490a60b53a9b35b0a0a43f3c1b1f9002.bin",
-          "./content/37838ba10da125e117b3611e470dbdda1c3d9597010988c6dc94907d0e3af6b4.ktx2"
+          "./content/dde4a242715220b468c233d3af6fc79b1fe8e2d65f29496cb61eb091b9bd2eb8.bin",
+          "./content/de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51.ktx2",
+          "./content/01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0.gltf"
         ],
-        "bytes": 408863,
-        "triangles": 5000,
+        "bytes": 338491,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -1538,17 +1538,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/9ed6d4872d8af377f4143af7abf6349b7e004fb764eeae09197b2b475f6d18ea.ktx2",
+            "url": "./content/13d3e07edf4a618d6a26dc5b02159a83fb953cb8b88ba4531f417cc1b0b216b4.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 3149720,
+            "bytes": 2564789,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/9ed6d4872d8af377f4143af7abf6349b7e004fb764eeae09197b2b475f6d18ea.ktx2"
+          "./content/13d3e07edf4a618d6a26dc5b02159a83fb953cb8b88ba4531f417cc1b0b216b4.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -1556,20 +1556,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/1dfdade00d8a41ad20dec136b17d33c6a524f30dffe6988065d8694b32b9da56.ktx2",
+            "url": "./content/de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 229168,
+            "bytes": 263544,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/1dfdade00d8a41ad20dec136b17d33c6a524f30dffe6988065d8694b32b9da56.ktx2"
+          "./content/de3c0ff37ef076c898a478b531f3ff73f2aa21b1df286f0b82b7167f7b22ed51.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-08-timber-brace",
+        "requestedCap": 1500,
+        "actualTriangles": 1500,
+        "catalogAssetVersion": "7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78",
+        "beforeModelSha256": "7fa9f7d9251170e197e0236efd1b390e8583b3ff2880f8a15a1fa806258f4d78",
+        "appliedModelSha256": "01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0",
+        "nativeConfigSha256": "0ff679693e300d854a8702a6393bf9a38d9fbfffcd26174086dd20a1d0917c50",
+        "lodModels": [
+          "01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0",
+          "d8a36aca2d6fdc8b4899880f7442f2fd2d6a427bd97436416aed5a29aa3372db",
+          "3fb94874b7717c5a62e400adfa6270902d9834431ee183eb1249c27e5baf69ae"
+        ],
+        "mobileNearModelSha256": "01469c9aec29006a1ad15eb4ddb316ee14fe8533edfd1382cf11c4d645656ac0",
+        "derivedAtlasSourceSha256": "608631b0f0a9857c549fd63c2ff8e141e25d278ba1b6f603b396fa72c29db56a",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-09-iron-gate-leaf": {
@@ -1586,14 +1605,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e.gltf",
+          "model": "./content/9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf.gltf",
           "resources": [
-            "./content/f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e.gltf",
-            "./content/ba4a6df99f9d31400345d82959b252259c6b250c6f9c5b03282b093f4fa3df2d.bin",
-            "./content/a0d43e6a9d31f7c4db6a7e66f056015612ec574e5f645fd8b520fea38efbb2e6.ktx2"
+            "./content/7fd17d8f964a93a96a0f428f1d17b886fb63ca21eb7454d2497b6414369bda53.bin",
+            "./content/a0d43e6a9d31f7c4db6a7e66f056015612ec574e5f645fd8b520fea38efbb2e6.ktx2",
+            "./content/9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf.gltf"
           ],
-          "bytes": 401462,
-          "triangles": 4866,
+          "bytes": 323125,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1677,14 +1696,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e.gltf",
+        "model": "./content/9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf.gltf",
         "resources": [
-          "./content/f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e.gltf",
-          "./content/ba4a6df99f9d31400345d82959b252259c6b250c6f9c5b03282b093f4fa3df2d.bin",
-          "./content/a0d43e6a9d31f7c4db6a7e66f056015612ec574e5f645fd8b520fea38efbb2e6.ktx2"
+          "./content/7fd17d8f964a93a96a0f428f1d17b886fb63ca21eb7454d2497b6414369bda53.bin",
+          "./content/a0d43e6a9d31f7c4db6a7e66f056015612ec574e5f645fd8b520fea38efbb2e6.ktx2",
+          "./content/9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf.gltf"
         ],
-        "bytes": 401462,
-        "triangles": 4866,
+        "bytes": 323125,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -1741,6 +1760,25 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-09-iron-gate-leaf",
+        "requestedCap": 1500,
+        "actualTriangles": 1500,
+        "catalogAssetVersion": "f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e",
+        "beforeModelSha256": "f5dc73788307abfa15f0e76db4e087d2e62a46b2de3d1b6053dcc2324197b80e",
+        "appliedModelSha256": "9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf",
+        "nativeConfigSha256": "b119ca177e3f373adcfd71767ce28829471904f6ba9880c415e286a72e25072e",
+        "lodModels": [
+          "9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf",
+          "dc00e5ad0c51585cb53944b26e66140a66d6d583cb8fdf2d09348a48833a0acf",
+          "1569e9c5a1150fa06ec19d7944aa5a269309d36625e66b3947a292648825659b"
+        ],
+        "mobileNearModelSha256": "9689db4c6c2649abc04f9efbb8290255977a66f7d667ff4fe890832cedaebdbf",
+        "derivedAtlasSourceSha256": null,
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-10-hand-winch": {
@@ -1928,14 +1966,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89.gltf",
+          "model": "./content/26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2.gltf",
           "resources": [
-            "./content/07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89.gltf",
-            "./content/439f066e3659a16333531609eeb78e0ae952585634415cee6eec179a876bbc50.bin",
-            "./content/e7cb1e7130a248f8c37949710a64d3f9fccf9009a23e334f7b0fa0140e473246.ktx2"
+            "./content/4a72c70def5e3b31f95077f3d12e0ede8fcfc19702bf4b8133fbab56f26813a1.bin",
+            "./content/0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6.ktx2",
+            "./content/26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2.gltf"
           ],
-          "bytes": 408851,
-          "triangles": 5000,
+          "bytes": 351638,
+          "triangles": 1691,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2019,14 +2057,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89.gltf",
+        "model": "./content/26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2.gltf",
         "resources": [
-          "./content/07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89.gltf",
-          "./content/439f066e3659a16333531609eeb78e0ae952585634415cee6eec179a876bbc50.bin",
-          "./content/e7cb1e7130a248f8c37949710a64d3f9fccf9009a23e334f7b0fa0140e473246.ktx2"
+          "./content/4a72c70def5e3b31f95077f3d12e0ede8fcfc19702bf4b8133fbab56f26813a1.bin",
+          "./content/0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6.ktx2",
+          "./content/26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2.gltf"
         ],
-        "bytes": 408851,
-        "triangles": 5000,
+        "bytes": 351638,
+        "triangles": 1691,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2051,17 +2089,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/be8fd00f22ca9ed81e80ac159164102f47d6b98d8a66a9efb80eb833bc551ad4.ktx2",
+            "url": "./content/e689e05d966bed117393e18159a70241432590e0f084e2d3dd3fb7b52d0b29a1.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2802470,
+            "bytes": 2242240,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/be8fd00f22ca9ed81e80ac159164102f47d6b98d8a66a9efb80eb833bc551ad4.ktx2"
+          "./content/e689e05d966bed117393e18159a70241432590e0f084e2d3dd3fb7b52d0b29a1.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -2069,20 +2107,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/1b5b7333329480f0c190ec6d4f49035a9ebd01bc09dbdc323bffbb547af025ea.ktx2",
+            "url": "./content/0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 221202,
+            "bytes": 247930,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/1b5b7333329480f0c190ec6d4f49035a9ebd01bc09dbdc323bffbb547af025ea.ktx2"
+          "./content/0de004207855828b239a77060d936d0c89ead928d7b48e2cbc27d2f6446a58e6.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-11-sluice-shutter",
+        "requestedCap": 1500,
+        "actualTriangles": 1691,
+        "catalogAssetVersion": "07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89",
+        "beforeModelSha256": "07ea9989d77c265e959b1a4c51116940f55f9b7a57c3afe5762ff5cc38050f89",
+        "appliedModelSha256": "26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2",
+        "nativeConfigSha256": "20b6682d624b0e77938834bc1dc0bd983edb3ba6c6e2777c936daacb1c88455d",
+        "lodModels": [
+          "26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2",
+          "813c9d3b96c78fc76b2dda11196112e0da9e51398e1ccce39d6876f0ffc997f3",
+          "b9b3359d1fdfb1269680cab4e51b01b5852236b3e9b2213264c92e789103444d"
+        ],
+        "mobileNearModelSha256": "26eef670878528671c719de4a2d23c849fc2a44f72d365af6cc6030a5936b6a2",
+        "derivedAtlasSourceSha256": "e327abf241c0053f3b388e057c3b9f391bbbb70e654af07f99c79b94d52a26b7",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-12-lift-platform": {
@@ -2099,14 +2156,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3.gltf",
+          "model": "./content/4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f.gltf",
           "resources": [
-            "./content/67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3.gltf",
-            "./content/dd3b612c2b6e50fec418b9d6ee2f0b7c051f7932fd803fb62d3ec640924dfcca.bin",
-            "./content/7eb6b90cc6f1e266c2ce635eb83419656bd3c2c1bc762d998c93485728a4a3ba.ktx2"
+            "./content/86e36820a880f9be0eebc7507ab9ef227fb16a215135ee0d18deb86d72b8e4e2.bin",
+            "./content/2d9c4983f532dd64d3f17a9a6c7dfc75b4cee2d6031e42ebaf95317a5bca161f.ktx2",
+            "./content/4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f.gltf"
           ],
-          "bytes": 418698,
-          "triangles": 5000,
+          "bytes": 327148,
+          "triangles": 1499,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2190,14 +2247,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3.gltf",
+        "model": "./content/4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f.gltf",
         "resources": [
-          "./content/67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3.gltf",
-          "./content/dd3b612c2b6e50fec418b9d6ee2f0b7c051f7932fd803fb62d3ec640924dfcca.bin",
-          "./content/7eb6b90cc6f1e266c2ce635eb83419656bd3c2c1bc762d998c93485728a4a3ba.ktx2"
+          "./content/86e36820a880f9be0eebc7507ab9ef227fb16a215135ee0d18deb86d72b8e4e2.bin",
+          "./content/2d9c4983f532dd64d3f17a9a6c7dfc75b4cee2d6031e42ebaf95317a5bca161f.ktx2",
+          "./content/4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f.gltf"
         ],
-        "bytes": 418698,
-        "triangles": 5000,
+        "bytes": 327148,
+        "triangles": 1499,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2222,17 +2279,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/0ad4557819488d779ceeb4e4161b0eeb469223ca629acd3ac5659df5a3533734.ktx2",
+            "url": "./content/2af940e4a74c91718d6245754392379aad7a0528b3f5ceb493f8e604b0c572e4.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 3039374,
+            "bytes": 2260383,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/0ad4557819488d779ceeb4e4161b0eeb469223ca629acd3ac5659df5a3533734.ktx2"
+          "./content/2af940e4a74c91718d6245754392379aad7a0528b3f5ceb493f8e604b0c572e4.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -2240,20 +2297,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/c42a950cd1037f40c3fdef44ad33f48b53182f61d892a398952bc64a3ee1560f.ktx2",
+            "url": "./content/64e4278387cb363110cceb216b863191584030089d84c4e4b860e75b96c0214f.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 806665,
+            "bytes": 763717,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/c42a950cd1037f40c3fdef44ad33f48b53182f61d892a398952bc64a3ee1560f.ktx2"
+          "./content/64e4278387cb363110cceb216b863191584030089d84c4e4b860e75b96c0214f.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-12-lift-platform",
+        "requestedCap": 1500,
+        "actualTriangles": 1499,
+        "catalogAssetVersion": "67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3",
+        "beforeModelSha256": "67ef0cef879e02db635a702954a6a7e83e909e54c46c8a2e35109a00d1ad68b3",
+        "appliedModelSha256": "4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f",
+        "nativeConfigSha256": "16e20aea90bf9df1fde19c69267bbdc7e7c1ad5b91cb1281d4e02dc9807a5773",
+        "lodModels": [
+          "4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f",
+          "bc0ba599e2d78f690ada0ef454f139596fb82fc6939c324d8ee33bd3b52ca032",
+          "78146875d9f61220b89dd3dae7f594552d2ffeb7904f4fa335165569af14365c"
+        ],
+        "mobileNearModelSha256": "4616ce6097d1a12e88ef188643e22ab8ff6bb85592e2a9767eb6a1f905dc6d7f",
+        "derivedAtlasSourceSha256": "f5cc8480b24373f3faa895e750f5ff0a6da5d06b79005bcab82cb985bc33bfcb",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-13-votive-lantern": {
@@ -2455,14 +2531,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30.gltf",
+          "model": "./content/54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd.gltf",
           "resources": [
-            "./content/a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30.gltf",
-            "./content/9bbb17d08b945d6cc6b3a5cf4fde99132eb59a26c10edb67ac96cd155cdfc934.bin",
-            "./content/4ac04a16e1a39a50ebd9f9f6656c73c1a22e8705585666a203c39239903a65ad.ktx2"
+            "./content/fff8820a666d0e0f999042992809023c2b31ffb5f8b99a56be51ea74fcee8f56.bin",
+            "./content/aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a.ktx2",
+            "./content/54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd.gltf"
           ],
-          "bytes": 358362,
-          "triangles": 4999,
+          "bytes": 273586,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2546,14 +2622,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30.gltf",
+        "model": "./content/54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd.gltf",
         "resources": [
-          "./content/a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30.gltf",
-          "./content/9bbb17d08b945d6cc6b3a5cf4fde99132eb59a26c10edb67ac96cd155cdfc934.bin",
-          "./content/4ac04a16e1a39a50ebd9f9f6656c73c1a22e8705585666a203c39239903a65ad.ktx2"
+          "./content/fff8820a666d0e0f999042992809023c2b31ffb5f8b99a56be51ea74fcee8f56.bin",
+          "./content/aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a.ktx2",
+          "./content/54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd.gltf"
         ],
-        "bytes": 358362,
-        "triangles": 4999,
+        "bytes": 273586,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2578,17 +2654,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/eba23d533ac9c5809fcd61bd5b6b04baf6746162246267b90b2a8221b8af9a3d.ktx2",
+            "url": "./content/49d20e8dd209e537e92db6428f45fbed684fd9a52733ee2511a49a734d551461.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2376736,
+            "bytes": 1902878,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/eba23d533ac9c5809fcd61bd5b6b04baf6746162246267b90b2a8221b8af9a3d.ktx2"
+          "./content/49d20e8dd209e537e92db6428f45fbed684fd9a52733ee2511a49a734d551461.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -2596,20 +2672,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/79f0034a7190b5bf3f9594364eafd5ae11d4e255f1b40a92468cec7606083df0.ktx2",
+            "url": "./content/aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 188716,
+            "bytes": 213795,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/79f0034a7190b5bf3f9594364eafd5ae11d4e255f1b40a92468cec7606083df0.ktx2"
+          "./content/aed80e91991d873e4cdaed4381794b494a29929bad310e1dd29301823d40b71a.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-14-hidden-pressure-stone",
+        "requestedCap": 1500,
+        "actualTriangles": 1500,
+        "catalogAssetVersion": "a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30",
+        "beforeModelSha256": "a04befee2848ae9a0c50adc21bb28e9c151a2a65ceb5e890fe7d637ad7318c30",
+        "appliedModelSha256": "54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd",
+        "nativeConfigSha256": "d3dcd85565be97213b4988eceb1a03f887cd6c17a5a7e839c94a4d2c4d490a15",
+        "lodModels": [
+          "54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd",
+          "a9345a6d33b81acf34ce74fdfd43df333814484ea49e9b522379930f12cb63a3",
+          "5d8e12b70ded116298c56ac32beee449c508ca6ab421dfe6b8f56e3f5232dee0"
+        ],
+        "mobileNearModelSha256": "54f2ab67127289c5011f1c6710afbb3c08a9e9e693711eb2bedf0abd48e185fd",
+        "derivedAtlasSourceSha256": "b7886d0e111e0a45daeb3f25098319c9e42167d6a33bdb0b6141a84ed360fe49",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-15-resurrection-altar": {
@@ -2626,14 +2721,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f.gltf",
+          "model": "./content/66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea.gltf",
           "resources": [
-            "./content/7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f.gltf",
-            "./content/3a1edf1c7b21c2d8542c0a4fc1c864d976e0f587cdf4786a619d11f8b728ff45.bin",
-            "./content/c7038a5b935c82e2330ade6ec2513c9976011b7e704337d99e8885b4a49a8a7e.ktx2"
+            "./content/42effc6b059d556c1ab828a8942abe798b7e41189db582cc847df035791fa340.bin",
+            "./content/6e6dbe7642c3822078b9db91051005e91ea0e4167b255d5205ee93f842e95b63.ktx2",
+            "./content/66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea.gltf"
           ],
-          "bytes": 383749,
-          "triangles": 3986,
+          "bytes": 403049,
+          "triangles": 2097,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2717,14 +2812,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f.gltf",
+        "model": "./content/66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea.gltf",
         "resources": [
-          "./content/7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f.gltf",
-          "./content/3a1edf1c7b21c2d8542c0a4fc1c864d976e0f587cdf4786a619d11f8b728ff45.bin",
-          "./content/c7038a5b935c82e2330ade6ec2513c9976011b7e704337d99e8885b4a49a8a7e.ktx2"
+          "./content/42effc6b059d556c1ab828a8942abe798b7e41189db582cc847df035791fa340.bin",
+          "./content/6e6dbe7642c3822078b9db91051005e91ea0e4167b255d5205ee93f842e95b63.ktx2",
+          "./content/66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea.gltf"
         ],
-        "bytes": 383749,
-        "triangles": 3986,
+        "bytes": 403049,
+        "triangles": 2097,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2749,17 +2844,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/cff5dd9a978cae966fc993840d2dc21b6cfff5dfcad3804b52829d5e7fed5503.ktx2",
+            "url": "./content/f3b46faf9f503499ade234ef2b2fd1effeccb1429c4e84f5f13f88afdb1509c7.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2534664,
+            "bytes": 2251817,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/cff5dd9a978cae966fc993840d2dc21b6cfff5dfcad3804b52829d5e7fed5503.ktx2"
+          "./content/f3b46faf9f503499ade234ef2b2fd1effeccb1429c4e84f5f13f88afdb1509c7.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -2767,20 +2862,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/0757ce4d34745ac73eec72982711d18d2f7d617eff78ec86f573e5592a911b3c.ktx2",
+            "url": "./content/af21b3191b2878f1972da7c879b5deb4a434b1f2e080d2dbac0ac5f9c70c1662.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 693447,
+            "bytes": 770902,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/0757ce4d34745ac73eec72982711d18d2f7d617eff78ec86f573e5592a911b3c.ktx2"
+          "./content/af21b3191b2878f1972da7c879b5deb4a434b1f2e080d2dbac0ac5f9c70c1662.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-15-resurrection-altar",
+        "requestedCap": 1500,
+        "actualTriangles": 2097,
+        "catalogAssetVersion": "7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f",
+        "beforeModelSha256": "7ebe1dffd8fa71180522ae84faa891d40203af5c4c9c777544a7f7e3cfb75f3f",
+        "appliedModelSha256": "66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea",
+        "nativeConfigSha256": "a1ce6454cc0698513382862d3f7eda8aee3faa96255795c6e20ef17061179c5b",
+        "lodModels": [
+          "66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea",
+          "fb9ffc3d4725a0b36a6cbdc178720500824e126c733197962ce443fff5d2ae95",
+          "ae44f9eb9d83926652934c492cde6a6b2d250f53f11d541c4ab5b629adf23221"
+        ],
+        "mobileNearModelSha256": "66ec0b07e714d86fac02d6b1f1ec6fdbddf7c4769608e12d365afe0e0dcf5bea",
+        "derivedAtlasSourceSha256": "ef6d46e39a3bdf2545935795d2590ad5a7cd9ee1043931618bb25f48f36042d8",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-16-soul-collector-arm": {
@@ -2797,14 +2911,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12.gltf",
+          "model": "./content/708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e.gltf",
           "resources": [
-            "./content/a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12.gltf",
-            "./content/85970f794f4f37ca74ad73a5a2a3e32d93a76831f376e8a04201c0ad1e202832.bin",
-            "./content/68e2da400aa778cd8704aa1bf77d39bbcf91f9a17b0b550578a1373652093f09.ktx2"
+            "./content/0ee09143de00ce507e4b706065381509cc56806ecf85770120959eb94c8c7ec5.bin",
+            "./content/39c3212665e4138747f624955597654ff4365def11c94c789c6d96fb69749054.ktx2",
+            "./content/708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e.gltf"
           ],
-          "bytes": 419561,
-          "triangles": 4723,
+          "bytes": 431602,
+          "triangles": 2885,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2888,14 +3002,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12.gltf",
+        "model": "./content/708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e.gltf",
         "resources": [
-          "./content/a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12.gltf",
-          "./content/85970f794f4f37ca74ad73a5a2a3e32d93a76831f376e8a04201c0ad1e202832.bin",
-          "./content/68e2da400aa778cd8704aa1bf77d39bbcf91f9a17b0b550578a1373652093f09.ktx2"
+          "./content/0ee09143de00ce507e4b706065381509cc56806ecf85770120959eb94c8c7ec5.bin",
+          "./content/39c3212665e4138747f624955597654ff4365def11c94c789c6d96fb69749054.ktx2",
+          "./content/708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e.gltf"
         ],
-        "bytes": 419561,
-        "triangles": 4723,
+        "bytes": 431602,
+        "triangles": 2885,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2920,17 +3034,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/8ff3d416e4f0d7acaba4924cb3c1393a95f5b6bef9ca77b249554fbb211dd84f.ktx2",
+            "url": "./content/58ab0722c061741a47756a4a47586b59a05f36244c8c1df6b7f5dd4d3e2762cd.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2821693,
+            "bytes": 2442629,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/8ff3d416e4f0d7acaba4924cb3c1393a95f5b6bef9ca77b249554fbb211dd84f.ktx2"
+          "./content/58ab0722c061741a47756a4a47586b59a05f36244c8c1df6b7f5dd4d3e2762cd.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -2938,20 +3052,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/850b7e6e513d10b57836894dc144461f6d78c894d3d38231d1b4f8a83770fa0d.ktx2",
+            "url": "./content/4da5b7d44e00eaafdd181b1c772abc4367f4f9c18037302489197b976e9ce954.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 768338,
+            "bytes": 819972,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/850b7e6e513d10b57836894dc144461f6d78c894d3d38231d1b4f8a83770fa0d.ktx2"
+          "./content/4da5b7d44e00eaafdd181b1c772abc4367f4f9c18037302489197b976e9ce954.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-16-soul-collector-arm",
+        "requestedCap": 1500,
+        "actualTriangles": 2885,
+        "catalogAssetVersion": "a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12",
+        "beforeModelSha256": "a75378c64251be45dbea17903bfe6af046f34bbf556f481a0582a92110c1af12",
+        "appliedModelSha256": "708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e",
+        "nativeConfigSha256": "505f59177e94e5339523e4042d0224e60d75ede82b1bc28ea543a35d90abcb8e",
+        "lodModels": [
+          "708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e",
+          "f3f4a95448c197117abc1df245d30bcfc143f66b5f7f1ce7277e48dc154a2dec",
+          "4f6f23beadae94c325a5d2fd53b84677b6d0bf66105527dc5ab3bd37d41fea9e"
+        ],
+        "mobileNearModelSha256": "708131e4df7690e498df5a7d04af27f831cded6f5ee1e0056e337bf0cf5bb57e",
+        "derivedAtlasSourceSha256": "05386ced2b670e7949a80daca73bc78aa079f26e6ff8cc63e921c6119530ddf2",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-17-faded-sacred-emblem": {
@@ -2968,14 +3101,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b.gltf",
+          "model": "./content/b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97.gltf",
           "resources": [
-            "./content/711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b.gltf",
-            "./content/77a6463622345f245e397bbfabab8c0a3ed669276c66a717347d0befafb259f0.bin",
-            "./content/b6eddfddb5783ba8ff315cf164464b2d1a36cd52ac36bb6b398da09a828cbe5a.ktx2"
+            "./content/03189ad4c13e50117905ad129cc96fc8f1d860cd375cdda97ea048f31598642b.bin",
+            "./content/d237f81a5b16a78e04882d25a10c6309173a1adbaf775b431c099e045a094c7b.ktx2",
+            "./content/b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97.gltf"
           ],
-          "bytes": 397210,
-          "triangles": 4717,
+          "bytes": 308974,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3059,14 +3192,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b.gltf",
+        "model": "./content/b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97.gltf",
         "resources": [
-          "./content/711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b.gltf",
-          "./content/77a6463622345f245e397bbfabab8c0a3ed669276c66a717347d0befafb259f0.bin",
-          "./content/b6eddfddb5783ba8ff315cf164464b2d1a36cd52ac36bb6b398da09a828cbe5a.ktx2"
+          "./content/03189ad4c13e50117905ad129cc96fc8f1d860cd375cdda97ea048f31598642b.bin",
+          "./content/d237f81a5b16a78e04882d25a10c6309173a1adbaf775b431c099e045a094c7b.ktx2",
+          "./content/b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97.gltf"
         ],
-        "bytes": 397210,
-        "triangles": 4717,
+        "bytes": 308974,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -3091,17 +3224,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/5be51db7886e161864e34fb358ad8efc403acb2e6d72cd47229f7a33b3e17cc2.ktx2",
+            "url": "./content/3847dd40674afcd083465cd43bef657a1539a3f77023c589d0e5ae00d95e866f.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2890763,
+            "bytes": 2205594,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/5be51db7886e161864e34fb358ad8efc403acb2e6d72cd47229f7a33b3e17cc2.ktx2"
+          "./content/3847dd40674afcd083465cd43bef657a1539a3f77023c589d0e5ae00d95e866f.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -3109,20 +3242,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/588db0892dd986f85ba892d14b8942e2e9f6bc3e09e975b14476f2c33dbd7e6d.ktx2",
+            "url": "./content/eb0b840d0b3af19ff26803b352cf797e250de36a9e77c5fc4b49ccd94ab39506.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 773677,
+            "bytes": 737258,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/588db0892dd986f85ba892d14b8942e2e9f6bc3e09e975b14476f2c33dbd7e6d.ktx2"
+          "./content/eb0b840d0b3af19ff26803b352cf797e250de36a9e77c5fc4b49ccd94ab39506.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-17-faded-sacred-emblem",
+        "requestedCap": 1500,
+        "actualTriangles": 1500,
+        "catalogAssetVersion": "711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b",
+        "beforeModelSha256": "711a66e59b0cf9185fac3fe93d17bcab34c1cdaab491ffb88588192dbf927c7b",
+        "appliedModelSha256": "b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97",
+        "nativeConfigSha256": "a2649ce9c5c6221f3129bdac814a9d9e66e7e9cfeb82e3f4f26308eb5055e3f1",
+        "lodModels": [
+          "b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97",
+          "3fee1f8f1643c9c66f8ede85bd2ff900c15c295477b7ec23dd9b2ab1bbd4cf19",
+          "9bd05d855fb4f24339490803d53d3fe73f78d5b816a78291e84ac7879b9afce4"
+        ],
+        "mobileNearModelSha256": "b45264dc3eef2309509d02893d01a40a94a5e5742f2be1b7603e5543e0e2fd97",
+        "derivedAtlasSourceSha256": "5203e0034f616a8cdc5d8eb783221a9f493567d0a853ce797b5ffc6a213ea63a",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-18-alchemy-workbench": {
@@ -3310,14 +3462,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9.gltf",
+          "model": "./content/f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404.gltf",
           "resources": [
-            "./content/7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9.gltf",
-            "./content/044030df9e52d7bfa38f9ec37ae48d8e98702d48a695b3aa702e73cd942acc69.bin",
-            "./content/617e2c4e5de6043962bd8d4a83cabce3d1c042d1cd6c4159baac430553a8e19c.ktx2"
+            "./content/1569445890c1243e194aefd426f367dd93e7b71e9afb222e430d081993047316.bin",
+            "./content/6c369cfeeb6e4ba28aa8331528d012cac5fc1553d0836462a381ffb09059f498.ktx2",
+            "./content/f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404.gltf"
           ],
-          "bytes": 400478,
-          "triangles": 5000,
+          "bytes": 306247,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3401,14 +3553,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9.gltf",
+        "model": "./content/f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404.gltf",
         "resources": [
-          "./content/7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9.gltf",
-          "./content/044030df9e52d7bfa38f9ec37ae48d8e98702d48a695b3aa702e73cd942acc69.bin",
-          "./content/617e2c4e5de6043962bd8d4a83cabce3d1c042d1cd6c4159baac430553a8e19c.ktx2"
+          "./content/1569445890c1243e194aefd426f367dd93e7b71e9afb222e430d081993047316.bin",
+          "./content/6c369cfeeb6e4ba28aa8331528d012cac5fc1553d0836462a381ffb09059f498.ktx2",
+          "./content/f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404.gltf"
         ],
-        "bytes": 400478,
-        "triangles": 5000,
+        "bytes": 306247,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -3433,17 +3585,17 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/b905d10860c9f022b66b2d6dabf85638f8dd477f507fcfe0c5e2bb183f3ff7d5.ktx2",
+            "url": "./content/c0d8edf0c6d2c3e702571f856a13d4696fcf3a9d5f0867eae270160b52563b95.ktx2",
             "width": 4096,
             "height": 4096,
-            "bytes": 2405544,
+            "bytes": 1891409,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/b905d10860c9f022b66b2d6dabf85638f8dd477f507fcfe0c5e2bb183f3ff7d5.ktx2"
+          "./content/c0d8edf0c6d2c3e702571f856a13d4696fcf3a9d5f0867eae270160b52563b95.ktx2"
         ]
       },
       "visualReview": "APPROVED",
@@ -3451,20 +3603,39 @@
         "shading": "toon-color",
         "textures": {
           "albedo": {
-            "url": "./content/dbb16df9c64f87130b7cf977b8b93c9087838363691044f5c286fd215510827f.ktx2",
+            "url": "./content/2e7e513bc79e63a60b6196b0f2d36164e25a4e0fecc2830b44f7861f6d6dbb3d.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 666180,
+            "bytes": 644409,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/dbb16df9c64f87130b7cf977b8b93c9087838363691044f5c286fd215510827f.ktx2"
+          "./content/2e7e513bc79e63a60b6196b0f2d36164e25a4e0fecc2830b44f7861f6d6dbb3d.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-19-apothecary-shelf",
+        "requestedCap": 1500,
+        "actualTriangles": 1500,
+        "catalogAssetVersion": "7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9",
+        "beforeModelSha256": "7c665066d66d74c0999808c1c55ddb295c1e013b26e3cf4a40780b396b5c98a9",
+        "appliedModelSha256": "f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404",
+        "nativeConfigSha256": "eeef1a8dab823efa4902103c8ce4ca0c38401283f0433e966148e126aea00f0c",
+        "lodModels": [
+          "f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404",
+          "ad990e8f8ca5dccc6224795468ef58fa455191584652b2514fa17be0cdde6a3e",
+          "edb643e2cc29f63e9d34ca6a3ed7212a2336b04e7942296e5f408c13806c6d9e"
+        ],
+        "mobileNearModelSha256": "f95af65091e9d2527406151df61e1b7d2276a046a9518672393027b1269e8404",
+        "derivedAtlasSourceSha256": "81c9f23eaefd10ed2775d8a3279f5f4b5aa6071711f1d6e4847b5788e5e57eee",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "cave-20-modest-cot": {
@@ -4208,16 +4379,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf",
+          "model": "./content/dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789.gltf",
           "resources": [
-            "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
-            "./content/025ed1c44b253e7ab51a2e9cb86429c45512b1c04821eb28bd97a85f107aff85.ktx2",
-            "./content/1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8.gltf"
+            "./content/bcae42bd65062c7b4d173af09945d20ae97fa59fad84d63579671be906c97a2a.bin",
+            "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2",
+            "./content/dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789.gltf"
           ],
-          "triangles": 4683,
+          "triangles": 1964,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 390785
+          "bytes": 313869,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -4254,32 +4430,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf",
+        "model": "./content/0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58.gltf",
         "resources": [
-          "./content/27fc79fb56b3215b6f422bbb2af6392c443e0df79d0bbcc6409118a3cfb5bbcd.bin",
-          "./content/1429c47367287cdd8a5db729f96fcb3fa68d3e9d6a38111c31e9be77f53b6c58.ktx2",
-          "./content/689e2c29a5496edc5b36bcc1a1913a3554dc797bfcd77591f6806bcf9f2c7def.gltf"
+          "./content/bcae42bd65062c7b4d173af09945d20ae97fa59fad84d63579671be906c97a2a.bin",
+          "./content/534b6a4d579bc8c854a53cc030bf020dc3aac8b9079653fc06369ed5143aec42.ktx2",
+          "./content/0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58.gltf"
         ],
-        "triangles": 4683,
+        "triangles": 1964,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 242895
+        "bytes": 178253,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2",
+            "url": "./content/6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 735658,
+            "bytes": 602272,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/7ed276c107e492c2ee56fc3595a1d704745f5ab7b2cf6725839330afde4f0338.ktx2"
+          "./content/6d2fb95bfa0dcabf45f82ef5dec98a30a845c34ffe43be9386fa61b06c81c7f0.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -4289,21 +4470,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2",
+            "url": "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 206946,
+            "bytes": 223166,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/d32a07d7c5704408856f393966f82a6406d960ef9d9efa793b30ce4645ebe1c6.ktx2"
+          "./content/a49b27ebb673e4424b474de907ebbbc40ceb90a50e5ef3baabe9897245c3e66b.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "crate-barrel-cluster",
+        "requestedCap": 2000,
+        "actualTriangles": 1964,
+        "catalogAssetVersion": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "beforeModelSha256": "1a65245898501375700e71c84af6e3af818a02359eb83cc8440884efe7e751d8",
+        "appliedModelSha256": "dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789",
+        "nativeConfigSha256": "a3e3c20d140359f1938e87e100249a6c046ac1b0c91f79b34628b3edc33dcd13",
+        "lodModels": [
+          "dd5fd06d3d88601efc8aef1262583df0042f70547384173716c08dc1a3be9789",
+          "fe07e1d77f16bc9871621e9de6e183d5a38604111316736686493f77a9b74ab5",
+          "e089e76e9f6d18cf40a13e0db994db6b4d0e1fef543dee6b746664bb32394df7"
+        ],
+        "mobileNearModelSha256": "0fd0377535b70b8c1505323fadfbcef5b290612ba679c9271473e7d0de173b58",
+        "derivedAtlasSourceSha256": "66e4f7d6556b96e25c1bcf66daa00d93d5f6b73dbe8db5452ed64935325e0953",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "firewood": {
@@ -4321,16 +4521,21 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf",
+          "model": "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf",
           "resources": [
-            "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-            "./content/abd36d58cfd1c85553cced694a8ed27a3c3a0f56477cd4b5105a1ec234833e9e.ktx2",
-            "./content/27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb.gltf"
+            "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+            "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
+            "./content/de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0.gltf"
           ],
-          "triangles": 4815,
+          "triangles": 1941,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 391870
+          "bytes": 306283,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -4367,32 +4572,37 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf",
+        "model": "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf",
         "resources": [
-          "./content/cf2ba100f5f7487efa280262a4b1870e86e75c12cb4e5473909a972a79649d00.bin",
-          "./content/da4b7593353d30c659840b777f854f473e1a093e536f74978cc28486727ce2cf.ktx2",
-          "./content/b48d4b70c4f7f1a79612f8e605d5301c47a257148e89a9c1290d10d41e26c914.gltf"
+          "./content/70317137f1549bdc73b3e4148133f6d794133d7a198731bac3fc52f82b73c2f8.bin",
+          "./content/38f45ab1efb41c9564e63f17734d04ebf52ca2021274c1dc8c0a82d568cb74d0.ktx2",
+          "./content/68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f.gltf"
         ],
-        "triangles": 4815,
+        "triangles": 1941,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 241797
+        "bytes": 168781,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "geometryLod": true,
       "highTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2",
+            "url": "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2",
             "width": 2048,
             "height": 2048,
-            "bytes": 731878,
+            "bytes": 609531,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/6f08abe85f3f4e48233c4662a1f59453fee6f2d81cf38d20354ae06e95988960.ktx2"
+          "./content/115cbe57ecbcdd127161769f7c9ed79c69432a02705b5f0db9ed648d8e8bbee7.ktx2"
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
@@ -4402,21 +4612,40 @@
       "mobileHighTextures": {
         "textures": {
           "albedo": {
-            "url": "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2",
+            "url": "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2",
             "width": 1024,
             "height": 1024,
-            "bytes": 206480,
+            "bytes": 223839,
             "codec": "etc1s",
             "alpha": false,
             "gpuBlockBytes": 8
           }
         },
         "resources": [
-          "./content/59cec8a637a62126217833061c4f89970f9bcc516be42e734cea6481bb5b1922.ktx2"
+          "./content/b293f6788bf507d011692a8834cb88f857f1788ea68710bc870024aca16401d3.ktx2"
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "firewood",
+        "requestedCap": 2000,
+        "actualTriangles": 1941,
+        "catalogAssetVersion": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "beforeModelSha256": "27b463ad3c38ef1edba3aaa932d47c53a9df5c330871df2568d6f12cf16978cb",
+        "appliedModelSha256": "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+        "nativeConfigSha256": "c65a851970ff3d3986b0b5e5c4d5f6b87f42d687c424cd42f9a2de0c3f9c11be",
+        "lodModels": [
+          "de9379cc1d1e570dd8a5343e10f5ae062f14e3cf28f889aa021bbc5f0e7ec7a0",
+          "2bef5a5fcd7d436c947267c09cdad63eed8eb02bbc387850976ddde3d95ce3f9",
+          "c0558c9b3a77ff3ca091ebf48461a9ef7032a1eb63a99a9409519436cf4666b2"
+        ],
+        "mobileNearModelSha256": "68ba9aa5d862328b3fa227015bc7f2288959218192043737e5250a96dd20196f",
+        "derivedAtlasSourceSha256": "32cdc1dd7313eb61c4bb7c01eb69974c5b5e705bbb1a099fac5b4c1eef84d49c",
+        "texturePixelsUnchanged": false,
+        "lodDistancesUnchanged": true
       }
     },
     "handcart": {
@@ -4764,16 +4993,19 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+          "model": "./content/46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad.gltf",
           "resources": [
-            "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
-            "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
-            "./content/dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445.bin",
-            "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf"
+            "./content/621dc34b567944b4d370cf8fe4a9a0911f05c12bc778a32767fb1a02126edaa9.bin",
+            "./content/46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad.gltf"
           ],
-          "triangles": 4512,
+          "triangles": 2500,
           "textureSize": 0,
-          "bytes": 109951
+          "bytes": 45654,
+          "compression": {
+            "encodedViews": 3,
+            "rawViews": 0,
+            "verifiedViews": 3
+          }
         },
         {
           "level": 1,
@@ -4804,16 +5036,19 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf",
+        "model": "./content/46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad.gltf",
         "resources": [
-          "./content/132f8ca411fe13387c2a8396b2023810a9f0b21b4c30c7b83045d2e944fd5e94.bin",
-          "./content/a911bec121e8dfe3c9329b73dd8611fbb5b20511d02b730f3ad603de0b3c59cb.bin",
-          "./content/dca150efa5e6c90f5b8e4c495f229bdce8ca327cb52bf7859867784fa1202445.bin",
-          "./content/86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e.gltf"
+          "./content/621dc34b567944b4d370cf8fe4a9a0911f05c12bc778a32767fb1a02126edaa9.bin",
+          "./content/46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad.gltf"
         ],
-        "triangles": 4512,
+        "triangles": 2500,
         "textureSize": 0,
-        "bytes": 109951
+        "bytes": 45654,
+        "compression": {
+          "encodedViews": 3,
+          "rawViews": 0,
+          "verifiedViews": 3
+        }
       },
       "surfaceStyle": "cave-palette",
       "essentialStructural": true,
@@ -4836,7 +5071,26 @@
         "vertexPositionNormalAttributesUnchanged": true,
         "sourceImages": 0
       },
-      "newGenerationCalls": 0
+      "newGenerationCalls": 0,
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "cave-derived-laboratory-rock",
+        "requestedCap": 2500,
+        "actualTriangles": 2500,
+        "catalogAssetVersion": "86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e",
+        "beforeModelSha256": "86849888eabf4cc5c8141f59c6c879296b4a8fe32e994e05da03515a41fc311e",
+        "appliedModelSha256": "46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad",
+        "nativeConfigSha256": "fca18fd50765235998c3610a3d44fa66648ff1043be04604952a0470ab76d21a",
+        "lodModels": [
+          "46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad",
+          "14e68dcac35fa5e99ca6d83444a0112cacbc389ecab0dfe833182fa0077ec021",
+          "7932e34021d6a6fafec2741a53f34a13927456fb98346d5913d43c7e7c3209b1"
+        ],
+        "mobileNearModelSha256": "46a9cb36e60626dc19cedf113d894a4bfa167c36ab4147bf588b233fbf7d80ad",
+        "derivedAtlasSourceSha256": null,
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true
+      }
     }
   },
   "homes": 0,

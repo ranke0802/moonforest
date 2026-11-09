@@ -8,7 +8,7 @@ import {PLAINS_PLACEMENTS} from '../src/great-plains-layout.js';
 import {FOREST_PLACEMENTS} from '../src/monster-forest-layout.js';
 import {CAVE_PLACEMENTS} from '../src/witch-cave-layout.js';
 import {CHAPTER_POINTS} from '../src/chapter-quest-points.js';
-import {approvedSceneryVersion,APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION} from './approved-scenery-policy.mjs';
+import {approvedSceneryVersion,APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION,SCENERY_REVIEW_R2_REVISION} from './approved-scenery-policy.mjs';
 
 const root=resolve(import.meta.dirname,'..'),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),slash=value=>value.replaceAll('\\','/');
 const maps=['village','great-plains','monster-forest','witch-cave'];
@@ -108,6 +108,7 @@ export async function buildAssetCatalog({projectRoot=root}={}){
       const thumbnail=config.thumbnail??config.preview;
       const entry={assetId,version,contentHash:info.contentHash,name:config.name??config.displayName??assetId,category,tags:[category,name,assetId,...(info.skinned?['skinned','actor']:['static'])],runtime:{manifest:manifestPath,assetKey:assetId,model,lodLevel:0,sources:[{manifest:manifestPath,assetKey:assetId}]},usedMaps:[...new Set(usedMaps)].sort(),reviewStatus,reviewEvidence:explicitApproved?(config.visualReview?'manifest.visualReview':config.reviewStatus?'manifest.reviewStatus':'manifest.geometry.optimization.revision'):null,geometry:{triangles:info.triangles,uniqueMeshTriangles:info.uniqueMeshTriangles,vertices:info.vertices,materials:info.materials,textures:info.textures,images:info.images,lods,skinned:info.skinned,skins:info.skins,bones:info.bones,clips:info.clips,clipNames:info.clipNames,clipDurations:info.clipDurations,morphTargets:info.morphTargets},bounds:{size,source:config.bounds?'manifest':'glTF-scene-node-accessor-bounds',sourceBounds:info.bounds,posed:info.skinned},units:{world:'metres',source:config.height?'manifest-normalized':'authored-runtime',metersPerSourceUnit:normalization},pivot:{type:config.origin??'runtime-authored',offset:[0,0,0]},forwardYaw:config.frontYawOffset??config.forwardYaw??0,referenceHeight,placement:catalogPlacementPolicy({assetId,category,reviewStatus,skinned:info.skinned,clips:info.clips,morphTargets:info.morphTargets,deformedLod:lods.some(l=>l.skinned||l.clips||l.morphTargets),structural,baked}),reduction:catalogReductionPolicy({assetId,category,skinned:info.skinned}),preview:{mode:thumbnail?'existing-thumbnail':'load-on-explicit-selection',...(thumbnail?{thumbnail:catalogRuntimePath(manifestPath,thumbnail)}:{})}};
       if(config.geometryBudget)entry.reduction={locked:true,revision:SCENERY_BUDGET_REVISION,triangleCap:APPROVED_SCENERY_CAPS[assetId],reason:'The explicitly authorized scenery budget is applied. Automatic further reduction is locked; native placement and texture profiles are preserved. Final applied appearance awaits user inspection.'};
+      if(config.r2Geometry)entry.reduction={locked:true,revision:SCENERY_REVIEW_R2_REVISION,approvedTriangles:info.triangles,reason:'The user-reviewed R2 scenery candidate is applied. Preserve its source-specific geometry and UV/texture mapping; target counts are not hard caps on this approved asset.'};
       if(config.npc)entry.npc=structuredClone(config.npc);
       entries.set(key,entry);
     }

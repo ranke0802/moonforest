@@ -19,6 +19,7 @@ import {prepareMapMaterials} from './map-shader-cache.js';
 import {villageObstacles} from './village-layout.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {caveFogRootEnabled} from './cave-fog-of-war.js';
+import {buildEditedTerrain,publishEditedTerrain} from './terrain-edit.js';
 
 const geometry=container=>container.meshes.filter(mesh=>mesh.getTotalVertices?.()>0);
 const clone=value=>structuredClone(value);
@@ -52,6 +53,7 @@ export function createAuthoredPlacementNavigation(base,obstacles,revision,{remov
 export class AuthoredPlacementRuntime {
  constructor(world,{catalog,loadContainer=loadMapContainer,readManifest=readMapManifest,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},onCommit=()=>{},limits={},baseUrl,publish=true}={}){
   this.world=world;this.scene=world.scene;this.mapId=world.mapId;this.ground=world.ground;this.catalog=catalog;this.loadContainer=loadContainer;this.readManifest=readManifest;this.initialize=initialize;this.onCommit=onCommit;
+  this.terrainBase=world.terrain?.heights?.slice?.()??null;this.terrainEdited=false;
   this.publish=publish;this.baseUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
   this.baseManifest=createBasePlacementManifest(this.mapId,{catalog,placements:world.placements});this.document=createEmptyPlacementDocument(this.baseManifest);this.applied=false;
   this.limits={instances:Math.min(128,limits.instances??128),assets:Math.min(8,limits.assets??8)};
@@ -148,7 +150,7 @@ export class AuthoredPlacementRuntime {
     prepareVillageInstancing(meshes);applyVillageToon(meshes,this.world.lighting);prepareTreeOcclusion(meshes);
     for(const mesh of meshes){
      if(mesh.skeleton||mesh.morphTargetManager||mesh.hasThinInstances)throw new Error('Unsupported deformed placement mesh');
-     mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:this.world.cave,assetId:entry.catalog.assetId,category:entry.config.category});
+     mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:this.world.cave,assetId:entry.catalog.assetId,category:entry.config.category,level,r2Geometry:entry.config.r2Geometry,approvedVillageExterior:entry.config.approvedVillageExterior});
      this.world.caveAtmosphere?.attachMaterial(mesh.material);this.world.caveFog?.attach(mesh.material);
     }
     this.world.lighting?.registerMeshes(meshes);await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled:()=>entry.disposed||!this._current(generation)}));
@@ -168,14 +170,15 @@ export class AuthoredPlacementRuntime {
   for(const mesh of this._sources(entry))if(!mesh.isDisposed())mesh.dispose(false,false);
   for(const container of entry.containers)container.dispose();entry.containers.clear();this.stats.sourceReleases++;
  }
- validateSurface(instance){
+ editedTerrain(patches=[]){return buildEditedTerrain(this.world.terrain,this.terrainBase,patches);}
+ validateSurface(instance,terrain=this.world.terrain){
   const point=Vector3.FromArray(instance.transform.position),normal=Vector3.FromArray(instance.attachment.normal),{surface}=instance.attachment;
   if(surface==='free')return {point,normal};
   const supportId=instance.attachment.supportId??'terrain';
   if(supportId==='terrain'){
-   const height=this.world.terrain.heightAt(point.x,point.z);
+   const height=terrain.heightAt(point.x,point.z);
    if(Math.abs(point.y-height)>.08)throw new PlacementValidationError('attachment','ground anchor must be on the actual terrain surface');
-   const e=.05,terrainNormal=new Vector3(this.world.terrain.heightAt(point.x-e,point.z)-this.world.terrain.heightAt(point.x+e,point.z),2*e,this.world.terrain.heightAt(point.x,point.z-e)-this.world.terrain.heightAt(point.x,point.z+e)).normalize();
+   const e=.05,terrainNormal=new Vector3(terrain.heightAt(point.x-e,point.z)-terrain.heightAt(point.x+e,point.z),2*e,terrain.heightAt(point.x,point.z-e)-terrain.heightAt(point.x,point.z+e)).normalize();
    if(Vector3.Dot(normal,terrainNormal)<.8&&!(instance.sourceInstanceId&&normal.x===0&&normal.y===1&&normal.z===0))throw new PlacementValidationError('attachment.normal','normal does not match terrain support');
    return {point,normal,supportId};
   }
@@ -188,7 +191,7 @@ export class AuthoredPlacementRuntime {
   if(!hitNormal||Vector3.Dot(hitNormal.normalize(),normal)<.8)throw new PlacementValidationError('attachment.normal','normal does not match the outward immutable support geometry');
   return {point,normal,supportId};
  }
- _makeRecord(instance,entry){
+ _makeRecord(instance,entry,terrain=this.world.terrain){
   const root=new TransformNode('authored-'+instance.instanceId,this.scene),facing=new TransformNode(root.name+'-asset',this.scene);root.setEnabled(false);facing.parent=root;
   try{
    const created=instantiateStaticMap(entry.source,name=>root.name+'-'+name);for(const node of created.rootNodes)node.parent=facing;
@@ -196,11 +199,11 @@ export class AuthoredPlacementRuntime {
    for(const mesh of meshes){mesh.isPickable=true;mesh.metadata={...mesh.metadata,placementInstanceId:instance.instanceId,authoredPlacement:true};}
    root.metadata={placementInstanceId:instance.instanceId,authoredPlacement:true};
    const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)};
-   this._setTransform(record,instance);this.stats.instancesCreated++;return record;
+   this._setTransform(record,instance,terrain);this.stats.instancesCreated++;return record;
   }catch(error){root.dispose();this._release(entry);throw error;}
  }
- _setTransform(record,instance){
-  const {root,facing,entry}=record,{normal,point}=this.validateSurface(instance);
+ _setTransform(record,instance,terrain=this.world.terrain){
+  const {root,facing,entry}=record,{normal,point}=this.validateSurface(instance,terrain);
   root.unfreezeWorldMatrix();for(const node of root.getDescendants())node.unfreezeWorldMatrix?.();
   root.position.copyFrom(point.add(normal.scale(instance.attachment.offset)));root.rotationQuaternion=Quaternion.FromArray(instance.transform.rotation);root.scaling.copyFromFloats(...(instance.transform.aspect??[1,1,1]).map(value=>value*instance.transform.scale));
   const unit=entry.catalog.units.metersPerSourceUnit,pivot=entry.catalog.pivot?.offset??[0,0,0];
@@ -269,7 +272,7 @@ export class AuthoredPlacementRuntime {
   }
   const entry=await this._acquire(valid);
   if(!this._current()||request!==this.previewRequest){this._release(entry);throw mapLoadAbortError();}
-  this.outlines?.dispose();this.outlines=null;this._disposeRecord(this.previewRecord);this.previewRecord=this._makeRecord(valid,entry);this.previewRecord.root.setEnabled(true);this._refreshRecords();await this._rebuildRendering();this.stats.previews++;return this.previewRecord;
+  this.outlines?.dispose();this.outlines=null;this._disposeRecord(this.previewRecord);this.previewRecord=this._makeRecord(valid,entry);this.previewRecord.root.setEnabled(true);this._refreshRecords();await this._rebuildRendering();if(!this._current()||request!==this.previewRequest)throw mapLoadAbortError();this.stats.previews++;return this.previewRecord;
  }
  async previewExisting(instance){
   this._check();const record=this.records.get(instance.instanceId);if(!record)throw new Error('Committed placement is not available for preview');
@@ -303,9 +306,10 @@ export class AuthoredPlacementRuntime {
   this.clearExistingPreview();
   this._check();if(expectedRevision!==this.document.revision)throw new PlacementValidationError('revision','runtime revision conflict','REVISION_CONFLICT');
   const next=validatePlacementDocument(document,{catalog:this.catalog,baseManifest:this.baseManifest,maxInstances:this.limits.instances});
-  if(!this.publish&&(next.removedBaseIds?.length||next.instances.some(instance=>instance.collision!=='none'||instance.sourceInstanceId)))throw new Error('Nonpublishing scene visuals cannot own collision or base replacements');
+  if(!this.publish&&(next.terrainPatches?.length||next.removedBaseIds?.length||next.instances.some(instance=>instance.collision!=='none'||instance.sourceInstanceId)))throw new Error('Nonpublishing scene visuals cannot own terrain, collision or base replacements');
   if(this.applied&&next.revision<=this.document.revision){if(JSON.stringify(next)===JSON.stringify(this.document))return clone(this.document);throw new PlacementValidationError('revision','commits require a newer document revision','REVISION_CONFLICT');}
-  for(const instance of next.instances)this.validateSurface(instance);
+  const terrainChanged=JSON.stringify(next.terrainPatches??[])!==JSON.stringify(this.document.terrainPatches??[]),terrain=terrainChanged?this.editedTerrain(next.terrainPatches??[]):this.world.terrain;
+  for(const instance of next.instances)this.validateSurface(instance,terrain);
   const generation=this.generation,request=++this.request,staged=new Map(),created=[];let preparedOutlines,editedCaveClearance;
   try{
    for(const instance of next.instances){
@@ -313,13 +317,14 @@ export class AuthoredPlacementRuntime {
     if(old&&this._key(old.instance)===this._key(instance)){staged.set(instance.instanceId,old);continue;}
     const entry=await this._acquire(instance);this._check(generation);
     if(request!==this.request){this._release(entry);throw mapLoadAbortError();}
-    const record=this._makeRecord(instance,entry);created.push(record);staged.set(instance.instanceId,record);
+    const record=this._makeRecord(instance,entry,terrain);created.push(record);staged.set(instance.instanceId,record);
    }
    preparedOutlines=await this._prepareOutlines([...staged.values()]);
    if(this.world.cave&&this.publish&&(next.removedBaseIds?.length||next.instances.some(instance=>instance.sourceInstanceId||instance.collision==='solid'))){const {prepareEditedCaveClearance}=await import('./editor-cave-collision.js');this._check(generation);if(request!==this.request)throw mapLoadAbortError();editedCaveClearance=prepareEditedCaveClearance(this,next,staged);}
-   for(const instance of next.instances)this.validateSurface(instance);
+   for(const instance of next.instances)this.validateSurface(instance,terrain);
    this._check(generation);if(request!==this.request)throw mapLoadAbortError();
   }catch(error){preparedOutlines?.dispose();for(const record of created)this._disposeRecord(record);throw error;}
+  if(terrainChanged)try{publishEditedTerrain(this.world,terrain);this.terrainEdited=!!next.terrainPatches?.length;}catch(error){preparedOutlines?.dispose();for(const record of created)this._disposeRecord(record);throw error;}
   this.outlines?.dispose();this.outlines=null;this.visibility?.dispose();this.visibility=null;
   for(const instance of next.instances){const record=staged.get(instance.instanceId);this._setTransform(record,instance);record.root.setEnabled(true);}
   for(const [id,record]of this.records)if(staged.get(id)!==record)this._disposeRecord(record);
@@ -354,6 +359,7 @@ export class AuthoredPlacementRuntime {
   this.renderRecords.length=0;this.treeOcclusion=null;
   if(this.caveCollisionOwned&&this.caveCollisionTerrain.authoredCaveCollision===this.caveCollision){this.caveCollisionTerrain.authoredCaveCollision=this.previousCaveCollision;if(this.world.terrain===this.caveCollisionTerrain)this.world.caveFog?.fog.rebuildOccluders();}
   this.caveEditorMasks?.clear();this.caveEditorGround=null;this.caveEditorMask=null;this.caveEditorPrepared=null;this.caveEditorMaskBytes=0;this.caveCollision=null;this.caveCollisionTerrain=null;this.previousCaveCollision=null;
+  if(this.terrainEdited&&this.world.mapId===this.mapId&&this.world.ground===this.ground&&!this.scene.isDisposed){publishEditedTerrain(this.world,this.editedTerrain([]));this.terrainEdited=false;}
   if(this.suppressedBase.size)this._suppressBase([]);
   if(this.publish&&this.world.navigation===this.navigation)this.world.navigation=this.baseNavigation;
   if(this.publish&&this.world.mapId===this.mapId&&this.world.ground===this.ground){this.world.authoredPlacementRecords=[];this.world.placementOverlay=null;this.world.placementRevision=(this.world.placementRevision??0)+1;}

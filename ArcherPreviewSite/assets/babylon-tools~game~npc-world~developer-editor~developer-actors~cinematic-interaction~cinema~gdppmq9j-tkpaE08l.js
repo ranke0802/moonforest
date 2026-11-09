@@ -1,0 +1,1 @@
+import{i as e}from"./babylon-tools~game~npc-world~developer-editor~developer-actors~cinematic-interaction~cinema~krwy5lco-BqltO0ki.js";var t=class{static get Now(){return e()&&window.performance&&window.performance.now?window.performance.now():Date.now()}};export{t};

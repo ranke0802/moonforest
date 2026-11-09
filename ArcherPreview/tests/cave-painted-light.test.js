@@ -9,6 +9,7 @@ import {TerrainHeightField} from '../src/terrain.js';
 import {CAVE_LABORATORY_GEOMETRY} from '../src/cave-laboratory-geometry.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {readAccessor} from '../scripts/web-geometry.js';
+import {caveCollisionManifest} from '../scripts/cave-collision-source.mjs';
 
 const clear=()=>false,lamp=(x=-3,z=0)=>({id:'test-lamp',asset:'cave-13-votive-lantern',x,z,scale:1,yaw:0}),flat={heightAt:()=>0};
 const luma=rgb=>rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;
@@ -96,12 +97,14 @@ test('actual lower-wall receiver changes only adjacent non-walking shoulders and
 });
 
 test('the actual r3 native first wall receives warm lamp light with the existing .8m end margin',async()=>{
- const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),config=manifest.assets[CAVE_LABORATORY_GEOMETRY.assetId],placement=CAVE_PLACEMENTS.find(p=>p.asset===CAVE_LABORATORY_GEOMETRY.assetId),{gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));
+ const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),config=manifest.assets[CAVE_LABORATORY_GEOMETRY.assetId],placement=CAVE_PLACEMENTS.find(p=>p.asset===CAVE_LABORATORY_GEOMETRY.assetId);
  assert.equal(config.sourceSha256,CAVE_LABORATORY_GEOMETRY.sourceSha256);assert.equal(placement.yaw,0);assert.equal(config.height/config.bounds[1]*placement.scale,1);
  const emitter=historical.emitters.find(e=>e.id==='cavern-107');assert.deepEqual([emitter.x,emitter.z],[-40,-14]);
- const angle=285*Math.PI/180,origin=new Vector3(emitter.x,emitter.y,emitter.z),direction=new Vector3(Math.sin(angle),0,Math.cos(angle)),ray=new Ray(origin,direction,emitter.radius),offset=new Vector3(placement.x,placement.elevation-.025,placement.z);let first=Infinity;
- for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){const p=readAccessor(gltf,files,primitive.attributes.POSITION),indices=readAccessor(gltf,files,primitive.indices);for(let i=0;i<indices.length;i+=3){const tri=[0,1,2].map(k=>Vector3.FromArray(p,indices[i+k]*3).add(offset)),hit=ray.intersectsTriangle(...tri);if(hit&&hit.distance>0&&hit.distance<first)first=hit.distance;}}
- assert.ok(first<emitter.radius,'positive actual packed-native first-surface intersection');const point=origin.add(direction.scale(first));assert.ok(Math.abs(point.z+13.125)<1e-6);assert.ok(first>3.3&&first<3.5);
+ const angle=285*Math.PI/180,origin=new Vector3(emitter.x,emitter.y,emitter.z),direction=new Vector3(Math.sin(angle),0,Math.cos(angle)),ray=new Ray(origin,direction,emitter.radius),offset=new Vector3(placement.x,placement.elevation-.025,placement.z);
+ async function firstHit(model){const {gltf,files}=await readRuntimeGltf(new URL(model,base));let first=Infinity;for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){const p=readAccessor(gltf,files,primitive.attributes.POSITION),indices=readAccessor(gltf,files,primitive.indices);for(let i=0;i<indices.length;i+=3){const tri=[0,1,2].map(k=>Vector3.FromArray(p,indices[i+k]*3).add(offset)),hit=ray.intersectsTriangle(...tri);if(hit&&hit.distance>0&&hit.distance<first)first=hit.distance;}}return first;}
+ const preservedModel=caveCollisionManifest(manifest).assets[CAVE_LABORATORY_GEOMETRY.assetId].lods[0].model,preservedFirst=await firstHit(preservedModel),first=await firstHit(config.lods[0].model),preservedPoint=origin.add(direction.scale(preservedFirst));
+ assert.ok(Math.abs(preservedPoint.z+13.125)<1e-6,'the historic collision source retains its exact established wall intersection');assert.ok(first<emitter.radius,'positive actual packed-native first-surface intersection');
+ assert.ok(Math.abs(first-preservedFirst)<.05,'the approved R2 render wall remains within 5cm of the preserved reference at this lamp');const point=origin.add(direction.scale(first));assert.ok(first>3.3&&first<3.5);
  const before=buildCavePaintLight(actualTerrain,{placements:floorPlacements,receiverAt:caveRockPaintReceiver,endSurfaceMargin:0}),after=buildCavePaintLight(actualTerrain,{placements:floorPlacements,receiverAt:caveRockPaintReceiver}),sample=sampleCavePaintLight(after,point.x,point.y,point.z);
  assert.ok(luma(sample.rgb)>.45);assert.ok(luma(sample.rgb)>luma(sampleCavePaintLight(before,point.x,point.y,point.z).rgb)+.2,'first native receiving wall benefits from terminal margin without widening it');assert.ok(sample.rgb[0]>sample.rgb[2]);assert.equal(after.stats.endSurfaceMargin,.8);assert.equal(after.data.byteLength,65536);
  const oldX=-41.0625,oldZ=-9.5625,oldFloor=actualTerrain.heightAt(oldX,oldZ);assert.equal(caveRockPaintReceiver(actualTerrain,oldX,oldZ,oldFloor),oldFloor,'retired shoulder fixture is now the actual lowered floor');

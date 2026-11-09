@@ -1,0 +1,1 @@
+export{t as PLACEMENT_COORDINATE_SYSTEM,n as PLACEMENT_MAPS,r as PlacementHistory,i as PlacementValidationError,a as basePlacementEditability,o as createBasePlacementManifest,s as createEmptyPlacementDocument,c as placementCatalogAsset,l as placementScaleRange,u as validatePlacementDocument}from"./placement-document-DrYUp2Js.js";

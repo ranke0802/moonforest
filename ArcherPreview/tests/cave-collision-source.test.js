@@ -20,9 +20,30 @@ test('approved render budgets preserve registered collision near sources and kee
   assert.equal(renderModel,current.assets[id].lods[0].model);assert.equal(collisionModel,before.assets[id].lods[0].model);assert.equal(source.manifest.assets[id].lods[0].model,collisionModel);
   for(const key of ['bounds','height','origin','frontYawOffset','category','highTextures','mobileHighTextures'])assert.deepEqual(source.manifest.assets[id][key],current.assets[id][key]);
  }
- assert.deepEqual(source.manifest.assets['cave-derived-laboratory-rock'],current.assets['cave-derived-laboratory-rock'],'Unchanged authored native laboratory is never substituted');
+ const lab=current.assets['cave-derived-laboratory-rock'];
+ if(lab.r2Geometry){
+  const replacement=source.r2Replacements.find(row=>row.id==='cave-derived-laboratory-rock');assert.ok(replacement,'R2 laboratory collision source is projected');
+  assert.equal(replacement.renderModel,lab.lods[0].model);assert.equal(replacement.collisionModel,before.assets['cave-derived-laboratory-rock'].lods[0].model);
+  assert.equal(source.manifest.assets['cave-derived-laboratory-rock'].lods[0].model,replacement.collisionModel);
+ }else assert.deepEqual(source.manifest.assets['cave-derived-laboratory-rock'],lab,'Unchanged authored native laboratory is never substituted');
  assert.equal(caveSourceFingerprint(),body.fingerprint);for(const data of [sight,camera,native,ownership])assert.equal(data.fingerprint,body.fingerprint);
  assert.notEqual(caveRenderSourceFingerprint(),body.fingerprint,'Current render identity is recorded separately from the preserved gameplay epoch');
+});
+
+test('R2 render-only replacements retain the recorded cave collision epoch and reject forged or missing approvals',()=>{
+ const selected=Object.entries(current.assets).filter(([,asset])=>asset.r2Geometry);if(!selected.length)return;
+ const source=caveCollisionSource(current);assert.equal(source.r2Revision,'approved-review-r2-2026-11-09');assert.equal(source.r2Replacements.length,selected.length);
+ for(const [id,asset]of selected){const row=source.r2Replacements.find(r=>r.id===id);assert.ok(row,id);assert.equal(row.renderModel,asset.lods[0].model);assert.equal(source.manifest.assets[id].lods[0].model,row.collisionModel);}
+ assert.equal(caveSourceFingerprint(),body.fingerprint);for(const data of [sight,camera,native,ownership])assert.equal(data.fingerprint,body.fingerprint);
+ for(const mutate of [a=>{a.height+=.01;},a=>{a.r2Geometry.beforeModelSha256='0'.repeat(64);},a=>{a.r2Geometry.appliedModelSha256='0'.repeat(64);},a=>{a.lods[0].model='./content/'+'0'.repeat(64)+'.gltf';},a=>{delete a.r2Geometry;},a=>{a.lods[1].triangles++;}]){
+  const changed=structuredClone(current);mutate(changed.assets[selected[0][0]]);assert.throws(()=>caveCollisionManifest(changed),'tampered R2 approval must not inherit the old collision epoch');
+ }
+ const removed=structuredClone(current);for(const [id]of selected)delete removed.assets[id].r2Geometry;
+ assert.throws(()=>caveCollisionManifest(removed),/missing approval metadata/,'removing every marker must not bypass approval validation');
+ const r2=JSON.parse(readFileSync(sourcePath('approved-review-r2-2026-11-09','approval.json'))),rolledBack=structuredClone(current);
+ for(const entry of r2.assets){const app=entry.applications.find(row=>row.manifest==='witch-cave.json');if(app)rolledBack.assets[entry.id]=structuredClone(app.beforeConfig);}
+ const rollbackSource=caveCollisionSource(rolledBack);assert.equal(rollbackSource.r2Revision,null);assert.equal(rollbackSource.r2Replacements.length,0,'exact registered pre-R2 rollback remains valid');
+ const forgedRollback=structuredClone(rolledBack);forgedRollback.assets[selected[0][0]].lods[0].triangles++;assert.throws(()=>caveCollisionManifest(forgedRollback),/rollback snapshot/,'rollback config must equal the registered before snapshot');
 });
 
 test('collision source projection rejects unknown approval, source identity and native transform changes',()=>{

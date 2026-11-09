@@ -1,0 +1,1 @@
+export{so as clipPlaneFragment}from"./babylon-game-uE9lshiC.js";

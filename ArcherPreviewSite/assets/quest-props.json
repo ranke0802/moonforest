@@ -858,15 +858,20 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+          "model": "./content/dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e.gltf",
           "resources": [
-            "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+            "./content/78fb7249f36e5200b170c9dfc8e4e26e2e3cf080a73c3917ef021e092799ddaf.bin",
             "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
-            "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+            "./content/dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e.gltf"
           ],
-          "bytes": 339324,
+          "bytes": 236252,
           "textureSize": 1024,
-          "triangles": 4479
+          "triangles": 981,
+          "compression": {
+            "encodedViews": 4,
+            "rawViews": 0,
+            "verifiedViews": 4
+          }
         },
         {
           "level": 1,
@@ -895,15 +900,20 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf",
+        "model": "./content/dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e.gltf",
         "resources": [
-          "./content/e627d19de283e15395e125047c816510fb9a3b102a84953eb62304dc0ff8c4d1.bin",
+          "./content/78fb7249f36e5200b170c9dfc8e4e26e2e3cf080a73c3917ef021e092799ddaf.bin",
           "./content/ec35aa3b652ed23cac9f9b8fe136e6592a1a8df8b75902143acbe65b14add6c2.ktx2",
-          "./content/172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e.gltf"
+          "./content/dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e.gltf"
         ],
-        "bytes": 339324,
+        "bytes": 236252,
         "textureSize": 1024,
-        "triangles": 4479
+        "triangles": 981,
+        "compression": {
+          "encodedViews": 4,
+          "rawViews": 0,
+          "verifiedViews": 4
+        }
       },
       "highTextures": {
         "shading": "toon-color",
@@ -923,7 +933,26 @@
         ]
       },
       "sourceTask": "01a19bdb-c8a6-72cd-832f-2f289dfba7a4",
-      "triangles": 4479
+      "triangles": 4479,
+      "r2Geometry": {
+        "revision": "approved-review-r2-2026-11-09",
+        "assetId": "chest-common",
+        "requestedCap": 1000,
+        "actualTriangles": 981,
+        "catalogAssetVersion": "172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e",
+        "beforeModelSha256": "172f93c885c3ad1eb1ef8746da3f1114e614f204a03b66b5cd0b58bb9462ba0e",
+        "appliedModelSha256": "dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e",
+        "nativeConfigSha256": "e65f2278dae40aa52a7c3dda13c3357bed0c35eca86bb4186cc338ecbc638e12",
+        "lodModels": [
+          "dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e",
+          "095be9adbd4149d274ec916b9085e89af6361db640d0652778800fe305ff0b10",
+          "49dc04b3e36187e3da70d9f94733ac050ae9871bd8fb95c69aeafedcd1af5336"
+        ],
+        "mobileNearModelSha256": "dd13437f971d4aebbf4bb509eba39b987030dff46ab4c2c0353180014946789e",
+        "derivedAtlasSourceSha256": null,
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true
+      }
     },
     "waypost": {
       "name": "waypost",

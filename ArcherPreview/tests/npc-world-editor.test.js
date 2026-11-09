@@ -9,6 +9,8 @@ import {createCinematicVisualFactory} from '../src/cinematic-visual-adapter.js';
 import {getCinematicDefinitions} from '../src/cinematic-assets.js';
 import {createCinematicPoseSampler} from '../src/cinematic-scene-host.js';
 import {inspectNpcInteriorInk} from '../src/npc-interior-ink.js';
+import {createTrainingTargets} from '../src/targets.js';
+import {nearbyEditableObjects} from '../src/nearby-editor.js';
 
 const drain=()=>new Promise(resolve=>setImmediate(resolve));
 async function until(predicate){const end=performance.now()+3000;while(!predicate()&&performance.now()<end)await drain();assert.ok(predicate(),'operation should settle');}
@@ -65,6 +67,25 @@ test('borrowed existing monster and NPC IDs stay stable; Cancel restores native 
  await e.api.enter({selection:id});await e.click('higher');await e.click('apply');assert.equal(actor.position.y,1.25);assert.equal(JSON.stringify({hp:encounter.hp,config:encounter.config}),stats);assert.deepEqual(encounter.routeState,{});assert.equal(f.storage.getItem(NPC_WORLD_STORAGE_KEY),null,'borrowed actors never get random persistent IDs');assert.equal(f.state.ready,true);
 });
 
+test('nearby training dummy can be edited and cancelled or applied while its target and aim remain synchronized',async t=>{
+ const f=fixture(t),r=runtime(t,f),training=createTrainingTargets(f.scene,null);f.world.trainingTargets=training;t.after(()=>training.dispose());const target=training.targets[0],encounter=training.editableEncounters()[0],handles=listEditableActorHandles(f.world,{encounters:[]});assert.equal(handles.length,1);assert.equal(handles[0].source,'training');const rows=nearbyEditableObjects(f.world,target.position,{actors:handles});assert.equal(rows[0].name,'남쪽 허수아비');assert.equal(rows[0].editable,true);
+ const e=editor(t,f,r.instance),id=handles[0].id,original=target.aimPoint.clone();await e.api.enter({selection:id});await e.click('higher');near(target.aimPoint.y,original.y+.25);await e.click('cancel');near(target.aimPoint.y,original.y);near(encounter.actor.position.y,0);
+ await e.api.enter({selection:id});await e.click('higher');await e.click('apply');near(target.aimPoint.y,original.y+.25);near(encounter.actor.position.y,.25);assert.equal(training.selectNearest(encounter.actor.position),target);assert.equal(training.hit(target),true);assert.equal(target.hits,1);
+});
+
+test('NPC dialog settings cancel cleanly and persist with the NPC when applied',async t=>{
+ const f=fixture(t),r=runtime(t,f);await r.instance.ensureMap();const npc=await r.instance.add('test-npc',{position:[1,0,2],instanceId:'talker'}),e=editor(t,f,r.instance);
+ const fill=()=>{f.root.querySelector('[data-npc-interaction-label]').value='인사';f.root.querySelector('[data-npc-interaction-text]').value='마을에 오신 걸 환영해요.';f.root.querySelector('[data-npc-interaction-range]').value='4';};
+ await e.api.enter({selection:npc.id});fill();await e.click('interaction-save');assert.equal(r.instance.get(npc.id).interaction.text,'마을에 오신 걸 환영해요.');await e.click('cancel');assert.equal(r.instance.get(npc.id).interaction,undefined);
+ await e.api.enter({selection:npc.id});fill();await e.click('interaction-save');await e.click('apply');assert.equal(JSON.parse(f.storage.getItem(NPC_WORLD_STORAGE_KEY)).maps.village[0].interaction.label,'인사');r.instance.leaveMap();await r.instance.ensureMap();assert.deepEqual(r.instance.get(npc.id).interaction,{label:'인사',text:'마을에 오신 걸 환영해요.',range:4});
+});
+
+test('existing live NPC dialog settings are session-owned and cancel restores the original',async t=>{
+ const f=fixture(t),r=runtime(t,f),actor=new TransformNode('live-villager',f.scene),mesh=MeshBuilder.CreateBox('live-villager-body',{},f.scene);mesh.parent=actor;const encounter={actor,active:true,type:'npc',config:{name:'기존 주민'}},battle={encounters:[encounter]},id=listEditableActorHandles(f.world,battle)[0].id,e=editor(t,f,r.instance,{battle});
+ const fill=()=>{f.root.querySelector('[data-npc-interaction-text]').value='여기는 오래된 마을이에요.';};await e.api.enter({selection:id});fill();await e.click('interaction-save');assert.equal(encounter.interaction.text,'여기는 오래된 마을이에요.');await e.click('cancel');assert.equal(encounter.interaction,undefined);
+ await e.api.enter({selection:id});fill();await e.click('interaction-save');await e.click('apply');assert.equal(encounter.interaction.text,'여기는 오래된 마을이에요.');assert.equal(f.storage.getItem(NPC_WORLD_STORAGE_KEY),null);
+});
+
 for(const boundary of ['hydrate','runtime','ensureMap','lease'])test('turning the originating option OFF during '+boundary+' prevents a late editor lease/UI',async t=>{
  const f=fixture(t),r=runtime(t,f);let live=true,arrived=false,finish;const gate=new Promise(resolve=>finish=resolve),hold=async()=>{arrived=true;await gate;};t.after(()=>finish());const options={};
  if(boundary==='hydrate')options.hydrate=hold;
@@ -91,4 +112,15 @@ test('OFF/ON during a deferred NPC import permits new edits and apply without st
  e.api.hide();assert.equal(e.api.inspect().busy,false);assert.equal(f.state.ready,true);await e.api.enter({selection:npc.id});assert.equal(f.root.querySelector('[data-actor-command=apply]').disabled,false);await e.click('higher');await e.click('apply');assert.equal(settled,false,'new edit/apply finishes before the old import settles');assert.equal(r.instance.snapshot(npc.id).position[1],.25);assert.equal(f.state.ready,true);
  await e.api.enter({selection:npc.id});const lease=f.world.toolLease,status=f.root.querySelector('[data-actor-status]').textContent,notificationCount=messages.length;rejectImport(new Error('stale import must stay silent'));await until(()=>settled);for(let i=0;i<4;i++)await drain();
  assert.equal(messages.length,notificationCount);assert.equal(f.root.querySelector('[data-actor-status]').textContent,status);assert.equal(e.api.inspect().busy,false);assert.equal(e.api.inspect().editing,true);assert.equal(f.root.querySelector('[data-actor-command=apply]').disabled,false);assert.equal(f.world.toolLease,lease);assert.equal(lease.active,true);await e.click('higher');assert.equal(r.instance.snapshot(npc.id).position[1],.5);
+});
+
+test('nearby quest chest opens the actor editor and cancel restores its linked interaction position',async t=>{
+ const f=fixture(t),r=runtime(t,f),actor=new TransformNode('quest-chest',f.scene),body=MeshBuilder.CreateBox('quest-chest-body',{},f.scene);body.parent=actor;actor.position.set(1,0,2);actor.computeWorldMatrix(true);body.computeWorldMatrix(true);actor.freezeWorldMatrix();body.freezeWorldMatrix();
+ const point={x:1,z:2},encounter={actor,active:true,kind:'quest-chest',displayName:'보물 상자',onEdited(){const p=actor.getAbsolutePosition();point.x=p.x;point.z=p.z;}};f.world.questProps={editableEncounters:()=>[encounter]};
+ const row=listEditableActorHandles(f.world,{encounters:[]})[0],e=editor(t,f,r.instance);assert.equal(row.source,'quest-chest');await e.api.enter({selection:row.id});assert.equal(e.api.inspect().selected,row.id);const field=f.root.querySelector('[data-actor-position="0"]');field.value='4';field.dispatchEvent(new f.window.Event('change',{bubbles:true}));await until(()=>!e.api.inspect().busy);near(point.x,4);await e.click('cancel');near(point.x,1);near(actor.position.x,1);
+ await e.api.enter({selection:row.id});const field2=f.root.querySelector('[data-actor-position="0"]');field2.value='3';field2.dispatchEvent(new f.window.Event('change',{bubbles:true}));await until(()=>!e.api.inspect().busy);await e.click('apply');near(point.x,3);near(actor.position.x,3);
+});
+
+test('chest bonus item and future effect setting cancel or apply with the editor session',async t=>{
+ const f=fixture(t),r=runtime(t,f),actor=new TransformNode('chest-settings',f.scene),body=MeshBuilder.CreateBox('chest-body',{},f.scene);body.parent=actor;let committed=null;const encounter={actor,active:true,kind:'quest-chest',displayName:'상자',dropAssetId:'',dropEffectEnabled:false,onEditApplied(){committed={assetId:this.dropAssetId,effectEnabled:this.dropEffectEnabled};}};f.world.questProps={editableEncounters:()=>[encounter]};const row=listEditableActorHandles(f.world,{encounters:[]})[0],e=editor(t,f,r.instance);await e.api.enter({selection:row.id});const change=()=>{const select=f.root.querySelector('[data-chest-drop]');select.value='apple';select.dispatchEvent(new f.window.Event('change',{bubbles:true}));const box=f.root.querySelector('[data-chest-effect]');box.checked=true;box.dispatchEvent(new f.window.Event('change',{bubbles:true}));};change();assert.equal(encounter.dropAssetId,'apple');await e.click('cancel');assert.equal(encounter.dropAssetId,'');assert.equal(encounter.dropEffectEnabled,false);assert.equal(committed,null);await e.api.enter({selection:row.id});change();await e.click('apply');assert.deepEqual(committed,{assetId:'apple',effectEnabled:true});
 });
