@@ -11,9 +11,10 @@ import {CAVE_PLACEMENTS} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {caveSourceFingerprint} from './cave-source-fingerprint.mjs';
+import {caveCollisionManifest} from './cave-collision-source.mjs';
 
 if(!laboratoryEnabled())throw Error('Laboratory must have an approved geometry revision');
-const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(await readFile(new URL('witch-cave.json',base),'utf8')),asset=manifest.assets[contract.assetId],placement=CAVE_PLACEMENTS.find(p=>p.asset===contract.assetId),step=.125,padding=2.25,quantum=.001,maxDistance=2.25,maxRadius=2,skin=.002,legacyMargin=.08;
+const base=new URL('../public/assets/',import.meta.url),manifest=caveCollisionManifest(),asset=manifest.assets[contract.assetId],placement=CAVE_PLACEMENTS.find(p=>p.asset===contract.assetId),step=.125,padding=2.25,quantum=.001,maxDistance=2.25,maxRadius=2,skin=.002,legacyMargin=.08;
 if(!asset||!placement||asset.sourceSha256!==contract.sourceSha256)throw Error('Public laboratory geometry and contract differ');
 const bounds=contract.bounds,minX=bounds.minX-padding,minZ=bounds.minZ-padding,width=Math.round((bounds.maxX-bounds.minX+padding*2)/step),height=Math.round((bounds.maxZ-bounds.minZ+padding*2)/step),values=new Uint16Array(width*height),source=await readRuntimeGltf(new URL(asset.lods[0].model,base)),gltf=structuredClone(source.gltf),fingerprint=caveSourceFingerprint(),hash=b=>createHash('sha256').update(b).digest('hex');
 for(const key of ['extensionsUsed','extensionsRequired'])gltf[key]=(gltf[key]??[]).filter(e=>e!=='EXT_meshopt_compression');

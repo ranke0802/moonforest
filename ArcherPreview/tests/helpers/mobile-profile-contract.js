@@ -1,14 +1,41 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
+import {resolve,relative,basename,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {isDeepStrictEqual} from 'node:util';
+import {MeshoptDecoder} from 'meshoptimizer';
+import {sourcePath,projectRoot} from '../../../Sources/resolve-source.mjs';
+import {readAccessor} from '../../scripts/web-geometry.js';
+import {APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION,sceneryNativeFingerprint,approvedSceneryVersion} from '../../scripts/approved-scenery-policy.mjs';
 
 const assetsBase=new URL('../../public/assets/',import.meta.url),hash=value=>createHash('sha256').update(value).digest('hex');
 const sceneryCategories=new Set(['tree','rock','prop','plant','defense','fence']);
 const protectedIds=new Set(['village-approach','chapel','guardian-bear','hooded-goblin','elena','mourning-elena']);
+await MeshoptDecoder.ready;
+const registry=JSON.parse(readFileSync(resolve(projectRoot,'Sources/source-inputs.json'))),registered=new Map(registry.inputs.map(input=>[input.path,input]));
+function registeredBytes(id,...parts){const path=sourcePath(id,...parts),data=readFileSync(path),entry=registered.get(relative(projectRoot,path).replaceAll('\\','/'));assert.ok(entry,'approved geometry input must be registered: '+id);assert.equal(data.length,entry.bytes,id+' registered byte length');assert.equal(hash(data),entry.sha256,id+' registered hash');return {path,data};}
+const approval=JSON.parse(registeredBytes('approved-scenery-budgets','approval.json').data),plans=new Map(approval.assets.map(a=>[a.id,a]));
+assert.equal(approval.revision,SCENERY_BUDGET_REVISION);assert.deepEqual(Object.fromEntries(approval.assets.map(a=>[a.id,a.cap])),APPROVED_SCENERY_CAPS);
+const application=JSON.parse(readFileSync(new URL('../../reports/approved-scenery-budgets-2026-11-09/application.json',import.meta.url))),results=new Map(application.tierResults.map(t=>[t.id+':'+t.tier,t]));
+const beforeRows=new Map;for(const saved of approval.beforeManifests){const {data}=registeredBytes(saved.sourceId);assert.equal(hash(data),saved.sha256,saved.manifest+' immutable before graph');const manifest=JSON.parse(data);for(const [id,asset]of Object.entries(manifest.assets??{}))if(plans.has(id)){if(!beforeRows.has(id))beforeRows.set(id,[]);beforeRows.get(id).push({manifest:saved.manifest,asset});}}
+const contentBase=new URL('../../public/assets/content/',import.meta.url),resourceCache=new Map,modelCache=new Map,tierCache=new Map,expectedCache=new Map;
+function contentBytes(name){name=basename(name);assert.match(name,/^[a-f0-9]{64}\.[a-z0-9]+$/,'content-addressed source resource');if(!resourceCache.has(name)){const data=readFileSync(new URL(name,contentBase));assert.equal(hash(data),name.split('.')[0],name+' actual content hash');resourceCache.set(name,data);}return resourceCache.get(name);}
+function readGeometry(path,raw){if(modelCache.has(path))return modelCache.get(path);raw??=readFileSync(path);const gltf=JSON.parse(raw),files=new Map;for(const b of gltf.buffers.filter(b=>b.uri))files.set(b.uri,{data:b.uri.startsWith('data:')?Buffer.from(b.uri.split(',')[1],'base64'):readFileSync(resolve(dirname(path),b.uri))});const decoded=structuredClone(gltf),decodedBuffers=new Map;for(const view of decoded.bufferViews??[]){const ext=view.extensions?.EXT_meshopt_compression;if(!ext)continue;assert.equal(ext.filter??'NONE','NONE','approved pack must be lossless');const source=files.get(decoded.buffers[ext.buffer].uri).data,target=new Uint8Array(view.byteLength);MeshoptDecoder.decodeGltfBuffer(target,ext.count,ext.byteStride,source.subarray(ext.byteOffset??0,(ext.byteOffset??0)+ext.byteLength),ext.mode,ext.filter);if(!decodedBuffers.has(view.buffer))decodedBuffers.set(view.buffer,Buffer.alloc(decoded.buffers[view.buffer].byteLength));decodedBuffers.get(view.buffer).set(target,view.byteOffset??0);delete view.extensions.EXT_meshopt_compression;if(!Object.keys(view.extensions).length)delete view.extensions;}for(const [index,data]of decodedBuffers){const uri='approved-decoded-'+index;files.set(uri,{data});decoded.buffers[index]={uri,byteLength:data.length};}const value={gltf:decoded,packed:gltf,files,raw};modelCache.set(path,value);return value;}
+function approvedTier(id,t){const key=id+':'+t.tier;if(tierCache.has(key))return tierCache.get(key);const r=results.get(key);assert.ok(r,key+' applied tier');assert.equal(r.changed,t.changed);assert.equal(r.beforeModel,t.oldModel);assert.equal(r.beforeTriangles,t.beforeTriangles);assert.equal(r.triangles,t.afterTriangles);const oldBytes=contentBytes(t.oldModel);assert.equal(hash(oldBytes),t.oldModelSha256,key+' original model');if(!t.changed){assert.equal(r.model,t.oldModel,key+' preserved URL');const value={...r};tierCache.set(key,value);return value;}
+ const source=registeredBytes(t.sourceId);assert.equal(hash(source.data),t.sourceSha256,key+' immutable approved source');const runtime=contentBytes(r.model);assert.equal(hash(runtime),r.modelSha256,key+' packed model hash');const canonical=readGeometry(source.path,source.data),packed=readGeometry(fileURLToPath(new URL(r.model,assetsBase)),runtime);
+ const packingKeys=new Set(['buffers','bufferViews','accessors','extensionsUsed','extensionsRequired']);for(const field of new Set([...Object.keys(canonical.packed),...Object.keys(packed.packed)]))if(!packingKeys.has(field))assert.deepEqual(packed.packed[field],canonical.packed[field],key+' canonical '+field);for(const field of ['extensionsUsed','extensionsRequired'])assert.deepEqual((packed.packed[field]??[]).filter(v=>v!=='EXT_meshopt_compression'),canonical.packed[field]??[],key+' extensions');assert.deepEqual(packed.gltf.accessors,canonical.gltf.accessors,key+' accessor metadata');for(let i=0;i<canonical.gltf.accessors.length;i++){const a=readAccessor(canonical.gltf,canonical.files,i),b=readAccessor(packed.gltf,packed.files,i);assert.ok(Buffer.from(a.buffer,a.byteOffset,a.byteLength).equals(Buffer.from(b.buffer,b.byteOffset,b.byteLength)),key+' canonical accessor '+i);}
+ const references=[...new Set([...packed.packed.buffers.filter(b=>b.uri).map(b=>basename(b.uri)),...(packed.packed.images??[]).map(im=>basename(im.uri)),basename(r.model)])],resources=references.map(n=>'./content/'+n),totalBytes=references.reduce((n,name)=>n+contentBytes(name).length,0);assert.deepEqual(r.resources,resources,key+' exact resource graph');assert.equal(r.bytes,totalBytes,key+' actual resource bytes');
+ const widths={SCALAR:1,VEC2:2,VEC3:3,VEC4:4,MAT2:4,MAT3:9,MAT4:16},sizes={5120:1,5121:1,5122:2,5123:2,5125:4,5126:4},indexAccessors=new Set(canonical.gltf.meshes.flatMap(m=>m.primitives.map(p=>p.indices)));let verifiedViews=0;for(let vi=0;vi<canonical.gltf.bufferViews.length;vi++){const v=canonical.gltf.bufferViews[vi],ai=canonical.gltf.accessors.findIndex(a=>a.bufferView===vi),a=canonical.gltf.accessors[ai],stride=v.byteStride??(a?widths[a.type]*sizes[a.componentType]:0),indices=indexAccessors.has(ai);if(a&&!a.sparse&&stride>0&&v.byteLength%stride===0&&(indices?[2,4].includes(stride):stride%4===0&&stride<=256))verifiedViews++;}const encodedViews=packed.packed.bufferViews.filter(v=>v.extensions?.EXT_meshopt_compression).length,compression={encodedViews,rawViews:packed.packed.bufferViews.length-encodedViews,verifiedViews};assert.deepEqual(r.compression,compression,key+' actual compression evidence');const value={...r,model:r.model,resources,bytes:totalBytes,compression};tierCache.set(key,value);return value;
+}
 
-// The sole authorized additive field is a mobile albedo alternative. Do not
-// normalize LODs, original textures, bounds or any other source-graph fields.
-export function originalAssetGraph(asset,id){
+function expectedGraphs(id){if(expectedCache.has(id))return expectedCache.get(id);const plan=plans.get(id);assert.ok(plan,'unapproved scenery projection '+id);const tiers=new Map(plan.tiers.map(t=>[t.tier,approvedTier(id,t)])),graphs=(beforeRows.get(id)??[]).map(row=>{const asset=structuredClone(row.asset),originalNear=asset.model??asset.lods?.[0]?.model,near=tiers.get('lod0');assert.equal(basename(originalNear),basename(plan.tiers[0].oldModel),id+' immutable source alias');const update=(old,tier)=>{const t=tiers.get(tier);assert.equal(basename(old.model),basename(t.beforeModel),id+' '+tier+' immutable tier alias');return t.changed?{...old,model:t.model,resources:t.resources,bytes:t.bytes,triangles:t.triangles,...(old.compression?{compression:t.compression}:{})}:old;};if(asset.lods)asset.lods=asset.lods.map((old,i)=>update(old,'lod'+(old.level??i)));if(asset.mobileNear)asset.mobileNear=update(asset.mobileNear,'mobileNear');if(asset.model)Object.assign(asset,{model:near.model,resources:near.resources,bytes:near.bytes,triangles:near.triangles});asset.geometryBudget={revision:SCENERY_BUDGET_REVISION,date:approval.date,assetId:id,cap:plan.cap,catalogAssetVersion:plan.catalogAssetVersion,beforeModelSha256:basename(originalNear).split('.')[0],appliedModelSha256:near.modelSha256,nativeConfigSha256:sceneryNativeFingerprint(row.asset),texturePixelsUnchanged:true,lodDistancesUnchanged:true,retention:'Original source and runtime files retained; deletion awaits user decision.',approval:'Category replacement authorized; applied build awaits user inspection.'};if(asset.vertexRelief)asset.vertexRelief.approvedBudgetRevision=SCENERY_BUDGET_REVISION;return {...row,expected:asset};});assert.ok(graphs.length,id+' registered before graph');expectedCache.set(id,graphs);return graphs;}
+function historicalApprovedAsset(asset,id,manifest){if(asset.geometryBudget===undefined){if(plans.has(id)){const near=asset.model??asset.lods?.[0]?.model;assert.equal(basename(near??''),basename(plans.get(id).tiers[0].oldModel),id+' replacement geometry requires exact approval metadata');}return asset;}assert.ok(plans.has(id)&&Object.hasOwn(APPROVED_SCENERY_CAPS,id),id+' is not approved for geometry projection');const near=approvedTier(id,plans.get(id).tiers[0]);approvedSceneryVersion(id,asset,{contentHash:near.modelSha256,triangles:near.triangles});const row=expectedGraphs(id).find(row=>(!manifest||row.manifest===manifest)&&isDeepStrictEqual(asset,row.expected));assert.ok(row,id+' current full graph differs from its registered approval/native/texture/resource contract');return structuredClone(row.asset);}
+
+// Historical comparison permits only the validated additive mobile albedo and
+// these registered geometry replacements. Every current field and resource is
+// checked before recovering the immutable graph; arbitrary fields are not lost.
+export function originalAssetGraph(asset,id,manifest){
  const profile=asset.mobileHighTextures;
  if(profile!==undefined){
   assert.ok(sceneryCategories.has(asset.category)&&!protectedIds.has(id)&&!id.startsWith('house'),id+' is excluded from mobile scenery profiles');
@@ -27,27 +54,28 @@ export function originalAssetGraph(asset,id){
   assert.equal(bytes.readUInt32LE(40),Math.floor(Math.log2(albedo.width))+1,id+' complete mip chain');
   assert.deepEqual(profile,{...original,textures:{albedo},resources:[albedo.url],colorResolution:albedo.width,colorEncoding:`KTX2 ${albedo.codec.toUpperCase()} / sRGB / full mip chain / mobile ${albedo.width}`},id+' all other profile metadata remains original');
  }
- const {mobileHighTextures,...original}=asset;return original;
+ const projected=historicalApprovedAsset(asset,id,manifest),{mobileHighTextures,...original}=projected;return original;
 }
 
-export function originalManifestText(text){
+export function originalManifestText(text,manifestName){
  const manifest=JSON.parse(text);let additive=false;
  for(const [id,asset]of Object.entries(manifest.assets??{})){
-  additive||=Object.hasOwn(asset,'mobileHighTextures');manifest.assets[id]=originalAssetGraph(asset,id);
+  additive||=Object.hasOwn(asset,'mobileHighTextures')||Object.hasOwn(asset,'geometryBudget');manifest.assets[id]=originalAssetGraph(asset,id,manifestName);
  }
- // Before the additive metadata the authored manifests used this exact format.
- // Keeping the historical hashes proves every original field is still exact.
+ // Project to the exact historical authored format only after the complete
+ // current contract has validated. These hashes describe that source graph,
+ // rather than claiming the new production triangle buffers are unchanged.
  return additive?JSON.stringify(manifest,null,2)+'\n':text.replace(/\r\n?/g,'\n');
 }
 
 export function originalInputText(path,text){
- return /(?:^|\/)public\/assets\/(?:village|great-plains|monster-forest|witch-cave|village-plains-outskirts)\.json$/.test(path)?originalManifestText(text):text.replace(/\r\n?/g,'\n');
+ const match=path.match(/(?:^|\/)public\/assets\/([^/]+\.json)$/);return match&&approval.beforeManifests.some(s=>s.manifest===match[1])?originalManifestText(text,match[1]):text.replace(/\r\n?/g,'\n');
 }
 
 export function assertOriginalInputFingerprint(path,text,expected){
  const original=hash(originalInputText(path,text)),raw=hash(text.replace(/\r\n?/g,'\n'));
- // Existing masks predate the additive profile; a future full rebake can
- // record the exact current raw manifest as before. Both retain every source
- // geometry input, and profile validation above always runs before either path.
+ // Existing masks can refer to the validated historical graph; future rebakes
+ // can refer to the exact current graph. Both routes validate approved geometry
+ // and profile/resource integrity before accepting either fingerprint.
  assert.ok(original===expected||raw===expected,path+' original geometry inputs do not match the delivered bake');
 }

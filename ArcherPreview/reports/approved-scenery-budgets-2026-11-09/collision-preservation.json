@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-09",
+  "passed": true,
+  "focusedTestFiles": 8,
+  "tests": 38,
+  "pass": 38,
+  "fail": 0,
+  "durationMs": 18929.9121,
+  "log": "exports/asset-budget-apply-2026-11-09/props/cave-focused-tests.log",
+  "collisionFingerprint": "12591883bdb95ae902b3c664426af81c40ace36fe4ecea77aa240781607a9d71",
+  "renderFingerprint": "cec12cf438bf130f927341d2be40acf33c89d4c77a46040cbe695ac8bcef67ce",
+  "collisionSourceRevision": "approved-scenery-budget-v1",
+  "beforeManifestSha256": "0000be8dd9f43933a0cefc52217604a9be6ceaecc639aee07f8a19f4923fe22f",
+  "nearSourceReplacements": [
+    {
+      "id": "cave-01-eroded-wall",
+      "renderModel": "./content/fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f.gltf",
+      "collisionModel": "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf"
+    },
+    {
+      "id": "cave-02-rock-ledge",
+      "renderModel": "./content/3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323.gltf",
+      "collisionModel": "./content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf"
+    },
+    {
+      "id": "cave-03-great-column",
+      "renderModel": "./content/3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa.gltf",
+      "collisionModel": "./content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf"
+    },
+    {
+      "id": "cave-04-natural-arch",
+      "renderModel": "./content/2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a.gltf",
+      "collisionModel": "./content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf"
+    },
+    {
+      "id": "cave-05-stalagmites",
+      "renderModel": "./content/dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac.gltf",
+      "collisionModel": "./content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf"
+    },
+    {
+      "id": "cave-06-stalactite-canopy",
+      "renderModel": "./content/4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee.gltf",
+      "collisionModel": "./content/acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf"
+    },
+    {
+      "id": "cave-07-scree-ramp",
+      "renderModel": "./content/f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f.gltf",
+      "collisionModel": "./content/bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf"
+    },
+    {
+      "id": "cave-13-votive-lantern",
+      "renderModel": "./content/87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b.gltf",
+      "collisionModel": "./content/16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf"
+    },
+    {
+      "id": "cave-s01-solid-cliff-base",
+      "renderModel": "./content/2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439.gltf",
+      "collisionModel": "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf"
+    },
+    {
+      "id": "cave-s03-dry-spillway-rock",
+      "renderModel": "./content/9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540.gltf",
+      "collisionModel": "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf"
+    },
+    {
+      "id": "forest-06-witch-cave-mouth",
+      "renderModel": "./content/b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421.gltf",
+      "collisionModel": "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf"
+    },
+    {
+      "id": "handcart",
+      "renderModel": "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf",
+      "collisionModel": "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf"
+    },
+    {
+      "id": "rock-02-jagged-outcrop",
+      "renderModel": "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf",
+      "collisionModel": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+    },
+    {
+      "id": "rock-01-mossy-boulder",
+      "renderModel": "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf",
+      "collisionModel": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+    }
+  ],
+  "liveRenderGuard": "Exact canonical application near URL/SHA, immutable approval source ID/SHA and actual registered raw/packed model bytes; forged matching 64hex model+budget rejected.",
+  "gameplayCellDataFilesWritten": [],
+  "allSixBakedDataFilesUnchangedFromHead": true,
+  "payloadHashes": [
+    {
+      "file": "witch-cave-collision-data.js",
+      "sha256": "0d3564c8d3945a41f93dfebf7a0dcef7bdc37d4c983aca4bb3840f4272b33134"
+    },
+    {
+      "file": "witch-cave-sight-data.js",
+      "sha256": "b7a0b0922417e6b3589ded3e226ef359e8bb6d476902c9911fa23bb76ea91326"
+    },
+    {
+      "file": "witch-cave-camera-data.js",
+      "sha256": "337de415a10eb58302ddd37bad3c0a6e90a319368ded0a0af60d4b652d3c0589"
+    },
+    {
+      "file": "cave-laboratory-collision-data.js",
+      "sha256": "2f8c5a1033ab93f5f3c9066e85ed5c8eaa49be7850c7de84fe8bef0dbda7c77d"
+    },
+    {
+      "file": "editor-cave-collision-data.js",
+      "sha256": "e44d6d18c85e88100087582b9143230e602e1517f25bac69af0cbcaf85a19ce2"
+    },
+    {
+      "file": "mourning-cave-clearance-data.js",
+      "sha256": "e5f982e62688dbdefd75c1d6709eda228bfcafe5dd48c1b3139073e57fd3eb66"
+    }
+  ],
+  "dressing": {
+    "sourceProfilesAndPlacementsUnchanged": true,
+    "proof": "Every actual transformed near vertex enclosed by exact original conservative rectangle; native authored length/depth scaling verified. No arbitrary padding or profile expansion."
+  },
+  "browserAutomation": false,
+  "geometryOrTexturesModified": false
+}

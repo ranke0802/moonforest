@@ -117,62 +117,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+          "model": "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf",
           "resources": [
-            "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+            "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
             "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
-            "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+            "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf"
           ],
-          "triangles": 5268,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 369163
+          "bytes": 267482
         },
         {
           "level": 1,
-          "model": "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "model": "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf",
           "resources": [
-            "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
-            "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
-            "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
-            "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+            "./content/1905d5fc471c26105ed31c806066974cdd34a3f01979d0ba606550dbff527399.bin",
             "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-            "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf"
+            "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf"
           ],
-          "triangles": 2634,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 177112
+          "bytes": 125489
         },
         {
           "level": 2,
-          "model": "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "model": "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf",
           "resources": [
-            "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
-            "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
-            "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
-            "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+            "./content/a170875858692917e575b8aa018b5b22f440dc3bf858755a7284b3939a175bce.bin",
             "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
-            "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf"
+            "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf"
           ],
-          "triangles": 1158,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 74553
+          "bytes": 61019
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+        "model": "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf",
         "resources": [
-          "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+          "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
           "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-          "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf"
+          "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf"
         ],
-        "triangles": 5268,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 219765
+        "bytes": 118084
       },
       "geometryLod": true,
       "highTextures": {
@@ -194,7 +188,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541"
+      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-02-jagged-outcrop",
+        "cap": 700,
+        "catalogAssetVersion": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "beforeModelSha256": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "appliedModelSha256": "d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f",
+        "nativeConfigSha256": "24d8ea67e8a2e24c3287ea60f57aab6e10524fe8b949477a1ec2cb8422233192",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "tree-01-round-oak": {
       "name": "참나무",
@@ -487,62 +495,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "model": "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf",
           "resources": [
-            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
             "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
-            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+            "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf"
           ],
-          "triangles": 5255,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 361154
+          "bytes": 261144
         },
         {
           "level": 1,
-          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "model": "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf",
           "resources": [
-            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
-            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
-            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
-            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/9ab345175da2143b35c31eae95d507118ae2d5fad9fc5846640d4c16d27c5858.bin",
             "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+            "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf"
           ],
-          "triangles": 2626,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 174895
+          "bytes": 123695
         },
         {
           "level": 2,
-          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "model": "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf",
           "resources": [
-            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
-            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
-            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
-            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/2d939947dcebd10bd8cf79e68f3a097ab4171d770578c73f965e008008ff1183.bin",
             "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
-            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+            "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf"
           ],
-          "triangles": 1156,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 72848
+          "bytes": 59714
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "model": "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf",
         "resources": [
-          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
           "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+          "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf"
         ],
-        "triangles": 5255,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 216760
+        "bytes": 116750
       },
       "geometryLod": true,
       "highTextures": {
@@ -564,7 +566,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-01-mossy-boulder",
+        "cap": 700,
+        "catalogAssetVersion": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "beforeModelSha256": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "appliedModelSha256": "813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470",
+        "nativeConfigSha256": "b33afc8b5e426da1216e92b2ff58a2ace1011617c4eb68b153e44c6e76aeeb68",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "handcart": {
       "name": "두 바퀴 손수레",
@@ -581,16 +597,16 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf",
+          "model": "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf",
           "resources": [
-            "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+            "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
             "./content/35b3f819b45d015baa72f4acf5d4d124e18721e05607abdce9f0e41d9536ab3e.ktx2",
-            "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf"
+            "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf"
           ],
-          "triangles": 4737,
+          "triangles": 2500,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 410738
+          "bytes": 351689
         },
         {
           "level": 1,
@@ -627,16 +643,16 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+        "model": "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf",
         "resources": [
-          "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+          "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
           "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
-          "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf"
+          "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf"
         ],
-        "triangles": 4737,
+        "triangles": 2500,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 249690
+        "bytes": 190641
       },
       "geometryLod": true,
       "highTextures": {
@@ -677,6 +693,20 @@
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "handcart",
+        "cap": 2500,
+        "catalogAssetVersion": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "beforeModelSha256": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "appliedModelSha256": "fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce",
+        "nativeConfigSha256": "955d93518178e09e23675039d17f149a844f4c4e4c334052483325465c72509a",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "firewood": {

@@ -10,10 +10,11 @@ import {CAVE_PLACEMENTS,caveSurface} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {caveSourceFingerprint} from './cave-source-fingerprint.mjs';
+import {caveCollisionManifest} from './cave-collision-source.mjs';
 import {caveCollisionGeometry} from './cave-collision-geometry.mjs';
 import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from '../src/cave-laboratory-geometry.js';
 const base=new URL('../public/assets/',import.meta.url),out=new URL('../src/witch-cave-collision-data.js',import.meta.url);
-const manifest=JSON.parse(await readFile(new URL('witch-cave.json',base),'utf8'));
+const manifest=caveCollisionManifest();
 const step=.4,size=400,min=-80,occupied=new Uint8Array(size*size),sight=new Uint8Array(size*size),ground=new Float32Array(size*size),walk=new Uint8Array(size*size);
 // Camera occupancy retains the actual vertical range, including empty space
 // below arches. Quantised outwards, so no near-LOD wall surface is missed.

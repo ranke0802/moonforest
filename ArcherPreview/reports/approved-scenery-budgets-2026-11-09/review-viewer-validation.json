@@ -1,0 +1,363 @@
+{
+  "createdAt": "2026-11-09T04:46:48.366Z",
+  "passed": true,
+  "engine": "Babylon NullEngine; no GPU raster",
+  "data": "exports/asset-budget-apply-2026-11-09/review-data.json",
+  "assets": [
+    {
+      "id": "rock-01-mossy-boulder",
+      "category": "rock",
+      "budget": 700,
+      "triangles": [
+        5255,
+        700
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "rock-02-jagged-outcrop",
+      "category": "rock",
+      "budget": 700,
+      "triangles": [
+        5268,
+        700
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "grass-tuft",
+      "category": "grass",
+      "budget": 1500,
+      "triangles": [
+        2323,
+        1455
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "bush",
+      "category": "bush-thorn",
+      "budget": 2500,
+      "triangles": [
+        4359,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "forest-05-thorn-bramble",
+      "category": "bush-thorn",
+      "budget": 2500,
+      "triangles": [
+        3981,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "rail-fence",
+      "category": "low-fence",
+      "budget": 1500,
+      "triangles": [
+        5184,
+        1499
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "wall-01-straight",
+      "category": "stone-wall",
+      "budget": 2500,
+      "triangles": [
+        5142,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "wall-02-corner",
+      "category": "stone-wall",
+      "budget": 2500,
+      "triangles": [
+        5276,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "wall-03-breached",
+      "category": "stone-wall",
+      "budget": 2500,
+      "triangles": [
+        5264,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "handcart",
+      "category": "cart",
+      "budget": 2500,
+      "triangles": [
+        4737,
+        2500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 5,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-13-votive-lantern",
+      "category": "lantern",
+      "budget": 1500,
+      "triangles": [
+        4587,
+        1500
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-01-eroded-wall",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        5000,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-02-rock-ledge",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4999,
+        1999
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-03-great-column",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4999,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-04-natural-arch",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4998,
+        1999
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-05-stalagmites",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        5000,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-06-stalactite-canopy",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        5000,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-07-scree-ramp",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        5000,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-s01-solid-cliff-base",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4999,
+        1999
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "cave-s03-dry-spillway-rock",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4995,
+        1999
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    },
+    {
+      "id": "forest-06-witch-cave-mouth",
+      "category": "cave-module",
+      "budget": 2000,
+      "triangles": [
+        4809,
+        2000
+      ],
+      "sharedInternalTexture": true,
+      "resources": {
+        "meshes": 6,
+        "materials": 6,
+        "textures": 3,
+        "receivers": 2
+      }
+    }
+  ],
+  "assertions": [
+    "Actual current viewer and shared game input/camera/toon/outline modules run",
+    "Every original/candidate triangle count and per-asset cap matches",
+    "Original/candidate layer isolation and identical shared camera transforms",
+    "Original bounds fit shared view; native preview scale and yaw retained equally",
+    "Original/candidate share one internal texture object per pair",
+    "Category selector, all three view modes, wireframe and candidate glTF save",
+    "WASD key release, right-drag orbit, wheel zoom, touch joystick, blur and pointer exit reset",
+    "Visibility suspension/resume owns one frame callback",
+    "Two repeated full asset cycles return each asset to bounded resource counts",
+    "Rapid selection resolves latest asset",
+    "One engine/frame callback; disposal clears callbacks, receiver ownership and listeners",
+    "WebGL failure retains counts, cap, selector and candidate save"
+  ],
+  "movementDistanceAt100ms": 0.3994760962459679,
+  "liveListenersBeforeDispose": 35,
+  "sourceSha256": "ad0239559b8e675f2d9a95de0ccda1bc98aa13eacc1af18e1434253b27244c66",
+  "dataSha256": "a1c931e616e3ed2824f9d9851a816a07306826f429dada1fb3f5164664b79dd2",
+  "limitations": "Node/DOM and NullEngine evidence only. No browser automation, visual fidelity, GPU performance, real-device FPS or heat verification."
+}

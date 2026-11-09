@@ -14,8 +14,9 @@ import '@babylonjs/loaders/glTF/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
+import {caveCollisionManifest} from '../scripts/cave-collision-source.mjs';
 
-test('camera field matches current actual source layout and preserves arched clearance by height',()=>{
+test('camera field matches the preserved collision source layout and retains arched clearance by height',()=>{
  const hash=createHash('sha256');for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
  assert.equal(CAVE_CAMERA_DATA.fingerprint,caveSourceFingerprint());
  assert.equal(caveCameraRockBlocked(-35,1.7,32,0),false);
@@ -50,9 +51,9 @@ test('render guard preserves requested zoom/pinch, rendered matrices and outside
  }finally{guard.dispose();scene.dispose();engine.dispose();}
 });
 
-test('the actual landmark entrance participates in camera clearance without filling its arch opening',async t=>{
+test('the preserved landmark entrance source participates in camera clearance without filling its arch opening',async t=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>engine.dispose());
- const terrain=createWitchCaveTerrain(),base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),placement=CAVE_PLACEMENTS.find(p=>p.asset==='forest-06-witch-cave-mouth'),config=manifest.assets[placement.asset];
+ const terrain=createWitchCaveTerrain(),base=new URL('../public/assets/',import.meta.url),manifest=caveCollisionManifest(),placement=CAVE_PLACEMENTS.find(p=>p.asset==='forest-06-witch-cave-mouth'),config=manifest.assets[placement.asset];
  assert.equal(placement.kind,'landmark','story classification does not exempt a structural rock');
  const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(b.uri).data).toString('base64');
  const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:gltf},''),{root,facing}=createVillageTransform({scene,terrain},placement,config),instances=container.instantiateModelsToScene(n=>n+'-camera-regression',false,{doNotInstantiate:false});for(const node of instances.rootNodes)node.parent=facing;

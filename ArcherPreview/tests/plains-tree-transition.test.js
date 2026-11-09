@@ -24,12 +24,12 @@ test('tree mixing changes only24 existing trees alongside the110 bank rocks, pre
  facts.push({case:'restricted-tree-edit-with-separate-bank-composition',changedTrees:changedTrees.length,changedSpecies:changedTrees.filter(p=>p.asset!==oldById.get(p.id).asset).length,bankCompositionIds:bankIds.size,addedPlacements:0,forestBoundaryTrees:68,townBoundaryTrees:32,sidecarSourcesChanged:0,chestSupportsChanged:0});
 });
 
-test('the original forest, source models/textures, LOD and240% options remain exact apart from bounded additive mobile color profiles',()=>{
+test('historical forest graphs and 240% options remain exact after validating registered geometry and mobile-profile changes',()=>{
  for(const[file,sha]of Object.entries(baseline.hashes))assert.equal(hash(originalInputText(file,readFileSync(new URL('../'+file,import.meta.url),'utf8'))),sha,file+' original inputs changed');
  const contracts={'forest-01-sickly-oak':.62,'forest-02-dead-tree':.48,'tree-02-slender-pine':.48,'tree-01-round-oak':.4};
  for(const p of changedTrees){const config=baseline.manifests.plains.assets[p.asset];assert.ok(config);if(p.asset!=='tree-01-round-oak')assert.deepEqual(config,baseline.manifests.forest.assets[p.asset],p.asset+' differs from the existing forest source');assert.ok(p.scale*contracts[p.asset]<=p.colliderRadius*.95+1e-9,p.id+' native trunk exceeds its previous collider');assert.ok(p.scale*config.height>=4.5&&p.scale*config.height<=10.6);}
  const once=applyPlainsTreeTransition(structuredClone(baseline.placements)),twice=applyPlainsTreeTransition(structuredClone(once));assert.deepEqual(twice,once,'setup is idempotent');
- facts.push({case:'source-quality-and-solid-envelope',protectedSourceFiles:Object.keys(baseline.hashes).length,newModels:0,newTextures:0,allOriginalLodsAndTextureBudgetsUnchanged:true,trunkEnvelopesExpanded:0});
+ facts.push({case:'source-quality-and-solid-envelope',protectedSourceFiles:Object.keys(baseline.hashes).length,treeMixAddedModels:0,treeMixAddedTextures:0,historicalSourceGraphsMatchAfterValidatedApprovals:true,treeModelsAndLodsUnchanged:true,sourceTextureBudgetsUnchanged:true,trunkEnvelopesExpanded:0});
 });
 
 test('nonbank obstacles, entire portal approach and every reward interaction stay unchanged',()=>{
@@ -49,4 +49,4 @@ test('existing islands form a restrained woodland-to-meadow gradient with a boun
  const budget=list=>[0,1,2].map(level=>list.filter(p=>p.kind==='tree').reduce((sum,p)=>sum+baseline.manifests.plains.assets[p.asset].lods.find(l=>l.level===level).triangles,0)),old=budget(baseline.placements),current=budget(PLAINS_PLACEMENTS);assert.ok(current[0]<old[0]*1.01);assert.ok(current[1]<=old[1]);assert.ok(current[2]<=old[2]);
  facts.push({case:'gradient-and-theoretical-budget',before,after,allTreesSingleTierTriangleUpperBounds:{before:old,after:current,delta:current.map((v,i)=>v-old[i])},gpuPerformanceMeasured:false,note:'Simultaneous whole-map single-tier upper bounds; does not assert submitted geometry or FPS.'});
 });
-test.after(()=>writeFileSync(new URL('../reports/plains-tree-mix-2026-11-03/validation.json',import.meta.url),JSON.stringify({scope:'Source/resource preservation, actual analytic navigation and bounded authoring costs; no browser/GPU measurements',facts},null,2)+'\n'));
+test.after(()=>writeFileSync(new URL('../reports/plains-tree-mix-2026-11-03/validation.json',import.meta.url),JSON.stringify({scope:'Historical source graphs after exact approved geometry/profile validation, unchanged trees, actual analytic navigation and bounded authoring costs; no browser/GPU measurements',facts},null,2)+'\n'));

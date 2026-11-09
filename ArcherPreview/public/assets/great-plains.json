@@ -176,62 +176,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "model": "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf",
           "resources": [
-            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
             "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
-            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+            "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf"
           ],
-          "triangles": 5255,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 361154
+          "bytes": 261144
         },
         {
           "level": 1,
-          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "model": "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf",
           "resources": [
-            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
-            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
-            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
-            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/9ab345175da2143b35c31eae95d507118ae2d5fad9fc5846640d4c16d27c5858.bin",
             "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+            "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf"
           ],
-          "triangles": 2626,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 174895
+          "bytes": 123695
         },
         {
           "level": 2,
-          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "model": "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf",
           "resources": [
-            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
-            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
-            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
-            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/2d939947dcebd10bd8cf79e68f3a097ab4171d770578c73f965e008008ff1183.bin",
             "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
-            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+            "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf"
           ],
-          "triangles": 1156,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 72848
+          "bytes": 59714
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "model": "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf",
         "resources": [
-          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
           "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+          "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf"
         ],
-        "triangles": 5255,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 216760
+        "bytes": 116750
       },
       "geometryLod": true,
       "highTextures": {
@@ -253,7 +247,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-01-mossy-boulder",
+        "cap": 700,
+        "catalogAssetVersion": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "beforeModelSha256": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "appliedModelSha256": "813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470",
+        "nativeConfigSha256": "b33afc8b5e426da1216e92b2ff58a2ace1011617c4eb68b153e44c6e76aeeb68",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "rail-fence": {
       "name": "낮은 가로 목책",
@@ -270,32 +278,29 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19.gltf",
+          "model": "./content/e94cc7478bdb53fb7d6f5ebc3745f3c68eed2061e567b17b7b76713595aac671.gltf",
           "resources": [
-            "./content/e71d55c5ab493c22dfc0b914bba31407994dee8e4eac3196273b129e572f4441.bin",
+            "./content/23b79f3a28f41cc8a7c42b8a8ee76b0a3c6a15b1c2f865544dddde1857fa7c5f.bin",
             "./content/967e34b4019e64549980b152c7e618fa480d058cf6f30971b8b7822744a329a3.ktx2",
-            "./content/4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19.gltf"
+            "./content/e94cc7478bdb53fb7d6f5ebc3745f3c68eed2061e567b17b7b76713595aac671.gltf"
           ],
-          "triangles": 5184,
+          "triangles": 1499,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 381983
+          "bytes": 300575
         },
         {
           "level": 1,
-          "model": "./content/8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5.gltf",
+          "model": "./content/1eaa384a1283e97adfa2cf0283bebce8e0a3196f838c789e86a7074eadab42c0.gltf",
           "resources": [
-            "./content/0755c8f5eebecc0319f4efd3ab31e6135018a4ac8487c003f7177cbad55acf16.bin",
-            "./content/b0efdb4bd32b95b960f9e4508e217b403b939230f6183fb2659e5389fded82c4.bin",
-            "./content/4dfa4e510e8343eb873432c6e141886bde378f76bc052f480fe48c4a9b8789b1.bin",
-            "./content/e2ca3aaf9ca0d240c48fe57c2e06b9ba2f34d14864907f049358872476228bea.bin",
+            "./content/d8488341394938e4b3c840bfcdcbe3e48e6438d653da797ffe972e04d274bdc9.bin",
             "./content/0987ca828ea569e5ecc6adc43568a155641013200c75e15e35f7ba046fff01ab.ktx2",
-            "./content/8aea420e93f756ccb628b22c47b494851acee636f874dcb8df6c0ee3c042c9c5.gltf"
+            "./content/1eaa384a1283e97adfa2cf0283bebce8e0a3196f838c789e86a7074eadab42c0.gltf"
           ],
-          "triangles": 2592,
+          "triangles": 1498,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 189640
+          "bytes": 159301
         },
         {
           "level": 2,
@@ -316,16 +321,16 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79.gltf",
+        "model": "./content/74dcedb347e42eb176eb6f502a47d616cbedb126cfc4b3b8faaac633b5cb73ac.gltf",
         "resources": [
-          "./content/e71d55c5ab493c22dfc0b914bba31407994dee8e4eac3196273b129e572f4441.bin",
+          "./content/23b79f3a28f41cc8a7c42b8a8ee76b0a3c6a15b1c2f865544dddde1857fa7c5f.bin",
           "./content/0987ca828ea569e5ecc6adc43568a155641013200c75e15e35f7ba046fff01ab.ktx2",
-          "./content/ed2aba46a0bf48e4679af3d1a46c6b73fa1ef8068cff2c4b8313e0bce6d52e79.gltf"
+          "./content/74dcedb347e42eb176eb6f502a47d616cbedb126cfc4b3b8faaac633b5cb73ac.gltf"
         ],
-        "triangles": 5184,
+        "triangles": 1499,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 227534
+        "bytes": 146126
       },
       "geometryLod": true,
       "highTextures": {
@@ -366,6 +371,20 @@
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rail-fence",
+        "cap": 1500,
+        "catalogAssetVersion": "4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19",
+        "beforeModelSha256": "4b054087e0a00f565e78c87a59c17914ef34f093628bdc939a839c8c9190ef19",
+        "appliedModelSha256": "e94cc7478bdb53fb7d6f5ebc3745f3c68eed2061e567b17b7b76713595aac671",
+        "nativeConfigSha256": "3a06e6d6a5ab0519429839b89957f4b33b15071207007a37ebd3756c1778cbaa",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "covered-wagon": {
@@ -608,48 +627,66 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
           "resources": [
+            "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
             "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
-            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
-            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+            "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
           ],
-          "bytes": 0,
-          "textureSize": 1024
+          "bytes": 1836899,
+          "textureSize": 1024,
+          "triangles": 1455
         },
         {
           "level": 1,
-          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "model": "./content/0913c927634033ed215d22de75c8a1f83a79a132f22bb936a93275ad80ff24ee.gltf",
           "resources": [
+            "./content/4ebde8ec61d103679f2b74577525108736eb5e25bf88f0426c3f4010fafe46a7.bin",
             "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
-            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
-            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+            "./content/0913c927634033ed215d22de75c8a1f83a79a132f22bb936a93275ad80ff24ee.gltf"
           ],
-          "bytes": 0,
-          "textureSize": 1024
+          "bytes": 1834411,
+          "textureSize": 1024,
+          "triangles": 1397
         },
         {
           "level": 2,
-          "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+          "model": "./content/c8d98d90345612a64390096d6abfb96aa1268b4df52d95d591a49a7dfaf9cfef.gltf",
           "resources": [
+            "./content/c7272d0a733af2c8346ecad90ab982795d5f3888c593c4f2bf80deabde874ab7.bin",
             "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
-            "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
-            "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+            "./content/c8d98d90345612a64390096d6abfb96aa1268b4df52d95d591a49a7dfaf9cfef.gltf"
           ],
-          "bytes": 0,
-          "textureSize": 1024
+          "bytes": 1831376,
+          "textureSize": 1024,
+          "triangles": 1329
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+        "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
         "resources": [
+          "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
           "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
-          "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
-          "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
+          "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
         ],
-        "bytes": 0,
-        "textureSize": 1024
+        "bytes": 1836899,
+        "textureSize": 1024,
+        "triangles": 1455
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "grass-tuft",
+        "cap": 1500,
+        "catalogAssetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+        "beforeModelSha256": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+        "appliedModelSha256": "1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6",
+        "nativeConfigSha256": "fe5fac9d8b773a43b43b299d5b00548bf4b48534bd62c583b5aa4dda5b85d524",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "waypost": {
@@ -1099,62 +1136,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+          "model": "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf",
           "resources": [
-            "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+            "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
             "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
-            "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+            "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf"
           ],
-          "triangles": 5268,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 369163
+          "bytes": 267482
         },
         {
           "level": 1,
-          "model": "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "model": "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf",
           "resources": [
-            "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
-            "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
-            "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
-            "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+            "./content/1905d5fc471c26105ed31c806066974cdd34a3f01979d0ba606550dbff527399.bin",
             "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-            "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf"
+            "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf"
           ],
-          "triangles": 2634,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 177112
+          "bytes": 125489
         },
         {
           "level": 2,
-          "model": "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "model": "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf",
           "resources": [
-            "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
-            "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
-            "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
-            "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+            "./content/a170875858692917e575b8aa018b5b22f440dc3bf858755a7284b3939a175bce.bin",
             "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
-            "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf"
+            "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf"
           ],
-          "triangles": 1158,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 74553
+          "bytes": 61019
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+        "model": "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf",
         "resources": [
-          "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+          "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
           "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-          "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf"
+          "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf"
         ],
-        "triangles": 5268,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 219765
+        "bytes": 118084
       },
       "geometryLod": true,
       "highTextures": {
@@ -1176,7 +1207,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541"
+      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-02-jagged-outcrop",
+        "cap": 700,
+        "catalogAssetVersion": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "beforeModelSha256": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "appliedModelSha256": "d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f",
+        "nativeConfigSha256": "24d8ea67e8a2e24c3287ea60f57aab6e10524fe8b949477a1ec2cb8422233192",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "tree-02-slender-pine": {
       "name": "침엽수",
@@ -1331,32 +1376,29 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7.gltf",
+          "model": "./content/7bfcbcdbf64a9df8cc43ab5d0d961d05c4a13410bade9a14f8d79cc5e1915a1e.gltf",
           "resources": [
-            "./content/1fe18627f184aa54136bbadb82655ae3afbed76f67f2bed1244db6a65320934a.bin",
+            "./content/af8c411f14bb579f490b7731ecd0c25aa03e8fb423c7980367200934a30af4b9.bin",
             "./content/54aaaf295fac616edf36e92f0584766a627f64f2f1716efa51a0e95998579490.ktx2",
-            "./content/6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7.gltf"
+            "./content/7bfcbcdbf64a9df8cc43ab5d0d961d05c4a13410bade9a14f8d79cc5e1915a1e.gltf"
           ],
-          "triangles": 4359,
+          "triangles": 2500,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 325978
+          "bytes": 263994
         },
         {
           "level": 1,
-          "model": "./content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf",
+          "model": "./content/d5f5edb2173c3707e0ef124954263550a441420729b3f75a0bb0a3f4200a0009.gltf",
           "resources": [
-            "./content/3b1941d19b3a3efda6303192f595a82069e10dfab7ceb5d1e0d393407812cd8c.bin",
-            "./content/014a1d8dc9a6077eae9098ebb33c35a26528fcd8f75d003c096719a2f9990a69.bin",
-            "./content/770df73d53fe40325b2b3879cf63228f2a479b35d82074a35bf81b40d787d13b.bin",
-            "./content/309589d1d4b2bd34abdd26233024cbb18a43d4339c4b5d302917a147e845c10a.bin",
+            "./content/5ae96cf89a8177323e6db8f81d6616268ac0579403fa27d417cfa4eda85f6e15.bin",
             "./content/279352bd7c3937ffbffe90fb2b7431eea8ec657d56b971723ad8098ba5a2efad.ktx2",
-            "./content/acafb0b8a964b1252d718296acbe0b7a0290e1c12dd3803fb2aaa685fc19223c.gltf"
+            "./content/d5f5edb2173c3707e0ef124954263550a441420729b3f75a0bb0a3f4200a0009.gltf"
           ],
-          "triangles": 3314,
+          "triangles": 2499,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 247912
+          "bytes": 210297
         },
         {
           "level": 2,
@@ -1377,16 +1419,16 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf",
+        "model": "./content/af8ea06d1f315f8c1da1661823cf2623bbf477ca77326b7d1f978889adbc8c60.gltf",
         "resources": [
-          "./content/1fe18627f184aa54136bbadb82655ae3afbed76f67f2bed1244db6a65320934a.bin",
+          "./content/af8c411f14bb579f490b7731ecd0c25aa03e8fb423c7980367200934a30af4b9.bin",
           "./content/279352bd7c3937ffbffe90fb2b7431eea8ec657d56b971723ad8098ba5a2efad.ktx2",
-          "./content/fce1a83bbfed57aaa647841ec0484d0b39564f9f38399068116ef456cdf53052.gltf"
+          "./content/af8ea06d1f315f8c1da1661823cf2623bbf477ca77326b7d1f978889adbc8c60.gltf"
         ],
-        "triangles": 4359,
+        "triangles": 2500,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 230829
+        "bytes": 168845
       },
       "geometryLod": true,
       "highTextures": {
@@ -1408,7 +1450,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "06cebcabad154b8fbc2d893106b875c45de5f513fd4e56b1c83517c885c5a3cc"
+      "toonSourceModelSha256": "06cebcabad154b8fbc2d893106b875c45de5f513fd4e56b1c83517c885c5a3cc",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "bush",
+        "cap": 2500,
+        "catalogAssetVersion": "6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7",
+        "beforeModelSha256": "6f1068c421e4acc3d3f1ef3f521ac8eb34f7745e0530e5645e1da1cf6889ece7",
+        "appliedModelSha256": "7bfcbcdbf64a9df8cc43ab5d0d961d05c4a13410bade9a14f8d79cc5e1915a1e",
+        "nativeConfigSha256": "307b913f04e0fe60d0b476b460ff6c41e07e8cf37f935d48b4656534c776c96a",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "handcart": {
       "name": "두 바퀴 손수레",
@@ -1425,16 +1481,16 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf",
+          "model": "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf",
           "resources": [
-            "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+            "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
             "./content/35b3f819b45d015baa72f4acf5d4d124e18721e05607abdce9f0e41d9536ab3e.ktx2",
-            "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf"
+            "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf"
           ],
-          "triangles": 4737,
+          "triangles": 2500,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 410738
+          "bytes": 351689
         },
         {
           "level": 1,
@@ -1471,16 +1527,16 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+        "model": "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf",
         "resources": [
-          "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+          "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
           "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
-          "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf"
+          "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf"
         ],
-        "triangles": 4737,
+        "triangles": 2500,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 249690
+        "bytes": 190641
       },
       "geometryLod": true,
       "highTextures": {
@@ -1521,6 +1577,20 @@
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "handcart",
+        "cap": 2500,
+        "catalogAssetVersion": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "beforeModelSha256": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "appliedModelSha256": "fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce",
+        "nativeConfigSha256": "955d93518178e09e23675039d17f149a844f4c4e4c334052483325465c72509a",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "firewood": {
@@ -1669,7 +1739,7 @@
             [
               -2.572968006134033,
               -1.4086027145385742,
-              3.6531094593783564e-08
+              3.6531094593783564e-8
             ],
             [
               2.5852560997009277,
@@ -1699,7 +1769,7 @@
             [
               -2.572968006134033,
               -1.4086027145385742,
-              3.6531094593783564e-08
+              3.6531094593783564e-8
             ],
             [
               2.5852560997009277,
@@ -1760,7 +1830,7 @@
           [
             -2.572968006134033,
             -1.4086027145385742,
-            3.6531094593783564e-08
+            3.6531094593783564e-8
           ],
           [
             2.5852560997009277,
@@ -1900,7 +1970,7 @@
             [
               -2.525939702987671,
               -1.0082380771636963,
-              7.834184361854568e-05
+              0.00007834184361854568
             ],
             [
               2.522657871246338,
@@ -2011,7 +2081,7 @@
             [
               -2.2522988319396973,
               -0.5271841883659363,
-              3.208275867194743e-09
+              3.208275867194743e-9
             ],
             [
               2.2477011680603027,
@@ -2102,7 +2172,7 @@
           [
             -2.2522988319396973,
             -0.5271841883659363,
-            3.208275867194743e-09
+            3.208275867194743e-9
           ],
           [
             2.2477011680603027,
@@ -2163,14 +2233,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+          "model": "./content/cb9b1be10beefb1761fc72e7efbc671dc7f4c5ec602f7060d0c0e16835695348.gltf",
           "resources": [
-            "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
-            "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
-            "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+            "./content/f791d375a32e466304885988b2ae2e59436a59e7752ec0a93c5e512f3dcfb08c.bin",
+            "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
+            "./content/cb9b1be10beefb1761fc72e7efbc671dc7f4c5ec602f7060d0c0e16835695348.gltf"
           ],
-          "bytes": 385247,
-          "triangles": 3981,
+          "bytes": 336659,
+          "triangles": 2500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2182,7 +2252,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-08
+              -1.4259423863904885e-8
             ],
             [
               1.2412517070770264,
@@ -2193,14 +2263,14 @@
         },
         {
           "level": 1,
-          "model": "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf",
+          "model": "./content/60fa086d6da4d68431c18df03bc513655469717fae11f5ff744a975d92f51e99.gltf",
           "resources": [
-            "content/3cdda882035ace405f2a514348a6504f4171648c4adc6b5bb66623c3cecad420.bin",
-            "content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
-            "content/5249590783d173f56e65bdf48fdd3f8804ebc9cf9979d4478c2c73b816c0d228.gltf"
+            "./content/2667b52a1ccfeee9f3ad8758dd4f39b491a08b361bc615cb991d2a2be14bb0d6.bin",
+            "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
+            "./content/60fa086d6da4d68431c18df03bc513655469717fae11f5ff744a975d92f51e99.gltf"
           ],
-          "bytes": 368264,
-          "triangles": 3405,
+          "bytes": 339139,
+          "triangles": 2499,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2212,7 +2282,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-08
+              -1.4259423863904885e-8
             ],
             [
               1.2412517070770264,
@@ -2223,14 +2293,14 @@
         },
         {
           "level": 2,
-          "model": "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf",
+          "model": "./content/63282af25075c0809ff4e48c2edc1e189c2166c1c1b1477850b898bd4378d3cf.gltf",
           "resources": [
-            "content/ca0216b15837500d56f7178fc6a211ad55f2816b4c10714a18688d2159e55175.bin",
-            "content/a1c7c71b8cda477099ef43958bfb12afc1e65f64cffc19ebb79e9056b666bfbc.ktx2",
-            "content/1bb87f121678d71698e326734a12230b2ec0ddd5b5379258568ae2a7b6b523ba.gltf"
+            "./content/ab6a2e3148221e9a3b39483f2cf563719a6354b8488e1eb5caffc3fce0de5a42.bin",
+            "./content/a1c7c71b8cda477099ef43958bfb12afc1e65f64cffc19ebb79e9056b666bfbc.ktx2",
+            "./content/63282af25075c0809ff4e48c2edc1e189c2166c1c1b1477850b898bd4378d3cf.gltf"
           ],
-          "bytes": 219289,
-          "triangles": 3066,
+          "bytes": 201516,
+          "triangles": 2498,
           "textureSize": 512,
           "codec": "ETC1S",
           "compression": {
@@ -2242,7 +2312,7 @@
             [
               -1.2387257814407349,
               -0.47186487913131714,
-              -1.4259423863904885e-08
+              -1.4259423863904885e-8
             ],
             [
               1.2412517070770264,
@@ -2254,14 +2324,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
+        "model": "./content/cb9b1be10beefb1761fc72e7efbc671dc7f4c5ec602f7060d0c0e16835695348.gltf",
         "resources": [
-          "./content/61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72.gltf",
-          "./content/306e3d87eb35de6edc0e0628f20e92e2170a83e82da053a9af361e85c8a00bcc.bin",
-          "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2"
+          "./content/f791d375a32e466304885988b2ae2e59436a59e7752ec0a93c5e512f3dcfb08c.bin",
+          "./content/ebd9b0438d4caa4a06ae913ac898b6642e04b3441e04406da876b073e4db9fd2.ktx2",
+          "./content/cb9b1be10beefb1761fc72e7efbc671dc7f4c5ec602f7060d0c0e16835695348.gltf"
         ],
-        "bytes": 385247,
-        "triangles": 3981,
+        "bytes": 336659,
+        "triangles": 2500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2273,7 +2343,7 @@
           [
             -1.2387257814407349,
             -0.47186487913131714,
-            -1.4259423863904885e-08
+            -1.4259423863904885e-8
           ],
           [
             1.2412517070770264,
@@ -2318,6 +2388,20 @@
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "forest-05-thorn-bramble",
+        "cap": 2500,
+        "catalogAssetVersion": "61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72",
+        "beforeModelSha256": "61b801a552973d06a61b0d44a9aab8951fa6133b6b4e12ae2867801bb005bd72",
+        "appliedModelSha256": "cb9b1be10beefb1761fc72e7efbc671dc7f4c5ec602f7060d0c0e16835695348",
+        "nativeConfigSha256": "e85f302b43ee65fff6a84c920e15e320d9cdea4cafe181df08c9d1a5aa47dee7",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "forest-04-poison-fungi": {
@@ -2353,7 +2437,7 @@
             [
               -0.3444054424762726,
               -0.22276830673217773,
-              -1.0096522728986201e-08
+              -1.0096522728986201e-8
             ],
             [
               0.34650918841362,
@@ -2444,7 +2528,7 @@
           [
             -0.3444054424762726,
             -0.22276830673217773,
-            -1.0096522728986201e-08
+            -1.0096522728986201e-8
           ],
           [
             0.34650918841362,

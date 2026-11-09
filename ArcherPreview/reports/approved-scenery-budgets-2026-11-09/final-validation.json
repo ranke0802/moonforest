@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "date": "2026-11-09",
+  "passed": true,
+  "tests": 2087,
+  "failures": 0,
+  "skipped": 0,
+  "durationMs": 132307.0945,
+  "browserAutomation": false,
+  "devicePerformanceMeasured": false,
+  "sourceRegistryPassed": true,
+  "registeredSourceInputs": 2188,
+  "portableRegressionTests": 8,
+  "viewerAssets": 21,
+  "build": {
+    "passed": true,
+    "resourceRevision": "e7e012fa69079c2f335893730faeaf58568b18e78391aa480006f4c64de8fec2",
+    "publishedFiles": 1545,
+    "publishedBytes": 700847629,
+    "manifests": 31,
+    "contentFiles": 1188,
+    "resourceFiles": 1463,
+    "resourceBytes": 685575923,
+    "runtimeChunks": 65,
+    "entry": "game-12SrF1h9.js",
+    "pagesStagePassed": true
+  },
+  "retention": {
+    "oldContentFilesBefore": 2407,
+    "oldContentFilesRetained": 2407,
+    "deleted": 0
+  },
+  "geometryTotals": {
+    "uniqueNearBefore": 101175,
+    "uniqueNearApplied": 40850,
+    "meaning": "Sum of one near mesh per approved asset; not in-view triangles, draw submissions, GPU memory or measured FPS."
+  },
+  "logSha256": "c23c3ee6178308686627fc1c150cea7526fe1cb5a589e20c8c10779cf639880e",
+  "review": "Docs/Reviews/2026-11-09/MOONFOREST_승인범주_인게임적용_검수.html",
+  "guide": "Docs/Guides/2026-11-09/MOONFOREST_배경에셋_제작기준.html",
+  "limits": [
+    "Node/data checks do not establish real-device FPS, thermals or GPU raster output.",
+    "Final applied-build visual approval belongs to the user."
+  ]
+}

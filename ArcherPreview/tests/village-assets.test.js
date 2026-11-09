@@ -5,12 +5,15 @@ import { Matrix, Mesh, NullEngine, Quaternion, Scene, Vector3, VertexBuffer } fr
 import { createVillageTransform } from '../src/village-environment.js';
 import { VILLAGE_PLACEMENTS } from '../src/village-layout.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
+import {sourcePath} from '../../Sources/resolve-source.mjs';
+import {pathToFileURL} from 'node:url';
 
 const assetsUrl=new URL('../public/assets/',import.meta.url);
 const manifestUrl=['village.json','village-fixture.json'].map(n=>new URL(n,assetsUrl)).find(existsSync);
 const manifest=manifestUrl?JSON.parse(readFileSync(manifestUrl)):null;
-async function positions(modelUrl){
-  const {gltf,files}=await readRuntimeGltf(modelUrl),buffers=gltf.buffers.map(b=>files.get(b.uri)?.data),parents=new Map(),matrices=new Map(),out=[];
+async function positions(modelUrl,embedded=false){
+  const loaded=embedded?{gltf:JSON.parse(readFileSync(modelUrl))}:await readRuntimeGltf(modelUrl);
+  const {gltf,files}=loaded,buffers=gltf.buffers.map(b=>embedded?Buffer.from(b.uri.split(',')[1],'base64'):files.get(b.uri)?.data),parents=new Map(),matrices=new Map(),out=[];
   gltf.nodes.forEach((node,i)=>(node.children??[]).forEach(child=>parents.set(child,i)));
   const world=i=>{
     if(matrices.has(i))return matrices.get(i);
@@ -38,7 +41,19 @@ test('approved wagon/cart vertices, front correction and actual runtime transfor
     assert.ok(Math.abs(config.frontYawOffset-Math.PI/2)<1e-8);
     const rotation=Matrix.RotationY(config.frontYawOffset),min=new Vector3(Infinity,Infinity,Infinity),max=min.negate();
     for(let i=0;i<vertices.length;i+=3){const p=Vector3.TransformCoordinates(Vector3.FromArray(vertices,i),rotation);min.minimizeInPlace(p);max.maximizeInPlace(p);}
-    max.subtract(min).asArray().forEach((n,i)=>assert.ok(Math.abs(n-config.bounds[i])<1e-4,`${id} canonical axis ${i} differs from packed bounds`));
+    if(config.geometryBudget){
+      const before=JSON.parse(readFileSync(sourcePath('approved-scenery-budgets','before-manifests/village.json'))).assets[id];
+      assert.deepEqual(config.bounds,before.bounds,'geometry-only replacement keeps the native authoring frame');
+      const approval=JSON.parse(readFileSync(sourcePath('approved-scenery-budgets','approval.json')));
+      const approved=approval.assets.find(a=>a.id===id).tiers.find(t=>t.tier==='lod0');
+      const canonical=await positions(pathToFileURL(sourcePath(approved.sourceId)),true);
+      assert.deepEqual(vertices,canonical,'actual packed handcart vertices equal the frozen approved candidate');
+      const originalVertices=await positions(new URL(before.lods[0].model,manifestUrl));
+      const originalMin=new Vector3(Infinity,Infinity,Infinity),originalMax=originalMin.negate();
+      for(let i=0;i<originalVertices.length;i+=3){const p=Vector3.TransformCoordinates(Vector3.FromArray(originalVertices,i),rotation);originalMin.minimizeInPlace(p);originalMax.maximizeInPlace(p);}
+      originalMax.subtract(originalMin).asArray().forEach((n,i)=>assert.ok(Math.abs(n-config.bounds[i])<1e-4,`${id} preserved original frame ${i}`));
+      t.diagnostic(JSON.stringify({id,approvedContourSize:max.subtract(min).asArray(),nativeFrame:config.bounds,originalSourceRetained:true}));
+    }else max.subtract(min).asArray().forEach((n,i)=>assert.ok(Math.abs(n-config.bounds[i])<1e-4,`${id} canonical axis ${i} differs from packed bounds`));
     assert.ok(Math.abs(min.y)<1e-4,'bottom-center origin must stay on the ground');
     const placement=VILLAGE_PLACEMENTS.find(p=>p.asset===id),{root,facing}=createVillageTransform({scene,terrain:{heightAt:()=>2.5}},placement,config);
     const mesh=new Mesh(`real-${id}-vertices`,scene);mesh.setVerticesData(VertexBuffer.PositionKind,vertices);mesh.parent=facing;mesh.computeWorldMatrix(true);

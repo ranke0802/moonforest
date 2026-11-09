@@ -6,7 +6,7 @@ import {mourningCaveClearance} from '../src/mourning-cave-clearance.js';
 import {MOURNING_CAVE_CLEARANCE_DATA as data} from '../src/mourning-cave-clearance-data.js';
 import {ELENA_HOME,MOURNING_SIZE_SCALE} from '../src/elena-spec.js';
 import {assertOriginalInputFingerprint} from './helpers/mobile-profile-contract.js';
-test('full-pose mask fingerprints match the delivered geometry, layout and animator independently of bounded mobile color profiles',()=>{
+test('full-pose mask fingerprints retain approved collision geometry, layout and animator across render-only budgets and mobile color profiles',()=>{
  for(const [path,expected]of Object.entries(data.hashes))assertOriginalInputFingerprint(path,readFileSync(new URL(path,import.meta.url),'utf8'),expected);
  for(const path of ['../src/mourning-death-knee.js','../src/mourning-death-knee-data.js','../src/mourning-death-depth.js','../src/mourning-death-depth-data.js','../src/mourning-elena-encounter.js'])assert.ok(data.hashes[path],`actual prepared correction must invalidate the bake: ${path}`);
  assert.equal(data.sizeScale,MOURNING_SIZE_SCALE);assert.ok(data.poseSamples>=541);assert.ok(Math.max(...data.bands.map(b=>b.radius))>4.5);

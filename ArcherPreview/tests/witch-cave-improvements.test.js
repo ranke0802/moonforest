@@ -40,10 +40,10 @@ for(const [webgl,ubo]of [[1,false],[2,false],[2,true]])test(`static cave illumin
  }finally{engine.dispose();}
 });
 
-test('collision bake is tied to current layout and terrain, uses only original asset types',()=>{
+test('collision bake retains the approved source geometry with current layout and terrain',()=>{
  const hash=createHash('sha256');
  for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
- assert.equal(CAVE_COLLISION_DATA.fingerprint,caveSourceFingerprint(),'rebake collisions after moving rocks or changing near geometry');
+ assert.equal(CAVE_COLLISION_DATA.fingerprint,caveSourceFingerprint(),'layout, terrain and preserved collision sources must match; render-only budgets do not replace gameplay cells');
  assert.ok(JSON.stringify(CAVE_COLLISION_DATA).length<16000,'small collision metadata, no render models downloaded');
  assert.equal(new Set(CAVE_PLACEMENTS.map(p=>p.asset)).size,29,'22 approved cave assets, six original props and one derived laboratory; Joachim body removed');
  assert.ok(CAVE_PLACEMENTS.filter(p=>p.asset==='cave-01-eroded-wall').length<150);

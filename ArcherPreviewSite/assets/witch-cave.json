@@ -18,14 +18,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+          "model": "./content/fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f.gltf",
           "resources": [
-            "./content/8261a2e3f78cf2cd01a75855cf20572191d9925d1fd17234d322f8118de903d1.bin",
+            "./content/fb9492a798c8e58f442f2975d29e6353cd79a9b7360b05b4bfa76af6a91f934c.bin",
             "./content/2417faa19aa9c1a86cdcb8c7e26011420a65ab9aab9f667e3fdf2d6bf9673167.ktx2",
-            "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf"
+            "./content/fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f.gltf"
           ],
-          "bytes": 386190,
-          "triangles": 5000,
+          "bytes": 319181,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -48,14 +48,14 @@
         },
         {
           "level": 1,
-          "model": "./content/a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf",
+          "model": "./content/8f2ae47c5588c7b2f87dc8f60700a15c32b5448c53bf28b354ec7022c91c85f4.gltf",
           "resources": [
-            "./content/c301ddf06b41ba1531235e9836be90c52d6058ec4bb72aaeabedba97b8253380.bin",
+            "./content/42589b9d52b13f2f749b460d9151eb233f964869240a6199e1a4177ddd9dadfe.bin",
             "./content/2417faa19aa9c1a86cdcb8c7e26011420a65ab9aab9f667e3fdf2d6bf9673167.ktx2",
-            "./content/a593d14683eea4f34a89ae347ace31e44ff41005bf3dc0114a6e997cb7f6414e.gltf"
+            "./content/8f2ae47c5588c7b2f87dc8f60700a15c32b5448c53bf28b354ec7022c91c85f4.gltf"
           ],
-          "bytes": 336050,
-          "triangles": 2750,
+          "bytes": 318843,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -109,14 +109,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf",
+        "model": "./content/fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f.gltf",
         "resources": [
-          "./content/8261a2e3f78cf2cd01a75855cf20572191d9925d1fd17234d322f8118de903d1.bin",
+          "./content/fb9492a798c8e58f442f2975d29e6353cd79a9b7360b05b4bfa76af6a91f934c.bin",
           "./content/2417faa19aa9c1a86cdcb8c7e26011420a65ab9aab9f667e3fdf2d6bf9673167.ktx2",
-          "./content/1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5.gltf"
+          "./content/fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f.gltf"
         ],
-        "bytes": 386190,
-        "triangles": 5000,
+        "bytes": 319181,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -254,7 +254,8 @@
           "29aec96c67e6e296617909e5e7e8216269cd48adbc1d2e5ff616a45bec7f93c9",
           "590328f924cb948291ae3b6c5d78b0e387c0ff5f6231fa117ba74dc8d3df6615",
           "ef930570501f371f48fa54a3578a98430e2317831893a19a876cb9a9111812ff"
-        ]
+        ],
+        "approvedBudgetRevision": "approved-scenery-budget-v1"
       },
       "mobileHighTextures": {
         "shading": "toon-color",
@@ -274,6 +275,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-01-eroded-wall",
+        "cap": 2000,
+        "catalogAssetVersion": "1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5",
+        "beforeModelSha256": "1fc5e63ce447b58540de76878efa7a4eaed50c135d7fbedce20eb91e981a93a5",
+        "appliedModelSha256": "fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f",
+        "nativeConfigSha256": "64325609da364d81047a9f86a057f789b7c1639f0726d322c91a857974cfb334",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-02-rock-ledge": {
@@ -290,14 +305,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
+          "model": "./content/3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323.gltf",
           "resources": [
-            "./content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
-            "./content/b246e9fbf0ddcd5908519f1a69ff3e47a2622415ede1264e3435561306fad469.bin",
-            "./content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2"
+            "./content/00e1c94ca02bdebeb878b3622ff9109ab6073c6e285c4b00e5479362e92e4b2a.bin",
+            "./content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2",
+            "./content/3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323.gltf"
           ],
-          "bytes": 369728,
-          "triangles": 4999,
+          "bytes": 301107,
+          "triangles": 1999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -320,14 +335,14 @@
         },
         {
           "level": 1,
-          "model": "content/345e989f96e6bc749e4f74afa5ea332d3bc633686bbf98fd35e740a187fda4b1.gltf",
+          "model": "./content/0e28906f36826df2e7f7c2596410a99c70ed238816c9cf80164c24807e5e9e2a.gltf",
           "resources": [
-            "content/7fd134d64d26984613ab9b8da02c230aeb9f39cd48743a61fd93e6f8ea2d911f.bin",
-            "content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2",
-            "content/345e989f96e6bc749e4f74afa5ea332d3bc633686bbf98fd35e740a187fda4b1.gltf"
+            "./content/b8bba1b2318e6a3627014d710f4ea0768653c327d9df4173e3971f23eca80081.bin",
+            "./content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2",
+            "./content/0e28906f36826df2e7f7c2596410a99c70ed238816c9cf80164c24807e5e9e2a.gltf"
           ],
-          "bytes": 319168,
-          "triangles": 2749,
+          "bytes": 301548,
+          "triangles": 1997,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -381,14 +396,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
+        "model": "./content/3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323.gltf",
         "resources": [
-          "./content/84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628.gltf",
-          "./content/b246e9fbf0ddcd5908519f1a69ff3e47a2622415ede1264e3435561306fad469.bin",
-          "./content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2"
+          "./content/00e1c94ca02bdebeb878b3622ff9109ab6073c6e285c4b00e5479362e92e4b2a.bin",
+          "./content/91f13d9ef2bbc08ef59856e898b17bc3abd884700693f59554112ca85bf63d22.ktx2",
+          "./content/3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323.gltf"
         ],
-        "bytes": 369728,
-        "triangles": 4999,
+        "bytes": 301107,
+        "triangles": 1999,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -445,6 +460,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-02-rock-ledge",
+        "cap": 2000,
+        "catalogAssetVersion": "84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628",
+        "beforeModelSha256": "84823ee0517b3d3d3fdd430cac9028dda91a1c12d43ae1aa0cbea301b373c628",
+        "appliedModelSha256": "3a42dc15bd79d41ab926f276b475074edb0f1b6391e42074a3e3b16b4853f323",
+        "nativeConfigSha256": "a79db924c79791c0fde980cc0d73eb968bff8370dd98b5ef94984c2e8c4eef32",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-03-great-column": {
@@ -461,14 +490,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
+          "model": "./content/3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa.gltf",
           "resources": [
-            "./content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
-            "./content/4b97572b64f2454722808568eec63509cc358e4dfdf96ed8ea027f3235af6d33.bin",
-            "./content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2"
+            "./content/6af43376ccb68ceb8c301aae102f239d9b29989a77830354493b8ab7d44318ab.bin",
+            "./content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2",
+            "./content/3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa.gltf"
           ],
-          "bytes": 403089,
-          "triangles": 4999,
+          "bytes": 333521,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -491,14 +520,14 @@
         },
         {
           "level": 1,
-          "model": "content/a6c845ffa1cb1440700c6c156f7c33f37c7619e0d19a194e66280d599eecfd78.gltf",
+          "model": "./content/fd7f2264aabb93c947d37859f004092a43406c3560aedb6066a048cd257b13d8.gltf",
           "resources": [
-            "content/612d07eaa095f47f1fe225dbf27363bd4c0019f334582ea307a078b101922402.bin",
-            "content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2",
-            "content/a6c845ffa1cb1440700c6c156f7c33f37c7619e0d19a194e66280d599eecfd78.gltf"
+            "./content/96b4c0b4487ce57b31a5538d00e7e12ac662b153dd71be0d23a48974f269964d.bin",
+            "./content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2",
+            "./content/fd7f2264aabb93c947d37859f004092a43406c3560aedb6066a048cd257b13d8.gltf"
           ],
-          "bytes": 351058,
-          "triangles": 2749,
+          "bytes": 332860,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -552,14 +581,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
+        "model": "./content/3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa.gltf",
         "resources": [
-          "./content/fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f.gltf",
-          "./content/4b97572b64f2454722808568eec63509cc358e4dfdf96ed8ea027f3235af6d33.bin",
-          "./content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2"
+          "./content/6af43376ccb68ceb8c301aae102f239d9b29989a77830354493b8ab7d44318ab.bin",
+          "./content/84afb54a17242dde15fb089fdd75c9cd18e8be3733078221c60fef08715f127e.ktx2",
+          "./content/3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa.gltf"
         ],
-        "bytes": 403089,
-        "triangles": 4999,
+        "bytes": 333521,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -616,6 +645,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-03-great-column",
+        "cap": 2000,
+        "catalogAssetVersion": "fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f",
+        "beforeModelSha256": "fc2f168318ba9a96dda5fba4e5a6a7741164b1983ff3eed73582184dc7ea895f",
+        "appliedModelSha256": "3bd21d89881819f85ae15918d661ee922b18171bb91c37a8fcef435d4ccbcdfa",
+        "nativeConfigSha256": "79f6efbbc376784efb8f50480486b6396a259292a8d41824fdb6860416d78d64",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-04-natural-arch": {
@@ -632,14 +675,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
+          "model": "./content/2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a.gltf",
           "resources": [
-            "./content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
-            "./content/a9c021a9c61134b4fa7746bab7b153efeb793f6e7bdce0dccfbcecf915a5645d.bin",
-            "./content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2"
+            "./content/1b665a1db02c8feb75eccdc49e9c779336ea5436d2706380859da9c84825cd09.bin",
+            "./content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2",
+            "./content/2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a.gltf"
           ],
-          "bytes": 387550,
-          "triangles": 4998,
+          "bytes": 320878,
+          "triangles": 1999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -662,14 +705,14 @@
         },
         {
           "level": 1,
-          "model": "content/a71ace0b8039e7942260563dd95b37a17238ad3307f3f42e797322da06eeb6bf.gltf",
+          "model": "./content/207950d83253e733af35e7d1d7e5635c13315ce29659bbb21e4b84eceb91113d.gltf",
           "resources": [
-            "content/de4942df8118871f49aa4232ac3f9963224b62273784202cb4c9fc5397004535.bin",
-            "content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2",
-            "content/a71ace0b8039e7942260563dd95b37a17238ad3307f3f42e797322da06eeb6bf.gltf"
+            "./content/1e686c9119d270bda16bca2bda1181445ed458e83e2d266f0cc57f371ca1e7c5.bin",
+            "./content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2",
+            "./content/207950d83253e733af35e7d1d7e5635c13315ce29659bbb21e4b84eceb91113d.gltf"
           ],
-          "bytes": 338240,
-          "triangles": 2747,
+          "bytes": 320989,
+          "triangles": 1997,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -723,14 +766,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
+        "model": "./content/2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a.gltf",
         "resources": [
-          "./content/a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e.gltf",
-          "./content/a9c021a9c61134b4fa7746bab7b153efeb793f6e7bdce0dccfbcecf915a5645d.bin",
-          "./content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2"
+          "./content/1b665a1db02c8feb75eccdc49e9c779336ea5436d2706380859da9c84825cd09.bin",
+          "./content/71388c7804427a2d03cf4fe39cdaca496030ab233475e731f19ab77542d63568.ktx2",
+          "./content/2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a.gltf"
         ],
-        "bytes": 387550,
-        "triangles": 4998,
+        "bytes": 320878,
+        "triangles": 1999,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -787,6 +830,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-04-natural-arch",
+        "cap": 2000,
+        "catalogAssetVersion": "a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e",
+        "beforeModelSha256": "a29866b2752889bb294a226f298a8a5407738ad33ba80c73c910b6171ff49d4e",
+        "appliedModelSha256": "2a32f15f8e5c284156c81b9b6bc271d81173fb250b30e3ddede93b1da91dbe6a",
+        "nativeConfigSha256": "528c4a0d4fe99b7c73f252846b27663477c026cade552dc4a7e1d4a4084d3882",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-05-stalagmites": {
@@ -803,14 +860,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
+          "model": "./content/dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac.gltf",
           "resources": [
-            "./content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
-            "./content/24c9c68fad7c34000399d4cc91a48918fd775294b53b921dbaa591633c80443f.bin",
-            "./content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2"
+            "./content/326dce55bf9b7a987f3c9705810b58b34e65b7f4865d0359066b612820242c1a.bin",
+            "./content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2",
+            "./content/dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac.gltf"
           ],
-          "bytes": 395451,
-          "triangles": 5000,
+          "bytes": 317852,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -833,14 +890,14 @@
         },
         {
           "level": 1,
-          "model": "content/98c5e9c87eb52d0fd63a24a7c57777ce53d48590f6f4535492b21918e9e59153.gltf",
+          "model": "./content/4c54e9bcddb86d167ea3d84e6bb2f68b0c71fd7eb98046cb4f57b89460268e79.gltf",
           "resources": [
-            "content/d75aa0d9178e77f5b4d967efe32636136248f29776081ae1e39e1bcb044aba58.bin",
-            "content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2",
-            "content/98c5e9c87eb52d0fd63a24a7c57777ce53d48590f6f4535492b21918e9e59153.gltf"
+            "./content/78c2534f2a813740337e584fb9f2441a321e38f016d5df6f61004b66f4016a58.bin",
+            "./content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2",
+            "./content/4c54e9bcddb86d167ea3d84e6bb2f68b0c71fd7eb98046cb4f57b89460268e79.gltf"
           ],
-          "bytes": 335825,
-          "triangles": 2750,
+          "bytes": 315781,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -894,14 +951,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
+        "model": "./content/dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac.gltf",
         "resources": [
-          "./content/62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8.gltf",
-          "./content/24c9c68fad7c34000399d4cc91a48918fd775294b53b921dbaa591633c80443f.bin",
-          "./content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2"
+          "./content/326dce55bf9b7a987f3c9705810b58b34e65b7f4865d0359066b612820242c1a.bin",
+          "./content/2ab8f02c2c0ef3766dba18966cf1908e1b97793f3557e9272d0c7df611347115.ktx2",
+          "./content/dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac.gltf"
         ],
-        "bytes": 395451,
-        "triangles": 5000,
+        "bytes": 317852,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -958,6 +1015,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-05-stalagmites",
+        "cap": 2000,
+        "catalogAssetVersion": "62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8",
+        "beforeModelSha256": "62a84b9bc8a58b3dc103de1e3e28b58fdb45c4d643f3e89dc7f79baefe5a85a8",
+        "appliedModelSha256": "dbdc98878902fdf27128b19776191db5c21f844b7ff2d18ffdff6722e28498ac",
+        "nativeConfigSha256": "786c5f290c2240a7c10c9cd5c153d3ac09761f3c80ade82ab48194e4029f3ace",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-06-stalactite-canopy": {
@@ -974,14 +1045,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf",
+          "model": "./content/4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee.gltf",
           "resources": [
-            "./content/acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf",
-            "./content/dcf3ef0ed3292a233abf403201c519ee78dc7f240e32b4c8d1af6dea56578bc1.bin",
-            "./content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2"
+            "./content/8f482eb7ad54afc9f94a83ae3901f284d5d81f25a08a184a9f1c7144528d573c.bin",
+            "./content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2",
+            "./content/4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee.gltf"
           ],
-          "bytes": 383736,
-          "triangles": 5000,
+          "bytes": 316887,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1004,14 +1075,14 @@
         },
         {
           "level": 1,
-          "model": "content/26becafb8bdd9bfc36a5822f5d65852b393ecc6f1ebfaf5329f315675b961f9a.gltf",
+          "model": "./content/8308aa3929d1fe488c3498051f9a35bacd2f405fe40311a04b84322bedbf7bfb.gltf",
           "resources": [
-            "content/33948a3ccedd42f0e7367a1e06f67689e81f57f4374911c0ee1973e719b62f72.bin",
-            "content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2",
-            "content/26becafb8bdd9bfc36a5822f5d65852b393ecc6f1ebfaf5329f315675b961f9a.gltf"
+            "./content/f0006c9885427c14fa551dd161407ddb4bbf4544123e62dca369de740a952f1e.bin",
+            "./content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2",
+            "./content/8308aa3929d1fe488c3498051f9a35bacd2f405fe40311a04b84322bedbf7bfb.gltf"
           ],
-          "bytes": 333741,
-          "triangles": 2750,
+          "bytes": 316789,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1065,14 +1136,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf",
+        "model": "./content/4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee.gltf",
         "resources": [
-          "./content/acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec.gltf",
-          "./content/dcf3ef0ed3292a233abf403201c519ee78dc7f240e32b4c8d1af6dea56578bc1.bin",
-          "./content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2"
+          "./content/8f482eb7ad54afc9f94a83ae3901f284d5d81f25a08a184a9f1c7144528d573c.bin",
+          "./content/0787f028f30e0b9dc22dc084ece3c81c32094849acad43c29afbb3ba1b8e8425.ktx2",
+          "./content/4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee.gltf"
         ],
-        "bytes": 383736,
-        "triangles": 5000,
+        "bytes": 316887,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -1129,6 +1200,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-06-stalactite-canopy",
+        "cap": 2000,
+        "catalogAssetVersion": "acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec",
+        "beforeModelSha256": "acbb58680166edcef492737739ee6b01bf06c4783811bee17bf5b65caf9e3bec",
+        "appliedModelSha256": "4ee8ee966092bb670988f9446f9115c7c9bc4da9738d8d7df765f1c644ec90ee",
+        "nativeConfigSha256": "ffe78073a365b7874f814b9925fbaa538c9271e00a9b294d8a080690aee4f90c",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-07-scree-ramp": {
@@ -1145,14 +1230,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf",
+          "model": "./content/f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f.gltf",
           "resources": [
-            "./content/bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf",
-            "./content/d2b6470f9079e7643bfe4b44ba5b2e6a1439e22613322251a30a2097cb8def86.bin",
-            "./content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2"
+            "./content/749a8cdb9f0df5262e23638d2565824b6a45495ca8508c2d61a43225385961d4.bin",
+            "./content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2",
+            "./content/f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f.gltf"
           ],
-          "bytes": 390458,
-          "triangles": 5000,
+          "bytes": 326328,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1175,14 +1260,14 @@
         },
         {
           "level": 1,
-          "model": "content/2734bdfdf476248a1f16cfb197bc6fd81b7f721d84dc27e6c76428c428b7d3ca.gltf",
+          "model": "./content/bd1cc34fb79d3e4cebc2f4cdbd78cfbd1a5e39e40694c39aac0fa01e1ecbab46.gltf",
           "resources": [
-            "content/51f17dd8aa684383b72fc39464cdbfc1dd205c1537bed39a16ad18e213599b2b.bin",
-            "content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2",
-            "content/2734bdfdf476248a1f16cfb197bc6fd81b7f721d84dc27e6c76428c428b7d3ca.gltf"
+            "./content/203a2c76349bf0b541b4b0cea34fab2780c176425ed09649b4c6a9513050b03f.bin",
+            "./content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2",
+            "./content/bd1cc34fb79d3e4cebc2f4cdbd78cfbd1a5e39e40694c39aac0fa01e1ecbab46.gltf"
           ],
-          "bytes": 342872,
-          "triangles": 2750,
+          "bytes": 326339,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -1224,7 +1309,7 @@
             [
               -2.0057082176208496,
               -4.333792686462402,
-              -7.160821405705065e-05
+              -0.00007160821405705065
             ],
             [
               2.012683629989624,
@@ -1236,14 +1321,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf",
+        "model": "./content/f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f.gltf",
         "resources": [
-          "./content/bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f.gltf",
-          "./content/d2b6470f9079e7643bfe4b44ba5b2e6a1439e22613322251a30a2097cb8def86.bin",
-          "./content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2"
+          "./content/749a8cdb9f0df5262e23638d2565824b6a45495ca8508c2d61a43225385961d4.bin",
+          "./content/f108e4e652495dd9805a2192794378524e82c69ebc9607c7736ec345c114021e.ktx2",
+          "./content/f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f.gltf"
         ],
-        "bytes": 390458,
-        "triangles": 5000,
+        "bytes": 326328,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -1300,6 +1385,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-07-scree-ramp",
+        "cap": 2000,
+        "catalogAssetVersion": "bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f",
+        "beforeModelSha256": "bad9bd1008fc2b8d4c298f66d56000ef1f5339b99c1daec5582f24225aa2ec3f",
+        "appliedModelSha256": "f5327296db3009a8aee92e3aefccd6eccf8533ae4651c44ff9095b8ea284641f",
+        "nativeConfigSha256": "e03a55e574466873a9aafdc2eeef28a0cceea1da04736bb233ca6450aeb3aa17",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-08-timber-brace": {
@@ -1365,7 +1464,7 @@
             [
               -1.5,
               -0.26950642466545105,
-              5.580807815874778e-09
+              5.580807815874778e-9
             ],
             [
               1.4996472597122192,
@@ -1395,7 +1494,7 @@
             [
               -1.5009844303131104,
               -0.2713656723499298,
-              5.580807815874778e-09
+              5.580807815874778e-9
             ],
             [
               1.4972178936004639,
@@ -1536,7 +1635,7 @@
             [
               -1.250376582145691,
               -0.11269786208868027,
-              1.1431231072833725e-08
+              1.1431231072833725e-8
             ],
             [
               1.2491940259933472,
@@ -2171,14 +2270,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf",
+          "model": "./content/87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b.gltf",
           "resources": [
-            "./content/16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf",
-            "./content/c25dfef68af3be71f5f05beacfad5113ba871c682db23d30a0860f2baac60dda.bin",
-            "./content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2"
+            "./content/4369fb914f23b877e473fda3007b5a5817ecc264417cacf9268f847fd58ff0fa.bin",
+            "./content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2",
+            "./content/87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b.gltf"
           ],
-          "bytes": 426014,
-          "triangles": 4587,
+          "bytes": 326660,
+          "triangles": 1500,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2201,14 +2300,14 @@
         },
         {
           "level": 1,
-          "model": "content/2838905f704912f39de6192c9df4c0c1e98f213e9d8a948b7b1c47dc1e6f657c.gltf",
+          "model": "./content/1500f848124bcf5c65021f52f6c2923e516b0b4ca32a47924a06f6f1fa2fcefb.gltf",
           "resources": [
-            "content/3027515c488eceac289558ba267d129381e299fd961964803e03fc51104add47.bin",
-            "content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2",
-            "content/2838905f704912f39de6192c9df4c0c1e98f213e9d8a948b7b1c47dc1e6f657c.gltf"
+            "./content/c5e421f4c9efbb0f93df20e5870bb0df114dcc9d20c0b51fbfba06c4fdc11118.bin",
+            "./content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2",
+            "./content/1500f848124bcf5c65021f52f6c2923e516b0b4ca32a47924a06f6f1fa2fcefb.gltf"
           ],
-          "bytes": 389004,
-          "triangles": 3209,
+          "bytes": 328379,
+          "triangles": 1498,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -2231,14 +2330,14 @@
         },
         {
           "level": 2,
-          "model": "content/f13c578c671ed93f02d449d7eced8024f75b41195d4413b9718bde3d6f1d7430.gltf",
+          "model": "./content/e364a6086cf1f20c2f2357742ec371337d8ad90d7a95471722f5f41defdedc55.gltf",
           "resources": [
-            "content/f40d2ab61cf97e0f194ec77e8077b5ef312544e8c13de8b017ad5a0558f3d977.bin",
-            "content/f7325751b952a517537ecd6e3113ccad369bde136f37f8ce79972085f7374a03.ktx2",
-            "content/f13c578c671ed93f02d449d7eced8024f75b41195d4413b9718bde3d6f1d7430.gltf"
+            "./content/f8fae716c2468d138b9320357df55da846d75cecb15b98d3c65e7d254d82bdc7.bin",
+            "./content/f7325751b952a517537ecd6e3113ccad369bde136f37f8ce79972085f7374a03.ktx2",
+            "./content/e364a6086cf1f20c2f2357742ec371337d8ad90d7a95471722f5f41defdedc55.gltf"
           ],
-          "bytes": 184831,
-          "triangles": 2059,
+          "bytes": 166704,
+          "triangles": 1496,
           "textureSize": 512,
           "codec": "ETC1S",
           "compression": {
@@ -2262,14 +2361,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf",
+        "model": "./content/87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b.gltf",
         "resources": [
-          "./content/16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43.gltf",
-          "./content/c25dfef68af3be71f5f05beacfad5113ba871c682db23d30a0860f2baac60dda.bin",
-          "./content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2"
+          "./content/4369fb914f23b877e473fda3007b5a5817ecc264417cacf9268f847fd58ff0fa.bin",
+          "./content/859ded358e30252e954356c70b8f2919ab723b5393c73902208dee2cf157443a.ktx2",
+          "./content/87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b.gltf"
         ],
-        "bytes": 426014,
-        "triangles": 4587,
+        "bytes": 326660,
+        "triangles": 1500,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -2326,6 +2425,20 @@
         ],
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-13-votive-lantern",
+        "cap": 1500,
+        "catalogAssetVersion": "16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43",
+        "beforeModelSha256": "16a9f1b71b231ee718dcacf52baef777899512bb759d1bb2a825d342a9a7ad43",
+        "appliedModelSha256": "87b3676c94de275d94148d0f921e517edd6a9cbbf3a819bbdd04773727b7c84b",
+        "nativeConfigSha256": "8fcd3286b2c44c784454b72b181c505f014faf9b172ddcee055ce1963bc11c05",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-14-hidden-pressure-stone": {
@@ -3447,7 +3560,7 @@
             [
               -1.1502718925476074,
               -2.08227276802063,
-              2.751105121490127e-09
+              2.751105121490127e-9
             ],
             [
               1.149999976158142,
@@ -3539,14 +3652,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+          "model": "./content/2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439.gltf",
           "resources": [
-            "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
-            "./content/3bc2d8f0ff56ebb54b15802ea452834a224ee79589cbaa19ac74d2d0917deca2.bin",
-            "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2"
+            "./content/89911531fed577a3717c1bcae1c28a8b389a37193d1d9f0ef1900b2fe7194ff7.bin",
+            "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2",
+            "./content/2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439.gltf"
           ],
-          "bytes": 376717,
-          "triangles": 4999,
+          "bytes": 312236,
+          "triangles": 1999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3569,14 +3682,14 @@
         },
         {
           "level": 1,
-          "model": "content/60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf",
+          "model": "./content/254c652b513bcfa3df73287373f51b81e337fd5e398c49ce079c1bb940f47ed5.gltf",
           "resources": [
-            "content/acb1bd738d86f03861a3995434c697aae5544949de45ef86387f6011e5bb5f1b.bin",
-            "content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2",
-            "content/60954d799e6597fb54b82859819155d8f9ea6f8927309e44e8fba93e06ce903e.gltf"
+            "./content/94079e2ef264a8f9474cb1ed695ec4c25d212080eee22417d8e8a45aa9c67428.bin",
+            "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2",
+            "./content/254c652b513bcfa3df73287373f51b81e337fd5e398c49ce079c1bb940f47ed5.gltf"
           ],
-          "bytes": 328993,
-          "triangles": 2749,
+          "bytes": 312273,
+          "triangles": 1997,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3618,7 +3731,7 @@
             [
               -3.9701759815216064,
               -2.400526285171509,
-              9.538931772112846e-05
+              0.00009538931772112846
             ],
             [
               3.955699920654297,
@@ -3630,14 +3743,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
+        "model": "./content/2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439.gltf",
         "resources": [
-          "./content/fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc.gltf",
-          "./content/3bc2d8f0ff56ebb54b15802ea452834a224ee79589cbaa19ac74d2d0917deca2.bin",
-          "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2"
+          "./content/89911531fed577a3717c1bcae1c28a8b389a37193d1d9f0ef1900b2fe7194ff7.bin",
+          "./content/962e25583dd168bbedf64811985bd4ad7f54b150f356f4841fdc35878f89977d.ktx2",
+          "./content/2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439.gltf"
         ],
-        "bytes": 376717,
-        "triangles": 4999,
+        "bytes": 312236,
+        "triangles": 1999,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -3694,6 +3807,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-s01-solid-cliff-base",
+        "cap": 2000,
+        "catalogAssetVersion": "fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc",
+        "beforeModelSha256": "fdca191128d73e3bf96c12d51025af99e9f77a003d8318b45c4fe7ef9bab2dbc",
+        "appliedModelSha256": "2feb7956b9f1be5690d9978caa8c81c5337b6c5a2d37d4c87c63c6af61350439",
+        "nativeConfigSha256": "a6f33c454138e8d3563e9f3b660c6e9677f4c4c573ff61909830f069c937c9db",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "cave-s03-dry-spillway-rock": {
@@ -3710,14 +3837,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+          "model": "./content/9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540.gltf",
           "resources": [
-            "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
-            "./content/7a6dc4b19d67dbcde7684a8d2ef164b9b2703e550c5b6d27ddafa8bff4b2d414.bin",
-            "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2"
+            "./content/ca3a7644bec2138e7ed7010fae625e01e9549231c4a36333902fce784867334f.bin",
+            "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
+            "./content/9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540.gltf"
           ],
-          "bytes": 384544,
-          "triangles": 4995,
+          "bytes": 319056,
+          "triangles": 1999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3740,14 +3867,14 @@
         },
         {
           "level": 1,
-          "model": "content/ec146cf16a1199c285f0d983aa08d18f34a5fbb117c9832b594e452e6b93e02b.gltf",
+          "model": "./content/6888e23664c9fe2036a46a1836987ed0400d359d38db96a79923e51cb2d988d7.gltf",
           "resources": [
-            "content/409aa026b2ca0cbb6835bcedce4ed416c6c944ba93116c7342d678140a087fa8.bin",
-            "content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
-            "content/ec146cf16a1199c285f0d983aa08d18f34a5fbb117c9832b594e452e6b93e02b.gltf"
+            "./content/29d95fa17d5050641b5c0e6a34c217cd7411941564d1910395f8f538bd4959c2.bin",
+            "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
+            "./content/6888e23664c9fe2036a46a1836987ed0400d359d38db96a79923e51cb2d988d7.gltf"
           ],
-          "bytes": 336412,
-          "triangles": 2747,
+          "bytes": 319782,
+          "triangles": 1998,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3801,14 +3928,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
+        "model": "./content/9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540.gltf",
         "resources": [
-          "./content/d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee.gltf",
-          "./content/7a6dc4b19d67dbcde7684a8d2ef164b9b2703e550c5b6d27ddafa8bff4b2d414.bin",
-          "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2"
+          "./content/ca3a7644bec2138e7ed7010fae625e01e9549231c4a36333902fce784867334f.bin",
+          "./content/706707d1ec7690e211cee907ce8c8e2c88ad8acde97eee6e352d49a1013bed36.ktx2",
+          "./content/9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540.gltf"
         ],
-        "bytes": 384544,
-        "triangles": 4995,
+        "bytes": 319056,
+        "triangles": 1999,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -3865,6 +3992,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "cave-s03-dry-spillway-rock",
+        "cap": 2000,
+        "catalogAssetVersion": "d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee",
+        "beforeModelSha256": "d1ec2d39899386a17570cb1dfeac693fd6bb83ec1e7ccc67356dc45607d2f9ee",
+        "appliedModelSha256": "9b299a34399ba740a80f70597a9261cd25b902c7b8d943e391ee168fe4715540",
+        "nativeConfigSha256": "ce4ce46a3974df52a6606265095f2e172b2d4cf89680c906620686c5a346ac85",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "forest-06-witch-cave-mouth": {
@@ -3881,14 +4022,14 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+          "model": "./content/b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421.gltf",
           "resources": [
-            "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
-            "./content/476b372f8a0e4ba1c6173b16ddc4bc9272dd106605c340d016b5ec193a1952af.bin",
-            "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2"
+            "./content/1c55f4e7ad73867e27bb25a249b4219f453b234ecc380ebbed8b6b9d1a8d2a49.bin",
+            "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2",
+            "./content/b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421.gltf"
           ],
-          "bytes": 390562,
-          "triangles": 4809,
+          "bytes": 324772,
+          "triangles": 2000,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3900,7 +4041,7 @@
             [
               -3.7307798862457275,
               -2.7557108402252197,
-              -1.3587279568127997e-07
+              -1.3587279568127997e-7
             ],
             [
               3.734593152999878,
@@ -3911,14 +4052,14 @@
         },
         {
           "level": 1,
-          "model": "content/523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf",
+          "model": "./content/3f82257b9141351aabdcd3ca6cecaa953bd489ebce8f4ba25aed745962a36bcd.gltf",
           "resources": [
-            "content/bf8a88edafe894cca38317d3ff3ba8f68fb505d540dbb25f5802f2d70dbaa8b8.bin",
-            "content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2",
-            "content/523b1c3ce5ba6f2be91783f73c99dd6fb2a4215044ad2252ee89af71adc630f9.gltf"
+            "./content/e87672c0a7173a7f9f1e37cd9abca9e691383ddb7cb218ba472a51bb963c1a6c.bin",
+            "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2",
+            "./content/3f82257b9141351aabdcd3ca6cecaa953bd489ebce8f4ba25aed745962a36bcd.gltf"
           ],
-          "bytes": 340250,
-          "triangles": 2605,
+          "bytes": 322050,
+          "triangles": 1999,
           "textureSize": 1024,
           "codec": "ETC1S",
           "compression": {
@@ -3972,14 +4113,14 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
+        "model": "./content/b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421.gltf",
         "resources": [
-          "./content/5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee.gltf",
-          "./content/476b372f8a0e4ba1c6173b16ddc4bc9272dd106605c340d016b5ec193a1952af.bin",
-          "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2"
+          "./content/1c55f4e7ad73867e27bb25a249b4219f453b234ecc380ebbed8b6b9d1a8d2a49.bin",
+          "./content/efa8d6e0976f28986080b7dad9a91f3bb8aec0c07287616889c56618fe7ae73f.ktx2",
+          "./content/b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421.gltf"
         ],
-        "bytes": 390562,
-        "triangles": 4809,
+        "bytes": 324772,
+        "triangles": 2000,
         "textureSize": 1024,
         "codec": "ETC1S",
         "compression": {
@@ -3991,7 +4132,7 @@
           [
             -3.7307798862457275,
             -2.7557108402252197,
-            -1.3587279568127997e-07
+            -1.3587279568127997e-7
           ],
           [
             3.734593152999878,
@@ -4036,6 +4177,20 @@
         ],
         "colorResolution": 2048,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 2048"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "forest-06-witch-cave-mouth",
+        "cap": 2000,
+        "catalogAssetVersion": "5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee",
+        "beforeModelSha256": "5b06afec26bd006aabc1d99ceeb05641a6b17b2de272e62716e42c2f511d38ee",
+        "appliedModelSha256": "b9fd73c656900ad672ec77e785a2d7ad33a29f0e5d82088899db773eb1b0b421",
+        "nativeConfigSha256": "441fcd939ac7525d1cb1cb27a0e8f6cbea22c1b72264f6e8aa78e1256c106638",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "crate-barrel-cluster": {
@@ -4279,16 +4434,16 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf",
+          "model": "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf",
           "resources": [
-            "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+            "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
             "./content/35b3f819b45d015baa72f4acf5d4d124e18721e05607abdce9f0e41d9536ab3e.ktx2",
-            "./content/9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d.gltf"
+            "./content/fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce.gltf"
           ],
-          "triangles": 4737,
+          "triangles": 2500,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 410738
+          "bytes": 351689
         },
         {
           "level": 1,
@@ -4325,16 +4480,16 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf",
+        "model": "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf",
         "resources": [
-          "./content/c440b0618afd1063edba9791c598393f9d580db0f79b2b34ca3b58612b574b57.bin",
+          "./content/207455a364df57ff32f66b0b3b67012cb32eff88fc8ab4bb006ed08df5057d55.bin",
           "./content/81c4d3b40598749f5d9f31c157a210aa2d35c630fb59038fa126311b9ed53e86.ktx2",
-          "./content/c40d9998b9007ad744519ab75fdce62785e34b1311b15748a4a2a9d2b660b3fa.gltf"
+          "./content/50d33571cd90906225d78460949d7ab577246e77a1c07f1eed9055a48180c96c.gltf"
         ],
-        "triangles": 4737,
+        "triangles": 2500,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 249690
+        "bytes": 190641
       },
       "geometryLod": true,
       "highTextures": {
@@ -4375,6 +4530,20 @@
         "colorResolution": 1024,
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain / mobile 1024",
         "shading": "toon-color"
+      },
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "handcart",
+        "cap": 2500,
+        "catalogAssetVersion": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "beforeModelSha256": "9b1bebd6fcbe4831391a0b21504cb8d998b5082c0a144e87a21ba6ee9c37bb4d",
+        "appliedModelSha256": "fd8f15da408c0db5613a605257d000e08d2999bc560cd4528ef1ea3a0a7446ce",
+        "nativeConfigSha256": "955d93518178e09e23675039d17f149a844f4c4e4c334052483325465c72509a",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
       }
     },
     "rock-02-jagged-outcrop": {
@@ -4392,62 +4561,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf",
+          "model": "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf",
           "resources": [
-            "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+            "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
             "./content/4ac738015e1260869bd360a7127b36a10512ca9d3fc58c5e7134dcb53ed00721.ktx2",
-            "./content/feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0.gltf"
+            "./content/d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f.gltf"
           ],
-          "triangles": 5268,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 369163
+          "bytes": 267482
         },
         {
           "level": 1,
-          "model": "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf",
+          "model": "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf",
           "resources": [
-            "./content/aaa2a0d80173c46b766e556bcf34937832be6a418bd653c0697da26c65e5fda7.bin",
-            "./content/72656d2b097b3c4fac86349166d1a1cc6eac55893532d646474bf86f5d437706.bin",
-            "./content/28183ec99f20d4849c3a6955994e362de62ea549a4ebefaf5779811aad7ffffa.bin",
-            "./content/a5b527f1b8c0d2dede658b9ff18a4a2ed159a8c6589a5e42ae587e2bb9427946.bin",
+            "./content/1905d5fc471c26105ed31c806066974cdd34a3f01979d0ba606550dbff527399.bin",
             "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-            "./content/00cd139336d1e0999006532efc0c019afdffe076e88d8bab60e03da50766a3d3.gltf"
+            "./content/5ae9ff53f3ea9eac1961e320dda29048b97eff455c5ac49bd4e2de7aad3e80d0.gltf"
           ],
-          "triangles": 2634,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 177112
+          "bytes": 125489
         },
         {
           "level": 2,
-          "model": "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf",
+          "model": "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf",
           "resources": [
-            "./content/ff36c721a98ff7c16b8b1599b188ded0d8c24503523c1909875c6b7040018995.bin",
-            "./content/3efd2571b49e160383188ffab5e4b03b222f7919fe4950def479e5cb5c34be03.bin",
-            "./content/10ddffc6fd52309e2f412fc5391d8cd16f8453d0d3e2daf214f257066d6da663.bin",
-            "./content/b2dec91cd1222f3bca4b197ff60e32abb578dd0424f2ed83a176b30c1312e2a8.bin",
+            "./content/a170875858692917e575b8aa018b5b22f440dc3bf858755a7284b3939a175bce.bin",
             "./content/416d9a330489b22bfe473309dc939f20dc6c0466d764d5a037e3752162fa5fce.ktx2",
-            "./content/53da2efd9775e626d888fa2bc0f39c718d0c54eb373ad34d4eecd9d2743d902b.gltf"
+            "./content/46c2b68ea0e860bc75d0d84987c46bbc0a46e311ce53410ec2f36f2ec279b434.gltf"
           ],
-          "triangles": 1158,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 74553
+          "bytes": 61019
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf",
+        "model": "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf",
         "resources": [
-          "./content/abfa84684bacd6eacb790c01fd3fa69df774c84c513283745a751cac1f799583.bin",
+          "./content/ed89436d0483690301ea1ad7add47ae5c904ae3224a370a5d5179fe08dd084c6.bin",
           "./content/adfe1f88f62d70ccea3fa0316a112147d90ba00340a18690128b6540e4bec060.ktx2",
-          "./content/50dfec41298929cc9e18c23d46d5643f777dd2ef730e9fd01fb1e1b1f7c87c58.gltf"
+          "./content/ff55073ec85508264bfd673fac20a610fae1075b4ba185ddf7f90f4c8572451c.gltf"
         ],
-        "triangles": 5268,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 219765
+        "bytes": 118084
       },
       "geometryLod": true,
       "highTextures": {
@@ -4469,7 +4632,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541"
+      "toonSourceModelSha256": "ce778ff3b9ef8ebe0c1f37b63117e0e78378ec0c6040a3cae267cc71cff12541",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-02-jagged-outcrop",
+        "cap": 700,
+        "catalogAssetVersion": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "beforeModelSha256": "feebdaaeaf96af3742e6538c04148009bfb944e2acbd99c408b8eab8625693a0",
+        "appliedModelSha256": "d2e698a6786da2183fc48f7bf7dc1ff751d81d8f9688aab34d3f6624933b182f",
+        "nativeConfigSha256": "24d8ea67e8a2e24c3287ea60f57aab6e10524fe8b949477a1ec2cb8422233192",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "rock-01-mossy-boulder": {
       "name": "이끼 둥근 바위",
@@ -4486,62 +4663,56 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf",
+          "model": "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf",
           "resources": [
-            "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+            "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
             "./content/72dae0c34e2d28bc57a59fefc6862d85b8a1414ffe5793faa5ce53164f260ad2.ktx2",
-            "./content/799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a.gltf"
+            "./content/813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470.gltf"
           ],
-          "triangles": 5255,
+          "triangles": 700,
           "textureSize": 1024,
           "normalMap": false,
-          "bytes": 361154
+          "bytes": 261144
         },
         {
           "level": 1,
-          "model": "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf",
+          "model": "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf",
           "resources": [
-            "./content/43c9c16eee0386ef592ff872a9fa5d3a9157d8d9f7ccd3702a4e6e87e40f2d4e.bin",
-            "./content/76c87cc8d079802c19806e710174713ebf552095f82c8c17a25692271e0904c2.bin",
-            "./content/39e33d8992594f2e9c0fa531731d2ac33c1543dda0ab9dad0760ea93294d327b.bin",
-            "./content/47b855aec00d627d8a3880a230328592f9b6f6590562dc7270991a213d504824.bin",
+            "./content/9ab345175da2143b35c31eae95d507118ae2d5fad9fc5846640d4c16d27c5858.bin",
             "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-            "./content/13363d06ed6ec72b93e5099a8fec5e57edd54da957f7a3cb4148eec86c7d1aaa.gltf"
+            "./content/60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94.gltf"
           ],
-          "triangles": 2626,
+          "triangles": 698,
           "textureSize": 512,
           "normalMap": false,
-          "bytes": 174895
+          "bytes": 123695
         },
         {
           "level": 2,
-          "model": "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf",
+          "model": "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf",
           "resources": [
-            "./content/65dd1d3e461a724a10072cb82eb551fc655793b899c19c4072383027a16b382e.bin",
-            "./content/0ff4a7dfd88611a064dea75cc128567d96a33c52dc5bc6922b2ced274b855611.bin",
-            "./content/123b9bfa912e0dae47865551c47e51e8f73c6e710e34b45ce26fe96a29dc78e9.bin",
-            "./content/9b7be168f4f3328dd228377d385469df2e8310fd8899a53b16a616b874da94e2.bin",
+            "./content/2d939947dcebd10bd8cf79e68f3a097ab4171d770578c73f965e008008ff1183.bin",
             "./content/65a5a60101f9e060ffa1f63ae1a0fae29f82d7b1bf1bb473ac464cbd80df8427.ktx2",
-            "./content/b6de57ea2268a5502d65ec436682dba4091a52cb375665c28a815463f01ba51e.gltf"
+            "./content/76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec.gltf"
           ],
-          "triangles": 1156,
+          "triangles": 696,
           "textureSize": 256,
           "normalMap": false,
-          "bytes": 72848
+          "bytes": 59714
         }
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf",
+        "model": "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf",
         "resources": [
-          "./content/77ae7d9439eaaa7a1cf35fe4780824c9a8353fee86ac845cda92f1dbdc94e1b9.bin",
+          "./content/e90b56031a3479b2867837b6a186614542b0bb10afdde602db522a3916329bd7.bin",
           "./content/f3e76f5802795e8f6b5dc7417c54b242b22388d7dcf9a415b1654efca7f20abb.ktx2",
-          "./content/c61d360523df70289153874e72fe342de0a4cdf4a6a1722e582b43f2a02fa8da.gltf"
+          "./content/4313d1b32b8393055aa9e0430623e3288fad7fc6c95e821de63c20005b092c87.gltf"
         ],
-        "triangles": 5255,
+        "triangles": 700,
         "textureSize": 512,
         "normalMap": false,
-        "bytes": 216760
+        "bytes": 116750
       },
       "geometryLod": true,
       "highTextures": {
@@ -4563,7 +4734,21 @@
         "colorEncoding": "KTX2 ETC1S / sRGB / full mip chain",
         "shading": "toon-color"
       },
-      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf"
+      "toonSourceModelSha256": "6022f925f68b50ad2dfd2c9e4081f11a542a41ccd81bfa9aaef838794306c2cf",
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "rock-01-mossy-boulder",
+        "cap": 700,
+        "catalogAssetVersion": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "beforeModelSha256": "799909261977e5fd9a6a20dc3b74da1a11b15cca46f3109472bf7042fe685f5a",
+        "appliedModelSha256": "813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470",
+        "nativeConfigSha256": "b33afc8b5e426da1216e92b2ff58a2ace1011617c4eb68b153e44c6e76aeeb68",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "cave-derived-laboratory-rock": {
       "name": "실험실 큰 암반·절리",

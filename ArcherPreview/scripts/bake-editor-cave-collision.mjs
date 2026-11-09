@@ -13,10 +13,11 @@ import {CAVE_SIGHT_DATA} from '../src/witch-cave-sight-data.js';
 import {CAVE_CAMERA_DATA} from '../src/witch-cave-camera-data.js';
 import {CAVE_LABORATORY_GEOMETRY,laboratoryEnabled} from '../src/cave-laboratory-geometry.js';
 import {caveSourceFingerprint} from './cave-source-fingerprint.mjs';
+import {caveCollisionManifest} from './cave-collision-source.mjs';
 import {caveCollisionGeometry} from './cave-collision-geometry.mjs';
 import {EDITOR_CAVE_GRID as grid,rasterizeCaveGeometry,encodeCaveCells,fillCaveRuns,encodeCaveCamera,fillCaveCamera} from '../src/editor-cave-grid.js';
 const fingerprint=caveSourceFingerprint();if(fingerprint!==CAVE_COLLISION_DATA.fingerprint)throw Error('Current cave collision certificate needs its approved source revision');
-const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(await readFile(new URL('witch-cave.json',base),'utf8')),terrain=createWitchCaveTerrain(),ground=new Float32Array(grid.size**2),mask=new Uint8Array(ground.length),union=new Uint8Array(ground.length),owners={},sightOwners={},cameraOwners={},sightUnion=new Uint8Array(ground.length),cameraUnion=new Uint32Array(ground.length*8);
+const base=new URL('../public/assets/',import.meta.url),manifest=caveCollisionManifest(),terrain=createWitchCaveTerrain(),ground=new Float32Array(grid.size**2),mask=new Uint8Array(ground.length),union=new Uint8Array(ground.length),owners={},sightOwners={},cameraOwners={},sightUnion=new Uint8Array(ground.length),cameraUnion=new Uint32Array(ground.length*8);
 for(let z=0;z<grid.size;z++)for(let x=0;x<grid.size;x++){const i=z*grid.size+x,xx=grid.min+(x+.5)*grid.step,zz=grid.min+(z+.5)*grid.step;ground[i]=terrain.heightAt(xx,zz);mask[i]=caveSurface(xx,zz).distance<2?1:0;}
 const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;const world={scene,terrain};let triangles=0;
 try{for(const [id,config]of Object.entries(manifest.assets)){

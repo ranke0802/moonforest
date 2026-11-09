@@ -1,0 +1,1211 @@
+{
+  "version": 1,
+  "date": "2026-11-09",
+  "kind": "focused-independent-integration-check",
+  "productionMutations": false,
+  "browserAutomation": false,
+  "devicePerformanceMeasured": false,
+  "tests": [
+    {
+      "name": "registered approval has exactly the 21 authorized assets and immutable before snapshots",
+      "status": "passed",
+      "elapsedMs": 172
+    },
+    {
+      "name": "all production tiers losslessly retain canonical geometry, source attributes and native transforms/materials/images",
+      "status": "passed",
+      "elapsedMs": 1807
+    },
+    {
+      "name": "all unselected assets and native configuration, pivots, profiles and distances stay unchanged",
+      "status": "passed",
+      "elapsedMs": 14
+    },
+    {
+      "name": "four map selectors, outskirts and environment aliases consistently use approved models without profile changes",
+      "status": "passed",
+      "elapsedMs": 3
+    },
+    {
+      "name": "all original snapshot resources and canonical authoring inputs remain physically available with original hashes",
+      "status": "passed",
+      "elapsedMs": 685
+    },
+    {
+      "name": "approved scenery authoring identity is bounded to the whitelist and malformed metadata fails closed",
+      "status": "passed",
+      "elapsedMs": 3
+    },
+    {
+      "name": "refreshed catalog preserves native authoring versions and exact four-map base revisions and saved moonmap poses",
+      "status": "passed",
+      "elapsedMs": 418
+    }
+  ],
+  "assets": [
+    {
+      "id": "rock-01-mossy-boulder",
+      "cap": 700,
+      "counts": [
+        700,
+        698,
+        696
+      ],
+      "mobileNear": 700,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5255,
+          "after": 700,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2626,
+          "after": 698,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1156,
+          "after": 696,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5255,
+          "after": 700,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "id": "rock-02-jagged-outcrop",
+      "cap": 700,
+      "counts": [
+        700,
+        698,
+        696
+      ],
+      "mobileNear": 700,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5268,
+          "after": 700,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2634,
+          "after": 698,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.531602813694917e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1158,
+          "after": 696,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.531602813694917e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5268,
+          "after": 700,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        }
+      ]
+    },
+    {
+      "id": "grass-tuft",
+      "cap": 1500,
+      "counts": [
+        1455,
+        1397,
+        1329
+      ],
+      "mobileNear": 1455,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 2323,
+          "after": 1455,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2323,
+          "after": 1397,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 2323,
+          "after": 1329,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 2323,
+          "after": 1455,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "id": "bush",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2499,
+        2238
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4359,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 3314,
+          "after": 2499,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 2238,
+          "after": 2238,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4359,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 9.5367431640625e-7
+        }
+      ]
+    },
+    {
+      "id": "forest-05-thorn-bramble",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2499,
+        2498
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 3981,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 3.099441414633475e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 3405,
+          "after": 2499,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 3.099441414633475e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 3066,
+          "after": 2498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 3.099441414633475e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 3981,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 3.099441414633475e-7
+        }
+      ]
+    },
+    {
+      "id": "rail-fence",
+      "cap": 1500,
+      "counts": [
+        1499,
+        1498,
+        1140
+      ],
+      "mobileNear": 1499,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5184,
+          "after": 1499,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2592,
+          "after": 1498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1140,
+          "after": 1140,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5184,
+          "after": 1499,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "id": "wall-01-straight",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2498,
+        1130
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5142,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2570,
+          "after": 2498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1130,
+          "after": 1130,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5142,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "id": "wall-02-corner",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2498,
+        1159
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5276,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.3841863594498136e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2638,
+          "after": 2498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.3841863594498136e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1159,
+          "after": 1159,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5276,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.3841863594498136e-7
+        }
+      ]
+    },
+    {
+      "id": "wall-03-breached",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2498,
+        1158
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5264,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 4.76837158203125e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2632,
+          "after": 2498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 4.76837158203125e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1158,
+          "after": 1158,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 4.76837158203125e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5264,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 4.76837158203125e-7
+        }
+      ]
+    },
+    {
+      "id": "handcart",
+      "cap": 2500,
+      "counts": [
+        2500,
+        2367,
+        1387
+      ],
+      "mobileNear": 2500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4737,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2367,
+          "after": 2367,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1387,
+          "after": 1387,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4737,
+          "after": 2500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.384185791015625e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-13-votive-lantern",
+      "cap": 1500,
+      "counts": [
+        1500,
+        1498,
+        1496
+      ],
+      "mobileNear": 1500,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4587,
+          "after": 1500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.8610230629055877e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 3209,
+          "after": 1498,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.8610230629055877e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 2059,
+          "after": 1496,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.8610230629055877e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4587,
+          "after": 1500,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 2.8610230629055877e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-01-eroded-wall",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1998,
+        1400
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 1.1402097932489141e-8,
+          "allowedGroundDelta": 0.0000012125303783250274
+        },
+        {
+          "tier": "lod1",
+          "before": 2750,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.000001213216592077515
+        },
+        {
+          "tier": "lod2",
+          "before": 1400,
+          "after": 1400,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.000001213216592077515
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 1.1402097932489141e-8,
+          "allowedGroundDelta": 0.0000012125303783250274
+        }
+      ]
+    },
+    {
+      "id": "cave-02-rock-ledge",
+      "cap": 2000,
+      "counts": [
+        1999,
+        1997,
+        1399
+      ],
+      "mobileNear": 1999,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4999,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 7.14281952696183e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2749,
+          "after": 1997,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 7.124915555323241e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1399,
+          "after": 1399,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 7.159383130783681e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4999,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 7.14281952696183e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-03-great-column",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1998,
+        1399
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4999,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.00000286102294921875
+        },
+        {
+          "tier": "lod1",
+          "before": 2749,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.000002860430413420545
+        },
+        {
+          "tier": "lod2",
+          "before": 1399,
+          "after": 1399,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.000002860430413420545
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4999,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.00000286102294921875
+        }
+      ]
+    },
+    {
+      "id": "cave-04-natural-arch",
+      "cap": 2000,
+      "counts": [
+        1999,
+        1997,
+        1397
+      ],
+      "mobileNear": 1999,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4998,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0.018356837332248688,
+          "allowedGroundDelta": 0.0000010975028317261604
+        },
+        {
+          "tier": "lod1",
+          "before": 2747,
+          "after": 1997,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.0000010975028317261604
+        },
+        {
+          "tier": "lod2",
+          "before": 1397,
+          "after": 1397,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.0000010992164334311383
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4998,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0.018356837332248688,
+          "allowedGroundDelta": 0.0000010975028317261604
+        }
+      ]
+    },
+    {
+      "id": "cave-05-stalagmites",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1998,
+        1400
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.1062319168268e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2750,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.119990866362059e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1400,
+          "after": 1400,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.119774292936199e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.1062319168268e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-06-stalactite-canopy",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1998,
+        1400
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0.008112839015666395,
+          "allowedGroundDelta": 6.654720436927164e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2750,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0.11888308264315128,
+          "allowedGroundDelta": 6.646092742812471e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1400,
+          "after": 1400,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 6.646092742812471e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0.008112839015666395,
+          "allowedGroundDelta": 6.654720436927164e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-07-scree-ramp",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1998,
+        1398
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 5.705192620553134e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2750,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 5.70557403989369e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1398,
+          "after": 1398,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 5.721967681893148e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 5000,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 5.705192620553134e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-s01-solid-cliff-base",
+      "cap": 2000,
+      "counts": [
+        1999,
+        1997,
+        1399
+      ],
+      "mobileNear": 1999,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4999,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 1.2357554091124712e-8,
+          "allowedGroundDelta": 8.995263556244026e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2749,
+          "after": 1997,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.995263556244026e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1399,
+          "after": 1399,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 8.973843819148897e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4999,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 1.2357554091124712e-8,
+          "allowedGroundDelta": 8.995263556244026e-7
+        }
+      ]
+    },
+    {
+      "id": "cave-s03-dry-spillway-rock",
+      "cap": 2000,
+      "counts": [
+        1999,
+        1998,
+        1398
+      ],
+      "mobileNear": 1999,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4995,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 6.787993811485649e-7
+        },
+        {
+          "tier": "lod1",
+          "before": 2747,
+          "after": 1998,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 6.809243018324196e-7
+        },
+        {
+          "tier": "lod2",
+          "before": 1398,
+          "after": 1398,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 6.757049391126202e-7
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4995,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 6.787993811485649e-7
+        }
+      ]
+    },
+    {
+      "id": "forest-06-witch-cave-mouth",
+      "cap": 2000,
+      "counts": [
+        2000,
+        1999,
+        1305
+      ],
+      "mobileNear": 2000,
+      "tiers": [
+        {
+          "tier": "lod0",
+          "before": 4809,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.0000013113021850585938
+        },
+        {
+          "tier": "lod1",
+          "before": 2605,
+          "after": 1999,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.000001310393031417334
+        },
+        {
+          "tier": "lod2",
+          "before": 1305,
+          "after": 1305,
+          "changed": false,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.0000012999306591154891
+        },
+        {
+          "tier": "mobileNear",
+          "before": 4809,
+          "after": 2000,
+          "changed": true,
+          "sourceExact": true,
+          "groundDelta": 0,
+          "allowedGroundDelta": 0.0000013113021850585938
+        }
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "mapId": "village",
+      "baseRevision": "base-v1-df702ffd5fbba4a6",
+      "instances": 753,
+      "exactBeforeAfter": true
+    },
+    {
+      "mapId": "great-plains",
+      "baseRevision": "base-v1-6fc3db2cf9acf956",
+      "instances": 1424,
+      "exactBeforeAfter": true
+    },
+    {
+      "mapId": "monster-forest",
+      "baseRevision": "base-v1-00b8ad6c8679e30d",
+      "instances": 891,
+      "exactBeforeAfter": true
+    },
+    {
+      "mapId": "witch-cave",
+      "baseRevision": "base-v1-ec3bab9e672e6ec3",
+      "instances": 212,
+      "exactBeforeAfter": true
+    }
+  ],
+  "approval": {
+    "assets": 21,
+    "tiers": 84,
+    "changedTiers": 67,
+    "beforeManifestSnapshots": 8,
+    "approvalSource": "Sources/environment/approved-geometry/2026-11-09/approval.json"
+  },
+  "geometry": {
+    "verifiedAccessorBytes": 9142598,
+    "retainedAttributeStreams": 239,
+    "retainedColorStreams": 38,
+    "sourceModelsChecked": 190,
+    "maximumGroundDelta": 0.11888308264315128,
+    "groundFailures": [],
+    "groundReviewLimitations": [
+      {
+        "id": "cave-04-natural-arch",
+        "tier": "lod0",
+        "before": 0,
+        "after": 0.018356837332248688,
+        "signedGroundDelta": 0.018356837332248688,
+        "units": "native source coordinates",
+        "productionMatchesRegisteredSourceExactly": true,
+        "reason": "Preserve frozen approved geometry and its derived ordinal tier; native pivot/configuration remains unchanged."
+      },
+      {
+        "id": "cave-04-natural-arch",
+        "tier": "mobileNear",
+        "before": 0,
+        "after": 0.018356837332248688,
+        "signedGroundDelta": 0.018356837332248688,
+        "units": "native source coordinates",
+        "productionMatchesRegisteredSourceExactly": true,
+        "reason": "Preserve frozen approved geometry and its derived ordinal tier; native pivot/configuration remains unchanged."
+      },
+      {
+        "id": "cave-06-stalactite-canopy",
+        "tier": "lod0",
+        "before": -0.0004776795976795256,
+        "after": 0.00763515941798687,
+        "signedGroundDelta": 0.008112839015666395,
+        "units": "native source coordinates",
+        "productionMatchesRegisteredSourceExactly": true,
+        "reason": "Preserve frozen approved geometry and its derived ordinal tier; native pivot/configuration remains unchanged."
+      },
+      {
+        "id": "cave-06-stalactite-canopy",
+        "tier": "lod1",
+        "before": -0.008049251511693,
+        "after": 0.11083383113145828,
+        "signedGroundDelta": 0.11888308264315128,
+        "units": "native source coordinates",
+        "productionMatchesRegisteredSourceExactly": true,
+        "reason": "Preserve frozen approved geometry and its derived ordinal tier; native pivot/configuration remains unchanged."
+      },
+      {
+        "id": "cave-06-stalactite-canopy",
+        "tier": "mobileNear",
+        "before": -0.0004776795976795256,
+        "after": 0.00763515941798687,
+        "signedGroundDelta": 0.008112839015666395,
+        "units": "native source coordinates",
+        "productionMatchesRegisteredSourceExactly": true,
+        "reason": "Preserve frozen approved geometry and its derived ordinal tier; native pivot/configuration remains unchanged."
+      }
+    ],
+    "groundTolerance": "Unlisted original-to-approved differences must be within 2^-22 times max(1, original absolute Y), approximately two float32 ULPs at model scale. The five explicitly listed approved contour differences are fixed exact values. Production-to-registered-source geometry and ground are exact; native configuration/pivot remains exact."
+  },
+  "preservation": {
+    "protectedManifestAssets": 72,
+    "selectedManifestOccurrences": 38,
+    "protectedNamed": [
+      "chapel",
+      "covered-wagon",
+      "forest-01-sickly-oak",
+      "forest-02-dead-tree",
+      "house-01-cottage",
+      "house-02-tall-home",
+      "house-03-workshop",
+      "house-04-forest-hut",
+      "oak-tree",
+      "tree-01-round-oak",
+      "tree-02-slender-pine",
+      "verdant-tree"
+    ],
+    "textureProfilesAndDistancesExact": true,
+    "nativeConfigAndPivotsExact": true
+  },
+  "selectors": {
+    "maps": [
+      "village",
+      "great-plains",
+      "monster-forest",
+      "witch-cave"
+    ],
+    "outskirts": true,
+    "environmentAlias": true,
+    "selectedOccurrences": 38,
+    "coverageThresholdsUnchanged": true
+  },
+  "retention": {
+    "snapshotReferencedOriginalFiles": 929,
+    "snapshotReferencedOriginalBytes": 302461180,
+    "applicationOriginalFileCount": 2407,
+    "applicationDeleted": 0,
+    "scope": "Independently verifies all original files referenced by before manifests/catalog and approved original geometry; application additionally records its full original content inventory count."
+  },
+  "identityPolicy": {
+    "acceptedManifestOccurrences": 38,
+    "rejectedMalformedCases": 18,
+    "whitelistSize": 21,
+    "contentHashRemainsActual": true
+  },
+  "savedMoonmap": {
+    "source": "Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
+    "sha256": "ce97044cc38428e275530a1125cc644ee5be6d198b324cfe50ae8192c0959331",
+    "instances": 16,
+    "removedBaseIds": 1,
+    "originalBaseRevision": "base-v1-b2818f0d0797c28a",
+    "normalizedBaseRevision": "base-v1-6fc3db2cf9acf956",
+    "allPosesAndVersionsExact": true
+  },
+  "catalog": {
+    "selectedStableAuthoringVersions": 21,
+    "beforeRevision": "ebeb9e1ab78dcde40792b7e4b68fb9d5c4c1e5dc07321bf4c36d55bbdcf4a12f",
+    "afterRevision": "fe6beeb80f8ac923b25135682448116a367f9a59aa063e99496012d8d068145a",
+    "actualContentHashes": true
+  },
+  "status": "passed",
+  "completedAt": "2026-11-09T04:48:09.403Z"
+}

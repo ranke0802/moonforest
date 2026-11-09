@@ -19,7 +19,7 @@ import {caveFogFallback} from '../src/cave-fog-binding.js';
 const bodyUnion=(omit=new Set())=>{const cells=new Uint8Array(data.size**2);for(const [id,runs]of Object.entries(data.owners))if(!omit.has(id))fillCaveRuns(cells,runs);return cells;};
 const typed=(text,Type)=>{const bytes=Buffer.from(text,'base64');return new Type(bytes.buffer,bytes.byteOffset,bytes.length/Type.BYTES_PER_ELEMENT);};
 
-test('complete near-mesh ownership exactly reproduces every approved body, sight and camera cell',()=>{
+test('complete preserved near-source ownership exactly reproduces every approved body, sight and camera cell',()=>{
  assert.equal(data.fingerprint,caveSourceFingerprint());assert.equal(Object.keys(data.owners).length,210);
  assert.deepEqual(bodyUnion(),fillCaveRuns(new Uint8Array(data.size**2),CAVE_COLLISION_DATA.runs));
  const sight=new Uint8Array(data.size**2),camera=new Uint32Array(sight.length*8);for(const id of Object.keys(data.owners)){fillCaveRuns(sight,data.sightOwners[id]);fillCaveCamera(camera,data.cameraOwners[id]);}

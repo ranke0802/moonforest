@@ -33,7 +33,8 @@
     "repository-assets-resources-audio": "Assets/Resources/Audio",
     "elena-boss-pack": "Sources/actors/elena-pack/elena-boss",
     "elena-two-phase-pack": "Sources/actors/elena-pack/elena-two-phase",
-    "elena-motion-v2-pack": "Sources/actors/elena-pack/elena-motion-v2"
+    "elena-motion-v2-pack": "Sources/actors/elena-pack/elena-motion-v2",
+    "approved-scenery-budgets": "Sources/environment/approved-geometry/2026-11-09"
   },
   "inputs": [
     {
@@ -26773,6 +26774,1722 @@
       ],
       "requiredBy": [
         "optional original-source KTX2 regeneration"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-catalog.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-catalog.json",
+      "bytes": 410514,
+      "sha256": "a17395702ecc6f311a9d540df609fbc2fe0b0633c1d5bc15feaf5e5d4ccd5f46",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/environment.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/environment.json",
+      "bytes": 10809,
+      "sha256": "4ae13966f4c4acdd7ee976cadee90c02566f52f2ad7af4736ee842b086942ef1",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/great-plains.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/great-plains.json",
+      "bytes": 95088,
+      "sha256": "04f177f3fe1f055b44868f2fa1a22ca22d31a91d87912069091cbf97b391dad3",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/monster-forest.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/monster-forest.json",
+      "bytes": 50225,
+      "sha256": "77e602964be37d530bd7046917ab664b39b73f9f0f7805886c3d177cd4f18bae",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/npc-moonforest-resident2-blacksmith.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/npc-moonforest-resident2-blacksmith.json",
+      "bytes": 7518,
+      "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/quest-props.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/quest-props.json",
+      "bytes": 38299,
+      "sha256": "f35521dc16992e5acadd494ffe984faac32f8f294385e1d46edc0e471da88b3f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/village-plains-outskirts.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/village-plains-outskirts.json",
+      "bytes": 69032,
+      "sha256": "89e1695d886dffe9614ad8f942339ef0f0e797d63e6c145adff3296cdb9dcdca",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/village.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/village.json",
+      "bytes": 108637,
+      "sha256": "05f37830a801a2a5f0429b5ccf3d240b5ec1731faeed4c53b92fa56dce3fb366",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/before-manifests/witch-cave.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/before-manifests/witch-cave.json",
+      "bytes": 155431,
+      "sha256": "0000be8dd9f43933a0cefc52217604a9be6ceaecc639aee07f8a19f4923fe22f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod0.gltf",
+      "bytes": 51854,
+      "sha256": "e5cf727962231d06cfff430daebe7a4a9d85bcdf5055fce9b9955d6b6b5dae76",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod0.u32",
+      "bytes": 3668,
+      "sha256": "2732136a4edde440620d98350d1439d24fb4e41cd77fc0f1835c01d1d8b42298",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod1.gltf",
+      "bytes": 51970,
+      "sha256": "287f575e6e7c226717ac54bae4977b29967ac3250e88c93e6696b76e6ab3728b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod1.u32",
+      "bytes": 3680,
+      "sha256": "42ba97e4c340c161895abe410ba2d790e84f8f1b615e65c3a52b07ab651d6b0a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod2.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.lod2.gltf",
+      "bytes": 51654,
+      "sha256": "bd6be63ee340a8b04066ab4994a8c572d39f79f1f5dc819b42f40a28a5ab14f7",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod2.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.lod2.u32",
+      "bytes": 3652,
+      "sha256": "d26b4301003dd50bd6eaf177bd3512ad640dec5fc4deaef69a7213e50c3ee560",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-01-mossy-boulder.mobileNear.gltf",
+      "bytes": 51854,
+      "sha256": "c0f2bdfb8766324409b31381917cf1579f8d0aee0c3ec7b7cae6b8d8c91256ad",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-01-mossy-boulder.mobileNear.u32",
+      "bytes": 3668,
+      "sha256": "2732136a4edde440620d98350d1439d24fb4e41cd77fc0f1835c01d1d8b42298",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod0.gltf",
+      "bytes": 54116,
+      "sha256": "ddd1180a81674e0b13f6dbf1fede2196e7fbe09651fa84c96760237f47c278bc",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod0.u32",
+      "bytes": 3880,
+      "sha256": "214e1312896ebf238d299409f3dbb0fe0e49a184e90cb52c113c72a680c218c8",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod1.gltf",
+      "bytes": 54057,
+      "sha256": "e7a7d4bc9de187de6eef4d9a3c44b03adfa1e807ace1738e464441e4f21e5230",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod1.u32",
+      "bytes": 3876,
+      "sha256": "dc7007a4927e503d6e443c0864f26a5f89b59957421204afc1f35faca8c8d135",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod2.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.lod2.gltf",
+      "bytes": 53729,
+      "sha256": "0fb17d253859a8e1d0702c4fe96f4305aaf8135fa448c289bbf523c91c098d1a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod2.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.lod2.u32",
+      "bytes": 3848,
+      "sha256": "908aaaa3c1c515e9b00378fcb7f6b38da5ac37cfaae7a435b18198ad313609e3",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rock-02-jagged-outcrop.mobileNear.gltf",
+      "bytes": 54116,
+      "sha256": "1be1c7ab005f36e3a05a863c24da5d32a45fef63c4df00fe6eb36d88006c8a54",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rock-02-jagged-outcrop.mobileNear.u32",
+      "bytes": 3880,
+      "sha256": "214e1312896ebf238d299409f3dbb0fe0e49a184e90cb52c113c72a680c218c8",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod0.gltf",
+      "bytes": 146340,
+      "sha256": "607ad3063b7151e821212b97023a0366209703088939b8efbdc4ec49b4e8c59f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod0.u32",
+      "bytes": 11400,
+      "sha256": "93433540e6a32d61ad1da093463e36b5c5bdb8943b29f224b141c6fcf2291f3c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod1.gltf",
+      "bytes": 139740,
+      "sha256": "df071824922e17df99eccff07675ed06ba4750497641778f57a01b857b92ede2",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod1.u32",
+      "bytes": 10868,
+      "sha256": "7d4542096680650ab36cff5b9e04428ed0fef750cb6282fb30a23c22f295c68b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod2.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.lod2.gltf",
+      "bytes": 130843,
+      "sha256": "eef5d299ddd91603229a45d3551fb709995dec10677de30ad70c4d3e3284de5b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod2.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.lod2.u32",
+      "bytes": 10136,
+      "sha256": "f110d333c60f1d0363a24672f6569066bc68981631b520702732090206f691f4",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/grass-tuft.mobileNear.gltf",
+      "bytes": 146340,
+      "sha256": "607ad3063b7151e821212b97023a0366209703088939b8efbdc4ec49b4e8c59f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/grass-tuft.mobileNear.u32",
+      "bytes": 11400,
+      "sha256": "93433540e6a32d61ad1da093463e36b5c5bdb8943b29f224b141c6fcf2291f3c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/bush.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/bush.lod0.gltf",
+      "bytes": 245364,
+      "sha256": "a4e7cc64f16b8ab1ddbedc807f6cf97c090f072af471d6f7549410bc89171810",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/bush.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/bush.lod0.u32",
+      "bytes": 19112,
+      "sha256": "c18d9431fe028faa328cdfbdf9e2e98498f2b3c9b9ee3d4f541270b3f8a73d70",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/bush.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/bush.lod1.gltf",
+      "bytes": 255500,
+      "sha256": "db23db149380c43295b879f5a090f1f651f6efb9e3ebfb5d1fc35889786af158",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/bush.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/bush.lod1.u32",
+      "bytes": 20064,
+      "sha256": "e83d3862ac435da261f2293cf8af85fe427b2d2f49b3399e5e05907a25d86e00",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/bush.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/bush.mobileNear.gltf",
+      "bytes": 245364,
+      "sha256": "34d857d042136cb7a60b2bb8bbde719e10d2a3d57b9e0c357118d1e816ef2ba6",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/bush.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/bush.mobileNear.u32",
+      "bytes": 19112,
+      "sha256": "c18d9431fe028faa328cdfbdf9e2e98498f2b3c9b9ee3d4f541270b3f8a73d70",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod0.gltf",
+      "bytes": 275452,
+      "sha256": "1dd592f6db55f18adaf48b7d2099d0401772fcf855cb361dab410180f32d0134",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod0.u32",
+      "bytes": 17504,
+      "sha256": "5ce4bb8bd17659922c82ff5d9f1b2545e6669caf6ef07b1e30fd494f4b00d5d1",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod1.gltf",
+      "bytes": 284984,
+      "sha256": "f7d061435d33b9e3e9914b683bf4bc113dbfa5e6e8d10bb17d0e207662a6b740",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod1.u32",
+      "bytes": 18220,
+      "sha256": "f28b57a7bdf21571dacf39a9d422407632dfcee17cc3b5e18fa1ee4395470aef",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod2.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.lod2.gltf",
+      "bytes": 281608,
+      "sha256": "3c2c7c83c03da09c1229229b0f7727136a748a714b2df02b84b2aabb71f2c115",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod2.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.lod2.u32",
+      "bytes": 17968,
+      "sha256": "2b5116a980b9f31340c302d9e7a723fa408383495327250b64b553ebb8a2a1df",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-05-thorn-bramble.mobileNear.gltf",
+      "bytes": 275452,
+      "sha256": "1dd592f6db55f18adaf48b7d2099d0401772fcf855cb361dab410180f32d0134",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-05-thorn-bramble.mobileNear.u32",
+      "bytes": 17504,
+      "sha256": "5ce4bb8bd17659922c82ff5d9f1b2545e6669caf6ef07b1e30fd494f4b00d5d1",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rail-fence.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rail-fence.lod0.gltf",
+      "bytes": 105239,
+      "sha256": "688486f2d08e579b706731aa2daa365285ed64e207f90ccf40f3fa5e1b3572f0",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.lod0.u32",
+      "bytes": 7476,
+      "sha256": "5178904e132d29563e1002e1ecd8b8a07d80f6680ba55649d621a7823284a501",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rail-fence.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rail-fence.lod1.gltf",
+      "bytes": 106375,
+      "sha256": "08aba5d6b1cadeea67308833d0a5fc8625373951b1d601c641128e5281ce0aa1",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.lod1.u32",
+      "bytes": 7584,
+      "sha256": "905699d9ec83246c27fd98be9f16b462a0773b9085d38c347d23e03127edd757",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/rail-fence.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/rail-fence.mobileNear.gltf",
+      "bytes": 105239,
+      "sha256": "70bf0f80a366426957191ad808a428be4241aa04d79543d5611c271107385043",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/rail-fence.mobileNear.u32",
+      "bytes": 7476,
+      "sha256": "5178904e132d29563e1002e1ecd8b8a07d80f6680ba55649d621a7823284a501",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.lod0.gltf",
+      "bytes": 158986,
+      "sha256": "8d58c3ce840c1d251ac1ae35b91719f863849b26fa5d90674ed81282da73a18a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.lod0.u32",
+      "bytes": 11012,
+      "sha256": "b41d127cac13063647107e2f12ec7c232402a2ed6e77a6c9d0d037b0fac5472f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.lod1.gltf",
+      "bytes": 161471,
+      "sha256": "ed08d52269ef344574b176a22e37c129f8b1145898dfff915b4a51b596bd125d",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.lod1.u32",
+      "bytes": 11248,
+      "sha256": "4f732d3f1173c82cc58916eac162377427999a5ce1da94074d56f072155e0e76",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-01-straight.mobileNear.gltf",
+      "bytes": 158986,
+      "sha256": "599703af09f8f65aff1be0a0346e4346d584241b8687f967c775f1d480536987",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-01-straight.mobileNear.u32",
+      "bytes": 11012,
+      "sha256": "b41d127cac13063647107e2f12ec7c232402a2ed6e77a6c9d0d037b0fac5472f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.lod0.gltf",
+      "bytes": 157930,
+      "sha256": "b9f5420a5c97571ca6e3f7b6f14cb90a7728bfb379de027adcc75d923eff808b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.lod0.u32",
+      "bytes": 10912,
+      "sha256": "ce7c8f0e5c49c6194e39f87fc13b2412556318c62a8adb5119b32f91d15f8822",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.lod1.gltf",
+      "bytes": 158346,
+      "sha256": "224565292798e71afccb3ae806f5f647c80766ef7a12fe72e2027259dcb47045",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.lod1.u32",
+      "bytes": 10952,
+      "sha256": "1d7d9e9ddeb8f04f24027bedac2fd365be1dd8404e2d0006b56ca97965261ac9",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-02-corner.mobileNear.gltf",
+      "bytes": 157930,
+      "sha256": "f9d2d6d55455ff37a1367a7e0aa542a9146aaa747d6b62ec57d53bdddf819363",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-02-corner.mobileNear.u32",
+      "bytes": 10912,
+      "sha256": "ce7c8f0e5c49c6194e39f87fc13b2412556318c62a8adb5119b32f91d15f8822",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.lod0.gltf",
+      "bytes": 145930,
+      "sha256": "48d0772b63e40a14f617ebbcbb425af47599df4ebf542be3a32ebf0c5fe94163",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.lod0.u32",
+      "bytes": 9788,
+      "sha256": "6b48463cdd1b64ec3b8008415d7eaa9f3ec1f54c1696db47a504cfe6b48bbcdd",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.lod1.gltf",
+      "bytes": 147198,
+      "sha256": "4797033827f3fec7ac38f7a6b45456ef6803faaa70ed41eaa8ca920532b62e1a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.lod1.u32",
+      "bytes": 9908,
+      "sha256": "38da3b11d8a7766cd94fd312758fe37c1a31af735d64c51f6802e70068a9acc6",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/wall-03-breached.mobileNear.gltf",
+      "bytes": 145930,
+      "sha256": "0910b2524b3229f2b1e7d6b8123d8006030e5ef46e1415ef316da386249e9d15",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.mobileNear.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/wall-03-breached.mobileNear.u32",
+      "bytes": 9788,
+      "sha256": "6b48463cdd1b64ec3b8008415d7eaa9f3ec1f54c1696db47a504cfe6b48bbcdd",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/handcart.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/handcart.lod0.gltf",
+      "bytes": 195449,
+      "sha256": "137c5461a68a4ee6721030416e845846db722f59eaa1a2c93febe646b2d8ff40",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/handcart.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/handcart.lod0.u32",
+      "bytes": 14432,
+      "sha256": "7d1b42db1731bc4688ab4241010e1aff11253a51c0952c87f24d818ca9de4302",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/handcart.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/handcart.mobileNear.gltf",
+      "bytes": 195449,
+      "sha256": "0f6c0a2cc2960ad48b97efe712d6c810e9018f6fa620b4d7b0abccc5ad5604dd",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod0.gltf",
+      "bytes": 134893,
+      "sha256": "52dd57d9605116f12b3226af9280685001fb6fd679d5d594bfdad4c12d0f7755",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod0.u32",
+      "bytes": 8164,
+      "sha256": "a8e59ac451a057e9b777e35d1733dc27f890f141fe3ab90f9ab2a3fe954a0880",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod1.gltf",
+      "bytes": 140994,
+      "sha256": "17f53a054efca10a12df812f1639f4170a8adec9fa66a07465a237d04f09a397",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod1.u32",
+      "bytes": 8624,
+      "sha256": "e66dbcb703d5981661e3a584fa29f4e50ce8607515745aa4dcbed0c401d59ed5",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod2.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.lod2.gltf",
+      "bytes": 168696,
+      "sha256": "45279bb7ffd9b8d086acaba1c810ac9f0cccb5cca47512026bbf93d0596a3854",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod2.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-13-votive-lantern.lod2.u32",
+      "bytes": 10704,
+      "sha256": "f87b0c938fa8d3990cf4e66bf6ca5eea1d4c4b661f56c4f1246f6081d778c626",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-13-votive-lantern.mobileNear.gltf",
+      "bytes": 134893,
+      "sha256": "52dd57d9605116f12b3226af9280685001fb6fd679d5d594bfdad4c12d0f7755",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.lod0.gltf",
+      "bytes": 156358,
+      "sha256": "56e7c29a9d4c22aa5b83f3c3c7e7b75c127d11b2bf12a7415b0f4bb06291f82f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-01-eroded-wall.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-01-eroded-wall.lod0.u32",
+      "bytes": 9176,
+      "sha256": "8786be3b951162eafa7bb0ad1f570a12537012d78279dd516463e9833df33787",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.lod1.gltf",
+      "bytes": 156127,
+      "sha256": "2178083af32cd58f83fe07a9cd997e309993d82030a4504f3c7bb1c304b0969c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-01-eroded-wall.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-01-eroded-wall.lod1.u32",
+      "bytes": 9160,
+      "sha256": "bbbd9b841ee194340bf34fd37cde2e50572ef6ff95ad44aaf5d0e0c4643ead85",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-01-eroded-wall.mobileNear.gltf",
+      "bytes": 156358,
+      "sha256": "56e7c29a9d4c22aa5b83f3c3c7e7b75c127d11b2bf12a7415b0f4bb06291f82f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.lod0.gltf",
+      "bytes": 173495,
+      "sha256": "a5caee7963082d8d6f36eaed1943d3483c771d1b8e0b7448adbde24bedb6dc2b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-02-rock-ledge.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-02-rock-ledge.lod0.u32",
+      "bytes": 10460,
+      "sha256": "fb21a95322e4289012c55cf41397f06d1751a3563a33d35cabef4e94e53a323f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.lod1.gltf",
+      "bytes": 175223,
+      "sha256": "96c4a4552ddab271b1cb47c3834373a88184ff58ddb6d017a0b86b28e915161a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-02-rock-ledge.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-02-rock-ledge.lod1.u32",
+      "bytes": 10592,
+      "sha256": "82db89260881aee99fc1afb98945981a908c8ddf61ea1b6157cf91029057d90e",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-02-rock-ledge.mobileNear.gltf",
+      "bytes": 173495,
+      "sha256": "a5caee7963082d8d6f36eaed1943d3483c771d1b8e0b7448adbde24bedb6dc2b",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.lod0.gltf",
+      "bytes": 174988,
+      "sha256": "c83427f45199d383b699d754131a9380fc7151e8e6c11a248da0fd046bdbdf16",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-03-great-column.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-03-great-column.lod0.u32",
+      "bytes": 10572,
+      "sha256": "539a527569a703c74947435a75f93e8b50bcac567c674f5a5af775ffdf9ae1fd",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.lod1.gltf",
+      "bytes": 173006,
+      "sha256": "ab91440d15249ac1b8407d29032025f5407eabca2d666658f09ffafeeecefbb6",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-03-great-column.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-03-great-column.lod1.u32",
+      "bytes": 10424,
+      "sha256": "5a7074d772593c73ac6d4e188e2289c211e50d8358bd56ae1e54b99871abf2e9",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-03-great-column.mobileNear.gltf",
+      "bytes": 174988,
+      "sha256": "c83427f45199d383b699d754131a9380fc7151e8e6c11a248da0fd046bdbdf16",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.lod0.gltf",
+      "bytes": 153709,
+      "sha256": "3645567483c3e937f24002d55051b2d28959d4c9f600fff1b07b4a7aef2e58a0",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-04-natural-arch.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-04-natural-arch.lod0.u32",
+      "bytes": 8976,
+      "sha256": "de20ac457aae15c72a844ea4c9a1016c289728ea6d4c55ffdcb00b362359cffa",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.lod1.gltf",
+      "bytes": 152813,
+      "sha256": "bbf5f3d45c18cdb589964346429aab75309b0ad5da7adf02fcbcd05ddc7bbdc3",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-04-natural-arch.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-04-natural-arch.lod1.u32",
+      "bytes": 8912,
+      "sha256": "3d5ee983a84f6a7def884eb63a21247b11406cb8f8c873ce412f5c0f7d12e2a6",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-04-natural-arch.mobileNear.gltf",
+      "bytes": 153709,
+      "sha256": "3645567483c3e937f24002d55051b2d28959d4c9f600fff1b07b4a7aef2e58a0",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.lod0.gltf",
+      "bytes": 194136,
+      "sha256": "f9ee234fd319213da75ab6f52e4d85b4b2110b0f4fdc59409af2ab2550b2f0a7",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-05-stalagmites.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-05-stalagmites.lod0.u32",
+      "bytes": 12008,
+      "sha256": "d116c842c552603ed4e83015eef0c6d3c09e2269ce11b41f7e7ae19776d9cfd8",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.lod1.gltf",
+      "bytes": 185460,
+      "sha256": "2b1e096d43811d58bac20f62eaef3cb64ea429d337805061e0296e93cdf97a1e",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-05-stalagmites.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-05-stalagmites.lod1.u32",
+      "bytes": 11360,
+      "sha256": "344cb0c144348bbe867496c789be0423d76259ed3de4592d2ac96258061355ce",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-05-stalagmites.mobileNear.gltf",
+      "bytes": 194136,
+      "sha256": "f9ee234fd319213da75ab6f52e4d85b4b2110b0f4fdc59409af2ab2550b2f0a7",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.lod0.gltf",
+      "bytes": 153258,
+      "sha256": "c06866b34e51244877a49edf30ded5137cc9e8e129dd33d70c566da954bd5de2",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-06-stalactite-canopy.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-06-stalactite-canopy.lod0.u32",
+      "bytes": 8940,
+      "sha256": "4580f018efc0c68e8fd1c326ba62583299f9f1330f9bc0cff2d9d3a99b82daaa",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.lod1.gltf",
+      "bytes": 153015,
+      "sha256": "7d7a565f85258c31c8309a0b78f8469d44aedc5f08183109e2b3e016c7152ad3",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-06-stalactite-canopy.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-06-stalactite-canopy.lod1.u32",
+      "bytes": 8924,
+      "sha256": "7334f8d1482694ceb032bde5f624f15d5a059da703aded23fcb0b2ea3572378a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-06-stalactite-canopy.mobileNear.gltf",
+      "bytes": 153258,
+      "sha256": "c06866b34e51244877a49edf30ded5137cc9e8e129dd33d70c566da954bd5de2",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.lod0.gltf",
+      "bytes": 146021,
+      "sha256": "57ff8ffecbccc9accbe00ae37e55dd57ea107007c7be63a28eb249502f7825ab",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-07-scree-ramp.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-07-scree-ramp.lod0.u32",
+      "bytes": 8400,
+      "sha256": "14e6c222a2dc3f793962a78c6c7c2e815415c4d2e731aa84d0b540b43eb94c0c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.lod1.gltf",
+      "bytes": 146009,
+      "sha256": "1bd52c59cd27250bbe43cf8e2c722e1ed99abf60991f8b943972a46320f8b581",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-07-scree-ramp.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-07-scree-ramp.lod1.u32",
+      "bytes": 8400,
+      "sha256": "5ac911968b7dc399c7e32b2bf3425d6b0551e3ff5db4024c3ea172be701634ec",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-07-scree-ramp.mobileNear.gltf",
+      "bytes": 146021,
+      "sha256": "57ff8ffecbccc9accbe00ae37e55dd57ea107007c7be63a28eb249502f7825ab",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.lod0.gltf",
+      "bytes": 144326,
+      "sha256": "aab891d6f3260ac9eff06d64b9e38152937169429d2211562d39bfc7d59c65ab",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-s01-solid-cliff-base.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-s01-solid-cliff-base.lod0.u32",
+      "bytes": 8272,
+      "sha256": "11dccc256130c7b34801f4f9217742a962f944240247903f8a4d0af3982c416d",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.lod1.gltf",
+      "bytes": 144827,
+      "sha256": "e361d9991d931d60b010cbea8ddb03531dab159ad9064cc1edd830034f01379e",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-s01-solid-cliff-base.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-s01-solid-cliff-base.lod1.u32",
+      "bytes": 8312,
+      "sha256": "d99e669095d005fa087236be9893c0929ed0bf1433793be5d28e1dbc31667a2c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s01-solid-cliff-base.mobileNear.gltf",
+      "bytes": 144326,
+      "sha256": "aab891d6f3260ac9eff06d64b9e38152937169429d2211562d39bfc7d59c65ab",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.lod0.gltf",
+      "bytes": 145322,
+      "sha256": "e5fd51da050f23e78a0d40756e6da10b4361d80370e0f6ea9acb6eae8bb7c745",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-s03-dry-spillway-rock.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-s03-dry-spillway-rock.lod0.u32",
+      "bytes": 8348,
+      "sha256": "f9bb4ddbb40dc1ad54ba094030ed73f22e26089aae13015838128349a3ea08a7",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.lod1.gltf",
+      "bytes": 146818,
+      "sha256": "5a64eaec33106043866dedae34950b60b9476a9313196438128cc3e0144c3b5f",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/cave-s03-dry-spillway-rock.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/cave-s03-dry-spillway-rock.lod1.u32",
+      "bytes": 8460,
+      "sha256": "aad7ef931c3d9c80f1f4d0f5a197e27475452f58072316dc5407b0a75204e256",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/cave-s03-dry-spillway-rock.mobileNear.gltf",
+      "bytes": 145322,
+      "sha256": "e5fd51da050f23e78a0d40756e6da10b4361d80370e0f6ea9acb6eae8bb7c745",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.lod0.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.lod0.gltf",
+      "bytes": 159762,
+      "sha256": "11b1dce053659743d4efbcc319db69f67055dda20a2c20c068d7cd1f1446c308",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-06-witch-cave-mouth.lod0.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-06-witch-cave-mouth.lod0.u32",
+      "bytes": 9428,
+      "sha256": "20df14f757e1e4c899a558d21c30794a5808c30c86364e4b77037e11a9aa71fd",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.lod1.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.lod1.gltf",
+      "bytes": 153518,
+      "sha256": "fbf74e5e36479ec1c3ca3f17422d7f1e0ee17197787a4a52803d677b265f8f1a",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/maps/forest-06-witch-cave-mouth.lod1.u32",
+      "path": "Sources/environment/approved-geometry/2026-11-09/maps/forest-06-witch-cave-mouth.lod1.u32",
+      "bytes": 8960,
+      "sha256": "b4f1255ceace8c829a3a2aa028cecc1c6e4acc8b65a286417126ac2aa70adf2c",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.mobileNear.gltf",
+      "path": "Sources/environment/approved-geometry/2026-11-09/models/forest-06-witch-cave-mouth.mobileNear.gltf",
+      "bytes": 159762,
+      "sha256": "11b1dce053659743d4efbcc319db69f67055dda20a2c20c068d7cd1f1446c308",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/environment/approved-geometry/2026-11-09/approval.json",
+      "path": "Sources/environment/approved-geometry/2026-11-09/approval.json",
+      "bytes": 79267,
+      "sha256": "926b92e71daf8981a4c4afffb39259e3889d77e2826a8ad11844d1a5acc863f5",
+      "origins": [
+        "Canonical MoonForest approved category geometry / 2026-11-09"
+      ],
+      "requiredBy": [
+        "approved-scenery-budgets"
       ],
       "status": "bundled"
     }

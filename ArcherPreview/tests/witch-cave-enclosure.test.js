@@ -86,7 +86,7 @@ test('cave floor, painted rocks and ink use the same local cutaway and focus',as
  }finally{ink?.dispose();engine.dispose();}
 });
 
-test('baked rock sight blockers follow actual tall surfaces and preserve natural arch openings',()=>{
+test('baked rock sight blockers retain preserved source surfaces and natural arch openings',()=>{
  const hash=createHash('sha256');for(const name of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+name,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));
  assert.equal(CAVE_SIGHT_DATA.fingerprint,caveSourceFingerprint());
  assert.deepEqual(CAVE_SIGHT_DATA.heightRange,[1.5,2.1]);assert.equal(CAVE_SIGHT_DATA.kind,'rock-or-rock-asset');

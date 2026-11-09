@@ -55,7 +55,7 @@ test('whole real shoulder footprints preserve free cells; native lab cladding pr
 });
 function pointSegmentDistance(q,a,b){const x=b[0]-a[0],z=b[1]-a[1],t=Math.max(0,Math.min(1,((q.x-a[0])*x+(q.z-a[1])*z)/(x*x+z*z)));return Math.hypot(q.x-a[0]-x*t,q.z-a[1]-z*t);}
 
-test('dressing profile rectangles enclose the actual shipped near-LOD geometry after the production transform',async t=>{
+test('unchanged conservative dressing rectangles enclose every actual shipped near-LOD vertex after the production transform',async t=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>{scene.dispose();engine.dispose();});
  const world={scene,terrain:{heightAt:()=>0}},base=new URL('../public/assets/',import.meta.url);
  for(const [id,profile]of Object.entries(CAVE_DRESSING_PROFILES)){
@@ -63,8 +63,18 @@ test('dressing profile rectangles enclose the actual shipped near-LOD geometry a
   const {gltf,files}=await readRuntimeGltf(new URL(config.lods[0].model,base));for(const buffer of gltf.buffers)if(buffer.uri)buffer.uri='data:application/octet-stream;base64,'+Buffer.from(files.get(buffer.uri).data).toString('base64');
   const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:gltf},'');
   const placement={id:'test-'+id,x:0,z:0,scale:1,yaw:0,elevation:0,kind:'rock'},{root,facing}=createVillageTransform(world,placement,config),instance=instantiateStaticMap(container,name=>'profile-'+name);for(const node of instance.rootNodes)node.parent=facing;
-  const min=new Vector3(Infinity,Infinity,Infinity),max=min.negate();for(const mesh of root.getChildMeshes()){mesh.computeWorldMatrix(true);const b=mesh.getBoundingInfo().boundingBox;min.minimizeInPlace(b.minimumWorld);max.maximizeInPlace(b.maximumWorld);}
-  assert.ok(Math.abs(max.x-min.x-profile.width)<.001,id+' width mismatch');assert.ok(Math.abs(max.z-min.z-profile.depth)<.001,id+' depth mismatch');assert.ok(Math.abs(max.y-min.y-profile.height)<.001,id+' height mismatch');assert.ok(Math.abs(min.x+max.x)<.001&&Math.abs((min.z+max.z)/2-(profile.centerZ??0))<.001,id+' source centre mismatch');
+  // Profiles describe the original native placement rectangle. A retained
+  // vertex subset can shrink its tight bounds without shrinking that authority
+  // or moving any existing dressing placement. Check actual transformed
+  // vertices against those exact original sides, rather than demanding a new
+  // simplified mesh still touch every side of its conservative rectangle.
+  const min=new Vector3(Infinity,Infinity,Infinity),max=min.negate();let profileVertices=0;
+  for(const mesh of root.getChildMeshes()){
+   const positions=mesh.getVerticesData('position');if(!positions)continue;const matrix=mesh.computeWorldMatrix(true);
+   for(let i=0;i<positions.length;i+=3){const point=Vector3.TransformCoordinates(Vector3.FromArray(positions,i),matrix);min.minimizeInPlace(point);max.maximizeInPlace(point);profileVertices++;assert.ok(Math.abs(point.x)<=profile.width/2+.001,id+' vertex leaves native width');assert.ok(Math.abs(point.z-(profile.centerZ??0))<=profile.depth/2+.001,id+' vertex leaves native depth');}
+  }
+  assert.ok(profileVertices>0);assert.ok(max.y-min.y<=profile.height+.001,id+' vertex height leaves native profile');
+  t.diagnostic(JSON.stringify({id,profileVertices,actualSpan:[max.x-min.x,max.y-min.y,max.z-min.z],conservativeNativeSpan:[profile.width,profile.height,profile.depth]}));
   if(['rock-02-jagged-outcrop','cave-s01-solid-cliff-base'].includes(id)){
    const terrain=createWitchCaveTerrain();
    assert.equal(config.frontYawOffset??0,0,'lab cladding footprints require a centred unrotated source');
@@ -77,8 +87,10 @@ test('dressing profile rectangles enclose the actual shipped near-LOD geometry a
      assert.ok(p.length>=6&&p.length<=9&&p.depth>=1.3&&p.depth<=2);
      const inverse=labRoot.computeWorldMatrix(true).clone().invert(),localMin=new Vector3(Infinity,Infinity,Infinity),localMax=localMin.negate();
      for(const mesh of labRoot.getChildMeshes()){const positions=mesh.getVerticesData('position');if(!positions)continue;const matrix=mesh.computeWorldMatrix(true).multiply(inverse);for(let i=0;i<positions.length;i+=3){const point=Vector3.TransformCoordinates(Vector3.FromArray(positions,i),matrix);localMin.minimizeInPlace(point);localMax.maximizeInPlace(point);}}
-     assert.ok(Math.abs((localMax.x-localMin.x)*labRoot.scaling.x-p.length)<.001,p.id+' ignores authored length');
-     assert.ok(Math.abs((localMax.z-localMin.z)*labRoot.scaling.z-p.depth)<.001,p.id+' ignores authored shallow depth');
+     assert.ok(Math.abs(config.bounds[0]*labRoot.scaling.x-p.length)<.001,p.id+' ignores authored native length');
+     assert.ok(Math.abs(config.bounds[2]*labRoot.scaling.z-p.depth)<.001,p.id+' ignores authored native shallow depth');
+     assert.ok((localMax.x-localMin.x)*labRoot.scaling.x<=p.length+.001,p.id+' geometry leaves authored length');
+     assert.ok((localMax.z-localMin.z)*labRoot.scaling.z<=p.depth+.001,p.id+' geometry leaves authored shallow depth');
     }
     t.diagnostic(JSON.stringify({id:p.id,vertices,aboveTerrain:above,maxAboveTerrain:maxAbove,top:maxY}));labRoot.dispose();
    }

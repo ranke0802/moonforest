@@ -20,7 +20,7 @@ import {boundaryContracts,firstTriggerPose,makeBoundaryCases} from '../reports/p
 import {originalInputText} from './helpers/mobile-profile-contract.js';
 
 const hash=x=>createHash('sha256').update(x).digest('hex'),near=(a,b,tol=1e-8)=>assert.ok(Math.abs(a-b)<=tol,`${a} != ${b}`),facts=[];
-test('the complete native forest layout, terrain, material/LOD graph and ground remain the approved original',()=>{
+test('native forest layout, terrain and ground remain original while exact approved geometry restores the historical source graph',()=>{
  const expected={
   'src/monster-forest-layout.js':'2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a',
   'src/monster-forest-terrain.js':'6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9',
@@ -32,7 +32,7 @@ test('the complete native forest layout, terrain, material/LOD graph and ground 
  const terrain=createMonsterForestTerrain();assert.equal(hash(Buffer.from(terrain.heights.buffer)),'014606f03dd9c5ad69f4378b20bbe3ab1eac8113d91c9f6c7d726801b8731ed3');
  const ground=JSON.parse(readFileSync(new URL('../public/assets/monster-forest-ground.json',import.meta.url)));
  for(const role of['color','detail']){const p=new URL(ground[role].url,new URL('../public/assets/',import.meta.url));assert.equal(hash(readFileSync(p)),p.pathname.split('/').at(-1).split('.')[0]);}
- facts.push({case:'native-forest-preserved',baseline:'547b3a4',protectedFiles:Object.keys(expected).length,placements:891,terrainHeights:terrain.heights.length,groundImageHashVerified:true});
+ facts.push({case:'native-forest-with-validated-geometry-approvals',baseline:'547b3a4',protectedFiles:Object.keys(expected).length,placements:891,terrainHeights:terrain.heights.length,groundImageHashVerified:true,historicalSourceGraphMatchesAfterValidatedApprovals:true,currentGeometryIntentionallyChanged:true,nativeTreeGeometryUnchanged:true});
 });
 
 test('both road handoff transforms match the actual portal heading and preserve scale on either side of the trigger',()=>{

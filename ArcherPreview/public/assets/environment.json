@@ -148,12 +148,28 @@
       ]
     },
     "grass-tuft": {
-      "model": "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf",
+      "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
       "resources": [
+        "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
         "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
-        "./content/d9aaf58efb679bd6a7b4e2abbf1ab5605962f6210dc7d52c218de5a8c3027a02.bin",
-        "./content/51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191.gltf"
-      ]
+        "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
+      ],
+      "bytes": 1836899,
+      "triangles": 1455,
+      "geometryBudget": {
+        "revision": "approved-scenery-budget-v1",
+        "date": "2026-11-09",
+        "assetId": "grass-tuft",
+        "cap": 1500,
+        "catalogAssetVersion": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+        "beforeModelSha256": "51e60518f71706e1e1ea8800772184fb866e07e23656bd4daba13526efe57191",
+        "appliedModelSha256": "1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6",
+        "nativeConfigSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "texturePixelsUnchanged": true,
+        "lodDistancesUnchanged": true,
+        "retention": "Original source and runtime files retained; deletion awaits user decision.",
+        "approval": "Category replacement authorized; applied build awaits user inspection."
+      }
     },
     "grass-cluster": {
       "model": "./content/c87874aabe3bf4ec4b20818d933d4b9f92ffff4435f346983f348a222e79787c.gltf",
