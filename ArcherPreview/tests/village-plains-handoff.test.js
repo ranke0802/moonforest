@@ -23,7 +23,7 @@ import {createWorld} from '../src/world.js';
 import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
 import {isVillageBoundaryTree} from '../src/village-plains-boundary.js';
 
-test('road arrival remains disarmed indefinitely until the player leaves its trigger with hysteresis',()=>{
+test('road arrival does not bounce when stationary or moving sideways, and rearms after leaving the strip',()=>{
  for(const [map,source] of [['village','warrior-plains'],['great-plains','warrior-v3'],['monster-forest','warrior-plains'],['great-plains','warrior-v4']]){
   const {document}=parseHTML('<button id="portal"></button>'),oldDocument=globalThis.document,oldLocation=globalThis.location;globalThis.document=document;globalThis.location={href:`https://example.test/?character=${map==='village'?'warrior-v3':map==='monster-forest'?'warrior-v4':'warrior-plains'}`};
   const engine=new NullEngine(),scene=new Scene(engine),p=mapPortals(map).find(p=>p.destination===source),state={position:{x:p.x,z:p.z},hp:500,potions:3},calls=[];
@@ -35,6 +35,33 @@ test('road arrival remains disarmed indefinitely until the player leaves its tri
    state.position=mapPoint({...origin,x:origin.x+25});portal.update();state.position={x:p.x,z:p.z};portal.update();assert.equal(calls.length,1);assert.equal(calls[0].selected,p);
    for(let i=0;i<30;i++)portal.update(.1);assert.equal(calls.length,1);portal.dispose();
   }finally{engine.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
+ }
+});
+
+test('all road arrivals allow an immediate intentional return, without triggering on continued forward movement',()=>{
+ const roads=[
+  {map:'village',character:'warrior-v3',source:'warrior-plains',common:{x:.35,z:75},point:p=>p,outward:1},
+  {map:'great-plains',character:'warrior-plains',source:'warrior-v3',common:{x:.35,z:75},point:villageToPlains,outward:-1},
+  {map:'monster-forest',character:'warrior-v4',source:'warrior-plains',common:{x:0,z:51},point:p=>p,outward:1},
+  {map:'great-plains',character:'warrior-plains',source:'warrior-v4',common:{x:0,z:51},point:forestToPlains,outward:-1},
+ ];
+ for(const road of roads)for(const forwardFirst of [false,true]){
+  const {document}=parseHTML('<button id="portal"></button>'),oldDocument=globalThis.document,oldLocation=globalThis.location;
+  globalThis.document=document;globalThis.location={href:`https://example.test/?character=${road.character}`};
+  const engine=new NullEngine(),scene=new Scene(engine),button=document.getElementById('portal'),calls=[];
+  const state={position:road.point(road.common),hp:500,potions:3},world={mapId:road.map,scene,camera:{globalPosition:Vector3.Zero()},terrain:{heightAt:()=>0}};
+  const portal=createMapPortal(world,{button,persistTravel:false,disarmRoadDestination:road.source,getState:()=>state,onTravel:(url,selected)=>calls.push({url,selected})});
+  const move=(dz,dx=0)=>{state.position=road.point({x:road.common.x+dx,z:road.common.z+dz});portal.update(1/60);};
+  try{
+   for(let i=0;i<120;i++)portal.update(1/60);
+   move(road.outward*.15);move(0,1);move(0);assert.equal(calls.length,0,`${road.map} ${road.source}: no stationary/sideways/jitter bounce`);
+   if(forwardFirst){for(let i=1;i<=6;i++)move(-road.outward*i*.1);assert.equal(calls.length,0,`${road.map} ${road.source}: continuing into the new map`);}
+   const start=forwardFirst?-.6:0;
+   for(let i=1;i<=4;i++)move(road.outward*(start+i*.1));
+   assert.equal(calls.length,1,`${road.map} ${road.source}: reverse direction`);
+   assert.equal(calls[0].selected.destination,road.source);
+   for(let i=0;i<20;i++)portal.update(1/60);assert.equal(calls.length,1);
+  }finally{portal.dispose();engine.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
  }
 });
 

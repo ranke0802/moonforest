@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704328972,
+  "bytes": 704329373,
   "files": [
     {
       "path": "app.webmanifest",
@@ -64,9 +64,9 @@
       "sha256": "c07a0c6ea490b9fd1bb486f866eb68fddb2956905e4ac9f8f5a4b62899e679dc"
     },
     {
-      "path": "assets/authored-map-loader-B65LmRpw.js",
-      "bytes": 15871,
-      "sha256": "af5d125a3bd4952b8eff8ab762e35186e030e22fa228abe15c9716d878a24d5e"
+      "path": "assets/authored-map-loader-BCpoIUN9.js",
+      "bytes": 16272,
+      "sha256": "953ed2d6241b4d36c4a8027e3d6f33d5b39aae0aa6cc566ec9607f0fc8589dc2"
     },
     {
       "path": "assets/authored-monster-runtime-qGlKWDLg.js",
@@ -7989,9 +7989,9 @@
       "sha256": "050aad2f107af568d84d15c0d6e4c5186464a9fecb3cf88801f4b551a50f4f84"
     },
     {
-      "path": "assets/developer-editor--pavwwqL.js",
+      "path": "assets/developer-editor-i2fwRhqF.js",
       "bytes": 49803,
-      "sha256": "ee80f1dd1194bc8caee51240f1e79bd2d590d67fad3480be5441407e77c9025b"
+      "sha256": "80cc843cfe7e7b0edd055bd0b98834cf9e5bf6d96f821f843c294efc0174be51"
     },
     {
       "path": "assets/developer-tools-Bw4es7AK.js",
@@ -8584,14 +8584,14 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
+      "path": "assets/game-BNB93qhu.js",
+      "bytes": 2275411,
+      "sha256": "0a2a7c1f058bfab5125bd3645cfb51acbd291c5e73308d033b051d873e0daea9"
+    },
+    {
       "path": "assets/game-iuoAbjSe.css",
       "bytes": 103804,
       "sha256": "74f07e2d4c01361bf3715bb3ef88cfc65a198300b2f71838599fda07ef4d3feb"
-    },
-    {
-      "path": "assets/game-KFPJvZz3.js",
-      "bytes": 2275411,
-      "sha256": "a7e4dd791fc8b34f12d44a770ad830764ae97d3d23ac5eaeb47b3f5fe41d721a"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
@@ -10181,7 +10181,7 @@
     {
       "path": "index.html",
       "bytes": 39000,
-      "sha256": "e44c8fc59a396cfaedd2f14a2f80883047e2220cded562d1a1a0456d4a063cec"
+      "sha256": "9cc740c535bf24004cd7e21d95f8fa748d8f0e367a65bf52b8970cf3b18df077"
     },
     {
       "path": "KTX2_NOTICES.txt",

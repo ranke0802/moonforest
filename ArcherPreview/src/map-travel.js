@@ -16,8 +16,8 @@ export function clampVillageExit(position,previous){
   return position;
 }
 // The common-coordinate strips cover both shoulders and the nearby trees.
-// Arrival retains the player's offset; reverse triggers remain disarmed until
-// the player actually leaves the destination strip.
+// Arrival retains the player's offset; the return trigger distinguishes
+// intentional outward movement from arriving or standing in the strip.
 export function roadPortalContains(mapId,portal,position){
  if(!portal?.roadPassage||!position)return false;
  if(mapId==='village'&&portal.destination==='warrior-plains')return Math.abs(position.x-exitRoadX(position.z))<=20&&position.z>=73&&position.z<=78;
@@ -26,6 +26,18 @@ export function roadPortalContains(mapId,portal,position){
  if(mapId==='great-plains'&&portal.destination==='warrior-v4'){const p=plainsToForest(position);return Math.abs(p.x)<=18&&p.z>=45&&p.z<=54;}
  return false;
 }
+// Signed distance along the road, increasing towards this portal's destination.
+// Use the shared road coordinate so the rotated plains boundaries behave like
+// the corresponding village/forest roads.
+function roadOutwardProgress(mapId,portal,position){
+ if(!position)return null;
+ if(mapId==='village'&&portal.destination==='warrior-plains')return position.z;
+ if(mapId==='monster-forest'&&portal.destination==='warrior-plains')return position.z;
+ if(mapId==='great-plains'&&portal.destination==='warrior-v3')return -plainsToVillage(position).z;
+ if(mapId==='great-plains'&&portal.destination==='warrior-v4')return -plainsToForest(position).z;
+ return null;
+}
+const RETURN_ROAD_MOVEMENT=0.3;
 export function safeRoadArrival(world,position,radius,limitFor){
  const legal=p=>{
   if(world.mapId==='village'){const bounded=clampVillageExit({...p},p);if(Math.hypot(bounded.x-p.x,bounded.z-p.z)>.001)return false;}
@@ -51,9 +63,11 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
   const portals=mapPortals(world.mapId);if(!portals.length)return null;
   let portal=portals[0];const mists=portals.filter(p=>!p.roadPassage).map(p=>createPortalMist(world,p));button.hidden=true;
   let available=false,disposed=false,automaticPending=false;
-  // A transformed arrival can be inside the return trigger. Rearm only after
-  // leaving it; elapsed time alone must never bounce a stationary player.
+  // A transformed arrival can be inside the return trigger. Track the most
+  // inward point, so reversing works even before leaving the broad strip.
+  // Time, camera rotation and small positional jitter cannot trigger a return.
   let disarmed=portals.find(p=>p.roadPassage&&p.destination===disarmRoadDestination)??null;
+  let inwardProgress=disarmed?roadOutwardProgress(world.mapId,disarmed,getState().position):null;
   const inside=(p,state)=>p.roadPassage?roadPortalContains(world.mapId,p,state.position):portalAvailable(state.position,p,{});
   const canUse=(p,state)=>p.roadPassage?inside(p,state)&&portalAvailable({x:p.x,z:p.z},p,state):portalAvailable(state.position,p,state);
   const activate=()=>{
@@ -69,7 +83,16 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
   return {dispose,update(dt=0){
     if(disposed)return;for(const mist of mists)mist.update(dt);
     const position=getState().position;
-    if(disarmed&&position&&!inside(disarmed,{position}))disarmed=null;
+    if(disarmed&&position){
+      if(!inside(disarmed,{position}))disarmed=null;
+      else {
+        const progress=roadOutwardProgress(world.mapId,disarmed,position);
+        if(Number.isFinite(progress)){
+          if(!Number.isFinite(inwardProgress)||progress<inwardProgress)inwardProgress=progress;
+          else if(progress-inwardProgress>=RETURN_ROAD_MOVEMENT)disarmed=null;
+        }
+      }
+    }
     if(position)portal=portals.reduce((a,b)=>Math.hypot(position.x-a.x,position.z-a.z)<Math.hypot(position.x-b.x,position.z-b.z)?a:b);
     const state=getState(),near=state.position&&(inside(portal,state)||Math.hypot(state.position.x-portal.x,state.position.z-portal.z)<6);
     available=portal!==disarmed&&canUse(portal,state);button.hidden=!near;button.disabled=!available;
