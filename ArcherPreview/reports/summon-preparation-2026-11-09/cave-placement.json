@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-09",
+  "scope": "Exact root bossSpawnPositions for 20 Mourning actors, actual cave full-pose navigator and occupied player/bodies. pause() and fifth-argument preparation match the root hidden-placement protocol; one whole-plan derived southwest retry is allowed.",
+  "passed": true,
+  "radius": 1.5,
+  "separationRadius": 1.8333333333333333,
+  "limit": 73.5,
+  "coldOrdinaryCaveFieldInitializationMs": 153.10370000000012,
+  "reports": [
+    {
+      "origin": {
+        "x": -42,
+        "z": 43
+      },
+      "count": 20,
+      "mode": "radial",
+      "failedRadialCount": null,
+      "radialError": null,
+      "totalCpuMs": 23.24090000000001,
+      "preparation": {
+        "yields": 14,
+        "maxSliceMs": 4.650000000000091,
+        "blocks": 34
+      },
+      "packingOrigin": {
+        "x": -18.375,
+        "z": -46.875
+      },
+      "points": [
+        {
+          "x": 23.375,
+          "z": -22.875
+        },
+        {
+          "x": 21.625,
+          "z": -25.625
+        },
+        {
+          "x": 19.375,
+          "z": -28.125
+        },
+        {
+          "x": 26.375,
+          "z": -21.875
+        },
+        {
+          "x": 24.875,
+          "z": -25.625
+        },
+        {
+          "x": 22.625,
+          "z": -28.625
+        },
+        {
+          "x": 29.625,
+          "z": -21.625
+        },
+        {
+          "x": 27.875,
+          "z": -24.625
+        },
+        {
+          "x": 20.375,
+          "z": -31.125
+        },
+        {
+          "x": 25.875,
+          "z": -28.625
+        },
+        {
+          "x": 23.625,
+          "z": -31.625
+        },
+        {
+          "x": 31.125,
+          "z": -24.375
+        },
+        {
+          "x": 28.875,
+          "z": -27.625
+        },
+        {
+          "x": 33.875,
+          "z": -22.875
+        },
+        {
+          "x": 32.125,
+          "z": -27.375
+        },
+        {
+          "x": 30.375,
+          "z": -30.375
+        },
+        {
+          "x": 34.875,
+          "z": -25.875
+        },
+        {
+          "x": 33.625,
+          "z": -30.125
+        },
+        {
+          "x": 36.375,
+          "z": -28.625
+        },
+        {
+          "x": 35.375,
+          "z": -32.875
+        }
+      ]
+    },
+    {
+      "origin": {
+        "x": 29,
+        "z": -25.5
+      },
+      "count": 20,
+      "mode": "derived-southwest-retry",
+      "failedRadialCount": 15,
+      "radialError": "비탄의 마녀가 안전하게 등장할 거처 공간이 없습니다.",
+      "totalCpuMs": 14.841599999999971,
+      "preparation": {
+        "yields": 23,
+        "maxSliceMs": 0.7106000000001131,
+        "blocks": 53
+      },
+      "packingOrigin": {
+        "x": -18.375,
+        "z": -46.875
+      },
+      "points": [
+        {
+          "x": 20.375,
+          "z": -31.125
+        },
+        {
+          "x": 19.375,
+          "z": -28.125
+        },
+        {
+          "x": 23.625,
+          "z": -31.875
+        },
+        {
+          "x": 22.625,
+          "z": -28.875
+        },
+        {
+          "x": 21.625,
+          "z": -25.875
+        },
+        {
+          "x": 25.875,
+          "z": -29.625
+        },
+        {
+          "x": 24.875,
+          "z": -26.625
+        },
+        {
+          "x": 23.125,
+          "z": -23.125
+        },
+        {
+          "x": 29.125,
+          "z": -30.375
+        },
+        {
+          "x": 26.375,
+          "z": -23.875
+        },
+        {
+          "x": 30.625,
+          "z": -27.625
+        },
+        {
+          "x": 32.375,
+          "z": -31.375
+        },
+        {
+          "x": 28.625,
+          "z": -21.625
+        },
+        {
+          "x": 30.875,
+          "z": -23.875
+        },
+        {
+          "x": 33.875,
+          "z": -28.625
+        },
+        {
+          "x": 35.375,
+          "z": -32.875
+        },
+        {
+          "x": 33.625,
+          "z": -25.375
+        },
+        {
+          "x": 36.875,
+          "z": -30.125
+        },
+        {
+          "x": 36.625,
+          "z": -26.875
+        },
+        {
+          "x": 35.875,
+          "z": -23.125
+        }
+      ]
+    }
+  ],
+  "cache": {
+    "candidates": 2590,
+    "cachedOrigins": 24,
+    "cachedOriginLimit": 24,
+    "candidateBlock": 64,
+    "maxBlockCandidates": 1024,
+    "sliceBudgetMs": 0.75
+  },
+  "cellsOrRadiusChanged": false,
+  "performanceLimit": "Desktop Node CPU/synthetic immediate frame scheduling only; concurrent jobs can affect timings. Not device FPS/GPU timing or wall-clock browser loading time."
+}

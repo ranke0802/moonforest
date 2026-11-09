@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "date": "2026-11-09",
+  "status": "build-validated",
+  "browserAutomation": false,
+  "tests": {
+    "total": 2116,
+    "passed": 2116,
+    "failed": 0,
+    "skipped": 0,
+    "durationMs": 178846.9477,
+    "logSha256": "5f75f44c125cb34914142bace9f7583c32f3ccd066d8051e08e16562313a5e2f"
+  },
+  "manualSummon": {
+    "perKind": 20,
+    "kinds": [
+      "bear",
+      "goblin",
+      "elena",
+      "mourning-elena"
+    ],
+    "maps": [
+      "village",
+      "great-plains",
+      "monster-forest",
+      "witch-cave"
+    ],
+    "independentPosesAndPhases": true,
+    "queuedPerActorTransform": true,
+    "atomicHiddenGroupActivation": true,
+    "lateMapCancellation": true,
+    "storyHomeRestoredOnReturn": true,
+    "otherKindPreservedOnFailure": true
+  },
+  "changes": [
+    "Cached clean model template; independent actor skeleton/animation/morph controls",
+    "Reuse prepared animator through public reset contract",
+    "Coalesce preparation boundaries under existing time/block budgets; preserve cancellation/deadline and real frame barriers",
+    "Configure immutable morph correction/policy before clone thaw to avoid redundant bootstrap texture packing",
+    "Bounded cancellable cave placement search and one complete deterministic packing retry without relaxing safety",
+    "Expose load/placement/preparation/activation wall times, CPU steps and frame waits in copied diagnostics"
+  ],
+  "preserved": [
+    "Player and boss texture files/resolutions",
+    "All art/geometry/LOD settings and map layouts",
+    "Combat timing, attack and hit detection",
+    "Cave full-pose safety payload and all non-summon Mourning class methods",
+    "Separate developer actor-lab/cinematic budgets"
+  ],
+  "measurement": "Node/NullEngine actual asset, scheduling and resource-identity checks. Texture input bytes are CPU packing inputs, not exact GPU resident memory. Synthetic wait timings are not mobile/browser spawn time. No physical-device FPS/heat or GPU timing claims.",
+  "build": {
+    "passed": true,
+    "manifests": 31,
+    "contentFiles": 1188,
+    "runtimeChunks": 65,
+    "resourceRevision": "e7e012fa69079c2f335893730faeaf58568b18e78391aa480006f4c64de8fec2"
+  },
+  "deployed": false
+}

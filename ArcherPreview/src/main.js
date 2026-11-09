@@ -248,7 +248,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({...mapWorkDiagnostics(),animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({...mapWorkDiagnostics(),summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -315,16 +315,15 @@ function toast(message, {stamina=false}={}) {
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { staminaNoticeAnchor?.reset();$('#toast').hidden = true; }, 4000);
 }
 function updateSummonControls(encounter=boss) {
-  const cave=isCave(),selection=bossSelection.current(cave),disabled=!ready||!isV2()||!!encounter?.loading;
+  const selection=bossSelection.current(),disabled=!ready||!isV2()||!!encounter?.loading;
   $('#boss-kind').value=selection.kind;
   $('#boss-kind').disabled=disabled;
-  for(const option of $('#boss-kind').options)option.disabled=option.value!=='bear'&&!cave;
   $('#boss-count').value=String(selection.count);
-  $('#boss-count').disabled=disabled||selection.phase!==null;
+  $('#boss-count').disabled=disabled;
   $('#summon-boss').disabled=disabled;
   $('#open-summon').disabled=disabled;$('#open-summon').hidden=!isV2();
-  text('#boss-selection-help',bossSelectionHelp(selection,cave));
-  const present=encounter?.encounters.some(enemy=>enemy.kind===(selection.phase?'elena':'bear'));
+  text('#boss-selection-help',bossSelectionHelp(selection));
+  const present=encounter?.encounters.some(enemy=>enemy.kind===(selection.phase?'elena':'bear')&&(!selection.phase||enemy.phase===selection.phase));
   text('#summon-boss',encounter?.loading?'불러오는 중…':present?'보스 다시 소환':'보스 소환');
 }
 
@@ -1074,13 +1073,13 @@ try {
     for(const name of ['pointercancel','lostpointercapture'])button.addEventListener(name,event=>actions.cancelDodgeInput('button:'+event.pointerId));
     button.addEventListener('click',event=>{if(event.detail===0&&performance.now()-lastPress>350)actions.dodge();});
   }
-  $('#boss-kind').addEventListener('change',()=>{bossSelection.choose($('#boss-kind').value,isCave());updateSummonControls();});
+  $('#boss-kind').addEventListener('change',()=>{bossSelection.choose($('#boss-kind').value);updateSummonControls();});
   $('#boss-count').addEventListener('change',()=>{bossSelection.setCount($('#boss-count').value);updateSummonControls();});
   for(const [selector,count,kind] of [['#summon-boss','#boss-count','bear'],['#summon-goblin','#goblin-count','goblin']])$(selector).addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
     try{
       input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;leaveElenaReview();
-      const selection=kind==='bear'?bossSelection.current(isCave()):null;
+      const selection=kind==='bear'?bossSelection.current():null;
       const summoned=await (selection?summonSelectedBoss(boss,actor,selection):boss.summon(actor,$(count).value,kind));
       if(!summoned)return;
       $('#summon-dialog').close();

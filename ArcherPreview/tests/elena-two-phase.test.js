@@ -80,7 +80,8 @@ test('boss selector reuses one Elena per phase near the player without changing 
   }
   assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);
   assert.ok(events.every(event=>event.stage!=='screen'&&event.type!=='error'),'pooled summons must skip screen preparation');
-  const phase=battle.residentPhase;world.cave=false;assert.equal(await battle.summonResident(player,1),false);assert.equal(battle.residentPhase,phase);
+  const phase=battle.residentPhase,witchHp=witch.brain.hp;world.cave=false;assert.equal(await battle.summonResident(player,1),true);assert.equal(battle.residentPhase,phase);
+  assert.equal(battle.encounters.filter(e=>e.kind==='elena'&&e.phase===1&&e.active).length,1,'manual phase one is available outside the story cave');assert.equal(witch.active,true);assert.ok(battle.encounters.includes(witch));assert.equal(witch.brain.hp,witchHp,'manual phase one preserves the living other phase');assert.equal(battle.playerHp,321);assert.equal(battle.potions.remaining,2);assert.equal(battle.combat.defense,13);
 });
 
 test('an enlarged resident or transformation finds a clear spawn outside player and cave walls',async t=>{
@@ -138,17 +139,14 @@ test('real phase-one defeat transforms once and preserves player state through p
   assert.equal(f.elenaModels.instances,1);assert.equal(f.mourningModels.instances,1);assert.equal(f.defeats.length,1);assert.deepEqual(snapshot(f),before);
 });
 
-test('the actual mourning model library adopts one packed container without cloning morph managers or skeletons',async t=>{
+test('the actual mourning library clones independent rigs and morph targets from one clean packed container',async t=>{
   const f=await fixture(t),{container,config}=f.mourningModels,library=new BossModelLibrary(f.scene,'mourning-elena');
   library.container=container;library.config=config;library.load=async()=>{library.loads=1;};
   const originalSkeletons=[...container.skeletons],originalManagers=[...new Set(container.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.equal(originalManagers.length,2);assert.deepEqual(originalManagers.map(manager=>manager.numTargets).sort((a,b)=>a-b),[1,11]);
-  const first=await library.instantiate(),after=snapshot(f);
-  for(let i=0;i<12;i++){
-    const again=await library.instantiate();assert.strictEqual(again.asset,first.asset);assert.strictEqual(again.config,config);assert.deepEqual(snapshot(f),after);
-  }
-  assert.deepEqual(first.asset.skeletons,originalSkeletons);first.asset.skeletons.forEach((skeleton,index)=>assert.strictEqual(skeleton,originalSkeletons[index]));
-  const adoptedManagers=[...new Set(first.asset.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))];assert.deepEqual(adoptedManagers,originalManagers);
-  originalManagers.forEach((manager,index)=>{assert.strictEqual(adoptedManagers[index],manager);assert.equal(f.scene.morphTargetManagers.filter(candidate=>candidate===manager).length,1);});assert.equal(f.scene.skeletons.length,originalSkeletons.length);
+  const first=await library.instantiate(),again=await library.instantiate();assert.notStrictEqual(again.asset,first.asset);assert.strictEqual(again.config,config);
+  first.asset.skeletons.forEach((skeleton,index)=>{assert.notStrictEqual(skeleton,originalSkeletons[index]);assert.notStrictEqual(skeleton,again.asset.skeletons[index]);});
+  const managers=a=>[...new Set(a.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))],clonedManagers=managers(first.asset),againManagers=managers(again.asset);assert.deepEqual(clonedManagers.map(m=>m.numTargets),originalManagers.map(m=>m.numTargets));
+  originalManagers.forEach((manager,index)=>{assert.notStrictEqual(clonedManagers[index],manager);assert.notStrictEqual(clonedManagers[index],againManagers[index]);assert.notStrictEqual(clonedManagers[index].getTarget(0),againManagers[index].getTarget(0));assert.strictEqual(clonedManagers[index].getTarget(0).getPositions(),againManagers[index].getTarget(0).getPositions());});
 });
 
 test('first offline pose and same-frame relocation refresh the mesh root before bones and cloth',async t=>{

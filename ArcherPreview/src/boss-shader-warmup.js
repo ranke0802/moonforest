@@ -1,7 +1,7 @@
 import {createBossPreparation} from './boss-preparation.js';
 import {canInlineHitFlash} from './hit-feedback.js';
 import {overlaySubMeshReadiness} from './overlay-readiness.js';
-// Compile body and silhouette before showing the actor. Yield between shader
+// Compile body and silhouette before showing the actor. Budget shader
 // variants, polling the REAL submesh/skin/morph variant ourselves. Babylon's
 // forceCompilationAsync starts a private 16ms loop with no cancellation/timeout.
 export async function prepareBossShaders(asset,{preparation,frame,now,shadows,timeoutMs=45000}={}){
@@ -16,7 +16,7 @@ export async function prepareBossShaders(asset,{preparation,frame,now,shadows,ti
       // rendering is restored last; shared textures/materials are not cloned.
       const variants=mesh.metadata?.moonforestEnemyFade&&!mesh.metadata?.moonforestOutline?[.5,visibility]:[visibility];
       for(const value of variants){
-        mesh.visibility=value;await job.nextFrame();
+        mesh.visibility=value;await job.pause();
         for(;;){
           job.check();let ready=true;
           const subMeshes=material._storeEffectOnSubMeshes?mesh.subMeshes:null;
@@ -38,7 +38,7 @@ export async function prepareBossShaders(asset,{preparation,frame,now,shadows,ti
         // flash. Prepare that exact pass/skin/morph/batch without drawing it.
         const scene=mesh.getScene?.(),overlay=mesh.metadata?.moonforestEnemyFade&&!mesh.metadata?.moonforestOutline&&!canInlineHitFlash(mesh)&&scene?.getOutlineRenderer;
         if(overlay){
-          await job.nextFrame();
+          await job.pause();
           for(;;){
             job.check();let ready=true;
             for(const sub of mesh.subMeshes??[]){
@@ -56,7 +56,7 @@ export async function prepareBossShaders(asset,{preparation,frame,now,shadows,ti
       // variant without registering a hidden actor or drawing an extra shadow.
       const shadowMap=shadows?.getShadowMap?.(),scene=mesh.getScene?.(),engine=scene?.getEngine();
       if(!mesh.metadata?.moonforestOutline&&shadowMap&&engine){
-        await job.nextFrame();
+        await job.pause();
         for(;;){
           job.check();let ready=true;const previous=engine.currentRenderPassId;
           try{

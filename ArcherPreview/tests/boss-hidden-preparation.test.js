@@ -127,7 +127,7 @@ test('failed shader preparation stays hidden, does not retry in the update loop,
  try{assert.equal(await f.battle.preloadMourning(),false);}finally{console.warn=warn;}
  assertWarmInvisible(f);const e=f.battle.mourningPool[0],calls=f.compileCalls.length,scans=e.assetPreparationStep;assert.equal(scans,5);assert.equal(f.battle.mourningWarmJob.status,'error');
  step(f,120);assert.equal(f.compileCalls.length,calls);assert.equal(await f.battle.preloadMourning(),false);assert.equal(f.compileCalls.length,calls);
- assert.equal(await f.battle.summonResident(f.player,2),true);assert.strictEqual(f.battle.encounters[0],e);assert.equal(f.mourningModels.instances,1);assert.equal(e.preparationStats.blocks,0,'explicit recovery resumes after completed vertex proof');
+ assert.equal(await f.battle.summonResident(f.player,2),true);assert.strictEqual(f.battle.encounters[0],e);assert.equal(f.mourningModels.instances,1);assert.equal(e.preparationStats.blocks-(e.preparationStats.placementBlocks??0),0,'explicit recovery resumes after completed vertex proof; safe placement blocks are separate');
  reports.push({case:'failure-explicit-recovery',instances:f.mourningModels.instances,compileRequests:f.compileCalls.length,firstAttemptCompileRequests:calls,counts:counts(f)});
 });
 
@@ -170,8 +170,8 @@ test('real resident cold and warm activation reports animator work and preserves
  const pose=e=>({hp:e.brain.hp,state:e.brain.state,actor:e.actor.position.asArray(),nodes:e.asset.transformNodes.map(n=>[n.name,...n.position.asArray(),...(n.rotationQuaternion?.asArray()??[0,0,0,1])]),morph:e.asset.meshes.filter(m=>m.morphTargetManager&&!m.metadata?.moonforestOutline).map(m=>Array.from({length:m.morphTargetManager.numTargets},(_,i)=>m.morphTargetManager.getTarget(i).influence))});
  async function activation(label,fn){const before=f.events.length,start=performance.now();assert.equal(await fn(),true);const elapsed=performance.now()-start,event=f.events.slice(before).find(e=>e.type==='ready');assert.ok(event?.preparationStats);cases.push({label,elapsedDesktopMs:elapsed,preparationStats:structuredClone(event.preparationStats)});return f.battle.encounters.find(e=>e.kind==='elena');}
  let e=await activation('saint-cold',()=>f.battle.activateResident(f.player,{reset:true}));const saint=pose(e);
- assert.ok(cases.at(-1).preparationStats.steps.some(s=>s.name==='model-adopt'&&Number.isFinite(s.ms)));
- assert.ok(!cases.at(-1).preparationStats.steps.some(s=>s.name==='model-clone'));
+ assert.ok(cases.at(-1).preparationStats.steps.some(s=>s.name==='model-clone'&&Number.isFinite(s.ms)));
+ assert.ok(!cases.at(-1).preparationStats.steps.some(s=>s.name==='model-adopt'));
  e=await activation('saint-reset',()=>f.battle.activateResident(f.player,{reset:true}));nearPose(pose(e),saint);
  assert.ok(!cases.at(-1).preparationStats.steps.some(s=>s.name==='model-adopt'||s.name==='model-clone'));
  assert.equal(await f.battle.preloadMourning(),true);const prefetch=structuredClone(f.battle.mourningWarmJob.preparation.stats);
@@ -192,7 +192,7 @@ test('foreground preparation includes bounded-consumer stats on error and cancel
 
 test('contact creation stays hidden through cancellation and resumes on the same mesh',async t=>{
  const f=await fixture(t),gate=deferred(),entered=deferred();let held=false;
- f.battle.preparationOptions={frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
+ f.battle.preparationOptions={maxBlocks:1,frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
  const pending=f.battle.activateResident(f.player,{reset:true});await entered.promise;const e=f.battle.elenaPool[0],contact=e.contact;
  assert.equal(contact.mesh.isEnabled(),false);assert.equal(e.actor.isEnabled(),false);f.battle.hide();f.world.cave=false;assert.equal(await pending,false);
  gate.resolve();await Promise.resolve();assert.equal(contact.mesh.isEnabled(),false);assert.equal(e.active,false);
@@ -203,7 +203,7 @@ test('contact creation stays hidden through cancellation and resumes on the same
 
 test('disposing the scene while contact shader preparation waits cannot expose a late mesh',async t=>{
  const f=await fixture(t),gate=deferred(),entered=deferred();let held=false;
- f.battle.preparationOptions={frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
+ f.battle.preparationOptions={maxBlocks:1,frame:async()=>{const e=f.battle.elenaPool[0];if(!held&&e?.contact&&!e.contact.prepared){held=true;entered.resolve();await gate.promise;}}};
  const pending=f.battle.activateResident(f.player,{reset:true});await entered.promise;const e=f.battle.elenaPool[0],contact=e.contact;f.scene.dispose();
  assert.equal(await pending,false);gate.resolve();await Promise.resolve();assert.equal(contact.mesh.isDisposed(),true);assert.equal(e.active,false);
 });

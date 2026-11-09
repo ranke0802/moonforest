@@ -1,0 +1,31 @@
+{
+  "revision": "manual-elena-summon-placement-v1",
+  "path": "../src/mourning-elena-encounter.js",
+  "previousCommit": "89c2eed",
+  "beforeSha256": "38a212819d23f106011127220013a8c1ed3ee1eee3e461dc1264a0cfd4c1503c",
+  "afterSha256": "1e6c0660d6a4c515106ceac1e208ef5f9af5f97a4dbc23193e7c1e7b10498388",
+  "unchangedNonSummonSha256": "b1467a131a9952b989052fe732aa8bc9d88b29a9949f9ecfe075da2bfc598585",
+  "unchangedClassMethods": {
+    "constructor": "3fbf4d7fc2787b79ef8c4e85e62ce601fbf36c1e2b2c2c480ade7f31eed71cec",
+    "update": "05893f845c8135b630be5c52d13617ea11b086438b938aad8c31e0cde74fe17f",
+    "hide": "2f425cbe6d42686f40d829536a55adad038556118136ee241a4089a612e43574",
+    "createBrain": "bbff24bb89d1f30e335712cfcec5f837279dc99ad481ee8b1d2bbdc7589939b6",
+    "movementNavigation": "683827b64ecf31dd91b50d0f83e0fdc139c66239f68c0ac7d4930fc8e134e6ad",
+    "contactSeparation": "c7dacd01ac3ac0285650ab9d1faa4f7e294a6e3217b98bd425490df16fccf561",
+    "prepareAsset": "17c3b51ee086437daf8a4b20a0e739239dd0839d2226a4fd8400008d4344024c",
+    "createAnimator": "84a2e1ec8185daaad8e8a0b7df1b7e932c470c864a31c227e7c690bdc12aede7",
+    "healthBarPosition": "a7dbc641a8d5c90cad4cfb2eb521cd187e6c92b3d24d9723c4bb27330108baf6",
+    "alignPose": "909b95488a798084e99ffc91b6ce40d857ab182ee8d59b924dda67fa4e39450b",
+    "hurtCapsules": "760bc400719c928915900920655c73516e5509b10bd5a9f7d8f10435cb3c0bc9",
+    "updateRenderRange": "230e98e4adb12a91a5da33b620c056af57b522687925faee6e9354567b9c46e5"
+  },
+  "cellPayloadSha256": "e5f982e62688dbdefd75c1d6709eda228bfcafe5dd48c1b3139073e57fd3eb66",
+  "scope": "Only summon() request reentry, immutable requested coordinates, occupied-body fallback and optional incremental preparation changed. All other class methods, pose/morph/death preparation helpers and existing gameplay grid data remain byte exact; no rebake.",
+  "allNonMetadataFieldsExact": true,
+  "cellDataRebaked": false,
+  "sourceFilesChanged": [
+    "ArcherPreview/src/mourning-elena-encounter.js",
+    "ArcherPreview/src/elena-encounter.js",
+    "ArcherPreview/src/mourning-cave-navigation.js"
+  ]
+}

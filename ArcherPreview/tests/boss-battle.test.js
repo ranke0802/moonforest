@@ -77,7 +77,7 @@ test('far enemy draw suppression is reversible and leaves combat/model state int
 });
 
 test('spawn count is bounded and five bosses have separate positions inside the arena',()=>{
-  assert.deepEqual(['2',0,99,'bad',3.9].map(normalizeBossCount),[2,1,5,1,3]);
+  assert.deepEqual(['2',0,99,'bad',3.9].map(normalizeBossCount),[2,1,20,1,3]);
   for(const center of [Vector3.Zero(),new Vector3(9,0,9)]) {
     const positions=bossSpawnPositions({position:center,rotation:{y:1}},5);
     for(let i=0;i<5;i++){assert.ok(positions[i].length()<=21.5001);for(let j=i+1;j<5;j++)assert.ok(Vector3.Distance(positions[i],positions[j])>2);}

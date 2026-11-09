@@ -37,13 +37,15 @@ async function packedFixture(t,id,{textureMode=false}={}){
   return {engine,scene,container,library,config};
 }
 
-for(const id of ['elena','mourning-elena'])test(`${id} keeps one packed resident asset through repeated requests without cloning`,async t=>{
+for(const id of ['elena','mourning-elena'])test(`${id} permits 20 independent packed actors without mutating the clean cached template`,async t=>{
   const {scene,container,library}=await packedFixture(t,id);
   let clones=0;const clone=container.instantiateModelsToScene.bind(container);container.instantiateModelsToScene=(...args)=>{clones++;return clone(...args);};
-  const first=await library.instantiate(),before=counts(scene);
-  for(let i=0;i<20;i++)assert.strictEqual((await library.instantiate()).asset,first.asset);
-  assert.equal(clones,0);assert.deepEqual(counts(scene),before);
-  assert.deepEqual(first.asset.meshes,container.meshes);assert.strictEqual(first.asset.skeletons,container.skeletons);assert.strictEqual(first.asset.animationGroups,container.animationGroups);
+  const sourceRoots=container.meshes.filter(m=>!m.parent),sourceNodes=new Set([...container.meshes,...container.transformNodes]),sourceTargets=new Set(container.animationGroups.flatMap(g=>g.targetedAnimations.map(a=>a.target))),first=await library.instantiate(),all=[first.asset];
+  const body=first.asset.meshes.find(m=>m.getTotalVertices()),sourceBody=container.meshes.find(m=>m.name===body.name);body.position.x=37;body.metadata={...body.metadata,moonforestOutline:true};MeshBuilder.CreateBox('live-only-child',{},scene).parent=body;
+  for(let i=1;i<20;i++){const next=(await library.instantiate()).asset;all.push(next);assert.notStrictEqual(next,first.asset);assert.ok(next.meshes.every(m=>m.name!=='live-only-child'&&!m.metadata?.moonforestOutline));assert.equal(next.meshes.find(m=>m.name===body.name).position.x,sourceBody.position.x);}
+  assert.equal(clones,20);assert.equal(new Set(all.map(a=>a.skeletons[0])).size,20);assert.ok(sourceRoots.every(m=>!m.parent));assert.ok([...sourceNodes].every(n=>!n.metadata?.moonforestOutline));
+  for(const a of all){assert.notStrictEqual(a.skeletons[0],container.skeletons[0]);for(const g of a.animationGroups)for(const {target}of g.targetedAnimations)assert.equal(sourceTargets.has(target),false);}
+  assert.equal(container.meshes.some(m=>m.name==='live-only-child'),false);
   assert.equal(first.asset.meshes.filter(m=>m.getTotalVertices()).reduce((n,m)=>n+m.getTotalIndices()/3,0),id==='elena'?56918:49982);
 });
 
@@ -55,18 +57,18 @@ test('counted bear instances still receive separate actors',async t=>{
 });
 
 test('texture morph pruning keeps stable r9 shader slots, identical skin/normals and shared shadow/outline bindings',async t=>{
-  const {scene,library}=await packedFixture(t,'mourning-elena',{textureMode:true}),{asset}=await library.instantiate();
+  const {scene,library,container}=await packedFixture(t,'mourning-elena',{textureMode:true}),rawManager=container.meshes.find(m=>m.name==='Elina_Chimera_Skin').morphTargetManager,rawTargets=Array.from({length:rawManager.numTargets},(_,i)=>[hash(rawManager.getTarget(i).getPositions()),hash(rawManager.getTarget(i).getNormals())]),{asset}=await library.instantiate();
   const body=asset.meshes.find(m=>m.name==='Elina_Chimera_Skin');assert.ok(body,'select the authored body, not the separate mouth interior');
   const manager=body.morphTargetManager,targets=Array.from({length:manager.numTargets},(_,i)=>manager.getTarget(i));
   assert.equal(targets.length,11);
   const mouth=asset.meshes.find(m=>/Lament_Mouth_Interior/.test(m.name));assert.ok(mouth);const mouthManager=mouth.morphTargetManager;
   assert.notStrictEqual(mouthManager,manager);assert.equal(mouthManager.numTargets,1);assert.equal(new Set(asset.meshes.map(m=>m.morphTargetManager).filter(Boolean)).size,2);
-  const original={positions:hash(body.getVerticesData(VertexBuffer.PositionKind)),normals:hash(body.getVerticesData(VertexBuffer.NormalKind)),targets:targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())])};
+  const original={positions:hash(body.getVerticesData(VertexBuffer.PositionKind)),normals:hash(body.getVerticesData(VertexBuffer.NormalKind)),targets:rawTargets};
   let synchronizations=0;const synchronize=manager.synchronize.bind(manager);manager.synchronize=()=>{synchronizations++;return synchronize();};
-  MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,1,'one initial upload folds the local death correction into the existing target');
+  MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,0,'the clean template already folded the death correction into the first clone upload');
   const preparedTargets=targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]);
   targets.forEach((target,i)=>{if(target.name==='Death_Ground_Contact')assert.notDeepEqual(preparedTargets[i],original.targets[i]);else assert.deepEqual(preparedTargets[i],original.targets[i]);});
-  const texture=manager._targetStoreTexture;MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,1);assert.strictEqual(manager._targetStoreTexture,texture);
+  const texture=manager._targetStoreTexture;MourningElenaEncounter.prototype.prepareAsset.call({asset});assert.equal(synchronizations,0);assert.strictEqual(manager._targetStoreTexture,texture);
   assert.equal(mouthManager.isUsingTextureForTargets,true);assert.equal(mouthManager.numMaxInfluencers,1);assert.notStrictEqual(mouthManager._targetStoreTexture,texture);
   const painted=new PBRMaterial('test-elena-painted',scene);painted.unlit=true;
   for(const mesh of asset.meshes)if(mesh.getTotalVertices())mesh.material=painted;
@@ -102,7 +104,7 @@ test('texture morph pruning keeps stable r9 shader slots, identical skin/normals
   shell.skeleton.prepare(true);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,.72);
   applyHitFlash(asset.meshes,0);shell.material.bind(shell.computeWorldMatrix(true),shell,effect,shell.subMeshes[0]);assert.equal(uniforms.hitFlash,0);
   assert.equal(hash(body.getVerticesData(VertexBuffer.PositionKind)),original.positions);assert.equal(hash(body.getVerticesData(VertexBuffer.NormalKind)),original.normals);assert.deepEqual(targets.map(target=>[hash(target.getPositions()),hash(target.getNormals())]),preparedTargets);
-  assert.equal(synchronizations,1,'after initial preparation, weight changes only update bindings and never rebuild the morph texture');
+  assert.equal(synchronizations,0,'after clone creation, weight changes only update bindings and never rebuild the morph texture');
 });
 
 test('attribute-mode fallback preserves r9 body/mouth targets and binds each manager within the engine limit',async t=>{

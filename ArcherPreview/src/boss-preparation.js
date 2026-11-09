@@ -13,8 +13,8 @@ export function bossPreparationFrame(signal){
 }
 export function runPreparationSync(work){let next;do{next=work.next();}while(!next.done);return next.value;}
 export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationFrame,now=()=>performance.now(),incremental=true,budgetMs=1.5,maxBlocks=4,timeoutMs=45000}={}){
-  const stats={yields:0,slices:0,blocks:0,maxSliceMs:0,steps:[]};
-  const controller=new AbortController(),started=now(),waiters=new Set();let reason=null;
+  const stats={yields:0,slices:0,blocks:0,maxSliceMs:0,coalescedPauses:0,frameWaitMs:0,steps:[]};
+  const controller=new AbortController(),started=now(),waiters=new Set();let reason=null,sliceStarted=started,sliceBlocks=0,firstFrame=true;
   const cancel=(error=bossPreparationCancelled())=>{if(reason)return;reason=error;controller.abort(error);for(const reject of [...waiters])reject(error);};
   const check=()=>{if(!reason&&!isCurrent())cancel();if(!reason&&now()-started>=timeoutMs)cancel(bossPreparationTimeout());if(reason)throw reason;};
   const preparation={incremental,stats,check,cancel,signal:controller.signal,get pendingWaits(){return waiters.size;},
@@ -32,17 +32,24 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
       const delay=new Promise((resolve,reject)=>{let timer;const abort=()=>{clearTimeout(timer);signal.removeEventListener('abort',abort);reject(signal.reason??bossPreparationCancelled());};signal.addEventListener('abort',abort,{once:true});timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},ms);});
       return this.wait(delay);
     },
-    async nextFrame(){check();stats.yields++;await this.wait(frame(controller.signal));},
-    async pause(){check();if(incremental)await this.nextFrame();},
+    async nextFrame(){check();stats.yields++;const start=now();await this.wait(frame(controller.signal));stats.frameWaitMs+=Math.max(0,now()-start);sliceStarted=now();sliceBlocks=0;firstFrame=false;},
+    async pause(){
+      check();if(!incremental)return;
+      // Cheap preparation boundaries can share one task slice. The first
+      // boundary still gives UI/cancellation a frame, and either the existing
+      // time budget or block ceiling forces the next scheduling opportunity.
+      if(firstFrame||sliceBlocks>=maxBlocks||now()-sliceStarted>=budgetMs)await this.nextFrame();else stats.coalescedPauses++;
+      sliceBlocks++;
+    },
     async step(name,fn){await this.pause();const start=now();const value=fn();stats.steps.push({name,ms:Math.max(0,now()-start)});check();return value;},
     async run(work){
       check();if(!incremental)return runPreparationSync(work);
       let next;
       do{
-        check();const start=now();let blocks=0;
-        do{next=work.next();blocks++;stats.blocks++;}while(!next.done&&blocks<maxBlocks&&now()-start<budgetMs);
+        check();if(firstFrame||sliceBlocks>=maxBlocks||now()-sliceStarted>=budgetMs)await this.nextFrame();const start=now();let blocks=0;
+        do{next=work.next();blocks++;stats.blocks++;sliceBlocks++;}while(!next.done&&blocks<maxBlocks&&sliceBlocks<maxBlocks&&now()-sliceStarted<budgetMs);
         stats.slices++;stats.maxSliceMs=Math.max(stats.maxSliceMs,Math.max(0,now()-start));
-        if(!next.done)await this.pause();
+        if(!next.done)await this.nextFrame();
       }while(!next.done);
       check();return next.value;
     }

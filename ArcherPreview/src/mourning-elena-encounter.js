@@ -85,12 +85,24 @@ export class MourningElenaEncounter extends ElenaEncounter {
     return new MourningElenaAnimator(this.asset,this.config,this.actor);
   }
   async summon(player,options={}){
+    if(this.loading||this.summonPlacementPending)return;
+    this.summonPlacementPending=true;
+    try{
     this.slamAdvance.reset();
-    const position=(options.position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8))).clone(),navigation=this.movementNavigation;
-    if(navigation&&(!navigation.free(position,this.radius)||Math.hypot(position.x-player.position.x,position.z-player.position.z)<this.radius+.8)){
-      const safe=navigation.findFree(position,this.radius,ENEMY_ARENA_RADIUS,[{x:player.position.x,z:player.position.z,radius:.8}]);position.x=safe.x;position.z=safe.z;
+    const requested=options.position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)),position=new Vector3(requested.x,requested.y??0,requested.z),navigation=this.movementNavigation;
+    if(![position.x,position.y,position.z].every(Number.isFinite))throw new TypeError('Invalid Mourning Elena summon position');
+    // The caller snapshots all other summoned bodies. Never let a fallback for
+    // one large actor reuse another actor's newly occupied safe destination.
+    const occupied=(options.occupied??[]).map(other=>({... (other.position??other),radius:other.radius??this.radius}));
+    const available=p=>(!navigation?.free||navigation.free(p,this.radius,ENEMY_ARENA_RADIUS))&&Math.hypot(p.x-player.position.x,p.z-player.position.z)>=this.radius+.8&&occupied.every(other=>Math.hypot(p.x-other.x,p.z-other.z)>=this.radius+other.radius+.12);
+    if(!available(position)){
+      if(!navigation?.findFree)throw new Error('비탄의 마녀가 안전하게 등장할 공간이 없습니다.');
+      const safe=await navigation.findFree(position,this.radius,ENEMY_ARENA_RADIUS,[{x:player.position.x,z:player.position.z,radius:.8},...occupied],options.preparation);
+      if(!safe||![safe.x,safe.z].every(Number.isFinite)||!available(safe))throw new Error('비탄의 마녀가 안전하게 등장할 공간이 없습니다.');
+      position.x=safe.x;position.z=safe.z;
     }
     await super.summon(player,{...options,position});this.contact.mesh.scaling.set(MOURNING_SIZE.contactScale,1,MOURNING_SIZE.contactScale);
+    }finally{this.summonPlacementPending=false;}
   }
   healthBarPosition(){return this.healthAnchor.copyFrom(this.actor.position).addInPlaceFromFloats(0,MOURNING_SIZE.bodyHeight+.3,0);}
   alignPose(){

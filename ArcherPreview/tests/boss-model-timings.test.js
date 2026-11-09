@@ -8,7 +8,7 @@ import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {BossModelLibrary} from '../src/boss-models.js';
 const base=new URL('../public/assets/',import.meta.url);
-for(const id of ['guardian-bear','hooded-goblin','elena','mourning-elena'])test(`actual ${id} timing preserves independent clone or single resident ownership`,async t=>{
+for(const id of ['guardian-bear','hooded-goblin','elena','mourning-elena'])test(`actual ${id} timing preserves independent clones from the cached clean source`,async t=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;
  Object.assign(engine.getCaps(),{textureFloat:true,canUseGLVertexID:true,maxTextureSize:4096});
  engine.createRawTexture2DArray=(data,w,h,d,f,m,i,s,c,type)=>{const texture=engine.createRawTexture(data,w,h,f,m,i,s,c,type);texture.depth=d;texture.is2DArray=true;return texture;};
@@ -18,11 +18,10 @@ for(const id of ['guardian-bear','hooded-goblin','elena','mourning-elena'])test(
  const loader=new GLTFFileLoader();loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:gltf},'');for(const group of container.animationGroups)group.stop();
  const library=new BossModelLibrary(scene,id);Object.assign(library,{config,container,load:async()=>{}});
  t.after(()=>{container.dispose();loader.dispose();scene.dispose();engine.dispose();});
- const a=await library.instantiate(),b=await library.instantiate(),resident=id==='elena'||id==='mourning-elena';
- assert.equal(a.modelTimings.mode,resident?'adopt':'clone');assert.equal(b.modelTimings.mode,resident?'reuse':'clone');
- assert.deepEqual(a.modelTimings.steps.map(s=>s.name),resident?['model-adopt']:['model-clone','node-collection']);assert.deepEqual(b.modelTimings.steps.map(s=>s.name),resident?[]:['model-clone','node-collection']);
+ const a=await library.instantiate(),b=await library.instantiate();
+ assert.equal(a.modelTimings.mode,'clone');assert.equal(b.modelTimings.mode,'clone');
+ assert.deepEqual(a.modelTimings.steps.map(s=>s.name),['model-clone','node-collection']);assert.deepEqual(b.modelTimings.steps.map(s=>s.name),['model-clone','node-collection']);
  for(const step of [...a.modelTimings.steps,...b.modelTimings.steps])assert.ok(Number.isFinite(step.ms)&&step.ms>=0);
- if(resident){assert.strictEqual(a.asset,b.asset);assert.strictEqual(a.asset.skeletons,container.skeletons);return;}
  assert.notStrictEqual(a.asset,b.asset);assert.notStrictEqual(a.asset.skeletons[0],b.asset.skeletons[0]);
  const bodies=[a.asset.meshes.find(m=>m.getTotalVertices()>0),b.asset.meshes.find(m=>m.getTotalVertices()>0)];assert.notStrictEqual(bodies[0],bodies[1]);assert.strictEqual(bodies[0].geometry,bodies[1].geometry);
  for(let i=0;i<a.asset.animationGroups.length;i++){

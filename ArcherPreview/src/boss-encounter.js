@@ -132,7 +132,7 @@ export class BossEncounter {
     await this.prepareAuxiliary(preparation);preparation.check();
     this.assetPrepared=true;this.preparationStats=preparation.stats;this.preparationPhase('model');return this.asset;
   }
-  async summon(player,{position,rotationY,preparation,reuseAnimator=false}={}){
+  async summon(player,{position,rotationY,preparation,reuseAnimator=false,activate=true}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
     try{
@@ -148,14 +148,14 @@ export class BossEncounter {
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
       this.deathShadowsRemoved=false;
-      for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
+        for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(activate&&mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
-      this.actor.setEnabled(true);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
-      this.ring.setEnabled(true);
+        this.actor.setEnabled(activate);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
+        this.ring.setEnabled(activate);
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.world.terrain?.place(this.actor.position);
-      this.active=true;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
+        this.active=activate;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
       this.routeState={};this.dodgeContactClearance=false;
       this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}

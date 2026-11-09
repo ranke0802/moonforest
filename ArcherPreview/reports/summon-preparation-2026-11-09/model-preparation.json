@@ -1,0 +1,232 @@
+{
+  "scope": "Actual packed models, Babylon NullEngine clone/hidden-preparation CPU and synthetic scheduling waits; immutable geometry/texture quality unchanged. No physical GPU, device FPS or temperature claims.",
+  "records": [
+    {
+      "case": "20-mourning-model-clones",
+      "baseline": {
+        "load": {
+          "wallMs": 1344.0567999999985,
+          "processCpuMs": 1469
+        },
+        "wallMs": 3436.1993999999995,
+        "processCpuMs": 5985,
+        "clones": 20,
+        "cloneTimes": [
+          284.6046000000006,
+          239.1921000000002,
+          188.28809999999976,
+          116.78800000000047,
+          214.58689999999842,
+          135.89489999999932,
+          165.72220000000016,
+          152.98559999999998,
+          220.36549999999988,
+          134.13130000000092,
+          172.73420000000078,
+          195.6175000000003,
+          128.39799999999923,
+          162.52939999999944,
+          192.79830000000038,
+          107.95399999999972,
+          149.30149999999958,
+          187.0751999999993,
+          143.67489999999998,
+          142.3758999999991
+        ],
+        "textureArrayInputCalls": 82,
+        "textureArrayInputBytes": 532388608,
+        "textureDimensions": [
+          {
+            "width": 4096,
+            "height": 18,
+            "depth": 11,
+            "bytes": 12976128
+          },
+          {
+            "width": 560,
+            "height": 1,
+            "depth": 1,
+            "bytes": 8960
+          }
+        ],
+        "warmAdditionalMorphAllocations": 0,
+        "immutableTextureStoreOwnership": "Two per clone, owned independently by Babylon; no private GPU store sharing",
+        "gpuStorageResidencyMeasured": false,
+        "independentSkeletons": 20,
+        "independentMorphManagers": 40,
+        "sourceMeshArrayGrowth": 100,
+        "geometries": 4,
+        "deathPositionsSha256": "bb48e79954c35b6567e82782e4d8b3dcac59d333bef83469d48d251b1025dbdf",
+        "deathNormalsSha256": "5765644d53cb817787b90f2e907ace79e4da1bab8d40df1bc83fb6356bb5da46"
+      },
+      "optimized": {
+        "load": {
+          "wallMs": 1114.4763999999996,
+          "processCpuMs": 1828
+        },
+        "wallMs": 5083.397000000001,
+        "processCpuMs": 8187,
+        "clones": 20,
+        "cloneTimes": [
+          169.60429999999906,
+          206.03330000000096,
+          199.61160000000018,
+          211.76280000000042,
+          309.759799999998,
+          191.65610000000015,
+          219.70569999999861,
+          210.1942999999992,
+          295.20770000000266,
+          353.3590000000004,
+          205.627199999999,
+          240.01390000000174,
+          210.6870999999992,
+          313.7029000000002,
+          369.1977000000006,
+          214.83520000000135,
+          356.2910000000011,
+          218.37679999999818,
+          289.5663999999997,
+          297.52660000000105
+        ],
+        "textureArrayInputCalls": 43,
+        "textureArrayInputBytes": 285662976,
+        "textureDimensions": [
+          {
+            "width": 4096,
+            "height": 18,
+            "depth": 11,
+            "bytes": 12976128
+          },
+          {
+            "width": 560,
+            "height": 1,
+            "depth": 1,
+            "bytes": 8960
+          }
+        ],
+        "warmAdditionalMorphAllocations": 0,
+        "immutableTextureStoreOwnership": "Two per clone, owned independently by Babylon; no private GPU store sharing",
+        "gpuStorageResidencyMeasured": false,
+        "independentSkeletons": 20,
+        "independentMorphManagers": 40,
+        "sourceMeshArrayGrowth": 100,
+        "geometries": 4,
+        "deathPositionsSha256": "bb48e79954c35b6567e82782e4d8b3dcac59d333bef83469d48d251b1025dbdf",
+        "deathNormalsSha256": "5765644d53cb817787b90f2e907ace79e4da1bab8d40df1bc83fb6356bb5da46"
+      },
+      "inputBytesAvoided": 246725632,
+      "note": "CPU morph packing and texture-array input payload events from the actual SDK with an inert NullEngine array shim; not GPU memory residency, upload completion or physical FPS."
+    },
+    {
+      "case": "elena-hidden-preparation",
+      "runs": [
+        {
+          "legacyFrames": true,
+          "cold": {
+            "wallMs": 807.5776000000005,
+            "processCpuMs": 328,
+            "schedulerWaitMs": 358.65140000000247,
+            "yields": 10,
+            "coalescedPauses": 0
+          },
+          "warm": {
+            "wallMs": 11.304800000001705,
+            "processCpuMs": 0,
+            "yields": 0
+          },
+          "triangles": 56918,
+          "meshNames": [
+            "__root__",
+            "Elena_Meshy_Static",
+            "Elena_Meshy_Static / silhouette"
+          ],
+          "stillHidden": true
+        },
+        {
+          "legacyFrames": false,
+          "cold": {
+            "wallMs": 357.77600000000166,
+            "processCpuMs": 719,
+            "schedulerWaitMs": 80.57079999999769,
+            "yields": 6,
+            "coalescedPauses": 4
+          },
+          "warm": {
+            "wallMs": 0.033699999999953434,
+            "processCpuMs": 0,
+            "yields": 0
+          },
+          "triangles": 56918,
+          "meshNames": [
+            "__root__",
+            "Elena_Meshy_Static",
+            "Elena_Meshy_Static / silhouette"
+          ],
+          "stillHidden": true
+        }
+      ],
+      "frameDelay": "Synthetic 2ms scheduling opportunities to separate wait time from process CPU; no browser/rAF or real GPU timing."
+    },
+    {
+      "case": "mourning-elena-hidden-preparation",
+      "runs": [
+        {
+          "legacyFrames": true,
+          "cold": {
+            "wallMs": 1945.201000000001,
+            "processCpuMs": 781,
+            "schedulerWaitMs": 1215.9651000000013,
+            "yields": 46,
+            "coalescedPauses": 0
+          },
+          "warm": {
+            "wallMs": 0.05470000000059372,
+            "processCpuMs": 0,
+            "yields": 0
+          },
+          "triangles": 49982,
+          "meshNames": [
+            "__root__",
+            "Lament_Mouth_Interior",
+            "Halo_Attached_Streamers",
+            "Halo_Rigid_Emblem",
+            "Elina_Chimera_Skin",
+            "Halo_Attached_Streamers / silhouette",
+            "Halo_Rigid_Emblem / silhouette",
+            "Elina_Chimera_Skin / silhouette"
+          ],
+          "stillHidden": true
+        },
+        {
+          "legacyFrames": false,
+          "cold": {
+            "wallMs": 1847.7664000000004,
+            "processCpuMs": 1250,
+            "schedulerWaitMs": 1044.053299999996,
+            "yields": 44,
+            "coalescedPauses": 6
+          },
+          "warm": {
+            "wallMs": 0.05010000000038417,
+            "processCpuMs": 0,
+            "yields": 0
+          },
+          "triangles": 49982,
+          "meshNames": [
+            "__root__",
+            "Lament_Mouth_Interior",
+            "Halo_Attached_Streamers",
+            "Halo_Rigid_Emblem",
+            "Elina_Chimera_Skin",
+            "Halo_Attached_Streamers / silhouette",
+            "Halo_Rigid_Emblem / silhouette",
+            "Elina_Chimera_Skin / silhouette"
+          ],
+          "stillHidden": true
+        }
+      ],
+      "frameDelay": "Synthetic 2ms scheduling opportunities to separate wait time from process CPU; no browser/rAF or real GPU timing."
+    }
+  ]
+}

@@ -11,12 +11,20 @@ test('enemy fade variant warms before opaque and restores mesh visibility on can
   assert.deepEqual(seen,fail?[.5]:[.5,1]);assert.equal(mesh.visibility,1);assert.equal(mesh.material.allowShaderHotSwapping,true);
  }
 });
-test('hidden boss body and silhouette check the actual variants serially with a frame opportunity between each',async()=>{
+test('hidden boss body and silhouette check serially while cheap ready variants share one bounded slice',async()=>{
   const calls=[];
   const mesh=(name,outline=false)=>({name,metadata:outline?{moonforestOutline:true}:{},getTotalVertices:()=>300,material:{metadata:{moonforestMonsterToon:!outline},isReady(m){calls.push(m.name);return true;},forceCompilationAsync(){throw new Error('private unbounded poll must never be used');}}});
   const body=mesh('body'),outline=mesh('outline',true),empty={getTotalVertices:()=>0};
-  await prepareBossShaders({meshes:[body,empty,outline]},{frame:async()=>{calls.push('frame');}});
-  assert.deepEqual(calls,['frame','body','frame','outline']);
+  await prepareBossShaders({meshes:[body,empty,outline]},{frame:async()=>{calls.push('frame');},now:()=>0});
+  assert.deepEqual(calls,['frame','body','outline']);
+});
+
+test('ready shader variants still yield at the time budget and bounded task ceiling',async()=>{
+ for(const timeBudget of [false,true]){
+  let clock=0;const calls=[],meshes=Array.from({length:6},(_,i)=>({metadata:{moonforestOutline:true},getTotalVertices:()=>3,material:{isReady(){calls.push(i);if(timeBudget)clock+=2;return true;}}}));
+  await prepareBossShaders({meshes},{preparation:createBossPreparation({frame:async()=>calls.push('frame'),now:()=>clock,budgetMs:1.5,maxBlocks:4})});
+  assert.deepEqual(calls,timeBudget?meshes.flatMap((_,i)=>['frame',i]):['frame',0,1,2,3,'frame',4,5]);
+ }
 });
 test('a failed shader prepare does not proceed to expose subsequent unready variants',async()=>{
   let next=false;const first={metadata:{moonforestOutline:true},getTotalVertices:()=>1,material:{isReady(){throw new Error('compile failed');}}},second={...first,material:{isReady(){next=true;return true;}}};

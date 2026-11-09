@@ -1,5 +1,30 @@
 import {LoadAssetContainerAsync,MorphTargetManager} from '@babylonjs/core';
 import {readMapContainer} from './map-container.js';
+import {prepareMourningDeathDepth} from './mourning-death-depth.js';
+
+const preparedCloneSources=new WeakSet();
+export function prepareBossCloneSource(container){
+  if(preparedCloneSources.has(container))return;
+  // This existing immutable death-target correction is actor-independent.
+  // Correct it once before cloning; target objects/weights remain independent,
+  // while Babylon shares their immutable data arrays. No live actor is adopted.
+  for(const manager of new Set(container.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))){
+    manager.areUpdatesFrozen=true;
+    try{prepareMourningDeathDepth(manager,container.meshes);}finally{manager.areUpdatesFrozen=false;}
+  }
+  preparedCloneSources.add(container);
+}
+export function cloneBossMorphManager(source,scene){
+  const copy=new MorphTargetManager(scene,source.meshName);copy.areUpdatesFrozen=true;
+  try{
+    copy.useTextureToStoreTargets=source.useTextureToStoreTargets;
+    for(const field of ['enablePositionMorphing','enableNormalMorphing','enableTangentMorphing','enableUVMorphing','enableUV2Morphing','enableColorMorphing','optimizeInfluencers'])copy[field]=source[field];
+    copy.numMaxInfluencers=source.numMaxInfluencers;
+    for(let i=0;i<source.numTargets;i++)copy.addTarget(source.getTarget(i).clone());
+    copy.metadata=source.metadata;
+    copy.areUpdatesFrozen=false;return copy;
+  }catch(error){copy.dispose();throw error;}
+}
 
 export function loadBossModelContainer(scene,model,{lifetime}={}){
   if(lifetime)return lifetime.run(async()=>{
