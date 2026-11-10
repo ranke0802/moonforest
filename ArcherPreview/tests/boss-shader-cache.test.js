@@ -124,6 +124,18 @@ for(const manifest of ['elena','mourning-elena'])test(`${manifest} actual packed
  records.push({case:'actual-packed-model-effects',manifest,allBossMaterialsUnfrozen:true,bodies:bodies.map(mesh=>({name:mesh.name,vertices:mesh.getTotalVertices(),boneInfluencers:mesh.numBoneInfluencers,morphTargets:mesh.morphTargetManager?.numTargets??0,textureMorphs:mesh.morphTargetManager?.isUsingTextureForTargets??false})),transitions,newEffectsOnFirstDisplayOrDeath:0,rawTexturesDuringWarm:afterWarmRaw-beforeRaw,rawTexturesAfterFirstDisplay:rawAfterFirstDraw-afterWarmRaw,resourcesBeforeDisplay:counts,resourcesAfterDisplay:inventory(f),sourceImagesLoaded:false});
 });
 
+test('actual goblin geometry reuses prepared body, outline, overlay and shadow effects through first fatal hit and fade',async t=>{
+ const f=fixture(t),{asset}=await packedAsset(f,t,'hooded-goblin');
+ for(const node of [...asset.meshes,...asset.transformNodes])if(!node.parent)node.parent=f.actor;
+ for(const mesh of asset.meshes)if(mesh.getTotalVertices()){mesh.alwaysSelectAsActiveMesh=true;if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;if(mesh.skeleton)mesh.skeleton.useTextureToStoreBoneMatrices=true;}
+ applyMonsterToon(asset);attachCharacterOutlines(asset,'goblin');enableEnemyFade(asset);
+ await prepareBossShaders(asset,{shadows:f.shadows,frame:async()=>{}});
+ const bodies=asset.meshes.filter(m=>m.getTotalVertices()&&!isRuntimeOutline(m)),prepared=f.effects.length;
+ f.actor.setEnabled(true);for(const m of bodies)f.shadows.addShadowCaster(m,false);f.scene.render();const beforeRequests=f.requests.length;
+ for(const visibility of [1,.999,.8,.5,.1]){for(const m of asset.meshes)m.visibility=visibility;if(visibility<1)for(const m of bodies)f.shadows.removeShadowCaster(m,false);applyHitFlash(asset.meshes,.1);f.scene.render();assert.equal(f.effects.length,prepared,'first fatal-hit/fade draw unexpectedly prepared another SDK effect');}
+ t.diagnostic(`goblin first fatal/fade cached effect requests: ${f.requests.length-beforeRequests}`);
+});
+
 for(const [manifest,Type]of [['guardian-bear',BossEncounter],['elena',ElenaEncounter],['mourning-elena',MourningElenaEncounter]])test(`${manifest} actual hidden encounter prepares its first contact or attack-warning draw before summon`,async t=>{
  const f=fixture(t),loaded=await packedAsset(f,t,manifest),terrain={heightAt:(x,z)=>.01*x+.02*z,place(p){p.y=this.heightAt(p.x,p.z);}},world={scene:f.scene,shadows:f.shadows,terrain},player=new TransformNode('aux-player',f.scene);
  const encounter=new Type(world,()=>{},()=>{},()=>{},{loadAsset:async()=>loaded});let draws=0;const draw=f.engine.drawElementsType.bind(f.engine);f.engine.drawElementsType=(...args)=>{draws++;return draw(...args);};

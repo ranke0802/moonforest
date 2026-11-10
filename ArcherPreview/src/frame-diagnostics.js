@@ -1,5 +1,6 @@
 import {BossDiagnostics,bossComparisonLines} from './boss-diagnostics.js';
 import {LongFrameRecording} from './long-frame-recording.js';
+import {DiagnosticBurstBudget} from './diagnostic-burst-budget.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -95,12 +96,17 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};
   enabled=readFrameDiagnosticPreference(storage,key);
   let drawCpuEnabled=!!drawCpuToggle&&readDrawCpuDiagnosticPreference(storage);
-  const recording=new LongFrameRecording({now});let recordingTimer=null,burstUntil=0,burstUsed=0,burstStart=0;
-  const finishBurst=at=>{if(!burstUntil)return;onContinuousDraw(false);burstUsed+=Math.max(0,Math.min(at,burstUntil)-burstStart);recording.detailBursts.at(-1).endedAtMs=at;burstUntil=0;};
+  const recording=new LongFrameRecording({now});let recordingTimer=null,burstUntil=0,burstBudget=null;
+  const finishBurst=at=>{if(!burstUntil)return;onContinuousDraw(false);recording.detailBursts.at(-1).endedAtMs=at;burstUntil=0;};
+  const startBurst=(at,critical,reason)=>{
+    if(recording.state!=='recording'||!drawCpuEnabled||!collecting||burstUntil)return false;
+    const duration=burstBudget.take(at-recording.startMs,critical);if(!duration)return false;
+    burstUntil=at+duration;recording.detailBursts.push({triggerAtMs:at,startedAtMs:at,plannedEndMs:burstUntil,critical,reason});onContinuousDraw(true);return true;
+  };
   const longStart=get('long-frame-start'),longStop=get('long-frame-stop'),longDownload=get('long-frame-download'),longStatus=get('long-frame-status');
   const syncRecording=()=>{const active=recording.state==='recording';if(longStart)longStart.disabled=!enabled||active;if(longStop)longStop.disabled=!active;if(longDownload)longDownload.disabled=recording.state==='idle';if(longStatus)longStatus.textContent=active?'기록 중 · 최대 10분':recording.state==='complete'?'기록 종료 · 파일을 다운로드하세요.':'성능 진단을 켜고 기록을 시작하세요.';};
   const stopRecording=reason=>{if(recording.state!=='recording')return;clearTimeout(recordingTimer);recordingTimer=null;finishBurst(now());recording.stop(reason);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();};
-  longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(metadata());burstUntil=0;burstUsed=0;recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
+  longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(metadata());burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
   longStop?.addEventListener('click',()=>stopRecording('manual'));
   longDownload?.addEventListener('click',()=>{
     if(recording.state==='idle')return;
@@ -168,7 +174,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     report.measurement+=' sceneryDemandMs and sceneryLoadStartMs are synchronous subintervals of sceneryGeometryMs; do not sum them with their parent. Sampled drawCpu textureUpload/shaderPrepare capture engine calls only within sampled renders; preparation outside the sampled render, asynchronous completion, GPU execution and driver scheduling may be missed.';
     report.measurement+=' sceneResources counts are instantaneous scene-level counts; observer counts cover only the three named scene observables and include observers pending removal. SDK active animatables include paused bindings; these counts are not leak proof or total memory.';
     report.measurement+=' activeMeshCandidates reports the last candidate-provider input, omitted registered disabled static instances/empty clone roots and submitted candidates, not final visible/drawn meshes. textureWork.stage covers resource/texture preparation or material promotion; lastPromoteMs is the last successful synchronous material assignment CPU duration, not GPU upload time or the current pending job duration.';
-    report.measurement+=' drawCpu is separately opt-in and defaults off. When selected, it periodically samples one scene render per second and can capture coalesced event-requested frames after defeat, viewport changes or texture promotion, spaced by at least 250ms. Its wrappers/timers can perturb that render. latest is historical and identified by reason/sampleId/sceneFrameId/ageMs; it is not necessarily the delay event frame. slowSamples retains up to eight sampled renders taking at least 50ms, not all slow frames. ktxUploads retains up to eight most recent synchronous KTX upload CPU calls, including uploads between renders; their timestamps use performance.now, not GPU time. Uploads may be followed by deferred GPU work and these measurements cannot prove cause. Groups include cached/no-op calls and inclusive nested time and must not be summed or treated as actual GL calls. effectChanges counts engine effect-reference changes. Driver blocking, browser scheduling and GPU execution cannot be separated by these CPU clocks; no synchronous GPU read is added.';
+    report.measurement+=' drawCpu is separately opt-in and defaults off. When selected, it periodically samples one scene render per second and can capture coalesced event-requested frames after defeat, viewport changes or texture promotion, spaced by at least 250ms. Its wrappers/timers can perturb that render. latest is historical and identified by reason/sampleId/sceneFrameId/ageMs; it is not necessarily the delay event frame. slowSamples retains up to eight sampled renders taking at least 50ms, not all slow frames. slowCalls contains up to eight individual inclusive calls of at least 2ms with method and optional short shader name; nested calls may overlap, and a name does not prove compilation. ktxUploads retains up to eight most recent synchronous KTX upload CPU calls, including uploads between renders; their timestamps use performance.now, not GPU time. Uploads may be followed by deferred GPU work and these measurements cannot prove cause. Groups include cached/no-op calls and inclusive nested time and must not be summed or treated as actual GL calls. effectChanges counts engine effect-reference changes. Driver blocking, browser scheduling and GPU execution cannot be separated by these CPU clocks; no synchronous GPU read is added.';
     report.measurement+=' diagnosticCpuMs separately summarizes synchronous endFrame collection (counter snapshots, delay/boss recording, memory sampling and any scheduled HUD paint) since diagnostic reset. It excludes scene instrumentation/drawCpu hooks inside rendering, beginFrame, snapshot/copy work and GPU execution. It runs after jsSubmitMs is captured and is not attributed to any preceding frame interval or individual delay; its own final scalar bookkeeping is excluded.';
     report.measurement+=' GPU elapsed times are nonblocking asynchronous results from earlier engine frames, sampled at most about 4 Hz. They are not the CPU frame on which the result arrived and must not be added to CPU times. GPU summaries count each query sampleId once and assign boss phases only when the complete original query interval lies in that phase; crossing intervals are excluded. Unsupported, pending, disjoint, context-lost and stale values are null rather than zero. While paused, retained contains historical completed samples and their age, never current GPU time. No GPU fences, readPixels, finish, or synchronous result wait is used.';
     return report;
@@ -185,6 +191,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     snapshot,
     refresh:paint,
     get enabled(){return enabled;},
+    captureEvent(reason){return startBurst(now(),true,String(reason??'event').slice(0,64));},
     mark(){return collecting?now():null;},
     measure(name,start){if(start!==null&&collecting&&name in sections)sections[name]+=Math.max(0,now()-start);},
     bossEvent(event){if(!enabled)return;if(event.type==='begin'&&comparison)comparison.open=true;bosses.event(event,now(),sampleMemory(true),context());next=0;paint();},
@@ -199,9 +206,9 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
       if(recording.state==='recording'&&monitor.interval>0){
         const workMs=Math.max(0,time-monitor.frameStart);recording.record({startMs:monitor.frameStart,intervalMs:monitor.interval,workMs,targetFps:monitor.targetFps,metrics,sections:{...sections},context});
         if(burstUntil&&time>=burstUntil)finishBurst(time);
-        if(drawCpuEnabled&&!burstUntil&&burstUsed<10000&&(monitor.interval>50||workMs>50||metrics.drawSubmissionMs>50)){
-          burstStart=time;burstUntil=time+Math.min(1000,10000-burstUsed);recording.detailBursts.push({triggerAtMs:time,startedAtMs:time,plannedEndMs:burstUntil});onContinuousDraw(true);
-        }
+        const critical=monitor.interval>=200||workMs>=200||metrics.drawSubmissionMs>=200;
+        const slow=monitor.interval>50||workMs>50||metrics.drawSubmissionMs>50;
+        if(drawCpuEnabled&&slow)startBurst(time,critical,critical?'critical-frame':'slow-frame');
       }
       monitor.end(time,()=>({...context(),diagnosticOptions:{drawCpuEnabled},render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
       bosses.frame(time,{intervalStart:monitor.frameStart-monitor.interval,frameMs:monitor.interval,cpuMs:Math.max(0,time-monitor.frameStart),...metrics,...sections,targetFps:monitor.targetFps},sampleMemory(),context);

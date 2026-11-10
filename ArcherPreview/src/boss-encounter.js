@@ -197,8 +197,14 @@ export class BossEncounter {
       if(this.death.holdPose){this.pendingEvents=[];this.bossReaction.reset();this.knockVelocity.setAll(0);}
     }
     // Visibility is per mesh, so living enemies sharing this material do not fade.
-    for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=visibility*this.death.opacity;
-    if(this.death.opacity<1&&!this.deathShadowsRemoved){
+    // During the witch's 5.2 s death animation and hold the opacity is exactly
+    // one: avoid repeated SDK property writes and calculate the eased fade once.
+    const opacity=this.death.opacity;
+    for(const [mesh,visibility] of this.deathVisibility){const next=visibility*opacity;if(mesh.visibility!==next)mesh.visibility=next;}
+    if(opacity<1&&!this.deathShadowsRemoved){
+      // Request the opt-in probe before the first transparent draw. It neither
+      // modifies the fade nor delays the animation when diagnostics are off.
+      try{this.world.requestDeathDiagnostic?.('enemy-fade');}catch{/* Diagnostics never alter death timing. */}
       for(const [mesh] of this.deathVisibility)this.world.shadows.removeShadowCaster?.(mesh,false);
       this.deathShadowsRemoved=true;
     }

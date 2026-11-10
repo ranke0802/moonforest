@@ -22,6 +22,7 @@ test('CPU sampling is bounded, preserves receiver/results and never calls synchr
  const result=f.sampler.sample().latest;assert.equal(result.sceneFrameId,7);assert.equal(result.groups.drawCommands.ms,3);assert.equal(result.groups.drawCommands.calls,1);assert.equal(result.groups.effectEnable.calls,2);assert.equal(result.effectChanges,1);assert.equal(result.groups.bufferBinding.ms,1.5);assert.equal(result.groups.textureSet.ms,.5);
  assert.equal(result.groups.candidateSelection.ms,.25);assert.equal(result.groups.candidateSelection.calls,1);
  assert.equal(result.groups.textureUpload.ms,4);assert.equal(result.groups.textureUpload.calls,1);assert.equal(result.groups.shaderPrepare.ms,2);assert.equal(result.groups.shaderPrepare.calls,1);
+ assert.deepEqual(result.slowCalls.map(c=>c.method),['drawElementsType','_uploadDataToTextureDirectly','createEffect']);
  assert.equal(Object.hasOwn(f.engine,'drawElementsType'),false,'restore prototype instead of retaining own property');
  f.sampler.setActive(true);f.begin();assert.equal(f.engine.drawElementsType,f.prototype.drawElementsType,'same active value cannot reset throttle');f.end();
  f.setTime(1100);f.begin();f.engine.drawArraysType();f.end();assert.equal(f.sampler.sample().latest.sampleId,2);assert.equal(result.groups.drawCommands.calls,1,'completed samples never mutate');

@@ -920,7 +920,7 @@ try {
     if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
-  },{onDefeat:event=>{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  },{onDefeat:event=>{try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
@@ -1067,6 +1067,7 @@ try {
     sceneDiagnostics.requestDrawCpuCapture('viewport-commit');
   },window,{onPending:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)input.reset();},onLayout:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)resizeScreenProjection();}});
   world.requestDrawCpuCapture=reason=>sceneDiagnostics.requestDrawCpuCapture(reason);
+  world.requestDeathDiagnostic=reason=>{try{sceneDiagnostics.requestDrawCpuCapture(reason);frameDiagnostics.captureEvent(reason);}catch{/* Optional diagnostic only. */}};
   world.scene.onDisposeObservable.addOnce(viewportResize);
   $('#quality-select').addEventListener('change', event => {
     qualityMode = event.target.value;

@@ -7,6 +7,7 @@ const methods={
  textureUpload:['_uploadDataToTextureDirectly','_uploadCompressedDataToTextureDirectly'],
  shaderPrepare:['createEffect','createShaderProgram','_preparePipelineContext'],
 };
+function shaderLabel(source){try{const label=typeof source==='string'?source:source?.vertex;return typeof label==='string'&&label.length<=128&&!/[\r\n]/.test(label)?label:null;}catch{return null;}}
 
 // Periodic and bounded event-requested renders, only while diagnostics collect. These
 // are inclusive engine-method CPU times (including cached/no-op calls), not GL
@@ -46,7 +47,7 @@ export class RenderCpuSampler {
   if(!this.continuous&&started<this.next&&!eventReady)return;
   const reason=this.continuous?'continuous':this.requested??'periodic';if(this.requested!==null)this.eventAfter=started+250;
   this.requested=null;this.next=started+this.intervalMs;
-  const pending=this.pending={sampleId:++this.sequence,sceneFrameId:this.scene.getFrameId(),startedAtMs:started,reason,effectChanges:0,groups:{}};
+  const pending=this.pending={sampleId:++this.sequence,sceneFrameId:this.scene.getFrameId(),startedAtMs:started,reason,effectChanges:0,groups:{},slowCalls:[]};
   try{
    const probes=[...Object.entries(methods).map(([group,names])=>[this.engine,group,names]),[this.scene,'candidateSelection',['getActiveMeshCandidates']]];
    for(const [,group]of probes)pending.groups[group]={calls:0,ms:0};
@@ -63,7 +64,14 @@ export class RenderCpuSampler {
       const counter=current.groups[group];
       const start=sampler.now(),effect=this._currentEffect;counter.calls++;
       try{return Reflect.apply(original,this,args);}
-      finally{counter.ms+=Math.max(0,sampler.now()-start);if(name==='enableEffect'&&this._currentEffect!==effect)current.effectChanges++;}
+      finally{
+       const elapsed=Math.max(0,sampler.now()-start);counter.ms+=elapsed;
+       if(elapsed>=2&&current.slowCalls.length<8){
+        const label=group==='shaderPrepare'?shaderLabel(args[0]):null;
+        current.slowCalls.push({group,method:name,ms:elapsed,shader:label});
+       }
+       if(name==='enableEffect'&&this._currentEffect!==effect)current.effectChanges++;
+      }
      }
      Object.defineProperty(owner,name,{configurable:true,writable:true,value:wrapper});
      this.hooks.push({owner,name,wrapper,descriptor});

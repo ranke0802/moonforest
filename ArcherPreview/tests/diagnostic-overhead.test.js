@@ -52,6 +52,14 @@ test('ten-minute recording keeps basic diagnostics unchanged, enables bounded de
  download.dispatchEvent(event());const report=JSON.parse(await blob.text());assert.equal(report.format,'moonforest-frame-recording');assert.equal(report.reason,'manual');assert.ok(report.critical.length>=3);assert.ok(report.detailBursts.length>=1);assert.match(report.measurement,/triggering-frame detail can be missing/);
 });
 
+test('death/fade event probes begin before rendering and are still available late in the session',t=>{
+ const bursts=[],f=fixture(t,{onContinuousDraw:v=>bursts.push(v)}),click=id=>f.doc.getElementById(id).dispatchEvent(new f.window.Event('click'));
+ f.change('draw-cpu-diagnostics-toggle',true);click('long-frame-start');f.frame(0);
+ f.setTime(100);f.diagnostics.beginFrame(true,60);assert.equal(f.diagnostics.captureEvent('enemy-defeat'),true);assert.equal(bursts.at(-1),true);f.setTime(120);f.diagnostics.endFrame();
+ f.diagnostics.suspend();assert.equal(bursts.at(-1),false);
+ f.setTime(419000);f.diagnostics.beginFrame(true,60);assert.equal(f.diagnostics.captureEvent('enemy-fade'),true);assert.equal(bursts.at(-1),true);f.setTime(419020);f.diagnostics.endFrame();click('long-frame-stop');assert.equal(bursts.at(-1),false);
+});
+
 test('basic real scene diagnostics keep all native methods and CPU/GPU counters while detailed calls default OFF',t=>{
  const engine=new NullEngine(),scene=new Scene(engine),probe=new SceneDiagnostics({driverFactory:()=>null});t.after(()=>{probe.dispose();scene.dispose();engine.dispose();});
  const native=new Map(nativeNames.map(name=>[name,engine[name]]));probe.setEnabled(true,scene);probe.setActive(true);
