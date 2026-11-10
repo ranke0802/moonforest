@@ -15,7 +15,7 @@ const methods={
 // Nested groups must never be added together.
 export class RenderCpuSampler {
  constructor(scene,{now=()=>performance.now(),intervalMs=1000,staleMs=2500}={}){
-  Object.assign(this,{scene,now,intervalMs,staleMs});this.engine=scene.getEngine();this.active=false;this.disposed=false;this.next=0;this.sequence=0;this.latest=null;this.pending=null;this.hooks=[];this.requested=null;this.eventAfter=0;
+  Object.assign(this,{scene,now,intervalMs,staleMs});this.engine=scene.getEngine();this.active=false;this.disposed=false;this.next=0;this.sequence=0;this.latest=null;this.slowSamples=[];this.pending=null;this.hooks=[];this.requested=null;this.eventAfter=0;
   this.before=scene.onBeforeRenderObservable.add(()=>this.begin());
   this.after=scene.onAfterRenderObservable.add(()=>this.end());
   // A failed render may not reach onAfterRender; do not retain wrapped methods.
@@ -24,7 +24,7 @@ export class RenderCpuSampler {
   this.restored=this.engine.onContextRestoredObservable?.add(()=>{this.contextLost=false;this.reset();});
  }
  setActive(active){const next=Boolean(active)&&!this.disposed;if(this.active===next)return;this.active=next;if(!this.active){this.cancel();this.requested=null;}else this.next=0;}
- reset(){this.cancel();this.latest=null;this.next=0;this.requested=null;this.eventAfter=0;}
+ reset(){this.cancel();this.latest=null;this.slowSamples=[];this.next=0;this.requested=null;this.eventAfter=0;}
  requestCapture(reason){
   if(!this.active||this.disposed||this.contextLost)return false;
   // One coalesced request, never a queue. Event probes are opt-in just like
@@ -72,12 +72,13 @@ export class RenderCpuSampler {
   if(!this.pending)return;
   const completedAtMs=this.now(),sample=this.pending;this.restore();this.pending=null;
   sample.completedAtMs=completedAtMs;sample.sceneElapsedMs=Math.max(0,completedAtMs-sample.startedAtMs);this.latest=sample;
+  if(sample.sceneElapsedMs>=50){this.slowSamples.push(sample);if(this.slowSamples.length>8)this.slowSamples.shift();}
  }
  sample(){
   const ageMs=this.latest?Math.max(0,this.now()-this.latest.completedAtMs):null;
   const status=this.disposed?'disabled':this.contextLost?'context-lost':!this.active?'paused':!this.latest?'pending':ageMs>this.staleMs?'stale':'sampled';
-  return {status,scope:'sampled-scene-engine-method-cpu',intervalMs:this.intervalMs,ageMs,pending:Boolean(this.pending),latest:status==='sampled'?this.latest:null,retained:status==='paused'?this.latest:null};
+  return {status,scope:'sampled-scene-engine-method-cpu',intervalMs:this.intervalMs,ageMs,pending:Boolean(this.pending),latest:status==='sampled'?this.latest:null,retained:status==='paused'?this.latest:null,slowSamples:this.slowSamples.slice()};
  }
- dispose(){if(this.disposed)return;this.cancel();this.disposed=true;this.active=false;this.latest=null;this.requested=null;
+ dispose(){if(this.disposed)return;this.cancel();this.disposed=true;this.active=false;this.latest=null;this.slowSamples=[];this.requested=null;
   this.scene.onBeforeRenderObservable.remove(this.before);this.scene.onAfterRenderObservable.remove(this.after);this.engine.onEndFrameObservable.remove(this.engineEnd);this.engine.onContextLostObservable?.remove(this.lost);this.engine.onContextRestoredObservable?.remove(this.restored);}
 }

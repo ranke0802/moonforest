@@ -1,7 +1,13 @@
 import {mapLoadAbortError} from './map-load-lifetime.js';
 
 // Weak ownership marks only: no texture/scene/worker is retained by this set.
-const abandoned=new WeakSet(),installed=new WeakSet(),releaseListeners=new WeakMap();
+const abandoned=new WeakSet(),installed=new WeakSet(),releaseListeners=new WeakMap(),uploadObservers=new WeakMap();
+// Only diagnostic subscribers are retained, keyed by their engine. No texture,
+// decoded pixels or scene is kept in these callbacks.
+export function observeMapTextureUploads(engine,callback){
+  let observers=uploadObservers.get(engine);if(!observers){observers=new Set();uploadObservers.set(engine,observers);}observers.add(callback);
+  return ()=>{observers.delete(callback);if(!observers.size)uploadObservers.delete(engine);};
+}
 export const isAbandonedMapTexture=internal=>!!internal&&abandoned.has(internal);
 export function watchMapTextureRelease(internal,callback){
   if(!internal)return ()=>{};if(abandoned.has(internal)){callback();return ()=>{};}
@@ -26,5 +32,16 @@ export function installMapTextureLifetimeGuard(Ktx){
   // Pinned Babylon 9.31 awaits a worker, then uploads even after its texture
   // was disposed. Stop only our abandoned final-owner allocation at that exact
   // boundary; normal and still-shared InternalTextures follow the native path.
-  Ktx.prototype._createTexture=function(data,internal,...args){if(abandoned.has(internal))throw mapLoadAbortError();return create.call(this,data,internal,...args);};
+  Ktx.prototype._createTexture=function(data,internal,...args){
+    if(abandoned.has(internal))throw mapLoadAbortError();
+    const observers=uploadObservers.get(this._engine);
+    if(!observers?.size)return create.call(this,data,internal,...args);
+    const start=performance.now();let success=false;
+    try{const result=create.call(this,data,internal,...args);success=true;return result;}
+    finally{
+      const end=performance.now(),first=data?.mipmaps?.[0];
+      const sample={startedAtMs:start,completedAtMs:end,cpuMs:Math.max(0,end-start),width:first?.width??null,height:first?.height??null,mipCount:data?.mipmaps?.length??0,format:data?.transcodedFormat??null,success};
+      for(const callback of observers)try{callback(sample);}catch{/* Diagnostic observers must never alter texture loading. */}
+    }
+  };
 }

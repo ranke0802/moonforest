@@ -69,3 +69,11 @@ test('event requests never survive pause, reset, context loss or disposal',()=>{
  f.engine.onContextRestoredObservable.notifyObservers();f.begin();f.end();assert.equal(f.sampler.sample().latest.reason,'periodic');
  f.sampler.requestCapture('enemy-defeat');f.sampler.dispose();assert.equal(f.sampler.requestCapture('viewport-commit'),false);assert.equal(f.sampler.requested,null);assert.equal(f.sampler.hooks.length,0);
 });
+
+test('slow sampled renders are retained in a bounded history, separately from the latest sample',()=>{
+ const f=fixture();f.sampler.setActive(true);
+ for(let i=0;i<10;i++){f.setTime(i*1100);f.begin();f.setTime(i*1100+60+i);f.end();}
+ let result=f.sampler.sample();assert.equal(result.slowSamples.length,8);assert.equal(result.slowSamples[0].sampleId,3);assert.equal(result.slowSamples.at(-1).sampleId,10);
+ f.setTime(11000);f.begin();f.end();result=f.sampler.sample();assert.equal(result.latest.sampleId,11);assert.equal(result.slowSamples.at(-1).sampleId,10);
+ f.sampler.reset();assert.equal(f.sampler.sample().slowSamples.length,0);f.sampler.dispose();
+});
