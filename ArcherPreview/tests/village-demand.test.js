@@ -46,6 +46,23 @@ test('streaming loads one tier at a time, waits for activation and never automat
  assert.ok(stream.failed.has(next.id+':'+next.level));let nextRequest;stream.load=async r=>{nextRequest=r;loaded.add(r.id+':'+r.level);};stream.update(1500);await stream.pending;assert.notDeepEqual(nextRequest,next);
 });
 
+test('completed scenery tiers skip camera demand scans but immediately notice removed tiers and changed placements',async t=>{
+ const {world,records}=fixture(t),loaded=new Set(),requests=[],stats={};
+ for(const record of records)for(const level of [0,1,2])loaded.add(record.placement.asset+':'+level);
+ const stream=new VillageGeometryStreaming(world,records,async r=>{requests.push(r);loaded.add(r.id+':'+r.level);},r=>loaded.has(r.id+':'+r.level),stats);
+ t.after(()=>stream.dispose());stream.active=true;
+ const realDemand=stream.demand.get.bind(stream.demand);let scans=0;
+ stream.demand.get=()=>{scans++;return realDemand();};
+ for(let i=1;i<=5;i++){world.camera.alpha+=.05;stream.update(i*250);}
+ assert.equal(scans,0);assert.equal(stats.geometryCompleteSkips,5);assert.equal(requests.length,0);
+ const wanted=villageDemand(world,records)[0];loaded.delete(wanted.id+':'+wanted.level);
+ stream.update(1500);await stream.pending;assert.equal(scans,1);assert.deepEqual(requests[0],wanted);
+ const oldAsset=records[0].placement.asset;records[0].placement={...records[0].placement,asset:'new-editor-asset'};
+ stream.demand.get=()=>{scans++;return [{id:'new-editor-asset',level:0}];};
+ stream.update(1750);await stream.pending;assert.equal(requests.at(-1).id,'new-editor-asset');
+ records[0].placement={...records[0].placement,asset:oldAsset};
+});
+
 test('idle views reuse the exact LOD demand; every camera, projection and policy change invalidates it',t=>{
  const {world,records}=fixture(t,true),stats={},cache=new VillageDemandCache(world,records,stats);
  const plan=cache.get();for(let i=0;i<300;i++)assert.equal(cache.get(),plan);

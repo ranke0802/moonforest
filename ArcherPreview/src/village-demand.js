@@ -168,6 +168,7 @@ export class VillageDemandCache {
 export class VillageGeometryStreaming {
   constructor(world,records,load,has,stats){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
+    stats.geometryCompleteSkips=0;
     this.demand=new VillageDemandCache(world,records,stats);
     this.observer=world.scene.onAfterRenderObservable.add(()=>{
       const start=world.frameDiagnostics?.mark();
@@ -175,12 +176,35 @@ export class VillageGeometryStreaming {
     });
   }
   async initial(plan){for(const request of plan)if(!this.has(request))await this.load(request);}
+  allGeometrySettled(){
+    // Every demand request uses one of these three tiers. Only skip the camera
+    // scan when *all* assets are already resident or explicitly failed. Check
+    // again each time so editor changes, retries and resource release are seen.
+    if(!this.records.length)return false;
+    const seen=new Set();
+    for(const record of this.records){
+      const id=record.placement?.asset;if(typeof id!=='string'||!id)return false;
+      if(seen.has(id))continue;seen.add(id);
+      for(const level of [0,1,2]){
+        const request={id,level};
+        if(this.failed.has(id+':'+level))continue;
+        try{if(!this.has(request))return false;}catch{return false;}
+      }
+    }
+    return seen.size>0;
+  }
   update(now){
     if(this.disposed||!this.active||this.pending||this.stats.highTexturePending||now<this.next)return;this.next=now+200;
-    const request=this.demand.get().find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
+    const started=this.world.frameDiagnostics?.mark();let request;
+    try{
+      if(this.allGeometrySettled()){this.stats.geometryCompleteSkips++;return;}
+      request=this.demand.get().find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
+    }finally{this.world.frameDiagnostics?.measure('sceneryDemandMs',started??null);}
     if(!request)return;
     this.stats.geometryPending=1;
-    this.pending=this.load(request).catch(error=>{
+    const loadStarted=this.world.frameDiagnostics?.mark();let operation;
+    try{operation=this.load(request);}finally{this.world.frameDiagnostics?.measure('sceneryLoadStartMs',loadStarted??null);}
+    this.pending=operation.catch(error=>{
       if(this.disposed||error.name==='AbortError')return;
       this.failed.add(request.id+':'+request.level);this.stats.geometryError=String(error.message??error);
       console.warn('Village model stopped; no automatic retry.',request.id,request.level,error);

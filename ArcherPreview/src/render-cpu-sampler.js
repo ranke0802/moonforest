@@ -4,11 +4,15 @@ const methods={
  bufferBinding:['bindBuffers','bindVertexArrayObject'],
  textureSet:['setTexture'],
  bufferUpdate:['updateDynamicVertexBuffer','updateDynamicIndexBuffer'],
+ textureUpload:['_uploadDataToTextureDirectly','_uploadCompressedDataToTextureDirectly'],
+ shaderPrepare:['createEffect','createShaderProgram','_preparePipelineContext'],
 };
 
 // Periodic and bounded event-requested renders, only while diagnostics collect. These
 // are inclusive engine-method CPU times (including cached/no-op calls), not GL
-// command counts or GPU execution. Nested groups must never be added together.
+// command counts or GPU execution. Upload/shader probes cover only calls made
+// during a sampled render, not asynchronous preparation between renders.
+// Nested groups must never be added together.
 export class RenderCpuSampler {
  constructor(scene,{now=()=>performance.now(),intervalMs=1000,staleMs=2500}={}){
   Object.assign(this,{scene,now,intervalMs,staleMs});this.engine=scene.getEngine();this.active=false;this.disposed=false;this.next=0;this.sequence=0;this.latest=null;this.pending=null;this.hooks=[];this.requested=null;this.eventAfter=0;

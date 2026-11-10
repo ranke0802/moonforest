@@ -207,7 +207,7 @@ export class BossEncounter {
     }
   }
   createBrain(durations){return new BossBrain(durations);}
-  createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations,{bindingCacheSize:this.kind==='bear'?2:0});}
+  createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations,{bindingCacheSize:['bear','goblin'].includes(this.kind)?2:0});}
   prepareAsset(){}
   async prepareAuxiliary(){}
   // Actor movement may need a larger environment envelope than its combat body.

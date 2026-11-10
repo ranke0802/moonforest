@@ -16,7 +16,7 @@ function fixture(t,{borrowed=false}={}){
   const battle=new BossBattle(world,()=>{},()=>{},()=>true),player=new TransformNode('player',scene);battle.currentPlayer=player;
   const libraries=new Map(),loads={count:0},disposedSources={count:0};
   function libraryFactory(_scene,id){
-    const definition=Object.values(ACTOR_DEFINITIONS).find(d=>d.assetId===id),container=new AssetContainer(scene),root=new TransformNode('rig-root',scene),hip=new TransformNode('mixamorig:Hips',scene);hip.parent=root;
+    const definition=Object.values(ACTOR_DEFINITIONS).find(d=>d.assetId===id),beforeObservers=new Set(scene.onDisposeObservable.observers),container=new AssetContainer(scene),containerObserver=scene.onDisposeObservable.observers.find(observer=>!beforeObservers.has(observer)),root=new TransformNode('rig-root',scene),hip=new TransformNode('mixamorig:Hips',scene);hip.parent=root;
     const nodes=[root,hip,...['Head','RightHand','LeftHand','LeftFoot','RightFoot'].map(name=>{const n=new TransformNode('mixamorig:'+name,scene);n.parent=hip;return n;})];
     const mesh=MeshBuilder.CreateBox(id,{size:1},scene);mesh.parent=root;mesh.material=new PBRMaterial(id+'-paint',scene);
     const skeleton=new Skeleton(id+'-skin',id+'-skin',scene),bone=new Bone('Hips',skeleton,null,Matrix.Identity());bone.linkTransformNode(hip);mesh.skeleton=skeleton;
@@ -29,7 +29,8 @@ function fixture(t,{borrowed=false}={}){
       const group=new AnimationGroup(name,scene);group.addTargetedAnimation(animation,hip);container.animationGroups.push(group);
     }
     container.populateRootNodes();container.removeAllFromScene();
-    const dispose=container.dispose.bind(container);container.dispose=()=>{disposedSources.count++;dispose();};
+    // Mirror readMapContainer's ownership of Babylon's scene-disposal hook.
+    const dispose=container.dispose.bind(container);container.dispose=()=>{disposedSources.count++;scene.onDisposeObservable.remove(containerObserver);dispose();};
     const config={version:definition.assetVersion,scale:1,animations:definition.animation,catalog:Object.keys(definition.animation).map(name=>({name,fps:30,duration:1,rootTrack:[[0,0,0],[0,0,0]],groundTrack:[.075,.075]}))};
     const library={config,container,loads:0,load:async()=>{if(!library.loads){loads.count++;library.loads++;}}};libraries.set(id,library);
     return {library,owned:!borrowed};
@@ -108,6 +109,30 @@ test('independent pooled encounters reuse shared geometry/materials and retain a
   assert.equal(start.mock.calls.length,0,'already prepared idle clips keep their native animatables');
   assert.equal(f.loads.count,1);assert.equal(f.battle.combat.hp,233);assert.equal(f.battle.combat.invulnerable,.3);
   const update=t.mock.method(e,'update',()=>{throw new Error('adapter duplicated battle update');});a.update(.1,{});assert.equal(update.mock.calls.length,0);
+});
+
+test('ten goblin actors repeatedly created, killed and removed release owned scene resources',async t=>{
+ const f=fixture(t),definition=getActorDefinition('hooded-goblin.standard');
+ const observers=o=>o.observers.filter(row=>!row._willBeUnregistered).length;
+ const counts=()=>({meshes:f.scene.meshes.length,skeletons:f.scene.skeletons.length,animationGroups:f.scene.animationGroups.length,animatables:f.scene._activeAnimatables.length,before:observers(f.scene.onBeforeRenderObservable),after:observers(f.scene.onAfterRenderObservable),dispose:observers(f.scene.onDisposeObservable)});
+ const baseline=counts();let warmBaseline;
+ for(let cycle=0;cycle<3;cycle++){
+  const actors=Array.from({length:10},()=>f.factory(definition));
+  for(const [index,adapter]of actors.entries())await adapter.activate({position:new Vector3((index-5)*3,0,8)},{preparation:prepare()});
+  assert.equal(f.factory.inspect().actors,10);
+  for(const adapter of actors){
+   const e=adapter.encounter;assert.equal(e.brain.hit({damage:10000}),true);
+   e.animator.transition(e.brain.state,{clipTime:0,actionId:e.brain.serial});e.animator.update(.2);
+  }
+  for(const adapter of actors)await adapter.dispose();
+  assert.equal(f.factory.inspect().actors,0);assert.equal(f.factory.inspect().libraries,0);
+  f.scene.render();await new Promise(resolve=>setTimeout(resolve,0));
+  const after=counts();
+  for(const key of ['meshes','skeletons','animationGroups','animatables','before','after'])assert.equal(after[key],baseline[key],`${key} after cycle ${cycle+1}`);
+  // Babylon keeps a small number of scene-lifetime observers after first use;
+  // they must remain bounded across repeated lifetimes, not be called a leak.
+  if(cycle===0)warmBaseline=after;else assert.deepEqual(after,warmBaseline,`scene resource counts after cycle ${cycle+1}`);
+ }
 });
 
 test('retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose',t=>{

@@ -8,7 +8,8 @@ function fixture(){
  let time=0;
  const forbidden=()=>{throw new Error('synchronous GL read must not be used');};
  const prototype={drawElementsType(value){assert.equal(this,engine);time+=3;if(value==='throw')throw new Error('draw failed');return value;},
-  drawArraysType(){time+=2;},enableEffect(effect){this._currentEffect=effect;time+=1;},setTexture(){time+=.5;},bindBuffers(){this.setTexture();time+=1;}};
+  drawArraysType(){time+=2;},enableEffect(effect){this._currentEffect=effect;time+=1;},setTexture(){time+=.5;},bindBuffers(){this.setTexture();time+=1;},
+  _uploadDataToTextureDirectly(){time+=4;},createEffect(){time+=2;}};
  const engine=Object.assign(Object.create(prototype),{onEndFrameObservable:new Observable(),onContextLostObservable:new Observable(),onContextRestoredObservable:new Observable(),_gl:{finish:forbidden,readPixels:forbidden,getParameter:forbidden,clientWaitSync:forbidden}});
  const scene={getEngine:()=>engine,getFrameId:()=>7,getActiveMeshCandidates(){assert.equal(this,scene);time+=.25;return {data:[],length:0};},onBeforeRenderObservable:new Observable(),onAfterRenderObservable:new Observable()};
  const sampler=new RenderCpuSampler(scene,{now:()=>time});
@@ -17,9 +18,10 @@ function fixture(){
 
 test('CPU sampling is bounded, preserves receiver/results and never calls synchronous GPU queries',()=>{
  const f=fixture();f.begin();assert.equal(f.engine.drawElementsType,f.prototype.drawElementsType);f.end();assert.equal(f.sampler.sample().latest,null);
- f.sampler.setActive(true);f.begin();assert.equal(f.engine.drawElementsType(42),42);const effect={};f.engine.enableEffect(effect);f.engine.enableEffect(effect);f.engine.bindBuffers();f.scene.getActiveMeshCandidates();f.end();
+ f.sampler.setActive(true);f.begin();assert.equal(f.engine.drawElementsType(42),42);const effect={};f.engine.enableEffect(effect);f.engine.enableEffect(effect);f.engine.bindBuffers();f.engine._uploadDataToTextureDirectly();f.engine.createEffect();f.scene.getActiveMeshCandidates();f.end();
  const result=f.sampler.sample().latest;assert.equal(result.sceneFrameId,7);assert.equal(result.groups.drawCommands.ms,3);assert.equal(result.groups.drawCommands.calls,1);assert.equal(result.groups.effectEnable.calls,2);assert.equal(result.effectChanges,1);assert.equal(result.groups.bufferBinding.ms,1.5);assert.equal(result.groups.textureSet.ms,.5);
  assert.equal(result.groups.candidateSelection.ms,.25);assert.equal(result.groups.candidateSelection.calls,1);
+ assert.equal(result.groups.textureUpload.ms,4);assert.equal(result.groups.textureUpload.calls,1);assert.equal(result.groups.shaderPrepare.ms,2);assert.equal(result.groups.shaderPrepare.calls,1);
  assert.equal(Object.hasOwn(f.engine,'drawElementsType'),false,'restore prototype instead of retaining own property');
  f.sampler.setActive(true);f.begin();assert.equal(f.engine.drawElementsType,f.prototype.drawElementsType,'same active value cannot reset throttle');f.end();
  f.setTime(1100);f.begin();f.engine.drawArraysType();f.end();assert.equal(f.sampler.sample().latest.sampleId,2);assert.equal(result.groups.drawCommands.calls,1,'completed samples never mutate');
