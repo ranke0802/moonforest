@@ -1,4 +1,5 @@
 import {BossDiagnostics,bossComparisonLines} from './boss-diagnostics.js';
+import {LongFrameRecording} from './long-frame-recording.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -68,7 +69,7 @@ export function readFrameDiagnosticPreference(storage,key='moonforest-frame-diag
 export const DRAW_CPU_DIAGNOSTICS_KEY='moonforest-draw-cpu-diagnostics-v1';
 export function readDrawCpuDiagnosticPreference(storage){try{return storage?.getItem(DRAW_CPU_DIAGNOSTICS_KEY)==='1';}catch{return false;}}
 
-export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onDrawCpuEnabled=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
+export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onDrawCpuEnabled=()=>{},onContinuousDraw=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
@@ -86,7 +87,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   expand?.addEventListener('click',()=>{compactView();if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint({details:true});detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
   for(const id of ['close-diagnostic-detail','diagnostic-detail-done'])get(id)?.addEventListener('click',()=>detailDialog?.close());
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
-  const setCollecting=value=>{if(collecting!==value){collecting=value;onCollecting(value);}};
+  const setCollecting=value=>{if(collecting!==value){collecting=value;if(!value){recording.break();finishBurst(now());}onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
   let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
@@ -94,6 +95,23 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};
   enabled=readFrameDiagnosticPreference(storage,key);
   let drawCpuEnabled=!!drawCpuToggle&&readDrawCpuDiagnosticPreference(storage);
+  const recording=new LongFrameRecording({now});let recordingTimer=null,burstUntil=0,burstUsed=0,burstStart=0;
+  const finishBurst=at=>{if(!burstUntil)return;onContinuousDraw(false);burstUsed+=Math.max(0,Math.min(at,burstUntil)-burstStart);recording.detailBursts.at(-1).endedAtMs=at;burstUntil=0;};
+  const longStart=get('long-frame-start'),longStop=get('long-frame-stop'),longDownload=get('long-frame-download'),longStatus=get('long-frame-status');
+  const syncRecording=()=>{const active=recording.state==='recording';if(longStart)longStart.disabled=!enabled||active;if(longStop)longStop.disabled=!active;if(longDownload)longDownload.disabled=recording.state==='idle';if(longStatus)longStatus.textContent=active?'기록 중 · 최대 10분':recording.state==='complete'?'기록 종료 · 파일을 다운로드하세요.':'성능 진단을 켜고 기록을 시작하세요.';};
+  const stopRecording=reason=>{if(recording.state!=='recording')return;clearTimeout(recordingTimer);recordingTimer=null;finishBurst(now());recording.stop(reason);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();};
+  longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(metadata());burstUntil=0;burstUsed=0;recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
+  longStop?.addEventListener('click',()=>stopRecording('manual'));
+  longDownload?.addEventListener('click',()=>{
+    if(recording.state==='idle')return;
+    try{
+      const report={...recording.snapshot(),endSnapshot:snapshot()};
+      const url=URL.createObjectURL(new Blob([JSON.stringify(report)+'\n'],{type:'application/json'})),link=doc.createElement('a');
+      link.href=url;link.download='moonforest-performance-'+new Date().toISOString().replace(/[:.]/g,'-')+'.json';link.hidden=true;doc.body.append(link);
+      try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+      if(longStatus)longStatus.textContent='기록 파일 다운로드를 요청했습니다. 브라우저 다운로드 목록을 확인하세요.';
+    }catch{if(longStatus)longStatus.textContent='파일을 만들지 못했습니다. 브라우저의 다운로드 설정을 확인해 주세요.';}
+  });
   let diagnosticSamples=0,diagnosticTotal=0,diagnosticMax=0,diagnosticLast=null,diagnosticCompletedAt=null;
   const resetDiagnosticCpu=()=>{diagnosticSamples=0;diagnosticTotal=0;diagnosticMax=0;diagnosticLast=null;diagnosticCompletedAt=null;};
   const setText=(id,value)=>{const node=get(id);if(node&&node.textContent!==value)node.textContent=value;};
@@ -125,13 +143,13 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     const detail=last?`최근 지연 ${Math.round(last.frameMs)} ms · ${last.activity??'플레이'}`:'회전·이동하며 확인하세요';
     setText('diagnostic-detail',paused?'측정 대기 · 설정/초기 로딩 중 제외':detail);
   };
-  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;if(drawCpuToggle){drawCpuToggle.checked=drawCpuEnabled;drawCpuToggle.disabled=!enabled;}onEnabled(enabled);onDrawCpuEnabled(enabled&&drawCpuEnabled);paint();};
+  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;if(drawCpuToggle){drawCpuToggle.checked=drawCpuEnabled;drawCpuToggle.disabled=!enabled;}onEnabled(enabled);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();paint();};
   drawCpuToggle?.addEventListener('change',()=>{
     drawCpuEnabled=drawCpuToggle.checked===true;try{storage?.setItem(DRAW_CPU_DIAGNOSTICS_KEY,drawCpuEnabled?'1':'0');}catch{/* Keep session preference. */}
-    onDrawCpuEnabled(enabled&&drawCpuEnabled);if(enabled)refreshGpu();paint();
+    if(!drawCpuEnabled)finishBurst(now());onDrawCpuEnabled(enabled&&drawCpuEnabled);if(enabled)refreshGpu();paint();
   });
   toggle.addEventListener('change',()=>{
-    enabled=toggle.checked;setCollecting(false);monitor.reset();resetDiagnosticCpu();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(!enabled&&detailDialog?.open)detailDialog.close();if(comparison)comparison.open=false;
+    enabled=toggle.checked;if(!enabled)stopRecording('diagnostics-off');setCollecting(false);monitor.reset();resetDiagnosticCpu();bosses.reset();metrics={};next=0;nextMemory=0;fallback.hidden=true;status.textContent='';if(!enabled&&detailDialog?.open)detailDialog.close();if(comparison)comparison.open=false;
     try{storage?.setItem(key,enabled?'1':'0');}catch{/* Keep session choice. */}sync();
   });
   reset.addEventListener('click',()=>{monitor.reset();resetDiagnosticCpu();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
@@ -177,7 +195,14 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
       if(!collecting){if(enabled){monitor.suspend();if(!paused){refreshGpu();bosses.suspend();paused=true;paint();}}return;}
       paused=false;for(const name in sections)sections[name]=0;monitor.begin(now(),targetFps);
     },
-    endFrame(){if(!collecting)return;const time=now();try{metrics={...renderMetrics()};
+    endFrame(){if(!collecting)return;const time=now();if(recording.state==='recording'&&time-recording.startMs>=recording.durationMs)stopRecording('duration-limit');try{metrics={...renderMetrics()};
+      if(recording.state==='recording'&&monitor.interval>0){
+        const workMs=Math.max(0,time-monitor.frameStart);recording.record({startMs:monitor.frameStart,intervalMs:monitor.interval,workMs,targetFps:monitor.targetFps,metrics,sections:{...sections},context});
+        if(burstUntil&&time>=burstUntil)finishBurst(time);
+        if(drawCpuEnabled&&!burstUntil&&burstUsed<10000&&(monitor.interval>50||workMs>50||metrics.drawSubmissionMs>50)){
+          burstStart=time;burstUntil=time+Math.min(1000,10000-burstUsed);recording.detailBursts.push({triggerAtMs:time,startedAtMs:time,plannedEndMs:burstUntil});onContinuousDraw(true);
+        }
+      }
       monitor.end(time,()=>({...context(),diagnosticOptions:{drawCpuEnabled},render:{...metrics},...sections,bossPreparation:bosses.current?.status==='preparing'?bosses.current.stage:null,bossBackground:bosses.backgroundLoads.filter(r=>r.status==='loading').map(r=>r.label)}));
       bosses.frame(time,{intervalStart:monitor.frameStart-monitor.interval,frameMs:monitor.interval,cpuMs:Math.max(0,time-monitor.frameStart),...metrics,...sections,targetFps:monitor.targetFps},sampleMemory(),context);
       if(time>=next){next=time+500;paint();}}finally{const completed=now(),cost=Math.max(0,completed-time);diagnosticSamples++;diagnosticTotal+=cost;diagnosticMax=Math.max(diagnosticMax,cost);diagnosticLast=cost;diagnosticCompletedAt=completed;}},

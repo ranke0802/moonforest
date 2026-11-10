@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704333119,
+  "bytes": 704339533,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8584,9 +8584,9 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-1hmw8l14.js",
-      "bytes": 2277973,
-      "sha256": "cadb6c79fa00a39e98dbe2f0a56a6b58dd40c58ed9ab74664168c3031a769a74"
+      "path": "assets/game-BDekc_MT.js",
+      "bytes": 2284387,
+      "sha256": "edcd0d7b3c0f2e6923d13f8ec018a02573b2c0b13930226df80b9e5ee9b8abe3"
     },
     {
       "path": "assets/game-iuoAbjSe.css",
@@ -10181,7 +10181,7 @@
     {
       "path": "index.html",
       "bytes": 39000,
-      "sha256": "7b8341914c73c96e86207dde9b4f9bcfe7355e61ec6879a9e835cff50df2e107"
+      "sha256": "1d41bad80a21b50e6a06b6caf11574f730d7f342e3da64723f0b94d143643b9c"
     },
     {
       "path": "KTX2_NOTICES.txt",

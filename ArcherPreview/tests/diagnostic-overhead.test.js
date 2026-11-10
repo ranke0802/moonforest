@@ -31,15 +31,26 @@ test('complete scene-call and gameplay-prelude timings remain separate from the 
  assert.match(f.diagnostics.snapshot().measurement,/including all its after-render observers/);
  f.diagnostics.suspend();const ignored=f.diagnostics.mark();assert.equal(ignored,null);f.diagnostics.measure('sceneCallMs',ignored);
 });
-function fixture(t,{stored=new Map([['moonforest-frame-diagnostics-v1','1']]),storage,renderMetrics=()=>({drawCalls:123,sceneMs:7,animationMs:1}),memory=()=>({jsUsedBytes:64*1048576}),onEnabled,onDrawCpuEnabled,onCollecting}={}){
+function fixture(t,{stored=new Map([['moonforest-frame-diagnostics-v1','1']]),storage,renderMetrics=()=>({drawCalls:123,sceneMs:7,animationMs:1}),memory=()=>({jsUsedBytes:64*1048576}),onEnabled,onDrawCpuEnabled,onContinuousDraw,onCollecting}={}){
  const {document:doc,window}=parseHTML(html),previous=globalThis.document;globalThis.document=doc;setupSettingsPanel();globalThis.document=previous;
  let time=0,copied,memoryCalls=0,zoomCalls=0;
- const diagnostics=createFrameDiagnostics({doc,storage:storage??{getItem:key=>stored.get(key)??null,setItem:(key,value)=>stored.set(key,value)},now:()=>time,onEnabled,onDrawCpuEnabled,onCollecting,
+ const diagnostics=createFrameDiagnostics({doc,storage:storage??{getItem:key=>stored.get(key)??null,setItem:(key,value)=>stored.set(key,value)},now:()=>time,onEnabled,onDrawCpuEnabled,onContinuousDraw,onCollecting,
   renderMetrics:()=>renderMetrics({advance:ms=>time+=ms}),memory:()=>{memoryCalls++;return memory({advance:ms=>time+=ms});},zoom:()=>{zoomCalls++;return {factor:2,minEnabled:true,maxEnabled:true,minZoom:1,maxZoom:4};},clipboard:{writeText:async value=>copied=JSON.parse(value)}});
  const dialog=doc.getElementById('diagnostic-detail-dialog');dialog.open=false;dialog.showModal=()=>dialog.open=true;dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
  const change=(id,value)=>{const node=doc.getElementById(id);node.checked=value;node.dispatchEvent(new window.Event('change'));};
  return {doc,window,diagnostics,dialog,stored,change,setTime:value=>time=value,frame(at,work=4){time=at;diagnostics.beginFrame(true,60);time=at+work;diagnostics.endFrame();},memoryCalls:()=>memoryCalls,zoomCalls:()=>zoomCalls,copy:async()=>{doc.getElementById('copy-frame-diagnostics').dispatchEvent(new window.Event('click'));await Promise.resolve();return copied;}};
 }
+
+test('ten-minute recording keeps basic diagnostics unchanged, enables bounded detail only by checkbox and exports one file across map changes',async t=>{
+ const detail=[],bursts=[],f=fixture(t,{onDrawCpuEnabled:v=>detail.push(v),onContinuousDraw:v=>bursts.push(v)});
+ const event=()=>new f.window.Event('click'),start=f.doc.getElementById('long-frame-start'),stop=f.doc.getElementById('long-frame-stop'),download=f.doc.getElementById('long-frame-download');
+ assert.equal(start.disabled,false);assert.equal(download.disabled,true);start.dispatchEvent(event());assert.equal(detail.at(-1),false);assert.equal(stop.disabled,false);
+ f.frame(0);f.frame(250,220);assert.equal(bursts.length,0,'basic recording never enables detailed probes');
+ f.change('draw-cpu-diagnostics-toggle',true);f.frame(500,220);assert.equal(bursts.at(-1),true);for(let at=730;at<1750;at+=16)f.frame(at,2);assert.equal(bursts.at(-1),false);
+ f.diagnostics.mapChanged();f.frame(1900);f.frame(2150,220);stop.dispatchEvent(event());assert.equal(stop.disabled,true);assert.equal(download.disabled,false);assert.equal(bursts.at(-1),false);
+ let blob;const oldCreate=URL.createObjectURL,oldRevoke=URL.revokeObjectURL;URL.createObjectURL=value=>{blob=value;return 'blob:test';};URL.revokeObjectURL=()=>{};t.after(()=>{URL.createObjectURL=oldCreate;URL.revokeObjectURL=oldRevoke;});
+ download.dispatchEvent(event());const report=JSON.parse(await blob.text());assert.equal(report.format,'moonforest-frame-recording');assert.equal(report.reason,'manual');assert.ok(report.critical.length>=3);assert.ok(report.detailBursts.length>=1);assert.match(report.measurement,/triggering-frame detail can be missing/);
+});
 
 test('basic real scene diagnostics keep all native methods and CPU/GPU counters while detailed calls default OFF',t=>{
  const engine=new NullEngine(),scene=new Scene(engine),probe=new SceneDiagnostics({driverFactory:()=>null});t.after(()=>{probe.dispose();scene.dispose();engine.dispose();});

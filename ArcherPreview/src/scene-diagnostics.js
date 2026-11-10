@@ -88,7 +88,7 @@ export class SceneDiagnostics {
     this.drawCpuEnabled=enabled===true;
     if(!this.drawCpuEnabled){this.cpu?.dispose();this.cpu=null;this.stopTextureUploads?.();this.stopTextureUploads=null;this.textureUploads=[];}
     else if(this.scene&&!this.cpu){
-      this.cpu=new RenderCpuSampler(this.scene,{now:this.options.now});this.cpu.setActive(this.active);
+      this.cpu=new RenderCpuSampler(this.scene,{now:this.options.now});this.cpu.setContinuous(this.continuous);this.cpu.setActive(this.active);
       this.stopTextureUploads=observeMapTextureUploads(this.scene.getEngine(),sample=>{if(!this.active)return;this.textureUploads.push(sample);if(this.textureUploads.length>8)this.textureUploads.shift();});
     }
   }
@@ -98,6 +98,7 @@ export class SceneDiagnostics {
     if(enabled&&scene&&!this.instrumentation){this.scene=scene;const i=this.instrumentation=new SceneInstrumentation(scene);i.captureFrameTime=true;i.captureAnimationsTime=true;i.captureActiveMeshesEvaluationTime=true;i.captureRenderTargetsRenderTime=true;i.captureRenderTime=true;this.gpu=new GpuFrameSampler(scene.getEngine(),this.options);this.gpu.setActive(this.active);this.setDrawCpuEnabled(this.drawCpuEnabled);this.sceneDispose=scene.onDisposeObservable.addOnce(()=>this.dispose());}
   }
   setActive(active){this.active=Boolean(active);this.gpu?.setActive(this.active);this.cpu?.setActive(this.active);}
+  setContinuous(enabled){this.continuous=enabled===true;this.cpu?.setContinuous(this.continuous);}
   requestDrawCpuCapture(reason){return this.cpu?.requestCapture(reason)??false;}
   resetGpu(){this.gpu?.reset(this.active?'pending':'paused');this.cpu?.reset();this.textureUploads=[];}
   sample(){const i=this.instrumentation;if(!i)return {};

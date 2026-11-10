@@ -253,6 +253,7 @@ const mapWorkDiagnostics=()=>({
 const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
   onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
+  onContinuousDraw:enabled=>sceneDiagnostics.setContinuous(enabled),
   onCollecting:active=>sceneDiagnostics.setActive(active),
   onMapChanged:()=>sceneDiagnostics.resetGpu('map'),
   onReset:()=>sceneDiagnostics.resetGpu('reset'),

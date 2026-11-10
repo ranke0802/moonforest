@@ -19,11 +19,12 @@ export class RenderCpuSampler {
   this.before=scene.onBeforeRenderObservable.add(()=>this.begin());
   this.after=scene.onAfterRenderObservable.add(()=>this.end());
   // A failed render may not reach onAfterRender; do not retain wrapped methods.
-  this.engineEnd=this.engine.onEndFrameObservable.add(()=>this.cancel());
+  this.engineEnd=this.engine.onEndFrameObservable.add(()=>{if(this.pending)this.cancel();});
   this.lost=this.engine.onContextLostObservable?.add(()=>{this.contextLost=true;this.reset();});
   this.restored=this.engine.onContextRestoredObservable?.add(()=>{this.contextLost=false;this.reset();});
  }
  setActive(active){const next=Boolean(active)&&!this.disposed;if(this.active===next)return;this.active=next;if(!this.active){this.cancel();this.requested=null;}else this.next=0;}
+ setContinuous(enabled){this.continuous=enabled===true;if(!this.continuous&&!this.pending)this.restore();}
  reset(){this.cancel();this.latest=null;this.slowSamples=[];this.next=0;this.requested=null;this.eventAfter=0;}
  requestCapture(reason){
   if(!this.active||this.disposed||this.contextLost)return false;
@@ -42,14 +43,15 @@ export class RenderCpuSampler {
  begin(){
   if(this.disposed||!this.active||this.contextLost||this.pending)return;
   const started=this.now(),eventReady=this.requested!==null&&started>=this.eventAfter;
-  if(started<this.next&&!eventReady)return;
-  const reason=this.requested??'periodic';if(this.requested!==null)this.eventAfter=started+250;
+  if(!this.continuous&&started<this.next&&!eventReady)return;
+  const reason=this.continuous?'continuous':this.requested??'periodic';if(this.requested!==null)this.eventAfter=started+250;
   this.requested=null;this.next=started+this.intervalMs;
   const pending=this.pending={sampleId:++this.sequence,sceneFrameId:this.scene.getFrameId(),startedAtMs:started,reason,effectChanges:0,groups:{}};
   try{
    const probes=[...Object.entries(methods).map(([group,names])=>[this.engine,group,names]),[this.scene,'candidateSelection',['getActiveMeshCandidates']]];
+   for(const [,group]of probes)pending.groups[group]={calls:0,ms:0};
+   if(this.hooks.length)return;
    for(const [owner,group,names]of probes){
-    const counter=pending.groups[group]={calls:0,ms:0};
     for(const name of names){
      const original=owner[name],descriptor=Object.getOwnPropertyDescriptor(owner,name);
      if(typeof original!=='function'||(descriptor&&!descriptor.configurable))continue;
@@ -57,10 +59,11 @@ export class RenderCpuSampler {
      function wrapper(...args){
       // An external wrapper can retain this function after disposal. Passthrough
       // without timing, and preserve the caller's receiver/return/exception.
-      if(sampler.pending!==pending)return Reflect.apply(original,this,args);
+      const current=sampler.pending;if(!current)return Reflect.apply(original,this,args);
+      const counter=current.groups[group];
       const start=sampler.now(),effect=this._currentEffect;counter.calls++;
       try{return Reflect.apply(original,this,args);}
-      finally{counter.ms+=Math.max(0,sampler.now()-start);if(name==='enableEffect'&&this._currentEffect!==effect)pending.effectChanges++;}
+      finally{counter.ms+=Math.max(0,sampler.now()-start);if(name==='enableEffect'&&this._currentEffect!==effect)current.effectChanges++;}
      }
      Object.defineProperty(owner,name,{configurable:true,writable:true,value:wrapper});
      this.hooks.push({owner,name,wrapper,descriptor});
@@ -70,7 +73,7 @@ export class RenderCpuSampler {
  }
  end(){
   if(!this.pending)return;
-  const completedAtMs=this.now(),sample=this.pending;this.restore();this.pending=null;
+  const completedAtMs=this.now(),sample=this.pending;if(!this.continuous)this.restore();this.pending=null;
   sample.completedAtMs=completedAtMs;sample.sceneElapsedMs=Math.max(0,completedAtMs-sample.startedAtMs);this.latest=sample;
   if(sample.sceneElapsedMs>=50){this.slowSamples.push(sample);if(this.slowSamples.length>8)this.slowSamples.shift();}
  }
