@@ -1,0 +1,89 @@
+{
+  "date": "2026-11-11",
+  "changes": [
+    "Chest pickup models have per-item visibility sizes while retaining original mesh proportions, textures and animation timing.",
+    "Both built-in chest and placed-chest editors display their effective current reward list and all 22 registered inventory choices, with add, quantity, delete and restore-default controls.",
+    "Built-in chest lists persist through the existing browser chest settings and restore on cancel. Placed-chest lists retain quantities through game apply, reload, undo/redo and moonmap JSON export/import.",
+    "Explicit lists create one model per physical item type, not per quantity. Currency and items without a physical model share a bundle; empty lists open without a phantom reward.",
+    "Complete drop batches reserve existing storage capacity and are persisted once, preventing partial or duplicate rewards."
+  ],
+  "pickupLongestAxisMetres": {
+    "apple": 0.24,
+    "apple-pie": 0.44,
+    "pet-food": 0.4,
+    "moon-dew-herb": 0.42,
+    "clue-bandage": 0.4,
+    "contaminated-vial": 0.34,
+    "goblin-club": 0.72,
+    "memory-locket": 0.22,
+    "clue-satchel": 0.46
+  },
+  "limits": {
+    "itemTypesPerChest": 16,
+    "quantityPerType": 9999,
+    "pendingDropsPerMap": 128,
+    "totalPendingDrops": 512,
+    "visibleDrops": 64,
+    "concurrentModelLoads": 1
+  },
+  "validation": {
+    "browserAutomation": false,
+    "uniquePassingTests": 133,
+    "suites": [
+      {
+        "log": "chest-items-final-validation.log",
+        "passed": 97,
+        "failed": 0
+      },
+      {
+        "log": "chest-items-compatibility.log",
+        "passed": 36,
+        "failed": 0
+      },
+      {
+        "log": "chest-items-ui-final.log",
+        "passed": 56,
+        "failed": 0,
+        "recheck": true
+      }
+    ],
+    "actualShippedModels": [
+      "contaminated-vial",
+      "memory-locket",
+      "apple-pie"
+    ],
+    "actualBoundsAndGroundAttachment": true,
+    "duplicateModelGeometryShared": true,
+    "settledMatricesFrozen": true,
+    "fourMaps": [
+      "village",
+      "great-plains",
+      "monster-forest",
+      "witch-cave"
+    ],
+    "build": "pass"
+  },
+  "preserved": {
+    "assetAndTextureFiles": true,
+    "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+    "lod": true,
+    "combatJudgement": true,
+    "legacyChestRewards": true,
+    "monsterDropScale": true,
+    "sourceAssetGeometry": true
+  },
+  "limitations": [
+    "Node DOM/NullEngine validation covers logic, native matrices and resource lifetime, not device FPS, heat or GPU rasterization."
+  ],
+  "sourceHashes": {
+    "actor-editor.js": "2ebf5564d20d14dbdbfebbf7fdc4aee23fd31ccbf28cb0c9b0d97cdfd8389743",
+    "chest-reward-data.js": "7cb76ec9cd220161044d4f552bc82d4c9bfc50b5e303d2c76ca50bc6c6add79d",
+    "chest-reward-editor.js": "303cd2d08e536ddbf957634b507e15e15b4b2360a69edaa423366bb691821c8e",
+    "chapter-quest-props.js": "3fe1ee2c5f2ed0035e25d88d533c9d2f2e672b04706366570b196d1bb16f6341",
+    "chapter-quest-state.js": "1128bcece8cd92c0fe043f34ca9f5a17a089fcf604adcbe9c5b85c85854c4259",
+    "chapter-quest.js": "1d51fb2a35b0a6bb91fa4d2454beb5c4a48be28c17f121f8190886f5d83c3f05",
+    "developer-editor.js": "10bd76e5e0ba905993cbbdf335668d8e2e3481e050ae3b9f73976301b585a802",
+    "item-drop-view.js": "5b3e93c541a2fcf111c60275d215989268ae4f4b570327971e50d17b676b122e",
+    "placement-document.js": "220afdc7487ccf04d6551c4261495ec9ec8b20e401214a483e529995d8f47713"
+  }
+}

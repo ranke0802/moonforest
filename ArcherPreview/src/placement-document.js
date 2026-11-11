@@ -7,6 +7,7 @@ import {CHAPTER_POINTS} from './chapter-quest-points.js';
 import {editableBasePlacement} from './editable-asset-index.js';
 import {normalizeInteraction} from './interaction-data.js';
 import {ITEM_DROP_MODELS} from './item-drop-data.js';
+import {normalizeChestItems} from './chest-reward-data.js';
 
 export const PLACEMENT_COORDINATE_SYSTEM='RH_Y_UP_METRES';
 export const PLACEMENT_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
@@ -125,7 +126,7 @@ export function validatePlacementDocument(document,{catalog,baseManifest,expecte
   if(!['solid','none'].includes(instance.collision))fail(path+'.collision','expected solid or none');
   if(instance.collision==='solid'&&(surface!=='ground'||placement.collision!=='independent-static'||placement.solidSurfaces&&!placement.solidSurfaces.includes(surface)))fail(path+'.collision','solid collision is certified only for ground-attached independent props');
   let interaction;try{interaction=normalizeInteraction(instance.interaction);}catch(error){fail(path+'.interaction',error.message);}
-  let chest;if(instance.chest!==undefined){if(assetId!=='chest-common')fail(path+'.chest','chest settings require a chest');object(instance.chest,path+'.chest',['tier','item']);const {tier,item}=instance.chest;if(!Number.isInteger(tier)||tier<1||tier>5)fail(path+'.chest.tier','expected chest grade 1 to 5');if(typeof item!=='string'||item!==''&&!Object.hasOwn(ITEM_DROP_MODELS,item))fail(path+'.chest.item','unknown chest reward');chest={tier,item};}
+  let chest;if(instance.chest!==undefined){if(assetId!=='chest-common')fail(path+'.chest','chest settings require a chest');object(instance.chest,path+'.chest',['tier','item','items']);const {tier,item=''}=instance.chest;if(!Number.isInteger(tier)||tier<1||tier>5)fail(path+'.chest.tier','expected chest grade 1 to 5');if(typeof item!=='string'||item!==''&&!Object.hasOwn(ITEM_DROP_MODELS,item))fail(path+'.chest.item','unknown chest reward');let items;try{items=normalizeChestItems(instance.chest.items);}catch(error){fail(path+'.chest.items',error.message);}chest={tier,item,...(items!==undefined?{items}:{})};}
   return {instanceId,assetId,assetVersion:instance.assetVersion,transform:{position,rotation,scale,...(aspect?{aspect}:{}),...(frontYaw!==undefined?{frontYaw}:{})},attachment:{surface,normal,offset,...(supportId?{supportId}:{})},collision:instance.collision,...(sourceInstanceId!==undefined?{sourceInstanceId}:{}),...(interaction?{interaction}:{}),...(chest?{chest}:{})};
  });
  const overridden=new Set(instances.map(instance=>instance.sourceInstanceId).filter(Boolean));for(const instance of instances)if(overridden.has(instance.attachment.supportId))fail('attachment.supportId','이 소품에 붙인 장식을 먼저 옮겨 주세요. 편집 중인 기존 소품은 고정 지지면으로 사용할 수 없어요.');

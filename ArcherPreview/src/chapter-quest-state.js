@@ -1,6 +1,6 @@
-import {validateItemDrop,ITEM_DROP_MODELS} from './item-drop-data.js';
+import {validateItemDrop,DROP_MAPS} from './item-drop-data.js';
 import {CHAPTER_QUESTS} from './chapter-quest-data.js';
-import {chestRewards} from './loot-rarity.js';
+import {chestRewardDrops} from './chest-reward-data.js';
 export const CHAPTER_SAVE='moonforest-chapter-one-v1';
 const lookup=new Map(CHAPTER_QUESTS.map(q=>[q.id,q]));
 const integer=n=>Number.isSafeInteger(n)&&n>=0?Math.min(n,100000):0;
@@ -27,17 +27,14 @@ export class ChapterJourney{
   if(token){this.seen.add(token);this.value.seen.push(token);}this.value.facts[key]=Math.min(100000,(this.value.facts[key]??0)+amount);this.save();return true;}
  collect(item,count=1,token){if(!this.record('item:'+item,count,token))return false;this.value.bag[item]=(this.value.bag[item]??0)+count;this.save();return true;}
  // The chest-open token and the uncollected reward are one durable write.
- openChest(point,{origin,position}={}){
-  const rewards=chestRewards(point?.tier),token=chestOpenToken(point?.id,point?.openCycle),originalToken=chestOpenToken(point?.id);
-  if(!rewards||!point?.id||!point?.key||this.seen.has(token)||this.value.pendingDrops.length>=512||this.value.pendingDrops.filter(drop=>drop.mapId===point.map).length>=128)return null;
-  if(point.rewardItem&&Object.hasOwn(ITEM_DROP_MODELS,point.rewardItem)){for(const item of Object.keys(rewards))if(item!=='gold')delete rewards[item];rewards[point.rewardItem]=1;}
-  if(point.id==='lookout-chest')rewards['equipment-voucher']=1;
-  if(['goblin-relic','village-relief'].includes(point.id))rewards['key-3']=1;
-  const bonus=Object.entries(ITEM_DROP_MODELS).find(([,asset])=>asset===point.dropAssetId)?.[0];if(bonus)rewards[bonus]=(rewards[bonus]??0)+1;
-  const item=Object.keys(rewards).find(key=>ITEM_DROP_MODELS[key]),drop={id:'chest:'+point.id+(token===originalToken?'':':cycle:'+point.openCycle),mapId:point.map,model:point.dropAssetId||ITEM_DROP_MODELS[item],effectEnabled:point.dropEffectEnabled===true,origin,position,rewards};
-  if(!validateItemDrop(drop))return null;
+ openChest(point,{origin,position,poses}={}){
+  let parts;try{parts=chestRewardDrops(point);}catch{return null;}
+  const token=chestOpenToken(point?.id,point?.openCycle),originalToken=chestOpenToken(point?.id);
+  if(!parts||!point?.id||!point?.key||!DROP_MAPS.includes(point.map)||this.seen.has(token)||this.value.pendingDrops.length+parts.length>512||this.value.pendingDrops.filter(drop=>drop.mapId===point.map).length+parts.length>128)return null;
+  const id='chest:'+point.id+(token===originalToken?'':':cycle:'+point.openCycle),drops=parts.map((part,index)=>({id:id+(index?':item:'+index:''),mapId:point.map,...part,effectEnabled:point.dropEffectEnabled===true,...(poses?.[index]??{origin,position})}));
+  if(!drops.every(validateItemDrop))return null;
   if(!this.seen.has(originalToken)){this.seen.add(originalToken);this.value.seen.push(originalToken);this.value.facts[point.key]=Math.min(100000,(this.value.facts[point.key]??0)+1);}
-  if(token!==originalToken){this.seen.add(token);this.value.seen.push(token);}this.value.pendingDrops.push(drop);this.save();return drop;
+  if(token!==originalToken){this.seen.add(token);this.value.seen.push(token);}this.value.pendingDrops.push(...drops);this.save();return drops[0]??{empty:true,rewards:{}};
  }
  queueMonsterDrop(drop){if(!validateItemDrop(drop)||this.value.pendingDrops.some(item=>item.id===drop.id))return false;
   if(this.value.pendingDrops.length>=512||this.value.pendingDrops.filter(item=>item.mapId===drop.mapId).length>=128){const existing=this.value.pendingDrops.find(item=>item.mapId===drop.mapId&&Object.keys({...item.rewards,...drop.rewards}).length<=16&&Object.entries(drop.rewards).every(([key,n])=>(item.rewards[key]??0)+n<=100000));if(!existing)return false;for(const [key,n]of Object.entries(drop.rewards))existing.rewards[key]=(existing.rewards[key]??0)+n;if(drop.sourceKind==='boss')existing.sourceKind='boss';}

@@ -7,6 +7,10 @@ import {prepareVillageInstancing} from './village-instancing.js';
 import {applyVillageToon} from './village-toon.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
 
+// Chest pickups need a readable world size at the game camera distance. Scale
+// by the longest axis so flat food and small jewellery keep their proportions.
+const chestPickupSize=Object.freeze({apple:.24,'apple-pie':.44,'pet-food':.4,'moon-dew-herb':.42,'clue-bandage':.4,'contaminated-vial':.34,'goblin-club':.72,'memory-locket':.22,'clue-satchel':.46});
+
 // Drop visuals use existing map assets and the existing scene/frame loop.
 export function createItemDropView(world,{baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,onError=()=>{}}={}){
  const scene=world.scene;let disposed=false,version=0,scope=new AbortController(),manifest=null,manifestTask=null;const sources=new Map(),loading=new Map(),records=new Map(),failed=new Set();
@@ -20,7 +24,7 @@ export function createItemDropView(world,{baseUrl,readManifest=readMapManifest,l
  }catch(error){if(current(v)&&!signal.aborted){failed.add(id);onError(error);}}finally{container?.dispose();lifetime.close();if(loading.get(id)===task)loading.delete(id);}})();loading.set(id,task);return task;}
  function remove(id,record){record.root.dispose();records.delete(id);}
  function sync(drops,dt){if(disposed||scene.isDisposed)return;const present=new Set(drops.map(drop=>drop.id));for(const [id,record]of records)if(!present.has(id))remove(id,record);
-  for(const drop of drops){let record=records.get(drop.id);if(!record){const source=sources.get(drop.model);if(!source){void request(drop.model);continue;}const root=new TransformNode('item-drop-'+drop.id,scene),asset=instantiateStaticMap(source.container,name=>'drop-'+drop.id+'-'+name);for(const child of asset.rootNodes)child.parent=root;root.scaling.setAll((source.config.height/source.config.bounds[1])*(drop.id.startsWith('chest:')?1:.45));root.rotation.y=(drop.id.length%8)*.6;record={root,age:0,settled:false};records.set(drop.id,record);}
+  for(const drop of drops){let record=records.get(drop.id);if(!record){const source=sources.get(drop.model);if(!source){void request(drop.model);continue;}const root=new TransformNode('item-drop-'+drop.id,scene),asset=instantiateStaticMap(source.container,name=>'drop-'+drop.id+'-'+name);for(const child of asset.rootNodes)child.parent=root;const authoredScale=source.config.height/source.config.bounds[1],scale=drop.id.startsWith('chest:')?Math.max(authoredScale,(chestPickupSize[drop.model]??.34)/Math.max(...source.config.bounds)):authoredScale*.45;root.scaling.setAll(scale);root.rotation.y=(drop.id.length%8)*.6;record={root,age:0,settled:false};records.set(drop.id,record);}
    if(!record.settled){record.age+=Math.max(0,Math.min(.1,dt));const t=Math.min(1,record.age/.6),travel=1-(1-t)*(1-t),bounce=t<.72?Math.sin(Math.PI*t/.72)*.38:Math.sin(Math.PI*(t-.72)/.28)*.075;record.root.position.set(drop.origin.x+(drop.position.x-drop.origin.x)*travel,drop.origin.y+(drop.position.y-drop.origin.y)*travel+bounce,drop.origin.z+(drop.position.z-drop.origin.z)*travel);record.root.computeWorldMatrix(true);if(t===1){record.settled=true;record.root.freezeWorldMatrix();}}
    record.root.setEnabled(!world.caveFog||world.caveFog.allowsPoint(record.root.position));
   }
