@@ -50,15 +50,31 @@ test('held and pending shields never create an outgoing strike, even across the 
   assert.equal(sample.window.damage,10);assert.equal(sample.window.stun,1.5,'a released tap retains the original push');
 });
 
+test('one actual shield sweep knocks down every separately hit enemy once',t=>{
+  const a=fixture(t,BossEncounter,'guardian-bear'),b=fixture(t,GoblinEncounter,'hooded-goblin');
+  const shield=new TransformNode('sweep-shield',a.scene);shield.position.set(0,1,4.84);
+  const sample=new PlayerStrikeSampler().sample({...tap,actionId:42,clipTime:1.12},null,shield);
+  for(const {b:enemy,player} of [a,b]){
+    enemy.alignPose=()=>{};enemy.contactSeparation=()=>0;enemy.hurtCapsules=()=>[{points:[[0,1,5],[0,2,5]],radius:1}];enemy.skillHurtCapsule=()=>null;enemy.damageNumberPosition=()=>enemy.actor.position;enemy.animator={ensurePoseCurrent(){},reactToHit(){}};
+    const hp=enemy.brain.hp;enemy.poseAndContacts(player,{state:'shieldPush'},sample,shield);
+    assert.equal(enemy.brain.mode,'down');assert.equal(enemy.knockVelocity.z,8);assert.equal(enemy.brain.hp,hp-10);
+    enemy.poseAndContacts(player,{state:'shieldPush'},sample,shield);assert.equal(enemy.brain.hp,hp-10,'the same sweep cannot damage twice');
+  }
+});
+
 for(const [name,Encounter,asset] of variants){
   test(`${name}: actual heavy and shield contacts apply an outward knockback`,t=>{
     const {b,player}=fixture(t,Encounter,asset);let reactions=0;
     b.alignPose=()=>{};b.contactSeparation=()=>0;b.hurtCapsules=()=>[{points:[[0,1,5],[0,2,5]],radius:1}];b.skillHurtCapsule=()=>null;b.damageNumberPosition=()=>b.actor.position;
-    b.animator={ensurePoseCurrent(){},reactToHit(){},reactToKnockback(){reactions++;}};
+    b.animator={ensurePoseCurrent(){},reactToHit(){},reactToKnockback(){reactions++;},transition(){},update(){}};b.ring={isVisible:false};b.warningRing={update(){}};
     for(const [i,window] of [{id:'jump-cut',damage:10,heavy:true},{id:'shield-push',damage:10,stun:1.5}].entries()){
       b.brain=b.createBrain(b.brain.durations);b.gate.reset();b.knockVelocity.setAll(0);
       b.poseAndContacts(player,{state:'idle'}, {actionId:100+i,window,blade:[[0,1,5],[0,2,5]]},null);
-      assert.ok(b.knockVelocity.z>0,`${window.id} pushes away from the player`);assert.equal(b.knockVelocity.x,0);
+      assert.equal(b.knockVelocity.z,8,`${window.id} uses heavy-strike knockback strength`);assert.equal(b.knockVelocity.x,0);
+      if(name==='Mourning Elena')assert.ok(b.brain.stagger>0,'large witch uses her authored knockback reaction');
+      else assert.equal(b.brain.mode,'down',`${window.id} starts the same fall as a heavy attack`);
+      const from=b.actor.position.z;BossEncounter.prototype.update.call(b,1/60,player);assert.ok(b.actor.position.z>from,`${window.id} actually moves the target away`);
+      b.actor.position.z=5;
     }
     assert.equal(reactions,2);
     b.brain=b.createBrain(b.brain.durations);b.brain.hp=1;b.gate.reset();b.knockVelocity.setAll(0);

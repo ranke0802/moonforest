@@ -358,17 +358,20 @@ export class BossEncounter {
       }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact});
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
-        if(!this.brain.hit(hit))continue;
+        // A released shield push should trigger the same fall response as a
+        // heavy strike without changing its damage, hit feedback or input.
+        const shieldPush=hit.id==='shield-push';
+        if(!this.brain.hit(shieldPush?{...hit,heavy:true}:hit))continue;
         if(this.brain.hp>0)this.animator?.reactToHit?.();
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
-        if(hit.heavy||hit.id==='shield-push'){
+        if(hit.heavy||shieldPush){
           this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;
           if(away.lengthSquared()<1e-8)away.set(Math.sin(player.rotation?.y??0),0,Math.cos(player.rotation?.y??0));
-          this.knockVelocity.copyFrom(away.normalize().scale(hit.heavy?8:5));
+          this.knockVelocity.copyFrom(away.normalize().scale(8));
           if(this.brain.hp>0)this.animator?.reactToKnockback?.();
         }
-        this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':hit.id==='shield-push'?'방패 명중 · 넉백':this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';
+        this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':shieldPush?'방패 명중 · 넉백':this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';
         this.onDamage(this.damageNumberPosition(),hit.damage,hit.heavy,'enemy',hit.burstIndex,hit.critical,this);this.onChange(this);
       }
     }else this.gate.previous=null;

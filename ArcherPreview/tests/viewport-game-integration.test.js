@@ -34,7 +34,7 @@ function fixture(t,{mobile=true,width=832,height=384,pixelRatio=2}={}){
     focus(){}getBoundingClientRect(){return {left:0,top:0,width:this.clientWidth??832,height:this.clientHeight??384};}
     setPointerCapture(id){this.captured.add(id);}hasPointerCapture(id){return this.captured.has(id);}releasePointerCapture(id){this.captured.delete(id);}
   }
-  let now=0,next=0,level=1,held=false,resets=0,projections=0,invalidates=0,observerCount=0,observer;
+  let now=0,next=0,level=1,held=false,resets=0,projections=0,invalidates=0,restarts=0,observerCount=0,observer;
   let maxFrames=0,maxTimers=0;
   const frames=new Map(),timers=new Map(),buffers=[],captures=[],trace=[];
   const win=new Surface(),doc=new Surface(),canvas=new Surface();canvas.tagName='CANVAS';Object.assign(canvas,{clientWidth:width,clientHeight:height});
@@ -54,7 +54,7 @@ function fixture(t,{mobile=true,width=832,height=384,pixelRatio=2}={}){
   const activity=new RenderActivity(mobile,()=>now);activity.setTargetFps(60);
   const world={scene:{onDisposeObservable:new Observable()},lighting:{setQuality:quality=>assert.equal(quality,'high')}};
   const env={canvas,engine,window:win,document:doc,world,input,observeViewportSize,renderPixelRatio,renderActivity:activity,qualityMode:'high',touchDevice:mobile,renderScaleControl:{value:85},renderViewportKey:'',mapDeparture:null,mapTransition:{busy:false},
-    resizeScreenProjection(){projections++;},$:()=>({value:''}),frameLoop:{invalidate(){invalidates++;}},
+    resizeScreenProjection(){projections++;},$:()=>({value:''}),frameLoop:{invalidate(){invalidates++;},restart(){restarts++;}},
     sceneDiagnostics:{requestDrawCpuCapture(reason){const entry={type:'capture',reason,at:now,buffer:buffers.at(-1)?.buffer,held};captures.push(entry);trace.push(entry);return true;}},
   };
   const api=Function('env','with(env){'+applySource+'\n'+bindingSource+';return {apply:applyRenderQuality,viewportResize};}')(env);
@@ -65,7 +65,7 @@ function fixture(t,{mobile=true,width=832,height=384,pixelRatio=2}={}){
   t.after(()=>{api.viewportResize();input.dispose();});
   const visibility=hidden=>{doc.hidden=hidden;inGlobals(()=>doc.emit('visibilitychange'));};
   return {win,doc,canvas,input,world,engine,env,...api,flush,advance,resize,key,visibility,buffers,captures,trace,frames,timers,
-    held:()=>held,resets:()=>resets,projections:()=>projections,invalidates:()=>invalidates,
+    held:()=>held,resets:()=>resets,projections:()=>projections,invalidates:()=>invalidates,restarts:()=>restarts,
     stats:()=>({maxFrames,maxTimers,observerCount,disconnected:observer.disconnected===true})};
 }
 
@@ -110,16 +110,17 @@ test('real visibility resume gates texture admission before delayed CSS changes 
   assert.equal(f.captures.at(-1).reason,'viewport-commit');assert.equal(f.captures.at(-1).at,325);
 });
 
-test('desktop main binding remains next-frame responsive and applies DPR changes without duplicate allocations',t=>{
-  const f=fixture(t,{mobile:false});f.flush();f.key();f.resize(1000,600);
-  assert.equal(f.viewportResize.isSettling(),false);assert.equal(f.resets(),1);assert.deepEqual(f.buffers.at(-1).buffer,[1700,1020]);
+test('desktop fullscreen main binding batches resize and applies DPR changes without duplicate allocations',t=>{
+  const f=fixture(t,{mobile:false});f.flush();assert.equal(f.restarts(),1);f.key();f.doc.emit('fullscreenchange');f.resize(900,550);f.advance(40);f.resize(1000,600);
+  assert.equal(f.viewportResize.isSettling(),true);assert.equal(f.resets(),1);f.advance(80);assert.deepEqual(f.buffers.at(-1).buffer,[1700,1020]);
+  assert.equal(f.restarts(),2,'the render loop is re-registered after the fullscreen buffer commit');
   f.key();f.resize(1000,600);assert.equal(f.held(),true);assert.equal(f.buffers.length,2);assert.equal(f.captures.length,2);
-  f.win.devicePixelRatio=1.5;f.win.emit('resize');f.flush();assert.equal(f.resets(),2);
+  f.win.devicePixelRatio=1.5;f.win.emit('resize');f.flush();assert.equal(f.resets(),2);f.advance(80);
   // Integer division by the reciprocal scaling level can round just below the
   // mathematical size; retain the renderer's actual integer backing contract.
   assert.deepEqual(f.buffers.at(-1).buffer,[1274,764]);assert.ok(Math.abs(f.buffers.at(-1).ratio-1.275)<1e-12);
   assert.equal(f.env.renderScaleControl.value,85);assert.equal(f.engine.maxFPS,60);
-  assert.equal(f.timers.size,0);assert.equal(f.captures.at(-1).reason,'viewport-commit');
+  f.advance(50);assert.equal(f.timers.size,0);assert.equal(f.captures.at(-1).reason,'viewport-commit');
 });
 
 test('the production scene disposal observer cancels pending resize and cannot clear a fresh hold or request late probes',t=>{

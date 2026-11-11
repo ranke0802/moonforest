@@ -61,8 +61,14 @@ test('a popup component is editable in the preview and never applied to a differ
  const saved=JSON.parse(f.storage.getItem(HUD_LAYOUT_KEY)),key=Object.keys(saved.items).find(k=>k.startsWith('component:chapterDialog:bag:'));assert.ok(key);assert.equal(saved.items[key].x,.05);assert.equal(saved.items[key].y,.05);assert.equal(source.querySelector('button').style.translate,'50px 30px');
  source.querySelector('button').dataset.id='different';source.querySelector('button').style.translate='';f.ui.refresh();f.flush();assert.equal(source.querySelector('button').style.translate,'');f.ui.dispose();
 });
-test('neutral layout preserves original style, and never schedules continuous frame work',()=>{
- const f=fixture();for(const g of HUD_GROUPS){const node=f.root.querySelector(g.selector);if(!node)continue;assert.equal(node.style.translate,'');assert.equal(node.style.scale,'');}assert.equal(f.stats().frameCalls,0);f.resize();f.resize();assert.equal(f.stats().frameCalls,1);f.flush();assert.equal(f.stats().frameCalls,1);f.ui.dispose();
+test('neutral layout scales with the viewport without scheduling continuous frame work',()=>{
+ const f=fixture();assert.equal(Number(f.root.querySelector('#player-hud').style.scale),.8);assert.equal(f.stats().frameCalls,0);f.resize();f.resize();assert.equal(f.stats().frameCalls,1);f.flush();assert.equal(f.stats().frameCalls,1);f.ui.dispose();
+});
+test('edited scale remains proportional across fullscreen viewport changes and reset restores the default',()=>{
+ const f=fixture();f.frame.width=1280;f.frame.height=720;f.resize();f.flush();f.ui.open();f.choose('health');f.set('scale',120);f.command('save');
+ const node=f.root.querySelector('#player-hud');assert.equal(Number(node.style.scale),1.2);
+ f.frame.width=1152;f.frame.height=648;f.resize();f.flush();assert.ok(Math.abs(Number(node.style.scale)-1.08)<1e-9);assert.equal(f.ui.inspect().items.health.scale,1.2);
+ f.ui.open();f.command('reset-all');f.command('save');assert.equal(f.ui.inspect().items.health.scale,1);assert.ok(Math.abs(Number(node.style.scale)-.9)<1e-9);f.ui.dispose();
 });
 test('save, reload and cancel use independent game storage and reset held input at editor boundaries',()=>{
  const saved=store(),f=fixture(saved);f.setReady(false);assert.equal(f.ui.open(),false);f.setReady(true);assert.equal(f.ui.open(),true);assert.equal(f.ui.isOpen(),true);f.choose('health');f.set('x',10);f.set('scale',120);f.command('save');assert.equal(f.ui.isOpen(),false);assert.equal(f.stats().resets,2);assert.equal(f.stats().paused,2);assert.ok(saved.getItem(HUD_LAYOUT_KEY));assert.equal(saved.getItem('moonforest-ui-proposal-layout-v1'),undefined);

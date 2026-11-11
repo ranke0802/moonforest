@@ -4,8 +4,8 @@
  */
 export function observeViewportSize(canvas, onResize, host = window, {onLayout=()=>{},onPending=()=>{}} = {}) {
   const doc = host.document;
-  const quietMs=125,maxWaitMs=500;
   const mobile=host.matchMedia?host.matchMedia('(pointer:coarse)').matches:!!host.navigator?.maxTouchPoints;
+  const quietMs=mobile?125:80,maxWaitMs=mobile?500:250;
   const now=()=>host.performance?.now?.()??performance.now();
   let frame=null,timer=null,disposed=false,previous='',committed=null,pending=null;
   let watchUntil=0,watchAt=Infinity,lastNotice='false:false:false';
@@ -54,15 +54,15 @@ export function observeViewportSize(canvas, onResize, host = window, {onLayout=(
     }
     const size={width,height,pixelRatio};
     const key = `${width}:${height}:${pixelRatio}`;
-    // Startup uses its first laid-out measurement immediately. Desktop drag
-    // resizing remains next-frame responsive; only coarse-pointer layouts wait.
+    // Startup is immediate. Batch subsequent fullscreen/resize bursts on both
+    // desktop and mobile so each intermediate size does not clear the canvas.
     if(!previous){commit(size,key);arm(at);notify();return;}
     if(key!==previous&&!pending){
       pending={size,key,started:at,changed:at};
       onPending(copy(size));notify();
     }else if(pending&&key!==pending.key){pending.size=size;pending.key=key;pending.changed=at;}
     if(pending){
-      if(!mobile||at-pending.changed>=quietMs||at-pending.started>=maxWaitMs)commit(size,key);
+      if(at-pending.changed>=quietMs||at-pending.started>=maxWaitMs)commit(size,key);
       arm(at);notify();return;
     }
     // A 180-degree phone turn can swap CSS safe-area insets without changing

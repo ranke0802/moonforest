@@ -1085,6 +1085,9 @@ try {
   const viewportResize=world.viewportResize=observeViewportSize(canvas, () => {
     if(mapDeparture?.departing||mapTransition?.busy)return;
     applyRenderQuality();
+    // Fullscreen can suspend the browser's render callback while Babylon's
+    // backing buffer is reallocated. Re-register only the already-running loop.
+    frameLoop?.restart?.();
     sceneDiagnostics.requestDrawCpuCapture('viewport-commit');
   },window,{onPending:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)input.reset();},onLayout:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)resizeScreenProjection();}});
   world.requestDrawCpuCapture=reason=>sceneDiagnostics.requestDrawCpuCapture(reason);

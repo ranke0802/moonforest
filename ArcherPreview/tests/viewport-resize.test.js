@@ -132,10 +132,11 @@ test('continuous actual mobile changes commit latest dimensions by the 500ms dea
   assert.equal(f.pending.length,1);assert.equal(f.frames.size,0);assert.equal(f.timers.size,0);
 });
 
-test('desktop resizing stays next-frame responsive and DPR changes retain exact measurements',t=>{
-  const f=fixture(t,{mobile:false});f.flush();f.resize(1100,700);assert.equal(f.calls.length,2);assert.equal(f.calls.at(-1).width,1100);
-  assert.equal(f.dispose.isSettling(),false);assert.equal(f.timers.size,0);
-  f.host.devicePixelRatio=2;f.host.dispatchEvent(new Event('resize'));f.flush();
+test('desktop fullscreen resize bursts coalesce and DPR changes retain exact measurements',t=>{
+  const f=fixture(t,{mobile:false});f.flush();f.host.document.dispatchEvent(new Event('fullscreenchange'));f.resize(1000,600);f.advance(40);f.resize(1100,700);
+  assert.equal(f.calls.length,1);f.advance(79);assert.equal(f.calls.length,1);f.advance(1);assert.equal(f.calls.length,2);assert.equal(f.calls.at(-1).width,1100);
+  f.advance(130);assert.equal(f.dispose.isSettling(),false);assert.equal(f.timers.size,0);
+  f.host.devicePixelRatio=2;f.host.dispatchEvent(new Event('resize'));f.flush();f.advance(80);
   assert.equal(f.calls.length,3);assert.equal(f.calls.at(-1).pixelRatio,2);assert.equal(f.pending.length,2);
 });
 
