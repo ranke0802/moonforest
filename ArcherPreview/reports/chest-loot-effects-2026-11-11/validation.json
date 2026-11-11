@@ -28,6 +28,15 @@
         "fail": 0
       },
       "sha256": "7c4f5ca0c62a63439ff6fa29b7198d1b3c0bf06e10a42f85be7ed3a44832c05b"
+    },
+    {
+      "log": "idle-recheck.log",
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0
+      },
+      "sha256": "04af7b2cba011fdf30273b0155221a2a6973906b3f52c1c79cacf570bb594c2e"
     }
   ],
   "textureAndResourceRevisionUnchanged": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",

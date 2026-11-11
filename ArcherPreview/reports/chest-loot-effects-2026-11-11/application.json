@@ -8,7 +8,8 @@
     "Flight ribbons and persistent pickup outlines use each physical item rarity, independently of the opening chest grade.",
     "One reusable 704-triangle effect mesh with fixed 96 sparkle / 256 ribbon slots, no new images, sounds, lights, shadow passes or render targets. No effect buffer uploads when idle.",
     "Effect shader preparation runs during existing loading-screen preparation. Source meshes and tinted ink variants warm before publication; map disposal cancels and releases owned effects and drops.",
-    "The previously reserved built-in chest effect checkbox is now active; legacy placeholder values migrate to enabled, while explicit new OFF selections persist."
+    "The previously reserved built-in chest effect checkbox is now active; legacy placeholder values migrate to enabled, while explicit new OFF selections persist.",
+    "After the last particle expires, the effect updater returns immediately without scanning particle slots or reading the camera; a new chest reactivates the same fixed pool."
   ],
   "preserved": {
     "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
@@ -39,7 +40,12 @@
     ],
     "build": "passed; existing large chunk warning only",
     "realDeviceFPSAndHeat": "not measured",
-    "GPUImageVisualReview": "not performed"
+    "GPUImageVisualReview": "not performed",
+    "idleEarlyReturnRecheck": {
+      "passing": 6,
+      "failed": 0,
+      "log": "idle-recheck.log"
+    }
   },
   "limits": {
     "physicalStacksPerChest": 24,
