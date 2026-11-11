@@ -2,7 +2,7 @@ import {createItemDropView} from './item-drop-view.js';
 import {ITEM_DROP_MODELS,ITEM_DROP_CHOICES} from './item-drop-data.js';
 import {GOLD_REWARDS} from './gold-loot.js';
 import {CHAPTER_QUESTS} from './chapter-quest-data.js';
-import {ChapterJourney} from './chapter-quest-state.js';
+import {ChapterJourney,chestOpenToken} from './chapter-quest-state.js';
 import {CHAPTER_POINTS,QUEST_APPLE_TREE} from './chapter-quest-points.js';
 import {createQuestProps} from './chapter-quest-props.js';
 import {lootRarity,lootItem,itemRarity} from './loot-rarity.js';
@@ -25,7 +25,18 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
  const journey=new ChapterJourney(storage),doc=root.ownerDocument,win=doc.defaultView,abort=new AbortController(),props=createProps(world),storyNpcs=createStoryNpcSettings({world,storage});world.questProps=props;world.storyNpcs=storyNpcs;
  const chestSettingsKey='moonforest-chest-drop-settings-v1';let chestSettings={};
  try{const value=JSON.parse(storage?.getItem(chestSettingsKey)??'{}');if(value&&typeof value==='object'&&!Array.isArray(value))chestSettings=value;}catch{}
- const saveChestSettings=(id,settings)=>{if(!storage)throw Error('상자 설정을 저장할 공간이 없습니다.');const next=structuredClone(chestSettings);next[world.mapId]??={};next[world.mapId][id]={assetId:settings.assetId,effectEnabled:settings.effectEnabled===true,...(typeof settings.visualOpened==='boolean'?{visualOpened:settings.visualOpened}:{})};storage.setItem(chestSettingsKey,JSON.stringify(next));chestSettings=next;};world.saveQuestChestSettings=saveChestSettings;
+ const chestCycle=setting=>Number.isSafeInteger(setting?.openCycle)&&setting.openCycle>0&&setting.openCycle<100000?setting.openCycle:0;
+ const chestTier=value=>Number.isInteger(value)&&value>=1&&value<=5;
+ const saveChestSettings=(id,settings)=>{
+  if(!storage)throw Error('상자 설정을 저장할 공간이 없습니다.');
+  const next=structuredClone(chestSettings),map=world.mapId;next[map]??={};let openCycle=chestCycle(next[map][id]);
+  // Only an explicit application of "closed" re-arms an already claimed cycle.
+  // An unchanged closed setting on reload must never produce another reward.
+  if(settings.visualOpened===false&&journey.seen.has(chestOpenToken(id,openCycle))){if(openCycle>=99999)throw Error('상자 초기화 횟수 한도를 초과했습니다.');openCycle++;}
+  next[map][id]={assetId:settings.assetId,effectEnabled:settings.effectEnabled===true,...(chestTier(settings.tier)?{tier:settings.tier}:{}),...(typeof settings.visualOpened==='boolean'?{visualOpened:settings.visualOpened}:{}),openCycle,stateVersion:2};
+  storage.setItem(chestSettingsKey,JSON.stringify(next));chestSettings=next;
+  const point=points.find(point=>point.id===id);if(point){point.openCycle=openCycle;point.wasLooted=journey.seen.has(chestOpenToken(id,openCycle));}
+ };world.saveQuestChestSettings=saveChestSettings;
  let dropView=null,dropTime=null,authoredRevision=-1;
  const isAuthoredChestOpened=id=>journey.seen.has('point:authored:'+id);
  world.isAuthoredChestOpened=isAuthoredChestOpened;
@@ -70,7 +81,7 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
  }
  function allowed(p){if(!p.requires)return true;if(p.requires.includes(':'))return journey.value.facts[p.requires]>0;return ['active','ready','done'].includes(journey.status(p.requires));}
  function inView(p){return allowed(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z}));}
- function visible(p){if(!inView(p))return false;if(p.id==='apple-tree')return appleDrops===0&&journey.status('Q01')==='active';if(p.id==='apple-drop')return appleDrops>0;return !(p.tier&&p.opened)&&!journey.seen.has('point:'+p.id);}
+ function visible(p){if(!inView(p))return false;if(p.id==='apple-tree')return appleDrops===0&&journey.status('Q01')==='active';if(p.id==='apple-drop')return appleDrops>0;return !(p.tier&&p.opened)&&!journey.seen.has(chestOpenToken(p.id,p.openCycle));}
  // Loot ownership controls interaction; an opened chest remains part of the scenery.
  function displayable(p){return p.tier&&p.model==='chest-common'?inView(p):visible(p);}
  function interact(){if(!safe()||!nearest||Math.hypot(getState().position.x-nearest.x,getState().position.z-nearest.z)>3)return;const p=nearest;if(!visible(p)||props.isReady?.(p)===false||!world.navigation.segmentClear(getState().position,p,.05))return;
@@ -111,7 +122,13 @@ export function setupChapterQuests({root,world,storage,getState,resetInput=()=>{
   event(key,count=1,token){return journey.record(key,count,token);},
   strike(result,position){if(getState().map!=='village'||!['active','ready'].includes(journey.status('Q01'))||!['slash','attack','moveAttack'].includes(result.state)||result.actionId===lastStrike||Math.hypot(position.x-QUEST_APPLE_TREE.x,position.z-QUEST_APPLE_TREE.z)>3.4)return;lastStrike=result.actionId;appleHits++;if((journey.value.bag.apple??0)<6)appleDrops=Math.min(3,appleDrops+1);journey.record('apple:strike');notify('사과가 떨어졌습니다. 가까이에서 G로 줍기');},
   update(time){const s=getState();if(!s.ready)return;syncAuthoredChests();props.animate?.(time);updateDrops(time,s);if(time-lastTime<.15)return;lastTime=time;
-   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);const setting=chestSettings[s.map]?.[p.id],dropAssetId=ITEM_DROP_CHOICES.some(([id])=>id===setting?.assetId)?setting.assetId:'',wasLooted=!!p.tier&&journey.seen.has('point:'+p.id),visualOpened=typeof setting?.visualOpened==='boolean'?setting.visualOpened:null;return {...p,x:position.x,z:position.z,dropAssetId,dropEffectEnabled:setting?.effectEnabled===true,wasLooted,visualOpened,opened:visualOpened??wasLooted};});props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
+   if(currentMap!==s.map){currentMap=s.map;points=CHAPTER_POINTS.filter(p=>p.map===s.map).map(p=>{
+    const position=world.navigation.findFree({x:p.x,z:p.z},p.tier?.65:.2,world.plains?105:world.cave?64:world.forest?55:48);let setting=chestSettings[s.map]?.[p.id];
+    // Repair the old saved visual-only closed state once, preserving old loot.
+    if(p.tier&&setting?.visualOpened===false&&setting.stateVersion!==2){try{saveChestSettings(p.id,setting);}catch{const next={...setting,openCycle:chestCycle(setting)+(journey.seen.has(chestOpenToken(p.id,chestCycle(setting)))?1:0),stateVersion:2};chestSettings[s.map][p.id]=next;}setting=chestSettings[s.map]?.[p.id];}
+    const tier=p.tier&&chestTier(setting?.tier)?setting.tier:p.tier,openCycle=chestCycle(setting),dropAssetId=ITEM_DROP_CHOICES.some(([id])=>id===setting?.assetId)?setting.assetId:'',wasLooted=!!p.tier&&journey.seen.has(chestOpenToken(p.id,openCycle)),visualOpened=setting?.visualOpened===true?true:setting?.visualOpened===false&&!wasLooted?false:null;
+    return {...p,tier,x:position.x,z:position.z,openCycle,dropAssetId,dropEffectEnabled:setting?.effectEnabled===true,wasLooted,visualOpened,opened:visualOpened??wasLooted};
+   });props.load(points).catch(e=>{console.error('[Quest props]',e);notify('소품을 불러오지 못했습니다. 의뢰 기록은 유지됩니다.');});}
    if(s.map==='village')journey.record('visit:village',1,'visit:village');
    if(s.map==='great-plains'&&Math.hypot(s.position.x+5,s.position.z-25)<8)journey.record('visit:junction',1,'visit:junction');
    if(s.map==='monster-forest'&&Math.hypot(s.position.x-27,s.position.z+36)<6)journey.record('visit:cave-camp',1,'visit:cave-camp');

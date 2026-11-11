@@ -25,3 +25,8 @@ test('corrupt saves and unavailable storage preserve an operational session with
 
 import {GoldLoot} from '../src/gold-loot.js';
 test('quest gold reconciles into the real wallet once after reload and retains combat loot',()=>{const storage=memory(),gold=new GoldLoot({storage});assert.equal(gold.creditCumulative('chapter-one',120),120);gold.drop('goblin',{x:0,z:0});gold.update(1,{x:0,z:0});const reload=new GoldLoot({storage});assert.equal(reload.balance,130);assert.equal(reload.creditCumulative('chapter-one',120),0);assert.equal(reload.creditCumulative('chapter-one',135),15);assert.equal(reload.balance,145);});
+
+
+test('re-armed chest reward cycles retain earlier drops and quest facts and cannot duplicate on reload',()=>{
+ const saved=memory(),j=new ChapterJourney(saved),point={id:'editor-closed',map:'village',tier:3,key:'chest:editor-closed'},pose={origin:{x:0,y:1,z:0},position:{x:1,y:0,z:0}};assert.ok(j.openChest(point,pose));const facts={...j.value.facts};point.openCycle=1;assert.ok(j.openChest(point,pose));assert.equal(j.openChest(point,pose),null);assert.deepEqual(j.value.facts,facts);assert.deepEqual(j.value.pendingDrops.map(d=>d.id),['chest:editor-closed','chest:editor-closed:cycle:1']);const next=new ChapterJourney(saved);assert.equal(next.openChest(point,pose),null);assert.equal(next.value.pendingDrops.length,2);
+});

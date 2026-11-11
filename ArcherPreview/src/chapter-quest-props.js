@@ -8,6 +8,7 @@ import {loadMapContainer} from './map-container.js';
 import {instantiateStaticMap} from './static-map-instances.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
 import {prepareChestOpening,createChestOpening} from './chest-opening.js';
+import {lootRarity} from './loot-rarity.js';
 
 // An opaque 24-segment annulus replaces the separate 1,250-triangle torus.
 // The points share one 48-triangle geometry and use native instances.
@@ -67,7 +68,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    containers.push(container);container=null;owned.push(...localRoots);records.push(...localRecords);localRoots=[];
    for(const record of localRecords){
     record.point.visual=record.root;
-    if(record.point.model==='chest-common')record.editableEncounter={actor:record.root,active:true,kind:'quest-chest',displayName:record.point.label??'보물 상자',get dropAssetId(){return record.point.dropAssetId??'';},set dropAssetId(value){record.point.dropAssetId=value;},get dropEffectEnabled(){return record.point.dropEffectEnabled===true;},set dropEffectEnabled(value){record.point.dropEffectEnabled=!!value;},get chestVisualState(){return record.point.visualOpened===true?'open':record.point.visualOpened===false?'closed':'auto';},set chestVisualState(value){record.point.visualOpened=value==='open'?true:value==='closed'?false:null;record.point.opened=record.point.visualOpened??record.point.wasLooted??false;opening.delete(record.opening);record.opening?.setOpened(record.point.opened);sync();},onEditApplied(){world.saveQuestChestSettings?.(record.point.id,{assetId:record.point.dropAssetId??'',effectEnabled:record.point.dropEffectEnabled===true,visualOpened:record.point.visualOpened});},onEdited(){
+    if(record.point.model==='chest-common')record.editableEncounter={actor:record.root,active:true,kind:'quest-chest',displayName:record.point.label??'보물 상자',get chestTier(){return record.point.tier;},set chestTier(value){if(!Number.isInteger(value)||value<1||value>5)return;record.point.tier=record.placement.tier=value;record.placement.lootTier=value;const tint=Color3.FromHexString(lootRarity(value).color);for(const mesh of record.meshes)mesh.instancedBuffers.villageInkTint.copyFrom(tint);},get dropAssetId(){return record.point.dropAssetId??'';},set dropAssetId(value){record.point.dropAssetId=value;},get dropEffectEnabled(){return record.point.dropEffectEnabled===true;},set dropEffectEnabled(value){record.point.dropEffectEnabled=!!value;},get chestVisualState(){return record.point.visualOpened===true?'open':record.point.visualOpened===false?'closed':'auto';},set chestVisualState(value){record.point.visualOpened=value==='open'?true:value==='closed'?false:null;record.point.opened=record.point.visualOpened??record.point.wasLooted??false;opening.delete(record.opening);record.opening?.setOpened(record.point.opened);sync();},onEditApplied(){world.saveQuestChestSettings?.(record.point.id,{assetId:record.point.dropAssetId??'',effectEnabled:record.point.dropEffectEnabled===true,visualOpened:record.point.visualOpened,tier:record.point.tier});sync();},onEdited(){
      if(record.root.isDisposed())return;const position=record.root.getAbsolutePosition();record.point.x=position.x;record.point.z=position.z;
      record.placement.x=position.x;record.placement.z=position.z;record.center.set(position.x,position.y+(record.point.height??record.config.height)*.5,position.z);
      const ring=record.point.marker;if(ring&&!ring.isDisposed()){ring.unfreezeWorldMatrix();ring.position.set(position.x,world.terrain.heightAt(position.x,position.z)+.05,position.z);ring.computeWorldMatrix(true);ring.freezeWorldMatrix();}
@@ -105,7 +106,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    sync();pump();
   },
   openChest(point,{immediate=false}={}){
-   if(disposed||point.model!=='chest-common')return false;point.wasLooted=true;point.opened=true;
+   if(disposed||point.model!=='chest-common')return false;point.wasLooted=true;point.opened=true;point.visualOpened=null;
    const controller=records.find(record=>record.point===point)?.opening;
    if(controller?.open({immediate})&&controller.state.active)opening.add(controller);
    sync();return !!controller;
