@@ -1,4 +1,6 @@
 import {Constants,Mesh,ShaderMaterial,VertexBuffer,VertexData} from '@babylonjs/core';
+import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
+import {bindCaveFogMaterial} from './cave-fog-binding.js';
 
 export const SWORD_TRAIL_KEY='moonforest-sword-trail-v1';
 // These colors follow the existing selectable sword palettes, not the shield.
@@ -19,14 +21,18 @@ const vertex=`
   precision highp float;
   attribute vec3 position;
   attribute vec4 color;
+  uniform mat4 world;
   uniform mat4 worldViewProjection;
   varying mediump vec4 trailColor;
-  void main(void){trailColor=color;gl_Position=worldViewProjection*vec4(position,1.0);}
+  varying vec3 trailWorldPosition;
+  void main(void){trailColor=color;trailWorldPosition=(world*vec4(position,1.0)).xyz;gl_Position=worldViewProjection*vec4(position,1.0);}
 `;
 const fragment=`
   precision mediump float;
   varying mediump vec4 trailColor;
-  void main(void){gl_FragColor=trailColor;}
+  varying vec3 trailWorldPosition;
+  ${CAVE_FOG_GLSL}
+  void main(void){if(caveFogHidesInk(trailWorldPosition))discard;gl_FragColor=trailColor;}
 `;
 const SEGMENTS=12, LIFE=.18, EPSILON=1e-8;
 
@@ -36,8 +42,9 @@ export function createSwordTrail(scene,{enabled=true,prepare=true,onError=()=>{}
  const mesh=new Mesh('player-sword-trail',scene),positions=new Float32Array(SEGMENTS*12),colors=new Float32Array(SEGMENTS*16),indices=[];
  for(let i=0;i<SEGMENTS;i++){const n=i*4;indices.push(n,n+1,n+2,n+1,n+3,n+2);}
  const data=new VertexData();data.positions=positions;data.colors=colors;data.indices=indices;data.applyToMesh(mesh,true);
- const material=new ShaderMaterial('player-sword-trail-material',scene,{vertexSource:vertex,fragmentSource:fragment},{attributes:['position','color'],uniforms:['worldViewProjection'],needAlphaBlending:true});
+ const material=new ShaderMaterial('player-sword-trail-material',scene,{vertexSource:vertex,fragmentSource:fragment},{attributes:['position','color'],uniforms:['world','worldViewProjection','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap'],needAlphaBlending:true});
  material.backFaceCulling=false;material.disableDepthWrite=true;material.alphaMode=Constants.ALPHA_COMBINE;
+ bindCaveFogMaterial(scene,material);material.onBindObservable.add(()=>bindCaveFogMaterial(scene,material,material._activeEffect));
  mesh.material=material;mesh.isPickable=false;mesh.receiveShadows=false;mesh.alwaysSelectAsActiveMesh=true;mesh.hasVertexAlpha=true;mesh.setEnabled(false);
  const segments=Array.from({length:SEGMENTS},()=>({points:new Float32Array(12),born:0,active:false}));let cursor=0,active=0,lastTime=null,disposed=false,prepared=!prepare,preparing=null,failed=false;
  const safeError=error=>{try{onError(error);}catch{}};

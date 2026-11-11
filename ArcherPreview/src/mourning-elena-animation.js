@@ -80,6 +80,9 @@ export class MourningElenaAnimator {
     const dead=channels(group('Chimera_Death_Lament_5p2s'));
     this.deathChannels=dead.map(c=>({...c,from:c.target[c.property].clone()}));
     applyMourningDeathKneeTracks(this.deathChannels,makeTrack);
+    // A short, reversible upper-body delta from the opening of the authored
+    // death clip. It never starts the death state or modifies leg/knee tracks.
+    this.knockbackChannels=this.deathChannels.filter(c=>c.property==='rotationQuaternion'&&['DEF_Abdomen','DEF_Spine','DEF_Chest','DEF_Neck','DEF_Head'].includes(c.target.name)&&!c.track.constant).map(c=>({target:c.target,track:c.track,inverse:c.track.sample(0).clone().conjugate(),delta:Quaternion.Identity(),weighted:Quaternion.Identity()}));
     this.deathFromWeights={walk:0,cast:0,idle:1,hit:0};
     this.hair=combined.filter(c=>c.target.name.startsWith('DEF_Hair_'));
     this.body=combined.filter(c=>!c.target.name.startsWith('DEF_Hair_'));
@@ -115,7 +118,7 @@ export class MourningElenaAnimator {
     this.reset();
   }
   reset(){
-    Object.assign(this,{current:'idle',castVariant:'cast',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,clothInitialized:false,disposed:false,actionId:null,deathTime:0,deathWeight:0,deathStarted:false});
+    Object.assign(this,{current:'idle',castVariant:'cast',castTime:0,walkTime:0,hairTime:0,idleTime:0,hitTime:0,breathClock:0,haloTime:0,haloSpeed:1,gaitBlend:0,gaitRate:this.config.motion?.defaultGaitRate??2,accumulator:0,staggerRemaining:0,hitActive:false,hitReleaseWeight:0,hitReleaseTime:0,interruptCastWeight:0,interruptHaloSpeed:1,hitPulseTime:HIT_PULSE_SECONDS,hitPulseWeight:0,hitPulseCount:0,knockbackTime:.7,clothInitialized:false,disposed:false,actionId:null,deathTime:0,deathWeight:0,deathStarted:false});
     for(const c of this.fixed)c.target[c.property].copyFrom(c.track.keys[0].value);
     this.sample(0);return this;
   }
@@ -154,6 +157,7 @@ export class MourningElenaAnimator {
     if(this.disposed||this.current==='dead'||this.hitActive)return false;
     this.hitPulseTime=0;this.hitPulseCount++;return true;
   }
+  reactToKnockback(){if(this.disposed||this.deathStarted)return false;this.knockbackTime=0;this.accumulator=0;return true;}
   update(dt){
     if(this.disposed)return;
     dt=Math.max(0,Number.isFinite(dt)?dt:0);const moving=this.current==='walk'&&!this.hitActive,dead=this.current==='dead';
@@ -168,11 +172,12 @@ export class MourningElenaAnimator {
     if(this.hitActive)this.hitTime=Math.min(1.3,this.hitTime+dt);else this.hitReleaseTime+=dt;
     const pulsing=this.hitPulseTime<HIT_PULSE_SECONDS;
     this.hitPulseTime=Math.min(HIT_PULSE_SECONDS,this.hitPulseTime+dt);
+    this.knockbackTime=Math.min(.7,this.knockbackTime+dt);
     this.haloSpeed=this.current==='cast'&&!this.hitActive?haloSpeedAt(this.castTime):this.hitActive?1+(this.interruptHaloSpeed-1)*(1-smooth01(this.hitTime/.25)):1;
     this.haloTime=(this.haloTime+dt*this.haloSpeed)%48;
     this.accumulator+=dt;
     // Engaged/casting characters always sample every frame; distant residents may use 15/30 Hz.
-    if(this.current!=='cast'&&!this.hitActive&&!pulsing&&this.accumulator<this.sampleInterval)return;
+    if(this.current!=='cast'&&!this.hitActive&&!pulsing&&this.knockbackTime>=.7&&this.accumulator<this.sampleInterval)return;
     const step=this.accumulator;this.accumulator=0;this.sample(step);
   }
   sample(dt){
@@ -182,6 +187,7 @@ export class MourningElenaAnimator {
     for(const c of this.body)applyWeighted(c,this,this.weights);
     this.applyHitPulse(casting);
     for(const c of this.hair)applyWeighted(c,this,this.weights,true);
+    if(this.knockbackTime<.7){const weight=.7*shotWeight(this.knockbackTime,.7,.12,.25),time=Math.min(.9,this.knockbackTime*1.6);for(const c of this.knockbackChannels){c.inverse.multiplyToRef(c.track.sample(time),c.delta);Quaternion.SlerpToRef(this.hitIdentity,c.delta,weight,c.weighted);c.target.rotationQuaternion.multiplyToRef(c.weighted,c.target.rotationQuaternion);c.target.rotationQuaternion.normalize();}}
     for(const c of this.halo)c.target[c.property].copyFrom(c.track.sample(this.haloTime));
     this.applyMorphs(casting,false);
     this.refreshPose();this.applyCloth(dt);this.samples++;this.cachePoseRoots();

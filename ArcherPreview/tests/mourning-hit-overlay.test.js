@@ -116,4 +116,13 @@ test('real r8 ordinary-hit overlay preserves action clocks, feet, cast hands and
     a.animator.reactToHit();const sampled=a.animator.samples;step(pair,'idle',24);assert.ok(a.animator.samples>=sampled+23,'active recoil and its last cleanup pose sample even at a lower resident rate');assert.equal(a.animator.hitPulseWeight,0);
     a.animator.sample(0);b.animator.sample(0);sameUnaffected(a,b,new Set());
   });
+  await t.test('knockback reuses the opening death tracks briefly without starting death or changing the legs',()=>{
+    a.animator.reset();b.animator.reset();a.animator.sampleInterval=0;b.animator.sampleInterval=0;step(pair,'idle',10);
+    assert.ok(a.animator.knockbackChannels.length>0);assert.equal(a.animator.reactToKnockback(),true);step(pair,'idle',12);
+    const changed=a.animator.knockbackChannels.some(c=>angle(c.target.rotationQuaternion,b.nodes.get(c.target.name).rotationQuaternion)>.02);
+    assert.ok(changed,'the sampled death motion affects the living upper body');assert.equal(a.animator.deathStarted,false);
+    for(const [name,node] of a.nodes)if(/Leg|Foot|Thigh|Knee/i.test(name))assert.ok(error(node.rotationQuaternion,b.nodes.get(name)?.rotationQuaternion)<2e-6,name);
+    step(pair,'idle',40);assert.equal(a.animator.knockbackTime,.7);sameUnaffected(a,b,new Set());
+    a.animator.transition('dead');assert.equal(a.animator.reactToKnockback(),false);
+  });
 });

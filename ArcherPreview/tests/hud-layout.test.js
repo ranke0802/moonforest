@@ -74,6 +74,13 @@ test('combat buttons can move and reset independently',()=>{
 test('drag events in editing top layer move HUD without invoking the underlying combat button',()=>{
  const f=fixture();let attack=0;f.root.querySelector('#attack-button').addEventListener('pointerdown',()=>attack++);f.ui.open();f.event(f.dialog,'pointerdown',{button:0,pointerId:1,clientX:60,clientY:40});f.event(f.dialog,'pointermove',{pointerId:1,clientX:160,clientY:100});f.event(f.dialog,'pointercancel',{pointerId:1});f.command('save');assert.equal(f.ui.inspect().items.health.x,.1);assert.equal(f.ui.inspect().items.health.y,.1);assert.equal(attack,0);f.ui.dispose();
 });
+test('directly pointing at another visible UI selects and moves that item',()=>{
+ const f=fixture(),node=f.root.querySelector('#dot-minimap'),box=f.geometry.get(node);f.ui.open();
+ const x=box.x+box.width/2,y=box.y+box.height/2;
+ f.event(f.dialog,'pointerdown',{button:0,pointerId:7,pointerType:'mouse',clientX:x,clientY:y});
+ f.event(f.dialog,'pointermove',{pointerId:7,pointerType:'mouse',clientX:x+100,clientY:y+30});f.event(f.dialog,'pointerup',{pointerId:7});f.command('save');
+ assert.equal(f.ui.inspect().items.map.x,.1);assert.equal(f.ui.inspect().items.map.y,.05);assert.equal(f.ui.inspect().items.health.x,0);f.ui.dispose();
+});
 test('mouse corner drag and touch pinch resize the selected HUD group',()=>{
  const f=fixture();f.ui.open();
  f.event(f.dialog,'pointerdown',{button:0,pointerId:1,pointerType:'mouse',clientX:20,clientY:60});

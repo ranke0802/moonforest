@@ -3,6 +3,16 @@ import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
 import {NullEngine,Scene,TransformNode,VertexBuffer} from '@babylonjs/core';
 import {createSwordTrail,setupSwordTrailSettings,SWORD_TRAIL_KEY,SWORD_TRAIL_COLORS} from '../src/sword-trail.js';
+
+test('sword ribbon participates in cave visibility masking and switches away from a retired cave mask',()=>{
+ const engine=new NullEngine(),scene=new Scene(engine),trail=createSwordTrail(scene,{prepare:false});
+ const material=trail.mesh.material;assert.ok(material.options.samplers.includes('caveFogMap'));
+ assert.ok(material.options.uniforms.includes('caveFogActive'));
+ assert.match(material.shaderPath.fragmentSource,/caveFogHidesInk\(trailWorldPosition\)/);
+ let binds=0;scene.metadata={caveFogRuntime:{disposed:false,bind(){binds++;}}};material.onBindObservable.notifyObservers(trail.mesh);assert.equal(binds,1);
+ scene.metadata.caveFogRuntime.disposed=true;material.onBindObservable.notifyObservers(trail.mesh);assert.equal(material._floats.caveFogActive,0);
+ trail.dispose();scene.dispose();engine.dispose();
+});
 import {PlayerStrikeSampler} from '../src/player-strikes.js';
 
 const contact={previous:[[0,1,0],[0,0,0]],blade:[[1,1,0],[1,0,0]],window:{id:'cut'}};

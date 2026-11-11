@@ -29,5 +29,5 @@ test('stored hidden diagnostics apply on reveal and recalculate once on resize',
 });
 
 test('closing the HUD editor restores focus outside the now-closed editor and settings dialog',()=>{
- const f=fixture();f.ui.open();assert.equal(f.getFocused()?.id,'hud-layout-selection');f.event(f.dialog.querySelector('[data-hud-command="cancel"]'),'click');assert.notEqual(f.getFocused()?.id,'hud-layout-selection');assert.ok(['motion-speed-toggle','viewport','open-hud-layout'].includes(f.getFocused()?.id));f.ui.dispose();
+ const f=fixture();f.ui.open();assert.equal(f.getFocused()?.dataset.hudCommand,'save');f.event(f.dialog.querySelector('[data-hud-command="cancel"]'),'click');assert.notEqual(f.getFocused()?.dataset.hudCommand,'save');assert.ok(['motion-speed-toggle','viewport','open-hud-layout'].includes(f.getFocused()?.id));f.ui.dispose();
 });

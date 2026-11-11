@@ -51,6 +51,20 @@ test('held and pending shields never create an outgoing strike, even across the 
 });
 
 for(const [name,Encounter,asset] of variants){
+  test(`${name}: actual heavy and shield contacts apply an outward knockback`,t=>{
+    const {b,player}=fixture(t,Encounter,asset);let reactions=0;
+    b.alignPose=()=>{};b.contactSeparation=()=>0;b.hurtCapsules=()=>[{points:[[0,1,5],[0,2,5]],radius:1}];b.skillHurtCapsule=()=>null;b.damageNumberPosition=()=>b.actor.position;
+    b.animator={ensurePoseCurrent(){},reactToHit(){},reactToKnockback(){reactions++;}};
+    for(const [i,window] of [{id:'jump-cut',damage:10,heavy:true},{id:'shield-push',damage:10,stun:1.5}].entries()){
+      b.brain=b.createBrain(b.brain.durations);b.gate.reset();b.knockVelocity.setAll(0);
+      b.poseAndContacts(player,{state:'idle'}, {actionId:100+i,window,blade:[[0,1,5],[0,2,5]]},null);
+      assert.ok(b.knockVelocity.z>0,`${window.id} pushes away from the player`);assert.equal(b.knockVelocity.x,0);
+    }
+    assert.equal(reactions,2);
+    b.brain=b.createBrain(b.brain.durations);b.brain.hp=1;b.gate.reset();b.knockVelocity.setAll(0);
+    b.poseAndContacts(player,{state:'idle'},{actionId:103,window:{id:'shield-push',damage:10,stun:1.5},blade:[[0,1,5],[0,2,5]]},null);
+    assert.equal(b.brain.hp,0);assert.ok(b.knockVelocity.z>0,'lethal contact still pushes');assert.equal(reactions,2,'death keeps its own animation');
+  });
   test(`${name}: held/pending block staggers only on contact, without damage or positional recoil`,t=>{
     const {b,player,feedback}=fixture(t,Encounter,asset),position=b.actor.position.clone();
     for(const action of [pending,held]){
