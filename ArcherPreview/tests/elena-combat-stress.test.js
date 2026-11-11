@@ -1,3 +1,4 @@
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 import test,{after} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
@@ -24,6 +25,8 @@ const counts=f=>({meshes:f.scene.meshes.length,geometries:f.scene.geometries.len
 async function fixture(t){
   setWorldCharacter('warrior-v5');t.after(()=>setWorldCharacter('warrior'));
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;scene.useConstantAnimationDeltaTime=true;
+  // NullEngine has no real texture upload completion; mark this shared fallback complete.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   Object.assign(engine.getCaps(),{textureFloat:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});
   const loaded=[];
   async function library(name){

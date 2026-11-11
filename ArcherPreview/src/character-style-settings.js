@@ -3,11 +3,12 @@ export const CHARACTER_STYLE_KEY='moonforest-character-style-v1';
 export const CHARACTER_STYLE_DEFAULTS=Object.freeze({
   player:Object.freeze({outline:true,outlineWidth:.15,internal:true,internalStrength:.04,brightness:.95}),
   boss:Object.freeze({outline:true,outlineWidth:.3,internal:true,internalStrength:.3,brightness:1}),
+  mourning:Object.freeze({outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35}),
 });
 const bounded=(value,min,max,fallback)=>typeof value==='number'&&Number.isFinite(value)?Math.round(Math.max(min,Math.min(max,value))*100)/100:fallback;
 export function normalizeCharacterStyles(value){
   const result={version:1,defaultsVersion:3};
-  for(const group of ['player','boss']){
+  for(const group of ['player','boss','mourning']){
     const d=CHARACTER_STYLE_DEFAULTS[group],v=value?.[group];
     result[group]={outline:typeof v?.outline==='boolean'?v.outline:d.outline,outlineWidth:bounded(v?.outlineWidth,group==='player'?-1:0,3,d.outlineWidth),internal:typeof v?.internal==='boolean'?v.internal:d.internal,internalStrength:bounded(v?.internalStrength,0,1,d.internalStrength),brightness:bounded(v?.brightness,.25,2.5,d.brightness)};
   }
@@ -30,7 +31,7 @@ export function setupCharacterStylePanel({storage,onChange=()=>{},doc=document}=
   const settings=new CharacterStyleSettings(storage),dialog=doc.createElement('dialog');
   dialog.id='character-style-dialog';dialog.className='motion-speed-dialog character-style-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-labelledby','character-style-title');
   dialog.innerHTML=`<header><h2 id="character-style-title">캐릭터 선 · 밝기</h2><button type="button" class="close-style" aria-label="캐릭터 표현 설정 닫기">×</button></header>
-    <label class="style-group-label">조절 대상<select id="character-style-group"><option value="player">주인공 · 장비</option><option value="boss">보스</option></select></label>
+    <label class="style-group-label">조절 대상<select id="character-style-group"><option value="player">주인공 · 장비</option><option value="boss">보스</option><option value="mourning">비탄의 마녀</option></select></label>
     <div class="style-control"><label><input id="character-outline-enabled" type="checkbox">외곽선</label><label for="character-outline-width"><span id="character-outline-label">굵기</span><output id="character-outline-value"></output></label><input id="character-outline-width" type="range" min="0" max="3" step="0.05"><small id="character-outline-note"></small></div>
     <div class="style-control"><label><input id="character-internal-enabled" type="checkbox">내부선</label><label for="character-internal-strength">강도<output id="character-internal-value"></output></label><input id="character-internal-strength" type="range" min="0" max="1" step="0.02"><small>원본 그림에 그려진 선은 유지됩니다.</small></div>
     <div class="style-control"><label for="character-brightness">밝기<output id="character-brightness-value"></output></label><input id="character-brightness" type="range" min="0.25" max="2.5" step="0.05"></div>

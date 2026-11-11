@@ -1,0 +1,1 @@
+export{t as NPC_WORLD_STORAGE_KEY,n as createNpcWorld,r as hasNpcPlacements}from"./npc-world-BLSkXnD6.js";

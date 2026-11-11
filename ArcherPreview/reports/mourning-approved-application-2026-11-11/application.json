@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "date": "2026-11-11",
+  "approvedReview": "Docs/Reviews/2026-11-11/비탄의_마녀_49982_동작수정_검수_v4.html",
+  "profile": {
+    "outlinePixels": 0.5,
+    "interiorStrength": 0.2,
+    "brightness": 1.35,
+    "pbr": false
+  },
+  "triangles": 49982,
+  "sampledPoses": 494,
+  "nonHairVertexDifference": 0,
+  "nonHairLocalTransformDifference": 0,
+  "tests": {
+    "integration": {
+      "tests": 124,
+      "pass": 123,
+      "fail": 1
+    },
+    "compatibility": {
+      "tests": 80,
+      "pass": 80,
+      "fail": 0
+    },
+    "final": {
+      "tests": 32,
+      "pass": 32,
+      "fail": 0
+    }
+  },
+  "optimizationChecklist": [
+    {
+      "item": "모델·텍스처 보존",
+      "status": "확인",
+      "evidence": "49,982삼각형, 기존 4K KTX2·13단계 mip. UV·가중치·원본 클립과 전투 샘플러 파일은 변경하지 않음."
+    },
+    {
+      "item": "머리카락 보정 범위",
+      "status": "확인",
+      "evidence": "494개 CPU 포즈 비교. 머리카락 외 정점·본 차이 0. 내려찍기·피격 때 15개 가이드만 보정. 대기·걷기·사망은 유지."
+    },
+    {
+      "item": "지오메트리·재질 공유",
+      "status": "확인",
+      "evidence": "개체별 rig·상태는 독립. geometry·텍스처·표면 재질과 외곽선 재질은 공유. 네 맵 조건 검사."
+    },
+    {
+      "item": "외곽선 중복 방지",
+      "status": "확인",
+      "evidence": "기존 3개 실루엣이 본체의 geometry·skin·morph를 재사용. 전용 stencil bit 1로 표면 위 검은 틈 방지. 풍경 bit 4와 분리."
+    },
+    {
+      "item": "내부선 패스 공유",
+      "status": "확인",
+      "evidence": "NPC와 scene 공용 normal/depth RTT·합성 1세트. 개체마다 RTT 생성 금지. 추가 월드 depth 재렌더 0. 가려진 동굴 표면의 내부선은 폐기."
+    },
+    {
+      "item": "포즈 반복 처리",
+      "status": "확인",
+      "evidence": "머리카락 보정은 sample 중 한 번만 수행. 카메라·충돌 질의의 refresh 반복에는 재적용하지 않음. 내부선용 root 변환도 개체당 한 번, dirty-aware 갱신."
+    },
+    {
+      "item": "분할 준비·취소·재시도",
+      "status": "확인",
+      "evidence": "기존 소환 시간/작업 예산과 deadline 유지. 본체·사망 투명도·그림자 준비 경로 유지, 내부선 skin/morph도 숨긴 상태에서 준비. 취소·오류 후 수동 재시도 검사."
+    },
+    {
+      "item": "거리·LOD·보이지 않는 개체",
+      "status": "확인",
+      "evidence": "기존 LOD·MourningCameraBounds·렌더 거리·상태별 포즈 갱신 간격 유지. 기존 네 맵 외곽선·승격 수명 검사 통과."
+    },
+    {
+      "item": "사망·반복 이동·해제",
+      "status": "확인",
+      "evidence": "개체별 mesh visibility로 사망 페이드. 표면 공유 재질의 alpha를 바꾸지 않음. 숨김 시 RTT/합성 해제, 마지막 등록 제거와 scene 종료 시 공용 자원 해제. 동굴 종료 때 sampler를 공용 fallback으로 교체."
+    },
+    {
+      "item": "전투 판정·동작 시간",
+      "status": "확인",
+      "evidence": "몸·다리·팔의 애니메이션과 판정 코드는 유지. 실제 모델 전투·반복 공격·맵 취소 검사를 실행. 원본 클립 비교는 승인된 보정 대상인 머리카락을 별도 검사."
+    },
+    {
+      "item": "기존 검사 1건의 불일치",
+      "status": "기존 항목",
+      "evidence": "동굴 안전 영역의 과거 sampler SHA는 6ca342…이나 현재 HEAD와 작업 파일은 모두 808b77…로 동일. 이번 작업 전부터의 기록 불일치. 원본 sampler·안전 셀·검사를 고쳐서 통과시키지 않고 별도 기록."
+    },
+    {
+      "item": "실기기 FPS·GPU·발열",
+      "status": "미측정",
+      "evidence": "브라우저 자동조작 없이 Node/NullEngine·빌드·배포 파일로 검증. 내부선 공유 패스도 렌더링 비용이 있으며 실기기 성능 보장을 뜻하지 않음."
+    }
+  ],
+  "limitations": [
+    "No browser automation",
+    "No physical GPU timing, S23 FPS or temperature measurement",
+    "One pre-existing stale safety-bake source fingerprint recorded separately"
+  ],
+  "deployment": "Prepared resource graph and production build verified; public publication is recorded separately in deployment.json."
+}

@@ -3,6 +3,9 @@ import { CharacterAnimator } from './animation.js';
 import { attachCharacterOutlines, attachCharacterOutlinesAsync, isRuntimeOutline } from './character-outlines.js';
 import { applyMonsterToon } from './monster-toon.js';
 import { applyElenaStyle } from './elena-style.js';
+import {applyMourningElenaLook} from './mourning-elena-look.js';
+import {installMourningHairGuides} from './mourning-hair-guides.js';
+import {prepareNpcInteriorInk} from './character-interior-ink.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
@@ -107,7 +110,7 @@ export class BossEncounter {
       }
     });this.assetPreparationStep=1;}
     if(this.assetPreparationStep<2){await preparation.step('paint-materials',()=>{
-      applyMonsterToon(this.asset);if(this.kind==='elena')applyElenaStyle(this.asset);this.world.lighting?.registerMeshes(this.asset.meshes);
+      this.preparePaint();this.world.lighting?.registerMeshes(this.asset.meshes);
     });this.assetPreparationStep=2;}
     if(this.assetPreparationStep<3){
       if(preparation.incremental)await attachCharacterOutlinesAsync(this.asset,this.kind,preparation);
@@ -123,15 +126,20 @@ export class BossEncounter {
     });this.assetPreparationStep=4;}
     // The stable morph-slot contract is configured above. Initialize the real
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
-    if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.createAnimator();});this.assetPreparationStep=5;}
+    if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.prepareAnimator();});this.assetPreparationStep=5;}
     if(this.assetPreparationStep<6){
       this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation,shadows:this.world.shadows});
       if(this.kind!=='elena')await prepareBossShaders({meshes:[this.ring]},{preparation});
       preparation.check();this.assetPreparationStep=6;
     }
-    await this.prepareAuxiliary(preparation);preparation.check();
+    await this.prepareAuxiliary(preparation);if(this.kind==='elena'&&this.phase===2)await prepareNpcInteriorInk(this.asset,preparation);preparation.check();
     this.assetPrepared=true;this.preparationStats=preparation.stats;this.preparationPhase('model');return this.asset;
   }
+  preparePaint(){
+    if(this.kind==='elena'&&this.phase===2){applyMourningElenaLook(this.asset,this.actor,this.config);return;}
+    applyMonsterToon(this.asset);if(this.kind==='elena')applyElenaStyle(this.asset);
+  }
+  prepareAnimator(){const animator=this.createAnimator();if(this.kind==='elena'&&this.phase===2)installMourningHairGuides(animator);return animator;}
   async summon(player,{position,rotationY,preparation,reuseAnimator=false,activate=true}={}){
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
@@ -143,7 +151,7 @@ export class BossEncounter {
         const reset=this.animator.resetForReuse??this.animator.reset;
         if(typeof reset!=='function')throw new Error('Prepared actor animator cannot reset for reuse');
         reset.call(this.animator);
-      }else{this.animator?.dispose();this.animator=this.createAnimator();}
+      }else{this.animator?.dispose();this.animator=this.prepareAnimator();}
       preparation?.stats.steps.push({name:'summon-animator',ms:Math.max(0,performance.now()-animatorStart)});
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});

@@ -133,8 +133,10 @@ test('failed shader preparation stays hidden, does not retry in the update loop,
 
 test('a never-ready shader cancels before any late completion, and immediate map return prepares under the new revision',async t=>{
  const f=await fixture(t);await f.battle.activateResident(f.player,{reset:true});f.battle.preparationOptions={frame:async()=>{}};
- const entered=deferred(),ready=PBRMaterial.prototype.isReadyForSubMesh;let blocked=true,calls=0;
- PBRMaterial.prototype.isReadyForSubMesh=function(mesh,...args){if(blocked&&mesh.name==='Lament_Mouth_Interior'){calls++;entered.resolve();return false;}return ready.call(this,mesh,...args);};
+ const entered=deferred(),ready=PBRMaterial.prototype.isReadyForSubMesh,shaderReady=ShaderMaterial.prototype.isReady;let blocked=true,calls=0;
+ const waiting=function(mesh,original,args){if(blocked&&mesh.name==='Lament_Mouth_Interior'){calls++;entered.resolve();return false;}return original.call(this,mesh,...args);};
+ PBRMaterial.prototype.isReadyForSubMesh=function(mesh,...args){return waiting.call(this,mesh,ready,args);};ShaderMaterial.prototype.isReady=function(mesh,...args){return waiting.call(this,mesh,shaderReady,args);};
+ t.after(()=>{PBRMaterial.prototype.isReadyForSubMesh=ready;ShaderMaterial.prototype.isReady=shaderReady;});
  const warm=f.battle.preloadMourning();await entered.promise;assertWarmInvisible(f);const oldJob=f.battle.mourningWarmJob;f.battle.hide();f.world.cave=false;f.world.mapId='village';assert.equal(await warm,false);assert.equal(oldJob.preparation.pendingWaits,0);
  const stopped=calls;await new Promise(r=>setTimeout(r,35));assert.equal(calls,stopped,'never-ready old variant has no surviving readiness callback');f.world.cave=true;f.world.mapId='witch-cave';blocked=false;
  const returning=f.battle.activateResident(f.player,{reset:true,phase:2});assert.equal(await returning,true);assert.equal(oldJob.status,'cancelled','later-ready effects cannot complete the old owner');
@@ -148,12 +150,14 @@ test('disposing the owning scene during a preparation slice cannot resurrect or 
 });
 
 test('a shader deadline clears the hidden join, restores borrowed state and permits one explicit fresh request',async t=>{
- const f=await fixture(t);await f.battle.activateResident(f.player,{reset:true});let clock=0;const ready=PBRMaterial.prototype.isReadyForSubMesh,previous=new Map();
- PBRMaterial.prototype.isReadyForSubMesh=function(mesh,...args){if(mesh.name==='Lament_Mouth_Interior'){if(!previous.has(this))previous.set(this,true);clock=45001;return false;}return ready.call(this,mesh,...args);};
+ const f=await fixture(t);await f.battle.activateResident(f.player,{reset:true});let clock=0;const ready=PBRMaterial.prototype.isReadyForSubMesh,shaderReady=ShaderMaterial.prototype.isReady,previous=new Map();
+ const delayed=function(mesh,original,args){if(mesh.name==='Lament_Mouth_Interior'){if(!previous.has(this))previous.set(this,true);clock=45001;return false;}return original.call(this,mesh,...args);};
+ PBRMaterial.prototype.isReadyForSubMesh=function(mesh,...args){return delayed.call(this,mesh,ready,args);};ShaderMaterial.prototype.isReady=function(mesh,...args){return delayed.call(this,mesh,shaderReady,args);};
+ t.after(()=>{PBRMaterial.prototype.isReadyForSubMesh=ready;ShaderMaterial.prototype.isReady=shaderReady;});
  f.battle.preparationOptions={now:()=>clock,frame:async()=>{}};const warn=console.warn;console.warn=()=>{};try{assert.equal(await f.battle.preloadMourning(),false);}finally{console.warn=warn;}
  const job=f.battle.mourningWarmJob,e=f.battle.mourningPool[0];assert.equal(job.status,'error');assert.match(job.error,/시간이 초과/);assert.equal(job.preparation.pendingWaits,0);assert.equal(e.hiddenPreparationPending,null);assert.notEqual(e.assetPrepared,true);assertWarmInvisible(f);
  for(const material of previous.keys())assert.notEqual(material.allowShaderHotSwapping,false,'borrowed hot-swapping restored after whole-job timeout');
- PBRMaterial.prototype.isReadyForSubMesh=ready;f.battle.preparationOptions={frame:async()=>{}};assert.equal(await f.battle.summonResident(f.player,2),true);assert.equal(f.mourningModels.instances,1);assert.equal(f.battle.encounters[0],e);
+ PBRMaterial.prototype.isReadyForSubMesh=ready;ShaderMaterial.prototype.isReady=shaderReady;f.battle.preparationOptions={frame:async()=>{}};assert.equal(await f.battle.summonResident(f.player,2),true);assert.equal(f.mourningModels.instances,1);assert.equal(f.battle.encounters[0],e);
  reports.push({case:'shader-timeout-explicit-recovery',oldPendingWaiters:job.preparation.pendingWaits,sourceClockMs:clock,instances:f.mourningModels.instances,counts:counts(f)});
 });
 

@@ -3,6 +3,7 @@ import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.fu
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
 import {characterStyleFor,registerCharacterInk} from './character-style.js';
+import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
 import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots,trimEmptyBoneSlotsAsync} from './character-render-cost.js';
 import {prepareMourningCameraCulling,prepareMourningCameraCullingAsync} from './mourning-camera-culling.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
@@ -82,9 +83,10 @@ function cloneOutlineMesh(source,name){
   return new CharacterOutlineMesh(name,source.getScene(),source,source);
 }
 
-function outlineMaterial(scene) {
-  if (materials.has(scene)) return materials.get(scene);
-  const material = new ShaderMaterial('moonforest-character-outline', scene,
+function outlineMaterial(scene,exterior=false) {
+  let cache=materials.get(scene);if(!cache){cache=new Map();materials.set(scene,cache);}
+  if(cache.has(exterior))return cache.get(exterior);
+  const material = new ShaderMaterial('moonforest-character-outline'+(exterior?'-mourning-exterior':''), scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
       defines: ['#define NORMAL'],
@@ -94,7 +96,9 @@ function outlineMaterial(scene) {
   material.backFaceCulling = true;
   material.cullBackFaces = false;
   material.disableDepthWrite = true;
-  material.setColor3('outlineColor', new Color3(.035, .025, .035));
+  const srgb=x=>x<=.0031308?x*12.92:1.055*Math.pow(x,1/2.4)-.055;
+  material.setColor3('outlineColor', exterior?new Color3(...[.028,.022,.030].map(srgb)):new Color3(.035,.025,.035));
+  if(exterior)configureCharacterExteriorStencil(null,material);
   material.setFloat('outlineWidth', .004);
   material.setFloat('outlineOpacity', 1);
   material.setFloat('hitFlash', 0);
@@ -110,15 +114,16 @@ function outlineMaterial(scene) {
     // and texture immediately before this observer, including cached draws.
     const group=mesh.metadata.characterStyleGroup,style=characterStyleFor(mesh);
     const pixelOutline=mesh.metadata.outlinePixels!==undefined;
-    effect?.setFloat('outlineWidth',pixelOutline?0:mesh.metadata.outlineWidth*(group==='boss'?style.outlineWidth/.5:1));
-    effect?.setFloat('outlinePixels',group==='player'||(group==='boss'&&pixelOutline)?style.outlineWidth:mesh.metadata.outlinePixels??0);
+    const boss=group==='boss'||group==='mourning';
+    effect?.setFloat('outlineWidth',pixelOutline?0:mesh.metadata.outlineWidth*(boss?style.outlineWidth/.5:1));
+    effect?.setFloat('outlinePixels',group==='player'||(boss&&pixelOutline)?style.outlineWidth:mesh.metadata.outlinePixels??0);
     const engine=scene.getEngine(),canvas=engine.getRenderingCanvas();
     effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);
     const source = mesh.parent;
     effect?.setFloat('hitFlash', source&&(source.renderOverlay||source.metadata?.elenaInlineFlash) ? source.overlayAlpha : 0);
   });
-  materials.set(scene, material);
+  cache.set(exterior, material);
   return material;
 }
 
@@ -149,13 +154,14 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.numBoneInfluencers = source.numBoneInfluencers;
     shell.computeBonesUsingShaders = source.computeBonesUsingShaders;
     shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(profile==='elena'?{outlinePixels:.5}:{}) };
-    shell.material = outlineMaterial(source.getScene());
+    const mourning=source.metadata?.mourningReferenceLook===true;
+    shell.material = outlineMaterial(source.getScene(),mourning);
     shell.isPickable = false; shell.checkCollisions = false; shell.receiveShadows = false;
     shell.renderOutline = false; shell.renderOverlay = false;
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;
     shell.visibility = source.visibility; shell.isVisible = source.isVisible;
     if(kind==='warrior')registerCharacterInk(shell,'player');
-    else if(kind==='bear'||kind==='goblin'||kind==='elena')registerCharacterInk(shell,'boss');
+    else if(kind==='bear'||kind==='goblin'||kind==='elena')registerCharacterInk(shell,mourning?'mourning':'boss');
     added.push(shell);
   }
   asset.meshes.push(...added);

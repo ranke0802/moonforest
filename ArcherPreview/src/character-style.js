@@ -16,7 +16,8 @@ function applyInkEnabled(mesh){
   const style=characterStyleFor(mesh);
   // Only own this ink mesh's local switch; never enable the actor, source or a
   // FoW-hidden parent. FoW separately owns isVisible, including its restore cache.
-  mesh.setEnabled(mesh.metadata.characterInkInitiallyEnabled&&style.outline&&(mesh.metadata.characterStyleGroup!=='boss'||style.outlineWidth>0));
+  const boss=['boss','mourning'].includes(mesh.metadata.characterStyleGroup);
+  mesh.setEnabled(mesh.metadata.characterInkInitiallyEnabled&&style.outline&&(!boss||style.outlineWidth>0));
 }
 export function registerCharacterInk(mesh,group){
   if(mesh.metadata?.characterInkRegistered)return;

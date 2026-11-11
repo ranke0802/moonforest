@@ -1,3 +1,4 @@
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
@@ -38,6 +39,8 @@ async function load(scene,name){
 }
 async function fixture(t){
   setWorldCharacter('warrior-v5');const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;scene.useConstantAnimationDeltaTime=true;
+  // NullEngine has no real texture upload completion; mark this shared fallback complete.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   Object.assign(engine.getCaps(),{textureFloat:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});
   const witch=await load(scene,'mourning-elena'),warrior=await load(scene,'warrior-v3'),player=new TransformNode('actual-player',scene);
   warrior.container.addAllToScene();for(const node of new Set([...warrior.container.meshes,...warrior.container.transformNodes]))if(!node.parent)node.parent=player;
