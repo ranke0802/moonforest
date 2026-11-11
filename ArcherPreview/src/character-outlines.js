@@ -86,7 +86,7 @@ function cloneOutlineMesh(source,name){
 function outlineMaterial(scene,exterior=false) {
   let cache=materials.get(scene);if(!cache){cache=new Map();materials.set(scene,cache);}
   if(cache.has(exterior))return cache.get(exterior);
-  const material = new ShaderMaterial('moonforest-character-outline'+(exterior?'-mourning-exterior':''), scene,
+  const material = new ShaderMaterial('moonforest-character-outline'+(exterior==='enemy'?'-enemy-exterior':exterior?'-mourning-exterior':''), scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
       defines: ['#define NORMAL'],
@@ -97,8 +97,8 @@ function outlineMaterial(scene,exterior=false) {
   material.cullBackFaces = false;
   material.disableDepthWrite = true;
   const srgb=x=>x<=.0031308?x*12.92:1.055*Math.pow(x,1/2.4)-.055;
-  material.setColor3('outlineColor', exterior?new Color3(...[.028,.022,.030].map(srgb)):new Color3(.035,.025,.035));
-  if(exterior)configureCharacterExteriorStencil(null,material);
+  material.setColor3('outlineColor', exterior===true?new Color3(...[.028,.022,.030].map(srgb)):new Color3(.035,.025,.035));
+  if(exterior)configureCharacterExteriorStencil(null,material,exterior==='enemy'?2:1);
   material.setFloat('outlineWidth', .004);
   material.setFloat('outlineOpacity', 1);
   material.setFloat('hitFlash', 0);
@@ -125,6 +125,14 @@ function outlineMaterial(scene,exterior=false) {
   });
   cache.set(exterior, material);
   return material;
+}
+
+// The same hull geometry, pass, colour and per-mesh fade uniforms. Share one
+// stencil variant for enemies; never mutate player/NPC or Mourning ink.
+export function prepareEnemyExteriorOutline(mesh){
+  if(!isRuntimeOutline(mesh)||mesh.parent?.metadata?.mourningReferenceLook)return false;
+  mesh.material=outlineMaterial(mesh.getScene(),'enemy');
+  mesh.metadata={...mesh.metadata,enemyFadeExterior:true};return true;
 }
 
 export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferCameraCulling=false}={}) {

@@ -1,3 +1,7 @@
+import {prepareEnemyExteriorOutline,isRuntimeOutline} from './character-outlines.js';
+import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
+import {orderEnemyFadeInkAfterSurfaces} from './character-render-cost.js';
+
 export const CORPSE_FADE_SECONDS=5;
 export const MOURNING_DEATH_HOLD_SECONDS=.65;
 export const MOURNING_CORPSE_SECONDS=10;
@@ -19,6 +23,10 @@ export function enableEnemyFade(asset){
   for(const mesh of asset.meshes){
     if(!mesh.getTotalVertices?.())continue;
     mesh.metadata={...mesh.metadata,moonforestEnemyFade:true};
+    if(!mesh.metadata.mourningReferenceLook&&!mesh.parent?.metadata?.mourningReferenceLook){
+      if(prepareEnemyExteriorOutline(mesh))orderEnemyFadeInkAfterSurfaces(mesh.getScene(),mesh.renderingGroupId);
+      else if(!isRuntimeOutline(mesh)&&mesh.material?.stencil)configureCharacterExteriorStencil(mesh.material,null,2);
+    }
     const material=mesh.material;if(!material||fadeMaterials.has(material))continue;
     // glTF OPAQUE takes priority over mesh.visibility in Babylon. Override only
     // this decision for fading enemies, never shared material alpha or modes.

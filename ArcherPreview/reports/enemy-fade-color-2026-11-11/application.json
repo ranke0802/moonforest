@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "date": "2026-11-11",
+  "problem": "Fading coloured enemy surfaces expose their dark inverted hull; the old ordering covered only opaque meshes.",
+  "fix": [
+    "Use existing base draw to write depth-tested coverage to stencil bit 2; reject the shared hull inside that coverage.",
+    "Keep native transparent ordering except fading regular-enemy ink, submitted after the bases.",
+    "Reserve bit 1 and existing material/profile/ordering for Mourning Witch; retain scenery/native bit 4."
+  ],
+  "preserved": [
+    "Original body/outline colours, widths, geometry, skin/morph managers, textures, LOD and combat",
+    "Existing 5-second eased corpse fade and Mourning Witch 10-second lifecycle",
+    "Shared body/texture resources, shared ink material, hidden shader warmup, no death-frame shader compilation"
+  ],
+  "cost": {
+    "additionalDraws": 0,
+    "additionalDepthPrepasses": 0,
+    "additionalRenderTargets": 0,
+    "additionalPerActorGeometry": 0,
+    "sharedInkVariants": "One scene-wide regular-enemy stencil material; not one per actor.",
+    "gpuCost": "Uses existing stencil attachment and fragment stencil tests; physical GPU/FPS/temperature unmeasured."
+  },
+  "tests": {
+    "fadeAndRendering": {
+      "tests": 41,
+      "pass": 41,
+      "fail": 0
+    },
+    "compatibility": {
+      "tests": 28,
+      "pass": 28,
+      "fail": 0
+    }
+  },
+  "validation": "Actual packed bear/goblin/saint geometry/reference contracts, real NullEngine draw queues, stencil/alpha numerical checks, shader warmup/cache and Mourning death lifecycle. No browser automation or actual GPU framebuffer pixel claim."
+}

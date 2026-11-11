@@ -2,6 +2,7 @@ import {RenderingGroup,VertexBuffer} from '@babylonjs/core';
 import {runPreparationSync} from './boss-preparation.js';
 
 const orderedGroups=new WeakMap();
+const fadeOrderedGroups=new WeakMap();
 
 // Keep the usual material batching inside each bucket. Only the opaque ink
 // bucket moves behind the opaque surfaces, so their depth is available before
@@ -19,6 +20,17 @@ export function orderCharacterInkAfterSurfaces(scene,groupId=0){
   const manager=scene._renderingManager;
   const previous=manager?._customOpaqueSortCompareFn[groupId]??RenderingGroup.PainterSortCompare;
   scene.setRenderingOrder(groupId,opaqueSurfaceBeforeInk(previous),manager?._customAlphaTestSortCompareFn[groupId]??null,manager?._customTransparentSortCompareFn[groupId]??null);
+  groups.add(groupId);
+}
+
+export function fadingSurfaceBeforeInk(previous=RenderingGroup.defaultTransparentSortCompare){
+  const ink=sub=>{const mesh=sub.getMesh();return mesh.metadata?.enemyFadeExterior===true&&mesh.metadata?.moonforestOutline===true&&mesh.visibility<1;};
+  return (a,b)=>Number(ink(a))-Number(ink(b))||previous(a,b);
+}
+export function orderEnemyFadeInkAfterSurfaces(scene,groupId=0){
+  let groups=fadeOrderedGroups.get(scene);if(!groups){groups=new Set();fadeOrderedGroups.set(scene,groups);}if(groups.has(groupId))return;
+  const manager=scene._renderingManager;
+  scene.setRenderingOrder(groupId,manager?._customOpaqueSortCompareFn[groupId]??null,manager?._customAlphaTestSortCompareFn[groupId]??null,fadingSurfaceBeforeInk(manager?._customTransparentSortCompareFn[groupId]??RenderingGroup.defaultTransparentSortCompare));
   groups.add(groupId);
 }
 
