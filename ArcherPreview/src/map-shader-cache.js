@@ -15,7 +15,7 @@ export function mapShaderCacheSize(engine){return caches.get(engine)?.size??0;}
 // Warm the actual instanced submesh variant. Material.forceCompilationAsync
 // creates temporary PBR submeshes, and warms ShaderMaterial without INSTANCES;
 // neither guarantees the first real draw is ready.
-export async function prepareMapMaterials(meshes,{material:override,cancelled=()=>false,now=()=>performance.now(),wait=()=>new Promise(r=>setTimeout(r,16))}={}){
+export async function prepareMapMaterials(meshes,{material:override,cancelled=()=>false,instances=true,now=()=>performance.now(),wait=()=>new Promise(r=>setTimeout(r,16))}={}){
   const states=new Map(),pending=[];
   for(const mesh of meshes){const material=override??mesh.material;if(!material)continue;
     if(!states.has(material)){states.set(material,material.allowShaderHotSwapping);material.allowShaderHotSwapping=false;}
@@ -26,7 +26,7 @@ export async function prepareMapMaterials(meshes,{material:override,cancelled=()
   try{
     while(pending.length&&!cancelled()){
       for(let i=pending.length-1;i>=0;i--){const {mesh,material,subMesh}=pending[i];
-        const ready=subMesh?material.isReadyForSubMesh(mesh,subMesh,true):material.isReady(mesh,true);
+        const ready=subMesh?material.isReadyForSubMesh(mesh,subMesh,instances):material.isReady(mesh,instances);
         const effect=subMesh?.effect??material.getEffect();
         if(ready){retainMapEffect(effect);pending.splice(i,1);}
         else if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');

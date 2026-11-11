@@ -13,6 +13,7 @@ export const CHEST_REWARD_CHOICES=Object.freeze(Object.entries({
 const ids=new Set(CHEST_REWARD_CHOICES.map(item=>item.id));
 export const CHEST_ITEM_LIMIT=16;
 export const CHEST_ITEM_COUNT_LIMIT=9999;
+export const CHEST_DROP_LIMIT=24;
 
 export function normalizeChestItems(value){
  if(value===undefined)return undefined;
@@ -38,14 +39,16 @@ export function resolveChestRewards(point){
 export function chestRewardDrops(point){
  const rewards=resolveChestRewards(point);if(!rewards)return null;
  if(!Object.keys(rewards).length)return [];
- // Keep legacy bundles exactly as they were. Explicit lists display one model
- // per item kind, not one mesh per quantity, with non-model rewards attached.
+ // Preserve legacy bundles. Explicit quantities form up to three small stacks
+ // per kind, bounded to 24 physical pickups for the entire chest.
  if(point.chestItems===undefined){const item=Object.keys(rewards).find(id=>ITEM_DROP_MODELS[id]);return [{model:point.dropAssetId||ITEM_DROP_MODELS[item]||'clue-satchel',rewards}];}
- const parts=[],attached={};
+ const kinds=[],attached={};
  for(const [id,count] of Object.entries(rewards)){
-  if(ITEM_DROP_MODELS[id])parts.push({model:ITEM_DROP_MODELS[id],rewards:{[id]:count}});
+  if(ITEM_DROP_MODELS[id])kinds.push({id,count,stacks:1});
   else attached[id]=count;
  }
+ let total=kinds.length;for(let pass=0;pass<2;pass++)for(const kind of kinds)if(total<CHEST_DROP_LIMIT&&kind.stacks<kind.count){kind.stacks++;total++;}
+ const parts=[];for(const kind of kinds)for(let i=0;i<kind.stacks;i++)parts.push({model:ITEM_DROP_MODELS[kind.id],rewards:{[kind.id]:Math.floor(kind.count/kind.stacks)+(i<kind.count%kind.stacks?1:0)}});
  if(!parts.length)parts.push({model:'clue-satchel',rewards:{}});
  Object.assign(parts[0].rewards,attached);return parts;
 }

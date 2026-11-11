@@ -79,7 +79,8 @@ export function prepareVillageInkSource(mesh,{tinted=false}={}){
 // instance batch. Independent shell meshes could survive a base/LOD change.
 // No shell objects, textures, render targets or geometry copies are allocated.
 export class VillageOutlines {
-  constructor(world,records,stats){
+  constructor(world,records,stats,{minimumCoverage=VILLAGE_INK_MIN_COVERAGE,fadeCoverage=.0045}={}){
+    this.minimumCoverage=minimumCoverage;this.fadeCoverage=fadeCoverage;
     this.world=world;this.stats=stats;this.sources=new Set();this.tintedSources=new WeakSet();this.baseObservers=[];this.entries=[];this.selected=new Set();this.selectedMeshes=new Set();this.next=0;this.drawing=false;this.drawn=new WeakMap();
     // A private draw wrapper must not overwrite the base PBR submesh effect.
     this.laboratoryRect=new Vector4();
@@ -143,6 +144,9 @@ export class VillageOutlines {
     const stopped=()=>this.world.scene.isDisposed||cancelled();
     for(const [material,items]of groups){if(stopped())break;await prepareMapMaterials(items,{material,cancelled:stopped});}
   }
+  removeRecords(records){
+    const removed=new Set(records);this.entries=this.entries.filter(entry=>{if(!removed.has(entry.record))return true;entry.mesh.instancedBuffers.villageInk.set(0,0);this.selected.delete(entry);this.selectedMeshes.delete(entry.mesh);this.entryMeshes.delete(entry.mesh);return false;});this.next=0;
+  }
   afterBase(mesh,subMesh,batch){
     const scene=this.world.scene,engine=scene.getEngine();
     if(this.drawing||scene._isInIntermediateRendering()||!this.sources.has(mesh)||this.drawn.get(mesh)!==scene.getRenderId())return;
@@ -182,7 +186,7 @@ export class VillageOutlines {
     if(fogChanged)material.setVector2('inkFogRange',this.fogRange);
     bindCaveFogMaterial(this.world.scene,material);
     material.setVector3('inkCamera',this.world.camera.globalPosition);
-    material.setFloat('inkCaveActive',this.world.cave?1:0);material.setVector3('inkFocus',this.world.camera.target);
+    material.setFloat('inkCaveActive',this.world.cave?1:0);material.setVector3('inkFocus',this.world.camera.target??this.world.camera.getTarget());
   }
   update(now){
     const {fogStart,fogEnd}=this.world.scene;
@@ -199,9 +203,9 @@ export class VillageOutlines {
         const {record,mesh}=entry;
         if(record.fogVisible===false||!record.root.isEnabled()||!mesh.isInFrustum(planes))continue;
         entry.coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
-        if(entry.coverage>VILLAGE_INK_MIN_COVERAGE)ranked.push(entry);
+        if(entry.coverage>this.minimumCoverage)ranked.push(entry);
       }
-      const {chosen:selected,triangles}=selectVillageOutlines(ranked,this.world.touchDevice,this.selected);
+      const {chosen:selected,triangles}=selectVillageOutlines(ranked,this.world.touchDevice,this.selected,this.minimumCoverage);
       for(const entry of this.selected)if(!selected.has(entry))entry.mesh.instancedBuffers.villageInk.set(0,0);
       this.selected=selected;this.stats.outlineInstances=selected.size;this.stats.outlineTriangles=triangles;
     }
@@ -209,7 +213,7 @@ export class VillageOutlines {
     for(const entry of this.selected){
       const {record,mesh}=entry;
       const coverage=mesh.instancedBuffers?.treeCoverage??1;
-      mesh.instancedBuffers.villageInk.set(record.fogVisible!==false&&record.root.isEnabled()?coverage*Math.min(1,(entry.coverage-VILLAGE_INK_MIN_COVERAGE)/.0045):0,entry.inkWidth);
+      mesh.instancedBuffers.villageInk.set(record.fogVisible!==false&&record.root.isEnabled()?coverage*(this.fadeCoverage>0?Math.min(1,(entry.coverage-this.minimumCoverage)/this.fadeCoverage):1):0,entry.inkWidth);
       if(mesh.instancedBuffers.villageInk.x>0)this.selectedMeshes.add(mesh);
     }
   }

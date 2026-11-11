@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-11",
+  "request": "Chest-grade opening effects and generous physical loot flight",
+  "implemented": [
+    "Opening spark color and density follow chest grade 1–5; cached jingle pitch and high-tier accent follow the chest, not its reward contents.",
+    "Chest drops use a higher 1.28–1.44 second ballistic flight with a short ground bounce and return upright before pickup.",
+    "Up to three quantity stacks per selected item kind scatter across clear ground, bounded to 24 pickups per chest. Inventory quantities, atomic claims, legacy bundles and pending drop limits are preserved.",
+    "Flight ribbons and persistent pickup outlines use each physical item rarity, independently of the opening chest grade.",
+    "One reusable 704-triangle effect mesh with fixed 96 sparkle / 256 ribbon slots, no new images, sounds, lights, shadow passes or render targets. No effect buffer uploads when idle.",
+    "Effect shader preparation runs during existing loading-screen preparation. Source meshes and tinted ink variants warm before publication; map disposal cancels and releases owned effects and drops.",
+    "The previously reserved built-in chest effect checkbox is now active; legacy placeholder values migrate to enabled, while explicit new OFF selections persist."
+  ],
+  "preserved": {
+    "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+    "texturesAndLOD": "unchanged",
+    "combatInputTimingAndJudgments": "unchanged",
+    "monsterDropMotion": "unchanged",
+    "newRuntimeAssets": 0
+  },
+  "validation": {
+    "browserAutomation": false,
+    "uniquePassingTests": 153,
+    "failures": 0,
+    "mainLog": "tests.log",
+    "finalPrewarmRecheck": {
+      "passing": 14,
+      "failed": 0,
+      "log": "prewarm-recheck.log"
+    },
+    "coverage": [
+      "Five chest grades and independent item grades",
+      "High arc, clear-ground scatter and quantity conservation",
+      "Built-in and editor chests through village/plains/forest/cave trips",
+      "Shared source geometry, pickup size and native instanced ink",
+      "Exactly-once rewards, full inventory, closed/reopened chest cycles and empty chests",
+      "Effects OFF persistence and no opening replay on map re-entry",
+      "Pool saturation, zero idle uploads, repeat cleanup plateau and late preparation disposal",
+      "Existing scenery outline defaults, audio voice ownership, editor undo/save and sword trail regressions"
+    ],
+    "build": "passed; existing large chunk warning only",
+    "realDeviceFPSAndHeat": "not measured",
+    "GPUImageVisualReview": "not performed"
+  },
+  "limits": {
+    "physicalStacksPerChest": 24,
+    "stacksPerKind": 3,
+    "visiblePickupLimit": 64,
+    "pendingPerMap": 128,
+    "pendingTotal": 512,
+    "effectMeshTriangles": 704,
+    "sparkSlots": 96,
+    "ribbonSlots": 256,
+    "pendingOpeningBursts": 4
+  }
+}

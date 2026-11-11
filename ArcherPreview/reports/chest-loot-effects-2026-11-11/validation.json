@@ -1,0 +1,35 @@
+{
+  "browserAutomation": false,
+  "engine": "Babylon.js 9.31 NullEngine",
+  "results": [
+    {
+      "log": "tests.log",
+      "counts": {
+        "tests": 153,
+        "pass": 153,
+        "fail": 0
+      },
+      "sha256": "8df191ef5d12f4e202346d57355c14269464a0b8446d179bdfc9ea9abfd46063"
+    },
+    {
+      "log": "prewarm-recheck.log",
+      "counts": {
+        "tests": 14,
+        "pass": 14,
+        "fail": 0
+      },
+      "sha256": "eee82413ba80b14a45dd9e878dbf46bf4af70189a775bf9964267f136950affd"
+    },
+    {
+      "log": "prepare-lifetime.log",
+      "counts": {
+        "tests": 6,
+        "pass": 6,
+        "fail": 0
+      },
+      "sha256": "7c4f5ca0c62a63439ff6fa29b7198d1b3c0bf06e10a42f85be7ed3a44832c05b"
+    }
+  ],
+  "textureAndResourceRevisionUnchanged": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+  "deviceFPSHeatAndGPUVisuals": "not measured"
+}
