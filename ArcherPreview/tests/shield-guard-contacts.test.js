@@ -20,6 +20,25 @@ const held={state:'shieldPush',actionId:1,clipTime:59/60,guarding:true,shieldPen
 const pending={...held,guarding:false,shieldPending:true,clipTime:.1};
 const tap={...held,guarding:false,shieldPending:false};
 
+for(const [name,Encounter,asset] of variants)for(const id of ['jump-cut','shield-push']){
+  test(`${name}: ${id} aligns the fall with the actual impact from any side`,t=>{
+    const {b,player}=fixture(t,Encounter,asset);
+    b.alignPose=()=>{};b.contactSeparation=()=>0;b.skillHurtCapsule=()=>null;b.damageNumberPosition=()=>b.actor.position;
+    b.animator={ensurePoseCurrent(){},reactToHit(){},reactToKnockback(){},transition(){},update(){}};b.ring={};b.warningRing={update(){}};
+    for(const angle of [0,Math.PI/2,Math.PI,-Math.PI/2]){
+      const x=5*Math.sin(angle),z=5*Math.cos(angle);b.actor.position.set(x,0,z);b.actor.rotation.y=angle+.7;
+      b.brain=b.createBrain(b.brain.durations);b.gate.reset();b.knockTurn=null;b.knockVelocity.setAll(0);
+      b.hurtCapsules=()=>[{points:[[x,1,z],[x,2,z]],radius:1}];
+      b.poseAndContacts(player,{state:'idle'},{actionId:1,window:{id,damage:10,heavy:id==='jump-cut',stun:1.5},blade:[[x,1,z],[x,2,z]]},null);
+      assert.ok(b.knockTurn,'a real contact schedules a smooth turn');
+      for(let frame=0;frame<9;frame++)BossEncounter.prototype.update.call(b,1/60,player);
+      assert.ok(Math.abs(Math.sin(b.actor.rotation.y)+Math.sin(angle))<1e-5);
+      assert.ok(Math.abs(Math.cos(b.actor.rotation.y)+Math.cos(angle))<1e-5);
+      assert.equal(b.knockTurn,null);
+    }
+  });
+}
+
 function fixture(t,Encounter,asset){
   const engine=new NullEngine(),scene=new Scene(engine),feedback=[],world={scene};
   const b=new Encounter(world,()=>{},(...args)=>feedback.push(args));

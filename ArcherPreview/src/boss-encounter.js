@@ -34,7 +34,7 @@ export class BossEncounter {
     this.death=new EnemyDeath();this.onDefeat=onDefeat;this.onPreparationStage=onPreparationStage;
     this.world=world;this.onChange=onChange;this.onDamage=onDamage;this.active=false;this.loading=false;this.gate=new MeleeContactGate();
     this.hitCount=0;this.heavyCount=0;
-    this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();
+    this.pendingEvents=[];this.lastRoot=null;this.knockVelocity=new Vector3();this.knockTurn=null;
     this.bossReaction=new PlayerHitReaction();this.onPlayerHit=onPlayerHit;
     this.damageAnchor=new Vector3();
     this.grab=new BossGrab(captured=>{
@@ -155,13 +155,13 @@ export class BossEncounter {
         this.ring.setEnabled(activate);
       capPosition(this.actor.position);this.actor.rotation.y=rotationY??player.rotation.y+Math.PI;
       this.world.terrain?.place(this.actor.position);
-        this.active=activate;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);
+        this.active=activate;this.fogVisible=true;this.lastHit=null;this.groundHeight=.075;this.lastSerial=null;this.lastRoot=null;this.defenseFeedbackKey=null;this.knockVelocity.setAll(0);this.knockTurn=null;
       this.routeState={};this.dodgeContactClearance=false;
       this.animator.transition(this.brain.state,{clipTime:0,actionId:this.brain.serial});this.animator.update(.2);
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
     enabled=enabled&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
@@ -273,8 +273,13 @@ export class BossEncounter {
     const travel=new Vector3((waypoint??target).x-this.actor.position.x,0,(waypoint??target).z-this.actor.position.z);
     const travelDistance=Math.hypot(target.x-this.actor.position.x,target.z-this.actor.position.z);
     if(this.brain.mode==='evade')this.showDefense('evade');
-    if(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial){
+    if(!this.knockTurn&&(['idle','move','approach'].includes(this.brain.mode)||this.lastSerial!==this.brain.serial)){
       if(!this.grab.active&&!['down','recover'].includes(this.brain.mode)&&!(this.brain.hp<=0&&this.death.holdPose)&&distance>.01){const facing=['move','approach'].includes(this.brain.mode)?travel:direction;this.actor.rotation.y=Math.atan2(facing.x,facing.z);}
+    }
+    if(this.knockTurn){
+      const turn=this.knockTurn;turn.elapsed=Math.min(.15,turn.elapsed+Math.max(0,dt));
+      const t=turn.elapsed/.15;this.actor.rotation.y=turn.start+turn.delta*t*t*(3-2*t);
+      if(t>=1)this.knockTurn=null;
     }
     if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
@@ -371,6 +376,12 @@ export class BossEncounter {
           this.heavyCount++;const away=this.actor.position.subtract(player.position);away.y=0;
           if(away.lengthSquared()<1e-8)away.set(Math.sin(player.rotation?.y??0),0,Math.cos(player.rotation?.y??0));
           this.knockVelocity.copyFrom(away.normalize().scale(8));
+          // These authored knockdown clips fall toward local -Z; face the source
+          // so the falling body and the already existing outward impulse agree.
+          if(!grounded&&(this.brain.mode==='down'||(this.kind==='elena'&&this.phase===2&&this.brain.hp>0))){
+            const target=Math.atan2(-away.x,-away.z),start=this.actor.rotation.y;
+            this.knockTurn={start,delta:Math.atan2(Math.sin(target-start),Math.cos(target-start)),elapsed:0};
+          }
           if(this.brain.hp>0)this.animator?.reactToKnockback?.();
         }
         this.lastHit=grounded?'다운·기상 중 추가 타격':hit.heavy?'강공격 명중 · 넉백':shieldPush?'방패 명중 · 넉백':this.brain.stagger?'검 명중 · 경직':'검 명중 · 보스 기술 유지';

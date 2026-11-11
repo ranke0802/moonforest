@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704376104,
+  "bytes": 704381222,
   "files": [
     {
       "path": "app.webmanifest",
@@ -14,19 +14,19 @@
       "sha256": "20de31890a9d868763ec0eee76b8ad35e27a3de763998853e37d7b4c73cb2136"
     },
     {
-      "path": "assets/actor-editor-C1vb-DkI.js",
+      "path": "assets/actor-editor-BKWruK-e.js",
       "bytes": 31279,
-      "sha256": "dff32738660f9e6d36df9ba59373d5a8cb971c7568f66587d5bd39240e3ee313"
+      "sha256": "4ecdff942c9eeb692c6576de6548b0cc60716140772007123502fa731d73f14a"
     },
     {
-      "path": "assets/actor-encounter-adapter-B6QM6S5O.js",
+      "path": "assets/actor-encounter-adapter-BX_tHtsi.js",
       "bytes": 10154,
-      "sha256": "1cf5d7c4f5db651ad9111caf0ba8836608242d536e5b9018b312a2bb06a79fbc"
+      "sha256": "925d7880af1277ababed44dd504fe80b73f57e65b3f51c58d8bcb098dfa12a50"
     },
     {
-      "path": "assets/actor-population-Bm5XP3o2.js",
+      "path": "assets/actor-population-CB8CCx-O.js",
       "bytes": 11318,
-      "sha256": "4ab8ededdb0c1f4e631af78680d343e624800fcc577bd5fd0acf0ef69ece8f30"
+      "sha256": "704e76aa360f4b3f363c77e1cd902397cf0f822481361d9045e722fec67767d2"
     },
     {
       "path": "assets/anaglyph.fragment-8PrW9mQs.js",
@@ -69,9 +69,9 @@
       "sha256": "7eb8fd2c3d5c1256f26e8c3bef01a3e9fc023f57b826ba2253ab21ab0c815cf7"
     },
     {
-      "path": "assets/authored-monster-runtime-BQNgd7KX.js",
+      "path": "assets/authored-monster-runtime-4jVS5c0r.js",
       "bytes": 5757,
-      "sha256": "3f61b86d8960f93966dfab979a629765b32c278df6b6c00ced22ea7ce3ee8ef2"
+      "sha256": "1e09063517d81483620a078053e37ad051d452a229db8e92b8b2d5c8b1598a30"
     },
     {
       "path": "assets/authored-placement-runtime-BetvUnVG.js",
@@ -1724,9 +1724,9 @@
       "sha256": "7cd1667b81058e6f9a9b8bb580d574dff2718fa3fb46d1a25998dfa662fd6294"
     },
     {
-      "path": "assets/cinematic-game-DaMoqyFo.js",
+      "path": "assets/cinematic-game-BV67k2bf.js",
       "bytes": 48146,
-      "sha256": "f9cb6c005fe8d98ef8c6124af4c973782091c9a1299b7701451b88de0d81df72"
+      "sha256": "fd07a9cfbdab10dd7dbbd037616bc4768d03672bbbb9a2f7389c80cb3ccbf72b"
     },
     {
       "path": "assets/cinematic-ground-CpVeV1ce.js",
@@ -1759,9 +1759,9 @@
       "sha256": "ca925830737d746309c36e396ed5aba587dbfd7e83199041f30de78388114e2c"
     },
     {
-      "path": "assets/cinematic-scene-host-C3HVLely.js",
+      "path": "assets/cinematic-scene-host-B0nmjav-.js",
       "bytes": 39808,
-      "sha256": "7b7a0c6431476746b9707c3a30fde084d7ca3650ea4a0f127afc12232ca2182d"
+      "sha256": "7045e3964b7ce0b4b09c5692a514e0d22ebda6f174fc764b4e681b960ba79833"
     },
     {
       "path": "assets/cinematicStudio-8IECG2tE.js",
@@ -7984,9 +7984,9 @@
       "sha256": "6733c6019f67c82db9c6a975be0815e4b19ea93d8096bd8d3afd8b0e9595e840"
     },
     {
-      "path": "assets/developer-actors-DfG0M6Vi.js",
+      "path": "assets/developer-actors-DQMpvFFd.js",
       "bytes": 8744,
-      "sha256": "79c76d1110d59ba41de0f84bad8c3d35aa11dedf9376aa92fd9444a12fc5a684"
+      "sha256": "488c410cf98da989270b0808461827f307945145967dc5d809e4adcc585ec1a4"
     },
     {
       "path": "assets/developer-editor-oOvl5GVn.js",
@@ -8584,19 +8584,19 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-BER4B9tJ.css",
-      "bytes": 107189,
-      "sha256": "41840853385301be51d54b6faed5922acbfb3044a160c3d23451a1d6e3c19ef5"
+      "path": "assets/game-DmeH5K_S.css",
+      "bytes": 109645,
+      "sha256": "7def7cd1affcd5f664b18a0768004c6ecdaf6ece3f13c50455f18ed6ed3feca2"
+    },
+    {
+      "path": "assets/game-Qwn4DT-x.js",
+      "bytes": 2311035,
+      "sha256": "57b69f35abb7dc94ca8444ac07c926fac92bc4df67c920eedb3022574dbc1b0e"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
       "bytes": 6672,
       "sha256": "e69534b7f8a6574b090095f8ddc5ccf3b020520c27f30537e176bf6e16ca8aeb"
-    },
-    {
-      "path": "assets/game-XJ8rHsj6.js",
-      "bytes": 2308858,
-      "sha256": "56c53428f2ae83056696a5142646aa7b4692f17eaf12c65bf98566d904746cee"
     },
     {
       "path": "assets/gaussianSplatting-Dpcqs6S2.js",
@@ -9404,9 +9404,9 @@
       "sha256": "695dcb7e2a5be16f9749999194266863cf00fbd2dd26b35a78939786c86a99b7"
     },
     {
-      "path": "assets/mourning-elena-encounter-CzKy9G5c.js",
-      "bytes": 256475,
-      "sha256": "7a0d499c1c344d0c051fa663aa567c4ef683c14ec155b04e33cad4eeb8c26e48"
+      "path": "assets/mourning-elena-encounter-l5eC5LiQ.js",
+      "bytes": 256960,
+      "sha256": "819f4114a01562deeaf011f12c6890576ec0451defc435d93c929f305e0fadeb"
     },
     {
       "path": "assets/mourning-elena.json",
@@ -9444,14 +9444,14 @@
       "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27"
     },
     {
-      "path": "assets/npc-world-0353cnw9.js",
+      "path": "assets/npc-world-CvL5YDZx.js",
       "bytes": 8791,
-      "sha256": "d669a0bfa1f5ae39a4de07a5b0d15672cda02905a634fc4a48c573bb0abed3b0"
+      "sha256": "0cc559b5a048cb7676632728ed709a5d8a1be86255e31c7bc4b9f188d660ec7a"
     },
     {
-      "path": "assets/npc-world-wEATGDae.js",
+      "path": "assets/npc-world-ZhvRH4iV.js",
       "bytes": 106,
-      "sha256": "80a24f32e6efa387d0def7b18e57c0971f77085ed0aa1d28b507c0cb965d6e7a"
+      "sha256": "cca4d3a0fa9773c55a21c37bc2646f4939f1e6976162537f526d3f2ae16ad20d"
     },
     {
       "path": "assets/objectIdFunctions-CxXVSfX0.js",
@@ -10186,7 +10186,7 @@
     {
       "path": "index.html",
       "bytes": 39045,
-      "sha256": "e5c93a40fe0c273fa28041ae6ddcbcc4872cc9dff200c2aa9bb0ef4f4d6f7ce6"
+      "sha256": "4eb7548e744a11f2aa6e519dd258a0b4cf186a58563fa86f722e8fa227c1253d"
     },
     {
       "path": "KTX2_NOTICES.txt",

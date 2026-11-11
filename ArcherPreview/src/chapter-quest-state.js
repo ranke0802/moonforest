@@ -36,7 +36,7 @@ export class ChapterJourney{
   this.seen.add(token);this.value.seen.push(token);this.value.facts[point.key]=Math.min(100000,(this.value.facts[point.key]??0)+1);this.value.pendingDrops.push(drop);this.save();return drop;
  }
  queueMonsterDrop(drop){if(!validateItemDrop(drop)||this.value.pendingDrops.some(item=>item.id===drop.id))return false;
-  if(this.value.pendingDrops.length>=512||this.value.pendingDrops.filter(item=>item.mapId===drop.mapId).length>=128){const existing=this.value.pendingDrops.find(item=>item.mapId===drop.mapId&&Object.keys({...item.rewards,...drop.rewards}).length<=16&&Object.entries(drop.rewards).every(([key,n])=>(item.rewards[key]??0)+n<=100000));if(!existing)return false;for(const [key,n]of Object.entries(drop.rewards))existing.rewards[key]=(existing.rewards[key]??0)+n;}
+  if(this.value.pendingDrops.length>=512||this.value.pendingDrops.filter(item=>item.mapId===drop.mapId).length>=128){const existing=this.value.pendingDrops.find(item=>item.mapId===drop.mapId&&Object.keys({...item.rewards,...drop.rewards}).length<=16&&Object.entries(drop.rewards).every(([key,n])=>(item.rewards[key]??0)+n<=100000));if(!existing)return false;for(const [key,n]of Object.entries(drop.rewards))existing.rewards[key]=(existing.rewards[key]??0)+n;if(drop.sourceKind==='boss')existing.sourceKind='boss';}
   else this.value.pendingDrops.push(structuredClone(drop));return true;}
  addMonsterDrop(drop){if(!this.queueMonsterDrop(drop))return false;this.save();return true;}
  recordDefeatDrop(key,drop){if(!key||!this.queueMonsterDrop(drop))return false;this.value.facts[key]=Math.min(100000,(this.value.facts[key]??0)+1);this.save();return true;}
