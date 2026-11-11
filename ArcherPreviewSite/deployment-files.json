@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704381222,
+  "bytes": 704381148,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8584,14 +8584,14 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
+      "path": "assets/game-BUQ00mow.js",
+      "bytes": 2310961,
+      "sha256": "69397f0db03526ba38d957f05b40a48c817ffeb1d54834509518e07c51ed527c"
+    },
+    {
       "path": "assets/game-DmeH5K_S.css",
       "bytes": 109645,
       "sha256": "7def7cd1affcd5f664b18a0768004c6ecdaf6ece3f13c50455f18ed6ed3feca2"
-    },
-    {
-      "path": "assets/game-Qwn4DT-x.js",
-      "bytes": 2311035,
-      "sha256": "57b69f35abb7dc94ca8444ac07c926fac92bc4df67c920eedb3022574dbc1b0e"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
@@ -10186,7 +10186,7 @@
     {
       "path": "index.html",
       "bytes": 39045,
-      "sha256": "4eb7548e744a11f2aa6e519dd258a0b4cf186a58563fa86f722e8fa227c1253d"
+      "sha256": "f47504103f4e2707f5d6f595b62714eb31aea0d921d1377b9105ba085cfac68e"
     },
     {
       "path": "KTX2_NOTICES.txt",

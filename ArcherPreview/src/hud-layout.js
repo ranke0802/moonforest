@@ -46,7 +46,7 @@ export const HUD_GROUPS=Object.freeze([
   ['authoredInteraction','.authored-interaction-button','상호작용',false,.6,2],
   ['authoredDialog','.authored-interaction-dialog','상호작용 창',false,.6,1.4],
   ['streamLoading','#stream-loading','추가 로딩 표시',false,.6,2],
-].map(([id,selector,label,locked,min,max])=>Object.freeze({id,selector,label,locked,min,max})));
+].map(([id,selector,label,locked,min])=>Object.freeze({id,selector,label,locked,min,max:5})));
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const combatControls=new Set(['shield','potion','dodge','attack']);
 // Nested elements inherit their parent's responsive scale. The saved scale is
@@ -70,7 +70,7 @@ export function parseHudLayout(raw){
     if(!v||Object.keys(v).length!==3||!['x','y','scale'].every(k=>typeof v[k]==='number'&&Number.isFinite(v[k]))||Math.abs(v.x)>1||Math.abs(v.y)>1||v.scale<g.min||v.scale>g.max)throw Error('HUD 위치 또는 크기 범위를 확인해 주세요.');
     result[g.id]={x:g.locked?0:v.x,y:g.locked?0:v.y,scale:v.scale};
   }
-  for(const [id,v] of Object.entries(value.items))if(componentParts(id)){if(!v||Object.keys(v).length!==3||!['x','y','scale'].every(k=>typeof v[k]==='number'&&Number.isFinite(v[k]))||Math.abs(v.x)>1||Math.abs(v.y)>1||v.scale<.6||v.scale>2)throw Error('UI 위치 또는 크기 범위를 확인해 주세요.');result[id]={x:v.x,y:v.y,scale:v.scale};}
+  for(const [id,v] of Object.entries(value.items))if(componentParts(id)){if(!v||Object.keys(v).length!==3||!['x','y','scale'].every(k=>typeof v[k]==='number'&&Number.isFinite(v[k]))||Math.abs(v.x)>1||Math.abs(v.y)>1||v.scale<.6||v.scale>5)throw Error('UI 위치 또는 크기 범위를 확인해 주세요.');result[id]={x:v.x,y:v.y,scale:v.scale};}
   return result;
 }
 export function resolveHudBox(group,value,box,viewport,responsiveScale=1){
@@ -78,10 +78,13 @@ export function resolveHudBox(group,value,box,viewport,responsiveScale=1){
   if(value.x===0&&value.y===0&&value.scale===1&&responsiveScale===1)return {...value};
   const edge=8,halfW=viewport.width/2,halfH=viewport.height/2;
   const cx=box.x+box.width/2,cy=box.y+box.height/2;
-  const cap=group.locked?Math.min((cx-edge)*2/box.width,(viewport.width-edge-cx)*2/box.width,(cy-edge)*2/box.height,(viewport.height-edge-cy)*2/box.height):Math.min((viewport.width-2*edge)/box.width,(viewport.height-2*edge)/box.height);
+  const cap=group.locked?Math.min((cx-edge)*2/box.width,(viewport.width-edge-cx)*2/box.width,(cy-edge)*2/box.height,(viewport.height-edge-cy)*2/box.height):Infinity;
   const minimum=combatControls.has(group.id)?44/Math.min(box.width,box.height):0;
   const scale=Math.max(.1,Math.min(cap,Math.max(minimum,clamp(value.scale,group.min,group.max)*responsiveScale)));
-  return {x:group.locked?0:clamp(value.x,(edge+box.width*scale/2-cx)/(halfW*2),(viewport.width-edge-box.width*scale/2-cx)/(halfW*2)),y:group.locked?0:clamp(value.y,(edge+box.height*scale/2-cy)/(halfH*2),(viewport.height-edge-box.height*scale/2-cy)/(halfH*2)),scale};
+  // Oversized elements are centered on that axis instead of silently shrinking
+  // below the chosen size. Reset and the editor controls remain available.
+  const axis=(offset,center,size,extent)=>size>extent-2*edge?(extent/2-center)/extent:clamp(offset,(edge+size/2-center)/extent,(extent-edge-size/2-center)/extent);
+  return {x:group.locked?0:axis(value.x,cx,box.width*scale,halfW*2),y:group.locked?0:axis(value.y,cy,box.height*scale,halfH*2),scale};
 }
 
 export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{},onPauseChange=()=>{},onClose=()=>{}}){
@@ -134,7 +137,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   function controls(){
     const g=group();if(!g)return;
     select.value=selected;find('#hud-layout-current').textContent=g.label;find('#hud-layout-note').textContent=selectedComponent?'선택한 창 내부 요소를 조절합니다.':'위치는 화면 비율로 저장됩니다. 겹치지 않게 배치해 주세요.';
-    for(const input of dialog.querySelectorAll('[data-hud-field]')){const key=input.dataset.hudField,v=draft[selectedComponent??g.id];input.disabled=g.locked&&key!=='scale';input.min=String(key==='scale'?(selectedComponent ? .6 : g.min)*100:-90);input.max=String(key==='scale'?(selectedComponent?2:g.max)*100:90);input.value=String(Math.round(v[key]*100));find(`[data-hud-output="${key}"]`).textContent=Math.round(v[key]*100)+'%';}
+    for(const input of dialog.querySelectorAll('[data-hud-field]')){const key=input.dataset.hudField,v=draft[selectedComponent??g.id];input.disabled=g.locked&&key!=='scale';input.min=String(key==='scale'?(selectedComponent ? .6 : g.min)*100:-90);input.max=String(key==='scale'?(selectedComponent?5:g.max)*100:90);input.value=String(Math.round(v[key]*100));find(`[data-hud-output="${key}"]`).textContent=Math.round(v[key]*100)+'%';}
     const chosen=boxes[g.id];if(!chosen?.width||!chosen?.height)status.textContent='현재 숨겨진 항목입니다. 표시될 때 저장한 배치가 적용됩니다.';
   }
   function clearDrag(){drag=null;const ids=[...pointers.keys()];pointers.clear();for(const id of ids){try{dialog.releasePointerCapture(id);}catch{}}}
@@ -151,7 +154,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     root.querySelector('#motion-speed-dialog')?.close();dialog.showModal();status.textContent=storageError?'저장 배치를 읽지 못했거나 저장 공간을 사용할 수 없습니다.':'';updatePreview();draw();onPauseChange();dialog.querySelector('[data-hud-command="save"]').focus();return true;
   }
   listen(select,'change',()=>{selected=select.value;selectedComponent=null;status.textContent='';updatePreview();draw();});
-  listen(dialog,'input',event=>{const key=event.target.dataset.hudField,g=group();if(!key||!g||g.locked&&key!=='scale')return;draft[selectedComponent??g.id][key]=clamp(Number(event.target.value)/100,key==='scale'?(selectedComponent ? .6 : g.min):-.9,key==='scale'?(selectedComponent?2:g.max):.9);status.textContent='저장 전 미리보기';draw();});
+  listen(dialog,'input',event=>{const key=event.target.dataset.hudField,g=group();if(!key||!g||g.locked&&key!=='scale')return;draft[selectedComponent??g.id][key]=clamp(Number(event.target.value)/100,key==='scale'?(selectedComponent ? .6 : g.min):-.9,key==='scale'?(selectedComponent?5:g.max):.9);status.textContent='저장 전 미리보기';draw();});
   listen(componentChoice.querySelector('input'),'change',()=>{selectedComponent=null;updatePreview();draw();});
   listen(dialog,'click',event=>{const command=event.target.closest('[data-hud-command]')?.dataset.hudCommand;if(command==='reset'&&selectedComponent){draft[selectedComponent]={x:0,y:0,scale:1};event.stopImmediatePropagation();draw();}else if(command==='reset-all'||command==='import')selectedComponent=null;});
   listen(dialog,'click',event=>{const command=event.target.closest('[data-hud-command]')?.dataset.hudCommand;if(!command)return;if(command==='cancel'||command==='save'){finish(command==='save');return;}if(command==='reset')draft[selected]=defaultHudLayout()[selected];if(command==='reset-all'){draft=defaultHudLayout();status.textContent='기본 배치로 초기화했습니다. 저장하면 적용됩니다.';}if(command==='export'){find('#hud-layout-json').value=JSON.stringify({version:1,items:draft},null,2);find('#hud-layout-json').focus();find('#hud-layout-json').select();status.textContent='배치 데이터를 복사해 보관하세요.';}if(command==='download'){const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,items:draft},null,2)+'\n'],{type:'application/json'})),link=doc.createElement('a');link.href=url;link.download='moonforest-hud-layout.json';link.hidden=true;doc.body.append(link);try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}status.textContent='배치 파일 다운로드를 요청했습니다.';}if(command==='open-file')fileInput.click();if(command==='import'){try{draft=parseHudLayout(find('#hud-layout-json').value);status.textContent='배치를 불러왔습니다. 저장하면 적용됩니다.';}catch(error){status.textContent=error.message;}}draw();});
@@ -176,7 +179,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     if(!drag||!pointers.has(event.pointerId)){
       if(event.pointerType==='mouse'&&!event.target.closest('.hud-layout-panel')){const item=[...groups].reverse().find(g=>{const r=displayNode(g).getBoundingClientRect();return r.width&&r.height&&event.clientX>=r.left-10&&event.clientX<=r.right+10&&event.clientY>=r.top-10&&event.clientY<=r.bottom+10;});if(!item){dialog.style.cursor='';return;}let hover=displayNode(item);if(hover===previewNode&&componentChoice.querySelector('input').checked){const children=[...previewNode.querySelectorAll('*')].filter(node=>!['svg','path','option','script','style'].includes(node.tagName.toLowerCase()));hover=children.reverse().find(node=>{const b=node.getBoundingClientRect();return b.width&&b.height&&event.clientX>=b.left-10&&event.clientX<=b.right+10&&event.clientY>=b.top-10&&event.clientY<=b.bottom+10;})??hover;}const r=hover.getBoundingClientRect(),x=Math.abs(event.clientX-r.left)<=12?-1:Math.abs(event.clientX-r.right)<=12?1:0,y=Math.abs(event.clientY-r.top)<=12?-1:Math.abs(event.clientY-r.bottom)<=12?1:0;dialog.style.cursor=x&&y?(x===y?'nwse-resize':'nesw-resize'):x?'ew-resize':y?'ns-resize':'move';}return;
     }event.preventDefault();pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});const g=group();
-    const target=draft[selectedComponent??g.id],min=selectedComponent ? .6 : g.min,max=selectedComponent?2:g.max;
+    const target=draft[selectedComponent??g.id],min=selectedComponent ? .6 : g.min,max=selectedComponent?5:g.max;
     if(drag.mode==='pinch'&&pointers.size===2){const [a,b]=[...pointers.values()];target.scale=clamp(drag.start.scale*Math.hypot(a.x-b.x,a.y-b.y)/drag.distance,min,max);}
     else if(drag.mode==='resize')target.scale=clamp(drag.start.scale*Math.hypot(event.clientX-drag.cx,event.clientY-drag.cy)/drag.distance,min,max);
     else if(drag.mode==='move'){target.x=clamp(drag.start.x+(event.clientX-drag.x)/view.width,-.9,.9);target.y=clamp(drag.start.y+(event.clientY-drag.y)/view.height,-.9,.9);}

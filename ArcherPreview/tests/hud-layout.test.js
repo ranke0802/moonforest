@@ -37,6 +37,17 @@ test('viewport resolver preserves neutral authored placement and clips moved gro
  for(const [x,y]of [[-1,-1],[1,1]]){const r=resolveHudBox(g,{x,y,scale:1.4},b,v);assert.ok(b.x+b.width/2+r.x*v.width-b.width*r.scale/2>=7.999);assert.ok(b.y+b.height/2+r.y*v.height-b.height*r.scale/2>=7.999);assert.ok(b.x+b.width/2+r.x*v.width+b.width*r.scale/2<=992.001);}
  const attack=HUD_GROUPS.find(g=>g.id==='attack'),a=resolveHudBox(attack,{x:1,y:1,scale:.85},{x:300,y:300,width:48,height:48},v);assert.ok(a.x>0);assert.ok(a.y>0);assert.ok(a.scale*48>=44);
 });
+test('every HUD group and inner component accepts and restores up to 500 percent',()=>{
+ const layout={version:1,items:defaultHudLayout()};
+ for(const group of HUD_GROUPS)layout.items[group.id].scale=5;
+ const component='component:chapterDialog:bag:0:button:item:apple:';layout.items[component]={x:0,y:0,scale:5};
+ const parsed=parseHudLayout(layout);assert.equal(parsed.attack.scale,5);assert.equal(parsed[component].scale,5);
+ layout.items.attack.scale=5.01;assert.throws(()=>parseHudLayout(layout));layout.items.attack.scale=5;layout.items[component].scale=5.01;assert.throws(()=>parseHudLayout(layout));
+ const f=fixture();f.frame.width=1280;f.frame.height=720;f.resize();f.flush();f.ui.open();f.choose('attack');f.set('scale',500);f.command('save');
+ assert.equal(f.ui.inspect().items.attack.scale,5);assert.equal(Number(f.root.querySelector('#attack-button').style.scale),5);
+ const next=fixture(f.storage);assert.equal(next.ui.inspect().items.attack.scale,5);next.ui.dispose();f.ui.dispose();
+ const box=resolveHudBox(HUD_GROUPS[0],{x:0,y:0,scale:5},{x:0,y:0,width:500,height:100},{width:1000,height:600});assert.equal(box.scale,5,'oversized elements retain the requested scale');
+});
 test('popup position and size are saved with HUD layout',()=>{
  const f=fixture();f.ui.open();f.choose('chapterDialog');f.set('x',10);f.set('scale',110);f.command('save');
  const saved=JSON.parse(f.storage.getItem(HUD_LAYOUT_KEY));assert.equal(saved.items.chapterDialog.x,.1);assert.equal(saved.items.chapterDialog.scale,1.1);
