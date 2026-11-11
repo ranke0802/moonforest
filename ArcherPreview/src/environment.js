@@ -4,11 +4,16 @@ import { attachTreeLod, addDistanceCull } from './tree-lod.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
 import { createFarTreeMaterial } from './tree-material.js';
 import { SCENERY_VIEW_DISTANCE } from './world-limits.js';
+import { initializeVillageMeshopt } from './village-meshopt.js';
 
 export async function loadTrainingGround(world,training){
   if(world.environmentPromise)return world.environmentPromise;
   world.environmentPromise=(async()=>{
-    const url=new URL(`${import.meta.env.BASE_URL}assets/environment.json`,location.href),response=await fetch(url,{cache:'no-cache'});
+    // Legacy character routes share the compressed grass with the main maps.
+    // Install the same pinned, bounded local decoder before any parallel import;
+    // otherwise Babylon silently falls back to its external default decoder.
+    await initializeVillageMeshopt();
+    const url=new URL(`${import.meta.env?.BASE_URL??'./'}assets/environment.json`,location.href),response=await fetch(url,{cache:'no-cache'});
     if(!response.ok)throw new Error('훈련장 에셋을 불러오지 못했습니다.');
     const manifest=await response.json();
     if(manifest.ground){

@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-11",
+  "inputLogCreatedAt": "2026-11-11T09:35:35.439Z",
+  "observed": {
+    "character": "warrior",
+    "failedPhase": "model",
+    "failedResource": "1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
+    "resourceRole": "shared legacy arena grass-tuft with EXT_meshopt_compression",
+    "decoderStatus": "uninitialized",
+    "publicModelAndDependenciesHttpStatus": 200,
+    "publicModelAndDependenciesByteIdenticalToLocal": true
+  },
+  "cause": "loadTrainingGround imported the now-compressed shared grass with SceneLoader before the local Meshopt initializer. A required arena failure aborts loadCharacter before the original player import; the SDK otherwise tries an external default decoder.",
+  "inferenceLimit": "The log does not identify which external script/worker request failed. File deletion is ruled out for the reported resource and its buffer/image; missing local initializer is established from source and a controlled external-decoder failure.",
+  "changes": [
+    "Initialize the existing pinned local single-worker Meshopt supervisor before parallel legacy arena model loads.",
+    "Preserve archer, original warrior and warrior-v2 manifests, model/skin/animation/texture bytes, old arena placements and LOD values.",
+    "Retain the already deployed transparent outlined notices and removal of the chest-open toast."
+  ],
+  "verification": {
+    "browserAutomation": false,
+    "legacyRoutes": [
+      "archer",
+      "warrior",
+      "warrior-v2"
+    ],
+    "legacyActualMeshesRigsAnimations": "pass, Babylon NullEngine",
+    "sharedTrainingGroundAndLods": "pass, actual shipped vertices with materials stubbed; GPU images excluded",
+    "externalDecoderBlockedReproductionAndLocalRecovery": "pass",
+    "boundedWorkerCacheAndRetryCases": 16,
+    "failedRelatedCases": 0,
+    "build": "pass",
+    "nonTargetStartupFixture": {
+      "passed": 1,
+      "failed": 21,
+      "productionMainAndFixtureUnchanged": true,
+      "cause": "The extracted-main test fixture omits the existing swordTrail binding. A diagnostic-only probe exposes ReferenceError: swordTrail is not defined; loadTrainingGround is stubbed in that fixture. This is not counted as passing."
+    }
+  },
+  "preserved": {
+    "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+    "legacy": {
+      "character": {
+        "manifestSha256": "17b972c76ea1a41b55d36ef9bb5c3fd8873e0ce3830a66b5a011219c7b098b8c",
+        "model": "./content/533cf50e621eb67829ca2ac3fa1c366e5b5fa0a651fc0b5a3893d3f9d517dd4e.gltf"
+      },
+      "warrior": {
+        "manifestSha256": "6e6b756dc3e776740e8be2f8c3d48dbc319ff34f0b9eedb4d420f647611969aa",
+        "model": "./content/2e579ef51f7faed31839e84f6f700ce7886d21b06d82bd29869f995d3afe4755.gltf"
+      },
+      "warrior-v2": {
+        "manifestSha256": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+        "model": "./content/867a628605740bc662fc1bb7b1c35e5f7ac594c5405737d62d47cae3872c5aab.gltf"
+      },
+      "environment": {
+        "manifestSha256": "fcdaef1f8dbfa6bdcd5b68fe6ed2c5833e0d46e96a5547a5d97b3c5acf506928",
+        "model": null
+      }
+    }
+  },
+  "limitations": [
+    "No browser automation, GPU image rendering, device FPS or thermal validation."
+  ],
+  "deployment": {
+    "files": 2043,
+    "bytes": 704397126
+  }
+}
