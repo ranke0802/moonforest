@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704397036,
+  "bytes": 704397107,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8584,14 +8584,14 @@
       "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31"
     },
     {
-      "path": "assets/game-bga3ZUQe.js",
-      "bytes": 2308300,
-      "sha256": "b8a4d1eb0dd104e83bd42d2390fe7ecbd63f11ad9e3931cfeae506c8f9fd7167"
+      "path": "assets/game-BUvQ19AY.css",
+      "bytes": 110205,
+      "sha256": "0ce27787208f00b3b044eeab5d95b0ab4e45f7c5260b86f950a72488538f211a"
     },
     {
-      "path": "assets/game-BTatqCda.css",
-      "bytes": 109972,
-      "sha256": "6ce577b715cc92db2c8464a644221383e89db4ce498271c1572c8beef57380de"
+      "path": "assets/game-GXreYCy2.js",
+      "bytes": 2308138,
+      "sha256": "63f5d434bcc7c0ce535520c5d06682d5c49e9c496db81578c2ded63eab9c45e9"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
@@ -10186,7 +10186,7 @@
     {
       "path": "index.html",
       "bytes": 39045,
-      "sha256": "b1b9ef310c756f343efc69f23851957162480ff94d68f4a36e240c2aed6aa28a"
+      "sha256": "37ca0531943bae3b6231642799943b00a95c53811d56eb4ec18524be72f96efb"
     },
     {
       "path": "KTX2_NOTICES.txt",

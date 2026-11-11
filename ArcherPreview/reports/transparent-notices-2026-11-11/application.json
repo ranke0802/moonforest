@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-11",
+  "changes": [
+    "Removed the successful chest-opening center message from built-in and authored chest paths.",
+    "Center game, quest, UI-test and stamina notices use outlined text without a panel background, border, panel shadow or backdrop blur."
+  ],
+  "preserved": [
+    "Chest opening animation, rewards, grade settings and saved reward ownership",
+    "Notice timers, centering and layout customization; acquisition panels and boss-clear modal",
+    "Approved assets, textures, LOD and combat"
+  ],
+  "validation": {
+    "existingTestsPassed": 35,
+    "failed": 0,
+    "log": "transparent-notices-validation.log",
+    "build": "pass",
+    "compiledChestMessageAbsent": true,
+    "compiledTransparentOutlinedNotices": true,
+    "browserAutomation": false
+  },
+  "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7"
+}
