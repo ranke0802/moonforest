@@ -69,6 +69,7 @@ import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
+import {createSwordTrail,setupSwordTrailSettings} from './sword-trail.js';
 import {configurePlayerSize,playerDimensions,WARRIOR_DIMENSIONS} from './player-dimensions.js';
 import { createDamageNumbers } from './damage-numbers.js';
 import { BossHealthBars } from './boss-health-bar.js';
@@ -157,7 +158,7 @@ const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.sear
 let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
-let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop;
+let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail;
 const staminaFeedback=new StaminaFailureFeedback();
 const staminaNoticeAnchor=new StaminaNoticeAnchor($('#toast'));
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
@@ -174,6 +175,8 @@ const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
 const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
+const swordTrailSettings=setupSwordTrailSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{swordTrail?.setEnabled(value);renderActivity.wake();frameLoop?.invalidate();}});
+if(import.meta.hot)import.meta.hot.dispose(()=>swordTrailSettings.dispose());
 const weatherSettings=setupWeatherSettings({host:$('.settings-display-options'),storage:equipmentStorage,getWorld:()=>world,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
 const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),storage:equipmentStorage,activity:renderActivity,onChange:fps=>{if(engine)engine.maxFPS=fps;}});
 if(import.meta.hot)import.meta.hot.dispose(()=>frameRateControl.dispose());
@@ -537,7 +540,7 @@ async function loadCharacter() {
     await migrateCachedGlb(config, manifestUrl);
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
-    if (animator) animator.dispose();
+    swordTrail?.clear();if (animator) animator.dispose();
     equipment?.dispose(); equipment = null;
     if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
     if (actor) actor.dispose();
@@ -939,9 +942,12 @@ try {
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
+  try{swordTrail=createSwordTrail(world.scene,{enabled:swordTrailSettings.enabled,onError:error=>console.warn('[검격 잔상]',error)});}catch(error){console.warn('[검격 잔상]',error);}
   world.scene.onAfterAnimationsObservable.add(()=>{
-    if(!simulateFrame||!ready||!isWarrior()||!combatResult)return;
+    if(!simulateFrame)return;
+    if(!ready||!isWarrior()||!combatResult){swordTrail?.clear();return;}
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
+    try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     frameDiagnostics.measure('contactsMs',contactsStart);
@@ -983,7 +989,7 @@ try {
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
-      combatResult=null;strikeSampler.reset();mapPortal?.dispose();mapPortal=null;
+      combatResult=null;strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
     },
     release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},

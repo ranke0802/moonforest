@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704367933,
+  "bytes": 704371990,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8589,9 +8589,9 @@
       "sha256": "d70d9e9834cc498077c0eae8cd19561ecf88a7f303bc0cd4118322a304d1b4e1"
     },
     {
-      "path": "assets/game-DGr--tTT.js",
-      "bytes": 2303826,
-      "sha256": "bd6b5eaecf0b6fe7feb71f0b3d4176f1c7251c48f678176304b8877a991d044d"
+      "path": "assets/game-BkfSbKUl.js",
+      "bytes": 2307883,
+      "sha256": "8cb8f5a2b7affebe3ea912821e8081349808c8c551912a10d33dd53d384a0cee"
     },
     {
       "path": "assets/game-tool-lease-cQhkTM3H.js",
@@ -10186,7 +10186,7 @@
     {
       "path": "index.html",
       "bytes": 39000,
-      "sha256": "78ec285cf888ff0c5c5e025686122e131a453a8a5b9f456f122552ac12549110"
+      "sha256": "cd65fde37adacf0d40f7ae0f8ea43a677e4ed414585a9281f8b1db941e561051"
     },
     {
       "path": "KTX2_NOTICES.txt",
