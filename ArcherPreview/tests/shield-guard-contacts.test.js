@@ -68,6 +68,10 @@ test('held and pending shields never create an outgoing strike, even across the 
   const sample=sampler.sample({...tap,clipTime:1.12},null,shield);
   assert.equal(sample.window.damage,10);assert.equal(sample.window.stun,1.5,'a released tap retains the original push');
 });
+test('shield-push sweep extends the prior shield-local bounds and contact radius by 20 percent',t=>{
+ const {scene}=fixture(t,BossEncounter,'guardian-bear'),shield=new TransformNode('shield-reach',scene),sample=new PlayerStrikeSampler().sample({...tap,clipTime:1.12},null,shield);
+ assert.ok(Math.abs(sample.blade[0][0]+.66)<1e-6);assert.ok(Math.abs(sample.blade[1][0]-.66)<1e-6);assert.ok(Math.abs(sample.blade[0][2]-.192)<1e-6);assert.ok(sample.bladeRadius>0);
+});
 
 test('one actual shield sweep knocks down every separately hit enemy once',t=>{
   const a=fixture(t,BossEncounter,'guardian-bear'),b=fixture(t,GoblinEncounter,'hooded-goblin');
@@ -146,12 +150,12 @@ for(const [name,Encounter,asset] of variants){
     assert.deepEqual(feedback.map(f=>f[3]),['block','block']);
   });
 
-  test(`${name}: a released short tap retains its existing block knockback`,t=>{
+  test(`${name}: a short tap blocks and staggers without pushing the attacker away`,t=>{
     const {b}=fixture(t,Encounter,asset),position=b.actor.position.clone();
     assert.equal(b.receiveBossHit({damage:30,bodyContact:true,action:tap}),true);
     assert.equal(b.playerHp,500);assert.equal(b.brain.stagger,1);
     b.bossReaction.update(.2,b.actor);
-    assert.ok(Math.abs(Vector3.Distance(position,b.actor.position)-.28)<1e-8);
+    assert.ok(b.actor.position.equals(position));
     assert.equal(b.knockVelocity.lengthSquared(),0);
   });
 }

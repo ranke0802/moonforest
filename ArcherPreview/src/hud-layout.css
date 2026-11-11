@@ -17,5 +17,5 @@
 @media(orientation:landscape) and (max-height:540px){.hud-layout-panel{width:min(500px,calc(100vw - 16px));padding:6px 10px}.hud-layout-panel header+p{display:block;font-size:11px}.hud-layout-panel header button{min-height:32px}.hud-layout-options{max-height:48dvh}}
 
 /* Shared notices remain readable at phone and desktop sizes. Stamina keeps its
-   separate character-anchored, text-only treatment. */
+   separate centered, text-only treatment. */
 #app > #toast:not(.stamina-notice),#app > .chapter-toast,#app > .uit-toast{position:absolute;left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);scale:none;transform-origin:center;max-width:min(620px,calc(100% - 32px));width:max-content;padding:10px 18px;border:1px solid #a68e57;border-radius:6px;background:#102019ed;color:#f3e2b5;font:600 clamp(17px,3.4vmin,24px)/1.45 MoonforestUI,'Malgun Gothic',sans-serif;text-align:center;text-shadow:0 1px 2px #000;pointer-events:none;z-index:1100}

@@ -28,6 +28,7 @@ export class ChapterJourney{
  openChest(point,{origin,position}={}){
   const rewards=chestRewards(point?.tier),token='point:'+point?.id;
   if(!rewards||!point?.id||!point?.key||this.seen.has(token)||this.value.pendingDrops.length>=512||this.value.pendingDrops.filter(drop=>drop.mapId===point.map).length>=128)return null;
+  if(point.rewardItem&&Object.hasOwn(ITEM_DROP_MODELS,point.rewardItem)){for(const item of Object.keys(rewards))if(item!=='gold')delete rewards[item];rewards[point.rewardItem]=1;}
   if(point.id==='lookout-chest')rewards['equipment-voucher']=1;
   if(['goblin-relic','village-relief'].includes(point.id))rewards['key-3']=1;
   const bonus=Object.entries(ITEM_DROP_MODELS).find(([,asset])=>asset===point.dropAssetId)?.[0];if(bonus)rewards[bonus]=(rewards[bonus]??0)+1;
@@ -40,6 +41,7 @@ export class ChapterJourney{
   else this.value.pendingDrops.push(structuredClone(drop));return true;}
  addMonsterDrop(drop){if(!this.queueMonsterDrop(drop))return false;this.save();return true;}
  recordDefeatDrop(key,drop){if(!key||!this.queueMonsterDrop(drop))return false;this.value.facts[key]=Math.min(100000,(this.value.facts[key]??0)+1);this.save();return true;}
+ recordDefeatReward(key,rewards){if(!key)return null;const granted={};this.value.facts[key]=Math.min(100000,(this.value.facts[key]??0)+1);for(const [item,count] of Object.entries(rewards)){if(!Number.isSafeInteger(count)||count<=0)continue;const previous=this.value.bag[item]??0,next=Math.min(100000,previous+count);this.value.bag[item]=next;if(next>previous)granted[item]=next-previous;if(item!=='gold')this.value.facts['item:'+item]=Math.min(100000,(this.value.facts['item:'+item]??0)+next-previous);}this.save();return granted;}
 
  collectDrop(id){const index=this.value.pendingDrops.findIndex(drop=>drop.id===id);if(index<0)return null;const [drop]=this.value.pendingDrops.splice(index,1);for(const [item,count]of Object.entries(drop.rewards)){this.value.bag[item]=Math.min(100000,(this.value.bag[item]??0)+count);if(item!=='gold')this.value.facts['item:'+item]=Math.min(100000,(this.value.facts['item:'+item]??0)+count);}this.save();return drop;}
  claim(id){if(this.status(id)!=='ready')return null;const q=lookup.get(id),v=this.value;

@@ -20,6 +20,9 @@ import {villageObstacles} from './village-layout.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {caveFogRootEnabled} from './cave-fog-of-war.js';
 import {buildEditedTerrain,publishEditedTerrain} from './terrain-edit.js';
+import {prepareChestOpening,createChestOpening} from './chest-opening.js';
+import {lootRarity} from './loot-rarity.js';
+import {Color3} from '@babylonjs/core';
 
 const geometry=container=>container.meshes.filter(mesh=>mesh.getTotalVertices?.()>0);
 const clone=value=>structuredClone(value);
@@ -57,7 +60,7 @@ export class AuthoredPlacementRuntime {
   this.publish=publish;this.baseUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
   this.baseManifest=createBasePlacementManifest(this.mapId,{catalog,placements:world.placements});this.document=createEmptyPlacementDocument(this.baseManifest);this.applied=false;
   this.limits={instances:Math.min(128,limits.instances??128),assets:Math.min(8,limits.assets??8)};
-  this.records=new Map();this.assets=new Map();this.renderRecords=[];this.previewRecord=null;this.existingPreview=null;this.baseNavigation=world.navigation;this.navigation=null;this.suppressedBase=new Map();this.baseObstacleOwnership=new Map();
+  this.records=new Map();this.assets=new Map();this.renderRecords=[];this.openingChests=new Set();this.previewRecord=null;this.existingPreview=null;this.baseNavigation=world.navigation;this.navigation=null;this.suppressedBase=new Map();this.baseObstacleOwnership=new Map();
   this.controller=new AbortController();this.generation=0;this.request=0;this.previewRequest=0;this.disposed=false;this.lifetimes=new Set();this.pending=new Set();this.stats={commits:0,previews:0,sourceLoads:0,sourceReleases:0,instancesCreated:0,instancesDisposed:0,geometryPending:0};
   this.proxy=Object.create(world);this.proxy.environment=this.stats;
   this.streaming=new VillageGeometryStreaming(this.proxy,this.renderRecords,request=>this._loadTier(this.assets.get(request.id),request.level),request=>{const entry=this.assets.get(request.id);return !entry||!entry.levels.some(level=>level.level===request.level)||hasVillageGeometry(entry,request.level);},this.stats);this.proxy.villageStreaming=this.streaming;this.streaming.active=true;
@@ -145,6 +148,7 @@ export class AuthoredPlacementRuntime {
     container=await lifetime.run(()=>this.loadContainer(model,this.scene,{signal:lifetime.signal,lifetime}),{onLate:value=>value?.dispose()});
     this._check(generation);lifetime.check();if(entry.disposed)throw mapLoadAbortError();
     if(container.skeletons?.length||container.animationGroups?.length||container.morphTargetManagers?.length)throw new Error('Editable placement asset must be static');
+    if(entry.catalog.assetId==='chest-common')prepareChestOpening(container);
     const meshes=geometry(container);if(!meshes.length)throw new Error('Editable placement asset has no geometry');
     if(this.world.cave&&entry.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:entry.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(entry.catalog.assetId)};
     prepareVillageInstancing(meshes);applyVillageToon(meshes,this.world.lighting);prepareTreeOcclusion(meshes);
@@ -198,8 +202,8 @@ export class AuthoredPlacementRuntime {
    const meshes=root.getChildMeshes().filter(mesh=>mesh.getTotalVertices()>0);
    for(const mesh of meshes){mesh.isPickable=true;mesh.metadata={...mesh.metadata,placementInstanceId:instance.instanceId,authoredPlacement:true};}
    root.metadata={placementInstanceId:instance.instanceId,authoredPlacement:true};
-   const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)};
-   this._setTransform(record,instance,terrain);this.stats.instancesCreated++;return record;
+   const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale,...(instance.assetId==='chest-common'?{lootTier:instance.chest?.tier??1}:{})},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)};
+   this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.world.isAuthoredChestOpened?.(instance.instanceId)===true});this.stats.instancesCreated++;return record;
   }catch(error){root.dispose();this._release(entry);throw error;}
  }
  _setTransform(record,instance,terrain=this.world.terrain){
@@ -229,7 +233,7 @@ export class AuthoredPlacementRuntime {
   const body=entry.catalog.placement.body;
   record.obstacles=instance.collision!=='solid'?[]:instance.sourceInstanceId?this._baseCollisionParts(record,instance):this.world.cave?[]:body?.shape==='trunk-capsule'?[this._trunkObstacle(record,body)]:[{id:'authored-'+instance.instanceId,instanceId:instance.instanceId,shape:'box',x:center.x,z:center.z,yaw:0,halfWidth:Math.max(.0001,(max.x-min.x)/2),halfDepth:Math.max(.0001,(max.z-min.z)/2),radius:Math.hypot(max.x-min.x,max.z-min.z)/2,height:Math.max(0,max.y-this.world.terrain.heightAt(center.x,center.z)),source:'transformed-mesh-conservative-XZ-bounds'}];record.obstacle=record.obstacles[0]??null;
  }
- _disposeRecord(record){if(!record||record.disposed)return;record.disposed=true;for(const mesh of record.meshes)this.world.shadows?.removeShadowCaster(mesh,false);record.root.dispose(false,false);this._release(record.entry);this.stats.instancesDisposed++;}
+ _disposeRecord(record){if(!record||record.disposed)return;record.disposed=true;if(record.chestOpening)this.openingChests.delete(record.chestOpening);for(const mesh of record.meshes)this.world.shadows?.removeShadowCaster(mesh,false);record.root.dispose(false,false);this._release(record.entry);this.stats.instancesDisposed++;}
  _refreshRecords(){this.renderRecords.splice(0,this.renderRecords.length,...this.records.values(),...(this.previewRecord?[this.previewRecord]:[]));this.streaming.demand.invalidate();this.textureStreaming.nextCheck=0;}
  _rebuildVisibility(){this.visibility?.dispose();this.visibility=new VillageVisibility(this.proxy,[...this.records.values()],{touch:this.world.touchDevice});for(const record of this.records.values())record.visibilityKey=cellKey(record.placement.x,record.placement.z);this.world.caveFog?.updateRecords([...this.records.values()]);this.treeOcclusion=this.publish?new TreeOcclusion([...this.records.values()].filter(record=>record.blocksPlayerView).map(record=>record.root)):null;}
  _relocateVisibility(record){
@@ -333,16 +337,18 @@ export class AuthoredPlacementRuntime {
   const obstacles=[...this.records.values()].flatMap(record=>record.obstacles??(record.obstacle?[record.obstacle]:[])),revision=(this.world.placementRevision??0)+1;
   if(this.publish){const replacements=[...next.instances.map(instance=>instance.sourceInstanceId).filter(Boolean),...(next.removedBaseIds??[])],removedIds=replacements.flatMap(id=>this._originalObstacles(id).map(obstacle=>obstacle.id));this.navigation=createAuthoredPlacementNavigation(this.baseNavigation,obstacles,revision,{removedIds,force:!!editedCaveClearance});if(editedCaveClearance)this.navigation.clearanceAt=editedCaveClearance.clearanceAt;this._suppressBase(replacements);this.world.navigation=this.navigation;this.world.placementRevision=revision;this.world.authoredPlacementRecords=[...this.records.values()];this.world.placementOverlay=clone(next);if(this.world.cave)this._publishCaveCollision(editedCaveClearance);}
   this.stats.commits++;
-  this.outlines=preparedOutlines;this.outlines.drawing=false;this.outlines.next=0;this.outlines.observer=this.scene.onBeforeRenderObservable.add(()=>this.outlines?.update(performance.now()));this._rebuildVisibility();
+  this.outlines=preparedOutlines;for(const entry of this.outlines.entries){const tier=entry.record.instance.assetId==='chest-common'?entry.record.instance.chest?.tier??1:0;if(tier){entry.record.placement.lootTier=tier;entry.inkWidth=.028;entry.mesh.instancedBuffers.villageInkTint=Color3.FromHexString(lootRarity(tier).color);}}this.outlines.drawing=false;this.outlines.next=0;this.outlines.observer=this.scene.onBeforeRenderObservable.add(()=>this.outlines?.update(performance.now()));this._rebuildVisibility();
   this.update(0,this.lastPlayer);await this.onCommit({document:clone(next),records:this.records,obstacles,revision});return clone(next);
  }
  update(dt=0,player){
   if(!this._current())return;this.lastPlayer=player??this.lastPlayer;
+  for(const opening of this.openingChests)if(!opening.advance(dt))this.openingChests.delete(opening);
   const position=this.world.toolLease?.active?this.world.camera.getTarget():this.lastPlayer?.position??this.world.camera.target??this.world.camera.getTarget();
   this.visibility?.update(this.world.camera.globalPosition,position,Math.max(0,Number.isFinite(dt)?dt:0));
   if(this.treeOcclusion){if(this.world.toolLease?.active){for(const tree of this.treeOcclusion.trees){tree.coverage=tree.target=1;for(const mesh of tree.meshes)if(mesh.instancedBuffers)mesh.instancedBuffers.treeCoverage=1;}}else this.treeOcclusion.update(this.world.camera.globalPosition,position,Math.max(0,Number.isFinite(dt)?dt:0));}
   if(this.existingPreview)this.existingPreview.record.root.setEnabled(true);
  }
+ openChest(instanceId){const record=this.records.get(instanceId),opening=record?.chestOpening;if(!opening)return false;if(opening.open())this.openingChests.add(opening);return true;}
  _publishCaveCollision(value){
   if(!value&&!this.caveCollisionOwned)return;const terrain=this.world.terrain;if(!this.caveCollisionOwned){this.previousCaveCollision=terrain.authoredCaveCollision;this.caveCollisionTerrain=terrain;this.caveCollisionOwned=true;}
   terrain.authoredCaveCollision=value??this.previousCaveCollision;this.caveCollision=value??this.previousCaveCollision;

@@ -69,6 +69,13 @@ test('object interaction is saved in the map document and follows undo and apply
  assert.deepEqual(f.api.inspect().document.instances[0].interaction,{label:'읽기',text:'낡은 기록을 발견했다.',range:4});await f.click('undo');assert.equal(f.api.inspect().document.instances[0].interaction,undefined);await f.click('redo');await f.click('apply');assert.equal(JSON.parse(f.store.get(authoredMapStorageKey('village'))).instances[0].interaction.text,'낡은 기록을 발견했다.');
 });
 
+test('placed chest grade and chosen item survive apply and undo/redo',async t=>{
+ const f=fixture(t);await settle();const chest=ASSET_CATALOG.entries.find(row=>row.assetId==='chest-common'),category=f.root.querySelector('[data-category]'),variants=f.root.querySelector('[data-variants]');category.value='prop';category.dispatchEvent(new f.window.Event('change'));variants.value=chest.assetId+'@'+chest.version;variants.dispatchEvent(new f.window.Event('change'));await f.click('place');
+ assert.equal(f.api.inspect().document.instances[0].assetId,'chest-common');assert.equal(f.root.querySelector('[data-chest-tier]').closest('fieldset').hidden,false);
+ f.root.querySelector('[data-chest-tier]').value='4';f.root.querySelector('[data-chest-item]').value='apple';await f.click('chest-save');assert.deepEqual(f.api.inspect().document.instances[0].chest,{tier:4,item:'apple'});
+ await f.click('undo');assert.equal(f.api.inspect().document.instances[0].chest,undefined);await f.click('redo');await f.click('apply');assert.deepEqual(JSON.parse(f.store.get(authoredMapStorageKey('village'))).instances[0].chest,{tier:4,item:'apple'});
+});
+
 test('closing the editor during delayed preview cannot commit the cancelled object',async t=>{
  const f=fixture(t);await settle();const runtime=f.world.authoredPlacements,preview=runtime.preview.bind(runtime);let release,started=false;runtime.preview=async row=>{started=true;await new Promise(resolve=>release=resolve);return preview(row);};
  await f.clickRaw('place');assert.equal(started,true);const closing=f.api.hide();release();await closing;await settle();assert.equal(f.api.inspect().placing,null);assert.equal(f.api.inspect().document.instances.length,0);assert.equal(f.root.querySelector('.placement-preview-actions'),null);

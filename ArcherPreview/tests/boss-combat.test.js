@@ -150,8 +150,8 @@ test('strike sampling: 2x low-FPS shield contact is retained only inside its aut
  shield.position.x=1;
  const sample=sampler.sample({state:'shieldPush',actionId:1,clipTime:1.24},null,shield);
  assert.equal(sample.window.stun,1.5);
- assert.ok(Math.abs(sample.previous[0][0]-(-.55+.3))<1e-6);
- assert.ok(Math.abs(sample.blade[0][0]-(-.55+.55))<1e-6);
+ assert.ok(Math.abs(sample.previous[0][0]-(-.66+.3))<1e-6);
+ assert.ok(Math.abs(sample.blade[0][0]-(-.66+.55))<1e-6);
  assert.equal(sampler.sample({state:'shieldPush',actionId:1,clipTime:1.4},null,shield).window,undefined);
  scene.dispose();engine.dispose();
 });

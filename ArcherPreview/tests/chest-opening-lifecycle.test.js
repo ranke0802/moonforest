@@ -25,6 +25,9 @@ import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {createMonsterForestTerrain} from '../src/monster-forest-terrain.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {ASSET_CATALOG} from '../src/asset-catalog.js';
+import {AuthoredPlacementRuntime} from '../src/authored-placement-runtime.js';
+import {createEmptyPlacementDocument} from '../src/placement-document.js';
 const maps=['village','great-plains','monster-forest','witch-cave'],facts=[],base=new URL('../public/assets/',import.meta.url),fullManifest=JSON.parse(readFileSync(new URL('quest-props.json',base))),config=fullManifest.assets['chest-common'],manifest={assets:{'chest-common':config}},profile=config.lods[1],modelUrl=new URL(profile.model,base);
 const deferred=()=>{let resolve;const promise=new Promise(r=>resolve=r);return{promise,resolve};},tick=()=>new Promise(r=>setImmediate(r));
 const storage=()=>{const values=new Map();let writes=0;return{getItem:k=>values.get(k),setItem:(k,v)=>{writes++;values.set(k,v);},get writes(){return writes;}};};
@@ -120,5 +123,16 @@ test('a visible quest chest is listed for nearby editing and its interaction fol
  assert.ok(chest);assert.equal(chest.source,'quest-chest');assert.equal(nearbyEditableObjects(f.world,{x:point.x,z:point.z},{actors:handles})[0].instanceId,chest.id);
  chest.encounter.chestVisualState='open';assert.equal(point.opened,true);assert.equal(f.api.journey.seen.has('point:'+point.id),false);chest.encounter.chestVisualState='auto';assert.equal(point.opened,false);assert.equal(f.api.journey.seen.has('point:'+point.id),false);
  const moved={x:point.x+1,z:point.z+1};point.visual.unfreezeWorldMatrix();point.visual.position.x=moved.x;point.visual.position.z=moved.z;point.visual.computeWorldMatrix(true);chest.encounter.onEdited();point.visual.freezeWorldMatrix();assert.equal(point.x,moved.x);assert.equal(point.z,moved.z);assert.equal(point.marker.position.x,moved.x);assert.equal(point.marker.position.z,moved.z);
- f.state.position=moved;f.api.update(1.4);f.click();assert.equal(point.opened,true);assert.ok(f.api.journey.seen.has('point:'+point.id));f.api.releaseMap();assert.equal(listEditableActorHandles(f.world,{encounters:[]}).length,0);
+ f.state.position=moved;f.api.update(1.4);f.click();assert.equal(point.opened,true);assert.ok(f.api.journey.seen.has('point:'+point.id));
+ chest.encounter.chestVisualState='closed';chest.encounter.onEditApplied();f.api.update(1.6);assert.equal(point.visual.isEnabled(),true,'closing an already-looted chest preserves its visible model');assert.equal(point.marker.isEnabled(),false,'closing the model cannot recreate a reward');assert.equal(point.opened,false);const before=JSON.stringify(f.api.journey.value);f.click(false);assert.equal(JSON.stringify(f.api.journey.value),before);
+ f.api.releaseMap();f.api.update(2);await f.loaded();f.api.update(2.2);const restored=f.points.find(p=>p.id===point.id);assert.equal(restored.opened,false);assert.equal(restored.visual.isEnabled(),true,'closed override remains visible after reload');assert.equal(restored.marker.isEnabled(),false);f.api.releaseMap();assert.equal(listEditableActorHandles(f.world,{encounters:[]}).length,0);
+});
+
+test('a placed chest uses the shipped opening geometry and preserves its opened state on map reload',async t=>{
+ const f=fixture(t,{withUi:true}),entry=ASSET_CATALOG.entries.find(v=>v.assetId==='chest-common');configureMap(f,'great-plains');t.after(()=>setWorldCharacter('warrior'));f.world.placements=[];f.world.villageRenderRecords=[];
+ const profile={level:0,model:entry.runtime.model.replace(/^assets\//,''),resources:[]},data={assets:{'chest-common':{...config,geometryLod:false,lods:[profile]}}};
+ const runtime=new AuthoredPlacementRuntime(f.world,{catalog:ASSET_CATALOG,baseUrl:'https://qa.test/',initialize:async()=>{},readManifest:async()=>data,loadContainer:f.load});f.world.authoredPlacements=runtime;t.after(()=>runtime.dispose());
+ const row={instanceId:'authored-test-chest',assetId:'chest-common',assetVersion:entry.version,transform:{position:[3,f.world.terrain.heightAt(3,0),0],rotation:[0,0,0,1],scale:1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'none',chest:{tier:3,item:'apple'}};
+ const doc={...createEmptyPlacementDocument(runtime.baseManifest),revision:1,instances:[row]};await runtime.apply(doc);const chest=runtime.records.get(row.instanceId);assert.ok(chest.chestOpening);assert.equal(chest.meshes.length,2);assert.equal(chest.placement.lootTier,3);f.state.position={x:3,z:0};f.api.update(1);assert.equal(f.world.openAuthoredChest(row.instanceId),true);assert.equal(chest.chestOpening.state.opened,true);assert.deepEqual(f.api.journey.value.pendingDrops[0].rewards,{gold:70,apple:1});for(let i=0;i<30;i++)runtime.update(.05);assert.ok(chest.chestOpening.state.angle<0);
+ runtime.leaveMap();const fresh=new AuthoredPlacementRuntime(f.world,{catalog:ASSET_CATALOG,baseUrl:'https://qa.test/',initialize:async()=>{},readManifest:async()=>data,loadContainer:f.load});f.world.authoredPlacements=fresh;t.after(()=>fresh.dispose());await fresh.apply(doc);const restored=fresh.records.get(row.instanceId);assert.equal(restored.chestOpening.state.opened,true);assert.equal(f.world.openAuthoredChest(row.instanceId),false);
 });

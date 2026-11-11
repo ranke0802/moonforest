@@ -4,6 +4,12 @@ import {parseHTML} from 'linkedom';
 import {setupAuthoredInteractions} from '../src/authored-interactions.js';
 import {normalizeInteraction} from '../src/interaction-data.js';
 
+test('an editor-placed chest gets an open interaction by default and stops offering it after opening',()=>{
+ const {document}=parseHTML('<html><body><main></main></body></html>'),root=document.querySelector('main'),create=document.createElement.bind(document);document.createElement=(name,...args)=>{const e=create(name,...args);if(name==='dialog'){Object.defineProperty(e,'open',{get:()=>e.hasAttribute('open')});e.close=()=>{};}return e;};
+ let opened=false;const item={instanceId:'authored-chest',assetId:'chest-common'},record={root:{position:{x:1,y:0,z:0},isEnabled:()=>true},bounds:{min:{x:1,z:0},max:{x:2,z:1}}},world={mapId:'village',placementOverlay:{instances:[item]},authoredPlacements:{records:new Map([[item.instanceId,record]])},navigation:{segmentClear:()=>true},isAuthoredChestOpened:()=>opened,openAuthoredChest:id=>{assert.equal(id,item.instanceId);opened=true;return true;}};
+ const ui=setupAuthoredInteractions({root,world,getState:()=>({ready:true,position:{x:0,z:0}})});ui.update(1);const button=root.querySelector('.authored-interaction-button');assert.equal(button.hidden,false);assert.match(button.textContent,/상자 열기/);button.click();assert.equal(opened,true);assert.equal(button.hidden,true);ui.update(2);assert.equal(button.hidden,true);ui.dispose();
+});
+
 test('interaction data is bounded and rejects executable or malformed extra fields',()=>{
  assert.deepEqual(normalizeInteraction({label:' 읽기 ',text:' 기록 ',range:3}),{label:'읽기',text:'기록',range:3});assert.throws(()=>normalizeInteraction({label:'a',text:'b',range:3,script:'x'}));assert.throws(()=>normalizeInteraction({label:'a',text:'',range:3}));assert.throws(()=>normalizeInteraction({label:'a',text:'b',range:9}));
 });

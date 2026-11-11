@@ -22,7 +22,7 @@ export class PlayerStrikeSampler{
     const node=result.state==='shieldPush'?shield:sword;
     if(!node){this.reset();return null;}
     node.computeWorldMatrix(true);
-    const local=result.state==='shieldPush'?[[-.55,0,.16],[.55,0,.16]]:[[-.002,.405,0],[-.002,-.951,0]];
+    const local=result.state==='shieldPush'?[[-.66,0,.192],[.66,0,.192]]:[[-.002,.405,0],[-.002,-.951,0]];
     if(result.state==='slash')local[1]=local[0].map((v,i)=>v+(local[1][i]-v)*1.1);
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
@@ -35,7 +35,7 @@ export class PlayerStrikeSampler{
       lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth*dimensions.ratio}:null}));
     return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
       // A 1 cm contact margin keeps near-edge hits consistent with the V6 grip.
-      bladeRadius:result.state==='shieldPush'?dimensions.shieldStrikeRadius:dimensions.bladeRadius};
+      bladeRadius:result.state==='shieldPush'?dimensions.shieldStrikeRadius*1.2:dimensions.bladeRadius};
   }
 }
 

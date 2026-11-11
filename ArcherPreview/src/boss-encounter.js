@@ -442,7 +442,7 @@ export class BossEncounter {
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
-      if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45,recoil:!(action?.shieldPending||action?.guarding)});
+      if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45,recoil:false});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block');this.onChange(this);
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null,knockdown:heavy});

@@ -35,7 +35,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
   owned=[];containers=[];records=[];mapPoints=[];
   Object.assign(stats,{instances:0,markerInstances:0,outlineInstances:0,outlineTriangles:0,lastError:null});
  };
- const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p)&&!p.opened);p.visual?.setEnabled(demand.has(p));}for(const record of records)if(record.point.opened&&record.opening&&!record.opening.state.opened)record.opening.open({immediate:true});};
+ const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p)&&!p.opened&&!p.wasLooted);p.visual?.setEnabled(demand.has(p));}for(const record of records)if(record.point.opened&&record.opening&&!record.opening.state.opened)record.opening.open({immediate:true});};
  async function install(id,revision,signal){
   const config=manifest?.assets[id],profile=config?.lods?.[1]??config?.lods?.[0];if(!profile){models.set(id,'unavailable');return;}
   const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href),url=new URL(profile.model,base);
