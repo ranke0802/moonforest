@@ -1,6 +1,7 @@
 import {Frustum,Vector3,Matrix,Quaternion} from '@babylonjs/core';
 import {projectedCoverage,villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {plainsRenderRange} from './plains-view-distance.js';
+import {sceneryDistanceRange as cinematicSceneryRange,sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 
 // The 1000-record cutoff is empirical: local paired tests found no consistent
 // benefit for the current village, forest and cave. Overview uses a direct scan.
@@ -90,7 +91,7 @@ export function villageDemand(world,records,index=null,stats=null){
   }
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
   const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
-  const range=world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull;
+  const range=cinematicSceneryRange(world)?.cellCull??(world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull);
   const target=camera.target??camera.getTarget();
   const candidates=villageDemandCandidates(index,camera.globalPosition,target,planes,range);
   if(stats){stats.demandRecordsTotal=records.length;stats.demandRecordsChecked=candidates.count;}
@@ -102,7 +103,7 @@ export function villageDemand(world,records,index=null,stats=null){
     const {center,radius}=record.bounds,distance=Vector3.Distance(camera.globalPosition,center)-radius;
     const close=Vector3.Distance(target,center)-radius<18;
     if(distance>range+12||(!close&&!planes.every(p=>p.dotCoordinate(center)>=-radius-10)))continue;
-    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius}),level=villageLodTier(coverage);
+    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius},world),level=villageLodTier(coverage);
     const request=tier=>{
       const key=record.placement.asset+':'+tier,priority=(close?1000:0)+coverage*100-distance;
       if(!wanted.has(key)||wanted.get(key).priority<priority)wanted.set(key,{id:record.placement.asset,level:tier,priority});
@@ -120,14 +121,14 @@ export function villageDemand(world,records,index=null,stats=null){
 function villageDemandDirect(world,records){
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
   const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
-  const range=world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull;
+  const range=cinematicSceneryRange(world)?.cellCull??(world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull);
   const target=camera.target??camera.getTarget();
   for(const record of records){
     if(world.caveFog?.fog.ready&&!world.caveFog.fog.boundsVisible(record.min??record.bounds.min,record.max??record.bounds.max,2))continue;
     const {center,radius}=record.bounds,distance=Vector3.Distance(camera.globalPosition,center)-radius;
     const close=Vector3.Distance(target,center)-radius<18;
     if(distance>range+12||(!close&&!planes.every(p=>p.dotCoordinate(center)>=-radius-10)))continue;
-    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius}),level=villageLodTier(coverage);
+    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius},world),level=villageLodTier(coverage);
     const request=tier=>{
       const key=record.placement.asset+':'+tier,priority=(close?1000:0)+coverage*100-distance;
       if(!wanted.has(key)||wanted.get(key).priority<priority)wanted.set(key,{id:record.placement.asset,level:tier,priority});
@@ -144,7 +145,7 @@ function villageDemandDirect(world,records){
 // against the current loaded tiers, without rescanning all 698 placements.
 export class VillageDemandCache {
   constructor(world,records,stats={}){
-    Object.assign(this,{world,records,stats});this.previous=new Float64Array(29);this.previous.fill(NaN);this.plan=null;
+    Object.assign(this,{world,records,stats});this.previous=new Float64Array(30);this.previous.fill(NaN);this.plan=null;
     this.index=null;this.indexLength=-1;
     stats.demandEvaluations=0;stats.demandCacheHits=0;
   }
@@ -153,7 +154,7 @@ export class VillageDemandCache {
     const {world,records}=this,camera=world.camera;
     camera.getViewMatrix();camera.getProjectionMatrix();
     const matrix=camera.getTransformationMatrix().m,position=camera.globalPosition,target=camera.target??camera.getTarget();
-    const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length,plainsRenderRange(world).cellCull];
+    const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length,plainsRenderRange(world).cellCull,cinematicSceneryScale(world)];
     const fogRevision=world.caveFog?.fog.revision??0;
     let changed=!this.plan||this.camera!==camera||this.fogRevision!==fogRevision;this.fogRevision=fogRevision;
     for(let i=0;i<16;i++)if(this.previous[i]!==matrix[i])changed=true;

@@ -7,22 +7,23 @@ import {playerDimensions} from './player-dimensions.js';
 import {caveRockOccludes} from './witch-cave-sight.js';
 import {bindCaveFogMaterial,caveFogFallback,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_ROCK_GLSL,bindCaveRock,buildCaveRockShell,caveRockTexture} from './cave-rock-shell.js';
+import {sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 
 const fogFunctions=CAVE_FOG_GLSL.replace('uniform vec4 caveFogRect;','').replace('uniform float caveFogActive;','').replace('uniform vec4 caveFogOrigin;','');
 // Cover shading is exactly scene-clear coloured beyond 48m. Keep an extra
 // reserve and hysteresis: this is not permission to remove a visible wall.
 export const CAVE_COVER_HIDE_DISTANCE=54,CAVE_COVER_SHOW_DISTANCE=50;
-export function distantCoverHidden(previous,min,max,eye){
+export function distantCoverHidden(previous,min,max,eye,scale=1){
   if(!min||!max||!eye||!Number.isFinite(min.x)||!Number.isFinite(min.y)||!Number.isFinite(min.z)||!Number.isFinite(max.x)||!Number.isFinite(max.y)||!Number.isFinite(max.z)||!Number.isFinite(eye.x)||!Number.isFinite(eye.y)||!Number.isFinite(eye.z)||min.x>max.x||min.y>max.y||min.z>max.z)return false;
   const dx=Math.max(min.x-eye.x,0,eye.x-max.x),dy=Math.max(min.y-eye.y,0,eye.y-max.y),dz=Math.max(min.z-eye.z,0,eye.z-max.z),squared=dx*dx+dy*dy+dz*dz;
-  return previous?squared>CAVE_COVER_SHOW_DISTANCE**2:squared>=CAVE_COVER_HIDE_DISTANCE**2;
+  return previous?squared>(CAVE_COVER_SHOW_DISTANCE*scale)**2:squared>=(CAVE_COVER_HIDE_DISTANCE*scale)**2;
 }
 class CaveFogShade extends MaterialPluginBase {
   constructor(material,runtime){super(material,'CaveFogOfWar',490,{MOONFOREST_CAVE_FOG:true,MOONFOREST_CAVE_FOG_STANDARD:material.getClassName()==='StandardMaterial',MOONFOREST_CAVE_FOG_GROUND:material===runtime.world.ground?.material},true,false);this.doNotSerialize=true;this.runtime=runtime;this.standard=material.getClassName()==='StandardMaterial';this.ground=material===runtime.world.ground?.material;this.registerForExtraEvents=true;this._enable(true);}
   getClassName(){return 'MoonforestCaveFogShade';}
   getSamplers(samplers){samplers.push('caveFogMap');if(this.ground)samplers.push('caveRockMap');}
   getUniforms(){return {ubo:[{name:'caveFogRect',size:4,type:'vec4'},{name:'caveFogActive',size:1,type:'float'},{name:'caveFogOrigin',size:4,type:'vec4'},{name:'caveFogCutout',size:1,type:'float'},{name:'caveFogEnvironment',size:1,type:'float'},...(this.ground?[{name:'caveRockToGamma',size:1,type:'float'}]:[])],fragment:'uniform vec4 caveFogOrigin;uniform vec4 caveFogRect;uniform float caveFogActive;uniform float caveFogCutout;uniform float caveFogEnvironment;'+(this.ground?'uniform float caveRockToGamma;':'')};}
-  hardBindForSubMesh(buffer){const r=this.runtime,active=r&&!r.disposed&&r.fog.ready;buffer.updateFloat('caveFogActive',active?1:0);buffer.updateFloat('caveFogCutout',this._material.alpha<1?1:0);buffer.updateFloat('caveFogEnvironment',this._material.metadata?.villageToon||this._material===r?.world.floorMaterial?1:0);buffer.setTexture('caveFogMap',active?r.texture:caveFogFallback(this._material.getScene()));if(active){buffer.updateFloat4('caveFogRect',r.rect.x,r.rect.y,r.rect.z,r.rect.w);buffer.updateFloat4('caveFogOrigin',r.playerView.x,r.playerView.y,r.playerView.z,r.playerView.w);}if(this.ground){const texture=r&&!r.disposed?caveRockTexture(r.world):caveFogFallback(this._material.getScene());buffer.setTexture('caveRockMap',texture);buffer.updateFloat('caveRockToGamma',texture.gammaSpace===false?1:0);}}
+  hardBindForSubMesh(buffer){const r=this.runtime,active=r&&!r.disposed&&r.fog.ready;buffer.updateFloat('caveFogActive',active?1:0);buffer.updateFloat('caveFogCutout',this._material.alpha<1?1:0);buffer.updateFloat('caveFogEnvironment',this._material.metadata?.villageToon||this._material===r?.world.floorMaterial?1:0);buffer.setTexture('caveFogMap',active?r.texture:caveFogFallback(this._material.getScene()));if(active){buffer.updateFloat4('caveFogRect',r.rect.x,r.rect.y,r.rect.z,r.rect.w);buffer.updateFloat4('caveFogOrigin',r.playerView.x,r.playerView.y,r.playerView.z,cinematicSceneryScale(r.world));}if(this.ground){const texture=r&&!r.disposed?caveRockTexture(r.world):caveFogFallback(this._material.getScene());buffer.setTexture('caveRockMap',texture);buffer.updateFloat('caveRockToGamma',texture.gammaSpace===false?1:0);}}
   getCustomCode(type){if(type!=='fragment')return null;const color=this.standard?'color':'finalColor',distanceFog=`if(caveFogActive>.5&&caveFogEnvironment>.5){float caveDistanceFog=caveDistanceHaze(vPositionW,vEyePosition.xyz);${color}.rgb=mix(${color}.rgb,vec3(.024,.028,.038),caveDistanceFog);}`;return {CUSTOM_FRAGMENT_DEFINITIONS:fogFunctions+(this.ground?CAVE_ROCK_GLSL.replace('uniform float caveRockToGamma;',''):''),CUSTOM_FRAGMENT_MAIN_BEGIN:'if(caveFogActive>.5&&caveFogCutout>.5&&caveFogHidesInk(vPositionW))discard;',CUSTOM_FRAGMENT_BEFORE_FRAGCOLOR:(this.ground?`if(caveFogActive>.5){vec2 caveGroundFog=caveFogState(vPositionW);if(caveGroundFog.x<.92){vec3 caveGroundNormal=vec3(0.,1.,0.);
 #ifdef NORMAL
 caveGroundNormal=normalW;
@@ -47,7 +48,7 @@ export class CaveFogRuntime {
     this.plugins=new Set();this.materials=new WeakSet();this.materialDisposals=new Map();this.shaderDisposals=new Map();this.recordMeshes=new WeakSet();this.hidden=new Map();this.hiddenOverlays=new Set();this.owned=new Set();this.shadowScratch=[];this.shadowOriginal=null;this.encounters=[];this.time=0;this.disposed=false;this.patches=[];this.dynamic=[];this.inventoryDirty=true;this.materialDirty=true;this.meshCount=-1;this.materialCount=-1;
     this.stats={uploads:0,hiddenRecords:0,hiddenMeshes:0,hiddenShadowCasters:0,detailPatches:0,coverPatches:0,coverDraws:0,coverTriangles:0,distanceHiddenCoverPatches:0};
     this.coverDistanceCulling=coverDistanceCulling;this.coverDistanceEye=new Float64Array(3).fill(NaN);
-    this.playerForward=new Vector4(0,0,1,0);this.playerView=new Vector4(0,0,0,0);this.bossView=new Vector4(0,0,0,0);
+    this.playerForward=new Vector4(0,0,1,0);this.playerView=new Vector4(0,0,0,0);this.bossView=new Vector4(0,0,0,0);this.distanceOrigin=new Vector4(0,0,0,1);
     world.scene.metadata={...world.scene.metadata,caveFogRuntime:this};this.previousClearColor=world.scene.clearColor;this.clearColor=new Color4(.024,.028,.038,1);world.scene.clearColor=this.clearColor;
     this.installGround(world.ground);
     this.materialObserver=world.scene.onNewMaterialAddedObservable.add(material=>this.attach(material));
@@ -73,10 +74,11 @@ export class CaveFogRuntime {
     if(!this.shaderDisposals.has(material))this.shaderDisposals.set(material,material.onDisposeObservable?.addOnce(()=>this.shaderDisposals.delete(material)));
     const active=!this.disposed&&this.fog.ready?1:0;
     material.setTexture('caveFogMap',this.texture);material.setVector4('caveFogRect',this.rect);material.setFloat('caveFogActive',active);
-    material.setVector4('caveFogOrigin',this.playerView);material.setVector4('cavePlayerView',this.playerView);material.setVector4('caveBossView',this.bossView);
+    this.distanceOrigin.set(this.playerView.x,this.playerView.y,this.playerView.z,cinematicSceneryScale(this.world));
+    material.setVector4('caveFogOrigin',this.distanceOrigin);material.setVector4('cavePlayerView',this.playerView);material.setVector4('caveBossView',this.bossView);
     effect=readyShaderEffect(effect);if(!effect)return;
     effect.setTexture('caveFogMap',this.texture);effect.setVector4('caveFogRect',this.rect);effect.setFloat('caveFogActive',active);
-    effect.setVector4('caveFogOrigin',this.playerView);effect.setVector4('cavePlayerView',this.playerView);effect.setVector4('caveBossView',this.bossView);
+    effect.setVector4('caveFogOrigin',this.distanceOrigin);effect.setVector4('cavePlayerView',this.playerView);effect.setVector4('caveBossView',this.bossView);
   }
   allowsPoint(position){return !this.fog.ready||this.fog.stateAt(position.x,position.z)===CAVE_FOG_VISIBLE;}
   allowsBounds(min,max){return this.fog.boundsVisible(min,max);}
@@ -135,10 +137,11 @@ export class CaveFogRuntime {
     // that view, retaining depth/character occlusion instead of assuming black.
     const valid=this.coverDistanceCulling&&this.fog.ready&&nearPlayer&&!(Number.isFinite(requested)&&requested>24),last=this.coverDistanceEye;this.coverDistanceEligible=valid;
     if(!valid){for(const p of this.patches)p.farHidden=false;last.fill(NaN);this.stats.distanceHiddenCoverPatches=0;return;}
-    if(eye.x!==last[0]||eye.y!==last[1]||eye.z!==last[2]){
+    const scale=cinematicSceneryScale(this.world);
+    if(eye.x!==last[0]||eye.y!==last[1]||eye.z!==last[2]||this.coverDistanceScale!==scale){
       // The original detail AABB encloses every sparse cover vertex too. Its
       // nearest distance is conservative, unlike centre-distance rejection.
-      for(const p of this.patches)p.farHidden=distantCoverHidden(p.farHidden,p.min,p.max,eye);
+      for(const p of this.patches)p.farHidden=distantCoverHidden(p.farHidden,p.min,p.max,eye,scale);this.coverDistanceScale=scale;
       last[0]=eye.x;last[1]=eye.y;last[2]=eye.z;
     }
     this.stats.distanceHiddenCoverPatches=this.patches.reduce((sum,p)=>sum+Number(p.cover&&p.farHidden),0);

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "completedAt": "2026-11-11T17:34:50.073Z",
+  "tests": 279,
+  "pass": 279,
+  "fail": 0,
+  "skipped": 0,
+  "durationMs": 26422.1142,
+  "sourceFiles": 947,
+  "sourceUnchanged": true,
+  "scope": "All cinematic and affected tool, plains, LOD, demand, texture, cave-fog regressions after runtime bridge split.",
+  "priorWholeSuite": "../cinematic-mobile-2026-11-11/regression-scope.json",
+  "wholeSuiteRepeated": false,
+  "log": "regression.log"
+}

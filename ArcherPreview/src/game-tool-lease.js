@@ -12,7 +12,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   environment:audio.environment,combatMode:audio.combatMode,bossTheme:audio.bossTheme,musicWanted:audio.musicWanted,beds:{...audio.beds?.desired}};
  const doc=root.ownerDocument,style=doc.createElement('style');
  style.textContent='#app[data-tool-hud-owner] > :not(canvas):not([data-tool-ui]):not(style){visibility:hidden!important;pointer-events:none!important}';
- let active=true,paused=false,keyboard=null,disposeObserver,contextObserver,fineZoom,borrowedSceneInput=false,cameraMode='orbit',savedInputMap=null;const ownedCameraInputs=[];
+ let active=true,paused=false,keyboard=null,toolMovement=null,disposeObserver,contextObserver,fineZoom,borrowedSceneInput=false,cameraMode='orbit',savedInputMap=null;const ownedCameraInputs=[];
  const copyInputEntry=entry=>({...entry,...(entry.modifiers?{modifiers:{...entry.modifiers}}:{}),...(Array.isArray(entry.key)?{key:[...entry.key]}:{})});
  const ownedVoices=new Set();
  const sameWorld=()=>world.scene===scene&&world.mapId===mapId&&(world.toolGeneration??0)===generation&&!scene.isDisposed;
@@ -38,6 +38,8 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
   },
   setCameraMode(mode){if(!['orbit','pan'].includes(mode))return;cameraMode=mode;token.attachCamera();},
   get cameraMode(){return cameraMode;},
+  setCameraMovement(value){if(!token.isCurrent()||paused||!options.freeCamera)return false;return toolMovement?.setMovement(value)??false;},
+  clearCameraMovement(){toolMovement?.clearMovement();},
   update(dt){
    const state=getState();
    if(!token.isCurrent()){token.cancel('map-change',{restore:false});return;}
@@ -46,7 +48,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    if(!paused)options.onFrame?.(Math.max(0,Math.min(.1,Number.isFinite(dt)?dt:0)));
   },
   setPaused(value){
-   value=Boolean(value);if(!active||value===paused)return;paused=value;token.stopAudio();
+   value=Boolean(value);if(!active||value===paused)return;paused=value;token.clearCameraMovement();token.stopAudio();
    audio.setSuspended(paused||!token.audioEnabled);options.onPause?.(paused);
   },
   playAudio(id,settings){
@@ -61,7 +63,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    const owns=world.toolLease===token,same=sameWorld();
    if(owns)world.toolLease=null;
    token.stopAudio();scene.onDisposeObservable.remove(disposeObserver);scene.getEngine?.().onContextLostObservable?.remove(contextObserver);
-   fineZoom?.dispose();
+   token.clearCameraMovement();fineZoom?.dispose();
    style.remove();
    if(saved.hud===undefined)delete root.dataset.toolHudOwner;else root.dataset.toolHudOwner=saved.hud;
    if(owns){
@@ -89,7 +91,7 @@ export function acquireGameToolLease({world,root,canvas,input,audio,getState,set
    keyboard=camera.inputs?.attached?.keyboard??null;if(keyboard)camera.inputs.remove(keyboard);
    if(!camera.inputs?.attached?.pointers&&camera.inputs?.addPointers){camera.inputs.addPointers();ownedCameraInputs.push(camera.inputs.attached.pointers);}
    if(!camera.inputs?.attached?.mousewheel&&camera.inputs?.addMouseWheel){camera.inputs.addMouseWheel();ownedCameraInputs.push(camera.inputs.attached.mousewheel);}
-   if(canvas?.ownerDocument&&camera.inputs?.add){const movement=createToolCameraInput(canvas);camera.inputs.add(movement);ownedCameraInputs.push(movement);}
+   if(canvas?.ownerDocument&&camera.inputs?.add){toolMovement=createToolCameraInput(canvas);camera.inputs.add(toolMovement);ownedCameraInputs.push(toolMovement);}
    for(const key of ['inertialAlphaOffset','inertialBetaOffset','inertialRadiusOffset','inertialPanningX','inertialPanningY'])if(key in camera)camera[key]=0;
    camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();
    camera.lowerAlphaLimit=camera.upperAlphaLimit=null;camera.lowerBetaLimit=.03;camera.upperBetaLimit=Math.PI-.03;camera.lowerRadiusLimit=.25;camera.upperRadiusLimit=Math.max(200,savedCamera.upperRadiusLimit??0);

@@ -1,0 +1,256 @@
+{
+  "generatedAt": "2026-11-11T17:32:16.705Z",
+  "passed": true,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "src/cinematic-scenery-distance.js": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b",
+    "src/scenery-distance-state.js": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154",
+    "src/cinematic-document.js": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297",
+    "src/cinematic-scene-host.js": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1",
+    "src/plains-view-distance.js": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0",
+    "src/village-lod.js": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e",
+    "src/village-streamed-environment.js": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b",
+    "src/village-demand.js": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff",
+    "src/village-visibility.js": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f",
+    "src/village-texture-streaming.js": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587",
+    "src/cave-fog-runtime.js": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c",
+    "src/cave-fog-cover.js": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a",
+    "scripts/runtime-module-graph.mjs": "11f42f74e2540e1272815413dbe74321285e0699ec59e8e64141c0206b455300"
+  },
+  "finalSourceHashes": {
+    "src/cinematic-scenery-distance.js": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b",
+    "src/scenery-distance-state.js": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154",
+    "src/cinematic-document.js": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297",
+    "src/cinematic-scene-host.js": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1",
+    "src/plains-view-distance.js": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0",
+    "src/village-lod.js": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e",
+    "src/village-streamed-environment.js": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b",
+    "src/village-demand.js": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff",
+    "src/village-visibility.js": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f",
+    "src/village-texture-streaming.js": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587",
+    "src/cave-fog-runtime.js": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c",
+    "src/cave-fog-cover.js": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a",
+    "scripts/runtime-module-graph.mjs": "11f42f74e2540e1272815413dbe74321285e0699ec59e8e64141c0206b455300"
+  },
+  "cases": [
+    {
+      "name": "optional v1 distance is integer100..240, absent preserves evaluated shape and file roundtrip",
+      "passed": true,
+      "version": 1,
+      "integerBounds": [
+        100,
+        240
+      ],
+      "legacyShapePreserved": true,
+      "sourceInitialClosureModules": 266,
+      "lazyMutationExcluded": true,
+      "runtimeGuardStillRejectsCinematicModule": true
+    },
+    {
+      "name": "actual four maps apply absolute distance and restore exact atmosphere/camera while normal plains stays240%",
+      "passed": true,
+      "maps": [
+        {
+          "mapId": "village",
+          "normalFog": [
+            65,
+            80
+          ],
+          "normalCellCull": 82,
+          "absolute240CellCull": 196.79999999999998
+        },
+        {
+          "mapId": "monster-forest",
+          "normalFog": [
+            65,
+            80
+          ],
+          "normalCellCull": 82,
+          "absolute240CellCull": 196.79999999999998
+        },
+        {
+          "mapId": "great-plains",
+          "normalFog": [
+            156,
+            192
+          ],
+          "normalCellCull": 196.79999999999998,
+          "absolute240CellCull": 196.79999999999998
+        },
+        {
+          "mapId": "witch-cave",
+          "normalFog": [
+            22,
+            48
+          ],
+          "normalCellCull": 82,
+          "absolute240CellCull": 196.79999999999998
+        }
+      ],
+      "normalPlainsScale": 2.4,
+      "noResourceOrObserverGrowth": true
+    },
+    {
+      "name": "actual four-map shipped LODs retain geometry and source identity while native selection extends and late arrivals restore",
+      "passed": true,
+      "maps": [
+        {
+          "mapId": "village",
+          "assetId": "rock-01-mossy-boulder",
+          "modelSha256": [
+            "813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470",
+            "60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94",
+            "76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec"
+          ],
+          "nativeNearTriangles": 700,
+          "lateFarRestored": true
+        },
+        {
+          "mapId": "monster-forest",
+          "assetId": "forest-03-fallen-log",
+          "modelSha256": [
+            "ff1b6f7a41b25bf381a8c44016d48f4e90cc36bf7b1ef321d0086c327ef8f845",
+            "6e20a63e541a1695751ad942d505d446a858700cbf05b8833cfd7d0b21560ed5",
+            "73cbed552018e9091cfc1608d8e35b9e3df860e6b6c0e5faf80597c28dfd0ed1"
+          ],
+          "nativeNearTriangles": 999,
+          "lateFarRestored": true
+        },
+        {
+          "mapId": "great-plains",
+          "assetId": "rock-01-mossy-boulder",
+          "modelSha256": [
+            "813f7ca055b40d3a4f2b49a9c690a536723e879482b3d7479c6fbaabe2bd7470",
+            "60167020d3d613579c2202abbfdc3aa4f7456fff3c340a36e206c5897d26dd94",
+            "76569f63e88850a9b7d0e7bccb98a88bba0d3272731787ef23770490370e7fec"
+          ],
+          "nativeNearTriangles": 700,
+          "lateFarRestored": true
+        },
+        {
+          "mapId": "witch-cave",
+          "assetId": "cave-01-eroded-wall",
+          "modelSha256": [
+            "fd7581a528586e0a2f45e7ea3eceeb0d681826e497d44eedbc53d8d74ee1df2f",
+            "8f2ae47c5588c7b2f87dc8f60700a15c32b5448c53bf28b354ec7022c91c85f4",
+            "4de4b912ff903f96f9e7ec969404e6b43437b3affeae6b952f65109ad6d5f0e3"
+          ],
+          "nativeNearTriangles": 2000,
+          "lateFarRestored": true
+        }
+      ],
+      "loaderBoundary": "Actual prepared glTF+Meshopt bytes, skipMaterials only; production installer and native LOD selection",
+      "geometryChanged": false
+    },
+    {
+      "name": "distance-based native LOD and disposed/late sources follow current map scope without stale camera restore",
+      "passed": true,
+      "distanceLOD": true,
+      "staleScopeDoesNotRewriteNextMap": true
+    },
+    {
+      "name": "a retained live environment source participates after main-style tool-generation advance",
+      "passed": true,
+      "sameSceneMapGround": true,
+      "generationAdvanced": true,
+      "retainedNativeSourcesScaled": true
+    },
+    {
+      "name": "same-environment generation cancellation restores only its still-owned fog and leaves newer camera state intact",
+      "passed": true,
+      "maps": [
+        {
+          "mapId": "village",
+          "fogRestored": [
+            65,
+            80
+          ],
+          "newerCameraPreserved": 777
+        },
+        {
+          "mapId": "monster-forest",
+          "fogRestored": [
+            65,
+            80
+          ],
+          "newerCameraPreserved": 777
+        },
+        {
+          "mapId": "great-plains",
+          "fogRestored": [
+            156,
+            192
+          ],
+          "newerCameraPreserved": 777
+        },
+        {
+          "mapId": "witch-cave",
+          "fogRestored": [
+            22,
+            48
+          ],
+          "newerCameraPreserved": 777
+        }
+      ],
+      "requiresSameSceneMapGroundAndOwnedFog": true
+    },
+    {
+      "name": "foreign fog pairs and a replacement owner survive late prior-generation release exactly",
+      "passed": true,
+      "foreignPairComponentsTested": 2,
+      "replacementOwnerPreserved": true
+    },
+    {
+      "name": "actual four-map visibility cells extend at240% while cave unexplored-root rejection remains independent",
+      "passed": true,
+      "maps": [
+        {
+          "mapId": "village",
+          "cell160mEnabledAt240": true,
+          "unexploredCaveStillHidden": false
+        },
+        {
+          "mapId": "monster-forest",
+          "cell160mEnabledAt240": true,
+          "unexploredCaveStillHidden": false
+        },
+        {
+          "mapId": "great-plains",
+          "cell160mEnabledAt240": true,
+          "unexploredCaveStillHidden": false
+        },
+        {
+          "mapId": "witch-cave",
+          "cell160mEnabledAt240": true,
+          "unexploredCaveStillHidden": true
+        }
+      ]
+    },
+    {
+      "name": "demand cache, visibility and texture admission share the extended coverage without increasing texture/shadow budgets",
+      "passed": true,
+      "rawCoverage": 0.080000007457857,
+      "beforeTier": 1,
+      "extendedTier": 0,
+      "textureBudgetUnchanged": 134217728,
+      "shadowBudgetUnchanged": true
+    },
+    {
+      "name": "cave distance haze and cover cutoff scale together while FoW cells/player reveal and budgets remain exact",
+      "passed": true,
+      "hazeScaleUniform": 2.4,
+      "coverThreshold": 129.6,
+      "playerRevealUnchanged": true,
+      "fogMaskUnchanged": true
+    },
+    {
+      "name": "real scene host samples distance changes and restores on release without changing normal map preferences",
+      "passed": true,
+      "actualHostLifecycle": true,
+      "actualGameToolLease": true,
+      "patchToInheritedRestores": true
+    }
+  ],
+  "scope": "Real createWorld/replaceWorldMap atmospheres and cave FoW. Shipped four-map glTF geometry decoded unchanged at the file/texture boundary, installed with production installVillageGeometry, then evaluated by native Mesh.getLOD. Demand/visibility/high-texture policy and real empty-document scene host lifecycle. No pixel or device-performance claim.",
+  "limits": "Node/LinkeDOM/Babylon NullEngine evidence. No browser automation, rendered-pixel comparison, physical touch, GPU, FPS, or device claim."
+}

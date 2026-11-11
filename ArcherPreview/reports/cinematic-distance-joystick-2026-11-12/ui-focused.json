@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-12",
+  "owner": "resources",
+  "status": "candidate-frozen-focused-pass-await-independent-native-gate",
+  "scope": [
+    "src/cinematic-studio.js",
+    "src/cinematic-studio.css",
+    "src/cinematic-camera-controls.js",
+    "public/moonforest-help.html"
+  ],
+  "api": {
+    "module": "mountCinematicCameraControls(root,{window,getState,onMove,onError})",
+    "state": "{ready,cameraControlId:positiveSafeInteger,cutsceneId,mapId:actualBackground}",
+    "movement": "onMove({x,y,z},{cameraControlId,cutsceneId,mapId}); context captured by first owned pointer, preserved for zero",
+    "packets": "Studio camera-move payload adds globally monotonic sequence per mount; immediate post, no ensurePreview or preview queue from movement",
+    "selectors": [
+      "[data-field=scenery-distance]",
+      "[data-view=camera-controls]",
+      "[data-camera-stick]",
+      "[data-camera-stick-ring]",
+      "[data-camera-stick-knob]",
+      "[data-camera-height=\"1\"]",
+      "[data-camera-height=\"-1\"]",
+      "[data-camera-controls-toggle]"
+    ]
+  },
+  "behavior": {
+    "distance": "Options inherit/100..240 by10. Stores only optional presentation.sceneryDistance through normal history/preview patch/export. Blank deletes optional field. No general-game scenery setting write.",
+    "joystick": "Parent DOM outside iframe/stage. Dynamic origin at owned pointer DOWN, radius30px, deadzone5px, total3D vector normalized <=1. Independent height pointer ownership. No new engine, canvas, timer or RAF.",
+    "gating": "Mobile only with valid prepared controlID; ready/paused or explicitly retained completed; hide/reset on playback/loading/queued preview actions/import/fullscreen/desktop/hidden/layout/destroy.",
+    "ownership": "Every MOVE/UP revalidates current context. Identity change sends zero to old gesture and drops old event. Old pointer cannot clear a new gesture. Internal iframe blur with doc.hasFocus true does not cancel multitouch; real focus leave resets.",
+    "async": "Nonzero/zero callbacks invoked synchronously. ACK never retries/replays movement or updates phase. Blocking-command generation rejects old state snapshots. Authenticated camera-control-state reconciles actual state/map/doc/currentID.",
+    "preservation": "Existing mobile fixed preview/PC layout/display module, native keyboard/mouse, scene data, iframe instance and file flow remain."
+  },
+  "checks": {
+    "syntax": true,
+    "cssParse": true,
+    "diffCheck": true,
+    "ownedFilesEndWithLF": true,
+    "existingFocusedTests": {
+      "passed": 64,
+      "failed": 0,
+      "command": "node --test tests/cinematic-studio.test.js tests/cinematic-studio-layout.test.js tests/cinematic-workspace-controls.test.js tests/cinematic-expansion-ui.test.js tests/cinematic-studio-display.test.js"
+    },
+    "directNativeDom": {
+      "passed": 9,
+      "cases": [
+        "dynamic origin/deadzone/diagonal normalization/two-pointer height",
+        "session change zero keeps old IDs; late old pointer ignored",
+        "state change at MOVE without polling",
+        "release posts zero before delayed ACK, no replay",
+        "internal iframe vs real window blur",
+        "hide toggle and one unchanged iframe",
+        "fullscreen/desktop mutation hide",
+        "missing controlID disabled",
+        "destroy removes handlers/DOM"
+      ]
+    },
+    "studioDom": {
+      "passed": true,
+      "cases": [
+        "16 scenery options including inherit",
+        "100/240/inherit +undo/redo and preview patch",
+        "movement sends context+monotonic sequence",
+        "movement does not alter exact authored document/history data",
+        "export retains distance and contains no movement/control IDs",
+        "playing hides controls; same iframe"
+      ]
+    },
+    "customSceneryInteger": {
+      "passed": true,
+      "case": "Native saved File containing137 imports automatically; select displays137% with one custom option, exact document/export137 unchanged;100/240/inherit return to16baseoptions; undo/redo and repeated137import do not duplicate custom options.",
+      "scope": "Only render-select compatibility changed after the64-test source snapshot. Existing64 gate was on studio a83411e32979e05d27d5951f8aa98efdcceb8e5457b0357e2dd7d67fa3efee97; this new focused case uses final source hash below."
+    }
+  },
+  "sha256": {
+    "src/cinematic-studio.js": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f",
+    "src/cinematic-studio.css": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123",
+    "src/cinematic-camera-controls.js": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d",
+    "public/moonforest-help.html": "b40d0bdd17d6c43f2a6754cacc1bc07ff92df10b76243e30fcc5bfc5a6f8779c"
+  },
+  "limitations": [
+    "Native DOM/Node checks and controlled command replies only for this owner; C independently tests actual bridge/runtime.",
+    "No browser automation, real touch/device rendering, GPU/FPS, build or deployment claim."
+  ]
+}

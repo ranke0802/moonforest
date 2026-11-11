@@ -1,0 +1,247 @@
+{
+  "validatedAt": "2026-11-11T17:34:52.611Z",
+  "passed": true,
+  "release": "MoonForest 0.1 ver",
+  "baselineHead": "821890f0fdf6b34488ec87f4faa996a6d8b72ad4",
+  "scope": "Saved cutscene scenery distance100..240%, native LOD/fog/culling/demand coordination, mobile parent-DOM camera joystick. Normal gameplay remains inherited without a cutscene override.",
+  "tests": {
+    "related": {
+      "passed": true,
+      "completedAt": "2026-11-11T17:34:50.073Z",
+      "tests": 279,
+      "pass": 279,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 26422.1142,
+      "sourceFiles": 947,
+      "sourceUnchanged": true,
+      "scope": "All cinematic and affected tool, plains, LOD, demand, texture, cave-fog regressions after runtime bridge split.",
+      "priorWholeSuite": "../cinematic-mobile-2026-11-11/regression-scope.json",
+      "wholeSuiteRepeated": false,
+      "log": "regression.log"
+    },
+    "independent": {
+      "tests": 26,
+      "pass": 26,
+      "fail": 0
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "ArcherPreview/public/moonforest-help.html",
+      "bytes": 19468,
+      "sha256": "b40d0bdd17d6c43f2a6754cacc1bc07ff92df10b76243e30fcc5bfc5a6f8779c"
+    },
+    {
+      "path": "ArcherPreview/src/cave-fog-cover.js",
+      "bytes": 5348,
+      "sha256": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a"
+    },
+    {
+      "path": "ArcherPreview/src/cave-fog-runtime.js",
+      "bytes": 23798,
+      "sha256": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-document.js",
+      "bytes": 28811,
+      "sha256": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-game.js",
+      "bytes": 34802,
+      "sha256": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-protocol.js",
+      "bytes": 3305,
+      "sha256": "6981f68793e4b34bf9d66dd396680b5cd3e75351ae48b69604086555ffa68a3f"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-scene-host.js",
+      "bytes": 35220,
+      "sha256": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-studio.css",
+      "bytes": 30379,
+      "sha256": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-studio.js",
+      "bytes": 118404,
+      "sha256": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f"
+    },
+    {
+      "path": "ArcherPreview/src/game-tool-lease.js",
+      "bytes": 8821,
+      "sha256": "557a3b295c4ce3ab745cf42dc2bcafe784131f2cdb9f8de98485049f49b279bf"
+    },
+    {
+      "path": "ArcherPreview/src/plains-view-distance.js",
+      "bytes": 2649,
+      "sha256": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0"
+    },
+    {
+      "path": "ArcherPreview/src/tool-camera-input.js",
+      "bytes": 3063,
+      "sha256": "4d688a60befda391c07d072bb4df6e49e5404e262e503aaf432c027d738c730e"
+    },
+    {
+      "path": "ArcherPreview/src/village-demand.js",
+      "bytes": 14142,
+      "sha256": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff"
+    },
+    {
+      "path": "ArcherPreview/src/village-environment.js",
+      "bytes": 10824,
+      "sha256": "0803cc38936ac0c4dd2a97b6daacebd0f7d38c4a84785617c0c618cf759e59a8"
+    },
+    {
+      "path": "ArcherPreview/src/village-lod.js",
+      "bytes": 1610,
+      "sha256": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e"
+    },
+    {
+      "path": "ArcherPreview/src/village-streamed-environment.js",
+      "bytes": 21563,
+      "sha256": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b"
+    },
+    {
+      "path": "ArcherPreview/src/village-texture-streaming.js",
+      "bytes": 21021,
+      "sha256": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587"
+    },
+    {
+      "path": "ArcherPreview/src/village-visibility.js",
+      "bytes": 8485,
+      "sha256": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-camera-controls.js",
+      "bytes": 8981,
+      "sha256": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-scenery-distance.js",
+      "bytes": 5009,
+      "sha256": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b"
+    },
+    {
+      "path": "ArcherPreview/src/scenery-distance-state.js",
+      "bytes": 2508,
+      "sha256": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-camera-controls.test.js",
+      "bytes": 15117,
+      "sha256": "a6f30618ac81025f5a4f6f4295b9f5b153cd4d3aa6e1e53a481b9b5964741b44"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-camera-movement.test.js",
+      "bytes": 13784,
+      "sha256": "421bdda14e1329ceb9d6b36578b70dd6dc386bbbd581d7aa21487e1578c11832"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-scenery-distance.test.js",
+      "bytes": 22003,
+      "sha256": "bf1fd4c8b26a0daad8fac5baac66d1ed4139155c8297643d7e53dd06365e58ea"
+    }
+  ],
+  "preparedResources": {
+    "revision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+    "preservedInputs": [
+      {
+        "path": "ArcherPreview/src/asset-catalog.js",
+        "sha256": "6ece28609af449d9fca62beada6f81a2eb577206ea0d3ab32a39875546836901"
+      },
+      {
+        "path": "ArcherPreview/public/assets/resource-index.json",
+        "sha256": "3730799bc5025e3b2a015b52b7d7c63eccf96bee70878f05683273104d669fd1"
+      },
+      {
+        "path": "ArcherPreview/public/assets/resource-sizes.json",
+        "sha256": "da57008ca586393711b5f347a6f7cab535997c0e2cfa644095e364d27010baaf"
+      }
+    ],
+    "allPublishedAssetEntriesUnchanged": true
+  },
+  "initialGameGraph": {
+    "entry": "assets/game-gJUgVItP.js",
+    "chunks": 62,
+    "modules": 3098,
+    "lightweightBridgeReachable": true,
+    "cinematicLifecycleAndUiExcluded": true,
+    "guardUnchanged": true
+  },
+  "published": {
+    "files": 2044,
+    "bytes": 704458637,
+    "distSiteStageAllHashesMatch": true,
+    "unchangedExistingFiles": 2017,
+    "changed": [
+      "cinematic-studio.html",
+      "index.html",
+      "moonforest-help.html"
+    ],
+    "added": [
+      "assets/actor-editor-BR4_SoNs.js",
+      "assets/actor-encounter-adapter-DQQwGgz8.js",
+      "assets/actor-population-uv4N1bgw.js",
+      "assets/authored-map-loader-CGvZeZPA.js",
+      "assets/authored-monster-runtime-Bk7JMK_J.js",
+      "assets/authored-placement-runtime-BOOD31Xd.js",
+      "assets/authored-placement-runtime-CDhGc09g.js",
+      "assets/cinematic-document-3vlk-ynz.js",
+      "assets/cinematic-game-B7P20D_a.js",
+      "assets/cinematic-interaction-C4-WjmNW.js",
+      "assets/cinematic-interaction-DdCBXXSZ.js",
+      "assets/cinematic-protocol-DOFBLZU7.js",
+      "assets/cinematic-scene-host-D94PQ-9x.js",
+      "assets/cinematicStudio-BG6a7N8Q.css",
+      "assets/cinematicStudio-oCUjZ15X.js",
+      "assets/developer-actors-BsCnT1pQ.js",
+      "assets/developer-editor-gvrJHM5-.js",
+      "assets/game-gJUgVItP.js",
+      "assets/game-tool-lease-B1pe_-Mw.js",
+      "assets/mourning-elena-encounter-DrnMkQ8k.js",
+      "assets/npc-world-D4kZ-L5R.js",
+      "assets/npc-world-Dm6qkZ-h.js",
+      "assets/player-dimensions-anlm_M84.js",
+      "assets/village-environment-HyfyrMWn.js"
+    ],
+    "retiredChunksExcluded": [
+      "assets/actor-editor-CPYwMV8I.js",
+      "assets/actor-encounter-adapter-CQFQRwFD.js",
+      "assets/actor-population-B7gW2Bhj.js",
+      "assets/authored-map-loader-BauQBe2l.js",
+      "assets/authored-monster-runtime-BtvhHS5y.js",
+      "assets/authored-placement-runtime-0AjpDMmY.js",
+      "assets/authored-placement-runtime-3Yn5_4IB.js",
+      "assets/cinematic-document-CppqzMHb.js",
+      "assets/cinematic-game-BFVt-ZeA.js",
+      "assets/cinematic-interaction-BnvpyaMC.js",
+      "assets/cinematic-interaction-BwIrivSD.js",
+      "assets/cinematic-protocol-DyVqnyZ6.js",
+      "assets/cinematic-scene-host-BZ8IOQqb.js",
+      "assets/cinematicStudio-BUkTtiQ8.js",
+      "assets/cinematicStudio-CTxsEPFv.css",
+      "assets/developer-actors-CRgpYsVZ.js",
+      "assets/developer-editor-CbSYGi0-.js",
+      "assets/game-D_nlGT11.js",
+      "assets/game-tool-lease-cQhkTM3H.js",
+      "assets/mourning-elena-encounter-BZx8lsKZ.js",
+      "assets/npc-world-9MwavXdn.js",
+      "assets/npc-world-DVZxKWdw.js",
+      "assets/player-dimensions-Cgiff4IV.js",
+      "assets/village-environment-BWClE35w.js"
+    ]
+  },
+  "limits": {
+    "browserAutomation": false,
+    "pixels": "not inspected",
+    "physicalMobileTouch": "unverified",
+    "devicePerformance": "unmeasured",
+    "wholeSuite": "Known unrelated55 failures from previous whole run remain; this is a related279-test pass."
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "status": "validated",
+  "updatedAt": "2026-11-11T17:34:52.611Z",
+  "repository": "C:\\dev\\MoonForest",
+  "release": "MoonForest 0.1 ver",
+  "baselineHead": "821890f0fdf6b34488ec87f4faa996a6d8b72ad4",
+  "request": [
+    "Cutscene scenerydistance100..240% with alignedfog/culling/LOD/demand; legacyabsentkeepscurrentmap setting",
+    "Mobile dynamicjoystick cameramovement andheight outside3Dcanvas/export; hide/resetduringplayback/fullscreen",
+    "KeepPCcontrols, gamepreferences, caveexploration andassetquality; scopedlease restore"
+  ],
+  "owners": {
+    "root": [
+      "cinematic-protocol.js",
+      "cinematic-game.js",
+      "tool-camera-input.js",
+      "game-tool-lease.js",
+      "integration",
+      "publish"
+    ],
+    "rendering": [
+      "scenery module",
+      "cinematic-document.js",
+      "cinematic-scene-host.js",
+      "scopedworldrangeLODhooks"
+    ],
+    "resources": [
+      "cinematic-studio.js",
+      "cinematic-studio.css",
+      "cinematic-camera-controls.js",
+      "help"
+    ],
+    "verification": [
+      "nativecamera/scenery tests",
+      "independentaudit"
+    ]
+  },
+  "knownBaseline": {
+    "report": "../cinematic-mobile-2026-11-11/regression-scope.json",
+    "wholeSuite": {
+      "tests": 2316,
+      "pass": 2261,
+      "fail": 55
+    },
+    "note": "Do not rerun unrelated45s boss-model failures or call thempassing."
+  },
+  "verification": {
+    "regression": {
+      "passed": true,
+      "completedAt": "2026-11-11T17:34:50.073Z",
+      "tests": 279,
+      "pass": 279,
+      "fail": 0,
+      "skipped": 0,
+      "durationMs": 26422.1142,
+      "sourceFiles": 947,
+      "sourceUnchanged": true,
+      "scope": "All cinematic and affected tool, plains, LOD, demand, texture, cave-fog regressions after runtime bridge split.",
+      "priorWholeSuite": "../cinematic-mobile-2026-11-11/regression-scope.json",
+      "wholeSuiteRepeated": false,
+      "log": "regression.log"
+    },
+    "independent": {
+      "pass": 26,
+      "fail": 0,
+      "report": "verification-summary.json"
+    },
+    "pixels": "not inspected",
+    "devicePerformance": "unmeasured"
+  },
+  "nextAction": "Commit only task-owned code, tests and reviewed deployment files; publish to archer and verify workflow and public file hashes.",
+  "build": {
+    "passed": true,
+    "preparedResourcesUnchanged": true,
+    "initialGameLifecycleAndUiExcluded": true,
+    "releaseValidation": "release-validation.json"
+  }
+}

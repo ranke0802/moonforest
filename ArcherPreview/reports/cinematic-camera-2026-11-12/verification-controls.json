@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-11-11T17:31:53.506Z",
+  "passed": true,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "src/cinematic-camera-controls.js": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d",
+    "src/cinematic-studio.js": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f",
+    "src/cinematic-studio.css": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123"
+  },
+  "finalSourceHashes": {
+    "src/cinematic-camera-controls.js": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d",
+    "src/cinematic-studio.js": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f",
+    "src/cinematic-studio.css": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123"
+  },
+  "cases": [
+    {
+      "name": "stick lives outside the video and starts dynamically at the touched point without selecting preview content",
+      "passed": true,
+      "dynamicOrigin": true,
+      "previewActorSelectionEvents": 0,
+      "frameIdentityRetained": true
+    },
+    {
+      "name": "diagonal stick plus independent height pointers is bounded and opposing vertical holds cancel independently",
+      "passed": true,
+      "threeIndependentPointers": true,
+      "maxVectorLength": 1
+    },
+    {
+      "name": "all cancellation and layout boundaries send zero immediately and release owned captures",
+      "passed": true,
+      "cancellationReasons": [
+        "pointercancel",
+        "lostpointercapture",
+        "blur",
+        "pagehide",
+        "resize",
+        "orientationchange",
+        "hidden",
+        "desktop",
+        "fullscreen",
+        "menu",
+        "not-ready",
+        "identity",
+        "toggle",
+        "destroy"
+      ]
+    },
+    {
+      "name": "an asynchronous state/identity change before the next pointer sample cannot emit stale movement",
+      "passed": true,
+      "stateRaces": 4
+    },
+    {
+      "name": "delayed/rejected acknowledgements cannot replay nonzero input or mutate a replacement gesture",
+      "passed": true,
+      "lateAckNonzeroReplays": 0,
+      "lateOldErrors": 0
+    },
+    {
+      "name": "real Studio scenery selector persists only explicit distance and stick never changes draft/history/iframe",
+      "passed": true,
+      "explicitSceneryRange": [
+        100,
+        240
+      ],
+      "absenceInherits": true,
+      "parentOnlyInput": true,
+      "noHistoryCommitsFromJoystick": true
+    },
+    {
+      "name": "valid imported137% remains visible and exact through commit/import/serialization until inheritance is chosen",
+      "passed": true,
+      "customInteger": 137,
+      "unchangedThroughSerialization": true,
+      "explicitInheritanceClears": true
+    },
+    {
+      "name": "camera touch zones have scoped CSS and remain outside the stage/canvas and fullscreen rotation",
+      "passed": true,
+      "scopedTouchCss": true,
+      "noCanvasInputCss": true,
+      "desktopAndFullscreenHidden": true
+    }
+  ],
+  "scope": "Connected parent DOM pointer controls, exact preview/draft/iframe identity, real shared Studio serializer/history and CSS structure. Child delivery/controller/native camera are independently exercised in cinematic-camera-movement.test.js. No simulated browser pixels.",
+  "limits": "Node/LinkeDOM/Babylon NullEngine evidence. No browser automation, rendered-pixel comparison, physical touch, GPU, FPS, or device claim."
+}

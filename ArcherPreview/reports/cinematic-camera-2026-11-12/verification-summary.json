@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-11-11T17:34:06.910Z",
+  "passed": true,
+  "total": 26,
+  "failed": 0,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "src/cinematic-camera-controls.js": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d",
+    "src/cinematic-studio.js": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f",
+    "src/cinematic-studio.css": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123",
+    "src/tool-camera-input.js": "4d688a60befda391c07d072bb4df6e49e5404e262e503aaf432c027d738c730e",
+    "src/game-tool-lease.js": "557a3b295c4ce3ab745cf42dc2bcafe784131f2cdb9f8de98485049f49b279bf",
+    "src/cinematic-protocol.js": "6981f68793e4b34bf9d66dd396680b5cd3e75351ae48b69604086555ffa68a3f",
+    "src/cinematic-game.js": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3",
+    "src/cinematic-scenery-distance.js": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b",
+    "src/scenery-distance-state.js": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154",
+    "src/cinematic-document.js": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297",
+    "src/cinematic-scene-host.js": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1",
+    "src/plains-view-distance.js": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0",
+    "src/village-lod.js": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e",
+    "src/village-streamed-environment.js": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b",
+    "src/village-demand.js": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff",
+    "src/village-visibility.js": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f",
+    "src/village-texture-streaming.js": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587",
+    "src/cave-fog-runtime.js": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c",
+    "src/cave-fog-cover.js": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a",
+    "scripts/runtime-module-graph.mjs": "11f42f74e2540e1272815413dbe74321285e0699ec59e8e64141c0206b455300"
+  },
+  "currentSourceHashes": {
+    "src/cinematic-camera-controls.js": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d",
+    "src/cinematic-studio.js": "d290f67b513b44b626799de01ab3c601be47c6cd0ef56eaf74ee2f018cfc6e2f",
+    "src/cinematic-studio.css": "32e5ea3ce2c28e6e3a2f9f9a76f24d831f8d3ac004a4395e92945f0e0ed42123",
+    "src/tool-camera-input.js": "4d688a60befda391c07d072bb4df6e49e5404e262e503aaf432c027d738c730e",
+    "src/game-tool-lease.js": "557a3b295c4ce3ab745cf42dc2bcafe784131f2cdb9f8de98485049f49b279bf",
+    "src/cinematic-protocol.js": "6981f68793e4b34bf9d66dd396680b5cd3e75351ae48b69604086555ffa68a3f",
+    "src/cinematic-game.js": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3",
+    "src/cinematic-scenery-distance.js": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b",
+    "src/scenery-distance-state.js": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154",
+    "src/cinematic-document.js": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297",
+    "src/cinematic-scene-host.js": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1",
+    "src/plains-view-distance.js": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0",
+    "src/village-lod.js": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e",
+    "src/village-streamed-environment.js": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b",
+    "src/village-demand.js": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff",
+    "src/village-visibility.js": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f",
+    "src/village-texture-streaming.js": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587",
+    "src/cave-fog-runtime.js": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c",
+    "src/cave-fog-cover.js": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a",
+    "scripts/runtime-module-graph.mjs": "11f42f74e2540e1272815413dbe74321285e0699ec59e8e64141c0206b455300"
+  },
+  "testHashes": {
+    "tests/cinematic-camera-controls.test.js": "a6f30618ac81025f5a4f6f4295b9f5b153cd4d3aa6e1e53a481b9b5964741b44",
+    "tests/cinematic-camera-movement.test.js": "421bdda14e1329ceb9d6b36578b70dd6dc386bbbd581d7aa21487e1578c11832",
+    "tests/cinematic-scenery-distance.test.js": "bf1fd4c8b26a0daad8fac5baac66d1ed4139155c8297643d7e53dd06365e58ea"
+  },
+  "groups": [
+    {
+      "report": "verification-controls.json",
+      "generatedAt": "2026-11-11T17:31:53.506Z",
+      "passed": true,
+      "cases": 8,
+      "sha256": "d30b6e609df56ffb730f9c105df0e10fcd5f6ae48f3a88e05763b6ccce310646"
+    },
+    {
+      "report": "verification-movement.json",
+      "generatedAt": "2026-11-11T17:31:53.827Z",
+      "passed": true,
+      "cases": 7,
+      "sha256": "3f345868aa51d35ffea4a5ca4e57faa100e57aa33e08e2100380237bad214135"
+    },
+    {
+      "report": "verification-scenery.json",
+      "generatedAt": "2026-11-11T17:32:16.705Z",
+      "passed": true,
+      "cases": 11,
+      "sha256": "889ec61f5b2b9f054e483727fda84823515d3784d2cf29ec3c56f409b5e8d270"
+    }
+  ],
+  "evidence": [
+    "Real createWorld/replaceWorldMap for village, monster-forest, great-plains, witch-cave;100/170/240% and exact restoration.",
+    "Twelve shipped prepared glTF LOD model imports through native readMapContainer, actual production installVillageGeometry, native Mesh.getLOD; unchanged source geometry identity and late far-tier restoration.",
+    "Native visibility cell160m, demand cache/finer-tier planning and original high-texture candidate admission. Texture byte and shadow policy caps remain unchanged.",
+    "Normal plains240% remains240%; explicit cutscene240% is absolute, not576%. Absent distance preserves inherited defaults and v1 evaluated shape.",
+    "Actual cave distance-fog binding uses scale2.4 and matching opaque-cover cutoff; original player-view/reveal state, FoW revision/visible/RGBA buffers remain exact.",
+    "Actual ArcRotateCamera and game-tool lease, native DOM canvas events through Babylon SceneInputManager; standard PC keyboard, typing isolation, orbit and pan remain functional.",
+    "Parent touch DOM events send authenticated packets to actual default Game/Host/player/lease; real camera moves without child canvas focus and terminal zero stops it.",
+    "Stale session/document/map/sequence, Play, pause, detach, blur, replacement and map-generation cancellation cannot revive analog movement.",
+    "Parent dynamic stick origin, independent up/down multitouch, all cancellation boundaries and delayed acknowledgements; ready/scope changes checked at each sample.",
+    "Actual Studio scenery history field supports100..240 and blank inheritance; imported nonpreset137 remains visible/exact through commit, import and serialization, with no rounding. Joystick sends no document/history mutations and preserves iframe identity; desktop/fullscreen/playing controls hidden.",
+    "Actual main relative static-import AST closure reaches only the small scenery state/registration bridge. Cinematic scenery acquisition/restoration, camera UI and scene host remain lazy; unchanged runtime graph guard still rejects a statically reached cinematic implementation. Final emitted build evidence remains the parent build audit responsibility."
+  ],
+  "discoveredIntegrationBoundariesAddressedBeforeFreeze": [
+    "Cave has independent22..48m shader haze and54/50m opaque-cover cutoff, so changing Scene.fogEnd alone was insufficient; implementation scales these while retaining FoW.",
+    "Source registry disposal ownership prevents ordinary map loads retaining disposed prior-map meshes.",
+    "Gesture identity is captured per session and revalidated on each pointer sample; final zero targets the original gesture, with no asynchronous ACK replay.",
+    "Live environment source identity follows scene/map/ground while cinematic owners also follow toolGeneration; retained sources still receive native LOD scaling after the main character loader advances the generation.",
+    "Same-map character reload can invalidate the tool generation without rebuilding scenery. Release now restores only the original owner fog pair still present on the same scene/map/ground; foreign fog, replacement owners and newer camera values are preserved. Two durable cases include all four actual map atmospheres.",
+    "Initial build guard exposed a regular range import reaching cinematic acquisition code. A small state/registration/getter bridge now separates ordinary runtime dependencies from lazy cutscene-owned mutation; static closure and guard assertions passed with all eleven scenery cases rerun."
+  ],
+  "verificationCorrectionsOnly": [
+    "Initial host-only fixture omitted the required lease.isCurrent method; replaced with actual native game-tool lease.",
+    "Numerical assertions treat positive/negative zero as equal on the JSON wire; CSS checks use actual desktop/fullscreen exclusion contract."
+  ],
+  "limitations": [
+    "No browser automation or actual device/touch/rendered-pixel check. Node/NullEngine evidence does not establish GPU frame rate, thermal behavior or screenshot appearance.",
+    "Prepared geometry is real; material/texture decoding is bypassed only for the numerical LOD-source test. Texture test covers original candidate admission and unchanged budget, not GPU upload or visual quality.",
+    "The joystick belongs to parent Studio DOM outside the iframe/stage and is absent from scene/export data. Its controls can visually overlay the preview workspace; no pixel measurement was performed.",
+    "The unrelated known55 prior whole-suite failures are outside this independent gate; no whole-suite pass is claimed."
+  ]
+}

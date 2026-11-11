@@ -1,0 +1,80 @@
+{
+  "task": "Repair initial runtime graph boundary for cinematic scenery distance",
+  "date": "2026-11-12",
+  "status": "implementation complete; source frozen and independent post-factor scenery gate passed; parent actual build pending",
+  "before": {
+    "report": "reports/cinematic-distance-joystick-2026-11-12/render-implementation.json",
+    "moduleHash": "cf6b7cb5a784ffcdde8c16082792577cbab54b3714954435429f57b6af8e6251",
+    "buildFailure": "verify-runtime-module-graph correctly rejected cinematic-scenery-distance.js in the initial game graph via shared range/LOD imports.",
+    "historicalValidation": "56 existing +4 final delta smoke +11 independent scenery checks passed before this structural factor; these records remain unchanged."
+  },
+  "after": {
+    "bridge": "src/scenery-distance-state.js",
+    "initialResponsibilities": [
+      "Symbol and weak per-world source registry",
+      "Pure active scale/range and environment identity readers",
+      "Existing source-install/disposal registration; delegates active source mutation through owner.applyMesh"
+    ],
+    "lazyModule": "src/cinematic-scenery-distance.js",
+    "lazyResponsibilities": [
+      "Owner acquire/apply/release lifecycle",
+      "Fog and camera snapshot/apply/ownership-checked restoration",
+      "Native LOD threshold mutation, late-tier handling and restoration",
+      "Visibility/demand invalidation"
+    ],
+    "edges": "Seven direct shared hooks import only the generic bridge; texture priority and cave cover receive it indirectly. The only production importer of the heavy module is lazy cinematic-scene-host.js. The bridge imports pure village-policy.js only; no reverse edge.",
+    "compatibility": "Heavy module reexports old helper functions as identical references, preserving API and native behavior.",
+    "guard": "scripts/runtime-module-graph.mjs unchanged. No whitelist or guard relaxation; no rename of the lifecycle implementation into initial runtime."
+  },
+  "focusedValidation": {
+    "passed": 3,
+    "failed": 0,
+    "kind": "Ad-hoc Node bridge/API smoke",
+    "cases": [
+      "Legacy helper exports are exact bridge function references",
+      "Source registration dispatches only active owner.applyMesh; fake native LOD accessor throws if invoked by bridge and remains uncalled",
+      "Bridge has no cinematic import or fog/camera/nativeLOD assignment"
+    ]
+  },
+  "independentValidation": {
+    "status": "passed",
+    "owner": "/root/verification",
+    "report": "reports/cinematic-camera-2026-11-12/verification-scenery.json",
+    "sha256": "1583437a0e20f2aa70b674d01046d5f6328ca0f413f573ff88a18a47132d0358",
+    "passed": 11,
+    "failed": 0,
+    "sourceHashesMatch": true,
+    "native": "All four-map nativeLOD/late arrival/demand/texture admission/caveFoW/generation/fog ownership/actual host cases pass after factor.",
+    "staticGraph": "Actual main static AST closure266 localJS contains bridge but excludes lazy lifecycle/UI/host; bridge closure contains2 files(policy+self). Unchanged runtime guard still rejects static lazy implementation.",
+    "scope": "Only scenery11 rerun; controls8/movement7 retain previous evidence."
+  },
+  "build": {
+    "owner": "/root",
+    "status": "pending",
+    "note": "Parent explicitly owns one actual build after final gate; this agent does not run simultaneous build."
+  },
+  "sourceHashes": {
+    "src/scenery-distance-state.js": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154",
+    "src/cinematic-scenery-distance.js": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b",
+    "src/cinematic-document.js": "60aed67aad61e789415ba509292e6f085febfa2801c35f27cd9423bb10241297",
+    "src/cinematic-scene-host.js": "f97dc941726260f7e606b19a008351eef412cf4c92097d7c1952411783e630c1",
+    "src/plains-view-distance.js": "77290931d12f4ffcaca40e7fe441ad092d9b49f4d58f10a04482337d5159ebc0",
+    "src/village-lod.js": "b146edc058fbe742ac1bd1a92109593e2a5921bbd92a7b39c17162c99e364c6e",
+    "src/village-streamed-environment.js": "de7bfe30a0265e06ddfe3aca54de6da75890fbbc5fbc30eb685ad73f1655d25b",
+    "src/village-environment.js": "0803cc38936ac0c4dd2a97b6daacebd0f7d38c4a84785617c0c618cf759e59a8",
+    "src/village-demand.js": "3125f2e3b37e493f4caf69b6a6fe0f5b9f600732343517052296fd4c11d14dff",
+    "src/village-texture-streaming.js": "e13b2648c64581fe8f8212b888a05ebc5b64054a964a597edcf21a1dfd1f8587",
+    "src/village-visibility.js": "787bb62833c945ed8801dee2041006dfbf36964512dbc99eba96b4bbeb32433f",
+    "src/cave-fog-cover.js": "f614d7b0de01b364056def33e7925d4f44bc557e329a86a30b0f7cd184b1ec7a",
+    "src/cave-fog-runtime.js": "3888074a2f1161f07f365c2cca8fc3da2282b8991c223a22767ed42d260db35c"
+  },
+  "sourceBytes": {
+    "src/scenery-distance-state.js": 2508,
+    "src/cinematic-scenery-distance.js": 5009
+  },
+  "guardHash": "11f42f74e2540e1272815413dbe74321285e0699ec59e8e64141c0206b455300",
+  "limitations": [
+    "No browser/device/GPU/pixel claims.",
+    "No art, game defaults, budgets, texture settings, frame scheduling or module graph guard changes."
+  ]
+}

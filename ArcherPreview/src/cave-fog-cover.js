@@ -11,7 +11,7 @@ uniform sampler2D caveFogMap;
 uniform vec4 caveFogRect;
 uniform float caveFogActive;
 uniform vec4 caveFogOrigin;
-float caveDistanceHaze(vec3 p,vec3 eye){return smoothstep(22.,48.,length(p-(caveFogActive>.5?caveFogOrigin.xyz:eye)));}
+float caveDistanceHaze(vec3 p,vec3 eye){float rangeScale=caveFogActive>.5?max(1.,caveFogOrigin.w):1.;return smoothstep(22.*rangeScale,48.*rangeScale,length(p-(caveFogActive>.5?caveFogOrigin.xyz:eye)));}
 // The paint/lantern and final fog stages ask about the same fragment. Retain
 // this one existing lookup, never a second visibility texture or frame upload.
 bool caveFogSampleReady=false;

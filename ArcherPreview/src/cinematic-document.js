@@ -28,7 +28,10 @@ export function validateCinematicDocument(input,references={}){
   if(references.migrateCatalogRevision===true&&typeof doc.catalogRevision==='string'&&/^[a-f0-9]{64}$/.test(doc.catalogRevision)&&references.catalog?.revision)doc.catalogRevision=references.catalog.revision;
   if(!references.catalog?.revision||doc.catalogRevision!==references.catalog.revision)add('$.catalogRevision','Catalog revision differs from the current project');
   if(object(doc.anchor,['position','rotation'],'$.anchor')){vector(doc.anchor.position,'$.anchor.position');rotation(doc.anchor.rotation,'$.anchor.rotation');}
-  if(doc.presentation!==undefined&&object(doc.presentation,['fadeIn','fadeOut'],'$.presentation'))for(const key of ['fadeIn','fadeOut'])if(doc.presentation[key]!==undefined)number(doc.presentation[key],'$.presentation.'+key,0,Math.min(10,doc.duration));
+  if(doc.presentation!==undefined&&object(doc.presentation,['fadeIn','fadeOut','sceneryDistance'],'$.presentation')){
+    for(const key of ['fadeIn','fadeOut'])if(doc.presentation[key]!==undefined)number(doc.presentation[key],'$.presentation.'+key,0,Math.min(10,doc.duration));
+    if(doc.presentation.sceneryDistance!==undefined){number(doc.presentation.sceneryDistance,'$.presentation.sceneryDistance',100,240);if(!Number.isInteger(doc.presentation.sceneryDistance))add('$.presentation.sceneryDistance','Expected an integer percentage');}
+  }
   const localAudioIds=new Set();let mediaBytes=0;
   if(doc.media!==undefined&&object(doc.media,['audio'],'$.media'))for(const [i,item]of array(doc.media.audio,'$.media.audio',8).entries()){
     const p='$.media.audio['+i+']';if(!object(item,['assetId','name','mime','bytes','sha256','duration'],p))continue;
@@ -137,7 +140,7 @@ export function cinematicPresentationAt(document,time){
   const t=clamp(time,0,document.duration),p=document.presentation??{};let blackOpacity=0;
   if(p.fadeIn&&t<p.fadeIn)blackOpacity=Math.max(blackOpacity,1-t/p.fadeIn);if(p.fadeOut&&t>document.duration-p.fadeOut)blackOpacity=Math.max(blackOpacity,(t-document.duration+p.fadeOut)/p.fadeOut);
   for(const row of document.tracks.backgrounds??[]){if(row.time===0||row.transition!=='fade'||!row.fadeDuration)continue;const half=row.fadeDuration/2,distance=Math.abs(t-row.time);if(distance<half)blackOpacity=Math.max(blackOpacity,1-distance/half);}
-  return {blackOpacity:clamp(blackOpacity,0,1)};
+  return {blackOpacity:clamp(blackOpacity,0,1),...(p.sceneryDistance!==undefined?{sceneryDistance:p.sceneryDistance}:{})};
 }
 // Pure, absolute seconds: editor seek and game playback call this same sampler.
 export function evaluateCinematic(document,time){

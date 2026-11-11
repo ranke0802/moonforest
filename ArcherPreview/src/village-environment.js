@@ -11,6 +11,7 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {loadStreamedVillage} from './village-streamed-environment.js';
 import {prepareVillageInstancing} from './village-instancing.js';
+import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 export {prepareVillageStart} from './village-streamed-environment.js';
 
 const geometry=container=>container.meshes.filter(m=>m.getTotalVertices?.()>0);
@@ -93,7 +94,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
       // plugin uniforms and shadow defines across all instance/LOD variants.
       // Screen-size LOD retains tiny silhouettes. Whole-cell distance culling
       // still removes scenery behind the existing fog, with conservative bounds.
-      for(const mesh of full){if(!config.geometryLod)mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;}
+      for(const mesh of full){if(!config.geometryLod)mesh.addLODLevel(world.villageOverview?260:world.villagePolicy.meshCull,null);mesh.isPickable=false;registerCinematicSceneryLod(world,mesh);}
       assets.set(id,{source,config,cover});onProgress(++completed,Object.keys(manifest.assets).length);
     }
     if(fixture){

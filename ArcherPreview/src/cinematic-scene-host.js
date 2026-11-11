@@ -13,6 +13,7 @@ import {getCinematicDefinitions,cinematicStaticCatalog,cinematicStaticManifest} 
 import {createCinematicVisualFactory} from './cinematic-visual-adapter.js';
 import {readMapManifest} from './map-manifests.js';
 import {getNpcCatalog} from './npc-library.js';
+import {acquireCinematicSceneryDistance} from './cinematic-scenery-distance.js';
 
 const MAX_ACTORS=20,MAX_BYTES=512*1024*1024;
 const copy=value=>value?.clone?.()??value;
@@ -200,7 +201,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
      onCancel:reason=>{session.controller.abort(bossPreparationCancelled());void host.release({token,lease:session.lease,prepared:session.prepared,reason,restore:false});callbacks.onCancel?.(reason);},
     });
     check(session);const camera=world.camera;session.cameraLimits={lowerAlphaLimit:camera.lowerAlphaLimit,upperAlphaLimit:camera.upperAlphaLimit,lowerBetaLimit:camera.lowerBetaLimit,upperBetaLimit:camera.upperBetaLimit,lowerRadiusLimit:camera.lowerRadiusLimit,upperRadiusLimit:camera.upperRadiusLimit};
-    for(const key of Object.keys(session.cameraLimits))camera[key]=null;stats.acquired++;return session.lease;
+    for(const key of Object.keys(session.cameraLimits))camera[key]=null;session.scenery=acquireCinematicSceneryDistance(world,{isCurrent:()=>current(session)});session.scenery.apply(document.presentation?.sceneryDistance);stats.acquired++;return session.lease;
    }catch(error){await host.release({token,lease:session.lease,reason:'acquire-error'});throw error;}
   },
   async prepare(document,{token,signal,isCurrent,lease,time}={}){
@@ -240,6 +241,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
   },
   sample(frame,{token,lease,prepared,seeking=false}={}){
    const session=sessions.get(token);if(!session||session.lease!==lease||session.prepared!==prepared)throw bossPreparationCancelled();check(session);
+   session.scenery?.apply(frame.presentation?.sceneryDistance);
    const camera=world.camera;camera.movement?.resetPanVelocity?.();camera.movement?.resetRotationVelocity?.();camera.movement?.resetZoomVelocity?.();camera.inertialAlphaOffset=camera.inertialBetaOffset=camera.inertialRadiusOffset=camera.inertialPanningX=camera.inertialPanningY=0;
    camera.setTarget(Vector3.FromArray(frame.camera.target));if(camera.setPosition)camera.setPosition(Vector3.FromArray(frame.camera.position));else camera.position.copyFromFloats(...frame.camera.position);camera.fov=frame.camera.fov;camera.getViewMatrix(true);camera.getProjectionMatrix(true);
    const statics=[];
@@ -265,7 +267,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
    const session=sessions.get(token);if(!session){prepared?.staticRuntime?.dispose();return;}
    if(session.released){if(prepared&&prepared!==session.releasedPrepared){prepared.staticRuntime?.dispose();session.releasedPrepared=prepared;}return;}
    session.released=true;session.releasedPrepared=prepared;session.controller.abort(bossPreparationCancelled());session.preparation?.cancel();session.lifetime?.abort();session.lifetime?.close();session.signal?.removeEventListener('abort',session.abort);
-   attempt(()=>lease?.stopAudio?.());for(const target of session.prepared?.actors.values()??[])if(target.kind==='bound')attempt(()=>target.restore());attempt(()=>session.staticRuntime?.dispose());
+   attempt(()=>session.scenery?.release());attempt(()=>lease?.stopAudio?.());for(const target of session.prepared?.actors.values()??[])if(target.kind==='bound')attempt(()=>target.restore());attempt(()=>session.staticRuntime?.dispose());
    const keep=restore&&sameWorld(world,session.world)&&!['death','context-loss','scene-dispose','map-change','error','dispose'].includes(reason);
    for(const slot of session.slots){slot.busy=false;slot.shown=false;slot.lastUsed=now();if(keep&&slot.warmed&&!slot.retiring)attempt(()=>slot.adapter.hide());else retire(slot);}
    attempt(()=>restoreLimits(session));attempt(()=>lease?.release?.(reason,{restore:restore&&sameWorld(world,session.world)}));

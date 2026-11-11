@@ -1,16 +1,18 @@
 export const CINEMATIC_CHANNEL='moonforest-cinematic-studio';
-const commands=['load','patch-document','save-scene','select-actor','focus-actor','camera-mode','path-visibility','list-existing','play','pause','resume','seek','stop','loop','capture-camera','status'];
+const commands=['load','patch-document','save-scene','select-actor','focus-actor','camera-mode','camera-move','path-visibility','list-existing','play','pause','resume','seek','stop','loop','capture-camera','status'];
+export function isCinematicCameraMovement(value){return !!value&&typeof value==='object'&&!Array.isArray(value)&&Object.keys(value).length===3&&['x','y','z'].every(key=>typeof value[key]==='number'&&Number.isFinite(value[key])&&Math.abs(value[key])<=1);}
 export function parseCinematicCommand(event,{source,origin}){
   if(event.source!==source||event.origin!==origin)return null;
   const value=event.data;
   if(!value||typeof value!=='object'||Array.isArray(value)||value.channel!==CINEMATIC_CHANNEL||value.version!==1||!commands.includes(value.command)||typeof value.requestId!=='string'||!/^[A-Za-z0-9._:-]{1,80}$/.test(value.requestId))return null;
   const documentCommand=['load','patch-document','save-scene'].includes(value.command),actorCommand=['select-actor','focus-actor'].includes(value.command);
-  const allowed=['channel','version','requestId','command',...(documentCommand?['document',...(value.command==='load'?['preserveCamera']:[])]:actorCommand?['actorId']:value.command==='camera-mode'?['mode']:value.command==='path-visibility'?['visible']:value.command==='seek'?['time']:value.command==='loop'?['loop']:[])];
+  const allowed=['channel','version','requestId','command',...(documentCommand?['document',...(value.command==='load'?['preserveCamera']:[])]:actorCommand?['actorId']:value.command==='camera-mode'?['mode']:value.command==='camera-move'?['movement','cameraControlId','cutsceneId','mapId','sequence']:value.command==='path-visibility'?['visible']:value.command==='seek'?['time']:value.command==='loop'?['loop']:[])];
   if(Object.keys(value).some(key=>!allowed.includes(key)))return null;
   if(documentCommand&&(!value.document||typeof value.document!=='object'||Array.isArray(value.document)))return null;
   if(value.command==='load'&&value.preserveCamera!==undefined&&typeof value.preserveCamera!=='boolean')return null;
   if(actorCommand&&(typeof value.actorId!=='string'||!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/.test(value.actorId)))return null;
   if(value.command==='camera-mode'&&!['orbit','pan'].includes(value.mode))return null;
+  if(value.command==='camera-move'&&(!isCinematicCameraMovement(value.movement)||!Number.isSafeInteger(value.cameraControlId)||value.cameraControlId<1||!Number.isSafeInteger(value.sequence)||value.sequence<1||typeof value.cutsceneId!=='string'||!/^[A-Za-z0-9][A-Za-z0-9._:-]{0,79}$/.test(value.cutsceneId)||!['village','monster-forest','great-plains','witch-cave'].includes(value.mapId)))return null;
   if(value.command==='path-visibility'&&typeof value.visible!=='boolean')return null;
   if(value.command==='seek'&&(typeof value.time!=='number'||!Number.isFinite(value.time)))return null;
   if(value.command==='loop'&&typeof value.loop!=='boolean')return null;

@@ -1,11 +1,13 @@
 // Screen area incorporates both distance and placement scale. Tiny rocks do not
 // keep a 5K mesh merely because the camera happens to pass nearby.
+import {sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 export const VILLAGE_LOD_COVERAGE=Object.freeze({mid:.22,far:.035});
 
-export function projectedCoverage(camera,sphere){
+export function projectedCoverage(camera,sphere,world){
   const distance=camera.mode===1?camera.minZ:Math.hypot(sphere.centerWorld.x-camera.globalPosition.x,sphere.centerWorld.y-camera.globalPosition.y,sphere.centerWorld.z-camera.globalPosition.z);
   const radius=sphere.radiusWorld*camera.minZ/Math.max(distance,.001);
-  return Math.PI*radius*radius/camera.screenArea;
+  const coverage=Math.PI*radius*radius/camera.screenArea,scale=cinematicSceneryScale(world);
+  return scale===1?coverage:coverage*scale*scale;
 }
 export function villageLodTier(coverage){
   return coverage>VILLAGE_LOD_COVERAGE.mid?0:coverage>VILLAGE_LOD_COVERAGE.far?1:2;

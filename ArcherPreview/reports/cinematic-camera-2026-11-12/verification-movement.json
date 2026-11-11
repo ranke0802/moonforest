@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-11-11T17:31:53.827Z",
+  "passed": true,
+  "sourceUnchanged": true,
+  "sourceHashes": {
+    "src/tool-camera-input.js": "4d688a60befda391c07d072bb4df6e49e5404e262e503aaf432c027d738c730e",
+    "src/game-tool-lease.js": "557a3b295c4ce3ab745cf42dc2bcafe784131f2cdb9f8de98485049f49b279bf",
+    "src/cinematic-protocol.js": "6981f68793e4b34bf9d66dd396680b5cd3e75351ae48b69604086555ffa68a3f",
+    "src/cinematic-game.js": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3"
+  },
+  "finalSourceHashes": {
+    "src/tool-camera-input.js": "4d688a60befda391c07d072bb4df6e49e5404e262e503aaf432c027d738c730e",
+    "src/game-tool-lease.js": "557a3b295c4ce3ab745cf42dc2bcafe784131f2cdb9f8de98485049f49b279bf",
+    "src/cinematic-protocol.js": "6981f68793e4b34bf9d66dd396680b5cd3e75351ae48b69604086555ffa68a3f",
+    "src/cinematic-game.js": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3"
+  },
+  "cases": [
+    {
+      "name": "analog movement uses camera-relative horizontal axes and vertical world-up without child canvas focus",
+      "passed": true,
+      "metersPer60HzFrame": 0.1,
+      "parentFocusSupported": true
+    },
+    {
+      "name": "analog normalization, exact finite contract, delta cap and detach prevent runaway or stale movement",
+      "passed": true,
+      "normalization": "3D unit length",
+      "maxDeltaSeconds": 0.05,
+      "detachClears": true
+    },
+    {
+      "name": "PC keyboard retains exact movement and typing isolation while native mouse orbit/pan still work",
+      "passed": true,
+      "nativeSceneInputManager": true,
+      "keyboardTypingIsolation": true,
+      "restoredGameInput": true
+    },
+    {
+      "name": "lease pause, detach, blur, map cancellation and replacement cannot retain analog holds",
+      "passed": true,
+      "cancelledOldScope": true,
+      "lateOldSetterRejected": true
+    },
+    {
+      "name": "camera-move protocol requires exact authenticated bounded movement and stable per-session identity",
+      "passed": true,
+      "strictAuthentication": true,
+      "invalidCases": 13
+    },
+    {
+      "name": "actual preview game/host/lease rejects late nonzero across Play, replacement and map generation while zero stays safe",
+      "passed": true,
+      "realGameHostLease": true,
+      "lateCommandsRejected": true,
+      "authenticatedParentOnly": true
+    },
+    {
+      "name": "parent touch DOM packets traverse authenticated game receive into the actual native camera without child focus",
+      "passed": true,
+      "actualParentDomToGameReceive": true,
+      "defaultHostAndLease": true,
+      "nativeCameraMoved": true,
+      "terminalZeroStops": true
+    }
+  ],
+  "scope": "Actual ArcRotateCamera updates, native canvas DOM events through Babylon SceneInputManager, real game cinematic controller/host/player and game-tool lease. Empty neutral document avoids unrelated actor/model preparation. Platform focus/pointer/layout and message delivery boundaries are deterministic.",
+  "limits": "Node/LinkeDOM/Babylon NullEngine evidence. No browser automation, rendered-pixel comparison, physical touch, GPU, FPS, or device claim."
+}

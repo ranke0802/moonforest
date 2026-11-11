@@ -22,6 +22,7 @@ import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
+import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -143,6 +144,7 @@ export function installVillageGeometry(asset,container,level,world){
       const low=asset.tiers.get(tier)?.meshes[i];if(!low||base.getLODLevels().some(l=>l.mesh===low))continue;
       base.addLODLevel(tier===1?VILLAGE_LOD_COVERAGE.mid:VILLAGE_LOD_COVERAGE.far,low);if(!world.scene.meshes.includes(low))world.scene.addMesh(low);
     }
+    registerCinematicSceneryLod(world,base);
   }
 }
 

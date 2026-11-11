@@ -108,7 +108,7 @@ export class VillageTextureStreaming {
       if(!config?.highTextures||(asset.baseLevel!==undefined&&asset.baseLevel!==0))continue;
       for(const mesh of record.meshes){
         if(!mesh.isInFrustum(planes))continue;
-        const coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
+        const coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere,this.world);
         if(coverage>VILLAGE_LOD_COVERAGE.mid){
           const id=record.placement.asset;
           if(!this.failed.has(id))candidates.set(id,Math.max(coverage,candidates.get(id)??0));

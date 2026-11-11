@@ -4,6 +4,7 @@ import { plainsRenderRange } from './plains-view-distance.js';
 import {selectVillageShadowCasters} from './village-shadow-policy.js';
 import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
 import {caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
+import {sceneryDistanceRange as cinematicSceneryRange} from './scenery-distance-state.js';
 
 export function cellKey(x,z,size=16){return `${Math.floor(x/size)}:${Math.floor(z/size)}`;}
 
@@ -62,11 +63,11 @@ export class VillageVisibility {
     const moved=Vector3.DistanceSquared(this.camera,camera)>1;
     const transform=this.world.camera.getTransformationMatrix();
     const turned=!this.view||transform.m.some((n,i)=>Math.abs(n-this.view[i])>.0001);
-    if(this.timer>0&&!moved&&!turned)return;
+    const range=cinematicSceneryRange(this.world,this.touch)?.cellCull??(this.world.villageOverview?(this.world.plains?420:260):plainsRenderRange(this.world,this.touch).cellCull);
+    if(this.timer>0&&!moved&&!turned&&this.range===range)return;this.range=range;
     this.timer=.16;this.camera.copyFrom(camera);
     this.view??=new Float32Array(16);this.view.set(transform.m);Frustum.GetPlanesToRef(transform,this.planes);
     let activeCells=0,activeInstances=0;
-    const range=this.world.villageOverview?(this.world.plains?420:260):plainsRenderRange(this.world,this.touch).cellCull;
     for(const cell of this.cells.values()){
       const distance=Vector3.Distance(camera,cell.center)-cell.radius;
       // Generous frustum margin prevents camera motion from revealing empty cells.

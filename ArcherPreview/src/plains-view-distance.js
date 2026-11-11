@@ -1,4 +1,5 @@
 import {villageRenderRange} from './village-policy.js';
+import {sceneryDistanceRange as cinematicSceneryRange} from './scenery-distance-state.js';
 
 export const PLAINS_VIEW_DISTANCE_KEY='moonforest-plains-view-distance-v2';
 export const PLAINS_VIEW_DISTANCE_DEFAULT=2.4;
@@ -18,6 +19,7 @@ export function readPlainsViewDistance(storage){
   }catch{return PLAINS_VIEW_DISTANCE_DEFAULT;}
 }
 export function plainsRenderRange(world,touch=world.touchDevice){
+  const cinematic=cinematicSceneryRange(world,touch);if(cinematic)return cinematic;
   const base=villageRenderRange(touch);
   if(world.mapId!=='great-plains')return base;
   const scale=normalizePlainsViewDistance(world.plainsViewDistance);
