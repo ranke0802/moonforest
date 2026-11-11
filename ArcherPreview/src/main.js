@@ -74,6 +74,8 @@ import { createDamageNumbers } from './damage-numbers.js';
 import { BossHealthBars } from './boss-health-bar.js';
 import { PlayerHealthBar } from './player-health-bar.js';
 import { setupSettingsPanel } from './settings-panel.js';
+import {setupMovementSpeedSettings} from './movement-speed-settings.js';
+import {setupWeatherSettings} from './weather-settings.js';
 import {setupSummonPanel} from './summon-panel.js';
 import {setupBossPatternPanel} from './boss-pattern-settings.js';
 import {setupCharacterStylePanel} from './character-style-settings.js';
@@ -171,6 +173,8 @@ let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
+const weatherSettings=setupWeatherSettings({host:$('.settings-display-options'),storage:equipmentStorage,getWorld:()=>world,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
 const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),storage:equipmentStorage,activity:renderActivity,onChange:fps=>{if(engine)engine.maxFPS=fps;}});
 if(import.meta.hot)import.meta.hot.dispose(()=>frameRateControl.dispose());
 const plainsViewDistanceControl=setupPlainsViewDistanceControl({select:$('#plains-view-distance-select'),storage:equipmentStorage,onChange:value=>{if(world)applyPlainsViewDistance(world,value);renderActivity.wake();frameLoop?.invalidate();}});
@@ -573,6 +577,7 @@ async function loadCharacter() {
     animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?2:0});
     const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds, ...(isV2()?{holdNow:()=>performance.now()}:{}) });
+    movementSpeedSettings.apply(controller);
     applyAttackSpeed(readAttackSpeed());
     if(isV2())motionSpeedControls.apply(controller);
     motionSpeedControls.setVisible(isV2());
@@ -616,7 +621,11 @@ async function loadCharacter() {
     $('#guard-button').setAttribute('aria-label','방패 밀치기, 길게 누르면 방어 태세');
     canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
     if(isVillage()&&arrival){boss.combat.hp=arrival.hp;boss.potions.remaining=arrival.potions;}
-    resetCamera();restoreMapCamera(); updateButtons();
+    resetCamera();
+    // First entry faces the warrior; an explicit portal arrival or saved
+    // camera keeps its own orientation, preserving map continuity/resume.
+    if(isV2()&&!arrival&&!resumePose&&!villageOverview&&!villageHorizon&&!elenaReviewMode){world.camera.alpha=Math.PI/2+actor.rotation.y-(config.forwardYaw||0);world.camera.beta=1.25;syncCameraFocus(0,{snap:true});}
+    restoreMapCamera(); updateButtons();
     await skyReady;
     if(isCave())await boss.activateResident(actor);
     await prepareElenaReview();world.authoredPlacements?.update(0,actor);
@@ -867,6 +876,7 @@ try {
   engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
+  world.weather=weatherSettings;weatherSettings.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
   if(releaseEnabled){
     world.loadAuthoredMap=async()=>{
@@ -889,6 +899,11 @@ try {
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
   cameraFollow=new CameraFollow({storage:equipmentStorage});
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
+  $('#map-polygon-estimate')?.addEventListener('click',async event=>{
+    const button=event.currentTarget,status=$('#map-polygon-status'),map=world.mapId;button.disabled=true;status.textContent='맵 배치를 집계하는 중…';
+    try{const [{ASSET_CATALOG},{estimateMapPolygons}]=await Promise.all([import('./asset-catalog.js'),import('./map-polygon-estimate.js')]);if(world.mapId!==map){status.textContent='맵이 바뀌었습니다. 다시 집계해 주세요.';return;}const value=estimateMapPolygons(world,ASSET_CATALOG);status.textContent=`확인 가능한 배치·지형 합계 ${value.estimatedTotal?.toLocaleString()??'—'} 삼각형 · 배치 ${value.placements}개 · 집계 불가 ${value.unknown}개. 미집계 대상이 있으면 전체보다 적을 수 있으며 배우·효과와 실제 LOD는 제외됩니다.`;}
+    catch(error){status.textContent='맵 집계 실패: '+error.message;}finally{button.disabled=false;}
+  });
   setupCameraZoomControls(cameraZoom,{onChange:cameraSettingChanged});cameraPitchControls=setupCameraPitchControls(cameraPitch,{onChange:cameraSettingChanged});
   setupCameraFollowControls(cameraFollow,{onChange:cameraSettingChanged});
   world.villageOverview=isVillage()&&villageOverview;

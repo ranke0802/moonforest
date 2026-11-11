@@ -22,11 +22,19 @@ uniform sampler2D cloudMap;
 uniform vec2 drift;
 uniform vec3 horizon;
 uniform vec2 imageProcessing;
+uniform float weatherCloud;
 void main() {
   vec3 direction = normalize(skyDirection);
   // A flat cloud layer above the viewer; no longitude seam or polar pinching.
   vec2 uv = direction.xz / (max(direction.y, 0.0) + .35) * .28 + drift;
-  vec3 clouds = texture2D(cloudMap, uv).rgb;
+  // Two differently scaled layers of the existing image drift at different
+  // speeds. No extra texture, geometry, render target or animation loop.
+  vec3 layerA = texture2D(cloudMap, uv).rgb;
+  vec2 layerUV = (uv-drift)*1.47 + vec2(.31,.67) + drift*.43;
+  vec3 layerB = texture2D(cloudMap, layerUV).rgb;
+  vec3 clouds = mix(layerA,layerB,.22);
+  float gray=dot(clouds,vec3(.299,.587,.114));
+  clouds=mix(clouds,vec3(gray*.76),weatherCloud);
   vec3 color = mix(horizon, clouds, smoothstep(0.0, .32, direction.y));
   // Match the scene's gamma-space exposure/contrast without per-pixel pow().
   color = clamp(color * imageProcessing.x, 0.0, 1.0);
@@ -46,12 +54,13 @@ export class MovingSky {
     // corpses/effects. Alpha is always 1; the sky never overwrites scene depth.
     this.mesh.alphaIndex = -1000000;
     this.material = new ShaderMaterial('painted-sky-material', scene, { vertexSource, fragmentSource }, {
-      attributes: ['position'], uniforms: ['worldViewProjection', 'drift', 'horizon', 'imageProcessing'],
+      attributes: ['position'], uniforms: ['worldViewProjection', 'drift', 'horizon', 'imageProcessing', 'weatherCloud'],
       samplers: ['cloudMap'], needAlphaBlending: true,
     });
     this.material.disableDepthWrite = true;
     this.material.backFaceCulling = false;
     this.material.setColor3('horizon', SKY_HORIZON);
+    this.material.setFloat('weatherCloud',0);
     this.drift = new Vector2();
     this.imageProcessing = new Vector2();
     this.mesh.material = this.material;

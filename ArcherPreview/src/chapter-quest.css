@@ -86,4 +86,22 @@
 .chapter-dialog-feedback{font-size:12px;color:#e1d5aa;line-height:1.7}
 @media(max-width:750px){.chapter-dialog-content{padding:14px 16px}.chapter-bag-layout{grid-template-columns:minmax(0,1fr) minmax(235px,1fr);gap:15px}.chapter-item-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#chapter-dialog .chapter-item-detail{padding:19px}.chapter-dialog-content>.chapter-body{grid-template-columns:205px minmax(0,1fr);gap:13px}#chapter-dialog>header{padding:13px 17px;min-height:65px}#chapter-dialog>nav{padding:9px 16px}}
 @media(max-width:580px){#chapter-dialog{width:calc(100vw - 16px);height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)}.chapter-dialog-content>.chapter-body{grid-template-columns:1fr;grid-template-rows:105px minmax(0,1fr)}#chapter-dialog .chapter-list{flex-direction:row}#chapter-dialog .chapter-list button{min-width:180px;padding:10px 12px}#chapter-dialog .chapter-paper{padding:18px}.chapter-bag-layout{display:flex;flex-direction:column;min-height:auto}.chapter-bag-items{overflow:visible;flex-shrink:0}.chapter-item-grid{grid-template-columns:repeat(4,minmax(0,1fr))}#chapter-dialog[data-screen=bag] .chapter-dialog-content{overflow:auto;display:block}#chapter-dialog .chapter-item-detail{overflow:visible;min-height:235px;flex-shrink:0}.chapter-item-art{float:right;margin-left:15px;width:70px;height:70px}.chapter-dialog-footer{padding:7px 16px}.chapter-bag-meta{font-size:10px}.chapter-bag-tabs{margin-bottom:15px}}
+
+/* Compact navigation so the inventory and journal content get the space. */
+#chapter-dialog{width:min(940px,94vw);height:min(590px,90dvh)}
+#chapter-dialog>header{min-height:48px;padding:8px 18px}
+#chapter-dialog>header small{display:none}
+#chapter-dialog>header h2{font-size:18px;margin:0}
+#chapter-dialog>nav{padding:5px 18px;gap:5px}
+#chapter-dialog>nav button,#chapter-dialog .chapter-bag-tabs button{min-height:36px;padding:5px 11px}
+.chapter-dialog-content{padding:12px 18px}
+.chapter-bag-meta{margin-bottom:4px}
+.chapter-bag-tabs{margin-bottom:7px}
+.chapter-bag-layout{grid-template-columns:minmax(0,85fr) minmax(120px,15fr);gap:10px}
+.chapter-item-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+#chapter-dialog .chapter-item-detail{padding:10px;overflow:auto}
+.chapter-item-art{width:52px;height:52px;margin-bottom:4px}
+#chapter-dialog .chapter-item-detail h3{font-size:15px;margin:5px 0}
+.chapter-item-facts{margin:8px 0;padding-top:5px}
+@media(max-width:580px){#chapter-dialog{width:calc(100vw - 16px);height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px)}.chapter-bag-layout{display:flex;flex-direction:column}.chapter-item-grid{grid-template-columns:repeat(auto-fill,minmax(58px,1fr))}#chapter-dialog .chapter-item-detail{min-height:0}.chapter-item-art{float:right;margin-left:10px}}
 @media(orientation:landscape) and (max-height:550px){#chapter-dialog{height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 12px)}#chapter-dialog>header{min-height:49px;padding:7px 17px}#chapter-dialog>header small{font-size:8px}#chapter-dialog>header h2{font-size:17px}#chapter-dialog>nav{padding:6px 16px}#chapter-dialog>nav button{min-height:34px;padding:5px 14px}.chapter-dialog-content{padding:11px 16px}.chapter-bag-tabs{margin-bottom:10px}.chapter-bag-tabs button{min-height:34px!important;padding:5px 12px!important}.chapter-item-art{width:62px;height:62px;float:right;margin-left:12px}#chapter-dialog .chapter-item-detail h3{font-size:17px}.chapter-dialog-footer{min-height:27px;padding:4px 16px}}

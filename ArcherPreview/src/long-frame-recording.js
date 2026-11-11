@@ -16,7 +16,7 @@ export class LongFrameRecording {
   // Match the original scene render to this JS frame. A stale sampled value
   // must never be attributed to an unrelated frame interval.
   const same=draw&&draw.startedAtMs>=startMs&&draw.completedAtMs<=startMs+workMs?draw:null;
-  const current={startMs,intervalMs,workMs,targetFps,render:{drawCalls:metrics?.drawCalls,sceneMs:metrics?.sceneMs,activeMeshesMs:metrics?.activeMeshesMs,renderTargetsMs:metrics?.renderTargetsMs,drawSubmissionMs:metrics?.drawSubmissionMs,gpu:metrics?.gpu,drawCpu:same},sections};
+  const current={startMs,intervalMs,workMs,targetFps,render:{drawCalls:metrics?.drawCalls,submittedTriangles:metrics?.submittedTriangles,sceneMs:metrics?.sceneMs,activeMeshesMs:metrics?.activeMeshesMs,renderTargetsMs:metrics?.renderTargetsMs,drawSubmissionMs:metrics?.drawSubmissionMs,gpu:metrics?.gpu,drawCpu:same},sections};
   if(same?.reason==='continuous'){if(this.detailFrames.length<2048)this.detailFrames.push(current);else this.dropped.detailFrames++;}
   for(const upload of metrics?.drawCpu?.ktxUploads??[]){if(upload.completedAtMs<this.startMs||upload.completedAtMs<=this.lastUpload)continue;this.lastUpload=upload.completedAtMs;if(this.ktxUploads.length<1024)this.ktxUploads.push(upload);else this.dropped.ktxUploads++;}
   if(intervalMs>50||workMs>50||metrics?.drawSubmissionMs>50){

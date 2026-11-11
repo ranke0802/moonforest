@@ -70,8 +70,9 @@ export function setupSettingsPanel() {
   const longCapture=document.createElement('div');longCapture.id='long-frame-capture';
   longCapture.innerHTML='<p>장시간 끊김 기록 · 최대 10분</p><small>기본 계측으로 지연을 기록합니다. 위의 상세 CPU 호출 계측을 체크하면 지연 후 짧게 연속 측정합니다. 상세 계측은 성능에 영향을 줄 수 있습니다. 기록은 기기에만 남으며 새로고침하거나 닫으면 사라집니다.</small><div><button type="button" id="long-frame-start">10분 기록 시작</button> <button type="button" id="long-frame-stop" disabled>기록 종료</button> <button type="button" id="long-frame-download" disabled>기록 파일 다운로드</button></div><small id="long-frame-status" role="status"></small>';
   diagnosticOptions.append(longCapture);
+  const polygonEstimate=document.createElement('div');polygonEstimate.innerHTML='<button type="button" id="map-polygon-estimate">맵 삼각형 수 집계</button><small id="map-polygon-status" role="status">등록된 배치와 지형 기준의 추정치입니다. 최초 집계 시 목록을 불러옵니다.</small>';diagnosticOptions.append(polygonEstimate);
   section('성능 진단', [diagnosticOptions]);
-  section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]);
+  section('공통 속도', [$('#attack-speed').closest('.attack-speed-control'), $('#dodge-speed-control')]).id='common-speed-settings';
   const bossPatterns=document.createElement('button');bossPatterns.id='open-boss-patterns';bossPatterns.type='button';bossPatterns.className='motion-speed-toggle';bossPatterns.textContent='보스 패턴 · 속도';bossPatterns.setAttribute('aria-haspopup','dialog');
   section('보스 전투', [bossPatterns]);
   const reset = $('#reset-motion-speeds');

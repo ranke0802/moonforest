@@ -103,6 +103,9 @@ export class SceneDiagnostics {
   resetGpu(){this.gpu?.reset(this.active?'pending':'paused');this.cpu?.reset();this.textureUploads=[];}
   sample(){const i=this.instrumentation;if(!i)return {};
     this.result.drawCalls=i.drawCallsCounter.current;this.result.sceneMs=i.frameTimeCounter.current;this.result.animationMs=i.animationsTimeCounter.current;
+    // Babylon already counts submitted indices, including instances and render
+    // passes. This is a frame workload estimate, not a count of unique map assets.
+    const activeIndices=this.scene.getActiveIndices?.();this.result.submittedTriangles=Number.isFinite(activeIndices)?Math.floor(activeIndices/3):null;
     // CPU submission counters can overlap (draw submission also occurs inside
     // shadow/render targets). They are never a substitute for GPU elapsed time.
     this.result.activeMeshesMs=i.activeMeshesEvaluationTimeCounter.current;this.result.renderTargetsMs=i.renderTargetsRenderTimeCounter.current;this.result.drawSubmissionMs=i.renderTimeCounter.current;

@@ -77,6 +77,7 @@ export function createChestOpening(root,{opened=false}={}){
   };
   const api={state,hinge,
     open({immediate=false}={}){if(state.opened)return false;state.opened=true;state.active=!immediate;state.progress=immediate?1:0;if(immediate)apply(CHEST_OPEN_ANGLE,true);return true;},
+    setOpened(opened){state.opened=opened===true;state.active=false;state.progress=state.opened?1:0;apply(state.opened?CHEST_OPEN_ANGLE:0,true);},
     advance(dt){if(!state.active)return false;state.progress=Math.min(1,state.progress+Math.max(0,Math.min(.05,dt))/CHEST_OPEN_SECONDS);state.active=state.progress<1;apply(CHEST_OPEN_ANGLE*(1-(1-state.progress)**3),!state.active);return state.active;}
   };
   if(opened)api.open({immediate:true});return api;

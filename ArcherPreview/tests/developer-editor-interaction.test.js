@@ -33,6 +33,14 @@ function fixture(t,{ready=true,autoEnter=true,deferLease=false,deferApply=false,
  return {api,root,document,window,world,state,stats,store,gate,options,player,nativeGizmo,manager,button,click,clickRaw,pointer,get cameraCounts(){return {detach:detachCount,attach:attachCount};}};
 }
 
+test('fixed toolbar closes the editor and releases its gameplay lease',async t=>{
+ const f=fixture(t);await settle();assert.equal(f.api.isEditing(),true);
+ const toolbar=f.root.querySelector('.placement-toolbar');assert.ok(toolbar);
+ toolbar.querySelector('[data-editor-action="close"]').dispatchEvent(new f.window.Event('click',{bubbles:true}));await settle();
+ assert.equal(f.api.isEditing(),false);assert.equal(f.root.querySelector('.placement-editor').hidden,true);assert.equal(f.stats.releases,1);
+ await f.api.enter();assert.equal(f.root.querySelector('.placement-editor').hidden,false);
+});
+
 test('first-use UI waits for ready, auto-enters once and opens the usable prop category',async t=>{
  const f=fixture(t,{ready:false});assert.equal(f.root.querySelectorAll('[data-assets] option').length,ASSET_CATALOG.entries.filter(row=>row.placement.supported&&row.category==='prop').length,f.root.querySelector('[data-category]').outerHTML);assert.equal(f.root.querySelector('[data-category]').closest('[data-advanced]'),null,'primary category is visible outside advanced controls');assert.equal(f.root.querySelector('[data-advanced]').hasAttribute('open'),false);assert.equal(f.button('place').disabled,true);assert.equal(f.button('enter').disabled,true);await settle();assert.equal(f.stats.runtimes,0);f.api.notifyReady();assert.equal(f.stats.leases,0);
  f.state.ready=true;f.api.notifyReady();await settle();assert.equal(f.api.isEditing(),true);assert.equal(f.stats.leases,1);assert.equal(f.options[0].hideHud,true);assert.equal(f.button('place').disabled,false);assert.equal(f.world.scene.onBeforeRenderObservable.observers.filter(observer=>!observer._willBeUnregistered).length,0);

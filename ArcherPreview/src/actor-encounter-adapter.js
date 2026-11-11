@@ -174,6 +174,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         if(definition.category==='npc'){
           // Reuse the prepared visual/idle, never the hostile encounter update.
           encounter.active=false;encounter.setShadowCasting(true);encounter.player=null;encounter.ring.setEnabled(false);
+          encounter.storyNpcId=definition.npc?.interactionId;world.storyNpcs?.syncEncounter(encounter);
         }else{
           battle.applyAttackSettings?.(encounter);
           if(value.staged===true)encounter.actor.setEnabled(false);
@@ -183,11 +184,11 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
       },
       reveal(){if(!active||definition.category==='npc'||encounter.actor.isDisposed())return false;encounter.actor.setEnabled(true);if(!battle.encounters.includes(encounter))battle.encounters.push(encounter);battle.active=true;return true;},
       update(dt){
-        if(!active||definition.category!=='npc')return;
+        if(!active||definition.category!=='npc'||encounter.storyNpcSuppressed)return;
         encounter.animator.update(dt); // combat actors update only in BossBattle
       },
       decide(){if(active&&definition.category==='npc')decisionCount++;},
-      interact(){return active&&definition.npc?interaction(definition.npc.interactionId,encounter.actor.position,definition.npc.range):false;},
+      interact(){return active&&definition.npc&&!encounter.storyNpcSuppressed?interaction(definition.npc.interactionId,encounter.actor.position,definition.npc.range):false;},
       defeat(){
         if(!active||definition.category==='npc'||encounter.brain.hp<=0)return false;
         return encounter.brain.hit({damage:encounter.brain.hp,heavy:true});

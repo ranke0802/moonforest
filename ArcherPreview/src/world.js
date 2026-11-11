@@ -93,7 +93,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   shadows.bias = .0008; shadows.normalBias = .02;
   shadows.setDarkness(.35);
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
-  configureOutdoorVista({mountains,sky,lighting,camera},{village,plains});
+  configureOutdoorVista({mountains,sky,lighting,camera},{village,plains,villageNotch:village&&!forest&&!cave&&!plains});
 
   const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE,borderHeight:village&&!plains&&!forest&&!cave?villageOutskirtsSkirtHeight:null});
@@ -162,7 +162,7 @@ export function replaceWorldMap(world,character){
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
-  configureOutdoorVista(world,{village:true,plains});
+  configureOutdoorVista(world,{village:true,plains,villageNotch:!forest&&!cave&&!plains});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
   warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS);
@@ -176,4 +176,5 @@ export function replaceWorldMap(world,character){
   configureCaveAtmosphere(world);
   configureCaveFog(world);
   configurePlainsDecor(world);
+  world.weather?.mapChanged();
 }

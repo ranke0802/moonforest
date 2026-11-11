@@ -11,6 +11,7 @@ import {createCinematicPoseSampler} from '../src/cinematic-scene-host.js';
 import {inspectNpcInteriorInk} from '../src/npc-interior-ink.js';
 import {createTrainingTargets} from '../src/targets.js';
 import {nearbyEditableObjects} from '../src/nearby-editor.js';
+import {createStoryNpcSettings} from '../src/story-npc-settings.js';
 
 const drain=()=>new Promise(resolve=>setImmediate(resolve));
 async function until(predicate){const end=performance.now()+3000;while(!predicate()&&performance.now()<end)await drain();assert.ok(predicate(),'operation should settle');}
@@ -32,6 +33,22 @@ function source(scene){
 }
 function runtime(t,f,options={}){const assets=catalog();let loads=0;const instance=createNpcWorld({world:f.world,catalog:assets,getCatalog:()=>assets,hydrate:async()=>{},getState:()=>f.state,storage:f.storage,preparationOptions:{incremental:false},factoryOptions:{resolveCatalog:value=>value,resolveNpcSource:async()=>null,initialize:async()=>{},readManifest:async()=>({model:'./content/npc.gltf',height:1.85,animations:{idle:'Idle'},npc:assets.entries[0].npc}),loadContainer:async()=>{loads++;return source(f.scene);},prepareShaders:async()=>{}},...options});t.after(()=>instance.dispose());f.world.npcWorld=instance;return {instance,assets,loads:()=>loads};}
 function editor(t,f,npcWorld,extra={}){const api=setupActorEditor({root:f.root,world:f.world,battle:extra.battle??{encounters:[]},npcWorld,catalog:catalog(),getState:()=>f.state,storage:f.storage,hydrate:async()=>{},subscribe:()=>()=>{},setupLayout:()=>({dispose(){},focusSelection(){}}),...extra});t.after(()=>api.dispose());const click=async command=>{const button=f.root.querySelector(`[data-actor-command="${command}"]`);assert.ok(button);button.click();await until(()=>!api.inspect().busy);};return {api,click};}
+
+test('story resident delete and restore are staged, cancellable and persist only on apply',async t=>{
+ const f=fixture(t),r=runtime(t,f);f.world.storyNpcs=createStoryNpcSettings({world:f.world,storage:f.storage});const e=editor(t,f,r.instance);
+ const pick=()=>{f.root.querySelector('[data-story-npc]').value='elder';};
+ await e.api.enter();pick();f.root.querySelector('[data-story-action=remove]').click();assert.equal(f.world.storyNpcs.isRemoved('elder'),false);await e.click('cancel');assert.equal(f.world.storyNpcs.isRemoved('elder'),false);
+ await e.api.enter();pick();f.root.querySelector('[data-story-action=remove]').click();await e.click('apply');assert.equal(f.world.storyNpcs.isRemoved('elder'),true);
+ await e.api.enter();pick();f.root.querySelector('[data-story-action=restore]').click();await e.click('apply');assert.equal(f.world.storyNpcs.isRemoved('elder'),false);
+});
+test('selecting a live story NPC supports staged deletion and restores its visual',async t=>{
+ const f=fixture(t),r=runtime(t,f),actor=new TransformNode('story-guard',f.scene),mesh=MeshBuilder.CreateBox('guard-body',{},f.scene);mesh.parent=actor;
+ const encounter={actor,active:true,type:'npc',storyNpcId:'guard',config:{name:'자경단 전사'}},battle={encounters:[encounter]};f.world.storyNpcs=createStoryNpcSettings({world:f.world,storage:f.storage});
+ const e=editor(t,f,r.instance,{battle}),id=listEditableActorHandles(f.world,battle)[0].id;
+ await e.api.enter({selection:id});assert.equal(f.root.querySelector('[data-actor-command=delete]').disabled,false);await e.click('delete');await e.click('cancel');assert.equal(actor.isEnabled(),true);assert.equal(f.world.storyNpcs.isRemoved('guard'),false);
+ await e.api.enter({selection:id});await e.click('delete');await e.click('apply');assert.equal(actor.isEnabled(),false);assert.equal(f.world.storyNpcs.isRemoved('guard'),true);
+ await e.api.enter();f.root.querySelector('[data-story-npc]').value='guard';f.root.querySelector('[data-story-action=restore]').click();await e.click('apply');assert.equal(actor.isEnabled(),true);
+});
 
 test('NPC world keeps native rigs independent, scopes look, and removes horizontal root motion without losing vertical sit motion',async t=>{
  const f=fixture(t),r=runtime(t,f),a=await r.instance.add('test-npc',{position:[2,3,4],persist:false}),b=await r.instance.add('test-npc',{position:[-2,1,4],persist:false});assert.equal(r.loads(),1);assert.notEqual(a.encounter.asset.skeletons[0],b.encounter.asset.skeletons[0]);assert.notEqual(a.encounter.asset.animationGroups[0],b.encounter.asset.animationGroups[0]);assert.equal(a.encounter.asset.meshes[0].geometry,b.encounter.asset.meshes[0].geometry);

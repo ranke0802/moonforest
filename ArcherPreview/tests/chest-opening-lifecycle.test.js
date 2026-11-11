@@ -118,6 +118,7 @@ test('a visible quest chest is listed for nearby editing and its interaction fol
  const f=fixture(t,{withUi:true}),limit=configureMap(f,'great-plains'),source=CHAPTER_POINTS.find(p=>p.map==='great-plains'&&p.tier&&!p.requires);t.after(()=>setWorldCharacter('warrior'));approach(f,source,limit);f.api.update(1);await f.loaded();f.api.update(1.2);
  const point=f.points.find(p=>p.id===source.id),handles=listEditableActorHandles(f.world,{encounters:[]}),chest=handles.find(row=>row.root===point.visual);
  assert.ok(chest);assert.equal(chest.source,'quest-chest');assert.equal(nearbyEditableObjects(f.world,{x:point.x,z:point.z},{actors:handles})[0].instanceId,chest.id);
+ chest.encounter.chestVisualState='open';assert.equal(point.opened,true);assert.equal(f.api.journey.seen.has('point:'+point.id),false);chest.encounter.chestVisualState='auto';assert.equal(point.opened,false);assert.equal(f.api.journey.seen.has('point:'+point.id),false);
  const moved={x:point.x+1,z:point.z+1};point.visual.unfreezeWorldMatrix();point.visual.position.x=moved.x;point.visual.position.z=moved.z;point.visual.computeWorldMatrix(true);chest.encounter.onEdited();point.visual.freezeWorldMatrix();assert.equal(point.x,moved.x);assert.equal(point.z,moved.z);assert.equal(point.marker.position.x,moved.x);assert.equal(point.marker.position.z,moved.z);
  f.state.position=moved;f.api.update(1.4);f.click();assert.equal(point.opened,true);assert.ok(f.api.journey.seen.has('point:'+point.id));f.api.releaseMap();assert.equal(listEditableActorHandles(f.world,{encounters:[]}).length,0);
 });

@@ -18,6 +18,10 @@ function fixture(t,{preview=true,ready=true,raw=null,readyTimeoutMs=1000,hero=fa
  t.after(async()=>{await api.dispose();scene.dispose();engine.dispose();});
  return {api,world,camera,state,root,document,window,win,messages,listeners,storage,values,draft,playerNode,send:(command,id,payload={})=>listeners.get('message')?.({source:win.parent,origin:win.location.origin,data:cinematicCommand(command,id,payload)})};
 }
+test('ordinary saved scene reopens at the beginning after a previous seek',async t=>{
+ const f=fixture(t,{preview:false});await f.api.load(f.draft);f.api.player.seek(f.draft.duration);await f.api.load(f.draft);assert.equal(f.api.player.time,0);
+});
+
 test('same-scene game bridge gates readiness, rejects spoofed sources and samples the shared timeline',async t=>{
  const f=fixture(t,{ready:false});assert.equal(f.messages[0].value.ready,false);
  f.listeners.get('message')({source:{},origin:f.win.location.origin,data:cinematicCommand('load','spoof',{document:f.draft})});await settle();assert.equal(f.api.player.state,'idle');

@@ -16,7 +16,8 @@ function peakHeight(angle, peaks) {
   let height=0;
   for (const [center,top,width] of peaks) {
     const distance=Math.abs(Math.atan2(Math.sin(angle-center),Math.cos(angle-center)));
-    height=Math.max(height,top*Math.max(0,1-distance/width)**.85);
+    const t=Math.max(0,1-distance/width);
+    height=Math.max(height,top*t*t*(3-2*t));
   }
   return height;
 }
@@ -85,6 +86,11 @@ export function createMountainBackdrop(scene) {
   }
   ridge(MOUNTAIN_RIDGE_LAYOUT.far.segments,true);
   ridge(MOUNTAIN_RIDGE_LAYOUT.near.segments,false);
+  // Shared corner colors are averaged once at creation. This removes the
+  // conspicuous per-triangle color facets without extra meshes or frame work.
+  const corners=new Map();
+  for(let i=0;i<positions.length;i+=3){const key=positions[i]+','+positions[i+1]+','+positions[i+2];let c=corners.get(key);if(!c){c={r:0,g:0,b:0,n:0};corners.set(key,c);}const j=i/3*4;c.r+=colors[j];c.g+=colors[j+1];c.b+=colors[j+2];c.n++;}
+  for(let i=0;i<positions.length;i+=3){const c=corners.get(positions[i]+','+positions[i+1]+','+positions[i+2]),j=i/3*4;colors[j]=c.r/c.n;colors[j+1]=c.g/c.n;colors[j+2]=c.b/c.n;}
   const mesh = new Mesh('forest-mountain-backdrop',scene);
   const data = new VertexData();
   data.positions=positions;data.colors=colors;data.indices=indices;data.applyToMesh(mesh,false);

@@ -27,7 +27,9 @@ export class WarriorV2Controller {
     this.sprintHeld=false;this.sprinting=false;this.sprintExhausted=false;this.sprintInitialSeconds=null;this.pendingSprint=null;this.staminaSpent=false;
     this.sprintRecord={sprintSeconds:0,idleSeconds:0,allowRestore:false};
     this.motionSpeeds={...V2_MOTION_DEFAULTS};
+    this.walkSpeedFactor=1;this.sprintSpeedFactor=V2_SPRINT_MULTIPLIER;
   }
+  setMovementSpeed({walk=1,sprint=V2_SPRINT_MULTIPLIER}={}){this.walkSpeedFactor=Number.isFinite(walk)?Math.max(.5,Math.min(2,walk)):1;this.sprintSpeedFactor=Number.isFinite(sprint)?Math.max(.5,Math.min(3,sprint)):V2_SPRINT_MULTIPLIER;}
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value)*V2_ATTACK_BASE_RATE;}
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
   playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
@@ -264,7 +266,7 @@ export class WarriorV2Controller {
       else if(this.staminaEnabled&&this.stamina<=1e-8){this.sprintExhausted=true;this.staminaRejectSerial++;}
     }
     if(alive&&!this.action&&!this.pendingSprint&&!spentAtStart&&!this.staminaSpent)this.restoreStamina(Math.max(0,idleDt-recoveredBeforeAttack));
-    const playbackRate=this.playbackRate(this.state)*(this.state==='run'&&idleDt>0?1+(V2_SPRINT_MULTIPLIER-1)*sprintSeconds/idleDt:1);
+    const playbackRate=this.playbackRate(this.state)*(this.state==='run'&&idleDt>0?this.walkSpeedFactor+(this.sprintSpeedFactor-this.walkSpeedFactor)*sprintSeconds/idleDt:1);
     if(!this.action)this.time=(this.time+idleDt*playbackRate*(this.state==='run'?magnitude:1))%this.durations[this.state];
     return {state:this.state,clipTime:this.action?.time??this.time,timeScale:playbackRate,moving:this.state==='run',speed:this.state==='run'?this.runSpeed*magnitude*playbackRate:0,
       loop:!this.action,actionId:this.action?.id??null,actionElapsed:this.action?.elapsed??0,hitStopped,chargeProgress:this.chargeProgress,

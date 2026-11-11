@@ -38,14 +38,24 @@ export function plainsVistaPositions(source){
  return out;
 }
 
+// Move the painted ridge away from the reciprocal plains vista at the village
+// gate. The original positions are cached for the forest and all vertex/index
+// counts remain unchanged. A smooth angular blend avoids an abrupt cut edge.
+export function villageVistaPositions(source){
+ const out=Float32Array.from(source),farVertices=MOUNTAIN_RIDGE_LAYOUT.far.segments*(MOUNTAIN_RIDGE_LAYOUT.far.radii.length-1)*6;
+ for(let i=0;i<source.length;i+=3){const angle=Math.atan2(source[i+2],source[i]),distance=passage(angle,Math.PI/2,.31,.78),radius=Math.hypot(source[i],source[i+2]);if(!distance||radius<1e-6)continue;const displacement=(i/3<farVertices?35:70)*distance;out[i]=source[i]*(1+displacement/radius);out[i+2]=source[i+2]*(1+displacement/radius);}
+ return out;
+}
+
 const states=new WeakMap();
-export function configureOutdoorVista(world,{village=true,plains=false}={}){
+export function configureOutdoorVista(world,{village=true,plains=false,villageNotch=village}={}){
  const mesh=world.mountains;let state=states.get(mesh);
- if(!state){state={base:Float32Array.from(mesh.getVerticesData('position')),plains:null,mode:'base'};states.set(mesh,state);}
- const mode=plains?'plains':'base';
+ if(!state){state={base:Float32Array.from(mesh.getVerticesData('position')),plains:null,village:null,mode:'base'};states.set(mesh,state);}
+ const mode=plains?'plains':villageNotch?'village':'base';
  if(state.mode!==mode){
   if(plains&&!state.plains)state.plains=plainsVistaPositions(state.base);
-  mesh.setVerticesData('position',plains?state.plains:state.base,false);mesh.refreshBoundingInfo();state.mode=mode;
+  if(mode==='village'&&!state.village)state.village=villageVistaPositions(state.base);
+  mesh.setVerticesData('position',plains?state.plains:mode==='village'?state.village:state.base,false);mesh.refreshBoundingInfo();state.mode=mode;
  }
  mesh.unfreezeWorldMatrix();mesh.scaling.set(...(plains?[1,1,1]:village?VILLAGE_MOUNTAIN_SCALE:[1,1,1]));mesh.freezeWorldMatrix();
  const yaw=plains?boundary.yaw:0;

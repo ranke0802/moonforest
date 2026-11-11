@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "items": {
+    "health": {"x":0,"y":0,"scale":1},
+    "gold": {"x":0,"y":0,"scale":1},
+    "quest": {"x":0,"y":0,"scale":1},
+    "tools": {"x":0,"y":0,"scale":1},
+    "map": {"x":0,"y":0,"scale":1},
+    "diagnostics": {"x":0,"y":0,"scale":1},
+    "shield": {"x":0,"y":0,"scale":1},
+    "potion": {"x":0,"y":0,"scale":1},
+    "dodge": {"x":0,"y":0,"scale":1},
+    "attack": {"x":0,"y":0,"scale":1}
+  }
+}

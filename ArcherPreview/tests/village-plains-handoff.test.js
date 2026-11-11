@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
 import {NullEngine,Scene,Vector3} from '@babylonjs/core';
-import {createMapPortal,roadPortalContains,safeRoadArrival,villageTravelLimit} from '../src/map-travel.js';
+import {createMapPortal,roadPortalContains,safeRoadArrival,villageTravelLimit,clampVillageExit,exitRoadX} from '../src/map-travel.js';
 import {mapPortals} from '../src/map-route.js';
 import {captureVillagePlainsHandoff} from '../src/village-plains-handoff.js';
 import {villageToPlains,plainsToVillage} from '../src/village-plains-boundary.js';
@@ -22,6 +22,21 @@ import {monsterForestHeight} from '../src/monster-forest-terrain.js';
 import {createWorld} from '../src/world.js';
 import {VILLAGE_PLACEMENTS} from '../src/village-layout.js';
 import {isVillageBoundaryTree} from '../src/village-plains-boundary.js';
+
+test('village exit corridor edges do not snap the next movement back to the 48 m arena',()=>{
+ const navigation=new VillageNavigation([]),radius=.28;
+ for(const side of [-1,1]){
+  let previous={x:exitRoadX(60)+side*21.99,z:60};
+  for(let i=0;i<5;i++){
+   const target={x:previous.x+side*.3,z:previous.z},moved=navigation.move(previous,target,radius,villageTravelLimit(previous));
+   clampVillageExit(moved,previous);
+   assert.equal(villageTravelLimit(moved),80);
+   assert.ok(Math.hypot(moved.x-previous.x,moved.z-previous.z)<.31);
+   assert.ok(Math.hypot(moved.x,moved.z)>48);
+   previous=moved;
+  }
+ }
+});
 
 test('road arrival does not bounce when stationary or moving sideways, and rearms after leaving the strip',()=>{
  for(const [map,source] of [['village','warrior-plains'],['great-plains','warrior-v3'],['monster-forest','warrior-plains'],['great-plains','warrior-v4']]){

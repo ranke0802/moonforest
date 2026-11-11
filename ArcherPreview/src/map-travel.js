@@ -7,10 +7,14 @@ const exitSamples=sampleGroundCurve(VILLAGE_GROUND_ROUTES[1].points).filter(p=>p
 export function exitRoadX(z){
   let nearest=exitSamples[0];for(const p of exitSamples)if(Math.abs(p[1]-z)<Math.abs(nearest[1]-z))nearest=p;return nearest[0];
 }
-export function villageTravelLimit(position,normal=48){return position.z>43&&Math.abs(position.x-exitRoadX(position.z))<22?80:normal;}
+// The exit clamp deliberately places the player exactly on these edges. Treat
+// the edges as part of the corridor; otherwise the next frame falls back to
+// the 48 m arena and findFree teleports the player back to its circular rim.
+function inVillageExitCorridor(position){return !!position&&position.z>=43-1e-6&&Math.abs(position.x-exitRoadX(position.z))<=22+1e-6;}
+export function villageTravelLimit(position,normal=48){return inVillageExitCorridor(position)?80:normal;}
 export function clampVillageExit(position,previous){
   if(Math.hypot(position.x,position.z)<=48)return position;
-  if((previous?.z>43&&Math.abs(previous.x-exitRoadX(previous.z))<22)||(position.z>43&&Math.abs(position.x-exitRoadX(position.z))<22)){
+  if(inVillageExitCorridor(previous)||inVillageExitCorridor(position)){
     position.z=Math.max(43,Math.min(position.z,78));const x=exitRoadX(position.z);position.x=Math.max(x-22,Math.min(x+22,position.x));
   }else {const d=Math.hypot(position.x,position.z);position.x*=48/d;position.z*=48/d;}
   return position;

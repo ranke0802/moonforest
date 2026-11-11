@@ -4,7 +4,7 @@ import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NullEngine,Scene,Vector3,Ray} from '@babylonjs/core';
 import {createMountainBackdrop} from '../src/mountain-backdrop.js';
-import {configureOutdoorVista,plainsVistaPositions,PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
+import {configureOutdoorVista,plainsVistaPositions,villageVistaPositions,PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
 import {PLAINS_RADIUS} from '../src/great-plains-layout.js';
 import {createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
 import {villageToPlains,VILLAGE_PLAINS_BOUNDARY as boundary} from '../src/village-plains-boundary.js';
@@ -91,14 +91,14 @@ test('plains remap is cached across outdoor roundtrips without changing palette,
   try{
     const world={mountains:mesh};assert.equal(f.indices.length/3,2944);assert.deepEqual(Float32Array.from(plainsVistaPositions(f.base)),Float32Array.from(f.positions));
     for(let cycle=0;cycle<32;cycle++){
-      configureOutdoorVista(world,{village:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),f.base);assert.deepEqual(mesh.scaling.asArray(),[1.9,1.3,1.9]);
+      configureOutdoorVista(world,{village:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),villageVistaPositions(f.base));assert.deepEqual(mesh.scaling.asArray(),[1.9,1.3,1.9]);
       configureOutdoorVista(world,{village:true,plains:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),Float32Array.from(f.positions));
       configureOutdoorVista(world,{village:false});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),f.base);assert.deepEqual(mesh.scaling.asArray(),[1,1,1]);
       configureOutdoorVista(world,{village:true,plains:true});assert.equal(mesh.geometry,geometry);assert.equal(mesh.material,material);assert.deepEqual(Float32Array.from(mesh.getVerticesData('color')),colors);
     }
     assert.deepEqual([f.scene.meshes.length,f.scene.materials.length,f.scene.geometries.length,f.scene.textures.length],counts);assert.equal(f.scene.onBeforeRenderObservable.observers.length+f.scene.onAfterRenderObservable.observers.length,observers);
     assert.equal(material.unlit,true);assert.equal(mesh.checkCollisions,false);assert.equal(mesh.receiveShadows,false);assert.equal(mesh.isPickable,false);assert.equal(mesh.applyFog,false);
-    facts.push({case:'static-resource-and-roundtrip-invariants',triangles:2944,roundTrips:32,resources:counts,newTextures:0,newLights:0,newShadowPasses:0,newFrameObservers:0,unchangedNativeMountainPalette:true,villageAndForestBaseRestoredExactly:true});
+    facts.push({case:'static-resource-and-roundtrip-invariants',triangles:2944,roundTrips:32,resources:counts,newTextures:0,newLights:0,newShadowPasses:0,newFrameObservers:0,unchangedNativeMountainPalette:true,forestBaseRestoredExactly:true,villageGateVistaAdjusted:true});
   }finally{f.dispose();}
 });
 

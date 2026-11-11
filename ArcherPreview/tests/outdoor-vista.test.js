@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {NullEngine,Scene,Vector3,ArcRotateCamera,DirectionalLight,HemisphericLight,ShadowGenerator} from '@babylonjs/core';
 import {createMountainBackdrop} from '../src/mountain-backdrop.js';
-import {configureOutdoorVista,plainsVistaPositions,PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
+import {configureOutdoorVista,plainsVistaPositions,villageVistaPositions,PLAINS_VISTA_FAR} from '../src/outdoor-vista.js';
 import {VILLAGE_PLAINS_BOUNDARY as boundary} from '../src/village-plains-boundary.js';
 import {SceneLighting} from '../src/scene-lighting.js';
 
@@ -17,7 +17,7 @@ function nearestRadius(poly){
 test('plains vista starts outside the playable envelope and preserves the native palette and camera limits',()=>{
  const engine=new NullEngine(),scene=new Scene(engine),mesh=createMountainBackdrop(scene);
  try{
- const base=Float32Array.from(mesh.getVerticesData('position')),colors=Float32Array.from(mesh.getVerticesData('color')),indices=Array.from(mesh.getIndices()),positions=plainsVistaPositions(base);
+ const base=Float32Array.from(mesh.getVerticesData('position')),colors=Float32Array.from(mesh.getVerticesData('color')),indices=Array.from(mesh.getIndices()),positions=plainsVistaPositions(base),villagePositions=villageVistaPositions(base);
  let minAboveFloorRadius=Infinity,maxDistance=0;
  for(let i=0;i<positions.length;i+=3){
   assert.ok(Number.isFinite(positions[i]+positions[i+1]+positions[i+2]));
@@ -27,7 +27,8 @@ test('plains vista starts outside the playable envelope and preserves the native
  assert.ok(minAboveFloorRadius>106.29,'mountain enters the playable body envelope');assert.ok(maxDistance+106+82<PLAINS_VISTA_FAR,'peak could be clipped from legal play/camera positions');assert.equal(indices.length/3,2944);
  const world={mountains:mesh};configureOutdoorVista(world,{village:true,plains:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('color')),colors);assert.deepEqual(Array.from(mesh.getIndices()),indices);
  const geometry=mesh.geometry,material=mesh.material,counts=[scene.meshes.length,scene.materials.length,scene.geometries.length,scene.textures.length];
- for(let n=0;n<24;n++){configureOutdoorVista(world,{village:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),base);assert.deepEqual(mesh.scaling.asArray(),[1.9,1.3,1.9]);configureOutdoorVista(world,{village:true,plains:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),positions);assert.equal(mesh.geometry,geometry);assert.equal(mesh.material,material);assert.deepEqual([scene.meshes.length,scene.materials.length,scene.geometries.length,scene.textures.length],counts);}
+ for(let i=0;i<villagePositions.length;i+=3){const angle=Math.atan2(villagePositions[i+2],villagePositions[i]);if(Math.abs(angle-Math.PI/2)<.30&&villagePositions[i+1]>.12)assert.ok(Math.hypot(villagePositions[i],villagePositions[i+2])*1.9>180);}
+ for(let n=0;n<24;n++){configureOutdoorVista(world,{village:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),villagePositions);assert.deepEqual(mesh.scaling.asArray(),[1.9,1.3,1.9]);configureOutdoorVista(world,{village:true,plains:true});assert.deepEqual(Float32Array.from(mesh.getVerticesData('position')),positions);assert.equal(mesh.geometry,geometry);assert.equal(mesh.material,material);assert.deepEqual([scene.meshes.length,scene.materials.length,scene.geometries.length,scene.textures.length],counts);}
  const result={triangles:indices.length/3,minAboveFloorRadius,maxVertexRadius:maxDistance,legalCameraAndPlayerMargin:188,cameraFar:PLAINS_VISTA_FAR,roundTrips:24,stableResources:counts,extraLights:0,extraShadowPasses:0,extraTextures:0,cachedPositionBytes:base.byteLength+positions.byteLength,scope:'Actual SDK geometry/scene lifetime and resource invariants; not a mobile GPU or gameplay screenshot measurement.'};
  mkdirSync(folder,{recursive:true});writeFileSync(new URL('outdoor-vista-resources.json',folder),JSON.stringify(result,null,2));
  }finally{scene.dispose();engine.dispose();}
