@@ -1,0 +1,801 @@
+{
+  "generatedAt": "2026-11-11T11:34:17.967Z",
+  "baseline": "5ddc41e23c4315dc5d13ecf33e2678a0a9886ae9",
+  "scope": "Static dependency and fixture parity for the model-regression tests that repeatedly timed out; this is not a separate baseline test execution.",
+  "modelTestFiles": [
+    "ArcherPreview/tests/elena-hurt-volumes.test.js",
+    "ArcherPreview/tests/elena-mourning-movement.test.js"
+  ],
+  "dependencyFiles": [
+    {
+      "path": "ArcherPreview/tests/elena-hurt-volumes.test.js",
+      "bytes": 18632,
+      "sha256": "a6ee9a9c15bf195b9edaf0f68d20b3d0e3473d463076b8dd77c37809d19472fa",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/tests/helpers/read-runtime-gltf.js",
+      "bytes": 362,
+      "sha256": "c4954e04d75a7b2edf6c280520a84522536e94ec17cd239ebf07333a157d627f",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/scripts/meshopt-lossless.js",
+      "bytes": 5060,
+      "sha256": "7753a973da8f832c2a82045b4f14cd8c4bbf7afc962779a09e13c43dad18e35b",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/scripts/resource-pack.js",
+      "bytes": 4357,
+      "sha256": "95cd64d840357cdb9d296f09fd41218c1dc727fbd7472ed711df30cc37628c76",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-models.js",
+      "bytes": 4788,
+      "sha256": "aaf724f3944caede8730c5bd14d50e518ceac5cb3844374cb3800a2e71a17cd7",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-gpu-preparation.js",
+      "bytes": 3505,
+      "sha256": "e96fcc3d875fe400df29df47165df6303edcd10c23bfe78b05352aaaf65354ce",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-container.js",
+      "bytes": 6844,
+      "sha256": "bfeb18aa1e15e691c3ad275a54765e2086f3b7cf7e9008f9502b7a1e485bb3fe",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-decode-cache.js",
+      "bytes": 7055,
+      "sha256": "733bdf6b7ca04633ca8f3293d97dae9170c0cb8bcacfdaf870bd026718533add",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-load-lifetime.js",
+      "bytes": 4299,
+      "sha256": "6ef368b6cf6a51f6107f067886495ce36fe87fad976c4d7c480ab2e34ea9dbc7",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/runtime-timers.js",
+      "bytes": 565,
+      "sha256": "9f1cee06da955743237ef1707d7cf6da08ecd427e9655bf83a74b23f47922013",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-texture-lifetime.js",
+      "bytes": 3168,
+      "sha256": "611dfefc52aa2be0930470ee02cbe0ff6b7f5c9b5a87d446c8444ce244e9de99",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-death-depth.js",
+      "bytes": 2645,
+      "sha256": "a94f21996c1bfff864ef726cf85eefa6623ac2436331b6f3d389a6eeaf6fe5cc",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-death-depth-data.js",
+      "bytes": 72242,
+      "sha256": "5c65715b12d9e2b24d136c3c57b3ece73a298ad05c2cf4d298c863a3c14bb26a",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-manifests.js",
+      "bytes": 1164,
+      "sha256": "ce794e70528ee010f19b6c2d427f661f638050f194078072a7534e4b207e03de",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-elena-encounter.js",
+      "bytes": 8967,
+      "sha256": "2776a3d4c5503d7ed822e3e413e6508715c771f8c6a46cfa37d32135b022f832",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-encounter.js",
+      "bytes": 16019,
+      "sha256": "1cb3d94ec267889799fb2e9cbeffc8d9eea41bd9dbb9e0090693c481515ccd47",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-encounter.js",
+      "bytes": 36686,
+      "sha256": "1e23fb45a6a5bd53c59ab077ab35dc22f28222590c81144313b6da0bea6f41a5",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/animation.js",
+      "bytes": 10524,
+      "sha256": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-outlines.js",
+      "bytes": 11154,
+      "sha256": "c1f18086cccd198db4e31a13552c8556afca3b9abd1c7d5be271db28ea1f9014",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-fog-cover.js",
+      "bytes": 5265,
+      "sha256": "66ac748847c6a83b0667ece3140fd98fbfd5a9854bdb2245f51f7fd9109b77e0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-rock-shell.js",
+      "bytes": 4480,
+      "sha256": "603241a57a40a26b3066581f24fe03c95d40c3a792d8d094c44b3162b1895920",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-fog-binding.js",
+      "bytes": 1761,
+      "sha256": "e7c954909020086d5c3d2becacbe79da5029a4232f03920b81c69f9048ec1c68",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-rock-palette.js",
+      "bytes": 1902,
+      "sha256": "c6b8f32e8302c56763b546ccc05013e09238eaee7fc23cb1a0a6b79b58fa9d9d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-laboratory-geometry.js",
+      "bytes": 5902,
+      "sha256": "9cf944f8946a2e0b12f9e7d1e333709561d373f1f4d5bdac64cca2908705a5ad",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-visibility.js",
+      "bytes": 1826,
+      "sha256": "0f1b62579272783e3820b86e97b797b03337e20dd4ce5c7dfd35427169dabf3a",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-style.js",
+      "bytes": 6039,
+      "sha256": "e7b2065bf43e21d3e8cceacb064629835c194c624a6fa47bca146d0b2bee701a",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-style-settings.js",
+      "bytes": 6555,
+      "sha256": "069f73101fcaab681a5d9ccf63c990a94a4ffa4f31c0b132426d4d5c3569878f",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-ink-stencil.js",
+      "bytes": 901,
+      "sha256": "0dae2e0ee694bfada658ab65bc49aaf1c89bfe9681d938418b68a1ac09e3a916",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-render-cost.js",
+      "bytes": 3884,
+      "sha256": "a62318d07b6b46ac93edd4b42a2f9c91c1e97106748f6533f475a6e386ed3b40",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-preparation.js",
+      "bytes": 4750,
+      "sha256": "590899c50ea8a24ef9dbf45d959db14b29e7f589406cab727e47877aa391d6f6",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-camera-culling.js",
+      "bytes": 9055,
+      "sha256": "694085e0af3402f0583cd5c5a6a6a657732545dae2537f65ac83c519428007fc",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/monster-toon.js",
+      "bytes": 2009,
+      "sha256": "97323f012a4abbcb8c3320d34f9d9b8018d6ad0ec30f47391ceb373ac0c932fc",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-style.js",
+      "bytes": 3831,
+      "sha256": "efd8ba1c765b0a39ae6597540c98582d6498d8ba71c18afa9c819054e211e447",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/hit-feedback.js",
+      "bytes": 2417,
+      "sha256": "6eae7014b50f81a11fbbdb38b0257456183fb0d82ac99dce4686293fd2647e34",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-elena-look.js",
+      "bytes": 6967,
+      "sha256": "d5f9bd42e419cfc12d8bb3a2f4d987abe43827d2f259e4f0a454a5c85a3f14b8",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-interior-ink.js",
+      "bytes": 11652,
+      "sha256": "6641a9022423415e0f8b048d65299f6897bedc03d8992d7e7ed0f8c1767d0d38",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/character-ink-shaders.js",
+      "bytes": 5335,
+      "sha256": "5d5b4ce95b312ccb5a2bb487ff9c80c701fb5daf47436e4195b02113f78ad3a0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-hair-guides.js",
+      "bytes": 3007,
+      "sha256": "d3143b9e7bdafddf18386ecbb76936f18da0529de3bfb370f5c884cd304b48d9",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-spec.js",
+      "bytes": 9098,
+      "sha256": "7e4f18547971baa0c46245fc46e60d072a91f0f826ec176a98b0fd613479064e",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/melee-collision.js",
+      "bytes": 4739,
+      "sha256": "b97acb0e5ff4c820423e6bca8631d49685a77902074e3f1fdb3b8339a43075f5",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/player-strikes.js",
+      "bytes": 4141,
+      "sha256": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/equipment-stats.js",
+      "bytes": 1188,
+      "sha256": "309e7e7a28834369d01c3714bfcef0bc23c7ef5dd78ec5e25e828d6a5093694d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/player-dimensions.js",
+      "bytes": 1522,
+      "sha256": "f4a8545e46490575c15600a6de04532e34cd9d1782faef1e976d10df493cc37f",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/player-strike-timings.js",
+      "bytes": 108,
+      "sha256": "34b67f719fc4218b8340c94e3739024463c670f2c209bdbc18a6edbff94d8e9b",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/combat-damage.js",
+      "bytes": 789,
+      "sha256": "8a48b6b851451a7d7175f9e615560d082a1f692e39a3f8f37d525a9962bf9cba",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-grab.js",
+      "bytes": 6284,
+      "sha256": "0a0bff1a548aa150a94919bf7f6a54fdb194509cc568c2a9776d48f01228db81",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/world-limits.js",
+      "bytes": 1246,
+      "sha256": "5e076320ae10f10d7b5ceec13b0a0cc86c0da051e5bf4533abdb740a31cbc2f2",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-layout.js",
+      "bytes": 16924,
+      "sha256": "26424fa0c3386bafa67bffd86072d6aa204d161fd87587cf81f1d1fde2e934f7",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-collision.js",
+      "bytes": 3424,
+      "sha256": "4001a0c507e4a5aed37b6d6f5e76e4ace91c8504c997cdbf63501512fff72f87",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/scenery-collision-policy.js",
+      "bytes": 436,
+      "sha256": "408c18272f1f99c6b2d44ab788b5ea6156473e97e723619445158a97fe4ee13e",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/map-route.js",
+      "bytes": 3807,
+      "sha256": "df5169cc034b40ed9b52ef9c566a9e4eeab12aa9f3c4b7eeae47d8a173c27e92",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/great-plains-layout.js",
+      "bytes": 23401,
+      "sha256": "5fb89c25c28a6c501086d92cba938db9d4f9ef43b5b712db260f342681cfdf47",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-ground-layout.js",
+      "bytes": 1650,
+      "sha256": "776d37c4ecac64973adfb32a39aa020cd0bba45134eaeb3b1ac2bc275e8682e1",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-terrain.js",
+      "bytes": 1591,
+      "sha256": "78a120c01636191acb7f5f3ec2a030f890ca1d847e07b62667de0b2923b241e2",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/terrain.js",
+      "bytes": 2026,
+      "sha256": "c8191372185d43c8898a2e4ee5466fd69fe620117662b35fd3fef9b240b3a7d0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-plains-boundary.js",
+      "bytes": 1498,
+      "sha256": "f47ffd0c22fb655c001dcd2ecc3634c9ad2988ccf66841a7b48dc07a3146d508",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/plains-forest-edge.js",
+      "bytes": 2640,
+      "sha256": "beb70f8189fe740aef174d82a1ef3412f62c08a53f5f620690f1524c588ef99a",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/monster-forest-layout.js",
+      "bytes": 4064,
+      "sha256": "9d56908db03a7db9d816a764a9e59e0786644af17d9abd3c5925b9897d90c3f0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/monster-forest-terrain.js",
+      "bytes": 896,
+      "sha256": "ffbae162f6991357be397592438dcd9e68b88f013337974382114d858e7df201",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/plains-forest-boundary.js",
+      "bytes": 966,
+      "sha256": "a98c67e47ad02bf33a93fc56d4c6834babbbe47e4c30f6c99d0ea65aa147ce0c",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/plains-tree-transition.js",
+      "bytes": 2729,
+      "sha256": "7e1a4192e187fb5917ecade92d14bc9967f67f47d532d500fafec0e1cdea8367",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/player-combat.js",
+      "bytes": 1486,
+      "sha256": "4180162daef7aaa24ff0104ab12eee5c8253b06118a8b8ba2b8e0c6e7eb9f2cf",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/healing-potion.js",
+      "bytes": 1017,
+      "sha256": "827a6d3ff898e3823b184d1ea626b90b7cf63b0f044874279d3e1ed56da95873",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/passive-health-regen.js",
+      "bytes": 855,
+      "sha256": "c248ed68bf1b4f8fb6e577aab87b6d0b7fcd54ff6d04ff171f7024a891a250f0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/pose-matrices.js",
+      "bytes": 1007,
+      "sha256": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/enemy-collision.js",
+      "bytes": 693,
+      "sha256": "ef52063446a47a19178fc4a6311cebd42575989be67e166d7facb866c7e3713d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/enemy-death.js",
+      "bytes": 2378,
+      "sha256": "909ef3865866b4e76fc8c05440ada6c5b40c399050831bcb7ec01cbf34970b2d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/terrain-mesh.js",
+      "bytes": 3168,
+      "sha256": "e05f74a69657c296a00fde8dde1153b2cbc72661c93027fa1919dac7e73083b5",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-laboratory-terrain.js",
+      "bytes": 1828,
+      "sha256": "0de342b65180dedef5ce29fca06125749bfddd5c35f7096edbd26980ba6b58ef",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-laboratory-terrain-data.js",
+      "bytes": 10985,
+      "sha256": "df66cf701b19ff42c494ca329d91a10afa947a9ec3e0ce8ab8be40de05671516",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-shader-warmup.js",
+      "bytes": 4501,
+      "sha256": "533f9e25e870586c2cfe90ae590869055d16da165e79f7fee0936c2f216e7909",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/overlay-readiness.js",
+      "bytes": 859,
+      "sha256": "1a6ed152e64740211903a472e413415446247f8b19ad266d52f6163b692c6aed",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-spec.js",
+      "bytes": 10093,
+      "sha256": "2517dd7806b9340cea856ea661c8f64d295da83f9e5e69bdd955206bb0582d0f",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-ground-magic.js",
+      "bytes": 14474,
+      "sha256": "03009999e0f8e8309e15f4a445ff482972771fbe27fa4f3819695e01f0cfa371",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-ground-surface.js",
+      "bytes": 9329,
+      "sha256": "d5cb4e37c1847808ef360a6e379c77b64949de424c5d6eefbcfc855fc43f8f0d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-reposition.js",
+      "bytes": 4925,
+      "sha256": "7dbad7031fcae84496adb7c7e04518b7556803f2b2d43028d613d2c326971ef7",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-locomotion.js",
+      "bytes": 5710,
+      "sha256": "17f66ff94258861065f979f49d926a15a4e0e94282e8acf3acc97c28740d13d7",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/elena-charge.js",
+      "bytes": 1103,
+      "sha256": "dcdaac8dd85727f246180bb7ab743ceb6b0decf50ad0c6aaf97184dea64ba9e8",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-elena-animation.js",
+      "bytes": 21487,
+      "sha256": "8f017dd1e074bc2af464709ff725048bd4daafa633de5a5de1f3fcdcd2f52bd0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-motion-v2.js",
+      "bytes": 1518,
+      "sha256": "ae56ce2828ccefcc58a74c26130259c7f5ee5112613925f66f447471dc2ec6b3",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-death-knee.js",
+      "bytes": 1131,
+      "sha256": "6dd62899a9ba7275dd6a24973463ca576029073f3669f865dae74d268fbf3079",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-death-knee-data.js",
+      "bytes": 37222,
+      "sha256": "01dfd5e6f4405f42c00f7440e48d4873f285ac86243a476f587986209795f54b",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-elena-hurt.js",
+      "bytes": 4619,
+      "sha256": "3b97555ab66abf1a6ab00f56fa1bcf99b57f3198f93bfe58606332d0485a9bc5",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-cave-navigation.js",
+      "bytes": 5448,
+      "sha256": "05e16ef92b47ca949690d7e6fe57075bfaf7d9e08602b590941086a1612309fb",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-navigation.js",
+      "bytes": 2055,
+      "sha256": "6f73a911c84544e2e9ed182b07f5e48de49d16818db197ddc5591b126d008976",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/village-navigation.js",
+      "bytes": 9942,
+      "sha256": "6ee214bff008d46a632ab6e5dff13a0e135870bdfaf745bb47cb35176d410f9b",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/navigation.js",
+      "bytes": 6066,
+      "sha256": "c26667f1a267587c19e265866671af9fd49df0ec41f69515eef55f2340440cf2",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/navigation-segment-cells.js",
+      "bytes": 1452,
+      "sha256": "f0df40a977a1b87092f0137ded180a856da73dfeac7effc25eeb40a968a7aa67",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-terrain.js",
+      "bytes": 4444,
+      "sha256": "5f2f9731718fbcc71b31799d3b96fac4a11bb798dcd42e59eb003a0026335a8b",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-layout.js",
+      "bytes": 18119,
+      "sha256": "8927040f722380b73050b6d3d31399dadb441e947d33893e975f84fdb0bcb26a",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-lantern-mounts.js",
+      "bytes": 12622,
+      "sha256": "1cb370fd928e283986964ecade982913740c02cdfaad374dffd5607e4c9fa7d8",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-natural-dressing-data.js",
+      "bytes": 15818,
+      "sha256": "ac584fa3312bb97434ecffa0b4ee37d8a42f6153d8c541e644022e59e2978f86",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-collision.js",
+      "bytes": 1473,
+      "sha256": "7349b8f701d904375bfd39551528bae1ac7fa9cb0db79bbf85b4e537ce6a18cd",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/witch-cave-collision-data.js",
+      "bytes": 3820,
+      "sha256": "eedefdf44a6b4d551a69e23692a4a01f820d5882f66a0f2a0752bd4bbfb5b28e",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-laboratory-collision.js",
+      "bytes": 2171,
+      "sha256": "b85777d8a33dbc505931d9f69c6b2e29948f731eaef6aa729ebd6602bd809465",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/cave-laboratory-collision-data.js",
+      "bytes": 140098,
+      "sha256": "ac5bae22beaba366de7e7f21ead8833ad7876b5b8a8ae842263cb5c2440e861d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-cave-clearance.js",
+      "bytes": 1934,
+      "sha256": "36275a86bfb8a4215f245f7b87176ed8b48a4fe4d9766cbab12cf9f96d0dcc7c",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-cave-clearance-data.js",
+      "bytes": 6109,
+      "sha256": "7349ab1e10405a6358a2a46e1646c8a61c4486d1ee3bf4c96d866220a2a6a6c0",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/mourning-slam.js",
+      "bytes": 2525,
+      "sha256": "90a1532fdb93ca1a477c7b24856295e74f428b98a8e70062c5e23fc79b987d08",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/tests/elena-mourning-movement.test.js",
+      "bytes": 14331,
+      "sha256": "ebd3f6e41d2f7e75355342a8fa7fd49c79cd95d9376d47f80d07510aef2d1681",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/boss-battle.js",
+      "bytes": 32788,
+      "sha256": "bf913aef7b115d102121794b797a9bd50a017ef50401cd0f38deba2fe01dc9e2",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/goblin-encounter.js",
+      "bytes": 1219,
+      "sha256": "9eac9379e462e76886d01e111097880046d382b47b921f92d7ddbc4255fdac9d",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/goblin-spec.js",
+      "bytes": 5340,
+      "sha256": "3b11db6d14547f130b310b8e1b0fd27b5b1292067706107de6dbfc83c2c7bb03",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/src/summon-limits.js",
+      "bytes": 347,
+      "sha256": "1e478a5994541ed8b894f57b7c45c1b0c4b4f314644d6f027ac2e40546078934",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/mourning-elena.json",
+      "bytes": 56709,
+      "sha256": "9c9cc489cb2cd4c937360ea8491f3064682fdcc9dbab064fae20872a21a6f35e",
+      "baselineExists": true,
+      "identicalToBaseline": true
+    }
+  ],
+  "fixtureResources": [
+    {
+      "path": "ArcherPreview/public/assets/content/5630d193b2dffc993cb3216c8f0c2483b996a72774b74d634f637376db2407ff.gltf",
+      "bytes": 1124105,
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/e1f363e87344cf26f53f6a8b6ae448b9a70b810798c259b632c9a46ad2146793.bin",
+      "bytes": 4298014,
+      "baselineExists": true,
+      "identicalToBaseline": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/content/b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9.ktx2",
+      "bytes": 2120278,
+      "baselineExists": true,
+      "identicalToBaseline": true
+    }
+  ],
+  "allDependenciesIdentical": true,
+  "allFixtureResourcesIdentical": true,
+  "importsMobileStudio": false,
+  "observedFailures": [
+    "✖ actual two-phase models keep floor warning, one damage release and source pose aligned at .5x/1x/2x, 30/60 fps (50724.6363ms)\r",
+    "✖ saved settings and duplicate sequence progress survive other boss edits, map hide/return, pooled summon and restart (47385.5834ms)\r",
+    "✖ actual hidden Elena preparation coalesces artificial scheduling waits without changing prepared geometry or visibility (50173.5088ms)\r",
+    "✖ retired Elena phases submit no meshes, skeletons or shadow candidates during two minutes after defeat; warm map return restores living shadows (47866.2585ms)\r",
+    "✖ actual main portal callbacks and death dialog restart retain followMotion=false across repeated trips (1452.451ms)\r",
+    "✖ actual main portal callbacks and death dialog restart retain followMotion=true across repeated trips (882.4086ms)\r",
+    "✖ manual retry after a model timeout keeps the already-carried camera and player pose instead of rotating twice (89.9207ms)\r",
+    "✖ actual main forest/cave round trips use source direction and keep rear view, health, equipment and fullscreen (43.4661ms)\r",
+    "✖ direct cave review remains available, but leaving it disables staging before ordinary return (16.4139ms)\r",
+    "✖ actual main disconnected map selection does not apply a fabricated portal half turn (22.8656ms)\r",
+    "✖ actual main road handoff preserves transformed position and pose across retries and repeated round trips (19.0252ms)\r",
+    "✖ real road portal activation invokes the production main callback and transfers the captured position (17.7604ms)\r",
+    "✖ actual forest road trigger uses main handoff and retry preserves exact pose without a second rotation (46.1604ms)\r",
+    "✖ actual minimap sanctuary from another map uses normal cave transition once and consumes the waypoint (15.1891ms)\r",
+    "✖ phase-two sampling, morphs and cloth retain their existing cadence while hidden (2146.5768ms)\r",
+    "✖ the unchanged packed body scales from 2.7 to 4.5 metres without accumulating across summons (46313.3206ms)\r",
+    "✖ all asymmetric limbs follow actual skinned walk/cast surfaces from front, side and rear (46049.5603ms)\r",
+    "✖ r9 idle, explicit hit and interrupted-cast hit keep skin contacts through the complete clips (45339.7774ms)\r",
+    "✖ real side/rear blade contacts damage once per swing through the encounter route (45411.7517ms)\r",
+    "✖ empty spaces between planted limbs and outside the head remain unhittable (45251.057ms)\r",
+    "✖ front, side and back torso skin remains vulnerable while the actor rotates (45205.7338ms)\r",
+    "✖ hurt volumes reuse endpoint arrays through pose changes, relocation and a pooled reset (45192.6912ms)\r",
+    "✖ actual rig walks, skitters and charges with only the warned slam advance during casts (46771.7696ms)\r",
+    "✖ charge shows a full locked 0.9 second ground warning and follows the old target after a dodge (46343.7977ms)\r",
+    "✖ actual charge applies one contact, supports dodge, blocks and walls, and a new charge may hit again (45475.0622ms)\r",
+    "✖ a newly blocked charge during warning recovers at 30fps without stale warning or inherited cast time (45586.3685ms)\r",
+    "✖ a newly blocked charge during travel recovers at 30fps without stale warning or inherited cast time (45446.2537ms)\r",
+    "✖ a newly blocked charge during warning recovers at 60fps without stale warning or inherited cast time (45294.9291ms)\r",
+    "✖ a newly blocked charge during travel recovers at 60fps without stale warning or inherited cast time (45368.2649ms)\r"
+  ],
+  "inference": "Repeated model failures occur in unchanged test/code/fixture dependencies which do not import the modified studio UI. Do not describe the whole regression suite as passing."
+}

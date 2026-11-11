@@ -1,7 +1,7 @@
 {
   "version": 2,
   "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
-  "bytes": 704413594,
+  "bytes": 704439681,
   "files": [
     {
       "path": "app.webmanifest",
@@ -1764,14 +1764,14 @@
       "sha256": "d7f55c1e2232a0c27f215bd9046952cd8c05e58691f91371159d749ef98f4a62"
     },
     {
-      "path": "assets/cinematicStudio-Bf-16Jw_.css",
-      "bytes": 13530,
-      "sha256": "071bb30ffc9bc1fcf9e85aea2b3b08a79a2cf734ddf350bc0596edb35ad83feb"
+      "path": "assets/cinematicStudio-BUkTtiQ8.js",
+      "bytes": 107654,
+      "sha256": "c05fded0d171f08d000b3c8b54dc8ee3e13f268b337e2a72714d4a0d3e1d0e9e"
     },
     {
-      "path": "assets/cinematicStudio-DN1-SZ9e.js",
-      "bytes": 95934,
-      "sha256": "c90ba9985a95cbad88f2b56a0bf086929d745a799f4b344fa0cf04b5c449c13b"
+      "path": "assets/cinematicStudio-CTxsEPFv.css",
+      "bytes": 26800,
+      "sha256": "f8d1cdb5dad72a6118882eafadab14378ffb2eb7d14f77825981cc05c44724ef"
     },
     {
       "path": "assets/circleOfConfusion.fragment-61wgC-BV.js",
@@ -10185,8 +10185,8 @@
     },
     {
       "path": "cinematic-studio.html",
-      "bytes": 2101,
-      "sha256": "a11630a6d8ca28c5d84c86b1384074fdd9e3edd75da49a8db3f073ae84f47cde"
+      "bytes": 2120,
+      "sha256": "6a570e9b64e4c736890a504383dd2ffd71dd94ea995601dd7d98fd2fbc5ef1d1"
     },
     {
       "path": "index.html",
@@ -10205,8 +10205,8 @@
     },
     {
       "path": "moonforest-help.html",
-      "bytes": 17641,
-      "sha256": "1dc38593ae13af666e0297a6922507a326ff76b92e319264af172ec02b02ea1d"
+      "bytes": 18719,
+      "sha256": "be98e454152d2858eae5ec43a4279a32688f556d8a6687ccb12dc7e8705e0e0b"
     },
     {
       "path": "NOTICE.txt",

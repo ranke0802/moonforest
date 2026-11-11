@@ -1,0 +1,19 @@
+{
+  "baselineFiles": 2044,
+  "files": 2044,
+  "changes": [
+    "cinematic-studio.html",
+    "moonforest-help.html"
+  ],
+  "added": [
+    "assets/cinematicStudio-BUkTtiQ8.js",
+    "assets/cinematicStudio-CTxsEPFv.css"
+  ],
+  "removed": [
+    "assets/cinematicStudio-Bf-16Jw_.css",
+    "assets/cinematicStudio-DN1-SZ9e.js"
+  ],
+  "gameIndexExact": true,
+  "resourceRevisionBefore": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+  "resourceRevisionAfter": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7"
+}

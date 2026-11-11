@@ -1,0 +1,17 @@
+{
+  "exitCode": 1,
+  "passed": false,
+  "tests": 2316,
+  "pass": 2261,
+  "fail": 55,
+  "skipped": 0,
+  "scope": "Whole current npm test; do not describe as passing.",
+  "log": "regression.log",
+  "modelBaselineProof": "regression-baseline-proof.json",
+  "finalCinematic": {
+    "tests": 210,
+    "pass": 210,
+    "fail": 0,
+    "log": "cinematic-final.log"
+  }
+}

@@ -1,0 +1,657 @@
+{
+  "generatedAt": "2026-11-11T11:40:08.749Z",
+  "scope": "Independent read-only failure triage; no tests rerun or implementation edits.",
+  "baseline": "5ddc41e23c4315dc5d13ecf33e2678a0a9886ae9",
+  "whole": {
+    "tests": 2316,
+    "passed": 2261,
+    "failed": 55,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "wholePassed": false,
+  "failedFiles": 13,
+  "changedStudioFailureDetected": false,
+  "groups": [
+    {
+      "file": "tests/boss-pattern-integration.test.js",
+      "cases": [
+        {
+          "line": 67,
+          "name": "actual two-phase models keep floor warning, one damage release and source pose aligned at .5x/1x/2x, 30/60 fps",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 102,
+          "name": "saved settings and duplicate sequence progress survive other boss edits, map hide/return, pooled summon and restart",
+          "reason": "TypeError [Error]: Cannot read properties of undefined (reading 'cast')"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/boss-pattern-integration.test.js",
+        "baselineExists": true,
+        "bytes": 12226,
+        "sha256": "a4fcd1f540b113de217839351523f881e38141bce5c293ae9facb04d6dbbae44",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "002805373a6a358835a18af7591739387b266ce398e48f06ed16b00cb4b30533",
+        "baselineNormalizedSha256": "002805373a6a358835a18af7591739387b266ce398e48f06ed16b00cb4b30533"
+      }
+    },
+    {
+      "file": "tests/boss-preparation-budget.test.js",
+      "cases": [
+        {
+          "line": 29,
+          "name": "actual hidden Elena preparation coalesces artificial scheduling waits without changing prepared geometry or visibility",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/boss-preparation-budget.test.js",
+        "baselineExists": true,
+        "bytes": 11002,
+        "sha256": "46e63f4bc87157977a57d1d133748338730e134f3e3b63412d246bbc3be64033",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "329ec57fc649bdeeed0d80aa72c1c33c4123bbcdfaecda922fc2428b8576cf4f",
+        "baselineNormalizedSha256": "329ec57fc649bdeeed0d80aa72c1c33c4123bbcdfaecda922fc2428b8576cf4f"
+      }
+    },
+    {
+      "file": "tests/boss-retired-work.test.js",
+      "cases": [
+        {
+          "line": 16,
+          "name": "retired Elena phases submit no meshes, skeletons or shadow candidates during two minutes after defeat; warm map return restores living shadows",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/boss-retired-work.test.js",
+        "baselineExists": true,
+        "bytes": 6731,
+        "sha256": "840b8295d7cf462647cfd2e1f89854b08f7401f12d466310df6198d22419dd15",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "425e3a9eb59afc1ec64b2bc75a8ca37a019b255fabedcb4637200e9abe6fb1f5",
+        "baselineNormalizedSha256": "425e3a9eb59afc1ec64b2bc75a8ca37a019b255fabedcb4637200e9abe6fb1f5"
+      }
+    },
+    {
+      "file": "tests/camera-follow-lifecycle.test.js",
+      "cases": [
+        {
+          "line": 102,
+          "name": "actual main portal callbacks and death dialog restart retain followMotion=false across repeated trips",
+          "reason": "TypeError [Error]: loadDiagnostics.snapshot is not a function"
+        },
+        {
+          "line": 102,
+          "name": "actual main portal callbacks and death dialog restart retain followMotion=true across repeated trips",
+          "reason": "TypeError [Error]: loadDiagnostics.snapshot is not a function"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/camera-follow-lifecycle.test.js",
+        "baselineExists": true,
+        "bytes": 14568,
+        "sha256": "4900df057c57a274ea3238fbc1c0ad8ed0e279dfa251b8f0db5c7b732975327c",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "c983f98e9cce0b8d9c3b2d432b5f0df060f6801d826c440bf9901979b15b1435",
+        "baselineNormalizedSha256": "c983f98e9cce0b8d9c3b2d432b5f0df060f6801d826c440bf9901979b15b1435"
+      }
+    },
+    {
+      "file": "tests/cave-portal-facing.test.js",
+      "cases": [
+        {
+          "line": 118,
+          "name": "manual retry after a model timeout keeps the already-carried camera and player pose instead of rotating twice",
+          "reason": "AssertionError [ERR_ASSERTION]: 0 != -0.7853981633974483"
+        },
+        {
+          "line": 129,
+          "name": "actual main forest/cave round trips use source direction and keep rear view, health, equipment and fullscreen",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 149,
+          "name": "direct cave review remains available, but leaving it disables staging before ordinary return",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 158,
+          "name": "actual main disconnected map selection does not apply a fabricated portal half turn",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 164,
+          "name": "actual main road handoff preserves transformed position and pose across retries and repeated round trips",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 175,
+          "name": "real road portal activation invokes the production main callback and transfers the captured position",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 184,
+          "name": "actual forest road trigger uses main handoff and retry preserves exact pose without a second rotation",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        },
+        {
+          "line": 207,
+          "name": "actual minimap sanctuary from another map uses normal cave transition once and consumes the waypoint",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/cave-portal-facing.test.js",
+        "baselineExists": true,
+        "bytes": 23831,
+        "sha256": "48d87028634477062bda4e936acbca5471114d5a8d9230e119854470d9e35e33",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "5c0ac1e1a981055683cce445f3d51252d41bb237db2bfbebd11b1e6b5eded23c",
+        "baselineNormalizedSha256": "5c0ac1e1a981055683cce445f3d51252d41bb237db2bfbebd11b1e6b5eded23c"
+      }
+    },
+    {
+      "file": "tests/elena-hidden-resident.test.js",
+      "cases": [
+        {
+          "line": 147,
+          "name": "phase-two sampling, morphs and cloth retain their existing cadence while hidden",
+          "reason": "TypeError [Error]: shadows.isReady is not a function"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/elena-hidden-resident.test.js",
+        "baselineExists": true,
+        "bytes": 16049,
+        "sha256": "38c73b20ffd45e19c25caf227351dd28e9aa93523ade9aeb4351f0eb93df29ff",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "0aec2d14eac9856101a9b3a4c6fc6598bd06464b9cf50794dd54936f7b19c2a5",
+        "baselineNormalizedSha256": "0aec2d14eac9856101a9b3a4c6fc6598bd06464b9cf50794dd54936f7b19c2a5"
+      }
+    },
+    {
+      "file": "tests/elena-hurt-volumes.test.js",
+      "cases": [
+        {
+          "line": 53,
+          "name": "the unchanged packed body scales from 2.7 to 4.5 metres without accumulating across summons",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 67,
+          "name": "all asymmetric limbs follow actual skinned walk/cast surfaces from front, side and rear",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 85,
+          "name": "r9 idle, explicit hit and interrupted-cast hit keep skin contacts through the complete clips",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 119,
+          "name": "real side/rear blade contacts damage once per swing through the encounter route",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 134,
+          "name": "empty spaces between planted limbs and outside the head remain unhittable",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 143,
+          "name": "front, side and back torso skin remains vulnerable while the actor rotates",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 156,
+          "name": "hurt volumes reuse endpoint arrays through pose changes, relocation and a pooled reset",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/elena-hurt-volumes.test.js",
+        "baselineExists": true,
+        "bytes": 18632,
+        "sha256": "a6ee9a9c15bf195b9edaf0f68d20b3d0e3473d463076b8dd77c37809d19472fa",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "1b24dbf09a4b3a4edcdc7cf9ea39decf4c1aacb6b9043322bc44a49ccde91596",
+        "baselineNormalizedSha256": "1b24dbf09a4b3a4edcdc7cf9ea39decf4c1aacb6b9043322bc44a49ccde91596"
+      }
+    },
+    {
+      "file": "tests/elena-mourning-movement.test.js",
+      "cases": [
+        {
+          "line": 52,
+          "name": "actual rig walks, skitters and charges with only the warned slam advance during casts",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 71,
+          "name": "charge shows a full locked 0.9 second ground warning and follows the old target after a dodge",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 91,
+          "name": "actual charge applies one contact, supports dodge, blocks and walls, and a new charge may hit again",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 116,
+          "name": "a newly blocked charge during warning recovers at 30fps without stale warning or inherited cast time",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 116,
+          "name": "a newly blocked charge during travel recovers at 30fps without stale warning or inherited cast time",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 116,
+          "name": "a newly blocked charge during warning recovers at 60fps without stale warning or inherited cast time",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 116,
+          "name": "a newly blocked charge during travel recovers at 60fps without stale warning or inherited cast time",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        },
+        {
+          "line": 134,
+          "name": "charge cancels on map exit or player death and manual review never starts automatic movement",
+          "reason": "Error [TimeoutError]: 화면 준비 시간이 초과되었습니다. 새로고침해 주세요."
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/elena-mourning-movement.test.js",
+        "baselineExists": true,
+        "bytes": 14331,
+        "sha256": "ebd3f6e41d2f7e75355342a8fa7fd49c79cd95d9376d47f80d07510aef2d1681",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "c4c79883ea8f2cb6861e67f58eb90c3e46ed8a9bbdcf8bd5b316b044f1dbedb1",
+        "baselineNormalizedSha256": "c4c79883ea8f2cb6861e67f58eb90c3e46ed8a9bbdcf8bd5b316b044f1dbedb1"
+      }
+    },
+    {
+      "file": "tests/elena-two-phase.test.js",
+      "cases": [
+        {
+          "line": 228,
+          "name": "phase-two painted body and morph-normal silhouette compile with stable r9 target variants",
+          "reason": "TypeError [Error]: Cannot read properties of undefined (reading 'brightness')"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/elena-two-phase.test.js",
+        "baselineExists": true,
+        "bytes": 27334,
+        "sha256": "23e55c98a706310fff71a53973091cebdf7cc00e2eff15b3e83cb29cff17dc1c",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "f4ce31f700ef7fe8a05d5ae30acdc113eb553ee0c21b3f1ab8fe825f0cc2b468",
+        "baselineNormalizedSha256": "f4ce31f700ef7fe8a05d5ae30acdc113eb553ee0c21b3f1ab8fe825f0cc2b468"
+      }
+    },
+    {
+      "file": "tests/map-loading-art-flow.test.js",
+      "cases": [
+        {
+          "line": 66,
+          "name": "actual main prepare and real map transition publish destination art before release and retry that destination without stale updates",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/map-loading-art-flow.test.js",
+        "baselineExists": true,
+        "bytes": 20509,
+        "sha256": "4c3c067a1644c3f6ce7075fc0bcf3784c88dfe68e8d87b100a2c481b61a79d66",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "99c645e92d40b5939361f7f56bc3c99a2beee6eee20ebeed9497c082f59bd74d",
+        "baselineNormalizedSha256": "99c645e92d40b5939361f7f56bc3c99a2beee6eee20ebeed9497c082f59bd74d"
+      }
+    },
+    {
+      "file": "tests/mourning-cave-clearance.test.js",
+      "cases": [
+        {
+          "line": 9,
+          "name": "full-pose mask fingerprints retain approved collision geometry, layout and animator across render-only budgets and mobile color profiles",
+          "reason": "AssertionError [ERR_ASSERTION]: ../src/mourning-elena-animation.js original geometry inputs do not match the delivered bake"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/mourning-cave-clearance.test.js",
+        "baselineExists": true,
+        "bytes": 4758,
+        "sha256": "e9012d0593862da31d93dbe3f4c5590c083e87bc7bd4e940cd9edde9db203810",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "ec9bf3420b47c26df2b094a24f774d5dab738cde166b74797242b78030b87980",
+        "baselineNormalizedSha256": "ec9bf3420b47c26df2b094a24f774d5dab738cde166b74797242b78030b87980"
+      }
+    },
+    {
+      "file": "tests/startup-frame-failure.test.js",
+      "cases": [
+        {
+          "line": 129,
+          "name": "actual main startup failure during model stays failed; retry DOM starts a successful new generation",
+          "reason": "AssertionError [ERR_ASSERTION]: did not reach model"
+        },
+        {
+          "line": 129,
+          "name": "actual main startup failure during scene stays failed; retry DOM starts a successful new generation",
+          "reason": "AssertionError [ERR_ASSERTION]: did not reach scene"
+        },
+        {
+          "line": 129,
+          "name": "actual main startup failure during first-raf stays failed; retry DOM starts a successful new generation",
+          "reason": "AssertionError [ERR_ASSERTION]: did not reach presentation RAF"
+        },
+        {
+          "line": 129,
+          "name": "actual main startup failure during second-raf stays failed; retry DOM starts a successful new generation",
+          "reason": "AssertionError [ERR_ASSERTION]: did not reach presentation RAF"
+        },
+        {
+          "line": 141,
+          "name": "actual map callbacks preserve a frame failure during map-download",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 141,
+          "name": "actual map callbacks preserve a frame failure during scene",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 141,
+          "name": "actual map callbacks preserve a frame failure during second-raf",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 152,
+          "name": "actual main release failure remains paused until explicit reload succeeds; return travel then works",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 152,
+          "name": "actual main map-download failure remains paused until explicit reload succeeds; return travel then works",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 152,
+          "name": "actual main finish failure remains paused until explicit reload succeeds; return travel then works",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 174,
+          "name": "actual map release timeout offers same-destination manual retry without reloading the player",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 174,
+          "name": "actual map map-model timeout offers same-destination manual retry without reloading the player",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 174,
+          "name": "actual map map-download timeout offers same-destination manual retry without reloading the player",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 191,
+          "name": "actual forest transition prepares map while bounded sky work is pending, revealing only after both finish",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 221,
+          "name": "actual main callbacks complete48 warm four-map transfers without player, camera or callback ownership growth",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 235,
+          "name": "actual main repeated45s stage timeouts and double-click manual retries cannot let late old completion reveal a new map",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 254,
+          "name": "actual playback pauses for the HUD editor and map preparation closes it before resuming",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 260,
+          "name": "actual map finish respects hidden/settings state through18 transfers and restores exactly one playable loop",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 272,
+          "name": "actual main frame failure/reload12times releases previous player wrappers and never accumulates a second input/render generation",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 284,
+          "name": "ordinary initial asset failure stays paused across focus/settings changes and recovers on one manual retry",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        },
+        {
+          "line": 293,
+          "name": "actual main capability rejection records the gate inputs before downloads and manual retry selects the bounded player graph",
+          "reason": "AssertionError [ERR_ASSERTION]: expected a pending presentation RAF"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/startup-frame-failure.test.js",
+        "baselineExists": true,
+        "bytes": 37986,
+        "sha256": "289683b2e017c2b24dcd938cf502baffad70a706f9dc0206e7975eac991ec793",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "ddfc70e6ad7bbd0f1fd0cb180361f5e766b87c5d2dc759b129823b0835971d6b",
+        "baselineNormalizedSha256": "ddfc70e6ad7bbd0f1fd0cb180361f5e766b87c5d2dc759b129823b0835971d6b"
+      }
+    },
+    {
+      "file": "tests/treasure-loot.test.js",
+      "cases": [
+        {
+          "line": 44,
+          "name": "actual chapter UI opens chest once, shows matching coloured item border, heals and retains loot on re-entry",
+          "reason": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:"
+        }
+      ],
+      "baselineComparison": {
+        "path": "ArcherPreview/tests/treasure-loot.test.js",
+        "baselineExists": true,
+        "bytes": 5623,
+        "sha256": "bd44f98470cff93edf7ed768baf466c15a26fe333a514fe0c0086d3af7226636",
+        "byteIdentical": false,
+        "normalizedTextIdentical": true,
+        "normalizedSha256": "e072265f72a539bd360f4bf9dc445af0df0e2239657fa37ece45714a8b7dfc7a",
+        "baselineNormalizedSha256": "e072265f72a539bd360f4bf9dc445af0df0e2239657fa37ece45714a8b7dfc7a"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "category": "model-preparation-timeout-or-follow-on",
+      "failedCases": 19,
+      "files": [
+        "tests/boss-pattern-integration.test.js",
+        "tests/boss-preparation-budget.test.js",
+        "tests/boss-retired-work.test.js",
+        "tests/elena-hurt-volumes.test.js",
+        "tests/elena-mourning-movement.test.js"
+      ],
+      "reason": "18 preparation TimeoutError cases plus one undefined cast follow-on. Cause remains unproved without a baseline execution."
+    },
+    {
+      "category": "model-fixture-contract",
+      "failedCases": 2,
+      "files": [
+        "tests/elena-hidden-resident.test.js",
+        "tests/elena-two-phase.test.js"
+      ],
+      "reason": "Missing shadows.isReady and undefined brightness; unchanged game/model test contracts."
+    },
+    {
+      "category": "main-loading-camera-portal-fixture",
+      "failedCases": 32,
+      "files": [
+        "tests/camera-follow-lifecycle.test.js",
+        "tests/cave-portal-facing.test.js",
+        "tests/map-loading-art-flow.test.js",
+        "tests/startup-frame-failure.test.js"
+      ],
+      "reason": "Missing loadDiagnostics.snapshot, portal/pose assertions and presentation stages/RAFs not reached. These are unresolved game-flow/UI assertions, outside standalone Studio imports."
+    },
+    {
+      "category": "collision-bake-fingerprint",
+      "failedCases": 1,
+      "files": [
+        "tests/mourning-cave-clearance.test.js"
+      ],
+      "reason": "Approved animation-source fingerprint does not match delivered bake; invariant remains unresolved."
+    },
+    {
+      "category": "loot-contract",
+      "failedCases": 1,
+      "files": [
+        "tests/treasure-loot.test.js"
+      ],
+      "reason": "Chapter chest UI expected1 but observed undefined at test line50; unresolved gameplay/UI assertion."
+    }
+  ],
+  "staticEvidence": {
+    "failedTestFilesNormalizedIdentical": 13,
+    "trackedProductionSourceFiles": 358,
+    "changedProductionTexts": [
+      {
+        "path": "ArcherPreview/src/cinematic-studio.css",
+        "baselineExists": true,
+        "bytes": 28254,
+        "sha256": "652ff7acafb9e36130b84fbbe556fb11a945ff328b56f4d64740798231c5d81f",
+        "byteIdentical": false,
+        "normalizedTextIdentical": false,
+        "normalizedSha256": "a3c4025c30c336abeeb3bd15853d26ebbd8a8089debba1085f6bb585f3dae989",
+        "baselineNormalizedSha256": "1b35ff1055ec1545bbeae8824a3f3688769ff84ceb29e5ac3cbc2d64a1a64153"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-studio.js",
+        "baselineExists": true,
+        "bytes": 113436,
+        "sha256": "324298be689715c909220c79f94c5ac10da3e7f14e545c899d21dc7b2f01c773",
+        "byteIdentical": false,
+        "normalizedTextIdentical": false,
+        "normalizedSha256": "6cc02cd14f9739d74bbfacdd7096608c2b80f3a23bf324ec1f025384c0ea90c0",
+        "baselineNormalizedSha256": "44b01e387b9fe352c73c3fe6838b2b3f21b86414f1791e446f76c85f89720822"
+      }
+    ],
+    "allOtherTrackedProductionSourceTextsIdentical": true,
+    "normalizedNonUIFingerprint": "2631f7687c43aaae44002553e23c4dcfc36e5de77e79f4cd752a679dee4c7af2",
+    "baselineNormalizedNonUIFingerprint": "2631f7687c43aaae44002553e23c4dcfc36e5de77e79f4cd752a679dee4c7af2",
+    "rawByteIdenticalSources": 46,
+    "CRLFOnlySources": 310,
+    "note": "Git blobs useLF while many checkout files useCRLF. Source parity here is explicitly afterCRLF-to-LF normalization, not raw-byte identity.",
+    "newUntrackedRuntimeSource": [
+      "ArcherPreview/src/cinematic-studio-display.js"
+    ],
+    "moduleImportClosureFiles": 202,
+    "importsModifiedStudio": [],
+    "entryHTML": {
+      "path": "ArcherPreview/index.html",
+      "baselineExists": true,
+      "bytes": 30176,
+      "sha256": "01596e99cc9d6369f12a5aa08f074cc7b38403a023be1a36020715bc97acc421",
+      "byteIdentical": false,
+      "normalizedTextIdentical": true,
+      "normalizedSha256": "9e3438fe1cb317e51346662fdfa191d56dd88a9f53872647abdd91660dfdac33",
+      "baselineNormalizedSha256": "9e3438fe1cb317e51346662fdfa191d56dd88a9f53872647abdd91660dfdac33"
+    },
+    "knownReadReferenceDifference": {
+      "path": "ArcherPreview/reports/approved-scenery-budgets-2026-11-09/application.json",
+      "baselineExists": true,
+      "bytes": 208496,
+      "sha256": "da4d0894e01a4a216efbcecf896421e469056f428103026f689a0c752d33f0dd",
+      "byteIdentical": false,
+      "normalizedTextIdentical": false,
+      "normalizedSha256": "da4d0894e01a4a216efbcecf896421e469056f428103026f689a0c752d33f0dd",
+      "baselineNormalizedSha256": "e387d7bdd82a332c169bc6b8a755359c520b71b58470671b153aa7c9aef06e3e",
+      "classification": "Generated report referenced by fingerprint helper; exact relation to the fingerprint failure is not established. Do not claim every read artifact equals baseline."
+    }
+  },
+  "supportingModelProof": {
+    "path": "regression-baseline-proof.json",
+    "sha256": "10f8a9f692d4ca1a85b48bde55ed8026c794979a64e988d2fe28bcfa61c2bcbd",
+    "dependencies": 105,
+    "fixtures": 3,
+    "allDependenciesIdentical": true,
+    "allFixturesIdentical": true,
+    "scope": "Static dependency and fixture parity for the model-regression tests that repeatedly timed out; this is not a separate baseline test execution.",
+    "note": "Root static proof reused; no repeated model decode, GPU prep or multi-MB asset hashing."
+  },
+  "currentUI": {
+    "focused": {
+      "tests": 36,
+      "passed": 36,
+      "failed": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "controllerSHA256": "26cff75a1eea71e006a2432d8c4fd1c9f065bd43f4115ded7e853e39da389987",
+    "cinematicSuite": {
+      "tests": 210,
+      "passed": 210,
+      "failed": 0,
+      "logSHA256": "7745e558c7ffb8c9de4085d36844c9f1c3f7f43f6dee59407fbe6b058b7f787e"
+    }
+  },
+  "publicationScope": {
+    "uiOnlyBuildConditionMet": true,
+    "evidence": "build-comparison.json",
+    "sha256": "d5845b2f0e9c03ae5b0370772f2f5c22f5463e2281c3aa2d2bb048965df6c7bf",
+    "comparison": {
+      "baselineFiles": 2044,
+      "files": 2044,
+      "changes": [
+        "cinematic-studio.html",
+        "moonforest-help.html"
+      ],
+      "added": [
+        "assets/cinematicStudio-BUkTtiQ8.js",
+        "assets/cinematicStudio-CTxsEPFv.css"
+      ],
+      "removed": [
+        "assets/cinematicStudio-Bf-16Jw_.css",
+        "assets/cinematicStudio-DN1-SZ9e.js"
+      ],
+      "gameIndexExact": true,
+      "resourceRevisionBefore": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+      "resourceRevisionAfter": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7"
+    },
+    "note": "Root artifact comparison records every other common published file unchanged; unchanged gameindex and onlyStudio chunk replacements support a UI-only deployment. This triage independently reads that evidence; it does not rerun its fullbyte audit."
+  },
+  "conclusion": "No failing test imports the changed standalone Studio/helper. All13failing test texts and all tracked nonStudio production source texts match5ddc after line-ending normalization. Together with210/210current cinematic tests and the UI-only artifact comparison, this supports scoped mobile-UI publication without claiming the whole game regression passed.",
+  "unknowns": [
+    "No baseline test execution was performed; preexisting runtime failure reproduction is not claimed.",
+    "The45s preparation failure cause and possible concurrent-run resource contention are not experimentally resolved.",
+    "The model fixture contracts, original-input bake fingerprint and chest/UI assertions remain failing and are not waived.",
+    "No browser/device pixels, physical fullscreen/orientation behavior, GPU/FPS or audibility validation."
+  ],
+  "inputs": {
+    "regressionLogSHA256": "d54899b9549fc94acf5fd0351740074f5bd07c4d3a99b01f40870103340aceed",
+    "baselineProofSHA256": "10f8a9f692d4ca1a85b48bde55ed8026c794979a64e988d2fe28bcfa61c2bcbd"
+  }
+}

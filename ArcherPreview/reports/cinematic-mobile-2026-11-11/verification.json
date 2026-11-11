@@ -1,0 +1,139 @@
+{
+  "generatedAt": "2026-11-11T11:31:27.403Z",
+  "passed": true,
+  "scope": "Independent source, LinkeDOM event/platform-boundary and parsed CSS integration verification of the mobile cinematic display. No production edits by verifier.",
+  "node": "v24.22.1",
+  "command": "../Tools/portable/runtime/win-x64/node/node.exe --test tests/cinematic-mobile-display.test.js tests/cinematic-mobile-layout.test.js tests/cinematic-studio-layout.test.js tests/cinematic-studio-layout-css.test.js",
+  "results": {
+    "tests": 36,
+    "passed": 36,
+    "failed": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "log": {
+    "path": "verification-focused.log",
+    "sha256": "abdd87630ee6f22b6f5936113fb534fa83f7f9245eee152dbace4e91b12d86b1",
+    "writtenAt": "2026-11-11T11:30:23.233Z"
+  },
+  "baseline": {
+    "tests": 12,
+    "passed": 12,
+    "files": [
+      "tests/cinematic-studio-layout.test.js",
+      "tests/cinematic-studio-layout-css.test.js"
+    ],
+    "evidence": "verification-baseline.json",
+    "sourceBefore": [
+      {
+        "Path": "C:\\dev\\MoonForest\\ArcherPreview\\src\\cinematic-studio.js",
+        "Hash": "56FB1882005D4B00D3BA63A083CE32E3FF75FC9CC308075FDE8DDE0C6E287FB3"
+      },
+      {
+        "Path": "C:\\dev\\MoonForest\\ArcherPreview\\src\\cinematic-studio.css",
+        "Hash": "14B4D33FF408EC185362CA157EEEE3E7607E9DB2F0C14EFCD4658D555E441DEE"
+      }
+    ],
+    "sourceAfter": [
+      {
+        "Path": "C:\\dev\\MoonForest\\ArcherPreview\\src\\cinematic-studio.js",
+        "Hash": "56FB1882005D4B00D3BA63A083CE32E3FF75FC9CC308075FDE8DDE0C6E287FB3"
+      },
+      {
+        "Path": "C:\\dev\\MoonForest\\ArcherPreview\\src\\cinematic-studio.css",
+        "Hash": "14B4D33FF408EC185362CA157EEEE3E7607E9DB2F0C14EFCD4658D555E441DEE"
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "Display controller",
+      "passed": 16,
+      "note": "14 top-level tests plus2 nested terminal-race cases."
+    },
+    {
+      "name": "New Studio/stylesheet integration",
+      "passed": 8
+    },
+    {
+      "name": "Existing layout and authoring regressions",
+      "passed": 12
+    }
+  ],
+  "selectorRegression": {
+    "beforeControllerSHA256": "71ad701f407c2382b7b2070d1dea5da39b807b91868e469497181e31312e8682",
+    "currentControllerSHA256": "26cff75a1eea71e006a2432d8c4fd1c9f065bd43f4115ded7e853e39da389987",
+    "beforeFocusedCases": 2,
+    "beforeFailed": 2,
+    "currentFocusedCases": 2,
+    "currentPassed": 2,
+    "beforeLogSHA256": "0d33288320b50cc93bc66fd55ec108b16790e760e1f877184de94e6a7af8585e",
+    "productionFilesWrittenByBeforeProof": false,
+    "description": "With browser contains(self)=true, unqualified delegated attributes matched root state. Because root also has mobilePanel, ordinary clicks normally marked the current menu as manually selected; the fullscreen branch was masked. Explicit button selectors prevent both collisions. The initial34 cases did not model this browser semantic; both new fixtures now do."
+  },
+  "verified": [
+    "Browser contains-self semantics: ordinary fields, file picker and play actions do not mark a menu manual, enter fullscreen or dismiss an active view; only real display buttons control it.",
+    "Auto narrow/mobileUA/coarse display, landscape desktop-UA iPad detection and wide Windows touch PC control. ManualPC/mobile selection persists and wins over resize; blocked storage and missingmatchMedia remain functional.",
+    "One persistent iframe, unchanged authored document, uncommitted caption/time fields, selected target, panel scroll positions and timeline across menu/mode switches. Display controls issue no additional preview-load commands.",
+    "Authenticated actor/subtitle selections open the lower inspector without history or scene-command mutations. Existing500ms status polling is controlled at its callback boundary and does not reset the selected menu.",
+    "Mobile quick play and fullscreen play/pause use the existing serialized preview command queue and cannot overtake a pending seek. Existing start/interior/end capture, undo/redo and navigation assertions remain covered; this focused run does not re-exhaust the five-entry history limit.",
+    "Direct user-gesture native request; native/WebKit fullscreen and orientation outcomes; portrait view-only fallback, landscape restoration, failure/retry, unrelated native owner, late request/lock after exit/destroy, Back, per-document pending Back remount guard, listeners/style/focus cleanup.",
+    "Same-origin child-document canvas Escape closes preview without stopPropagation, preserving game cleanup; iframe-load rebind removes old document listener; destroy removes current listener. Rotated stage inert is scoped, removed on landscape/exit and restores a prior inert owner.",
+    "Visual viewport844→440→844 height ownership without mode/panel/frame/draft changes; previous inline viewport-height value restored on destroy.",
+    "Parsed CSS supports320/390/600/760/1024/1440 widths plus390×440 keyboard case, fixed top preview ownership, one independent lower scroll panel, explicitPC3columns at small widths with horizontal access, safe areas,44px targets,16px fields, bounded file menu/dialogs. Rotated stage alone swaps viewport axes; toolbar remains outside transform; iframe pointer input is blocked only in rotated viewing."
+  ],
+  "existingTestAdjustments": {
+    "approvedByParent": true,
+    "changes": [
+      "Explicitly scope desktop CSS expectations to the public data-studio-mode contract; preserve original PCcolumns and short-desktop scroll behavior.",
+      "Permit intentional play/pause duplicates in separate preview controls while retaining unique other actions/fields/views and all existing authoring behavior assertions."
+    ]
+  },
+  "sourceEvidence": {
+    "moment": "Hashes recorded after the passing focused run; controller/CSS/HTML match final owner-supplied freeze hashes. Parent owns the whole-suite before/after source snapshot.",
+    "files": {
+      "src/cinematic-studio-display.js": {
+        "sha256": "26cff75a1eea71e006a2432d8c4fd1c9f065bd43f4115ded7e853e39da389987",
+        "modifiedAt": "2026-11-11T11:28:38.168Z"
+      },
+      "src/cinematic-studio.js": {
+        "sha256": "324298be689715c909220c79f94c5ac10da3e7f14e545c899d21dc7b2f01c773",
+        "modifiedAt": "2026-11-11T11:24:36.294Z"
+      },
+      "src/cinematic-studio.css": {
+        "sha256": "652ff7acafb9e36130b84fbbe556fb11a945ff328b56f4d64740798231c5d81f",
+        "modifiedAt": "2026-11-11T11:23:51.448Z"
+      },
+      "cinematic-studio.html": {
+        "sha256": "c45df3c972527c619986ad6a03e07133326d662382c6ea52a8f099be2e2dd32d",
+        "modifiedAt": "2026-11-11T11:16:35.531Z"
+      },
+      "public/moonforest-help.html": {
+        "sha256": "81bb1b39a5215cc3c4a38ef1ff5376c39b7ad5c8063701d7df0852f6ab67662e",
+        "modifiedAt": "2026-11-11T11:24:36.293Z"
+      },
+      "tests/cinematic-mobile-display.test.js": {
+        "sha256": "d222b38fb488d819e4144944534f6e94db96a7158c1a87e28dab16de5a95ebac",
+        "modifiedAt": "2026-11-11T11:30:20.119Z"
+      },
+      "tests/cinematic-mobile-layout.test.js": {
+        "sha256": "25b97d6070efb9e208fb985242c11da0ca6a724ac106e37e359c0c253533dc12",
+        "modifiedAt": "2026-11-11T11:30:20.120Z"
+      },
+      "tests/cinematic-studio-layout.test.js": {
+        "sha256": "84f641722c2f18abd9d50bfa9e87631daf8dc4f105378047c1cd1fbfe69336f5",
+        "modifiedAt": "2026-11-11T11:21:15.793Z"
+      },
+      "tests/cinematic-studio-layout-css.test.js": {
+        "sha256": "a7d79a7b6bc084c2bf9a8634d8078b60458fb0f2bd194b69da6d298e600d1062",
+        "modifiedAt": "2026-11-11T11:21:15.793Z"
+      }
+    }
+  },
+  "limits": [
+    "No browser automation, physical device, real mobile fullscreen permission, orientation lock, soft keyboard or rendered layout pixels were exercised.",
+    "Native/WebKit fullscreen, history and orientation are simulated at the platform API boundary around real controller DOM events. CSS cascade/DOM constraints do not establish actual device appearance, touch-coordinate correctness, viewport clipping or browser-specific fullscreen policy.",
+    "Tests preserve preview identity and transport behavior but do not create a WebGL Engine or prove GPU/FPS/heat behavior.",
+    "Only the two new test files, two explicitly approved existing layout tests and this verification report directory were edited by this verifier. Existing concurrent application/assets work was left untouched."
+  ]
+}

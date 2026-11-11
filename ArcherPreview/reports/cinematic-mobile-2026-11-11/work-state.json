@@ -1,0 +1,69 @@
+{
+  "status": "validated",
+  "updatedAt": "2026-11-11T11:40:36.516Z",
+  "repository": "C:\\dev\\MoonForest",
+  "release": "MoonForest 0.1 ver",
+  "baselineHead": "5ddc41e23c4315dc5d13ecf33e2678a0a9886ae9",
+  "request": [
+    "Mobile portrait editor automatically selected",
+    "Top-right manual mobile or PC layout selection",
+    "Mobile preview stays visible at top; settings behind menus",
+    "Landscape fullscreen preview icon; supported native orientation plus view-only rotated fallback",
+    "Preserve desktop controls, document format, rendering and assets"
+  ],
+  "owners": {
+    "root": [
+      "cinematic-studio.js integration",
+      "build",
+      "publish"
+    ],
+    "rendering": [
+      "cinematic-studio-display.js"
+    ],
+    "resources": [
+      "cinematic-studio.css",
+      "cinematic-studio.html"
+    ],
+    "verification": [
+      "mobile tests",
+      "layout regression"
+    ]
+  },
+  "verification": {
+    "focused": {
+      "tests": 36,
+      "pass": 36
+    },
+    "cinematic": {
+      "tests": 210,
+      "pass": 210
+    },
+    "whole": {
+      "exitCode": 1,
+      "passed": false,
+      "tests": 2316,
+      "pass": 2261,
+      "fail": 55,
+      "skipped": 0,
+      "scope": "Whole current npm test; do not describe as passing.",
+      "log": "regression.log",
+      "modelBaselineProof": "regression-baseline-proof.json",
+      "finalCinematic": {
+        "tests": 210,
+        "pass": 210,
+        "fail": 0,
+        "log": "cinematic-final.log"
+      }
+    },
+    "pixels": "not inspected",
+    "devicePerformance": "unmeasured"
+  },
+  "nextAction": "Commit only reviewed UI, help, tests and deployment files, push to archer, then verify Pages workflow and all changed public hashes.",
+  "sourceDeltaAfterInitialFullRun": [
+    "ArcherPreview/src/cinematic-studio-display.js",
+    "ArcherPreview/tests/cinematic-mobile-display.test.js",
+    "ArcherPreview/tests/cinematic-mobile-layout.test.js"
+  ],
+  "releaseValidation": "release-validation.json",
+  "wholeRegression": "55 current failures remain; not a full-suite pass. Existing published game is byte-identical."
+}

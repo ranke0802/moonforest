@@ -1,0 +1,117 @@
+{
+  "validatedAt": "2026-11-11T11:40:36.516Z",
+  "passed": true,
+  "release": "MoonForest 0.1 ver",
+  "scope": "Mobile cinematic editor only; all existing published game/asset files are retained byte-for-byte.",
+  "head": "5ddc41e23c4315dc5d13ecf33e2678a0a9886ae9",
+  "sourceFiles": [
+    {
+      "path": "ArcherPreview/cinematic-studio.html",
+      "bytes": 598,
+      "sha256": "c45df3c972527c619986ad6a03e07133326d662382c6ea52a8f099be2e2dd32d"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-studio.js",
+      "bytes": 113436,
+      "sha256": "324298be689715c909220c79f94c5ac10da3e7f14e545c899d21dc7b2f01c773"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-studio.css",
+      "bytes": 28254,
+      "sha256": "652ff7acafb9e36130b84fbbe556fb11a945ff328b56f4d64740798231c5d81f"
+    },
+    {
+      "path": "ArcherPreview/src/cinematic-studio-display.js",
+      "bytes": 14733,
+      "sha256": "26cff75a1eea71e006a2432d8c4fd1c9f065bd43f4115ded7e853e39da389987"
+    },
+    {
+      "path": "ArcherPreview/public/moonforest-help.html",
+      "bytes": 18736,
+      "sha256": "81bb1b39a5215cc3c4a38ef1ff5376c39b7ad5c8063701d7df0852f6ab67662e"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-mobile-display.test.js",
+      "bytes": 19653,
+      "sha256": "d222b38fb488d819e4144944534f6e94db96a7158c1a87e28dab16de5a95ebac"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-mobile-layout.test.js",
+      "bytes": 16639,
+      "sha256": "25b97d6070efb9e208fb985242c11da0ca6a724ac106e37e359c0c253533dc12"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-studio-layout.test.js",
+      "bytes": 13655,
+      "sha256": "84f641722c2f18abd9d50bfa9e87631daf8dc4f105378047c1cd1fbfe69336f5"
+    },
+    {
+      "path": "ArcherPreview/tests/cinematic-studio-layout-css.test.js",
+      "bytes": 6239,
+      "sha256": "a7d79a7b6bc084c2bf9a8634d8078b60458fb0f2bd194b69da6d298e600d1062"
+    }
+  ],
+  "checks": {
+    "cinematic": {
+      "tests": 210,
+      "passed": 210,
+      "failed": 0
+    },
+    "independent": {
+      "tests": 36,
+      "passed": 36
+    },
+    "wholeRegression": {
+      "exitCode": 1,
+      "passed": false,
+      "tests": 2316,
+      "pass": 2261,
+      "fail": 55,
+      "skipped": 0,
+      "scope": "Whole current npm test; do not describe as passing.",
+      "log": "regression.log",
+      "modelBaselineProof": "regression-baseline-proof.json",
+      "finalCinematic": {
+        "tests": 210,
+        "pass": 210,
+        "fail": 0,
+        "log": "cinematic-final.log"
+      }
+    },
+    "wholeRegressionIsPassing": false,
+    "sourceSnapshotCount": 941,
+    "deltaAfterWholeRun": [
+      "ArcherPreview/src/cinematic-studio-display.js",
+      "ArcherPreview/tests/cinematic-mobile-display.test.js",
+      "ArcherPreview/tests/cinematic-mobile-layout.test.js"
+    ],
+    "finalCinematicCoversDelta": true
+  },
+  "published": {
+    "files": 2044,
+    "bytes": 704439681,
+    "distSiteStageAllHashesMatch": true,
+    "gameIndexExact": true,
+    "resourceRevisionExact": true,
+    "resourceRevision": "ea52c45df7c167ab16293b76e6ee8090621c69d76a14ca091c7c78a6bcb76ad7",
+    "unchangedExistingFiles": 2040,
+    "changed": [
+      "cinematic-studio.html",
+      "moonforest-help.html"
+    ],
+    "added": [
+      "assets/cinematicStudio-BUkTtiQ8.js",
+      "assets/cinematicStudio-CTxsEPFv.css"
+    ],
+    "oldEditorChunksExcluded": [
+      "assets/cinematicStudio-Bf-16Jw_.css",
+      "assets/cinematicStudio-DN1-SZ9e.js"
+    ]
+  },
+  "limits": {
+    "browserAutomation": false,
+    "pixels": "not inspected",
+    "physicalMobileFullscreenOrientationKeyboardTouch": "unverified",
+    "devicePerformance": "unmeasured"
+  }
+}
