@@ -54,8 +54,8 @@ export class SceneLighting {
     key.shadowMinZ = 1; key.shadowMaxZ = village?120:65;
     key.autoUpdateExtends = false;
     shadows.filteringQuality = touchDevice ? ShadowGenerator.QUALITY_LOW : ShadowGenerator.QUALITY_MEDIUM;
-    // Mobile rendering defaults to 30 FPS (optionally 60). Skipping alternate
-    // shadow passes reduces animated shadows to 15 Hz; worse, a moving light
+    // Skipping alternate shadow passes halves animated shadow updates; worse,
+    // a moving light
     // samples the previous map with the new projection on the skipped frame.
     // Keep one bounded map synchronized with the pose and light every frame.
     shadows.getShadowMap().refreshRate = 1;

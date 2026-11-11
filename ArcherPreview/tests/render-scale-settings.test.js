@@ -19,22 +19,23 @@ test('explicit 3D percentages multiply each existing quality cap, including belo
  for(const touch of [true,false])for(const [quality,cap] of Object.entries(touch?{high:2,balanced:1.5,battery:1}:{high:3,balanced:2,battery:1}))for(const percent of [75,85,100]){
   assert.equal(renderPixelRatio(4,quality,touch,percent),cap*percent/100);
   assert.equal(renderPixelRatio(1,quality,touch,percent),percent/100);
-  const activity=new RenderActivity(touch);assert.equal(activity.limit({quality}),30);activity.setTargetFps(60);assert.equal(activity.limit({quality}),60);
+  const activity=new RenderActivity(touch);assert.equal(activity.limit({quality}),60);activity.setTargetFps(30);assert.equal(activity.limit({quality}),30);
  }
  assert.equal(renderPixelRatio(3,'battery',true,75),.75);
  assert.equal(renderPixelRatio(NaN,'unknown',true,85),.85);
- for(const value of [0,50,150,NaN,'broken'])assert.equal(renderPixelRatio(3,'high',true,value),2);
+ for(const value of [0,50,150,NaN,'broken'])assert.equal(renderPixelRatio(3,'high',true,value),1.7);
 });
 
 test('device defaults, saved percentages, malformed storage and denied writes survive control recreation',()=>{
  for(const touch of [true,false]){
   const saved=storage(),select=Object.assign(new EventTarget(),{value:''});let applied;
   let control=setupRenderScaleControl({select,storage:saved,touchDevice:touch,onChange:value=>applied=value});
-  assert.equal(control.value,touch?85:100);assert.equal(applied,control.value);
+  assert.equal(control.value,85);assert.equal(applied,control.value);
   for(const percent of [75,100,85]){select.value=String(percent);select.dispatchEvent(new Event('change'));assert.equal(applied,percent);assert.equal(saved.values.get(RENDER_SCALE_KEY),String(percent));}
   control.dispose();select.value='75';select.dispatchEvent(new Event('change'));assert.equal(applied,85);
   control=setupRenderScaleControl({select,storage:saved,touchDevice:touch});assert.equal(control.value,85);control.dispose();
-  for(const value of [null,'','0','90','NaN','{"percent":75}'])assert.equal(readRenderScale({getItem:()=>value},touch),touch?85:100);
+  saved.setItem(RENDER_SCALE_KEY,'100');control=setupRenderScaleControl({select,storage:saved,touchDevice:touch});assert.equal(control.value,100);control.dispose();
+  for(const value of [null,'','0','90','NaN','{"percent":75}'])assert.equal(readRenderScale({getItem:()=>value},touch),85);
  }
  const denied={getItem(){throw Error('denied');},setItem(){throw Error('denied');}},select=Object.assign(new EventTarget(),{value:''});
  const control=setupRenderScaleControl({select,storage:denied,touchDevice:true});assert.equal(control.value,85);select.value='75';select.dispatchEvent(new Event('change'));assert.equal(control.value,75);control.dispose();

@@ -33,7 +33,7 @@ for(const [orientation,width,height]of [['S23 landscape',780,360],['S23 portrait
   const ambient=new HemisphericLight('sky',Vector3.Up(),scene),key=new DirectionalLight('sun',new Vector3(-.4,-1,-.6),scene),rim=new DirectionalLight('rim',Vector3.Down(),scene),shadows=new ShadowGenerator(1024,key);
   new MovingSky(scene);scene.fogStart=65;scene.fogEnd=80;
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice:true,village:true}),world={scene,camera,terrain:createVillageTerrain(),touchDevice:true,lighting,shadows};
-  lighting.setQuality('high');assert.equal(new RenderActivity(true).limit({busy:true}),30);assert.equal(ratio,2);
+  lighting.setQuality('high');assert.equal(new RenderActivity(true).limit({busy:true}),60);assert.equal(ratio,2);
   const base=new URL('../public/assets/',import.meta.url),manifest=JSON.parse(readFileSync(new URL('witch-cave.json',base))),assets=[],records=[],sources=new Set();
   const ids=Object.keys(manifest.assets);
   for(const id of ids){

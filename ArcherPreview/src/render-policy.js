@@ -1,5 +1,5 @@
 export const RENDER_SCALE_PERCENTAGES=Object.freeze([75,85,100]);
-export const defaultRenderScale=touchDevice=>touchDevice?85:100;
+export const defaultRenderScale=()=>85;
 export function normalizeRenderScale(value,touchDevice=false){
   const percent=Number(value);
   return RENDER_SCALE_PERCENTAGES.includes(percent)?percent:defaultRenderScale(touchDevice);
@@ -18,7 +18,7 @@ export class RenderActivity {
     this.touchDevice = touchDevice;
     this.now = now;
     this.lastActive = now();
-    this.targetFps = 30;
+    this.targetFps = 60;
   }
   wake() { this.lastActive = this.now(); }
   setTargetFps(value) { this.targetFps=Number(value)===60?60:30;return this.targetFps; }

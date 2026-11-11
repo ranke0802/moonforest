@@ -15,8 +15,9 @@ test('touch rendering bounds supersampling while keeping desktop quality and low
   assert.equal(renderPixelRatio(NaN,'unknown',true),1);
 });
 
-test('mobile stays capped at 30 during idle, gestures and sustained combat',()=>{
+test('explicit 30 FPS stays capped during idle, gestures and sustained combat',()=>{
   let time=0;const activity=new RenderActivity(true,()=>time);
+  activity.setTargetFps(30);
   assert.equal(activity.limit(),30);
   time=2999;assert.equal(activity.limit(),30);
   time=3000;assert.equal(activity.limit(),30);
@@ -25,12 +26,12 @@ test('mobile stays capped at 30 during idle, gestures and sustained combat',()=>
   time=12000;assert.equal(activity.limit(),30);
   time=13000;assert.equal(activity.limit(),30);
   assert.equal(activity.limit({busy:true,quality:'battery'}),30);
-  const desktop=new RenderActivity(false,()=>time);time+=10000;assert.equal(desktop.limit(),30);
+  const desktop=new RenderActivity(false,()=>time);desktop.setTargetFps(30);time+=10000;assert.equal(desktop.limit(),30);
 });
 
 test('an explicit 60 FPS choice survives idle, combat and quality changes on touch and desktop',()=>{
  for(const touch of [true,false]){
-  const policy=new RenderActivity(touch);assert.equal(policy.limit(),30);policy.setTargetFps(60);
+  const policy=new RenderActivity(touch);assert.equal(policy.limit(),60);policy.setTargetFps(60);
   for(let i=0;i<600;i++){policy.wake();assert.equal(policy.limit({busy:i%2===0,quality:['high','balanced','battery'][i%3]}),60);}
   policy.setTargetFps(30);assert.equal(policy.limit({busy:true}),30);
  }

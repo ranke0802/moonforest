@@ -1,5 +1,5 @@
 export const FRAME_RATE_KEY='moonforest-frame-rate-v1';
-export function readFrameRate(storage){try{return storage?.getItem(FRAME_RATE_KEY)==='60'?60:30;}catch{return 30;}}
+export function readFrameRate(storage){try{return storage?.getItem(FRAME_RATE_KEY)==='30'?30:60;}catch{return 60;}}
 export function setupFrameRateControl({select,storage,activity,onChange=()=>{}}){
   const apply=value=>{const fps=activity.setTargetFps(value);select.value=String(fps);onChange(fps);return fps;};
   apply(readFrameRate(storage));

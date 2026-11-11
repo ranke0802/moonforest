@@ -16,7 +16,7 @@ export function setupRenderScaleControl({host,select,storage,touchDevice=false,o
     const label=doc.createElement('label');label.textContent='3D 해상도';
     select=doc.createElement('select');select.id='render-scale-select';select.className='quality-select';select.setAttribute('aria-label','3D 렌더 해상도');select.setAttribute('aria-describedby','render-scale-help');
     for(const percent of RENDER_SCALE_PERCENTAGES){const option=doc.createElement('option');option.value=String(percent);option.textContent=percent+'%';select.append(option);}
-    const help=doc.createElement('small');help.id='render-scale-help';help.textContent='모바일 기본 85% · PC 기본 100%. 낮추면 3D 화면의 부하가 줄어듭니다. 글자와 버튼 크기는 같습니다.';
+    const help=doc.createElement('small');help.id='render-scale-help';help.textContent='기본 85%. 낮추면 3D 화면의 부하가 줄어듭니다. 글자와 버튼 크기는 같습니다.';
     label.append(select);owned.append(label,help);host.append(owned);
   }
   let value=readRenderScale(storage,touchDevice);

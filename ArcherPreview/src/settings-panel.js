@@ -47,7 +47,7 @@ export function setupSettingsPanel() {
   fullscreen.before(fps);
   const frameLabel=document.createElement('label');frameLabel.textContent='프레임';
   const frameSelect=document.createElement('select');frameSelect.id='frame-rate-select';frameSelect.setAttribute('aria-label','목표 프레임');frameSelect.className='quality-select';
-  frameSelect.innerHTML='<option value="30">30 FPS · 기본</option><option value="60">60 FPS</option>';frameLabel.append(frameSelect);
+  frameSelect.innerHTML='<option value="30">30 FPS</option><option value="60">60 FPS · 기본</option>';frameLabel.append(frameSelect);
   displayOptions.append(qualityLabel,frameLabel);
   const plainsDistance=document.createElement('div');plainsDistance.className='camera-zoom-options';
   plainsDistance.innerHTML=`<label>대평원 풍경 거리 <select id="plains-view-distance-select" class="quality-select" aria-label="대평원 풍경 거리">${PLAINS_VIEW_DISTANCE_STEPS.map(value=>`<option value="${value}">${value===PLAINS_VIEW_DISTANCE_DEFAULT?'기본 · 240%':`${Math.round(value*100)}%`}</option>`).join('')}</select></label><small>대평원에서 먼 풍경을 더 보여줍니다. 거리가 멀수록 성능에 부담이 늘 수 있습니다.</small>`;
