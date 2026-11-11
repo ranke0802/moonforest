@@ -173,7 +173,7 @@ test('downed boss: real low blade contact deals normal and three heavy hits with
  b.poseAndContacts(player,{state:'slash',actionId:1},sample,null);assert.equal(b.brain.hp,880);
  const burst={...sample,actionId:2,window:{id:'jump-cut',damage:64,heavy:true,burst:[20,20,24],interval:.055}};
  for(const elapsed of [0,.055,.11])b.poseAndContacts(player,{state:'judgment',actionId:2},{...burst,elapsed},null);
- assert.equal(b.brain.hp,816);assert.equal(b.hitCount,4);assert.equal(b.heavyCount,0);
+ assert.equal(b.brain.hp,816);assert.equal(b.hitCount,4);assert.equal(b.heavyCount,1);assert.ok(b.knockVelocity.lengthSquared()>0,'a heavy hit still pushes a grounded target');
  assert.equal(b.brain.serial,serial);assert.equal(b.brain.time,.3);assert.equal(b.brain.stagger,0);
  assert.deepEqual(feedback.map(f=>f[1]),[20,20,20,24]);assert.ok(b.asset.meshes[0].renderOverlay);
  b.actor.position.z=6;

@@ -53,8 +53,9 @@ export class BossBrain {
     }
     return this.bag.pop();
   }
-  hit({heavy=false,damage=14,stun=0,interruptsBoss=false}={}){
-    if(this.hp<=0||this.defense)return false;
+  hit({heavy=false,damage=14,stun=0,interruptsBoss=false,ignoreDefense=false}={}){
+    const defense=this.defense;
+    if(this.hp<=0||(defense&&!ignoreDefense))return false;
     this.hp=Math.max(0,this.hp-damage);
     const flashDuration=stun>0?.75:.22;
     if(flashDuration>=this.flash){this.flash=flashDuration;this.flashDuration=flashDuration;}

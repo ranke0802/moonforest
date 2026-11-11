@@ -1,4 +1,5 @@
 import { normalizeAttackSpeed } from './controller.js';
+import { JUDGMENT_CONTACT_END } from './player-strike-timings.js';
 export const V2_ATTACKS = ['slash', 'attack', 'judgment'];
 export const V2_COMBO = ['slash', 'attack'];
 export const V2_ATTACK_BASE_RATE = 1.8;
@@ -13,6 +14,9 @@ export const V2_STAMINA_REGEN=15;
 export const V2_SPRINT_COST=5;
 export const V2_SPRINT_MULTIPLIER=1.8;
 export const V2_STAMINA_COST=Object.freeze({slash:10,attack:10,judgment:30,shieldPush:20,dodge:10});
+// Share the real blade window; recovery starts only once all heavy contacts
+// have finished, independent of animation playback speed or a missed swing.
+export const V2_JUDGMENT_RECOVERY_START=JUDGMENT_CONTACT_END;
 export const V2_LABELS = {idle:'대기',run:'달리기',attack:'베고 찌르기 · 2타',slash:'한손 베기 · 1타',judgment:'심판의 검 · 3타',shieldPush:'방패 밀치기',dodge:'회피 구르기',knockdown:'넉다운',getUp:'기상'};
 export const V2_MOTION_DEFAULTS = {idle:1,run:1,attack:1.6,slash:1,judgment:1,shieldPush:1,dodge:1.7,knockdown:1,getUp:1};
 
@@ -41,6 +45,7 @@ export class WarriorV2Controller {
     return true;
   }
   restoreStamina(seconds){if(this.staminaEnabled&&seconds>0)this.stamina=Math.min(this.maxStamina,this.stamina+V2_STAMINA_REGEN*seconds);}
+  restoreJudgmentRecovery(from,to,rate){if(rate>0)this.restoreStamina(Math.max(0,to-Math.max(from,V2_JUDGMENT_RECOVERY_START))/rate);}
   resetStamina(){this.cancelShieldInput();this.stamina=this.maxStamina;this.staminaSpent=false;this.setSprintHeld(false);}
   setSprintHeld(held,initialFrameSeconds){
     if(held){if(!this.sprintHeld){this.sprintHeld=true;this.sprintInitialSeconds=Number.isFinite(initialFrameSeconds)?Math.max(0,initialFrameSeconds):null;}}
@@ -237,6 +242,7 @@ export class WarriorV2Controller {
       if(rolling)rollFrom=this.action.time;
       const rate=this.playbackRate(this.action.state);
       const left=Math.max(0,(this.durations[this.action.state]-this.action.time)/rate);
+      if(alive&&this.action.state==='judgment')this.restoreJudgmentRecovery(this.action.time,Math.min(this.durations.judgment,this.action.time+dt*rate),rate);
       if(rolling)rollTo=Math.min(this.durations.dodge,this.action.time+dt*rate);
       if(dt<left){this.action.time+=dt*rate;idleDt=0;}
       else {idleDt=dt-left;this.comboRemaining=V2_COMBO.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
@@ -253,6 +259,7 @@ export class WarriorV2Controller {
       if(alive&&this.startAttack(kind==='normal'?undefined:kind)){
         const duration=this.durations[this.action.state],rate=this.playbackRate(this.action.state);
         this.action.elapsed=available;this.action.time=Math.min(duration,available*rate);idleDt=0;
+        if(kind==='judgment')this.restoreJudgmentRecovery(0,this.action.time,rate);
         if(this.action.time>=duration){idleDt=Math.max(0,available-duration/rate);this.comboRemaining=kind==='normal'?V2_COMBO_GRACE:0;this.action=null;}
       }
     }

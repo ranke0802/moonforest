@@ -62,6 +62,33 @@ test('one actual shield sweep knocks down every separately hit enemy once',t=>{
   }
 });
 
+for(const [name,Encounter,asset] of variants.slice(0,2))for(const mode of ['guard','evade']){
+  test(`${name}: a shield push that contacts a ${mode} target knocks it down, while normal attacks remain defended`,t=>{
+    const {b,player}=fixture(t,Encounter,asset);let blocked=0;
+    b.alignPose=()=>{};b.contactSeparation=()=>0;b.hurtCapsules=()=>[{points:[[0,1,5],[0,2,5]],radius:1}];b.skillHurtCapsule=()=>null;b.damageNumberPosition=()=>b.actor.position;b.playerBlocked=()=>blocked++;
+    b.animator={ensurePoseCurrent(){},reactToHit(){},reactToKnockback(){}};
+    const state=name==='bear'?(mode==='guard'?'Block6':'Backflip'):(mode==='guard'?'Sword_Parry_Backward_2':'Dodge_Roll');b.brain.start(state,mode);
+    const hp=b.brain.hp,hit=[[0,1,5],[0,2,5]],miss=[[50,1,50],[50,2,50]];
+    const sweep=(actionId,id,blade)=>({actionId,contacts:[{window:{id,damage:10,stun:id==='shield-push'?1.5:0},blade}]});
+    b.poseAndContacts(player,{state:'shieldPush'},sweep(31,'shield-push',miss),null);
+    assert.equal(b.brain.hp,hp);assert.equal(b.brain.mode,mode);assert.equal(b.knockVelocity.lengthSquared(),0,'a miss cannot break defense');
+    b.poseAndContacts(player,{state:'slash'},sweep(32,'cut',hit),null);
+    assert.equal(b.brain.hp,hp);assert.equal(b.brain.mode,mode);assert.equal(blocked,mode==='guard'?1:0);
+    b.poseAndContacts(player,{state:'shieldPush'},sweep(33,'shield-push',hit),null);
+    assert.equal(b.brain.hp,hp-10);assert.equal(b.brain.mode,'down');assert.equal(b.knockVelocity.z,8);assert.equal(blocked,mode==='guard'?1:0);
+    b.poseAndContacts(player,{state:'shieldPush'},sweep(33,'shield-push',hit),null);
+    assert.equal(b.brain.hp,hp-10,'a single shield swing applies damage once');
+  });
+}
+
+test('a shield push does not hit a defending target through a wall',t=>{
+  const {b,player,world}=fixture(t,BossEncounter,'guardian-bear');b.brain.start('Block6','guard');
+  b.alignPose=()=>{};b.contactSeparation=()=>0;b.hurtCapsules=()=>[{points:[[0,1,5],[0,2,5]],radius:1}];b.skillHurtCapsule=()=>null;b.animator={ensurePoseCurrent(){}};
+  world.navigation={segmentClear:()=>false};const hp=b.brain.hp;
+  b.poseAndContacts(player,{state:'shieldPush'},{actionId:51,window:{id:'shield-push',damage:10,stun:1.5},blade:[[0,1,5],[0,2,5]]},null);
+  assert.equal(b.brain.hp,hp);assert.equal(b.brain.mode,'guard');assert.equal(b.knockVelocity.lengthSquared(),0);
+});
+
 for(const [name,Encounter,asset] of variants){
   test(`${name}: actual heavy and shield contacts apply an outward knockback`,t=>{
     const {b,player}=fixture(t,Encounter,asset);let reactions=0;

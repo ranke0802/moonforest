@@ -349,19 +349,21 @@ export class BossEncounter {
       const rangeContact=grounded&&distance<=BOSS_GROUNDED_HIT_RANGE;
       let contacts;
       if(this.brain.defense){
-        // Consume this swing without starting a delayed damage burst through a block/roll.
+        // A contacting shield push breaks both block and evade states.
+        // Other contacts still consume their swing without delayed damage.
         this.gate.pending=[];
-        for(const contact of sample.contacts??[sample])if(this.gate.check({...sample,...contact,capsules:contactCapsules})){
+        const all=sample.contacts??[sample],breaking=all.filter(contact=>contact.window?.id==='shield-push');
+        for(const contact of all)if(!breaking.includes(contact)&&this.gate.check({...sample,...contact,capsules:contactCapsules})){
           if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block')this.playerBlocked();
         }
-        contacts={hits:[],hitStop:0};
+        contacts=breaking.length?this.gate.collect({...sample,contacts:breaking,capsules:contactCapsules,rangeContact}):{hits:[],hitStop:0};
       }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact});
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
         // A released shield push should trigger the same fall response as a
         // heavy strike without changing its damage, hit feedback or input.
         const shieldPush=hit.id==='shield-push';
-        if(!this.brain.hit(shieldPush?{...hit,heavy:true}:hit))continue;
+        if(!this.brain.hit(shieldPush?{...hit,heavy:true,ignoreDefense:true}:hit))continue;
         if(this.brain.hp>0)this.animator?.reactToHit?.();
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);

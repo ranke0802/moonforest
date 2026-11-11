@@ -1,6 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
 import { boostSwordStrike } from './equipment-stats.js';
 import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
+import {JUDGMENT_CONTACT_END} from './player-strike-timings.js';
 // Thrust_Slash's two authored passes are centered left of the actor's forward
 // axis. Aim the whole action once; keep the source pose and real blade intact.
 export const PLAYER_STRIKE_AIM_YAW={attack:25*Math.PI/180};
@@ -8,7 +9,7 @@ export const PLAYER_STRIKES={
   attack:[{id:'thrust',from:.55,to:1.02,damage:18,interruptsBoss:false},{id:'follow-cut',from:1.08,to:1.65,damage:20,interruptsBoss:false,halfWidth:.3}],
   slash:[{id:'cut',from:.38,to:.80,damage:20,interruptsBoss:false,halfWidth:.3}],
   // Only the descending blade deals the heavy hit. Landing/recovery are inactive.
-  judgment:[{id:'jump-cut',from:.94,to:1.12,damage:64,heavy:true,burst:[20,20,24],interval:.055}],
+  judgment:[{id:'jump-cut',from:.94,to:JUDGMENT_CONTACT_END,damage:64,heavy:true,burst:[20,20,24],interval:.055}],
   shieldPush:[{id:'shield-push',from:1.10,to:1.15,damage:10,stun:1.5}],
 };
 /** Clip-time sweeps are clipped to the strike window, including slow frames at 2x. */
