@@ -1,0 +1,93 @@
+{
+  "sourceAssetId": "wolf-attack-r8",
+  "sourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
+  "sourceBytes": 4357668,
+  "originalImmutable": true,
+  "bufferViewsByteIdentical": 1008,
+  "allNodesUvNormalsWeightsBindsMorphAndTwelveClipsIdentical": true,
+  "existingCatalogEntriesUnchanged": 85,
+  "runtime": {
+    "model": "./content/e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63.gltf",
+    "texture": {
+      "width": 4096,
+      "height": 4096,
+      "format": "KTX2 UASTC sRGB",
+      "sourceSha256": "de72b7523fa14906eba4d2d974c02850485167a5fefb1ed793c9f11297343dac",
+      "runtimeSha256": "445fbd01f773332c1b5a01bf2381ddd417b3c49fd3358c093d6807b2a50f819a"
+    },
+    "geometry": {
+      "triangles": 25080,
+      "uniqueMeshTriangles": 25080,
+      "vertices": 18996,
+      "materials": 3,
+      "textures": 1,
+      "images": 1,
+      "lods": [
+        {
+          "level": 0,
+          "distance": null,
+          "profile": null,
+          "model": "assets/content/e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63.gltf",
+          "contentHash": "e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63",
+          "triangles": 25080,
+          "materials": 3,
+          "textures": 1,
+          "skinned": true,
+          "clips": 12,
+          "morphTargets": 1
+        }
+      ],
+      "skinned": true,
+      "skins": 1,
+      "bones": 28,
+      "clips": 12,
+      "clipNames": [
+        "Alert_Lie_R5",
+        "Circle_Watch_R5",
+        "Get_Up_R5",
+        "Hit_Cower_R5",
+        "Knockback_Brace_R5",
+        "Knockdown_Fall_R5",
+        "Pin_Throat_Bite_R5",
+        "Rest_Lie_R5",
+        "Rise_From_Lie_R5",
+        "Run_Dodge_Lunge_R5",
+        "Wolf_Run_R5",
+        "Wolf_Walk_R5"
+      ],
+      "clipDurations": {
+        "Alert_Lie_R5": 1.7999999999999998,
+        "Circle_Watch_R5": 43.4,
+        "Get_Up_R5": 3.1,
+        "Hit_Cower_R5": 1.2666666666666666,
+        "Knockback_Brace_R5": 1.5,
+        "Knockdown_Fall_R5": 1.5,
+        "Pin_Throat_Bite_R5": 3.4,
+        "Rest_Lie_R5": 6.4,
+        "Rise_From_Lie_R5": 2.2,
+        "Run_Dodge_Lunge_R5": 3.1,
+        "Wolf_Run_R5": 0.5666666666666667,
+        "Wolf_Walk_R5": 1.0666666666666667
+      },
+      "morphTargets": 1
+    },
+    "balance": {
+      "hp": 900,
+      "radius": 0.65,
+      "separationRadius": 0.75,
+      "stopDistance": 1.8,
+      "walkSpeed": 0.9,
+      "runSpeed": 4.2,
+      "detectRange": 16,
+      "attackDistance": 10.8,
+      "lungeMinDistance": 9.8,
+      "pinDistance": 2.35,
+      "biteRange": 2.8,
+      "biteContactRadius": 0.95,
+      "biteDamage": 100,
+      "pinDamage": 120,
+      "cooldown": 1.1,
+      "gold": 100
+    }
+  }
+}

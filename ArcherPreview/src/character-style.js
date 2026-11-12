@@ -5,7 +5,7 @@ const scenes=new WeakMap(),surfacePlugins=new WeakMap(),inkPlugins=new WeakMap()
 const neutral=Object.freeze({outline:true,outlineWidth:0,internal:false,internalStrength:0,brightness:1});
 export function characterStyleFor(mesh){
   if(mesh?.metadata?.npcCharacterStyle)return mesh.metadata.npcCharacterStyle;
-  const group=mesh?.metadata?.characterStyleGroup;
+  const group=mesh?.metadata?.characterStyleOverrideGroup??mesh?.metadata?.characterStyleGroup;
   return mesh?.getScene().metadata?.characterStyleSettings?.[group]??CHARACTER_STYLE_DEFAULTS[group]??neutral;
 }
 export function setSceneCharacterStyles(scene,value){

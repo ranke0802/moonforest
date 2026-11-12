@@ -1,11 +1,11 @@
 import {MAX_SUMMON_PER_KIND,normalizeSummonCount} from './summon-limits.js';
 
 const ELENA_PHASES = Object.freeze({ elena: 1, 'mourning-elena': 2 });
-const BOSS_NAMES = Object.freeze({bear:'곰 보스',elena:'타락한 성녀 엘레나','mourning-elena':'비탄의 마녀 엘레나'});
+const BOSS_NAMES = Object.freeze({wolf:'우두머리 늑대',bear:'곰 보스',elena:'타락한 성녀 엘레나','mourning-elena':'비탄의 마녀 엘레나'});
 
 // Each selected kind keeps its quantity independently across map changes.
 export class BossSelection {
-  constructor() { this.kind = 'bear'; this.counts = {bear:1,elena:1,'mourning-elena':1}; }
+  constructor() { this.kind = 'bear'; this.counts = {wolf:1,bear:1,elena:1,'mourning-elena':1}; }
 
   choose(kind) {
     this.kind = Object.hasOwn(this.counts, kind) ? kind : 'bear';

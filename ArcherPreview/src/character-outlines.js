@@ -61,7 +61,7 @@ void main(void) {
   gl_FragColor = vec4(mix(outlineColor, vec3(1.0), hitFlash), outlineOpacity);
 }`;
 const materials = new WeakMap();
-const widths = { sword: .0025, shield: .0035, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
+const widths = { sword: .0025, shield: .0035, wolf: .003, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
 // Keep Babylon's complete Mesh clone pipeline, including posed bounds. Its
@@ -161,7 +161,7 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.morphTargetManager = source.morphTargetManager;
     shell.numBoneInfluencers = source.numBoneInfluencers;
     shell.computeBonesUsingShaders = source.computeBonesUsingShaders;
-    shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(profile==='elena'?{outlinePixels:.5}:{}) };
+    shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(['elena','wolf'].includes(profile)?{outlinePixels:.5}:{}),...(source.metadata?.characterStyleOverrideGroup?{characterStyleOverrideGroup:source.metadata.characterStyleOverrideGroup}:{}) };
     const mourning=source.metadata?.mourningReferenceLook===true;
     shell.material = outlineMaterial(source.getScene(),mourning);
     shell.isPickable = false; shell.checkCollisions = false; shell.receiveShadows = false;
@@ -169,7 +169,7 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;
     shell.visibility = source.visibility; shell.isVisible = source.isVisible;
     if(kind==='warrior')registerCharacterInk(shell,'player');
-    else if(kind==='bear'||kind==='goblin'||kind==='elena')registerCharacterInk(shell,mourning?'mourning':'boss');
+    else if(kind==='bear'||kind==='goblin'||kind==='elena'||kind==='wolf')registerCharacterInk(shell,mourning?'mourning':'boss');
     added.push(shell);
   }
   asset.meshes.push(...added);

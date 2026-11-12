@@ -13,8 +13,8 @@ import {approvedSceneryVersion,APPROVED_SCENERY_CAPS,SCENERY_BUDGET_REVISION,SCE
 const root=resolve(import.meta.dirname,'..'),sha=bytes=>createHash('sha256').update(bytes).digest('hex'),slash=value=>value.replaceAll('\\','/');
 const maps=['village','great-plains','monster-forest','witch-cave'];
 const layouts={'village':VILLAGE_PLACEMENTS,'great-plains':PLAINS_PLACEMENTS,'monster-forest':FOREST_PLACEMENTS,'witch-cave':CAVE_PLACEMENTS};
-export const CATALOG_MANIFESTS=['village','village-plains-outskirts','great-plains','monster-forest','witch-cave','quest-props','environment','guardian-bear','hooded-goblin','elena','mourning-elena','character','warrior','warrior-v2','warrior-v3','warrior-v3-ios'];
-const actors=new Set(['guardian-bear','hooded-goblin','elena','mourning-elena']),players=new Set(['character','warrior','warrior-v2','warrior-v3','warrior-v3-ios']);
+export const CATALOG_MANIFESTS=['village','village-plains-outskirts','great-plains','monster-forest','witch-cave','quest-props','environment','guardian-bear','hooded-goblin','alpha-wolf','elena','mourning-elena','character','warrior','warrior-v2','warrior-v3','warrior-v3-ios'];
+const actors=new Set(['guardian-bear','hooded-goblin','alpha-wolf','elena','mourning-elena']),players=new Set(['character','warrior','warrior-v2','warrior-v3','warrior-v3-ios']);
 
 const canonicalCatalogValue=value=>Array.isArray(value)?value.map(canonicalCatalogValue):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonicalCatalogValue(value[key])])):value;
 // Approved saved scenes reference the shipped catalog's legacy distribution

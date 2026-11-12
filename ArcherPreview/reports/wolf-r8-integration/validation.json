@@ -1,0 +1,156 @@
+{
+  "scope": "Packed R8 asset, actual terrain/navigation and Babylon NullEngine; GPU and real-device FPS/heat not measured",
+  "cases": [
+    {
+      "map": "village",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "liveResources": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "after": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "sharedGeometry": true,
+      "independentSkeletonAndMorph": true
+    },
+    {
+      "map": "great-plains",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "liveResources": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "after": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "sharedGeometry": true,
+      "independentSkeletonAndMorph": true
+    },
+    {
+      "map": "monster-forest",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "liveResources": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "after": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "sharedGeometry": true,
+      "independentSkeletonAndMorph": true
+    },
+    {
+      "map": "witch-cave",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "liveResources": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "after": {
+        "mesh": 320,
+        "geometry": 27,
+        "skeleton": 20,
+        "animation": 240,
+        "morph": 20,
+        "textures": 0,
+        "beforeRender": 0
+      },
+      "sharedGeometry": true,
+      "independentSkeletonAndMorph": true
+    },
+    {
+      "nativeSamplerPoseChecks": 48,
+      "allTwelveClips": true
+    },
+    {
+      "contacts": "real jaw/paw pose",
+      "dodge": true,
+      "blockNoDisplacement": true,
+      "heavyAndBashAwayFromPlayer": true,
+      "deathRewardCount": 1,
+      "playerDeathReleasesCapture": true
+    },
+    {
+      "authoredLungeTargetMeters": 10.4,
+      "biteHits": 1,
+      "actorMeters": 9.1,
+      "rootNotAppliedTwice": true,
+      "pitchAndFlightPreserved": true
+    },
+    {
+      "roundTripMaps": [
+        "village",
+        "great-plains",
+        "monster-forest",
+        "witch-cave"
+      ],
+      "roundTripRepeats": 2,
+      "pooledWolves": 5,
+      "resourcesStable": true,
+      "warningGroundUsesCurrentMap": true
+    }
+  ]
+}

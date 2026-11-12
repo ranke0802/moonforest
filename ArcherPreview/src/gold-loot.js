@@ -1,4 +1,4 @@
-export const GOLD_REWARDS=Object.freeze({goblin:10,bear:100});
+export const GOLD_REWARDS=Object.freeze({goblin:10,bear:100,wolf:100});
 const STORAGE_KEY='moonforest-gold-v1';
 const LEDGER_KEY='moonforest-gold-ledger-v1';
 export class GoldLoot {

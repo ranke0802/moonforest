@@ -36,7 +36,9 @@
     "elena-motion-v2-pack": "Sources/actors/elena-pack/elena-motion-v2",
     "approved-scenery-budgets": "Sources/environment/approved-geometry/2026-11-09",
     "village-exterior-shell-review": "Sources/environment/village-exterior-shell/2026-11-09",
-    "approved-review-r2-2026-11-09": "Sources/environment/approved-geometry/2026-11-09-r2"
+    "approved-review-r2-2026-11-09": "Sources/environment/approved-geometry/2026-11-09-r2",
+    "wolf-game-r8": "Sources/actors/tripo-monsters/wolf-game-r8",
+    "wolf-attack-r8": "Sources/actors/tripo-monsters/wolf-attack-r8"
   },
   "inputs": [
     {
@@ -30208,6 +30210,1399 @@
       ],
       "requiredBy": [
         "village-exterior-textured-review-authoring"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/actions.json",
+      "bytes": 2885492,
+      "sha256": "36779b6a4e1c9b0d11c1e9e8a6473eee3d9b46b100d6773ea3059ce2a86f4a34",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/binding.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/binding.json",
+      "bytes": 120264,
+      "sha256": "79cfa57d3c6f99533635f58b46a987ec11bec355891f5686e392577b4e1e0743",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/blend/wolf-attack-r8.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/blend/wolf-attack-r8.blend",
+      "bytes": 51159110,
+      "sha256": "5f3ba653ad28889d14d2974765460c1a36b61a7d8e0119389ae7db348c816a06",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/build-report.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/build-report.json",
+      "bytes": 3485,
+      "sha256": "5ab080ccaa7d9a6108089cf989deb15c2e916bc595b7962bd2bc6aa7136b13d3",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/export-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/export-validation.json",
+      "bytes": 1787,
+      "sha256": "7da95dfcfea7ba225811a572019cbcd8cc77ec53f4bc83aef01afb74e4dbac48",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/limb-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/limb-validation.json",
+      "bytes": 14985,
+      "sha256": "35cf2b562f4e086d39f790839ddcc3502efc155f858065e9ac015dff891a69a1",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/manifest.json",
+      "bytes": 10204,
+      "sha256": "fdfa7b1a864eacfd83b89ba2b61d69921a0315dedaecaec6c453acf7256fb400",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/models/alpha-wolf-attack-r8.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/models/alpha-wolf-attack-r8.glb",
+      "bytes": 4357668,
+      "sha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/motion-continuity.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/motion-continuity.json",
+      "bytes": 6944,
+      "sha256": "95b5ef40d780b8e1f9ffc545f67da3b268e021b32b0ed55d3fa3e58097092ae7",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/r7-motion-inspection.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/r7-motion-inspection.json",
+      "bytes": 25964,
+      "sha256": "9cb8e6aca86c35ef2137520d3e25d52f56d45a3d68384c15ef48adf441422d35",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/reference/base-color-original.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/reference/base-color-original.jpg",
+      "bytes": 1928946,
+      "sha256": "de72b7523fa14906eba4d2d974c02850485167a5fefb1ed793c9f11297343dac",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/reference/quaternius-License.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/reference/quaternius-License.txt",
+      "bytes": 364,
+      "sha256": "83d8959f9fc56353ed571fbe2dc52e4bcd64508e2399501cd45ac2ce3df0bf8c",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/attack-comparison.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/attack-comparison.jpg",
+      "bytes": 267964,
+      "sha256": "3042db28237a0ccaddfe76d56221a3b77b7933e77fb4e2bd2afe3f7fb6cba109",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/joint-comparison.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/joint-comparison.jpg",
+      "bytes": 214897,
+      "sha256": "0c79d078d538bbd5c26d670b3d4abf50d202073d69b8d78c79fb39935dbdc4f4",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-00-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-00-side.png",
+      "bytes": 294954,
+      "sha256": "4ad8b20b21ac3e5bf087d09ed16a398424c540a869f2c1b028448a471ae5acfd",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-01-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-01-side.png",
+      "bytes": 294983,
+      "sha256": "45a20bac072ce8090c2d4cd53d1199b07a07903f94fdb60639b48e25b9643ac7",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-02-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-02-side.png",
+      "bytes": 295806,
+      "sha256": "46a57613f8456710d46e7c39544a16d9df4648da10db9b3a9f6383a247636633",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-03-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-03-side.png",
+      "bytes": 294054,
+      "sha256": "4f8e08272c8061140dfc2e104f118b03ac4385f4b72dffeba936eec87501a68c",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-04-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-04-side.png",
+      "bytes": 292374,
+      "sha256": "aaa0be3005e8bb259eb3bf8f563faa423fb9a58c6cd0386e4489f33abd7be470",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-05-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-05-side.png",
+      "bytes": 294221,
+      "sha256": "6870ef0b0c6bc9f5f33a985fc523344913d8b6a1fe677c5f340378e02b2ae018",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-06-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-06-side.png",
+      "bytes": 296245,
+      "sha256": "7e051fcc35cff2c406c2b13568cb9c1d3ca984e81c49c893180e2960644ed5cd",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-07-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-07-side.png",
+      "bytes": 294936,
+      "sha256": "1ea3b0c25c68fbf20fb2c2febda695d0849147e32929585a0adfaddf21f6c9aa",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-08-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-08-side.png",
+      "bytes": 294410,
+      "sha256": "39f154ebb3f3fbfce51b025fa57feae6da4e8950a375c21646ba131cce773276",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-09-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-09-side.png",
+      "bytes": 289471,
+      "sha256": "bf8dd408f6ebde95d428605fc70797797c745dbbe0999a6393577cca126fe045",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-10-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-10-side.png",
+      "bytes": 296894,
+      "sha256": "92ec2af599ce857e8f21d143070fb546d4a7517119dd8389b7533401c89ca11b",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-11-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-11-side.png",
+      "bytes": 290564,
+      "sha256": "3900c5965adf400a73a60788b3289651386e4dfc307f51c376e4fcd802ed9d6b",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-12-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-12-side.png",
+      "bytes": 296712,
+      "sha256": "e6357b5b312925810c623652d83b31c94de47f3f0601b59e74f9b3d9bb5afd40",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-13-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-13-side.png",
+      "bytes": 291932,
+      "sha256": "d9c6bb794d0d41fd2bd3b497b8444a1d6249fc7827be680d760f908bdb8041d5",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-14-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-14-side.png",
+      "bytes": 298254,
+      "sha256": "c0d352e234553b18535fd65386b277d431d0b951eb4b4f6b276a32112e61dc53",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-15-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-15-side.png",
+      "bytes": 295246,
+      "sha256": "efa63c414d48c61ba237ba104b4f62d9c18c89a59e9c5c8d3f2698d885d42e76",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-16-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-16-side.png",
+      "bytes": 295147,
+      "sha256": "9142cac67b81c15ba55cd414a513e0e269c9e5f9607e9b13bc448055be1e28d3",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-17-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-17-side.png",
+      "bytes": 294737,
+      "sha256": "569e2103d0006de0303194dec4c33373b14970ce542ebc8d51af7889ee64a6b1",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-18-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-18-side.png",
+      "bytes": 295223,
+      "sha256": "c97de5001b80e92bb1a6c16704c1628a2678e478f75f9a389f00a458b85c247a",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-19-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-19-side.png",
+      "bytes": 295327,
+      "sha256": "648f4c49d0bf0022eecf938b66085b17cedf6ddfab33194a4099d2ef12740d8e",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-20-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-20-quarter.png",
+      "bytes": 330201,
+      "sha256": "88fbd20b6b99c0388567be29bc460667d999b673c4908cc3085e41af44993669",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-21-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-21-front.png",
+      "bytes": 285910,
+      "sha256": "c721f2fb7b9305e0461488db8a9a4b8010833c625aa8100a3fa0fdcdabae7232",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-22-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-22-joint.png",
+      "bytes": 370818,
+      "sha256": "78c2f7d74c43d1638a20051c0270820d82634c83ce9435db95f307cbcdabbd90",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-23-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-23-joint.png",
+      "bytes": 362633,
+      "sha256": "6efbd27883f6cf9e1880fe8a89d89797259bed1e929f52cb8b4c35360ceaa388",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-24-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-24-front.png",
+      "bytes": 288874,
+      "sha256": "d2e085e779bdf2a332f8b2a3a659647de1333a56941acb27dfbb28d999925967",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-25-distant.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R7-25-distant.png",
+      "bytes": 309919,
+      "sha256": "1c977f01c700d58a95da451e1365e36d48ab98b32311c90a5e8d1c4a7cbd8ce6",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-00-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-00-side.png",
+      "bytes": 296092,
+      "sha256": "8022408c7fd9cafa7f717ce149ae6f48bdfd5b4bdf915ac8012973237364e6ef",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-01-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-01-side.png",
+      "bytes": 296892,
+      "sha256": "33b9c382192a59bb760e3a2adc114b6a37560b456361f2086f6703c8fd57e79d",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-02-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-02-side.png",
+      "bytes": 296542,
+      "sha256": "8ea74e4bc1694318b3d0754226f05b2276122ffdf5c779ea73dd94733e29fffd",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-03-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-03-side.png",
+      "bytes": 294543,
+      "sha256": "4cfa09d1f2cbf09948b9bf23de5c9191ea11c47636aee8e338df8c7c84de9096",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-04-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-04-side.png",
+      "bytes": 293680,
+      "sha256": "e811e07550cd2c99611dcafa9a9e458cffaeaaa0269ff943a687c08419a8ec43",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-05-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-05-side.png",
+      "bytes": 294850,
+      "sha256": "8d88960a4ec35c4c92fc7e8d0bd3ae8f1d07b82ca5293b7dc7406fd263d30fe2",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-06-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-06-side.png",
+      "bytes": 296270,
+      "sha256": "2656f31acc1cd2839189a3a40db8d3f317ad17b4639792f00dd735ffc5d6f762",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-07-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-07-side.png",
+      "bytes": 294937,
+      "sha256": "6c1a2c823c82634e031af9cf84b67a78fb976c846c29f99a487529dced60b7c1",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-08-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-08-side.png",
+      "bytes": 295586,
+      "sha256": "067730863c543737a70505eeac359e7dd725f61aefada39498d5e3384606c785",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-09-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-09-side.png",
+      "bytes": 290896,
+      "sha256": "4df3c20136d16177961dfdf241c594b921357a14308e9ced744fa0ca5c7d5870",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-10-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-10-side.png",
+      "bytes": 296639,
+      "sha256": "956bca8b986134942bd09fbb1d4299dbbc2a0d02f4a17ad2182f89c6029ba1bb",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-11-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-11-side.png",
+      "bytes": 293740,
+      "sha256": "9e42279265fddf3e9649f51070182e54e2066e531ae89477284f7badbbbed72f",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-12-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-12-side.png",
+      "bytes": 298581,
+      "sha256": "8e6cc83218a9599ea5b9b4a162c1a2bcf38a4cb96732eea7ae242543618c2f92",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-13-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-13-side.png",
+      "bytes": 295940,
+      "sha256": "a231087b6b877420d9fe750ccf1c8660b45b3db6f2baf5abb1bca958aad4b99c",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-14-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-14-side.png",
+      "bytes": 295892,
+      "sha256": "5e9553082f00e1f1c4161440c201eb78d54cb2320993c36d6f285abcbdabb68b",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-15-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-15-side.png",
+      "bytes": 295344,
+      "sha256": "ea30496ef2d17791f6e5f9d21a9e2ae6a5e36b2899f91a3f5a88766e146d6aae",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-16-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-16-side.png",
+      "bytes": 295355,
+      "sha256": "729976523217dd44494309052b704cfb8fdd36e0edb7aa81f66f2c61b34ecf29",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-17-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-17-side.png",
+      "bytes": 295059,
+      "sha256": "9188fe8f59ae944878fae42b33274102986cba519f100b6517240aabb533eb43",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-18-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-18-side.png",
+      "bytes": 295546,
+      "sha256": "c0749a4648423881d01bf370d827ce97c7a3a4b4eb2cc932ffb8a3f42cea241a",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-19-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-19-side.png",
+      "bytes": 295791,
+      "sha256": "0cf89093dac366f5ea6ea82b7142f7e93676eef92dffec21289e43c72bd3734f",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-20-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-20-quarter.png",
+      "bytes": 331559,
+      "sha256": "01102f912295130704a3e48f2a6ba4d6496e08ed6b28b918746d31fe78c1b1fd",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-21-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-21-front.png",
+      "bytes": 283746,
+      "sha256": "51fa5df7a0d7a8acec03dfaa5babd3e3cf724bd92976ab75d4e680e4c4ae0d1f",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-22-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-22-joint.png",
+      "bytes": 367836,
+      "sha256": "15072c26844b128f3480c9c63f7bcfb7687b984b40237bc6fccf34a29fb2a55f",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-23-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-23-joint.png",
+      "bytes": 367506,
+      "sha256": "e47f833466a27605a0f8879e42b77d8692af1a64e38aa39564b4b292d4518ad6",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-24-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-24-front.png",
+      "bytes": 288609,
+      "sha256": "b05367bbc2efe0f7a661877e5e93723d5fd64912dc924524cf3385d318b215a8",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-25-distant.png",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/R8-25-distant.png",
+      "bytes": 311284,
+      "sha256": "079d11826ab5d393936e41b6b54edfb68518606668b92e6c37935a4ffc788a4c",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/render-cases.json",
+      "bytes": 2760,
+      "sha256": "7fad6db9ee7df65b8ae94c5caad857859d5f1f6f6c8176e696e6a97948acd50a",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/review/run-comparison.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/review/run-comparison.jpg",
+      "bytes": 178791,
+      "sha256": "ee402b7052beaef88882bf33b30a89851bd4d600b97d0e8a8379749d5bfe7b1f",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/rotation-continuity.json",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/rotation-continuity.json",
+      "bytes": 195,
+      "sha256": "b9399049ae3da1a150d69b936d62e6462ba9996aaccbbf04d27602be29e3d154",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/audit_motion.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/audit_motion.py",
+      "bytes": 1976,
+      "sha256": "8c5677f7335c22ceb5674ff56223cefc4fb54e1c755c9dff601d91892e1b50eb",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/build_r8.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/build_r8.py",
+      "bytes": 18471,
+      "sha256": "d41e15ce665335d6cbc6b8e1befc9ebe0534ac3d1819174f89c389d6b2fcde9c",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/inspect_r7.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/inspect_r7.py",
+      "bytes": 1415,
+      "sha256": "0ff242be315c1dcd1d3f087778880622fe612bcffd30d71f07796982ecd9382a",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/normalize_rotation_keys.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/normalize_rotation_keys.py",
+      "bytes": 2410,
+      "sha256": "b8233bfdaafed544b8143f6772f0ecb53024aa528ddb11ee6838b782d9ae644d",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/package_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/package_review.py",
+      "bytes": 1552,
+      "sha256": "cfdfc450bd3ddd39bc1033113f54395652b836104b00eae5d9d000c1bd97b939",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/scripts/review_r8.py",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/scripts/review_r8.py",
+      "bytes": 8703,
+      "sha256": "3aeb15a6fd63e824bef8e8b0d2627eee84f116d4c2007c59b5b6e21808d074c1",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/검수_안내.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/검수_안내.txt",
+      "bytes": 3228,
+      "sha256": "7b3b69a2521d7f2286cbdf5151bc00c3cb6e56e35f9f9b00b73095dd57d3556a",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-attack-r8/우두머리_늑대_R7_R8_달리기_회피_도약_비교.html",
+      "path": "Sources/actors/tripo-monsters/wolf-attack-r8/우두머리_늑대_R7_R8_달리기_회피_도약_비교.html",
+      "bytes": 18750969,
+      "sha256": "f5e78b887b9dec8f64c39fbd1f7b128070faef6ad9211f541e7c06f8ee45b205",
+      "origins": [
+        "R7-preserving derivative: fixed-length gallop, lateral dodge and jump/bite animation refinement"
+      ],
+      "requiredBy": [
+        "wolf-attack-r8-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/albedo-4k-uastc.ktx2",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/albedo-4k-uastc.ktx2",
+      "bytes": 11322755,
+      "sha256": "445fbd01f773332c1b5a01bf2381ddd417b3c49fd3358c093d6807b2a50f819a",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/albedo-runtime.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/albedo-runtime.png",
+      "bytes": 8765469,
+      "sha256": "0f1b5f4736bf266f13d1ab31aec8d6a18f5576a8b1f7510742bca8780f58d2f6",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/albedo-source.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/albedo-source.jpg",
+      "bytes": 1928946,
+      "sha256": "de72b7523fa14906eba4d2d974c02850485167a5fefb1ed793c9f11297343dac",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/albedo-source.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/albedo-source.png",
+      "bytes": 11349695,
+      "sha256": "76bad16910428e2d11c0284f66d62dcdc439470b39fb935cb9671a624272e44c",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/provenance.json",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/provenance.json",
+      "bytes": 508,
+      "sha256": "bbb44469664332bbb27f1964c9a9de029a158bcab97fe8ff6243d8754b88b7fc",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/render-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/render-validation.json",
+      "bytes": 4535,
+      "sha256": "74c2a3aee5aaf800cdf9bc9177fc22f1fdec18069bb1ac367ddd655f883dfdff",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-00-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-00-front.png",
+      "bytes": 398178,
+      "sha256": "51e64dfadf7763490004a54e88952519e21a5de47acee806486345bad0405ed2",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-01-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-01-side.png",
+      "bytes": 410433,
+      "sha256": "1bf6e5390fa88242d4fe99718dd80ad3c02bdccef8727db3ba9c94e7c46e15de",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-02-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-02-quarter.png",
+      "bytes": 391244,
+      "sha256": "9d9871de2df4e1ab98aa534abf4bc8c33c3e3a7cdbf75dbcdcaf918e03c1f26a",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-03-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-03-joint.png",
+      "bytes": 461734,
+      "sha256": "9de045e78a5920187178d4d8f6927cc46e9bb4ad1a8626342685a699dc5e57dc",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-04-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-04-side.png",
+      "bytes": 407804,
+      "sha256": "71fe38627af6da4a1f23485e423dfe203207ef9648586b4acb789fd4c7c73f2c",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-05-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-05-side.png",
+      "bytes": 410866,
+      "sha256": "845a2cd9a1234ac72229e0db5aaf094cf17e7afdd5d168fe43064aba7e066d81",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-06-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-06-side.png",
+      "bytes": 410495,
+      "sha256": "a508bec32660ece6762e8a8af4b9045780ef49d69be16e761e0a694f8b2308bb",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-07-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-07-side.png",
+      "bytes": 409803,
+      "sha256": "24a3846762863d1a4a772218c17229d7ba89aa43e80e8591ed6a5be23bb0a92f",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-08-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-08-quarter.png",
+      "bytes": 393454,
+      "sha256": "c996bcf6531ee9690791f8508d897c7692900160efe81c4b0856b2aaac1f91e2",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/game-09-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/game-09-side.png",
+      "bytes": 390753,
+      "sha256": "c2d9f919f4a7d927e8d92f1c4489ebc4d52bc2d738ddc5ed6bd6411b3bd2eb41",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-00-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-00-front.png",
+      "bytes": 397964,
+      "sha256": "0d633ae62ca451b5a70b7851f64a6d21bbfe867fa4e7f1ba5192394430c3bd91",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-01-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-01-side.png",
+      "bytes": 410163,
+      "sha256": "dda7d202c9ee7961f8ac8a04b82ad492e3bf20bb48bbaf64734c9fe2db8a8046",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-02-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-02-quarter.png",
+      "bytes": 391010,
+      "sha256": "c8362a017f22a58d7769d8309d9cb120f3654d401b533fc0d50d5fd2a94fd28c",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-03-joint.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-03-joint.png",
+      "bytes": 451999,
+      "sha256": "a7625bbf0c07e7db053ab957839b37ba95c98f99fa3de0eccc8f5965a79fe4d0",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-04-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-04-side.png",
+      "bytes": 407119,
+      "sha256": "6f7a0765b70168d5a096f28944820056ebf3426163b5dd893cd3e65dab7f3a22",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-05-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-05-side.png",
+      "bytes": 410635,
+      "sha256": "5907093784eb8b33a805047d1333d04439f9168a9ec1eab70d8896a2944e6155",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-06-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-06-side.png",
+      "bytes": 409791,
+      "sha256": "e8048e34a54b06895090ce62173487442300000cea0020cb77f06ef305e5aa8a",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-07-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-07-side.png",
+      "bytes": 408942,
+      "sha256": "03ecd624a78f0590dd8c09cf8d31bd4b87db2b2e7e36f504ba9482526c3382ed",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-08-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-08-quarter.png",
+      "bytes": 393146,
+      "sha256": "7d1dc1104343f555033ba98031d003611f2ce2e55e7cab516cb5de7ed2c7a982",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/review/source-09-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/review/source-09-side.png",
+      "bytes": 390385,
+      "sha256": "8e84dbc7357e1e6c130422a14744aeaf0a5b9b755b899b488666e2cfac14991c",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/runtime-manifest.json",
+      "bytes": 318251,
+      "sha256": "551a3336a53b8f04778ff615f0bf780290444e66deedde867aa9344af30e17f0",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/runtime-review.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-game-r8/runtime-review.glb",
+      "bytes": 12527420,
+      "sha256": "63c2620a5f9ec5338773495e688734adc49d98141bc02907d46fae23557fb07d",
+      "origins": [
+        "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
+      ],
+      "requiredBy": [
+        "alpha-wolf-game-r8",
+        "alpha-wolf-runtime-review"
       ],
       "status": "bundled"
     }

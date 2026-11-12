@@ -342,7 +342,7 @@ function updateSummonControls(encounter=boss) {
   $('#summon-boss').disabled=disabled;
   $('#open-summon').disabled=disabled;$('#open-summon').hidden=!isV2();
   text('#boss-selection-help',bossSelectionHelp(selection));
-  const present=encounter?.encounters.some(enemy=>enemy.kind===(selection.phase?'elena':'bear')&&(!selection.phase||enemy.phase===selection.phase));
+  const present=encounter?.encounters.some(enemy=>enemy.kind===(selection.phase?'elena':selection.kind)&&(!selection.phase||enemy.phase===selection.phase));
   text('#summon-boss',encounter?.loading?'불러오는 중…':present?'보스 다시 소환':'보스 소환');
 }
 
@@ -1131,7 +1131,7 @@ try {
       if(!summoned)return;
       $('#summon-dialog').close();
       actionAudio.reset();
-      if(!selection?.phase)for(const enemy of boss.encounters.filter(e=>e.kind===kind))audio.play(kind==='bear'?'boss_appear':'goblin_appear',{position:enemy.actor.position,volume:kind==='bear'?1:.45});
+      if(!selection?.phase)for(const enemy of boss.encounters.filter(e=>e.kind===(selection?.kind??kind)))audio.play(kind==='bear'?'boss_appear':'goblin_appear',{position:enemy.actor.position,volume:kind==='bear'?1:.45});
       world.camera.radius=Math.max(world.camera.radius,innerWidth<600?11:8);canvas.focus({preventScroll:true});
     }
     catch(error){console.error('[Boss load]',error);toast('보스를 불러오지 못했습니다. 연결을 확인한 뒤 다시 소환해 주세요.');audio.play('ui_error');}

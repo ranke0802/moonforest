@@ -66,7 +66,7 @@ test('historical catalog identities remain reproducible; approved scenery change
  assert.equal(legacy.length,82);assert.notEqual(entriesHash(legacy),'f73c016eed41df9410a8e357960ce9112e4247e8a201f8dd82dcd66b5f268ff5','expanded editor capabilities are deliberately distinct metadata');
  assert.equal(catalogRevisionForEntries(legacy),'a33bb141c160692086a7bb1f7f8100be74fdbb1fcdef6876512635245af92853');
  assert.equal(previous.length,84);assert.equal(catalogRevisionForEntries(previous),'535a44e389eea2c7a46223d345768369c9533115b7c1598695ba34319dfd97f8');
- assert.equal(ASSET_CATALOG.entries.length,85);assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),ASSET_CATALOG.revision);assert.notEqual(ASSET_CATALOG.revision,catalogRevisionForEntries(legacy));
+ assert.equal(ASSET_CATALOG.entries.length,86);assert.equal(ASSET_CATALOG.entries.filter(e=>e.assetId!=='alpha-wolf').length,85);assert.equal(getCatalogAsset('alpha-wolf').geometry.triangles,25080);assert.equal(catalogRevisionForEntries(ASSET_CATALOG.entries),ASSET_CATALOG.revision);assert.notEqual(ASSET_CATALOG.revision,catalogRevisionForEntries(legacy));
  assert.notEqual(ASSET_CATALOG.revision,before.revision,'New geometry is a new content catalog, not a forged legacy fingerprint');
  for(const id of Object.keys(APPROVED_SCENERY_CAPS)){
   const old=before.entries.find(e=>e.assetId===id),current=getCatalogAsset(id);

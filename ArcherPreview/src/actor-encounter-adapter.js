@@ -1,3 +1,4 @@
+import {WolfEncounter} from './wolf-encounter.js';
 import {Vector3} from '@babylonjs/core';
 import {BossEncounter} from './boss-encounter.js';
 import {GoblinEncounter} from './goblin-encounter.js';
@@ -9,7 +10,7 @@ import {applyHitFlash} from './hit-feedback.js';
 import {isRuntimeOutline} from './character-outlines.js';
 import {ACTOR_DEFINITIONS,getActorDefinition,validateActorSpawn} from './actor-definitions.js';
 
-const encounters={bear:BossEncounter,goblin:GoblinEncounter,elena:ElenaEncounter,mourning:MourningElenaEncounter,npc:GoblinEncounter};
+const encounters={wolf:WolfEncounter,bear:BossEncounter,goblin:GoblinEncounter,elena:ElenaEncounter,mourning:MourningElenaEncounter,npc:GoblinEncounter};
 const positionOf=value=>value instanceof Vector3?value.clone():new Vector3(value.x,value.y??0,value.z);
 function registeredProfile(definition){
   const reference=Object.values(ACTOR_DEFINITIONS).find(value=>value.encounterType===definition.encounterType);

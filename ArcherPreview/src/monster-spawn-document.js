@@ -2,7 +2,7 @@ import {ITEM_DROP_CHOICES} from './item-drop-data.js';
 // Data-only monster placement document. Never execute values from imported files.
 export const MONSTER_SPAWN_FORMAT='moonforest-monster-spawns';
 export const MONSTER_SPAWN_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
-export const MONSTER_SPAWN_DEFINITIONS=Object.freeze(['guardian-bear.standard','hooded-goblin.standard']);
+export const MONSTER_SPAWN_DEFINITIONS=Object.freeze(['guardian-bear.standard','hooded-goblin.standard','alpha-wolf.r8']);
 const validId=/^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,79}$/;
 export const emptyMonsterSpawns=()=>({format:MONSTER_SPAWN_FORMAT,version:1,maps:{}});
 export function validateMonsterSpawns(input){

@@ -120,7 +120,7 @@ export class BossEncounter {
     if(this.assetPreparationStep<4){await preparation.step('pose-and-warning-resources',()=>{
       enableEnemyFade(this.asset);
       this.deathVisibility=this.asset.meshes.map(mesh=>[mesh,mesh.visibility]);this.nodes=Object.fromEntries(this.asset.transformNodes.map(node=>[node.name,node]));this.poseNodes=orderPoseNodes(this.asset.transformNodes);
-      this.warningRing=createTerrainRing(this.world.scene,this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
+      this.warningRing=createTerrainRing(this.world.scene,this.warningTerrain?.()??this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
       this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       if(this.kind!=='elena')this.ring.metadata={...this.ring.metadata,moonforestWarmMaterial:true};
     });this.assetPreparationStep=4;}
@@ -233,6 +233,14 @@ export class BossEncounter {
   attackRange(spec){return bossAttackRange(spec);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
   isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
+  attackContactPoints(aim){return ['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));}
+  attackBodyContact(){return true;}
+  applyMotionRoot(root){
+    if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
+      const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale,yaw=this.actor.rotation.y;
+      this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
+    }
+  }
   hurtCapsules(){
     const pairs=[['Hips','Spine2',.48],['Neck','Head',.35],['LeftArm','LeftForeArm',.23],['LeftForeArm','LeftHand',.23],['RightArm','RightForeArm',.23],['RightForeArm','RightHand',.23],['LeftUpLeg','LeftLeg',.27],['LeftLeg','LeftFoot',.22],['RightUpLeg','RightLeg',.27],['RightLeg','RightFoot',.22]];
     return pairs.map(([a,b,r])=>({points:[a,b].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition().asArray()),radius:r*this.config.scale}));
@@ -293,10 +301,7 @@ export class BossEncounter {
     this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
     this.animator.update(dt);
     const root=rootSample(this.config,this.brain.state,this.brain.time);
-    if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
-      const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale,yaw=this.actor.rotation.y;
-      this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
-    }
+    this.applyMotionRoot(root);
     this.lastRoot=root;this.lastSerial=this.brain.serial;
     // Shield pushes and large enemies can be staggered without entering the
     // down state. Apply their bounded recoil through the same navigation guard.
@@ -403,8 +408,8 @@ export class BossEncounter {
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(event.kind==='spin'||event.kind==='grab'||facing>.2){
           const aim=player.position.add(new Vector3(0,playerDimensions(player).bodyAimHeight,0));
-          const limbs=['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
-          this.receiveBossHit({damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact:true,shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          const limbs=this.attackContactPoints(aim);
+          this.receiveBossHit({event,damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact:this.attackBodyContact(event,aim,limbs),shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
         }
       }
     }

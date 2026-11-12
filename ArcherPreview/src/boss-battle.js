@@ -1,3 +1,5 @@
+import {WolfEncounter} from './wolf-encounter.js';
+import {WOLF_BALANCE} from './wolf-spec.js';
 import { Vector3 } from '@babylonjs/core';
 import { BossEncounter } from './boss-encounter.js';
 import { BossModelLibrary } from './boss-models.js';
@@ -77,10 +79,11 @@ export function separateBosses(encounters, grabOwner) {
 }
 
 export class BossBattle {
-  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
+  constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, wolfModels, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
     this.onDefeat=onDefeat;this.onDiagnosticEvent=onDiagnosticEvent;
     this.models = models ?? new BossModelLibrary(world.scene);
+    this.wolfModels=wolfModels??new BossModelLibrary(world.scene,'alpha-wolf');this.wolfPool=[];
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;
@@ -107,7 +110,7 @@ export class BossBattle {
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
   get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
-  get allPooled(){return [...this.pool,...this.goblinPool,...this.elenaPool,...this.mourningPool,...(this.developmentPool??[])];}
+  get allPooled(){return [...this.pool,...this.wolfPool,...this.goblinPool,...this.elenaPool,...this.mourningPool,...(this.developmentPool??[])];}
   setAttackSettings(value){this.attackSettings=value;for(const enemy of this.allPooled)this.applyAttackSettings(enemy);}
   applyAttackSettings(enemy){const kind=enemy.kind==='elena'?(enemy.phase===2?'mourning-elena':'elena'):enemy.kind;enemy.brain?.configureAttacks?.(this.attackSettings?.[kind]??{});}
   residentForPhase(phase){
@@ -285,10 +288,10 @@ export class BossBattle {
   }
   manualEncounter(kind,index){
     const phase=kind==='mourning-elena'?2:kind==='elena'?1:null;
-    const models=phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='goblin'?this.goblinModels:this.models;
-    const pool=phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='goblin'?this.goblinPool:this.pool;
+    const models=phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='wolf'?this.wolfModels:kind==='goblin'?this.goblinModels:this.models;
+    const pool=phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='wolf'?this.wolfPool:kind==='goblin'?this.goblinPool:this.pool;
     if(!pool[index]){
-      const Encounter=phase===2?MourningElenaEncounter:phase===1?ElenaEncounter:kind==='goblin'?GoblinEncounter:BossEncounter;
+      const Encounter=phase===2?MourningElenaEncounter:phase===1?ElenaEncounter:kind==='wolf'?WolfEncounter:kind==='goblin'?GoblinEncounter:BossEncounter;
       const enemy=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(duration,options)=>this.playerHit(duration,options),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat});
       enemy.number=index+1;enemy.id=kind==='bear'?index+1:kind==='goblin'?`g${index+1}`:`${kind}-${index+1}`;pool.push(enemy);
     }
@@ -305,12 +308,12 @@ export class BossBattle {
   }
   async summonGroup(player, value = 1, kind='bear') {
     if (this.loading) return false;
-    if(!['bear','goblin','elena','mourning-elena'].includes(kind))throw new RangeError('Unknown summon kind: '+kind);
+    if(!['bear','goblin','wolf','elena','mourning-elena'].includes(kind))throw new RangeError('Unknown summon kind: '+kind);
     const phase=kind==='mourning-elena'?2:kind==='elena'?1:null;
     const matches=b=>phase?b.kind==='elena'&&b.phase===phase:b.kind===kind;
     const others=this.encounters.filter(b=>!matches(b));
     const request = ++this.revision, count = normalizeBossCount(value);
-    const models=phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='goblin'?this.goblinModels:this.models,pool=phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='goblin'?this.goblinPool:this.pool,radius=phase===2?MOURNING_SIZE.radius:phase===1?ELENA_SIZE.radius:kind==='goblin'?.34:.7;
+    const models=phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='wolf'?this.wolfModels:kind==='goblin'?this.goblinModels:this.models,pool=phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='wolf'?this.wolfPool:kind==='goblin'?this.goblinPool:this.pool,radius=phase===2?MOURNING_SIZE.radius:phase===1?ELENA_SIZE.radius:kind==='wolf'?WOLF_BALANCE.radius:kind==='goblin'?.34:.7;
     const scene=this.world.scene,map=this.world.mapId;
     const preparation=createBossPreparation({...this.preparationOptions,incremental:true,isCurrent:()=>request===this.revision&&this.world.scene===scene&&this.world.mapId===map&&!scene?.isDisposed});
     const started=performance.now(),timings={kind,count,map,mode:pool.slice(0,count).length===count&&pool.slice(0,count).every(e=>e.assetPrepared)?'reuse':models.container?'cached-model':'cold',status:'preparing',loadMs:0,placementMs:0,prepareMs:0,activationMs:0};this.lastSummon=timings;
@@ -327,7 +330,7 @@ export class BossBattle {
       if(!others.some(b=>b.brain.hp>0))this.combat.reset();
       mark=performance.now();
       const plan=async(origin=null)=>{
-        const positions=origin?Array.from({length:count},()=>new Vector3(origin.x,0,origin.z)):bossSpawnPositions(player,count,{radius,separationRadius:phase===2?MOURNING_SIZE.separationRadius:phase===1?ELENA_SIZE.separationRadius:kind==='goblin'?.42:.8});
+        const positions=origin?Array.from({length:count},()=>new Vector3(origin.x,0,origin.z)):bossSpawnPositions(player,count,{radius,separationRadius:phase===2?MOURNING_SIZE.separationRadius:phase===1?ELENA_SIZE.separationRadius:kind==='wolf'?WOLF_BALANCE.separationRadius:kind==='goblin'?.42:.8});
         const occupied=this.spawnOccupants(player,others),placements=[];
         for(let index=0;index<count;index++){
           const enemy=this.manualEncounter(kind,index),position=positions[index],navigation=enemy.movementNavigation??this.world.navigation;
@@ -438,7 +441,7 @@ export class BossBattle {
   inspect() {
     return { active: this.active, loading: this.loading, count: this.encounters.length, living: this.livingCount,
       playerHp: this.playerHp, potions: this.potions.remaining, capturedBy: this.combat.grabOwner?.id ?? null,
-      pooledModels: this.allPooled.length, modelLoads: this.models.loads, goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,mourningModelLoads:this.mourningModels.loads,residentPhase:this.residentPhase,residentError:this.residentError??null,
+      pooledModels: this.allPooled.length, modelLoads: this.models.loads,wolfModelLoads:this.wolfModels.loads,wolfCount:this.encounters.filter(b=>b.kind==='wolf').length, goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,mourningModelLoads:this.mourningModels.loads,residentPhase:this.residentPhase,residentError:this.residentError??null,
       summonLimitPerKind:MAX_BOSSES,lastSummon:this.lastSummon??null,elenaCount:this.encounters.filter(b=>b.kind==='elena'&&b.phase===1).length,mourningCount:this.encounters.filter(b=>b.kind==='elena'&&b.phase===2).length,
       bearCount:this.encounters.filter(b=>b.kind==='bear').length,goblinCount:this.encounters.filter(b=>b.kind==='goblin').length,bosses: this.encounters.map(boss => boss.inspect()) };
   }
