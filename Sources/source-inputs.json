@@ -39,7 +39,9 @@
     "approved-review-r2-2026-11-09": "Sources/environment/approved-geometry/2026-11-09-r2",
     "wolf-game-r8": "Sources/actors/tripo-monsters/wolf-game-r8",
     "wolf-attack-r8": "Sources/actors/tripo-monsters/wolf-attack-r8",
-    "wolf-v02-attacks-r9": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9"
+    "wolf-v02-attacks-r9": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9",
+    "wolf-v02-feral-r10": "Sources/actors/tripo-monsters/wolf-v02-feral-r10",
+    "wolf-feral-r10-review-reference": "Sources/references/wolf-feral-r10"
   },
   "inputs": [
     {
@@ -32410,6 +32412,2944 @@
       ],
       "requiredBy": [
         "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/actions.json",
+      "bytes": 248387,
+      "sha256": "71223857454938efe0f6d72546fd04756c8278e350fee8cf614b1ad160bd2dd9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/audit.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/audit.log",
+      "bytes": 26151,
+      "sha256": "0a1f73d0aab7f9c7103e21b66304901bab60d4277a1f48f0e17899ffd8dff94c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/AUTHORING_NOTES.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/AUTHORING_NOTES.txt",
+      "bytes": 2391,
+      "sha256": "4f5eee50cd82e62a3e107a2d584ad63583ac117c6e467c30f0084d356e2116e7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/blend/wolf-v02-feral-r10.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/blend/wolf-v02-feral-r10.blend",
+      "bytes": 55553966,
+      "sha256": "600acc4173c9a465433045d94b5c377fe4503ff401faa84bcc806f659ff479ac",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/build.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/build.log",
+      "bytes": 6388,
+      "sha256": "9cf14712f879a60616dbb52ed2c28f83572075785c6ae0525fae2b922dc2557e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/clips.json",
+      "bytes": 1270365,
+      "sha256": "2b1e8de3e7b3e4feafcc9d665e9e8aaec63a78cd272654d925411f4b1932408b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/deformation-validation.json",
+      "bytes": 35902,
+      "sha256": "b62aa74b96c0c0a393a01d5ee990d1033b599e4dec2e30dc873b7261f3ff2628",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/encode.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/encode.log",
+      "bytes": 25397,
+      "sha256": "944d1bf19f284336508a79b30a5fa9f02d0985667f4d73bc18ff0288f511b9e9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/manifest.json",
+      "bytes": 9470,
+      "sha256": "17dff87c34d91874af0ab9c85aee208d4a95b92b69ab8991710ac82f9c5901aa",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/models/wolf-v02-feral-r10.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/models/wolf-v02-feral-r10.glb",
+      "bytes": 293672,
+      "sha256": "7611101fd44c145d8dd15f1fdb91735c29450d9917384627f4ee444e2ec1b48b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/playblast.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/playblast.log",
+      "bytes": 32823,
+      "sha256": "1182cb30161bbe178ef4a2028b65a5c862faa8951491f187bcdc1a2369d7634a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/000.png",
+      "bytes": 242019,
+      "sha256": "0715c3e1cc37501fe7355a2476982a77e74065e7b584c0252aeda8968cc979ea",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/002.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/002.png",
+      "bytes": 241700,
+      "sha256": "c3770f740202ac4e9b83c412dd540374fb68ce5e02bda0c47e2b0fd51463c07d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/004.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/004.png",
+      "bytes": 241956,
+      "sha256": "f8aadfec25bb74117fb4e202b90d98788e4d341c27b1715fc6e7c6247522cb31",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/006.png",
+      "bytes": 242209,
+      "sha256": "9ec631278fdb307d15618f8405c377e0ee47dd347041cff16990e165feba70b2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/008.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/008.png",
+      "bytes": 242034,
+      "sha256": "6faa43890bdd0c3a07a9b9e0566ebb7ee152adfeeb66cfcdd197b483bcd84325",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/010.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/010.png",
+      "bytes": 242126,
+      "sha256": "5c7587ca9775e5c4275669f661ebaccd7530c636e5e46bb7510cef2a6e03a6cd",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/012.png",
+      "bytes": 241317,
+      "sha256": "00c0c530b6b75777db7aca2a12316f710425d30c5ae8a55b1ea9f4622cebb9db",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/014.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/014.png",
+      "bytes": 238160,
+      "sha256": "6692423f1845d349b0a73289c2cca52eb4bf30586530eb75d752e70ca9736765",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/016.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/016.png",
+      "bytes": 235285,
+      "sha256": "c8067ff685658d7f7d2a73a875bb12dfe68e9202f8b1d1cc928c5c44e8dc6bdf",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/018.png",
+      "bytes": 235012,
+      "sha256": "ba1631934b2969a000fe5ba1a226c3da11a179d61f7411e376d372555bc86425",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/020.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/020.png",
+      "bytes": 234881,
+      "sha256": "626d45a82956209cd31e659a4a69ce59c68e502aa7b43a75ac5717fe8e958273",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/022.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/022.png",
+      "bytes": 234991,
+      "sha256": "4cade2a16280842f5655267d55f4e99a3be5fa8b6960a20f55c68641595bad4c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/024.png",
+      "bytes": 235095,
+      "sha256": "9bdf0e6e22bdb1cdc20e3022ae9c17a5999f1583ce87b5d4ec8b76db9420a83f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/026.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/026.png",
+      "bytes": 235789,
+      "sha256": "b30fe4ac70c39c6c7ccc2dc943fa3d0839320934a044d1b8eebbdd4b1fa9dd89",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/028.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/028.png",
+      "bytes": 236416,
+      "sha256": "d9eca1674ea03cb01aeb67f8e9aea2aa18e3861233ee8b2a60f12e7313b2a3c9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/030.png",
+      "bytes": 237598,
+      "sha256": "bcf4c092555c0649dd3909ffcc61c5891a8ee6b103834895bf93144e73bc8b0e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/032.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/032.png",
+      "bytes": 239141,
+      "sha256": "be23847d250534568586b3dbeb6839f071a7a1216e065b03676120991bd932fa",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/034.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/034.png",
+      "bytes": 239564,
+      "sha256": "80a1974902dca01ab74b73eb3a8d583c4a3a9d5a22e5db758cb59884c146d2e2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/036.png",
+      "bytes": 240746,
+      "sha256": "ca1795a163b130a6d8d683077ab795f548ffb28898346b9ea60efc9ae317435c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/038.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/038.png",
+      "bytes": 240758,
+      "sha256": "57b4272108603b48dc1f9c7918db6db6cf71b7d61f5fc1ca60150dcf49a079e8",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/040.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/040.png",
+      "bytes": 241451,
+      "sha256": "5da6aaf11a3bac9dbf904b4341cc49bd99a7bd29ddc80cdad25b1e6f4883e1fa",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/042.png",
+      "bytes": 241204,
+      "sha256": "c03e298c622b4e0943d7ec86d39555253481f45c54b97fc9373e8b3b0b011528",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/044.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/044.png",
+      "bytes": 241170,
+      "sha256": "fed1f655edbcff372016e42e0020de4110f9f0a42de3cfa1e8d4ca2184e5ebf5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Bite_V02/sequence.ffconcat",
+      "bytes": 965,
+      "sha256": "ba34ad6c6eaeb98d8710a5caa1e9ceaabf66a53e9a6c0626cc1ce67efde7104e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/000.png",
+      "bytes": 242019,
+      "sha256": "1fb9ca5bc96ae427865124cc628717726723a1970c1659d7ae96f3fc4a6ef60a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/002.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/002.png",
+      "bytes": 241772,
+      "sha256": "e0b067545abaaa3fb9ecb8573f247e23481f187ab5684a2ea431c6033e5a725b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/004.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/004.png",
+      "bytes": 241941,
+      "sha256": "c8c2639fbb092b83b29b0047b6941b4928172f39cca6a97c9647c921b83b8ed1",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/006.png",
+      "bytes": 242815,
+      "sha256": "7f25134c9889f77a90e0e7f03e5922a09c505526f5a0b84eb38fe0d5b94eccfd",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/008.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/008.png",
+      "bytes": 242494,
+      "sha256": "593bab54d905494bc311fd5282ec109b1a024aaa9f801d24f96da16e64b106fb",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/010.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/010.png",
+      "bytes": 242126,
+      "sha256": "81b990e0b52cafb5b87f0f36193a0d0460475adf5d0c93eebee80fbd71a0decb",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/012.png",
+      "bytes": 241848,
+      "sha256": "d123821bb18140527b0ca0c478832e046e8dc9ea038c9faf24d9e08044e5d377",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/014.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/014.png",
+      "bytes": 240811,
+      "sha256": "09386687d25e265e3f5175fbadf1e73f87258f3b143161017c6599aa4f8792ea",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/016.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/016.png",
+      "bytes": 239032,
+      "sha256": "6e53e24d11842afd21d93c3d1f37f21f21f199546702d56a7af6722ddadf50c7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/018.png",
+      "bytes": 236952,
+      "sha256": "afce1016805d159f8be6dbf8722880c7ea94f67662cfa315fa8862d22d6232ae",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/020.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/020.png",
+      "bytes": 236237,
+      "sha256": "934dd8269838cc84c18955166df1352a83e4e8197357ca697a75bce05f314b33",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/022.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/022.png",
+      "bytes": 235997,
+      "sha256": "c5ffac84dcee68fbc8da66fa00f8b58d09f58e9766b762c36cc13b873ce2a443",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/024.png",
+      "bytes": 236205,
+      "sha256": "d3d084a882faf499823a2f52fe219a85aec1439ed8bbc80ef1dbbef3cd093d64",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/026.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/026.png",
+      "bytes": 236024,
+      "sha256": "f2f6e8bfc7ba25d3eaddd094ceb0c833adc31368eca624fc6f25d1cb5ba65a3b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/028.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/028.png",
+      "bytes": 236393,
+      "sha256": "b2c9c4ce53863ce2c38f88f4a90cbb6da4ac832dd09070b7a8aefcbbd04b6447",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/030.png",
+      "bytes": 236937,
+      "sha256": "0e61359807c488f90ae0f799164b4b0e1a91c3c287658afd926c64996bce92c0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/032.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/032.png",
+      "bytes": 237522,
+      "sha256": "ffeb927a9658696ec1de79d194d4faf4d33f0417f7ca665bb9cfb49f8f0f2c51",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/034.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/034.png",
+      "bytes": 238753,
+      "sha256": "598dfec8ad0bcab892e1d7b3778986685050afc2a2c09ac0a60f8c03e0a239cb",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/036.png",
+      "bytes": 239817,
+      "sha256": "267df30bd45c5a396ef1ae3cb9f1ee6edf047936e77acda97a2c869c86b0268d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/038.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/038.png",
+      "bytes": 240178,
+      "sha256": "80d2f6a33c513c9b11d4a29856a443e7679e48edb6412e7717da230101db1ab8",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/040.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/040.png",
+      "bytes": 240566,
+      "sha256": "90e4ee6c695461ac04f3f8a21c134f27eb565f7d9238f604c0c1bc10632a3bb5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/042.png",
+      "bytes": 240946,
+      "sha256": "0f2b4fa3f28ce35f27855c0d703804d6dbb5d34eaacc3f1739e69ee985eaa476",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/044.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/044.png",
+      "bytes": 241014,
+      "sha256": "3992f42fdcc00ada4095cc6ee67fcd49b587f53946ce6a3237278dbe741f62c0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/046.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/046.png",
+      "bytes": 240809,
+      "sha256": "f7f1ac0de7635ebb3d93752ef763de4969a14e683c770a1f81d49bc92d21037f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/048.png",
+      "bytes": 240751,
+      "sha256": "ad7baea530f11673fb46469ff57d0399f2f21fa760632a01c4a59068a480a7a2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Driving_Cross_Bite_V02/sequence.ffconcat",
+      "bytes": 1047,
+      "sha256": "69de2068f0c0ada9175ef27de42a0eaf96f7698a4b51d2071065aef00fb0b238",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/000.png",
+      "bytes": 239546,
+      "sha256": "e94ba331ce3d1ecc6bdd83d2aaf59f48f287a3acbec99d75e7356c25ad933795",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/002.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/002.png",
+      "bytes": 239854,
+      "sha256": "c837343ef63d1ca577cfe7eb9f9c82ec89bb3e50eb9e636ae7f825f5f04498f4",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/004.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/004.png",
+      "bytes": 239603,
+      "sha256": "68e581693fe371ce591ca9405ffcc2b08fb7657cfec993d6b73f4d3df2abf7d0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/006.png",
+      "bytes": 239734,
+      "sha256": "24bdf2dd58e3370976ba3fb1ac50adec6a7084e02cb5c167cea4e6771225a740",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/008.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/008.png",
+      "bytes": 240015,
+      "sha256": "19ede7131837959f6aea0e44ec4b1800fe5d3d6390dce2ba1e2e60f2fc3696c2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/010.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/010.png",
+      "bytes": 240294,
+      "sha256": "c7e6b720ad6d7da898d558fa470977fd6150929f2447b54e3fcac727cce5d6ec",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/012.png",
+      "bytes": 240544,
+      "sha256": "c9cd86a55cf6f26f1d2c0ea3e4a6021293aad61e641f9aec5460ae32860f41e3",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/014.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/014.png",
+      "bytes": 240668,
+      "sha256": "5feb9851f3c9584e74a5942521560510de82e34b89d2e195a0d3ceb009863f98",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/016.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/016.png",
+      "bytes": 240632,
+      "sha256": "bab1f46de0ecede2f808f21417842b544dd9826a9bc3ec6413a69bc5589faac4",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/018.png",
+      "bytes": 240394,
+      "sha256": "767a1b6a93b47803aa2d67131fa99a4ecf47a246fd29348e9dc416ff72ef4536",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/020.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/020.png",
+      "bytes": 240678,
+      "sha256": "c2c03211d1b306cd26c23668eaee1650e00efcdd647b4797f848fbd312dbd5c7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/022.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/022.png",
+      "bytes": 240490,
+      "sha256": "3cd7ff9f3d8c306cdf8de6bb20d108c80fa80be3a7934778f9a00e241b82cf0e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/024.png",
+      "bytes": 240859,
+      "sha256": "3ab368aeb922ed53f31b9e01d0864796a3309ebb5c147b683cb157d1cc6316fe",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/026.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/026.png",
+      "bytes": 240990,
+      "sha256": "3cde0d70e2dee65ca51aef340686f971a1c21db3904ab5f189ec3d9704ff5e05",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/028.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/028.png",
+      "bytes": 240894,
+      "sha256": "97732fcc74287d838e7aeb4f5d914e7ab0c43e600c3db158c0ffe57e1103795f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/030.png",
+      "bytes": 241455,
+      "sha256": "cd0b69ba2c7d684cd7f4e313b8d740e8ea9a53cf3b8c2fe510c2fba8658a20d5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/032.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/032.png",
+      "bytes": 241078,
+      "sha256": "7cc221fb23f950ec1fd37fe5a2037c64dfdf4d8a890d5c2cdf1434b903c4aa51",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/034.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/034.png",
+      "bytes": 241253,
+      "sha256": "4d1e0764e13c2c93f23d69fe57faef1900dd2b5f3e332580259d71b91538de4e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/036.png",
+      "bytes": 241605,
+      "sha256": "2e21edd0b48070db2b3b9c63c3a4c0df3b26f1c1423e3085846045a0214cf9b8",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/038.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/038.png",
+      "bytes": 241546,
+      "sha256": "6d2fd4b833417f6030d3496f7c4f37207b41ef585077d16c36ed77f920fc98ff",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/040.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/040.png",
+      "bytes": 241935,
+      "sha256": "4cd1c2fa77b0f7d4b3a1a729cfc16344321e2139ca19fecf50e364d5854e2c11",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/042.png",
+      "bytes": 242364,
+      "sha256": "55ceebb172f9ab92b4c3dc5fadc003a609f651fae3e95ec350cd0f4683642aca",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/044.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/044.png",
+      "bytes": 242020,
+      "sha256": "ef0139769830216b365619bbf775135ee9795ce25fcf870a5af06c4146a94d02",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/046.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/046.png",
+      "bytes": 242215,
+      "sha256": "7f131a2fe9de8965a1440cc4bd829d3805708a6edf75ffb3567af0600c6254d5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/048.png",
+      "bytes": 241728,
+      "sha256": "226bba6570283ddce73ae48d0a169246f04955d1e56d223e05e87c1e1122ec83",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/050.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/050.png",
+      "bytes": 241815,
+      "sha256": "0535460242da713f82a0e45dfe52463c35eab6cfdd08298ae640710b12269136",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/052.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/052.png",
+      "bytes": 241545,
+      "sha256": "6fddc3fde8a7ef2aec41efd55ffdf5bb8af5d2d9869f9592d545ba97d382849a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/054.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/054.png",
+      "bytes": 242138,
+      "sha256": "9c408dd81713c0bc9d130eabde64d0e054be5f4524b67c623072805d3a71b7d7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_Left_V02/sequence.ffconcat",
+      "bytes": 1170,
+      "sha256": "820c22d51b5cef6e795a30a9a514c2e8cc36b011f3686b2da6f1fca7ec7632c5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/000.png",
+      "bytes": 239546,
+      "sha256": "e6218735ee7309844fe8e4b878f67b354251e3f50ed9e52952c3f90dcabc9ee1",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/002.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/002.png",
+      "bytes": 239748,
+      "sha256": "bb025a3e3cae96717992c3d61d960e3cd712e2ac7e3735e18d97505ccbabbe16",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/004.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/004.png",
+      "bytes": 239806,
+      "sha256": "e394527aba260bdf34a188e21478c2ccb4d51a654e284e22418ccf42fdb265db",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/006.png",
+      "bytes": 239424,
+      "sha256": "968cd821c5be1d47a66fd4df20b4975103da79c2528e8b11eeeb7b47bee2c406",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/008.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/008.png",
+      "bytes": 239344,
+      "sha256": "2a59339e3967f601c23afd33cda08592319a070fa04aa88e18df9b14142ae91c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/010.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/010.png",
+      "bytes": 239355,
+      "sha256": "baea2e6a1c7a23bb422aa728f520f2a03a3e1cfb2e63ff9b215208d66da1b391",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/012.png",
+      "bytes": 238862,
+      "sha256": "63c721a438ebf44291aede744297b22d9f78e6024441b86b199b24f41c574668",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/014.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/014.png",
+      "bytes": 238261,
+      "sha256": "a4f89332319749af2dba837d9293c7e97cc08f131eaa950043911c15f8648610",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/016.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/016.png",
+      "bytes": 238042,
+      "sha256": "6ebd56818a34d270b1825ef0ff0293fe47276e41215bac6e9d612468203448b9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/018.png",
+      "bytes": 237613,
+      "sha256": "14e9e3d6f51881a9d780d0d8ebe7bc74fead376055b63460d08015c6259290b5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/020.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/020.png",
+      "bytes": 237578,
+      "sha256": "4c0cca52f7febe7af47845cf9436c0babb5fe61229ac3753816f1cba6b945f7a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/022.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/022.png",
+      "bytes": 237413,
+      "sha256": "5114e174b74ee78fc7397e8ca926f341bb1c5ad44da1940bf174f0a8f4ec6bca",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/024.png",
+      "bytes": 237237,
+      "sha256": "f953fb17d2bc455ef7eb842ef2469b575b6cfad11e531329930a2aebb3f7cf55",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/026.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/026.png",
+      "bytes": 236936,
+      "sha256": "2c0c3fb89736c7ad2d3fafddf3d4b4aa060d6610e64b4e84069c3864a6334f57",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/028.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/028.png",
+      "bytes": 237013,
+      "sha256": "cf5618312ac6d14def50514de279be4d71140d9ff18810975d4554f81809005a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/030.png",
+      "bytes": 236652,
+      "sha256": "93142b77380f131f78a4eba5f91b622936bd30f1969b8515b28f1f4fff73044b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/032.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/032.png",
+      "bytes": 236655,
+      "sha256": "f4e30ca76cf6e5d4fc8a52d11e7dfdcefca6c79dec3354f69d21e2fc66f2f4cd",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/034.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/034.png",
+      "bytes": 235960,
+      "sha256": "ddeaa1e41f718e98821dd5db52d317a4e3dfdb0e044f2223df91ba61a2b2f846",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/036.png",
+      "bytes": 235849,
+      "sha256": "0248927812ad3f5b93eb0b565599b9fa2b3ba2f72e6827d9fdb98be5daa8dcae",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/038.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/038.png",
+      "bytes": 236159,
+      "sha256": "33962fdc773b2733fd53cb8c1724a9f823a6832d0672b96f364e4ca509e92ada",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/040.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/040.png",
+      "bytes": 235676,
+      "sha256": "5dc200ca94bf4d0985667ccb31965689927d8855dde6115f88ca94cec6991b7c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/042.png",
+      "bytes": 235193,
+      "sha256": "b196161bbd114134b7d2545095f908d0f6018a0552068f1b78188d1632375c66",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/044.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/044.png",
+      "bytes": 235455,
+      "sha256": "5630a4f542ae72a5ac69be1c77cd3a6975bf8d3806c92337a1f456c30aa5553d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/046.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/046.png",
+      "bytes": 235054,
+      "sha256": "9a0ebf1a9f6f9721e68775ae9274fba661582a9edabeb8a627304ce03bc4e70e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/048.png",
+      "bytes": 234958,
+      "sha256": "ffccc2f7ff468ba29745ec3e4864d73c450c9b93e74cdb8674a3705a8e79bbe1",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/050.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/050.png",
+      "bytes": 234831,
+      "sha256": "51aa0b2552d1739978c05bbdee4276a5f93764df818ff939b5acb242651e6463",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/052.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/052.png",
+      "bytes": 235015,
+      "sha256": "616804cc2d6524b68268cde891868c202c6391f1f264b40d794a8d0c2c665306",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/054.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/054.png",
+      "bytes": 234419,
+      "sha256": "2c359a5ba2ce8d794f49426ebe9e7294cf2c0b617846073d5de68906229e836a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/frames/Wolf_Orbit_Step_V02/sequence.ffconcat",
+      "bytes": 1170,
+      "sha256": "820c22d51b5cef6e795a30a9a514c2e8cc36b011f3686b2da6f1fca7ec7632c5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R10-motion-preview.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R10-motion-preview.ffconcat",
+      "bytes": 7978,
+      "sha256": "6ceac33ff34f04bfdd27f2593b47cf6d1f767af2d21aa5f1d8ff094e623bdf4e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R10-motion-preview.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R10-motion-preview.mp4",
+      "bytes": 620750,
+      "sha256": "e650075444adfcd1dbf3790dade70e43adf9ece66faebfe03742aa5d755ed47d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R9-R10-truecolor-comparison.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/R9-R10-truecolor-comparison.jpg",
+      "bytes": 514815,
+      "sha256": "6715d839d05eee226c5e9b075134ed2d3a75a25dabf927b92a067e0c876cc3b7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/render-cases.json",
+      "bytes": 9832,
+      "sha256": "686bd439ada625ebeda747df20e20fbac444a75e11e37f6325e989f1232915bf",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-forelimbs-matcap.png",
+      "bytes": 511390,
+      "sha256": "5d69b05a73b6fdedf890559a73f24ef28d2ce4b847ea5ad67b8bef2a59a1b599",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-forelimbs-quarter.png",
+      "bytes": 582145,
+      "sha256": "92b2c9dfa3cdb2aa7fd57be8e1e133031e6289465ed074818ee587eecfb975e2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-hindlimbs-matcap.png",
+      "bytes": 494860,
+      "sha256": "39e047763ce8871483f0b9bd372bbfa89decfa0e4c003d112cabfe22eaac5af9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-hindlimbs-quarter.png",
+      "bytes": 566896,
+      "sha256": "13d34c2ca7f5d2eab9c1ecdd88752de6091a1fc39cfe05754ba6271eaeb1c8e2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-front.png",
+      "bytes": 461892,
+      "sha256": "40cc79b62061393880558a40597f00e2a9f94b332ed8d941e0aef39a299a0848",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-quarter.png",
+      "bytes": 503020,
+      "sha256": "3579c66beb68187f5fcaf22e90808a82443f18d135f647078be614ef51812405",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-impact-side.png",
+      "bytes": 493017,
+      "sha256": "f1227c426573b2790c8066c9dd4dd5b3f9485e5874a048f01dfe2b621b8a3cc7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-joint-sheet.jpg",
+      "bytes": 273247,
+      "sha256": "7feabb072153ae9652e4790af04dd2407652353de78854242151178434dc1f87",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-motion-filmstrip.jpg",
+      "bytes": 215267,
+      "sha256": "ee88c0929e831c2410c3e068e97144b37aa1a6f9fefaf2937aab6798bd325db6",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-muzzle-matcap.png",
+      "bytes": 469506,
+      "sha256": "9c01aa7cd4ad1f2ab20d13d7b20e15dd35e5f5b1ef3e72977397fb48647cb846",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-muzzle-quarter.png",
+      "bytes": 523586,
+      "sha256": "40a947637c87aa279c94625185dc4a13ac5b56dbc00f9516fe4de16d69f605e7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-front.png",
+      "bytes": 476706,
+      "sha256": "26fb3dfb4caa00e2933688e65479e88f496ea6d413bff53cfd35f21fa758b2c5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-quarter.png",
+      "bytes": 517369,
+      "sha256": "bdb63e68dbb01fcf060221408afd6f60a6ebec4f39bb4822021283e24177bd38",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-prepare-side.png",
+      "bytes": 500347,
+      "sha256": "3d36e143c364e4014ad7b97504f6914809e8b26af3f08094c2510e1a273db245",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-preview-label.png",
+      "bytes": 180199,
+      "sha256": "69414aafa20a68e2c04db4db67c82f2d3dba02a838c71e74462f36944a42099e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-front.png",
+      "bytes": 476504,
+      "sha256": "ad034fb32fe44b8521c39c7098a60807cad31e69d42715eeaa0584981069c5dd",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-quarter.png",
+      "bytes": 515062,
+      "sha256": "16bfbf309b8175f71b6cc1bb996e3b1dd22e5d96e5ea90f1f57989d5795eae66",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-recover-side.png",
+      "bytes": 492812,
+      "sha256": "9fcdb52125c26fd4ec6e5bea848f13178421581ff4f984b7fa18d0bf6eba9c53",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-slow.gif",
+      "bytes": 2074029,
+      "sha256": "be0eedc63cdfab27f4aa08d499f67d1203ab8803a9bf5a98f1cbf04e4e8da087",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02-truecolor-sheet.jpg",
+      "bytes": 285423,
+      "sha256": "3918ffad4f05f3aec1b4930c26ce942ad86a43e9dd84867809f1927842b0222f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02.gif",
+      "bytes": 2074029,
+      "sha256": "d4642ec34f99762a8f0700d6a69f6bf30aad84b2a203b6e52e0ce4ded6066a02",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Bite_V02.mp4",
+      "bytes": 92337,
+      "sha256": "eacd113d6a8563bd96aed4007ad2c187f6e9abf5b1c26229aedeae9a319fc613",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-forelimbs-matcap.png",
+      "bytes": 514965,
+      "sha256": "d14cd5f7ef44ebc5e3a34916639ee9c3ebd22f68e2e6c44e1e1c106aa0f267a5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-forelimbs-quarter.png",
+      "bytes": 598873,
+      "sha256": "c5282a3b40e13b6e48343f50a8db1c78a8cb8ad2fa38c98eaae39b01c7011cef",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-hindlimbs-matcap.png",
+      "bytes": 500508,
+      "sha256": "f2854eb74950abe2047a14380e4ac0e3abc183cb1e16055fb28c89ef05410969",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-hindlimbs-quarter.png",
+      "bytes": 572698,
+      "sha256": "8efa62def4d688ef09a83dd75842ca1a87e54521b52280efa1ede882b247834b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-front.png",
+      "bytes": 458487,
+      "sha256": "c5c0a2be4aad248895ab24ab9446da9bd44ddad10cdf7a2bdbd15a5993121424",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-quarter.png",
+      "bytes": 505803,
+      "sha256": "8683a03909de0fd68cc60dd4192c723c567e32579128e8d52607bcf91bec1905",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-impact-side.png",
+      "bytes": 491375,
+      "sha256": "6aec821aa340dbcd2eb2c56e2cf8622f90e3dbbc26223f65ca8073c57c6ea5fe",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-joint-sheet.jpg",
+      "bytes": 272578,
+      "sha256": "9c4bacadd3315cc611913748970e18be01bc84150231e98a2cafb744438487b7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-motion-filmstrip.jpg",
+      "bytes": 220340,
+      "sha256": "1c4eb6901e9276054c689c20390b23bddfbeabb8afae8ebc65bef3a741516f75",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-muzzle-matcap.png",
+      "bytes": 461970,
+      "sha256": "089c91b020598d21018334eb46e6a3f1254eec06e8c8fbd1c6eb0b4e05aaa3b5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-muzzle-quarter.png",
+      "bytes": 525154,
+      "sha256": "e7670d2a79717c88466e40edd0fb30db1fdef7c3eac388515f2a846f0a1f9fa9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-front.png",
+      "bytes": 476325,
+      "sha256": "9b3a41425d8f7660ebb578e2a4f4022aa98b5918b2417927fc0451d50bb0bd6b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-quarter.png",
+      "bytes": 518007,
+      "sha256": "ff9938e983de4b7f9ac4bbf947aa97641768250a1f03559f8f21d5a7998ada5a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-prepare-side.png",
+      "bytes": 500370,
+      "sha256": "465203859a672b6e31d788ec9f4452cae9dfccf506987959010efdad04491d94",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-preview-label.png",
+      "bytes": 180646,
+      "sha256": "b0e8424d3337a62713d5da3268b0f4c534015431a5abe71f5e2f3c9201827085",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-front.png",
+      "bytes": 475971,
+      "sha256": "e2a1ed6dbf05fe637bbbb793b18da729ab4cca369485a65083b21ccd4e834c7f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-quarter.png",
+      "bytes": 515352,
+      "sha256": "d780a3d909a82a92967c790f12c128509bbcdf1bc393984e13942523bba5bfea",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-recover-side.png",
+      "bytes": 493329,
+      "sha256": "ff3d84253186169278bff7945e6c9df8f18ea7f2a9b482001af0e1703e270c91",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-slow.gif",
+      "bytes": 2265444,
+      "sha256": "94fc9f5f1344bfe1a722f9f469ee3a72bd06d1e32f2ea14a1d5437769ff149a0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02-truecolor-sheet.jpg",
+      "bytes": 289917,
+      "sha256": "3a471f9b42931620029f876c07e13a320de1f026c6a95d0c67f1e89493421b19",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02.gif",
+      "bytes": 2265444,
+      "sha256": "4e19b870922c40a48b33b11983e8ca8f1bbf20a9039fbef6d4af8718b2a00cca",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Driving_Cross_Bite_V02.mp4",
+      "bytes": 101987,
+      "sha256": "c56962f3e1011281124b02424335fef3bb5391fe786af6095d0cd89a0c7b29f6",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-forelimbs-matcap.png",
+      "bytes": 498420,
+      "sha256": "ad1ff6689ac57e3e675e838c53119f17978fc9abc142b6065711e2c5f99b62e6",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-forelimbs-quarter.png",
+      "bytes": 578481,
+      "sha256": "2a9f30264e8d5e53a30a920f7ff93a527bee02aca405413ff0599d6c2585647d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-hindlimbs-matcap.png",
+      "bytes": 506748,
+      "sha256": "2009669cde991c6c2b7eca914f2c522801341439d68efda66dfab3e6044ef2f7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-hindlimbs-quarter.png",
+      "bytes": 576851,
+      "sha256": "c3ccde06c880150bbf56a5e236c748c8d36cafb63287a86ff616edac12153ed2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-front.png",
+      "bytes": 471974,
+      "sha256": "7d15ff98c8542f22c637c09020643892f30d91f9a4a2d95ae82beffcd298e61e",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-quarter.png",
+      "bytes": 513015,
+      "sha256": "01114686f974f3b305c0c88f80cde83913450551a9b8aa005db5990c3fa41ca0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-initial-side.png",
+      "bytes": 489107,
+      "sha256": "dc7e8ec8c09082ed82b547058b790271e9a51d328079702cc19577abbcbe71ba",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-joint-sheet.jpg",
+      "bytes": 267830,
+      "sha256": "c9b5959a716e0788c89d7f04a2e0a8bca3f9ce098ebc0de911b82f7bf35936c7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-front.png",
+      "bytes": 468434,
+      "sha256": "2b5d46bc133143a4e04cec84bd59bc0f7d547715477679475c10a1dd9c5dc69c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-quarter.png",
+      "bytes": 515200,
+      "sha256": "0020a5fca426ae3568a31899a32d5388f32850cdd602c8814278b3e920f7588d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-midstance-side.png",
+      "bytes": 488510,
+      "sha256": "3de0bf0c76dd3383af3492ec2454bb66c3a63e2ea7e1786232e3af7492484e4d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-motion-filmstrip.jpg",
+      "bytes": 223022,
+      "sha256": "d2594ddf7b94bc3d034dfd3d20f599f696459a7757ebc15b0a2ba6365b45ddc3",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-muzzle-matcap.png",
+      "bytes": 465956,
+      "sha256": "7e5d39c16b24f908b0d759bc0037f51a4c4f213d591286360e498fcd2126bc40",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-muzzle-quarter.png",
+      "bytes": 530401,
+      "sha256": "684f6b2cda14f2b930be246a976e12770f8cd45a686816a4e9e4bc7ce5542f5b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-preview-label.png",
+      "bytes": 179141,
+      "sha256": "8ac9be24732bd2e70d1d279d25d48b5be8e9718a6d8ee06d2c1793c2b6cd76b9",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-front.png",
+      "bytes": 476869,
+      "sha256": "6c4d295792150b6fcc11f8b166bb8883ab5f05350225eed640f3a3de659ba2a5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-quarter.png",
+      "bytes": 517028,
+      "sha256": "b91899b2e084f3c067abb7f5aebad338b73e4e466cc0ab2041c24e7d2c7481a8",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-seam-side.png",
+      "bytes": 489204,
+      "sha256": "99bd16300291a105f9c03e6345b12df78c2c3e4d925653bd3b4f122543a7da50",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-slow.gif",
+      "bytes": 2558033,
+      "sha256": "f6d2bd4960bc65b2482ed14b0b6a8abebb1f3ca2a95dd648512e84b8c2e0a86c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-front.png",
+      "bytes": 467591,
+      "sha256": "25e8a0baeae83362f6016686db9a08aeea4a0f7c4bb548c96f6c114fdf2def7f",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-quarter.png",
+      "bytes": 514306,
+      "sha256": "35149f62d3d0e05dad4d857171a79420cae91e73057ff0bbc92f5833fdf8a480",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-step-side.png",
+      "bytes": 490962,
+      "sha256": "1d5192840e5ee7592eca2a1ffb9c7261a6a44766c25a7a3757baba14104732cb",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02-truecolor-sheet.jpg",
+      "bytes": 387615,
+      "sha256": "847d981921a4f88410beda6929ca32ca19a14666f5bdfcbf4219a12d5e61f739",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02.gif",
+      "bytes": 2558033,
+      "sha256": "e45b5808a6a43f259431e3d68f624e5ccb5e200cee64a96397c4a2fa70371932",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_Left_V02.mp4",
+      "bytes": 98929,
+      "sha256": "b10f6bdc52d5a0c961f89fc749279dddd70de6e3526ca5e612bdc812094377ba",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-forelimbs-matcap.png",
+      "bytes": 477880,
+      "sha256": "9dc1e683510a56ee170107c621d2f9215baf115ab41b2924eba7b5ff5b5aaae7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-forelimbs-quarter.png",
+      "bytes": 557470,
+      "sha256": "ef91be988ee85979aad647f4ef8cdbb0f3f40d70cbb4b972eaa0f0d80273f6d2",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-hindlimbs-matcap.png",
+      "bytes": 523023,
+      "sha256": "69b804ea31588e1a7739a392ec4582ce5f89733e71b4f1365acd70f8d3aa2ff7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-hindlimbs-quarter.png",
+      "bytes": 600007,
+      "sha256": "5cec62c6df49ab4bcbca7f2e23ad3d2e9e0247f1ed66f8bfa851822db62d6b2b",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-front.png",
+      "bytes": 471974,
+      "sha256": "affa40eb853fad06e65f87267b1291a0dde72e183d50818a367530a2225dee94",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-quarter.png",
+      "bytes": 513015,
+      "sha256": "32eb8d0bf9b63c6a1e1d6e98806077ff175f8ea10d8e52d4899ac64971485d82",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-initial-side.png",
+      "bytes": 489107,
+      "sha256": "4afb200d6f5c7f85e5bb8dfadf8111376e2b3fc99e990d704b1e299b06abbebd",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-joint-sheet.jpg",
+      "bytes": 258359,
+      "sha256": "e844da5a7701d57357369c7c06b3f7f703a9eb469e17feba982455f273033126",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-front.png",
+      "bytes": 480057,
+      "sha256": "ecbecc12266e43be5dd054fd408b08dd45de095a2de0d70bc857e93daabc474c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-quarter.png",
+      "bytes": 506834,
+      "sha256": "d70ca5500dfdae625da14e267dba6656d4c5e656e4dd3d7ea140fc4929afc3ae",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-midstance-side.png",
+      "bytes": 491271,
+      "sha256": "546ac3602f46117372cf0be523d35385babd2c79189a4b228a8325e4e1e91bc4",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-motion-filmstrip.jpg",
+      "bytes": 210499,
+      "sha256": "c3a2fffbdd3bd5986c56ace19bef88660e2eae983a4f01dafab7988bb59003a3",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-muzzle-matcap.png",
+      "bytes": 448183,
+      "sha256": "7a06af66da6406d9e075e7324d43905ce65dfcde8a4372efc3762219b6364b8d",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-muzzle-quarter.png",
+      "bytes": 508013,
+      "sha256": "aca632ee82035d28b61fb2bab38515004178b2e87b1448e8869b1ba0d8cadcc6",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-preview-label.png",
+      "bytes": 179017,
+      "sha256": "76635424a30d1f9c5ef66f3c256785512e0e295c4e229834dee74cbf7f0e74ab",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-front.png",
+      "bytes": 491712,
+      "sha256": "27632530d4d6ad1c1e0d1353e75c918ec765c28b403be22f72bc8f929d46e7f5",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-quarter.png",
+      "bytes": 502214,
+      "sha256": "6ce8df0cee18642db59d85b2c3141d6d7bc3c9ddf1dc1ec2f82c9bd559f3f0e0",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-seam-side.png",
+      "bytes": 491578,
+      "sha256": "47c98550636bca19c919cac1f3127b45c5816d3b05e91d0ba1c4e5477bd76086",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-slow.gif",
+      "bytes": 2491062,
+      "sha256": "fd693f5bd17203f5132df9a51fa91c7ac7d3b9a7fc722095d5e8e5c95ba19270",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-front.png",
+      "bytes": 476129,
+      "sha256": "d9fbcab928fac102555bc2a0eaadeb18fcd2f033d5c9e50885f7c9ad83be7380",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-quarter.png",
+      "bytes": 509691,
+      "sha256": "398c6c0875f7a2221c2aa0d08d63366eb6e73851e42f43d3ccceaa351e43b868",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-step-side.png",
+      "bytes": 492552,
+      "sha256": "e25eb325da717fd5cdc22525296252bb45fbc7b842a023642c9bdd437dbafe23",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02-truecolor-sheet.jpg",
+      "bytes": 381276,
+      "sha256": "dbd2960c82568652df6800dc9da2b46eb3893d06e520309a2ac7cdae51436b25",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02.gif",
+      "bytes": 2491062,
+      "sha256": "1fbb19e273271a9cadcfa9671b5be38885628076237d21dc3851a66ec324b620",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review/Wolf_Orbit_Step_V02.mp4",
+      "bytes": 94709,
+      "sha256": "4bdc7e753413b280ae4dc41e4a90c388dae630acccb7acae5c20b528bef9798a",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/review.log",
+      "bytes": 19479,
+      "sha256": "631eed5d528d89f155a940337542312bc674aef9e2fec5191f179724cb5af602",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/audit_deformation.py",
+      "bytes": 9533,
+      "sha256": "2130724438eacf7bdedae60e690d11246b85c9234efc4ce949919841fbfaf92c",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/build_feral.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/build_feral.py",
+      "bytes": 15972,
+      "sha256": "af40bd29c87bf1feeb87fe228aea9a36edc932b08107255249eb3167269f0a46",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/extract_clips.py",
+      "bytes": 6842,
+      "sha256": "9efd918cf0dd634d52a98f760bc4a13906aec9a1225954925bb7cbec9920b0e7",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/finalize_manifest.py",
+      "bytes": 3713,
+      "sha256": "e4cfe2793dd2ca688e149b8bfb36758d8007453f8662e35ab5f207cf22cc8783",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/package_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/package_review.py",
+      "bytes": 4386,
+      "sha256": "7b80981d2d042595f4e901a838c4ff1b1e3ee08f1203a00fc2c427d9a04323d6",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-feral-r10/scripts/render_review.py",
+      "bytes": 5856,
+      "sha256": "7d90293f990c31477a752f81f221018d8162a564449a50f0d35e84ff21b29041",
+      "origins": [
+        "New R10 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-feral-r10"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-feral-r10/review-input.mp4",
+      "path": "Sources/references/wolf-feral-r10/review-input.mp4",
+      "bytes": 28805452,
+      "sha256": "514c4ad958cf468a61fb18476774cf730a1331efcb2dff5feec7d21593a349f7",
+      "origins": [
+        "User-provided gameplay review reference, copied into canonical workspace"
+      ],
+      "requiredBy": [
+        "wolf-feral-r10-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-feral-r10/video-review.json",
+      "path": "Sources/references/wolf-feral-r10/video-review.json",
+      "bytes": 1875,
+      "sha256": "806c56dcb2d28c242b5e0da8620d0779aed8159446a89a38f03f2b689d469839",
+      "origins": [
+        "User-provided gameplay review reference, copied into canonical workspace"
+      ],
+      "requiredBy": [
+        "wolf-feral-r10-review"
       ],
       "status": "bundled"
     }

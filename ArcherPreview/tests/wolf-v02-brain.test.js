@@ -34,7 +34,7 @@ test('0.1 keeps its R8 source, texture, size, two authored attacks and legacy im
  const b=new WolfBrain(durations);assert.equal(b.plannedAttack(WOLF_BALANCE.pinDistance),WOLF_CLIPS.pin);assert.equal(b.plannedAttack(WOLF_BALANCE.lungeDistance),WOLF_CLIPS.lunge);
 });
 
-test('0.2 uses separately authored snap/swipe clips while preserving the full R8 lunge and pin',()=>{
+test('0.2 uses separately authored driving bites while preserving the full R8 lunge and pin',()=>{
  assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','paw-swipe','lunge','pin']);
  for(const action of WOLF_V02_ACTIONS){
   assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok([...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)].includes(action.sourceClip));
@@ -42,9 +42,9 @@ test('0.2 uses separately authored snap/swipe clips while preserving the full R8
   assert.ok(action.clipEnd<=durations[action.sourceClip]+1e-5);
   assert.ok(action.range>0&&action.damage>0);assert.ok(action.label);
  }
- assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Snap_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
- assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Snap_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
- assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Forepaw_Swipe_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['fore.L.paw']);
+ assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Driving_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Driving_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Driving_Cross_Bite_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['jaw','head']);
  assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_CLIPS.lunge);
  assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,durations[WOLF_CLIPS.lunge]);
 });

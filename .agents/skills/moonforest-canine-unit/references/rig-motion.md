@@ -22,7 +22,9 @@ Use a short clear preparation, rapid contact, deceleration and recovery. Runtime
 
 For a visible head nip, restrain jaw opening to what the weighted muzzle supports. R9's 0.20 radian opening is a wolf-specific measured limit; larger gaps deformed the muzzle and were rejected. Retargeting to a different jaw requires a new deformation check, not an unconditional 0.20 limit.
 
-Do not author a wide, high forepaw sweep merely to make a wolf look aggressive. The current R9 compatibility name `Wolf_Forepaw_Swipe_V02` describes a low supporting forepaw step and forward body pressure. Preserve that meaning unless a new action is explicitly requested.
+Do not author a wide, high forepaw sweep merely to make a wolf look aggressive. R9's `Wolf_Forepaw_Swipe_V02` is preserved as a historical low supporting step. The user rejected its friendly appearance for current combat; R10's compatibility action ID `paw-swipe` now uses a driving cross-bite. Use rear-leg propulsion, forward torso weight, a planted lead support and a visible diagonal neck/head trajectory. Restrained jaw opening alone is not an aggressive whole-body attack.
+
+The R10 right/left orbit clips follow a real circular path, with planted foot targets on the original fixed-length rig. Left reuses the motion idea, not opposite-side bind offsets: the model is slightly asymmetric. Reflecting opposite local translations changed joint lengths and was rejected. Solve each side against its own bind lengths and mirror all relevant step phases/rotations rather than root alone.
 
 ## Validation and export
 

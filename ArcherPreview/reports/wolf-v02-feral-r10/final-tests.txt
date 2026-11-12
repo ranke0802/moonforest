@@ -1,0 +1,99 @@
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+✔ new 0.2 authoring preserves the exact shared 0.1 wolf code, model config and packed model bytes (27.7992ms)
+✔ new standing attacks have separate clip identities and finite fixed-scale authored channels (9.8105ms)
+✔ runtime preparation removes only exact constant-channel duplicates and preserves all moving keys and metadata (18.783ms)
+✔ new R10 motion channels preserve the original limb offsets and scales while allowing authored pelvis movement (9.093ms)
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+✔ authored clips install once per cloned rig without changing the shared twelve-clip template (313.9831ms)
+✔ 0.2 heavy/bash knockback travels about twenty percent less with original source poses and hit timing (126.3083ms)
+✔ preserved R9 standing snap keeps four feet planted while body pressure uses a short supported forepaw step (76.7246ms)
+✔ new snap, chain and swipe hit actual warrior body once per strike using only their authored contact parts (162.3262ms)
+✔ disposing authored actor adapters removes all six added animation groups and leaves the shared template intact (210.4651ms)
+✔ 0.1 keeps its R8 source, texture, size, two authored attacks and legacy impact contracts (0.937ms)
+✔ 0.2 uses separately authored driving bites while preserving the full R8 lunge and pin (0.6558ms)
+✔ 30/60 Hz and 0.5/1/2 speed play every action once, retain source impact pose and snapshot speed (4.1401ms)
+✔ long frames cross the authored impact once and cannot emit damage during recovery or after interruption (0.4175ms)
+✔ whipping remaps only source time with slow anticipation, rapid contact and slower followthrough (0.3166ms)
+✔ phase pressure, flanks and outcome tracking stay deterministic and do not mutate legacy balance (4.3492ms)
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+✔ real head keeps its muzzle toward stationary and moving players through both centered orbit directions (639.6567ms)
+✔ autonomous pursuit uses the approved gallop at the requested faster speed with matching enlarged cadence (91.0027ms)
+✔ real autonomous positioning reaches every attack at minimum/preferred/maximum and farther starts at 30/60Hz and 0.5/1/2x (804.9155ms)
+✔ committed attacks lock body and neck while bounded head attention preserves authored roll as the player escapes (183.4094ms)
+✔ independent actual contacts retain dodge/block/interrupt/height/behind/wall negatives and one resolution per serial (234.9476ms)
+✔ actual default bouts switch at half health without cutting the current strike or creating an unlimited chain (390.2815ms)
+✔ the first actual support step holds its entry anchors through the transition and completes a full cycle in both phases (131.5224ms)
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:59]: Babylon.js v9.31.0 - Null engine
+✔ actual default hunt attacks, stalks and faces the player instead of running away at close/mid/long range (1419.0933ms)
+✔ all eighteen motion roles remain available independently through discovery, direct sampling and combat reactions (102.9928ms)
+✔ bounded physical contact windows deduplicate hits, consume a dodged strike and do not hit through walls or behind the wolf (220.2951ms)
+✔ a modest lateral moving target is contacted without altering its position or extending a missed strike indefinitely (168.0116ms)
+✔ both ends of every automatic engagement band contact the standing player at 30/60Hz and 0.5/1/2x speed (582.1327ms)
+✔ watching and recovery hold their ground, and a blocked authored stalk stops instead of sliding or teleporting (100.45ms)
+✔ above half health every default bout has one attack followed by authored stalking (6.4261ms)
+✔ half health and below adds bounded successful attack bouts without eliminating final recovery (5.1921ms)
+✔ miss, block, escape and interrupts cancel aggressive followups; explicit chain stays compatible (1.9664ms)
+✔ long attacks never make space by fleeing and custom orders substitute only when too close (0.603ms)
+✔ stalking freezes its authored gait when corridor or facing is blocked (0.1701ms)
+✔ stationary observation and recovery hold the circling pose while only their timers advance (0.2274ms)
+✔ phase threshold does not cut off current attack or bypass hit/down/recovery motions (0.3928ms)
+✔ impact window accepts a late contact upgrade once and rejects stale, duplicate and terminal changes (0.1714ms)
+✔ strong whipping accelerates contact while preserving exact authored poses, time monotonicity and speed snapshot (3.233ms)
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:57]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:58]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:59]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:59]: Babylon.js v9.31.0 - Null engine
+BJS - [19:24:00]: Babylon.js v9.31.0 - Null engine
+BJS - [19:24:00]: Babylon.js v9.31.0 - Null engine
+BJS - [19:24:01]: Babylon.js v9.31.0 - Null engine
+BJS - [19:24:02]: Babylon.js v9.31.0 - Null engine
+BJS - [19:24:03]: Babylon.js v9.31.0 - Null engine
+✔ only the explicit 0.2 world selects the new wolf encounter and 0.1/default retain the original class (1191.9046ms)
+✔ 0.2 preserves all twelve approved R8 local poses, root pitch and lunge body height (379.6719ms)
+✔ actual 0.2 attacks land at their authored contact poses once at 30/60 Hz and 0.5/1/2 speed (631.9399ms)
+✔ actual bite contact respects dodge and shield, and a missed bite still leaves recovery (399.6821ms)
+✔ lunge anticipation tracks with a turn limit and commits its aim before the authored leap (476.34ms)
+✔ heavy/bash interrupt before impact, capture escape and death release input, and defeat rewards deduplicate (434.1015ms)
+▶ 0.2 1/5/10/20 manual summons on all maps retain independent rigs, sampler tables and stable warm resources
+  ✔ village (608.5658ms)
+  ✔ great-plains (662.5054ms)
+  ✔ monster-forest (1078.774ms)
+  ✔ witch-cave (1013.2931ms)
+✔ 0.2 1/5/10/20 manual summons on all maps retain independent rigs, sampler tables and stable warm resources (3364.1411ms)
+✔ cancelled 0.2 preparation stays hidden, releases waiting work and retries on a changed map without new models (460.9124ms)
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+BJS - [19:23:56]: Babylon.js v9.31.0 - Null engine
+✔ an obstructed player-centered stride tries the genuinely opposite gait once before attacking (183.7955ms)
+✔ a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating (105.4503ms)
+✔ a walking player does not spin standing recovery feet and observation starts a real step before attention runs out (87.4053ms)
+✔ support and attention refresh only cached affected branches with bounded matrix work and identical poses (80.3987ms)
+✔ versioned wolf catalog and saved patterns cannot replace 0.1 settings (1.3488ms)
+✔ 0.2 pattern panel exposes all five actions and saves actual add/reorder/speed/reset controls (8.8089ms)
+ℹ tests 55
+ℹ suites 0
+ℹ pass 55
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9728.3916

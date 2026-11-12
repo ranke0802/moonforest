@@ -3,7 +3,7 @@
   "release": "moonforest-0.2",
   "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 719436378,
+  "bytes": 720620865,
   "files": [
     {
       "path": "app.webmanifest",
@@ -11,19 +11,19 @@
       "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
     },
     {
-      "path": "assets/actor-editor-B0wtgWoK.js",
+      "path": "assets/actor-editor-70gt1CXk.js",
       "bytes": 32192,
-      "sha256": "f826ec0987ec61016eb2b272966ea0fd9516d7b27fd3e2674472e2168f712135"
+      "sha256": "b87890544a6e80e5e5020c3890618968fa5f5090c18a3bc16cda47e383be8d2f"
     },
     {
-      "path": "assets/actor-encounter-adapter-n7M2VfLK.js",
+      "path": "assets/actor-encounter-adapter-CUbBfZir.js",
       "bytes": 16081,
-      "sha256": "2b87a7c0e134f9e8fe6ab6c9faf174d7d789855847fcaef971a47aea8868b693"
+      "sha256": "f4cae0ad9b056d6180c3cc99305dff4e28878c8fd5f110296f8a3086e7b9b1d7"
     },
     {
-      "path": "assets/actor-population-CvhOkUYQ.js",
+      "path": "assets/actor-population-B2fas1DE.js",
       "bytes": 11318,
-      "sha256": "4cf1d669158e0fe131decb7e6b0bcf36f76640c41fe929159778d5880f041cb5"
+      "sha256": "802ff388dec42f08d25a765528145e4ad56adc64cd277372b92917d02db276f1"
     },
     {
       "path": "assets/alpha-wolf.json",
@@ -71,9 +71,9 @@
       "sha256": "53e734957f6272cf384baa0035101b45a3b4d902b72ce86c34b7d4548210230e"
     },
     {
-      "path": "assets/authored-monster-runtime-B31re7OG.js",
+      "path": "assets/authored-monster-runtime-6juA9Wij.js",
       "bytes": 5707,
-      "sha256": "9df391cf4bb67863018c1039c92c21028db648fc1d2e786f10ffa0f97bbbfaae"
+      "sha256": "d23025857925e7f7f738bba73434182fee851541e9c3bb426c52f096299f670e"
     },
     {
       "path": "assets/authored-placement-runtime-C7nSoaB1.js",
@@ -1706,14 +1706,14 @@
       "sha256": "82ce5bdefc2eba732eb65ea85891b111fd4aec77d643916b45ed8fa6e6245325"
     },
     {
-      "path": "assets/cinematic-game-CDwWjETA.js",
+      "path": "assets/cinematic-game-ClYLnJ-7.js",
       "bytes": 64146,
-      "sha256": "c6f980204bd64dcc951202b716cfc188f2739377317f6b320e9b5f964039f30d"
+      "sha256": "6b40cbf0947cf55b3fd8fea1dbba0299f706965a983a7e1448b0d7703a8e8a33"
     },
     {
-      "path": "assets/cinematic-interaction-B4nwVpdb.js",
+      "path": "assets/cinematic-interaction-85_dYm4J.js",
       "bytes": 7838,
-      "sha256": "ea58c9a82986c317b2135fd395c386fc06ca5eba58a93c4851830c95ac45063c"
+      "sha256": "1575c3d95d61d6934e5c4e047131d286fe17195fa34e8a688c83fe22c73172b2"
     },
     {
       "path": "assets/cinematic-media-D3pcCO1R.js",
@@ -1726,9 +1726,9 @@
       "sha256": "9766dfc1ee740eaa480dc6cd30e6f960603b9adec5da531142590bfab4838cc3"
     },
     {
-      "path": "assets/cinematic-scene-host-C9Bqh93u.js",
+      "path": "assets/cinematic-scene-host-wQgBaI04.js",
       "bytes": 56297,
-      "sha256": "e1fb09c8be2e11b8ce2794b8da1b9798e1dbf5e52a630bf70850423ef4fc35c3"
+      "sha256": "6c7a1c71cde3f5e0bfe2f54cad228d965a219487ab06107ab2c2dca17dff1da5"
     },
     {
       "path": "assets/circleOfConfusion.fragment-CHfYsnTF.js",
@@ -8061,9 +8061,9 @@
       "sha256": "22e4c69c9d53a4cc78ab258a773ce79d040828d256463e0148610a4e8f6d833c"
     },
     {
-      "path": "assets/developer-actors-DUQcSpG5.js",
+      "path": "assets/developer-actors-BY3Y8RZY.js",
       "bytes": 8694,
-      "sha256": "3addadcea9778207ca79ca772bb7836e498d8272bd3364ab3613aefd295b7310"
+      "sha256": "523feec237d22d99777035d4d54eff4915bca2511920c20e647ee6e48d537274"
     },
     {
       "path": "assets/developer-editor-DDtgVJR4.js",
@@ -9416,9 +9416,9 @@
       "sha256": "0ce27787208f00b3b044eeab5d95b0ab4e45f7c5260b86f950a72488538f211a"
     },
     {
-      "path": "assets/moonforestV2-y_46KWsP.js",
+      "path": "assets/moonforestV2-D9lghJCg.js",
       "bytes": 2309036,
-      "sha256": "67accbb7c965b29de2a0e0fa23aaa431f7bc71c4e1906dd8398cb31e291c82d1"
+      "sha256": "6b4332f9ad72c9410af0b4c4fc6f04a01566518145d3e4fe832bed8968079bcb"
     },
     {
       "path": "assets/morphTargetsVertex-6kE48R8N.js",
@@ -9471,9 +9471,9 @@
       "sha256": "27397fb3044d4a13c4c320cd61797a88df7e493d33898911578480b500074690"
     },
     {
-      "path": "assets/mourning-elena-encounter-SF_py2A2.js",
-      "bytes": 844856,
-      "sha256": "df19d1a9587e38c47042c3f6073a0084702d22114809bad5d34fa637367d1e90"
+      "path": "assets/mourning-elena-encounter-BupvbAhy.js",
+      "bytes": 2029343,
+      "sha256": "8166ac5e6b7540571071e33d244478be49ccca1662dff6d756ca52f9a422dcd6"
     },
     {
       "path": "assets/mourning-elena.json",
@@ -9511,14 +9511,14 @@
       "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27"
     },
     {
-      "path": "assets/npc-world-B2O718YN.js",
-      "bytes": 8698,
-      "sha256": "799c31d651f66468814da3c581e862d24f06ecad0993975ebf379daea1c7470f"
+      "path": "assets/npc-world-C69ZW46S.js",
+      "bytes": 106,
+      "sha256": "d1f6fde9d76af61ca7da54a2a3b5436ef15de1394370ed3d584a62039030ef7d"
     },
     {
-      "path": "assets/npc-world-CKDBKH0z.js",
-      "bytes": 106,
-      "sha256": "56dc84400d0840eca3d6b4fae47ec4f45b8e197e63986fa73014294485971edf"
+      "path": "assets/npc-world-Dm_31uXS.js",
+      "bytes": 8698,
+      "sha256": "6242217cc304b934d81b3cdd21b6992c9e2d160e2b847ed049f0a625de8971f6"
     },
     {
       "path": "assets/objectIdFunctions-BOMO8OAo.js",
@@ -10258,7 +10258,7 @@
     {
       "path": "moonforest-0.2.html",
       "bytes": 38553,
-      "sha256": "0dc12057c1d19e2286607e4d03542aa1b17c00a78386f795b8f6e282412a4b74"
+      "sha256": "82d45d4516190dd33cc7857567ba134b63c276d693bf77197ce01f8051fa23ff"
     },
     {
       "path": "moonforest-0.2.webmanifest",

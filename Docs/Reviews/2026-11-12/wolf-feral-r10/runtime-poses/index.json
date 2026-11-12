@@ -1,0 +1,41 @@
+{
+  "sources": {
+    "wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+    "wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+    "wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+    "wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+    "wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+  },
+  "rows": [
+    {
+      "name": "quick-bite-runtime-impact",
+      "clip": "Wolf_Driving_Bite_V02",
+      "sourceTime": 0.3,
+      "meshCount": 7
+    },
+    {
+      "name": "paw-swipe-runtime-impact",
+      "clip": "Wolf_Driving_Cross_Bite_V02",
+      "sourceTime": 0.3333333333333333,
+      "meshCount": 7
+    },
+    {
+      "name": "orbit-3m-runtime",
+      "clip": "Wolf_Orbit_Step_Left_V02",
+      "sourceTime": 0.3749999999999999,
+      "meshCount": 7
+    },
+    {
+      "name": "orbit-5m-runtime",
+      "clip": "Wolf_Orbit_Step_Left_V02",
+      "sourceTime": 0.3749999999999999,
+      "meshCount": 7
+    },
+    {
+      "name": "running-runtime",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.4104761904761904,
+      "meshCount": 7
+    }
+  ]
+}

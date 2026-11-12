@@ -12,11 +12,13 @@ Paths below are relative to the active project root. Resolve raw source IDs with
 | Added animation source ID | `wolf-v02-attacks-r9` |
 | R9 authoring, export and checks | `Sources/actors/tripo-monsters/wolf-v02-attacks-r9/{blend,models,scripts,review}`, `clips.json`, `manifest.json`, `deformation-validation.json` |
 | R9 preparation | `ArcherPreview/scripts/prepare-wolf-v02-attacks.mjs` |
+| Current feral motion source | `wolf-v02-feral-r10` / `Sources/actors/tripo-monsters/wolf-v02-feral-r10` |
+| R10 preparation and runtime | `ArcherPreview/scripts/prepare-wolf-v02-feral.mjs` / `src/wolf-v02-feral-clips.json` |
 | Runtime added clips | `ArcherPreview/src/wolf-v02-attack-clips.json`, `wolf-v02-authored-clips.js` |
 | Sampler / base encounter | `ArcherPreview/src/wolf-animation.js`, `wolf-encounter.js`, `wolf-spec.js` |
 | 0.2 encounter / patterns | `ArcherPreview/src/wolf-v02-encounter.js`, `wolf-v02-spec.js` |
 
-R8 is 25,080 triangles, 28 joints, 12 clips, one Breath morph, and the approved 4K colour texture. The game uses scale 2.5 (standing height about 3.75 m). That enlargement is intentional; do not infer that every canine should use it. Game walk/run speeds remain 0.9/4.2 m/s with cadence compensated for scale.
+R8 is 25,080 triangles, 28 joints, 12 clips, one Breath morph, and the approved 4K colour texture. The game uses scale 2.5 (standing height about 3.75 m). That enlargement is intentional; do not infer that every canine should use it. Preserved 0.1 walk/run speeds are 0.9/4.2 m/s. The later user-authorized 0.2 feral version approaches attacks at 6.6 m/s; read current gait cadence and loop offset in `wolf-v02-spec.js` rather than copying 0.1 speeds.
 
 R8's source clip names keep `_R5` for compatibility:
 
@@ -32,7 +34,7 @@ R8's source clip names keep `_R5` for compatibility:
 
 Run period is 17/30 seconds at reference review speed 4.2 m/s. The lunge source is 3.1 seconds: original dodge event 0.85, take-off 1.65, original bite event 2.25 seconds. Gameplay's pose-calibrated contact time may differ; read current attack specs. The body's leap translation below root must remain. The watching clip is long (43.4 s); its full duration need not block the AI from selecting the next behaviour.
 
-R9 adds `Wolf_Snap_Bite_V02` (0.9 s) and `Wolf_Forepaw_Swipe_V02` (1.0 s) to 0.2 actors only. The latter is now a low supporting step/body pressure, not a high slash. Original R8 clips/mesh/UV/weights/binds are preserved; the base shared template and 0.1 retain 12 clips, while prepared 0.2 actors have 14. Continuous two-bite behaviour reuses Snap with separate action serials, not a fifteenth clip. Death uses down/hold/fade, not an invented separate death animation.
+R9 added `Wolf_Snap_Bite_V02` (0.9 s) and `Wolf_Forepaw_Swipe_V02` (1.0 s). They remain available for history and comparison. R10 adds `Wolf_Driving_Bite_V02` (44/60 s), `Wolf_Driving_Cross_Bite_V02` (0.8 s), and right/left `Wolf_Orbit_Step_V02` / `Wolf_Orbit_Step_Left_V02` (0.9 s). Current 0.2 actors therefore have 18 available clips; the shared template and preserved 0.1 retain 12. Availability is not a claim that all 18 play during every fight. Continuous bites reuse the current driving bite under independent action serials. Death uses down/hold/fade, not an invented separate death animation.
 
 Default wolf presentation: PBR appearance off; cartoon shading; outline on 0.60 px; internal lines on strength 0.25; brightness 1.20. Use the `wolf` expression/settings group, not another boss's saved values. Approved 4K texture, original LOD and other actors' appearance remain unchanged.
 

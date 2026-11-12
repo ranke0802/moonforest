@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WOLF_CLIPS,WOLF_BALANCE} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,actionDuration,sampleWhipTime,whipElapsedAt} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_ORBIT,WOLF_V02_GAIT,actionDuration,sampleWhipTime,whipElapsedAt} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
@@ -36,7 +36,7 @@ test('above half health every default bout has one attack followed by authored s
  for(const fps of [30,60]){
   const t=trace(451,{fps});assert.ok(t.bouts.length>8);assert.ok(t.bouts.every(b=>b.length===1));assert.ok(!t.attacks.includes('chain-bite'));
   assert.ok(t.attacks.includes('quick-bite')&&t.attacks.includes('paw-swipe'));
-  assert.ok(t.flanks.every(f=>f.clip===WOLF_CLIPS.watch&&f.mode==='idle'&&f.remaining>=1.35));
+  assert.ok(t.flanks.every(f=>Object.values(WOLF_V02_ORBIT).includes(f.clip)&&f.mode==='idle'&&Math.abs(f.remaining-.9/WOLF_V02_GAIT.orbitPlaybackRate)<1e-8));
   assert.equal(t.b.balance,WOLF_BALANCE);
  }
 });
@@ -47,7 +47,7 @@ test('half health and below adds bounded successful attack bouts without elimina
  assert.ok(fierce.attacks.length>cautious.attacks.length*1.3,'phase 2 pressure comes from fewer decision pauses and conditional followups');
  assert.ok(fierce.flanks.every(f=>f.remaining<=.55));
  const b=brain(450);b.startAction('quick-bite');let entered=false;
- for(let frame=0;frame<120;frame++){const r=b.update(1/60,2.25);if(r.events.length)b.noteAttackResult({blocked:true});if(b.behavior==='recovery'){entered=true;assert.ok(b.recoveryRemaining>=.85-1/60);break;}}
+ for(let frame=0;frame<120;frame++){const r=b.update(1/60,2.25);if(r.events.length)b.noteAttackResult({blocked:true});if(b.behavior==='recovery'){entered=true;assert.ok(b.recoveryRemaining>=WOLF_V02_BY_ID['quick-bite'].recovery-1/60);break;}}
  assert.ok(entered,'blocked attack exposes a real recovery instead of restarting the attack');
 });
 
@@ -77,7 +77,7 @@ test('long attacks never make space by fleeing and custom orders substitute only
 });
 
 test('stalking freezes its authored gait when corridor or facing is blocked',()=>{
- const b=brain(900);b.beginStalk();const first=b.update(.1,2.25);assert.equal(first.speed,0);assert.equal(first.flank.authored,true);assert.equal(first.flank.facePlayer,true);assert.equal(b.state,WOLF_CLIPS.watch);
+ const b=brain(900);b.beginStalk();const first=b.update(.1,2.25);assert.equal(first.speed,0);assert.equal(first.flank.authored,true);assert.equal(first.flank.facePlayer,true);assert.ok(Object.values(WOLF_V02_ORBIT).includes(b.state));
  const poseTime=b.time;b.suppressStalkStep=true;const next=b.update(.1,2.25);assert.equal(b.time,poseTime);assert.equal(next.speed,0);assert.equal(b.behavior,'position');
  assert.equal(b.update(.01,2.25).events.length,0);assert.equal(b.mode,'attack');
 });

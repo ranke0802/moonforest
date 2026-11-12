@@ -1,0 +1,111 @@
+{
+  "scope": "Actual CPU-skinned pose/root/gaze/plant. Original colour atlas, offline Blender lighting; not game GPU UI.",
+  "blenderVersion": "4.5.14 LTS",
+  "rows": [
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\quick-bite-runtime-impact-front.png",
+      "sourceTime": 0.3,
+      "clip": "Wolf_Driving_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\quick-bite-runtime-impact-side.png",
+      "sourceTime": 0.3,
+      "clip": "Wolf_Driving_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\quick-bite-runtime-impact-quarter.png",
+      "sourceTime": 0.3,
+      "clip": "Wolf_Driving_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\paw-swipe-runtime-impact-front.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Driving_Cross_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\paw-swipe-runtime-impact-side.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Driving_Cross_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\paw-swipe-runtime-impact-quarter.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Driving_Cross_Bite_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-3m-runtime-front.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-3m-runtime-side.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-3m-runtime-quarter.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-5m-runtime-front.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-5m-runtime-side.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\orbit-5m-runtime-quarter.png",
+      "sourceTime": 0.3749999999999999,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "running-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\running-runtime-front.png",
+      "sourceTime": 0.4104761904761904,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "running-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\running-runtime-side.png",
+      "sourceTime": 0.4104761904761904,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "running-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-12\\wolf-feral-r10\\runtime-poses\\running-runtime-quarter.png",
+      "sourceTime": 0.4104761904761904,
+      "clip": "Wolf_Run_R5"
+    }
+  ]
+}

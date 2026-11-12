@@ -13,7 +13,7 @@ import {WolfEncounter} from '../src/wolf-encounter.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID} from '../src/wolf-v02-spec.js';
-import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_R9_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
 import {sourcePath} from '../../Sources/resolve-source.mjs';
 
@@ -33,7 +33,9 @@ async function fixture(t){
 const resources=scene=>({meshes:scene.meshes.length,geometry:scene.geometries.length,materials:scene.materials.length,groups:scene.animationGroups.length,skeletons:scene.skeletons.length,morph:scene.morphTargetManagers.length,textures:scene.textures.length,nodes:scene.transformNodes.length,native:scene._activeAnimatables.length,before:scene.onBeforeRenderObservable.observers.length,after:scene.onAfterRenderObservable.observers.length,dispose:scene.onDisposeObservable.observers.length});
 const authoredKeyHash=asset=>createHash('sha256').update(JSON.stringify(asset.animationGroups.filter(g=>WOLF_V02_AUTHORED_CLIPS.some(c=>c.name===g.name)).map(g=>({name:g.name,channels:g.targetedAnimations.map(row=>({node:row.target.name,path:row.animation.targetProperty,keys:row.animation.getKeys().map(k=>[k.frame,...k.value.asArray()])}))})))).digest('hex');
 const span=(values,key)=>Math.max(...values.map(v=>v[key]))-Math.min(...values.map(v=>v[key]));
-function samplePose(e,name,time,serial){e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(name,'idle');e.brain.time=time;e.animator.transition(name,{clipTime:time,actionId:serial,blendDuration:0});e.animator.update(0);e.alignPose();}
+// Source-pose preservation uses the original carrier correction; the separate
+// feral integration tests measure the intentional live attention/foot layer.
+function samplePose(e,name,time,serial){e.v02Pose?.restore();e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(name,'idle');e.brain.time=time;e.animator.transition(name,{clipTime:time,actionId:serial,blendDuration:0});e.animator.update(0);WolfEncounter.prototype.alignPose.call(e);}
 test.after(()=>{fs.mkdirSync('reports/wolf-v02-authored-attacks',{recursive:true});fs.writeFileSync('reports/wolf-v02-authored-attacks/validation.json',JSON.stringify({scope:'CPU-only packed R8 rig and authored 0.2 animation sidecar validation in Babylon NullEngine. Materials replaced; visual quality, GPU and device/touch play remain unmeasured.',sourceMotionSha256:createHash('sha256').update(fs.readFileSync(sourcePath('wolf-v02-attacks-r9','clips.json'))).digest('hex'),runtimeMotionSha256:createHash('sha256').update(fs.readFileSync(new URL('../src/wolf-v02-attack-clips.json',import.meta.url))).digest('hex'),cases:rows},null,2)+'\n');});
 
 // Captured immediately before the separately authored 0.2 attack work. The
@@ -60,8 +62,9 @@ test('new 0.2 authoring preserves the exact shared 0.1 wolf code, model config a
 test('new standing attacks have separate clip identities and finite fixed-scale authored channels',()=>{
  const names=WOLF_V02_AUTHORED_CLIPS.map(c=>c.name);assert.ok(names.includes('Wolf_Snap_Bite_V02'));assert.ok(names.every(n=>!Object.values(WOLF_CLIPS).includes(n)));assert.equal(new Set(names).size,names.length);
  const base=JSON.parse(fs.readFileSync(new URL('alpha-wolf.json',assetBase)));assert.equal(WOLF_V02_AUTHORED_SOURCE,base.sourceSha256);
- assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Snap_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Snap_Bite_V02');
- for(const clip of WOLF_V02_AUTHORED_CLIPS){
+ assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Driving_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Driving_Bite_V02');
+ assert.equal(WOLF_V02_R9_CLIPS.length,2);assert.equal(WOLF_V02_FERAL_CLIPS.length,4);assert.equal(WOLF_V02_AUTHORED_CLIPS.length,6);
+ for(const clip of WOLF_V02_R9_CLIPS){
   assert.ok(clip.duration>0&&clip.duration<=2);assert.equal(clip.fps,60);assert.ok(clip.channels.length>0);assert.ok(clip.rootTrack.length>1&&clip.yawTrack.length>1);
   const ids=new Set();
   for(const channel of clip.channels){
@@ -89,6 +92,27 @@ test('runtime preparation removes only exact constant-channel duplicates and pre
   }
  }
  assert.equal(prepared.preparation.originalKeys,originalKeys);assert.equal(prepared.preparation.runtimeKeys,runtimeKeys);assert.ok(runtimeKeys<originalKeys&&reduced>0);rows.push({case:'lossless-constant-key-preparation',sourceDataSha256:prepared.preparation.sourceDataSha256,originalKeys,runtimeKeys,reducedChannels:reduced,movingKeysExact:true});
+});
+
+test('new R10 motion channels preserve the original limb offsets and scales while allowing authored pelvis movement',()=>{
+ const reference=JSON.parse(fs.readFileSync(new URL(JSON.parse(fs.readFileSync(new URL('alpha-wolf.json',assetBase))).model,assetBase))),bindNodes=new Map(reference.nodes.map(n=>[n.name,n]));
+ for(const clip of WOLF_V02_FERAL_CLIPS){
+  assert.ok(clip.duration>0&&clip.duration<=1);assert.equal(clip.fps,60);assert.equal(clip.channels.length,84);
+  const ids=new Set();for(const channel of clip.channels){
+   const id=channel.node+'/'+channel.path;assert.equal(ids.has(id),false);ids.add(id);assert.equal(channel.times.length,channel.values.length);
+   assert.ok(channel.times.length>=2);let previous=-1;const first=channel.values[0];
+   for(let i=0;i<channel.times.length;i++){
+    const time=channel.times[i],value=channel.values[i];assert.ok(time>previous&&time>=0&&time<=clip.duration+1e-6);previous=time;assert.ok(value.every(Number.isFinite));
+    if(channel.path==='rotation')assert.ok(Math.abs(Math.hypot(...value)-1)<1e-5,id+' rotation normalization');
+    if(channel.path==='scale')assert.ok(value.every((v,k)=>Math.abs(v-first[k])<1e-6),id+' rigid scale');
+    if(channel.path==='translation'&&!['root','pelvis'].includes(channel.node)){
+     const original=bindNodes.get(channel.node);assert.ok(original,id+' approved bind node exists');
+     assert.ok(Math.abs(Math.hypot(...value)-Math.hypot(...(original.translation??[0,0,0])))<1e-5,id+' approved bind attachment length');
+     assert.ok(Math.abs(Math.hypot(...value)-Math.hypot(...first))<1e-5,id+' fixed bone attachment length');
+    }
+   }
+  }
+ }
 });
 
 test('authored clips install once per cloned rig without changing the shared twelve-clip template',async t=>{
@@ -131,9 +155,9 @@ test('0.2 heavy/bash knockback travels about twenty percent less with original s
  oracle.hide();
 });
 
-test('standing snap keeps four feet planted while body pressure uses a short supported forepaw step',async t=>{
+test('preserved R9 standing snap keeps four feet planted while body pressure uses a short supported forepaw step',async t=>{
  const f=await fixture(t);assert.equal(await f.battle.summon(f.player,1,'wolf'),true);const e=f.battle.encounters[0],scales=Object.fromEntries(Object.entries(e.nodes).map(([name,node])=>[name,node.scaling.clone()]));let serial=10000;
- const snap=WOLF_V02_AUTHORED_CLIPS.find(c=>c.name==='Wolf_Snap_Bite_V02'),swipe=WOLF_V02_AUTHORED_CLIPS.find(c=>c.name==='Wolf_Forepaw_Swipe_V02');assert.ok(snap&&swipe);
+ const snap=WOLF_V02_R9_CLIPS.find(c=>c.name==='Wolf_Snap_Bite_V02'),swipe=WOLF_V02_R9_CLIPS.find(c=>c.name==='Wolf_Forepaw_Swipe_V02');assert.ok(snap&&swipe);
  for(const clip of [snap,swipe]){
   const snapshots=[];
   for(let i=0;i<=60;i++){
@@ -171,8 +195,8 @@ test('new snap, chain and swipe hit actual warrior body once per strike using on
  }
 });
 
-test('disposing authored actor adapters removes the two added animation groups and leaves the shared template intact',async t=>{
+test('disposing authored actor adapters removes all six added animation groups and leaves the shared template intact',async t=>{
  const f=await fixture(t),baseline={groups:f.scene.animationGroups.length,native:f.scene._activeAnimatables.length,dispose:f.scene.onDisposeObservable.observers.length},factory=createActorEncounterFactory({world:f.world,battle:f.battle,getPlayer:()=>f.player,libraryFactory:()=>({library:f.models,owned:false})});f.player.position.setAll(0);
- try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,14);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
- rows.push({case:'authored-group-disposal',cycles:3,addedGroupsPerActor:2,groupsReturnedToBaseline:true,nativeAndDisposalObserversStable:true});
+ try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,18);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
+ rows.push({case:'authored-group-disposal',cycles:3,addedGroupsPerActor:6,groupsReturnedToBaseline:true,nativeAndDisposalObserversStable:true});
 });

@@ -1,0 +1,1846 @@
+{
+  "scope": "R10 source, real runtime CPU skin, numerical tests and offline original-colour renders. No browser automation or device performance measurement.",
+  "independent": {
+    "scope": "Independent numerical CPU/NullEngine review against the actual packed approved R8 rig and live game update/pose/contact pipeline. This report does not establish visual animation quality, mobile FPS, heat, GPU or physical-input feel.",
+    "sources": {
+      "src/wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+      "src/wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+      "src/wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+      "src/wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+      "src/wolf-v02-attack-clips.json": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+      "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "tests/wolf-v02-feral-integration.test.js": "94dd56dfea922987ba14e905ea781611400758004cfec320b0440d6d2869ef98",
+      "tests/helpers/wolf-feral-fixture.js": "1888d353aef2bbb32e98cb3572b9fe48d7475a4eb9e6ff11606ae6672863e4a6",
+      "tests/wolf-v02-authored-attacks.test.js": "4b1dc35baeae191d923b813c3ad039fdc65f0a022b3ac5a31599e2dcc31c0bc3",
+      "tests/wolf-v02-integration.test.js": "f1a850a44f880408db3ce2ce419e97753e684009094823dc4a8cab63ad6455e8",
+      "tests/wolf-v02-brain.test.js": "09f97845af888a01a4c005740cea95caf29a980dc2c4d27b4c32807566fff486",
+      "tests/wolf-v02-hunt.test.js": "20eae028371ee3090939f508f4f3d3981ccef3be970f45f3672bda5b003a778d",
+      "tests/wolf-v02-hunt-integration.test.js": "7051667f528843311b3457268fa944f80cb582e1ad8a40d692c2e878ceeb598f",
+      "tests/wolf-v02-orbit-navigation.test.js": "cfb4f48b40b19e9cfa82ff0dbf43ddcf8fe152310a3ceffafac9331d0889ddd3",
+      "tests/wolf-v02-patterns.test.js": "9f05cc72d04d8e019da3cccc03eb9809e0b21f5a9a986b0f45e279a0bdfcc11f"
+    },
+    "baseline": {
+      "source": "baseline-motion.json",
+      "actualHeadAttention": [
+        {
+          "movePlayer": false,
+          "horizontalAngleP50": 45.76934887063312,
+          "horizontalAngleP95": 55.42391115729407,
+          "horizontalAngleMax": 55.70832256181318,
+          "minRadius": 4.999989083615521,
+          "maxRadius": 5.645972729350979
+        },
+        {
+          "movePlayer": true,
+          "horizontalAngleP50": 100.34701842431494,
+          "horizontalAngleP95": 144.09570268293703,
+          "horizontalAngleMax": 148.58110855712044,
+          "minRadius": 2.2102008351397964,
+          "maxRadius": 5
+        }
+      ],
+      "note": "Baseline attention measured actual head +Y, unlike earlier actor-yaw-only assertions. Baseline foot-low-height observations are diagnostics and are not used as planted-foot pass/fail evidence."
+    },
+    "checks": {
+      "completeV02Regression": {
+        "tests": 55,
+        "passed": 55,
+        "failed": 0,
+        "log": "final-tests.txt",
+        "files": 8
+      },
+      "originalV01Regression": {
+        "tests": 20,
+        "passed": 20,
+        "failed": 0,
+        "files": [
+          "tests/wolf-integration.test.js",
+          "tests/wolf-pattern-size.test.js"
+        ],
+        "note": "Executed before 0.2 final calibration. The final 0.2 suite also asserts unchanged original code/config/model/dependency hashes and original twelve raw sampled poses."
+      },
+      "autonomousContact": {
+        "cases": 120,
+        "contacts": 120,
+        "sampling": "Five actions × min/preferred/max/outside-approach starts × 30/60Hz × .5/1/2 attack speed. Each starts the actual positioning brain, not startAction.",
+        "playerTeleports": 0
+      },
+      "actualHeadAndCenteredOrbit": {
+        "cases": 8,
+        "secondsPerCase": 14,
+        "conditions": "Both genuinely authored left/right steps, 3m/5m radii, stationary/moving player center (.12m/s lateral plus .2m slow depth oscillation).",
+        "maximum3DAttentionErrorDegrees": 0.00004002732700288928,
+        "maximumHorizontalAttentionErrorDegrees": 0.00005599682428490812,
+        "maximumRadiusErrorMeters": 1.7763568394002505e-15,
+        "minimumAbsoluteOrbitAngleDegrees": 300.29790308986145,
+        "namedStanceSamples": 13136,
+        "maximumNamedStanceDriftMeters": 0.000002008287380794459,
+        "stancePolicy": "Named diagonal phases [0,.45] and [.45,.9] source seconds, left mirrored. First .3 wall seconds excluded before selecting a reference anchor; no stance reference is carried from the transition blend."
+      },
+      "firstStepTransition": {
+        "case": "first-step-transition-and-complete-cycle",
+        "rows": [
+          {
+            "hp": 451,
+            "side": -1,
+            "radius": 3,
+            "clip": "Wolf_Orbit_Step_Left_V02",
+            "frames": 45,
+            "sourceMax": 0.8999999999999997,
+            "coveredSource": 0.8999999999999997,
+            "firstHalfMaximumEntryAnchorDrift": 5.503352079576071e-7
+          },
+          {
+            "hp": 451,
+            "side": -1,
+            "radius": 5,
+            "clip": "Wolf_Orbit_Step_Left_V02",
+            "frames": 45,
+            "sourceMax": 0.8999999999999997,
+            "coveredSource": 0.8999999999999997,
+            "firstHalfMaximumEntryAnchorDrift": 5.230286352272107e-7
+          },
+          {
+            "hp": 451,
+            "side": 1,
+            "radius": 3,
+            "clip": "Wolf_Orbit_Step_V02",
+            "frames": 45,
+            "sourceMax": 0.8999999999999997,
+            "coveredSource": 0.8999999999999997,
+            "firstHalfMaximumEntryAnchorDrift": 3.885747435809761e-7
+          },
+          {
+            "hp": 451,
+            "side": 1,
+            "radius": 5,
+            "clip": "Wolf_Orbit_Step_V02",
+            "frames": 45,
+            "sourceMax": 0.8999999999999997,
+            "coveredSource": 0.8999999999999997,
+            "firstHalfMaximumEntryAnchorDrift": 3.2098083538618706e-7
+          },
+          {
+            "hp": 450,
+            "side": -1,
+            "radius": 3,
+            "clip": "Wolf_Orbit_Step_Left_V02",
+            "frames": 32,
+            "sourceMax": 0.8700000000000006,
+            "coveredSource": 0.9000000000000008,
+            "firstHalfMaximumEntryAnchorDrift": 5.127385417844431e-7
+          },
+          {
+            "hp": 450,
+            "side": -1,
+            "radius": 5,
+            "clip": "Wolf_Orbit_Step_Left_V02",
+            "frames": 32,
+            "sourceMax": 0.8700000000000006,
+            "coveredSource": 0.9000000000000008,
+            "firstHalfMaximumEntryAnchorDrift": 5.462855929083633e-7
+          },
+          {
+            "hp": 450,
+            "side": 1,
+            "radius": 3,
+            "clip": "Wolf_Orbit_Step_V02",
+            "frames": 32,
+            "sourceMax": 0.8700000000000006,
+            "coveredSource": 0.9000000000000008,
+            "firstHalfMaximumEntryAnchorDrift": 4.3392836387637365e-7
+          },
+          {
+            "hp": 450,
+            "side": 1,
+            "radius": 5,
+            "clip": "Wolf_Orbit_Step_V02",
+            "frames": 32,
+            "sourceMax": 0.8700000000000006,
+            "coveredSource": 0.9000000000000008,
+            "firstHalfMaximumEntryAnchorDrift": 3.488272401904948e-7
+          }
+        ],
+        "phaseChangeDuringStep": {
+          "snapshotRate": 1.25,
+          "unchanged": true
+        },
+        "scope": "Actual standing watch settled before the step. Initial support pair is compared with its actual world anchor before the first root motion; all blend frames included, no .3-second exclusion. Both phases must cover all .9 source seconds. The later half-cycle is a new support episode and is not compared with the first half entry anchors."
+      },
+      "runApproach": [
+        {
+          "initialRange": 6,
+          "moveFrames": 26,
+          "medianSpeed": 6.5999999999999925,
+          "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+          "nativeImportedSourceDuration": 0.6000000238418579,
+          "runPeriod": null,
+          "sampledWallPeriods": [],
+          "runCycles": 0,
+          "stanceSamples": 4,
+          "maxStanceDrift": 2.682209014892578e-7,
+          "stanceWorst": [
+            {
+              "name": "fore.R.paw",
+              "wall": 0.35,
+              "sourceTime": 0.26380952380952377,
+              "drift": 2.682209014892578e-7
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 0.36666666666666664,
+              "sourceTime": 0.27428571428571424,
+              "drift": 2.6656007498500226e-7
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 0.3333333333333333,
+              "sourceTime": 0.2533333333333333,
+              "drift": 2.4755668231600746e-7
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 0.31666666666666665,
+              "sourceTime": 0.2428571428571428,
+              "drift": 0
+            }
+          ]
+        },
+        {
+          "initialRange": 15,
+          "moveFrames": 108,
+          "medianSpeed": 6.5999999999999925,
+          "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+          "nativeImportedSourceDuration": 0.6000000238418579,
+          "observedSourcePeriod": 0.5666666666666667,
+          "runPeriod": 0.9015151515151518,
+          "sampledWallPeriods": [],
+          "runCycles": 1,
+          "stanceSamples": 51,
+          "maxStanceDrift": 9.834766387939453e-7,
+          "stanceWorst": [
+            {
+              "name": "hind.L.paw",
+              "wall": 1.4333333333333333,
+              "sourceTime": 0.37809523809523843,
+              "drift": 9.834766387939453e-7
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 1.1666666666666667,
+              "sourceTime": 0.21047619047619084,
+              "drift": 9.578560996048568e-7
+            },
+            {
+              "name": "hind.L.paw",
+              "wall": 0.5666666666666667,
+              "sourceTime": 0.3999999999999999,
+              "drift": 5.339525004377638e-7
+            },
+            {
+              "name": "fore.L.paw",
+              "wall": 1.0666666666666667,
+              "sourceTime": 0.147619047619048,
+              "drift": 4.924151790695877e-7
+            },
+            {
+              "name": "hind.R.paw",
+              "wall": 1.5,
+              "sourceTime": 0.4200000000000003,
+              "drift": 4.777675730550706e-7
+            }
+          ]
+        },
+        {
+          "initialRange": 35,
+          "moveFrames": 290,
+          "medianSpeed": 6.599999999999966,
+          "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+          "nativeImportedSourceDuration": 0.6000000238418579,
+          "observedSourcePeriod": 0.5666666666666667,
+          "runPeriod": 0.9015151515151518,
+          "sampledWallPeriods": [
+            0.9,
+            0.9000000000000001,
+            0.8999999999999999,
+            0.8999999999999999
+          ],
+          "runCycles": 5,
+          "stanceSamples": 167,
+          "maxStanceDrift": 0.000003875791740069146,
+          "stanceWorst": [
+            {
+              "name": "fore.R.paw",
+              "wall": 4.8,
+              "sourceTime": 0.22761904761904986,
+              "drift": 0.000003875791740069146
+            },
+            {
+              "name": "fore.L.paw",
+              "wall": 3.7,
+              "sourceTime": 0.10285714285714467,
+              "drift": 0.0000026351050994629378
+            },
+            {
+              "name": "fore.L.paw",
+              "wall": 3.6666666666666665,
+              "sourceTime": 0.08190476190476373,
+              "drift": 0.0000019734898961953288
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 3.85,
+              "sourceTime": 0.19714285714285892,
+              "drift": 0.0000019094429587890324
+            },
+            {
+              "name": "fore.R.paw",
+              "wall": 2.9833333333333334,
+              "sourceTime": 0.21904761904762035,
+              "drift": 0.0000015497207641601562
+            }
+          ]
+        }
+      ],
+      "committedStrike": {
+        "case": "commit-lock-vs-head-attention",
+        "rows": [
+          {
+            "id": "quick-bite",
+            "samples": 90,
+            "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+            "maxHeadYawDegrees": 40.10705786459034,
+            "maxHeadPitchDegrees": 20.053524682242635,
+            "maxHeadRollBasisResidual": 3.9982898094938233e-7,
+            "lockedYaw": 0
+          },
+          {
+            "id": "chain-bite",
+            "samples": 90,
+            "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+            "maxHeadYawDegrees": 40.10705786459034,
+            "maxHeadPitchDegrees": 20.053524682242635,
+            "maxHeadRollBasisResidual": 3.9982898094938233e-7,
+            "lockedYaw": 0
+          },
+          {
+            "id": "paw-swipe",
+            "samples": 100,
+            "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+            "maxHeadYawDegrees": 40.10705629815547,
+            "maxHeadPitchDegrees": 20.053529323977017,
+            "maxHeadRollBasisResidual": 3.1430904072368883e-7,
+            "lockedYaw": 0
+          },
+          {
+            "id": "lunge",
+            "samples": 287,
+            "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+            "maxHeadYawDegrees": 40.10705503299428,
+            "maxHeadPitchDegrees": 20.05352938207828,
+            "maxHeadRollBasisResidual": 3.404503070299685e-7,
+            "lockedYaw": 0.05620192432749602
+          },
+          {
+            "id": "pin",
+            "samples": 300,
+            "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+            "maxHeadYawDegrees": 40.10704903191593,
+            "maxHeadPitchDegrees": 20.053527559743056,
+            "maxHeadRollBasisResidual": 2.3811880727996107e-7,
+            "lockedYaw": 0
+          }
+        ]
+      },
+      "boundedMatrixRefresh": {
+        "test": "support and attention refresh only cached affected branches with bounded matrix work and identical poses",
+        "passed": true,
+        "reference": "The previous full-rig refresh is substituted into the same actual planted-foot and head-attention correction, then compared against the optimized path for every animator node world position and local rotation.",
+        "positionToleranceMeters": 0.00001,
+        "rotationDotTolerance": 0.000001,
+        "wholeRigRefreshCallsDuringOptimizedCorrections": 0,
+        "dirtyVisitBound": "Positive and no greater than the complete actor rig node count for two support legs plus both attention joints.",
+        "unrelatedNodesNeverMarkedDirty": [
+          "root",
+          "pelvis",
+          "spine",
+          "chest"
+        ],
+        "precomputedBranchArraysReused": true,
+        "limitation": "This measures CPU scene-matrix work and exact sampled corrected poses, not device FPS or GPU performance."
+      },
+      "defenses": {
+        "case": "defense-height-behind-wall-interrupt",
+        "rows": [
+          {
+            "id": "quick-bite",
+            "defense": "dodge",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "quick-bite",
+            "defense": "shieldPush",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "quick-bite",
+            "defense": "behind",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "quick-bite",
+            "defense": "height",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "quick-bite",
+            "defense": "wall",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "quick-bite",
+            "defense": "interrupt",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "dodge",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "shieldPush",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "behind",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "height",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "wall",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "chain-bite",
+            "defense": "interrupt",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "dodge",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "shieldPush",
+            "damage": 0,
+            "resolvedSerial": 3,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "behind",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "height",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "wall",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          },
+          {
+            "id": "paw-swipe",
+            "defense": "interrupt",
+            "damage": 0,
+            "resolvedSerial": null,
+            "followup": null
+          }
+        ]
+      },
+      "hpPhase": {
+        "rows": [
+          {
+            "hp": 451,
+            "completedBouts": 17,
+            "boutSizes": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "hits": 17,
+            "attackClips": [
+              "Wolf_Driving_Bite_V02",
+              "Wolf_Driving_Cross_Bite_V02"
+            ]
+          },
+          {
+            "hp": 450,
+            "completedBouts": 8,
+            "boutSizes": [
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3,
+              3
+            ],
+            "hits": 27,
+            "attackClips": [
+              "Wolf_Driving_Bite_V02",
+              "Wolf_Driving_Cross_Bite_V02"
+            ]
+          }
+        ],
+        "phaseChangeDuringStrike": {
+          "serialUnchanged": true,
+          "sourceTimeAdvanced": true
+        },
+        "note": "450 HP total hits include an unfinished final bout; completed bout sizes use only finished bouts."
+      },
+      "preservation": "All original twelve raw source sampler/carrier poses, original code/config/model/dependencies, strict R9 source/moving keys and standing shapes, new R10 local attachment lengths against approved bind nodes, fixed scaling, eighteen actor-local clip targets with twelve unchanged shared-template clips.",
+      "fourMapResources": "Village, great plains, monster forest and witch cave: 1/5/10/20 actors, independent skeletons/morph state/targets, shared geometry, three warm repeats, cancellation/retry and original 0.1 lifetime checks."
+    },
+    "measuredLimits": [
+      "The preserved imported R8 run includes one initial 1/30-second hold and a native .600000024-second range. The 0.2 runtime skips that initial hold only: the independent test measures actual source-time wraps and the report records the resulting cycle and sampled wall periods. The original 0.1 sampler and asset remain unchanged.",
+      "Numbers for named foot anchors prove world-space support in the sampled windows; visual leg-shape and gait quality require the separate runtime-skinned render review.",
+      "Forced fourteen-second continuous circles are a stress scenario. Normal encounter stalking uses shorter finite bouts."
+    ]
+  },
+  "regression": {
+    "scope": "Node/NullEngine actual-rig 3D attention, complete orbit entry/foot plant, autonomous contact, feral behavior, four-map summon/resource lifecycle, preserved0.1 and shared combat regressions. No browser automation. DeviceFPS/heat/GPU and visual approval are not measured.",
+    "startedAt": "2026-11-12T10:25:09.274Z",
+    "finishedAt": "2026-11-12T10:25:37.326Z",
+    "command": [
+      "node",
+      "--test",
+      "tests/wolf-integration.test.js",
+      "tests/wolf-pattern-size.test.js",
+      "tests/wolf-v02-brain.test.js",
+      "tests/wolf-v02-patterns.test.js",
+      "tests/wolf-v02-authored-attacks.test.js",
+      "tests/wolf-v02-integration.test.js",
+      "tests/wolf-v02-hunt.test.js",
+      "tests/wolf-v02-hunt-integration.test.js",
+      "tests/wolf-v02-feral-integration.test.js",
+      "tests/wolf-v02-orbit-navigation.test.js",
+      "tests/boss-battle.test.js",
+      "tests/boss-combat.test.js",
+      "tests/combat-reconcile.test.js",
+      "tests/grab-escape.test.js",
+      "tests/release-v2.test.js"
+    ],
+    "exitCode": 0,
+    "tests": 123,
+    "pass": 123,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "sourceAndTestFilesUnchangedDuringRun": true,
+    "inputHashes": {
+      "src/wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+      "src/wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+      "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "src/wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+      "src/wolf-v02-attack-clips.json": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+      "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "src/wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+      "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+      "public/assets/alpha-wolf.json": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+      "tests/wolf-integration.test.js": "a68c876905cd288d23c261bd2800d7e1bb610b88ca3f2f0bff7084fb6eb23895",
+      "tests/wolf-pattern-size.test.js": "97a8b52fc20ee7a7021362e44558816a21c1c138618ee646df97cefb3436abee",
+      "tests/wolf-v02-brain.test.js": "09f97845af888a01a4c005740cea95caf29a980dc2c4d27b4c32807566fff486",
+      "tests/wolf-v02-patterns.test.js": "9f05cc72d04d8e019da3cccc03eb9809e0b21f5a9a986b0f45e279a0bdfcc11f",
+      "tests/wolf-v02-authored-attacks.test.js": "4b1dc35baeae191d923b813c3ad039fdc65f0a022b3ac5a31599e2dcc31c0bc3",
+      "tests/wolf-v02-integration.test.js": "f1a850a44f880408db3ce2ce419e97753e684009094823dc4a8cab63ad6455e8",
+      "tests/wolf-v02-hunt.test.js": "20eae028371ee3090939f508f4f3d3981ccef3be970f45f3672bda5b003a778d",
+      "tests/wolf-v02-hunt-integration.test.js": "7051667f528843311b3457268fa944f80cb582e1ad8a40d692c2e878ceeb598f",
+      "tests/wolf-v02-feral-integration.test.js": "94dd56dfea922987ba14e905ea781611400758004cfec320b0440d6d2869ef98",
+      "tests/wolf-v02-orbit-navigation.test.js": "cfb4f48b40b19e9cfa82ff0dbf43ddcf8fe152310a3ceffafac9331d0889ddd3",
+      "tests/boss-battle.test.js": "ba1bacd5dd2fafb91086f1cf1a9993ac3eb36ea2101478d4508202af7c15edac",
+      "tests/boss-combat.test.js": "394e6f43f5e876590aaa2a523aeaac6937a711fb7bd5e06dea9a24a0738c7d85",
+      "tests/combat-reconcile.test.js": "68814ff8b408d0f588709f2e8bb30ed1b3bcc89fcf69a6919177ba778eafaa5f",
+      "tests/grab-escape.test.js": "e209d0831344731eba16e09e9803faee6d8756d91b9767ee467074a013978366",
+      "tests/release-v2.test.js": "7892554bcefabc8a21b3f59ecff8c5d2bcbc1d36d00659c6c2b3c7ed650b2324",
+      "tests/helpers/wolf-hunt-fixture.js": "b2c9a972232667bf4cd8d169269d12d61e54ed41ba0002ee83510b81adeeccc1",
+      "tests/helpers/wolf-feral-fixture.js": "1888d353aef2bbb32e98cb3572b9fe48d7475a4eb9e6ff11606ae6672863e4a6"
+    },
+    "output": "combined-regression.txt"
+  },
+  "deformation": {
+    "scope": "New R10 authored motion at 60Hz on original R8 evaluated mesh; full original 4K renders reviewed separately",
+    "clipsJsonSha256": "2b1e8de3e7b3e4feafcc9d665e9e8aaec63a78cd272654d925411f4b1932408b",
+    "animationGlbSha256": "7611101fd44c145d8dd15f1fdb91735c29450d9917384627f4ee444e2ec1b48b",
+    "blendSha256": "600acc4173c9a465433045d94b5c377fe4503ff401faa84bcc806f659ff479ac",
+    "clips": [
+      {
+        "clip": "Wolf_Driving_Bite_V02",
+        "sampleHz": 60,
+        "frames": 45,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.738295640762999e-7,
+        "maximumConnectedAttachmentGapMeters": 5.438413498072225e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 3.145671409459747e-7,
+        "minimumSurfaceHeightMeters": 0.000999803189188242,
+        "meshEdgeStrainMinimum": 0.024010716006159782,
+        "meshEdgeStrainMaximum": 421.553955078125,
+        "rigidShaftEdgeStrainMinimum": 0.9992156028747559,
+        "rigidShaftEdgeStrainMaximum": 1.0017540454864502,
+        "meshEdgeStrainP01Minimum": 0.558132466673851,
+        "meshEdgeStrainP99Maximum": 3.287320544719693,
+        "jawRelativeAngularExcursionRadians": 0.2000021514486304,
+        "rootAxisExcursionMeters": [
+          0,
+          0.3799999952316284,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0.03200000151991844,
+          0.3799999989569187,
+          0.07499998807907104
+        ],
+        "leftForepawAxisExcursionMeters": [
+          8.940696716308594e-8,
+          0.3800002634525299,
+          0.08397354185581207
+        ],
+        "limbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 2.3340093136394205e-7,
+            "minimumThicknessRatio": 0.9999998001380362,
+            "maximumThicknessRatio": 1.0000002412216307
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.100449233729199e-7,
+            "minimumThicknessRatio": 0.9999995113875774,
+            "maximumThicknessRatio": 1.000000496687131
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.6372514279846337e-7,
+            "minimumThicknessRatio": 0.9999998200138859,
+            "maximumThicknessRatio": 1.0000003420055976
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 1.7846253489493396e-7,
+            "minimumThicknessRatio": 0.9999997308148386,
+            "maximumThicknessRatio": 1.000000234573432
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 9.113634458977587e-7,
+            "minimumThicknessRatio": 0.9999996093139134,
+            "maximumThicknessRatio": 1.0000003861969677
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.688643510481399e-7,
+            "minimumThicknessRatio": 0.9999998480102601,
+            "maximumThicknessRatio": 1.000000327580168
+          },
+          "hind.L.upper": {
+            "vertices": 89,
+            "restCrossSectionThicknessMeters": [
+              0.05005534404824363,
+              0.21629439333662903
+            ],
+            "maximumLocalShapeErrorMeters": 0.000001955290409876605,
+            "minimumThicknessRatio": 0.9999992743040382,
+            "maximumThicknessRatio": 1.0000006471979377
+          },
+          "hind.L.lower": {
+            "vertices": 106,
+            "restCrossSectionThicknessMeters": [
+              0.12723645581897036,
+              0.17863566136984732
+            ],
+            "maximumLocalShapeErrorMeters": 0.00002111790266491537,
+            "minimumThicknessRatio": 0.9999995033584074,
+            "maximumThicknessRatio": 1.0000005664508835
+          },
+          "hind.L.metatarsal": {
+            "vertices": 14,
+            "restCrossSectionThicknessMeters": [
+              0.07268349989667626,
+              0.09288471898813588
+            ],
+            "maximumLocalShapeErrorMeters": 1.2723953889032997e-7,
+            "minimumThicknessRatio": 0.9999996979332476,
+            "maximumThicknessRatio": 1.0000006643134733
+          },
+          "hind.L.paw": {
+            "vertices": 199,
+            "restCrossSectionThicknessMeters": [
+              0.16570507622300423,
+              0.14416674902261017
+            ],
+            "maximumLocalShapeErrorMeters": 1.51519231446227e-7,
+            "minimumThicknessRatio": 0.9999997924890955,
+            "maximumThicknessRatio": 1.0000001539224979
+          },
+          "hind.R.upper": {
+            "vertices": 196,
+            "restCrossSectionThicknessMeters": [
+              0.19862814805988793,
+              0.22691677657482734
+            ],
+            "maximumLocalShapeErrorMeters": 0.000038817135755890874,
+            "minimumThicknessRatio": 0.9999995921143824,
+            "maximumThicknessRatio": 1.0000002404959878
+          },
+          "hind.R.lower": {
+            "vertices": 112,
+            "restCrossSectionThicknessMeters": [
+              0.15958010133240208,
+              0.18964986065528766
+            ],
+            "maximumLocalShapeErrorMeters": 1.7109392487712072e-7,
+            "minimumThicknessRatio": 0.9999997599614913,
+            "maximumThicknessRatio": 1.0000003277419485
+          },
+          "hind.R.metatarsal": {
+            "vertices": 30,
+            "restCrossSectionThicknessMeters": [
+              0.104837623498518,
+              0.09330757842948356
+            ],
+            "maximumLocalShapeErrorMeters": 0.000005905458402941698,
+            "minimumThicknessRatio": 0.9999995528424813,
+            "maximumThicknessRatio": 1.0000004108187392
+          },
+          "hind.R.paw": {
+            "vertices": 228,
+            "restCrossSectionThicknessMeters": [
+              0.1669197115588862,
+              0.13935668793443318
+            ],
+            "maximumLocalShapeErrorMeters": 1.0356002477224643e-7,
+            "minimumThicknessRatio": 0.9999998025784633,
+            "maximumThicknessRatio": 1.0000001840168369
+          }
+        },
+        "limbJointBandPhases": [
+          {
+            "time": 0.25,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7670292992266758,
+            "strainP95": 2.191415258808773,
+            "strainMinimum": 0.06216580311676371,
+            "strainMaximum": 31.546933933076325,
+            "maximumAbsoluteEdgeChangeMeters": 0.19224318261902767,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.3,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7745037588113566,
+            "strainP95": 2.3979408277436702,
+            "strainMinimum": 0.07809123211383016,
+            "strainMaximum": 37.48333471964482,
+            "maximumAbsoluteEdgeChangeMeters": 0.2399360477523132,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8024250195801453,
+            "strainP95": 1.81858521553988,
+            "strainMinimum": 0.11119855657930051,
+            "strainMaximum": 10.32267684611069,
+            "maximumAbsoluteEdgeChangeMeters": 0.09194513685594997,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.7333333333333333,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8477343572454719,
+            "strainP95": 1.6472157170784656,
+            "strainMinimum": 0.16764400339592964,
+            "strainMaximum": 8.631825741532893,
+            "maximumAbsoluteEdgeChangeMeters": 0.1052827192057272,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ],
+        "maximumWorldSupportFootFrameDriftMeters": 3.72826933956051e-7,
+        "supportFootSpeedP95MetersPerSecond": 0.000014630878606473275,
+        "loopRelativePositionSeamMeters": 2.384185791015625e-7,
+        "loopRotationSeamRadians": 0,
+        "maximumHeadWorldRotationFromFirstPoseRadians": 0.826600733429029
+      },
+      {
+        "clip": "Wolf_Driving_Cross_Bite_V02",
+        "sampleHz": 60,
+        "frames": 49,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.8400121026829197e-7,
+        "maximumConnectedAttachmentGapMeters": 5.206884506242319e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 2.3595896661118953e-7,
+        "minimumSurfaceHeightMeters": 0.0009997559245675802,
+        "meshEdgeStrainMinimum": 0.024073686450719833,
+        "meshEdgeStrainMaximum": 235.85394287109375,
+        "rigidShaftEdgeStrainMinimum": 0.9989043474197388,
+        "rigidShaftEdgeStrainMaximum": 1.002349853515625,
+        "meshEdgeStrainP01Minimum": 0.6122572654485703,
+        "meshEdgeStrainP99Maximum": 3.36677169799804,
+        "jawRelativeAngularExcursionRadians": 0.2000033455143132,
+        "rootAxisExcursionMeters": [
+          0,
+          0.41999998688697815,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0.03200000151991844,
+          0.4199999962002039,
+          0.07499992847442627
+        ],
+        "leftForepawAxisExcursionMeters": [
+          7.450580596923828e-8,
+          0.4200001657009125,
+          0.0847214013338089
+        ],
+        "limbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 2.158970473667476e-7,
+            "minimumThicknessRatio": 0.9999996953067037,
+            "maximumThicknessRatio": 1.000000195359403
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 9.007920392765312e-7,
+            "minimumThicknessRatio": 0.9999995971574592,
+            "maximumThicknessRatio": 1.000000323621059
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.678253870511169e-7,
+            "minimumThicknessRatio": 0.9999997842278898,
+            "maximumThicknessRatio": 1.000000383933598
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 2.2120119771800727e-7,
+            "minimumThicknessRatio": 0.9999997766927787,
+            "maximumThicknessRatio": 1.0000002357458144
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.152453274486004e-7,
+            "minimumThicknessRatio": 0.9999995831082799,
+            "maximumThicknessRatio": 1.0000003972722684
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.8637151856791253e-7,
+            "minimumThicknessRatio": 0.9999997889227666,
+            "maximumThicknessRatio": 1.0000003860170246
+          },
+          "hind.L.upper": {
+            "vertices": 89,
+            "restCrossSectionThicknessMeters": [
+              0.05005534404824363,
+              0.21629439333662903
+            ],
+            "maximumLocalShapeErrorMeters": 0.0000016180382732207944,
+            "minimumThicknessRatio": 0.9999993834717142,
+            "maximumThicknessRatio": 1.0000006740650127
+          },
+          "hind.L.lower": {
+            "vertices": 106,
+            "restCrossSectionThicknessMeters": [
+              0.12723645581897036,
+              0.17863566136984732
+            ],
+            "maximumLocalShapeErrorMeters": 0.000017436118020223918,
+            "minimumThicknessRatio": 0.9999995147078845,
+            "maximumThicknessRatio": 1.0000004981095763
+          },
+          "hind.L.metatarsal": {
+            "vertices": 14,
+            "restCrossSectionThicknessMeters": [
+              0.07268349989667626,
+              0.09288471898813588
+            ],
+            "maximumLocalShapeErrorMeters": 1.397729756291779e-7,
+            "minimumThicknessRatio": 0.9999997421365141,
+            "maximumThicknessRatio": 1.000000593817274
+          },
+          "hind.L.paw": {
+            "vertices": 199,
+            "restCrossSectionThicknessMeters": [
+              0.16570507622300423,
+              0.14416674902261017
+            ],
+            "maximumLocalShapeErrorMeters": 1.389750875636429e-7,
+            "minimumThicknessRatio": 0.999999827825961,
+            "maximumThicknessRatio": 1.0000001823980917
+          },
+          "hind.R.upper": {
+            "vertices": 196,
+            "restCrossSectionThicknessMeters": [
+              0.19862814805988793,
+              0.22691677657482734
+            ],
+            "maximumLocalShapeErrorMeters": 0.0001055550564722293,
+            "minimumThicknessRatio": 0.9999995998661126,
+            "maximumThicknessRatio": 1.00000021288773
+          },
+          "hind.R.lower": {
+            "vertices": 112,
+            "restCrossSectionThicknessMeters": [
+              0.15958010133240208,
+              0.18964986065528766
+            ],
+            "maximumLocalShapeErrorMeters": 1.6620722224764195e-7,
+            "minimumThicknessRatio": 0.9999995697569672,
+            "maximumThicknessRatio": 1.0000003428054431
+          },
+          "hind.R.metatarsal": {
+            "vertices": 30,
+            "restCrossSectionThicknessMeters": [
+              0.104837623498518,
+              0.09330757842948356
+            ],
+            "maximumLocalShapeErrorMeters": 0.000012732116911663377,
+            "minimumThicknessRatio": 0.999999034697884,
+            "maximumThicknessRatio": 1.0000003685174137
+          },
+          "hind.R.paw": {
+            "vertices": 228,
+            "restCrossSectionThicknessMeters": [
+              0.1669197115588862,
+              0.13935668793443318
+            ],
+            "maximumLocalShapeErrorMeters": 9.615700160401488e-8,
+            "minimumThicknessRatio": 0.9999997471505336,
+            "maximumThicknessRatio": 1.000000248059234
+          }
+        },
+        "limbJointBandPhases": [
+          {
+            "time": 0.25,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7539896560033102,
+            "strainP95": 2.866462922159149,
+            "strainMinimum": 0.11773989986786344,
+            "strainMaximum": 24.475875399306464,
+            "maximumAbsoluteEdgeChangeMeters": 0.2423625243414541,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.3333333333333333,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.735306818706549,
+            "strainP95": 3.1645224266896492,
+            "strainMinimum": 0.09793649624381114,
+            "strainMaximum": 57.149288706219764,
+            "maximumAbsoluteEdgeChangeMeters": 0.29372161157022914,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7901369656849637,
+            "strainP95": 2.038978885972358,
+            "strainMinimum": 0.07836803266187352,
+            "strainMaximum": 35.494646495357884,
+            "maximumAbsoluteEdgeChangeMeters": 0.09851728334633576,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.8,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8477341105287804,
+            "strainP95": 1.6472185240078558,
+            "strainMinimum": 0.1676443437685589,
+            "strainMaximum": 8.631819692231712,
+            "maximumAbsoluteEdgeChangeMeters": 0.10528273410688839,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ],
+        "maximumWorldSupportFootFrameDriftMeters": 4.238326148190466e-7,
+        "supportFootSpeedP95MetersPerSecond": 0.000014180651544657927,
+        "loopRelativePositionSeamMeters": 3.604110068812318e-7,
+        "loopRotationSeamRadians": 0,
+        "maximumHeadWorldRotationFromFirstPoseRadians": 0.826600733429029
+      },
+      {
+        "clip": "Wolf_Orbit_Step_V02",
+        "sampleHz": 60,
+        "frames": 55,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.494948648206318e-7,
+        "maximumConnectedAttachmentGapMeters": 5.339525004377638e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 2.8572630271833374e-7,
+        "minimumSurfaceHeightMeters": 0.0009997128508985043,
+        "meshEdgeStrainMinimum": 0.021575847640633583,
+        "meshEdgeStrainMaximum": 12.864285469055176,
+        "rigidShaftEdgeStrainMinimum": 0.9980380535125732,
+        "rigidShaftEdgeStrainMaximum": 1.0016597509384155,
+        "meshEdgeStrainP01Minimum": 0.6160411238670349,
+        "meshEdgeStrainP99Maximum": 1.421541103124618,
+        "jawRelativeAngularExcursionRadians": 0.000976562509701277,
+        "rootAxisExcursionMeters": [
+          0.5309448838233948,
+          0.12385059893131256,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0.721200168132782,
+          0.16823050379753113,
+          2.980232238769531e-7
+        ],
+        "leftForepawAxisExcursionMeters": [
+          0.3645745478570461,
+          0.11055785417556763,
+          0.0747467428445816
+        ],
+        "limbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 2.2772772857434306e-7,
+            "minimumThicknessRatio": 0.9999997569300894,
+            "maximumThicknessRatio": 1.0000002879492456
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.7372427762312e-7,
+            "minimumThicknessRatio": 0.9999996783362595,
+            "maximumThicknessRatio": 1.0000004814962153
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.8702399785697236e-7,
+            "minimumThicknessRatio": 0.9999998113371916,
+            "maximumThicknessRatio": 1.0000005527718285
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 2.471376388201828e-7,
+            "minimumThicknessRatio": 0.9999996903125091,
+            "maximumThicknessRatio": 1.0000002066605906
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.475280357153129e-7,
+            "minimumThicknessRatio": 0.9999996651002429,
+            "maximumThicknessRatio": 1.000000590511113
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.6990778808179102e-7,
+            "minimumThicknessRatio": 0.9999997212124354,
+            "maximumThicknessRatio": 1.0000004203772723
+          },
+          "hind.L.upper": {
+            "vertices": 89,
+            "restCrossSectionThicknessMeters": [
+              0.05005534404824363,
+              0.21629439333662903
+            ],
+            "maximumLocalShapeErrorMeters": 0.000001934520609242526,
+            "minimumThicknessRatio": 0.9999981823267277,
+            "maximumThicknessRatio": 1.0000014435528513
+          },
+          "hind.L.lower": {
+            "vertices": 106,
+            "restCrossSectionThicknessMeters": [
+              0.12723645581897036,
+              0.17863566136984732
+            ],
+            "maximumLocalShapeErrorMeters": 0.00002215056206486959,
+            "minimumThicknessRatio": 0.9999995907148007,
+            "maximumThicknessRatio": 1.0000004281590054
+          },
+          "hind.L.metatarsal": {
+            "vertices": 14,
+            "restCrossSectionThicknessMeters": [
+              0.07268349989667626,
+              0.09288471898813588
+            ],
+            "maximumLocalShapeErrorMeters": 2.8572630271833374e-7,
+            "minimumThicknessRatio": 0.9999985732724342,
+            "maximumThicknessRatio": 1.0000009475046385
+          },
+          "hind.L.paw": {
+            "vertices": 199,
+            "restCrossSectionThicknessMeters": [
+              0.16570507622300423,
+              0.14416674902261017
+            ],
+            "maximumLocalShapeErrorMeters": 1.9662168415746527e-7,
+            "minimumThicknessRatio": 0.9999994809176294,
+            "maximumThicknessRatio": 1.000000410818611
+          },
+          "hind.R.upper": {
+            "vertices": 196,
+            "restCrossSectionThicknessMeters": [
+              0.19862814805988793,
+              0.22691677657482734
+            ],
+            "maximumLocalShapeErrorMeters": 0.00005559919406777529,
+            "minimumThicknessRatio": 0.9999995271958255,
+            "maximumThicknessRatio": 1.0000002535571284
+          },
+          "hind.R.lower": {
+            "vertices": 112,
+            "restCrossSectionThicknessMeters": [
+              0.15958010133240208,
+              0.18964986065528766
+            ],
+            "maximumLocalShapeErrorMeters": 1.7085609676870896e-7,
+            "minimumThicknessRatio": 0.999999515482533,
+            "maximumThicknessRatio": 1.0000003134985422
+          },
+          "hind.R.metatarsal": {
+            "vertices": 30,
+            "restCrossSectionThicknessMeters": [
+              0.104837623498518,
+              0.09330757842948356
+            ],
+            "maximumLocalShapeErrorMeters": 0.000018293988499409106,
+            "minimumThicknessRatio": 0.9999990133413266,
+            "maximumThicknessRatio": 1.0000006768458263
+          },
+          "hind.R.paw": {
+            "vertices": 228,
+            "restCrossSectionThicknessMeters": [
+              0.1669197115588862,
+              0.13935668793443318
+            ],
+            "maximumLocalShapeErrorMeters": 1.448683645950869e-7,
+            "minimumThicknessRatio": 0.9999996760798647,
+            "maximumThicknessRatio": 1.000000249749452
+          }
+        },
+        "limbJointBandPhases": [
+          {
+            "time": 0,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7977653593165959,
+            "strainP95": 2.4563415823416763,
+            "strainMinimum": 0.173290705889049,
+            "strainMaximum": 16.813535191231725,
+            "maximumAbsoluteEdgeChangeMeters": 0.14241098446278563,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.25,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7992902368574417,
+            "strainP95": 2.2850546285544424,
+            "strainMinimum": 0.10562980112967642,
+            "strainMaximum": 18.546797029800118,
+            "maximumAbsoluteEdgeChangeMeters": 0.12769825156491238,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7592414204346551,
+            "strainP95": 2.3401752619481497,
+            "strainMinimum": 0.13184206841066512,
+            "strainMaximum": 16.70239426036825,
+            "maximumAbsoluteEdgeChangeMeters": 0.11596719320576626,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.9,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7977688564388544,
+            "strainP95": 2.4563436866472608,
+            "strainMinimum": 0.17328469413462758,
+            "strainMaximum": 16.813520009254304,
+            "maximumAbsoluteEdgeChangeMeters": 0.14241119307904235,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ],
+        "maximumWorldSupportFootFrameDriftMeters": 4.882404747405001e-7,
+        "supportFootSpeedP95MetersPerSecond": 0.00002145763685346772,
+        "loopRelativePositionSeamMeters": 6.314998895054189e-7,
+        "loopRotationSeamRadians": 0,
+        "maximumHeadWorldRotationFromFirstPoseRadians": 0.4583333886208619
+      },
+      {
+        "clip": "Wolf_Orbit_Step_Left_V02",
+        "sampleHz": 60,
+        "frames": 55,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.617148871480012e-7,
+        "maximumConnectedAttachmentGapMeters": 5.339525004377638e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 2.869481719049876e-7,
+        "minimumSurfaceHeightMeters": 0.000999673386104405,
+        "meshEdgeStrainMinimum": 0.011456036940217018,
+        "meshEdgeStrainMaximum": 12.811513900756836,
+        "rigidShaftEdgeStrainMinimum": 0.9987205862998962,
+        "rigidShaftEdgeStrainMaximum": 1.0018783807754517,
+        "meshEdgeStrainP01Minimum": 0.6167586612701416,
+        "meshEdgeStrainP99Maximum": 1.4234345114231062,
+        "jawRelativeAngularExcursionRadians": 0.000976562509701277,
+        "rootAxisExcursionMeters": [
+          0.5309448838233948,
+          0.12385059893131256,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0.721200168132782,
+          0.16823050379753113,
+          2.980232238769531e-7
+        ],
+        "leftForepawAxisExcursionMeters": [
+          0.3758641183376312,
+          0.06216055154800415,
+          0.07474678754806519
+        ],
+        "limbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 1.7915448248740308e-7,
+            "minimumThicknessRatio": 0.9999997203881449,
+            "maximumThicknessRatio": 1.0000002058527522
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.347802725540563e-7,
+            "minimumThicknessRatio": 0.9999995867214723,
+            "maximumThicknessRatio": 1.0000005499973412
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.8047180970164784e-7,
+            "minimumThicknessRatio": 0.9999997737277895,
+            "maximumThicknessRatio": 1.0000005120435689
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 2.243808999283665e-7,
+            "minimumThicknessRatio": 0.9999997739166142,
+            "maximumThicknessRatio": 1.000000198865941
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 7.770939539333973e-7,
+            "minimumThicknessRatio": 0.9999995226605418,
+            "maximumThicknessRatio": 1.0000006179995826
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.9659261306211189e-7,
+            "minimumThicknessRatio": 0.9999997795878476,
+            "maximumThicknessRatio": 1.0000004966224119
+          },
+          "hind.L.upper": {
+            "vertices": 89,
+            "restCrossSectionThicknessMeters": [
+              0.05005534404824363,
+              0.21629439333662903
+            ],
+            "maximumLocalShapeErrorMeters": 0.000002022435816641712,
+            "minimumThicknessRatio": 0.999998108693969,
+            "maximumThicknessRatio": 1.0000014576965097
+          },
+          "hind.L.lower": {
+            "vertices": 106,
+            "restCrossSectionThicknessMeters": [
+              0.12723645581897036,
+              0.17863566136984732
+            ],
+            "maximumLocalShapeErrorMeters": 0.00002205424850609464,
+            "minimumThicknessRatio": 0.9999993047192511,
+            "maximumThicknessRatio": 1.0000005837710124
+          },
+          "hind.L.metatarsal": {
+            "vertices": 14,
+            "restCrossSectionThicknessMeters": [
+              0.07268349989667626,
+              0.09288471898813588
+            ],
+            "maximumLocalShapeErrorMeters": 1.7228148571978405e-7,
+            "minimumThicknessRatio": 0.9999989596642278,
+            "maximumThicknessRatio": 1.000000998178591
+          },
+          "hind.L.paw": {
+            "vertices": 199,
+            "restCrossSectionThicknessMeters": [
+              0.16570507622300423,
+              0.14416674902261017
+            ],
+            "maximumLocalShapeErrorMeters": 1.628450558498282e-7,
+            "minimumThicknessRatio": 0.9999996372013127,
+            "maximumThicknessRatio": 1.0000003176229837
+          },
+          "hind.R.upper": {
+            "vertices": 196,
+            "restCrossSectionThicknessMeters": [
+              0.19862814805988793,
+              0.22691677657482734
+            ],
+            "maximumLocalShapeErrorMeters": 0.000056441154970385886,
+            "minimumThicknessRatio": 0.9999994645721895,
+            "maximumThicknessRatio": 1.00000026318593
+          },
+          "hind.R.lower": {
+            "vertices": 112,
+            "restCrossSectionThicknessMeters": [
+              0.15958010133240208,
+              0.18964986065528766
+            ],
+            "maximumLocalShapeErrorMeters": 1.8693977008805796e-7,
+            "minimumThicknessRatio": 0.9999992396964017,
+            "maximumThicknessRatio": 1.0000004607764752
+          },
+          "hind.R.metatarsal": {
+            "vertices": 30,
+            "restCrossSectionThicknessMeters": [
+              0.104837623498518,
+              0.09330757842948356
+            ],
+            "maximumLocalShapeErrorMeters": 0.000018115254552803476,
+            "minimumThicknessRatio": 0.9999992801250983,
+            "maximumThicknessRatio": 1.0000007195708918
+          },
+          "hind.R.paw": {
+            "vertices": 228,
+            "restCrossSectionThicknessMeters": [
+              0.1669197115588862,
+              0.13935668793443318
+            ],
+            "maximumLocalShapeErrorMeters": 1.8384291030507644e-7,
+            "minimumThicknessRatio": 0.9999995638349249,
+            "maximumThicknessRatio": 1.0000003872133332
+          }
+        },
+        "limbJointBandPhases": [
+          {
+            "time": 0,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7977653593165959,
+            "strainP95": 2.4563415823416763,
+            "strainMinimum": 0.173290705889049,
+            "strainMaximum": 16.813535191231725,
+            "maximumAbsoluteEdgeChangeMeters": 0.14241098446278563,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.25,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7595596646447113,
+            "strainP95": 2.4891059403362426,
+            "strainMinimum": 0.10429285805740685,
+            "strainMaximum": 18.54678943881141,
+            "maximumAbsoluteEdgeChangeMeters": 0.137941676135702,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7677176769776889,
+            "strainP95": 2.284043429747238,
+            "strainMinimum": 0.05853024615889754,
+            "strainMaximum": 16.702400586192176,
+            "maximumAbsoluteEdgeChangeMeters": 0.11596719320576626,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.9,
+            "edgeCount": 6909,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.7977677248469746,
+            "strainP95": 2.4563411526742858,
+            "strainMinimum": 0.1732911736228026,
+            "strainMaximum": 16.81352633507823,
+            "maximumAbsoluteEdgeChangeMeters": 0.14241110367207518,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ],
+        "maximumWorldSupportFootFrameDriftMeters": 4.645722290313213e-7,
+        "supportFootSpeedP95MetersPerSecond": 0.00002252497893797255,
+        "loopRelativePositionSeamMeters": 5.63098300328588e-7,
+        "loopRotationSeamRadians": 0,
+        "maximumHeadWorldRotationFromFirstPoseRadians": 0.4583333886208619
+      }
+    ]
+  },
+  "manifest": {
+    "assetId": "wolf-v02-feral-r10",
+    "version": 10,
+    "sourceAssetId": "wolf-attack-r8",
+    "scope": "Four newly authored animation-only R10 actions; unchanged approved R8 geometry, UV, normals, weights, bind, 28 joints, packed 4K colour and original 12 actions",
+    "validation": "deformation-validation.json",
+    "sourceActionProof": "actions.json",
+    "boneCount": 28,
+    "restNodeTRSMaximumError": 0,
+    "jawLimitRadians": 0.2,
+    "orbitRadius": 1.2,
+    "strideLength": 0.55,
+    "sourceMeshesAndOriginal12ActionsUnchanged": true,
+    "reviewedViews": [
+      "front",
+      "side",
+      "quarter",
+      "forelimb, hindlimb and muzzle textured closeups",
+      "forelimb, hindlimb and muzzle neutral matcap closeups",
+      "eight-pose motion filmstrips"
+    ],
+    "reviewScope": "Offline Blender 4.5.14 original packed 4096x4096 colour with source metre grid and 1.6m-world warrior target at game scale2.5. Actual game contact, radial warping and real-device performance are separately verified by runtime integration.",
+    "jointCollarScope": "Fixed bones and rigid muscle cores do not mean zero deformation of the interpolated joint collars; local edge strain is reported independently in deformation-validation.json. Tiny source edges amplify maximum strain ratios. The unchanged narrow collar weights show firm angular elbow/hock bends in closeup.",
+    "mirroring": "Left uses reflected arc, opposite torso/neck/tail rotations and swapped full diagonal leg phases, solved independently with its own unchanged asymmetric bind lengths. It never mirrors root alone or copies opposite-side local translations.",
+    "clips": [
+      {
+        "duration": 0.7333333333333333,
+        "impact": 0.3,
+        "fps": 60,
+        "sourceRootDistanceMeters": 0.38,
+        "contactParts": [
+          "head",
+          "jaw"
+        ],
+        "contactInterval": [
+          0.27,
+          0.35
+        ],
+        "jawLimitRadians": 0.2,
+        "headWorldYawWindupRadians": 0.48,
+        "headWorldYawStrikeRadians": -0.52,
+        "id": "Wolf_Driving_Bite_V02",
+        "rootEndTRSDelta": [
+          0,
+          0,
+          0.3799999952316284
+        ],
+        "behavior": "rapid forward weight commit with a large opposite diagonal head/neck bite"
+      },
+      {
+        "duration": 0.8,
+        "impact": 0.3333333333333333,
+        "fps": 60,
+        "sourceRootDistanceMeters": 0.42,
+        "contactParts": [
+          "head",
+          "jaw"
+        ],
+        "contactInterval": [
+          0.3,
+          0.3833333333
+        ],
+        "jawLimitRadians": 0.2,
+        "headWorldYawWindupRadians": -0.48,
+        "headWorldYawStrikeRadians": 0.52,
+        "id": "Wolf_Driving_Cross_Bite_V02",
+        "rootEndTRSDelta": [
+          0,
+          0,
+          0.41999998688697815
+        ],
+        "behavior": "rapid forward weight commit with a large opposite diagonal head/neck bite"
+      },
+      {
+        "duration": 0.9,
+        "impact": 0,
+        "fps": 60,
+        "sourceRootDistanceMeters": -0.55,
+        "orbitRadius": 1.2,
+        "strideLength": 0.55,
+        "arcRadians": -0.45833333333333337,
+        "supportPhases": [
+          {
+            "start": 0,
+            "end": 0.45,
+            "feet": [
+              "fore.L.paw",
+              "hind.R.paw"
+            ]
+          },
+          {
+            "start": 0.45,
+            "end": 0.9,
+            "feet": [
+              "fore.R.paw",
+              "hind.L.paw"
+            ]
+          }
+        ],
+        "rootYawEnd": 0.45833333333333337,
+        "stanceDutyFactor": 0.5,
+        "mirroring": "Anatomically reflected motion and swapped support-pair phases; independent IK on the unchanged asymmetric left/right bind, never reflected local translations",
+        "id": "Wolf_Orbit_Step_Left_V02",
+        "rootEndTRSDelta": [
+          -0.5309448838233948,
+          0,
+          0.12385059893131256
+        ],
+        "behavior": "player-facing circular stance step"
+      },
+      {
+        "duration": 0.9,
+        "impact": 0,
+        "fps": 60,
+        "sourceRootDistanceMeters": 0.55,
+        "orbitRadius": 1.2,
+        "strideLength": 0.55,
+        "arcRadians": 0.45833333333333337,
+        "supportPhases": [
+          {
+            "start": 0,
+            "end": 0.45,
+            "feet": [
+              "fore.R.paw",
+              "hind.L.paw"
+            ]
+          },
+          {
+            "start": 0.45,
+            "end": 0.9,
+            "feet": [
+              "fore.L.paw",
+              "hind.R.paw"
+            ]
+          }
+        ],
+        "rootYawEnd": -0.45833333333333337,
+        "stanceDutyFactor": 0.5,
+        "mirroring": "Anatomically reflected motion and swapped support-pair phases; independent IK on the unchanged asymmetric left/right bind, never reflected local translations",
+        "id": "Wolf_Orbit_Step_V02",
+        "rootEndTRSDelta": [
+          0.5309448838233948,
+          0,
+          0.12385059893131256
+        ],
+        "behavior": "player-facing circular stance step"
+      }
+    ],
+    "clipsJsonSha256": "2b1e8de3e7b3e4feafcc9d665e9e8aaec63a78cd272654d925411f4b1932408b",
+    "animationGlbSha256": "7611101fd44c145d8dd15f1fdb91735c29450d9917384627f4ee444e2ec1b48b",
+    "blendSha256": "600acc4173c9a465433045d94b5c377fe4503ff401faa84bcc806f659ff479ac",
+    "validationSha256": "b62aa74b96c0c0a393a01d5ee990d1033b599e4dec2e30dc873b7261f3ff2628",
+    "reviewArtifacts": [
+      {
+        "path": "review/R10-motion-preview.mp4",
+        "sha256": "e650075444adfcd1dbf3790dade70e43adf9ece66faebfe03742aa5d755ed47d"
+      },
+      {
+        "path": "review/R9-R10-truecolor-comparison.jpg",
+        "sha256": "6715d839d05eee226c5e9b075134ed2d3a75a25dabf927b92a067e0c876cc3b7"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02-joint-sheet.jpg",
+        "sha256": "7feabb072153ae9652e4790af04dd2407652353de78854242151178434dc1f87"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02-motion-filmstrip.jpg",
+        "sha256": "ee88c0929e831c2410c3e068e97144b37aa1a6f9fefaf2937aab6798bd325db6"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02-slow.gif",
+        "sha256": "be0eedc63cdfab27f4aa08d499f67d1203ab8803a9bf5a98f1cbf04e4e8da087"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02-truecolor-sheet.jpg",
+        "sha256": "3918ffad4f05f3aec1b4930c26ce942ad86a43e9dd84867809f1927842b0222f"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02.gif",
+        "sha256": "d4642ec34f99762a8f0700d6a69f6bf30aad84b2a203b6e52e0ce4ded6066a02"
+      },
+      {
+        "path": "review/Wolf_Driving_Bite_V02.mp4",
+        "sha256": "eacd113d6a8563bd96aed4007ad2c187f6e9abf5b1c26229aedeae9a319fc613"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02-joint-sheet.jpg",
+        "sha256": "9c4bacadd3315cc611913748970e18be01bc84150231e98a2cafb744438487b7"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02-motion-filmstrip.jpg",
+        "sha256": "1c4eb6901e9276054c689c20390b23bddfbeabb8afae8ebc65bef3a741516f75"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02-slow.gif",
+        "sha256": "94fc9f5f1344bfe1a722f9f469ee3a72bd06d1e32f2ea14a1d5437769ff149a0"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02-truecolor-sheet.jpg",
+        "sha256": "3a471f9b42931620029f876c07e13a320de1f026c6a95d0c67f1e89493421b19"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02.gif",
+        "sha256": "4e19b870922c40a48b33b11983e8ca8f1bbf20a9039fbef6d4af8718b2a00cca"
+      },
+      {
+        "path": "review/Wolf_Driving_Cross_Bite_V02.mp4",
+        "sha256": "c56962f3e1011281124b02424335fef3bb5391fe786af6095d0cd89a0c7b29f6"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02-joint-sheet.jpg",
+        "sha256": "c9b5959a716e0788c89d7f04a2e0a8bca3f9ce098ebc0de911b82f7bf35936c7"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02-motion-filmstrip.jpg",
+        "sha256": "d2594ddf7b94bc3d034dfd3d20f599f696459a7757ebc15b0a2ba6365b45ddc3"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02-slow.gif",
+        "sha256": "f6d2bd4960bc65b2482ed14b0b6a8abebb1f3ca2a95dd648512e84b8c2e0a86c"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02-truecolor-sheet.jpg",
+        "sha256": "847d981921a4f88410beda6929ca32ca19a14666f5bdfcbf4219a12d5e61f739"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02.gif",
+        "sha256": "e45b5808a6a43f259431e3d68f624e5ccb5e200cee64a96397c4a2fa70371932"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_Left_V02.mp4",
+        "sha256": "b10f6bdc52d5a0c961f89fc749279dddd70de6e3526ca5e612bdc812094377ba"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02-joint-sheet.jpg",
+        "sha256": "e844da5a7701d57357369c7c06b3f7f703a9eb469e17feba982455f273033126"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02-motion-filmstrip.jpg",
+        "sha256": "c3a2fffbdd3bd5986c56ace19bef88660e2eae983a4f01dafab7988bb59003a3"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02-slow.gif",
+        "sha256": "fd693f5bd17203f5132df9a51fa91c7ac7d3b9a7fc722095d5e8e5c95ba19270"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02-truecolor-sheet.jpg",
+        "sha256": "dbd2960c82568652df6800dc9da2b46eb3893d06e520309a2ac7cdae51436b25"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02.gif",
+        "sha256": "1fbb19e273271a9cadcfa9671b5be38885628076237d21dc3851a66ec324b620"
+      },
+      {
+        "path": "review/Wolf_Orbit_Step_V02.mp4",
+        "sha256": "4bdc7e753413b280ae4dc41e4a90c388dae630acccb7acae5c20b528bef9798a"
+      }
+    ]
+  },
+  "runtimeRender": {
+    "sources": {
+      "wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+      "wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+      "wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+      "wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+      "wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+    },
+    "rows": [
+      {
+        "name": "quick-bite-runtime-impact",
+        "clip": "Wolf_Driving_Bite_V02",
+        "sourceTime": 0.3,
+        "meshCount": 7
+      },
+      {
+        "name": "paw-swipe-runtime-impact",
+        "clip": "Wolf_Driving_Cross_Bite_V02",
+        "sourceTime": 0.3333333333333333,
+        "meshCount": 7
+      },
+      {
+        "name": "orbit-3m-runtime",
+        "clip": "Wolf_Orbit_Step_Left_V02",
+        "sourceTime": 0.3749999999999999,
+        "meshCount": 7
+      },
+      {
+        "name": "orbit-5m-runtime",
+        "clip": "Wolf_Orbit_Step_Left_V02",
+        "sourceTime": 0.3749999999999999,
+        "meshCount": 7
+      },
+      {
+        "name": "running-runtime",
+        "clip": "Wolf_Run_R5",
+        "sourceTime": 0.4104761904761904,
+        "meshCount": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "release": "moonforest-0.2",
+  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+  "verifiedFiles": 2056,
+  "bytes": 720620865,
+  "reusedBytes": 716032856,
+  "changedPaths": [
+    "ArcherPreviewSite/assets/actor-editor-70gt1CXk.js",
+    "ArcherPreviewSite/assets/actor-encounter-adapter-CUbBfZir.js",
+    "ArcherPreviewSite/assets/actor-population-B2fas1DE.js",
+    "ArcherPreviewSite/assets/authored-monster-runtime-6juA9Wij.js",
+    "ArcherPreviewSite/assets/cinematic-game-ClYLnJ-7.js",
+    "ArcherPreviewSite/assets/cinematic-interaction-85_dYm4J.js",
+    "ArcherPreviewSite/assets/cinematic-scene-host-wQgBaI04.js",
+    "ArcherPreviewSite/assets/developer-actors-BY3Y8RZY.js",
+    "ArcherPreviewSite/assets/moonforestV2-D9lghJCg.js",
+    "ArcherPreviewSite/assets/mourning-elena-encounter-BupvbAhy.js",
+    "ArcherPreviewSite/assets/npc-world-C69ZW46S.js",
+    "ArcherPreviewSite/assets/npc-world-Dm_31uXS.js",
+    "ArcherPreviewSite/moonforest-0.2.html",
+    "ArcherPreviewSite/deployment-files-moonforest-0.2.json"
+  ]
+}

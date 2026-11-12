@@ -75,7 +75,9 @@ test('0.2 preserves all twelve approved R8 local poses, root pitch and lunge bod
  const f=await fixture(t);plainWorld(f);const e=await begin(f,'lunge'),oracle=new WolfEncounter(f.world,()=>{},()=>{},()=>{},{loadAsset:()=>f.models.instantiate()});
  await oracle.summon(f.player,{position:Vector3.Zero(),rotationY:0});let checked=0;const lungeHeights=[];
  for(const clip of f.config.catalog)for(const time of [...new Set([0,clip.duration*.37,clip.duration*.73,clip.duration,...(clip.name===WOLF_CLIPS.lunge?[2.02]:[])])]){
-  e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(clip.name,'idle');e.brain.time=time;e.animator.transition(clip.name,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();
+  // Compare the unchanged source sampler/carrier before the intentional live
+  // head-attention/foot layer, which has its own actual-world integration gate.
+  e.v02Pose?.restore();e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(clip.name,'idle');e.brain.time=time;e.animator.transition(clip.name,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);WolfEncounter.prototype.alignPose.call(e);
   oracle.actor.position.setAll(0);oracle.actor.rotation.y=0;oracle.brain.start(clip.name,'idle');oracle.brain.time=time;oracle.animator.transition(clip.name,{clipTime:time,actionId:oracle.brain.serial,blendDuration:0});oracle.animator.update(0);oracle.alignPose();
   for(const name of ['root','pelvis','chest','head','jaw','fore.L.paw','fore.R.paw']){
    const a=name==='root'?e.animator.root:e.nodes[name],b=name==='root'?oracle.animator.root:oracle.nodes[name];

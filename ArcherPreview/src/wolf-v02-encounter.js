@@ -1,10 +1,11 @@
 import {Vector3} from '@babylonjs/core';
 import {WolfEncounter} from './wolf-encounter.js';
-import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE} from './wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT} from './wolf-v02-spec.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 import {playerDimensions} from './player-dimensions.js';
 import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 import {segmentDistanceSquared} from './melee-collision.js';
+import {WolfV02LocomotionPose} from './wolf-v02-locomotion.js';
 
 // These are the physical part envelopes; player capsule radius is added once.
 // Their centres always come from the post-navigation, authored skeletal pose.
@@ -19,6 +20,7 @@ const FALLBACK_COMMIT=Object.freeze({
   [WOLF_CLIPS.lunge]:1.65,
 });
 const angleDelta=(to,from)=>Math.atan2(Math.sin(to-from),Math.cos(to-from));
+const ORBIT_CLIPS=new Set(Object.values(WOLF_V02_ORBIT));
 
 function sampleRoot(clip,time){
   const frames=clip.rootTrack,f=Math.max(0,Math.min(frames.length-1,time*clip.fps));
@@ -34,9 +36,9 @@ function sampleYaw(clip,time){
   return frames[i]+angleDelta(frames[j],frames[i])*(f-i);
 }
 
-// The 0.2 variant owns decisions and movement only. The approved R8 sampler,
-// model library, shared paint/ink/shader preparation, pool and death lifecycle
-// remain the same implementation used by 0.1.
+// The 0.2 variant owns decisions, movement and bounded post-sampler attention /
+// fixed-length foot support. R8's sampler, model library, shared paint/ink,
+// preparation, pool and death lifecycle remain the implementation used by 0.1.
 export class WolfV02Encounter extends WolfEncounter{
   constructor(...args){
     super(...args);
@@ -55,6 +57,32 @@ export class WolfV02Encounter extends WolfEncounter{
   createBrain(durations){return new WolfV02Brain(durations);}
   prepareAsset(){this.config=installWolfV02AttackClips(this.asset,this.config);}
 
+  update(dt,player){
+    this.v02Pose?.capturePreviousFeet();
+    this.v02Pose?.restore();
+    this.v02HeldYaw=this.actor?.rotation.y;
+    // A stationary watch keeps its support feet fixed. During the freely
+    // interruptible observation, use a real step before the neck reaches its
+    // turn limit. A punishable recovery always retains its full timer.
+    const b=this.brain,p=this.actor?.position;
+    if(b?.behavior==='observe'&&b.state===WOLF_CLIPS.watch&&p&&player){
+      const target=Math.atan2(player.position.x-p.x,player.position.z-p.z);
+      if(Math.abs(angleDelta(target,this.v02HeldYaw))>.24)b.observation=0;
+    }
+    super.update(dt,player);
+  }
+
+  alignPose(){
+    this.v02Pose??=new WolfV02LocomotionPose(this);
+    this.v02Pose.restore();
+    super.alignPose();
+    const orbit=this.brain.behavior==='flank'&&ORBIT_CLIPS.has(this.brain.state);
+    if(orbit)this.v02Pose.plantOrbit(this.brain.state===WOLF_V02_ORBIT.left);
+    else if(this.brain.mode==='move'&&this.brain.state===WOLF_CLIPS.run)this.v02Pose.plantRun();
+    else this.v02Pose.resetPlants();
+    this.v02Pose.aim();
+  }
+
   motionSpec(name){
     if(this.brain?.mode==='attack'&&this.brain.action){
       return {...this.brain.action,name,kind:'melee',role:'attack'};
@@ -68,8 +96,7 @@ export class WolfV02Encounter extends WolfEncounter{
 
   movementPlan(player,result){
     if(result.flank){
-      // R8's Circle_Watch owns its short lateral step and foot placement.
-      // Do not redirect a forward run sideways or mirror only its root.
+      // The dedicated left/right R10 support gait owns the orbit's stride.
       return {target:player.position,stopDistance:0};
     }
     return {target:player.position,stopDistance:result.stopDistance??result.engageDistance??2.4};
@@ -109,10 +136,11 @@ export class WolfV02Encounter extends WolfEncounter{
         }
       }
     }
-    const stalking=brain.behavior==='flank'&&brain.state===WOLF_CLIPS.watch;
-    const watching=brain.state===WOLF_CLIPS.watch;
+    const stalking=brain.behavior==='flank'&&ORBIT_CLIPS.has(brain.state);
+    const watching=brain.state===WOLF_CLIPS.watch||ORBIT_CLIPS.has(brain.state);
+    if(watching&&!stalking&&!this.knockTurn&&Number.isFinite(this.v02HeldYaw))this.actor.rotation.y=this.v02HeldYaw;
     if(watching&&!stalking&&!this.knockTurn)this.motionYaw=this.actor.rotation.y-sampleYaw(clip,time)+(this.v02RootYaw??0);
-    if(time>=this.previousWolfTime&&this.lastRoot&&!brain.stagger&&brain.mode!=='move'&&(!watching||stalking)){
+    if((time>=this.previousWolfTime||stalking)&&this.lastRoot&&!brain.stagger&&brain.mode!=='move'&&(!watching||stalking)){
       // The large 2.5x body amplified both authored fall travel and impulse.
       // Keep the pose curve intact and shorten only the world displacement.
       const fallScale=['down','recover'].includes(brain.mode)?WOLF_V02_KNOCKBACK_SCALE:1;
@@ -121,19 +149,37 @@ export class WolfV02Encounter extends WolfEncounter{
       const dx=x*Math.cos(yaw)+z*Math.sin(yaw),dz=z*Math.cos(yaw)-x*Math.sin(yaw);
       if(stalking){
         const player=this.player.position,p=this.actor.position;
-        const to=this.v02MoveTarget.set(p.x+dx,p.y,p.z+dz),navigation=this.movementNavigation;
-        const distance=Math.hypot(p.x-player.x,p.z-player.z),nextDistance=Math.hypot(to.x-player.x,to.z-player.z);
+        const distance=Math.hypot(p.x-player.x,p.z-player.z),navigation=this.movementNavigation;
         this.v02StalkRadius??=distance;
+        // Source arc length, not elapsed time or a generic authored arc, is the
+        // movement budget. Recompute the polar origin around the actual player
+        // every step; a moving player never leaves an old circle centre behind.
+        const sourceRadius=clip.orbitRadius??WOLF_V02_GAIT.orbitRadius;
+        const wrapped=time<this.previousWolfTime;
+        const yawStep=wrapped?angleDelta(sampleYaw(clip,clip.duration),sampleYaw(clip,this.previousWolfTime))+angleDelta(sampleYaw(clip,time),sampleYaw(clip,0)):angleDelta(sampleYaw(clip,time),sampleYaw(clip,this.previousWolfTime));
+        const stride=Math.abs(yawStep)>1e-8?Math.abs(yawStep)*sourceRadius*this.config.scale:Math.hypot(dx,dz);
+        const radial=Math.max(-stride*.25,Math.min(stride*.25,this.v02StalkRadius-distance));
+        const nextDistance=Math.max(this.radius+playerDimensions(this.player).moveRadius,distance+radial);
+        const tangent=Math.sqrt(Math.max(0,stride*stride-radial*radial));
+        const angle=Math.atan2(p.x-player.x,p.z-player.z)-brain.flankSide*tangent/Math.max(.25,(distance+nextDistance)*.5);
+        const to=this.v02MoveTarget.set(player.x+Math.sin(angle)*nextDistance,p.y,player.z+Math.cos(angle)*nextDistance);
         const clear=!navigation||navigation.segmentClear(p,to,this.radius);
-        const facing=Math.abs(angleDelta(Math.atan2(player.x-to.x,player.z-to.z),this.motionYaw+sampleYaw(clip,time)-(this.v02RootYaw??0)));
-        if(clear&&nextDistance<=this.v02StalkRadius+.65&&facing<=Math.PI/3){p.x=to.x;p.z=to.z;brain.suppressStalkStep=false;}
-        else brain.suppressStalkStep=true;
+        if(clear&&Math.abs(distance-this.v02StalkRadius)<1.5){
+          p.x=to.x;p.z=to.z;this.actor.rotation.y=Math.atan2(player.x-p.x,player.z-p.z);brain.stalkBlocked=false;
+          this.v02OrbitDistance=(this.v02OrbitDistance??0)+stride;
+        }else{
+          // Reject both the root and its foot phase. Next decision tries the
+          // proper opposite gait once, then returns to a reachable attack.
+          brain.time=this.previousWolfTime;brain.stalkBlocked=true;
+          this.animator.transition(brain.state,{clipTime:brain.time,actionId:brain.serial});this.animator.update(0);
+          for(let i=0;i<3;i++)root[i]=this.lastRoot[i];
+        }
       }else{this.actor.position.x+=dx;this.actor.position.z+=dz;}
     }
-    if(brain.mode!=='move'&&!this.knockTurn){
+    if(brain.mode!=='move'&&!this.knockTurn&&!stalking){
       this.actor.rotation.y=this.motionYaw+sampleYaw(clip,time)-(this.v02RootYaw??0);
     }
-    this.previousWolfTime=time;
+    this.previousWolfTime=brain.time;
     if(!stalking){this.v02StalkRadius=null;brain.suppressStalkStep=false;}
   }
 
@@ -231,15 +277,17 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   hide(){
+    this.v02Pose?.restore();this.v02Pose?.resetPlants();
     super.hide();
     this.v02ImpactOutcome=null;
     this.v02LastContact=null;
     this.v02LastOutcome=null;
-    this.v02ContactSerial=null;this.v02ResolvedSerial=null;this.v02StalkRadius=null;
+    this.v02ContactSerial=null;this.v02ResolvedSerial=null;this.v02StalkRadius=null;this.v02OrbitDistance=0;
   }
 
   inspect(){
     return {...super.inspect(),combatVersion:this.combatVersion,action:this.brain?.action?.id??null,
-      phase:this.brain?.phase??null,behavior:this.brain?.behavior??null,contact:this.v02LastContact,outcome:this.v02LastOutcome};
+      phase:this.brain?.phase??null,behavior:this.brain?.behavior??null,contact:this.v02LastContact,outcome:this.v02LastOutcome,
+      locomotion:{orbitSourceDistance:this.v02OrbitDistance??0,plantReachError:this.v02Pose?.maxReachError??0,releasedPlants:this.v02Pose?.releasedPlants??0}};
   }
 }

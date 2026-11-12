@@ -1,17 +1,21 @@
-import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE} from './wolf-spec.js';
+import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE,WOLF_SCALE} from './wolf-spec.js';
 export const WOLF_V02_KNOCKBACK_SCALE=.8;
 
-// The short snap and braced forward pressure are authored R9 actions on R8's
-// unchanged rig. The full lunge and pin retain their approved source clips.
-export const WOLF_V02_SNAP='Wolf_Snap_Bite_V02',WOLF_V02_SWIPE='Wolf_Forepaw_Swipe_V02';
-const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:.90,impact:.40,commitTime:.30,capture:false,damage:55,range:3.2,minDistance:2.0,maxDistance:2.3,preferredDistance:2.15,recovery:.85,contactParts:['jaw','head'],whip:{source:[0,.30,.48,.90],seconds:[0,.38,.45,.90]}};
+// R10's two driving diagonal bites use R8's unchanged rig. The R9 actions stay
+// callable, while the full lunge and pin retain their approved source clips.
+export const WOLF_V02_SNAP='Wolf_Driving_Bite_V02',WOLF_V02_SWIPE='Wolf_Driving_Cross_Bite_V02';
+export const WOLF_V02_ORBIT=Object.freeze({right:'Wolf_Orbit_Step_V02',left:'Wolf_Orbit_Step_Left_V02'});
+// R8's supported run feet travel 4.2 source metres per source second (17/30 s
+// per cycle). At 2.5x the cadence, rather than the stride, matches world speed.
+export const WOLF_V02_GAIT=Object.freeze({runSpeed:6.6,runSourceSpeed:4.2,runPlaybackRate:6.6/(4.2*WOLF_SCALE),runSourceStart:1/30,runSourceDuration:17/30,orbitPlaybackRate:1.25,orbitFastPlaybackRate:1.8,orbitRadius:1.2});
+const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:44/60,impact:.30,commitTime:.20,capture:false,damage:55,range:4,minDistance:2.8,maxDistance:3.15,preferredDistance:3.0,recovery:.60,contactParts:['jaw','head'],whip:{source:[0,.20,.35,44/60],seconds:[0,.26,.32,.64]}};
 export const WOLF_V02_ACTIONS=Object.freeze([
  {id:'quick-bite',label:'짧은 입질',...quick},
- {id:'chain-bite',label:'연속 입질',...quick,damage:45,recovery:1.05,chain:true},
- {id:'paw-swipe',label:'몸 낮춰 압박',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:1,impact:.43,commitTime:.32,capture:false,damage:65,range:3.2,minDistance:2.2,maxDistance:2.70,preferredDistance:2.4,recovery:.95,contactParts:['fore.L.paw'],whip:{source:[0,.32,.50,1],seconds:[0,.43,.51,1]}},
+ {id:'chain-bite',label:'연속 입질',...quick,damage:45,recovery:.68,chain:true},
+ {id:'paw-swipe',label:'사선 돌진 물기',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:.80,impact:20/60,commitTime:.22,capture:false,damage:65,range:4,minDistance:2.8,maxDistance:3.25,preferredDistance:3.1,recovery:.65,contactParts:['jaw','head'],whip:{source:[0,.22,23/60,.80],seconds:[0,.28,.34,.70]}},
  {id:'lunge',label:'측면 회피·도약 덮치기',sourceClip:WOLF_CLIPS.lunge,clipStart:0,clipEnd:3.1,impact:2.35,commitTime:1.65,capture:false,damage:100,range:4,minDistance:24.7,maxDistance:25.8,preferredDistance:25.4,recovery:1.35,whip:{source:[0,1.65,2.55,3.1],seconds:[0,1.90,2.10,3.1]}},
  {id:'pin',label:'앞발 제압·물기',sourceClip:WOLF_CLIPS.pin,clipStart:0,clipEnd:3.4,impact:1.20,commitTime:.85,capture:true,damage:120,range:3.2,minDistance:8.7,maxDistance:9.5,preferredDistance:9.1,recovery:1.2,whip:{source:[0,.85,1.20,1.85,3.4],seconds:[0,.90,1.04,1.68,3.4]}},
-].map(a=>Object.freeze({...a,contactStart:a.capture?a.impact:a.impact-.05,contactEnd:a.impact+.12,contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
+].map(a=>Object.freeze({...a,contactStart:a.capture?a.impact:a.impact-.03,contactEnd:a.impact+(a.sourceClip===WOLF_V02_SNAP?.05:a.sourceClip===WOLF_V02_SWIPE?.05:.12),contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
 export const WOLF_V02_BY_ID=Object.freeze(Object.fromEntries(WOLF_V02_ACTIONS.map(a=>[a.id,a])));
 const aliases={[WOLF_CLIPS.lunge]:'lunge',[WOLF_CLIPS.pin]:'pin'};
 const deck1=['quick-bite','paw-swipe'],deck2=['chain-bite','paw-swipe','quick-bite','paw-swipe'];
@@ -87,9 +91,10 @@ export class WolfV02Brain extends WolfBrain{
   return this.followupInReach(next,distance)?next:null;
  }
  beginStalk(){
-  this.followupId=null;this.followChain=false;this.boutStrikes=0;this.plannedId=null;this.flankSide*=-1;this.suppressStalkStep=false;
-  this.start(WOLF_CLIPS.watch,'idle');this.behavior='flank';
-  this.flankRemaining=this.phase===2?.55:1.35+(this.planIndex%3)*.15;
+  this.followupId=null;this.followChain=false;this.boutStrikes=0;this.plannedId=null;this.flankSide*=-1;this.suppressStalkStep=false;this.stalkBlocked=false;this.flankReversed=false;
+  this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'idle');this.behavior='flank';
+  this.flankPlaybackRate=this.phase===2?WOLF_V02_GAIT.orbitFastPlaybackRate:WOLF_V02_GAIT.orbitPlaybackRate;
+  this.flankRemaining=.90/this.flankPlaybackRate;
  }
  beginRecovery(){
   const action=this.action,outcome=this.lastOutcome??'miss';this.previousAction=action.id;this.previousOutcome=outcome;
@@ -148,18 +153,25 @@ export class WolfV02Brain extends WolfBrain{
    return {events,speed:0};
   }
   if(this.behavior==='flank'){
-   // Use the authored circling gait/root together. Moving a forward-running
-   // clip sideways while fixing its chest towards the player would slide feet.
-   this.time=(this.time+(this.suppressStalkStep?0:dt))%(this.durations[this.state]??1);this.flankRemaining-=dt;
-   if(this.suppressStalkStep||this.flankRemaining<=0){this.behavior='position';this.positionElapsed=0;this.plannedId=this.chooseAction(distance);}
-   return {events,speed:0,flank:{authored:true,facePlayer:true,side:this.flankSide,radius:distance,angle:.4}};
+   if(this.stalkBlocked&&!this.flankReversed){
+    this.flankSide*=-1;this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'idle');this.flankReversed=true;this.stalkBlocked=false;
+   }else if(this.stalkBlocked)this.suppressStalkStep=true;
+   if(this.suppressStalkStep||this.flankRemaining<=0){this.behavior='position';this.positionElapsed=0;this.plannedId=this.chooseAction(distance);return {events,speed:0};}
+   else{
+    const advance=Math.min(dt,this.flankRemaining),duration=this.durations[this.state]??.9;
+    this.time=(this.time+advance*this.flankPlaybackRate)%duration;this.flankRemaining=Math.max(0,this.flankRemaining-advance);
+    return {events,speed:0,flank:{authored:true,facePlayer:true,side:this.flankSide,radius:distance}};
+   }
   }
   this.plannedId=this.chooseAction(distance);this.positionElapsed+=dt;
   const chosen=WOLF_V02_BY_ID[this.plannedId],approach=distance>chosen.maxDistance;
   if(approach){
-   const difference=distance-chosen.preferredDistance,fast=difference>2;
-   this.startIfChanged(fast?WOLF_CLIPS.run:WOLF_CLIPS.walk,'move');this.time=(this.time+dt*this.balance.locomotionPlaybackRate)%(this.durations[this.state]??1);
-   return {events,speed:fast?this.balance.runSpeed:this.balance.walkSpeed,retreat:false,stopDistance:chosen.preferredDistance};
+   const changed=this.state!==WOLF_CLIPS.run||this.mode!=='move';this.startIfChanged(WOLF_CLIPS.run,'move');
+   // The glTF adds a duplicate first-frame hold. Only 0.2 skips that hold,
+   // looping the preserved gallop keys from frame 1 through frame 18.
+   const clock=changed?0:Math.max(0,this.time-WOLF_V02_GAIT.runSourceStart);
+   this.time=WOLF_V02_GAIT.runSourceStart+(clock+dt*WOLF_V02_GAIT.runPlaybackRate)%WOLF_V02_GAIT.runSourceDuration;
+   return {events,speed:WOLF_V02_GAIT.runSpeed,retreat:false,stopDistance:chosen.preferredDistance};
   }
   this.planIndex++;if(this.attackSettings?.custom)this.customAttackIndex=(this.customAttackIndex??0)+1;this.startAction(chosen.id);
   return {events,speed:0};

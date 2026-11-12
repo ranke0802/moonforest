@@ -1,14 +1,18 @@
 import {Animation,AnimationGroup,Quaternion,Vector3} from '@babylonjs/core';
 import data from './wolf-v02-attack-clips.json' with {type:'json'};
+import feral from './wolf-v02-feral-clips.json' with {type:'json'};
 
-export const WOLF_V02_AUTHORED_CLIPS=data.clips;
+export const WOLF_V02_R9_CLIPS=data.clips;
+export const WOLF_V02_FERAL_CLIPS=feral.clips;
+export const WOLF_V02_AUTHORED_CLIPS=[...data.clips,...feral.clips];
 export const WOLF_V02_AUTHORED_SOURCE=data.sourceSha256;
+if(feral.sourceSha256!==data.sourceSha256)throw Error('R10 motions require the same approved R8 rig');
 const properties={translation:'position',rotation:'rotationQuaternion',scale:'scaling'};
 const installed=new WeakMap();
 // One immutable key-value table for the module. Actors own their animation
 // wrappers, target nodes, sampler cursors and blended pose; key values are read
 // by the existing bounded sampler and are never rewritten by gameplay.
-const templates=data.clips.map(clip=>({clip,channels:clip.channels.map(channel=>{
+const templates=WOLF_V02_AUTHORED_CLIPS.map(clip=>({clip,channels:clip.channels.map(channel=>{
  const property=properties[channel.path];if(!property)throw Error('Unsupported authored wolf channel: '+channel.path);
  if(channel.times.length!==channel.values.length||channel.times.length<2)throw Error('Incomplete authored wolf keys');
  const animation=new Animation(clip.name+':'+channel.node+':'+property,property,clip.fps,channel.path==='rotation'?Animation.ANIMATIONTYPE_QUATERNION:Animation.ANIMATIONTYPE_VECTOR3,Animation.ANIMATIONLOOPMODE_CONSTANT);
@@ -36,6 +40,6 @@ export function installWolfV02AttackClips(asset,config){
    group.normalize(0,clip.duration*clip.fps);asset.animationGroups.push(group);
   }
  }catch(error){for(const group of added){const index=asset.animationGroups.indexOf(group);if(index>=0)asset.animationGroups.splice(index,1);group.dispose();}throw error;}
- const prepared={...config,animations:{...config.animations,...Object.fromEntries(data.clips.map(clip=>[clip.name,clip.name]))},catalog:[...config.catalog,...data.clips.map(({channels,...clip})=>clip)]};
+ const prepared={...config,animations:{...config.animations,...Object.fromEntries(WOLF_V02_AUTHORED_CLIPS.map(clip=>[clip.name,clip.name]))},catalog:[...config.catalog,...WOLF_V02_AUTHORED_CLIPS.map(({channels,...clip})=>clip)]};
  installed.set(asset,prepared);return prepared;
 }

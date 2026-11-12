@@ -1,0 +1,565 @@
+{
+  "scope": "Independent numerical CPU/NullEngine review against the actual packed approved R8 rig and live game update/pose/contact pipeline. This report does not establish visual animation quality, mobile FPS, heat, GPU or physical-input feel.",
+  "sources": {
+    "src/wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+    "src/wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+    "src/wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+    "src/wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+    "src/wolf-v02-attack-clips.json": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+    "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+    "tests/wolf-v02-feral-integration.test.js": "94dd56dfea922987ba14e905ea781611400758004cfec320b0440d6d2869ef98",
+    "tests/helpers/wolf-feral-fixture.js": "1888d353aef2bbb32e98cb3572b9fe48d7475a4eb9e6ff11606ae6672863e4a6",
+    "tests/wolf-v02-authored-attacks.test.js": "4b1dc35baeae191d923b813c3ad039fdc65f0a022b3ac5a31599e2dcc31c0bc3",
+    "tests/wolf-v02-integration.test.js": "f1a850a44f880408db3ce2ce419e97753e684009094823dc4a8cab63ad6455e8",
+    "tests/wolf-v02-brain.test.js": "09f97845af888a01a4c005740cea95caf29a980dc2c4d27b4c32807566fff486",
+    "tests/wolf-v02-hunt.test.js": "20eae028371ee3090939f508f4f3d3981ccef3be970f45f3672bda5b003a778d",
+    "tests/wolf-v02-hunt-integration.test.js": "7051667f528843311b3457268fa944f80cb582e1ad8a40d692c2e878ceeb598f",
+    "tests/wolf-v02-orbit-navigation.test.js": "cfb4f48b40b19e9cfa82ff0dbf43ddcf8fe152310a3ceffafac9331d0889ddd3",
+    "tests/wolf-v02-patterns.test.js": "9f05cc72d04d8e019da3cccc03eb9809e0b21f5a9a986b0f45e279a0bdfcc11f"
+  },
+  "baseline": {
+    "source": "baseline-motion.json",
+    "actualHeadAttention": [
+      {
+        "movePlayer": false,
+        "horizontalAngleP50": 45.76934887063312,
+        "horizontalAngleP95": 55.42391115729407,
+        "horizontalAngleMax": 55.70832256181318,
+        "minRadius": 4.999989083615521,
+        "maxRadius": 5.645972729350979
+      },
+      {
+        "movePlayer": true,
+        "horizontalAngleP50": 100.34701842431494,
+        "horizontalAngleP95": 144.09570268293703,
+        "horizontalAngleMax": 148.58110855712044,
+        "minRadius": 2.2102008351397964,
+        "maxRadius": 5
+      }
+    ],
+    "note": "Baseline attention measured actual head +Y, unlike earlier actor-yaw-only assertions. Baseline foot-low-height observations are diagnostics and are not used as planted-foot pass/fail evidence."
+  },
+  "checks": {
+    "completeV02Regression": {
+      "tests": 55,
+      "passed": 55,
+      "failed": 0,
+      "log": "final-tests.txt",
+      "files": 8
+    },
+    "originalV01Regression": {
+      "tests": 20,
+      "passed": 20,
+      "failed": 0,
+      "files": [
+        "tests/wolf-integration.test.js",
+        "tests/wolf-pattern-size.test.js"
+      ],
+      "note": "Executed before 0.2 final calibration. The final 0.2 suite also asserts unchanged original code/config/model/dependency hashes and original twelve raw sampled poses."
+    },
+    "autonomousContact": {
+      "cases": 120,
+      "contacts": 120,
+      "sampling": "Five actions × min/preferred/max/outside-approach starts × 30/60Hz × .5/1/2 attack speed. Each starts the actual positioning brain, not startAction.",
+      "playerTeleports": 0
+    },
+    "actualHeadAndCenteredOrbit": {
+      "cases": 8,
+      "secondsPerCase": 14,
+      "conditions": "Both genuinely authored left/right steps, 3m/5m radii, stationary/moving player center (.12m/s lateral plus .2m slow depth oscillation).",
+      "maximum3DAttentionErrorDegrees": 0.00004002732700288928,
+      "maximumHorizontalAttentionErrorDegrees": 0.00005599682428490812,
+      "maximumRadiusErrorMeters": 1.7763568394002505e-15,
+      "minimumAbsoluteOrbitAngleDegrees": 300.29790308986145,
+      "namedStanceSamples": 13136,
+      "maximumNamedStanceDriftMeters": 0.000002008287380794459,
+      "stancePolicy": "Named diagonal phases [0,.45] and [.45,.9] source seconds, left mirrored. First .3 wall seconds excluded before selecting a reference anchor; no stance reference is carried from the transition blend."
+    },
+    "firstStepTransition": {
+      "case": "first-step-transition-and-complete-cycle",
+      "rows": [
+        {
+          "hp": 451,
+          "side": -1,
+          "radius": 3,
+          "clip": "Wolf_Orbit_Step_Left_V02",
+          "frames": 45,
+          "sourceMax": 0.8999999999999997,
+          "coveredSource": 0.8999999999999997,
+          "firstHalfMaximumEntryAnchorDrift": 5.503352079576071e-7
+        },
+        {
+          "hp": 451,
+          "side": -1,
+          "radius": 5,
+          "clip": "Wolf_Orbit_Step_Left_V02",
+          "frames": 45,
+          "sourceMax": 0.8999999999999997,
+          "coveredSource": 0.8999999999999997,
+          "firstHalfMaximumEntryAnchorDrift": 5.230286352272107e-7
+        },
+        {
+          "hp": 451,
+          "side": 1,
+          "radius": 3,
+          "clip": "Wolf_Orbit_Step_V02",
+          "frames": 45,
+          "sourceMax": 0.8999999999999997,
+          "coveredSource": 0.8999999999999997,
+          "firstHalfMaximumEntryAnchorDrift": 3.885747435809761e-7
+        },
+        {
+          "hp": 451,
+          "side": 1,
+          "radius": 5,
+          "clip": "Wolf_Orbit_Step_V02",
+          "frames": 45,
+          "sourceMax": 0.8999999999999997,
+          "coveredSource": 0.8999999999999997,
+          "firstHalfMaximumEntryAnchorDrift": 3.2098083538618706e-7
+        },
+        {
+          "hp": 450,
+          "side": -1,
+          "radius": 3,
+          "clip": "Wolf_Orbit_Step_Left_V02",
+          "frames": 32,
+          "sourceMax": 0.8700000000000006,
+          "coveredSource": 0.9000000000000008,
+          "firstHalfMaximumEntryAnchorDrift": 5.127385417844431e-7
+        },
+        {
+          "hp": 450,
+          "side": -1,
+          "radius": 5,
+          "clip": "Wolf_Orbit_Step_Left_V02",
+          "frames": 32,
+          "sourceMax": 0.8700000000000006,
+          "coveredSource": 0.9000000000000008,
+          "firstHalfMaximumEntryAnchorDrift": 5.462855929083633e-7
+        },
+        {
+          "hp": 450,
+          "side": 1,
+          "radius": 3,
+          "clip": "Wolf_Orbit_Step_V02",
+          "frames": 32,
+          "sourceMax": 0.8700000000000006,
+          "coveredSource": 0.9000000000000008,
+          "firstHalfMaximumEntryAnchorDrift": 4.3392836387637365e-7
+        },
+        {
+          "hp": 450,
+          "side": 1,
+          "radius": 5,
+          "clip": "Wolf_Orbit_Step_V02",
+          "frames": 32,
+          "sourceMax": 0.8700000000000006,
+          "coveredSource": 0.9000000000000008,
+          "firstHalfMaximumEntryAnchorDrift": 3.488272401904948e-7
+        }
+      ],
+      "phaseChangeDuringStep": {
+        "snapshotRate": 1.25,
+        "unchanged": true
+      },
+      "scope": "Actual standing watch settled before the step. Initial support pair is compared with its actual world anchor before the first root motion; all blend frames included, no .3-second exclusion. Both phases must cover all .9 source seconds. The later half-cycle is a new support episode and is not compared with the first half entry anchors."
+    },
+    "runApproach": [
+      {
+        "initialRange": 6,
+        "moveFrames": 26,
+        "medianSpeed": 6.5999999999999925,
+        "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+        "nativeImportedSourceDuration": 0.6000000238418579,
+        "runPeriod": null,
+        "sampledWallPeriods": [],
+        "runCycles": 0,
+        "stanceSamples": 4,
+        "maxStanceDrift": 2.682209014892578e-7,
+        "stanceWorst": [
+          {
+            "name": "fore.R.paw",
+            "wall": 0.35,
+            "sourceTime": 0.26380952380952377,
+            "drift": 2.682209014892578e-7
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 0.36666666666666664,
+            "sourceTime": 0.27428571428571424,
+            "drift": 2.6656007498500226e-7
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 0.3333333333333333,
+            "sourceTime": 0.2533333333333333,
+            "drift": 2.4755668231600746e-7
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 0.31666666666666665,
+            "sourceTime": 0.2428571428571428,
+            "drift": 0
+          }
+        ]
+      },
+      {
+        "initialRange": 15,
+        "moveFrames": 108,
+        "medianSpeed": 6.5999999999999925,
+        "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+        "nativeImportedSourceDuration": 0.6000000238418579,
+        "observedSourcePeriod": 0.5666666666666667,
+        "runPeriod": 0.9015151515151518,
+        "sampledWallPeriods": [],
+        "runCycles": 1,
+        "stanceSamples": 51,
+        "maxStanceDrift": 9.834766387939453e-7,
+        "stanceWorst": [
+          {
+            "name": "hind.L.paw",
+            "wall": 1.4333333333333333,
+            "sourceTime": 0.37809523809523843,
+            "drift": 9.834766387939453e-7
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 1.1666666666666667,
+            "sourceTime": 0.21047619047619084,
+            "drift": 9.578560996048568e-7
+          },
+          {
+            "name": "hind.L.paw",
+            "wall": 0.5666666666666667,
+            "sourceTime": 0.3999999999999999,
+            "drift": 5.339525004377638e-7
+          },
+          {
+            "name": "fore.L.paw",
+            "wall": 1.0666666666666667,
+            "sourceTime": 0.147619047619048,
+            "drift": 4.924151790695877e-7
+          },
+          {
+            "name": "hind.R.paw",
+            "wall": 1.5,
+            "sourceTime": 0.4200000000000003,
+            "drift": 4.777675730550706e-7
+          }
+        ]
+      },
+      {
+        "initialRange": 35,
+        "moveFrames": 290,
+        "medianSpeed": 6.599999999999966,
+        "medianSourceSecondsPerWallSecond": 0.6285714285714283,
+        "nativeImportedSourceDuration": 0.6000000238418579,
+        "observedSourcePeriod": 0.5666666666666667,
+        "runPeriod": 0.9015151515151518,
+        "sampledWallPeriods": [
+          0.9,
+          0.9000000000000001,
+          0.8999999999999999,
+          0.8999999999999999
+        ],
+        "runCycles": 5,
+        "stanceSamples": 167,
+        "maxStanceDrift": 0.000003875791740069146,
+        "stanceWorst": [
+          {
+            "name": "fore.R.paw",
+            "wall": 4.8,
+            "sourceTime": 0.22761904761904986,
+            "drift": 0.000003875791740069146
+          },
+          {
+            "name": "fore.L.paw",
+            "wall": 3.7,
+            "sourceTime": 0.10285714285714467,
+            "drift": 0.0000026351050994629378
+          },
+          {
+            "name": "fore.L.paw",
+            "wall": 3.6666666666666665,
+            "sourceTime": 0.08190476190476373,
+            "drift": 0.0000019734898961953288
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 3.85,
+            "sourceTime": 0.19714285714285892,
+            "drift": 0.0000019094429587890324
+          },
+          {
+            "name": "fore.R.paw",
+            "wall": 2.9833333333333334,
+            "sourceTime": 0.21904761904762035,
+            "drift": 0.0000015497207641601562
+          }
+        ]
+      }
+    ],
+    "committedStrike": {
+      "case": "commit-lock-vs-head-attention",
+      "rows": [
+        {
+          "id": "quick-bite",
+          "samples": 90,
+          "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+          "maxHeadYawDegrees": 40.10705786459034,
+          "maxHeadPitchDegrees": 20.053524682242635,
+          "maxHeadRollBasisResidual": 3.9982898094938233e-7,
+          "lockedYaw": 0
+        },
+        {
+          "id": "chain-bite",
+          "samples": 90,
+          "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+          "maxHeadYawDegrees": 40.10705786459034,
+          "maxHeadPitchDegrees": 20.053524682242635,
+          "maxHeadRollBasisResidual": 3.9982898094938233e-7,
+          "lockedYaw": 0
+        },
+        {
+          "id": "paw-swipe",
+          "samples": 100,
+          "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+          "maxHeadYawDegrees": 40.10705629815547,
+          "maxHeadPitchDegrees": 20.053529323977017,
+          "maxHeadRollBasisResidual": 3.1430904072368883e-7,
+          "lockedYaw": 0
+        },
+        {
+          "id": "lunge",
+          "samples": 287,
+          "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+          "maxHeadYawDegrees": 40.10705503299428,
+          "maxHeadPitchDegrees": 20.05352938207828,
+          "maxHeadRollBasisResidual": 3.404503070299685e-7,
+          "lockedYaw": 0.05620192432749602
+        },
+        {
+          "id": "pin",
+          "samples": 300,
+          "maxAuthoredNeckAngleError": 4.2146848510894035e-8,
+          "maxHeadYawDegrees": 40.10704903191593,
+          "maxHeadPitchDegrees": 20.053527559743056,
+          "maxHeadRollBasisResidual": 2.3811880727996107e-7,
+          "lockedYaw": 0
+        }
+      ]
+    },
+    "boundedMatrixRefresh": {
+      "test": "support and attention refresh only cached affected branches with bounded matrix work and identical poses",
+      "passed": true,
+      "reference": "The previous full-rig refresh is substituted into the same actual planted-foot and head-attention correction, then compared against the optimized path for every animator node world position and local rotation.",
+      "positionToleranceMeters": 0.00001,
+      "rotationDotTolerance": 0.000001,
+      "wholeRigRefreshCallsDuringOptimizedCorrections": 0,
+      "dirtyVisitBound": "Positive and no greater than the complete actor rig node count for two support legs plus both attention joints.",
+      "unrelatedNodesNeverMarkedDirty": [
+        "root",
+        "pelvis",
+        "spine",
+        "chest"
+      ],
+      "precomputedBranchArraysReused": true,
+      "limitation": "This measures CPU scene-matrix work and exact sampled corrected poses, not device FPS or GPU performance."
+    },
+    "defenses": {
+      "case": "defense-height-behind-wall-interrupt",
+      "rows": [
+        {
+          "id": "quick-bite",
+          "defense": "dodge",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "quick-bite",
+          "defense": "shieldPush",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "quick-bite",
+          "defense": "behind",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "quick-bite",
+          "defense": "height",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "quick-bite",
+          "defense": "wall",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "quick-bite",
+          "defense": "interrupt",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "dodge",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "shieldPush",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "behind",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "height",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "wall",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "chain-bite",
+          "defense": "interrupt",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "dodge",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "shieldPush",
+          "damage": 0,
+          "resolvedSerial": 3,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "behind",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "height",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "wall",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        },
+        {
+          "id": "paw-swipe",
+          "defense": "interrupt",
+          "damage": 0,
+          "resolvedSerial": null,
+          "followup": null
+        }
+      ]
+    },
+    "hpPhase": {
+      "rows": [
+        {
+          "hp": 451,
+          "completedBouts": 17,
+          "boutSizes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "hits": 17,
+          "attackClips": [
+            "Wolf_Driving_Bite_V02",
+            "Wolf_Driving_Cross_Bite_V02"
+          ]
+        },
+        {
+          "hp": 450,
+          "completedBouts": 8,
+          "boutSizes": [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          "hits": 27,
+          "attackClips": [
+            "Wolf_Driving_Bite_V02",
+            "Wolf_Driving_Cross_Bite_V02"
+          ]
+        }
+      ],
+      "phaseChangeDuringStrike": {
+        "serialUnchanged": true,
+        "sourceTimeAdvanced": true
+      },
+      "note": "450 HP total hits include an unfinished final bout; completed bout sizes use only finished bouts."
+    },
+    "preservation": "All original twelve raw source sampler/carrier poses, original code/config/model/dependencies, strict R9 source/moving keys and standing shapes, new R10 local attachment lengths against approved bind nodes, fixed scaling, eighteen actor-local clip targets with twelve unchanged shared-template clips.",
+    "fourMapResources": "Village, great plains, monster forest and witch cave: 1/5/10/20 actors, independent skeletons/morph state/targets, shared geometry, three warm repeats, cancellation/retry and original 0.1 lifetime checks."
+  },
+  "measuredLimits": [
+    "The preserved imported R8 run includes one initial 1/30-second hold and a native .600000024-second range. The 0.2 runtime skips that initial hold only: the independent test measures actual source-time wraps and the report records the resulting cycle and sampled wall periods. The original 0.1 sampler and asset remain unchanged.",
+    "Numbers for named foot anchors prove world-space support in the sampled windows; visual leg-shape and gait quality require the separate runtime-skinned render review.",
+    "Forced fourteen-second continuous circles are a stress scenario. Normal encounter stalking uses shorter finite bouts."
+  ]
+}

@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {wolfHuntFixture,beginWolfHunt,stepWolfHunt,huntResourceCounts} from './helpers/wolf-hunt-fixture.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const evidence=[];
 test.after(()=>{
@@ -40,7 +41,7 @@ test('actual default hunt attacks, stalks and faces the player instead of runnin
  }
 });
 
-test('the fourteen existing motion roles remain callable and independent through rest, discovery and combat reactions',async t=>{
+test('all eighteen motion roles remain available independently through discovery, direct sampling and combat reactions',async t=>{
  const f=await wolfHuntFixture(t);await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0],visited=new Set([e.brain.state]);
  const tickUntil=(accept,limit=1000)=>{for(let i=0;i<limit&&!accept();i++){e.playerHp=500;stepWolfHunt(f,e,1/60);visited.add(e.brain.state);}assert.ok(accept(),JSON.stringify({state:e.brain.state,mode:e.brain.mode}));};
  e.actor.position.setAll(0);f.player.position.set(0,0,5);tickUntil(()=>e.brain.mode==='alert');tickUntil(()=>e.brain.mode==='rise');tickUntil(()=>e.brain.state===WOLF_CLIPS.watch);
@@ -49,9 +50,10 @@ test('the fourteen existing motion roles remain callable and independent through
  e.brain.hit({damage:1,interruptsBoss:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_CLIPS.hit);
  e.brain.hit({damage:1,stun:.1});tickUntil(()=>e.brain.state===WOLF_CLIPS.brace);visited.add(e.brain.state);
  e.brain.hit({damage:1,heavy:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_CLIPS.down);tickUntil(()=>e.brain.state===WOLF_CLIPS.recover);visited.add(e.brain.state);tickUntil(()=>e.brain.state===WOLF_CLIPS.watch);
- const expected=[...Object.values(WOLF_CLIPS),'Wolf_Snap_Bite_V02','Wolf_Forepaw_Swipe_V02'];assert.deepEqual([...visited].sort(),expected.sort());assert.equal(e.animator.clips.size,14);assert.equal(f.container.animationGroups.length,12);assert.equal(f.scene._activeAnimatables.length,0);
+ const manuallySampled=[];for(const clip of WOLF_V02_AUTHORED_CLIPS){e.brain.start(clip.name,'idle');e.animator.transition(clip.name,{clipTime:clip.duration*.37,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(clip.name);manuallySampled.push(clip.name);}
+ const expected=[...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)];assert.deepEqual([...visited].sort(),expected.sort());assert.equal(e.animator.clips.size,18);assert.equal(f.container.animationGroups.length,12);assert.equal(f.scene._activeAnimatables.length,0);
  const resources=huntResourceCounts(f.scene);for(let i=0;i<3;i++){f.battle.hide();await f.battle.summon(f.player,1,'wolf');assert.deepEqual(huntResourceCounts(f.scene),resources);}
- evidence.push({case:'fourteen-role-lifecycle',visited:[...visited],sharedTemplateClips:f.container.animationGroups.length,actorClips:e.animator.clips.size,warmRepeats:3,resources});
+ evidence.push({case:'eighteen-role-availability',sampledRoles:[...visited],manuallySampledAddedClips:manuallySampled,allRolesAutonomouslyVisited:false,sharedTemplateClips:f.container.animationGroups.length,actorClips:e.animator.clips.size,warmRepeats:3,resources});
 });
 
 test('bounded physical contact windows deduplicate hits, consume a dodged strike and do not hit through walls or behind the wolf',async t=>{
@@ -111,7 +113,7 @@ test('both ends of every automatic engagement band contact the standing player a
 });
 
 test('watching and recovery hold their ground, and a blocked authored stalk stops instead of sliding or teleporting',async t=>{
- const f=await wolfHuntFixture(t);await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0];e.actor.position.setAll(0);f.player.position.set(0,0,8);e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='observe';e.brain.observation=5;
+ const f=await wolfHuntFixture(t);await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0];e.actor.position.setAll(0);e.actor.rotation.y=0;f.player.position.set(0,0,8);e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='observe';e.brain.observation=5;
  const origin=e.actor.position.clone();for(let i=0;i<100;i++)stepWolfHunt(f,e,1/60);assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'idle watch root cannot drift during observation');
  e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='recovery';e.brain.recoveryRemaining=e.brain.recoveryFull=3;e.brain.recoveryElapsed=0;e.brain.followupId=null;
  for(let i=0;i<100;i++)stepWolfHunt(f,e,1/60);assert.equal(e.brain.behavior,'recovery');assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'watch root cannot drift during punishable recovery');

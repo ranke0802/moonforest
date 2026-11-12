@@ -1,0 +1,84 @@
+{
+  "scope": "Root inspected actual source-colour authoring sheets, joint closeups and original-texture CPU-skinned runtime front/side/quarter contact sheet. Final matrix refresh optimization separately proves the same corrected node poses. Offline Blender output, not actual browser/device GPU gameplay.",
+  "finding": "Weight-forward bite poses and player-centred stepping retain firm limb shafts and coherent narrow joint connections in reviewed frames. No taffy shaft stretch or floating-limb disconnection observed. Fur and interpolated joint collars still deform, documented separately. This is an offline review judgment, not user approval.",
+  "runtimeSources": {
+    "wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+    "wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+    "wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+    "wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d",
+    "wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+  },
+  "images": [
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/quick-bite-runtime-impact-front.png",
+      "sha256": "ab1d1c207de4e224115b4f91a9c09336edd41a891117e5a3f2f383e9f90d0d80"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/quick-bite-runtime-impact-side.png",
+      "sha256": "b09bef87125da93e0c7758900008e0f34533a931959d983a1bf6a42372ef7058"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/quick-bite-runtime-impact-quarter.png",
+      "sha256": "d6045cce6db2051b9a79e84361a9518ad2fc12104c331c017d8aad536afb6fa9"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/paw-swipe-runtime-impact-front.png",
+      "sha256": "e8e085751212b4ab5125179e12baf236a5c621e381e9ecafba409d04a1bf42bd"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/paw-swipe-runtime-impact-side.png",
+      "sha256": "5d138668926c55935f20317c8c672ad0571f91035d7ee19fc14e73cda5c89489"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/paw-swipe-runtime-impact-quarter.png",
+      "sha256": "a6444f1921047fa4e01b64e252fe3a19202e26741c6211279687bfb9976ba815"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-3m-runtime-front.png",
+      "sha256": "877d4f1b4a20d1fae7e805d5be828a48154b935c7a6064dff8cf1319976d9e37"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-3m-runtime-side.png",
+      "sha256": "1846d2fc1da8009709f0487c2e12ed7751b4edd870f3c3675bd0f8ba5e63ac37"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-3m-runtime-quarter.png",
+      "sha256": "7bba407ef109f96bd4a2ef4503baebfd7ce89e8da3f9787a4529560159a43800"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-5m-runtime-front.png",
+      "sha256": "4a2f83a51d70b68eba2c93490b5b614a5b1af93c42d4bbe5f05c7f46940716e6"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-5m-runtime-side.png",
+      "sha256": "103ae22c9c938f3ceb3f361f60302f38fd81962377add0284c31f899ad44d430"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/orbit-5m-runtime-quarter.png",
+      "sha256": "71ef6c38581ec0236f38539f4f72e6994fb491c7eadf40f4be2745e5fe7f09a5"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/running-runtime-front.png",
+      "sha256": "df564aaa78e2b8b79ac6e3507f2a4b607bfe5c03406e0a905f670eb1a5938b53"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/running-runtime-side.png",
+      "sha256": "a150a09cac357c8b49fca5b2af189b1028499e18097bc0fa20eba0a9f643a1cc"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-12/wolf-feral-r10/runtime-poses/running-runtime-quarter.png",
+      "sha256": "038fc6e5589599de7a2a268260d84e49db821a2b18cb3490d7cdc618edc15d3d"
+    }
+  ],
+  "authoringViews": [
+    "R9-R10-truecolor-comparison.jpg",
+    "Wolf_Driving_Bite_V02-truecolor-sheet.jpg",
+    "Wolf_Driving_Cross_Bite_V02-truecolor-sheet.jpg",
+    "Wolf_Orbit_Step_V02-truecolor-sheet.jpg",
+    "Wolf_Orbit_Step_Left_V02-truecolor-sheet.jpg",
+    "Wolf_Driving_Bite_V02-joint-sheet.jpg",
+    "Wolf_Orbit_Step_Left_V02-joint-sheet.jpg"
+  ],
+  "browserAutomationUsed": false,
+  "devicePerformanceMeasured": false
+}

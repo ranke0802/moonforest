@@ -1,0 +1,12 @@
+{
+  "file": "../Docs/Reports/2026-11-12/MOONFOREST_0.2_늑대_R10_검토보고서.html",
+  "bytes": 5671009,
+  "inlineScriptsParsed": 1,
+  "staticImageVideoDataSources": 10,
+  "allAssetsEmbedded": true,
+  "uniqueIds": 9,
+  "regression": 123,
+  "independent": 55,
+  "browserAutomationUsed": false,
+  "review": "Generated HTML structure, controls wiring and script syntax inspected. Media sheets inspected separately; no browser layout/render verification."
+}
