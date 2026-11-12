@@ -1,0 +1,1730 @@
+{
+  "scope": "Real packed R8 model, CPU NullEngine and actual battle update/contact pipeline on flat unobstructed ground. No browser automation or real-device FPS/heat/GPU claim.",
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "d7dec82635c953f73d9fc0ffa1bdc3aadc25dc336dd240829521bd0506dfee99",
+    "src/wolf-v02-encounter.js": "386361aff6fb30b36a7382066c696d4b0755cd44f22b636654bc68245240a507"
+  },
+  "cases": [
+    {
+      "case": "default-free-hunt",
+      "hp": 900,
+      "initialDistance": 2.15,
+      "durationSeconds": 45,
+      "attackCount": 12,
+      "actualDamageEvents": 12,
+      "attacks": [
+        {
+          "id": "quick-bite",
+          "time": 1.6,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 4.9,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 9.333333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 12.466666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 16.616666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 20.1,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "quick-bite",
+          "time": 24.133333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 27.433333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 31.866666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 35,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 39.15,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 42.63333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 1112,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 900,
+      "initialDistance": 4,
+      "durationSeconds": 45,
+      "attackCount": 12,
+      "actualDamageEvents": 12,
+      "attacks": [
+        {
+          "id": "quick-bite",
+          "time": 3.3833333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 6.683333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 11.116666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 14.25,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 18.4,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 21.883333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "quick-bite",
+          "time": 25.916666666666668,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 29.216666666666665,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 33.65,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 36.78333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 40.93333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 44.416666666666664,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 1088,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 900,
+      "initialDistance": 10,
+      "durationSeconds": 45,
+      "attackCount": 11,
+      "actualDamageEvents": 10,
+      "attacks": [
+        {
+          "id": "pin",
+          "time": 1.9,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 8.066666666666666,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 12.45,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 15.583333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 19.733333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 23.216666666666665,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "quick-bite",
+          "time": 27.233333333333334,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 30.533333333333335,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 34.96666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 38.1,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 42.25,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 1047,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Pin_Throat_Bite_R5",
+        "Wolf_Forepaw_Swipe_V02",
+        "Wolf_Snap_Bite_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 900,
+      "initialDistance": 25.4,
+      "durationSeconds": 45,
+      "attackCount": 11,
+      "actualDamageEvents": 11,
+      "attacks": [
+        {
+          "id": "lunge",
+          "time": 1.3666666666666667,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 7.366666666666666,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 11.75,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 14.883333333333333,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 19.033333333333335,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "paw-swipe",
+          "time": 22.516666666666666,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "quick-bite",
+          "time": 26.533333333333335,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "paw-swipe",
+          "time": 29.833333333333332,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        },
+        {
+          "id": "quick-bite",
+          "time": 34.266666666666666,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 100
+        },
+        {
+          "id": "paw-swipe",
+          "time": 37.4,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 81
+        },
+        {
+          "id": "quick-bite",
+          "time": 41.55,
+          "phase": 1,
+          "bout": 1,
+          "stalkSamples": 91
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 1088,
+      "motions": [
+        "Circle_Watch_R5",
+        "Run_Dodge_Lunge_R5",
+        "Wolf_Forepaw_Swipe_V02",
+        "Wolf_Walk_R5",
+        "Wolf_Snap_Bite_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 400,
+      "initialDistance": 2.15,
+      "durationSeconds": 45,
+      "attackCount": 22,
+      "actualDamageEvents": 22,
+      "attacks": [
+        {
+          "id": "chain-bite",
+          "time": 0.5833333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 1.8166666666666667,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 3.1666666666666665,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 5.716666666666667,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 8.416666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 9.766666666666667,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 12.316666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 15.016666666666667,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 16.25,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 17.6,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 20.15,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 22.85,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 24.2,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 26.75,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 29.45,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 30.683333333333334,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 32.03333333333333,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 34.583333333333336,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 37.28333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 38.63333333333333,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 41.18333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 43.88333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 442,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02",
+        "Wolf_Walk_R5"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 400,
+      "initialDistance": 4,
+      "durationSeconds": 45,
+      "attackCount": 21,
+      "actualDamageEvents": 21,
+      "attacks": [
+        {
+          "id": "chain-bite",
+          "time": 2.5,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 3.7333333333333334,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 5.083333333333333,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 7.633333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 10.333333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 11.683333333333334,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 14.233333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 16.933333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 18.166666666666668,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 19.516666666666666,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 22.066666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 24.766666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 26.116666666666667,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 28.666666666666668,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 31.366666666666667,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 32.6,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 33.95,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 36.5,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 39.2,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 40.55,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 43.1,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 408,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 400,
+      "initialDistance": 10,
+      "durationSeconds": 45,
+      "attackCount": 20,
+      "actualDamageEvents": 19,
+      "attacks": [
+        {
+          "id": "pin",
+          "time": 1.1333333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 6.35,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 9,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 10.35,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 12.9,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 15.6,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 16.833333333333332,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 18.183333333333334,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 20.733333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 23.433333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 24.783333333333335,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 27.333333333333332,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 30.033333333333335,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 31.266666666666666,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 32.61666666666667,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 35.166666666666664,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 37.86666666666667,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 39.21666666666667,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 41.766666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 44.46666666666667,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 442,
+      "motions": [
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Pin_Throat_Bite_R5",
+        "Wolf_Forepaw_Swipe_V02",
+        "Wolf_Snap_Bite_V02"
+      ]
+    },
+    {
+      "case": "default-free-hunt",
+      "hp": 400,
+      "initialDistance": 25.4,
+      "durationSeconds": 45,
+      "attackCount": 21,
+      "actualDamageEvents": 21,
+      "attacks": [
+        {
+          "id": "lunge",
+          "time": 0.5833333333333334,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 4.133333333333334,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 5.483333333333333,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 8.033333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 10.733333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 12.083333333333334,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 14.633333333333333,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 17.333333333333332,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 18.566666666666666,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 19.916666666666668,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 22.466666666666665,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 25.166666666666668,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 26.516666666666666,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 29.066666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 31.766666666666666,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "chain-bite",
+          "time": 33,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 34.35,
+          "phase": 2,
+          "bout": 3,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 36.9,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "quick-bite",
+          "time": 39.6,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        },
+        {
+          "id": "paw-swipe",
+          "time": 40.95,
+          "phase": 2,
+          "bout": 2,
+          "stalkSamples": 0
+        },
+        {
+          "id": "paw-swipe",
+          "time": 43.5,
+          "phase": 2,
+          "bout": 1,
+          "stalkSamples": 34
+        }
+      ],
+      "fleeFrames": 0,
+      "stalkFrames": 408,
+      "motions": [
+        "Circle_Watch_R5",
+        "Run_Dodge_Lunge_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02",
+        "Wolf_Walk_R5"
+      ]
+    },
+    {
+      "case": "fourteen-role-lifecycle",
+      "visited": [
+        "Rest_Lie_R5",
+        "Alert_Lie_R5",
+        "Rise_From_Lie_R5",
+        "Circle_Watch_R5",
+        "Wolf_Walk_R5",
+        "Wolf_Run_R5",
+        "Wolf_Snap_Bite_V02",
+        "Wolf_Forepaw_Swipe_V02",
+        "Run_Dodge_Lunge_R5",
+        "Pin_Throat_Bite_R5",
+        "Hit_Cower_R5",
+        "Knockback_Brace_R5",
+        "Knockdown_Fall_R5",
+        "Get_Up_R5"
+      ],
+      "sharedTemplateClips": 12,
+      "actorClips": 14,
+      "warmRepeats": 3,
+      "resources": {
+        "meshes": 16,
+        "geometry": 8,
+        "materials": 4,
+        "skeletons": 1,
+        "groups": 14,
+        "morph": 1,
+        "textures": 0,
+        "nodes": 39,
+        "nativeAnimatables": 0
+      }
+    },
+    {
+      "case": "contact-safety",
+      "singleDamagePerSerial": [
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 2,
+          "hits": 1
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 2,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 2,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 2,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 2,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 0.5,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 1,
+          "hits": 1
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 2,
+          "hits": 1
+        }
+      ],
+      "dodgeConsumedWithoutLateDamage": true,
+      "behindMiss": true,
+      "distantMiss": true,
+      "wallBlocked": true
+    },
+    {
+      "case": "moving-body-contact",
+      "rows": [
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "damage": 1,
+          "captured": false,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "damage": 1,
+          "captured": true,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "damage": 1,
+          "captured": true,
+          "lateralSpeed": 0.3,
+          "maximumLateralOffset": 0.35
+        }
+      ]
+    },
+    {
+      "case": "engagement-band-endpoints",
+      "rows": [
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 30,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 30,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 30,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 30,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 0.5,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 1,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 1,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "quick-bite",
+          "fps": 60,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 2.3,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 2.2,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "paw-swipe",
+          "fps": 60,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 2.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 24.7,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "lunge",
+          "fps": 60,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 25.8,
+          "hit": true,
+          "captured": false
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 2,
+          "band": "minDistance",
+          "distance": 8.7,
+          "hit": true,
+          "captured": true
+        },
+        {
+          "id": "pin",
+          "fps": 60,
+          "speed": 2,
+          "band": "maxDistance",
+          "distance": 9.5,
+          "hit": true,
+          "captured": true
+        }
+      ]
+    },
+    {
+      "case": "stationary-watch-and-blocked-stalk",
+      "idleFrames": 100,
+      "recoveryFrames": 100,
+      "rootDrift": 0,
+      "blockedStalkMoved": false
+    }
+  ]
+}

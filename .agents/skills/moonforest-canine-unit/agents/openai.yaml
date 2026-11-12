@@ -1,0 +1,6 @@
+interface:
+  display_name: "MoonForest Canine Units"
+  short_description: "Preserve canine rig shape, contact and combat motion"
+  default_prompt: "Use $moonforest-canine-unit to add or repair a MoonForest canine quadruped with measured retargeting, clear attack contact and bounded runtime ownership."
+policy:
+  allow_implicit_invocation: true

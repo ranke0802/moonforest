@@ -1,0 +1,3353 @@
+{
+  "scope": "Real R8 packed rig and gameplay pipeline, flat CPU NullEngine in great-plains world limits. Forced attack profile, no GPU or physical-device claim.",
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "0f9a31cffc32d9dacb4046eb7ff056620eed4bd18ef9564a141f058b0b6b2452",
+    "src/wolf-v02-encounter.js": "dc6c016f8fe61b83bfa0c629276f0b40d0e3b756d5cb0ed80167bf079762250a"
+  },
+  "rows": [
+    {
+      "action": "quick-bite",
+      "x": -0.9,
+      "z": 1.65,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0.016091471387435576,
+          0,
+          -0.02950103087696522
+        ],
+        "player": [
+          -0.9,
+          0,
+          1.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            -0.896399199962616,
+            1.692264199256897,
+            1.643398404121399
+          ],
+          "distance": 0.3804373973803408,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          -0.896399199962616,
+          1.692264199256897,
+          1.643398404121399
+        ],
+        "distance": 0.3804373973803408,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": -0.5,
+      "z": 1.65,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0.054812820985743464,
+          0,
+          -0.18088230925295343
+        ],
+        "player": [
+          -0.5,
+          0,
+          1.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            -0.49781930446624756,
+            1.692264199256897,
+            1.642803430557251
+          ],
+          "distance": 0.3804373963495558,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          -0.49781930446624756,
+          1.692264199256897,
+          1.642803430557251
+        ],
+        "distance": 0.3804373963495558,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0,
+      "z": 1.65,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          -0.2630988726842076
+        ],
+        "player": [
+          0,
+          0,
+          1.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0,
+            1.692264199256897,
+            1.642480492591858
+          ],
+          "distance": 0.38043739233694535,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0,
+          1.692264199256897,
+          1.642480492591858
+        ],
+        "distance": 0.38043739233694535,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.5,
+      "z": 1.65,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          -0.054812820985743464,
+          0,
+          -0.18088230925295343
+        ],
+        "player": [
+          0.5,
+          0,
+          1.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0.49781930446624756,
+            1.692264199256897,
+            1.642803430557251
+          ],
+          "distance": 0.3804373963495558,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0.49781930446624756,
+          1.692264199256897,
+          1.642803430557251
+        ],
+        "distance": 0.3804373963495558,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.9,
+      "z": 1.65,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          -0.016091471387435576,
+          0,
+          -0.02950103087696522
+        ],
+        "player": [
+          0.9,
+          0,
+          1.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0.896399199962616,
+            1.692264199256897,
+            1.643398404121399
+          ],
+          "distance": 0.3804373973803408,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0.896399199962616,
+          1.692264199256897,
+          1.643398404121399
+        ],
+        "distance": 0.3804373973803408,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": -0.9,
+      "z": 2.15,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          -0.9,
+          0,
+          2.15
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            -0.7358167171478271,
+            1.692264199256897,
+            1.7577842473983765
+          ],
+          "distance": 0.5704957611178616,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          -0.7358167171478271,
+          1.692264199256897,
+          1.7577842473983765
+        ],
+        "distance": 0.5704957611178616,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": -0.5,
+      "z": 2.15,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          -0.5,
+          0,
+          2.15
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            -0.4316393733024597,
+            1.692264199256897,
+            1.8560491800308228
+          ],
+          "distance": 0.48554745014211104,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          -0.4316393733024597,
+          1.692264199256897,
+          1.8560491800308228
+        ],
+        "distance": 0.48554745014211104,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0,
+      "z": 2.15,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          0,
+          0,
+          2.15
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0,
+            1.692264199256897,
+            1.9055794477462769
+          ],
+          "distance": 0.4521255056513498,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0,
+          1.692264199256897,
+          1.9055794477462769
+        ],
+        "distance": 0.4521255056513498,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.5,
+      "z": 2.15,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          0.5,
+          0,
+          2.15
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0.4316393733024597,
+            1.692264199256897,
+            1.8560491800308228
+          ],
+          "distance": 0.48554745014211104,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0.4316393733024597,
+          1.692264199256897,
+          1.8560491800308228
+        ],
+        "distance": 0.48554745014211104,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.9,
+      "z": 2.15,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          0.9,
+          0,
+          2.15
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0.7358167171478271,
+            1.692264199256897,
+            1.7577842473983765
+          ],
+          "distance": 0.5704957611178616,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0.7358167171478271,
+          1.692264199256897,
+          1.7577842473983765
+        ],
+        "distance": 0.5704957611178616,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": -0.9,
+      "z": 2.65,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.5287407407407407,
+        "part": "jaw",
+        "point": [
+          -0.5401498079299927,
+          1.222731590270996,
+          1.590441107749939
+        ],
+        "distance": 1.1249777785449981,
+        "radius": 0.8880988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": -0.5,
+      "z": 2.65,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          -0.5,
+          0,
+          2.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            -0.35330939292907715,
+            1.692264199256897,
+            1.8725394010543823
+          ],
+          "distance": 0.8778605718519246,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          -0.35330939292907715,
+          1.692264199256897,
+          1.8725394010543823
+        ],
+        "distance": 0.8778605718519246,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0,
+      "z": 2.65,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          0,
+          0,
+          2.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0,
+            1.692264199256897,
+            1.9055794477462769
+          ],
+          "distance": 0.8359653253061468,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0,
+          1.692264199256897,
+          1.9055794477462769
+        ],
+        "distance": 0.8359653253061468,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.5,
+      "z": 2.65,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.3514285714285713,
+        "actor": [
+          0,
+          0,
+          0
+        ],
+        "player": [
+          0.5,
+          0,
+          2.65
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.3514285714285713,
+          "part": "jaw",
+          "point": [
+            0.35330939292907715,
+            1.692264199256897,
+            1.8725394010543823
+          ],
+          "distance": 0.8778605718519246,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.3514285714285713,
+        "part": "jaw",
+        "point": [
+          0.35330939292907715,
+          1.692264199256897,
+          1.8725394010543823
+        ],
+        "distance": 0.8778605718519246,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "quick-bite",
+      "x": 0.9,
+      "z": 2.65,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "quick-bite",
+        "sourceTime": 0.5287407407407407,
+        "part": "jaw",
+        "point": [
+          0.5401498079299927,
+          1.222731590270996,
+          1.590441107749939
+        ],
+        "distance": 1.1249777785449981,
+        "radius": 0.8880988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.9,
+      "z": 1.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          -0.08102849646823065,
+          0,
+          0.1710601592107091
+        ],
+        "player": [
+          -0.9,
+          0,
+          1.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            -0.36187490820884705,
+            0.47916343808174133,
+            1.6399682760238647
+          ],
+          "distance": 0.5785313177109067,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          -0.36187490820884705,
+          0.47916343808174133,
+          1.6399682760238647
+        ],
+        "distance": 0.5785313177109067,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.5,
+      "z": 1.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          -0.013129156042428838,
+          0,
+          0.04989079296122953
+        ],
+        "player": [
+          -0.5,
+          0,
+          1.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            -0.01890718936920166,
+            0.47916343808174133,
+            1.545394778251648
+          ],
+          "distance": 0.5647384028902026,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          -0.01890718936920166,
+          0.47916343808174133,
+          1.545394778251648
+        ],
+        "distance": 0.5647384028902026,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0,
+      "z": 1.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0,
+          0,
+          -0.013098872684207521
+        ],
+        "player": [
+          0,
+          0,
+          1.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750079870223999,
+            0.47916343808174133,
+            1.4346354007720947
+          ],
+          "distance": 0.5647382999843367,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.3750079870223999,
+          0.47916343808174133,
+          1.4346354007720947
+        ],
+        "distance": 0.5647382999843367,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.5,
+      "z": 1.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0.013129156042428838,
+          0,
+          0.04989079296122953
+        ],
+        "player": [
+          0.5,
+          0,
+          1.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.7442284822463989,
+            0.47916343808174133,
+            1.3545207977294922
+          ],
+          "distance": 0.5647383990831807,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.7442284822463989,
+          0.47916343808174133,
+          1.3545207977294922
+        ],
+        "distance": 0.5647383990831807,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.9,
+      "z": 1.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0.08102849646823065,
+          0,
+          0.1710601592107091
+        ],
+        "player": [
+          0.9,
+          0,
+          1.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            1.039692759513855,
+            0.47916343808174133,
+            1.318896770477295
+          ],
+          "distance": 0.5785314172481519,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          1.039692759513855,
+          0.47916343808174133,
+          1.318896770477295
+        ],
+        "distance": 0.5785314172481519,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.9,
+      "z": 2.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          -0.14464413355576244,
+          0,
+          0.3857176894820332
+        ],
+        "player": [
+          -0.9,
+          0,
+          2.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            -0.26853886246681213,
+            0.47916343808174133,
+            1.784126877784729
+          ],
+          "distance": 0.8820673845471748,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          -0.26853886246681213,
+          0.47916343808174133,
+          1.784126877784729
+        ],
+        "distance": 0.8820673845471748,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.5,
+      "z": 2.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          -0.08401827641466564,
+          0,
+          0.403287726790395
+        ],
+        "player": [
+          -0.5,
+          0,
+          2.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.0071829138323664665,
+            0.47916343808174133,
+            1.8042092323303223
+          ],
+          "distance": 0.7824328386027222,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.0071829138323664665,
+          0.47916343808174133,
+          1.8042092323303223
+        ],
+        "distance": 0.7824328386027222,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0,
+      "z": 2.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0,
+          0,
+          0.4119466729462146
+        ],
+        "player": [
+          0,
+          0,
+          2.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750079870223999,
+            0.47916343808174133,
+            1.7648203372955322
+          ],
+          "distance": 0.7376206302998539,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.3750079870223999,
+          0.47916343808174133,
+          1.7648203372955322
+        ],
+        "distance": 0.7376206302998539,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.5,
+      "z": 2.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0.08401827641466564,
+          0,
+          0.403287726790395
+        ],
+        "player": [
+          0.5,
+          0,
+          2.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.7270681262016296,
+            0.47916343808174133,
+            1.6512402296066284
+          ],
+          "distance": 0.7824328263156228,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.7270681262016296,
+          0.47916343808174133,
+          1.6512402296066284
+        ],
+        "distance": 0.7824328263156228,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.9,
+      "z": 2.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 0.40249999999999986,
+        "actor": [
+          0.14464413355576244,
+          0,
+          0.3857176894820332
+        ],
+        "player": [
+          0.9,
+          0,
+          2.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.40249999999999986,
+          "part": "fore.L.paw",
+          "point": [
+            0.9708006978034973,
+            0.47916343808174133,
+            1.520778775215149
+          ],
+          "distance": 0.8820672882051774,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.40249999999999986,
+        "part": "fore.L.paw",
+        "point": [
+          0.9708006978034973,
+          0.47916343808174133,
+          1.520778775215149
+        ],
+        "distance": 0.8820672882051774,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.9,
+      "z": 2.9,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.5532879818594106,
+        "part": "fore.L.paw",
+        "point": [
+          -0.1679597795009613,
+          0.40249961614608765,
+          1.8063890933990479
+        ],
+        "distance": 1.3160048417367076,
+        "radius": 1.0380988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": -0.5,
+      "z": 2.9,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.5532879818594106,
+        "part": "fore.L.paw",
+        "point": [
+          0.0679626390337944,
+          0.40249961614608765,
+          1.812907338142395
+        ],
+        "distance": 1.2265206144790985,
+        "radius": 1.0380988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0,
+      "z": 2.9,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.5532879818594106,
+        "part": "fore.L.paw",
+        "point": [
+          0.375,
+          0.40249961614608765,
+          1.775000810623169
+        ],
+        "distance": 1.1858535702978927,
+        "radius": 1.0380988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.5,
+      "z": 2.9,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.5532879818594106,
+        "part": "fore.L.paw",
+        "point": [
+          0.6711323857307434,
+          0.40249961614608765,
+          1.6854771375656128
+        ],
+        "distance": 1.2265206582506958,
+        "radius": 1.0380988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "x": 0.9,
+      "z": 2.9,
+      "dz": 0.5,
+      "hit": false,
+      "captured": false,
+      "at": null,
+      "lastContact": {
+        "serial": 2,
+        "action": "paw-swipe",
+        "sourceTime": 0.5532879818594106,
+        "part": "fore.L.paw",
+        "point": [
+          0.8842577934265137,
+          0.40249961614608765,
+          1.5840896368026733
+        ],
+        "distance": 1.3160047607776948,
+        "radius": 1.0380988726842075,
+        "contact": false
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.9,
+      "z": 24.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -1.3716214470423427,
+          0,
+          23.04594484781189
+        ],
+        "player": [
+          -0.9,
+          0,
+          24.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.8834128975868225,
+            1.6699631214141846,
+            24.869213104248047
+          ],
+          "distance": 0.35976569671693787,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.8834128975868225,
+          1.6699631214141846,
+          24.869213104248047
+        ],
+        "distance": 0.35976569671693787,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.5,
+      "z": 24.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -1.0043791785239709,
+          0,
+          23.054587054088685
+        ],
+        "player": [
+          -0.5,
+          0,
+          24.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.4862551689147949,
+            1.6699631214141846,
+            24.869482040405273
+          ],
+          "distance": 0.35962293844678905,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.4862551689147949,
+          1.6699631214141846,
+          24.869482040405273
+        ],
+        "distance": 0.35962293844678905,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0,
+      "z": 24.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.5426969203355524,
+          0,
+          23.06548988846507
+        ],
+        "player": [
+          0,
+          0,
+          24.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.01207711361348629,
+            1.6699631214141846,
+            24.869474411010742
+          ],
+          "distance": 0.35956370767096474,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.01207711361348629,
+          1.6699631214141846,
+          24.869474411010742
+        ],
+        "distance": 0.35956370767096474,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.5,
+      "z": 24.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.07805568960630614,
+          0,
+          23.07632269401098
+        ],
+        "player": [
+          0.5,
+          0,
+          24.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.5125086307525635,
+            1.6699631214141846,
+            24.868953704833984
+          ],
+          "distance": 0.3596230386176005,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.5125086307525635,
+          1.6699631214141846,
+          24.868953704833984
+        ],
+        "distance": 0.3596230386176005,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.9,
+      "z": 24.9,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          0.29575601312829447,
+          0,
+          23.08483155024252
+        ],
+        "player": [
+          0.9,
+          0,
+          24.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.9143210649490356,
+            1.6699631214141846,
+            24.86809730529785
+          ],
+          "distance": 0.3597655715160218,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.9143210649490356,
+          1.6699631214141846,
+          24.86809730529785
+        ],
+        "distance": 0.3597655715160218,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.9,
+      "z": 25.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -1.256595258264559,
+          0,
+          23.520429006807984
+        ],
+        "player": [
+          -0.9,
+          0,
+          25.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.844333827495575,
+            1.6699631214141846,
+            25.095144271850586
+          ],
+          "distance": 0.4735442211288381,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.844333827495575,
+          1.6699631214141846,
+          25.095144271850586
+        ],
+        "distance": 0.4735442211288381,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.5,
+      "z": 25.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.8882841969355291,
+          0,
+          23.526718739997722
+        ],
+        "player": [
+          -0.5,
+          0,
+          25.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.44883620738983154,
+            1.6699631214141846,
+            25.10529899597168
+          ],
+          "distance": 0.466556327861141,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.44883620738983154,
+          1.6699631214141846,
+          25.10529899597168
+        ],
+        "distance": 0.466556327861141,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0,
+      "z": 25.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.4260444749396182,
+          0,
+          23.534944128976555
+        ],
+        "player": [
+          0,
+          0,
+          25.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.04558586701750755,
+            1.6699631214141846,
+            25.1092586517334
+          ],
+          "distance": 0.46348354283764515,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.04558586701750755,
+          1.6699631214141846,
+          25.1092586517334
+        ],
+        "distance": 0.46348354283764515,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.5,
+      "z": 25.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          0.03829394423738058,
+          0,
+          23.54345083158627
+        ],
+        "player": [
+          0.5,
+          0,
+          25.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.5395263433456421,
+            1.6699631214141846,
+            25.103515625
+          ],
+          "distance": 0.4665551500681718,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.5395263433456421,
+          1.6699631214141846,
+          25.103515625
+        ],
+        "distance": 0.4665551500681718,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.9,
+      "z": 25.4,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          0.41126810769616184,
+          0,
+          23.550381543639148
+        ],
+        "player": [
+          0.9,
+          0,
+          25.4
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.9339495897293091,
+            1.6699631214141846,
+            25.091968536376953
+          ],
+          "distance": 0.473544452868219,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.9339495897293091,
+          1.6699631214141846,
+          25.091968536376953
+        ],
+        "distance": 0.473544452868219,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.9,
+      "z": 25.9,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -1.239268186686314,
+          0,
+          23.600624010996142
+        ],
+        "player": [
+          -0.9,
+          0,
+          25.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.8483858704566956,
+            1.6699631214141846,
+            25.096229553222656
+          ],
+          "distance": 0.8814302814737411,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.8483858704566956,
+          1.6699631214141846,
+          25.096229553222656
+        ],
+        "distance": 0.8814302814737411,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": -0.5,
+      "z": 25.9,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.8746500480940851,
+          0,
+          23.6169614145376
+        ],
+        "player": [
+          -0.5,
+          0,
+          25.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            -0.46059107780456543,
+            1.6699631214141846,
+            25.10631561279297
+          ],
+          "distance": 0.8716056225510028,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          -0.46059107780456543,
+          1.6699631214141846,
+          25.10631561279297
+        ],
+        "distance": 0.8716056225510028,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0,
+      "z": 25.9,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          -0.4185249691980151,
+          0,
+          23.629451996493614
+        ],
+        "player": [
+          0,
+          0,
+          25.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.0242672860622406,
+            1.6699631214141846,
+            25.110519409179688
+          ],
+          "distance": 0.8672236713054661,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.0242672860622406,
+          1.6699631214141846,
+          25.110519409179688
+        ],
+        "distance": 0.8672236713054661,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.5,
+      "z": 25.9,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          0.03751373109193504,
+          0,
+          23.633122347298247
+        ],
+        "player": [
+          0.5,
+          0,
+          25.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.508746862411499,
+            1.6699631214141846,
+            25.105388641357422
+          ],
+          "distance": 0.8716031840829657,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.508746862411499,
+          1.6699631214141846,
+          25.105388641357422
+        ],
+        "distance": 0.8716031840829657,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "lunge",
+      "x": 0.9,
+      "z": 25.9,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 2.3249999999999886,
+        "actor": [
+          0.4019406901414648,
+          0,
+          23.629720333269912
+        ],
+        "player": [
+          0.9,
+          0,
+          25.9
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "lunge",
+          "sourceTime": 2.3249999999999886,
+          "part": "fore.L.paw",
+          "point": [
+            0.8956965208053589,
+            1.6699631214141846,
+            25.094585418701172
+          ],
+          "distance": 0.8814304052616179,
+          "radius": 1.0380988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "lunge",
+        "sourceTime": 2.3249999999999886,
+        "part": "fore.L.paw",
+        "point": [
+          0.8956965208053589,
+          1.6699631214141846,
+          25.094585418701172
+        ],
+        "distance": 0.8814304052616179,
+        "radius": 1.0380988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.9,
+      "z": 8.6,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.7008793804362029,
+          0,
+          6.697291857501494
+        ],
+        "player": [
+          -0.9,
+          0,
+          8.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.8924458622932434,
+            1.321744441986084,
+            8.527816772460938
+          ],
+          "distance": 0.07324188813887197,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.8924458622932434,
+          1.321744441986084,
+          8.527816772460938
+        ],
+        "distance": 0.07324188813887197,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.5,
+      "z": 8.6,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.38896083064067394,
+          0,
+          6.69012628701959
+        ],
+        "player": [
+          -0.5,
+          0,
+          8.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.49578747153282166,
+            1.321744441986084,
+            8.527544975280762
+          ],
+          "distance": 0.07324183809033291,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.49578747153282166,
+          1.321744441986084,
+          8.527544975280762
+        ],
+        "distance": 0.07324183809033291,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0,
+      "z": 8.6,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0,
+          0,
+          6.686901127315792
+        ],
+        "player": [
+          0,
+          0,
+          8.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0,
+            1.321744441986084,
+            8.527422904968262
+          ],
+          "distance": 0.0732415562842864,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0,
+          1.321744441986084,
+          8.527422904968262
+        ],
+        "distance": 0.0732415562842864,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.5,
+      "z": 8.6,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.38896083064067394,
+          0,
+          6.69012628701959
+        ],
+        "player": [
+          0.5,
+          0,
+          8.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.49578747153282166,
+            1.321744441986084,
+            8.527544975280762
+          ],
+          "distance": 0.07324183809033291,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.49578747153282166,
+          1.321744441986084,
+          8.527544975280762
+        ],
+        "distance": 0.07324183809033291,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.9,
+      "z": 8.6,
+      "dz": -0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.7008793804362029,
+          0,
+          6.697291857501494
+        ],
+        "player": [
+          0.9,
+          0,
+          8.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.8924458622932434,
+            1.321744441986084,
+            8.527816772460938
+          ],
+          "distance": 0.07324188813887197,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.8924458622932434,
+          1.321744441986084,
+          8.527816772460938
+        ],
+        "distance": 0.07324188813887197,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.9,
+      "z": 9.1,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.7117110456472552,
+          0,
+          7.19618946154447
+        ],
+        "player": [
+          -0.9,
+          0,
+          9.1
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.8928568959236145,
+            1.321744441986084,
+            9.027775764465332
+          ],
+          "distance": 0.07324107439211684,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.8928568959236145,
+          1.321744441986084,
+          9.027775764465332
+        ],
+        "distance": 0.07324107439211684,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.5,
+      "z": 9.1,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.395042988392134,
+          0,
+          7.18978238873684
+        ],
+        "player": [
+          -0.5,
+          0,
+          9.1
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.4960182309150696,
+            1.321744441986084,
+            9.027530670166016
+          ],
+          "distance": 0.07324308223532683,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.4960182309150696,
+          1.321744441986084,
+          9.027530670166016
+        ],
+        "distance": 0.07324308223532683,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0,
+      "z": 9.1,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0,
+          0,
+          7.186901127315792
+        ],
+        "player": [
+          0,
+          0,
+          9.1
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0,
+            1.321744441986084,
+            9.027422904968262
+          ],
+          "distance": 0.0732415562842864,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0,
+          1.321744441986084,
+          9.027422904968262
+        ],
+        "distance": 0.0732415562842864,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.5,
+      "z": 9.1,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.395042988392134,
+          0,
+          7.18978238873684
+        ],
+        "player": [
+          0.5,
+          0,
+          9.1
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.4960182309150696,
+            1.321744441986084,
+            9.027530670166016
+          ],
+          "distance": 0.07324308223532683,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.4960182309150696,
+          1.321744441986084,
+          9.027530670166016
+        ],
+        "distance": 0.07324308223532683,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.9,
+      "z": 9.1,
+      "dz": 0,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.7117110456472552,
+          0,
+          7.19618946154447
+        ],
+        "player": [
+          0.9,
+          0,
+          9.1
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.8928568959236145,
+            1.321744441986084,
+            9.027775764465332
+          ],
+          "distance": 0.07324107439211684,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.8928568959236145,
+          1.321744441986084,
+          9.027775764465332
+        ],
+        "distance": 0.07324107439211684,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.9,
+      "z": 9.6,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.6870948786554948,
+          0,
+          7.329012038991944
+        ],
+        "player": [
+          -0.9,
+          0,
+          9.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.8575944304466248,
+            1.321744441986084,
+            9.147674560546875
+          ],
+          "distance": 0.45441547767357887,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.8575944304466248,
+          1.321744441986084,
+          9.147674560546875
+        ],
+        "distance": 0.45441547767357887,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": -0.5,
+      "z": 9.6,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          -0.38287423029686635,
+          0,
+          7.351185221699833
+        ],
+        "player": [
+          -0.5,
+          0,
+          9.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            -0.4778828024864197,
+            1.321744441986084,
+            9.175350189208984
+          ],
+          "distance": 0.42533930346771176,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          -0.4778828024864197,
+          1.321744441986084,
+          9.175350189208984
+        ],
+        "distance": 0.42533930346771176,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0,
+      "z": 9.6,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0,
+          0,
+          7.361149152134022
+        ],
+        "player": [
+          0,
+          0,
+          9.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0,
+            1.321744441986084,
+            9.187787055969238
+          ],
+          "distance": 0.4123304525137647,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0,
+          1.321744441986084,
+          9.187787055969238
+        ],
+        "distance": 0.4123304525137647,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.5,
+      "z": 9.6,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.38287423029686635,
+          0,
+          7.351185221699833
+        ],
+        "player": [
+          0.5,
+          0,
+          9.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.4778828024864197,
+            1.321744441986084,
+            9.175350189208984
+          ],
+          "distance": 0.42533930346771176,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.4778828024864197,
+          1.321744441986084,
+          9.175350189208984
+        ],
+        "distance": 0.42533930346771176,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    },
+    {
+      "action": "pin",
+      "x": 0.9,
+      "z": 9.6,
+      "dz": 0.5,
+      "hit": true,
+      "captured": false,
+      "at": {
+        "sourceTime": 1.2,
+        "actor": [
+          0.6870948786554948,
+          0,
+          7.329012038991944
+        ],
+        "player": [
+          0.9,
+          0,
+          9.6
+        ],
+        "contact": {
+          "serial": 2,
+          "action": "pin",
+          "sourceTime": 1.2,
+          "part": "jaw",
+          "point": [
+            0.8575944304466248,
+            1.321744441986084,
+            9.147674560546875
+          ],
+          "distance": 0.45441547767357887,
+          "radius": 0.8880988726842075,
+          "bodyRadius": 0.28809887268420753,
+          "swept": true,
+          "contact": true
+        }
+      },
+      "lastContact": {
+        "serial": 2,
+        "action": "pin",
+        "sourceTime": 1.2,
+        "part": "jaw",
+        "point": [
+          0.8575944304466248,
+          1.321744441986084,
+          9.147674560546875
+        ],
+        "distance": 0.45441547767357887,
+        "radius": 0.8880988726842075,
+        "bodyRadius": 0.28809887268420753,
+        "swept": true,
+        "contact": true
+      }
+    }
+  ],
+  "poses": [
+    {
+      "action": "quick-bite",
+      "time": 0.25,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          2.669814348220825,
+          1.7828013896942139
+        ],
+        "head": [
+          0,
+          3.0625534057617188,
+          1.128746747970581
+        ],
+        "fore.L.paw": [
+          0.3749999403953552,
+          0.40250149369239807,
+          0.9374993443489075
+        ],
+        "fore.R.paw": [
+          -0.3750000596046448,
+          0.4025012254714966,
+          0.9374992847442627
+        ]
+      }
+    },
+    {
+      "action": "quick-bite",
+      "time": 0.4,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          1.2014014720916748,
+          1.663164496421814
+        ],
+        "head": [
+          0,
+          1.9231292009353638,
+          1.4158982038497925
+        ],
+        "fore.L.paw": [
+          0.3749999701976776,
+          0.4025005102157593,
+          0.9374983906745911
+        ],
+        "fore.R.paw": [
+          -0.3749999403953552,
+          0.40250059962272644,
+          0.9374984502792358
+        ]
+      }
+    },
+    {
+      "action": "quick-bite",
+      "time": 0.55,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          1.2565981149673462,
+          1.7045021057128906
+        ],
+        "head": [
+          0,
+          1.9707715511322021,
+          1.4361976385116577
+        ],
+        "fore.L.paw": [
+          0.37499991059303284,
+          0.4025009870529175,
+          0.9374993443489075
+        ],
+        "fore.R.paw": [
+          -0.375,
+          0.40250128507614136,
+          0.9374994039535522
+        ]
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "time": 0.28,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0.006649278731054656
+      ],
+      "parts": {
+        "jaw": [
+          -0.0001585921854712069,
+          2.5226471424102783,
+          1.8513238430023193
+        ],
+        "head": [
+          -0.00013189415039960295,
+          2.9606056213378906,
+          1.2266446352005005
+        ],
+        "fore.L.paw": [
+          0.3750005066394806,
+          0.663569450378418,
+          1.1876671314239502
+        ],
+        "fore.R.paw": [
+          -0.37500032782554626,
+          0.40248075127601624,
+          0.9208739399909973
+        ]
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "time": 0.43,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0.16987671032017543
+      ],
+      "parts": {
+        "jaw": [
+          -0.04323176294565201,
+          1.8494741916656494,
+          2.023505210876465
+        ],
+        "head": [
+          -0.037602510303258896,
+          2.3917014598846436,
+          1.4868587255477905
+        ],
+        "fore.L.paw": [
+          0.3750046193599701,
+          0.4096788167953491,
+          1.3503241539001465
+        ],
+        "fore.R.paw": [
+          -0.375,
+          0.40250110626220703,
+          0.5128077268600464
+        ]
+      }
+    },
+    {
+      "action": "paw-swipe",
+      "time": 0.58,
+      "root": [
+        0,
+        -0.024999916553497314,
+        0.17000000178813934
+      ],
+      "parts": {
+        "jaw": [
+          -0.04193510487675667,
+          1.870396375656128,
+          2.0233476161956787
+        ],
+        "head": [
+          -0.036436863243579865,
+          2.409884214401245,
+          1.4839463233947754
+        ],
+        "fore.L.paw": [
+          0.3749999701976776,
+          0.4024980366230011,
+          1.3500021696090698
+        ],
+        "fore.R.paw": [
+          -0.3750000596046448,
+          0.402497261762619,
+          0.5125012993812561
+        ]
+      }
+    },
+    {
+      "action": "lunge",
+      "time": 2.2,
+      "root": [
+        5.5471047949451346e-8,
+        0.2231228806502522,
+        9.08975009878104
+      ],
+      "parts": {
+        "jaw": [
+          -6.270629882010326e-8,
+          4.044465065002441,
+          2.163322925567627
+        ],
+        "head": [
+          -5.675201197874458e-9,
+          4.356162071228027,
+          1.466994047164917
+        ],
+        "fore.L.paw": [
+          0.375,
+          2.291062831878662,
+          1.2688461542129517
+        ],
+        "fore.R.paw": [
+          -0.3750000596046448,
+          2.309736728668213,
+          1.2688491344451904
+        ]
+      }
+    },
+    {
+      "action": "lunge",
+      "time": 2.35,
+      "root": [
+        6.965324032826015e-9,
+        -0.04315568208029391,
+        9.43377018154388
+      ],
+      "parts": {
+        "jaw": [
+          -1.6821713799686222e-8,
+          3.6088531017303467,
+          2.308992862701416
+        ],
+        "head": [
+          -4.763121896900202e-9,
+          3.713348865509033,
+          1.5532749891281128
+        ],
+        "fore.L.paw": [
+          0.3750670254230499,
+          1.356130599975586,
+          1.418879508972168
+        ],
+        "fore.R.paw": [
+          -0.37502360343933105,
+          1.5736756324768066,
+          1.5112981796264648
+        ]
+      }
+    },
+    {
+      "action": "lunge",
+      "time": 2.5,
+      "root": [
+        3.836917006339036e-9,
+        -0.09124445915222168,
+        9.441351890563965
+      ],
+      "parts": {
+        "jaw": [
+          -5.357909227399205e-9,
+          2.4712038040161133,
+          2.2371106147766113
+        ],
+        "head": [
+          -3.851038155033848e-9,
+          2.7438716888427734,
+          1.5245931148529053
+        ],
+        "fore.L.paw": [
+          0.37500008940696716,
+          0.4025034010410309,
+          0.8966308832168579
+        ],
+        "fore.R.paw": [
+          -0.37500014901161194,
+          0.403279185295105,
+          0.8983814120292664
+        ]
+      }
+    },
+    {
+      "action": "pin",
+      "time": 1.05,
+      "root": [
+        0,
+        -0.29737502949305206,
+        2.7808141422209656
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          1.5163207054138184,
+          1.8299763202667236
+        ],
+        "head": [
+          0,
+          2.1160430908203125,
+          1.3584198951721191
+        ],
+        "fore.L.paw": [
+          0.5518808364868164,
+          1.933127522468567,
+          1.4816330671310425
+        ],
+        "fore.R.paw": [
+          -0.5518808364868164,
+          1.933127522468567,
+          1.4816330671310425
+        ]
+      }
+    },
+    {
+      "action": "pin",
+      "time": 1.2,
+      "root": [
+        0,
+        -0.36000001430511475,
+        2.9444596608536093
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          1.321744441986084,
+          1.8266371488571167
+        ],
+        "head": [
+          0,
+          1.9330086708068848,
+          1.3701411485671997
+        ],
+        "fore.L.paw": [
+          0.5500012040138245,
+          1.147184133529663,
+          1.4752509593963623
+        ],
+        "fore.R.paw": [
+          -0.5500012040138245,
+          1.147184133529663,
+          1.4752509593963623
+        ]
+      }
+    },
+    {
+      "action": "pin",
+      "time": 1.3499999999999999,
+      "root": [
+        0,
+        -0.36000001430511475,
+        2.950000047683716
+      ],
+      "parts": {
+        "jaw": [
+          0,
+          1.2765711545944214,
+          1.8477948904037476
+        ],
+        "head": [
+          0,
+          1.8929636478424072,
+          1.398247480392456
+        ],
+        "fore.L.paw": [
+          0.5500005483627319,
+          1.1000005006790161,
+          1.475000023841858
+        ],
+        "fore.R.paw": [
+          -0.5500005483627319,
+          1.1000005006790161,
+          1.475000023841858
+        ]
+      }
+    }
+  ]
+}
